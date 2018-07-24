@@ -7,6 +7,7 @@ import heronarts.lx.LXModelComponent;
 import heronarts.lx.LXUtils;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXVector;
 
 import java.util.ArrayList;
@@ -20,9 +21,10 @@ public abstract class LXWarp extends LXModelComponent implements LXComponent.Ren
 
     protected LXWarp inputSource = null;
     protected List<LXVector> inputVectors = null;  // externally provided, treated as read-only
-    protected List<LXVector> outputVectors = null;  // solely owned and written by this LXWarp
+    protected List<LXVector> outputVectors = new ArrayList<>();  // solely owned and written by this LXWarp
     protected boolean inputVectorsChanged = false;
     protected boolean outputVectorsChanged = false;
+    protected boolean parameterChangeDetected = false;
 
     protected LXWarp(LX lx) {
         super(lx);
@@ -41,6 +43,18 @@ public abstract class LXWarp extends LXModelComponent implements LXComponent.Ren
 
     public final boolean isEnabled() {
         return this.enabled.isOn();
+    }
+
+    @Override public void onParameterChanged(LXParameter parameter) {
+        super.onParameterChanged(parameter);
+        parameterChangeDetected = true;
+    }
+
+    /** A useful way for LXWarp subclasses to check if they need to recompute the warp. */
+    protected boolean getAndClearParameterChangeDetectedFlag() {
+        boolean result = parameterChangeDetected;
+        parameterChangeDetected = false;
+        return result;
     }
 
     public final void setIndex(int index) {
@@ -84,13 +98,6 @@ public abstract class LXWarp extends LXModelComponent implements LXComponent.Ren
      * object, and callers should treat this list as read-only.
      */
     public List<LXVector> getOutputVectors() {
-        if (outputVectors == null) {
-            System.out.println("Copying inputVectors to outputVectors (" + inputVectors.size() + ")...");
-            outputVectors = new ArrayList<LXVector>();
-            for (LXVector v : inputVectors) {
-                outputVectors.add(new LXVector(v));
-            }
-        }
         return outputVectors;
     }
 
@@ -108,13 +115,13 @@ public abstract class LXWarp extends LXModelComponent implements LXComponent.Ren
     }
 
     /**
-     * Applies the warp to the coordinates in inputVectors and writes the results
-     * to outputVectors.  The inputVectorsChanged flag indicates whether inputVectors
-     * has changed since the last call to run(); a typical implementation would
-     * recompute outputVectors when inputVectorsChanged is true OR any of the warp's
-     * parameters has changed.  This method should treat inputVectors as read-only;
-     * it is also the sole writer to outputVectors, and it should return a flag
-     * indicating whether any changes were written to outputVectors.
+     * Applies the warp to the coordinates in inputVectors and updates or rewrites
+     * the outputVectors list.  The inputVectorsChanged flag indicates whether
+     * inputVectors has changed since the last call to run(); a typical implementation
+     * would recompute outputVectors when inputVectorsChanged is true OR any of the
+     * warp's parameters has changed.  This method should treat inputVectors as
+     * read-only; it is also the sole writer to outputVectors, and it should return
+     * a flag indicating whether it made any changes to outputVectors.
      */
     protected abstract boolean run(double deltaMs, boolean inputVectorsChanged);
 
