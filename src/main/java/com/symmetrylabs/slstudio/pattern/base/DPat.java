@@ -54,6 +54,7 @@ public abstract class DPat extends SLPattern<SLModel> {
     }
 
     public float interpWv(float i, float[] vals) {
+        i = Math.max(0, Math.min(vals.length - 1, i));
         return interp(i - MathUtils.floor(i), vals[MathUtils.floor(i)], vals[MathUtils.ceil(i)]);
     }
 
