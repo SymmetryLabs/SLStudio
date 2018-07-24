@@ -116,6 +116,7 @@ public class Starlings extends SLPatternWithMarkers {
     }
 
     public void onVectorsChanged() {
+        super.onVectorsChanged();
         modelIndex = new OctreeModelIndex(model, getVectors());
     }
 

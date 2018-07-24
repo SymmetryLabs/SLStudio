@@ -13,7 +13,6 @@ import heronarts.lx.warp.LXWarp;
 
 public class Inversion extends LXWarp {
     private CompoundParameter radiusParam;
-    private boolean parametersChanged = false;
 
     public Inversion(LX lx) {
         super(lx);
@@ -38,9 +37,7 @@ public class Inversion extends LXWarp {
     }
 
     public boolean run(double deltaMs, boolean inputVectorsChanged) {
-        if (inputVectorsChanged || parametersChanged) {
-            parametersChanged = false;
-
+        if (inputVectorsChanged || getAndClearParameterChangeDetectedFlag()) {
             System.out.println("Recomputing Inversion warp (" + inputVectors.size() + " inputVectors)...");
             float ox = model.cx;
             float oy = model.cy;

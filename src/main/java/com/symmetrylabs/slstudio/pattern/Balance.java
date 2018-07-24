@@ -85,6 +85,7 @@ public class Balance extends LXPattern {
 
     @Override
     public void onVectorsChanged() {
+        super.onVectorsChanged();
         projection = new LXProjection(model, getVectors());
     }
 

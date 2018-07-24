@@ -23,13 +23,8 @@ public class Radiant extends LXWarp {
         addParameter(widthParam);
     }
 
-    public void onParameterChanged(LXParameter param) {
-        super.onParameterChanged(param);
-        parameterChanged = true;
-    }
-
     public boolean run(double deltaMs, boolean inputVectorsChanged) {
-        if (inputVectorsChanged || parameterChanged) {
+        if (inputVectorsChanged || getAndClearParameterChangeDetectedFlag()) {
             parameterChanged = false;
 
             System.out.println("Recomputing Radiant warp (" + inputVectors.size() + " vectors)...");
