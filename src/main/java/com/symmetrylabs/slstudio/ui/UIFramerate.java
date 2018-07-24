@@ -21,7 +21,7 @@ public class UIFramerate extends UI2dContext {
     private final PFont font;
 
     public UIFramerate(UI ui, final P3LX lx, float x, float y) {
-        super(ui, x, y, 900, 30);
+        super(ui, x, y, 940, 30);
         this.lx = lx;
         this.font = SLStudio.applet.loadFont("Inconsolata-Bold-14.vlw");
         setVisible(true);
@@ -45,15 +45,15 @@ public class UIFramerate extends UI2dContext {
                 using16bit += "E";
             }
             pg.text(String.format(
-                "Engine: %5.1f fps    UI: %5.1f fps    Net: %5.1f fps    Frame: %4.1fms, avg %4.1fms, max %4.1fms    16-bit: %-8s  Conversions:%2d    (? for help)",
-                lx.engine.frameRate(),
-                lx.applet.frameRate,
-                lx.engine.network.frameRate(),
+                "Engine: %5.1ffps    UI: %5.1ffps    Net: %5.1ffps    Frame:%5.1fms, avg%5.1fms, max%5.1fms    16-bit conv:%3d %-11s(? for help)",
+                Math.min(lx.engine.frameRate(), 999),  // frameRate() sometimes returns Infinity
+                Math.min(lx.applet.frameRate, 999),
+                Math.min(lx.engine.network.frameRate(), 999),
                 lx.engine.timer.runCurrentNanos / 1e6,
                 lx.engine.timer.runAvgNanos / 1e6,
                 lx.engine.timer.runWorstNanos / 1e6,
-                "[" + using16bit + "]",
-                lx.engine.conversionsPerFrame
+                lx.engine.conversionsPerFrame,
+                "[" + using16bit + "]"
             ), 0, 0);
 
             if (lx.engine.timer.runLastNanos >= 100000000
