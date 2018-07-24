@@ -68,7 +68,7 @@ public class UIOverriddenRightPane extends UIPane {
             new UIPixlites(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
             SLStudio.applet.uiTreeModelingTool = new UITreeModelingTool(ui, SLStudio.applet.treeModelingTool, 0, 0, this.utility.getContentWidth());
             SLStudio.applet.uiTreeModelingTool.addToContainer(this.utility);
-            new UIAnemometer(ui, lx, SLStudio.applet.anemometer, 0, 0, this.utility.getContentWidth(), 200).addToContainer(this.utility);
+            //new UIAnemometer(ui, lx, SLStudio.applet.anemometer, 0, 0, this.utility.getContentWidth(), 200).addToContainer(this.utility);
         }
     }
 

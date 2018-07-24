@@ -86,30 +86,45 @@ public class TreeModelingPattern extends SLPattern<TreeModel> {
                     colors[p.index] = i1++ > (points.size()-1)/2 ? LXColor.BLUE : LXColor.RED;
                 }
 
-                if (uiModelingTool.displayTwigIndices.isOn()) {
-                    int bi = 0;
-                    for (TreeModel.Twig twig : modelingTool.getSelectedBranch().getTwigs()) {
-                        int ti = -1;
-                        for (TreeModel.Leaf leaf : twig.getLeaves()) {
-                            if (bi > ti++) {
-                                for (LXPoint p : leaf.getPoints()) {
-                                    colors[p.index] = LXColor.GREEN;
-                                }
-                            }
-                        }
-                        bi++;
-                    }
-                }
+//                if (uiModelingTool.displayTwigIndices.isOn()) {
+//                    int bi = 0;
+//                    for (TreeModel.Twig twig : modelingTool.getSelectedBranch().getTwigs()) {
+//                        int ti = -1;
+//                        for (TreeModel.Leaf leaf : twig.getLeaves()) {
+//                            if (bi > ti++) {
+//                                for (LXPoint p : leaf.getPoints()) {
+//                                    colors[p.index] = LXColor.GREEN;
+//                                }
+//                            }
+//                        }
+//                        bi++;
+//                    }
+//                }
                 break;
 
             case TWIG:
                 i1 = 0; i2 = 0;
-                for (TreeModel.Twig twig : modelingTool.getSelectedBranch().getTwigs()) {
-                    for (LXPoint p : twig.getPoints()) {
-                        if (i2++ % 2 == 0) {
-                            colors[p.index] = LXColor.scaleBrightness(
-                                (i1 % 2 == 0) ? LXColor.GREEN : ORANGE, siblingBrightness.getValuef()
-                            );
+                //for (TreeModel.Twig twig : modelingTool.getSelectedBranch().getTwigs()) {
+                TreeModel.Branch branch = modelingTool.getSelectedBranch();
+
+
+//                for (int i = 0; i < branch.getTwigs().size(); i++) {
+//                     System.out.println("------------------------------");
+//                     for (TreeModel.Twig twig : branch.getTwigs()) {
+//                         System.out.println("twig index: " + twig.getConfig().index);
+//                     }
+//                }
+
+
+                for (int i3 = 0; i3 < branch.getTwigs().size(); i3++) {
+                    TreeModel.Twig twig = branch.getTwigByWiringIndex(i3+1);
+                    if (twig != null) {
+                        for (LXPoint p : twig.points) {
+                            if (i2++ % 2 == 0) {
+                                colors[p.index] = LXColor.scaleBrightness(
+                                    (i1 % 2 == 0) ? LXColor.GREEN : ORANGE, siblingBrightness.getValuef()
+                                );
+                            }
                         }
                     }
                     i1++;
@@ -123,7 +138,7 @@ public class TreeModelingPattern extends SLPattern<TreeModel> {
 
                 if (uiModelingTool.displayTwigIndices.isOn()) {
                         TreeModel.Twig twig = modelingTool.getSelectedTwig();
-                        int ti = modelingTool.getSelectedBranch().getTwigs().indexOf(twig);
+                        int ti = twig.getConfig().index-1;
                         int ti1 = -1;
                         for (TreeModel.Leaf leaf : twig.getLeaves()) {
                             if (ti1++ < ti) {
