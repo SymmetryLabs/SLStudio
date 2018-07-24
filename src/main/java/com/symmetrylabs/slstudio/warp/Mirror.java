@@ -1,12 +1,19 @@
 package com.symmetrylabs.slstudio.warp;
 
+import com.symmetrylabs.util.CubeMarker;
+import com.symmetrylabs.util.Marker;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
 import heronarts.lx.warp.LXWarp;
+import processing.core.PVector;
 
-public class Mirror extends LXWarp {
+public class Mirror extends LXWarpWithMarkers {
     private BooleanParameter xParam = new BooleanParameter("x", false);
     private CompoundParameter cxParam = new CompoundParameter("cx", model.cx, model.xMin, model.xMax);
     private BooleanParameter yParam = new BooleanParameter("y", false);
@@ -46,5 +53,31 @@ public class Mirror extends LXWarp {
             return true;
         }
         return false;
+    }
+
+    @Override public List<Marker> getMarkers() {
+        List<Marker> markers = new ArrayList<>();
+        if (xParam.getValueb()) {
+            markers.add(new CubeMarker(
+                new PVector(cxParam.getValuef(), model.cy, model.cz),
+                new PVector(0, model.yRange/2, model.zRange/2),
+                0x4000ffff
+            ));
+        }
+        if (yParam.getValueb()) {
+            markers.add(new CubeMarker(
+                new PVector(model.cx, cyParam.getValuef(), model.cz),
+                new PVector(model.xRange/2, 0, model.zRange/2),
+                0x4000ffff
+            ));
+        }
+        if (zParam.getValueb()) {
+            markers.add(new CubeMarker(
+                new PVector(model.cx, model.cy, czParam.getValuef()),
+                new PVector(model.xRange/2, model.yRange/2, 0),
+                0x4000ffff
+            ));
+        }
+        return markers;
     }
 }

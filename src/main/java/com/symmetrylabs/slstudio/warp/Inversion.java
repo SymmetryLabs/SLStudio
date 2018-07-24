@@ -1,6 +1,11 @@
 package com.symmetrylabs.slstudio.warp;
 
+import com.symmetrylabs.util.CubeMarker;
+import com.symmetrylabs.util.Marker;
+import com.symmetrylabs.util.SphereMarker;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.border.CompoundBorder;
 
@@ -10,9 +15,13 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
 import heronarts.lx.warp.LXWarp;
+import processing.core.PVector;
 
-public class Inversion extends LXWarp {
+public class Inversion extends LXWarpWithMarkers {
     private CompoundParameter radiusParam;
+    private CompoundParameter cxParam = new CompoundParameter("cx", model.cx, model.xMin, model.xMax);
+    private CompoundParameter cyParam = new CompoundParameter("cy", model.cy, model.yMin, model.yMax);
+    private CompoundParameter czParam = new CompoundParameter("cz", model.cz, model.zMin, model.zMax);
 
     public Inversion(LX lx) {
         super(lx);
@@ -20,6 +29,9 @@ public class Inversion extends LXWarp {
         float maxRadius = getMaxRadius(model);
         radiusParam = new CompoundParameter("Radius", maxRadius/2, 1, maxRadius);
         addParameter(radiusParam);
+        addParameter(cxParam);
+        addParameter(cyParam);
+        addParameter(czParam);
     }
 
     public static float getMaxRadius(LXModel model) {
@@ -39,9 +51,9 @@ public class Inversion extends LXWarp {
     public boolean run(double deltaMs, boolean inputVectorsChanged) {
         if (inputVectorsChanged || getAndClearParameterChangeDetectedFlag()) {
             System.out.println("Recomputing Inversion warp (" + inputVectors.size() + " inputVectors)...");
-            float ox = model.cx;
-            float oy = model.cy;
-            float oz = model.cz;
+            float ox = cxParam.getValuef();
+            float oy = cyParam.getValuef();
+            float oz = czParam.getValuef();
             float radius = radiusParam.getValuef();
             float sqRadius = radius * radius;
 
@@ -59,5 +71,15 @@ public class Inversion extends LXWarp {
             return true;
         }
         return false;
+    }
+
+    @Override public List<Marker> getMarkers() {
+        List<Marker> markers = new ArrayList<>();
+        markers.add(new SphereMarker(
+            new PVector(cxParam.getValuef(), cyParam.getValuef(), czParam.getValuef()),
+            radiusParam.getValuef(),
+            0x40ff00ff
+        ));
+        return markers;
     }
 }

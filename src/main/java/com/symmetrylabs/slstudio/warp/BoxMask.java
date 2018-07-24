@@ -60,7 +60,7 @@ public class BoxMask extends LXWarpWithMarkers {
         markers.add(new CubeMarker(
             new PVector(cxParam.getValuef(), cyParam.getValuef(), czParam.getValuef()),
             new PVector(xSizeParam.getValuef(), ySizeParam.getValuef(), zSizeParam.getValuef()),
-            0x60ffffff
+            0x40ffffff
         ));
         return markers;
     }
