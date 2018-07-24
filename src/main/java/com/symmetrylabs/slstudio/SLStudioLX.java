@@ -78,20 +78,24 @@ public class SLStudioLX extends P3LX {
          * "Cmd" or "Ctrl", as appropriate for the operating system.
          */
         private static final String HELP_TEXT =
-              "@-C    Toggle P3CubeMap debugging\n" +
-                "@-F    Toggle frame rate status line\n" +
-                "@-G    Toggle UI geometry\n" +
-                "@-L    Layout selection\n" +
-                "@-M    Modulation source\n" +
-                "@-P    Performance mode\n" +
-                "@-R    Rename channel or pattern\n" +
-                "@-S    Save current project\n" +
-                "@-V    Toggle preview display\n" +
-                "@-W    Toggle all warps (selected channel)\n" +
-                "@-X    Toggle axes\n" +
-                "@-/    Toggle help caption line\n" +
-                "@-\\    Toggle 16-bit color (all)\n" +
-                "@-|    Toggle 16-bit color (selected channel)";
+              "@-C           Toggle P3CubeMap debugging\n" +
+                "@-D           Delete selected channel, warp, effect, or pattern\n" +
+                "@-F           Toggle frame rate status line\n" +
+                "@-G           Toggle UI geometry\n" +
+                "@-L           Layout selection\n" +
+                "@-M           Modulation source\n" +
+                "@-N           New channel\n" +
+                "@-P           Performance mode\n" +
+                "@-R           Rename channel or pattern\n" +
+                "@-S           Save current project\n" +
+                "@-V           Toggle preview display\n" +
+                "@-X           Toggle axis display\n" +
+                "@-/           Toggle help caption line\n" +
+                "@-\\           Toggle 16-bit color (all)\n" +
+                "@-|           Toggle 16-bit color (selected channel)\n" +
+                "@-Left/Right  Reorder selected channel, warp, or effect\n" +
+                "@-Up/Down     Reorder selected pattern"
+            ;
 
         UI(final SLStudioLX lx) {
             super(lx);
@@ -182,20 +186,6 @@ public class SLStudioLX extends P3LX {
                                 break;
                             case VK_V:
                                 lx.ui.preview.toggleVisible();
-                                break;
-                            case VK_W:
-                                if (engine.getFocusedChannel() instanceof LXChannel) {
-                                    LXChannel channel = (LXChannel) engine.getFocusedChannel();
-                                    boolean enable = false;
-                                    for (LXWarp warp : channel.getWarps()) {
-                                        enable = warp.isEnabled();
-                                    }
-                                    enable = !enable;
-                                    for (LXWarp warp : channel.getWarps()) {
-                                        System.out.println("Channel " + channel + " - " + warp + " enable: " + enable);
-                                        warp.enabled.setValue(enable);
-                                    }
-                                }
                                 break;
                             case VK_X:
                                 axes.toggleVisible();
