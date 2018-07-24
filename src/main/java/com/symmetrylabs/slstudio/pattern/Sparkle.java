@@ -1,5 +1,7 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.color.Ops8;
+
 import java.lang.Math;
 import java.util.Arrays;
 import java.util.List;
@@ -74,7 +76,7 @@ public class Sparkle extends LXPattern {
             sparks.add(new Spark());
         }
 
-        Arrays.fill(colors, 0);
+        Arrays.fill(colors, Ops8.BLACK);
 
         for (Spark spark : sparks) {
             float hue = ((float)(hueParameter.getValuef() + (hueVarianceParameter.getValuef() * spark.hue))) % 1.0f;
