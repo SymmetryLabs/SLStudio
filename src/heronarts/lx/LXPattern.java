@@ -35,6 +35,7 @@ import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transform.LXVector;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
@@ -279,7 +280,11 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
     }
 
     /** This method is invoked whenever the output of getVectors() changes. */
-    public /* abstract */ void onVectorsChanged() { }
+    public void onVectorsChanged() {
+        // When getVectors() changes, the set of filtered points can change, so
+        // it's usually desirable to clear out the colour buffer.
+        clear();
+    }
 
     @Override public void dispose() {
         onInactive();

@@ -233,6 +233,13 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
         super.dispose();
     }
 
+    /** Clears the colour buffer. */
+    protected void clear() {
+        int[] colors = (int[]) getArray(SRGB8);
+        Arrays.fill(colors, 0);
+        markModified(SRGB8);
+    }
+
     protected void setColors(PolyBuffer.Space space, Object color) {
         if (space == RGB8 || space == SRGB8) {
             Arrays.fill((int[]) getArray(space), (int) color);
