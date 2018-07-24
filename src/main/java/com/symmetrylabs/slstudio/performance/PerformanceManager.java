@@ -85,7 +85,7 @@ public class PerformanceManager extends LXComponent {
         }
 
         public ArrayList<LXListenableNormalizedParameter> getKnobParameters() {
-            int maxKnobs = 16;
+            int maxKnobs = 12;
             ArrayList<LXListenableNormalizedParameter> params =
                     new ArrayList<LXListenableNormalizedParameter>();
 
@@ -104,7 +104,7 @@ public class PerformanceManager extends LXComponent {
 
             }
             for (LXParameter p : params) {
-                System.out.println(p.getPath());
+//          System.out.println(p.getPath());
             }
             return params;
         }
@@ -397,6 +397,16 @@ public class PerformanceManager extends LXComponent {
         }
 
         gui.updateAllPatternLists();
+
+
+    }
+
+    public void updateAllTwisters() {
+        for (PerformanceHardwareController.TwisterListener t : hardware.twisterListeners) {
+            if (t != null) {
+                t.getAndWriteParams();
+            }
+        }
     }
 
     @Override
@@ -474,7 +484,7 @@ public class PerformanceManager extends LXComponent {
 
             float[] hues =
                     new float[] {
-                        0.0f, 25.0f, 60.0f, 115.0f, 180.0f, 225.0f, 280.0f,
+                        0.0f, 25.0f, 55.0f, 115.0f, 180.0f, 225.0f, 280.0f,
                     };
 
             String names[] =
@@ -539,12 +549,28 @@ public class PerformanceManager extends LXComponent {
             for (LXParameter param : pat.getParameters()) {
                 parameterValues.put(param.getPath(), param.getValuef());
             }
+            List<LXEffect> effects = channel.getEffects();
+            for (int i = 0; i < effects.size(); i++) {
+                LXEffect e = effects.get(i);
+                for (LXParameter param : e.getParameters()) {
+                    String path = String.format("effect-%d-%s", i, param.getPath());
+                    parameterValues.put(path, param.getValuef());
+                }
+            }
         }
 
         LXPattern applyTo(LXChannel channel) {
             LXPattern pat = channel.getPattern(patternName);
             for (Map.Entry<String, Float> e : parameterValues.entrySet()) {
-                pat.getParameter(e.getKey()).setValue(e.getValue());
+                String path = e.getKey();
+                if (path.contains("effect-")) {
+                    String[] parts = path.split("-");
+                    int eI = Integer.parseInt(parts[1]);
+                    String eP = parts[2];
+                    channel.getEffect(eI).getParameter(eP).setValue(e.getValue());
+                } else {
+                    pat.getParameter(path).setValue(e.getValue());
+                }
             }
             return pat;
         }

@@ -608,7 +608,7 @@
           {
             "index": 2,
             "name": "Yellow",
-            "hue": 60.0,
+            "hue": 55.0,
             "patternName": false,
             "parameterValues": {}
           },

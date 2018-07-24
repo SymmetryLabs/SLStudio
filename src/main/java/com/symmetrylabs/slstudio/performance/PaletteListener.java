@@ -56,6 +56,17 @@ public class PaletteListener {
 
         PaletteListener listener;
 
+        boolean needsPickup;
+        float lastSetValue;
+
+        enum PickupDirection {
+            INITIAL,
+            HIGHER,
+            LOWER
+        }
+
+        PickupDirection pickupDir;
+
 
 
 
@@ -69,6 +80,10 @@ public class PaletteListener {
             this.id = id;
             this.uuid = uuid;
             this.listener = listener;
+
+            needsPickup = true;
+            lastSetValue = -1;
+            pickupDir = PickupDirection.INITIAL;
 
             upsideDown = false;
 
@@ -112,7 +127,11 @@ public class PaletteListener {
             valueListener = new LXParameterListener() {
                 @Override
                 public void onParameterChanged(LXParameter lxParameter) {
-
+                    float cur = value.getNormalizedf();
+                    if (cur != lastSetValue) {
+                        needsPickup = true;
+                        pickupDir = cur > lastSetValue ? PickupDirection.HIGHER : PickupDirection.LOWER;
+                    }
                 }
             };
 
@@ -287,13 +306,37 @@ public class PaletteListener {
 
         void setValue(float v) {
             if (value != null) {
-                float val = upsideDown ? (1.0f - v) : v;
-                value.setNormalized(val);
+                v = upsideDown ? (1.0f - v) : v;
+                // RAPHTODO
+                if (value == listener.lx.engine.speed) {
+                    v = (1.0f - v);
+                    v /= 2;
+                }
+
+                if (needsPickup) {
+                    float cur = value.getNormalizedf();
+                    if (pickupDir == PickupDirection.INITIAL) {
+                        pickupDir = cur > v ? PickupDirection.HIGHER : PickupDirection.LOWER;
+                    }
+
+                    if (pickupDir == PickupDirection.LOWER && v > cur) {
+                        return;
+                    }
+
+                    if (pickupDir == PickupDirection.HIGHER && v < cur) {
+                        return;
+                    }
+
+                    needsPickup = false;
+                }
+
+                lastSetValue = v;
+                value.setNormalized(v);
             }
         }
 
         void setDiscrete(int clicks) {
-            int clicksPerSlot = 3;
+            int clicksPerSlot = 5;
             if (clickCounter > 0 && clicks < 0) {
                 clickCounter = 0;
             }
@@ -368,8 +411,7 @@ public class PaletteListener {
     private Table<Integer, Integer, Module> modules = null;
     public ListenableSet<Module> moduleSet;
     JsonParser parser;
-    HashMap<Integer, JsonArray> pendingInputs;
-    final LX lx;
+    HashMap<Integer, JsonArray> pendingInputs;final LX lx;
     StringBuilder[] builders;
 
 
@@ -425,20 +467,27 @@ public class PaletteListener {
             boolean found = false;
             while (stream.available() > 0) {
                 char c = (char)stream.read();
-                if (objectCount == 0 && c != '{') {
-                    continue;
+                if (c == '\n') {
+                    found = true;
+                    break;
+                } else {
+                    builder.append(c);
                 }
-                builder.append(c);
-                if (c == '{') {
-                    objectCount++;
-                }
-                if (c == '}') {
-                    objectCount--;
-                    if (objectCount == 0) {
-                        found = true;
-                        break;
-                    }
-                }
+//                System.out.print(c);
+//                if (objectCount == 0 && c != '{') {
+//                    continue;
+//                }
+//                builder.append(c);
+//                if (c == '{') {
+//                    objectCount++;
+//                }
+//                if (c == '}') {
+//                    objectCount--;
+//                    if (objectCount == 0) {
+//                        found = true;
+//                        break;
+//                    }
+//                }
             }
             if (found) {
                 String line = builder.toString();

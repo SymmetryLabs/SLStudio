@@ -102,6 +102,8 @@ public class PerformanceHardwareController extends LXComponent {
         TwisterListener(int deckI) {
             this.deckI = deckI;
 
+            params = new ArrayList<LXListenableNormalizedParameter>();
+
             writeListeners = new LXParameterListener[16];
             for (int i = 0; i < writeListeners.length; i++) {
                 final int k = i;
@@ -142,14 +144,14 @@ public class PerformanceHardwareController extends LXComponent {
         }
 
 
-        void getAndWriteParams() {
+        public void getAndWriteParams() {
             getParams();
             writeParamStates();
         }
 
         void getParams() {
             if (params != null) {
-                for (int i = 0; i < params.size(); i++) {
+                for (int i = 0; i < Math.min(params.size(), writeListeners.length); i++) {
                     if (params.get(i) != null) {
                         params.get(i).removeListener(writeListeners[i]);
                     }
@@ -158,12 +160,17 @@ public class PerformanceHardwareController extends LXComponent {
             int maxParamKnobs = 12;
             int active = pm.decks[deckI].activeChannel.getValuei();
             PerformanceManager.PerformanceChannel activeChannel = pm.decks[deckI].channels[active];
-            params = activeChannel.getKnobParameters();
-            while (params.size() < maxParamKnobs) {
-                params.add(null);
+            ArrayList<LXListenableNormalizedParameter> knobParams = activeChannel.getKnobParameters();
+            params.clear();
+            for (int i = 0; i < maxParamKnobs; i++) {
+                if (i < knobParams.size()) {
+                    params.add(knobParams.get(i));
+                } else {
+                    params.add(null);
+                }
             }
             params.addAll(activeChannel.getEffectParameters());
-            for (int i = 0; i < params.size(); i++) {
+            for (int i = 0; i < Math.min(params.size(), writeListeners.length); i++) {
                 if (params.get(i) != null) {
                     params.get(i).addListener(writeListeners[i]);
                 }
@@ -533,6 +540,8 @@ public class PerformanceHardwareController extends LXComponent {
     ColorParameter[] presetColors;
     ColorParameter[] blendModeColors;
     ColorParameter[] cueColors;
+    ColorParameter[] fireColors;
+
 
 
 
@@ -556,14 +565,16 @@ public class PerformanceHardwareController extends LXComponent {
         }
 
         brightnessColor = thresholdColor(pm.globalParams.brightness, 1.0f, 181, 130, 130);
-        speedColor = thresholdColor(pm.globalParams.brightness, 0.5f, 181, 130, 316);
+        speedColor = thresholdColor(pm.globalParams.speed, 0.5f, 181, 130, 130);
         blurColor = thresholdColor(pm.globalParams.effectParams.blur, 0.0f, 130, 130, 316);
-        desaturationColor = thresholdColor(pm.globalParams.effectParams.desaturation, 0.0f, 130, 316, 316);
+        desaturationColor = thresholdColor(pm.globalParams.effectParams.desaturation, 0.0f, 130, 130, 316);
 
         patternColors = new ColorParameter[4];
         presetColors = new ColorParameter[4];
         blendModeColors = new ColorParameter[2];
         cueColors = new ColorParameter[4];
+        fireColors = new ColorParameter[4];
+
 
         for (int i = 0; i < 4; i++) {
             String name = String.format("pattern-%d", i);
@@ -581,6 +592,7 @@ public class PerformanceHardwareController extends LXComponent {
                 }
             };
             addImmediateListener(active, listener);
+
         }
 
         for (int i = 0; i < 4; i++) {
@@ -610,7 +622,7 @@ public class PerformanceHardwareController extends LXComponent {
                     // RAPHTODO
                     float[] hues =
                         new float[] {
-                            0.0f, 25.0f, 60.0f, 115.0f, 180.0f, 225.0f, 280.0f,
+                            0.0f, 25.0f, 55.0f, 115.0f, 180.0f, 225.0f, 280.0f,
                         };
                     float hue = hues[blend.getValuei()];
                     blendModeColors[k].setColor(LXColor.hsb(hue, 100, 100));
@@ -639,10 +651,30 @@ public class PerformanceHardwareController extends LXComponent {
                         on = true;
                     }
 
-                    cueColors[k].setColor(on ? LXColor.RED : LXColor.BLACK);
+                    int c = LXColor.hsb(316, 100, 100);
+                    cueColors[k].setColor(on ? c : LXColor.BLACK);
                 }
             };
             addImmediateListener(cueState, listener);
+        }
+
+        for (int i = 0; i < 4; i++) {
+            String name = String.format("fire-%d", i);
+            fireColors[i] = new ColorParameter(name);
+            final PerformanceGUIController.ChannelWindow window = pm.gui.channelWindows[i];
+            final int k = i;
+            LXParameterListener listener = new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+                    int pI = window.selectedPreset.getValuei();
+                    PerformanceManager.Preset preset = pm.presets.get(pI);
+                    boolean on = preset.patternName != null;
+                    fireColors[k].setColor(LXColor.hsb(preset.hue, 100, on ? 100 : 0));
+                }
+            };
+            addImmediateListener(window.selectedPreset, listener);
+            addImmediateListener(window.savePushed, listener);
+
         }
     }
 
@@ -716,7 +748,8 @@ public class PerformanceHardwareController extends LXComponent {
                 }
                 @Override
                 ColorParameter getColorParameter(int deckI, int channelI) {
-                    return null;
+                    int wI = deckI * 2 + channelI;
+                    return fireColors[wI];
                 }
             });
 

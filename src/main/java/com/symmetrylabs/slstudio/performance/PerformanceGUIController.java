@@ -226,6 +226,7 @@ public class PerformanceGUIController extends LXComponent {
 
             refreshPattern();
             updatePatternList();
+            setActivePatternIndex();
 
             deck.activeChannel.addListener(
                     new LXParameterListener() {
@@ -287,8 +288,10 @@ public class PerformanceGUIController extends LXComponent {
                     PatternItem item = (PatternItem) getFocusedItem();
                     item.window.pm.toggleHidden(item.pattern);
                     if (item.isHidden()) {
-                        PatternItem newTop = (PatternItem) (getItems().get(0));
-                        newTop.onActivate();
+                        int afterI = Math.min(getItems().size() - 1, item.index);
+                        PatternItem after = (PatternItem) (getItems().get(afterI));
+                        after.onActivate();
+                        pm.updateAllTwisters();
                     }
                 }
             }
@@ -298,11 +301,16 @@ public class PerformanceGUIController extends LXComponent {
             final LXPattern pattern;
             final PerformanceManager.PerformanceChannel channel;
             final ChannelWindow window;
+            public int index = 0;
 
             PatternItem(LXPattern pattern, ChannelWindow window) {
                 this.pattern = pattern;
                 this.window = window;
                 this.channel = window.channel;
+            }
+
+            public void setIndex(int i) {
+                index = i;
             }
 
             public String getLabel() {
@@ -333,6 +341,8 @@ public class PerformanceGUIController extends LXComponent {
             @Override
             public void onActivate() {
                 channel.channel.goPattern(pattern);
+                patternList.setFocusIndex(index);
+                activePatternIndex.setValue(index);
                 window.refreshPattern();
             }
         }
@@ -585,7 +595,9 @@ public class PerformanceGUIController extends LXComponent {
 
             activePatternIndex.setRange(0, items.size());
 
-
+            for (int i = 0; i < items.size(); i++) {
+                ((PatternItem)items.get(i)).setIndex(i);
+            }
 
             patternList.setItems(items);
         }
@@ -606,7 +618,7 @@ public class PerformanceGUIController extends LXComponent {
 
             LXPattern pattern = channel.channel.getActivePattern();
 
-            setActivePatternIndex();
+//            setActivePatternIndex();
 
 
             for (UIKnob knob : knobs) {
