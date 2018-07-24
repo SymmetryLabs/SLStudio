@@ -12,7 +12,7 @@ public class Palette extends LXPattern {
     }
 
     public void run(double deltaMs) {
-        for (LXVector v : getVectorList()) {
+        for (LXVector v : getVectors()) {
             colors[v.index] = palette.getColor(v);
         }
     }

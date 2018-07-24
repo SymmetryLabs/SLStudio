@@ -2,17 +2,15 @@ package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.color.Ops8;
 
-import java.lang.Math;
 import java.util.Arrays;
-import java.util.List;
-import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
-import heronarts.lx.model.LXPoint;
-import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.LXUtils;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
 
 public class Sparkle extends LXPattern {
@@ -30,7 +28,7 @@ public class Sparkle extends LXPattern {
         boolean hasPeaked;
 
         Spark() {
-            List<LXVector> vectors = getVectorList();
+            List<LXVector> vectors = getVectors();
             vector = vectors.get((int) Math.floor(LXUtils.random(0, vectors.size())));
             hue = (float) LXUtils.random(0, 1);
             boolean infiniteAttack = (attackParameter.getValuef() > 0.999);

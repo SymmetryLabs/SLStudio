@@ -84,7 +84,7 @@ public class CrossSections extends LXPattern {
         float ywv = 100f / (10 + 40 * yw.getValuef());
         float zwv = 100f / (10 + 40 * zw.getValuef());
 
-        for (LXVector p : getVectorList()) {
+        for (LXVector p : getVectors()) {
                 int c = 0;
                 c = Ops8.add(c, LXColor.hsb(
                         palette.getHuef() + p.x / 10 + p.y / 3,

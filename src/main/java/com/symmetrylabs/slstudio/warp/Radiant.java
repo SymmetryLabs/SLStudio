@@ -1,8 +1,11 @@
 package com.symmetrylabs.slstudio.warp;
 
+import java.util.ArrayList;
+
 import heronarts.lx.LX;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.transform.LXVector;
 import heronarts.lx.warp.LXWarp;
 
 public class Radiant extends LXWarp {
@@ -29,20 +32,23 @@ public class Radiant extends LXWarp {
         if (inputVectorsChanged || parameterChanged) {
             parameterChanged = false;
 
-            System.out.println("Recomputing Radiant warp (" + inputVectors.length + " vectors)...");
+            System.out.println("Recomputing Radiant warp (" + inputVectors.size() + " vectors)...");
             float ox = model.cx;
             float oy = model.cy;
             float oz = model.cz;
             float rMid = radiusParam.getValuef();
             float rMin = rMid * (1 - widthParam.getValuef());
             float rMax = rMid * (1 + widthParam.getValuef());
-            for (int i = 0; i < inputVectors.length; i++) {
-                float dx = inputVectors[i].x - ox;
-                float dy = inputVectors[i].y - oy;
-                float dz = inputVectors[i].z - oz;
+            outputVectors.clear();
+            for (LXVector v : inputVectors) {
+                float dx = v.x - ox;
+                float dy = v.y - oy;
+                float dz = v.z - oz;
                 float r = (float) Math.sqrt(dx * dx + dy * dy + dz * dz) + 1e-6f;
                 float nr = rMin + (1f - 1f / (r / rMid + 1f)) * (rMax - rMin);
-                outputVectors[i].set(ox + dx * nr / r, oy + dy * nr / r, oz + dz * nr / r);
+                LXVector ov = new LXVector(v);  // sets ov.point and ov.index
+                ov.set(ox + dx * nr / r, oy + dy * nr / r, oz + dz * nr / r);
+                outputVectors.add(ov);
             }
             return true;
         }

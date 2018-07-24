@@ -72,7 +72,7 @@ public class Bubbles extends LXPattern {
             bubble.run(deltaMs);
         });
 
-        getVectorList().parallelStream().forEach(v -> {
+        getVectors().parallelStream().forEach(v -> {
             colors[v.index] = 0;
                         for (Bubble bubble : bubbles) {
                                 bubble.paint(v, colors);

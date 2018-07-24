@@ -90,7 +90,7 @@ public class StripPlay extends SLPattern<CubesModel> {
                     float hv = palette.getHuef() + colorOffset[i];
                     float br = max(0, 100 - avgdist * 2 * (100 - brightParameter.getValuef()));
                     int colr = lx.hsb(hv, sat[i].getValuef(), br);
-                    for (LXVector v : getVectorList(strip.points)) {
+                    for (LXVector v : getVectors(strip.points)) {
                         if (br > bright[v.index]) {
                             //colors[p.index] = lx.hsb(hv,sat[i].getValuef(),br);
                             addColor(v.index, colr);

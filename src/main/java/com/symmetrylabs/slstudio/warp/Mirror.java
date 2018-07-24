@@ -1,6 +1,9 @@
 package com.symmetrylabs.slstudio.warp;
 
+import java.util.ArrayList;
+
 import heronarts.lx.LX;
+import heronarts.lx.transform.LXVector;
 import heronarts.lx.warp.LXWarp;
 
 public class Mirror extends LXWarp {
@@ -11,13 +14,12 @@ public class Mirror extends LXWarp {
     @Override
     public boolean run(double deltaMs, boolean inputVectorsChanged) {
         if (inputVectorsChanged) {
-            System.out.println("Recomputing Mirror warp (" + inputVectors.length + " vectors)...");
-            for (int i = 0; i < outputVectors.length; i++) {
-                outputVectors[i].set(
-                    Math.abs(inputVectors[i].x - model.cx) + model.cx,
-                    inputVectors[i].y,
-                    inputVectors[i].z
-                );
+            System.out.println("Recomputing Mirror warp (" + inputVectors.size() + " vectors)...");
+            outputVectors.clear();
+            for (LXVector v : inputVectors) {
+                LXVector ov = new LXVector(v);  // sets ov.point and ov.index
+                ov.set(Math.abs(v.x - model.cx) + model.cx, v.y, v.z);
+                outputVectors.add(ov);
             }
             return true;
         }

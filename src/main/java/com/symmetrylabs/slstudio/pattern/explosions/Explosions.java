@@ -106,7 +106,7 @@ public class Explosions extends LXPattern {
                 float sat_value = saturationModulator.getValuef();
                 float brightness_value = brightnessParameter.getValuef();
 
-                for (LXVector v : getVectorList()) {
+                for (LXVector v : getVectors()) {
                         int num_explosions_in = 0;
 
                         for(L8onExplosion explosion : this.explosions) {
@@ -143,7 +143,7 @@ public class Explosions extends LXPattern {
                                 float stroke_width = this.new_stroke_width();
                                 QuadraticEnvelope new_radius_env = new QuadraticEnvelope(0.0, model.xRange, rateParameter);
                                 new_radius_env.setEase(QuadraticEnvelope.Ease.OUT);
-                                List<LXVector> vectors = getVectorList();
+                                List<LXVector> vectors = getVectors();
                                 LXVector center = vectors.get(pointRandom.nextInt(vectors.size()));
                                 addModulator(new_radius_env);
                                 BandGate explosionGate = (this.explosions.size() % 2 == 1) ? this.beatGate : this.clapGate;
@@ -161,7 +161,7 @@ public class Explosions extends LXPattern {
 
         private void assignNewCenter(L8onExplosion explosion) {
                 float stroke_width = this.new_stroke_width();
-                List<LXVector> vectors = getVectorList();
+                List<LXVector> vectors = getVectors();
                 LXVector center = vectors.get(pointRandom.nextInt(vectors.size()));
                 float chill_time = (15.0f + random(15)) * 1000;
                 QuadraticEnvelope new_radius_env = new QuadraticEnvelope(0.0, model.xRange, rateParameter);

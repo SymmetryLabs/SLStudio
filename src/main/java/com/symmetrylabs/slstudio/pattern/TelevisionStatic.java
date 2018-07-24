@@ -28,7 +28,7 @@ public class TelevisionStatic extends LXPattern {
         int[] colors = (int[]) getArray(SRGB8);
         final boolean d = direction.getValuef() > 5.0;
 
-        getVectorList().parallelStream().forEach(v -> {
+        getVectors().parallelStream().forEach(v -> {
             colors[v.index] = LXColor.hsb(palette.getHuef() + MathUtils.random(hueParameter.getValuef() * 360),
                 MathUtils.random(saturationParameter.getValuef() * 100),
                 MathUtils.random(brightParameter.getValuef() * 100)

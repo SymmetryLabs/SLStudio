@@ -54,7 +54,7 @@ public class Swim extends LXPattern {
     }
 
     public void onVectorsChanged() {
-        projection = new LXProjection(model, getVectorList());
+        projection = new LXProjection(model, getVectors());
     }
 
     @Override
