@@ -27,9 +27,7 @@
 package heronarts.p3lx.ui.studio.device;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
@@ -37,6 +35,7 @@ import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.warp.LXWarp;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UI2dContainer;
@@ -46,20 +45,22 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 
 public class UIDeviceBin extends UI2dScrollContext {
-
     public static final int PADDING = UIMixer.PADDING;
     public static final int HEIGHT = UIDevice.HEIGHT;
 
+    // The children of this UI container are kept in the following order:
+    //   - 0 or more UIWarpDevices (kept in warpDevices)
+    //   - optional UIChannelDevice and UIDeviceBin.Separator (present if channel != null)
+    //   - 0 or more UIPatternDevices (kept in patternDevices)
+    //   - 0 or more UIEffectDevices (kept in effectDevices)
+
     private final UI ui;
+    private final List<UIWarpDevice> warpDevices = new ArrayList<>();
     private final UIChannelDevice channelDevice;
-    private int effectDeviceOffset;
-    private int effectContainerOffset;
+    private final List<UIPatternDevice> patternDevices = new ArrayList<>();
+    private final List<UIEffectDevice> effectDevices = new ArrayList<>();
 
-    private final List<UIDevice> devices = new ArrayList<UIDevice>();
-
-    private final Map<LXPattern, UIPatternDevice> patternDevices =
-        new HashMap<LXPattern, UIPatternDevice>();
-
+    private final LXBus bus;
     private final LXChannel channel;
 
     public UIDeviceBin(final UI ui, LXBus bus, float y, float w) {
@@ -69,12 +70,12 @@ public class UIDeviceBin extends UI2dScrollContext {
         setHorizontalScrollingEnabled(true);
         setVerticalScrollingEnabled(false);
         setArrowKeyFocus(UI2dContainer.ArrowKeyFocus.HORIZONTAL);
+
         this.ui = ui;
+        this.bus = bus;
 
         if (bus instanceof LXChannel) {
             this.channel = (LXChannel) bus;
-            this.effectDeviceOffset = 1;
-            this.effectContainerOffset = 2;
 
             this.channel.addListener(new LXChannel.AbstractListener() {
                 @Override
@@ -89,25 +90,14 @@ public class UIDeviceBin extends UI2dScrollContext {
             });
 
             this.channelDevice = new UIChannelDevice(ui, this, this.channel);
-            addDevice(this.channelDevice, 0);
+            this.channelDevice.addToContainer(this);
+            new Separator().addToContainer(this);
 
             for (LXPattern pattern : this.channel.patterns) {
                 addPatternDevice(pattern);
             }
-
-            new UI2dComponent(0, 0, 4, getContentHeight()) {
-                @Override
-                protected void onDraw(UI ui, PGraphics pg) {
-                    pg.ellipseMode(PConstants.CENTER);
-                    pg.noStroke();
-                    pg.fill(ui.theme.getControlDisabledColor());
-                    for (int i = 0; i < 3; ++i) {
-                        pg.ellipse(this.width/2, this.height/2 + (i-1) * (this.width + 4), this.width, this.width);
-                    }
-                }
-            }.addToContainer(this);
-
             setFocusedPattern(this.channel.getFocusedPattern());
+
             this.channel.focusedPattern.addListener(new LXParameterListener() {
                 @Override
                 public void onParameterChanged(LXParameter parameter) {
@@ -115,99 +105,150 @@ public class UIDeviceBin extends UI2dScrollContext {
                 }
             });
         } else {
+            // This is the master channel; it doesn't have channel or pattern controls, but
+            // it can have warps and effects.
             this.channel = null;
             this.channelDevice = null;
-            this.effectDeviceOffset = 0;
-            this.effectContainerOffset = 0;
         }
+
         for (LXEffect effect : bus.getEffects()) {
-            addDevice(new UIEffectDevice(ui, bus, effect), -1);
+            addEffectDevice(effect);
         }
 
         bus.addListener(new LXChannel.AbstractListener() {
             @Override
+            public void warpAdded(LXBus bus, LXWarp warp) {
+                addWarpDevice(warp);
+            }
+
+            @Override
+            public void warpRemoved(LXBus bus, LXWarp warp) {
+                removeWarpDevice(warp);
+            }
+
+            @Override
+            public void warpMoved(LXBus bus, LXWarp warp) {
+                moveWarpDevice(warp, warp.getIndex());
+            }
+
+            @Override
             public void effectAdded(LXBus bus, LXEffect effect) {
-                addDevice(new UIEffectDevice(ui, bus, effect), -1);
+                addEffectDevice(effect);
             }
 
             @Override
             public void effectRemoved(LXBus bus, LXEffect effect) {
-                UIDevice effectDevice = findEffectDevice(effect);
-                if (effectDevice != null) {
-                    int index = devices.indexOf(effectDevice);
-                    removeDevice(effectDevice);
-                    if (index >= devices.size()) {
-                        index = devices.size() - 1;
-                    }
-                    if (index >= 0) {
-                        devices.get(index).focus();
-                    }
-                }
+                removeEffectDevice(effect);
             }
 
             @Override
             public void effectMoved(LXBus bus, LXEffect effect) {
-                UIEffectDevice effectDevice = findEffectDevice(effect);
-                if (effectDevice != null) {
-                    devices.remove(effectDevice);
-                    devices.add(effect.getIndex() + effectDeviceOffset, effectDevice);
-                    effectDevice.setContainerIndex(effect.getIndex() + effectContainerOffset);
-                }
+                moveEffectDevice(effect, effect.getIndex());
             }
         });
     }
 
-    private UIEffectDevice findEffectDevice(LXEffect effect) {
-        for (UIDevice device : devices) {
-            if (device instanceof UIEffectDevice) {
-                if (((UIEffectDevice) device).effect == effect) {
-                    return (UIEffectDevice) device;
-                }
-            }
-        }
-        return null;
-    }
-
-    private UIDeviceBin addDevice(UIDevice device, int index) {
-        if (index < 0) {
-            device.addToContainer(this);
-            this.devices.add(device);
-        } else {
-            device.addToContainer(this, index);
-            this.devices.add(index, device);
-        }
-        return this;
-    }
-
-    private UIDeviceBin removeDevice(UIDevice device) {
-        int index = this.devices.indexOf(device);
-        if (index >= 0) {
-            this.devices.remove(index).removeFromContainer();
-        }
-        return this;
-    }
-
     private void setFocusedPattern(LXPattern pattern) {
-        for (UIPatternDevice patternDevice : this.patternDevices.values()) {
+        for (UIPatternDevice patternDevice : patternDevices) {
             patternDevice.setVisible(patternDevice.pattern == pattern);
         }
     }
 
+    private void addWarpDevice(LXWarp warp) {
+        UIWarpDevice device = new UIWarpDevice(ui, bus, warp);
+        device.addToContainer(this, warpDevices.size());
+        warpDevices.add(device);
+    }
+
+    private int indexOfWarpDevice(LXWarp warp) {
+        for (int i = 0; i < warpDevices.size(); i++) {
+            if (warpDevices.get(i).warp == warp) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private void removeWarpDevice(LXWarp warp) {
+        int index = indexOfWarpDevice(warp);
+        warpDevices.remove(index).removeFromContainer();
+        if (index < warpDevices.size()) {
+            warpDevices.get(index).focus();
+        }
+    }
+
+    private void moveWarpDevice(LXWarp warp, int newIndex) {
+        int oldIndex = indexOfWarpDevice(warp);
+        UIWarpDevice device = warpDevices.get(oldIndex);
+        warpDevices.remove(oldIndex);
+        warpDevices.add(newIndex, device);
+        device.setContainerIndex(newIndex);
+    }
+
     private void addPatternDevice(LXPattern pattern) {
-        UIPatternDevice patternDevice = new UIPatternDevice(this.ui, this.channel, pattern);
-        patternDevice.setVisible(false);
-        this.patternDevices.put(pattern, patternDevice);
-        addDevice(patternDevice, 1);
-        ++this.effectDeviceOffset;
-        ++this.effectContainerOffset;
+        UIPatternDevice device = new UIPatternDevice(this.ui, this.channel, pattern);
+        device.setVisible(false);
+        device.addToContainer(this, warpDevices.size() + (channel != null ? 2 : 0) + patternDevices.size());
+        this.patternDevices.add(device);
+    }
+
+    private int indexOfPatternDevice(LXPattern pattern) {
+        for (int i = 0; i < patternDevices.size(); i++) {
+            if (patternDevices.get(i).pattern == pattern) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private void removePatternDevice(LXPattern pattern) {
-        UIPatternDevice patternDevice = this.patternDevices.remove(pattern);
-        if (patternDevice != null) {
-            removeDevice(patternDevice);
-            --this.effectDeviceOffset;
-            --this.effectContainerOffset;
+        patternDevices.remove(indexOfPatternDevice(pattern)).removeFromContainer();
+    }
+
+    private void addEffectDevice(LXEffect effect) {
+        UIEffectDevice device = new UIEffectDevice(ui, bus, effect);
+        device.addToContainer(this);  // always goes at the very end
+        effectDevices.add(device);
+    }
+
+    private int indexOfEffectDevice(LXEffect effect) {
+        for (int i = 0; i < effectDevices.size(); i++) {
+            if (effectDevices.get(i).effect == effect) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private void removeEffectDevice(LXEffect effect) {
+        int index = indexOfEffectDevice(effect);
+        effectDevices.remove(index).removeFromContainer();
+        if (index < effectDevices.size()) {
+            effectDevices.get(index).focus();
+        }
+    }
+
+    private void moveEffectDevice(LXEffect effect, int newIndex) {
+        int oldIndex = indexOfEffectDevice(effect);
+        UIEffectDevice device = effectDevices.get(oldIndex);
+        effectDevices.remove(oldIndex);
+        effectDevices.add(newIndex, device);
+        device.setContainerIndex(warpDevices.size() + (channel != null ? 2 : 0) + patternDevices.size() + newIndex);
+    }
+
+    class Separator extends UI2dComponent {  // three grey dots
+        public Separator() {
+            super(0, 0, 4, getContentHeight());
+        }
+
+        @Override
+        protected void onDraw(UI ui, PGraphics pg) {
+            pg.ellipseMode(PConstants.CENTER);
+            pg.noStroke();
+            pg.fill(ui.theme.getControlDisabledColor());
+            for (int i = 0; i < 3; ++i) {
+                pg.ellipse(this.width/2, this.height/2 + (i - 1)*(this.width + 4), this.width, this.width);
+            }
         }
     }
 }
