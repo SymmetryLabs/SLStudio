@@ -423,6 +423,7 @@ public class PaletteListener {
 
     ArrayList<CommPortIdentifier> getPalettePorts() {
         ArrayList<CommPortIdentifier> ports = new ArrayList<CommPortIdentifier>();
+        CommPortIdentifier.getPortIdentifiers()
         Enumeration<CommPortIdentifier> portIdentifiers = CommPortIdentifier.getPortIdentifiers();
         while (portIdentifiers.hasMoreElements()) {
             CommPortIdentifier id = portIdentifiers.nextElement();

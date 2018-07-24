@@ -57,6 +57,7 @@ public class PerformanceManager extends LXComponent {
             effectParams = new PerformanceEffectParams(lx, channel);
 
 
+
             addNewPatterns();
         }
 
