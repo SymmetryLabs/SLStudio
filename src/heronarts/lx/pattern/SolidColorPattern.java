@@ -25,6 +25,7 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.transform.LXVector;
 
 import java.util.Arrays;
 
@@ -42,15 +43,27 @@ public class SolidColorPattern extends LXPattern {
         super(lx);
         this.color.setColor(color);
         addParameter("color", this.color);
-        setColors(this.color.getColor());
+        render();
+    }
+
+    public void render() {
+        int c = color.getColor();
+        int[] colors = (int[]) getArray(SRGB8);
+        for (LXVector v : getVectors()) {
+            colors[v.index] = c;
+        }
+        markModified(SRGB8);
     }
 
     @Override
     public void onParameterChanged(LXParameter p) {
-        if (p == this.color) {
-            Arrays.fill((int[]) getArray(SRGB8), color.getColor());
-            markModified(SRGB8);
-        }
+        if (p == this.color) render();
+    }
+
+    @Override
+    public void onVectorsChanged() {
+        super.onVectorsChanged();
+        render();
     }
 
     @Override
