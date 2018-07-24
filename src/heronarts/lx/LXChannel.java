@@ -726,12 +726,10 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         }
     }
 
-    protected void setVectors(List<LXVector> newVectors) {
-        if (newVectors != vectors) {
-            vectors = newVectors;
-            for (LXPattern pattern : patterns) {
-                pattern.onVectorsChanged();
-            }
+    protected void setVectors(List<LXVector> newVectors, LXWarp newVectorSource) {
+        super.setVectors(newVectors, newVectorSource);
+        for (LXPattern pattern : patterns) {
+            pattern.onVectorsChanged();
         }
     }
 
@@ -774,7 +772,9 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
                 nextInputVectors = warp.getOutputVectors();
             }
         }
-        setVectors(nextInputVectors);
+        if (nextInputVectors != vectors || nextInputSource != vectorSource || nextInputChanged) {
+            setVectors(nextInputVectors, nextInputSource);
+        }
 
         // Run active pattern
         PolyBuffer.Space space = colorSpace.getEnum();

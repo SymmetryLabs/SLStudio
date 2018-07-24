@@ -88,6 +88,8 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
 
     /** The (possibly warped) coordinates of the model points, for use by patterns and effects */
     protected List<LXVector> vectors = null;
+    /** The LXWarp that last produced the contents of vectors, or null if the vectors came directly from the model. */
+    protected LXWarp vectorSource = null;
 
     LXBus(LX lx) {
         this(lx, null);
@@ -323,12 +325,11 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
         return result;
     }
 
-    protected void setVectors(List<LXVector> newVectors) {
-        if (newVectors != vectors) {
-            vectors = newVectors;
-            for (LXEffect effect : effects) {
-                effect.onVectorsChanged();
-            }
+    protected void setVectors(List<LXVector> newVectors, LXWarp newVectorSource) {
+        vectors = newVectors;
+        vectorSource = newVectorSource;
+        for (LXEffect effect : effects) {
+            effect.onVectorsChanged();
         }
     }
     
