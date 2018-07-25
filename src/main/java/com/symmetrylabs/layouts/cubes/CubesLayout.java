@@ -27,15 +27,145 @@ public class CubesLayout implements Layout {
     ListenableSet<CubesController> controllers = new ListenableSet<>();
     CubePhysicalIdMap cubePhysicalIdMap = new CubePhysicalIdMap();
 
+    static final float globalOffsetX = 0;
+    static final float globalOffsetY = 0;
+    static final float globalOffsetZ = 0;
+
+    static final float globalRotationX = 0;
+    static final float globalRotationY = -45;
+    static final float globalRotationZ = 0;
+
+    static final float CUBE_WIDTH = 24;
+    static final float CUBE_HEIGHT = 24;
+    static final float TOWER_WIDTH = 24;
+    static final float TOWER_HEIGHT = 24;
+    static final float CUBE_SPACING = 2.5f;
+
+    static final float TOWER_VERTICAL_SPACING = 2.5f;
+    static final float TOWER_RISER = 14;
+    static final float SP = 24+2;
+    static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
+
+    static final float INCHES_PER_METER = 39.3701f;
+
+    static final TowerConfig[] TOWER_CONFIG = {
+//        new TowerConfig(SP*0.f, 0, -SP*0.f, new String[] {"0", "0", "0", "0", "0"}),
+//        new TowerConfig(SP*1.f, 0, -SP*1.f, new String[] {"0", "0", "0", "0", "0"}),
+//        new TowerConfig(SP*2.f, 0, -SP*2.f, new String[] {"0", "0", "0", "0", "0"}),
+//        new TowerConfig(SP*3.f, 0, -SP*3.f, new String[] {"0", "0", "0", "0", "0"}),
+//        new TowerConfig(SP*4.f, 0, -SP*4.f, new String[] {"0", "0", "0", "0", "0"}),
+//        new TowerConfig(SP*5.f, 0, -SP*5.f, new String[] {"0", "0", "0", "0", "0"}),
+
+// back row right to left
+
+new TowerConfig(SP*0, 0, -SP*0, 0, 0, 0, new String[] {"55", "001ec0f4beb1", "353", "61"}),
+    new TowerConfig(SP*0, 0, -SP*1, 0, 0, 0, new String[] {"308", "412", "38"}),
+new TowerConfig(SP*1, 0, -SP*1, 0, 0, 0, new String[] {"d880399b2b0a", "001ec0f56df8", "001ec0f4f636"}),
+new TowerConfig(SP*2, 0, -SP*2, 0, 0, 0, new String[] {"d880399ad507", "71", "d8803963052f"}),
+    new TowerConfig(SP*2, 0, -SP*3, 0, 0, 0, new String[] {"46", "5", "001ec0f56ee3"}),
+new TowerConfig(SP*3, 0, -SP*3, 0, 0, 0, new String[] {"d880399b2000", "398", "001ec0f543f4", "d880396305af"})
+};
+
+    static class TowerConfig {
+
+        final CubesModel.Cube.Type type;
+        final float x;
+        final float y;
+        final float z;
+        final float xRot;
+        final float yRot;
+        final float zRot;
+        final String[] ids;
+        final float[] yValues;
+
+        TowerConfig(float x, float y, float z, String[] ids) {
+            this(CubesModel.Cube.Type.LARGE, x, y, z, ids);
+        }
+
+        TowerConfig(float x, float y, float z, float yRot, String[] ids) {
+            this(x, y, z, 0, yRot, 0, ids);
+        }
+
+        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, String[] ids) {
+            this(type, x, y, z, 0, 0, 0, ids);
+        }
+
+        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float yRot, String[] ids) {
+            this(type, x, y, z, 0, yRot, 0, ids);
+        }
+
+        TowerConfig(float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
+            this(CubesModel.Cube.Type.LARGE, x, y, z, xRot, yRot, zRot, ids);
+        }
+
+        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
+            this.type = type;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.xRot = xRot;
+            this.yRot = yRot;
+            this.zRot = zRot;
+            this.ids = ids;
+
+            this.yValues = new float[ids.length];
+            for (int i = 0; i < ids.length; i++) {
+                yValues[i] = y + i * (CUBE_HEIGHT + CUBE_SPACING);
+            }
+        }
+    }
+
+    public SLModel buildModel() {
+        // Any global transforms
+        LXTransform globalTransform = new LXTransform();
+        globalTransform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
+        globalTransform.rotateX(globalRotationX * Math.PI / 180.);
+        globalTransform.rotateY(globalRotationY * Math.PI / 180.);
+        globalTransform.rotateZ(globalRotationZ * Math.PI / 180.);
+
+        /* Cubes ----------------------------------------------------------*/
+        List<CubesModel.Tower> towers = new ArrayList<>();
+        List<CubesModel.Cube> allCubes = new ArrayList<>();
+
+        int stripId = 0;
+        for (TowerConfig config : TOWER_CONFIG) {
+            List<CubesModel.Cube> cubes = new ArrayList<>();
+            float x = config.x;
+            float z = config.z;
+            float xRot = config.xRot;
+            float yRot = config.yRot;
+            float zRot = config.zRot;
+            CubesModel.Cube.Type type = config.type;
+
+            for (int i = 0; i < config.ids.length; i++) {
+                float y = config.yValues[i];
+                CubesModel.Cube cube = new CubesModel.Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
+                cubes.add(cube);
+                allCubes.add(cube);
+            }
+            towers.add(new CubesModel.Tower("", cubes));
+        }
+        /*-----------------------------------------------------------------*/
+
+        CubesModel.Cube[] allCubesArr = new CubesModel.Cube[allCubes.size()];
+        for (int i = 0; i < allCubesArr.length; i++) {
+            allCubesArr[i] = allCubes.get(i);
+        }
+
+        return new CubesModel(towers, allCubesArr);
+    }
+
+    /*
+    public static LXModel importObjModel() {
+        return new LXModel(new ObjImporter("data", globalTransform).getModels().toArray(new LXModel[0]));
+    }
+    */
+
     private static Map<LX, WeakReference<CubesLayout>> instanceByLX = new WeakHashMap<>();
 
     public static CubesLayout getInstance(LX lx) {
         WeakReference<CubesLayout> weakRef = instanceByLX.get(lx);
         return weakRef == null ? null : weakRef.get();
-    }
-
-    public SLModel buildModel() {
-        return null;
     }
 
     public void setupLx(SLStudioLX lx) {
@@ -96,4 +226,9 @@ public class CubesLayout implements Layout {
         controllers.addListener(listener);
     }
 
+    public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
+        UI2dScrollContext utility = ui.rightPane.utility;
+        new UIOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
+        new UIMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
+    }
 }
