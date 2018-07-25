@@ -3,17 +3,16 @@ package com.symmetrylabs.slstudio;
 import java.util.Map;
 
 import com.symmetrylabs.layouts.Layout;
+import com.symmetrylabs.layouts.tree.Anemometer;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
 import heronarts.lx.LX;
 import com.symmetrylabs.layouts.LayoutRegistry;
 import com.symmetrylabs.layouts.tree.TreeModelingTool;
 import com.symmetrylabs.layouts.tree.ui.*;
-import com.symmetrylabs.layouts.tree.anemometer.*;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.output.OPCOutput;
 
 import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.output.OutputControl;

@@ -520,7 +520,7 @@ class dLattice {
     dPixel getClosest(LXVector p) {
         dVertex v = null;
         int pos = 0;
-        float d = 2500;
+        float d = Float.MAX_VALUE;
 
         for (Strip s : model.getStrips()) {
             float nd = pd2(s.points[0], p.x, p.y, p.z);
