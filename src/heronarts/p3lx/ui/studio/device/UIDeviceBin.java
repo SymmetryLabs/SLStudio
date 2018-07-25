@@ -33,6 +33,7 @@ import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
+import heronarts.lx.warp.LXWarp;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.warp.LXWarp;
