@@ -90,7 +90,7 @@
 //      raindrops.add(new Raindrop());
 //    }
 //
-//    getVectorList().parallelStream().forEach(p -> {
+//    getVectors().parallelStream().forEach(p -> {
 //      int c = 0;
 //      for (Raindrop raindrop : raindrops) {
 //        if (p.x >= (raindrop.p.x - raindrop.radius) && p.x <= (raindrop.p.x + raindrop.radius) &&

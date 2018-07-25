@@ -42,7 +42,7 @@ public class PaletteViewer extends SLPattern<SLModel> {
         pal.setBias(palBias.getValue());
         pal.setShift(palShift.getValue());
         pal.setCutoff(palCutoff.getValue());
-        for (LXVector v : getVectorList()) {
+        for (LXVector v : getVectors()) {
             colors[v.index] = pal.getColor((v.y - model.yMin) / (model.yMax - model.yMin));
         }
     }

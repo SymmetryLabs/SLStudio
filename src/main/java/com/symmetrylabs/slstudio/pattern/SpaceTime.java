@@ -55,7 +55,7 @@ public class SpaceTime extends SLPattern<StripsModel<Strip>> {
             int s = model.getStrips().indexOf(strip);
 
             int i = 0;
-            for (LXVector v : getVectorList(strip.points)) {
+            for (LXVector v : getVectors(strip.points)) {
                 colors[v.index] = lx.hsb(
                     palette.getHuef() + 360 - v.x * .2f + v.y * .3f,
                     constrain(.4f * min(abs(s - sVal1), abs(s - sVal2)), 20, 100),

@@ -24,12 +24,12 @@ public class TestCubeOrientation extends SLPattern<CubesModel> {
 
             for (CubesModel.Face face : cube.getFaces()) {
                 int col = cols[i++];
-                for (LXVector v : getVectorList(face.points)) {
+                for (LXVector v : getVectors(face.points)) {
                     colors[v.index] = col;
                 }
 
                 // make bottom of cube yellow
-                for (LXVector v : getVectorList(face.getStripByIndex(2).points)) {
+                for (LXVector v : getVectors(face.getStripByIndex(2).points)) {
                     colors[v.index] = cols[4];
                 }
             }

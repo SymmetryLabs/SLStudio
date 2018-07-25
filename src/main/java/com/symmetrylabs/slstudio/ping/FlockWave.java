@@ -282,7 +282,7 @@ public class FlockWave extends SLPatternWithMarkers {
         float radius = size.getValuef();
         float sqRadius = radius * radius;
 
-        for (LXVector p : getVectorList()) {
+        for (LXVector p : getVectors()) {
             int rgb = 0;
             for (Bird b : birds) {
                 if (Math.abs(b.pos.x - p.x) < radius) {
@@ -299,7 +299,7 @@ public class FlockWave extends SLPatternWithMarkers {
         float radius = size.getValuef();
 
         radius = 10000;
-        for (LXVector p : getVectorList()) {
+        for (LXVector p : getVectors()) {
             Bird closestBird = null;
             float minSqDist = 1e6f;
             for (Bird b : birds) {
@@ -393,7 +393,8 @@ public class FlockWave extends SLPatternWithMarkers {
 
     @Override
     public void onVectorsChanged() {
-        List<LXVector> vectorList = getVectorList();
+        super.onVectorsChanged();
+        List<LXVector> vectorList = getVectors();
         coords = new float[vectorList.size()*3];
         int i = 0;
         for (LXVector vector : vectorList) {

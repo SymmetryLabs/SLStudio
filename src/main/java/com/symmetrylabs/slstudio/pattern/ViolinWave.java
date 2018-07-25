@@ -80,7 +80,7 @@ public class ViolinWave extends LXPattern {
             if (!isActive()) return;
             final float pFalloff = (30 - 27 * pSize.getValuef());
 
-            getVectorList().parallelStream().forEach(p -> {
+            getVectors().parallelStream().forEach(p -> {
                 float b = 100 - pFalloff * (MathUtils.abs(p.x - x.getValuef()) + MathUtils.abs(p.y - y.getValuef()));
                 if (b > 0) {
                     colors[p.index] = Ops8.add(colors[p.index],
@@ -134,7 +134,7 @@ public class ViolinWave extends LXPattern {
         float rng = (78 - 64 * range.getValuef()) / (model.yMax - model.cy);
         float val = MathUtils.max(2, dbValue.getValuef());
 
-        for (LXVector v : getVectorList()) {
+        for (LXVector v : getVectors()) {
             int ci = (int)MathUtils.lerp(0, centers.length - 1, (v.point.x - model.xMin) / (model.xMax - model.xMin));
             float rFactor = 1.0f - 0.9f * MathUtils.abs(v.x - model.cx) / (model.xMax - model.cx);
             colors[v.index] = LXColor.hsb(

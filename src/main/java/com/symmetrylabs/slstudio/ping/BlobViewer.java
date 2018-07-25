@@ -54,7 +54,7 @@ public class BlobViewer extends SLPattern<SLModel> {
         boolean sphereMode = mode.getOption().equals("spheres");
 
         println("blobs: " + blobs.size());
-        for (LXVector p : getVectorList()) {
+        for (LXVector p : getVectors()) {
             PVector pv = new PVector(p.x, p.y, p.z);
             int c = 0;
             for (int b = 0; b < blobs.size(); b++) {

@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1532324236992,
+  "timestamp": 1532461037273,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -310,19 +310,6 @@
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 312,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -35584,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "outputControl": {
         "id": 31,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
@@ -368,11 +355,11 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 103.92673839457102,
-        "theta": 0.14700000000000002,
-        "phi": 0.07800000000000004,
-        "positionX": 1325.0,
-        "positionY": 39.0,
-        "positionZ": -6.999996185302734
+        "theta": 0.19200000000000006,
+        "phi": 0.13800000000000007,
+        "positionX": 1405.0006103515625,
+        "positionY": 93.0,
+        "positionZ": 17.0000057220459
       }
     }
   }

@@ -54,6 +54,7 @@ public abstract class DPat extends SLPattern<SLModel> {
     }
 
     public float interpWv(float i, float[] vals) {
+        i = Math.max(0, Math.min(vals.length - 1, i));
         return interp(i - MathUtils.floor(i), vals[MathUtils.floor(i)], vals[MathUtils.ceil(i)]);
     }
 
@@ -325,7 +326,7 @@ public abstract class DPat extends SLPattern<SLModel> {
         // TODO Threading: For some reason, using parallelStream here messes up the animations.
         int[] colors = (int[]) getArray(SRGB8);
 
-        getVectorList().parallelStream().forEach(p -> {
+        getVectors().parallelStream().forEach(p -> {
             PVector P = new PVector(), tP = new PVector();
 
             setVec(P, p);

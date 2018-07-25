@@ -92,7 +92,7 @@ public abstract class ThreadedPattern extends LXPattern {
                 }
 
                 int numThreads = renderThreads.size();
-                List<LXVector> vectors = getVectorList();
+                List<LXVector> vectors = getVectors();
                 int pointCount = vectors.size();
                 int startInclusive = pointCount * index / numThreads;
                 int endExclusive = pointCount * (index + 1) / numThreads;

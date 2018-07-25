@@ -2,8 +2,11 @@ package com.symmetrylabs.slstudio.warp;
 
 import com.symmetrylabs.layouts.tree.TreeModel;
 
+import java.util.ArrayList;
+
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.transform.LXVector;
 import heronarts.lx.warp.LXWarp;
 
 public class TreeStructure extends LXWarp {
@@ -15,7 +18,7 @@ public class TreeStructure extends LXWarp {
     public boolean run(double deltaMs, boolean inputVectorsChanged) {
         if (inputVectorsChanged) {
             if (model instanceof TreeModel) {
-                System.out.println("Recomputing TreeStructure warp (" + inputVectors.length + " vectors)...");
+                System.out.println("Recomputing TreeStructure warp (" + inputVectors.size() + " vectors)...");
                 TreeModel tree = (TreeModel) model;
 
                 float na = 0, nb = 0, nc = 0, nd = 0, ne = 0;
@@ -33,6 +36,7 @@ public class TreeStructure extends LXWarp {
                     }
                 }
 
+                outputVectors = new ArrayList<>();
                 int a = 0;
                 for (TreeModel.Limb limb : tree.limbs) {
                     int b = 0;
@@ -43,11 +47,11 @@ public class TreeStructure extends LXWarp {
                             for (TreeModel.Leaf leaf : twig.leaves) {
                                 int e = 0;
                                 for (LXPoint point : leaf.points) {
-                                    outputVectors[point.index].set(
-                                        tree.xMin + tree.xRange * (a / na + 0.1f * d / nd),
-                                        tree.yMin + tree.yRange * (c / nc),
-                                        tree.zMin + tree.zRange * (b / nb + 0.1f * e / ne)
-                                    );
+                                    LXVector ov = new LXVector(point);  // sets ov.point and ov.index
+                                    ov.set(tree.xMin + tree.xRange * (a / na + 0.1f * d / nd),
+                                              tree.yMin + tree.yRange * (c / nc),
+                                             tree.zMin + tree.zRange * (b / nb + 0.1f * e / ne));
+                                    outputVectors.add(ov);
                                     e++;
                                 }
                                 d++;

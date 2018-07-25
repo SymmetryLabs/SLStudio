@@ -96,7 +96,7 @@ public class CubesMappingPattern extends SLPattern<CubesModel> {
                 continue;
 
             int i = 0;
-            for (LXVector v : getVectorList(c.points)) {
+            for (LXVector v : getVectors(c.points)) {
                 if (dotted) {
                     col = (i++ % 2 == 0) ? LXColor.scaleBrightness(LXColor.GREEN, 0.2f) : LXColor.BLACK;
                 }

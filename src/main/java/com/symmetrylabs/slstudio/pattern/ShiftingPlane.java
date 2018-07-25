@@ -40,7 +40,7 @@ public class ShiftingPlane extends LXPattern {
         float dv = d.getValuef();
         float denom = sqrt(av * av + bv * bv + cv * cv);
 
-        for (LXVector v : getVectorList()) {
+        for (LXVector v : getVectors()) {
             float d = abs(av * (v.x - model.cx) + bv * (v.y - model.cy) + cv * (v.z - model.cz) + dv) / denom;
             colors[v.index] = LXColor.hsb(
                 hv + (abs(v.x - model.cx) * .6f + abs(v.y - model.cy) * .9f + abs(v.z - model.cz)) * hueShift.getValuef(),
