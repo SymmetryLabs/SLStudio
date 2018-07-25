@@ -6,15 +6,25 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.effect.ColorShiftEffect;
 import heronarts.lx.*;
 
+import heronarts.lx.blend.DissolveBlend;
 import heronarts.lx.blend.LXBlend;
 import heronarts.lx.effect.BlurEffect;
 import heronarts.lx.effect.DesaturationEffect;
+import heronarts.lx.midi.LXMidiListener;
+import heronarts.lx.output.LXOutputGroup;
 import heronarts.lx.parameter.*;
 
 import java.util.*;
 import java.io.*;
 
 public class PerformanceManager extends LXComponent {
+
+    public static enum PerformanceBlend {
+        Dissolve,
+        Add,
+        Multiply,
+        Fade
+    }
 
     public static int CHANNELS_PER_DECK = 2;
     public static int N_DECKS = 2;
@@ -32,6 +42,7 @@ public class PerformanceManager extends LXComponent {
     public BooleanParameter presetsLoaded;
 
     public CompoundParameter[] deckCrossfaders;
+    public EnumParameter<PerformanceBlend>[] deckBlends;
 
     public class PerformanceChannel extends LXComponent {
         public PerformanceEffectParams effectParams;
@@ -53,8 +64,24 @@ public class PerformanceManager extends LXComponent {
 
             int nPatterns = 1;
 
+            lx.engine.getChannel(String.format("PM%d", globalIndex));
             channel = lx.engine.channels.get(globalIndex);
             effectParams = new PerformanceEffectParams(lx, channel);
+
+            int nBlends = 6;
+            if (channel.blendMode.getOptions().length < nBlends) {
+                LXBlend[] blends = new LXBlend[nBlends];
+                for (int i = 0; i < nBlends; i++) {
+                    if (i == nBlends - 1) {
+                        blends[i] = new DissolveBlend(lx);
+                    } else {
+                        channel.blendMode.setValue(i);
+                        blends[i] = channel.blendMode.getObject();
+                    }
+                }
+                channel.blendMode.setObjects(blends);
+                channel.blendMode.setValue(0);
+            }
 
 
 
@@ -157,7 +184,7 @@ public class PerformanceManager extends LXComponent {
         public class PerformanceDeck extends LXComponent {
         public PerformanceChannel[] channels;
         public CompoundParameter crossfade;
-        public ObjectParameter<LXBlend> blendMode;
+        public ObjectParameter<PerformanceBlend> blendMode;
         public DiscreteParameter activeChannel;
         public int globalIndex;
         public PerformanceManager manager;
@@ -173,24 +200,40 @@ public class PerformanceManager extends LXComponent {
             }
 
             crossfade = manager.deckCrossfaders[globalIndex];
-            blendMode = channels[CHANNELS_PER_DECK - 1].channel.blendMode;
+            blendMode = manager.deckBlends[globalIndex];
             lastCrossfade = crossfade.getValuef();
 
             activeChannel = new DiscreteParameter("activeChannel", 0, 0, 2);
 
-            lx.engine.addLoopTask(
-                    new LXLoopTask() {
-                        @Override
-                        public void loop(double v) {
-                            if (crossfade.getValuef() != lastCrossfade) {
-                                setChannelFaders();
-                                lastCrossfade = crossfade.getValuef();
-                                setActiveChannel();
-                            }
-                        }
-                    });
-            setChannelFaders();
+            crossfade.addListener(new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+                    setChannelFaders();
+                    setActiveChannel();
+                }
+            });
 
+            blendMode.addListener(new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+                    setChannelFaders();
+                }
+            });
+
+
+
+//      lx.engine.addLoopTask(
+//          new LXLoopTask() {
+//            @Override
+//            public void loop(double v) {
+//              if (crossfade.getValuef() != lastCrossfade) {
+//                setChannelFaders();
+//                lastCrossfade = crossfade.getValuef();
+//                setActiveChannel();
+//              }
+//            }
+//          });
+            setChannelFaders();
             setActiveChannel();
         }
 
@@ -199,11 +242,82 @@ public class PerformanceManager extends LXComponent {
             activeChannel.setValue(val <= 0.5 ? 0 : 1);
         }
 
-        public void setChannelFaders() {
-            for (int i = 0; i < CHANNELS_PER_DECK; i++) {
-                float cf = crossfade.getValuef();
-                float val = i == 0 ? (1.0f - cf) : cf;
-                channels[i].channel.fader.setValue(val);
+
+
+        LXChannel[] setChannelsReversed(boolean reversed) {
+            LXChannel first = channels[0].channel;
+            LXChannel second = channels[1].channel;
+            int firstI = globalIndex * 2;
+            int secondI = firstI + 1;
+            List<LXChannel> channels = lx.engine.getChannels();
+            if (reversed && first != lx.engine.channels.get(secondI)) {
+                lx.engine.moveChannel(first, secondI);
+            } else if (!reversed && first != lx.engine.channels.get(firstI)) {
+                lx.engine.moveChannel(first, firstI);
+            }
+
+            if (reversed) {
+                return new LXChannel[]{second, first};
+            } else {
+                return new LXChannel[]{first, second};
+            }
+        }
+
+            final int LX_ADD_BLEND = 0;
+            final int LX_MULTIPLY_BLEND = 1;
+            final int LX_SUBTRACT_BLEND = 2;
+            final int LX_DIFFERENCE_BLEND = 3;
+            final int LX_NORMAL_BLEND = 4;
+            final int LX_DISSOLVE_BLEND = 5;
+
+
+
+
+            public void setChannelFaders() {
+            float cf = crossfade.getValuef();
+            float amt = 1.0f - Math.abs(cf - 0.5f) * 2;
+            PerformanceBlend b = ((EnumParameter<PerformanceBlend>) blendMode).getEnum();
+
+//            if (cf < 0.5) {
+//                amt = 1.0f - amt;
+//            }
+
+            LXChannel[] order = setChannelsReversed(cf > 0.5);
+//            if (b == PerformanceBlend.Dissolve) {
+//                order = setChannelsReversed(false);
+//            } else {
+//                order = setChannelsReversed(cf > 0.5);
+//            }
+
+                
+
+
+            switch (b) {
+
+                case Dissolve:
+                    order[0].fader.setValue(1.0f);
+                    order[1].fader.setValue(amt);
+                    order[0].blendMode.setValue(LX_ADD_BLEND);
+                    order[1].blendMode.setValue(LX_DISSOLVE_BLEND);
+                    break;
+                case Add:
+                    order[0].fader.setValue(1.0f);
+                    order[1].fader.setValue(amt);
+                    order[0].blendMode.setValue(LX_ADD_BLEND);
+                    order[1].blendMode.setValue(LX_ADD_BLEND);
+                    break;
+                case Multiply:
+                    order[0].fader.setValue(1.0f);
+                    order[1].fader.setValue(amt);
+                    order[0].blendMode.setValue(LX_ADD_BLEND);
+                    order[1].blendMode.setValue(LX_MULTIPLY_BLEND);
+                    break;
+                case Fade:
+                    order[0].fader.setValue(1.0 - amt);
+                    order[1].fader.setValue(0.0f);
+                    order[0].blendMode.setValue(LX_ADD_BLEND);
+                    order[1].blendMode.setValue(LX_ADD_BLEND);
+                    break;
             }
         }
     }
@@ -263,6 +377,7 @@ public class PerformanceManager extends LXComponent {
         }
 
         globalParams = new PerformanceGlobalParams(lx);
+
     }
 
     private void addEffects(LXBus c) {
@@ -304,7 +419,8 @@ public class PerformanceManager extends LXComponent {
                 LXChannel c = lx.engine.addChannel();
                 addEffects(c);
 
-                c.label.setValue(String.format("D %d C %d", deckIndex + 1, chanIndex + 1));
+                int ci = (deckIndex * N_DECKS) + chanIndex;
+                c.label.setValue(String.format("PM%d", ci));
 
                 LXChannel.CrossfadeGroup group =
                         deckIndex == 0 ? LXChannel.CrossfadeGroup.A : LXChannel.CrossfadeGroup.B;
@@ -347,6 +463,36 @@ public class PerformanceManager extends LXComponent {
     }
 
     public void start() {
+//        LXChannel c = lx.engine.getChannels().get(1);
+//        lx.engine.moveChannel();
+//        LXBlend b = new LXBlend(lx) {
+//            @Override
+//            public void blend(int[] base, int[] overlay, double alpha, int[] dest) {
+//                for (int i = 0; i < base.length; i++)  {
+//                    if (alpha > 0.5) {
+//                        dest[i] = overlay[i];
+//                    } else {
+//                        dest[i] = base[i];
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public String toString() {
+//                return "BAZINGA";
+//            }
+//
+//            @Override
+//            public String getLabel() {
+//                return "BARBAZ";
+//            }
+//        };
+//        c.blendMode.setObjects(new LXBlend[]{b, b});
+//        c.blendMode.setValue(0);
+//        c.blendMode.setObjects(new LXBlend[]{new DissolveBlend(lx)});
+//        c.blendMode.setValue(0);
+
+
         if (!performanceModeInitialized.getValueb()) {
             return;
         }
@@ -574,6 +720,7 @@ public class PerformanceManager extends LXComponent {
                 }
             }
             return pat;
+
         }
     }
 
@@ -591,11 +738,16 @@ public class PerformanceManager extends LXComponent {
         addParameter(cueState);
 
         deckCrossfaders = new CompoundParameter[N_DECKS];
+        deckBlends = new EnumParameter[N_DECKS];
         for (int i = 0; i < N_DECKS; i++) {
-            String name = String.format("crossfader-%d", i);
-            deckCrossfaders[i] = new CompoundParameter(name, 0);
+            String crossfadeName = String.format("crossfader-%d", i);
+            deckCrossfaders[i] = new CompoundParameter(crossfadeName, 0);
             deckCrossfaders[i].setPolarity(LXParameter.Polarity.BIPOLAR);
             addParameter(deckCrossfaders[i]);
+
+            String blendName = String.format("blend-%d", i);
+            deckBlends[i] = new EnumParameter<PerformanceBlend>(blendName, PerformanceBlend.Dissolve);
+            addParameter(deckBlends[i]);
         }
 
         hiddenPatterns = new HashSet<String>();

@@ -220,11 +220,13 @@ public class PerformanceHardwareController extends LXComponent {
             if (cc >= params.size() | params.get(cc) == null) {
                 return;
             }
+            LXListenableNormalizedParameter param = params.get(cc);
             if (channel == 0) {
-                params.get(cc).setNormalized(v);
-                float yo = params.get(cc).getValuef();
-                System.out.printf("%s: %.2f %.2f", params.get(cc).getLabel(), v, yo);
+                param.setNormalized(v);
             }
+//      if (channel == 1) {
+//          param.setValue(param.get)
+//            }
         }
 
         @Override
@@ -251,7 +253,6 @@ public class PerformanceHardwareController extends LXComponent {
         ArrayList<LXMidiOutput> fighterOutputs = new ArrayList<LXMidiOutput>();
         ArrayList<LXMidiOutput> twisterOutputs = new ArrayList<LXMidiOutput>();
 
-        List<LXMidiSurface> surfaces = lx.engine.midi.surfaces;
 
         for (LXMidiInput in : lx.engine.midi.inputs) {
             String name = in.getName();
@@ -260,6 +261,9 @@ public class PerformanceHardwareController extends LXComponent {
             } else if (name.contains("Fighter")) {
                 fighterInputs.add(in);
             }
+
+            System.out.printf("DESC: %s %s\n", in.getDescription(), in.getName());
+
         }
 
         for (LXMidiOutput out : lx.engine.midi.outputs) {
@@ -418,10 +422,31 @@ public class PerformanceHardwareController extends LXComponent {
             }
         });
 
+        for (int i = 0; i < 4; i++) {
+            final int j = i;
+            pm.gui.channelWindows[i].activePatternIndex.addListener(new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+                    int k = ((DiscreteParameter)lxParameter).getValuei();
+                    String name = pm.gui.channelWindows[j].patternList.getItems().get(k).getLabel();
+                    int deck = j < 2 ? 0 : 1;
+                    setPatternScreen(deck, name);
+                }
+            });
+        }
+
 
 //        startPaletteThread();
 
 
+    }
+
+    void setPatternScreen(int deckIndex, String name) {
+        for (PaletteListener.Module hub : palette.modules.column(1).values()) {
+            if (hub.hubIndex == deckIndex) {
+                hub.setString(name);
+            }
+        }
     }
 
 
@@ -564,10 +589,10 @@ public class PerformanceHardwareController extends LXComponent {
             crossfaderColors[i] = thresholdColor(fader, 0.5f, 181, 181, 316);
         }
 
-        brightnessColor = thresholdColor(pm.globalParams.brightness, 1.0f, 181, 130, 130);
+        brightnessColor = thresholdColor(pm.globalParams.brightness, 0.99f, 181, 130, 130);
         speedColor = thresholdColor(pm.globalParams.speed, 0.5f, 181, 130, 130);
-        blurColor = thresholdColor(pm.globalParams.effectParams.blur, 0.0f, 130, 130, 316);
-        desaturationColor = thresholdColor(pm.globalParams.effectParams.desaturation, 0.0f, 130, 130, 316);
+        blurColor = thresholdColor(pm.globalParams.effectParams.blur, 0.01f, 130, 130, 316);
+        desaturationColor = thresholdColor(pm.globalParams.effectParams.desaturation, 0.01f, 130, 130, 316);
 
         patternColors = new ColorParameter[4];
         presetColors = new ColorParameter[4];
@@ -768,16 +793,4 @@ public class PerformanceHardwareController extends LXComponent {
         }
     }
 
-    void startPaletteThread() {
-//        Runnable run =
-//            new Runnable() {
-//                @Override
-//                public void run() {
-//
-//                }
-//            };
-//        Thread paletteThread = new Thread(run);
-//        paletteThread.setName("HOWDY");
-//        paletteThread.start();
-    }
 }

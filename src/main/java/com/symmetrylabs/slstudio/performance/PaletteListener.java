@@ -17,6 +17,7 @@ import purejavacomm.*;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 public class PaletteListener {
@@ -34,6 +35,8 @@ public class PaletteListener {
         public String uuid;
         int serialIndex;
 
+        int hubIndex = -1;
+
         BooleanParameter pressed = null;
         LXListenableNormalizedParameter value = null;
         DiscreteParameter discrete = null;
@@ -49,6 +52,7 @@ public class PaletteListener {
         final LXParameterListener valueListener;
         final LXParameterListener discreteListener;
         final LXParameterListener colorListener;
+
 
         int lastR;
         int lastG;
@@ -157,6 +161,22 @@ public class PaletteListener {
                     setLED(r, g, b);
                 }
             };
+
+            if (type == Type.HUB) {
+                setString("Symmetry");
+            }
+
+
+
+        }
+
+        public void setString(String s) {
+            if (type == Type.HUB) {
+                JsonObject screen = new JsonObject();
+                int len = Math.min(s.length(), 11);
+                screen.addProperty("screen_string", s.substring(0, len));
+                send(screen);
+            }
         }
 
         public void setUpsideDown(boolean ud) {
@@ -319,11 +339,13 @@ public class PaletteListener {
                         pickupDir = cur > v ? PickupDirection.HIGHER : PickupDirection.LOWER;
                     }
 
-                    if (pickupDir == PickupDirection.LOWER && v > cur) {
+                    float margin = 1.1f/255.0f;
+
+                    if (pickupDir == PickupDirection.LOWER && v > cur && ((v - cur) > margin)) {
                         return;
                     }
 
-                    if (pickupDir == PickupDirection.HIGHER && v < cur) {
+                    if (pickupDir == PickupDirection.HIGHER && v < cur && ((cur - v) > margin)) {
                         return;
                     }
 
@@ -387,16 +409,14 @@ public class PaletteListener {
 
         @Override
         public void serialEvent(SerialPortEvent event) {
-            long millis = System.currentTimeMillis();
             JsonElement raw = listener.readSerialJSON(serialIndex);
             if (raw == null) {
                 return;
             }
             JsonObject j = raw.getAsJsonObject();
-            long elapsed = System.currentTimeMillis() - millis;
 
             if (j.has("in")) {
-                listener.pendingInputs.put(serialIndex, j.get("in").getAsJsonArray());
+                listener.onInput(serialIndex, j.get("in").getAsJsonArray());
             } else if (j.has("l")) {
                 listener.onPaletteModules(serialIndex, j.get("l").getAsJsonObject());
             }
@@ -407,12 +427,13 @@ public class PaletteListener {
 
     int nSerials;
     SerialPort[] serials;
-    BufferedReader[] serialInputs;
-    private Table<Integer, Integer, Module> modules = null;
+    public Table<Integer, Integer, Module> modules = null;
     public ListenableSet<Module> moduleSet;
     JsonParser parser;
-    HashMap<Integer, JsonArray> pendingInputs;final LX lx;
+    HashMap<Module, int[]> pendingInputs;
+    final LX lx;
     StringBuilder[] builders;
+    ReentrantLock serialLock;
 
 
     boolean isPalettePort(String portName) {
@@ -423,7 +444,6 @@ public class PaletteListener {
 
     ArrayList<CommPortIdentifier> getPalettePorts() {
         ArrayList<CommPortIdentifier> ports = new ArrayList<CommPortIdentifier>();
-        CommPortIdentifier.getPortIdentifiers()
         Enumeration<CommPortIdentifier> portIdentifiers = CommPortIdentifier.getPortIdentifiers();
         while (portIdentifiers.hasMoreElements()) {
             CommPortIdentifier id = portIdentifiers.nextElement();
@@ -434,31 +454,6 @@ public class PaletteListener {
         return ports;
     }
 
-
-
-
-
-    void openPorts() {
-        ArrayList<CommPortIdentifier> palettePorts = getPalettePorts();
-        nSerials = palettePorts.size();
-        serials = new SerialPort[nSerials];
-        builders = new StringBuilder[nSerials];
-        for (int i = 0; i < nSerials; i++) {
-            try {
-                SerialPort port = (SerialPort) palettePorts.get(i).open("SLStudio", 1000);
-                port.setSerialPortParams(1152000, 8, 1, 0);
-                serials[i] = port;
-
-                port.addEventListener(new PortListener(this, i));
-                port.notifyOnDataAvailable(true);
-
-                builders[i] = new StringBuilder();
-
-            } catch (PortInUseException | UnsupportedCommOperationException | TooManyListenersException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     JsonElement readSerialJSON(int serialIndex) {
         try {
@@ -493,13 +488,18 @@ public class PaletteListener {
             if (found) {
                 String line = builder.toString();
                 builder.setLength(0);
-                return parser.parse(line);
+                try {
+                    return parser.parse(line);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
             } else {
                 return null;
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            onSerialDisconnect(serialIndex);
             return null;
         }
     }
@@ -557,6 +557,21 @@ public class PaletteListener {
             modules.remove(serialIndex, id);
 
         }
+
+        Module hub = modules.get(serialIndex, 1);
+        boolean foundIndex = false;
+        for (int id : found) {
+            Module other = modules.get(serialIndex, id);
+            if (other.uuid.equals("GRp")) {
+                hub.hubIndex = 0;
+                foundIndex = true;
+                break;
+            }
+        }
+        if (!foundIndex) {
+            hub.hubIndex = 1;
+        }
+
     }
 
     void onInput(int serialIndex, JsonArray inputs) {
@@ -573,103 +588,164 @@ public class PaletteListener {
                 values[i] = valArr.get(i).getAsInt();
             }
             Module module = modules.get(serialIndex, id);
-            module.setValues(values);
+            pendingInputs.put(module, values);
 //            module
         }
-
     }
 
-    void writeStart() {
-        for (int i = 0; i < nSerials; i++) {
-            JsonObject start = new JsonObject();
-            start.add("start", new JsonPrimitive(0));
-            writeSerialJSON(i, start);
+    void onSerialDisconnect(int i) {
+        serialLock.lock();
+        SerialPort ser = serials[i];
+        ser.close();
+
+        ArrayList<Module> toRemove = new ArrayList<Module>();
+        for (Module mod : modules.row(i).values()) {
+                toRemove.add(mod);
         }
+        for (Module mod : toRemove) {
+            mod.removeListeners();
+            moduleSet.remove(mod);
+            modules.remove(i, mod.id);
+            pendingInputs.remove(mod);
+        }
+
+        builders[i] = null;
+        serials[i] = null;
+        serialLock.unlock();
+    }
+
+    void onSerialConnect(int i) {
+        writeStart(i);
+    }
+
+    void writeStart(int i) {
+        JsonObject start = new JsonObject();
+        start.add("start", new JsonPrimitive(0));
+        writeSerialJSON(i, start);
     }
 
     void updateParameters() {
-        for (Map.Entry<Integer, JsonArray> entry : pendingInputs.entrySet()) {
-            onInput(entry.getKey(), entry.getValue());
+        for (Map.Entry<Module, int[]> entry : pendingInputs.entrySet()) {
+            Module mod = entry.getKey();
+            int[] values = entry.getValue();
+            mod.setValues(values);
         }
         pendingInputs.clear();
         if (modules == null) {
             return;
         }
-        for (Module mod : modules.values()) {
-//            mod.smoothValue();
-        }
+
     }
 
-    void readLoop(int serialIndex) {
-        JsonElement raw = readSerialJSON(serialIndex);
-        JsonObject j = raw.getAsJsonObject();
-        if (j.has("in")) {
-            pendingInputs.put(serialIndex, j.get("in").getAsJsonArray());
-        } else if (j.has("l")) {
-            onPaletteModules(serialIndex, j.get("l").getAsJsonObject());
-        }
-    }
+    class SerialSearcher extends TimerTask {
+        HashSet<Integer> needsConnection = new HashSet<>();
+        HashSet<String> usedPorts = new HashSet<>();
 
-    public class Reader extends Thread {
-
-        int serialIndex;
-
-        public Reader(int serialIndex) {
-            super();
-            this.serialIndex = serialIndex;
-        }
-
-        @Override
         public void run() {
+            long millis = System.currentTimeMillis();
+            needsConnection.clear();
+            usedPorts.clear();
 
-            // Loop for ten iterations.
-
-            while (true) {
-
-                readLoop(serialIndex);
-
-
-//                // Sleep for a while
-//                try {
-//                    readLoop(serialIndex);
-////                    Thread.sleep(10);
-//                } catch (InterruptedException e) {
-//                    // Interrupted exception will occur if
-//                    // the Worker object's interrupt() method
-//                    // is called. interrupt() is inherited
-//                    // from the Thread class.
-//                    break;
-//                }
+            for (int i = 0; i < nSerials; i++) {
+                SerialPort ser = serials[i];
+                if (ser == null) {
+                    needsConnection.add(i);
+                } else {
+                    try {
+                        usedPorts.add(CommPortIdentifier.getPortIdentifier(ser).getName());
+                    } catch (NoSuchPortException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-        }
+            if (needsConnection.size() == 0) {
+                return;
+            }
 
+            ArrayList<CommPortIdentifier> palettePorts = getPalettePorts();
+            for (CommPortIdentifier ci : palettePorts) {
+                if (usedPorts.contains(ci.getName())) {
+                    continue;
+                }
+
+                if (needsConnection.size() == 0) {
+                    break;
+                }
+
+                serialLock.lock();
+                try {
+                    Iterator<Integer> it = needsConnection.iterator();
+                    int index = it.next();
+                    it.remove();
+                    SerialPort port = (SerialPort) ci.open("SLStudio", 1000);
+                    port.setSerialPortParams(1152000, 8, 1, 0);
+                    port.addEventListener(new PortListener(PaletteListener.this, index));
+                    port.notifyOnDataAvailable(true);
+                    serials[index] = port;
+                    builders[index] = new StringBuilder();
+                    onSerialConnect(index);
+
+                } catch (PortInUseException | UnsupportedCommOperationException | TooManyListenersException e) {
+                    e.printStackTrace();
+                }
+                serialLock.unlock();
+            }
+            long elapsed = System.currentTimeMillis() - millis;
+        }
     }
 
-    void startListeners() {
-        for (int i = 0; i < nSerials; i++) {
-            new Reader(i).start();
-        }
-    }
 
     PaletteListener(LX lx) {
         this.lx = lx;
         parser = new JsonParser();
 
+        serialLock = new ReentrantLock();
+
         moduleSet = new ListenableSet<Module>();
 
-        pendingInputs = new HashMap<Integer, JsonArray>();
+        pendingInputs = new HashMap<Module, int[]>();
 
-        openPorts();
+        nSerials = 2;
+        serials = new SerialPort[nSerials];
+        builders = new StringBuilder[nSerials];
+
+//        openPorts();
 //        startListeners();
-        writeStart();
 
 
         lx.engine.addLoopTask(new LXLoopTask() {
+            int lastFPS = -1;
+
             @Override
             public void loop(double v) {
+                if (serialLock.isLocked()) {
+                    return;
+                }
+
                 updateParameters();
+
+
+//                int fps = (int)lx.engine.frameRate();
+//                if (Math.abs(fps - lastFPS) > 10) {
+//                    String fpsString = String.format("FPS: %d", fps);
+//                    for (Module hub : modules.column(1).values()) {
+//                        hub.setString(fpsString);
+//                    }
+//                    lastFPS = fps;
+//                }
+
+
+//                counter += v;
+//                if (counter > 1000) {
+//                    counter = 0;
+//
+//
+//                }
             }
         });
+
+        Timer timer = new Timer();
+        timer.schedule(new SerialSearcher(), 0, 500);
 
 
     }

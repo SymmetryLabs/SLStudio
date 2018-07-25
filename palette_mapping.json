@@ -1,7 +1,7 @@
 {
 	"mappings": {
 		"center-crossfader": "HxP",
-		"brightness": "TODO",
+		"brightness": "F>g",
 		"speed": "H#Q",
 		"blur": "F@%",
 		"desaturation": "Hwz",
@@ -36,5 +36,5 @@
 			"GFi"
 		]
 	},
-	"upside-down": ["HxP", "F?y", "Hyq"]
+	"upside-down": ["Hwz", "F@%"]
 }

@@ -103,7 +103,7 @@ public class PerformanceGUIController extends LXComponent {
     }
 
     public void createFaderWindow(
-            LXListenableNormalizedParameter param, ObjectParameter<LXBlend> blendParam, int index) {
+        LXListenableNormalizedParameter param, ObjectParameter blendParam, int index) {
         Rectangle rect = getFaderCoordinates(index, false);
 
         FaderWindow window =
@@ -844,7 +844,7 @@ public class PerformanceGUIController extends LXComponent {
 
         FaderWindow(
                 LXListenableNormalizedParameter param,
-                ObjectParameter<LXBlend> blendParam,
+                ObjectParameter blendParam,
                 UI ui,
                 String title,
                 float x,
