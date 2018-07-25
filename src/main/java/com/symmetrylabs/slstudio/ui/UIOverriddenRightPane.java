@@ -29,7 +29,7 @@ import processing.core.PGraphics;
 import com.symmetrylabs.layouts.tree.TreeModelingTool;
 import com.symmetrylabs.layouts.tree.ui.*;
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.layouts.tree.anemometer.*;
+import com.symmetrylabs.layouts.tree.Anemometer;
 
 
 public class UIOverriddenRightPane extends UIPane {

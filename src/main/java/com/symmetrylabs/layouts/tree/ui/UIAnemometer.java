@@ -1,4 +1,4 @@
-package com.symmetrylabs.layouts.tree.anemometer;
+package com.symmetrylabs.layouts.tree.ui;
 
 import processing.core.PConstants;
 
@@ -22,6 +22,9 @@ import processing.core.PGraphics;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import static com.symmetrylabs.util.MathUtils.*;
+
+import com.symmetrylabs.layouts.tree.Anemometer;
+
 
 
 public class UIAnemometer extends UICollapsibleSection {
