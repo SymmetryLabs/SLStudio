@@ -43,6 +43,10 @@ public class LXProjection implements Iterable<LXVector> {
         return Arrays.asList(vectors).iterator();
     }
 
+    public LXVector[] getArray() {
+        return vectors;
+    }
+
     /** Constructs a projection view of the given array of nullable vectors. */
     public LXProjection(LXVector[] inputVectors) {
         this.inputVectors = inputVectors;
