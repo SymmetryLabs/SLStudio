@@ -73,7 +73,7 @@ public class Traktor extends LXPattern {
         final float trebG = trebleGain.getValuef();
 
 
-        getVectors().parallelStream().forEach(p -> {
+        getVectorList().parallelStream().forEach(p -> {
             int i = (int) MathUtils.constrain((model.xMax - p.x) / model.xMax * FRAME_WIDTH, 0, FRAME_WIDTH - 1);
             int pos = (index + FRAME_WIDTH - i) % FRAME_WIDTH;
 

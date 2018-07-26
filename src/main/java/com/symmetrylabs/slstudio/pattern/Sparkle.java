@@ -28,7 +28,7 @@ public class Sparkle extends LXPattern {
         boolean hasPeaked;
 
         Spark() {
-            List<LXVector> vectors = getVectors();
+            List<LXVector> vectors = getVectorList();
             vector = vectors.get((int) Math.floor(LXUtils.random(0, vectors.size())));
             hue = (float) LXUtils.random(0, 1);
             boolean infiniteAttack = (attackParameter.getValuef() > 0.999);

@@ -73,7 +73,7 @@ public class Spheres extends LXPattern {
         spheres[0].radius = 100 * hueParameter.getValuef();
         spheres[1].radius = 100 * hueParameter.getValuef();
 
-        getVectors().parallelStream().forEach(p -> {
+        getVectorList().parallelStream().forEach(p -> {
             float value = 0;
 
             int c = Ops8.BLACK;

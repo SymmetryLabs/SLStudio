@@ -59,7 +59,7 @@ public class BassPod extends LXPattern {
         final float bassLevel = eq.getAveragef(0, 5);
         final float satBase = bassLevel * 480 * clr.getValuef();
 
-        getVectors().parallelStream().forEach(p -> {
+        getVectorList().parallelStream().forEach(p -> {
             int avgIndex = (int)constrain(1 + abs(p.x - model.cx) / model.xRange * (eq.numBands - 5), 0, eq.numBands - 5);
             float value = 0;
             for (int i = avgIndex; i < avgIndex + 5; ++i) {

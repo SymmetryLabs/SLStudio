@@ -47,7 +47,7 @@ public class Spiral extends LXPattern {
 
     public void onVectorsChanged() {
         super.onVectorsChanged();
-        this.spiral = new LXProjection(model, getVectors());
+        this.spiral = new LXProjection(model, getVectorArray());
     }
 
     public void run(double deltaMs) {

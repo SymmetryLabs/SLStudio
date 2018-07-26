@@ -34,21 +34,25 @@ public class Mirror extends LXWarpWithMarkers {
     @Override
     public boolean run(double deltaMs, boolean inputVectorsChanged) {
         if (inputVectorsChanged || getAndClearParameterChangeDetectedFlag()) {
-            System.out.println("Recomputing Mirror warp (" + inputVectors.size() + " vectors)...");
-            outputVectors.clear();
-
+            System.out.println("Recomputing Mirror warp (" + inputVectors.length + " vectors)...");
             boolean x = xParam.getValueb();
             float cx = cxParam.getValuef();
             boolean y = yParam.getValueb();
             float cy = cyParam.getValuef();
             boolean z = zParam.getValueb();
             float cz = czParam.getValuef();
-            for (LXVector v : inputVectors) {
-                LXVector ov = new LXVector(v);  // sets ov.point and ov.index
-                if (x) ov.x = Math.abs(v.x - cx) + cx;
-                if (y) ov.y = Math.abs(v.y - cy) + cy;
-                if (z) ov.z = Math.abs(v.z - cz) + cz;
-                outputVectors.add(ov);
+
+            for (int i = 0; i < inputVectors.length; i++) {
+                LXVector iv = inputVectors[i];
+                if (iv == null) {
+                    outputVectors[i] = null;
+                } else {
+                    LXVector ov = new LXVector(iv);  // sets ov.point and ov.index
+                    if (x) ov.x = Math.abs(iv.x - cx) + cx;
+                    if (y) ov.y = Math.abs(iv.y - cy) + cy;
+                    if (z) ov.z = Math.abs(iv.z - cz) + cz;
+                    outputVectors[i] = ov;
+                }
             }
             return true;
         }

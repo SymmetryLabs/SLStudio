@@ -127,7 +127,7 @@ public class WarpSpeed extends SLPattern<CubesModel> {
             bars.add(new Bar());
         }
 
-        getVectors().parallelStream().forEach(p -> {
+        getVectorList().parallelStream().forEach(p -> {
             int c = 0;
             for (Bar bar : bars) {
                 if (p.x >= (bar.p.x - 2) && p.x <= (bar.p.x + 2) &&

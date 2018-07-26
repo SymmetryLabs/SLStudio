@@ -394,7 +394,7 @@ public class FlockWave extends SLPatternWithMarkers {
     @Override
     public void onVectorsChanged() {
         super.onVectorsChanged();
-        List<LXVector> vectorList = getVectors();
+        List<LXVector> vectorList = getVectorList();
         coords = new float[vectorList.size()*3];
         int i = 0;
         for (LXVector vector : vectorList) {

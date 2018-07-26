@@ -34,8 +34,7 @@ public class BoxMask extends LXWarpWithMarkers {
     @Override
     public boolean run(double deltaMs, boolean inputVectorsChanged) {
         if (inputVectorsChanged || getAndClearParameterChangeDetectedFlag()) {
-            System.out.println("Recomputing BoxMask warp (" + inputVectors.size() + " vectors)...");
-            outputVectors.clear();
+            System.out.println("Recomputing BoxMask warp (" + inputVectors.length + " vectors)...");
 
             float xSize = xSizeParam.getValuef();
             float cx = cxParam.getValuef();
@@ -43,11 +42,15 @@ public class BoxMask extends LXWarpWithMarkers {
             float cy = cyParam.getValuef();
             float zSize = zSizeParam.getValuef();
             float cz = czParam.getValuef();
-            for (LXVector v : inputVectors) {
-                if (Math.abs(v.x - cx) < xSize &&
-                      Math.abs(v.y - cy) < ySize &&
-                      Math.abs(v.z - cz) < zSize) {
-                    outputVectors.add(new LXVector(v));
+
+            for (int i = 0; i < inputVectors.length; i++)  {
+                LXVector iv = inputVectors[i];
+                if (Math.abs(iv.x - cx) < xSize &&
+                      Math.abs(iv.y - cy) < ySize &&
+                      Math.abs(iv.z - cz) < zSize) {
+                    outputVectors[i] = inputVectors[i];
+                } else {
+                    outputVectors[i] = null;
                 }
             }
             return true;

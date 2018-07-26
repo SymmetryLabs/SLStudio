@@ -157,7 +157,7 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
             renderer.run(deltaMs);
         }
         else {
-            render(deltaMs, getVectors(), colors);
+            render(deltaMs, getVectorList(), colors);
         }
     }
 

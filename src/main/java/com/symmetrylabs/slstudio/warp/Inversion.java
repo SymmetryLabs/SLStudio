@@ -50,23 +50,27 @@ public class Inversion extends LXWarpWithMarkers {
 
     public boolean run(double deltaMs, boolean inputVectorsChanged) {
         if (inputVectorsChanged || getAndClearParameterChangeDetectedFlag()) {
-            System.out.println("Recomputing Inversion warp (" + inputVectors.size() + " inputVectors)...");
+            System.out.println("Recomputing Inversion warp (" + inputVectors.length + " inputVectors)...");
             float ox = cxParam.getValuef();
             float oy = cyParam.getValuef();
             float oz = czParam.getValuef();
             float radius = radiusParam.getValuef();
             float sqRadius = radius * radius;
 
-            outputVectors.clear();
-            for (LXVector v : inputVectors) {
-                float dx = v.x - ox;
-                float dy = v.y - oy;
-                float dz = v.z - oz;
-                float r = (float) Math.sqrt(dx * dx + dy * dy + dz * dz) + 1e-6f;
-                float nr = sqRadius / r;
-                LXVector ov = new LXVector(v);  // sets ov.point and ov.index
-                ov.set(ox + dx * nr / r, oy + dy * nr / r, oz + dz * nr / r);
-                outputVectors.add(ov);
+            for (int i = 0; i < inputVectors.length; i++) {
+                LXVector iv = inputVectors[i];
+                if (iv == null) {
+                    outputVectors[i] = null;
+                } else {
+                    LXVector ov = new LXVector(iv);
+                    float dx = iv.x - ox;
+                    float dy = iv.y - oy;
+                    float dz = iv.z - oz;
+                    float r = (float) Math.sqrt(dx*dx + dy*dy + dz*dz) + 1e-6f;
+                    float nr = sqRadius/r;
+                    ov.set(ox + dx*nr/r, oy + dy*nr/r, oz + dz*nr/r);
+                    outputVectors[i] = ov;
+                }
             }
             return true;
         }

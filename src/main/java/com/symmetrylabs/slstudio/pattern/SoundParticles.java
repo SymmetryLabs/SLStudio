@@ -300,8 +300,8 @@ public class SoundParticles extends LXPattern {
 
     public void onVectorsChanged() {
         super.onVectorsChanged();
-        spinProjection = new LXProjection(model, getVectors());
-        scaleProjection = new LXProjection(model, getVectors());
+        spinProjection = new LXProjection(model, getVectorArray());
+        scaleProjection = new LXProjection(model, getVectorArray());
     }
 
     public boolean noteOn(MidiNote note) {
