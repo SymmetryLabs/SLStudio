@@ -73,6 +73,7 @@ public class Kaleidoscope extends LXWarpWithMarkers {
                     int count = (int) revs;
                     double frac = revs - count;
                     if (flip && count % 2 > 0) frac = 1 - frac;
+                    frac /= order;
 
                     v.x = (float) (r * Math.cos(frac * TAU));
                     v.y = (float) (r * Math.sin(frac * TAU));
