@@ -36,6 +36,7 @@ import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.transform.LXVector;
 
+import java.util.Iterator;
 import java.util.List;
 
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
@@ -45,7 +46,7 @@ import static heronarts.lx.PolyBuffer.Space.SRGB8;
  * may be stateless or stateful, though typically they operate on a single
  * frame. Only the current frame is provided at runtime.
  */
-public abstract class LXEffect extends LXDeviceComponent implements LXComponent.Renamable, LXMidiListener, LXOscComponent, LXUtils.IndexedElement {
+public abstract class LXEffect extends LXBusComponent implements LXComponent.Renamable, LXMidiListener, LXOscComponent, LXUtils.IndexedElement {
 
     public final BooleanParameter enabled =
         new BooleanParameter("Enabled", false)
@@ -104,31 +105,6 @@ public abstract class LXEffect extends LXDeviceComponent implements LXComponent.
 
     public final int getIndex() {
         return index;
-    }
-
-    public LXEffect setBus(LXBus bus) {
-        setParent(bus);
-        return this;
-    }
-
-    public LXBus getBus() {
-        return (LXBus) getParent();
-    }
-
-    protected List<LXVector> getVectors() {
-        return LXBus.getVectors(getBus(), model);
-    }
-
-    protected List<LXVector> getVectors(Iterable<LXPoint> points) {
-        return LXBus.getVectors(getBus(), model, points);
-    }
-
-    protected List<LXVector> getVectors(LXPoint[] points) {
-        return LXBus.getVectors(getBus(), model, points);
-    }
-
-    protected List<LXVector> getVectors(int start, int stop) {
-        return LXBus.getVectors(getBus(), model, start, stop);
     }
 
     /**
@@ -226,9 +202,6 @@ public abstract class LXEffect extends LXDeviceComponent implements LXComponent.
         // obtains a color array using getArray(space), writes into that array,
         // and then calls markModified(space).
     }
-
-    /** This method is invoked whenever the output of getVectors() changes. */
-    public /* abstract */ void onVectorsChanged() { }
 
     @Override
     public void noteOnReceived(MidiNoteOn note) {

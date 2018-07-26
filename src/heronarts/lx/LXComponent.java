@@ -175,7 +175,7 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         return this;
     }
 
-    protected final LXComponent setParent(LXComponent parent) {
+    protected LXComponent setParent(LXComponent parent) {
         if (this.parent != null) {
             throw new IllegalStateException("Component already has parent set: " + this + " " + parent);
         }

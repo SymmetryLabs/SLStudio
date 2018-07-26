@@ -21,7 +21,6 @@
 package heronarts.lx.transform;
 
 import heronarts.lx.model.LXModel;
-import heronarts.lx.model.LXPoint;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,53 +28,60 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Class to compute projections of an entire model. These are applied cheaply by
- * using direct manipulation rather than matrix multiplication. No push or pop
- * is available.
+ * Class to compute projections of a model or of an array of warped model vectors.
+ * These are applied cheaply by using direct manipulation rather than matrix
+ * multiplication; no push or pop is available.
  */
 public class LXProjection implements Iterable<LXVector> {
-    protected final List<LXVector> inputVectors;
-    protected final List<LXVector> vectors = new ArrayList<>();
+    protected final LXVector[] inputVectors;
+    protected final LXVector[] vectors;
     protected float cx = 0;
     protected float cy = 0;
     protected float cz = 0;
 
     public Iterator<LXVector> iterator() {
-        return vectors.iterator();
+        return Arrays.asList(vectors).iterator();
     }
 
-    /** Constructs a projection view of the given array of vectors. */
-    public LXProjection(List<LXVector> inputVectors) {
+    /** Constructs a projection view of the given array of nullable vectors. */
+    public LXProjection(LXVector[] inputVectors) {
         this.inputVectors = inputVectors;
-        reset();
+        vectors = new LXVector[inputVectors.length];
+        for (int i = 0; i < inputVectors.length; i++) {
+            vectors[i] = inputVectors[i] == null ? null : new LXVector(inputVectors[i]);
+        }
     }
 
-    /** Constructs a projection of the given vectors, using the given model's center point. */
-    public LXProjection(LXModel model, List<LXVector> inputVectors) {
+    /** Constructs a projection of the given array of nullable vectors, using the model's center point. */
+    public LXProjection(LXModel model, LXVector[] inputVectors) {
         this(inputVectors);
         cx = model.cx;
         cy = model.cy;
         cz = model.cz;
     }
 
-    /** Constructs a projection view of the given model. */
+
+    /** Constructs a projection of the given model, using the model's center point. */
     public LXProjection(LXModel model) {
-        this(model, model.getVectors());
+        this(model, model.getVectorArray());
     }
 
     /**
-     * Reset all points in the projection to the model
+     * Reset all points in the projection to their original positions.  This method
+     * is not safe to call if the original list of vectors has changed; if you have
+     * a new list of input vectors, you should throw away this LXProjection and make
+     * a new one.
      *
      * @return this, for method chaining
      */
     public LXProjection reset() {
-        for (int i = 0; i < vectors.size() && i < inputVectors.size(); i++) {
-            vectors.get(i).set(inputVectors.get(i));
-        }
-        if (vectors.size() < inputVectors.size()) {
-            System.out.println("Allocating " + (inputVectors.size() - vectors.size()) + " LXVectors for projection");
-            for (int i = vectors.size(); i < inputVectors.size(); i++) {
-                vectors.add(new LXVector(inputVectors.get(i)));
+        for (int i = 0; i < inputVectors.length; i++) {
+            if (inputVectors[i] == null) {
+                vectors[i] = null;
+            } else if (vectors[i] == null) {
+                vectors[i] = new LXVector(inputVectors[i]);
+            } else {
+                vectors[i].set(inputVectors[i]);
             }
         }
         return this;
@@ -91,9 +97,11 @@ public class LXProjection implements Iterable<LXVector> {
      */
     public LXProjection scale(float sx, float sy, float sz) {
         for (LXVector v : vectors) {
-            v.x *= sx;
-            v.y *= sy;
-            v.z *= sz;
+            if (v != null) {
+                v.x *= sx;
+                v.y *= sy;
+                v.z *= sz;
+            }
         }
         return this;
     }
@@ -108,9 +116,11 @@ public class LXProjection implements Iterable<LXVector> {
      */
     public LXProjection translate(float tx, float ty, float tz) {
         for (LXVector v : vectors) {
-            v.x += tx;
-            v.y += ty;
-            v.z += tz;
+            if (v != null) {
+                v.x += tx;
+                v.y += ty;
+                v.z += tz;
+            }
         }
         return this;
     }
@@ -144,7 +154,9 @@ public class LXProjection implements Iterable<LXVector> {
      */
     public LXProjection reflectX() {
         for (LXVector v : this.vectors) {
-            v.x = -v.x;
+            if (v != null) {
+                v.x = -v.x;
+            }
         }
         return this;
     }
@@ -156,7 +168,9 @@ public class LXProjection implements Iterable<LXVector> {
      */
     public LXProjection reflectY() {
         for (LXVector v : this.vectors) {
-            v.y = -v.y;
+            if (v != null) {
+                v.y = -v.y;
+            }
         }
         return this;
     }
@@ -168,7 +182,9 @@ public class LXProjection implements Iterable<LXVector> {
      */
     public LXProjection reflectZ() {
         for (LXVector v : this.vectors) {
-            v.z = -v.z;
+            if (v != null) {
+                v.z = -v.z;
+            }
         }
         return this;
     }
@@ -205,12 +221,14 @@ public class LXProjection implements Iterable<LXVector> {
         float xp, yp, zp;
 
         for (LXVector v : this.vectors) {
-            xp = v.x * a1 + v.y * a2 + v.z * a3;
-            yp = v.x * b1 + v.y * b2 + v.z * b3;
-            zp = v.x * c1 + v.y * c2 + v.z * c3;
-            v.x = xp;
-            v.y = yp;
-            v.z = zp;
+            if (v != null) {
+                xp = v.x * a1 + v.y * a2 + v.z * a3;
+                yp = v.x * b1 + v.y * b2 + v.z * b3;
+                zp = v.x * c1 + v.y * c2 + v.z * c3;
+                v.x = xp;
+                v.y = yp;
+                v.z = zp;
+            }
         }
 
         return this;

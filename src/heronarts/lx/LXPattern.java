@@ -36,6 +36,7 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transform.LXVector;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
@@ -44,7 +45,7 @@ import static heronarts.lx.PolyBuffer.Space.SRGB8;
  * A pattern is the core object that the animation engine uses to generate
  * colors for all the points.
  */
-public abstract class LXPattern extends LXDeviceComponent implements LXComponent.Renamable, LXLayeredComponent.Buffered, LXMidiListener, LXOscComponent, LXUtils.IndexedElement {
+public abstract class LXPattern extends LXBusComponent implements LXComponent.Renamable, LXLayeredComponent.Buffered, LXMidiListener, LXOscComponent, LXUtils.IndexedElement {
     private int index = -1;
     private int intervalBegin = -1;
     private int intervalEnd = -1;
@@ -67,22 +68,6 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
         super(lx);
         this.label.setDescription("The name of this pattern");
         this.label.setValue(getClass().getSimpleName().replaceAll("Pattern$", ""));
-    }
-
-    protected List<LXVector> getVectors() {
-        return LXBus.getVectors(getChannel(), model);
-    }
-
-    protected List<LXVector> getVectors(Iterable<LXPoint> points) {
-        return LXBus.getVectors(getChannel(), model, points);
-    }
-
-    protected List<LXVector> getVectors(LXPoint[] points) {
-        return LXBus.getVectors(getChannel(), model, points);
-    }
-
-    protected List<LXVector> getVectors(int start, int stop) {
-        return LXBus.getVectors(getChannel(), model, start, stop);
     }
 
     public String getOscAddress() {
@@ -108,7 +93,7 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
      * @return Channel pattern is loaded onto
      */
     public final LXChannel getChannel() {
-        return (LXChannel) getParent();
+        return (LXChannel) getBus();
     }
 
     /**
@@ -119,7 +104,7 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
      * @return this
      */
     final LXPattern setChannel(LXChannel channel) {
-        setParent(channel);
+        setBus(channel);
         return this;
     }
 
@@ -281,9 +266,8 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
 
     /** This method is invoked whenever the output of getVectors() changes. */
     public void onVectorsChanged() {
-        // When getVectors() changes, the set of filtered points can change, so
-        // it's usually desirable to clear out the colour buffer.
-        clear();
+        super.onVectorsChanged();
+        clear();  // the set of filtered points may have changed
     }
 
     @Override public void dispose() {

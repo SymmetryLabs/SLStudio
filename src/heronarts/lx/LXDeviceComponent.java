@@ -25,8 +25,7 @@ import com.google.gson.JsonObject;
 import heronarts.lx.osc.LXOscComponent;
 
 /**
- * A component which may have its own scoped user-level modulators. The concrete subclasses
- * of this are Patterns and Effects.
+ * A component which may have its own scoped user-level modulators.
  */
 public abstract class LXDeviceComponent extends LXLayeredComponent implements LXModulationComponent, LXOscComponent {
 
@@ -62,5 +61,4 @@ public abstract class LXDeviceComponent extends LXLayeredComponent implements LX
             this.modulation.load(lx,  obj.getAsJsonObject(KEY_MODULATION));
         }
     }
-
 }

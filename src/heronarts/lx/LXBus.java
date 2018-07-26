@@ -34,9 +34,9 @@ import heronarts.lx.warp.LXWarp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.NoSuchElementException;
 
 /**
  * Abstract representation of a channel, which could be a normal channel with patterns
@@ -87,9 +87,11 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
     private final List<ClipListener> clipListeners = new ArrayList<>();
 
     /** The (possibly warped) coordinates of the model points, for use by patterns and effects */
-    protected List<LXVector> vectors = null;
-    /** The LXWarp that last produced the contents of vectors, or null if the vectors came directly from the model. */
+    protected LXVector[] vectorArray = null;
+    /** The LXWarp that last produced the contents of vectorArray, or null if the vectors came directly from the model. */
     protected LXWarp vectorSource = null;
+    /** A cached list of all the non-null elements in vectorArray. */
+    protected List<LXVector> vectorList = null;
 
     LXBus(LX lx) {
         this(lx, null);
@@ -279,60 +281,126 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
         clip.dispose();
     }
 
-    protected static List<LXVector> getVectors(LXBus bus, LXModel model) {
+    protected static LXVector[] getVectorArray(LXBus bus, LXModel model) {
         if (bus == null) {
-            return model.getVectors();
+            return model.getVectorArray();
         }
-        if (bus.vectors == null) {
-            bus.vectors = model.getVectors();
+        if (bus.vectorArray == null) {
+            bus.vectorArray = model.getVectorArray();
         }
-        return bus.vectors;
+        return bus.vectorArray;
     }
 
-    protected static List<LXVector> getVectors(LXBus bus, LXModel model, Set<Integer> indexes) {
-        List<LXVector> result = new ArrayList<>();
-        for (LXVector v : getVectors(bus, model)) {
-            if (indexes.contains(v.index)) {
-                result.add(v);
-            }
-        }
-        return result;
-    }
-
-    protected static List<LXVector> getVectors(LXBus bus, LXModel model, Iterable<LXPoint> points) {
-        HashSet<Integer> indexes = new HashSet<>();
-        for (LXPoint p : points) {
-            indexes.add(p.index);
-        }
-        return getVectors(bus, model, indexes);
-    }
-
-    protected static List<LXVector> getVectors(LXBus bus, LXModel model, LXPoint[] points) {
-        HashSet<Integer> indexes = new HashSet<>();
-        for (LXPoint p : points) {
-            indexes.add(p.index);
-        }
-        return getVectors(bus, model, indexes);
-    }
-
-    protected static List<LXVector> getVectors(LXBus bus, LXModel model, int start, int stop) {
-        List<LXVector> result = new ArrayList<>();
-        for (LXVector v : getVectors(bus, model)) {
-            if (v.index >= start && v.index < stop) {
-                result.add(v);
-            }
-        }
-        return result;
-    }
-
-    protected void setVectors(List<LXVector> newVectors, LXWarp newVectorSource) {
-        vectors = newVectors;
+    protected void setVectorArray(LXVector[] newVectorArray, LXWarp newVectorSource) {
+        vectorArray = newVectorArray;
         vectorSource = newVectorSource;
+        vectorList = null;
         for (LXEffect effect : effects) {
             effect.onVectorsChanged();
         }
     }
-    
+
+    protected static List<LXVector> getVectorList(LXBus bus, LXModel model) {
+        if (bus == null) {
+            return Arrays.asList(model.getVectorArray());
+        }
+        if (bus.vectorList == null) {
+            bus.vectorList = new ArrayList<LXVector>();
+            for (LXVector v : getVectors(bus, model)) {
+                bus.vectorList.add(v);
+            }
+        }
+        return bus.vectorList;
+    }
+
+    /**
+     * An iterator that increments an index starting from 0, calling get(index)
+     * to retrieve the iterated element, skipping over any nulls returned by
+     * get(index), and stopping when the index reaches the given stopIndex.
+     */
+    abstract static class VectorIterator implements Iterator<LXVector> {
+        final int stopIndex;
+        int index = -1;
+        int nextIndex = -1;
+        
+        public VectorIterator(int stopIndex) {
+            this.stopIndex = stopIndex;
+        }
+
+        public boolean hasNext() {
+            if (nextIndex == index) {
+                do {
+                    nextIndex++;
+                } while (nextIndex < stopIndex && get(nextIndex) == null);
+            }
+            return nextIndex < stopIndex;
+        }
+
+        public LXVector next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            LXVector result = get(nextIndex);
+            index = nextIndex;
+            return result;
+        }
+
+        // Will always be called with 0 <= index < stopIndex.
+        abstract LXVector get(int index);
+    }
+
+    protected static Iterable<LXVector> getVectors(LXBus bus, LXModel model) {
+        final LXVector[] vectors = getVectorArray(bus, model);
+        return new Iterable<LXVector>() {
+            public Iterator<LXVector> iterator () {
+                return new VectorIterator(vectors.length) {
+                    public LXVector get(int index) {
+                        return vectors[index];
+                    }
+                };
+            }
+        };
+    }
+
+    protected static Iterable<LXVector> getVectors(LXBus bus, LXModel model, final List<LXPoint> points) {
+        final LXVector[] vectors = getVectorArray(bus, model);
+        return new Iterable<LXVector>() {
+            public Iterator<LXVector> iterator() {
+                return new VectorIterator(points.size()) {
+                    public LXVector get(int index) {
+                        return vectors[points.get(index).index];
+                    }
+                };
+            }
+        };
+    }
+
+    protected static Iterable<LXVector> getVectors(LXBus bus, LXModel model, LXPoint[] points) {
+        final LXVector[] vectors = getVectorArray(bus, model);
+        return new Iterable<LXVector>() {
+            public Iterator<LXVector> iterator() {
+                return new VectorIterator(points.length) {
+                    public LXVector get(int index) {
+                        return vectors[points[index].index];
+                    }
+                };
+            }
+        };
+    }
+
+    protected static Iterable<LXVector> getVectors(LXBus bus, LXModel model, final int start, final int stop) {
+        final LXVector[] vectors = getVectorArray(bus, model);
+        return new Iterable<LXVector>() {
+            public Iterator<LXVector> iterator() {
+                return new VectorIterator(stop - start) {
+                    public LXVector get(int index) {
+                        return vectors[start + index];
+                    }
+                };
+            }
+        };
+    }
+
     @Override
     public void loop(double deltaMs) {
         long loopStart = System.nanoTime();
