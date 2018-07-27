@@ -175,6 +175,7 @@ public class PerformanceGUIController extends LXComponent {
         public BooleanParameter savePushed;
 
         public DiscreteParameter activePatternIndex;
+        public BooleanParameter patternChanged;
 
 
 
@@ -204,6 +205,7 @@ public class PerformanceGUIController extends LXComponent {
             selectedPreset = new DiscreteParameter("selectedPreset", 0, 0, PerformanceManager.Preset.MAX_PRESETS);
 
             activePatternIndex = new DiscreteParameter("activePatternIndex", 0, 0, 1);
+            patternChanged = new BooleanParameter("patternChanged", false);
 
 
 
@@ -253,6 +255,7 @@ public class PerformanceGUIController extends LXComponent {
                     int i = activePatternIndex.getValuei();
 //                    System.out.println(deckI);
                     patternList.getItems().get(i).onActivate();
+                    patternChanged.toggle();
                 }
             });
 

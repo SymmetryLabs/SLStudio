@@ -117,7 +117,8 @@ public class PerformanceManager extends LXComponent {
             ArrayList<LXListenableNormalizedParameter> params =
                     new ArrayList<LXListenableNormalizedParameter>();
 
-            Collection<LXParameter> parameters = channel.getActivePattern().getParameters();
+            LXPattern pat = channel.getActivePattern();
+            Collection<LXParameter> parameters = pat.getParameters();
             for (LXParameter param : parameters) {
                 if (!(param instanceof LXListenableNormalizedParameter)) continue;
 

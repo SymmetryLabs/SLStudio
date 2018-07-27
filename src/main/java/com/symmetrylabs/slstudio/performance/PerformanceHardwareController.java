@@ -75,7 +75,7 @@ public class PerformanceHardwareController extends LXComponent {
             pm.decks[i].activeChannel.removeListener(activeChannelListener);
             for (int j = 0; j < 2; j++) {
                 int wI = (i * 2) + j;
-                DiscreteParameter active = pm.gui.channelWindows[wI].activePatternIndex;
+                BooleanParameter active = pm.gui.channelWindows[wI].patternChanged;
                 active.removeListener(activeChannelListener);
             }
 
@@ -86,7 +86,7 @@ public class PerformanceHardwareController extends LXComponent {
 
             for (int j = 0; j < 2; j++) {
                 int wI = (i * 2) + j;
-                DiscreteParameter active = pm.gui.channelWindows[wI].activePatternIndex;
+                BooleanParameter active = pm.gui.channelWindows[wI].patternChanged;
                 active.addListener(activeChannelListener);
             }
         }
@@ -172,6 +172,9 @@ public class PerformanceHardwareController extends LXComponent {
 
         FighterListener(LXMidiRemote midi, int i) {
             super(midi, i);
+
+            flashSide(deckI);
+
 
         }
 
@@ -939,6 +942,7 @@ public class PerformanceHardwareController extends LXComponent {
                 }
             };
             addImmediateListener(cueState, listener);
+
         }
 
         for (int i = 0; i < 4; i++) {
