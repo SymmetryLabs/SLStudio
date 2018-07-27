@@ -562,7 +562,7 @@ public class PaletteListener {
         boolean foundIndex = false;
         for (int id : found) {
             Module other = modules.get(serialIndex, id);
-            if (other.uuid.equals("GRp")) {
+            if (other != null && other.uuid != null && other.uuid.equals("GRp")) {
                 hub.hubIndex = 0;
                 foundIndex = true;
                 break;

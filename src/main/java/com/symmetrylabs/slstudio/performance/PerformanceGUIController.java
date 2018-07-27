@@ -98,7 +98,8 @@ public class PerformanceGUIController extends LXComponent {
     public void createGlobalWindow(PerformanceManager pm) {
         Rectangle rect = getFaderCoordinates(0, false);
         int x = ui.applet.width / 2 - CHANNEL_WIDTH / 2;
-        GlobalWindow window = new GlobalWindow(pm, ui, x, rect.y + rect.height + 5, CHANNEL_WIDTH, 210);
+        int y = ui.applet.height - (rect.width + 75 + 5);
+        GlobalWindow window = new GlobalWindow(pm, ui, x, y, CHANNEL_WIDTH, 210);
         ui.addLayer(window);
     }
 
