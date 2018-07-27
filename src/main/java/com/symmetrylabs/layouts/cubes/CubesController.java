@@ -89,7 +89,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         if (packetData == null || packetData.length != packetSizeBytes) {
             packetData = new byte[packetSizeBytes];
         }
-        packetData[0] = 0; // Channel
+        packetData[0] = 3; // Channel
         packetData[1] = use16 ? COMMAND_SET_16BIT_PIXEL_COLORS : COMMAND_SET_PIXEL_COLORS;
         packetData[2] = (byte) ((contentSizeBytes >> 8) & 0xFF);
         packetData[3] = (byte) (contentSizeBytes & 0xFF);
@@ -175,58 +175,23 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 //            }
 //        }
 
-//        // Initialize packet data base on cube type.
-//        // If we don't know the cube type, default to
-//        // using the cube type with the most pixels
-//        CubesModel.Cube.Type cubeType = cube != null ? cube.type : CubesModel.Cube.CUBE_TYPE_WITH_MOST_PIXELS;
-//        int numPixels = cubeType.POINTS_PER_CUBE;
+//        if (points != null) {
+//            int numPixels = points.size();
 //
-//        // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
-//        // TODO: refactor here
-//        if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(id)) {
-//            initPacketData(numPixels, false);
-//            if (mappingMode.inUnMappedMode()) {
-//                if (mappingMode.inDisplayAllMode()) {
-//                    int col = mappingMode.getUnMappedColor();
-//
-//                    for (int i = 0; i < numPixels; i++)
-//                        setPixel(i, col);
-//                } else {
-//                    if (mappingMode.isSelectedUnMappedFixture(id)) {
-//                        int col = mappingMode.getUnMappedColor();
-//
-//                        for (int i = 0; i < numPixels; i++)
-//                            setPixel(i, col);
-//                    } else {
-//                        for (int i = 0; i < numPixels; i++)
-//                            setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
-//                    }
-//                }
-//            } else {
-//                for (int i = 0; i < numPixels; i++)
-//                    setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
-//            }
-//        } else if (cube != null) {
 //            // Fill the datagram with pixel data
 //            if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
 //                initPacketData(numPixels, true);
 //                long[] srcLongs = (long[]) src.getArray(PolyBuffer.Space.RGB16);
-//                for (int stripNum = 0; stripNum < numStrips; stripNum++) {
-//                    Strip strip = cube.getStrips().get(STRIP_ORD[stripNum]);
-//                    for (int i = 0; i < strip.metrics.numPoints; i++) {
-//                        LXPoint point = strip.getPoints().get(i);
-//                        setPixel(stripNum * strip.metrics.numPoints + i, srcLongs[point.index]);
-//                    }
+//                for (int i = 0; i < numPixels; i++) {
+//                    LXPoint point = points.getPoint(i);
+//                    setPixel(i, srcLongs[point.index]);
 //                }
 //            } else {
 //                initPacketData(numPixels, false);
 //                int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
-//                for (int stripNum = 0; stripNum < numStrips; stripNum++) {
-//                    Strip strip = cube.getStrips().get(STRIP_ORD[stripNum]);
-//                    for (int i = 0; i < strip.metrics.numPoints; i++) {
-//                        LXPoint point = strip.getPoints().get(i);
-//                        setPixel(stripNum * strip.metrics.numPoints + i, srcInts[point.index]);
-//                    }
+//                for (int i = 0; i < numPixels; i++) {
+//                    LXPoint point = points.getPoint(i);
+//                    setPixel(i, srcInts[point.index]);
 //                }
 //            }
 //        } else {
@@ -237,20 +202,40 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 //            }
 //        }
 
-        if (points != null) {
-            int numPixels = points.size();
+        //CubesModel.Cube.Type cubeType = cube != null ? cube.type : CubesModel.Cube.CUBE_TYPE_WITH_MOST_PIXELS;
+        int numPixels = 168;
 
+        // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
+        // TODO: refactor here
+        if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(id)) {
+            initPacketData(numPixels, false);
+            if (mappingMode.inUnMappedMode()) {
+                if (mappingMode.inDisplayAllMode()) {
+                    int col = mappingMode.getUnMappedColor();
+
+                    for (int i = 0; i < numPixels; i++) {
+                        setPixel(i, col);
+                    }
+                } else {
+                    if (mappingMode.isSelectedUnMappedFixture(id)) {
+                        int col = mappingMode.getUnMappedColor();
+
+                        for (int i = 0; i < numPixels; i++)
+                            setPixel(i, col);
+                    } else {
+                        for (int i = 0; i < numPixels; i++)
+                            setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
+                    }
+                }
+            } else {
+                for (int i = 0; i < numPixels; i++)
+                    setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
+            }
+        } else if (points != null) {
             // Fill the datagram with pixel data
             if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
                 initPacketData(numPixels, true);
                 long[] srcLongs = (long[]) src.getArray(PolyBuffer.Space.RGB16);
-//                for (int stripNum = 0; stripNum < numStrips; stripNum++) {
-//                    Strip strip = cube.getStrips().get(STRIP_ORD[stripNum]);
-//                    for (int i = 0; i < strip.metrics.numPoints; i++) {
-//                        LXPoint point = strip.getPoints().get(i);
-//                        setPixel(stripNum * strip.metrics.numPoints + i, srcLongs[point.index]);
-//                    }
-//                }
                 for (int i = 0; i < numPixels; i++) {
                     LXPoint point = points.getPoint(i);
                     setPixel(i, srcLongs[point.index]);
@@ -258,13 +243,6 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             } else {
                 initPacketData(numPixels, false);
                 int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
-//                for (int stripNum = 0; stripNum < numStrips; stripNum++) {
-//                    Strip strip = cube.getStrips().get(STRIP_ORD[stripNum]);
-//                    for (int i = 0; i < strip.metrics.numPoints; i++) {
-//                        LXPoint point = strip.getPoints().get(i);
-//                        setPixel(stripNum * strip.metrics.numPoints + i, srcInts[point.index]);
-//                    }
-//                }
                 for (int i = 0; i < numPixels; i++) {
                     LXPoint point = points.getPoint(i);
                     setPixel(i, srcInts[point.index]);
