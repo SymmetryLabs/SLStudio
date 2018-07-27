@@ -27,9 +27,7 @@ public class PerformanceHardwareController extends LXComponent {
     HashMap<String, Boolean> uuidToUpsideDown;
     HashMap<String, ColorParameter> uuidToColorParameter;
 
-
     final BooleanParameter[] cuesPressed;
-
 
     final static String MAPPING_FILENAME = "palette_mapping.json";
     final static String MAPPINGS_KEY = "mappings";
@@ -48,61 +46,78 @@ public class PerformanceHardwareController extends LXComponent {
     final static String BLENDMODE_SCROLL = "blendmode-scroll";
     final static String CUE_BUTTONS = "cue-buttons";
 
-    final LXMidiRemote[] twisters;
-    final LXMidiRemote[] fighters;
 
-    final TwisterListener[] twisterListeners;
-    final FighterListener[] fighterListeners;
+    final ArrayList<TwisterListener> twisterListeners;
+    final ArrayList<FighterListener> fighterListeners;
 
-    static class FighterListener implements LXMidiListener {
-        int i;
-
-        FighterListener(int i) {
-            this.i = i;
-        }
-
-        @Override
-        public void noteOnReceived(MidiNoteOn midiNoteOn) {
-
-        }
-
-        @Override
-        public void noteOffReceived(MidiNote midiNote) {
-
-        }
-
-        @Override
-        public void controlChangeReceived(MidiControlChange midiControlChange) {
-
-        }
-
-        @Override
-        public void programChangeReceived(MidiProgramChange midiProgramChange) {
-
-        }
-
-        @Override
-        public void pitchBendReceived(MidiPitchBend midiPitchBend) {
-
-        }
-
-        @Override
-        public void aftertouchReceived(MidiAftertouch midiAftertouch) {
-
-        }
-    }
-
-    class TwisterListener implements LXMidiListener {
+    abstract class MFListener {
         int deckI;
-
-        LXParameterListener[] writeListeners;
+        LXMidiRemote midi;
 
         ArrayList<LXListenableNormalizedParameter> params = null;
+        LXParameterListener[] writeListeners;
+        LXParameterListener activeChannelListener;
 
-        TwisterListener(int deckI) {
+        abstract void writeParamState(int i);
+        abstract void getParams();
+        abstract void flashSide(int i);
+        abstract void writeParamStates();
+
+
+        void getAndWriteParams() {
+            removeWriteListeners();
+            getParams();
+            addWriteListeners();
+            writeParamStates();
+        }
+
+        void removeListeners(int i) {
+            pm.decks[i].activeChannel.removeListener(activeChannelListener);
+            for (int j = 0; j < 2; j++) {
+                int wI = (i * 2) + j;
+                DiscreteParameter active = pm.gui.channelWindows[wI].activePatternIndex;
+                active.removeListener(activeChannelListener);
+            }
+
+        }
+
+        void addListeners(int i) {
+            pm.decks[i].activeChannel.addListener(activeChannelListener);
+
+            for (int j = 0; j < 2; j++) {
+                int wI = (i * 2) + j;
+                DiscreteParameter active = pm.gui.channelWindows[wI].activePatternIndex;
+                active.addListener(activeChannelListener);
+            }
+        }
+
+        void removeWriteListeners() {
+            if (params != null) {
+                for (int i = 0; i < Math.min(params.size(), writeListeners.length); i++) {
+                    if (params.get(i) != null) {
+                        params.get(i).removeListener(writeListeners[i]);
+                    }
+                }
+            } else {
+                params = new ArrayList<>();
+            }
+        }
+
+        void addWriteListeners() {
+            for (int i = 0; i < Math.min(params.size(), writeListeners.length); i++) {
+                if (params.get(i) != null) {
+                    params.get(i).addListener(writeListeners[i]);
+                }
+            }
+        }
+
+
+
+        MFListener(LXMidiRemote midi, int deckI) {
+            this.midi = midi;
             this.deckI = deckI;
 
-            params = new ArrayList<LXListenableNormalizedParameter>();
+
 
             writeListeners = new LXParameterListener[16];
             for (int i = 0; i < writeListeners.length; i++) {
@@ -115,48 +130,264 @@ public class PerformanceHardwareController extends LXComponent {
                 };
             }
 
-
-            getAndWriteParams();
-            pm.decks[deckI].activeChannel.addListener(new LXParameterListener() {
+            activeChannelListener = new LXParameterListener() {
                 @Override
                 public void onParameterChanged(LXParameter lxParameter) {
                     getAndWriteParams();
                 }
-            });
+            };
 
-            for (int j = 0; j < 2; j++) {
-                final int k = j;
-                int wI = (deckI * 2) + j;
-                DiscreteParameter active = pm.gui.channelWindows[wI].activePatternIndex;
-                active.addListener(new LXParameterListener() {
-                    @Override
-                    public void onParameterChanged(LXParameter lxParameter) {
-                        if (pm.decks[deckI].activeChannel.getValuei() != k) {
-                            return;
-                        }
-                        getAndWriteParams();
-                    }
-                });
+            getAndWriteParams();
+            addListeners(deckI);
+        }
+
+        void setDirection(boolean left, boolean propagate) {
+            int desired = left ? 0 : 1;
+
+            if (deckI != desired) {
+                removeListeners(deckI);
+                deckI = desired;
+                addListeners(deckI);
+                getAndWriteParams();
             }
 
+            flashSide(deckI);
 
 
-        }
-
-
-        public void getAndWriteParams() {
-            getParams();
-            writeParamStates();
-        }
-
-        void getParams() {
-            if (params != null) {
-                for (int i = 0; i < Math.min(params.size(), writeListeners.length); i++) {
-                    if (params.get(i) != null) {
-                        params.get(i).removeListener(writeListeners[i]);
-                    }
+            if (propagate) {
+                boolean isTwister = this instanceof TwisterListener;
+                for (MFListener l : isTwister ? twisterListeners : fighterListeners) {
+                    if (l == this) continue;
+                    l.setDirection(!left, false);
                 }
             }
+
+
+        }
+    }
+
+    class FighterListener extends MFListener implements LXMidiListener {
+
+
+
+        FighterListener(LXMidiRemote midi, int i) {
+            super(midi, i);
+
+        }
+
+        void onNote(int channel, int pitch, boolean on) {
+            if (!on) {
+                return;
+            }
+            if (channel == 2) {
+                int i = fromKey(pitch);
+                if (i < params.size()) {
+                    BooleanParameter p = (BooleanParameter)params.get(i);
+                    p.toggle();
+                }
+            }
+            if (channel == 3) {
+                if (pitch >= 20) {
+                    int section = (pitch - 20) / 3;
+                    setDirection(section % 2 == 0, true);
+                }
+                if (pitch < 4) {
+                    int d = deckI * 2;
+                    int clamped = Math.max(d, Math.min(d + 1, pitch));
+                    int cI = clamped - d;
+                    pm.decks[deckI].activeChannel.setValue(cI);
+                    writeDeck();
+                }
+            }
+        }
+
+        @Override
+        public void noteOnReceived(MidiNoteOn midiNoteOn) {
+            int channel = midiNoteOn.getChannel();
+            int pitch = midiNoteOn.getPitch();
+            onNote(channel, pitch, true);
+        }
+
+        @Override
+        public void noteOffReceived(MidiNote midiNote) {
+            int channel = midiNote.getChannel();
+            int pitch = midiNote.getPitch();
+            onNote(channel, pitch, false);
+        }
+
+        @Override
+        public void controlChangeReceived(MidiControlChange midiControlChange) {
+        }
+
+        @Override
+        public void programChangeReceived(MidiProgramChange midiProgramChange) {
+            System.out.println(midiProgramChange.toString());
+        }
+
+        @Override
+        public void pitchBendReceived(MidiPitchBend midiPitchBend) {
+
+        }
+
+        @Override
+        public void aftertouchReceived(MidiAftertouch midiAftertouch) {
+
+        }
+
+        @Override
+        void getParams() {
+            int maxParamButtons = 8;
+            int active = pm.decks[deckI].activeChannel.getValuei();
+            PerformanceManager.PerformanceChannel activeChannel = pm.decks[deckI].channels[active];
+            ArrayList<BooleanParameter> buttonParams = activeChannel.getButtonParameters();
+            params.clear();
+            for (int i = 0; i < maxParamButtons; i++) {
+                if (i < buttonParams.size()) {
+                    params.add(buttonParams.get(i));
+                } else {
+                    break;
+                }
+            }
+        }
+
+        int fromKey(int pitch) {
+            int k = (pitch - 36) % 16;
+            int x = k % 4;
+            int y = k / 4;
+            return ((3 - y) * 4) + x;
+        }
+
+        int toKey(int i) {
+            int x = i % 4;
+            int y = i / 4;
+            int k = ((3 - y) * 4) + x;
+            return 36 + k;
+        }
+
+        void writeDeck() {
+            int c = pm.decks[deckI].activeChannel.getValuei();
+            int d = deckI * 2;
+            midi.getOutput().sendNoteOn(3, d + c, 127);
+        }
+
+        void writeParamStates() {
+            for (int i = 0; i < 16; i++) {
+                writeParamState(i);
+            }
+            writeDeck();
+        }
+
+        @Override
+        void writeParamState(int buttonI) {
+            LXMidiOutput out = midi.getOutput();
+
+            int pitch = toKey(buttonI);
+
+            int ON = 65; //63;
+            int OFF = 27; //15;
+
+            int v;
+            int b;
+            if (buttonI < params.size() && params.get(buttonI) != null) {
+                v = ((BooleanParameter)params.get(buttonI)).isOn() ? ON : OFF;
+                b = 33;
+//                out.sendControlChange(2, knobI, RGB_MAX);
+            } else {
+                v = OFF;
+                b = 18;
+//                out.sendControlChange(2, knobI, RGB_OFF);
+
+            }
+
+            for (int i = 0; i < 4; i++) {
+                int kI = pitch + (16 * i);
+                midi.sendNoteOn(2, kI, v);
+                midi.sendNoteOn(3, kI, b);
+            }
+        }
+
+        @Override
+        void flashSide(int side) {
+
+            for (int i = 0; i < 16; i++) {
+                int pitch = toKey(i);
+
+                int col = i % 4;
+                boolean on;
+                if (side == 0) {
+                    on = col < 2;
+                } else {
+                    on = col >= 2;
+                }
+                for (int j = 0; j < 4; j++) {
+                    int kI = pitch + (16 * j);
+
+                    midi.sendNoteOn(2, kI, 110);
+                    midi.sendNoteOn(3, kI, on ? 33 : 18);
+                }
+            }
+
+            new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        writeParamStates();
+                    }
+                },
+                500
+            );
+
+//            for (int i = 0; i < 16; i++) {
+//                int col = i % 4;
+//                boolean on;
+//                if (side == 0) {
+//                    on = col < 2;
+//                } else {
+//                    on = col >= 2;
+//                }
+//                LXMidiOutput out = midi.getOutput();
+//                out.sendControlChange(1, i, 90);
+////                out.sendControlChange(2, i, on ? RGB_MAX : RGB_OFF);
+////                out.sendControlChange(0, i, on ? 127 : 0);
+//            }
+//            new java.util.Timer().schedule(
+//                new java.util.TimerTask() {
+//                    @Override
+//                    public void run() {
+////                        setButtonColors();
+//                        writeParamStates();
+//                    }
+//                },
+//                500
+//            );
+        }
+    }
+
+    class TwisterListener extends MFListener implements LXMidiListener {
+
+        final int RGB_OFF = 17;
+        final int RGB_MED = 32;
+        final int RGB_MAX = 47;
+
+
+
+        TwisterListener(LXMidiRemote midi, int deckI) {
+            super(midi, deckI);
+
+            setButtonColors();
+            flashSide(deckI);
+        }
+
+        void setButtonColors() {
+            LXMidiOutput out = midi.getOutput();
+            for (int i = 0; i < 16; i++) {
+                int c = i < 12 ? 114 : 70;
+                out.sendControlChange(1, i, c);
+            }
+        }
+
+        @Override
+        void getParams() {
             int maxParamKnobs = 12;
             int active = pm.decks[deckI].activeChannel.getValuei();
             PerformanceManager.PerformanceChannel activeChannel = pm.decks[deckI].channels[active];
@@ -170,18 +401,11 @@ public class PerformanceHardwareController extends LXComponent {
                 }
             }
             params.addAll(activeChannel.getEffectParameters());
-            for (int i = 0; i < Math.min(params.size(), writeListeners.length); i++) {
-                if (params.get(i) != null) {
-                    params.get(i).addListener(writeListeners[i]);
-                }
-            }
         }
 
+        @Override
         void writeParamState(int knobI) {
-            int RGB_OFF = 17;
-            int RGB_MED = 32;
-            int RGB_MAX = 47;
-            LXMidiOutput out = twisters[deckI].getOutput();
+            LXMidiOutput out = midi.getOutput();
 
             int v;
             if (knobI < params.size() && params.get(knobI) != null) {
@@ -196,6 +420,8 @@ public class PerformanceHardwareController extends LXComponent {
             out.sendControlChange(0, knobI, v);
         }
 
+
+
         void writeParamStates() {
             for (int i = 0; i < 16; i++) {
                 writeParamState(i);
@@ -204,44 +430,78 @@ public class PerformanceHardwareController extends LXComponent {
 
         @Override
         public void noteOnReceived(MidiNoteOn midiNoteOn) {
-
+            System.out.println(midiNoteOn.toString());
         }
 
         @Override
         public void noteOffReceived(MidiNote midiNote) {
+            System.out.println(midiNote.toString());
+        }
 
+
+
+
+        @Override
+        void flashSide(int side) {
+            for (int i = 0; i < 16; i++) {
+                int col = i % 4;
+                boolean on;
+                if (side == 0) {
+                    on = col < 2;
+                } else {
+                    on = col >= 2;
+                }
+                LXMidiOutput out = midi.getOutput();
+                out.sendControlChange(1, i, 90);
+                out.sendControlChange(2, i, on ? RGB_MAX : RGB_OFF);
+            }
+            new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        setButtonColors();
+                        writeParamStates();
+                    }
+                },
+                500
+            );
         }
 
         @Override
         public void controlChangeReceived(MidiControlChange midiControlChange) {
+
             int channel = midiControlChange.getChannel();
             int cc = midiControlChange.getCC();
             double v = midiControlChange.getNormalized();
-            if (cc >= params.size() | params.get(cc) == null) {
-                return;
-            }
-            LXListenableNormalizedParameter param = params.get(cc);
+
             if (channel == 0) {
+                if (cc >= params.size() || params.get(cc) == null) {
+                    return;
+                }
+                LXListenableNormalizedParameter param = params.get(cc);
                 param.setNormalized(v);
             }
-//      if (channel == 1) {
-//          param.setValue(param.get)
-//            }
+            if (channel == 3) {
+                if (v == 1.0f && cc >= 8 && cc <= 13) {
+                    setDirection(cc <= 10, true);
+                }
+            }
         }
 
         @Override
         public void programChangeReceived(MidiProgramChange midiProgramChange) {
-
+            System.out.println(midiProgramChange.toString());
         }
 
         @Override
         public void pitchBendReceived(MidiPitchBend midiPitchBend) {
+            System.out.println(midiPitchBend.toString());
 
         }
 
         @Override
         public void aftertouchReceived(MidiAftertouch midiAftertouch) {
-
+            System.out.println(midiAftertouch.toString());
         }
     }
 
@@ -256,9 +516,11 @@ public class PerformanceHardwareController extends LXComponent {
 
         for (LXMidiInput in : lx.engine.midi.inputs) {
             String name = in.getName();
+            String desc = in.getDescription();
             if (name.contains("Twister")) {
                 twisterInputs.add(in);
-            } else if (name.contains("Fighter")) {
+                // horrible terrible hack
+            } else if (name.contains("Fighter") || name.contains("Internal Error")) {
                 fighterInputs.add(in);
             }
 
@@ -270,8 +532,8 @@ public class PerformanceHardwareController extends LXComponent {
             String name = out.getName();
             if (name.contains("Twister")) {
                 twisterOutputs.add(out);
-            } else if (name.contains("Fighter")) {
-                twisterOutputs.add(out);
+            } else if (name.contains("Fighter") || name.contains("Internal Error")) {
+                fighterOutputs.add(out);
             }
         }
 
@@ -280,9 +542,10 @@ public class PerformanceHardwareController extends LXComponent {
             LXMidiOutput out = twisterOutputs.get(i);
             in.open();
             out.open();
-            twisters[i] = new LXMidiRemote(in, out);
-            twisterListeners[i] = new TwisterListener(i);
-            in.addListener(twisterListeners[i]);
+            LXMidiRemote twister = new LXMidiRemote(in, out);
+            TwisterListener listener = new TwisterListener(twister, i);
+            in.addListener(listener);
+            twisterListeners.add(listener);
         }
 
         for (int i = 0; i < Math.min(2, fighterInputs.size()); i++) {
@@ -290,19 +553,13 @@ public class PerformanceHardwareController extends LXComponent {
             LXMidiOutput out = fighterOutputs.get(i);
             in.open();
             out.open();
-            fighters[i] = new LXMidiRemote(in, out);
-            fighterListeners[i] = new FighterListener(i);
-            in.addListener(fighterListeners[i]);
+            LXMidiRemote fighter = new LXMidiRemote(in, out);
+            FighterListener listener = new FighterListener(fighter, i);
+            in.addListener(listener);
+            fighterListeners.add(listener);
         }
-
-//        for (LXMidiRemote twister : twisters) {
-//            for (int deckI = 0; deckI < 16; deckI++) {
-//                LXParameter p = pm.decks[0].channels[0].getKnobParameters().get(deckI);
-//                twister.bindController(p, 0, deckI);
-//            }
-//        }
-//        System.out.println("AYE");
     }
+
 
 
     static abstract class DeckDependentMapping {
@@ -409,10 +666,8 @@ public class PerformanceHardwareController extends LXComponent {
             });
         }
 
-        twisters = new LXMidiRemote[2];
-        fighters = new LXMidiRemote[2];
-        twisterListeners = new TwisterListener[2];
-        fighterListeners = new FighterListener[2];
+        twisterListeners = new ArrayList<>();
+        fighterListeners = new ArrayList<>();
 
 
 
@@ -442,6 +697,9 @@ public class PerformanceHardwareController extends LXComponent {
     }
 
     void setPatternScreen(int deckIndex, String name) {
+        if (palette.modules == null) {
+            return;
+        }
         for (PaletteListener.Module hub : palette.modules.column(1).values()) {
             if (hub.hubIndex == deckIndex) {
                 hub.setString(name);

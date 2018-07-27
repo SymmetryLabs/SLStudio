@@ -725,22 +725,7 @@ public class PaletteListener {
                 updateParameters();
 
 
-//                int fps = (int)lx.engine.frameRate();
-//                if (Math.abs(fps - lastFPS) > 10) {
-//                    String fpsString = String.format("FPS: %d", fps);
-//                    for (Module hub : modules.column(1).values()) {
-//                        hub.setString(fpsString);
-//                    }
-//                    lastFPS = fps;
-//                }
 
-
-//                counter += v;
-//                if (counter > 1000) {
-//                    counter = 0;
-//
-//
-//                }
             }
         });
 
