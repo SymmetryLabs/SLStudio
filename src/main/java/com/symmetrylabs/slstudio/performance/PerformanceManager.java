@@ -290,7 +290,7 @@ public class PerformanceManager extends LXComponent {
 //                order = setChannelsReversed(cf > 0.5);
 //            }
 
-                
+
 
 
             switch (b) {
@@ -742,7 +742,7 @@ public class PerformanceManager extends LXComponent {
         deckBlends = new EnumParameter[N_DECKS];
         for (int i = 0; i < N_DECKS; i++) {
             String crossfadeName = String.format("crossfader-%d", i);
-            deckCrossfaders[i] = new CompoundParameter(crossfadeName, 0);
+            deckCrossfaders[i] = new CompoundParameter(crossfadeName, 0.5);
             deckCrossfaders[i].setPolarity(LXParameter.Polarity.BIPOLAR);
             addParameter(deckCrossfaders[i]);
 
