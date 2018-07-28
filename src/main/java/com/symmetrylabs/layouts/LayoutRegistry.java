@@ -5,7 +5,7 @@ import java.util.*;
 import com.symmetrylabs.layouts.cubes.OfficeLayout;
 import processing.core.PApplet;
 
-import com.symmetrylabs.layouts.cubes.CubesLayout;
+import com.symmetrylabs.layouts.cubes.*;
 import com.symmetrylabs.layouts.dynamic_JSON.DynamicLayout;
 import com.symmetrylabs.layouts.oslo.OsloLayout;
 import com.symmetrylabs.layouts.oslo.TreeModel;
@@ -44,6 +44,8 @@ public class LayoutRegistry {
         map.put("obj", () -> new ObjLayout());
         map.put("office", () -> new OfficeLayout());
         map.put("kalpa", () -> new KalpaLayout());
+        map.put("summer_stage", () -> new SummerStageLayout());
+        map.put("21_pilots", () -> new TwentyOnePilotsLayout());
     }
 
     static interface LayoutBuilder {

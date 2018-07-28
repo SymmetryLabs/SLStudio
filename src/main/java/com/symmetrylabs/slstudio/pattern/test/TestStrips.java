@@ -24,7 +24,7 @@ public class TestStrips extends SLPattern<StripsModel<Strip>> implements SLTestP
         for (Strip strip : strips) {
             float hue = 0;
 
-            for (LXVector v : getVectorList(strip.points)) {
+            for (LXVector v : getVectors(strip.points)) {
                 colors[v.index] = lx.hsb(hue, 100, 100);
             }
 

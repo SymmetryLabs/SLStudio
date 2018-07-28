@@ -85,7 +85,7 @@ public class CubeFlash extends SLPattern<CubesModel> {
             @Override
             public void accept(final Flash flash) {
              int col = LXColor.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
-             for (LXVector v : getVectorList(flash.cube.getPoints())) {
+             for (LXVector v : getVectors(flash.cube.getPoints())) {
                  colors[v.index] = col;
              }
             }

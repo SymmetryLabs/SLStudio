@@ -16,7 +16,7 @@ public class NetworkMonitor {
     public final ListenableSet<NetworkDevice> deviceList;
 
     private final NetworkScanner networkScanner;
-    private final Timer timer = new Timer();
+    private final Timer timer = new Timer("NetworkScanner");
 
     private boolean started = false;
     private boolean oldVersionWarningGiven = false;

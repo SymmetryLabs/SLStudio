@@ -20,4 +20,12 @@ public class DistanceUtils {
     public static float euclideanDistance(float ax, float ay, float az, float bx, float by, float bz) {
         return (float)FastMath.sqrt(squaredEuclideanDistance(ax, ay, az, bx, by, bz));
     }
+
+    public static float metersToInches(float meters) {
+        return meters / 0.0254f;
+    }
+
+    public static float inchesToMeters(float inches) {
+        return inches * 39.37007874f;
+    }
 }

@@ -15,6 +15,7 @@ import heronarts.lx.transform.LXTransform;
 import static com.symmetrylabs.util.MathUtils.*;
 import static com.symmetrylabs.util.DistanceConstants.*;
 import static com.symmetrylabs.util.MathConstants.*;
+import com.symmetrylabs.slstudio.output.PointsGrouping;
 
 /**
  * Top-level model of the entire sculpture. This contains a set of
@@ -137,6 +138,38 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         }
     }
 
+    public static class DoubleControllerCube extends Cube {
+
+        public final String idA;
+        public final String idB;
+
+        public DoubleControllerCube(String idA, String idB, float x, float y, float z, float rx, float ry, float rz, LXTransform t) {
+            super(idA, x, y, z, rx, ry, rz+180, t, CubesModel.Cube.Type.HD);
+            this.idA = idA;
+            this.idB = idB;
+        }
+
+        public PointsGrouping getPointsA() {
+            return new PointsGrouping()
+                .addPoints(getStrips().get(11).getPoints())
+                .addPoints(getStrips().get(8).getPoints())
+                .addPoints(getStrips().get(4).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(getStrips().get(6).getPoints())
+                .addPoints(getStrips().get(7).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(getStrips().get(9).getPoints());
+        }
+
+        public PointsGrouping getPointsB() {
+            return new PointsGrouping()
+                .addPoints(getStrips().get(0).getPoints())
+                .addPoints(getStrips().get(3).getPoints())
+                .addPoints(getStrips().get(5).getPoints())
+                .addPoints(getStrips().get(1).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(getStrips().get(2).getPoints())
+                .addPoints(getStrips().get(10).getPoints(), PointsGrouping.REVERSE_ORDERING);
+        }
+    }
+
     /**
      * Model of a single cube, which has an orientation and position on the
      * car. The position is specified in x,y,z coordinates with rotation. The
@@ -156,7 +189,8 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
             SMALL         (12,        72,       15),
             MEDIUM        (18,        60,       23),
             LARGE         (24,        30,       15),
-            LARGE_DOUBLE  (24,        60,       30);
+            LARGE_DOUBLE  (24,        60,       30),
+            HD                        (24,        60,       28);
 
 
             public final float EDGE_WIDTH;
@@ -328,7 +362,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
                 for (int i = 0; i < STRIPS_PER_FACE; i++) {
                     boolean isHorizontal = (i % 2 == 0);
                     CubesStrip.Metrics stripMetrics = isHorizontal ? metrics.horizontal : metrics.vertical;
-                    CubesStrip strip = new CubesStrip(i+"", stripMetrics, transform);
+                    CubesStrip strip = new CubesStrip(i+"", stripMetrics, isHorizontal, transform);
                     this.strips.add(strip);
                     transform.translate(isHorizontal ? metrics.horizontal.length : metrics.vertical.length, 0, 0);
                     transform.rotateZ(-HALF_PI);
@@ -345,6 +379,8 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
      * A strip is a linear run of points along a single edge of one cube.
      */
     public static class CubesStrip extends Strip {
+        public boolean isHorizontal = false;
+
         public static class Metrics extends Strip.Metrics {
 
             public final float length;
@@ -369,12 +405,13 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
             }
         }
 
-        public CubesStrip(String id, Metrics metrics, List<LXPoint> points) {
+        public CubesStrip(String id, Metrics metrics, boolean isHorizontal, List<LXPoint> points) {
             super(id, metrics, points);
         }
 
-        public CubesStrip(String id, Metrics metrics, LXTransform transform) {
+        public CubesStrip(String id, Metrics metrics, boolean isHorizontal, LXTransform transform) {
             super(id, metrics, new Fixture(metrics, transform));
+            this.isHorizontal = isHorizontal;
         }
 
         private static class Fixture extends LXAbstractFixture {

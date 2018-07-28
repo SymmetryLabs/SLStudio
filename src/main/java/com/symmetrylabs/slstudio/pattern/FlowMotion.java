@@ -98,7 +98,7 @@ public class FlowMotion extends SLPatternWithMarkers {
         long[] colors = (long[]) getArray(RGB16);
         float xScale = xSclParam.getValuef();
         float xOffset = xOffParam.getValuef();
-        for (LXVector v : getVectorList()) {
+        for (LXVector v : getVectors()) {
             float x = Math.abs(v.x - xOffset - model.cx) / (model.xRange / 2);
             float pos = (x / xScale) * STREAM_LENGTH;
             int index = (int) pos;

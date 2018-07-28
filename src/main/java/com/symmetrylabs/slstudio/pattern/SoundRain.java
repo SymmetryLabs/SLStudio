@@ -82,7 +82,7 @@ public class SoundRain extends SLPattern<CubesModel> {
                 Strip s = c.getStrips().get(j);
 
                 if (j % 4 != 0 && j % 4 != 2) {
-                    for (LXVector v : getVectorList(s.points)) {
+                    for (LXVector v : getVectors(s.points)) {
                         int seq = ((int) (v.y * avgSize / model.yMax + pos.getValuef() + Math.sin(v.x + v.z) * 2)) % avgSize;
                         seq = Math.min(Math.abs(seq - (avgSize / 2)), avgSize - 1);
                         colors[v.index] = lx.hsb(palette.getHuef(), Math.max(0, 100 - Math.abs(v.x - col1.getValuef()) / 2), lightVals[seq]);

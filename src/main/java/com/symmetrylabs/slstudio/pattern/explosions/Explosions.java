@@ -106,7 +106,7 @@ public class Explosions extends LXPattern {
                 float sat_value = saturationModulator.getValuef();
                 float brightness_value = brightnessParameter.getValuef();
 
-                for (LXVector v : getVectorList()) {
+                for (LXVector v : getVectors()) {
                         int num_explosions_in = 0;
 
                         for(L8onExplosion explosion : this.explosions) {

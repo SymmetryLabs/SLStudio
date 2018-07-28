@@ -64,7 +64,7 @@ public class CubeEQ extends SLPattern<SLModel> {
         final float clrConst = 1.1f + clr.getValuef();
 
         model.forEachPoint((start, end) -> {
-            for (LXVector v : getVectorList(start, end)) {
+            for (LXVector v : getVectors(start, end)) {
                 float normalizedX = (v.x - model.xMin) / model.xRange;
                 float avgIndex = constrain(2 + normalizedX * (eq.numBands - 4), 0, eq.numBands - 4);
                 int avgFloor = (int) avgIndex;

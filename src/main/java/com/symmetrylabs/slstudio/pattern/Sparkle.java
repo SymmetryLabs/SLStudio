@@ -1,16 +1,16 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import java.lang.Math;
+import com.symmetrylabs.color.Ops8;
+
 import java.util.Arrays;
-import java.util.List;
-import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
-import heronarts.lx.model.LXPoint;
-import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.LXUtils;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
 
 public class Sparkle extends LXPattern {
@@ -74,7 +74,7 @@ public class Sparkle extends LXPattern {
             sparks.add(new Spark());
         }
 
-        Arrays.fill(colors, 0);
+        Arrays.fill(colors, Ops8.BLACK);
 
         for (Spark spark : sparks) {
             float hue = ((float)(hueParameter.getValuef() + (hueVarianceParameter.getValuef() * spark.hue))) % 1.0f;

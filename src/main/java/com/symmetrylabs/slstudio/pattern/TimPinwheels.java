@@ -16,7 +16,6 @@ import static com.symmetrylabs.util.MathConstants.PI;
 //import static com.symmetrylabs.util.MathUtils.max;
 //import static com.symmetrylabs.util.MathUtils.pow;
 import static java.lang.StrictMath.atan2;
-import static jdk.nashorn.internal.objects.NativeMath.random;
 
 public class TimPinwheels extends LXPattern {
 
@@ -161,7 +160,7 @@ public class TimPinwheels extends LXPattern {
                 //colors[p.index] = lx.hsb(max(0, lx.h(c) - 10), min(100, lx.s(c) + 10), lx.b(c) - 5 );
             }
 
-            if (random(1.0) >= derez) {
+            if (MathUtils.random(1.0f) >= derez) {
                 float v = values[i];
                 colors[p.index] = lx.hsb(360 + hue + MathUtils.pow(v, 2) * hueSpread, 30 + MathUtils.pow(1 - v, 0.25f) * 60, v * 100);
             }
