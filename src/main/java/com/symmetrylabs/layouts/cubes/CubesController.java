@@ -259,7 +259,10 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         // Send the cube data to the cube. yay!
         try {
             //println("packetSizeBytes: "+packetSizeBytes);
-            dsocket.send(new java.net.DatagramPacket(packetData,packetSizeBytes));
+            if (points != null) {
+                dsocket.send(new java.net.DatagramPacket(packetData, packetSizeBytes));
+            }
+
         }
         catch (Exception e) {dispose();}
     }
