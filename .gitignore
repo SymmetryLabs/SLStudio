@@ -1,11 +1,10 @@
-.DS_Store
+DS_Store
 build-tmp/
 build/
 *.autosave
 *.swp
 *.iml
 .idea
-.layout
 .lxproject
 *.sublime-workspace
 application.macosx
