@@ -173,7 +173,7 @@ public class SummerStageLayout extends CubesLayout {
             // col 2
             new TowerConfig(SP * 1, SP * 0, SP * 0, new String[][]{new String[]{"916", "917"}, new String[]{"924", "923"}, new String[]{"922", "932"}, new String[]{"878", "888"}}),
             // col 3
-            new TowerConfig(SP * 2, SP * 0, SP * 0, new String[][]{new String[]{"926", "5410ecf5e6e1"}, new String[]{"939", "933"}, new String[]{"935", "999"}, new String[]{"904", "920"}, new String[]{"927", "915"}, new String[]{"919", "910"}}),
+            new TowerConfig(SP * 2, SP * 0, SP * 0, new String[][]{new String[]{"926", "5410ecf5e6e1"}, new String[]{"939", "933"}, new String[]{"935", "5410ecf65f07"}, new String[]{"904", "920"}, new String[]{"927", "915"}, new String[]{"919", "5410ecf6b5f9"}}),
         }),
 
         // done (almost)
@@ -240,7 +240,7 @@ public class SummerStageLayout extends CubesLayout {
             new TowerConfig(SP * 2, SP * 1, SP * 0, new String[][]{new String[]{"0", "0"}, new String[]{"0", "0"}, new String[]{"0", "0"}}),
             new TowerConfig(SP * 2, SP * 1, SP * -1, new String[][]{new String[]{"869", "868"}, new String[]{"855", "854"}, new String[]{"579", "5410ecf6088d"}, new String[]{"5410ecf5ec07", "790"}}),
             // col 4
-            new TowerConfig(SP * 3, SP * 0, SP * 0, new String[][]{new String[]{"0", "0"}, new String[]{"0", "0"}, new String[]{"0", "0"}, new String[]{"0", "0"}}),
+            new TowerConfig(SP * 3, SP * 0, SP * 0, new String[][]{new String[]{"0", "0"}, new String[]{"0", "0"}, new String[]{"0", "0"}, new String[]{"0", "5410ecf67b05"}}),
         }),
 
         new ClusterConfig("CLUSTER_W", SP*40, SP*13, 0, new TowerConfig[]{
