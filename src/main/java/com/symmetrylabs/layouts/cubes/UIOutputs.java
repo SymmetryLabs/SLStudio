@@ -21,11 +21,11 @@ public class UIOutputs extends UICollapsibleSection {
         private Dispatcher dispatcher;
 
         public UIOutputs(LX lx, UI ui, CubesLayout layout, float x, float y, float w) {
-                super(ui, x, y, w, 124);
+                super(ui, x, y, w, 824);
 
                 dispatcher = Dispatcher.getInstance(lx);
 
-                outputList = new UIItemList.ScrollList(ui, 0, 22, w-8, 78);
+                outputList = new UIItemList.ScrollList(ui, 0, 22, w-8, 678);
 
                 updateItems(layout);
                 outputList.setSingleClickActivate(true);

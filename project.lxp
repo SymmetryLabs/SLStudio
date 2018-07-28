@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1532811489340,
+  "timestamp": 1532812380772,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -520,7 +520,7 @@
       "modulationColor": -16711864,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -529,9 +529,9 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 4595,
+        "id": 5190,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -14352129,
+        "modulationColor": -65428,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,

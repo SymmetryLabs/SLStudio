@@ -58,7 +58,43 @@ public class SummerStageLayout extends CubesLayout {
 
     static final ClusterConfig[] clusters = new ClusterConfig[]{
 
+
+
         new ClusterConfig("CLUSTER_A", SP*24, SP*14, 0, new TowerConfig[] {
+            // MAC ADDRES CUBES
+            //new TowerConfig(SP * 0, SP * 1, SP * 0, new String[][]{
+//                new String[]{
+//                    "5410ecf55605",
+//                    "5410ecf5560b",
+//                    "5410ecf55e0b",
+//                    "5410ecf55f05",
+//                    "5410ecf56703",
+//                    "5410ecf57109",
+//                    "5410ecf5716f",
+//                    "5410ecf58907",
+//                    "5410ecf5a00f",
+//                    "5410ecf5a704",
+//                    "5410ecf5c453",
+//                    "5410ecf5d803",
+//                    "5410ecf5e6e1",
+//                    "5410ecf5e70c",
+//                    "5410ecf5ec07",
+//                    "5410ecf5f004",
+//                    "5410ecf5f105",
+//                    "5410ecf5f70e",
+//                    "5410ecf5fa48",
+//                    "5410ecf6005c",
+//                    "5410ecf60144",
+//                    "5410ecf607fb",
+//                    "5410ecf6086d",
+//                    "5410ecf61304",
+//                    "5410ecf65ce9",
+//                    "5410ecf65e0e",
+//                    "5410ecf65f07",
+//                    "5410ecf6b05"
+//                }
+//            }),
+
             // col 1
             new TowerConfig(SP * 0, SP * 1, SP * 0, new String[][]{new String[]{"485", "484"}}),
             new TowerConfig(SP * 0, SP * 0, SP * -1, new String[][]{new String[]{"487", "486"}, new String[]{"515", "514"}, new String[]{"491", "490"}, new String[]{"477", "476"}}),
@@ -280,9 +316,9 @@ public class SummerStageLayout extends CubesLayout {
 
         new ClusterConfig("CLUSTER_R", SP*48, SP*9, 0, new TowerConfig[]{
             // col 1
-            new TowerConfig(SP * 0, SP * 0, SP * 0, new String[][]{new String[]{"0", "0"}}),
+            new TowerConfig(SP * 0, SP * 0, SP * 0, new String[][]{new String[]{"727", "0"}}),
             // col 2
-            new TowerConfig(SP * 1, SP * 0, SP * 0, new String[][]{new String[]{"0", "0"}, new String[]{"0", "0"}}),
+            new TowerConfig(SP * 1, SP * 0, SP * 0, new String[][]{new String[]{"543", "0"}, new String[]{"0", "5410ecf65e0e"}}),
             // col 3
             new TowerConfig(SP * 2, SP * 0, SP * 0, new String[][]{new String[]{"446", "596"}, new String[]{"865", "864"}}),
         }),
