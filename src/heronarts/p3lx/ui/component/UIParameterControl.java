@@ -206,7 +206,7 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
         return "-";
     }
 
-    private String getLabelString() {
+    protected String getLabelString() {
         if (this.parameter != null) {
             return this.parameter.getLabel();
         } else if (this.label != null) {
