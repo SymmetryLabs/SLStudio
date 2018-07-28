@@ -252,13 +252,18 @@ public class PerformanceGUIController extends LXComponent {
             activePatternIndex.addListener(new LXParameterListener() {
                 @Override
                 public void onParameterChanged(LXParameter lxParameter) {
-                    int i = activePatternIndex.getValuei();
-//                    System.out.println(deckI);
-                    patternList.getItems().get(i).onActivate();
-                    patternChanged.toggle();
+                    patternList.setFocusIndex(activePatternIndex.getValuei());
                 }
             });
 
+        }
+
+        void activateFocused() {
+//            int i = activePatternIndex.getValuei();
+//                    System.out.println(deckI);
+            patternList.getFocusedItem().onActivate();
+//            patternList.getItems().get(i).onActivate();
+            patternChanged.toggle();
         }
 
         private void setBackground() {
@@ -369,7 +374,6 @@ public class PerformanceGUIController extends LXComponent {
                 PatternItem pi = (PatternItem)items.get(i);
                 if (pi.pattern == pattern) {
                     pi.onActivate();
-                    patternList.setFocusIndex(i);
                     break;
                 }
             }

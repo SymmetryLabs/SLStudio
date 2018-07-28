@@ -28,6 +28,8 @@ public class PerformanceHardwareController extends LXComponent {
     HashMap<String, ColorParameter> uuidToColorParameter;
 
     final BooleanParameter[] cuesPressed;
+    final BooleanParameter[] patternScrollPressed;
+
 
     final static String MAPPING_FILENAME = "palette_mapping.json";
     final static String MAPPINGS_KEY = "mappings";
@@ -44,6 +46,8 @@ public class PerformanceHardwareController extends LXComponent {
     final static String PRESET_SAVE = "preset-save";
     final static String PRESET_FIRE = "preset-fire";
     final static String BLENDMODE_SCROLL = "blendmode-scroll";
+    final static String CENTER_BLENDMODE = "center-blendmode";
+
     final static String CUE_BUTTONS = "cue-buttons";
 
 
@@ -634,6 +638,20 @@ public class PerformanceHardwareController extends LXComponent {
             cuesPressed[i].addListener(cueListener);
         }
 
+        patternScrollPressed = new BooleanParameter[2];
+        for (int i = 0; i < patternScrollPressed.length; i++) {
+            String name = String.format("patternScrollPressed-%d", i);
+            final int j = i;
+            patternScrollPressed[i] = new BooleanParameter(name, false);
+            patternScrollPressed[i].addListener(new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+                    int channelI = pm.decks[j].activeChannel.getValuei();
+                    pm.gui.channelWindows[j * 2 + channelI].activateFocused();
+                }
+            });
+        }
+
 
         uuidToParameter = new HashMap<String, ArrayList<LXParameter>>();
         uuidToColorParameter = new HashMap<String, ColorParameter>();
@@ -735,7 +753,8 @@ public class PerformanceHardwareController extends LXComponent {
     void mapModule(PaletteListener.Module module) {
         if (uuidToParameter.containsKey(module.uuid)) {
             mapDeckIndependentModule(module);
-        } else if (uuidToDeckDependentMapping.containsKey(module.uuid)) {
+        }
+        if (uuidToDeckDependentMapping.containsKey(module.uuid)) {
             mapDeckDepdendentModule(module);
         }
         boolean upsideDown = uuidToUpsideDown.containsKey(module.uuid);
@@ -857,7 +876,7 @@ public class PerformanceHardwareController extends LXComponent {
 
         patternColors = new ColorParameter[4];
         presetColors = new ColorParameter[4];
-        blendModeColors = new ColorParameter[2];
+        blendModeColors = new ColorParameter[3];
         cueColors = new ColorParameter[4];
         fireColors = new ColorParameter[4];
 
@@ -897,10 +916,15 @@ public class PerformanceHardwareController extends LXComponent {
             addImmediateListener(active, listener);
         }
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             String name = String.format("blend-%d", i);
             blendModeColors[i] = new ColorParameter(name);
-            final DiscreteParameter blend = pm.decks[i].blendMode;
+            final DiscreteParameter blend;
+            if (i < 2) {
+                blend = pm.decks[i].blendMode;
+            } else {
+                blend = pm.globalParams.blendMode;
+            }
             final int k = i;
             LXParameterListener listener = new LXParameterListener() {
                 @Override
@@ -986,6 +1010,21 @@ public class PerformanceHardwareController extends LXComponent {
             setParameterMappings(mappingsObj, DESATURATION, pm.globalParams.effectParams.desaturation, desaturationColor);
 
 
+//            setParameterMappings(mappingsObj, PATTERN_SCROLL, new DeckDependentMapping() {
+//                @Override
+//                LXParameter getParameter(int deckI, int channelI) {
+//                    return patternScrollPressed[deckI];
+//                }
+//
+//                @Override
+//                ColorParameter getColorParameter(int deckI, int channelI) {
+//                    int wI = deckI * 2 + channelI;
+//                    return patternColors[wI];
+//                }
+//            });
+
+
+
             setParameterMappings(mappingsObj, PATTERN_SCROLL, new DeckDependentMapping() {
                 @Override
                 LXParameter getParameter(int deckI, int channelI) {
@@ -999,6 +1038,12 @@ public class PerformanceHardwareController extends LXComponent {
                     return patternColors[wI];
                 }
             });
+
+            setParameterMappings(mappingsObj, PATTERN_SCROLL, patternScrollPressed, new ColorParameter[2]);
+
+
+
+
 
 
             setParameterMappings(mappingsObj, PRESET_SCROLL, new DeckDependentMapping() {
@@ -1041,6 +1086,8 @@ public class PerformanceHardwareController extends LXComponent {
             });
 
             setParameterMappings(mappingsObj, BLENDMODE_SCROLL, new LXParameter[]{pm.decks[0].blendMode, pm.decks[1].blendMode}, blendModeColors);
+            setParameterMappings(mappingsObj, CENTER_BLENDMODE, pm.globalParams.blendMode, blendModeColors[2]);
+
 
 
             setParameterMappings(mappingsObj, CUE_BUTTONS, cuesPressed, cueColors);

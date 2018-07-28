@@ -175,7 +175,7 @@ public class PaletteListener {
                 JsonObject screen = new JsonObject();
                 int len = Math.min(s.length(), 11);
                 screen.addProperty("screen_string", s.substring(0, len));
-                send(screen);
+//                send(screen);
             }
         }
 
