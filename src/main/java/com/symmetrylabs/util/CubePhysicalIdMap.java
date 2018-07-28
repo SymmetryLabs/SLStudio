@@ -29,7 +29,8 @@ public class CubePhysicalIdMap {
 
     public String getPhysicalId(String deviceId) {
         if (!physicalIds.containsKey(deviceId)) {
-            System.err.println("WARNING: Device ID " + deviceId + " not in " + FILENAME);
+
+            return deviceId;
         }
         return physicalIds.getOrDefault(deviceId, deviceId);
     }
