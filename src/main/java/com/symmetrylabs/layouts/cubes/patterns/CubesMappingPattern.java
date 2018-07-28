@@ -87,6 +87,7 @@ public class CubesMappingPattern extends SLPattern<CubesModel> {
     }
 
     private void setFixtureColor(String id, int col, boolean dotted) {
+<<<<<<< HEAD
         if (id.equals("-"))
             return;
 
@@ -104,4 +105,23 @@ public class CubesMappingPattern extends SLPattern<CubesModel> {
             }
         }
     }
+=======
+//        if (id.equals("-"))
+//            return;
+//
+//        // we iterate all cubes and call continue here because multiple cubes might have zero as id
+//        for (CubesModel.Cube c : model.getCubes()) {
+//            if (!c.id.equals(id))
+//                continue;
+//
+//            int i = 0;
+//            for (LXVector v : getVectorList(c.points)) {
+//                if (dotted) {
+//                    col = (i++ % 2 == 0) ? LXColor.scaleBrightness(LXColor.GREEN, 0.2f) : LXColor.BLACK;
+//                }
+//                setColor(v.index, col);
+//            }
+//        }
+}
+>>>>>>> mappings/summer-stage-in-progress
 }

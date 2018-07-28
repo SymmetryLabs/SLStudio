@@ -105,6 +105,7 @@ void  move()      { c     = interp(t,prvA,dstA);
         // addParameter(eq.release);
         // addParameter(eq.slope);
         addModulator(eq).start();
+        addParameter(eq.gain);
 
      // lx.addKeyEventHandler(parent);
         //leap= new LeapMotion(parent).withGestures();
@@ -118,6 +119,14 @@ void  move()      { c     = interp(t,prvA,dstA);
                                                                     "Prmd", "Wings", "W2", "Clock",
                                                                     "Trngle", "Quad", "Sphr", "Cone",
                                                                     "Noise", "Wave", "?", "?"}            );
+
+        addParameter(pRadius);
+        addParameter(pBounce);
+        addParameter(pAmp);
+        addParameter(pTempoMult);
+        addParameter(pTimePattern);
+        addParameter(pShape);
+
         //addSingleParameterUIRow(pTempoMult);
         //addSingleParameterUIRow(pTimePattern);
 

@@ -149,7 +149,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
             this.idB = idB;
         }
 
-        public PointsGrouping getPointsA() {
+        public PointsGrouping getPointsB() {
             return new PointsGrouping()
                 .addPoints(getStrips().get(11).getPoints())
                 .addPoints(getStrips().get(8).getPoints())
@@ -159,7 +159,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
                 .addPoints(getStrips().get(9).getPoints());
         }
 
-        public PointsGrouping getPointsB() {
+        public PointsGrouping getPointsA() {
             return new PointsGrouping()
                 .addPoints(getStrips().get(0).getPoints())
                 .addPoints(getStrips().get(3).getPoints())

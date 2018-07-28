@@ -77,6 +77,8 @@ public class CubesLayout implements Layout {
                 controller.enabled.setValue(isEnabled);
             }
         });
+
+        System.out.println("set up controllers");
     }
 
     public CubesController getControllerByDevice(NetworkDevice device) {
