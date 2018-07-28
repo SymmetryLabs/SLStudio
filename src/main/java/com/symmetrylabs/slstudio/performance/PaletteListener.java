@@ -385,6 +385,7 @@ public class PaletteListener {
                     setPressed(values[0] == 1);
                     break;
                 case DIAL:
+//                    System.out.printf("%d %d %d %d\n", values[0], values[1], values[2], values[3]);
                     setPressed(values[0] == 1);
                     setValue((float)values[3] / 255.0f);
                     clicks = values[1] > 0 ? -1 * values[1] : values[2];

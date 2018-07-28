@@ -83,6 +83,8 @@ public class PerformanceManager extends LXComponent {
                 channel.blendMode.setValue(0);
             }
 
+            channel.midiMonitor.setValue(true);
+
 
 
             addNewPatterns();

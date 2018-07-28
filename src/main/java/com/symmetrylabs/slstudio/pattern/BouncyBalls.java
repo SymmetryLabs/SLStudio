@@ -4,7 +4,9 @@ import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.midi.LXMidiListener;
 import heronarts.lx.midi.MidiNote;
+import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.Accelerator;
 import heronarts.lx.modulator.TriangleLFO;
@@ -12,7 +14,7 @@ import heronarts.lx.parameter.CompoundParameter;
 
 import static heronarts.lx.LX.TWO_PI;
 
-public class BouncyBalls extends LXPattern {
+public class BouncyBalls extends LXPattern implements LXMidiListener {
 
     static final int NUM_BALLS = 6;
 
@@ -80,6 +82,8 @@ public class BouncyBalls extends LXPattern {
         addParameter(bounce);
         addParameter(flr);
         addParameter(blobSize);
+
+        lx.engine.midi.addListener(this);
     }
 
     public void run(double deltaMs) {
@@ -89,9 +93,9 @@ public class BouncyBalls extends LXPattern {
         }
     }
 
-    public boolean noteOn(MidiNote note) {
+    @Override
+    public void noteOnReceived(MidiNoteOn note) {
         int pitch = (note.getPitch() + note.getChannel()) % NUM_BALLS;
         balls[pitch].bounce(note.getVelocity());
-        return true;
     }
 }

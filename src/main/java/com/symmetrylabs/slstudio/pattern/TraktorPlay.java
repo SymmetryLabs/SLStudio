@@ -3,6 +3,8 @@ package com.symmetrylabs.slstudio.pattern;
 import heronarts.lx.LX;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
+import heronarts.lx.midi.LXMidiListener;
+import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.modulator.Click;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -18,7 +20,7 @@ import com.symmetrylabs.util.MathUtils;
 import static processing.core.PApplet.*;
 import static java.lang.Math.*;
 
-public class TraktorPlay extends DPat //implements P3LX.KeyEventHandler
+public class TraktorPlay extends DPat implements LXMidiListener//implements P3LX.KeyEventHandler
 {
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);
@@ -60,6 +62,8 @@ void  move()      { c     = interp(t,prvA,dstA);
     int currentdeltaMs;
 
     CompoundParameter speed = new CompoundParameter("Speed", 0.4);
+    CompoundParameter gainF = new CompoundParameter("Gain", 1.0, 0.5, 3.);
+
     Click stepTimer = new Click("Step", speed.getValuef()*30);
     private float[] bass = new float[FRAME_WIDTH];
     private float[] treble = new float[FRAME_WIDTH];
@@ -117,6 +121,14 @@ void  move()      { c     = interp(t,prvA,dstA);
         //addSingleParameterUIRow(pTempoMult);
         //addSingleParameterUIRow(pTimePattern);
 
+        addParameter(pTempoMult);
+        addParameter(pTimePattern);
+        addParameter(pShape);
+
+        addParameter(gainF);
+
+
+
         //addNonKnobParameter(pTempoMult);
         //addNonKnobParameter(pTimePattern);
         //addNonKnobParameter(pShape);
@@ -127,6 +139,8 @@ void  move()      { c     = interp(t,prvA,dstA);
             treble[i] = 0;
         }
         addModulator(stepTimer).start();
+
+        lx.engine.midi.addListener(this);
     }
 
     public class rWave {
@@ -175,11 +189,23 @@ void  move()      { c     = interp(t,prvA,dstA);
     }
 
     int KeyPressed = -1;
-    // boolean noteOn(LXMidiNote note  ) {
-    //   int row = note.getPitch(), col = note.getChannel();
-    //   if (row == 57) {KeyPressed = col; return true; }
-    //   return super.noteOn(note);
-    // }
+
+    int fromKey(int pitch) {
+        int k = (pitch - 36) % 16;
+        int x = k % 4;
+        int y = k / 4;
+        return ((3 - y) * 4) + x;
+    }
+    @Override
+     public void noteOnReceived(MidiNoteOn note  ) {
+         int row = note.getPitch(), col = note.getChannel();
+         int key = fromKey(note.getPitch());
+         if (key > 7) {
+             key -= 7;
+             KeyPressed = key;
+         }
+//     if (row == 57) {KeyPressed = col; return; }
+     }
      int counter = 0;
 
     public void StartRun(double deltaMs) {
@@ -282,8 +308,8 @@ void  move()      { c     = interp(t,prvA,dstA);
 
      //to-do  make this a parameter, as well as speed a parameter, after HeronLX has been modified to allow more knobs
         // in-progress:  trying to average the lost FFT data in the case that stepTimer has not been called. Currently all that data is being ignored
-        float avgBass = eq.getAveragef(0,4);
-        float avgTreble = eq.getAveragef(eq.numBands-7, 7);
+        float avgBass = gainF.getValuef() * eq.getAveragef(0,4);
+        float avgTreble = gainF.getValuef() * eq.getAveragef(eq.numBands-7, 7);
 
         if (stepTimer.click())
         {

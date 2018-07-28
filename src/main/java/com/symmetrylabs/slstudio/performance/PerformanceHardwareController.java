@@ -143,6 +143,7 @@ public class PerformanceHardwareController extends LXComponent {
 
             getAndWriteParams();
             addListeners(deckI);
+
         }
 
         void setDirection(boolean left, boolean propagate) {
@@ -179,7 +180,7 @@ public class PerformanceHardwareController extends LXComponent {
 
             flashSide(deckI);
 
-
+            midi.getInput().channelEnabled.setValue(true);
         }
 
         void onNote(int channel, int pitch, boolean on) {
