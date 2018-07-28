@@ -161,7 +161,7 @@ public class SLStudio extends PApplet {
         lx.engine.isNetworkMultithreaded.setValue(true);
         lx.engine.audio.enabled.setValue(false);
         lx.engine.output.enabled.setValue(true);
-        lx.engine.framesPerSecond.setValue(30);
+        lx.engine.framesPerSecond.setValue(60);
 
     //performanceManager.start(lx.ui);
 
