@@ -1,6 +1,10 @@
 {
   "version": "0.1",
+<<<<<<< HEAD
   "timestamp": 1532812016058,
+=======
+  "timestamp": 1532812380772,
+>>>>>>> 6e237c1d2765455b1ab9c9082fc846b3ba1619ca
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -1547,7 +1551,7 @@
       "modulationColor": -16711864,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -1556,9 +1560,15 @@
     },
     "components": {
       "GammaExpander": {
+<<<<<<< HEAD
         "id": 2875,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
         "modulationColor": -32768,
+=======
+        "id": 5190,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -65428,
+>>>>>>> 6e237c1d2765455b1ab9c9082fc846b3ba1619ca
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
