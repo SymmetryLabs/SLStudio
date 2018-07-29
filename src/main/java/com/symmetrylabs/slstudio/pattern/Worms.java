@@ -278,7 +278,7 @@ class dCursor {
     boolean atDest() {
         LXPoint vCurP = vCur.getPoint(0);
         LXPoint vDestP1 = vDest.getPoint(0);
-        LXPoint vDestP2 = vDest.getPoint(14);
+        LXPoint vDestP2 = vDest.getPoint(27);
 
         return vCur.s == vDest.s ||
             LXUtils.distance(vCurP.x, vCurP.y, vDestP1.x, vDestP1.y) < 12 ||
@@ -327,7 +327,7 @@ class dCursor {
             return;
 
         } else {
-            LXPoint p1 = v.getPoint(14);
+            LXPoint p1 = v.getPoint(27);
             LXPoint p2 = vDest.getPoint(0);
             float d = (float)LXUtils.distance(p1.x, p1.y, p2.x, p2.y);
 
@@ -354,10 +354,10 @@ class dCursor {
         nTurns = 0;
 
         if (vCur != null) {
-            evaluate(vCur.c0, 0, 15);
-            evaluate(vCur.c1, 0, 15);
-            evaluate(vCur.c2, 0, 15);
-            evaluate(vCur.c3, 0, 15);
+            evaluate(vCur.c0, 0, 28);
+            evaluate(vCur.c1, 0, 28);
+            evaluate(vCur.c2, 0, 28);
+            evaluate(vCur.c3, 0, 28);
             evalTurn(vCur.t0);
             evalTurn(vCur.t1);
             evalTurn(vCur.t2);
@@ -374,7 +374,7 @@ class dCursor {
 
         int nFrom = (pos) >> 12;
         int nMv = Math.min(nAmount, posStop - pos);
-        int nTo = Math.min(14,(pos + nMv) >> 12);
+        int nTo = Math.min(27,(pos + nMv) >> 12);
         dVertex v  = vCur;
 
         // if (dDebug) {
@@ -431,7 +431,7 @@ class dVertex {
     }
 
     LXPoint getPoint(int i) {
-        return s.points[dir > 0 ? i : 14 - i];
+        return s.points[dir > 0 ? i : 27 - i];
     }
 
     void setOpp(dVertex _opp) {
@@ -488,12 +488,12 @@ class dLattice {
 
     // same strut, same direction
     boolean sameSame(Strip s1, Strip s2) {
-        return Math.max(dist2(s1, 0, s2, 0), dist2(s1, 14, s2, 14)) < 5;
+        return Math.max(dist2(s1, 0, s2, 0), dist2(s1, 27, s2, 27)) < 5;
     }
 
     // same strut, opp direction
     boolean sameOpp(Strip s1, Strip s2) {
-        return Math.max(dist2(s1, 0, s2, 14), dist2(s1, 14, s2, 0)) < 5;
+        return Math.max(dist2(s1, 0, s2, 27), dist2(s1, 27, s2, 0)) < 5;
     }
 
     // 2 strips on same strut
@@ -532,7 +532,7 @@ class dLattice {
 
             if (nd > 30) continue;
 
-            for (int k = 1; k <= 14; k++) {
+            for (int k = 1; k <= 27; k++) {
                 nd = pd2(s.points[k], p.x, p.y, p.z);
 
                 if (nd < d) {
@@ -543,7 +543,7 @@ class dLattice {
             }
         }
 
-        return LXUtils.random(0, 2) < 1 ? new dPixel(v, pos) : new dPixel(v.opp, 14 - pos);
+        return LXUtils.random(0, 2) < 1 ? new dPixel(v, pos) : new dPixel(v.opp, 27 - pos);
     }
 
     public dLattice(StripsModel<Strip> model) {
@@ -555,7 +555,7 @@ class dLattice {
             dVertex vrtx0 = new dVertex(s, s.points[0]);
             s.obj1 = vrtx0;
 
-            dVertex vrtx1 = new dVertex(s, s.points[14]);
+            dVertex vrtx1 = new dVertex(s, s.points[27]);
             s.obj2 = vrtx1;
 
             vrtx0.setOpp(vrtx1);
@@ -586,18 +586,18 @@ class dLattice {
                 }
 
                 if (dist2(s1, 0, s2, 0) < 20) { c++; addJoint(v1(s1), v0(s2)); addJoint(v1(s2), v0(s1)); }
-                if (dist2(s1, 0, s2,14) < 20) { c++; addJoint(v1(s1), v1(s2)); addJoint(v0(s2), v0(s1)); }
-                if (dist2(s1,14, s2, 0) < 20) { c++; addJoint(v0(s1), v0(s2)); addJoint(v1(s2), v1(s1)); }
-                if (dist2(s1,14, s2,14) < 20) { c++; addJoint(v0(s1), v1(s2)); addJoint(v0(s2), v1(s1)); }
+                if (dist2(s1, 0, s2,27) < 20) { c++; addJoint(v1(s1), v1(s2)); addJoint(v0(s2), v0(s1)); }
+                if (dist2(s1,27, s2, 0) < 20) { c++; addJoint(v0(s1), v0(s2)); addJoint(v1(s2), v1(s1)); }
+                if (dist2(s1,27, s2,27) < 20) { c++; addJoint(v0(s1), v1(s2)); addJoint(v0(s2), v1(s1)); }
                 if (c > 0) continue;
 
                 // Are they touching at all?
                 int pos1 = 0, pos2 = 0; float d = 500;
 
-                while (pos1 < 14 || pos2 < 14) {
+                while (pos1 < 27 || pos2 < 27) {
                     float oldD = d;
 
-                    if (pos1 < 14) {
+                    if (pos1 < 27) {
                         float d2 = dist2(s1, pos1+1, s2, pos2+0);
                         if (d2 < d) {
                             d = d2;
@@ -605,7 +605,7 @@ class dLattice {
                         }
                     }
 
-                    if (pos2 < 14) {
+                    if (pos2 < 27) {
                         float d2 = dist2(s1, pos1+0, s2, pos2+1);
                         if (d2 < d) {
                             d = d2;
@@ -618,9 +618,9 @@ class dLattice {
 
                 if (d > 5) continue;
                 addTurn(v0(s1), pos1, v0(s2), pos2);
-                addTurn(v1(s1), 14 - pos1, v0(s2), pos2);
+                addTurn(v1(s1), 27 - pos1, v0(s2), pos2);
                 addTurn(v0(s2), pos2, v0(s1), pos1);
-                addTurn(v1(s2), 14 - pos2, v0(s1), pos1);
+                addTurn(v1(s2), 27 - pos2, v0(s1), pos1);
             }
         }
     }
