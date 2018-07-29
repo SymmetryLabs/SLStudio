@@ -146,20 +146,30 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         CubesModel cubesModel = (CubesModel)lx.model;
 
         if ((SLStudio.applet.outputControl.testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
-            points = ((CubesModel.DoubleControllerCube)cubesModel.getCubes().get(0)).getPointsA();
+            CubesModel.Cube cube = cubesModel.getCubes().get(0);
+            if (cube instanceof CubesModel.DoubleControllerCube) {
+                points = ((CubesModel.DoubleControllerCube)cube).getPointsA();
+            }
+            else {
+                points = new PointsGrouping(cube.getPoints());
+            }
         } else {
-            points = cubesModel.getDoubleCubePoints(id);
-//            for (CubesModel.Cube c : cubesModel.getCubes()) {
-//                CubesModel.DoubleControllerCube c2 = (CubesModel.DoubleControllerCube) c;
-//                if (c2.idA != null && c2.idB != null) {
-//                    if (c2.idA.equals(id)) {
-//                        points = c2.getPointsA();
-//                    }
-//                    if (c2.idB.equals(id)) {
-//                        points = c2.getPointsB();
-//                    }
-//                }
-//            }
+            for (CubesModel.Cube c : cubesModel.getCubes()) {
+                if (c instanceof CubesModel.DoubleControllerCube) {
+                    CubesModel.DoubleControllerCube c2 = (CubesModel.DoubleControllerCube) c;
+                    if (c2.idA != null && c2.idB != null) {
+                        if (c2.idA.equals(id)) {
+                            points = c2.getPointsA();
+                        }
+                        if (c2.idB.equals(id)) {
+                            points = c2.getPointsB();
+                        }
+                    }
+                }
+                else if (c.id != null && c.id.equals(id)) {
+                    points = new PointsGrouping(c.getPoints());
+                }
+            }
         }
 
 //        CubesModel cubesModel = (CubesModel)lx.model;
