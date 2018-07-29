@@ -14,7 +14,7 @@ public class OpcSocket implements Closeable {
         void receive(InetAddress src, OpcMessage reply);
     }
 
-    protected static final ExecutorService executor = Executors.newCachedThreadPool();
+    protected final ExecutorService executor = Executors.newSingleThreadExecutor();
     protected DatagramSocket socket = null;
     protected final DatagramPacket reply = new DatagramPacket(new byte[65535], 65535);
 
@@ -36,11 +36,10 @@ public class OpcSocket implements Closeable {
         if (socket == null) {
             throw new IllegalStateException("Socket is no longer available");
         }
-        final DatagramSocket s = socket;
         final DatagramPacket packet = new DatagramPacket(message.bytes, message.bytes.length, address);
         executor.submit(() -> {
             try {
-                s.send(packet);
+                socket.send(packet);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -67,35 +66,35 @@ public class OpcSocket implements Closeable {
 
     /** Relinquishes any resources that this OpcSocket is holding. */
     public void close() {
-        if (socket != null) {
-            socket.close();
-            socket = null;
-        }
+        executor.submit(() -> {
+            if (socket != null) {
+                socket.close();
+                socket = null;
+            }
+        });
     }
 
     protected void listen(final int timeoutMillis, final boolean allowMultipleReplies, final Callback callback) {
         if (socket == null) {
             throw new IllegalStateException("Socket is no longer available");
         }
-        final DatagramSocket s = socket;
-        socket = null;  // relinquish responsibility for closing the socket
-        executor.submit(new Runnable() {
-            public void run() {
+
+        executor.submit(() -> {
+            try {
                 try {
-                    try {
-                        s.setSoTimeout(timeoutMillis);
-                        do {
-                            s.receive(reply);  // throws SocketTimeoutException upon a timeout
-                            callback.receive(reply.getAddress(), new OpcMessage(reply.getData()));
-                        } while (allowMultipleReplies);
-                    } finally {
-                        s.close();
-                    }
-                } catch (SocketTimeoutException e) {
-                    // ignore; no need to print the stack trace
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    socket.setSoTimeout(timeoutMillis);
+                    do {
+                        socket.receive(reply);  // throws SocketTimeoutException upon a timeout
+                        callback.receive(reply.getAddress(), new OpcMessage(reply.getData()));
+                    } while (allowMultipleReplies);
+                } finally {
+                    socket.close();
+                    socket = null;
                 }
+            } catch (SocketTimeoutException e) {
+                // ignore; no need to print the stack trace
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
     }
