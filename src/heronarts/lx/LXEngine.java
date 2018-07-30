@@ -1296,7 +1296,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             public long sendNanos = 0;
         }
 
-        private long lastFrame = System.currentTimeMillis();
+        private long lastFrame = System.nanoTime();
 
         private float frameRate = 0;
 
@@ -1340,8 +1340,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
                 }
 
                 // Compute network framerate
-                long now = System.currentTimeMillis();
-                this.frameRate = 1000.f / (now - this.lastFrame);
+                long now = System.nanoTime();
+                this.frameRate = 1e9f / (now - this.lastFrame);
                 this.lastFrame = now;
             }
 
