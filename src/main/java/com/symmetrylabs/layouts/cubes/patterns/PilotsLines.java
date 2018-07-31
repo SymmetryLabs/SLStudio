@@ -96,15 +96,18 @@ public class PilotsLines extends TopoPattern {
 
     private class ScrollerEdgeSet extends LineEffect {
         final List<List<TopoEdge>> lines;
-        float speed;
-        float width;
-        float[] min;
-        float[] max;
+        final float speed;
+        final float width;
+        final float[] min;
+        final float[] max;
         /* If true, we're scrolling a white bar through a transparent field.
            If false, we're scrolling a bar of the current palette color through a white field */
-        boolean whiteBar;
+        final boolean whiteBar;
         /* the length of the fade-out on the end of the line. If zero, has a hard end */
-        float tail;
+        final float tail;
+        final float maskPercentage;
+        final float maskSpeedScale;
+        final float barDelay;
 
         public ScrollerEdgeSet(
                     List<List<TopoEdge>> lines, float attack, float decay, float speed, float width,
@@ -126,6 +129,16 @@ public class PilotsLines extends TopoPattern {
                     max[i] = Float.max(e.maxOrder(), max[i]);
                 }
             }
+
+            if (!whiteBar) {
+                maskPercentage = 0.9f;
+                maskSpeedScale = 0.1f;
+                barDelay = 100f;
+            } else {
+                maskPercentage = 1f;
+                maskSpeedScale = 0f;
+                barDelay = 0f;
+            }
         }
 
         @Override
@@ -133,6 +146,8 @@ public class PilotsLines extends TopoPattern {
             int bar, field;
             float h, barS, fieldS, barB, fieldB, fieldAlpha;
 
+            /* store the HSB values directly so we can interpolate without having
+             * to reverse-engineer them from bar and field */
             if (whiteBar) {
                 h = 0;
                 barS = 0;
@@ -154,16 +169,24 @@ public class PilotsLines extends TopoPattern {
             }
 
             for (int i = 0; i < lines.size(); i++) {
-                float off = age / 1000.f * speed;
+                float barOff = Math.max(0, age - barDelay) / 1000.f * speed;
                 float bandHi, bandLo;
+                float maskHi, maskLo;
+                float maskWidth = maskPercentage * (max[i] - min[i]);
+                float maskOff = age / 1000.f * maskSpeedScale * speed;
 
                 if (speed < 0) {
-                    bandLo = max[i] + off;
+                    bandLo = max[i] + barOff;
                     bandHi = bandLo + width;
+                    maskHi = max[i] + maskOff;
+                    maskLo = maskHi - maskWidth;
                 } else {
-                    bandHi = min[i] + off;
+                    bandHi = min[i] + barOff;
                     bandLo = bandHi - width;
+                    maskLo = min[i] + maskOff;
+                    maskHi = maskLo + maskWidth;
                 }
+
 
                 for (TopoEdge e : lines.get(i)) {
                     for (LXVector p : getVectors(model.getStripByIndex(e.i).points)) {
@@ -173,6 +196,11 @@ public class PilotsLines extends TopoPattern {
                             case Y: v = p.y; break;
                             case Z: v = p.z; break;
                         }
+
+                        boolean inMask = maskLo < v && v < maskHi;
+                        if (!inMask)
+                            continue;
+
                         boolean inBand = bandLo < v && v < bandHi;
                         if (inBand)
                             colors[p.index] = Ops8.add(colors[p.index], bar);
