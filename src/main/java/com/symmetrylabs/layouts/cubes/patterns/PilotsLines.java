@@ -13,11 +13,12 @@ import java.util.*;
 public class PilotsLines extends TopoPattern {
     private DiscreteParameter hCountParam = new DiscreteParameter("hcount", 40, 1, 100);
     private DiscreteParameter vCountParam = new DiscreteParameter("vcount", 30, 1, 100);
-    private CompoundParameter attackParam = new CompoundParameter("attack", 100, 0, 1000);
-    private CompoundParameter decayParam = new CompoundParameter("decay", 500, 0, 4000);
+    private CompoundParameter attackParam = new CompoundParameter("attack", 60, 0, 600);
+    private CompoundParameter decayParam = new CompoundParameter("decay", 300, 0, 2000);
     private CompoundParameter speedParam = new CompoundParameter("speed", 200, 0, 800);
     private CompoundParameter widthParam = new CompoundParameter("width", 30, 0, 120);
-    private DiscreteParameter lengthParam = new DiscreteParameter("length", 4, 0, 20);
+    private DiscreteParameter hLengthParam = new DiscreteParameter("hlen", 8, 0, 20);
+    private DiscreteParameter vLengthParam = new DiscreteParameter("vlen", 4, 0, 20);
 
     public PilotsLines(LX lx) {
         super(lx);
@@ -27,7 +28,8 @@ public class PilotsLines extends TopoPattern {
         addParameter(decayParam);
         addParameter(widthParam);
         addParameter(speedParam);
-        addParameter(lengthParam);
+        addParameter(hLengthParam);
+        addParameter(vLengthParam);
     }
 
     private abstract class LineEffect {
@@ -89,45 +91,66 @@ public class PilotsLines extends TopoPattern {
     }
 
     private class ScrollerEdgeSet extends LineEffect {
-        final List<TopoEdge> edges;
+        final List<List<TopoEdge>> lines;
         float speed;
         float width;
-        float min;
-        float max;
+        float[] min;
+        float[] max;
 
-        public ScrollerEdgeSet(List<TopoEdge> edges, float attack, float decay, float speed, float width) {
+        public ScrollerEdgeSet(List<List<TopoEdge>> lines, float attack, float decay, float speed, float width) {
             super(attack, decay);
-            this.edges = edges;
+            this.lines = lines;
             this.speed = speed;
             this.width = width;
 
-            min = Float.MAX_VALUE;
-            max = Float.MIN_VALUE;
-            for (TopoEdge e : edges) {
-                min = Float.min(e.minOrder(), min);
-                max = Float.max(e.maxOrder(), max);
+            min = new float[lines.size()];
+            max = new float[lines.size()];
+            Arrays.fill(min, Float.MAX_VALUE);
+            Arrays.fill(max, Float.MIN_VALUE);
+            for (int i = 0; i < lines.size(); i++) {
+                for (TopoEdge e : lines.get(i)) {
+                    min[i] = Float.min(e.minOrder(), min[i]);
+                    max[i] = Float.max(e.maxOrder(), max[i]);
+                }
             }
-            System.out.println(String.format("min %f max %f", min, max));
         }
 
         @Override
         protected boolean applyColors(float alpha) {
             int c = LXColor.hsba(0, 0, 100, alpha);
-            float bandHi = age / 1000.f * speed + min;
-            float bandLo = bandHi - width;
-            for (TopoEdge e : edges) {
-                for (LXPoint p : model.getStripByIndex(e.i).points) {
-                    float v = Float.MIN_VALUE;
-                    switch (e.dir) {
-                        case X: v = p.x; break;
-                        case Y: v = p.y; break;
-                        case Z: v = p.z; break;
+            boolean anyActive = false;
+
+            for (int i = 0; i < lines.size(); i++) {
+                float off = age / 1000.f * speed;
+                float bandHi, bandLo;
+
+                if (speed < 0) {
+                    bandLo = max[i] + off;
+                    bandHi = bandLo + width;
+                    if (bandHi < min[i])
+                        continue;
+                } else {
+                    bandHi = min[i] + off;
+                    bandLo = bandHi - width;
+                    if (bandLo > max[i])
+                        continue;
+                }
+                anyActive = true;
+
+                for (TopoEdge e : lines.get(i)) {
+                    for (LXPoint p : model.getStripByIndex(e.i).points) {
+                        float v = Float.MIN_VALUE;
+                        switch (e.dir) {
+                            case X: v = p.x; break;
+                            case Y: v = p.y; break;
+                            case Z: v = p.z; break;
+                        }
+                        if (bandLo < v && v < bandHi)
+                            colors[p.index] = Ops8.add(colors[p.index], c);
                     }
-                    if (bandLo < v && v < bandHi)
-                        colors[p.index] = Ops8.add(colors[p.index], c);
                 }
             }
-            return bandLo < max;
+            return anyActive;
         }
     }
 
@@ -148,13 +171,19 @@ public class PilotsLines extends TopoPattern {
                 newEffect = createStaticVerticalLines();
                 break;
             case 62:
-                newEffect = createScrollingVerticalLines();
+                newEffect = createScrollingVerticalLines(true);
                 break;
             case 64:
-                newEffect = createStaticHorizontalLines();
+                newEffect = createScrollingVerticalLines(false);
                 break;
             case 65:
-                newEffect = createScrollingHorizontalLines();
+                newEffect = createStaticHorizontalLines();
+                break;
+            case 67:
+                newEffect = createScrollingHorizontalLines(true);
+                break;
+            case 69:
+                newEffect = createScrollingHorizontalLines(false);
                 break;
             default:
                 System.out.println(String.format("unknown midi pitch %d", note.getPitch()));
@@ -237,12 +266,12 @@ public class PilotsLines extends TopoPattern {
 
     private ArrayList<TopoEdge> createHorizontalLines() {
         return new ArrayList<>(
-            createLineSet(EdgeDirection.X, hCountParam.getValuei(), lengthParam.getValuei()));
+            createLineSet(EdgeDirection.X, hCountParam.getValuei(), hLengthParam.getValuei()));
     }
 
     private ArrayList<TopoEdge> createVerticalLines() {
         return new ArrayList<>(
-            createLineSet(EdgeDirection.Y, vCountParam.getValuei(), lengthParam.getValuei()));
+            createLineSet(EdgeDirection.Y, vCountParam.getValuei(), vLengthParam.getValuei()));
     }
 
     private LineEffect createStaticVerticalLines() {
@@ -255,15 +284,25 @@ public class PilotsLines extends TopoPattern {
             createHorizontalLines(), attackParam.getValuef(), decayParam.getValuef());
     }
 
-    private LineEffect createScrollingVerticalLines() {
+    private LineEffect createScrollingVerticalLines(boolean up) {
+        int N = vCountParam.getValuei();
+        List<List<TopoEdge>> lines = new ArrayList<>(N);
+        for (int i = 0; i < N; i++) {
+            lines.add(randomLineSeg(EdgeDirection.Y, vLengthParam.getValuei()));
+        }
         return new ScrollerEdgeSet(
-            createVerticalLines(), attackParam.getValuef(), decayParam.getValuef(),
-            speedParam.getValuef(), widthParam.getValuef());
+            lines, attackParam.getValuef(), decayParam.getValuef(),
+            (up ? 1 : -1) * speedParam.getValuef(), widthParam.getValuef());
     }
 
-    private LineEffect createScrollingHorizontalLines() {
+    private LineEffect createScrollingHorizontalLines(boolean right) {
+        int N = hCountParam.getValuei();
+        List<List<TopoEdge>> lines = new ArrayList<>(N);
+        for (int i = 0; i < N; i++) {
+            lines.add(randomLineSeg(EdgeDirection.X, hLengthParam.getValuei()));
+        }
         return new ScrollerEdgeSet(
-            createHorizontalLines(), attackParam.getValuef(), decayParam.getValuef(),
-            speedParam.getValuef(), widthParam.getValuef());
+            lines, attackParam.getValuef(), decayParam.getValuef(),
+            (right ? 1 : -1) * speedParam.getValuef(), widthParam.getValuef());
     }
 }
