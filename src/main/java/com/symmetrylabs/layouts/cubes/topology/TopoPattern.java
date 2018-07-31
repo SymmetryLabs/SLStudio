@@ -30,6 +30,7 @@ public abstract class TopoPattern extends SLPattern<CubesModel> {
     }
 
     private class BundleKDNode {
+        float x, y, z;
         StripBundle bundle;
         boolean isStart;
     }
@@ -318,42 +319,24 @@ public abstract class TopoPattern extends SLPattern<CubesModel> {
         for (StripBundle e : edges)
             e.finishedAddingStrips();
 
-        KDTree<BundleKDNode> tree = new KDTree<>(3);
-        try {
-            for (StripBundle e : edges) {
-                BundleKDNode start = new BundleKDNode();
-                start.bundle = e;
-                start.isStart = true;
-                boolean added = false;
-                double offset = 0;
-                do {
-                    try {
-                        tree.insert(toKDKey(e.endpoints().start, offset), start);
-                        added = true;
-                    } catch (KeyDuplicateException ex) {
-                        offset += 1e-6;
-                    }
-                } while (!added);
+        /* This used to use com.harium...KDTree but it was actually slower than the full quadratic check */
+        ArrayList<BundleKDNode> nodes = new ArrayList<>(edges.size() * 2);
+        for (StripBundle e : edges) {
+            BundleKDNode start = new BundleKDNode();
+            start.bundle = e;
+            start.isStart = true;
+            start.x = e.endpoints().start.x;
+            start.y = e.endpoints().start.y;
+            start.z = e.endpoints().start.z;
+            nodes.add(start);
 
-                BundleKDNode end = new BundleKDNode();
-                end.bundle = e;
-                end.isStart = false;
-                added = false;
-                offset = 0;
-                do {
-                    try {
-                        tree.insert(toKDKey(e.endpoints().end, offset), start);
-                        added = true;
-                    } catch (KeyDuplicateException ex) {
-                        offset += 1e-6;
-                    }
-                } while (!added);
-
-            }
-        } catch (KeySizeException ex) {
-            /* this shouldn't happen, because we're building all of our keys
-             * to be arrays of 3 elements. */
-            throw new RuntimeException(ex);
+            BundleKDNode end = new BundleKDNode();
+            end.bundle = e;
+            end.isStart = false;
+            end.x = e.endpoints().end.x;
+            end.y = e.endpoints().end.y;
+            end.z = e.endpoints().end.z;
+            nodes.add(end);
         }
 
         for (StripBundle e : edges) {
@@ -361,15 +344,15 @@ public abstract class TopoPattern extends SLPattern<CubesModel> {
             List<BundleKDNode> nearest;
 
             /* First find points near the start */
-            try {
-                nearest = tree.nearestEuclidean(toKDKey(ee.start, 0), ENDPOINT_TOLERANCE);
-            } catch (KeySizeException ex) {
-                throw new RuntimeException(ex);
-            }
-            nearest.forEach(node -> {
+            for (BundleKDNode node : nodes) {
+                if (Math.abs(ee.start.x - node.x) > ENDPOINT_TOLERANCE ||
+                    Math.abs(ee.start.y - node.y) > ENDPOINT_TOLERANCE ||
+                    Math.abs(ee.start.z - node.z) > ENDPOINT_TOLERANCE)
+                    continue;
+
                 StripBundle o = node.bundle;
                 if (o == e)
-                    return;
+                    continue;
                 if (o.dir == e.dir) {
                     e.na = o;
                 }
@@ -391,18 +374,17 @@ public abstract class TopoPattern extends SLPattern<CubesModel> {
                     else
                         e.ncn = o;
                 }
-            });
-
-            /* Then near the end. */
-            try {
-                nearest = tree.nearestEuclidean(toKDKey(ee.end, 0), ENDPOINT_TOLERANCE);
-            } catch (KeySizeException ex) {
-                throw new RuntimeException(ex);
             }
-            nearest.forEach(node -> {
+
+            /* ...then near the end. */
+            for (BundleKDNode node : nodes) {
+                if (Math.abs(ee.end.x - node.x) > ENDPOINT_TOLERANCE ||
+                    Math.abs(ee.end.y - node.y) > ENDPOINT_TOLERANCE ||
+                    Math.abs(ee.end.z - node.z) > ENDPOINT_TOLERANCE)
+                    continue;
                 StripBundle o = node.bundle;
                 if (o == e)
-                    return;
+                    continue;
                 if (o.dir == e.dir) {
                     e.pa = o;
                 }
@@ -425,19 +407,7 @@ public abstract class TopoPattern extends SLPattern<CubesModel> {
                     else
                         e.pcn = o;
                 }
-            });
+            }
         }
-    }
-
-    /** Create a key suitable for indexing into a KD tree.
-     * @param a The position to index into
-     * @param offset Provided so that you can apply very small offsets in the case in which two keys are perfectly matching
-     */
-    private static final double[] toKDKey(LXPoint a, double offset) {
-        return new double[] { a.x + offset, a.y + offset, a.z + offset };
-    }
-
-    private static final double squaredDistance(LXPoint a, LXPoint b) {
-        return Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2) + Math.pow(a.z - b.z, 2);
     }
 }
