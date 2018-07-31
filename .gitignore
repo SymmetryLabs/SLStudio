@@ -16,3 +16,6 @@ application.macosx
 /build/libs
 /build/resources
 /build/tmp
+*.swp
+/build
+.gradle
