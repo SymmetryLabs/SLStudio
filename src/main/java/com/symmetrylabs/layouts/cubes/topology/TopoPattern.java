@@ -1,9 +1,6 @@
 package com.symmetrylabs.layouts.cubes.topology;
 
 import com.google.common.base.Preconditions;
-import com.harium.storage.kdtree.KDTree;
-import com.harium.storage.kdtree.KeyDuplicateException;
-import com.harium.storage.kdtree.KeySizeException;
 import com.symmetrylabs.layouts.cubes.CubesModel;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
