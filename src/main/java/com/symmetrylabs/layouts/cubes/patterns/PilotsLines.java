@@ -1,12 +1,14 @@
 package com.symmetrylabs.layouts.cubes.patterns;
 
 import com.symmetrylabs.color.Ops8;
+import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.*;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.transform.LXVector;
 
 import java.util.*;
 
@@ -19,6 +21,7 @@ public class PilotsLines extends TopoPattern {
     private CompoundParameter widthParam = new CompoundParameter("width", 30, 0, 120);
     private DiscreteParameter hLengthParam = new DiscreteParameter("hlen", 8, 0, 20);
     private DiscreteParameter vLengthParam = new DiscreteParameter("vlen", 4, 0, 20);
+    private CompoundParameter tailParam = new CompoundParameter("tail", 30, 0, 120);
 
     public PilotsLines(LX lx) {
         super(lx);
@@ -30,6 +33,7 @@ public class PilotsLines extends TopoPattern {
         addParameter(speedParam);
         addParameter(hLengthParam);
         addParameter(vLengthParam);
+        addParameter(tailParam);
     }
 
     private abstract class LineEffect {
@@ -82,7 +86,7 @@ public class PilotsLines extends TopoPattern {
         protected boolean applyColors(float alpha) {
             int c = LXColor.hsba(0, 0, 100, alpha);
             for (TopoEdge e : edges) {
-                for (LXPoint p : model.getStripByIndex(e.i).points) {
+                for (LXVector p : getVectors(model.getStripByIndex(e.i).points)) {
                     colors[p.index] = Ops8.add(colors[p.index], c);
                 }
             }
@@ -96,12 +100,21 @@ public class PilotsLines extends TopoPattern {
         float width;
         float[] min;
         float[] max;
+        /* If true, we're scrolling a white bar through a transparent field.
+           If false, we're scrolling a bar of the current palette color through a white field */
+        boolean whiteBar;
+        /* the length of the fade-out on the end of the line. If zero, has a hard end */
+        float tail;
 
-        public ScrollerEdgeSet(List<List<TopoEdge>> lines, float attack, float decay, float speed, float width) {
+        public ScrollerEdgeSet(
+                    List<List<TopoEdge>> lines, float attack, float decay, float speed, float width,
+                    float tail, boolean whiteBar) {
             super(attack, decay);
             this.lines = lines;
             this.speed = speed;
             this.width = width;
+            this.whiteBar = whiteBar;
+            this.tail = tail;
 
             min = new float[lines.size()];
             max = new float[lines.size()];
@@ -117,8 +130,28 @@ public class PilotsLines extends TopoPattern {
 
         @Override
         protected boolean applyColors(float alpha) {
-            int c = LXColor.hsba(0, 0, 100, alpha);
-            boolean anyActive = false;
+            int bar, field;
+            float h, barS, fieldS, barB, fieldB, fieldAlpha;
+
+            if (whiteBar) {
+                h = 0;
+                barS = 0;
+                fieldS = 0;
+                barB = 100;
+                fieldB = 100;
+                fieldAlpha = 0.f;
+                bar = LXColor.rgba(255, 255, 255, (int) (255 * alpha));
+                field = LXColor.rgba(255,255,255,0);
+            } else {
+                h = palette.color.hue.getValuef();
+                barS = palette.color.saturation.getValuef();
+                fieldS = 0;
+                barB = palette.color.brightness.getValuef();
+                fieldB = 100;
+                fieldAlpha = alpha;
+                bar = LXColor.hsba(h, barS, barB, alpha);
+                field = LXColor.rgba(255, 255, 255, (int) (255 * alpha));
+            }
 
             for (int i = 0; i < lines.size(); i++) {
                 float off = age / 1000.f * speed;
@@ -127,30 +160,40 @@ public class PilotsLines extends TopoPattern {
                 if (speed < 0) {
                     bandLo = max[i] + off;
                     bandHi = bandLo + width;
-                    if (bandHi < min[i])
-                        continue;
                 } else {
                     bandHi = min[i] + off;
                     bandLo = bandHi - width;
-                    if (bandLo > max[i])
-                        continue;
                 }
-                anyActive = true;
 
                 for (TopoEdge e : lines.get(i)) {
-                    for (LXPoint p : model.getStripByIndex(e.i).points) {
+                    for (LXVector p : getVectors(model.getStripByIndex(e.i).points)) {
                         float v = Float.MIN_VALUE;
                         switch (e.dir) {
                             case X: v = p.x; break;
                             case Y: v = p.y; break;
                             case Z: v = p.z; break;
                         }
-                        if (bandLo < v && v < bandHi)
+                        boolean inBand = bandLo < v && v < bandHi;
+                        if (inBand)
+                            colors[p.index] = Ops8.add(colors[p.index], bar);
+                        else if (speed < 0 && v < bandLo)
+                            colors[p.index] = Ops8.add(colors[p.index], field);
+                        else if (speed > 0 && v > bandHi)
+                            colors[p.index] = Ops8.add(colors[p.index], field);
+                        else {
+                            float dist = speed > 0 ? bandLo - v : v - bandHi;
+                            dist = MathUtils.constrain(dist / tail, 0.f,1.f);
+                            int c = LXColor.hsba(
+                                h,
+                                (1.f - dist) * barS + dist * fieldS,
+                                (1.f - dist) * barB + dist * fieldB,
+                                (1.f - dist) * alpha + dist * fieldAlpha);
                             colors[p.index] = Ops8.add(colors[p.index], c);
+                        }
                     }
                 }
             }
-            return anyActive;
+            return true;
         }
     }
 
@@ -171,20 +214,34 @@ public class PilotsLines extends TopoPattern {
                 newEffect = createStaticVerticalLines();
                 break;
             case 62:
-                newEffect = createScrollingVerticalLines(true);
+                newEffect = createScrollingVerticalLines(true, true);
                 break;
             case 64:
-                newEffect = createScrollingVerticalLines(false);
+                newEffect = createScrollingVerticalLines(false, true);
                 break;
             case 65:
-                newEffect = createStaticHorizontalLines();
+                newEffect = createScrollingVerticalLines(true, false);
                 break;
             case 67:
-                newEffect = createScrollingHorizontalLines(true);
+                newEffect = createScrollingVerticalLines(false, false);
                 break;
-            case 69:
-                newEffect = createScrollingHorizontalLines(false);
+
+            case 72:
+                newEffect = createStaticHorizontalLines();
                 break;
+            case 74:
+                newEffect = createScrollingHorizontalLines(true, true);
+                break;
+            case 76:
+                newEffect = createScrollingHorizontalLines(false, true);
+                break;
+            case 77:
+                newEffect = createScrollingHorizontalLines(true, false);
+                break;
+            case 79:
+                newEffect = createScrollingHorizontalLines(false, false);
+                break;
+
             default:
                 System.out.println(String.format("unknown midi pitch %d", note.getPitch()));
         }
@@ -284,25 +341,35 @@ public class PilotsLines extends TopoPattern {
             createHorizontalLines(), attackParam.getValuef(), decayParam.getValuef());
     }
 
-    private LineEffect createScrollingVerticalLines(boolean up) {
+    private LineEffect createScrollingVerticalLines(boolean up, boolean whiteBar) {
         int N = vCountParam.getValuei();
         List<List<TopoEdge>> lines = new ArrayList<>(N);
         for (int i = 0; i < N; i++) {
             lines.add(randomLineSeg(EdgeDirection.Y, vLengthParam.getValuei()));
         }
         return new ScrollerEdgeSet(
-            lines, attackParam.getValuef(), decayParam.getValuef(),
-            (up ? 1 : -1) * speedParam.getValuef(), widthParam.getValuef());
+            lines,
+            attackParam.getValuef(),
+            decayParam.getValuef(),
+            (up ? 1 : -1) * speedParam.getValuef(),
+            widthParam.getValuef(),
+            tailParam.getValuef(),
+            whiteBar);
     }
 
-    private LineEffect createScrollingHorizontalLines(boolean right) {
+    private LineEffect createScrollingHorizontalLines(boolean right, boolean whiteBar) {
         int N = hCountParam.getValuei();
         List<List<TopoEdge>> lines = new ArrayList<>(N);
         for (int i = 0; i < N; i++) {
             lines.add(randomLineSeg(EdgeDirection.X, hLengthParam.getValuei()));
         }
         return new ScrollerEdgeSet(
-            lines, attackParam.getValuef(), decayParam.getValuef(),
-            (right ? 1 : -1) * speedParam.getValuef(), widthParam.getValuef());
+            lines,
+            attackParam.getValuef(),
+            decayParam.getValuef(),
+            (right ? 1 : -1) * speedParam.getValuef(),
+            widthParam.getValuef(),
+            tailParam.getValuef(),
+            whiteBar);
     }
 }
