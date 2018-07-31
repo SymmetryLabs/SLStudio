@@ -9,3 +9,6 @@
 /build/classes
 /build/libs
 /build/tmp
+*.swp
+/build
+.gradle
