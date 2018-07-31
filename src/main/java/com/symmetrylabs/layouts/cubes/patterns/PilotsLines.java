@@ -1,11 +1,11 @@
 package com.symmetrylabs.layouts.cubes.patterns;
 
 import com.symmetrylabs.color.Ops8;
+import com.symmetrylabs.layouts.cubes.topology.TopoPattern;
 import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.*;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.transform.LXVector;
@@ -85,8 +85,8 @@ public class PilotsLines extends TopoPattern {
     }
 
     private class StaticEdgeSet extends LineEffect {
-        final List<TopoEdge> edges;
-        public StaticEdgeSet(List<TopoEdge> edges, float attack, float decay) {
+        final List<StripBundle> edges;
+        public StaticEdgeSet(List<StripBundle> edges, float attack, float decay) {
             super(attack, decay);
             this.edges = edges;
         }
@@ -94,8 +94,8 @@ public class PilotsLines extends TopoPattern {
         @Override
         protected boolean applyColors(float alpha) {
             int c = LXColor.hsba(0, 0, 100, alpha);
-            for (TopoEdge e : edges) {
-                for (LXVector p : getVectors(model.getStripByIndex(e.i).points)) {
+            for (StripBundle e : edges) {
+                for (LXVector p : getVectors(model.getStripByIndex(e.strips[0]).points)) {
                     colors[p.index] = Ops8.add(colors[p.index], c);
                 }
             }
@@ -104,7 +104,7 @@ public class PilotsLines extends TopoPattern {
     }
 
     private class ScrollerEdgeSet extends LineEffect {
-        final List<List<TopoEdge>> lines;
+        final List<List<StripBundle>> lines;
         final float speed;
         final float[] min;
         final float[] max;
@@ -117,8 +117,8 @@ public class PilotsLines extends TopoPattern {
         final float bandDelay;
 
         public ScrollerEdgeSet(
-                    List<List<TopoEdge>> lines, float attack, float decay, float speed, float bandWidth,
-                    float bandTail, float bandSpeed, float bandDelay, float maskPercentage) {
+            List<List<StripBundle>> lines, float attack, float decay, float speed, float bandWidth,
+            float bandTail, float bandSpeed, float bandDelay, float maskPercentage) {
             super(attack, decay);
             this.lines = lines;
             this.speed = speed;
@@ -133,7 +133,7 @@ public class PilotsLines extends TopoPattern {
             Arrays.fill(min, Float.MAX_VALUE);
             Arrays.fill(max, Float.MIN_VALUE);
             for (int i = 0; i < lines.size(); i++) {
-                for (TopoEdge e : lines.get(i)) {
+                for (StripBundle e : lines.get(i)) {
                     min[i] = Float.min(e.minOrder(), min[i]);
                     max[i] = Float.max(e.maxOrder(), max[i]);
                 }
@@ -179,8 +179,8 @@ public class PilotsLines extends TopoPattern {
                     bandLo = bandHi - bandWidth;
                 }
 
-                for (TopoEdge e : lines.get(i)) {
-                    for (LXVector p : getVectors(model.getStripByIndex(e.i).points)) {
+                for (StripBundle e : lines.get(i)) {
+                    for (LXVector p : getVectors(model.getStripByIndex(e.strips[0]).points)) {
                         float v = Float.MIN_VALUE;
                         switch (e.dir) {
                             case X: v = p.x; break;
@@ -205,7 +205,7 @@ public class PilotsLines extends TopoPattern {
                             colors[p.index] = Ops8.add(colors[p.index], field);
                         else {
                             float dist = bandSpeed > 0 ? bandLo - v : v - bandHi;
-                            dist = MathUtils.constrain(dist / bandTail, 0.f,1.f);
+                            dist = MathUtils.constrain(dist / bandTail, 0.f, 1.f);
                             int c = LXColor.hsba(
                                 h,
                                 (1.f - dist) * bandS + dist * fieldS,
@@ -291,9 +291,9 @@ public class PilotsLines extends TopoPattern {
         effects.removeIf(e -> !e.run(deltaMs));
     }
 
-    private List<TopoEdge> randomLineSeg(EdgeDirection d, int expectedLength) {
+    private List<StripBundle> randomLineSeg(EdgeDirection d, int expectedLength) {
         Random r = new Random();
-        TopoEdge e;
+        StripBundle e;
         do {
             e = edges.get(r.nextInt(edges.size()));
         } while (e.dir != d);
@@ -309,11 +309,11 @@ public class PilotsLines extends TopoPattern {
             len++;
         }
 
-        LinkedList<TopoEdge> line = new LinkedList<>();
+        LinkedList<StripBundle> line = new LinkedList<>();
         line.add(e);
         while (line.size() < len) {
             boolean added = false;
-            TopoEdge t;
+            StripBundle t;
 
             t = line.getLast();
             if (t.na != null) {
@@ -336,20 +336,20 @@ public class PilotsLines extends TopoPattern {
         return line;
     }
 
-    private Set<TopoEdge> createLineSet(EdgeDirection d, int count, int expectedLength) {
-        Set<TopoEdge> all = new HashSet<>();
+    private Set<StripBundle> createLineSet(EdgeDirection d, int count, int expectedLength) {
+        Set<StripBundle> all = new HashSet<>();
         for (int i = 0; i < count; i++) {
             all.addAll(randomLineSeg(d, expectedLength));
         }
         return all;
     }
 
-    private ArrayList<TopoEdge> createHorizontalLines() {
+    private ArrayList<StripBundle> createHorizontalLines() {
         return new ArrayList<>(
             createLineSet(EdgeDirection.X, hCountParam.getValuei(), hLengthParam.getValuei()));
     }
 
-    private ArrayList<TopoEdge> createVerticalLines() {
+    private ArrayList<StripBundle> createVerticalLines() {
         return new ArrayList<>(
             createLineSet(EdgeDirection.Y, vCountParam.getValuei(), vLengthParam.getValuei()));
     }
@@ -364,7 +364,7 @@ public class PilotsLines extends TopoPattern {
             createHorizontalLines(), attackParam.getValuef(), decayParam.getValuef());
     }
 
-    private LineEffect createScroller(List<List<TopoEdge>> lines, boolean flipSpeed, boolean showBand) {
+    private LineEffect createScroller(List<List<StripBundle>> lines, boolean flipSpeed, boolean showBand) {
         return new ScrollerEdgeSet(
             lines,
             attackParam.getValuef(),
@@ -379,7 +379,7 @@ public class PilotsLines extends TopoPattern {
 
     private LineEffect createScrollingVerticalLines(boolean up, boolean showBand) {
         int N = vCountParam.getValuei();
-        List<List<TopoEdge>> lines = new ArrayList<>(N);
+        List<List<StripBundle>> lines = new ArrayList<>(N);
         for (int i = 0; i < N; i++) {
             lines.add(randomLineSeg(EdgeDirection.Y, vLengthParam.getValuei()));
         }
@@ -388,7 +388,7 @@ public class PilotsLines extends TopoPattern {
 
     private LineEffect createScrollingHorizontalLines(boolean right, boolean showBand) {
         int N = hCountParam.getValuei();
-        List<List<TopoEdge>> lines = new ArrayList<>(N);
+        List<List<StripBundle>> lines = new ArrayList<>(N);
         for (int i = 0; i < N; i++) {
             lines.add(randomLineSeg(EdgeDirection.X, hLengthParam.getValuei()));
         }
