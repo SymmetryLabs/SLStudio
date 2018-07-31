@@ -6,6 +6,13 @@ import java.net.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * A socket that can send and receive OPC messages.  The supported operations
+ * are send(), listen(), listenMultiple(), and close().  send() is non-terminal;
+ * the other operations are terminal.  To use an OpcSocket, acquire it with a
+ * try-with-resources block; within the block, call send() any number of times,
+ * then optionally call listen() or listenMultiple() exactly once.
+ */
 public class OpcSocket implements Closeable {
     public static final int DEFAULT_PORT = 7890;
     public final InetSocketAddress address;
@@ -16,7 +23,6 @@ public class OpcSocket implements Closeable {
 
     protected final ExecutorService executor = Executors.newSingleThreadExecutor();
     protected DatagramSocket socket = null;
-    protected final DatagramPacket reply = new DatagramPacket(new byte[65535], 65535);
 
     public OpcSocket(InetAddress host, int port) {
         address = new InetSocketAddress(host, port);
@@ -31,55 +37,89 @@ public class OpcSocket implements Closeable {
         this(addr, DEFAULT_PORT);
     }
 
-    /** Sends a message without listening for a reply. */
+    /** Sends a message asynchronously. */
     public void send(final OpcMessage message) {
-        if (socket == null) {
-            throw new IllegalStateException("Socket is no longer available");
+        requireSocket();
+        executor.submit(new SendTask(
+              socket, new DatagramPacket(message.bytes, message.bytes.length, address)));
+    }
+
+    /**
+     * Waits in the background for up to timeoutMillis for a single reply,
+     * which will be passed to callback.receive() on the background thread.
+     * No further operations may be performed on this OpcSocket; the background
+     * thread takes ownership of the socket and will automatically close it
+     * after a reply is received or the timeout expires.
+     */
+    public void listen(final int timeoutMillis, final Callback callback) {
+        requireSocket();
+        executor.submit(new ListenTask(socket, timeoutMillis, false, callback));
+        socket = null;
+    }
+
+    /**
+     * Waits in the background for up to timeoutMillis for any number of
+     * replies; callback.receive() is invoked on the background thread for each
+     * reply.  No further operations may be performed on this OpcSocket; the
+     * background thread takes ownership of the socket and will automatically
+     * close it after the timeout expires.
+     */
+    public void listenMultiple(int timeoutMillis, Callback callback) {
+        requireSocket();
+        executor.submit(new ListenTask(socket, timeoutMillis, true, callback));
+        socket = null;
+    }
+
+    /**
+     * Relinquishes any resources that this OpcSocket is holding.  Idempotent.
+     * No further operations may be performed on this OpcSocket.
+     */
+    public void close() {
+        if (socket != null) {
+            executor.submit(new CloseTask(socket));
+            socket = null;
         }
-        final DatagramPacket packet = new DatagramPacket(message.bytes, message.bytes.length, address);
-        executor.submit(() -> {
+    }
+
+    protected void requireSocket() {
+        if (socket == null) {
+            throw new IllegalStateException("Socket is already closed");
+        }
+    }
+
+    protected static class SendTask implements Runnable {
+        final DatagramSocket socket;
+        final DatagramPacket packet;
+
+        SendTask(DatagramSocket socket, DatagramPacket packet) {
+            this.socket = socket;
+            this.packet = packet;
+        }
+
+        public void run() {
             try {
                 socket.send(packet);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        });
+        }
     }
 
-    /**
-     * Sends a message, waiting in the background for up to timeoutMillis for
-     * a single reply, which will be passed to callback.receive().  After a
-     * reply is received or the timeout expires, callback.finish() is invoked.
-     */
-    public void listen(final int timeoutMillis, final Callback callback) {
-        listen(timeoutMillis, false, callback);
-    }
+    protected static class ListenTask implements Runnable {
+        final DatagramSocket socket;
+        final int timeoutMillis;
+        final boolean allowMultipleReplies;
+        final Callback callback;
+        final DatagramPacket reply = new DatagramPacket(new byte[65535], 65535);
 
-    /**
-     * Sends a message, waiting in the background for up to timeoutMillis for
-     * any number of replies; callback.receive() is invoked for each reply.
-     * After the timeout expires, callback.finish() is invoked.
-     */
-    public void listenMultiple(int timeoutMillis, Callback callback) {
-        listen(timeoutMillis, true, callback);
-    }
-
-    /** Relinquishes any resources that this OpcSocket is holding. */
-    public void close() {
-        executor.submit(() -> {
-            if (socket != null) {
-                socket.close();
-                socket = null;
-            }
-        });
-    }
-
-    protected void listen(final int timeoutMillis, final boolean allowMultipleReplies, final Callback callback) {
-        if (socket == null) {
-            throw new IllegalStateException("Socket is no longer available");
+        ListenTask(DatagramSocket socket, int timeoutMillis, boolean allowMultipleReplies, Callback callback) {
+            this.socket = socket;
+            this.timeoutMillis = timeoutMillis;
+            this.allowMultipleReplies = allowMultipleReplies;
+            this.callback = callback;
         }
 
-        executor.submit(() -> {
+        public void run() {
             try {
                 try {
                     socket.setSoTimeout(timeoutMillis);
@@ -89,13 +129,24 @@ public class OpcSocket implements Closeable {
                     } while (allowMultipleReplies);
                 } finally {
                     socket.close();
-                    socket = null;
                 }
             } catch (SocketTimeoutException e) {
                 // ignore; no need to print the stack trace
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        });
+        }
+    }
+
+    protected static class CloseTask implements Runnable {
+        final DatagramSocket socket;
+
+        CloseTask(DatagramSocket socket) {
+            this.socket = socket;
+        }
+
+        public void run() {
+            socket.close();
+        }
     }
 }
