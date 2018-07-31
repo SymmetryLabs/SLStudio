@@ -13,27 +13,36 @@ import heronarts.lx.transform.LXVector;
 import java.util.*;
 
 public class PilotsLines extends TopoPattern {
-    private DiscreteParameter hCountParam = new DiscreteParameter("hcount", 40, 1, 100);
-    private DiscreteParameter vCountParam = new DiscreteParameter("vcount", 30, 1, 100);
     private CompoundParameter attackParam = new CompoundParameter("attack", 60, 0, 600);
+    private CompoundParameter colorDelayParam = new CompoundParameter("cdelay", 0, 0, 500);
+    private CompoundParameter colorSpeedParam = new CompoundParameter("cspeed", 400, 0, 800);
+    private CompoundParameter colorTailParam = new CompoundParameter("tail", 30, 0, 120);
+    private CompoundParameter colorWidthParam = new CompoundParameter("cwidth", 20, 0, 200);
     private CompoundParameter decayParam = new CompoundParameter("decay", 300, 0, 2000);
     private CompoundParameter speedParam = new CompoundParameter("speed", 200, 0, 800);
-    private CompoundParameter widthParam = new CompoundParameter("width", 30, 0, 120);
+    private CompoundParameter widthParam = new CompoundParameter("mask", 0.7, 0, 1);
+    private DiscreteParameter hCountParam = new DiscreteParameter("hcount", 40, 1, 100);
     private DiscreteParameter hLengthParam = new DiscreteParameter("hlen", 8, 0, 20);
+    private DiscreteParameter vCountParam = new DiscreteParameter("vcount", 30, 1, 100);
     private DiscreteParameter vLengthParam = new DiscreteParameter("vlen", 4, 0, 20);
-    private CompoundParameter tailParam = new CompoundParameter("tail", 30, 0, 120);
 
     public PilotsLines(LX lx) {
         super(lx);
         addParameter(hCountParam);
         addParameter(vCountParam);
-        addParameter(attackParam);
-        addParameter(decayParam);
-        addParameter(widthParam);
-        addParameter(speedParam);
         addParameter(hLengthParam);
         addParameter(vLengthParam);
-        addParameter(tailParam);
+
+        addParameter(attackParam);
+        addParameter(decayParam);
+
+        addParameter(widthParam);
+        addParameter(speedParam);
+
+        addParameter(colorDelayParam);
+        addParameter(colorSpeedParam);
+        addParameter(colorTailParam);
+        addParameter(colorWidthParam);
     }
 
     private abstract class LineEffect {
@@ -97,27 +106,27 @@ public class PilotsLines extends TopoPattern {
     private class ScrollerEdgeSet extends LineEffect {
         final List<List<TopoEdge>> lines;
         final float speed;
-        final float width;
         final float[] min;
         final float[] max;
-        /* If true, we're scrolling a white bar through a transparent field.
-           If false, we're scrolling a bar of the current palette color through a white field */
-        final boolean whiteBar;
-        /* the length of the fade-out on the end of the line. If zero, has a hard end */
-        final float tail;
+        /* if zero, the band of color isn't displayed */
+        final float bandWidth;
+        final float bandSpeed;
+        /* the length of the fade-out on the end of the band. If zero, has a hard end */
+        final float bandTail;
         final float maskPercentage;
-        final float maskSpeedScale;
-        final float barDelay;
+        final float bandDelay;
 
         public ScrollerEdgeSet(
-                    List<List<TopoEdge>> lines, float attack, float decay, float speed, float width,
-                    float tail, boolean whiteBar) {
+                    List<List<TopoEdge>> lines, float attack, float decay, float speed, float bandWidth,
+                    float bandTail, float bandSpeed, float bandDelay, float maskPercentage) {
             super(attack, decay);
             this.lines = lines;
             this.speed = speed;
-            this.width = width;
-            this.whiteBar = whiteBar;
-            this.tail = tail;
+            this.bandWidth = bandWidth;
+            this.bandSpeed = bandSpeed;
+            this.bandDelay = bandDelay;
+            this.maskPercentage = maskPercentage;
+            this.bandTail = bandTail;
 
             min = new float[lines.size()];
             max = new float[lines.size()];
@@ -129,64 +138,46 @@ public class PilotsLines extends TopoPattern {
                     max[i] = Float.max(e.maxOrder(), max[i]);
                 }
             }
-
-            if (!whiteBar) {
-                maskPercentage = 0.9f;
-                maskSpeedScale = 0.1f;
-                barDelay = 100f;
-            } else {
-                maskPercentage = 1f;
-                maskSpeedScale = 0f;
-                barDelay = 0f;
-            }
         }
 
         @Override
         protected boolean applyColors(float alpha) {
-            int bar, field;
-            float h, barS, fieldS, barB, fieldB, fieldAlpha;
+            int band, field;
+            float h, bandS, fieldS, bandB, fieldB, fieldAlpha;
+            boolean showBand = bandWidth != 0f;
 
             /* store the HSB values directly so we can interpolate without having
-             * to reverse-engineer them from bar and field */
-            if (whiteBar) {
-                h = 0;
-                barS = 0;
-                fieldS = 0;
-                barB = 100;
-                fieldB = 100;
-                fieldAlpha = 0.f;
-                bar = LXColor.rgba(255, 255, 255, (int) (255 * alpha));
-                field = LXColor.rgba(255,255,255,0);
-            } else {
-                h = palette.color.hue.getValuef();
-                barS = palette.color.saturation.getValuef();
-                fieldS = 0;
-                barB = palette.color.brightness.getValuef();
-                fieldB = 100;
-                fieldAlpha = alpha;
-                bar = LXColor.hsba(h, barS, barB, alpha);
-                field = LXColor.rgba(255, 255, 255, (int) (255 * alpha));
-            }
+             * to reverse-engineer them from band and field */
+            h = palette.color.hue.getValuef();
+            bandS = palette.color.saturation.getValuef();
+            fieldS = 0;
+            bandB = palette.color.brightness.getValuef();
+            fieldB = 100;
+            fieldAlpha = alpha;
+            band = LXColor.hsba(h, bandS, bandB, alpha);
+            field = LXColor.rgba(255, 255, 255, (int) (255 * alpha));
 
             for (int i = 0; i < lines.size(); i++) {
-                float barOff = Math.max(0, age - barDelay) / 1000.f * speed;
-                float bandHi, bandLo;
                 float maskHi, maskLo;
                 float maskWidth = maskPercentage * (max[i] - min[i]);
-                float maskOff = age / 1000.f * maskSpeedScale * speed;
-
+                float maskOff = age / 1000.f * speed;
                 if (speed < 0) {
-                    bandLo = max[i] + barOff;
-                    bandHi = bandLo + width;
                     maskHi = max[i] + maskOff;
                     maskLo = maskHi - maskWidth;
                 } else {
-                    bandHi = min[i] + barOff;
-                    bandLo = bandHi - width;
                     maskLo = min[i] + maskOff;
                     maskHi = maskLo + maskWidth;
                 }
 
+                float bandOff = Math.max(0, age - bandDelay) / 1000.f * bandSpeed;
+                float bandHi, bandLo;
+                if (bandSpeed < 0) {
+                    bandLo = max[i] + bandOff;
+                    bandHi = bandLo + bandWidth;
+                } else {
+                    bandHi = min[i] + bandOff;
+                    bandLo = bandHi - bandWidth;
+                }
 
                 for (TopoEdge e : lines.get(i)) {
                     for (LXVector p : getVectors(model.getStripByIndex(e.i).points)) {
@@ -200,21 +191,25 @@ public class PilotsLines extends TopoPattern {
                         boolean inMask = maskLo < v && v < maskHi;
                         if (!inMask)
                             continue;
+                        if (!showBand) {
+                            colors[p.index] = Ops8.add(colors[p.index], field);
+                            continue;
+                        }
 
                         boolean inBand = bandLo < v && v < bandHi;
                         if (inBand)
-                            colors[p.index] = Ops8.add(colors[p.index], bar);
-                        else if (speed < 0 && v < bandLo)
+                            colors[p.index] = Ops8.add(colors[p.index], band);
+                        else if (bandSpeed < 0 && v < bandLo)
                             colors[p.index] = Ops8.add(colors[p.index], field);
-                        else if (speed > 0 && v > bandHi)
+                        else if (bandSpeed > 0 && v > bandHi)
                             colors[p.index] = Ops8.add(colors[p.index], field);
                         else {
-                            float dist = speed > 0 ? bandLo - v : v - bandHi;
-                            dist = MathUtils.constrain(dist / tail, 0.f,1.f);
+                            float dist = bandSpeed > 0 ? bandLo - v : v - bandHi;
+                            dist = MathUtils.constrain(dist / bandTail, 0.f,1.f);
                             int c = LXColor.hsba(
                                 h,
-                                (1.f - dist) * barS + dist * fieldS,
-                                (1.f - dist) * barB + dist * fieldB,
+                                (1.f - dist) * bandS + dist * fieldS,
+                                (1.f - dist) * bandB + dist * fieldB,
                                 (1.f - dist) * alpha + dist * fieldAlpha);
                             colors[p.index] = Ops8.add(colors[p.index], c);
                         }
@@ -242,32 +237,32 @@ public class PilotsLines extends TopoPattern {
                 newEffect = createStaticVerticalLines();
                 break;
             case 62:
-                newEffect = createScrollingVerticalLines(true, true);
-                break;
-            case 64:
-                newEffect = createScrollingVerticalLines(false, true);
-                break;
-            case 65:
                 newEffect = createScrollingVerticalLines(true, false);
                 break;
-            case 67:
+            case 64:
                 newEffect = createScrollingVerticalLines(false, false);
+                break;
+            case 65:
+                newEffect = createScrollingVerticalLines(true, true);
+                break;
+            case 67:
+                newEffect = createScrollingVerticalLines(false, true);
                 break;
 
             case 72:
                 newEffect = createStaticHorizontalLines();
                 break;
             case 74:
-                newEffect = createScrollingHorizontalLines(true, true);
-                break;
-            case 76:
-                newEffect = createScrollingHorizontalLines(false, true);
-                break;
-            case 77:
                 newEffect = createScrollingHorizontalLines(true, false);
                 break;
-            case 79:
+            case 76:
                 newEffect = createScrollingHorizontalLines(false, false);
+                break;
+            case 77:
+                newEffect = createScrollingHorizontalLines(true, true);
+                break;
+            case 79:
+                newEffect = createScrollingHorizontalLines(false, true);
                 break;
 
             default:
@@ -369,35 +364,34 @@ public class PilotsLines extends TopoPattern {
             createHorizontalLines(), attackParam.getValuef(), decayParam.getValuef());
     }
 
-    private LineEffect createScrollingVerticalLines(boolean up, boolean whiteBar) {
+    private LineEffect createScroller(List<List<TopoEdge>> lines, boolean flipSpeed, boolean showBand) {
+        return new ScrollerEdgeSet(
+            lines,
+            attackParam.getValuef(),
+            decayParam.getValuef(),
+            (flipSpeed ? -1 : 1) * speedParam.getValuef(),
+            showBand ? colorWidthParam.getValuef() : 0,
+            colorTailParam.getValuef(),
+            (flipSpeed ? -1 : 1) * colorSpeedParam.getValuef(),
+            colorDelayParam.getValuef(),
+            widthParam.getValuef());
+    }
+
+    private LineEffect createScrollingVerticalLines(boolean up, boolean showBand) {
         int N = vCountParam.getValuei();
         List<List<TopoEdge>> lines = new ArrayList<>(N);
         for (int i = 0; i < N; i++) {
             lines.add(randomLineSeg(EdgeDirection.Y, vLengthParam.getValuei()));
         }
-        return new ScrollerEdgeSet(
-            lines,
-            attackParam.getValuef(),
-            decayParam.getValuef(),
-            (up ? 1 : -1) * speedParam.getValuef(),
-            widthParam.getValuef(),
-            tailParam.getValuef(),
-            whiteBar);
+        return createScroller(lines, !up, showBand);
     }
 
-    private LineEffect createScrollingHorizontalLines(boolean right, boolean whiteBar) {
+    private LineEffect createScrollingHorizontalLines(boolean right, boolean showBand) {
         int N = hCountParam.getValuei();
         List<List<TopoEdge>> lines = new ArrayList<>(N);
         for (int i = 0; i < N; i++) {
             lines.add(randomLineSeg(EdgeDirection.X, hLengthParam.getValuei()));
         }
-        return new ScrollerEdgeSet(
-            lines,
-            attackParam.getValuef(),
-            decayParam.getValuef(),
-            (right ? 1 : -1) * speedParam.getValuef(),
-            widthParam.getValuef(),
-            tailParam.getValuef(),
-            whiteBar);
+        return createScroller(lines, !right, showBand);
     }
 }
