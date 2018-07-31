@@ -3,13 +3,11 @@ package com.symmetrylabs.layouts.cubes.topology;
 import com.google.common.base.Preconditions;
 import com.symmetrylabs.layouts.cubes.CubesModel;
 import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.pattern.base.SLPattern;
-import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 
 import java.util.*;
 
-public abstract class TopoPattern extends SLPattern<CubesModel> {
+public class CubeTopology {
     public static final int NO_EDGE = Integer.MAX_VALUE;
 
     /* All in inches */
@@ -28,25 +26,25 @@ public abstract class TopoPattern extends SLPattern<CubesModel> {
 
     private class BundleKDNode {
         float x, y, z;
-        StripBundle bundle;
+        Bundle bundle;
         boolean isStart;
     }
 
-    public class StripBundle {
+    public class Bundle {
         public static final int MAX_STRIPS = 4;
 
         public EdgeDirection dir = EdgeDirection.Other;
         public int[] strips;
-        public StripBundle pa  = null;
-        public StripBundle pbp = null;
-        public StripBundle pbn = null;
-        public StripBundle pcp = null;
-        public StripBundle pcn = null;
-        public StripBundle na  = null;
-        public StripBundle nbp = null;
-        public StripBundle nbn = null;
-        public StripBundle ncp = null;
-        public StripBundle ncn = null;
+        public Bundle pa  = null;
+        public Bundle pbp = null;
+        public Bundle pbn = null;
+        public Bundle pcp = null;
+        public Bundle pcn = null;
+        public Bundle na  = null;
+        public Bundle nbp = null;
+        public Bundle nbn = null;
+        public Bundle ncp = null;
+        public Bundle ncn = null;
 
         private boolean finished = false;
         private BundleEndpoints endpoints = null;
@@ -55,7 +53,7 @@ public abstract class TopoPattern extends SLPattern<CubesModel> {
         private float maxOrder = Float.MIN_VALUE;
         private float order = Float.MIN_VALUE;
 
-        protected StripBundle() {
+        protected Bundle() {
             strips = new int[MAX_STRIPS];
             Arrays.fill(strips, NO_EDGE);
         }
@@ -69,7 +67,7 @@ public abstract class TopoPattern extends SLPattern<CubesModel> {
                 }
             }
             throw new IllegalStateException(String.format(
-                "tried to add more than %d strips to a StripBundle", strips.length));
+                "tried to add more than %d strips to a Bundle", strips.length));
         }
 
         private BundleEndpoints endpoints() {
@@ -271,11 +269,11 @@ public abstract class TopoPattern extends SLPattern<CubesModel> {
         }
     }
 
-    public final List<StripBundle> edges;
+    private final CubesModel model;
+    public final List<Bundle> edges;
 
-    public TopoPattern(LX lx) {
-        super(lx);
-
+    public CubeTopology(CubesModel model) {
+        this.model = model;
         int N = model.getStrips().size();
         edges = new ArrayList<>(N);
 
@@ -283,7 +281,7 @@ public abstract class TopoPattern extends SLPattern<CubesModel> {
         for (int i = 0; i < N; i++) {
             Strip s = model.getStripByIndex(i);
 
-            StripBundle e = new StripBundle();
+            Bundle e = new Bundle();
             e.addStrip(i);
             if (s.xRange < 1e-3 && s.yRange < 1e-3) {
                 e.dir = EdgeDirection.Z;
@@ -301,7 +299,7 @@ public abstract class TopoPattern extends SLPattern<CubesModel> {
             boolean matchesExisting = false;
             SortBucket sb = e.sortBucket();
             float order = e.order();
-            for (StripBundle testEdge : edges) {
+            for (Bundle testEdge : edges) {
                 float testOrder = testEdge.order();
                 float orderDist = Math.abs(order - testOrder);
                 if (sb.equivalent(testEdge.sortBucket()) && orderDist < ORDER_TOLERANCE) {
@@ -313,12 +311,12 @@ public abstract class TopoPattern extends SLPattern<CubesModel> {
             if (!matchesExisting)
                 edges.add(e);
         }
-        for (StripBundle e : edges)
+        for (Bundle e : edges)
             e.finishedAddingStrips();
 
         /* This used to use com.harium...KDTree but it was actually slower than the full quadratic check */
         ArrayList<BundleKDNode> nodes = new ArrayList<>(edges.size() * 2);
-        for (StripBundle e : edges) {
+        for (Bundle e : edges) {
             BundleKDNode start = new BundleKDNode();
             start.bundle = e;
             start.isStart = true;
@@ -336,7 +334,7 @@ public abstract class TopoPattern extends SLPattern<CubesModel> {
             nodes.add(end);
         }
 
-        for (StripBundle e : edges) {
+        for (Bundle e : edges) {
             BundleEndpoints ee = e.endpoints();
             List<BundleKDNode> nearest;
 
@@ -347,7 +345,7 @@ public abstract class TopoPattern extends SLPattern<CubesModel> {
                     Math.abs(ee.start.z - node.z) > ENDPOINT_TOLERANCE)
                     continue;
 
-                StripBundle o = node.bundle;
+                Bundle o = node.bundle;
                 if (o == e)
                     continue;
                 if (o.dir == e.dir) {
@@ -379,7 +377,7 @@ public abstract class TopoPattern extends SLPattern<CubesModel> {
                     Math.abs(ee.end.y - node.y) > ENDPOINT_TOLERANCE ||
                     Math.abs(ee.end.z - node.z) > ENDPOINT_TOLERANCE)
                     continue;
-                StripBundle o = node.bundle;
+                Bundle o = node.bundle;
                 if (o == e)
                     continue;
                 if (o.dir == e.dir) {

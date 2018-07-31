@@ -8,7 +8,7 @@ import heronarts.lx.parameter.DiscreteParameter;
 
 import java.util.Random;
 
-public class TopoTestPattern extends TopoPattern {
+public class TopoTestPattern extends TopologyPattern {
     private DiscreteParameter modeParam = new DiscreteParameter("mode", 0, 0, 4);
     private float elapsed = 0;
     private int i = 0;
@@ -24,7 +24,7 @@ public class TopoTestPattern extends TopoPattern {
             colors[p.index] = color;
         }
     }
-    private void setEdgeColor(StripBundle e, int color) {
+    private void setEdgeColor(CubeTopology.Bundle e, int color) {
         for (int strip : e.strips) {
             setStripColor(model.getStripByIndex(strip), color);
         }
@@ -34,7 +34,7 @@ public class TopoTestPattern extends TopoPattern {
     public void run(double deltaMs) {
         switch (modeParam.getValuei()) {
             case 0:
-                for (StripBundle e : edges) {
+                for (CubeTopology.Bundle e : topology.edges) {
                     float h;
                     switch (e.dir) {
                         case X: h = 60; break;
@@ -53,12 +53,12 @@ public class TopoTestPattern extends TopoPattern {
                 }
                 elapsed = 0;
                 setColors(0);
-                StripBundle e = edges.get(r.nextInt(edges.size()));
+                CubeTopology.Bundle e = topology.edges.get(r.nextInt(topology.edges.size()));
                 setEdgeColor(e, LXColor.rgb(255,255,255));
-                for (StripBundle n = e.na; n != null; n = n.na) {
+                for (CubeTopology.Bundle n = e.na; n != null; n = n.na) {
                     setEdgeColor(n, LXColor.rgb(0,255,0));
                 }
-                for (StripBundle p = e.pa; p != null; p = p.pa) {
+                for (CubeTopology.Bundle p = e.pa; p != null; p = p.pa) {
                     setEdgeColor(p, LXColor.rgb(255,0,100));
                 }
                 break;
@@ -71,9 +71,9 @@ public class TopoTestPattern extends TopoPattern {
                 elapsed = 0;
                 setColors(0);
                 i++;
-                if (i > edges.size())
+                if (i > topology.edges.size())
                     i = 0;
-                StripBundle edge = edges.get(i);
+                CubeTopology.Bundle edge = topology.edges.get(i);
                 setEdgeColor(edge, LXColor.rgb(255,255,255));
                 System.out.println(String.format("%d %d %d %d",
                     edge.strips.length > 0 ? edge.strips[0] : -1,
