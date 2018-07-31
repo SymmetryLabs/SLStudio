@@ -1,0 +1,3 @@
+[submodule "LX"]
+	path = LX
+	url = git@github.com:SymmetryLabs/LX.git
