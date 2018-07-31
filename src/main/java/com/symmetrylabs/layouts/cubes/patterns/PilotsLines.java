@@ -1,8 +1,9 @@
 package com.symmetrylabs.layouts.cubes.patterns;
 
 import com.symmetrylabs.color.Ops8;
+import com.symmetrylabs.layouts.cubes.CubesModel;
 import com.symmetrylabs.layouts.cubes.topology.CubeTopology;
-import com.symmetrylabs.layouts.cubes.topology.TopologyPattern;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
@@ -13,7 +14,7 @@ import heronarts.lx.transform.LXVector;
 
 import java.util.*;
 
-public class PilotsLines extends TopologyPattern {
+public class PilotsLines extends SLPattern<CubesModel> {
     private CompoundParameter attackParam = new CompoundParameter("attack", 60, 0, 600);
     private CompoundParameter colorDelayParam = new CompoundParameter("cdelay", 0, 0, 500);
     private CompoundParameter colorSpeedParam = new CompoundParameter("cspeed", 400, 0, 800);
@@ -27,8 +28,13 @@ public class PilotsLines extends TopologyPattern {
     private DiscreteParameter vCountParam = new DiscreteParameter("vcount", 30, 1, 100);
     private DiscreteParameter vLengthParam = new DiscreteParameter("vlen", 4, 0, 20);
 
+    private CubeTopology topology;
+
     public PilotsLines(LX lx) {
         super(lx);
+
+        topology = new CubeTopology(model);
+
         addParameter(hCountParam);
         addParameter(vCountParam);
         addParameter(hLengthParam);

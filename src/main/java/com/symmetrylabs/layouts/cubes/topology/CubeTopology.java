@@ -19,7 +19,7 @@ public class CubeTopology {
         X, Y, Z, Other
     }
 
-    private class BundleEndpoints {
+    public class BundleEndpoints {
         public LXPoint start;
         public LXPoint end;
     }
@@ -70,7 +70,7 @@ public class CubeTopology {
                 "tried to add more than %d strips to a Bundle", strips.length));
         }
 
-        private BundleEndpoints endpoints() {
+        public BundleEndpoints endpoints() {
             if (finished)
                 return endpoints;
 

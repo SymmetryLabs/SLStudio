@@ -1,6 +1,8 @@
 package com.symmetrylabs.layouts.cubes.topology;
 
+import com.symmetrylabs.layouts.cubes.CubesModel;
 import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
@@ -8,14 +10,16 @@ import heronarts.lx.parameter.DiscreteParameter;
 
 import java.util.Random;
 
-public class TopoTestPattern extends TopologyPattern {
+public class TopoTestPattern extends SLPattern<CubesModel> {
     private DiscreteParameter modeParam = new DiscreteParameter("mode", 0, 0, 4);
     private float elapsed = 0;
     private int i = 0;
     private Random r = new Random();
+    private CubeTopology topology;
 
     public TopoTestPattern(LX lx) {
         super(lx);
+        topology = new CubeTopology(model);
         addParameter(modeParam);
     }
 
