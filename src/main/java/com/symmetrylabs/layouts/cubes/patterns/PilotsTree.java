@@ -20,8 +20,11 @@ import java.util.*;
 public class PilotsTree extends SLPattern<CubesModel> {
     private DiscreteParameter countParam = new DiscreteParameter("count", 6, 0, 12);
     /* LEDs per second */
-    private DiscreteParameter pulseSpeedParam = new DiscreteParameter("pulse", 20, 0, 100);
+    private DiscreteParameter gapSpeedParam = new DiscreteParameter("gapspeed", 90, 1, 500);
     private CompoundParameter topRadiusParam = new CompoundParameter("toprad", 60, 0, 150);
+
+    private CompoundParameter attackParam = new CompoundParameter("attack", 60, 0, 500);
+    private CompoundParameter decayParam = new CompoundParameter("decay", 300, 0, 2000);
 
     private class PathElement {
         Strip[] strips;
@@ -33,7 +36,7 @@ public class PilotsTree extends SLPattern<CubesModel> {
         List<PathElement> path;
     }
 
-    private class Pulse {
+    private class Gap {
         int start = -1;
         int end = -1;
     }
@@ -42,20 +45,23 @@ public class PilotsTree extends SLPattern<CubesModel> {
     EdgeAStar aStar;
     List<Root> roots;
     boolean started = false;
-    LinkedList<Pulse> pulses;
-    int maxPulseAge = 0;
-    double pulseDelay = 0;
+    LinkedList<Gap> gaps;
+    int maxGapAge = 0;
+    double gapDelay = 0;
 
     public PilotsTree(LX lx) {
         super(lx);
 
         topology = new CubeTopology(model);
         aStar = new EdgeAStar(topology);
-        pulses = new LinkedList<>();
+        gaps = new LinkedList<>();
+
+        addParameter(attackParam);
+        addParameter(decayParam);
 
         addParameter(countParam);
         addParameter(topRadiusParam);
-        addParameter(pulseSpeedParam);
+        addParameter(gapSpeedParam);
 
         started = true;
         build();
@@ -163,7 +169,7 @@ public class PilotsTree extends SLPattern<CubesModel> {
                     }
 
                     for (int strip = 0; strip < b.strips.length; strip++) {
-                        Strip s = model.getStripByIndex(strip);
+                        Strip s = model.getStripByIndex(b.strips[strip]);
                         e.strips[strip] = s;
 
                         LXVector front = new LXVector(s.points[0]);
@@ -182,30 +188,30 @@ public class PilotsTree extends SLPattern<CubesModel> {
             }
         }
 
-        maxPulseAge = 0;
+        maxGapAge = 0;
         for (Root r : roots) {
             int elementCount = 0;
             for (PathElement e : r.path) {
                 elementCount += e.strips[0].size;
             }
-            maxPulseAge = Integer.max(maxPulseAge, elementCount);
+            maxGapAge = Integer.max(maxGapAge, elementCount);
         }
     }
 
     @Override
     public void run(double deltaMs) {
-        pulseDelay += deltaMs;
+        gapDelay += deltaMs;
         /* in steps per millisecond */
-        float pulseSpeed = pulseSpeedParam.getValuef() / 1000f;
-        int steps = (int) Math.floor(pulseDelay * pulseSpeed);
+        float gapSpeed = gapSpeedParam.getValuef() / 1000f;
+        int steps = (int) Math.floor(gapDelay * gapSpeed);
         if (steps > 0) {
-            pulseDelay -= steps / pulseSpeed;
-            for (Iterator<Pulse> iter = pulses.iterator(); iter.hasNext();) {
-                Pulse p = iter.next();
+            gapDelay -= steps / gapSpeed;
+            for (Iterator<Gap> iter = gaps.iterator(); iter.hasNext();) {
+                Gap p = iter.next();
                 p.start += steps;
                 if (p.end >= 0)
                     p.end += steps;
-                if (p.end > maxPulseAge)
+                if (p.end > maxGapAge)
                     iter.remove();
             }
         }
@@ -217,7 +223,7 @@ public class PilotsTree extends SLPattern<CubesModel> {
 
             /* We keep track of how many LEDs we've seen along the course of
              * the whole path before a given element, so that we can figure
-             * out which LEDs are in a pulse */
+             * out which LEDs are in gaps */
             int previousStripLEDs = 0;
 
             for (PathElement e : r.path) {
@@ -226,22 +232,18 @@ public class PilotsTree extends SLPattern<CubesModel> {
                     boolean forward = e.forwards[stripIndex];
                     LXPoint[] points = strip.points;
 
-                    for (LXPoint p : points)
-                        colors[p.index] = LXColor.gray(100f);
-                    if (1==1) continue;
-
                     for (int localIndex = 0; localIndex < points.length; localIndex++) {
                         int localEffectiveIndex = forward ? localIndex : points.length - localIndex - 1;
                         int globalIndex = localEffectiveIndex + previousStripLEDs;
 
-                        boolean inPulse = false;
-                        for (Pulse pulse : pulses) {
-                            if (pulse.end <= globalIndex && globalIndex <= pulse.start) {
-                                inPulse = true;
+                        boolean inGap = false;
+                        for (Gap gap : gaps) {
+                            if (gap.end <= globalIndex && globalIndex <= gap.start) {
+                                inGap = true;
                                 break;
                             }
                         }
-                        if (!inPulse || true)
+                        if (!inGap)
                             colors[points[localIndex].index] = LXColor.gray(100f);
                     }
                 }
@@ -260,11 +262,11 @@ public class PilotsTree extends SLPattern<CubesModel> {
                 break;
 
             case 62:
-                if (!pulses.isEmpty() && pulses.peekFirst().end < 0)
-                    pulses.peekFirst().end = 0;
-                pulses.addFirst(new Pulse());
-                pulses.peekFirst().start = 0;
-                pulses.peekFirst().end = -1;
+                if (!gaps.isEmpty() && gaps.peekFirst().end < 0)
+                    gaps.peekFirst().end = 0;
+                gaps.addFirst(new Gap());
+                gaps.peekFirst().start = 0;
+                gaps.peekFirst().end = -1;
                 break;
 
             default:
@@ -279,8 +281,9 @@ public class PilotsTree extends SLPattern<CubesModel> {
                 break;
 
             case 62:
-                if (!pulses.isEmpty() && pulses.peekFirst().end < 0)
-                    pulses.peekFirst().end = 0;
+                if (!gaps.isEmpty() && gaps.peekFirst().end < 0)
+                    gaps.peekFirst().end = 0;
+                break;
 
             default:
                 System.out.println(String.format("unknown midi pitch %d", note.getPitch()));
