@@ -8,6 +8,7 @@ import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.*;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.transform.LXVector;
@@ -15,6 +16,8 @@ import heronarts.lx.transform.LXVector;
 import java.util.*;
 
 public class PilotsLines extends SLPattern<CubesModel> {
+    private BooleanParameter vertParam = new BooleanParameter("vert");
+
     private CompoundParameter attackParam = new CompoundParameter("attack", 60, 0, 600);
     private CompoundParameter colorDelayParam = new CompoundParameter("cdelay", 0, 0, 500);
     private CompoundParameter colorSpeedParam = new CompoundParameter("cspeed", 400, 0, 800);
@@ -30,6 +33,8 @@ public class PilotsLines extends SLPattern<CubesModel> {
 
     public PilotsLines(LX lx) {
         super(lx);
+
+        addParameter(vertParam);
 
         addParameter(hCountParam);
         addParameter(vCountParam);
@@ -237,35 +242,34 @@ public class PilotsLines extends SLPattern<CubesModel> {
         LineEffect newEffect = null;
         switch (note.getPitch()) {
             case 60:
-                newEffect = createStaticVerticalLines();
+                if (vertParam.getValueb())
+                    newEffect = createStaticVerticalLines();
+                else
+                    newEffect = createStaticHorizontalLines();
                 break;
             case 62:
-                newEffect = createScrollingVerticalLines(true, false);
+                if (vertParam.getValueb())
+                    newEffect = createScrollingVerticalLines(true, false);
+                else
+                    newEffect = createScrollingHorizontalLines(true, false);
                 break;
             case 64:
-                newEffect = createScrollingVerticalLines(false, false);
+                if (vertParam.getValueb())
+                    newEffect = createScrollingVerticalLines(false, false);
+                else
+                    newEffect = createScrollingHorizontalLines(false, false);
                 break;
             case 65:
-                newEffect = createScrollingVerticalLines(true, true);
+                if (vertParam.getValueb())
+                    newEffect = createScrollingVerticalLines(true, true);
+                else
+                    newEffect = createScrollingHorizontalLines(true, true);
                 break;
             case 67:
-                newEffect = createScrollingVerticalLines(false, true);
-                break;
-
-            case 72:
-                newEffect = createStaticHorizontalLines();
-                break;
-            case 74:
-                newEffect = createScrollingHorizontalLines(true, false);
-                break;
-            case 76:
-                newEffect = createScrollingHorizontalLines(false, false);
-                break;
-            case 77:
-                newEffect = createScrollingHorizontalLines(true, true);
-                break;
-            case 79:
-                newEffect = createScrollingHorizontalLines(false, true);
+                if (vertParam.getValueb())
+                    newEffect = createScrollingVerticalLines(false, true);
+                else
+                    newEffect = createScrollingHorizontalLines(false, true);
                 break;
 
             default:
