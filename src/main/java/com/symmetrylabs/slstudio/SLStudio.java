@@ -107,6 +107,12 @@ public class SLStudio extends PApplet {
 
                 layout.setupLx(lx);
 
+                lx.engine.output.brightness.addListener(parameter -> {
+                    if (parameter.getValuef() > 0.75f) {
+                        parameter.setValue(0.75f);
+                    }
+                });
+
                 if (TreeModelingTool.isTreeLayout()) {
                     treeModelingTool = new TreeModelingTool(lx);
                     lx.engine.registerComponent("treeModelingTool", treeModelingTool);
