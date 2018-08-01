@@ -39,6 +39,7 @@ public class PilotsRoots extends SLPattern<CubesModel> {
         Strip[] strips;
         boolean[] forwards;
     }
+
     private class Root {
         CubeTopology.Bundle top;
         CubeTopology.Bundle bottom;
@@ -96,6 +97,14 @@ public class PilotsRoots extends SLPattern<CubesModel> {
     public void onParameterChanged(LXParameter p) {
         if (p == countParam || p == topRadiusParam || p == rootModeParam)
             build();
+        else if (p == attackParam || p == decayParam || p == sustainParam || p == releaseParam || p == minBrightParam || p == maxBrightParam){
+            globalADSR.attack();
+            globalADSR.release();
+            for (Root r : roots) {
+                r.adsr.attack();
+                r.adsr.release();
+            }
+        }
     }
 
     /* Represents a half-built root; root builders return lists of these,
@@ -104,6 +113,10 @@ public class PilotsRoots extends SLPattern<CubesModel> {
     private static class RootSpec {
         Root root;
         List<CubeTopology.Bundle> bundles;
+        /** The point that determines which direction roots flow in; the end
+         *  of the first bundle in the list that is closest to gapOrigin is
+         *  the end that we start the gap at. */
+        LXVector gapOrigin;
     }
 
     private List<RootSpec> buildSliceRoots() {
@@ -130,25 +143,52 @@ public class PilotsRoots extends SLPattern<CubesModel> {
         List<RootSpec> res = new ArrayList<>(slices.size());
         for (float x : slices.keySet()) {
             List<CubeTopology.Bundle> slice = slices.get(x);
-            CubeTopology.Bundle a = slice.get(r.nextInt(slice.size()));
-            CubeTopology.Bundle b = slice.get(r.nextInt(slice.size()));
+            CubeTopology.Bundle start = null;
 
-            List<CubeTopology.Bundle> path;
-            try {
-                path = aStar.findPath(a, b);
-            } catch (EdgeAStar.NotConnectedException ex) {
-                ex.printStackTrace();
-                continue;
+            boolean startIsVertical = r.nextBoolean();
+            for (CubeTopology.Bundle b : slice) {
+                if (startIsVertical && b.dir != CubeTopology.EdgeDirection.Y)
+                    continue;
+                else if (!startIsVertical && b.dir != CubeTopology.EdgeDirection.Z)
+                    continue;
+                /* Looking for one with nothing below it and nothing in front
+                 * (in negative-Z) of it. For Y-aligned bundles, "below" is na
+                 * and "in front" is ncn. For Z-aligned bundles, "below" is ncn
+                 * and "in front" is na. Either way, the check is the same. */
+                if (b.na == null && b.ncn == null) {
+                    start = b;
+                    break;
+                }
+            }
+            if (start == null) {
+                throw new IllegalStateException("slice has no admissable start bundles");
+            }
+            List<CubeTopology.Bundle> path = new ArrayList<>();
+
+            CubeTopology.Bundle t = start;
+            while (t != null) {
+                path.add(t);
+                if (t.pa == null) {
+                    t = t.pcp;
+                } else if (t.pcp == null) {
+                    t = t.pa;
+                } else {
+                    t = r.nextBoolean() ? t.pa : t.pcp;
+                }
             }
 
             Root root = new Root();
-            root.top = a;
-            root.bottom = b;
+            root.top = start;
+            root.bottom = t;
             RootSpec spec = new RootSpec();
             spec.root = root;
             spec.bundles = path;
+            spec.gapOrigin = new LXVector(x, model.yMin, model.zMin);
             res.add(spec);
         }
+        res.sort((a, b) -> Float.compare(
+            a.bundles.get(0).endpoints().start.x,
+            b.bundles.get(0).endpoints().start.x));
         return res;
     }
 
@@ -230,6 +270,7 @@ public class PilotsRoots extends SLPattern<CubesModel> {
                 RootSpec spec = new RootSpec();
                 spec.root = r;
                 spec.bundles = path;
+                spec.gapOrigin = new LXVector(model.cx, model.yMax, model.cz);
                 res.add(spec);
                 added = true;
             }
@@ -268,7 +309,7 @@ public class PilotsRoots extends SLPattern<CubesModel> {
 
                 LXVector match;
                 if (r.path.isEmpty()) {
-                    match = new LXVector(model.cx, model.yMax, model.cz);
+                    match = spec.gapOrigin;
                 } else {
                     PathElement last = r.path.get(r.path.size() - 1);
                     Strip lastStrip = last.strips[0];
