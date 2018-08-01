@@ -226,7 +226,7 @@ public class SummerStageLayout extends CubesLayout {
             // col 3
             new TowerConfig(SP * 2, SP * 2, SP * 0, new String[][]{new String[]{"769", "768"}}),
             // col 4
-            new TowerConfig(SP * 3, SP * 0, SP * 0, new String[][]{new String[]{"565", "564"}, new String[]{"473", "472"}, new String[]{"455", "454"}})
+            new TowerConfig(SP * 3, SP * 0, SP * 0, new String[][]{new String[]{"FLICKERING-565", "564"}, new String[]{"473", "472"}, new String[]{"455", "454"}})
         }),
 
         new ClusterConfig("CLUSTER_B", SP*20, SP*13, 0, new TowerConfig[] {
