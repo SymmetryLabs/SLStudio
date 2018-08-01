@@ -209,11 +209,19 @@ public class PilotsRoots extends SLPattern<CubesModel> {
             if (e.dir == CubeTopology.EdgeDirection.Y)
                 continue;
 
-            /* only get elements with nothing below them */
-            if (e.dir == CubeTopology.EdgeDirection.X && (e.pbn != null || e.nbn != null))
-                continue;
-            if (e.dir == CubeTopology.EdgeDirection.Z && (e.pcn != null || e.ncn != null))
-                continue;
+            /* only get elements with nothing below them that are on the
+             * edge of the structure (meaning at least one of the directions
+             * in-bottom-plane has no bundle in it). */
+            if (e.dir == CubeTopology.EdgeDirection.X) {
+                if (e.pbn != null || e.nbn != null ||
+                    (e.na != null && e.pa != null && e.ncn != null && e.ncp != null && e.pcn != null && e.pcp != null))
+                    continue;
+            }
+            else {
+                if (e.pcn != null || e.ncn != null ||
+                    (e.na != null && e.pa != null && e.nbn != null && e.nbp != null && e.pbn != null && e.pbp != null))
+                    continue;
+            }
 
             rootBottoms.add(e);
         }

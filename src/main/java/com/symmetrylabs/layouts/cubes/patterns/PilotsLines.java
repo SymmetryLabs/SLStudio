@@ -103,7 +103,9 @@ public class PilotsLines extends SLPattern<CubesModel> {
         protected boolean applyColors(float alpha) {
             int c = LXColor.hsba(0, 0, 100, alpha);
             for (CubeTopology.Bundle e : edges) {
-                for (LXVector p : getVectors(model.getStripByIndex(e.strips[0]).points)) {
+                // pick a strip that's likely to be in the front of the bundle
+                int stripIndex = e.strips.length >= 2 ? 1 : 0;
+                for (LXVector p : getVectors(model.getStripByIndex(e.strips[stripIndex]).points)) {
                     colors[p.index] = Ops8.add(colors[p.index], c);
                 }
             }
@@ -188,7 +190,9 @@ public class PilotsLines extends SLPattern<CubesModel> {
                 }
 
                 for (CubeTopology.Bundle e : lines.get(i)) {
-                    for (LXVector p : getVectors(model.getStripByIndex(e.strips[0]).points)) {
+                    // pick a strip that's likely to be in the front of the bundle
+                    int stripIndex = e.strips.length >= 2 ? 1 : 0;
+                    for (LXVector p : getVectors(model.getStripByIndex(e.strips[stripIndex]).points)) {
                         float v = Float.MIN_VALUE;
                         switch (e.dir) {
                             case X: v = p.x; break;
