@@ -32,8 +32,6 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
     private final List<Cube> cubesUnmodifiable = Collections.unmodifiableList(cubes);
     private final List<Face> facesUnmodifiable = Collections.unmodifiableList(faces);
 
-    private final Cube[] _cubes;
-
     public CubesModel() {
         this(new ArrayList<>(), new Cube[0]);
     }
@@ -41,8 +39,6 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
     public CubesModel(List<Tower> towers, Cube[] cubeArr) {
         super(new Fixture(cubeArr));
         Fixture fixture = (Fixture) this.fixtures.get(0);
-
-        _cubes = cubeArr;
 
         for (Tower tower : towers) {
             this.towers.add(tower);
@@ -80,16 +76,6 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
                 }
             }
         }
-    }
-
-    /**
-     * TODO(mcslee): figure out better solution
-     *
-     * @param index
-     * @return
-     */
-    public Cube getCubeByRawIndex(int index) {
-        return _cubes[index];
     }
 
     public Cube getCubeById(String id) {
