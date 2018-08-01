@@ -24,7 +24,7 @@ public class CubeTopology {
         public LXPoint end;
     }
 
-    private class BundleKDNode {
+    private class BundleNode {
         float x, y, z;
         Bundle bundle;
         boolean isStart;
@@ -128,9 +128,9 @@ public class CubeTopology {
             }
             Integer[] newStrips = new Integer[count];
             int j = 0;
-            for (int i = 0; i < strips.length; i++) {
-                if (strips[i] != NO_EDGE) {
-                    newStrips[j] = strips[i];
+            for (int strip : strips) {
+                if (strip != NO_EDGE) {
+                    newStrips[j] = strip;
                     j++;
                 }
             }
@@ -183,10 +183,10 @@ public class CubeTopology {
                 return order;
             float order = 0;
             int count = 0;
-            for (int i = 0; i < strips.length; i++) {
-                if (strips[i] == NO_EDGE)
+            for (int strip : strips) {
+                if (strip == NO_EDGE)
                     continue;
-                Strip s = model.getStripByIndex(strips[i]);
+                Strip s = model.getStripByIndex(strip);
                 switch (dir) {
                     case X: order += s.cx; break;
                     case Y: order += s.cy; break;
@@ -202,10 +202,10 @@ public class CubeTopology {
             if (finished)
                 return minOrder;
             float min = Float.MAX_VALUE;
-            for (int i = 0; i < strips.length; i++) {
-                if (strips[i] == NO_EDGE)
+            for (int strip : strips) {
+                if (strip == NO_EDGE)
                     continue;
-                Strip s = model.getStripByIndex(strips[i]);
+                Strip s = model.getStripByIndex(strip);
                 switch (dir) {
                     case X: min = Float.min(min, s.xMin); break;
                     case Y: min = Float.min(min, s.yMin); break;
@@ -220,10 +220,10 @@ public class CubeTopology {
             if (finished)
                 return maxOrder;
             float max = Float.MIN_VALUE;
-            for (int i = 0; i < strips.length; i++) {
-                if (strips[i] == NO_EDGE)
+            for (int strip : strips) {
+                if (strip == NO_EDGE)
                     continue;
-                Strip s = model.getStripByIndex(strips[i]);
+                Strip s = model.getStripByIndex(strip);
                 switch (dir) {
                     case X: max = Float.max(max, s.xMax); break;
                     case Y: max = Float.max(max, s.yMax); break;
@@ -239,27 +239,27 @@ public class CubeTopology {
         float a;
         float b;
 
-        public SortBucket(EdgeDirection dir, float a, float b) {
+        SortBucket(EdgeDirection dir, float a, float b) {
             this.dir = dir;
             this.a = a;
             this.b = b;
         }
 
-        public boolean equivalent(SortBucket sb) {
+        boolean equivalent(SortBucket sb) {
             return dir == sb.dir && Math.abs(a - sb.a) < BUCKET_TOLERANCE && Math.abs(b - sb.b) < BUCKET_TOLERANCE;
         }
 
-        public static SortBucket combine(SortBucket buckets[]) {
+        static SortBucket combine(SortBucket buckets[]) {
             SortBucket res = null;
             int count = 0;
-            for (int i = 0; i < buckets.length; i++) {
-                if (buckets[i] == null)
+            for (SortBucket bucket : buckets) {
+                if (bucket == null)
                     continue;
                 if (res == null)
-                    res = new SortBucket(buckets[i].dir, buckets[i].a, buckets[i].b);
+                    res = new SortBucket(bucket.dir, bucket.a, bucket.b);
                 else {
-                    res.a += buckets[i].a;
-                    res.b += buckets[i].b;
+                    res.a += bucket.a;
+                    res.b += bucket.b;
                 }
                 count++;
             }
@@ -315,9 +315,9 @@ public class CubeTopology {
             e.finishedAddingStrips();
 
         /* This used to use com.harium...KDTree but it was actually slower than the full quadratic check */
-        ArrayList<BundleKDNode> nodes = new ArrayList<>(edges.size() * 2);
+        ArrayList<BundleNode> nodes = new ArrayList<>(edges.size() * 2);
         for (Bundle e : edges) {
-            BundleKDNode start = new BundleKDNode();
+            BundleNode start = new BundleNode();
             start.bundle = e;
             start.isStart = true;
             start.x = e.endpoints().start.x;
@@ -325,7 +325,7 @@ public class CubeTopology {
             start.z = e.endpoints().start.z;
             nodes.add(start);
 
-            BundleKDNode end = new BundleKDNode();
+            BundleNode end = new BundleNode();
             end.bundle = e;
             end.isStart = false;
             end.x = e.endpoints().end.x;
@@ -336,22 +336,23 @@ public class CubeTopology {
 
         for (Bundle e : edges) {
             BundleEndpoints ee = e.endpoints();
-            List<BundleKDNode> nearest;
+            List<BundleNode> nearest;
 
             /* First find points near the start */
-            for (BundleKDNode node : nodes) {
-                if (Math.abs(ee.start.x - node.x) > ENDPOINT_TOLERANCE ||
-                    Math.abs(ee.start.y - node.y) > ENDPOINT_TOLERANCE ||
-                    Math.abs(ee.start.z - node.z) > ENDPOINT_TOLERANCE)
-                    continue;
-
+            for (BundleNode node : nodes) {
                 Bundle o = node.bundle;
                 if (o == e)
                     continue;
+
+                float xd = Math.abs(ee.start.x - node.x);
+                float yd = Math.abs(ee.start.y - node.y);
+                float zd = Math.abs(ee.start.z - node.z);
+                if (xd > ENDPOINT_TOLERANCE || yd > ENDPOINT_TOLERANCE || zd > ENDPOINT_TOLERANCE)
+                    continue;
+
                 if (o.dir == e.dir) {
                     e.na = o;
-                }
-                if (node.isStart) {
+                } else if (node.isStart) {
                     /* This is a start-to-start connection, meaning this is on the
                      * negative side of both e and o, so o is in a positive direction
                      * wrt its axis compared to e. */
@@ -372,18 +373,20 @@ public class CubeTopology {
             }
 
             /* ...then near the end. */
-            for (BundleKDNode node : nodes) {
-                if (Math.abs(ee.end.x - node.x) > ENDPOINT_TOLERANCE ||
-                    Math.abs(ee.end.y - node.y) > ENDPOINT_TOLERANCE ||
-                    Math.abs(ee.end.z - node.z) > ENDPOINT_TOLERANCE)
-                    continue;
+            for (BundleNode node : nodes) {
                 Bundle o = node.bundle;
                 if (o == e)
                     continue;
+
+                float xd = Math.abs(ee.end.x - node.x);
+                float yd = Math.abs(ee.end.y - node.y);
+                float zd = Math.abs(ee.end.z - node.z);
+                if (xd > ENDPOINT_TOLERANCE || yd > ENDPOINT_TOLERANCE || zd > ENDPOINT_TOLERANCE)
+                    continue;
+
                 if (o.dir == e.dir) {
                     e.pa = o;
-                }
-                if (node.isStart) {
+                } else if (node.isStart) {
                     /* This is the end of e but the start of o, which means this
                      * is at the positive end of e and o is in the positive direction
                      * from e along the axis of o. */

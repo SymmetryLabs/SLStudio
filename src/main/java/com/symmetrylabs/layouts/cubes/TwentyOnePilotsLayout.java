@@ -88,6 +88,10 @@ public class TwentyOnePilotsLayout implements Layout {
         // row 2
         new TowerConfig(SP*3, 0, SP*0, new String[] {"0", "0", "0", "0"}),
         new TowerConfig(SP*3, 0, SP*1, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP*3, 0, SP*4, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP*3, 0, SP*5, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP*3, 0, SP*6, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP*3, 0, SP*7, new String[] {"0", "0", "0", "0"}),
         // gap
         // new TowerConfig(SP*1, 0, SP*4, new String[] {"0", "0", "0", "0"}),
         // new TowerConfig(SP*1, 0, SP*5, new String[] {"0", "0", "0", "0"}),

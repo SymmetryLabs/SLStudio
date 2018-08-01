@@ -67,7 +67,7 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
                 }
                 break;
 
-            case 2:
+            case 2: {
                 elapsed += deltaMs;
                 if (elapsed < 1000) {
                     break;
@@ -78,21 +78,60 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
                 if (i > topology.edges.size())
                     i = 0;
                 CubeTopology.Bundle edge = topology.edges.get(i);
-                setEdgeColor(edge, LXColor.rgb(255,255,255));
-                System.out.println(String.format("%d %d %d %d",
+                setEdgeColor(edge, LXColor.rgb(255, 255, 255));
+                System.out.println(String.format("%d / %d %d %d %d",
+                    i,
                     edge.strips.length > 0 ? edge.strips[0] : -1,
                     edge.strips.length > 1 ? edge.strips[1] : -1,
                     edge.strips.length > 2 ? edge.strips[2] : -1,
                     edge.strips.length > 3 ? edge.strips[3] : -1));
                 break;
+            }
 
-            case 3:
+            case 3: {
+                elapsed += deltaMs;
+                if (elapsed < 500) {
+                    break;
+                }
+                elapsed = 0;
                 setColors(0);
-                setStripColor(model.getStripByIndex(3), LXColor.hsb(0, 100, 100));
-                setStripColor(model.getStripByIndex(17), LXColor.hsb(80, 100, 100));
-                setStripColor(model.getStripByIndex(57), LXColor.hsb(160, 100, 100));
-                setStripColor(model.getStripByIndex(71), LXColor.hsb(240, 100, 100));
+                i++;
+                if (i > topology.edges.size())
+                    i = 0;
+                i = 42;
+                System.out.println(i);
+                {
+                    CubeTopology.Bundle edge = topology.edges.get(i);
+                    setEdgeColor(edge, LXColor.rgb(255, 255, 255));
+                    if (edge.na != null) setEdgeColor(edge.na, LXColor.hsb(0, 100, 100));
+                    if (edge.nbn != null) setEdgeColor(edge.nbn, LXColor.hsb(30, 100, 100));
+                    if (edge.ncn != null) setEdgeColor(edge.ncn, LXColor.hsb(60, 100, 100));
+                    if (edge.nbp != null) setEdgeColor(edge.nbp, LXColor.hsb(90, 100, 100));
+                    if (edge.ncp != null) setEdgeColor(edge.ncp, LXColor.hsb(120, 100, 100));
+                    if (edge.pa != null) setEdgeColor(edge.pa, LXColor.hsb(150, 100, 100));
+                    if (edge.pbn != null) setEdgeColor(edge.pbn, LXColor.hsb(180, 100, 100));
+                    if (edge.pcn != null) setEdgeColor(edge.pcn, LXColor.hsb(210, 100, 100));
+                    if (edge.pbp != null) setEdgeColor(edge.pbp, LXColor.hsb(240, 100, 100));
+                    if (edge.pcp != null) setEdgeColor(edge.pcp, LXColor.hsb(270, 100, 100));
+                }
+                {
+                    i = 640;
+                    System.out.println(i);
+                    CubeTopology.Bundle edge = topology.edges.get(i);
+                    setEdgeColor(edge, LXColor.rgb(255, 255, 255));
+                    if (edge.na != null) setEdgeColor(edge.na, LXColor.hsb(0, 100, 100));
+                    if (edge.nbn != null) setEdgeColor(edge.nbn, LXColor.hsb(30, 100, 100));
+                    if (edge.ncn != null) setEdgeColor(edge.ncn, LXColor.hsb(60, 100, 100));
+                    if (edge.nbp != null) setEdgeColor(edge.nbp, LXColor.hsb(90, 100, 100));
+                    if (edge.ncp != null) setEdgeColor(edge.ncp, LXColor.hsb(120, 100, 100));
+                    if (edge.pa != null) setEdgeColor(edge.pa, LXColor.hsb(150, 100, 100));
+                    if (edge.pbn != null) setEdgeColor(edge.pbn, LXColor.hsb(180, 100, 100));
+                    if (edge.pcn != null) setEdgeColor(edge.pcn, LXColor.hsb(210, 100, 100));
+                    if (edge.pbp != null) setEdgeColor(edge.pbp, LXColor.hsb(240, 100, 100));
+                    if (edge.pcp != null) setEdgeColor(edge.pcp, LXColor.hsb(270, 100, 100));
+                }
                 break;
+            }
         }
     }
 }

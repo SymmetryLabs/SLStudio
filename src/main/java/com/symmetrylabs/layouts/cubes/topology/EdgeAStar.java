@@ -2,10 +2,11 @@ package com.symmetrylabs.layouts.cubes.topology;
 
 import heronarts.lx.model.LXPoint;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class EdgeAStar {
+    public class NotConnectedException extends Exception {}
+
     private final CubeTopology topology;
 
     private final HashSet<CubeTopology.Bundle> closed = new HashSet<>();
@@ -16,10 +17,6 @@ public class EdgeAStar {
 
     private CubeTopology.Bundle current;
     private CubeTopology.Bundle target;
-
-    public interface Visitor {
-        void visit(CubeTopology.Bundle bundle);
-    }
 
     public EdgeAStar(CubeTopology topology) {
         this.topology = topology;
@@ -35,7 +32,7 @@ public class EdgeAStar {
         return (float) Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2) + Math.pow(az - bz, 2));
     }
 
-    public void findPath(CubeTopology.Bundle start, CubeTopology.Bundle end, Visitor visitor) {
+    public List<CubeTopology.Bundle> findPath(CubeTopology.Bundle start, CubeTopology.Bundle end) throws NotConnectedException {
         target = end;
 
         closed.clear();
@@ -52,7 +49,7 @@ public class EdgeAStar {
             current = null;
             float currentFScore = Float.MAX_VALUE;
             for (CubeTopology.Bundle b : open) {
-                Float bScore = fScore.getOrDefault(b, Float.MAX_VALUE);
+                Float bScore = fScore.get(b);
                 if (bScore < currentFScore) {
                     current = b;
                     currentFScore = bScore;
@@ -76,15 +73,25 @@ public class EdgeAStar {
             visitNeighbor(current.pcp);
         }
 
+        if (current != end)
+            throw new NotConnectedException();
+
+        LinkedList<CubeTopology.Bundle> res = new LinkedList<>();
         do {
-            visitor.visit(current);
+            res.addFirst(current);
             current = cameFrom.get(current);
         } while (current != start);
+        return res;
     }
 
     private void visitNeighbor(CubeTopology.Bundle neighbor) {
+        if (neighbor == null)
+            return;
         if (closed.contains(neighbor))
             return;
+
+        // this node is now up for grabs
+        open.add(neighbor);
 
         // the cost of getting to this neighbor from the current node
         float thisScore = gScore.get(current) + dist(current, neighbor);
