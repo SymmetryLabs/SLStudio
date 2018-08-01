@@ -49,14 +49,14 @@ public class PilotsRoots extends SLPattern<CubesModel> {
         int end = -1;
     }
 
-    CubeTopology topology;
-    EdgeAStar aStar;
-    List<Root> roots;
-    boolean started = false;
-    LinkedList<Gap> gaps;
-    int maxGapAge = 0;
-    double gapDelay = 0;
-    int nextRootToAttack = 0;
+    private CubeTopology topology;
+    private EdgeAStar aStar;
+    private List<Root> roots;
+    private boolean started = false;
+    private LinkedList<Gap> gaps;
+    private int maxGapAge = 0;
+    private double gapDelay = 0;
+    private int nextRootToAttack = 0;
 
     private ADSREnvelope globalADSR;
 
@@ -94,16 +94,7 @@ public class PilotsRoots extends SLPattern<CubesModel> {
             build();
     }
 
-    private void build() {
-        if (!started)
-            return;
-
-        if (roots != null) {
-            for (Root r : roots) {
-                removeModulator(r.adsr);
-            }
-        }
-
+    private HashMap<Root, List<CubeTopology.Bundle>> buildTreeRoots() {
         /* Generate lists of allowable root top bundles and root bottom bundles */
         List<CubeTopology.Bundle> rootTops = new ArrayList<>();
         for (CubeTopology.Bundle e : topology.edges) {
@@ -143,8 +134,9 @@ public class PilotsRoots extends SLPattern<CubesModel> {
         Arrays.fill(bottomsUsed, false);
 
         HashSet<CubeTopology.Bundle> used = new HashSet<>();
-        roots = new ArrayList<>();
-        for (int i = 0; i < rootTops.size() && roots.size() < N; i++) {
+        HashMap<Root, List<CubeTopology.Bundle>> res = new HashMap<>();
+
+        for (int i = 0; i < rootTops.size() && res.size() < N; i++) {
             Root r = new Root();
             r.top = rootTops.get(i);
 
@@ -176,46 +168,66 @@ public class PilotsRoots extends SLPattern<CubesModel> {
                 if (containsUsed)
                     continue;
                 used.addAll(path);
+                res.put(r, path);
+                added = true;
+            }
+        }
+        return res;
+    }
 
-                /* Now we figure out which direction we traverse each strip as
-                 * we go through the path */
-                r.path = new ArrayList<>();
-                for (CubeTopology.Bundle b : path) {
-                    PathElement e = new PathElement();
-                    e.strips = new Strip[b.strips.length];
-                    e.forwards = new boolean[b.strips.length];
+    private void build() {
+        if (!started)
+            return;
 
-                    LXVector match;
-                    if (r.path.isEmpty()) {
-                        match = new LXVector(model.cx, model.yMax, model.cz);
-                    } else {
-                        PathElement last = r.path.get(r.path.size() - 1);
-                        Strip lastStrip = last.strips[0];
-                        boolean lastForwards = last.forwards[0];
-                        match = new LXVector(lastStrip.points[lastForwards ? lastStrip.points.length - 1 : 0]);
-                    }
+        if (roots != null) {
+            for (Root r : roots) {
+                removeModulator(r.adsr);
+            }
+        }
 
-                    for (int strip = 0; strip < b.strips.length; strip++) {
-                        Strip s = model.getStripByIndex(b.strips[strip]);
-                        e.strips[strip] = s;
+        roots = new ArrayList<>();
+        HashMap<Root, List<CubeTopology.Bundle>> newRoots = buildTreeRoots();
+        for (Root r : newRoots.keySet()) {
+            List<CubeTopology.Bundle> path = newRoots.get(r);
 
-                        LXVector front = new LXVector(s.points[0]);
-                        LXVector back = new LXVector(s.points[s.points.length - 1]);
+            /* Figure out which direction we traverse each strip as we go through the path */
+            r.path = new ArrayList<>();
+            for (CubeTopology.Bundle b : path) {
+                PathElement e = new PathElement();
+                e.strips = new Strip[b.strips.length];
+                e.forwards = new boolean[b.strips.length];
 
-                        float forwardDist = front.dist(match);
-                        float reverseDist = back.dist(match);
-                        e.forwards[strip] = forwardDist < reverseDist;
-                    }
-
-                    r.path.add(e);
+                LXVector match;
+                if (r.path.isEmpty()) {
+                    match = new LXVector(model.cx, model.yMax, model.cz);
+                } else {
+                    PathElement last = r.path.get(r.path.size() - 1);
+                    Strip lastStrip = last.strips[0];
+                    boolean lastForwards = last.forwards[0];
+                    match = new LXVector(lastStrip.points[lastForwards ? lastStrip.points.length - 1 : 0]);
                 }
 
-                r.adsr = makeADSR();
-                addModulator(r.adsr);
+                for (int strip = 0; strip < b.strips.length; strip++) {
+                    Strip s = model.getStripByIndex(b.strips[strip]);
+                    e.strips[strip] = s;
 
-                added = true;
-                roots.add(r);
+                    LXVector front = new LXVector(s.points[0]);
+                    LXVector back = new LXVector(s.points[s.points.length - 1]);
+
+                    float forwardDist = front.dist(match);
+                    float reverseDist = back.dist(match);
+                    e.forwards[strip] = forwardDist < reverseDist;
+                }
+
+                r.path.add(e);
             }
+
+            r.adsr = makeADSR();
+            addModulator(r.adsr);
+            roots.add(r);
+
+            globalADSR.attack();
+            globalADSR.release();
         }
 
         maxGapAge = 0;
@@ -348,7 +360,7 @@ public class PilotsRoots extends SLPattern<CubesModel> {
 
     private ADSREnvelope makeADSR() {
         return new ADSREnvelope(
-            "PilotsTree ADSR", minBrightParam, maxBrightParam,
+            "PilotsRoots ADSR", minBrightParam, maxBrightParam,
             attackParam, decayParam, sustainParam, releaseParam,
             new FixedParameter(1));
     }
