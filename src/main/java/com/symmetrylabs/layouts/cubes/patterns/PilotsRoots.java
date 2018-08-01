@@ -19,7 +19,7 @@ import heronarts.lx.transform.LXVector;
 
 import java.util.*;
 
-public class PilotsTree extends SLPattern<CubesModel> {
+public class PilotsRoots extends SLPattern<CubesModel> {
     private DiscreteParameter countParam = new DiscreteParameter("count", 6, 0, 12);
     /* LEDs per second */
     private DiscreteParameter gapSpeedParam = new DiscreteParameter("speed", 90, 1, 500);
@@ -60,7 +60,7 @@ public class PilotsTree extends SLPattern<CubesModel> {
 
     private ADSREnvelope globalADSR;
 
-    public PilotsTree(LX lx) {
+    public PilotsRoots(LX lx) {
         super(lx);
 
         topology = new CubeTopology(model);
@@ -82,6 +82,8 @@ public class PilotsTree extends SLPattern<CubesModel> {
         globalADSR = makeADSR();
         addModulator(globalADSR);
 
+        /* Each addParameter will call onParameterChanged, and we don't want
+         * to build that many times, because each build can take ~100ms. */
         started = true;
         build();
     }
