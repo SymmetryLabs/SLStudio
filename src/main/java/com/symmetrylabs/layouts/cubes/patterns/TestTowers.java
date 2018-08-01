@@ -24,7 +24,7 @@ public class TestTowers extends SLPattern<CubesModel> {
     public TestTowers(LX lx) {
         super(lx);
         this.selectedTower = new DiscreteParameter("selectedTower", 0, 0, model.getTowers().size()-1);
-        selectedTower.setOptions(new String[] {"LEFT_FACE", "RIGHT_FACE", "A", "B", "C", "D", "E", "Z", "Y", "X", "W", "V", "U", "R", "Q"});
+        selectedTower.setOptions(new String[] {"LEFT_FACE", "RIGHT_FACE", "A", "B", "C", "D", "E", "Z", "Y", "X", "W", "V", "U", "Q"});
         addParameter(selectedTower);
         addModulator(pulse).start();
     }
