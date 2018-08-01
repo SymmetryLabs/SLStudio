@@ -98,7 +98,15 @@ public class PilotsRoots extends SLPattern<CubesModel> {
             build();
     }
 
-    private HashMap<Root, List<CubeTopology.Bundle>> buildSliceRoots() {
+    /* Represents a half-built root; root builders return lists of these,
+     * and the build method generates the PathElements and adds the ADSR
+     * to the root. */
+    private static class RootSpec {
+        Root root;
+        List<CubeTopology.Bundle> bundles;
+    }
+
+    private List<RootSpec> buildSliceRoots() {
         HashMap<Float, List<CubeTopology.Bundle>> slices = new HashMap<>();
         for (CubeTopology.Bundle b : topology.edges) {
             if (b.dir == CubeTopology.EdgeDirection.X)
@@ -119,7 +127,7 @@ public class PilotsRoots extends SLPattern<CubesModel> {
             }
         }
         Random r = new Random();
-        HashMap<Root, List<CubeTopology.Bundle>> res = new HashMap<>();
+        List<RootSpec> res = new ArrayList<>(slices.size());
         for (float x : slices.keySet()) {
             List<CubeTopology.Bundle> slice = slices.get(x);
             CubeTopology.Bundle a = slice.get(r.nextInt(slice.size()));
@@ -136,12 +144,15 @@ public class PilotsRoots extends SLPattern<CubesModel> {
             Root root = new Root();
             root.top = a;
             root.bottom = b;
-            res.put(root, path);
+            RootSpec spec = new RootSpec();
+            spec.root = root;
+            spec.bundles = path;
+            res.add(spec);
         }
         return res;
     }
 
-    private HashMap<Root, List<CubeTopology.Bundle>> buildTreeRoots() {
+    private List<RootSpec> buildTreeRoots() {
         /* Generate lists of allowable root top bundles and root bottom bundles */
         List<CubeTopology.Bundle> rootTops = new ArrayList<>();
         for (CubeTopology.Bundle e : topology.edges) {
@@ -181,7 +192,7 @@ public class PilotsRoots extends SLPattern<CubesModel> {
         Arrays.fill(bottomsUsed, false);
 
         HashSet<CubeTopology.Bundle> used = new HashSet<>();
-        HashMap<Root, List<CubeTopology.Bundle>> res = new HashMap<>();
+        List<RootSpec> res = new ArrayList<>(N);
 
         for (int i = 0; i < rootTops.size() && res.size() < N; i++) {
             Root r = new Root();
@@ -215,7 +226,11 @@ public class PilotsRoots extends SLPattern<CubesModel> {
                 if (containsUsed)
                     continue;
                 used.addAll(path);
-                res.put(r, path);
+
+                RootSpec spec = new RootSpec();
+                spec.root = r;
+                spec.bundles = path;
+                res.add(spec);
                 added = true;
             }
         }
@@ -233,15 +248,16 @@ public class PilotsRoots extends SLPattern<CubesModel> {
         }
 
         roots = new ArrayList<>();
-        HashMap<Root, List<CubeTopology.Bundle>> newRoots;
+        List<RootSpec> newRoots;
         if (rootModeParam.getValuei() == 0) {
             newRoots = buildSliceRoots();
         } else {
             newRoots = buildTreeRoots();
         }
 
-        for (Root r : newRoots.keySet()) {
-            List<CubeTopology.Bundle> path = newRoots.get(r);
+        for (RootSpec spec : newRoots) {
+            Root r = spec.root;
+            List<CubeTopology.Bundle> path = spec.bundles;
 
             /* Figure out which direction we traverse each strip as we go through the path */
             r.path = new ArrayList<>();
