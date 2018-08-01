@@ -10,8 +10,10 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.MidiNote;
 import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.modulator.ADSREnvelope;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.FixedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXVector;
 
@@ -24,7 +26,12 @@ public class PilotsTree extends SLPattern<CubesModel> {
     private CompoundParameter topRadiusParam = new CompoundParameter("toprad", 60, 0, 150);
 
     private CompoundParameter attackParam = new CompoundParameter("attack", 60, 0, 500);
-    private CompoundParameter decayParam = new CompoundParameter("decay", 300, 0, 2000);
+    private CompoundParameter decayParam = new CompoundParameter("decay", 40, 0, 1000);
+    private CompoundParameter sustainParam = new CompoundParameter("sustain", 1, 0, 1);
+    private CompoundParameter releaseParam = new CompoundParameter("release", 300, 0, 2000);
+
+    private CompoundParameter minBrightParam = new CompoundParameter("bright", 70, 0, 100);
+    private CompoundParameter maxBrightParam = new CompoundParameter("hit", 100, 0, 100);
 
     private class PathElement {
         Strip[] strips;
@@ -49,6 +56,8 @@ public class PilotsTree extends SLPattern<CubesModel> {
     int maxGapAge = 0;
     double gapDelay = 0;
 
+    private ADSREnvelope globalADSR;
+
     public PilotsTree(LX lx) {
         super(lx);
 
@@ -58,10 +67,21 @@ public class PilotsTree extends SLPattern<CubesModel> {
 
         addParameter(attackParam);
         addParameter(decayParam);
+        addParameter(sustainParam);
+        addParameter(releaseParam);
+
+        addParameter(minBrightParam);
+        addParameter(maxBrightParam);
 
         addParameter(countParam);
         addParameter(topRadiusParam);
         addParameter(gapSpeedParam);
+
+        globalADSR = new ADSREnvelope(
+            "Global ADSR", minBrightParam, maxBrightParam,
+            attackParam, decayParam, sustainParam, releaseParam,
+            new FixedParameter(1));
+        addModulator(globalADSR);
 
         started = true;
         build();
@@ -244,7 +264,7 @@ public class PilotsTree extends SLPattern<CubesModel> {
                             }
                         }
                         if (!inGap)
-                            colors[points[localIndex].index] = LXColor.gray(100f);
+                            colors[points[localIndex].index] = LXColor.gray(globalADSR.getValuef());
                     }
                 }
                 /* We assume that all strips in a given element have the same length
@@ -269,6 +289,10 @@ public class PilotsTree extends SLPattern<CubesModel> {
                 gaps.peekFirst().end = -1;
                 break;
 
+            case 64:
+                globalADSR.attack();
+                break;
+
             default:
                 System.out.println(String.format("unknown midi pitch %d", note.getPitch()));
         }
@@ -283,6 +307,10 @@ public class PilotsTree extends SLPattern<CubesModel> {
             case 62:
                 if (!gaps.isEmpty() && gaps.peekFirst().end < 0)
                     gaps.peekFirst().end = 0;
+                break;
+
+            case 64:
+                globalADSR.release();
                 break;
 
             default:
