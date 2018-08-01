@@ -22,7 +22,7 @@ import java.util.*;
 public class PilotsTree extends SLPattern<CubesModel> {
     private DiscreteParameter countParam = new DiscreteParameter("count", 6, 0, 12);
     /* LEDs per second */
-    private DiscreteParameter gapSpeedParam = new DiscreteParameter("gapspeed", 90, 1, 500);
+    private DiscreteParameter gapSpeedParam = new DiscreteParameter("speed", 90, 1, 500);
     private CompoundParameter topRadiusParam = new CompoundParameter("toprad", 60, 0, 150);
 
     private CompoundParameter attackParam = new CompoundParameter("attack", 60, 0, 500);
@@ -41,6 +41,7 @@ public class PilotsTree extends SLPattern<CubesModel> {
         CubeTopology.Bundle top;
         CubeTopology.Bundle bottom;
         List<PathElement> path;
+        ADSREnvelope adsr;
     }
 
     private class Gap {
@@ -55,6 +56,7 @@ public class PilotsTree extends SLPattern<CubesModel> {
     LinkedList<Gap> gaps;
     int maxGapAge = 0;
     double gapDelay = 0;
+    int nextRootToAttack = 0;
 
     private ADSREnvelope globalADSR;
 
@@ -77,10 +79,7 @@ public class PilotsTree extends SLPattern<CubesModel> {
         addParameter(topRadiusParam);
         addParameter(gapSpeedParam);
 
-        globalADSR = new ADSREnvelope(
-            "Global ADSR", minBrightParam, maxBrightParam,
-            attackParam, decayParam, sustainParam, releaseParam,
-            new FixedParameter(1));
+        globalADSR = makeADSR();
         addModulator(globalADSR);
 
         started = true;
@@ -96,6 +95,12 @@ public class PilotsTree extends SLPattern<CubesModel> {
     private void build() {
         if (!started)
             return;
+
+        if (roots != null) {
+            for (Root r : roots) {
+                removeModulator(r.adsr);
+            }
+        }
 
         /* Generate lists of allowable root top bundles and root bottom bundles */
         List<CubeTopology.Bundle> rootTops = new ArrayList<>();
@@ -203,6 +208,9 @@ public class PilotsTree extends SLPattern<CubesModel> {
                     r.path.add(e);
                 }
 
+                r.adsr = makeADSR();
+                addModulator(r.adsr);
+
                 added = true;
                 roots.add(r);
             }
@@ -239,7 +247,13 @@ public class PilotsTree extends SLPattern<CubesModel> {
         int black = LXColor.gray(0);
         for (int i = 0; i < colors.length; i++)
             colors[i] = black;
+
+        float globalBright = globalADSR.getValuef();
+
         for (Root r : roots) {
+            /* Each root is the maximum of the global brightness and its
+             * own brightness. */
+            float rootBright = Float.max(globalBright, r.adsr.getValuef());
 
             /* We keep track of how many LEDs we've seen along the course of
              * the whole path before a given element, so that we can figure
@@ -263,8 +277,9 @@ public class PilotsTree extends SLPattern<CubesModel> {
                                 break;
                             }
                         }
-                        if (!inGap)
-                            colors[points[localIndex].index] = LXColor.gray(globalADSR.getValuef());
+                        if (!inGap) {
+                            colors[points[localIndex].index] = LXColor.gray(rootBright);
+                        }
                     }
                 }
                 /* We assume that all strips in a given element have the same length
@@ -293,6 +308,10 @@ public class PilotsTree extends SLPattern<CubesModel> {
                 globalADSR.attack();
                 break;
 
+            case 65:
+                roots.get(nextRootToAttack).adsr.attack();
+                break;
+
             default:
                 System.out.println(String.format("unknown midi pitch %d", note.getPitch()));
         }
@@ -313,9 +332,22 @@ public class PilotsTree extends SLPattern<CubesModel> {
                 globalADSR.release();
                 break;
 
+            case 65:
+                roots.get(nextRootToAttack).adsr.release();
+                nextRootToAttack++;
+                if (nextRootToAttack >= roots.size())
+                    nextRootToAttack = 0;
+                break;
+
             default:
                 System.out.println(String.format("unknown midi pitch %d", note.getPitch()));
         }
     }
 
+    private ADSREnvelope makeADSR() {
+        return new ADSREnvelope(
+            "PilotsTree ADSR", minBrightParam, maxBrightParam,
+            attackParam, decayParam, sustainParam, releaseParam,
+            new FixedParameter(1));
+    }
 }
