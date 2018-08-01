@@ -148,7 +148,7 @@ public class SummerStageLayout extends CubesLayout {
                 new String[]{"981", "982"}, new String[]{"1003", "989"}, new String[]{"685", "1071"}, new String[]{"1031", "640"}
             }),
             // col 12 (-1)
-            new TowerConfig(SP * 11, SP * 10, SP * 0, new String[][]{
+            new TowerConfig(SP * 11, SP * 10, SP * -1, new String[][]{
                 new String[]{"719", "718"}
             })
         }),
@@ -185,6 +185,10 @@ public class SummerStageLayout extends CubesLayout {
             new TowerConfig(SP * 3, SP * 8, SP * 0, new String[][]{
                 new String[]{"681", "680"}, new String[]{"595", "804"},
                 new String[]{"675", "674"}, new String[]{"655", "463"}, new String[]{"892", "899"}
+            }),
+            // col 4 (-1)
+            new TowerConfig(SP * 3, SP * 4, SP * -1, new String[][]{
+                new String[]{"889", "1087"}
             }),
             // col 5
             new TowerConfig(SP * 4, SP * 9, SP * 0, new String[][]{
