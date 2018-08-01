@@ -80,7 +80,7 @@ public class EdgeAStar {
         do {
             res.addFirst(current);
             current = cameFrom.get(current);
-        } while (current != start);
+        } while (current != start && current != null); // current can be null if current == start == end on the first go-through
         res.addFirst(start);
 
         return res;
