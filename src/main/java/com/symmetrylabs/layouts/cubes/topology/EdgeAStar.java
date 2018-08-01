@@ -81,6 +81,8 @@ public class EdgeAStar {
             res.addFirst(current);
             current = cameFrom.get(current);
         } while (current != start);
+        res.addFirst(start);
+
         return res;
     }
 
