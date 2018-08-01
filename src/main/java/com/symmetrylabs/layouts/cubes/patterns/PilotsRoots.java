@@ -33,6 +33,8 @@ public class PilotsRoots extends SLPattern<CubesModel> {
     private CompoundParameter minBrightParam = new CompoundParameter("bright", 70, 0, 100);
     private CompoundParameter maxBrightParam = new CompoundParameter("hit", 100, 0, 100);
 
+    private DiscreteParameter rootModeParam = new DiscreteParameter("shape", 0, 0, 2);
+
     private class PathElement {
         Strip[] strips;
         boolean[] forwards;
@@ -79,6 +81,8 @@ public class PilotsRoots extends SLPattern<CubesModel> {
         addParameter(topRadiusParam);
         addParameter(gapSpeedParam);
 
+        addParameter(rootModeParam);
+
         globalADSR = makeADSR();
         addModulator(globalADSR);
 
@@ -90,8 +94,51 @@ public class PilotsRoots extends SLPattern<CubesModel> {
 
     @Override
     public void onParameterChanged(LXParameter p) {
-        if (p == countParam || p == topRadiusParam)
+        if (p == countParam || p == topRadiusParam || p == rootModeParam)
             build();
+    }
+
+    private HashMap<Root, List<CubeTopology.Bundle>> buildSliceRoots() {
+        HashMap<Float, List<CubeTopology.Bundle>> slices = new HashMap<>();
+        for (CubeTopology.Bundle b : topology.edges) {
+            if (b.dir == CubeTopology.EdgeDirection.X)
+                continue;
+
+            float x = b.endpoints().start.x;
+            boolean found = false;
+            for (Float existing : slices.keySet()) {
+                if (Math.abs(existing - x) < 4) {
+                    slices.get(existing).add(b);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                slices.put(x, new ArrayList<>());
+                slices.get(x).add(b);
+            }
+        }
+        Random r = new Random();
+        HashMap<Root, List<CubeTopology.Bundle>> res = new HashMap<>();
+        for (float x : slices.keySet()) {
+            List<CubeTopology.Bundle> slice = slices.get(x);
+            CubeTopology.Bundle a = slice.get(r.nextInt(slice.size()));
+            CubeTopology.Bundle b = slice.get(r.nextInt(slice.size()));
+
+            List<CubeTopology.Bundle> path;
+            try {
+                path = aStar.findPath(a, b);
+            } catch (EdgeAStar.NotConnectedException ex) {
+                ex.printStackTrace();
+                continue;
+            }
+
+            Root root = new Root();
+            root.top = a;
+            root.bottom = b;
+            res.put(root, path);
+        }
+        return res;
     }
 
     private HashMap<Root, List<CubeTopology.Bundle>> buildTreeRoots() {
@@ -186,7 +233,13 @@ public class PilotsRoots extends SLPattern<CubesModel> {
         }
 
         roots = new ArrayList<>();
-        HashMap<Root, List<CubeTopology.Bundle>> newRoots = buildTreeRoots();
+        HashMap<Root, List<CubeTopology.Bundle>> newRoots;
+        if (rootModeParam.getValuei() == 0) {
+            newRoots = buildSliceRoots();
+        } else {
+            newRoots = buildTreeRoots();
+        }
+
         for (Root r : newRoots.keySet()) {
             List<CubeTopology.Bundle> path = newRoots.get(r);
 
