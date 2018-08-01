@@ -2,11 +2,11 @@ package com.symmetrylabs.color;
 
 /**
  * Operations on 8-bit-per-channel color values packed into 32-bit integers.
- * Unlike LXColor, all routines in Ops8 follow these consistent rules:
+ * Unlike LXColor, all routines in Ops8 use numeric types consistently:
  *   - Integer components are always ints in the range from 0 to 255 (never bytes, never negative).
- *   - Double components are always doubles in the range from 0.0 to 1.0
+ *   - Floating-point components are always doubles in the range from 0.0 to 1.0
  *         (no single-precision floats, and never 0 to 100 or 0 to 360).
- *   - Floating-point numbers are rounded always to the nearest integer (never truncated).
+ *   - Rounding is always performed to the nearest integer (never by truncation).
  */
 public class Ops8 {
     private Ops8() {
