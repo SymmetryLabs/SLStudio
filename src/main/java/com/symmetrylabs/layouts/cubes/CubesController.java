@@ -3,7 +3,6 @@ package com.symmetrylabs.layouts.cubes;
 import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.component.GammaExpander;
-import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
@@ -149,17 +148,18 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         if ((SLStudio.applet.outputControl.testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
             points = ((CubesModel.DoubleControllerCube)cubesModel.getCubes().get(0)).getPointsA();
         } else {
-            for (CubesModel.Cube c : cubesModel.getCubes()) {
-                CubesModel.DoubleControllerCube c2 = (CubesModel.DoubleControllerCube) c;
-                if (c2.idA != null && c2.idB != null) {
-                    if (c2.idA.equals(id)) {
-                        points = c2.getPointsA();
-                    }
-                    if (c2.idB.equals(id)) {
-                        points = c2.getPointsB();
-                    }
-                }
-            }
+            points = cubesModel.getDoubleCubePoints(id);
+//            for (CubesModel.Cube c : cubesModel.getCubes()) {
+//                CubesModel.DoubleControllerCube c2 = (CubesModel.DoubleControllerCube) c;
+//                if (c2.idA != null && c2.idB != null) {
+//                    if (c2.idA.equals(id)) {
+//                        points = c2.getPointsA();
+//                    }
+//                    if (c2.idB.equals(id)) {
+//                        points = c2.getPointsB();
+//                    }
+//                }
+//            }
         }
 
 //        CubesModel cubesModel = (CubesModel)lx.model;
