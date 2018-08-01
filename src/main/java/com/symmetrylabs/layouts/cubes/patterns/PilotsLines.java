@@ -3,6 +3,7 @@ package com.symmetrylabs.layouts.cubes.patterns;
 import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.layouts.cubes.CubesModel;
 import com.symmetrylabs.layouts.cubes.topology.CubeTopology;
+import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
@@ -16,7 +17,12 @@ import heronarts.lx.transform.LXVector;
 import java.util.*;
 
 public class PilotsLines extends SLPattern<CubesModel> {
+    private static final float MIRROR_ENDPOINT_TOLERANCE = 6; // inches
+
     private BooleanParameter vertParam = new BooleanParameter("vert");
+    private BooleanParameter xMirrorParam = new BooleanParameter("xmirror");
+    private BooleanParameter yMirrorParam = new BooleanParameter("ymirror");
+    private BooleanParameter zMirrorParam = new BooleanParameter("zmirror");
 
     private CompoundParameter attackParam = new CompoundParameter("attack", 60, 0, 600);
     private CompoundParameter colorDelayParam = new CompoundParameter("cdelay", 0, 0, 500);
@@ -31,10 +37,21 @@ public class PilotsLines extends SLPattern<CubesModel> {
     private DiscreteParameter vCountParam = new DiscreteParameter("vcount", 30, 1, 100);
     private DiscreteParameter vLengthParam = new DiscreteParameter("vlen", 4, 0, 20);
 
+    /* We can't use a mirror warp on this pattern because we're need a topological
+     * mirror, not a geometric mirror. This caches the mirror image of the left side
+     * onto the right side, so that we don't have to calculate the mirror of each
+     * strip independently */
+    private HashMap<CubeTopology.Bundle, CubeTopology.Bundle> xMirrorMap = new HashMap<>();
+    private HashMap<CubeTopology.Bundle, CubeTopology.Bundle> yMirrorMap = new HashMap<>();
+    private HashMap<CubeTopology.Bundle, CubeTopology.Bundle> zMirrorMap = new HashMap<>();
+
     public PilotsLines(LX lx) {
         super(lx);
 
         addParameter(vertParam);
+        addParameter(xMirrorParam);
+        addParameter(yMirrorParam);
+        addParameter(zMirrorParam);
 
         addParameter(hCountParam);
         addParameter(vCountParam);
@@ -51,6 +68,43 @@ public class PilotsLines extends SLPattern<CubesModel> {
         addParameter(colorSpeedParam);
         addParameter(colorTailParam);
         addParameter(colorWidthParam);
+
+        for (CubeTopology.Bundle b : model.getTopology().edges) {
+            LXVector v = new LXVector(b.endpoints().start);
+            LXVector end = new LXVector(b.endpoints().end);
+            LXVector delta = v.copy().mult(-1).add(end); // delta = end - v
+
+            LXVector xmirror = v.copy();
+            xmirror.x += 2 * (model.cx - v.x) - delta.x;
+
+            LXVector ymirror = v.copy();
+            ymirror.y += 2 * (model.cy - v.y) - delta.y;
+
+            LXVector zmirror = v.copy();
+            ymirror.z += 2 * (model.cz - v.z) - delta.z;
+
+            boolean foundX = false, foundY = false, foundZ = false;
+            for (CubeTopology.Bundle maybeMirror : model.getTopology().edges) {
+                if (maybeMirror.dir != b.dir)
+                    continue;
+                LXVector mm = new LXVector(maybeMirror.endpoints().start);
+                if (xmirror.dist(mm) < MIRROR_ENDPOINT_TOLERANCE) {
+                    xMirrorMap.put(b, maybeMirror);
+                    foundX = true;
+                }
+                if (ymirror.dist(mm) < MIRROR_ENDPOINT_TOLERANCE) {
+                    yMirrorMap.put(b, maybeMirror);
+                    foundY = true;
+                }
+                if (zmirror.dist(mm) < MIRROR_ENDPOINT_TOLERANCE) {
+                    zMirrorMap.put(b, maybeMirror);
+                    foundZ = true;
+                }
+                if (foundX && foundY && foundZ)
+                    break;
+            }
+        }
+        System.out.println(String.format("%d elements in symmetry map", xMirrorMap.size()));
     }
 
     private abstract class LineEffect {
@@ -99,15 +153,29 @@ public class PilotsLines extends SLPattern<CubesModel> {
             this.edges = edges;
         }
 
+        private void turnOnBundle(CubeTopology.Bundle b, int c) {
+            if (b == null)
+                return;
+            for (int stripIndex : b.strips) {
+                Strip s = model.getStripByIndex(stripIndex);
+                for (LXVector p : getVectors(s.points)) {
+                    colors[p.index] = Ops8.add(colors[p.index], c);
+                }
+            }
+        }
+
         @Override
         protected boolean applyColors(float alpha) {
             int c = LXColor.hsba(0, 0, 100, alpha);
             for (CubeTopology.Bundle e : edges) {
-                // pick a strip that's likely to be in the front of the bundle
-                int stripIndex = e.strips.length >= 2 ? 1 : 0;
-                for (LXVector p : getVectors(model.getStripByIndex(e.strips[stripIndex]).points)) {
-                    colors[p.index] = Ops8.add(colors[p.index], c);
-                }
+                turnOnBundle(e, c);
+
+                if (xMirrorParam.getValueb())
+                    turnOnBundle(xMirrorMap.getOrDefault(e,null), c);
+                if (yMirrorParam.getValueb())
+                    turnOnBundle(yMirrorMap.getOrDefault(e,null), c);
+                if (zMirrorParam.getValueb())
+                    turnOnBundle(zMirrorMap.getOrDefault(e,null), c);
             }
             return true;
         }
