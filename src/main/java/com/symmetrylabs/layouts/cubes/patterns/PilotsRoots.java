@@ -52,7 +52,6 @@ public class PilotsRoots extends SLPattern<CubesModel> {
         int end = -1;
     }
 
-    private CubeTopology topology;
     private EdgeAStar aStar;
     private List<Root> roots;
     private boolean started = false;
@@ -66,8 +65,7 @@ public class PilotsRoots extends SLPattern<CubesModel> {
     public PilotsRoots(LX lx) {
         super(lx);
 
-        topology = new CubeTopology(model);
-        aStar = new EdgeAStar(topology);
+        aStar = new EdgeAStar(model.getTopology());
         gaps = new LinkedList<>();
 
         addParameter(attackParam);
@@ -121,7 +119,7 @@ public class PilotsRoots extends SLPattern<CubesModel> {
 
     private List<RootSpec> buildSliceRoots() {
         HashMap<Float, List<CubeTopology.Bundle>> slices = new HashMap<>();
-        for (CubeTopology.Bundle b : topology.edges) {
+        for (CubeTopology.Bundle b : model.getTopology().edges) {
             if (b.dir == CubeTopology.EdgeDirection.X)
                 continue;
 
@@ -195,7 +193,7 @@ public class PilotsRoots extends SLPattern<CubesModel> {
     private List<RootSpec> buildTreeRoots() {
         /* Generate lists of allowable root top bundles and root bottom bundles */
         List<CubeTopology.Bundle> rootTops = new ArrayList<>();
-        for (CubeTopology.Bundle e : topology.edges) {
+        for (CubeTopology.Bundle e : model.getTopology().edges) {
             if (e.dir != CubeTopology.EdgeDirection.Y)
                 continue;
             /* only get elements with nothing above them */
@@ -207,7 +205,7 @@ public class PilotsRoots extends SLPattern<CubesModel> {
         }
 
         List<CubeTopology.Bundle> rootBottoms = new ArrayList<>();
-        for (CubeTopology.Bundle e : topology.edges) {
+        for (CubeTopology.Bundle e : model.getTopology().edges) {
             if (e.dir == CubeTopology.EdgeDirection.Y)
                 continue;
 
@@ -287,6 +285,7 @@ public class PilotsRoots extends SLPattern<CubesModel> {
                 removeModulator(r.adsr);
             }
         }
+        nextRootToAttack = 0;
 
         roots = new ArrayList<>();
         List<RootSpec> newRoots;

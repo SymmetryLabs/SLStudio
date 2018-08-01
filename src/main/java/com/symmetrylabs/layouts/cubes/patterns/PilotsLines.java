@@ -28,12 +28,8 @@ public class PilotsLines extends SLPattern<CubesModel> {
     private DiscreteParameter vCountParam = new DiscreteParameter("vcount", 30, 1, 100);
     private DiscreteParameter vLengthParam = new DiscreteParameter("vlen", 4, 0, 20);
 
-    private CubeTopology topology;
-
     public PilotsLines(LX lx) {
         super(lx);
-
-        topology = new CubeTopology(model);
 
         addParameter(hCountParam);
         addParameter(vCountParam);
@@ -299,10 +295,11 @@ public class PilotsLines extends SLPattern<CubesModel> {
     }
 
     private List<CubeTopology.Bundle> randomLineSeg(CubeTopology.EdgeDirection d, int expectedLength) {
+        int N = model.getTopology().edges.size();
         Random r = new Random();
         CubeTopology.Bundle e;
         do {
-            e = topology.edges.get(r.nextInt(topology.edges.size()));
+            e = model.getTopology().edges.get(r.nextInt(N));
         } while (e.dir != d);
 
         /* determine our target line length by drawing from a poisson distribution */

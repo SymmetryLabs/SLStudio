@@ -15,11 +15,9 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
     private float elapsed = 0;
     private int i = 0;
     private Random r = new Random();
-    private CubeTopology topology;
 
     public TopoTestPattern(LX lx) {
         super(lx);
-        topology = new CubeTopology(model);
         addParameter(modeParam);
     }
 
@@ -38,7 +36,7 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
     public void run(double deltaMs) {
         switch (modeParam.getValuei()) {
             case 0:
-                for (CubeTopology.Bundle e : topology.edges) {
+                for (CubeTopology.Bundle e : model.getTopology().edges) {
                     float h;
                     switch (e.dir) {
                         case X: h = 60; break;
@@ -52,12 +50,13 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
 
             case 1:
                 elapsed += deltaMs;
-                if (elapsed < 1000) {
+                if (elapsed < 500) {
                     break;
                 }
                 elapsed = 0;
                 setColors(0);
-                CubeTopology.Bundle e = topology.edges.get(r.nextInt(topology.edges.size()));
+                CubeTopology topo = model.getTopology();
+                CubeTopology.Bundle e = topo.edges.get(r.nextInt(topo.edges.size()));
                 setEdgeColor(e, LXColor.rgb(255,255,255));
                 for (CubeTopology.Bundle n = e.na; n != null; n = n.na) {
                     setEdgeColor(n, LXColor.rgb(0,255,0));
@@ -69,15 +68,15 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
 
             case 2: {
                 elapsed += deltaMs;
-                if (elapsed < 1000) {
+                if (elapsed < 500) {
                     break;
                 }
                 elapsed = 0;
                 setColors(0);
                 i++;
-                if (i > topology.edges.size())
+                if (i > model.getTopology().edges.size())
                     i = 0;
-                CubeTopology.Bundle edge = topology.edges.get(i);
+                CubeTopology.Bundle edge = model.getTopology().edges.get(i);
                 setEdgeColor(edge, LXColor.rgb(255, 255, 255));
                 System.out.println(String.format("%d / %d %d %d %d",
                     i,
@@ -96,10 +95,10 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
                 elapsed = 0;
                 setColors(0);
                 i++;
-                if (i > topology.edges.size())
+                if (i > model.getTopology().edges.size())
                     i = 0;
                 System.out.println(i);
-                CubeTopology.Bundle edge = topology.edges.get(i);
+                CubeTopology.Bundle edge = model.getTopology().edges.get(i);
                 setEdgeColor(edge, LXColor.rgb(255, 255, 255));
                 if (edge.na != null) setEdgeColor(edge.na, LXColor.hsb(0, 100, 100));
                 if (edge.nbn != null) setEdgeColor(edge.nbn, LXColor.hsb(30, 100, 100));
