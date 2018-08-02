@@ -19,19 +19,19 @@ import java.util.*;
  * Each junction in this diagram labelled with a letter would be a bundle; A would have
  * one strip, B would have two and E would have 4.
  *
- *         A           B           C
- *             +-------+   +-------+
- *           |       |   |       |
- *           |       |   |       |
- *           |       |   |       |
- *             +-------+   +-------+
- *         D           E           F
- *             +-------+   +-------+
- *           |       |   |       |
- *           |       |   |       |
- *           |       |   |       |
- *             +-------+   +-------+
- *       G           H           I
+ *                          A           B           C
+ *                            +-------+   +-------+
+ *                            |       |   |       |
+ *                            |       |   |       |
+ *                            |       |   |       |
+ *                            +-------+   +-------+
+ *                          D           E           F
+ *                            +-------+   +-------+
+ *                            |       |   |       |
+ *                            |       |   |       |
+ *                            |       |   |       |
+ *                            +-------+   +-------+
+ *                          G           H           I
  *
  * Each bundle also has pointers to adjacent bundles, where adjacency is defined as
  * sharing an endpoint. Each bundle can have up to 10 neighbors, 5 at each end, but
