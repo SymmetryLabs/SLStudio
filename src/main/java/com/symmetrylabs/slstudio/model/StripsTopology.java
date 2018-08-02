@@ -35,16 +35,18 @@ public class StripsTopology {
 
         public EdgeDirection dir = EdgeDirection.Other;
         public int[] strips;
-        public Bundle pa  = null;
-        public Bundle pbp = null;
-        public Bundle pbn = null;
-        public Bundle pcp = null;
-        public Bundle pcn = null;
-        public Bundle na  = null;
-        public Bundle nbp = null;
-        public Bundle nbn = null;
-        public Bundle ncp = null;
-        public Bundle ncn = null;
+        public Bundle pxp = null;
+        public Bundle pxn = null;
+        public Bundle pyp = null;
+        public Bundle pyn = null;
+        public Bundle pzp = null;
+        public Bundle pzn = null;
+        public Bundle nxp = null;
+        public Bundle nxn = null;
+        public Bundle nyp = null;
+        public Bundle nyn = null;
+        public Bundle nzp = null;
+        public Bundle nzn = null;
 
         private boolean finished = false;
         private BundleEndpoints endpoints = null;
@@ -351,24 +353,58 @@ public class StripsTopology {
                     continue;
 
                 if (o.dir == e.dir) {
-                    e.na = o;
+                    switch (e.dir) {
+                        case X: e.nxn = o; break;
+                        case Y: e.nyn = o; break;
+                        case Z: e.nzn = o; break;
+                    }
                 } else if (node.isStart) {
                     /* This is a start-to-start connection, meaning this is on the
                      * negative side of both e and o, so o is in a positive direction
                      * wrt its axis compared to e. */
-                    if ((e.dir == EdgeDirection.X && o.dir == EdgeDirection.Y) ||
-                        (e.dir != EdgeDirection.X && o.dir == EdgeDirection.X))
-                        e.nbp = o;
-                    else
-                        e.ncp = o;
+                    switch (e.dir) {
+                        case X:
+                            if (o.dir == EdgeDirection.Y)
+                                e.nyp = o;
+                            else
+                                e.nzp = o;
+                            break;
+                        case Y:
+                            if (o.dir == EdgeDirection.X)
+                                e.nxp = o;
+                            else
+                                e.nzp = o;
+                            break;
+                        case Z:
+                            if (o.dir == EdgeDirection.X)
+                                e.nxp = o;
+                            else
+                                e.nyp = o;
+                            break;
+                    }
                 } else {
                     /* The start of e but the end of o means that o is below e
                      * along the axis of o. */
-                    if ((e.dir == EdgeDirection.X && o.dir == EdgeDirection.Y) ||
-                        (e.dir != EdgeDirection.X && o.dir == EdgeDirection.X))
-                        e.nbn = o;
-                    else
-                        e.ncn = o;
+                    switch (e.dir) {
+                        case X:
+                            if (o.dir == EdgeDirection.Y)
+                                e.nyn = o;
+                            else
+                                e.nzn = o;
+                            break;
+                        case Y:
+                            if (o.dir == EdgeDirection.X)
+                                e.nxn = o;
+                            else
+                                e.nzn = o;
+                            break;
+                        case Z:
+                            if (o.dir == EdgeDirection.X)
+                                e.nxn = o;
+                            else
+                                e.nyn = o;
+                            break;
+                    }
                 }
             }
 
@@ -385,25 +421,58 @@ public class StripsTopology {
                     continue;
 
                 if (o.dir == e.dir) {
-                    e.pa = o;
+                    switch (e.dir) {
+                        case X: e.pxp = o; break;
+                        case Y: e.pyp = o; break;
+                        case Z: e.pzp = o; break;
+                    }
                 } else if (node.isStart) {
-                    /* This is the end of e but the start of o, which means this
-                     * is at the positive end of e and o is in the positive direction
-                     * from e along the axis of o. */
-                    if ((e.dir == EdgeDirection.X && o.dir == EdgeDirection.Y) ||
-                        (e.dir != EdgeDirection.X && o.dir == EdgeDirection.X))
-                        e.pbp = o;
-                    else
-                        e.pcp = o;
+                    /* This is a start-to-start connection, meaning this is on the
+                     * negative side of both e and o, so o is in a positive direction
+                     * wrt its axis compared to e. */
+                    switch (e.dir) {
+                        case X:
+                            if (o.dir == EdgeDirection.Y)
+                                e.pyp = o;
+                            else
+                                e.pzp = o;
+                            break;
+                        case Y:
+                            if (o.dir == EdgeDirection.X)
+                                e.pxp = o;
+                            else
+                                e.pzp = o;
+                            break;
+                        case Z:
+                            if (o.dir == EdgeDirection.X)
+                                e.pxp = o;
+                            else
+                                e.pyp = o;
+                            break;
+                    }
                 } else {
-                    /* This is an end-to-end connection, meaning this is at the
-                     * positive end of e and o is in the negative direction from e
-                     * wrt the axis of o. */
-                    if ((e.dir == EdgeDirection.X && o.dir == EdgeDirection.Y) ||
-                        (e.dir != EdgeDirection.X && o.dir == EdgeDirection.X))
-                        e.pbn = o;
-                    else
-                        e.pcn = o;
+                    /* The start of e but the end of o means that o is below e
+                     * along the axis of o. */
+                    switch (e.dir) {
+                        case X:
+                            if (o.dir == EdgeDirection.Y)
+                                e.pyn = o;
+                            else
+                                e.pzn = o;
+                            break;
+                        case Y:
+                            if (o.dir == EdgeDirection.X)
+                                e.pxn = o;
+                            else
+                                e.pzn = o;
+                            break;
+                        case Z:
+                            if (o.dir == EdgeDirection.X)
+                                e.pxn = o;
+                            else
+                                e.pyn = o;
+                            break;
+                    }
                 }
             }
         }

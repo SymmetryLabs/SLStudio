@@ -154,7 +154,7 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
                  * (in negative-Z) of it. For Y-aligned bundles, "below" is na
                  * and "in front" is ncn. For Z-aligned bundles, "below" is ncn
                  * and "in front" is na. Either way, the check is the same. */
-                if (b.na == null && b.ncn == null) {
+                if (b.nyn == null && b.pyn == null && b.nzn == null && b.pzn == null) {
                     start = b;
                     break;
                 }
@@ -167,12 +167,12 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
             StripsTopology.Bundle t = start;
             while (t != null) {
                 path.add(t);
-                if (t.pa == null) {
-                    t = t.pcp;
-                } else if (t.pcp == null) {
-                    t = t.pa;
+                if (t.pzp == null) {
+                    t = t.pyp;
+                } else if (t.pyp == null) {
+                    t = t.pzp;
                 } else {
-                    t = r.nextBoolean() ? t.pa : t.pcp;
+                    t = r.nextBoolean() ? t.pyp : t.pzp;
                 }
             }
 
@@ -198,7 +198,7 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
             if (e.dir != StripsTopology.EdgeDirection.Y)
                 continue;
             /* only get elements with nothing above them */
-            if (e.pa != null)
+            if (e.pyp != null)
                 continue;
             float x = e.endpoints().end.x;
             if (Math.abs(model.cx - x) < topRadiusParam.getValuef())
@@ -213,16 +213,9 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
             /* only get elements with nothing below them that are on the
              * edge of the structure (meaning at least one of the directions
              * in-bottom-plane has no bundle in it). */
-            if (e.dir == StripsTopology.EdgeDirection.X) {
-                if (e.pbn != null || e.nbn != null ||
-                    (e.na != null && e.pa != null && e.ncn != null && e.ncp != null && e.pcn != null && e.pcp != null))
-                    continue;
-            }
-            else {
-                if (e.pcn != null || e.ncn != null ||
-                    (e.na != null && e.pa != null && e.nbn != null && e.nbp != null && e.pbn != null && e.pbp != null))
-                    continue;
-            }
+            if (e.nyn != null || e.pyn != null ||
+                  (e.nzn != null && e.nzp != null && e.nxn != null && e.nxp != null && e.pzn != null && e.pzp != null && e.pxn != null && e.pxp != null))
+                continue;
 
             rootBottoms.add(e);
         }

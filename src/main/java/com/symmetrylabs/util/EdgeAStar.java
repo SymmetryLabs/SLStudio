@@ -61,16 +61,18 @@ public class EdgeAStar {
             open.remove(current);
             closed.add(current);
 
-            visitNeighbor(current.na);
-            visitNeighbor(current.pa);
-            visitNeighbor(current.nbn);
-            visitNeighbor(current.nbp);
-            visitNeighbor(current.pbn);
-            visitNeighbor(current.pbp);
-            visitNeighbor(current.ncn);
-            visitNeighbor(current.ncp);
-            visitNeighbor(current.pcn);
-            visitNeighbor(current.pcp);
+            visitNeighbor(current.nxn);
+            visitNeighbor(current.nxp);
+            visitNeighbor(current.nyn);
+            visitNeighbor(current.nyp);
+            visitNeighbor(current.nzn);
+            visitNeighbor(current.nzp);
+            visitNeighbor(current.pxn);
+            visitNeighbor(current.pxp);
+            visitNeighbor(current.pyn);
+            visitNeighbor(current.pyp);
+            visitNeighbor(current.pzn);
+            visitNeighbor(current.pzp);
         }
 
         if (current != end)

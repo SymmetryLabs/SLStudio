@@ -394,18 +394,30 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
         line.add(e);
         while (line.size() < len) {
             boolean added = false;
-            StripsTopology.Bundle t;
+            StripsTopology.Bundle t, n;
 
             t = line.getLast();
-            if (t.na != null) {
-                line.addLast(t.na);
+            n = null;
+            switch (t.dir) {
+                case X: n = t.nxn; break;
+                case Y: n = t.nyn; break;
+                case Z: n = t.nzn; break;
+            }
+            if (n != null) {
+                line.addLast(n);
                 added = true;
             }
 
             if (line.size() < len) {
                 t = line.getFirst();
-                if (t.pa != null) {
-                    line.addFirst(t.pa);
+                n = null;
+                switch (t.dir) {
+                    case X: n = t.pxp; break;
+                    case Y: n = t.pyp; break;
+                    case Z: n = t.pzp; break;
+                }
+                if (n != null) {
+                    line.addFirst(n);
                     added = true;
                 }
             }
