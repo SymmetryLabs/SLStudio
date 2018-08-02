@@ -31,7 +31,9 @@ import com.symmetrylabs.util.Utils;
 
 import static com.symmetrylabs.util.DistanceConstants.*;
 
-public class SLStudio extends PApplet {
+public class
+
+SLStudio extends PApplet {
     public static SLStudio applet;
     public static final Font MONO_FONT = new Font("Inconsolata-Bold-14.vlw", 14, 17);
     public static final String LAYOUT_FILE_NAME = ".layout";
@@ -109,8 +111,8 @@ public class SLStudio extends PApplet {
                 layout.setupLx(lx);
 
                 lx.engine.output.brightness.addListener(parameter -> {
-                    if (parameter.getValuef() > 0.75f) {
-                        parameter.setValue(0.75f);
+                    if (parameter.getValuef() > 0.90f) {
+                        parameter.setValue(0.90f);
                     }
                 });
 
@@ -167,7 +169,7 @@ public class SLStudio extends PApplet {
         lx.engine.isChannelMultithreaded.setValue(true);
         lx.engine.isNetworkMultithreaded.setValue(true);
         lx.engine.audio.enabled.setValue(false);
-        lx.engine.output.enabled.setValue(true);
+        lx.engine.output.enabled.setValue(false);
         lx.engine.framesPerSecond.setValue(60);
 
     //performanceManager.start(lx.ui);
