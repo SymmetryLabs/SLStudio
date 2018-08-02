@@ -224,7 +224,7 @@ public class StripsTopology {
             return e;
         }
 
-        private PlanarLocation planarLocation() {
+        public PlanarLocation planarLocation() {
             PlanarLocation pl[] = new PlanarLocation[MAX_STRIPS];
             for (int i = 0; i < strips.length; i++) {
                 if (strips[i] == NO_STRIP)
@@ -298,10 +298,12 @@ public class StripsTopology {
 
     /** Represents the location of a bundle within the plane perpendicular to the bundle.
      * This is used to bucket strips into bundles. */
-    private static class PlanarLocation {
-        EdgeDirection dir;
-        float a;
-        float b;
+    public static class PlanarLocation {
+        public EdgeDirection dir;
+        /** The first coordinate in the plane. For the X plane, this is the Y coordinate. For Y and Z, this is the X coordinate. */
+        public float a;
+        /** The second coordinate in the plane. For the X and Y plane, this is the Z coordinate. For Z, this is the Y coordinate. */
+        public float b;
 
         PlanarLocation(EdgeDirection dir, float a, float b) {
             this.dir = dir;
