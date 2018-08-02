@@ -33,7 +33,7 @@ import static com.symmetrylabs.util.DistanceConstants.*;
 
 public class SLStudio extends PApplet {
     public static SLStudio applet;
-    public static final Font MONO_FONT = new Font("Inconsolata-Bold-14.vlw", 14);
+    public static final Font MONO_FONT = new Font("Inconsolata-Bold-14.vlw", 14, 17);
     public static final String LAYOUT_FILE_NAME = ".layout";
     public static final String RESTART_FILE_NAME = ".restart";
 
@@ -204,10 +204,10 @@ public class SLStudio extends PApplet {
         public final int lineHeight;
         private static PFont font = null;
 
-        public Font(String filename, int size) {
+        public Font(String filename, int size, int lineHeight) {
             this.filename = filename;
             this.size = size;
-            this.lineHeight = (int) (size * 1.4);
+            this.lineHeight = lineHeight;
         }
 
         public PFont getFont() {

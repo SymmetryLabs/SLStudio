@@ -1,7 +1,8 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.color.Ops8;
-import com.symmetrylabs.slstudio.ping.SLPatternWithMarkers;
+import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.CubeMarker;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.OctahedronWithArrow;
@@ -22,7 +23,7 @@ import java.util.Random;
 
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
-public class Starlings extends SLPatternWithMarkers {
+public class Starlings extends SLPattern<SLModel> {
     public enum ColorMode {RANDOM, PALETTE, GREYSCALE};
 
     private List<Bird> falcons = new ArrayList<>();

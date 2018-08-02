@@ -17,7 +17,7 @@
 
 // import com.symmetrylabs.slstudio.model.SLModel;
 
-// public class LightSource extends SLPatternWithMarkers {
+// public class LightSource extends SLPattern<SLModel> {
 //     CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);
 //     CompoundParameter y = new CompoundParameter("y", model.yMax, 0, 240);
 //     CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);

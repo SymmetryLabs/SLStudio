@@ -38,6 +38,7 @@ import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import com.symmetrylabs.LXClassLoader;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
+import com.symmetrylabs.util.CaptionSource;
 import com.symmetrylabs.util.MarkerSource;
 
 import javax.swing.*;
@@ -63,6 +64,7 @@ public class SLStudioLX extends P3LX {
         public final UIFramerate framerate;
         public final UITextOverlay helpHelp;
         public final UITextOverlay helpText;
+        public final UICaptionText captionText;
         public final UIAxes axes;
         public final UIMarkerPainter markerPainter;
         public final UICubeMapDebug cubeMapDebug;
@@ -125,6 +127,8 @@ public class SLStudioLX extends P3LX {
             helpText.setText(HELP_TEXT.replaceAll("@", mask == KeyEvent.CTRL ? "Ctrl" : "Cmd"));
             helpText.setVisible(false);
 
+            this.captionText = new UICaptionText(this, preview, 6, -6, PConstants.LEFT, PConstants.BOTTOM);
+
             this.axes = new UIAxes();
             this.markerPainter = new UIMarkerPainter();
             this.cubeMapDebug = new UICubeMapDebug(lx);
@@ -146,6 +150,7 @@ public class SLStudioLX extends P3LX {
             addLayer(this.framerate);
             addLayer(this.helpHelp);
             addLayer(this.helpText);
+            addLayer(this.captionText);
 
             _toggleClipView();
             _togglePerformanceMode();
@@ -583,6 +588,14 @@ public class SLStudioLX extends P3LX {
 
         public void removeMarkerSource(MarkerSource source) {
             markerPainter.removeSource(source);
+        }
+
+        public void addCaptionSource(CaptionSource source) {
+            captionText.addSource(source);
+        }
+
+        public void removeCaptionSource(CaptionSource source) {
+            captionText.removeSource(source);
         }
     }
 

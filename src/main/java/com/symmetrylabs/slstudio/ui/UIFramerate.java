@@ -25,11 +25,7 @@ public class UIFramerate extends UITextOverlay {
     public UIFramerate(UI ui, final P3LX lx, UI3dContext parent, int anchorX, int anchorY, int alignX, int alignY) {
         super(ui, parent, anchorX, anchorY, alignX, alignY);
         this.lx = lx;
-    }
-
-    protected void onDraw(UI ui, PGraphics pg) {
-        super.onDraw(ui, pg);
-        redraw();
+        redrawEveryFrame = true;
     }
 
     public String getText() {

@@ -20,6 +20,7 @@ public class UITextOverlay extends UI2dContext {
     protected int alignY = PConstants.TOP;
     protected String text = "";
     protected int color = 0xa0ffffff;
+    protected boolean redrawEveryFrame = false;
 
     public UITextOverlay(UI ui, UIObject bg, int anchorX, int anchorY, int alignX, int alignY) {
         super(ui, bg.getX(), bg.getY(), bg.getWidth(), bg.getHeight());
@@ -54,6 +55,9 @@ public class UITextOverlay extends UI2dContext {
         float x = anchorX < 0 ? bg.getWidth() + anchorX : anchorX;
         float y = anchorY < 0 ? bg.getHeight() + anchorY : anchorY;
         pg.text(getText(), x, y);
+        if (redrawEveryFrame) {
+            redraw();
+        }
     }
 
     public void onMousePressed(MouseEvent event, float mx, float my) {

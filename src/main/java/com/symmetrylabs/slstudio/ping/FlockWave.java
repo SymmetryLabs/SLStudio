@@ -21,9 +21,11 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
 import com.symmetrylabs.slstudio.kernel.SLKernel;
+import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.palettes.ColorPalette;
 import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.BlobFollower;
 import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.CubeMarker;
@@ -32,7 +34,7 @@ import com.symmetrylabs.util.Octahedron;
 
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
-public class FlockWave extends SLPatternWithMarkers {
+public class FlockWave extends SLPattern<SLModel> {
 
     private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
 
@@ -185,6 +187,10 @@ public class FlockWave extends SLPatternWithMarkers {
             }
         }
         return markers;
+    }
+
+    public String getCaption() {
+        return "Birds: " + birds.size();
     }
 
     void updateBlobTrackerParameters() {
