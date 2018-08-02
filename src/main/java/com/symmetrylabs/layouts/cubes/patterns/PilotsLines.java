@@ -212,8 +212,8 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
             Arrays.fill(max, Float.MIN_VALUE);
             for (int i = 0; i < lines.size(); i++) {
                 for (StripsTopology.Bundle e : lines.get(i)) {
-                    min[i] = Float.min(e.minOrder(), min[i]);
-                    max[i] = Float.max(e.maxOrder(), max[i]);
+                    min[i] = Float.min(e.minProjection(), min[i]);
+                    max[i] = Float.max(e.maxProjection(), max[i]);
                 }
             }
         }

@@ -113,7 +113,6 @@ public class StripsTopology {
         /* Caches for expensive-to-compute properties of the bundle, only populated
          * after the bundle is finished. */
         private BundleEndpoints endpoints = null;
-        private SortBucket sb = null;
         private float minOrder = Float.MAX_VALUE;
         private float maxOrder = Float.MIN_VALUE;
         private float order = Float.MIN_VALUE;
@@ -173,19 +172,18 @@ public class StripsTopology {
             for (int i = 0; i < count; i++)
                 strips[i] = newStrips[i];
             endpoints = endpoints();
-            sb = sortBucket();
-            minOrder = minOrder();
-            maxOrder = maxOrder();
-            order = order();
+            minOrder = minProjection();
+            maxOrder = maxProjection();
+            order = projection();
         }
 
         public BundleEndpoints endpoints() {
             if (finished)
                 return endpoints;
 
-            float min = minOrder();
-            float max = maxOrder();
-            SortBucket sort = sortBucket();
+            float min = minProjection();
+            float max = maxProjection();
+            PlanarLocation sort = planarLocation();
 
             float xs, xe;
             float ys, ye;
@@ -226,25 +224,23 @@ public class StripsTopology {
             return e;
         }
 
-        private SortBucket sortBucket() {
-            if (finished)
-                return sb;
-            SortBucket sb[] = new SortBucket[MAX_STRIPS];
+        private PlanarLocation planarLocation() {
+            PlanarLocation pl[] = new PlanarLocation[MAX_STRIPS];
             for (int i = 0; i < strips.length; i++) {
                 if (strips[i] == NO_STRIP)
                     continue;
                 Strip s = model.getStripByIndex(strips[i]);
                 switch (dir) {
-                    case X: sb[i] = new SortBucket(dir, s.cy, s.cz); break;
-                    case Y: sb[i] = new SortBucket(dir, s.cx, s.cz); break;
-                    case Z: sb[i] = new SortBucket(dir, s.cx, s.cy); break;
+                    case X: pl[i] = new PlanarLocation(dir, s.cy, s.cz); break;
+                    case Y: pl[i] = new PlanarLocation(dir, s.cx, s.cz); break;
+                    case Z: pl[i] = new PlanarLocation(dir, s.cx, s.cy); break;
                 }
             }
-            return SortBucket.combine(sb);
+            return PlanarLocation.combine(pl);
         }
 
-        /** An edge's "order" is the projection of it's centroid onto the axis it's aligned with */
-        public float order() {
+        /** An edge's "projection" is the projection of it's centroid onto the axis it's aligned with */
+        public float projection() {
             if (finished)
                 return order;
             float order = 0;
@@ -263,8 +259,8 @@ public class StripsTopology {
             return order / count;
         }
 
-        /** Min-order is the minimum value of the projection of this edge onto its axis */
-        public float minOrder() {
+        /** Min-projection is the minimum value of the projection of this edge onto its axis */
+        public float minProjection() {
             if (finished)
                 return minOrder;
             float min = Float.MAX_VALUE;
@@ -281,8 +277,8 @@ public class StripsTopology {
             return min;
         }
 
-        /** Max-order is the maximum value of the projection of this edge onto its axis */
-        public float maxOrder() {
+        /** Max-projection is the maximum value of the projection of this edge onto its axis */
+        public float maxProjection() {
             if (finished)
                 return maxOrder;
             float max = Float.MIN_VALUE;
@@ -300,29 +296,31 @@ public class StripsTopology {
         }
     }
 
-    private static class SortBucket {
+    /** Represents the location of a bundle within the plane perpendicular to the bundle.
+     * This is used to bucket strips into bundles. */
+    private static class PlanarLocation {
         EdgeDirection dir;
         float a;
         float b;
 
-        SortBucket(EdgeDirection dir, float a, float b) {
+        PlanarLocation(EdgeDirection dir, float a, float b) {
             this.dir = dir;
             this.a = a;
             this.b = b;
         }
 
-        boolean equivalent(SortBucket sb) {
-            return dir == sb.dir && Math.abs(a - sb.a) < BUCKET_TOLERANCE && Math.abs(b - sb.b) < BUCKET_TOLERANCE;
+        boolean equivalent(PlanarLocation pl) {
+            return dir == pl.dir && Math.abs(a - pl.a) < BUCKET_TOLERANCE && Math.abs(b - pl.b) < BUCKET_TOLERANCE;
         }
 
-        static SortBucket combine(SortBucket buckets[]) {
-            SortBucket res = null;
+        static PlanarLocation combine(PlanarLocation buckets[]) {
+            PlanarLocation res = null;
             int count = 0;
-            for (SortBucket bucket : buckets) {
+            for (PlanarLocation bucket : buckets) {
                 if (bucket == null)
                     continue;
                 if (res == null)
-                    res = new SortBucket(bucket.dir, bucket.a, bucket.b);
+                    res = new PlanarLocation(bucket.dir, bucket.a, bucket.b);
                 else {
                     res.a += bucket.a;
                     res.b += bucket.b;
@@ -370,12 +368,12 @@ public class StripsTopology {
 
             /* TODO: this doesn't need to be quadratic. */
             boolean matchesExisting = false;
-            SortBucket sb = e.sortBucket();
-            float order = e.order();
+            PlanarLocation pl = e.planarLocation();
+            float order = e.projection();
             for (Bundle testEdge : bundles) {
-                float testOrder = testEdge.order();
+                float testOrder = testEdge.projection();
                 float orderDist = Math.abs(order - testOrder);
-                if (sb.equivalent(testEdge.sortBucket()) && orderDist < ORDER_TOLERANCE) {
+                if (pl.equivalent(testEdge.planarLocation()) && orderDist < ORDER_TOLERANCE) {
                     testEdge.addStrip(i);
                     matchesExisting = true;
                     break;
