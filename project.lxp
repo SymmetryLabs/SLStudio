@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1533151926362,
+  "timestamp": 1533252066302,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -255,10 +255,51 @@
               "yRot": 0.5,
               "zRot": 0.5,
               "Spin": 0.5,
+              "X-SYM": false,
+              "Y-SYM": false,
+              "R-SYM": false,
+              "X-DUP": false,
+              "JOG": false,
+              "GREY": false,
               "Speed": 0.55,
               "Symm": 0,
               "Anim": 7,
               "Dens": 0.6
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 6307,
+            "class": "com.symmetrylabs.slstudio.pattern.Play",
+            "modulationColor": -65441,
+            "parameters": {
+              "label": "Play",
+              "Spark": 0.0,
+              "Wave": 0.0,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
+              "Spin": 0.5,
+              "X-SYM": false,
+              "Y-SYM": false,
+              "R-SYM": false,
+              "X-DUP": false,
+              "JOG": false,
+              "GREY": false,
+              "Rad": 0.10000000149011612,
+              "Bnc": 0.20000000298023224,
+              "Amp": 0.20000000298023224,
+              "tempo": 1.0,
+              "TMult": 0,
+              "TPat": 1,
+              "Shape": 0
             },
             "modulation": {
               "modulators": [],
@@ -370,23 +411,10 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.819999997764826
+        "brightness": 0.75
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 5717,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16734721,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "outputControl": {
         "id": 31,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
