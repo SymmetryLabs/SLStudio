@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import heronarts.lx.model.LXPoint;
