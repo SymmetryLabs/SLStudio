@@ -223,6 +223,12 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     }
 
     @Override
+    public float getX() { return x; }
+
+    @Override
+    public float getY() { return y; }
+
+    @Override
     public float getWidth() {
         return (this.pg == null) ? this.ui.applet.width : this.pg.width;
     }
