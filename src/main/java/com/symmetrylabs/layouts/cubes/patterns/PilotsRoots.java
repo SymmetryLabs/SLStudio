@@ -1,6 +1,5 @@
 package com.symmetrylabs.layouts.cubes.patterns;
 
-import com.symmetrylabs.layouts.cubes.CubesModel;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.util.EdgeAStar;
@@ -120,11 +119,11 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
 
     private List<RootSpec> buildSliceRoots() {
         HashMap<Float, List<StripsTopology.Bundle>> slices = new HashMap<>();
-        for (StripsTopology.Bundle b : model.getTopology().edges) {
+        for (StripsTopology.Bundle b : model.getTopology().bundles) {
             if (b.dir == StripsTopology.EdgeDirection.X)
                 continue;
 
-            float x = b.endpoints().start.x;
+            float x = b.endpoints().negative.x;
             boolean found = false;
             for (Float existing : slices.keySet()) {
                 if (Math.abs(existing - x) < 4) {
@@ -186,27 +185,27 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
             res.add(spec);
         }
         res.sort((a, b) -> Float.compare(
-            a.bundles.get(0).endpoints().start.x,
-            b.bundles.get(0).endpoints().start.x));
+            a.bundles.get(0).endpoints().negative.x,
+            b.bundles.get(0).endpoints().negative.x));
         return res;
     }
 
     private List<RootSpec> buildTreeRoots() {
         /* Generate lists of allowable root top bundles and root bottom bundles */
         List<StripsTopology.Bundle> rootTops = new ArrayList<>();
-        for (StripsTopology.Bundle e : model.getTopology().edges) {
+        for (StripsTopology.Bundle e : model.getTopology().bundles) {
             if (e.dir != StripsTopology.EdgeDirection.Y)
                 continue;
             /* only get elements with nothing above them */
             if (e.pyp != null)
                 continue;
-            float x = e.endpoints().end.x;
+            float x = e.endpoints().positive.x;
             if (Math.abs(model.cx - x) < topRadiusParam.getValuef())
                 rootTops.add(e);
         }
 
         List<StripsTopology.Bundle> rootBottoms = new ArrayList<>();
-        for (StripsTopology.Bundle e : model.getTopology().edges) {
+        for (StripsTopology.Bundle e : model.getTopology().bundles) {
             if (e.dir == StripsTopology.EdgeDirection.Y)
                 continue;
 

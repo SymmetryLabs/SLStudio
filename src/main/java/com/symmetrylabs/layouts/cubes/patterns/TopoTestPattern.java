@@ -37,7 +37,7 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
     public void run(double deltaMs) {
         switch (modeParam.getValuei()) {
             case 0: {
-                for (StripsTopology.Bundle e : model.getTopology().edges) {
+                for (StripsTopology.Bundle e : model.getTopology().bundles) {
                     float h;
                     switch (e.dir) {
                         case X: h = 60; break;
@@ -58,10 +58,10 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
                 elapsed = 0;
                 setColors(0);
                 i++;
-                if (i > model.getTopology().edges.size())
+                if (i > model.getTopology().bundles.size())
                     i = 0;
                 System.out.println(i);
-                StripsTopology.Bundle edge = model.getTopology().edges.get(i);
+                StripsTopology.Bundle edge = model.getTopology().bundles.get(i);
                 setEdgeColor(edge, LXColor.rgb(255, 255, 255));
                 if (edge.nxn != null) setEdgeColor(edge.nxn, LXColor.hsb(0, 100, 100));
                 if (edge.nxp != null) setEdgeColor(edge.nxp, LXColor.hsb(30, 100, 100));

@@ -23,12 +23,12 @@ public class EdgeAStar {
     }
 
     private float dist(StripsTopology.Bundle a, StripsTopology.Bundle b) {
-        float ax = (a.endpoints().start.x + a.endpoints().end.x) / 2f;
-        float ay = (a.endpoints().start.y + a.endpoints().end.y) / 2f;
-        float az = (a.endpoints().start.z + a.endpoints().end.z) / 2f;
-        float bx = (b.endpoints().start.x + b.endpoints().end.x) / 2f;
-        float by = (b.endpoints().start.y + b.endpoints().end.y) / 2f;
-        float bz = (b.endpoints().start.z + b.endpoints().end.z) / 2f;
+        float ax = (a.endpoints().negative.x + a.endpoints().positive.x) / 2f;
+        float ay = (a.endpoints().negative.y + a.endpoints().positive.y) / 2f;
+        float az = (a.endpoints().negative.z + a.endpoints().positive.z) / 2f;
+        float bx = (b.endpoints().negative.x + b.endpoints().positive.x) / 2f;
+        float by = (b.endpoints().negative.y + b.endpoints().positive.y) / 2f;
+        float bz = (b.endpoints().negative.z + b.endpoints().positive.z) / 2f;
         return (float) Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2) + Math.pow(az - bz, 2));
     }
 

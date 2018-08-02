@@ -1,14 +1,59 @@
 package com.symmetrylabs.slstudio.model;
 
 import com.google.common.base.Preconditions;
-import com.symmetrylabs.layouts.cubes.CubesModel;
-import com.symmetrylabs.slstudio.model.Strip;
 import heronarts.lx.model.LXPoint;
 
 import java.util.*;
 
+/** Topology structure for representing axis-aligned grids of equal-length strips
+ *
+ * StripsTopology is capable of representing the topology of any structure that is
+ * comprised entirely of approximately-equal-length strips where all strips are aligned
+ * to a cartesian axis.
+ *
+ * Topology is represented as a graph of "bundles", where each bundle can have up to
+ * four strips in it. A bundle is a set of parallel strips that are close to one another.
+ * In a dense grid made out of cubes, most bundles will have four strips in them.
+ * Here's a drawing; imagine that each square is a cube in plan view, and all four
+ * cubes are resting on the ground and are a couple inches from one another.
+ * Each junction in this diagram labelled with a letter would be a bundle; A would have
+ * one strip, B would have two and E would have 4.
+ *
+ *         A           B           C
+ *             +-------+   +-------+
+ *           |       |   |       |
+ *           |       |   |       |
+ *           |       |   |       |
+ *             +-------+   +-------+
+ *         D           E           F
+ *             +-------+   +-------+
+ *           |       |   |       |
+ *           |       |   |       |
+ *           |       |   |       |
+ *             +-------+   +-------+
+ *       G           H           I
+ *
+ * Each bundle also has pointers to adjacent bundles, where adjacency is defined as
+ * sharing an endpoint. Each bundle can have up to 10 neighbors, 5 at each end, but
+ * there are 12 fields for storing neighbors on the bundle object. This is because
+ * adjacent bundles are stored with respect to their location on the bundle.
+ *
+ * Each bundle is axis aligned, which induces on the bundle a positive and negative
+ * end (i.e., if a bundle is along X, it's positive end is towards X+ and its negative
+ * end is towards X-). At each end, there are bundles that could go in any of the Cartesian
+ * directions (X+, X-, Y+, Y-, Z+, Z-). Since you can't stick + and - in a field name,
+ * we instead use P for positive and N for negative. So the edge that goes in the X+
+ * direction on the negative end of a bundle is stored in the field NXP (negative end,
+ * x positive).
+ *
+ * If a bundle is oriented along axis A, nAp and pAn will always be null. This is
+ * a design decision; you could think of a bundle A along the X axis referencing
+ * itself in its negative-end-positive-X field, since it is what is in the positive-X
+ * direction of that endpoint, but I instead leave them as null because the risk of
+ * infinite loops seems like it outweighs the conceptual purity of making A.nxp = A.
+ */
 public class StripsTopology {
-    public static final int NO_EDGE = Integer.MAX_VALUE;
+    private static final int NO_STRIP = Integer.MAX_VALUE;
 
     /* All in inches */
     private static final float ORDER_TOLERANCE = 1;
@@ -20,56 +65,118 @@ public class StripsTopology {
     }
 
     public class BundleEndpoints {
-        public LXPoint start;
-        public LXPoint end;
-    }
-
-    private class BundleNode {
-        float x, y, z;
-        Bundle bundle;
-        boolean isStart;
+        public LXPoint negative;
+        public LXPoint positive;
     }
 
     public class Bundle {
-        public static final int MAX_STRIPS = 4;
+        /* Note that this is just a hit for initialization; the strips array
+         * is resized down once the bundle is finished being built. */
+        private static final int MAX_STRIPS = 4;
 
+        /** The direction this bundle points in */
         public EdgeDirection dir = EdgeDirection.Other;
+
+        /** The model indexes of the strips in this bundle.
+         *  These index into model.strips and can be used with model.getStripByIndex() */
         public int[] strips;
+
+        /** The bundle at the positive end of this bundle, in the positive X direction */
         public Bundle pxp = null;
+        /** The bundle at the positive end of this bundle, in the negative X direction */
         public Bundle pxn = null;
+        /** The bundle at the positive end of this bundle, in the positive Y direction */
         public Bundle pyp = null;
+        /** The bundle at the positive end of this bundle, in the negative Y direction */
         public Bundle pyn = null;
+        /** The bundle at the positive end of this bundle, in the positive Z direction */
         public Bundle pzp = null;
+        /** The bundle at the positive end of this bundle, in the negative Z direction */
         public Bundle pzn = null;
+        /** The bundle at the negative end of this bundle, in the positive X direction */
         public Bundle nxp = null;
+        /** The bundle at the negative end of this bundle, in the negative X direction */
         public Bundle nxn = null;
+        /** The bundle at the negative end of this bundle, in the positive Y direction */
         public Bundle nyp = null;
+        /** The bundle at the negative end of this bundle, in the negative Y direction */
         public Bundle nyn = null;
+        /** The bundle at the negative end of this bundle, in the positive Z direction */
         public Bundle nzp = null;
+        /** The bundle at the negative end of this bundle, in the negative Z direction */
         public Bundle nzn = null;
 
+        /* Set to true once we're finished adding strips to the bundle; the cached
+         * values below can only be used once this is set to true. */
         private boolean finished = false;
+
+        /* Caches for expensive-to-compute properties of the bundle, only populated
+         * after the bundle is finished. */
         private BundleEndpoints endpoints = null;
         private SortBucket sb = null;
         private float minOrder = Float.MAX_VALUE;
         private float maxOrder = Float.MIN_VALUE;
         private float order = Float.MIN_VALUE;
 
-        protected Bundle() {
+        private Bundle() {
             strips = new int[MAX_STRIPS];
-            Arrays.fill(strips, NO_EDGE);
+            Arrays.fill(strips, NO_STRIP);
         }
 
-        public void addStrip(int strip) {
+        private void addStrip(int strip) {
             Preconditions.checkState(!finished, "cannot add to finished bundle");
             for (int i = 0; i < strips.length; i++) {
-                if (strips[i] == NO_EDGE) {
+                if (strips[i] == NO_STRIP) {
                     strips[i] = strip;
                     return;
                 }
             }
             throw new IllegalStateException(String.format(
                 "tried to add more than %d strips to a Bundle", strips.length));
+        }
+
+        private void finishedAddingStrips() {
+            if (finished)
+                return;
+
+            int count = 0;
+            for (int i = 0; i < strips.length; i++) {
+                if (strips[i] != NO_STRIP)
+                    count++;
+            }
+            Integer[] newStrips = new Integer[count];
+            int j = 0;
+            for (int strip : strips) {
+                if (strip != NO_STRIP) {
+                    newStrips[j] = strip;
+                    j++;
+                }
+            }
+            /* Sort the included strips so that two bundles that are tip-to-tip
+             * adjacent will have element 0 line up with element 0, element 1
+             * with element 1, etc. */
+            Arrays.sort(newStrips, (a, b) -> {
+                Strip sa = model.getStripByIndex(a);
+                Strip sb = model.getStripByIndex(b);
+                if (Math.abs(sa.cx - sb.cx) > 1e-2) {
+                    return Float.compare(sa.cx, sb.cx);
+                }
+                if (Math.abs(sa.cy - sb.cy) > 1e-2) {
+                    return Float.compare(sa.cy, sb.cy);
+                }
+                if (Math.abs(sa.cz - sb.cz) > 1e-2) {
+                    return Float.compare(sa.cz, sb.cz);
+                }
+                return 0;
+            });
+            strips = new int[count];
+            for (int i = 0; i < count; i++)
+                strips[i] = newStrips[i];
+            endpoints = endpoints();
+            sb = sortBucket();
+            minOrder = minOrder();
+            maxOrder = maxOrder();
+            order = order();
         }
 
         public BundleEndpoints endpoints() {
@@ -114,60 +221,17 @@ public class StripsTopology {
                         "cannot find endpoints of non-aligned bundle");
             }
             BundleEndpoints e = new BundleEndpoints();
-            e.start = new LXPoint(xs, ys, zs);
-            e.end = new LXPoint(xe, ye, ze);
+            e.negative = new LXPoint(xs, ys, zs);
+            e.positive = new LXPoint(xe, ye, ze);
             return e;
         }
 
-        public void finishedAddingStrips() {
-            if (finished)
-                return;
-
-            int count = 0;
-            for (int i = 0; i < strips.length; i++) {
-                if (strips[i] != NO_EDGE)
-                    count++;
-            }
-            Integer[] newStrips = new Integer[count];
-            int j = 0;
-            for (int strip : strips) {
-                if (strip != NO_EDGE) {
-                    newStrips[j] = strip;
-                    j++;
-                }
-            }
-            /* Sort them so that two bundles that are tip-to-tip adjacent will
-             * have element 0 line up with element 0, element 1 with element 1, etc. */
-            Arrays.sort(newStrips, (a, b) -> {
-                Strip sa = model.getStripByIndex(a);
-                Strip sb = model.getStripByIndex(b);
-                if (Math.abs(sa.cx - sb.cx) > 1e-2) {
-                    return Float.compare(sa.cx, sb.cx);
-                }
-                if (Math.abs(sa.cy - sb.cy) > 1e-2) {
-                    return Float.compare(sa.cy, sb.cy);
-                }
-                if (Math.abs(sa.cz - sb.cz) > 1e-2) {
-                    return Float.compare(sa.cz, sb.cz);
-                }
-                return 0;
-            });
-            strips = new int[count];
-            for (int i = 0; i < count; i++)
-                strips[i] = newStrips[i];
-            endpoints = endpoints();
-            sb = sortBucket();
-            minOrder = minOrder();
-            maxOrder = maxOrder();
-            order = order();
-        }
-
-        public SortBucket sortBucket() {
+        private SortBucket sortBucket() {
             if (finished)
                 return sb;
             SortBucket sb[] = new SortBucket[MAX_STRIPS];
             for (int i = 0; i < strips.length; i++) {
-                if (strips[i] == NO_EDGE)
+                if (strips[i] == NO_STRIP)
                     continue;
                 Strip s = model.getStripByIndex(strips[i]);
                 switch (dir) {
@@ -186,7 +250,7 @@ public class StripsTopology {
             float order = 0;
             int count = 0;
             for (int strip : strips) {
-                if (strip == NO_EDGE)
+                if (strip == NO_STRIP)
                     continue;
                 Strip s = model.getStripByIndex(strip);
                 switch (dir) {
@@ -205,7 +269,7 @@ public class StripsTopology {
                 return minOrder;
             float min = Float.MAX_VALUE;
             for (int strip : strips) {
-                if (strip == NO_EDGE)
+                if (strip == NO_STRIP)
                     continue;
                 Strip s = model.getStripByIndex(strip);
                 switch (dir) {
@@ -223,7 +287,7 @@ public class StripsTopology {
                 return maxOrder;
             float max = Float.MIN_VALUE;
             for (int strip : strips) {
-                if (strip == NO_EDGE)
+                if (strip == NO_STRIP)
                     continue;
                 Strip s = model.getStripByIndex(strip);
                 switch (dir) {
@@ -236,7 +300,7 @@ public class StripsTopology {
         }
     }
 
-    protected static class SortBucket {
+    private static class SortBucket {
         EdgeDirection dir;
         float a;
         float b;
@@ -265,19 +329,28 @@ public class StripsTopology {
                 }
                 count++;
             }
+            if (res == null)
+                return null;
             res.a /= count;
             res.b /= count;
             return res;
         }
     }
 
-    private final StripsModel model;
-    public final List<Bundle> edges;
+    /* Used for endpoint determination */
+    private class BundleNode {
+        float x, y, z;
+        Bundle bundle;
+        boolean isNegativeEnd;
+    }
 
-    public StripsTopology(StripsModel model) {
+    private final StripsModel model;
+    public final List<Bundle> bundles;
+
+    StripsTopology(StripsModel model) {
         this.model = model;
         int N = model.getStrips().size();
-        edges = new ArrayList<>(N);
+        bundles = new ArrayList<>(N);
 
         /* Create TopoEdges for each bundle */
         for (int i = 0; i < N; i++) {
@@ -292,8 +365,6 @@ public class StripsTopology {
             } else if (s.yRange < 1e-3 && s.zRange < 1e-3) {
                 e.dir = EdgeDirection.X;
             } else {
-                System.out.println(String.format(
-                    "model strip not axis-aligned: x=%f y=%f z=%f", s.xRange, s.yRange, s.zRange));
                 e.dir = EdgeDirection.Other;
             }
 
@@ -301,7 +372,7 @@ public class StripsTopology {
             boolean matchesExisting = false;
             SortBucket sb = e.sortBucket();
             float order = e.order();
-            for (Bundle testEdge : edges) {
+            for (Bundle testEdge : bundles) {
                 float testOrder = testEdge.order();
                 float orderDist = Math.abs(order - testOrder);
                 if (sb.equivalent(testEdge.sortBucket()) && orderDist < ORDER_TOLERANCE) {
@@ -311,44 +382,48 @@ public class StripsTopology {
                 }
             }
             if (!matchesExisting)
-                edges.add(e);
+                bundles.add(e);
         }
-        for (Bundle e : edges)
+        for (Bundle e : bundles)
             e.finishedAddingStrips();
 
-        /* This used to use com.harium...KDTree but it was actually slower than the full quadratic check */
-        ArrayList<BundleNode> nodes = new ArrayList<>(edges.size() * 2);
-        for (Bundle e : edges) {
+        /* Now figure out adjacency. This used to use com.harium...KDTree but it was
+         * actually slower than the full quadratic check. */
+        ArrayList<BundleNode> nodes = new ArrayList<>(bundles.size() * 2);
+        for (Bundle e : bundles) {
             BundleNode start = new BundleNode();
             start.bundle = e;
-            start.isStart = true;
-            start.x = e.endpoints().start.x;
-            start.y = e.endpoints().start.y;
-            start.z = e.endpoints().start.z;
+            start.isNegativeEnd = true;
+            start.x = e.endpoints().negative.x;
+            start.y = e.endpoints().negative.y;
+            start.z = e.endpoints().negative.z;
             nodes.add(start);
 
             BundleNode end = new BundleNode();
             end.bundle = e;
-            end.isStart = false;
-            end.x = e.endpoints().end.x;
-            end.y = e.endpoints().end.y;
-            end.z = e.endpoints().end.z;
+            end.isNegativeEnd = false;
+            end.x = e.endpoints().positive.x;
+            end.y = e.endpoints().positive.y;
+            end.z = e.endpoints().positive.z;
             nodes.add(end);
         }
 
-        for (Bundle e : edges) {
+        for (Bundle e : bundles) {
             BundleEndpoints ee = e.endpoints();
-            List<BundleNode> nearest;
 
-            /* First find points near the start */
+            /* We split up the start point and end point searches, because the start point
+             * adjacencies will go in NXP, NXN, NYP, etc. while the end point adjacency
+             * goes in PXP, PXN, PYP, etc. Splitting them up like this makes the code a
+             * little simpler at almost no added computational cost. We start by looking
+             * for adjacency at the negative end of the bundle. */
             for (BundleNode node : nodes) {
                 Bundle o = node.bundle;
                 if (o == e)
                     continue;
 
-                float xd = Math.abs(ee.start.x - node.x);
-                float yd = Math.abs(ee.start.y - node.y);
-                float zd = Math.abs(ee.start.z - node.z);
+                float xd = Math.abs(ee.negative.x - node.x);
+                float yd = Math.abs(ee.negative.y - node.y);
+                float zd = Math.abs(ee.negative.z - node.z);
                 if (xd > ENDPOINT_TOLERANCE || yd > ENDPOINT_TOLERANCE || zd > ENDPOINT_TOLERANCE)
                     continue;
 
@@ -358,8 +433,8 @@ public class StripsTopology {
                         case Y: e.nyn = o; break;
                         case Z: e.nzn = o; break;
                     }
-                } else if (node.isStart) {
-                    /* This is a start-to-start connection, meaning this is on the
+                } else if (node.isNegativeEnd) {
+                    /* This is a neg-to-neg connection, meaning this is on the
                      * negative side of both e and o, so o is in a positive direction
                      * wrt its axis compared to e. */
                     switch (e.dir) {
@@ -383,7 +458,7 @@ public class StripsTopology {
                             break;
                     }
                 } else {
-                    /* The start of e but the end of o means that o is below e
+                    /* The neg of e but the pos of o means that o is below e
                      * along the axis of o. */
                     switch (e.dir) {
                         case X:
@@ -408,15 +483,15 @@ public class StripsTopology {
                 }
             }
 
-            /* ...then near the end. */
+            /* Look for adjacency at the positive end of this bundle */
             for (BundleNode node : nodes) {
                 Bundle o = node.bundle;
                 if (o == e)
                     continue;
 
-                float xd = Math.abs(ee.end.x - node.x);
-                float yd = Math.abs(ee.end.y - node.y);
-                float zd = Math.abs(ee.end.z - node.z);
+                float xd = Math.abs(ee.positive.x - node.x);
+                float yd = Math.abs(ee.positive.y - node.y);
+                float zd = Math.abs(ee.positive.z - node.z);
                 if (xd > ENDPOINT_TOLERANCE || yd > ENDPOINT_TOLERANCE || zd > ENDPOINT_TOLERANCE)
                     continue;
 
@@ -426,10 +501,9 @@ public class StripsTopology {
                         case Y: e.pyp = o; break;
                         case Z: e.pzp = o; break;
                     }
-                } else if (node.isStart) {
-                    /* This is a start-to-start connection, meaning this is on the
-                     * negative side of both e and o, so o is in a positive direction
-                     * wrt its axis compared to e. */
+                } else if (node.isNegativeEnd) {
+                    /* The pos-end of e but the neg-end of o, so o is in the positive
+                     * direction along o's axis. */
                     switch (e.dir) {
                         case X:
                             if (o.dir == EdgeDirection.Y)
@@ -451,7 +525,7 @@ public class StripsTopology {
                             break;
                     }
                 } else {
-                    /* The start of e but the end of o means that o is below e
+                    /* The pos-end of e and the pos-end of o means that o is below e
                      * along the axis of o. */
                     switch (e.dir) {
                         case X:

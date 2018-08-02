@@ -1,7 +1,6 @@
 package com.symmetrylabs.layouts.cubes.patterns;
 
 import com.symmetrylabs.color.Ops8;
-import com.symmetrylabs.layouts.cubes.CubesModel;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.slstudio.model.Strip;
@@ -70,9 +69,9 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
         addParameter(colorTailParam);
         addParameter(colorWidthParam);
 
-        for (StripsTopology.Bundle b : model.getTopology().edges) {
-            LXVector v = new LXVector(b.endpoints().start);
-            LXVector end = new LXVector(b.endpoints().end);
+        for (StripsTopology.Bundle b : model.getTopology().bundles) {
+            LXVector v = new LXVector(b.endpoints().negative);
+            LXVector end = new LXVector(b.endpoints().positive);
             LXVector delta = v.copy().mult(-1).add(end); // delta = end - v
 
             LXVector xmirror = v.copy();
@@ -85,10 +84,10 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
             ymirror.z += 2 * (model.cz - v.z) - delta.z;
 
             boolean foundX = false, foundY = false, foundZ = false;
-            for (StripsTopology.Bundle maybeMirror : model.getTopology().edges) {
+            for (StripsTopology.Bundle maybeMirror : model.getTopology().bundles) {
                 if (maybeMirror.dir != b.dir)
                     continue;
-                LXVector mm = new LXVector(maybeMirror.endpoints().start);
+                LXVector mm = new LXVector(maybeMirror.endpoints().negative);
                 if (xmirror.dist(mm) < MIRROR_ENDPOINT_TOLERANCE) {
                     xMirrorMap.put(b, maybeMirror);
                     foundX = true;
@@ -372,11 +371,11 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
     }
 
     private List<StripsTopology.Bundle> randomLineSeg(StripsTopology.EdgeDirection d, int expectedLength) {
-        int N = model.getTopology().edges.size();
+        int N = model.getTopology().bundles.size();
         Random r = new Random();
         StripsTopology.Bundle e;
         do {
-            e = model.getTopology().edges.get(r.nextInt(N));
+            e = model.getTopology().bundles.get(r.nextInt(N));
         } while (e.dir != d);
 
         /* determine our target line length by drawing from a poisson distribution */
