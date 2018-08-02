@@ -598,7 +598,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
 
         if (this.pg != null) {
             this.pg.endDraw();
-            dstPg.image(this.pg, this.x, this.y);
+            dstPg.image(this.pg, 0, 0);
         }
     }
 
