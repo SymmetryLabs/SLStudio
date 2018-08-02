@@ -26,7 +26,6 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     public final boolean isBroadcast;
     public final NetworkDevice networkDevice;
 
-    private Socket socket;
     private DatagramSocket dsocket;
     private OutputStream output;
     protected boolean is16BitColorEnabled = false;
@@ -310,7 +309,6 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             System.err.println("Disconnected from OPC server");
         }
         System.err.println("Failed to connect to OPC server " + host);
-        socket = null;
         dsocket = null;
     }
 
