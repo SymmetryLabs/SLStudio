@@ -21,6 +21,7 @@ import java.net.*;
 
 public class CubesController extends LXOutput implements Comparable<CubesController>, OPCConstants {
     public final String id;
+    public final int idInt;
     public final InetAddress host;
     public final boolean isBroadcast;
     public final NetworkDevice networkDevice;
@@ -71,6 +72,12 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         this.host = host;
         this.id = id;
         this.isBroadcast = isBroadcast;
+
+        int idInt = Integer.MAX_VALUE;
+        try {
+            idInt = Integer.parseInt(id);
+        } catch (NumberFormatException e) {}
+        this.idInt = idInt;
 
         mappingMode = CubesMappingMode.getInstance(lx);
         gammaExpander = gammaExpander.getInstance(lx);
@@ -309,17 +316,6 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 
     @Override
     public int compareTo(@NotNull CubesController other) {
-        int idInt, otherIdInt;
-        try {
-            idInt = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            idInt = Integer.MAX_VALUE;
-        }
-        try {
-            otherIdInt = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            otherIdInt = Integer.MAX_VALUE;
-        }
-        return idInt != otherIdInt ? Integer.compare(idInt, otherIdInt) : id.compareTo(other.id);
+        return idInt != other.idInt ? Integer.compare(idInt, other.idInt) : id.compareTo(other.id);
     }
 }
