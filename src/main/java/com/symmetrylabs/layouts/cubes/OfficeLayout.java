@@ -213,7 +213,8 @@ public class OfficeLayout implements Layout {
                 final CubesController controller = getControllerByDevice(device);
                 controllers.remove(controller);
                 dispatcher.dispatchNetwork(() -> {
-                    //lx.removeOutput(controller);
+                    controller.dispose();
+                    lx.removeOutput(controller);
                 });
             }
         });

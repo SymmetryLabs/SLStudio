@@ -2,17 +2,15 @@ package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.color.Ops8;
 
-import java.lang.Math;
 import java.util.Arrays;
-import java.util.List;
-import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
-import heronarts.lx.model.LXPoint;
-import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.LXUtils;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
 
 public class Sparkle extends LXPattern {

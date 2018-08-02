@@ -125,7 +125,8 @@ public class OpcSocket implements Closeable {
                     socket.setSoTimeout(timeoutMillis);
                     do {
                         socket.receive(reply);  // throws SocketTimeoutException upon a timeout
-                        callback.receive(reply.getAddress(), new OpcMessage(reply.getData()));
+                        callback.receive(
+                            reply.getAddress(), new OpcMessage(reply.getData(), reply.getLength()));
                     } while (allowMultipleReplies);
                 } finally {
                     socket.close();

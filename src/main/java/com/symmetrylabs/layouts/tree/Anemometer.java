@@ -1,4 +1,4 @@
-package com.symmetrylabs.layouts.tree.anemometer;
+package com.symmetrylabs.layouts.tree;
 
 import heronarts.lx.LXRunnableComponent;
 import heronarts.lx.modulator.LXModulator;

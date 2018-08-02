@@ -8,11 +8,16 @@ import java.util.HashMap;
 
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXAbstractFixture;
+import heronarts.lx.model.LXPoint;
+
+import static com.symmetrylabs.util.DistanceUtils.squaredEuclideanDistance;
 
 /**
  * A model with strips.
  */
 public class StripsModel<T extends Strip> extends SLModel {
+    private static final float DEFAULT_STRIP_JOINING_DISTANCE = 0;
+
     protected final List<T> strips = new ArrayList<>();
     protected final List<T> stripsUnmodifiable = Collections.unmodifiableList(strips);
     protected final Map<String, Strip> stripTable = new HashMap<>();
@@ -52,5 +57,61 @@ public class StripsModel<T extends Strip> extends SLModel {
                 points.addAll(strip.getPoints());
             }
         }
+    }
+
+    private float stripJoiningDistance = DEFAULT_STRIP_JOINING_DISTANCE;
+    private Map<T, List<T>> connectivityGraph = null;
+
+    public void setJoiningDistance(float dist) {
+        stripJoiningDistance = dist;
+    }
+
+    public float getJoiningDistance() {
+        return stripJoiningDistance;
+    }
+
+    public Map<T, List<T>> getConnectivityGraph() {
+        if (connectivityGraph != null)
+            return connectivityGraph;
+
+        Map<T, List<T>> graph = new HashMap<>();
+
+        List<T> strips = getStrips();
+        float joiningDistance = getJoiningDistance();
+        float squaredJoiningDistance = joiningDistance * joiningDistance;
+
+        // TODO: use smarter/faster clustering
+        for (T a : strips) {
+            graph.put(a, new ArrayList<T>());
+
+            List<LXPoint> aPoints = a.getPoints();
+            if (aPoints.isEmpty())
+                continue;
+
+            LXPoint aStart = aPoints.get(0);
+            LXPoint aEnd = aPoints.get(aPoints.size() - 1);
+
+            for (T b : strips) {
+                List<LXPoint> bPoints = b.getPoints();
+                if (bPoints.isEmpty())
+                    continue;
+
+                LXPoint bStart = bPoints.get(0);
+                LXPoint bEnd = bPoints.get(bPoints.size() - 1);
+
+                float minSquaredDist = Math.min(squaredEuclideanDistance(aStart, bStart),
+                        Math.min(squaredEuclideanDistance(aStart, bEnd),
+                        Math.min(squaredEuclideanDistance(aEnd, bStart),
+                        squaredEuclideanDistance(aEnd, bEnd))));
+
+                if (minSquaredDist < squaredJoiningDistance) {
+                    graph.get(a).add(b);
+                }
+            }
+        }
+
+        connectivityGraph = graph;
+
+        return graph;
     }
 }

@@ -27,9 +27,9 @@ public class NetworkDevice {
 
     public NetworkDevice(InetAddress ipAddress, String productId, String versionId, String deviceId, String[] featureIds) {
         this.ipAddress = ipAddress;
-        this.productId = productId;
-        this.versionId = versionId;
-        this.deviceId = deviceId;
+        this.productId = productId == null ? "" : productId;
+        this.versionId = versionId == null ? "" : versionId;
+        this.deviceId = deviceId == null ? "" : deviceId;
         this.featureIds.addAll(Arrays.asList(featureIds));
     }
 
@@ -50,7 +50,7 @@ public class NetworkDevice {
         String deviceId = String.format(
             "%02x%02x%02x%02x%02x%02x", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
         return new NetworkDevice(
-            ipAddress, null, null, deviceId, new String[0]);
+            ipAddress, "", "", deviceId, new String[0]);
     }
 
     /** Parses a SYMMETRY_LABS_IDENTIFY response like "aura/r1 (rgb16) [d88034ab34f5]". */

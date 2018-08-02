@@ -60,7 +60,7 @@ public class Voronoi extends LXPattern {
     }
 
     public void run(double deltaMs) {
-        for (LXVector p : getVectorList()) {
+        for (LXVector p : getVectors()) {
             float numSites = num.getValuef();
             float lineWidth = width.getValuef();
 

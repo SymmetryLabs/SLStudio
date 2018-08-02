@@ -84,7 +84,7 @@ public class SoundSpikes extends SLPattern<CubesModel> {
                 Strip s = c.getStrips().get(j);
 
                 if (j % 4 != 0 && j % 4 != 2) {
-                    for (LXVector v : getVectorList(s.points)) {
+                    for (LXVector v : getVectors(s.points)) {
                         float dis = (Math.abs(v.x - model.xMax / 2) + pos.getValuef()) % model.xRange / 2;
                         int seq = (int)((dis * avgSize * 2) / model.xRange);
                         if (seq > avgSize) seq = avgSize - seq;

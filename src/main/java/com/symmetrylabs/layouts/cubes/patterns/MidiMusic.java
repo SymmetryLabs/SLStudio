@@ -87,7 +87,7 @@ public class MidiMusic extends SLPattern<CubesModel> {
                 return;
             }
             float posf = position.getValuef();
-            for (LXVector p : getVectorList()) {
+            for (LXVector p : getVectors()) {
                 blendColor(p.index, lx.hsb(
                     palette.getHuef() + 0.2f*Math.abs(p.x - model.cx) + 0.2f*Math.abs(p.y - model.cy),
                     100,
@@ -130,7 +130,7 @@ public class MidiMusic extends SLPattern<CubesModel> {
                 return;
             }
             float yVal = yPos.getValuef();
-            for (LXVector p : getVectorList()) {
+            for (LXVector p : getVectors()) {
                 float falloff = 6 - 7*lightSize.getValuef();
                 float b = (float)Math.max(0, bVal - falloff*LXUtils.distance(p.x, p.y, xPos, yVal));
                 if (b > 0) {
@@ -236,7 +236,7 @@ public class MidiMusic extends SLPattern<CubesModel> {
             float maxBright = sparkleBright * (1 - sparkle.getValuef());
 
             int i = 0;
-            for (LXVector p : getVectorList(s.points)) {
+            for (LXVector p : getVectors(s.points)) {
                 int wavi = (int) LXUtils.constrain(p.x / model.xMax * wval.length, 0, wval.length - 1);
                 float wavb = (float) Math.max(0, wave.getValuef() * 100. - 8. * Math.abs(p.y - wval[wavi]));
                 colors[p.index] = lx.hsb(

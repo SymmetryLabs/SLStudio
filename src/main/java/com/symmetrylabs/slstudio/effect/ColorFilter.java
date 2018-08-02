@@ -22,7 +22,7 @@ public class ColorFilter extends LXEffect {
 
     @Override
     public void run(double deltaMs, double amount) {
-        for (LXVector v : getVectorList()) {
+        for (LXVector v : getVectors()) {
             float brightness = LXColor.b(colors[v.index]);
             colors[v.index] = lx.hsb(
                 hue.getValuef(),

@@ -8,8 +8,8 @@ import com.google.gson.JsonObject;
 import com.symmetrylabs.layouts.LayoutRegistry;
 import com.symmetrylabs.slstudio.ui.*;
 import heronarts.lx.*;
-import heronarts.lx.warp.LXWarp;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.event.MouseEvent;
 import processing.event.KeyEvent;
 
@@ -38,6 +38,7 @@ import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import com.symmetrylabs.LXClassLoader;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
+import com.symmetrylabs.util.CaptionSource;
 import com.symmetrylabs.util.MarkerSource;
 
 import javax.swing.*;
@@ -61,7 +62,9 @@ public class SLStudioLX extends P3LX {
         public final UIBottomTray bottomTray;
         public final UIContextualHelpBar helpBar;
         public final UIFramerate framerate;
-        public final UIHelpText helpText;
+        public final UITextOverlay helpHelp;
+        public final UITextOverlay helpText;
+        public final UICaptionText captionText;
         public final UIAxes axes;
         public final UIMarkerPainter markerPainter;
         public final UICubeMapDebug cubeMapDebug;
@@ -78,20 +81,24 @@ public class SLStudioLX extends P3LX {
          * "Cmd" or "Ctrl", as appropriate for the operating system.
          */
         private static final String HELP_TEXT =
-              "@-C    Toggle P3CubeMap debugging\n" +
-                "@-F    Toggle frame rate status line\n" +
-                "@-G    Toggle UI geometry\n" +
-                "@-L    Layout selection\n" +
-                "@-M    Modulation source\n" +
-                "@-P    Performance mode\n" +
-                "@-R    Rename channel or pattern\n" +
-                "@-S    Save current project\n" +
-                "@-V    Toggle preview display\n" +
-                "@-W    Toggle all warps (selected channel)\n" +
-                "@-X    Toggle axes\n" +
-                "@-/    Toggle help caption line\n" +
-                "@-\\    Toggle 16-bit color (all)\n" +
-                "@-|    Toggle 16-bit color (selected channel)";
+              "@-C           Toggle P3CubeMap debugging\n" +
+                "@-D           Delete selected channel, warp, effect, or pattern\n" +
+                "@-F           Toggle frame rate status line\n" +
+                "@-G           Toggle UI geometry\n" +
+                "@-L           Layout selection\n" +
+                "@-M           Modulation source\n" +
+                "@-N           New channel\n" +
+                "@-P           Performance mode\n" +
+                "@-R           Rename channel or pattern\n" +
+                "@-S           Save current project\n" +
+                "@-V           Toggle preview display\n" +
+                "@-X           Toggle axis display\n" +
+                "@-/           Toggle help caption line\n" +
+                "@-\\           Toggle 16-bit color (all)\n" +
+                "@-|           Toggle 16-bit color (selected channel)\n" +
+                "@-Left/Right  Reorder selected channel, warp, or effect\n" +
+                "@-Up/Down     Reorder selected pattern"
+            ;
 
         UI(final SLStudioLX lx) {
             super(lx);
@@ -109,11 +116,19 @@ public class SLStudioLX extends P3LX {
             this.rightPane = new UIOverriddenRightPane(this, lx);
             this.bottomTray = new UIBottomTray(this, lx);
             this.helpBar = new UIContextualHelpBar(this);
-            float previewLeft = leftPane.getX() + leftPane.getWidth();
-            this.framerate = new UIFramerate(this, lx, previewLeft + 6, 6);
+
+            this.framerate = new UIFramerate(this, lx, preview, 6, 6, PConstants.LEFT, PConstants.TOP);
+
+            this.helpHelp = new UITextOverlay(this, preview, -6, 6, PConstants.RIGHT, PConstants.TOP);
+            helpHelp.setText("(? for help)");
+
+            this.helpText = new UITextOverlay(this, preview, 6, 40, PConstants.LEFT, PConstants.TOP);
             int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-            this.helpText = new UIHelpText(this, previewLeft + 6, 40,
-                  HELP_TEXT.replaceAll("@", mask == KeyEvent.CTRL ? "Ctrl" : "Cmd"));
+            helpText.setText(HELP_TEXT.replaceAll("@", mask == KeyEvent.CTRL ? "Ctrl" : "Cmd"));
+            helpText.setVisible(false);
+
+            this.captionText = new UICaptionText(this, preview, 6, -6, PConstants.LEFT, PConstants.BOTTOM);
+
             this.axes = new UIAxes();
             this.markerPainter = new UIMarkerPainter();
             this.cubeMapDebug = new UICubeMapDebug(lx);
@@ -133,14 +148,16 @@ public class SLStudioLX extends P3LX {
             addLayer(this.bottomTray);
             addLayer(this.helpBar);
             addLayer(this.framerate);
+            addLayer(this.helpHelp);
             addLayer(this.helpText);
+            addLayer(this.captionText);
 
             _toggleClipView();
             _togglePerformanceMode();
 
             setTopLevelKeyEventHandler(new UIEventHandler() {
                 @Override
-                protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+                public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
                     if (keyChar == '?') {
                         helpText.toggleVisible();
                     }
@@ -182,20 +199,6 @@ public class SLStudioLX extends P3LX {
                                 break;
                             case VK_V:
                                 lx.ui.preview.toggleVisible();
-                                break;
-                            case VK_W:
-                                if (engine.getFocusedChannel() instanceof LXChannel) {
-                                    LXChannel channel = (LXChannel) engine.getFocusedChannel();
-                                    boolean enable = false;
-                                    for (LXWarp warp : channel.getWarps()) {
-                                        enable = warp.isEnabled();
-                                    }
-                                    enable = !enable;
-                                    for (LXWarp warp : channel.getWarps()) {
-                                        System.out.println("Channel " + channel + " - " + warp + " enable: " + enable);
-                                        warp.enabled.setValue(enable);
-                                    }
-                                }
                                 break;
                             case VK_X:
                                 axes.toggleVisible();
@@ -514,6 +517,7 @@ public class SLStudioLX extends P3LX {
                 Math.max(100, uiWidth - this.leftPane.getWidth() - this.rightPane.getWidth()),
                 Math.max(100, bottomTrayY)
             );
+            this.helpHelp.redraw();
         }
 
         private static final String KEY_AUDIO_EXPANDED = "audioExpanded";
@@ -584,6 +588,14 @@ public class SLStudioLX extends P3LX {
 
         public void removeMarkerSource(MarkerSource source) {
             markerPainter.removeSource(source);
+        }
+
+        public void addCaptionSource(CaptionSource source) {
+            captionText.addSource(source);
+        }
+
+        public void removeCaptionSource(CaptionSource source) {
+            captionText.removeSource(source);
         }
     }
 

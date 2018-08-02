@@ -2,7 +2,8 @@ package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.color.Spaces;
-import com.symmetrylabs.slstudio.ping.SLPatternWithMarkers;
+import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.CubeMarker;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.Octahedron;
@@ -19,7 +20,7 @@ import java.util.List;
 
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 
-public class FlowMotion extends SLPatternWithMarkers {
+public class FlowMotion extends SLPattern<SLModel> {
     private final int STREAM_LENGTH = 100;
     private CompoundParameter gainParam = new CompoundParameter("gain", 4, 0, 10);
     private CompoundParameter floorParam = new CompoundParameter("floor", 12, 1, 64);
@@ -98,7 +99,7 @@ public class FlowMotion extends SLPatternWithMarkers {
         long[] colors = (long[]) getArray(RGB16);
         float xScale = xSclParam.getValuef();
         float xOffset = xOffParam.getValuef();
-        for (LXVector v : getVectorList()) {
+        for (LXVector v : getVectors()) {
             float x = Math.abs(v.x - xOffset - model.cx) / (model.xRange / 2);
             float pos = (x / xScale) * STREAM_LENGTH;
             int index = (int) pos;

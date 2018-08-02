@@ -44,7 +44,7 @@ public class LSD extends SLModelEffect {
 
         model.forEachPoint((start, end) -> {
             final float[] hsb = new float[3];
-            for (LXVector v : getVectorList(start, end)) {
+            for (LXVector v : getVectors(start, end)) {
                 LXColor.RGBtoHSB(colors[v.index], hsb);
                 float h = rf * noise(sf * v.x, sf * v.y, sf * v.z + accum);
                 int c2 = LX.hsb(h * 360, 100, hsb[2] * 100);

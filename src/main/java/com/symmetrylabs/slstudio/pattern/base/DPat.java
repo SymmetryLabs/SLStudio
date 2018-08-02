@@ -54,6 +54,7 @@ public abstract class DPat extends SLPattern<SLModel> {
     }
 
     public float interpWv(float i, float[] vals) {
+        i = Math.max(0, Math.min(vals.length - 1, i));
         return interp(i - MathUtils.floor(i), vals[MathUtils.floor(i)], vals[MathUtils.ceil(i)]);
     }
 
@@ -236,15 +237,12 @@ public abstract class DPat extends SLPattern<SLModel> {
         pJog = new BooleanParameter("JOG");
         pGrey = new BooleanParameter("GREY");
 
-
-        // addNonKnobParameter(pXsym);
-        // addNonKnobParameter(pYsym);
-        // addNonKnobParameter(pRsym);
-        // addNonKnobParameter(pXdup);
-        // addNonKnobParameter(pJog);
-        // addNonKnobParameter(pGrey);
-
-        //addMultipleParameterUIRow("Bools",pXsym,pYsym,pRsym,pXdup,pJog,pGrey);
+        addParameter(pXsym);
+        addParameter(pYsym);
+        addParameter(pRsym);
+        addParameter(pXdup);
+        addParameter(pJog);
+        addParameter(pGrey);
 
         modmin = new PVector(model.xMin, model.yMin, model.zMin);
         mMax = new PVector(model.xMax, model.yMax, model.zMax);

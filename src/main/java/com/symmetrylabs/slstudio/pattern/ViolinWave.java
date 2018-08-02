@@ -134,7 +134,7 @@ public class ViolinWave extends LXPattern {
         float rng = (78 - 64 * range.getValuef()) / (model.yMax - model.cy);
         float val = MathUtils.max(2, dbValue.getValuef());
 
-        for (LXVector v : getVectorList()) {
+        for (LXVector v : getVectors()) {
             int ci = (int)MathUtils.lerp(0, centers.length - 1, (v.point.x - model.xMin) / (model.xMax - model.xMin));
             float rFactor = 1.0f - 0.9f * MathUtils.abs(v.x - model.cx) / (model.xMax - model.cx);
             colors[v.index] = LXColor.hsb(

@@ -32,7 +32,7 @@ public class LUVShift extends LXEffect {
 
     @Override
     public void run(double deltaMs, double amount) {
-        for (LXVector p : getVectorList()) {
+        for (LXVector p : getVectors()) {
             int c = colors[p.index];
             rgb[0] = ((c & LXColor.RED_MASK) >>> LXColor.RED_SHIFT) / 255f;
             rgb[1] = ((c & LXColor.GREEN_MASK) >>> LXColor.GREEN_SHIFT) / 255f;

@@ -49,7 +49,7 @@ public class Swarm extends SLPattern<StripsModel<Strip>> {
         float s = 0;
         for (Strip strip : model.getStrips()) {
           int i = 0;
-            for (LXVector p : getVectorList(strip.points)) {
+            for (LXVector p : getVectors(strip.points)) {
                 float fV = max(-1, 1 - dist(p.x / 2.f, p.y, fX.getValuef() / 2.f, fY.getValuef()) / 64.f);
                 // println("fv: " + fV);
                 colors[p.index] = LXColor.hsb(

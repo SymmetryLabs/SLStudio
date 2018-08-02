@@ -3,17 +3,17 @@ package com.symmetrylabs.slstudio;
 import java.util.Map;
 
 import com.symmetrylabs.layouts.Layout;
+import com.symmetrylabs.layouts.tree.Anemometer;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
 import heronarts.lx.LX;
 import com.symmetrylabs.layouts.LayoutRegistry;
 import com.symmetrylabs.layouts.tree.TreeModelingTool;
 import com.symmetrylabs.layouts.tree.ui.*;
-import com.symmetrylabs.layouts.tree.anemometer.*;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.output.OPCOutput;
+import processing.core.PFont;
 
 import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.output.OutputControl;
@@ -33,8 +33,9 @@ import static com.symmetrylabs.util.DistanceConstants.*;
 
 public class SLStudio extends PApplet {
     public static SLStudio applet;
-    static final String LAYOUT_FILE_NAME = ".layout";
-    static final String RESTART_FILE_NAME = ".restart";
+    public static final Font MONO_FONT = new Font("Inconsolata-Bold-14.vlw", 14, 17);
+    public static final String LAYOUT_FILE_NAME = ".layout";
+    public static final String RESTART_FILE_NAME = ".restart";
 
     private SLStudioLX lx;
     public Layout layout;
@@ -202,4 +203,24 @@ public class SLStudio extends PApplet {
     public final static int CHAN_HEIGHT = 650;
     public final static int CHAN_Y = 20;
     public final static int PAD = 5;
+
+    public static class Font {
+        public final String filename;
+        public final int size;
+        public final int lineHeight;
+        private static PFont font = null;
+
+        public Font(String filename, int size, int lineHeight) {
+            this.filename = filename;
+            this.size = size;
+            this.lineHeight = lineHeight;
+        }
+
+        public PFont getFont() {
+            if (font == null) {
+                font = applet.loadFont(filename);
+            }
+            return font;
+        }
+    }
 }

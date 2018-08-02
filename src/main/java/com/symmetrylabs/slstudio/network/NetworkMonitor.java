@@ -74,13 +74,18 @@ public class NetworkMonitor {
 
     public synchronized NetworkMonitor start() {
         if (!started) {
-            timer.schedule(new TimerTask() {
-                public void run() {
-                    networkScanner.scan();
-                }
-            }, 0, 500);
+            scheduleTask(0);
             started = true;
         }
         return this;
+    }
+
+    private void scheduleTask(long delay) {
+        timer.schedule(new TimerTask() {
+            public void run() {
+                networkScanner.scan();
+                scheduleTask(500);
+            }
+        }, delay);
     }
 }

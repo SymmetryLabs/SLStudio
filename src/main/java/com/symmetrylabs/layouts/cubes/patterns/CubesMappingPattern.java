@@ -104,4 +104,3 @@ public class CubesMappingPattern extends SLPattern<CubesModel> {
 //            }
 //        }
 }
-}

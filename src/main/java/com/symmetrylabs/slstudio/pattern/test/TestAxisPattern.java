@@ -59,7 +59,7 @@ public class TestAxisPattern extends LXPattern {
         float ywv = 100.0f / (10 + 40*yw.getValuef());
         float zwv = 100.0f / (10 + 40*zw.getValuef());
 
-        for (LXVector p : getVectorList()) {
+        for (LXVector p : getVectors()) {
             int c = 0;
             c = LXColor.blend(c, lx.hsb(
                 (lx.palette.getHuef() + p.x/10 + p.y/3) % 360,

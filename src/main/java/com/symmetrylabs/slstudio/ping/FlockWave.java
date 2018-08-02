@@ -21,9 +21,11 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
 import com.symmetrylabs.slstudio.kernel.SLKernel;
+import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.palettes.ColorPalette;
 import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.BlobFollower;
 import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.CubeMarker;
@@ -32,7 +34,7 @@ import com.symmetrylabs.util.Octahedron;
 
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
-public class FlockWave extends SLPatternWithMarkers {
+public class FlockWave extends SLPattern<SLModel> {
 
     private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
 
@@ -187,6 +189,10 @@ public class FlockWave extends SLPatternWithMarkers {
         return markers;
     }
 
+    public String getCaption() {
+        return "Birds: " + birds.size();
+    }
+
     void updateBlobTrackerParameters() {
         blobTracker.setBlobY(y.getValuef());
     }
@@ -282,7 +288,7 @@ public class FlockWave extends SLPatternWithMarkers {
         float radius = size.getValuef();
         float sqRadius = radius * radius;
 
-        for (LXVector p : getVectorList()) {
+        for (LXVector p : getVectors()) {
             int rgb = 0;
             for (Bird b : birds) {
                 if (Math.abs(b.pos.x - p.x) < radius) {
@@ -299,7 +305,7 @@ public class FlockWave extends SLPatternWithMarkers {
         float radius = size.getValuef();
 
         radius = 10000;
-        for (LXVector p : getVectorList()) {
+        for (LXVector p : getVectors()) {
             Bird closestBird = null;
             float minSqDist = 1e6f;
             for (Bird b : birds) {
@@ -393,6 +399,7 @@ public class FlockWave extends SLPatternWithMarkers {
 
     @Override
     public void onVectorsChanged() {
+        super.onVectorsChanged();
         List<LXVector> vectorList = getVectorList();
         coords = new float[vectorList.size()*3];
         int i = 0;

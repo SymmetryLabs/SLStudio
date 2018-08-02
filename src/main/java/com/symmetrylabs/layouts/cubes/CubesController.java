@@ -3,6 +3,7 @@ package com.symmetrylabs.layouts.cubes;
 import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.component.GammaExpander;
+import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
@@ -20,12 +21,13 @@ import java.net.*;
 
 public class CubesController extends LXOutput implements Comparable<CubesController>, OPCConstants {
     public final String id;
+    public final int idInt;
     public final InetAddress host;
     public final boolean isBroadcast;
     public final NetworkDevice networkDevice;
 
-    private Socket socket;
     private DatagramSocket dsocket;
+    private DatagramPacket packet;
     private OutputStream output;
     protected boolean is16BitColorEnabled = false;
 
@@ -71,6 +73,12 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         this.id = id;
         this.isBroadcast = isBroadcast;
 
+        int idInt = Integer.MAX_VALUE;
+        try {
+            idInt = Integer.parseInt(id);
+        } catch (NumberFormatException e) {}
+        this.idInt = idInt;
+
         mappingMode = CubesMappingMode.getInstance(lx);
         gammaExpander = gammaExpander.getInstance(lx);
 
@@ -87,8 +95,9 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         packetSizeBytes = HEADER_LEN + contentSizeBytes;
         if (packetData == null || packetData.length != packetSizeBytes) {
             packetData = new byte[packetSizeBytes];
+            packet = new DatagramPacket(packetData, packetSizeBytes);
         }
-        packetData[0] = 3; // Channel
+        packetData[0] = 0; // Channel
         packetData[1] = use16 ? COMMAND_SET_16BIT_PIXEL_COLORS : COMMAND_SET_PIXEL_COLORS;
         packetData[2] = (byte) ((contentSizeBytes >> 8) & 0xFF);
         packetData[3] = (byte) (contentSizeBytes & 0xFF);
@@ -127,8 +136,8 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
                 //socket.setTcpNoDelay(true);
                 // output = socket.getOutputStream();
             }
-            catch (ConnectException e) { dispose(); }
-            catch (IOException e) { dispose(); }
+            catch (ConnectException e) { connectionWarning(); return; }
+            catch (IOException e) { connectionWarning(); return; }
 
             if (dsocket == null)
                 return;
@@ -185,23 +194,58 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 //            }
 //        }
 
-//        if (points != null) {
-//            int numPixels = points.size();
+//        // Initialize packet data base on cube type.
+//        // If we don't know the cube type, default to
+//        // using the cube type with the most pixels
+//        CubesModel.Cube.Type cubeType = cube != null ? cube.type : CubesModel.Cube.CUBE_TYPE_WITH_MOST_PIXELS;
+//        int numPixels = cubeType.POINTS_PER_CUBE;
 //
+//        // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
+//        // TODO: refactor here
+//        if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(id)) {
+//            initPacketData(numPixels, false);
+//            if (mappingMode.inUnMappedMode()) {
+//                if (mappingMode.inDisplayAllMode()) {
+//                    int col = mappingMode.getUnMappedColor();
+//
+//                    for (int i = 0; i < numPixels; i++)
+//                        setPixel(i, col);
+//                } else {
+//                    if (mappingMode.isSelectedUnMappedFixture(id)) {
+//                        int col = mappingMode.getUnMappedColor();
+//
+//                        for (int i = 0; i < numPixels; i++)
+//                            setPixel(i, col);
+//                    } else {
+//                        for (int i = 0; i < numPixels; i++)
+//                            setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
+//                    }
+//                }
+//            } else {
+//                for (int i = 0; i < numPixels; i++)
+//                    setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
+//            }
+//        } else if (cube != null) {
 //            // Fill the datagram with pixel data
 //            if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
 //                initPacketData(numPixels, true);
 //                long[] srcLongs = (long[]) src.getArray(PolyBuffer.Space.RGB16);
-//                for (int i = 0; i < numPixels; i++) {
-//                    LXPoint point = points.getPoint(i);
-//                    setPixel(i, srcLongs[point.index]);
+//                for (int stripNum = 0; stripNum < numStrips; stripNum++) {
+//                    Strip strip = cube.getStrips().get(STRIP_ORD[stripNum]);
+//                    for (int i = 0; i < strip.metrics.numPoints; i++) {
+//                        LXPoint point = strip.getPoints().get(i);
+//                        setPixel(stripNum * strip.metrics.numPoints + i, srcLongs[point.index]);
+//                    }
 //                }
 //            } else {
 //                initPacketData(numPixels, false);
 //                int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
-//                for (int i = 0; i < numPixels; i++) {
-//                    LXPoint point = points.getPoint(i);
-//                    setPixel(i, srcInts[point.index]);
+//                for (int stripNum = 0; stripNum < numStrips; stripNum++) {
+//                    Strip strip = cube.getStrips().get(STRIP_ORD[stripNum]);
+//                    for (int i = 0; i < strip.metrics.numPoints; i++) {
+//                        LXPoint point = strip.getPoints().get(i);
+//                        setPixel(stripNum * strip.metrics.numPoints + i, srcInts[point.index]);
+//                    }
 //                }
 //            }
 //        } else {
@@ -212,40 +256,20 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 //            }
 //        }
 
-        //CubesModel.Cube.Type cubeType = cube != null ? cube.type : CubesModel.Cube.CUBE_TYPE_WITH_MOST_PIXELS;
-        int numPixels = 168;
+        if (points != null) {
+            int numPixels = points.size();
 
-        // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
-        // TODO: refactor here
-        if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(id)) {
-            initPacketData(numPixels, false);
-            if (mappingMode.inUnMappedMode()) {
-                if (mappingMode.inDisplayAllMode()) {
-                    int col = mappingMode.getUnMappedColor();
-
-                    for (int i = 0; i < numPixels; i++) {
-                        setPixel(i, col);
-                    }
-                } else {
-                    if (mappingMode.isSelectedUnMappedFixture(id)) {
-                        int col = mappingMode.getUnMappedColor();
-
-                        for (int i = 0; i < numPixels; i++)
-                            setPixel(i, col);
-                    } else {
-                        for (int i = 0; i < numPixels; i++)
-                            setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
-                    }
-                }
-            } else {
-                for (int i = 0; i < numPixels; i++)
-                    setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
-            }
-        } else if (points != null) {
             // Fill the datagram with pixel data
             if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
                 initPacketData(numPixels, true);
                 long[] srcLongs = (long[]) src.getArray(PolyBuffer.Space.RGB16);
+//                for (int stripNum = 0; stripNum < numStrips; stripNum++) {
+//                    Strip strip = cube.getStrips().get(STRIP_ORD[stripNum]);
+//                    for (int i = 0; i < strip.metrics.numPoints; i++) {
+//                        LXPoint point = strip.getPoints().get(i);
+//                        setPixel(stripNum * strip.metrics.numPoints + i, srcLongs[point.index]);
+//                    }
+//                }
                 for (int i = 0; i < numPixels; i++) {
                     LXPoint point = points.getPoint(i);
                     setPixel(i, srcLongs[point.index]);
@@ -253,6 +277,13 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             } else {
                 initPacketData(numPixels, false);
                 int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
+//                for (int stripNum = 0; stripNum < numStrips; stripNum++) {
+//                    Strip strip = cube.getStrips().get(STRIP_ORD[stripNum]);
+//                    for (int i = 0; i < strip.metrics.numPoints; i++) {
+//                        LXPoint point = strip.getPoints().get(i);
+//                        setPixel(stripNum * strip.metrics.numPoints + i, srcInts[point.index]);
+//                    }
+//                }
                 for (int i = 0; i < numPixels; i++) {
                     LXPoint point = points.getPoint(i);
                     setPixel(i, srcInts[point.index]);
@@ -269,37 +300,33 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         // Send the cube data to the cube. yay!
         try {
             //println("packetSizeBytes: "+packetSizeBytes);
-            if (points != null) {
-                dsocket.send(new java.net.DatagramPacket(packetData, packetSizeBytes));
-            }
-
+            dsocket.send(packet);
         }
-        catch (Exception e) {dispose();}
+        catch (Exception e) { connectionWarning(); }
+    }
+
+    private void connectionWarning() {
+        if (dsocket != null) {
+            // System.err.println("Disconnected from OPC server");
+        }
+        // System.err.println("Failed to connect to OPC server " + host);
+    }
+
+    private void resetSocket() {
+        if (dsocket != null) {
+            dsocket.close();
+            dsocket = null;
+        }
     }
 
     @Override
     public void dispose() {
-        if (dsocket != null) {
-            //System.err.println("Disconnected from OPC server");
-        }
-        //System.err.println("Failed to connect to OPC server " + host);
-        socket = null;
-        dsocket = null;
+        this.resetSocket();
+        super.dispose();
     }
 
     @Override
     public int compareTo(@NotNull CubesController other) {
-        int idInt, otherIdInt;
-        try {
-            idInt = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            idInt = Integer.MAX_VALUE;
-        }
-        try {
-            otherIdInt = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            otherIdInt = Integer.MAX_VALUE;
-        }
-        return idInt != otherIdInt ? Integer.compare(idInt, otherIdInt) : id.compareTo(other.id);
+        return idInt != other.idInt ? Integer.compare(idInt, other.idInt) : id.compareTo(other.id);
     }
 }
