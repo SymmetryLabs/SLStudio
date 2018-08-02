@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.network;
 /** Serializer and deserializer for the OPC message format: http://openpixelcontrol.org */
 public class OpcMessage {
     public final byte[] bytes;  // raw bytes as seen on the wire
+    public final int rawLength;  // raw length of bytes as seen on the wire
     public final byte channel;  // channel number (0 for broadcast)
     public final byte command;  // command (see command codes below)
     public final byte[] payload;
@@ -23,7 +24,12 @@ public class OpcMessage {
 
     /** Constructs an OpcMessage from an array of raw bytes as seen on the wire. */
     public OpcMessage(byte[] bytes) {
+        this(bytes, bytes.length);
+    }
+
+    public OpcMessage(byte[] bytes, int rawLength) {
         this.bytes = bytes;
+        this.rawLength = rawLength;
         channel = bytes.length > 0 ? bytes[0] : 0;
         command = bytes.length > 1 ? bytes[1] : 0;
         if (bytes.length >= 4) {
@@ -50,6 +56,7 @@ public class OpcMessage {
         this.command = (byte) command;
         this.payload = payload;
         bytes = new byte[payload.length + 4];
+        rawLength = bytes.length;
         bytes[0] = this.channel;
         bytes[1] = this.command;
         bytes[2] = (byte) (payload.length >> 8);
