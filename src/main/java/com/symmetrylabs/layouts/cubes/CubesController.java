@@ -27,6 +27,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     public final NetworkDevice networkDevice;
 
     private DatagramSocket dsocket;
+    private DatagramPacket packet;
     private OutputStream output;
     protected boolean is16BitColorEnabled = false;
 
@@ -94,6 +95,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         packetSizeBytes = HEADER_LEN + contentSizeBytes;
         if (packetData == null || packetData.length != packetSizeBytes) {
             packetData = new byte[packetSizeBytes];
+            packet = new DatagramPacket(packetData, packetSizeBytes);
         }
         packetData[0] = 0; // Channel
         packetData[1] = use16 ? COMMAND_SET_16BIT_PIXEL_COLORS : COMMAND_SET_PIXEL_COLORS;
@@ -298,7 +300,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         // Send the cube data to the cube. yay!
         try {
             //println("packetSizeBytes: "+packetSizeBytes);
-            dsocket.send(new java.net.DatagramPacket(packetData,packetSizeBytes));
+            dsocket.send(packet);
         }
         catch (Exception e) {dispose();}
     }
