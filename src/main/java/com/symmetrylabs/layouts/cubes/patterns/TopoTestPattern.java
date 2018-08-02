@@ -37,6 +37,8 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
     public void run(double deltaMs) {
         switch (modeParam.getValuei()) {
             case 0: {
+                if (model.getTopology() == null)
+                    return;
                 for (StripsTopology.Bundle e : model.getTopology().bundles) {
                     float h;
                     switch (e.dir) {
@@ -51,6 +53,8 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
             }
 
             case 1: {
+                if (model.getTopology() == null)
+                    return;
                 elapsed += deltaMs;
                 if (elapsed < 500) {
                     break;

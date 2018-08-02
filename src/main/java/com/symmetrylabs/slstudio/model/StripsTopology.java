@@ -426,6 +426,8 @@ public class StripsTopology {
                     continue;
 
                 if (o.dir == e.dir) {
+                    if (node.isNegativeEnd)
+                        throw new IllegalStateException("found parallel and overlapping bundles");
                     switch (e.dir) {
                         case X: e.nxn = o; break;
                         case Y: e.nyn = o; break;
@@ -494,6 +496,8 @@ public class StripsTopology {
                     continue;
 
                 if (o.dir == e.dir) {
+                    if (!node.isNegativeEnd)
+                        throw new IllegalStateException("found parallel and overlapping bundles");
                     switch (e.dir) {
                         case X: e.pxp = o; break;
                         case Y: e.pyp = o; break;

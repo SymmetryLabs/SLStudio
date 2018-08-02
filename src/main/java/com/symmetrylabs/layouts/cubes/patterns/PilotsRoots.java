@@ -165,6 +165,8 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
 
             StripsTopology.Bundle t = start;
             while (t != null) {
+                if (path.contains(t))
+                    throw new IllegalStateException("cycle in path");
                 path.add(t);
                 if (t.pzp == null) {
                     t = t.pyp;
