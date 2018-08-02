@@ -44,6 +44,7 @@ public class TraktorPlayNeue extends DPat
     private boolean rhythmOn = false;
     private boolean leapOn = false;
     PVector position = new PVector();
+    CompoundParameter gainf = new CompoundParameter("gain", .5, 0, 1);
 
 //    void keyEvent(KeyEvent keyEvent) {
 //
@@ -173,6 +174,7 @@ public class TraktorPlayNeue extends DPat
             eq.gain.setValue(6);
             eq.range.setValue(36);
             eq.release.setValue(640);
+              addParameter(gainf);
 //            addParameter(eq.gain);
 //            addParameter(eq.range);
 //            addParameter(eq.attack);
@@ -311,8 +313,8 @@ public class TraktorPlayNeue extends DPat
             float rawBass = eq.getAveragef(0, 4);
             float rawTreble = eq.getAveragef(eq.numBands-7, 7);
             index = (index + 1) % FRAME_WIDTH;
-            bass[index] = rawBass * rawBass * rawBass * rawBass;
-            treble[index] = rawTreble * rawTreble;
+            bass[index] = gainf.getValuef()*rawBass * rawBass * rawBass * rawBass;
+            treble[index] = gainf.getValuef()*rawTreble * rawTreble;
         }
         else return;
 

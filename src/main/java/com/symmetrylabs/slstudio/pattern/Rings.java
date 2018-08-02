@@ -17,17 +17,18 @@ public class Rings extends LXPattern {
     float dzParam, centerParam;
 
     private NoiseHelper noiseHelper = new NoiseHelper();
-
+    CompoundParameter paletteV = new CompoundParameter("Hue", 0, 0, 360);
     CompoundParameter pDepth = new CompoundParameter("Depth", 0.6);
     CompoundParameter pBright = new CompoundParameter("Bright", 0.75);
     CompoundParameter pSaturation = new CompoundParameter("Sat", 0.5);
 
     CompoundParameter pSpeed1 = new CompoundParameter("Speed1", 0.2);
     CompoundParameter pSpeed2 = new CompoundParameter("Speed2", 0.4);
-    CompoundParameter pScale = new CompoundParameter("Scale", 0.15);
+    CompoundParameter pScale = new CompoundParameter("Scale", 0.65);
 
     public Rings(LX lx) {
         super(lx);
+        addParameter(paletteV);
         addParameter(pDepth);
         addParameter(pBright);
         addParameter(pSaturation);
@@ -102,7 +103,7 @@ public class Rings extends LXPattern {
                 0.0f, 1.0f, 0.0f, 300.0f
             );
 
-            colors[p.index] = LXColor.hsb(palette.getHuef() + m, saturation, brightness);
+            colors[p.index] = LXColor.hsb(paletteV.getValuef() + m, saturation, brightness);
         });
 
         noiseHelper.noiseDetail(1);

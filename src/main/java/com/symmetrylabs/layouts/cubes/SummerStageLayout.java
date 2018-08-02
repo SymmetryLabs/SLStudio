@@ -160,7 +160,7 @@ public class SummerStageLayout extends CubesLayout {
                 new String[]{"1109", "1108"}, new String[] {"1065", "1074"}
             }),
             new TowerConfig(SP * 10, SP * 11, SP * -1, new String[][]{
-                new String[]{"1091", "1090"}, new String[] {"FLICKER-1096", "1095"}
+                new String[]{"1091", "1090"}, new String[] {"1096", "1095"} // 1096 was flickering
             }),
         }),
 
@@ -208,7 +208,7 @@ public class SummerStageLayout extends CubesLayout {
             }),
             // col 6
             new TowerConfig(SP * 5, SP * 9, SP * 0, new String[][]{
-                new String[]{"543", "542"}, new String[]{"?", "758"}
+                new String[]{"543", "542"}, new String[]{"1043", "758"}
             }),
             // col 7
             new TowerConfig(SP * 6, SP * 9, SP * 0, new String[][]{
@@ -226,7 +226,7 @@ public class SummerStageLayout extends CubesLayout {
             // col 3
             new TowerConfig(SP * 2, SP * 2, SP * 0, new String[][]{new String[]{"769", "768"}}),
             // col 4
-            new TowerConfig(SP * 3, SP * 0, SP * 0, new String[][]{new String[]{"FLICKERING-565", "564"}, new String[]{"473", "472"}, new String[]{"455", "454"}})
+            new TowerConfig(SP * 3, SP * 0, SP * 0, new String[][]{new String[]{"565", "564"}, new String[]{"473", "472"}, new String[]{"455", "454"}}) // 565n was flickering
         }),
 
         new ClusterConfig("CLUSTER_B", SP*20, SP*13, 0, new TowerConfig[] {
@@ -286,14 +286,14 @@ public class SummerStageLayout extends CubesLayout {
             new TowerConfig(SP * 0, SP * 1, SP * 0, new String[][]{new String[]{"873", "872"}, new String[]{"767", "766"}, new String[]{"693", "692"}}),
             new TowerConfig(SP * 0, SP * 2, SP * -1, new String[][]{new String[]{"739", "738"}, new String[]{"553", "552"}, new String[]{"852", "853"}}),
             // col 2
-            new TowerConfig(SP * 1, SP * 1, SP * -1, new String[][]{new String[]{"1092", "694"}, new String[]{"611", "610"}, new String[]{"653", "652"}}),
+            new TowerConfig(SP * 1, SP * 1, SP * -1, new String[][]{new String[]{"1092", "694"}, new String[]{"611", "610"}, new String[]{"653", "?11"}}),
             // col 3
-            new TowerConfig(SP * 2, SP * 0, SP * 0, new String[][]{new String[]{"857", "856"}}),
-            new TowerConfig(SP * 2, SP * 2, SP * 0, new String[][]{new String[]{"789", "788"}, new String[]{"801", "800"}}),
-            new TowerConfig(SP * 2, SP * 0, SP * -1, new String[][]{new String[]{"621", "620"}, new String[]{"789", "788"}, new String[]{"635", "634"}, new String[]{"633", "632"}}),
+            new TowerConfig(SP * 2, SP * 0, SP * 0, new String[][]{new String[]{"857", "?12"}}),
+            new TowerConfig(SP * 2, SP * 2, SP * 0, new String[][]{new String[]{"?", "788"}, new String[]{"801", "800"}}),
+            new TowerConfig(SP * 2, SP * 0, SP * -1, new String[][]{new String[]{"621", "952"}, new String[]{"789", "788"}, new String[]{"635", "634"}, new String[]{"633", "632"}}),
             // col 4
             new TowerConfig(SP * 3, SP * 1, SP * 0, new String[][]{new String[]{"671", "670"}, new String[]{"689", "688"}}),
-            new TowerConfig(SP * 3, SP * 1, SP * -1, new String[][]{new String[]{"FLICKERING-867", "866"}, new String[]{"585", "584"}})
+            new TowerConfig(SP * 3, SP * 1, SP * -1, new String[][]{new String[]{"867", "866"}, new String[]{"585", "584"}}) // 867 was flickering
         }),
 
         new ClusterConfig("CLUSTER_Y", SP*32, SP*13, 0, new TowerConfig[]{
@@ -334,7 +334,7 @@ public class SummerStageLayout extends CubesLayout {
             new TowerConfig(SP * 2, SP * 2, SP * -2, new String[][]{new String[]{"825", "824"}}),
             // col 4
             new TowerConfig(SP * 3, SP * 1, SP * -1, new String[][]{new String[]{"844", "845"}, new String[]{"499", "816"}}),
-            new TowerConfig(SP * 3, SP * 1, SP * -2, new String[][]{new String[]{"900", "?"}}),
+            new TowerConfig(SP * 3, SP * 1, SP * -2, new String[][]{new String[]{"900", "5410ecf57300"}}),
         }),
 
         // done (but add last two)
