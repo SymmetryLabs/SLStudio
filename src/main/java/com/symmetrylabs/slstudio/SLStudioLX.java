@@ -8,8 +8,8 @@ import com.google.gson.JsonObject;
 import com.symmetrylabs.layouts.LayoutRegistry;
 import com.symmetrylabs.slstudio.ui.*;
 import heronarts.lx.*;
-import heronarts.lx.warp.LXWarp;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.event.MouseEvent;
 import processing.event.KeyEvent;
 
@@ -61,7 +61,8 @@ public class SLStudioLX extends P3LX {
         public final UIBottomTray bottomTray;
         public final UIContextualHelpBar helpBar;
         public final UIFramerate framerate;
-        public final UIHelpText helpText;
+        public final UITextOverlay helpHelp;
+        public final UITextOverlay helpText;
         public final UIAxes axes;
         public final UIMarkerPainter markerPainter;
         public final UICubeMapDebug cubeMapDebug;
@@ -113,11 +114,17 @@ public class SLStudioLX extends P3LX {
             this.rightPane = new UIOverriddenRightPane(this, lx);
             this.bottomTray = new UIBottomTray(this, lx);
             this.helpBar = new UIContextualHelpBar(this);
-            float previewLeft = leftPane.getX() + leftPane.getWidth();
-            this.framerate = new UIFramerate(this, lx, previewLeft + 6, 6);
+
+            this.framerate = new UIFramerate(this, lx, preview, 6, 6, PConstants.LEFT, PConstants.TOP);
+
+            this.helpHelp = new UITextOverlay(this, preview, -6, 6, PConstants.RIGHT, PConstants.TOP);
+            helpHelp.setText("(? for help)");
+
+            this.helpText = new UITextOverlay(this, preview, 6, 40, PConstants.LEFT, PConstants.TOP);
             int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-            this.helpText = new UIHelpText(this, previewLeft + 6, 40,
-                  HELP_TEXT.replaceAll("@", mask == KeyEvent.CTRL ? "Ctrl" : "Cmd"));
+            helpText.setText(HELP_TEXT.replaceAll("@", mask == KeyEvent.CTRL ? "Ctrl" : "Cmd"));
+            helpText.setVisible(false);
+
             this.axes = new UIAxes();
             this.markerPainter = new UIMarkerPainter();
             this.cubeMapDebug = new UICubeMapDebug(lx);
@@ -137,6 +144,7 @@ public class SLStudioLX extends P3LX {
             addLayer(this.bottomTray);
             addLayer(this.helpBar);
             addLayer(this.framerate);
+            addLayer(this.helpHelp);
             addLayer(this.helpText);
 
             _toggleClipView();
@@ -144,7 +152,7 @@ public class SLStudioLX extends P3LX {
 
             setTopLevelKeyEventHandler(new UIEventHandler() {
                 @Override
-                protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+                public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
                     if (keyChar == '?') {
                         helpText.toggleVisible();
                     }
@@ -504,6 +512,7 @@ public class SLStudioLX extends P3LX {
                 Math.max(100, uiWidth - this.leftPane.getWidth() - this.rightPane.getWidth()),
                 Math.max(100, bottomTrayY)
             );
+            this.helpHelp.redraw();
         }
 
         private static final String KEY_AUDIO_EXPANDED = "audioExpanded";

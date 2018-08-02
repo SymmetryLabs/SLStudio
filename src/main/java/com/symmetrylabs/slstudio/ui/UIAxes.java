@@ -32,7 +32,7 @@ public class UIAxes extends UI3dComponent {
         pg.stroke(0, 0, 128);
         drawLineWithTicks(pg, 0, 0, 0, 0, 0, -100, 10);
 
-        pg.textFont(SLStudio.applet.loadFont("Inconsolata-Bold-14.vlw"));
+        pg.textFont(SLStudio.MONO_FONT.getFont());
         pg.textAlign(PConstants.CENTER, PConstants.BASELINE);
         pg.textSize(60);
         pg.pushMatrix();

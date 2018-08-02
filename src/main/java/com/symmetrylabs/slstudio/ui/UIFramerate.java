@@ -8,6 +8,8 @@ import heronarts.lx.PolyBuffer;
 import heronarts.p3lx.P3LX;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContext;
+import heronarts.p3lx.ui.UI3dContext;
+import heronarts.p3lx.ui.UIObject;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
@@ -16,36 +18,31 @@ import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.TOP;
 
 
-public class UIFramerate extends UI2dContext {
+public class UIFramerate extends UITextOverlay {
     private final P3LX lx;
-    private final PFont font;
-
-    public UIFramerate(UI ui, final P3LX lx, float x, float y) {
-        super(ui, x, y, 940, 30);
-        this.lx = lx;
-        this.font = SLStudio.applet.loadFont("Inconsolata-Bold-14.vlw");
-        setVisible(true);
-    }
-
     private long lastDebugPrint = millis();
 
+    public UIFramerate(UI ui, final P3LX lx, UI3dContext parent, int anchorX, int anchorY, int alignX, int alignY) {
+        super(ui, parent, anchorX, anchorY, alignX, alignY);
+        this.lx = lx;
+    }
+
     protected void onDraw(UI ui, PGraphics pg) {
-        pg.textFont(font);
-        pg.clear();
-        pg.textAlign(LEFT, TOP);
-        pg.fill(0xa0ffffff);
+        super.onDraw(ui, pg);
+        redraw();
+    }
+
+    public String getText() {
         if (lx.engine.isThreaded()) {
-            String using16bit = "";
-            for (int i = 0; i < 8 && i < lx.engine.getChannels().size(); i++) {
-                if (lx.engine.getChannel(i).colorSpace.getEnum() == PolyBuffer.Space.RGB16) {
-                    using16bit += (i + 1);
-                }
+            if (lx.engine.timer.runLastNanos >= 100000000
+                && lx.engine.timer.runLastNanos == lx.engine.timer.runWorstNanos
+                && lastDebugPrint + 500 < millis()) {
+                lastDebugPrint = millis();
+                printTimingStats();
             }
-            if (lx.engine.colorSpace.getEnum() == PolyBuffer.Space.RGB16) {
-                using16bit += "E";
-            }
-            pg.text(String.format(
-                "Engine: %5.1ffps    UI: %5.1ffps    Net: %5.1ffps    Frame:%5.1fms, avg%5.1fms, max%5.1fms    16-bit conv:%3d %-11s(? for help)",
+
+            return String.format(
+                "Engine: %5.1ffps    UI: %5.1ffps    Net: %5.1ffps    Frame:%5.1fms, avg%5.1fms, max%5.1fms    16-bit conv:%3d %s",
                 Math.min(lx.engine.frameRate(), 999),  // frameRate() sometimes returns Infinity
                 Math.min(lx.applet.frameRate, 999),
                 Math.min(lx.engine.network.frameRate(), 999),
@@ -53,19 +50,24 @@ public class UIFramerate extends UI2dContext {
                 lx.engine.timer.runAvgNanos / 1e6,
                 lx.engine.timer.runWorstNanos / 1e6,
                 lx.engine.conversionsPerFrame,
-                "[" + using16bit + "]"
-            ), 0, 0);
-
-            if (lx.engine.timer.runLastNanos >= 100000000
-                && lx.engine.timer.runLastNanos == lx.engine.timer.runWorstNanos
-                && lastDebugPrint + 500 < millis()) {
-                lastDebugPrint = millis();
-                printTimingStats();
-            }
+                "[" + getUsing16BitFlags() + "]"
+            );
         } else {
-            pg.text(String.format("FPS: %02.1f", lx.applet.frameRate), 0, 0);
+            return String.format("FPS: %02.1f", lx.applet.frameRate);
         }
-        redraw();
+    }
+
+    protected String getUsing16BitFlags() {
+        String flags = "";
+        for (int i = 0; i < 8 && i < lx.engine.getChannels().size(); i++) {
+            if (lx.engine.getChannel(i).colorSpace.getEnum() == PolyBuffer.Space.RGB16) {
+                flags += (i + 1);
+            }
+        }
+        if (lx.engine.colorSpace.getEnum() == PolyBuffer.Space.RGB16) {
+            flags += "E";
+        }
+        return flags;
     }
 
     protected void printTimingStats() {
