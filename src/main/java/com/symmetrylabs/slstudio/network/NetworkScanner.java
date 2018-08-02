@@ -33,7 +33,7 @@ public class NetworkScanner {
                 socket.send(new OpcMessage(0x88, 4));
                 socket.send(new OpcMessage(0, SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY));
                 socket.listenMultiple(1000, (src, reply) -> {
-                    if (reply.bytes.length == 6) {
+                    if (reply.rawLength == 6) {
                         updateDevice(NetworkDevice.fromMacAddress(src, reply.bytes));
                     } else if (reply.isSysex(SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY_REPLY)) {
                         updateDevice(NetworkDevice.fromIdentifier(src, reply.getSysexContent()));
