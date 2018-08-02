@@ -10,6 +10,7 @@ import java.util.Map;
 
 public class CubePhysicalIdMap {
     protected final Map<String, String> physicalIds = new HashMap<>();
+    protected final Map<String, Boolean> physicalIdWarningIssued = new HashMap<>();
     protected final static String FILENAME = "physid_to_mac.json";
 
     public CubePhysicalIdMap() {
@@ -28,8 +29,9 @@ public class CubePhysicalIdMap {
     }
 
     public String getPhysicalId(String deviceId) {
-        if (!physicalIds.containsKey(deviceId)) {
+        if (!physicalIds.containsKey(deviceId) && !physicalIdWarningIssued.containsKey(deviceId)) {
             System.err.println("WARNING: Device ID " + deviceId + " not in " + FILENAME);
+            physicalIdWarningIssued.put(deviceId, true);
         }
         return physicalIds.getOrDefault(deviceId, deviceId);
     }
