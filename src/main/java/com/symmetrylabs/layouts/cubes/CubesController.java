@@ -136,8 +136,8 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
                 //socket.setTcpNoDelay(true);
                 // output = socket.getOutputStream();
             }
-            catch (ConnectException e) { dispose(); }
-            catch (IOException e) { dispose(); }
+            catch (ConnectException e) { connectionWarning(); return; }
+            catch (IOException e) { connectionWarning(); return; }
 
             if (dsocket == null)
                 return;
@@ -302,16 +302,27 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             //println("packetSizeBytes: "+packetSizeBytes);
             dsocket.send(packet);
         }
-        catch (Exception e) {dispose();}
+        catch (Exception e) { connectionWarning(); }
     }
 
-    @Override
-    public void dispose() {
+    private void connectionWarning() {
         if (dsocket != null) {
             System.err.println("Disconnected from OPC server");
         }
         System.err.println("Failed to connect to OPC server " + host);
-        dsocket = null;
+    }
+
+    private void resetSocket() {
+        if (dsocket != null) {
+            dsocket.close();
+            dsocket = null;
+        }
+    }
+
+    @Override
+    public void dispose() {
+        this.resetSocket();
+        super.dispose();
     }
 
     @Override
