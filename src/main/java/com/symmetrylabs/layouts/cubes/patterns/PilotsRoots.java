@@ -1,6 +1,7 @@
 package com.symmetrylabs.layouts.cubes.patterns;
 
 import com.symmetrylabs.layouts.cubes.CubesModel;
+import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.util.EdgeAStar;
 import com.symmetrylabs.slstudio.model.Strip;
@@ -19,7 +20,7 @@ import heronarts.lx.transform.LXVector;
 
 import java.util.*;
 
-public class PilotsRoots extends SLPattern<CubesModel> {
+public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
     private DiscreteParameter countParam = new DiscreteParameter("count", 6, 0, 12);
     /* LEDs per second */
     private DiscreteParameter gapSpeedParam = new DiscreteParameter("speed", 90, 1, 500);
@@ -35,12 +36,12 @@ public class PilotsRoots extends SLPattern<CubesModel> {
 
     private DiscreteParameter rootModeParam = new DiscreteParameter("shape", 0, 0, 2);
 
-    private class PathElement {
+    private static class PathElement {
         Strip[] strips;
         boolean[] forwards;
     }
 
-    private class Root {
+    private static class Root {
         StripsTopology.Bundle top;
         StripsTopology.Bundle bottom;
         List<PathElement> path;

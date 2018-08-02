@@ -2,6 +2,7 @@ package com.symmetrylabs.layouts.cubes.patterns;
 
 import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.layouts.cubes.CubesModel;
+import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
@@ -16,7 +17,7 @@ import heronarts.lx.transform.LXVector;
 
 import java.util.*;
 
-public class PilotsLines extends SLPattern<CubesModel> {
+public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
     private static final float MIRROR_ENDPOINT_TOLERANCE = 6; // inches
 
     private BooleanParameter vertParam = new BooleanParameter("vert");
