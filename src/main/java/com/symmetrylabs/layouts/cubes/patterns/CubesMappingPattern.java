@@ -103,4 +103,5 @@ public class CubesMappingPattern extends SLPattern<CubesModel> {
 //                setColor(v.index, col);
 //            }
 //        }
+    }
 }
