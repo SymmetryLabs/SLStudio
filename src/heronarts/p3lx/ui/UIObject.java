@@ -147,11 +147,11 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
         return true;
     }
 
-    float getX() {
+    public float getX() {
         return 0;
     }
 
-    float getY() {
+    public float getY() {
         return 0;
     }
 
