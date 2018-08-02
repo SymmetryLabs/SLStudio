@@ -12,6 +12,15 @@ dynamic.json
 
 
 
+# Temporary
+################
+
+.idea/
+*.iml
+
+
+
+
 # Uncategorized
 ################
 
