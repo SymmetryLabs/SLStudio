@@ -546,6 +546,17 @@ public class LX {
     }
 
     /**
+     * Removes an output driver
+     *
+     * @param output Output
+     * @return this
+     */
+    public LX removeOutput(LXOutput output) {
+        this.engine.removeOutput(output);
+        return this;
+    }
+
+    /**
      * Specifies the set of patterns to be run.
      *
      * @param patterns Array of patterns

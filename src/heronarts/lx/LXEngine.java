@@ -795,6 +795,17 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         return this;
     }
 
+    /**
+     * Removes an output driver
+     *
+     * @param output Output driver
+     * @return this
+     */
+    public LXEngine removeOutput(LXOutput output) {
+        this.output.removeChild(output);
+        return this;
+    }
+
     public List<LXChannel> getChannels() {
         return this.channels;
     }
