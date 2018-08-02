@@ -301,7 +301,7 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
     }
 
     @Override
-    protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         if (!this.editing) {
             if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
                 consumeKeyEvent();
@@ -320,7 +320,7 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
     }
 
     @Override
-    protected void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
         if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
             consumeKeyEvent();
             setShowValue(false);
@@ -328,12 +328,12 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
     }
 
     @Override
-    protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+    public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
         setShowValue(true);
     }
 
     @Override
-    protected void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
+    public void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
         setShowValue(false);
     }
 

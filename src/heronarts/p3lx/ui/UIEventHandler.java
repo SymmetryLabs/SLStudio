@@ -37,7 +37,7 @@ public abstract class UIEventHandler {
      * @param mx x-coordinate
      * @param my y-coordinate
      */
-    protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+    public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
     }
 
     /**
@@ -47,7 +47,7 @@ public abstract class UIEventHandler {
      * @param mx x-coordinate
      * @param my y-coordinate
      */
-    protected void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
+    public void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
     }
 
     /**
@@ -57,7 +57,7 @@ public abstract class UIEventHandler {
      * @param mx x-coordinate
      * @param my y-coordinate
      */
-    protected void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
+    public void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
     }
 
     /**
@@ -69,7 +69,7 @@ public abstract class UIEventHandler {
      * @param dx movement in x
      * @param dy movement in y
      */
-    protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+    public void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
     }
 
     /**
@@ -79,7 +79,7 @@ public abstract class UIEventHandler {
      * @param mx x-coordinate
      * @param my y-coordinate
      */
-    protected void onMouseMoved(MouseEvent mouseEvent, float mx, float my) {
+    public void onMouseMoved(MouseEvent mouseEvent, float mx, float my) {
     }
 
     /**
@@ -87,7 +87,7 @@ public abstract class UIEventHandler {
      *
      * @param mouseEvent Mouse Event
      */
-    protected void onMouseOver(MouseEvent mouseEvent) {
+    public void onMouseOver(MouseEvent mouseEvent) {
     }
 
     /**
@@ -95,7 +95,7 @@ public abstract class UIEventHandler {
      *
      * @param mouseEvent Mouse Event
      */
-    protected void onMouseOut(MouseEvent mouseEvent) {
+    public void onMouseOut(MouseEvent mouseEvent) {
     }
 
     /**
@@ -106,7 +106,7 @@ public abstract class UIEventHandler {
      * @param my y-coordinate
      * @param delta Amount of wheel movement
      */
-    protected void onMouseWheel(MouseEvent mouseEvent, float mx, float my, float delta) {
+    public void onMouseWheel(MouseEvent mouseEvent, float mx, float my, float delta) {
     }
 
     /**
@@ -116,7 +116,7 @@ public abstract class UIEventHandler {
      * @param mx x-coordinate
      * @param my y-coordinate
      */
-    protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
     }
 
     /**
@@ -126,7 +126,7 @@ public abstract class UIEventHandler {
      * @param keyChar Key character
      * @param keyCode Key code value
      */
-    protected void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
     }
 
     /**
@@ -136,7 +136,7 @@ public abstract class UIEventHandler {
      * @param keyChar Key character
      * @param keyCode Key code value
      */
-    protected void onKeyTyped(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyTyped(KeyEvent keyEvent, char keyChar, int keyCode) {
     }
 
 }

@@ -172,7 +172,7 @@ public class UI2dScrollContext extends UI2dContext {
     }
 
     @Override
-    protected void onMouseWheel(MouseEvent e, float mx, float my, float delta) {
+    public void onMouseWheel(MouseEvent e, float mx, float my, float delta) {
         if (e.isShiftDown()) {
             if (this.horizontalScrollingEnabled) {
                 if (this.scrollWidth > this.width) {

@@ -155,7 +155,7 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
     protected void incrementValue(KeyEvent keyEvent) {}
 
     @Override
-    protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         if (this.editing) {
             // Editing!
             if (isValidCharacter(keyChar)) {
@@ -208,12 +208,12 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
     private float dAccum = 0;
 
     @Override
-    protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+    public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
         this.dAccum = 0;
     }
 
     @Override
-    protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+    public void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
         if (this.enabled) {
             this.dAccum -= dy;
             int offset = (int) (this.dAccum / 5);

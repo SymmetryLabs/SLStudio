@@ -98,14 +98,14 @@ public class UIColorSwatch extends UI2dComponent implements UIFocus {
     }
 
     @Override
-    protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+    public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
         if (this.enabled) {
             updateColor(mx, my);
         }
     }
 
     @Override
-    protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+    public void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
         if (this.enabled) {
             updateColor(mx, my);
         }
@@ -119,7 +119,7 @@ public class UIColorSwatch extends UI2dComponent implements UIFocus {
     }
 
     @Override
-    protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         if (!this.enabled) {
             return;
         }

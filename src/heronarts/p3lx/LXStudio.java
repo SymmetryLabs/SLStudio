@@ -107,7 +107,7 @@ public class LXStudio extends P3LX {
 
             setTopLevelKeyEventHandler(new UIEventHandler() {
                 @Override
-                protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+                public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
                     if (keyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
                         lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
                     } else if (keyChar == '?' && keyEvent.isShiftDown()) {

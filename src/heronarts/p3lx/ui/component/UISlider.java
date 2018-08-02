@@ -276,7 +276,7 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
     private float doubleClickP = 0;
 
     @Override
-    protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+    public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
         super.onMousePressed(mouseEvent, mx, my);
         float mp, dim;
         boolean isVertical = false;
@@ -306,7 +306,7 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
     }
 
     @Override
-    protected void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
+    public void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
         super.onMouseReleased(mouseEvent, mx, my);
         this.editing = false;
     }
@@ -327,7 +327,7 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
     }
 
     @Override
-    protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+    public void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
         if (isEnabled()) {
             float dv, dim;
             boolean valid;

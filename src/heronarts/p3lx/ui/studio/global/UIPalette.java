@@ -140,12 +140,12 @@ public class UIPalette extends UICollapsibleSection {
             }
 
             @Override
-            protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+            public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
                 updateHue(mx, my);
             }
 
             @Override
-            protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+            public void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
                 updateHue(mx, my);
             }
 

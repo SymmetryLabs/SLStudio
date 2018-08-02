@@ -77,7 +77,7 @@ public abstract class UIStop extends UI2dComponent implements UIFocus {
     }
 
     @Override
-    protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         if (keyCode == java.awt.event.KeyEvent.VK_SPACE) {
             consumeKeyEvent();
             stop();
@@ -87,7 +87,7 @@ public abstract class UIStop extends UI2dComponent implements UIFocus {
     }
 
     @Override
-    protected void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
         if (this.stopButtonDown && keyCode == java.awt.event.KeyEvent.VK_SPACE) {
             this.stopButtonDown = false;
             redraw();

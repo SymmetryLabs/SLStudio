@@ -158,7 +158,7 @@ public class UIClipButton extends UI2dContainer implements UIFocus, UITriggerTar
     }
 
     @Override
-    protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         super.onKeyPressed(keyEvent, keyChar, keyCode);
         if (this.clip == null) {
             if (keyCode == java.awt.event.KeyEvent.VK_ENTER) {
@@ -222,7 +222,7 @@ public class UIClipButton extends UI2dContainer implements UIFocus, UITriggerTar
     }
 
     @Override
-    protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+    public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
         if (this.clip == null) {
             if (mouseEvent.getCount() == 2) {
                 this.bus.addClip(this.index);

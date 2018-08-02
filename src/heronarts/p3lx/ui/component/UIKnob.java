@@ -187,7 +187,7 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
     private double dragValue;
 
     @Override
-    protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+    public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
         super.onMousePressed(mouseEvent, mx, my);
         this.dragValue = getNormalized();
         if ((this.parameter != null) && (mouseEvent.getCount() > 1)) {
@@ -216,7 +216,7 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
     }
 
     @Override
-    protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+    public void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
         if (!isEnabled()) {
             return;
         }

@@ -186,7 +186,7 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UITrigge
     }
 
     @Override
-    protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+    public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
         if (this.enabled) {
             this.exactToggleTime = mouseEvent.getMillis();
             setActive(this.isMomentary ? true : !this.active);
@@ -194,7 +194,7 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UITrigge
     }
 
     @Override
-    protected void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
+    public void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
         if (this.enabled) {
             if (this.isMomentary) {
                 this.exactToggleTime = mouseEvent.getMillis();
@@ -204,7 +204,7 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UITrigge
     }
 
     @Override
-    protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
             if (this.enabled) {
                 this.exactToggleTime = keyEvent.getMillis();
@@ -215,7 +215,7 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UITrigge
     }
 
     @Override
-    protected void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
         if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
             if (this.enabled && this.isMomentary) {
                 this.exactToggleTime = keyEvent.getMillis();

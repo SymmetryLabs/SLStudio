@@ -20,7 +20,7 @@ public class UISceneStop extends UIStop {
     }
 
     @Override
-    protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         super.onKeyPressed(keyEvent, keyChar, keyCode);
         if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
             consumeKeyEvent();

@@ -83,7 +83,7 @@ public class UI implements LXEngine.Dispatch {
         }
 
         @Override
-        protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+        public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
             if (!keyEventConsumed()) {
                 if (keyCode == java.awt.event.KeyEvent.VK_TAB) {
                     if (keyEvent.isShiftDown()) {

@@ -61,7 +61,7 @@ public class UISceneButton extends UI2dComponent implements UIFocus, UITriggerTa
     }
 
     @Override
-    protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         super.onKeyPressed(keyEvent, keyChar, keyCode);
         if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
             consumeKeyEvent();
@@ -75,7 +75,7 @@ public class UISceneButton extends UI2dComponent implements UIFocus, UITriggerTa
     }
 
     @Override
-    protected void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
         if (this.playButtonDown && keyCode == java.awt.event.KeyEvent.VK_SPACE) {
             this.playButtonDown = false;
             redraw();
@@ -83,14 +83,14 @@ public class UISceneButton extends UI2dComponent implements UIFocus, UITriggerTa
     }
 
     @Override
-    protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+    public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
         this.lx.engine.launchScene(this.index);
         this.playButtonDown = true;
         redraw();
     }
 
     @Override
-    protected void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
+    public void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
         if (this.playButtonDown) {
             this.playButtonDown = false;
             redraw();

@@ -209,7 +209,7 @@ public class UIToggleSet extends UI2dComponent implements UIFocus, UIControlTarg
     }
 
     @Override
-    protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+    public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
         for (int i = 0; i < this.boundaries.length; ++i) {
             if (mx < this.boundaries[i]) {
                 setValue(i);
@@ -219,7 +219,7 @@ public class UIToggleSet extends UI2dComponent implements UIFocus, UIControlTarg
     }
 
     @Override
-    protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         if ((keyCode == java.awt.event.KeyEvent.VK_LEFT)
                 || (keyCode == java.awt.event.KeyEvent.VK_DOWN)) {
             consumeKeyEvent();

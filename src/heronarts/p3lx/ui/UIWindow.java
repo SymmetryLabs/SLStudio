@@ -81,7 +81,7 @@ public class UIWindow extends UI2dContext {
     }
 
     @Override
-    protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+    public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
         this.movingWindow = (my < TITLE_LABEL_HEIGHT);
         bringToFront();
         if (!hasFocus()) {
@@ -90,7 +90,7 @@ public class UIWindow extends UI2dContext {
     }
 
     @Override
-    protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+    public void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
         if (this.movingWindow) {
             float newX = LXUtils.constrainf(this.x + dx, 0, this.parent.getWidth() - this.width);
             float newY = LXUtils.constrainf(this.y + dy, 0, this.parent.getHeight() - this.height);

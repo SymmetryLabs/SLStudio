@@ -347,7 +347,7 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
         }
 
         @Override
-        protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+        public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
             clearSelection();
             this.selectionStart = this.selectionEnd = LXUtils.constrain(mx / (this.width-1), 0, 1);
             if (this.impl != null) {
@@ -356,7 +356,7 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
         }
 
         @Override
-        protected void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
+        public void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
             clearSelection();
             if (this.impl != null) {
                 this.impl.onMouseClicked(mouseEvent, mx, my);
@@ -364,7 +364,7 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
         }
 
         @Override
-        protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+        public void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
             boolean implHandled = false;
             if (this.impl != null) {
                 implHandled = this.impl.onMouseDragged(mouseEvent, mx, my, dx, dy);
@@ -377,7 +377,7 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
         }
 
         @Override
-        protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+        public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
             super.onKeyPressed(keyEvent, keyChar, keyCode);
             if (this.impl != null) {
                 this.impl.onKeyPressed(keyEvent, keyChar, keyCode);
@@ -478,7 +478,7 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
             private final static int EVENT_SELECTION_THRESHOLD = 6;
 
             @Override
-            protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+            public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
                 LXClipEvent edit = null;
                 for (LXClipEvent event : lane.events) {
                     ParameterClipEvent parameterEvent = (ParameterClipEvent) event;
@@ -498,7 +498,7 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
             }
 
             @Override
-            protected void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
+            public void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
                 if (mouseEvent.getCount() == 2) {
                     double basis = mx / (width - 1);
                     double normalized = 1. - my / (height-1);
@@ -518,7 +518,7 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
             }
 
             @Override
-            protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+            public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
                 if (this.editEvent != null && keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
                     consumeKeyEvent();
                     LXClipEvent edit = this.editEvent;
@@ -585,7 +585,7 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
             }
 
             @Override
-            protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+            public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
                 LXChannel channel = (LXChannel) lane.clip.bus;
                 int numPatterns = channel.patterns.size();
                 int patternRowHeight = (int) Math.floor(height / numPatterns);
@@ -621,7 +621,7 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
             }
 
             @Override
-            protected void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
+            public void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
 
             }
 
@@ -635,7 +635,7 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
             }
 
             @Override
-            protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+            public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
                 if (this.selectedEvent != null && keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
                     lane.removeEvent(this.selectedEvent);
                 }
@@ -678,12 +678,12 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
             }
 
             @Override
-            protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+            public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
                 // TODO Auto-generated method stub
             }
 
             @Override
-            protected void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
+            public void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
                 // TODO Auto-generated method stub
             }
 
@@ -694,7 +694,7 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
             }
 
             @Override
-            protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+            public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
                 // TODO Auto-generated method stub
 
             }

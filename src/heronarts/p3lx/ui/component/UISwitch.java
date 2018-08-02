@@ -92,7 +92,7 @@ public class UISwitch extends UIParameterControl implements UIFocus, UITriggerTa
     }
 
     @Override
-    protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         super.onKeyPressed(keyEvent, keyChar, keyCode);
         if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
             if (this.parameter != null) {
@@ -107,7 +107,7 @@ public class UISwitch extends UIParameterControl implements UIFocus, UITriggerTa
     }
 
     @Override
-    protected void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
         super.onKeyReleased(keyEvent, keyChar, keyCode);
         if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
             if ((this.parameter != null) && this.isMomentary) {
@@ -125,7 +125,7 @@ public class UISwitch extends UIParameterControl implements UIFocus, UITriggerTa
     }
 
     @Override
-    protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+    public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
         super.onMousePressed(mouseEvent, mx, my);
         if (this.parameter != null && isOnSwitch(mx, my)) {
             if (this.isMomentary) {
@@ -137,7 +137,7 @@ public class UISwitch extends UIParameterControl implements UIFocus, UITriggerTa
     }
 
     @Override
-    protected void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
+    public void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
         super.onMouseReleased(mouseEvent, mx, my);
         if (this.isMomentary && (this.parameter != null) && isOnSwitch(mx, my)) {
             getBooleanParameter().setValue(false);

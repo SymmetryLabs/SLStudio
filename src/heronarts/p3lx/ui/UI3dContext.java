@@ -631,14 +631,14 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     }
 
     @Override
-    protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+    public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
         if (mouseEvent.getCount() > 1) {
             focus();
         }
     }
 
     @Override
-    protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+    public void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
         switch (this.interactionMode) {
         case ZOOM:
             if (mouseEvent.isShiftDown()) {
@@ -674,7 +674,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     }
 
     @Override
-    protected void onMouseWheel(MouseEvent mouseEvent, float mx, float my, float delta) {
+    public void onMouseWheel(MouseEvent mouseEvent, float mx, float my, float delta) {
         switch (this.interactionMode) {
         case ZOOM:
             this.radius.incrementValue(delta * this.radius.getValue() / 1000.);
@@ -688,7 +688,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     }
 
     @Override
-    protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         float amount = .02f;
         if (keyEvent.isShiftDown()) {
             amount *= 10.f;
