@@ -10,6 +10,7 @@ import heronarts.p3lx.ui.UI3dContext;
 
 public class UICaptionText extends UITextOverlay {
     Set<CaptionSource> sources = new HashSet<>();
+    static final String SPACES = "                                                   ";
 
     public UICaptionText(UI ui, UI3dContext parent, int anchorX, int anchorY, int alignX, int alignY) {
         super(ui, parent, anchorX, anchorY, alignX, alignY);
@@ -29,7 +30,8 @@ public class UICaptionText extends UITextOverlay {
         for (CaptionSource source : sources) {
             String caption = source.getCaption();
             if (caption != null && !caption.isEmpty()) {
-                result += source.getClass().getSimpleName() + " - " + caption + "\n";
+                String prefix = source.getClass().getSimpleName() + " - ";
+                result += prefix + caption.replace("\n", "\n" + SPACES.substring(0, prefix.length()));
             }
         }
         return result.trim();
