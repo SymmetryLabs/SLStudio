@@ -2,7 +2,7 @@ package com.symmetrylabs.layouts.cubes.patterns;
 
 import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.layouts.cubes.CubesModel;
-import com.symmetrylabs.layouts.cubes.topology.CubeTopology;
+import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.MathUtils;
@@ -41,9 +41,9 @@ public class PilotsLines extends SLPattern<CubesModel> {
      * mirror, not a geometric mirror. This caches the mirror image of the left side
      * onto the right side, so that we don't have to calculate the mirror of each
      * strip independently */
-    private HashMap<CubeTopology.Bundle, CubeTopology.Bundle> xMirrorMap = new HashMap<>();
-    private HashMap<CubeTopology.Bundle, CubeTopology.Bundle> yMirrorMap = new HashMap<>();
-    private HashMap<CubeTopology.Bundle, CubeTopology.Bundle> zMirrorMap = new HashMap<>();
+    private HashMap<StripsTopology.Bundle, StripsTopology.Bundle> xMirrorMap = new HashMap<>();
+    private HashMap<StripsTopology.Bundle, StripsTopology.Bundle> yMirrorMap = new HashMap<>();
+    private HashMap<StripsTopology.Bundle, StripsTopology.Bundle> zMirrorMap = new HashMap<>();
 
     public PilotsLines(LX lx) {
         super(lx);
@@ -69,7 +69,7 @@ public class PilotsLines extends SLPattern<CubesModel> {
         addParameter(colorTailParam);
         addParameter(colorWidthParam);
 
-        for (CubeTopology.Bundle b : model.getTopology().edges) {
+        for (StripsTopology.Bundle b : model.getTopology().edges) {
             LXVector v = new LXVector(b.endpoints().start);
             LXVector end = new LXVector(b.endpoints().end);
             LXVector delta = v.copy().mult(-1).add(end); // delta = end - v
@@ -84,7 +84,7 @@ public class PilotsLines extends SLPattern<CubesModel> {
             ymirror.z += 2 * (model.cz - v.z) - delta.z;
 
             boolean foundX = false, foundY = false, foundZ = false;
-            for (CubeTopology.Bundle maybeMirror : model.getTopology().edges) {
+            for (StripsTopology.Bundle maybeMirror : model.getTopology().edges) {
                 if (maybeMirror.dir != b.dir)
                     continue;
                 LXVector mm = new LXVector(maybeMirror.endpoints().start);
@@ -147,13 +147,13 @@ public class PilotsLines extends SLPattern<CubesModel> {
     }
 
     private class StaticEdgeSet extends LineEffect {
-        final List<CubeTopology.Bundle> edges;
-        public StaticEdgeSet(List<CubeTopology.Bundle> edges, float attack, float decay) {
+        final List<StripsTopology.Bundle> edges;
+        public StaticEdgeSet(List<StripsTopology.Bundle> edges, float attack, float decay) {
             super(attack, decay);
             this.edges = edges;
         }
 
-        private void turnOnBundle(CubeTopology.Bundle b, int c) {
+        private void turnOnBundle(StripsTopology.Bundle b, int c) {
             if (b == null)
                 return;
             for (int stripIndex : b.strips) {
@@ -167,7 +167,7 @@ public class PilotsLines extends SLPattern<CubesModel> {
         @Override
         protected boolean applyColors(float alpha) {
             int c = LXColor.hsba(0, 0, 100, alpha);
-            for (CubeTopology.Bundle e : edges) {
+            for (StripsTopology.Bundle e : edges) {
                 turnOnBundle(e, c);
 
                 if (xMirrorParam.getValueb())
@@ -182,7 +182,7 @@ public class PilotsLines extends SLPattern<CubesModel> {
     }
 
     private class ScrollerEdgeSet extends LineEffect {
-        final List<List<CubeTopology.Bundle>> lines;
+        final List<List<StripsTopology.Bundle>> lines;
         final float speed;
         final float[] min;
         final float[] max;
@@ -195,7 +195,7 @@ public class PilotsLines extends SLPattern<CubesModel> {
         final float bandDelay;
 
         public ScrollerEdgeSet(
-            List<List<CubeTopology.Bundle>> lines, float attack, float decay, float speed, float bandWidth,
+            List<List<StripsTopology.Bundle>> lines, float attack, float decay, float speed, float bandWidth,
             float bandTail, float bandSpeed, float bandDelay, float maskPercentage) {
             super(attack, decay);
             this.lines = lines;
@@ -211,7 +211,7 @@ public class PilotsLines extends SLPattern<CubesModel> {
             Arrays.fill(min, Float.MAX_VALUE);
             Arrays.fill(max, Float.MIN_VALUE);
             for (int i = 0; i < lines.size(); i++) {
-                for (CubeTopology.Bundle e : lines.get(i)) {
+                for (StripsTopology.Bundle e : lines.get(i)) {
                     min[i] = Float.min(e.minOrder(), min[i]);
                     max[i] = Float.max(e.maxOrder(), max[i]);
                 }
@@ -257,7 +257,7 @@ public class PilotsLines extends SLPattern<CubesModel> {
                     bandLo = bandHi - bandWidth;
                 }
 
-                for (CubeTopology.Bundle e : lines.get(i)) {
+                for (StripsTopology.Bundle e : lines.get(i)) {
                     // pick a strip that's likely to be in the front of the bundle
                     int stripIndex = e.strips.length >= 2 ? 1 : 0;
                     for (LXVector p : getVectors(model.getStripByIndex(e.strips[stripIndex]).points)) {
@@ -370,10 +370,10 @@ public class PilotsLines extends SLPattern<CubesModel> {
         effects.removeIf(e -> !e.run(deltaMs));
     }
 
-    private List<CubeTopology.Bundle> randomLineSeg(CubeTopology.EdgeDirection d, int expectedLength) {
+    private List<StripsTopology.Bundle> randomLineSeg(StripsTopology.EdgeDirection d, int expectedLength) {
         int N = model.getTopology().edges.size();
         Random r = new Random();
-        CubeTopology.Bundle e;
+        StripsTopology.Bundle e;
         do {
             e = model.getTopology().edges.get(r.nextInt(N));
         } while (e.dir != d);
@@ -389,11 +389,11 @@ public class PilotsLines extends SLPattern<CubesModel> {
             len++;
         }
 
-        LinkedList<CubeTopology.Bundle> line = new LinkedList<>();
+        LinkedList<StripsTopology.Bundle> line = new LinkedList<>();
         line.add(e);
         while (line.size() < len) {
             boolean added = false;
-            CubeTopology.Bundle t;
+            StripsTopology.Bundle t;
 
             t = line.getLast();
             if (t.na != null) {
@@ -416,22 +416,22 @@ public class PilotsLines extends SLPattern<CubesModel> {
         return line;
     }
 
-    private Set<CubeTopology.Bundle> createLineSet(CubeTopology.EdgeDirection d, int count, int expectedLength) {
-        Set<CubeTopology.Bundle> all = new HashSet<>();
+    private Set<StripsTopology.Bundle> createLineSet(StripsTopology.EdgeDirection d, int count, int expectedLength) {
+        Set<StripsTopology.Bundle> all = new HashSet<>();
         for (int i = 0; i < count; i++) {
             all.addAll(randomLineSeg(d, expectedLength));
         }
         return all;
     }
 
-    private ArrayList<CubeTopology.Bundle> createHorizontalLines() {
+    private ArrayList<StripsTopology.Bundle> createHorizontalLines() {
         return new ArrayList<>(
-            createLineSet(CubeTopology.EdgeDirection.X, hCountParam.getValuei(), hLengthParam.getValuei()));
+            createLineSet(StripsTopology.EdgeDirection.X, hCountParam.getValuei(), hLengthParam.getValuei()));
     }
 
-    private ArrayList<CubeTopology.Bundle> createVerticalLines() {
+    private ArrayList<StripsTopology.Bundle> createVerticalLines() {
         return new ArrayList<>(
-            createLineSet(CubeTopology.EdgeDirection.Y, vCountParam.getValuei(), vLengthParam.getValuei()));
+            createLineSet(StripsTopology.EdgeDirection.Y, vCountParam.getValuei(), vLengthParam.getValuei()));
     }
 
     private LineEffect createStaticVerticalLines() {
@@ -444,7 +444,7 @@ public class PilotsLines extends SLPattern<CubesModel> {
             createHorizontalLines(), attackParam.getValuef(), decayParam.getValuef());
     }
 
-    private LineEffect createScroller(List<List<CubeTopology.Bundle>> lines, boolean flipSpeed, boolean showBand) {
+    private LineEffect createScroller(List<List<StripsTopology.Bundle>> lines, boolean flipSpeed, boolean showBand) {
         return new ScrollerEdgeSet(
             lines,
             attackParam.getValuef(),
@@ -459,18 +459,18 @@ public class PilotsLines extends SLPattern<CubesModel> {
 
     private LineEffect createScrollingVerticalLines(boolean up, boolean showBand) {
         int N = vCountParam.getValuei();
-        List<List<CubeTopology.Bundle>> lines = new ArrayList<>(N);
+        List<List<StripsTopology.Bundle>> lines = new ArrayList<>(N);
         for (int i = 0; i < N; i++) {
-            lines.add(randomLineSeg(CubeTopology.EdgeDirection.Y, vLengthParam.getValuei()));
+            lines.add(randomLineSeg(StripsTopology.EdgeDirection.Y, vLengthParam.getValuei()));
         }
         return createScroller(lines, !up, showBand);
     }
 
     private LineEffect createScrollingHorizontalLines(boolean right, boolean showBand) {
         int N = hCountParam.getValuei();
-        List<List<CubeTopology.Bundle>> lines = new ArrayList<>(N);
+        List<List<StripsTopology.Bundle>> lines = new ArrayList<>(N);
         for (int i = 0; i < N; i++) {
-            lines.add(randomLineSeg(CubeTopology.EdgeDirection.X, hLengthParam.getValuei()));
+            lines.add(randomLineSeg(StripsTopology.EdgeDirection.X, hLengthParam.getValuei()));
         }
         return createScroller(lines, !right, showBand);
     }

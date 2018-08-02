@@ -1,4 +1,4 @@
-package com.symmetrylabs.layouts.cubes.topology;
+package com.symmetrylabs.slstudio.model;
 
 import com.google.common.base.Preconditions;
 import com.symmetrylabs.layouts.cubes.CubesModel;
@@ -7,7 +7,7 @@ import heronarts.lx.model.LXPoint;
 
 import java.util.*;
 
-public class CubeTopology {
+public class StripsTopology {
     public static final int NO_EDGE = Integer.MAX_VALUE;
 
     /* All in inches */
@@ -269,10 +269,10 @@ public class CubeTopology {
         }
     }
 
-    private final CubesModel model;
+    private final StripsModel model;
     public final List<Bundle> edges;
 
-    public CubeTopology(CubesModel model) {
+    public StripsTopology(StripsModel model) {
         this.model = model;
         int N = model.getStrips().size();
         edges = new ArrayList<>(N);

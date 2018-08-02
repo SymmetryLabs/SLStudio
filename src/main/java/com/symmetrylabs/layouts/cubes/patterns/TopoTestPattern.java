@@ -1,7 +1,8 @@
-package com.symmetrylabs.layouts.cubes.topology;
+package com.symmetrylabs.layouts.cubes.patterns;
 
 import com.symmetrylabs.layouts.cubes.CubesModel;
 import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
@@ -26,7 +27,7 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
             colors[p.index] = color;
         }
     }
-    private void setEdgeColor(CubeTopology.Bundle e, int color) {
+    private void setEdgeColor(StripsTopology.Bundle e, int color) {
         for (int strip : e.strips) {
             setStripColor(model.getStripByIndex(strip), color);
         }
@@ -36,7 +37,7 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
     public void run(double deltaMs) {
         switch (modeParam.getValuei()) {
             case 0:
-                for (CubeTopology.Bundle e : model.getTopology().edges) {
+                for (StripsTopology.Bundle e : model.getTopology().edges) {
                     float h;
                     switch (e.dir) {
                         case X: h = 60; break;
@@ -55,13 +56,13 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
                 }
                 elapsed = 0;
                 setColors(0);
-                CubeTopology topo = model.getTopology();
-                CubeTopology.Bundle e = topo.edges.get(r.nextInt(topo.edges.size()));
+                StripsTopology topo = model.getTopology();
+                StripsTopology.Bundle e = topo.edges.get(r.nextInt(topo.edges.size()));
                 setEdgeColor(e, LXColor.rgb(255,255,255));
-                for (CubeTopology.Bundle n = e.na; n != null; n = n.na) {
+                for (StripsTopology.Bundle n = e.na; n != null; n = n.na) {
                     setEdgeColor(n, LXColor.rgb(0,255,0));
                 }
-                for (CubeTopology.Bundle p = e.pa; p != null; p = p.pa) {
+                for (StripsTopology.Bundle p = e.pa; p != null; p = p.pa) {
                     setEdgeColor(p, LXColor.rgb(255,0,100));
                 }
                 break;
@@ -76,7 +77,7 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
                 i++;
                 if (i > model.getTopology().edges.size())
                     i = 0;
-                CubeTopology.Bundle edge = model.getTopology().edges.get(i);
+                StripsTopology.Bundle edge = model.getTopology().edges.get(i);
                 setEdgeColor(edge, LXColor.rgb(255, 255, 255));
                 System.out.println(String.format("%d / %d %d %d %d",
                     i,
@@ -98,7 +99,7 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
                 if (i > model.getTopology().edges.size())
                     i = 0;
                 System.out.println(i);
-                CubeTopology.Bundle edge = model.getTopology().edges.get(i);
+                StripsTopology.Bundle edge = model.getTopology().edges.get(i);
                 setEdgeColor(edge, LXColor.rgb(255, 255, 255));
                 if (edge.na != null) setEdgeColor(edge.na, LXColor.hsb(0, 100, 100));
                 if (edge.nbn != null) setEdgeColor(edge.nbn, LXColor.hsb(30, 100, 100));

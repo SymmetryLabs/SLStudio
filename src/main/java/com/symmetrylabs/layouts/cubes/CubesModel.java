@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.symmetrylabs.layouts.cubes.topology.CubeTopology;
+import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import heronarts.lx.model.LXPoint;
@@ -34,7 +34,6 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
     private final List<Face> facesUnmodifiable = Collections.unmodifiableList(faces);
 
     private final Cube[] _cubes;
-    private final CubeTopology topology;
 
     public CubesModel() {
         this(new ArrayList<>(), new Cube[0]);
@@ -58,14 +57,6 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
                 }
             }
         }
-
-        CubeTopology t = null;
-        try {
-            t = new CubeTopology(this);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
-        topology = t;
     }
 
     public List<Tower> getTowers() {
@@ -78,10 +69,6 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
 
     public List<Face> getFaces() {
         return facesUnmodifiable;
-    }
-
-    public CubeTopology getTopology() {
-        return topology;
     }
 
     private static class Fixture extends LXAbstractFixture {

@@ -16,6 +16,7 @@ public class StripsModel<T extends Strip> extends SLModel {
     protected final List<T> strips = new ArrayList<>();
     protected final List<T> stripsUnmodifiable = Collections.unmodifiableList(strips);
     protected final Map<String, Strip> stripTable = new HashMap<>();
+    private StripsTopology topology = null;
 
     public StripsModel() {
     }
@@ -32,6 +33,17 @@ public class StripsModel<T extends Strip> extends SLModel {
 
     protected StripsModel(LXFixture[] fixtures) {
         super(fixtures);
+    }
+
+    public StripsTopology getTopology() {
+        if (topology == null) {
+            try {
+                topology = new StripsTopology(this);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
+        }
+        return topology;
     }
 
     public List<T> getStrips() {

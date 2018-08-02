@@ -1,8 +1,8 @@
 package com.symmetrylabs.layouts.cubes.patterns;
 
 import com.symmetrylabs.layouts.cubes.CubesModel;
-import com.symmetrylabs.layouts.cubes.topology.CubeTopology;
-import com.symmetrylabs.layouts.cubes.topology.EdgeAStar;
+import com.symmetrylabs.slstudio.model.StripsTopology;
+import com.symmetrylabs.util.EdgeAStar;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
@@ -41,8 +41,8 @@ public class PilotsRoots extends SLPattern<CubesModel> {
     }
 
     private class Root {
-        CubeTopology.Bundle top;
-        CubeTopology.Bundle bottom;
+        StripsTopology.Bundle top;
+        StripsTopology.Bundle bottom;
         List<PathElement> path;
         ADSREnvelope adsr;
     }
@@ -110,7 +110,7 @@ public class PilotsRoots extends SLPattern<CubesModel> {
      * to the root. */
     private static class RootSpec {
         Root root;
-        List<CubeTopology.Bundle> bundles;
+        List<StripsTopology.Bundle> bundles;
         /** The point that determines which direction roots flow in; the end
          *  of the first bundle in the list that is closest to gapOrigin is
          *  the end that we start the gap at. */
@@ -118,9 +118,9 @@ public class PilotsRoots extends SLPattern<CubesModel> {
     }
 
     private List<RootSpec> buildSliceRoots() {
-        HashMap<Float, List<CubeTopology.Bundle>> slices = new HashMap<>();
-        for (CubeTopology.Bundle b : model.getTopology().edges) {
-            if (b.dir == CubeTopology.EdgeDirection.X)
+        HashMap<Float, List<StripsTopology.Bundle>> slices = new HashMap<>();
+        for (StripsTopology.Bundle b : model.getTopology().edges) {
+            if (b.dir == StripsTopology.EdgeDirection.X)
                 continue;
 
             float x = b.endpoints().start.x;
@@ -140,14 +140,14 @@ public class PilotsRoots extends SLPattern<CubesModel> {
         Random r = new Random();
         List<RootSpec> res = new ArrayList<>(slices.size());
         for (float x : slices.keySet()) {
-            List<CubeTopology.Bundle> slice = slices.get(x);
-            CubeTopology.Bundle start = null;
+            List<StripsTopology.Bundle> slice = slices.get(x);
+            StripsTopology.Bundle start = null;
 
             boolean startIsVertical = r.nextBoolean();
-            for (CubeTopology.Bundle b : slice) {
-                if (startIsVertical && b.dir != CubeTopology.EdgeDirection.Y)
+            for (StripsTopology.Bundle b : slice) {
+                if (startIsVertical && b.dir != StripsTopology.EdgeDirection.Y)
                     continue;
-                else if (!startIsVertical && b.dir != CubeTopology.EdgeDirection.Z)
+                else if (!startIsVertical && b.dir != StripsTopology.EdgeDirection.Z)
                     continue;
                 /* Looking for one with nothing below it and nothing in front
                  * (in negative-Z) of it. For Y-aligned bundles, "below" is na
@@ -161,9 +161,9 @@ public class PilotsRoots extends SLPattern<CubesModel> {
             if (start == null) {
                 throw new IllegalStateException("slice has no admissable start bundles");
             }
-            List<CubeTopology.Bundle> path = new ArrayList<>();
+            List<StripsTopology.Bundle> path = new ArrayList<>();
 
-            CubeTopology.Bundle t = start;
+            StripsTopology.Bundle t = start;
             while (t != null) {
                 path.add(t);
                 if (t.pa == null) {
@@ -192,9 +192,9 @@ public class PilotsRoots extends SLPattern<CubesModel> {
 
     private List<RootSpec> buildTreeRoots() {
         /* Generate lists of allowable root top bundles and root bottom bundles */
-        List<CubeTopology.Bundle> rootTops = new ArrayList<>();
-        for (CubeTopology.Bundle e : model.getTopology().edges) {
-            if (e.dir != CubeTopology.EdgeDirection.Y)
+        List<StripsTopology.Bundle> rootTops = new ArrayList<>();
+        for (StripsTopology.Bundle e : model.getTopology().edges) {
+            if (e.dir != StripsTopology.EdgeDirection.Y)
                 continue;
             /* only get elements with nothing above them */
             if (e.pa != null)
@@ -204,15 +204,15 @@ public class PilotsRoots extends SLPattern<CubesModel> {
                 rootTops.add(e);
         }
 
-        List<CubeTopology.Bundle> rootBottoms = new ArrayList<>();
-        for (CubeTopology.Bundle e : model.getTopology().edges) {
-            if (e.dir == CubeTopology.EdgeDirection.Y)
+        List<StripsTopology.Bundle> rootBottoms = new ArrayList<>();
+        for (StripsTopology.Bundle e : model.getTopology().edges) {
+            if (e.dir == StripsTopology.EdgeDirection.Y)
                 continue;
 
             /* only get elements with nothing below them that are on the
              * edge of the structure (meaning at least one of the directions
              * in-bottom-plane has no bundle in it). */
-            if (e.dir == CubeTopology.EdgeDirection.X) {
+            if (e.dir == StripsTopology.EdgeDirection.X) {
                 if (e.pbn != null || e.nbn != null ||
                     (e.na != null && e.pa != null && e.ncn != null && e.ncp != null && e.pcn != null && e.pcp != null))
                     continue;
@@ -237,7 +237,7 @@ public class PilotsRoots extends SLPattern<CubesModel> {
         boolean[] bottomsUsed = new boolean[rootBottoms.size()];
         Arrays.fill(bottomsUsed, false);
 
-        HashSet<CubeTopology.Bundle> used = new HashSet<>();
+        HashSet<StripsTopology.Bundle> used = new HashSet<>();
         List<RootSpec> res = new ArrayList<>(N);
 
         for (int i = 0; i < rootTops.size() && res.size() < N; i++) {
@@ -254,7 +254,7 @@ public class PilotsRoots extends SLPattern<CubesModel> {
                     continue;
                 r.bottom = rootBottoms.get(j);
 
-                List<CubeTopology.Bundle> path;
+                List<StripsTopology.Bundle> path;
                 try {
                     path = aStar.findPath(r.top, r.bottom);
                 } catch (EdgeAStar.NotConnectedException ex) {
@@ -263,7 +263,7 @@ public class PilotsRoots extends SLPattern<CubesModel> {
                 }
 
                 boolean containsUsed = false;
-                for (CubeTopology.Bundle b : path) {
+                for (StripsTopology.Bundle b : path) {
                     if (used.contains(b)) {
                         containsUsed = true;
                         break;
@@ -305,11 +305,11 @@ public class PilotsRoots extends SLPattern<CubesModel> {
 
         for (RootSpec spec : newRoots) {
             Root r = spec.root;
-            List<CubeTopology.Bundle> path = spec.bundles;
+            List<StripsTopology.Bundle> path = spec.bundles;
 
             /* Figure out which direction we traverse each strip as we go through the path */
             r.path = new ArrayList<>();
-            for (CubeTopology.Bundle b : path) {
+            for (StripsTopology.Bundle b : path) {
                 PathElement e = new PathElement();
                 e.strips = new Strip[b.strips.length];
                 e.forwards = new boolean[b.strips.length];

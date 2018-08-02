@@ -1,28 +1,28 @@
-package com.symmetrylabs.layouts.cubes.topology;
+package com.symmetrylabs.util;
 
-import heronarts.lx.model.LXPoint;
+import com.symmetrylabs.slstudio.model.StripsTopology;
 
 import java.util.*;
 
 public class EdgeAStar {
     public class NotConnectedException extends Exception {}
 
-    private final CubeTopology topology;
+    private final StripsTopology topology;
 
-    private final HashSet<CubeTopology.Bundle> closed = new HashSet<>();
-    private final HashSet<CubeTopology.Bundle> open = new HashSet<>();
-    private final HashMap<CubeTopology.Bundle, CubeTopology.Bundle> cameFrom = new HashMap<>();
-    private final HashMap<CubeTopology.Bundle, Float> gScore = new HashMap<>();
-    private final HashMap<CubeTopology.Bundle, Float> fScore = new HashMap<>();
+    private final HashSet<StripsTopology.Bundle> closed = new HashSet<>();
+    private final HashSet<StripsTopology.Bundle> open = new HashSet<>();
+    private final HashMap<StripsTopology.Bundle, StripsTopology.Bundle> cameFrom = new HashMap<>();
+    private final HashMap<StripsTopology.Bundle, Float> gScore = new HashMap<>();
+    private final HashMap<StripsTopology.Bundle, Float> fScore = new HashMap<>();
 
-    private CubeTopology.Bundle current;
-    private CubeTopology.Bundle target;
+    private StripsTopology.Bundle current;
+    private StripsTopology.Bundle target;
 
-    public EdgeAStar(CubeTopology topology) {
+    public EdgeAStar(StripsTopology topology) {
         this.topology = topology;
     }
 
-    private float dist(CubeTopology.Bundle a, CubeTopology.Bundle b) {
+    private float dist(StripsTopology.Bundle a, StripsTopology.Bundle b) {
         float ax = (a.endpoints().start.x + a.endpoints().end.x) / 2f;
         float ay = (a.endpoints().start.y + a.endpoints().end.y) / 2f;
         float az = (a.endpoints().start.z + a.endpoints().end.z) / 2f;
@@ -32,7 +32,7 @@ public class EdgeAStar {
         return (float) Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2) + Math.pow(az - bz, 2));
     }
 
-    public List<CubeTopology.Bundle> findPath(CubeTopology.Bundle start, CubeTopology.Bundle end) throws NotConnectedException {
+    public List<StripsTopology.Bundle> findPath(StripsTopology.Bundle start, StripsTopology.Bundle end) throws NotConnectedException {
         target = end;
 
         closed.clear();
@@ -48,7 +48,7 @@ public class EdgeAStar {
         while (!open.isEmpty()) {
             current = null;
             float currentFScore = Float.MAX_VALUE;
-            for (CubeTopology.Bundle b : open) {
+            for (StripsTopology.Bundle b : open) {
                 Float bScore = fScore.get(b);
                 if (bScore < currentFScore) {
                     current = b;
@@ -76,7 +76,7 @@ public class EdgeAStar {
         if (current != end)
             throw new NotConnectedException();
 
-        LinkedList<CubeTopology.Bundle> res = new LinkedList<>();
+        LinkedList<StripsTopology.Bundle> res = new LinkedList<>();
         do {
             res.addFirst(current);
             current = cameFrom.get(current);
@@ -86,7 +86,7 @@ public class EdgeAStar {
         return res;
     }
 
-    private void visitNeighbor(CubeTopology.Bundle neighbor) {
+    private void visitNeighbor(StripsTopology.Bundle neighbor) {
         if (neighbor == null)
             return;
         if (closed.contains(neighbor))
