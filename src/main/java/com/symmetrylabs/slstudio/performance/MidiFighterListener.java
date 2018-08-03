@@ -1,6 +1,5 @@
 package com.symmetrylabs.slstudio.performance;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import heronarts.lx.*;
 import heronarts.lx.midi.*;
 import heronarts.lx.midi.remote.LXMidiRemote;
