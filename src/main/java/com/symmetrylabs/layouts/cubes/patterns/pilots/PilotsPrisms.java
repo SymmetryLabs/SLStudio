@@ -1,4 +1,4 @@
-package com.symmetrylabs.layouts.cubes.patterns;
+package com.symmetrylabs.layouts.cubes.patterns.pilots;
 
 import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.slstudio.model.Strip;
@@ -11,6 +11,7 @@ import heronarts.lx.midi.MidiNote;
 import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.ADSREnvelope;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
@@ -25,6 +26,7 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
     private CompoundParameter releaseParam = new CompoundParameter("release", 300, 0, 2000);
 
     private DiscreteParameter maxSizeParam = new DiscreteParameter("scale", 10, 3, 20);
+    private BooleanParameter noIntersectParam = new BooleanParameter("avoid", false);
 
     private class Prism {
         //                      XYZ
@@ -41,7 +43,6 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
         ADSREnvelope adsr;
     }
 
-    private final List<StripsTopology.Junction> junctions;
     private final List<Prism> prisms;
     private final HashMap<Integer, List<Prism>> midiPrisms;
     private final Random random = new Random();
@@ -53,9 +54,10 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
         addParameter(decayParam);
         addParameter(sustainParam);
         addParameter(releaseParam);
+        addParameter(maxSizeParam);
+        addParameter(noIntersectParam);
 
         prisms = new ArrayList<>();
-        junctions = new ArrayList<>();
         midiPrisms = new HashMap<>();
     }
 
@@ -266,6 +268,7 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
         addEdges(p, p.pnn, p.ppn, StripsTopology.EdgeDirection.Y);
         addEdges(p, p.ppn, p.ppp, StripsTopology.EdgeDirection.X);
         addEdges(p, p.pnp, p.ppp, StripsTopology.EdgeDirection.Y);
+
         return p;
     }
 
@@ -284,11 +287,31 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
         List<Prism> newPrisms = new ArrayList<>();
         int add = note.getPitch() - 59;
         for (int i = 0; i < add; i++) {
-            Prism p = randomPrism();
-            addModulator(p.adsr);
-            p.adsr.attack();
-            prisms.add(p);
-            newPrisms.add(p);
+            Prism p = null;
+
+            boolean ok = false;
+            for (int attempts = 0; attempts < 50 && !ok; attempts++) {
+                p = randomPrism();
+                ok = true;
+
+                if (noIntersectParam.getValueb()) {
+                    int startSize = p.allEdges.size();
+                    for (Prism other : prisms) {
+                        p.allEdges.removeAll(other.allEdges);
+                        if (p.allEdges.size() != startSize) {
+                            ok = false;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (ok) {
+                addModulator(p.adsr);
+                p.adsr.attack();
+                prisms.add(p);
+                newPrisms.add(p);
+            }
         }
         midiPrisms.put(note.getPitch(), newPrisms);
     }
