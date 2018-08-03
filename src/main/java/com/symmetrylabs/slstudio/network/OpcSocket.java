@@ -100,6 +100,7 @@ public class OpcSocket implements Closeable {
             try {
                 socket.send(packet);
             } catch (IOException e) {
+                System.out.println(socket.getInetAddress().getHostAddress());
                 e.printStackTrace();
             }
         }

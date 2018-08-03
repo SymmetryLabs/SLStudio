@@ -20,7 +20,7 @@ public class NetworkScanner {
     protected Map<String, NetworkDevice> deviceMap = new HashMap<>();
     protected Map<String, Long> lastReplyMillis = new HashMap<>();
     protected final Dispatcher dispatcher;
-    protected static long MAX_MILLIS_WITHOUT_REPLY = 2500;
+    protected static long MAX_MILLIS_WITHOUT_REPLY = 10000;
 
     public NetworkScanner(Dispatcher dispatcher) {
         this.dispatcher = dispatcher;

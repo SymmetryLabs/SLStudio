@@ -128,6 +128,7 @@ public class TraktorPlayNeue extends DPat
         addParameter(pTempoMult);
         addParameter(pTimePattern);
         addParameter(pShape);
+        addParameter(gainf);
 
 //        addSingleParameterUIRow(pShape);
         for (int i = 0; i < FRAME_WIDTH; ++i) {
@@ -174,7 +175,7 @@ public class TraktorPlayNeue extends DPat
             eq.gain.setValue(6);
             eq.range.setValue(36);
             eq.release.setValue(640);
-              addParameter(gainf);
+
 //            addParameter(eq.gain);
 //            addParameter(eq.range);
 //            addParameter(eq.attack);

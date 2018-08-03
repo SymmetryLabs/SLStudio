@@ -259,7 +259,7 @@ public class SummerStageLayout extends CubesLayout {
         new ClusterConfig("CLUSTER_D", SP*13, SP*14, 0, new TowerConfig[]{
             // col 1
             new TowerConfig(SP * 0, SP * 1, SP * -1, new String[][]{new String[]{"509", "508"}, new String[]{"567", "566"}, new String[]{"583", "582"}}),
-            new TowerConfig(SP * 0, SP * 1, SP * -2, new String[][]{new String[]{"679", "678"}, new String[]{"643", "642"}, new String[]{"787", "786"}}),
+            new TowerConfig(SP * 0, SP * 1, SP * -2, new String[][]{new String[]{"679", "678"}, new String[]{"1046", "1054"}, new String[]{"787", "786"}}),  //643. 642 ->> 1046 , 1045 - AS OF 8/3/18
             // col 2
             new TowerConfig(SP * 1, SP * 0, SP * 0, new String[][]{new String[]{"765", "764"}, new String[]{"609", "608"}, new String[]{"781", "780"}, new String[]{"669", "668"}}),
             new TowerConfig(SP * 1, SP * 1, SP * -1, new String[][]{new String[]{"603", "602"}, new String[]{"821", "820"}, new String[]{"809", "808"}, new String[]{"721", "720"}}),
