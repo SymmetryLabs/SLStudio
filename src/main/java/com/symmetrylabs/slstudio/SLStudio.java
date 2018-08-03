@@ -5,6 +5,7 @@ import java.util.Map;
 import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.layouts.tree.Anemometer;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
+import com.symmetrylabs.slstudio.performance.MidiFighterListener;
 import heronarts.lx.LX;
 import com.symmetrylabs.layouts.LayoutRegistry;
 import com.symmetrylabs.layouts.tree.TreeModelingTool;
@@ -132,8 +133,12 @@ SLStudio extends PApplet {
                 lx.engine.registerComponent("outputControl", outputControl);
                 mappingPixlites = setupPixlites();
 
-                SLStudio.this.apc40Listener = new APC40Listener(lx);
-                new FoxListener(lx);
+                lx.engine.midi.whenReady(new Runnable() {
+                    @Override
+                    public void run() {
+                        MidiFighterListener.bindMidi(lx);
+                    }
+                });
 
                 // SLStudio.this.performanceManager = new PerformanceManager(lx);
                 // lx.engine.registerComponent("performanceManager", performanceManager);
