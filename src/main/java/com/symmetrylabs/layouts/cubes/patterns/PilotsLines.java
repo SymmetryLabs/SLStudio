@@ -398,9 +398,9 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
             t = line.getLast();
             n = null;
             switch (t.dir) {
-                case X: n = t.nxn; break;
-                case Y: n = t.nyn; break;
-                case Z: n = t.nzn; break;
+                case X: n = t.n.nx; break;
+                case Y: n = t.n.ny; break;
+                case Z: n = t.n.nz; break;
             }
             if (n != null) {
                 line.addLast(n);
@@ -411,9 +411,9 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
                 t = line.getFirst();
                 n = null;
                 switch (t.dir) {
-                    case X: n = t.pxp; break;
-                    case Y: n = t.pyp; break;
-                    case Z: n = t.pzp; break;
+                    case X: n = t.p.px; break;
+                    case Y: n = t.p.py; break;
+                    case Z: n = t.p.pz; break;
                 }
                 if (n != null) {
                     line.addFirst(n);

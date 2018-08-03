@@ -149,11 +149,16 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
                     continue;
                 else if (!startIsVertical && b.dir != StripsTopology.EdgeDirection.Z)
                     continue;
+
                 /* Looking for one with nothing below it and nothing in front
-                 * (in negative-Z) of it. For Y-aligned bundles, "below" is na
-                 * and "in front" is ncn. For Z-aligned bundles, "below" is ncn
-                 * and "in front" is na. Either way, the check is the same. */
-                if (b.nyn == null && b.pyn == null && b.nzn == null && b.pzn == null) {
+                 * (in negative-Z) of it. */
+                boolean ok;
+                if (startIsVertical) {
+                    ok = b.n.ny == null && b.n.nz == null && b.p.nz == null;
+                } else {
+                    ok = b.n.ny == null && b.p.ny == null && b.n.nz == null;
+                }
+                if (ok) {
                     start = b;
                     break;
                 }
@@ -168,12 +173,12 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
                 if (path.contains(t))
                     throw new IllegalStateException("cycle in path");
                 path.add(t);
-                if (t.pzp == null) {
-                    t = t.pyp;
-                } else if (t.pyp == null) {
-                    t = t.pzp;
+                if (t.p.pz == null) {
+                    t = t.p.py;
+                } else if (t.p.py == null) {
+                    t = t.p.pz;
                 } else {
-                    t = r.nextBoolean() ? t.pyp : t.pzp;
+                    t = r.nextBoolean() ? t.p.py : t.p.pz;
                 }
             }
 
@@ -199,7 +204,7 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
             if (e.dir != StripsTopology.EdgeDirection.Y)
                 continue;
             /* only get elements with nothing above them */
-            if (e.pyp != null)
+            if (e.p.py != null)
                 continue;
             float x = e.endpoints().positive.x;
             if (Math.abs(model.cx - x) < topRadiusParam.getValuef())
@@ -214,8 +219,9 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
             /* only get elements with nothing below them that are on the
              * edge of the structure (meaning at least one of the directions
              * in-bottom-plane has no bundle in it). */
-            if (e.nyn != null || e.pyn != null ||
-                  (e.nzn != null && e.nzp != null && e.nxn != null && e.nxp != null && e.pzn != null && e.pzp != null && e.pxn != null && e.pxp != null))
+            if (e.n.ny != null || e.p.ny != null ||
+                  (e.n.nz != null && e.n.pz != null && e.n.nx != null && e.n.px != null
+                        && e.p.nz != null && e.p.pz != null && e.p.nx != null && e.p.px != null))
                 continue;
 
             rootBottoms.add(e);

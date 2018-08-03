@@ -67,18 +67,30 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
                 System.out.println(i);
                 StripsTopology.Bundle edge = model.getTopology().bundles.get(i);
                 setEdgeColor(edge, LXColor.rgb(255, 255, 255));
-                if (edge.nxn != null) setEdgeColor(edge.nxn, LXColor.hsb(0, 100, 100));
-                if (edge.nxp != null) setEdgeColor(edge.nxp, LXColor.hsb(30, 100, 100));
-                if (edge.nyn != null) setEdgeColor(edge.nyn, LXColor.hsb(60, 100, 100));
-                if (edge.nyp != null) setEdgeColor(edge.nyp, LXColor.hsb(90, 100, 100));
-                if (edge.nzn != null) setEdgeColor(edge.nzn, LXColor.hsb(120, 100, 100));
-                if (edge.nzp != null) setEdgeColor(edge.nzp, LXColor.hsb(150, 100, 100));
-                if (edge.pxn != null) setEdgeColor(edge.pxn, LXColor.hsb(180, 100, 100));
-                if (edge.pxp != null) setEdgeColor(edge.pxp, LXColor.hsb(210, 100, 100));
-                if (edge.pyn != null) setEdgeColor(edge.pyn, LXColor.hsb(240, 100, 100));
-                if (edge.pyp != null) setEdgeColor(edge.pyp, LXColor.hsb(270, 100, 100));
-                if (edge.pzn != null) setEdgeColor(edge.pzn, LXColor.hsb(300, 100, 100));
-                if (edge.pzp != null) setEdgeColor(edge.pzp, LXColor.hsb(330, 100, 100));
+                if (edge.n.nx != null && edge.n.nx != edge)
+                    setEdgeColor(edge.n.nx, LXColor.hsb(0, 100, 100));
+                if (edge.n.px != null && edge.n.px != edge)
+                    setEdgeColor(edge.n.px, LXColor.hsb(30, 100, 100));
+                if (edge.n.ny != null && edge.n.ny != edge)
+                    setEdgeColor(edge.n.ny, LXColor.hsb(60, 100, 100));
+                if (edge.n.py != null && edge.n.py != edge)
+                    setEdgeColor(edge.n.py, LXColor.hsb(90, 100, 100));
+                if (edge.n.nz != null && edge.n.nz != edge)
+                    setEdgeColor(edge.n.nz, LXColor.hsb(120, 100, 100));
+                if (edge.n.pz != null && edge.n.pz != edge)
+                    setEdgeColor(edge.n.pz, LXColor.hsb(150, 100, 100));
+                if (edge.p.nx != null && edge.p.nx != edge)
+                    setEdgeColor(edge.p.nx, LXColor.hsb(180, 100, 100));
+                if (edge.p.px != null && edge.p.px != edge)
+                    setEdgeColor(edge.p.px, LXColor.hsb(210, 100, 100));
+                if (edge.p.ny != null && edge.p.ny != edge)
+                    setEdgeColor(edge.p.ny, LXColor.hsb(240, 100, 100));
+                if (edge.p.py != null && edge.p.py != edge)
+                    setEdgeColor(edge.p.py, LXColor.hsb(270, 100, 100));
+                if (edge.p.nz != null && edge.p.nz != edge)
+                    setEdgeColor(edge.p.nz, LXColor.hsb(300, 100, 100));
+                if (edge.p.pz != null && edge.p.pz != edge)
+                    setEdgeColor(edge.p.pz, LXColor.hsb(330, 100, 100));
                 break;
             }
         }

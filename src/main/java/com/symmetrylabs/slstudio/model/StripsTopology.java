@@ -1,7 +1,9 @@
 package com.symmetrylabs.slstudio.model;
 
 import com.google.common.base.Preconditions;
+import com.symmetrylabs.util.FixedWidthOctree;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.transform.LXVector;
 
 import java.util.*;
 
@@ -33,24 +35,15 @@ import java.util.*;
  *                            +-------+   +-------+
  *                          G           H           I
  *
- * Each bundle also has pointers to adjacent bundles, where adjacency is defined as
- * sharing an endpoint. Each bundle can have up to 10 neighbors, 5 at each end, but
- * there are 12 fields for storing neighbors on the bundle object. This is because
- * adjacent bundles are stored with respect to their location on the bundle.
+ * Each bundle has pointers to the junction at each end of it. Ends are identified
+ * by which end points towards the positive end of the axis it's aligned with; an
+ * X-aligned bundle has a positive end towards X+ and a negative end towards X-. Since
+ * you can't use + and - in field names, these are called P and N for positive and
+ * negative.
  *
- * Each bundle is axis aligned, which induces on the bundle a positive and negative
- * end (i.e., if a bundle is along X, it's positive end is towards X+ and its negative
- * end is towards X-). At each end, there are bundles that could go in any of the Cartesian
- * directions (X+, X-, Y+, Y-, Z+, Z-). Since you can't stick + and - in a field name,
- * we instead use P for positive and N for negative. So the edge that goes in the X+
- * direction on the negative end of a bundle is stored in the field NXP (negative end,
- * x positive).
- *
- * If a bundle is oriented along axis A, nAp and pAn will always be null. This is
- * a design decision; you could think of a bundle A along the X axis referencing
- * itself in its negative-end-positive-X field, since it is what is in the positive-X
- * direction of that endpoint, but I instead leave them as null because the risk of
- * infinite loops seems like it outweighs the conceptual purity of making A.nxp = A.
+ * Each junction has pointers to up to 6 attached bundles, one in every cardinal
+ * direction. These follow the same naming convention: nx is negative-X, pz is
+ * positive-Z, etc.
  */
 public class StripsTopology {
     private static final int NO_STRIP = Integer.MAX_VALUE;
@@ -65,10 +58,30 @@ public class StripsTopology {
     }
 
     public class BundleEndpoints {
-        public LXPoint negative;
-        public LXPoint positive;
+        public LXVector negative;
+        public LXVector positive;
     }
 
+    /** The meeting point of up to 6 bundles. */
+    public static class Junction {
+        /** The bundle in the positive X direction */
+        public StripsTopology.Bundle px;
+        /** The bundle in the negative X direction */
+        public StripsTopology.Bundle nx;
+        /** The bundle in the positive Y direction */
+        public StripsTopology.Bundle py;
+        /** The bundle in the negative Y direction */
+        public StripsTopology.Bundle ny;
+        /** The bundle in the positive Z direction */
+        public StripsTopology.Bundle pz;
+        /** The bundle in the negative X direction */
+        public StripsTopology.Bundle nz;
+        /** The approximate location of this junction.
+         *  This is calculated as the midpoint of the bundles attached to the junction. */
+        public LXVector loc;
+    }
+
+    /** A set of parallel, adjacent strips */
     public class Bundle {
         /* Note that this is just a hit for initialization; the strips array
          * is resized down once the bundle is finished being built. */
@@ -81,30 +94,10 @@ public class StripsTopology {
          *  These index into model.strips and can be used with model.getStripByIndex() */
         public int[] strips;
 
-        /** The bundle at the positive end of this bundle, in the positive X direction */
-        public Bundle pxp = null;
-        /** The bundle at the positive end of this bundle, in the negative X direction */
-        public Bundle pxn = null;
-        /** The bundle at the positive end of this bundle, in the positive Y direction */
-        public Bundle pyp = null;
-        /** The bundle at the positive end of this bundle, in the negative Y direction */
-        public Bundle pyn = null;
-        /** The bundle at the positive end of this bundle, in the positive Z direction */
-        public Bundle pzp = null;
-        /** The bundle at the positive end of this bundle, in the negative Z direction */
-        public Bundle pzn = null;
-        /** The bundle at the negative end of this bundle, in the positive X direction */
-        public Bundle nxp = null;
-        /** The bundle at the negative end of this bundle, in the negative X direction */
-        public Bundle nxn = null;
-        /** The bundle at the negative end of this bundle, in the positive Y direction */
-        public Bundle nyp = null;
-        /** The bundle at the negative end of this bundle, in the negative Y direction */
-        public Bundle nyn = null;
-        /** The bundle at the negative end of this bundle, in the positive Z direction */
-        public Bundle nzp = null;
-        /** The bundle at the negative end of this bundle, in the negative Z direction */
-        public Bundle nzn = null;
+        /** The junction at the positive end of this bundle */
+        public Junction p = null;
+        /** The junction at the negative end of this bundle */
+        public Junction n = null;
 
         /* Set to true once we're finished adding strips to the bundle; the cached
          * values below can only be used once this is set to true. */
@@ -189,38 +182,39 @@ public class StripsTopology {
             float ys, ye;
             float zs, ze;
 
+            BundleEndpoints e = new BundleEndpoints();
+            e.negative = new LXVector(0, 0, 0);
+            e.positive = new LXVector(0, 0, 0);
+
             switch (dir) {
                 case X:
-                    xs = min;
-                    xe = max;
-                    ys = sort.a;
-                    ye = sort.a;
-                    zs = sort.b;
-                    ze = sort.b;
+                    e.negative.x = min;
+                    e.positive.x = max;
+                    e.negative.y = sort.a;
+                    e.positive.y = sort.a;
+                    e.negative.z = sort.b;
+                    e.positive.z = sort.b;
                     break;
                 case Y:
-                    xs = sort.a;
-                    xe = sort.a;
-                    ys = min;
-                    ye = max;
-                    zs = sort.b;
-                    ze = sort.b;
+                    e.negative.x = sort.a;
+                    e.positive.x = sort.a;
+                    e.negative.y = min;
+                    e.positive.y = max;
+                    e.negative.z = sort.b;
+                    e.positive.z = sort.b;
                     break;
                 case Z:
-                    xs = sort.a;
-                    xe = sort.a;
-                    ys = sort.b;
-                    ye = sort.b;
-                    zs = min;
-                    ze = max;
+                    e.negative.x = sort.a;
+                    e.positive.x = sort.a;
+                    e.negative.y = sort.b;
+                    e.positive.y = sort.b;
+                    e.negative.z = min;
+                    e.positive.z = max;
                     break;
                 default:
                     throw new IllegalArgumentException(
                         "cannot find endpoints of non-aligned bundle");
             }
-            BundleEndpoints e = new BundleEndpoints();
-            e.negative = new LXPoint(xs, ys, zs);
-            e.positive = new LXPoint(xe, ye, ze);
             return e;
         }
 
@@ -346,11 +340,13 @@ public class StripsTopology {
 
     private final StripsModel model;
     public final List<Bundle> bundles;
+    public final List<Junction> junctions;
 
     StripsTopology(StripsModel model) {
         this.model = model;
         int N = model.getStrips().size();
         bundles = new ArrayList<>(N);
+        junctions = new ArrayList<>();
 
         /* Create TopoEdges for each bundle */
         for (int i = 0; i < N; i++) {
@@ -387,172 +383,128 @@ public class StripsTopology {
         for (Bundle e : bundles)
             e.finishedAddingStrips();
 
-        /* Now figure out adjacency. This used to use com.harium...KDTree but it was
-         * actually slower than the full quadratic check. */
-        ArrayList<BundleNode> nodes = new ArrayList<>(bundles.size() * 2);
-        for (Bundle e : bundles) {
-            BundleNode start = new BundleNode();
-            start.bundle = e;
-            start.isNegativeEnd = true;
-            start.x = e.endpoints().negative.x;
-            start.y = e.endpoints().negative.y;
-            start.z = e.endpoints().negative.z;
-            nodes.add(start);
+        /* Once we have all the bundles, create the junctions at their endpoints. */
+        int junctionCountGuess = bundles.size() / 6;
+        FixedWidthOctree<Junction> junctionTree =
+            new FixedWidthOctree<>(
+                model.cx, model.cy, model.cz, 2 * model.rMax,
+                /* use the log-base-8 of the number of junctions we're guessing we'll have as the
+                 * depth; for perfectly-distributed endpoints this would put four junctions
+                 * in each partition. */
+                (int) Math.ceil(Math.log(junctionCountGuess) / Math.log(8) / 4));
 
-            BundleNode end = new BundleNode();
-            end.bundle = e;
-            end.isNegativeEnd = false;
-            end.x = e.endpoints().positive.x;
-            end.y = e.endpoints().positive.y;
-            end.z = e.endpoints().positive.z;
-            nodes.add(end);
+        /* This makes the junctions and populates connectivity all at once. */
+        for (Bundle b : bundles) {
+            BundleEndpoints be = b.endpoints();
+
+            List<Junction> js = junctionTree.withinDistance(
+                be.positive.x, be.positive.y, be.positive.z, ENDPOINT_TOLERANCE);
+            if (!js.isEmpty()) {
+                b.p = js.get(0);
+                float dist = b.endpoints.positive.dist(js.get(0).loc);
+                for (int i = 1; i < js.size(); i++) {
+                    float d = b.endpoints.positive.dist(js.get(i).loc);
+                    if (d < dist) {
+                        b.p = js.get(i);
+                        dist = d;
+                    }
+                }
+            } else {
+                Junction j = new Junction();
+                j.loc = be.positive;
+                b.p = j;
+                junctionTree.insert(j.loc.x, j.loc.y, j.loc.z, j);
+                junctions.add(j);
+            }
+            switch (b.dir) {
+                case X:
+                    if (b.p.nx != null)
+                        throw new IllegalStateException("found overlapping bundles");
+                    b.p.nx = b;
+                    break;
+                case Y:
+                    if (b.p.ny != null)
+                        throw new IllegalStateException("found overlapping bundles");
+                    b.p.ny = b;
+                    break;
+                case Z:
+                    if (b.p.nz != null)
+                        throw new IllegalStateException("found overlapping bundles");
+                    b.p.nz = b;
+                    break;
+            }
+
+            js = junctionTree.withinDistance(
+                be.negative.x, be.negative.y, be.negative.z, ENDPOINT_TOLERANCE);
+            if (!js.isEmpty()) {
+                b.n = js.get(0);
+                float dist = b.endpoints.negative.dist(js.get(0).loc);
+                for (int i = 1; i < js.size(); i++) {
+                    float d = b.endpoints.negative.dist(js.get(i).loc);
+                    if (d < dist) {
+                        b.n = js.get(i);
+                        dist = d;
+                    }
+                }
+            } else {
+                Junction j = new Junction();
+                j.loc = be.negative;
+                b.n = j;
+                junctionTree.insert(j.loc.x, j.loc.y, j.loc.z, j);
+                junctions.add(j);
+            }
+            switch (b.dir) {
+                case X:
+                    if (b.n.px != null)
+                        throw new IllegalStateException("found overlapping bundles");
+                    b.n.px = b;
+                    break;
+                case Y:
+                    if (b.n.py != null)
+                        throw new IllegalStateException("found overlapping bundles");
+                    b.n.py = b;
+                    break;
+                case Z:
+                    if (b.n.pz != null)
+                        throw new IllegalStateException("found overlapping bundles");
+                    b.n.pz = b;
+                    break;
+            }
         }
 
-        for (Bundle e : bundles) {
-            BundleEndpoints ee = e.endpoints();
+        /* Find good locations for each of the junctions now that we have the final
+         * set of bundles for each of them. We take the junction location to be the
+         * midpoint of the endpoints of all of the adjacent bundles. */
+        for (Junction j : junctions) {
+            j.loc = new LXVector(0, 0, 0);
+            int count = 0;
 
-            /* We split up the start point and end point searches, because the start point
-             * adjacencies will go in NXP, NXN, NYP, etc. while the end point adjacency
-             * goes in PXP, PXN, PYP, etc. Splitting them up like this makes the code a
-             * little simpler at almost no added computational cost. We start by looking
-             * for adjacency at the negative end of the bundle. */
-            for (BundleNode node : nodes) {
-                Bundle o = node.bundle;
-                if (o == e)
-                    continue;
-
-                float xd = Math.abs(ee.negative.x - node.x);
-                float yd = Math.abs(ee.negative.y - node.y);
-                float zd = Math.abs(ee.negative.z - node.z);
-                if (xd > ENDPOINT_TOLERANCE || yd > ENDPOINT_TOLERANCE || zd > ENDPOINT_TOLERANCE)
-                    continue;
-
-                if (o.dir == e.dir) {
-                    if (node.isNegativeEnd)
-                        throw new IllegalStateException("found parallel and overlapping bundles");
-                    switch (e.dir) {
-                        case X: e.nxn = o; break;
-                        case Y: e.nyn = o; break;
-                        case Z: e.nzn = o; break;
-                    }
-                } else if (node.isNegativeEnd) {
-                    /* This is a neg-to-neg connection, meaning this is on the
-                     * negative side of both e and o, so o is in a positive direction
-                     * wrt its axis compared to e. */
-                    switch (e.dir) {
-                        case X:
-                            if (o.dir == EdgeDirection.Y)
-                                e.nyp = o;
-                            else
-                                e.nzp = o;
-                            break;
-                        case Y:
-                            if (o.dir == EdgeDirection.X)
-                                e.nxp = o;
-                            else
-                                e.nzp = o;
-                            break;
-                        case Z:
-                            if (o.dir == EdgeDirection.X)
-                                e.nxp = o;
-                            else
-                                e.nyp = o;
-                            break;
-                    }
-                } else {
-                    /* The neg of e but the pos of o means that o is below e
-                     * along the axis of o. */
-                    switch (e.dir) {
-                        case X:
-                            if (o.dir == EdgeDirection.Y)
-                                e.nyn = o;
-                            else
-                                e.nzn = o;
-                            break;
-                        case Y:
-                            if (o.dir == EdgeDirection.X)
-                                e.nxn = o;
-                            else
-                                e.nzn = o;
-                            break;
-                        case Z:
-                            if (o.dir == EdgeDirection.X)
-                                e.nxn = o;
-                            else
-                                e.nyn = o;
-                            break;
-                    }
-                }
+            if (j.px != null) {
+                j.loc.add(j.px.endpoints().negative);
+                count++;
+            }
+            if (j.nx != null) {
+                j.loc.add(j.nx.endpoints().positive);
+                count++;
+            }
+            if (j.py != null) {
+                j.loc.add(j.py.endpoints().negative);
+                count++;
+            }
+            if (j.ny != null) {
+                j.loc.add(j.ny.endpoints().positive);
+                count++;
+            }
+            if (j.pz != null) {
+                j.loc.add(j.pz.endpoints().negative);
+                count++;
+            }
+            if (j.nz != null) {
+                j.loc.add(j.nz.endpoints().positive);
+                count++;
             }
 
-            /* Look for adjacency at the positive end of this bundle */
-            for (BundleNode node : nodes) {
-                Bundle o = node.bundle;
-                if (o == e)
-                    continue;
-
-                float xd = Math.abs(ee.positive.x - node.x);
-                float yd = Math.abs(ee.positive.y - node.y);
-                float zd = Math.abs(ee.positive.z - node.z);
-                if (xd > ENDPOINT_TOLERANCE || yd > ENDPOINT_TOLERANCE || zd > ENDPOINT_TOLERANCE)
-                    continue;
-
-                if (o.dir == e.dir) {
-                    if (!node.isNegativeEnd)
-                        throw new IllegalStateException("found parallel and overlapping bundles");
-                    switch (e.dir) {
-                        case X: e.pxp = o; break;
-                        case Y: e.pyp = o; break;
-                        case Z: e.pzp = o; break;
-                    }
-                } else if (node.isNegativeEnd) {
-                    /* The pos-end of e but the neg-end of o, so o is in the positive
-                     * direction along o's axis. */
-                    switch (e.dir) {
-                        case X:
-                            if (o.dir == EdgeDirection.Y)
-                                e.pyp = o;
-                            else
-                                e.pzp = o;
-                            break;
-                        case Y:
-                            if (o.dir == EdgeDirection.X)
-                                e.pxp = o;
-                            else
-                                e.pzp = o;
-                            break;
-                        case Z:
-                            if (o.dir == EdgeDirection.X)
-                                e.pxp = o;
-                            else
-                                e.pyp = o;
-                            break;
-                    }
-                } else {
-                    /* The pos-end of e and the pos-end of o means that o is below e
-                     * along the axis of o. */
-                    switch (e.dir) {
-                        case X:
-                            if (o.dir == EdgeDirection.Y)
-                                e.pyn = o;
-                            else
-                                e.pzn = o;
-                            break;
-                        case Y:
-                            if (o.dir == EdgeDirection.X)
-                                e.pxn = o;
-                            else
-                                e.pzn = o;
-                            break;
-                        case Z:
-                            if (o.dir == EdgeDirection.X)
-                                e.pxn = o;
-                            else
-                                e.pyn = o;
-                            break;
-                    }
-                }
-            }
+            j.loc.mult(1f / count);
         }
     }
 }
