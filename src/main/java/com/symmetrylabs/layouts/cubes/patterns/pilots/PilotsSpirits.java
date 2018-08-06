@@ -11,33 +11,37 @@ import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
 
+import java.util.Random;
+
 public class PilotsSpirits extends SLPattern<SLModel> {
     private CompoundParameter spiritSizeParam = new CompoundParameter("size", 200, 1, 600);
     private CompoundParameter spiritHeartParam = new CompoundParameter("heart", 75, 1, 600);
 
-    private static final float GRAVITATIONAL_CONSTANT = 50;
-    private static final float RED_MASS = 2;
-    private static final float MAX_VELOCITY = 400; // inches per second
     private static final float RED_CHASE_DELAY = 400; // ms
     private static final float CHASE_PERIOD = 2700; // ms
+    private static final float RED_STRONGER_TIME = 2200; // ms
+    private static final float SHAKING_AMP_TIME = 4000; // ms
+    private static final float YELLOW_WINS_TIME = 1500; // ms
 
     SinLFO redRestLfo = new SinLFO(-40, 30, 4500);
     SinLFO yellowRestLfo = new SinLFO(35, -20, 5100);
-    double phaseAge = 0;
+    float phaseAge = 0;
+    float chaseAge = 0;
 
     enum Phase {
+        IDLE,
         MOVE_IN,
         RED_STRONGER,
         SHAKING,
         CHASE,
+        YELLOW_WINS,
+        OUT,
     }
 
-    Phase phase = Phase.MOVE_IN;
-
+    Phase phase = Phase.IDLE;
     LXVector redBase, yellowBase;
-    float redVelocity = 0;
-
-    boolean suppressYellow = false;
+    Random random = new Random();
+    boolean jerking = false;
 
     public PilotsSpirits(LX lx) {
         super(lx);
@@ -50,18 +54,42 @@ public class PilotsSpirits extends SLPattern<SLModel> {
         redRestLfo.start();
         yellowRestLfo.start();
 
+        resetLocation();
+    }
+
+    private void resetLocation() {
         redBase = new LXVector(model.xMin, model.cy, model.cz);
         yellowBase = new LXVector(model.xMax, model.cy, model.cz);
+    }
+
+    private LXVector randomVector() {
+        /* This doesn't create uniformly distributed vectors on the 2-sphere, but it sure is a lot simpler than the ways that do. */
+        LXVector v = new LXVector(
+            random.nextFloat() - 0.5f,
+            random.nextFloat() - 0.5f,
+            random.nextFloat() - 0.5f);
+        return v;
     }
 
     @Override
     public void run(double elapsedMs) {
         phaseAge += elapsedMs;
+        chaseAge += elapsedMs;
 
         int black = LXColor.gray(0);
         for (int i = 0; i < colors.length; i++)
             colors[i] = black;
 
+        if (phase == Phase.OUT) {
+            if (phaseAge < 30) {
+                int white = LXColor.gray(100);
+                for (int i = 0; i < colors.length; i++)
+                    colors[i] = white;
+            }
+            return;
+        }
+
+        /* Update positions */
         switch (phase) {
             case MOVE_IN: {
                 if (yellowBase.x > model.cx) {
@@ -72,14 +100,16 @@ public class PilotsSpirits extends SLPattern<SLModel> {
                 }
                 break;
             }
+            case YELLOW_WINS:
             case CHASE: {
-                yellowBase.x = model.cx + model.xRange * (float) Math.sin(phaseAge / CHASE_PERIOD * 2 * Math.PI) / 2;
-                if (phaseAge > RED_CHASE_DELAY)
-                    redBase.x = model.cx + model.xRange * (float) Math.sin((phaseAge - RED_CHASE_DELAY) / CHASE_PERIOD * 2 * Math.PI) / 2;
+                yellowBase.x = model.cx + model.xRange * (float) Math.sin(chaseAge / CHASE_PERIOD * 2 * Math.PI) / 2;
+                if (chaseAge > RED_CHASE_DELAY)
+                    redBase.x = model.cx + model.xRange * (float) Math.sin((chaseAge - RED_CHASE_DELAY) / CHASE_PERIOD * 2 * Math.PI) / 2;
                 break;
             }
         }
 
+        /* Add idle animations */
         LXVector yLoc = new LXVector(
             -yellowRestLfo.getValuef() / 1.5f,
             yellowRestLfo.getValuef() / 2,
@@ -92,22 +122,67 @@ public class PilotsSpirits extends SLPattern<SLModel> {
         float areaEffect = spiritSizeParam.getValuef();
         float heartSize = spiritHeartParam.getValuef();
 
+        /* Change colors and sizes */
         float rHue = 0;
-        float yHue = suppressYellow ? rHue : 45;
+        float yHue = 51;
+        float rAlpha = 1;
+        float yAlpha = 1;
 
-        for (LXVector v : getVectors()) {
-            double rDist = rLoc.dist(v) - heartSize;
-            double yDist = yLoc.dist(v) - heartSize;
+        if (phase == Phase.RED_STRONGER) {
+            yAlpha = (float) Math.max(1.0 - phaseAge / RED_STRONGER_TIME, 0.0);
+            float sizeScale = 1f + Math.min(phaseAge / RED_STRONGER_TIME, 1f);
+            heartSize *= sizeScale;
+            areaEffect *= sizeScale;
+        } else if (phase == Phase.SHAKING) {
+            yAlpha = 0;
+            heartSize *= 2;
+            areaEffect *= 2;
+            rLoc.add(randomVector().mult(80 * Math.min(phaseAge / SHAKING_AMP_TIME, 1)));
+        }
+        if (jerking) {
+            rLoc.add(randomVector().mult(80));
+        }
 
-            int rColor = rDist < 0
-                ? LXColor.hsb(rHue, 100 * (1 + rDist / heartSize), 100)
-                : LXColor.hsb(rHue, 100, 100 * Math.max(0, 1 - rDist / areaEffect));
+        /* Apply colors */
+        if (phase == Phase.YELLOW_WINS) {
+            int bg = LXColor.hsb(yHue, 100, 100 * Math.min(phaseAge / YELLOW_WINS_TIME, 1f));
+            for (int i = 0; i < colors.length; i++)
+                colors[i] = bg;
+            if (phaseAge > YELLOW_WINS_TIME) {
+                float sizeScale = 1f - Math.min(1f, (phaseAge - YELLOW_WINS_TIME) / YELLOW_WINS_TIME);
+                heartSize *= sizeScale;
+                areaEffect *= sizeScale;
+            }
+        }
 
-            int yColor = yDist < 0
-                ? LXColor.hsb(yHue, 100 * (1 + yDist / heartSize), 80)
-                : LXColor.hsb(yHue, 100, 80 * Math.max(0, 1 - yDist / areaEffect));
-            int color = Ops8.screen(rColor, yColor);
-            colors[v.index] = color;
+        float rHeartSize = heartSize;
+        float yHeartSize = heartSize;
+        if (random.nextFloat() < 0.015) {
+            rHeartSize *= 1.2;
+        }
+        if (random.nextFloat() < 0.015) {
+            yHeartSize *= 1.2;
+        }
+
+        if (phase == Phase.CHASE && phaseAge < 50) {
+            int white = LXColor.gray(100);
+            for (int i = 0; i < colors.length; i++)
+                colors[i] = white;
+        } else {
+            for (LXVector v : getVectors()) {
+                double rDist = rLoc.dist(v) - rHeartSize;
+                double yDist = yLoc.dist(v) - yHeartSize;
+
+                int rColor = rDist < 0
+                    ? LXColor.hsba(rHue, 100 * (1 + rDist / rHeartSize), 100, rAlpha)
+                    : LXColor.hsba(rHue, 100, 100 * Math.max(0, 1 - rDist / areaEffect), rAlpha);
+
+                int yColor = yDist < 0
+                    ? LXColor.hsba(yHue, 100 * (1 + yDist / yHeartSize), 85, yAlpha)
+                    : LXColor.hsba(yHue, 100, 85 * Math.max(0, 1 - yDist / areaEffect), yAlpha);
+                int color = Ops8.screen(rColor, yColor);
+                colors[v.index] = Ops8.add(color, colors[v.index]);
+            }
         }
     }
 
@@ -115,6 +190,9 @@ public class PilotsSpirits extends SLPattern<SLModel> {
     public void noteOnReceived(MidiNoteOn note) {
         if (note.getPitch() == 60) {
             switch (phase) {
+                case IDLE:
+                    phase = Phase.MOVE_IN;
+                    break;
                 case MOVE_IN:
                     phase = Phase.RED_STRONGER;
                     break;
@@ -123,14 +201,29 @@ public class PilotsSpirits extends SLPattern<SLModel> {
                     break;
                 case SHAKING:
                     phase = Phase.CHASE;
+                    chaseAge = 0;
+                    break;
+                case CHASE:
+                    phase = Phase.YELLOW_WINS;
+                    break;
+                case YELLOW_WINS:
+                    phase = Phase.OUT;
+                    break;
+                case OUT:
+                    resetLocation();
+                    phase = Phase.IDLE;
                     break;
             }
             phaseAge = 0;
             System.out.println(phase);
         }
+        if (note.getPitch() == 62)
+            jerking = true;
     }
 
     @Override
     public void noteOffReceived(MidiNote note) {
+        if (note.getPitch() == 62)
+            jerking = false;
     }
 }
