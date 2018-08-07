@@ -621,7 +621,7 @@ public class SLStudioLX extends P3LX {
                 }
             }
             text = text.trim();
-            int numLines = text.split("\n").length;
+            int numLines = text.isEmpty() ? 0 : text.split("\n").length;
             captionText.setAnchor(6, -6 - numLines * SLStudio.MONO_FONT.lineHeight);
             warningText.setText(text);
         }

@@ -31,7 +31,8 @@ public class UICaptionText extends UITextOverlay {
             String caption = source.getCaption();
             if (caption != null && !caption.isEmpty()) {
                 String prefix = source.getClass().getSimpleName() + " - ";
-                result += prefix + caption.replace("\n", "\n" + SPACES.substring(0, prefix.length()));
+                result = result.trim() + "\n" + prefix +
+                      caption.replace("\n", "\n" + SPACES.substring(0, prefix.length()));
             }
         }
         return result.trim();
