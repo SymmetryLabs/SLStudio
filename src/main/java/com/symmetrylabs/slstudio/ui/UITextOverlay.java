@@ -47,6 +47,19 @@ public class UITextOverlay extends UI2dContext {
         color = c;
     }
 
+    public void setAnchor(int x, int y) {
+        anchorX = x;
+        anchorY = y;
+    }
+
+    public int getAnchorX() {
+        return anchorX;
+    }
+
+    public int getAnchorY() {
+        return anchorY;
+    }
+
     protected void onDraw(UI ui, PGraphics pg) {
         pg.textFont(SLStudio.MONO_FONT.getFont());
         pg.clear();

@@ -2,6 +2,13 @@ package com.symmetrylabs.slstudio;
 
 import java.awt.*;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import com.google.gson.JsonObject;
 
@@ -65,6 +72,7 @@ public class SLStudioLX extends P3LX {
         public final UITextOverlay helpHelp;
         public final UITextOverlay helpText;
         public final UICaptionText captionText;
+        public final UITextOverlay warningText;
         public final UIAxes axes;
         public final UIMarkerPainter markerPainter;
         public final UICubeMapDebug cubeMapDebug;
@@ -128,6 +136,9 @@ public class SLStudioLX extends P3LX {
             helpText.setVisible(false);
 
             this.captionText = new UICaptionText(this, preview, 6, -6, PConstants.LEFT, PConstants.BOTTOM);
+            this.warningText = new UITextOverlay(this, preview, 6, -6, PConstants.LEFT, PConstants.BOTTOM);
+            this.warningText.setColor(0xffff4040);
+            updateWarningText(SLStudio.warnings);
 
             this.axes = new UIAxes();
             this.markerPainter = new UIMarkerPainter();
@@ -151,6 +162,7 @@ public class SLStudioLX extends P3LX {
             addLayer(this.helpHelp);
             addLayer(this.helpText);
             addLayer(this.captionText);
+            addLayer(this.warningText);
 
             _toggleClipView();
             _togglePerformanceMode();
@@ -596,6 +608,22 @@ public class SLStudioLX extends P3LX {
 
         public void removeCaptionSource(CaptionSource source) {
             captionText.removeSource(source);
+        }
+
+        protected void updateWarningText(Map<String, String> warnings) {
+            String text = "";
+            List<String> keys = new ArrayList<String>(warnings.keySet());
+            Collections.sort(keys);
+            for (String key : keys) {
+                String message = warnings.get(key);
+                if (message != null) {
+                    text += key + ": " + message + "\n";
+                }
+            }
+            text = text.trim();
+            int numLines = text.split("\n").length;
+            captionText.setAnchor(6, -6 - numLines * SLStudio.MONO_FONT.lineHeight);
+            warningText.setText(text);
         }
     }
 

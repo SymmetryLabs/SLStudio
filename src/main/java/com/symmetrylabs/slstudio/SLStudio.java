@@ -1,6 +1,9 @@
 package com.symmetrylabs.slstudio;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.layouts.tree.Anemometer;
@@ -54,6 +57,9 @@ public class SLStudio extends PApplet {
 
     public final BooleanParameter mappingModeEnabled = new BooleanParameter("Mappings");
     public Map<String, int[]> mappingColorsPerPixlite;
+
+    /** Persistent warning messages to be shown in the UI. */
+    protected static final Map<String, String> warnings = new HashMap<>();
 
     static public void main(String[] args) {
         System.setProperty("com.aparapi.enableShowGeneratedOpenCL", "true");
@@ -187,6 +193,18 @@ public class SLStudio extends PApplet {
         background(lx.ui.theme.getDarkBackgroundColor());
         DrawHelper.runAll();
         dispatcher.draw();
+    }
+
+    public static void setWarning(String key, String message) {
+        if (message != null) {
+            System.err.println("WARNING: " + key + ": " + message);
+            warnings.put(key, message);
+        } else {
+            warnings.remove(key);
+        }
+        if (applet != null && applet.lx != null && applet.lx.ui != null) {
+            applet.lx.ui.updateWarningText(warnings);
+        }
     }
 
     private MappingPixlite[] setupPixlites() {
