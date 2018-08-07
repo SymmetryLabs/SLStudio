@@ -19,7 +19,7 @@ public class PilotsMonochromeSwarm extends SLPattern<StripsModel<Strip>> {
     private final CompoundParameter fVParameter = new CompoundParameter("fV", 0, -1, 1);
     private final SawLFO offset = new SawLFO(0, 1, 1000);
     private final SinLFO rate = new SinLFO(350, 1200, 63000);
-    private final SinLFO falloff = new SinLFO(15, 50, 17000);
+    private final SinLFO falloff = new SinLFO(15, 35, 17000);
 
     public PilotsMonochromeSwarm(LX lx) {
         super(lx);
