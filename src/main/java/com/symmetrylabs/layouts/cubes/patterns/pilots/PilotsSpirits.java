@@ -36,7 +36,7 @@ public class PilotsSpirits<T extends Strip> extends SLPattern<StripsModel<T>> {
     private static final float TRAIL_MAX_AGE = 600; // ms
     private static final float TRAIL_MAX_AGE_CHASE = 200; // ms
     private static final float TRAIL_NEW_ELEM_AGE = 15; // ms
-    private static final float TRAIL_WIDTH = 100.f; // inches shrunk per trail element
+    private static final float TRAIL_WIDTH = 50.f; // inches shrunk per trail element
 
     private static final float CHASE_TIME = 1500f; // ms
     private static final float CHASE_SIZE_TRANSITION = 2000f; // ms
@@ -215,14 +215,12 @@ public class PilotsSpirits<T extends Strip> extends SLPattern<StripsModel<T>> {
             redChaseStart = redBase;
         chaseStart = yellowBase;
 
-        List<Junction> junctions = model.getTopology().junctions;
-        Junction j = null;
+        LXVector vs[] = model.getVectorArray();
         do {
-            int i = random.nextInt(junctions.size());
-            j = junctions.get(i);
-        } while (j.loc.dist(chaseStart) < 0.3f * model.xRange && j.degree() > 4);
+            int i = random.nextInt(vs.length);
+            chaseTarget = vs[i];
+        } while (chaseTarget.dist(chaseStart) < 0.3f);
 
-        chaseTarget = j.loc;
         moveAge = 0;
     }
 
