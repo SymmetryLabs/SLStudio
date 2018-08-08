@@ -79,6 +79,18 @@ public class StripsTopology {
         /** The approximate location of this junction.
          *  This is calculated as the midpoint of the bundles attached to the junction. */
         public LXVector loc;
+
+        /** The number of bundles attached to this junction */
+        public int degree() {
+            int degree = 0;
+            if (px != null) degree++;
+            if (nx != null) degree++;
+            if (py != null) degree++;
+            if (ny != null) degree++;
+            if (pz != null) degree++;
+            if (nz != null) degree++;
+            return degree;
+        }
     }
 
     /** A set of parallel, adjacent strips */

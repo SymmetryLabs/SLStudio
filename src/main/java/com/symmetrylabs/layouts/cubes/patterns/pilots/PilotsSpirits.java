@@ -2,12 +2,17 @@ package com.symmetrylabs.layouts.cubes.patterns.pilots;
 
 import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.model.StripsModel;
+import com.symmetrylabs.slstudio.model.StripsTopology;
+import com.symmetrylabs.slstudio.model.StripsTopology.Junction;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.MidiNote;
 import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.modulator.SinLFO;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
@@ -16,11 +21,13 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
-public class PilotsSpirits extends SLPattern<SLModel> {
+public class PilotsSpirits<T extends Strip> extends SLPattern<StripsModel<T>> {
     private CompoundParameter spiritSizeParam = new CompoundParameter("size", 30, 1, 200);
     private CompoundParameter spiritHeartParam = new CompoundParameter("heart", 30, 1, 200);
+    private BooleanParameter autoChaseParam = new BooleanParameter("autochase", false);
 
     private static final float RED_CHASE_DELAY = 500; // ms
     private static final float ROTATION_PERIOD_BASE = 4800; // ms
@@ -31,7 +38,7 @@ public class PilotsSpirits extends SLPattern<SLModel> {
     private static final float TRAIL_NEW_ELEM_AGE = 15; // ms
     private static final float TRAIL_WIDTH = 100.f; // inches shrunk per trail element
 
-    private static final float CHASE_TIME = 1600f; // ms
+    private static final float CHASE_TIME = 1500f; // ms
     private static final float CHASE_SIZE_TRANSITION = 2000f; // ms
     private static final float RED_EAT_YELLOW_TRANSITION = 6000f; // ms
     private static final float RED_GROWTH = 25; // inches
@@ -82,6 +89,7 @@ public class PilotsSpirits extends SLPattern<SLModel> {
 
         addParameter(spiritSizeParam);
         addParameter(spiritHeartParam);
+        addParameter(autoChaseParam);
         addModulator(redRestLfo).start();
         addModulator(yellowRestLfo).start();
 
@@ -96,36 +104,29 @@ public class PilotsSpirits extends SLPattern<SLModel> {
         yTrail.clear();
     }
 
-    private LXVector randomVector() {
-        /* This doesn't create uniformly distributed vectors on the 2-sphere, but it sure is a lot simpler than the ways that do. */
-        LXVector v = new LXVector(
-            random.nextFloat() - 0.5f,
-            random.nextFloat() - 0.5f,
-            random.nextFloat() - 0.5f);
-        return v;
-    }
-
     private void updateLocations(double elapsedMs) {
         LXVector yTarget = null;
         LXVector rTarget = null;
         float yVel = 0, rVel = 0;
-        float ellipseMajor = 95f;
-        float ellipseMinor = 20f;
+        float ellipseMajor = 65f;
+        float ellipseMinor = 14f;
 
         /* Update positions */
         switch (phase) {
             case MOVE_IN: {
-                yTarget = new LXVector(model.cx - ellipseMajor, model.cy, model.cz);
-                rTarget = new LXVector(model.cx + ellipseMajor, model.cy, model.cz);
-                yVel = 80f / 1000f;
-                rVel = 80f / 1000f;
+                yTarget = new LXVector(model.cx - ellipseMajor, model.cy, model.cz + 12);
+                rTarget = new LXVector(model.cx + ellipseMajor, model.cy, model.cz + 12);
+                yVel = 30f / 1000f;
+                rVel = 30f / 1000f;
                 break;
             }
 
             case ROTATING:
             case RED_EATS_YELLOW: {
                 float rate = ROTATION_PERIOD_BASE + (float) Math.sin(2 * Math.PI * phaseAge / ROTATION_PERIOD_RATE) * ROTATION_PERIOD_AMPLITUDE;
-                if (phase == Phase.RED_EATS_YELLOW)
+                if (phase == Phase.ROTATING && phaseAge < 1000f)
+                    rate = rate / (phaseAge / 1000f);
+                else if (phase == Phase.RED_EATS_YELLOW)
                     rate -= Math.min(1200f, phaseAge / 2.5f);
                 theta += 2 * Math.PI * elapsedMs / rate;
 
@@ -138,7 +139,7 @@ public class PilotsSpirits extends SLPattern<SLModel> {
                 Rotation rot = new Rotation(new Vector3D(0, 0, 1), theta, RotationConvention.VECTOR_OPERATOR);
                 Vector3D apacheOff = rot.applyTo(new Vector3D(1, 0, 0));
                 LXVector off = new LXVector((float) apacheOff.getX(), (float) apacheOff.getY(), (float) apacheOff.getZ());
-                LXVector center = new LXVector(model.cx, model.cy, model.cz);
+                LXVector center = new LXVector(model.cx, model.cy, model.cz + 12);
                 redBase = off.copy().mult(rRad).add(center);
                 yellowBase = off.mult(-yRad).add(center);
                 break;
@@ -153,13 +154,13 @@ public class PilotsSpirits extends SLPattern<SLModel> {
                 if (redCatchingUp) {
                     InterpResult r = expInterpToTarget(redChaseStart, chaseTarget);
                     redBase = r.loc;
-                    if (r.t > 0.99 && y.t > 0.99) {
+                    if (r.t > 0.99 && y.t > 0.99 && autoChaseParam.getValueb()) {
                         redCatchingUp = false;
                         pickChaseTarget();
                     }
                 } else {
                     redBase = yTrail.peekLast().loc;
-                    if (y.t > 0.99)
+                    if (y.t > 0.99 && autoChaseParam.getValueb())
                         pickChaseTarget();
                 }
                 break;
@@ -213,11 +214,15 @@ public class PilotsSpirits extends SLPattern<SLModel> {
         if (redCatchingUp)
             redChaseStart = redBase;
         chaseStart = yellowBase;
-        LXVector[] vs = model.getVectorArray();
+
+        List<Junction> junctions = model.getTopology().junctions;
+        Junction j = null;
         do {
-            int i = random.nextInt(vs.length);
-            chaseTarget = vs[i];
-        } while (chaseTarget.dist(chaseStart) < 0.3f * model.xRange);
+            int i = random.nextInt(junctions.size());
+            j = junctions.get(i);
+        } while (j.loc.dist(chaseStart) < 0.3f * model.xRange && j.degree() > 4);
+
+        chaseTarget = j.loc;
         moveAge = 0;
     }
 
@@ -304,6 +309,7 @@ public class PilotsSpirits extends SLPattern<SLModel> {
 
             float newYArea = YELLOW_SHRINK_TO + (1f - yAttenuate) * (yArea - YELLOW_SHRINK_TO);
             yArea = newYArea;
+            yHeartSize *= 1f - 0.4 * yAttenuate;
         }
 
         for (LXVector v : getVectors()) {
@@ -394,6 +400,8 @@ public class PilotsSpirits extends SLPattern<SLModel> {
     public void noteOnReceived(MidiNoteOn note) {
         if (note.getPitch() == 60)
             nextPhase();
+        else if (note.getPitch() == 61)
+            pickChaseTarget();
     }
 
     @Override
