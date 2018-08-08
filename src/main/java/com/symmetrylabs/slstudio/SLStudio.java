@@ -196,7 +196,7 @@ public class SLStudio extends PApplet {
     }
 
     public static void setWarning(String key, String message) {
-        if (message != null) {
+        if (message != null && !message.isEmpty()) {
             System.err.println("WARNING: " + key + ": " + message);
             warnings.put(key, message);
         } else {

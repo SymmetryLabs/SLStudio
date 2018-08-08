@@ -37,6 +37,7 @@ public class UITextOverlay extends UI2dContext {
 
     public void setText(String text) {
         this.text = text;
+        redraw();
     }
 
     public int getColor() {
@@ -45,11 +46,13 @@ public class UITextOverlay extends UI2dContext {
 
     public void setColor(int c) {
         color = c;
+        redraw();
     }
 
     public void setAnchor(int x, int y) {
         anchorX = x;
         anchorY = y;
+        redraw();
     }
 
     public int getAnchorX() {

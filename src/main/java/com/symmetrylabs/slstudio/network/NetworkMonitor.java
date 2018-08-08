@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import java.util.WeakHashMap;
 import java.lang.ref.WeakReference;
 
+import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.util.listenable.SetListener;
 import heronarts.lx.LX;
 
@@ -19,7 +20,6 @@ public class NetworkMonitor {
     private final Timer timer = new Timer("NetworkScanner");
 
     private boolean started = false;
-    private boolean oldVersionWarningGiven = false;
 
     private static Map<LX, WeakReference<NetworkMonitor>> instanceByLX = new WeakHashMap<>();
 
@@ -66,10 +66,7 @@ public class NetworkMonitor {
     }
 
     private void warnOldVersion() {
-        if (!oldVersionWarningGiven) {
-            System.out.println("WARNING: One or more cubes have outdated firmware!");
-            oldVersionWarningGiven = true;
-        }
+        SLStudio.setWarning("NetworkMonitor", "One or more cubes have outdated firmware!");
     }
 
     public synchronized NetworkMonitor start() {
