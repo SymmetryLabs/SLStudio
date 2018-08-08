@@ -150,7 +150,7 @@ public class SLStudio extends PApplet {
             protected void onUIReady(SLStudioLX lx, SLStudioLX.UI ui) {
                 ui.leftPane.audio.setVisible(true);
                 ui.preview.setCenter(lx.model.cx, lx.model.cy, lx.model.cz);
-                ui.preview.setPhi(0).setMinRadius(0 * FEET).setMaxRadius(150 * FEET).setRadius(150 * FEET);
+                ui.preview.setPhi(0).setMinRadius(0 * FEET).setMaxRadius(150 * FEET).setRadius(25 * FEET);
                 new UIFramerateControl(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
                 new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 2);
 
