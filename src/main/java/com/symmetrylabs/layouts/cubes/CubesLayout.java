@@ -23,7 +23,18 @@ import heronarts.p3lx.ui.UI2dScrollContext;
 /**
  * This file implements the mapping functions needed to lay out the cubes.
  */
-public class CubesLayout implements Layout {
+public abstract class CubesLayout implements Layout {
+    static final float CUBE_WIDTH = 24;
+    static final float CUBE_HEIGHT = 24;
+    static final float CUBE_SPACING = 1.5f;
+
+    static final float TOWER_VERTICAL_SPACING = 2.5f;
+    static final float TOWER_RISER = 14;
+    static final float SP = CUBE_HEIGHT+CUBE_SPACING;
+    static final float JUMP = CUBE_HEIGHT+TOWER_VERTICAL_SPACING;
+
+    static final float INCHES_PER_METER = 39.3701f;
+
     ListenableSet<CubesController> controllers = new ListenableSet<>();
     CubePhysicalIdMap cubePhysicalIdMap = new CubePhysicalIdMap();
 
@@ -34,9 +45,56 @@ public class CubesLayout implements Layout {
         return weakRef == null ? null : weakRef.get();
     }
 
-    public SLModel buildModel() {
-        return null;
+    public static class TowerConfig {
+
+        final CubesModel.Cube.Type type;
+        final float x;
+        final float y;
+        final float z;
+        final float xRot;
+        final float yRot;
+        final float zRot;
+        final String[] ids;
+        final float[] yValues;
+
+        TowerConfig(float x, float y, float z, String[] ids) {
+            this(CubesModel.Cube.Type.LARGE, x, y, z, ids);
+        }
+
+        TowerConfig(float x, float y, float z, float yRot, String[] ids) {
+            this(x, y, z, 0, yRot, 0, ids);
+        }
+
+        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, String[] ids) {
+            this(type, x, y, z, 0, 0, 0, ids);
+        }
+
+        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float yRot, String[] ids) {
+            this(type, x, y, z, 0, yRot, 0, ids);
+        }
+
+        TowerConfig(float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
+            this(CubesModel.Cube.Type.LARGE, x, y, z, xRot, yRot, zRot, ids);
+        }
+
+        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
+            this.type = type;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.xRot = xRot;
+            this.yRot = yRot;
+            this.zRot = zRot;
+            this.ids = ids;
+
+            this.yValues = new float[ids.length];
+            for (int i = 0; i < ids.length; i++) {
+                yValues[i] = y + i * (CUBE_HEIGHT + CUBE_SPACING);
+            }
+        }
     }
+
+    public abstract SLModel buildModel();
 
     public void setupLx(SLStudioLX lx) {
         instanceByLX.put(lx, new WeakReference<>(this));
@@ -97,4 +155,9 @@ public class CubesLayout implements Layout {
         controllers.addListener(listener);
     }
 
+    public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
+        UI2dScrollContext utility = ui.rightPane.utility;
+        new UIOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
+        new UIMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
+    }
 }
