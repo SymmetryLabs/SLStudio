@@ -26,15 +26,16 @@ public class PilotsSpirits extends SLPattern<SLModel> {
     private static final float ROTATION_PERIOD_BASE = 4800; // ms
     private static final float ROTATION_PERIOD_AMPLITUDE = 600; // ms
     private static final float ROTATION_PERIOD_RATE = 10200; // ms
-    private static final float TRAIL_MAX_AGE = 500; // ms
+    private static final float TRAIL_MAX_AGE = 600; // ms
     private static final float TRAIL_MAX_AGE_CHASE = 200; // ms
-    private static final float TRAIL_NEW_ELEM_AGE = 50; // ms
-    private static final float TRAIL_WIDTH = 7.f; // inches shrunk per trail element
+    private static final float TRAIL_NEW_ELEM_AGE = 15; // ms
+    private static final float TRAIL_WIDTH = 100.f; // inches shrunk per trail element
 
+    private static final float CHASE_TIME = 1600f; // ms
     private static final float CHASE_SIZE_TRANSITION = 2000f; // ms
     private static final float RED_EAT_YELLOW_TRANSITION = 6000f; // ms
     private static final float RED_GROWTH = 25; // inches
-    private static final float YELLOW_SHRINK_TO = 0; // inches
+    private static final float YELLOW_SHRINK_TO = 30; // inches
 
     private final SinLFO redRestLfo = new SinLFO(-40, 30, 4500);
     private final SinLFO yellowRestLfo = new SinLFO(35, -20, 5100);
@@ -48,11 +49,11 @@ public class PilotsSpirits extends SLPattern<SLModel> {
         OUT,
     }
 
-    Phase phase = Phase.RED_EATS_YELLOW;
+    Phase phase = Phase.IDLE;
     Random random = new Random();
     float theta = 0;
     float phaseAge = 0;
-    float chaseAge = 0;
+    float moveAge = 0;
 
     private static final class TrailElement {
         LXVector loc;
@@ -116,8 +117,8 @@ public class PilotsSpirits extends SLPattern<SLModel> {
             case MOVE_IN: {
                 yTarget = new LXVector(model.cx - ellipseMajor, model.cy, model.cz);
                 rTarget = new LXVector(model.cx + ellipseMajor, model.cy, model.cz);
-                yVel = 60f / 1000f;
-                rVel = 60f / 1000f;
+                yVel = 80f / 1000f;
+                rVel = 80f / 1000f;
                 break;
             }
 
@@ -147,10 +148,10 @@ public class PilotsSpirits extends SLPattern<SLModel> {
                 if (chaseTarget == null)
                     pickChaseTarget();
 
-                InterpResult y = expInterpToTarget(chaseStart);
+                InterpResult y = expInterpToTarget(chaseStart, chaseTarget);
                 yellowBase = y.loc;
                 if (redCatchingUp) {
-                    InterpResult r = expInterpToTarget(redChaseStart);
+                    InterpResult r = expInterpToTarget(redChaseStart, chaseTarget);
                     redBase = r.loc;
                     if (r.t > 0.99 && y.t > 0.99) {
                         redCatchingUp = false;
@@ -194,9 +195,9 @@ public class PilotsSpirits extends SLPattern<SLModel> {
         float t;
         LXVector loc;
     }
-    private InterpResult expInterpToTarget(LXVector start) {
-        LXVector chaseVec = start.copy().mult(-1).add(chaseTarget);
-        float t = 2f * chaseAge / 2000f;
+    private InterpResult expInterpToTarget(LXVector start, LXVector end) {
+        LXVector chaseVec = start.copy().mult(-1).add(end);
+        float t = 2f * moveAge / (redCatchingUp ? CHASE_TIME + RED_CHASE_DELAY : CHASE_TIME);
         InterpResult res = new InterpResult();
         if (t < 1) {
             res.t = 0.5f * (float) Math.pow(2, 10 * (t - 1));
@@ -216,8 +217,8 @@ public class PilotsSpirits extends SLPattern<SLModel> {
         do {
             int i = random.nextInt(vs.length);
             chaseTarget = vs[i];
-        } while (chaseTarget.dist(chaseStart) < 0.2f * model.xRange);
-        chaseAge = 0;
+        } while (chaseTarget.dist(chaseStart) < 0.3f * model.xRange);
+        moveAge = 0;
     }
 
     private void updateTrails(double elapsedMs, LXVector yLoc, LXVector rLoc) {
@@ -248,7 +249,7 @@ public class PilotsSpirits extends SLPattern<SLModel> {
     @Override
     public void run(double elapsedMs) {
         phaseAge += elapsedMs;
-        chaseAge += elapsedMs;
+        moveAge += elapsedMs;
 
         int black = LXColor.gray(0);
         for (int i = 0; i < colors.length; i++)
@@ -302,7 +303,6 @@ public class PilotsSpirits extends SLPattern<SLModel> {
             rArea += rBoost * RED_GROWTH * 0.667;
 
             float newYArea = YELLOW_SHRINK_TO + (1f - yAttenuate) * (yArea - YELLOW_SHRINK_TO);
-            yHeartSize += (yArea - newYArea) / 3f;
             yArea = newYArea;
         }
 
@@ -344,18 +344,18 @@ public class PilotsSpirits extends SLPattern<SLModel> {
             double rStrength = rHeartSize - rDist;
             double yStrength = yHeartSize - yDist;
 
-            rDist -= rHeartSize;
-            yDist -= yHeartSize;
-
             int color;
-            if (rStrength > yStrength)
-                color = rDist < 0
-                    ? LXColor.hsba(rHue, 100 * (1 + rDist / rHeartSize), 100, rAlpha)
-                    : LXColor.hsba(rHue, 100, 100 * Math.max(0, 1 - rDist / rArea), rAlpha);
-            else
-                color = yDist < 0
-                    ? LXColor.hsba(yHue, 100 * (1 + yDist / yHeartSize), 85, yAlpha)
-                    : LXColor.hsba(yHue, 100, 85 * Math.max(0, 1 - yDist / yArea), yAlpha);
+            if (rStrength > yStrength) {
+                float b = 100f * (float) Math.sqrt(Float.max(0f, 1f - (float) rDist / rArea));
+                color = rDist < rHeartSize
+                    ? LXColor.hsba(rHue, 100 * (1 - (rHeartSize - rDist) / rHeartSize), 100, rAlpha)
+                    : LXColor.hsba(rHue, 100, b, rAlpha);
+            } else {
+                float b = 90f * (float) Math.sqrt(Float.max(0f, 1f - (float) yDist / yArea));
+                color = yDist < yHeartSize
+                    ? LXColor.hsba(yHue, 100 * (1 - (yHeartSize - yDist) / yHeartSize), 100, yAlpha)
+                    : LXColor.hsba(yHue, 100, b, yAlpha);
+            }
             colors[v.index] = Ops8.add(color, colors[v.index]);
         }
     }
@@ -374,7 +374,7 @@ public class PilotsSpirits extends SLPattern<SLModel> {
                 break;
             case RED_EATS_YELLOW:
                 phase = Phase.CHASE;
-                chaseAge = 0;
+                moveAge = 0;
                 redCatchingUp = true;
                 break;
             case CHASE:
