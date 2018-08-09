@@ -4,6 +4,8 @@ import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology;
+import com.symmetrylabs.slstudio.model.StripsTopology.Dir;
+import com.symmetrylabs.slstudio.model.StripsTopology.Sign;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
@@ -188,37 +190,7 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
     private static final int PZ = 4;
     private static final int NZ = 5;
 
-    private boolean grow(Prism p, int direction) {
-        StripsTopology.Dir d = null;
-        StripsTopology.Sign s = null;
-        switch (direction) {
-            case PX:
-                d = StripsTopology.Dir.X;
-                s = StripsTopology.Sign.POS;
-                break;
-            case NX:
-                d = StripsTopology.Dir.X;
-                s = StripsTopology.Sign.NEG;
-            case PY:
-                d = StripsTopology.Dir.Y;
-                s = StripsTopology.Sign.POS;
-                break;
-            case NY:
-                d = StripsTopology.Dir.Y;
-                s = StripsTopology.Sign.NEG;
-            case PZ:
-                d = StripsTopology.Dir.Z;
-                s = StripsTopology.Sign.POS;
-                break;
-            case NZ:
-                d = StripsTopology.Dir.Z;
-                s = StripsTopology.Sign.NEG;
-                break;
-        }
-        if (d == null || s == null) {
-            throw new IllegalArgumentException("direction must be in [0-5]");
-        }
-
+    private boolean grow(Prism p, Dir d, Sign s) {
         StripsTopology.Dir a = d.ortho1();
         StripsTopology.Dir b = d.ortho2();
 
@@ -285,18 +257,18 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
 
         /* Grow it one unit in X, Y, and Z; if we fail on any, we just
          * say we have a bad seed and give up. */
-        if (!grow(p, PX)) {
-            if (!grow(p, NX)) {
+        if (!grow(p, Dir.X, Sign.POS)) {
+            if (!grow(p, Dir.X, Sign.NEG)) {
                 return false;
             }
         }
-        if (!grow(p, PY)) {
-            if (!grow(p, NY)) {
+        if (!grow(p, Dir.Y, Sign.POS)) {
+            if (!grow(p, Dir.Y, Sign.NEG)) {
                 return false;
             }
         }
-        if (!grow(p, PZ)) {
-            if (!grow(p, NZ)) {
+        if (!grow(p, Dir.Z, Sign.POS)) {
+            if (!grow(p, Dir.Z, Sign.NEG)) {
                 return false;
             }
         }
@@ -319,7 +291,33 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
         int targetGrowth = random.nextInt(maxSizeParam.getValuei());
         int added = 0;
         for (int attempts = 0; attempts < targetGrowth * 10 && added < targetGrowth; attempts++) {
-            if (grow(p, random.nextInt(6))) {
+            Dir d = null;
+            Sign s = null;
+            switch (random.nextInt(6)) {
+                case PX:
+                    d = Dir.X;
+                    s = Sign.POS;
+                    break;
+                case NX:
+                    d = Dir.X;
+                    s = Sign.NEG;
+                case PY:
+                    d = Dir.Y;
+                    s = Sign.POS;
+                    break;
+                case NY:
+                    d = Dir.Y;
+                    s = Sign.NEG;
+                case PZ:
+                    d = Dir.Z;
+                    s = Sign.POS;
+                    break;
+                case NZ:
+                    d = Dir.Z;
+                    s = Sign.NEG;
+                    break;
+            }
+            if (grow(p, d, s)) {
                 added++;
             }
         }

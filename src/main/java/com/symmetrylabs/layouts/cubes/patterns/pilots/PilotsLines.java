@@ -4,6 +4,8 @@ import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology;
+import com.symmetrylabs.slstudio.model.StripsTopology.Dir;
+import com.symmetrylabs.slstudio.model.StripsTopology.Sign;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
@@ -395,7 +397,7 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
         effects.removeIf(e -> !e.run(deltaMs));
     }
 
-    private List<StripsTopology.Bundle> randomLineSeg(StripsTopology.Dir d, int expectedLength) {
+    private List<StripsTopology.Bundle> randomLineSeg(Dir d, int expectedLength) {
         int N = model.getTopology().bundles.size();
         Random r = new Random();
         StripsTopology.Bundle e;
@@ -422,7 +424,7 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
             StripsTopology.Bundle t, n;
 
             t = line.getLast();
-            n = t.get(StripsTopology.Sign.NEG).get(t.dir, StripsTopology.Sign.NEG);
+            n = t.get(Sign.NEG).get(t.dir, Sign.NEG);
             if (n != null) {
                 line.addLast(n);
                 added = true;
@@ -430,7 +432,7 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
 
             if (line.size() < len) {
                 t = line.getFirst();
-                n = t.get(StripsTopology.Sign.POS).get(t.dir, StripsTopology.Sign.POS);
+                n = t.get(Sign.POS).get(t.dir, Sign.POS);
                 if (n != null) {
                     line.addFirst(n);
                     added = true;
@@ -445,7 +447,7 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
         return line;
     }
 
-    private Set<StripsTopology.Bundle> createLineSet(StripsTopology.Dir d, int count, int expectedLength) {
+    private Set<StripsTopology.Bundle> createLineSet(Dir d, int count, int expectedLength) {
         Set<StripsTopology.Bundle> all = new HashSet<>();
         for (int i = 0; i < count; i++) {
             all.addAll(randomLineSeg(d, expectedLength));
@@ -455,12 +457,12 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
 
     private ArrayList<StripsTopology.Bundle> createHorizontalLines() {
         return new ArrayList<>(
-            createLineSet(StripsTopology.Dir.X, hCountParam.getValuei(), hLengthParam.getValuei()));
+            createLineSet(Dir.X, hCountParam.getValuei(), hLengthParam.getValuei()));
     }
 
     private ArrayList<StripsTopology.Bundle> createVerticalLines() {
         return new ArrayList<>(
-            createLineSet(StripsTopology.Dir.Y, vCountParam.getValuei(), vLengthParam.getValuei()));
+            createLineSet(Dir.Y, vCountParam.getValuei(), vLengthParam.getValuei()));
     }
 
     private LineEffect createStaticVerticalLines() {
@@ -490,7 +492,7 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
         int N = vCountParam.getValuei();
         List<List<StripsTopology.Bundle>> lines = new ArrayList<>(N);
         for (int i = 0; i < N; i++) {
-            lines.add(randomLineSeg(StripsTopology.Dir.Y, vLengthParam.getValuei()));
+            lines.add(randomLineSeg(Dir.Y, vLengthParam.getValuei()));
         }
         return createScroller(lines, !up, showBand);
     }
@@ -499,7 +501,7 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
         int N = hCountParam.getValuei();
         List<List<StripsTopology.Bundle>> lines = new ArrayList<>(N);
         for (int i = 0; i < N; i++) {
-            lines.add(randomLineSeg(StripsTopology.Dir.X, hLengthParam.getValuei()));
+            lines.add(randomLineSeg(Dir.X, hLengthParam.getValuei()));
         }
         return createScroller(lines, !right, showBand);
     }
