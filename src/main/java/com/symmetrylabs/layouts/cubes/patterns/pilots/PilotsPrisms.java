@@ -183,13 +183,6 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
         return js.get(random.nextInt(js.size()));
     }
 
-    private static final int PX = 0;
-    private static final int NX = 1;
-    private static final int PY = 2;
-    private static final int NY = 3;
-    private static final int PZ = 4;
-    private static final int NZ = 5;
-
     private boolean grow(Prism p, Dir d, Sign s) {
         StripsTopology.Dir a = d.ortho1();
         StripsTopology.Dir b = d.ortho2();
@@ -294,25 +287,25 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
             Dir d = null;
             Sign s = null;
             switch (random.nextInt(6)) {
-                case PX:
+                case 0:
                     d = Dir.X;
                     s = Sign.POS;
                     break;
-                case NX:
+                case 1:
                     d = Dir.X;
                     s = Sign.NEG;
-                case PY:
+                case 2:
                     d = Dir.Y;
                     s = Sign.POS;
                     break;
-                case NY:
+                case 3:
                     d = Dir.Y;
                     s = Sign.NEG;
-                case PZ:
+                case 4:
                     d = Dir.Z;
                     s = Sign.POS;
                     break;
-                case NZ:
+                case 5:
                     d = Dir.Z;
                     s = Sign.NEG;
                     break;
