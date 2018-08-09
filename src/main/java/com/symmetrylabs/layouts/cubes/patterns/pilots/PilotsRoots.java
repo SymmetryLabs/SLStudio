@@ -2,6 +2,8 @@ package com.symmetrylabs.layouts.cubes.patterns.pilots;
 
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology;
+import com.symmetrylabs.slstudio.model.StripsTopology.Dir;
+import com.symmetrylabs.slstudio.model.StripsTopology.Sign;
 import com.symmetrylabs.util.EdgeAStar;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
@@ -120,7 +122,7 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
     private List<RootSpec> buildSliceRoots() {
         HashMap<Float, List<StripsTopology.Bundle>> slices = new HashMap<>();
         for (StripsTopology.Bundle b : model.getTopology().bundles) {
-            if (b.dir == StripsTopology.EdgeDirection.X)
+            if (b.dir == Dir.X)
                 continue;
 
             float x = b.endpoints().negative.x;
@@ -145,18 +147,22 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
 
             boolean startIsVertical = r.nextBoolean();
             for (StripsTopology.Bundle b : slice) {
-                if (startIsVertical && b.dir != StripsTopology.EdgeDirection.Y)
+                if (startIsVertical && b.dir != Dir.Y)
                     continue;
-                else if (!startIsVertical && b.dir != StripsTopology.EdgeDirection.Z)
+                else if (!startIsVertical && b.dir != Dir.Z)
                     continue;
 
                 /* Looking for one with nothing below it and nothing in front
                  * (in negative-Z) of it. */
                 boolean ok;
                 if (startIsVertical) {
-                    ok = b.n.ny == null && b.n.nz == null && b.p.nz == null;
+                    ok = b.get(Sign.NEG).get(Dir.Y, Sign.NEG) == null;
+                    ok = ok && b.get(Sign.NEG).get(Dir.Z, Sign.NEG) == null;
+                    ok = ok && b.get(Sign.POS).get(Dir.Z, Sign.NEG) == null;
                 } else {
-                    ok = b.n.ny == null && b.p.ny == null && b.n.nz == null;
+                    ok = b.get(Sign.NEG).get(Dir.Y, Sign.NEG) == null;
+                    ok = ok && b.get(Sign.POS).get(Dir.Y, Sign.NEG) == null;
+                    ok = ok && b.get(Sign.NEG).get(Dir.Z, Sign.NEG) == null;
                 }
                 if (ok) {
                     start = b;
@@ -173,12 +179,14 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
                 if (path.contains(t))
                     throw new IllegalStateException("cycle in path");
                 path.add(t);
-                if (t.p.pz == null) {
-                    t = t.p.py;
-                } else if (t.p.py == null) {
-                    t = t.p.pz;
+                StripsTopology.Bundle pz = t.get(Sign.POS).get(Dir.Z, Sign.POS);
+                StripsTopology.Bundle py = t.get(Sign.POS).get(Dir.Y, Sign.POS);
+                if (pz == null) {
+                    t = py;
+                } else if (py == null) {
+                    t = pz;
                 } else {
-                    t = r.nextBoolean() ? t.p.py : t.p.pz;
+                    t = r.nextBoolean() ? py : pz;
                 }
             }
 
@@ -201,11 +209,12 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
         /* Generate lists of allowable root top bundles and root bottom bundles */
         List<StripsTopology.Bundle> rootTops = new ArrayList<>();
         for (StripsTopology.Bundle e : model.getTopology().bundles) {
-            if (e.dir != StripsTopology.EdgeDirection.Y)
+            if (e.dir != Dir.Y)
                 continue;
             /* only get elements with nothing above them */
-            if (e.p.py != null)
+            if (e.get(Sign.POS).get(Dir.Y, Sign.POS) != null)
                 continue;
+
             float x = e.endpoints().positive.x;
             if (Math.abs(model.cx - x) < topRadiusParam.getValuef())
                 rootTops.add(e);
@@ -213,18 +222,31 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
 
         List<StripsTopology.Bundle> rootBottoms = new ArrayList<>();
         for (StripsTopology.Bundle e : model.getTopology().bundles) {
-            if (e.dir == StripsTopology.EdgeDirection.Y)
+            if (e.dir == Dir.Y)
                 continue;
 
             /* only get elements with nothing below them that are on the
              * edge of the structure (meaning at least one of the directions
              * in-bottom-plane has no bundle in it). */
-            if (e.n.ny != null || e.p.ny != null ||
-                  (e.n.nz != null && e.n.pz != null && e.n.nx != null && e.n.px != null
-                        && e.p.nz != null && e.p.pz != null && e.p.nx != null && e.p.px != null))
-                continue;
-
-            rootBottoms.add(e);
+            boolean ok = e.get(Sign.NEG).get(Dir.Y, Sign.NEG) == null &&
+                e.get(Sign.POS).get(Dir.Y, Sign.NEG) == null;
+            if (ok) {
+                /* Just make sure we have a single direction in the XZ plane
+                 * with no neighbor. */
+                ok = false;
+                outer: for (Sign end : Sign.values()) {
+                    for (Dir d : new Dir[] { Dir.X, Dir.Z }) {
+                        for (Sign s : Sign.values()) {
+                            if (e.get(end).get(d, s) == null) {
+                                ok = true;
+                                break outer;
+                            }
+                        }
+                    }
+                }
+                if (ok)
+                    rootBottoms.add(e);
+            }
         }
 
         /* Shuffle those lists (this is where the randomness comes from */

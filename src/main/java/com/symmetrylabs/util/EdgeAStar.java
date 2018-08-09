@@ -61,18 +61,10 @@ public class EdgeAStar {
             open.remove(current);
             closed.add(current);
 
-            visitNeighbor(current.n.nx);
-            visitNeighbor(current.n.px);
-            visitNeighbor(current.n.ny);
-            visitNeighbor(current.n.py);
-            visitNeighbor(current.n.nz);
-            visitNeighbor(current.n.pz);
-            visitNeighbor(current.p.nx);
-            visitNeighbor(current.p.px);
-            visitNeighbor(current.p.ny);
-            visitNeighbor(current.p.py);
-            visitNeighbor(current.p.nz);
-            visitNeighbor(current.p.pz);
+            for (StripsTopology.Sign s1 : StripsTopology.Sign.values())
+                for (StripsTopology.Dir d : StripsTopology.Dir.values())
+                    for (StripsTopology.Sign s2 : StripsTopology.Sign.values())
+                        visitNeighbor(current.get(s1).get(d, s2));
         }
 
         if (current != end)

@@ -28,19 +28,85 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
     private DiscreteParameter maxSizeParam = new DiscreteParameter("scale", 10, 3, 20);
     private BooleanParameter noIntersectParam = new BooleanParameter("avoid", false);
 
-    private class Prism {
-        //                      XYZ
-        StripsTopology.Junction nnn;
-        StripsTopology.Junction nnp;
-        StripsTopology.Junction npn;
-        StripsTopology.Junction npp;
-        StripsTopology.Junction pnn;
-        StripsTopology.Junction pnp;
-        StripsTopology.Junction ppn;
-        StripsTopology.Junction ppp;
+    private static class PrismIndexer {
+        private StripsTopology.Sign x, y, z;
+
+        PrismIndexer() {}
+
+        PrismIndexer(StripsTopology.Sign x, StripsTopology.Sign y, StripsTopology.Sign z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        PrismIndexer with(StripsTopology.Dir d, StripsTopology.Sign s) {
+            PrismIndexer i = new PrismIndexer(x, y, z);
+            switch (d) {
+                case X: i.x = s; return i;
+                case Y: i.y = s; return i;
+                case Z: i.z = s; return i;
+            }
+            return null;
+        }
+
+        void set(StripsTopology.Dir d, StripsTopology.Sign s) {
+            switch (d) {
+                case X: x = s; return;
+                case Y: y = s; return;
+                case Z: z = s; return;
+            }
+        }
+
+        int index() {
+            int idx = 0;
+            if (x == StripsTopology.Sign.POS) idx |= 0x01;
+            if (y == StripsTopology.Sign.POS) idx |= 0x02;
+            if (z == StripsTopology.Sign.POS) idx |= 0x04;
+            return idx;
+        }
+
+        PrismIndexer[] adjacent() {
+            PrismIndexer[] res = new PrismIndexer[3];
+            res[0] = this.with(StripsTopology.Dir.X, x.other());
+            res[1] = this.with(StripsTopology.Dir.Y, y.other());
+            res[2] = this.with(StripsTopology.Dir.Z, z.other());
+            return res;
+        }
+
+        static PrismIndexer fromIndex(int idx) {
+            return new PrismIndexer(
+                (idx & 0x01) != 0 ? StripsTopology.Sign.POS : StripsTopology.Sign.NEG,
+                (idx & 0x02) != 0 ? StripsTopology.Sign.POS : StripsTopology.Sign.NEG,
+                (idx & 0x04) != 0 ? StripsTopology.Sign.POS : StripsTopology.Sign.NEG);
+        }
+
+        static PrismIndexer[] allIndexes() {
+            PrismIndexer[] idx = new PrismIndexer[8];
+            for (int i = 0; i < 8; i++) {
+                idx[i] = fromIndex(i);
+            }
+            return idx;
+        }
+    }
+
+    private static class Prism {
+        StripsTopology.Junction[] junctions = new StripsTopology.Junction[8];
 
         HashSet<StripsTopology.Bundle> allEdges = new HashSet<>();
         ADSREnvelope adsr;
+
+        StripsTopology.Junction get(PrismIndexer i) {
+            return junctions[i.index()];
+        }
+
+        void set(PrismIndexer i, StripsTopology.Junction j) {
+            junctions[i.index()] = j;
+        }
+
+        void setAll(StripsTopology.Junction j) {
+            for (int i = 0; i < junctions.length; i++)
+                junctions[i] = j;
+        }
     }
 
     private final List<Prism> prisms;
@@ -102,81 +168,74 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
     private static final int NZ = 5;
 
     private boolean grow(Prism p, int direction) {
+        StripsTopology.Dir d = null;
+        StripsTopology.Sign s = null;
         switch (direction) {
             case PX:
-                if (p.nnp.px != null && p.npp.px != null && p.pnp.px != null && p.ppp.px != null) {
-                    p.nnp = p.nnp.px.p;
-                    p.npp = p.npp.px.p;
-                    p.pnp = p.pnp.px.p;
-                    p.ppp = p.ppp.px.p;
-                    return true;
-                }
-                return false;
+                d = StripsTopology.Dir.X;
+                s = StripsTopology.Sign.POS;
+                break;
             case NX:
-                if (p.nnn.nx != null && p.npn.nx != null && p.pnn.nx != null && p.ppn.nx != null) {
-                    p.nnn = p.nnn.nx.n;
-                    p.npn = p.npn.nx.n;
-                    p.pnn = p.pnn.nx.n;
-                    p.ppn = p.ppn.nx.n;
-                    return true;
-                }
-                return false;
+                d = StripsTopology.Dir.X;
+                s = StripsTopology.Sign.NEG;
             case PY:
-                if (p.npn.py != null && p.npp.py != null && p.ppn.py != null && p.ppp.py != null) {
-                    p.npn = p.npn.py.p;
-                    p.npp = p.npp.py.p;
-                    p.ppn = p.ppn.py.p;
-                    p.ppp = p.ppp.py.p;
-                    return true;
-                }
-                return false;
+                d = StripsTopology.Dir.Y;
+                s = StripsTopology.Sign.POS;
+                break;
             case NY:
-                if (p.nnn.ny != null && p.nnp.ny != null && p.pnn.ny != null && p.pnp.ny != null) {
-                    p.nnn = p.nnn.ny.n;
-                    p.nnp = p.nnp.ny.n;
-                    p.pnn = p.pnn.ny.n;
-                    p.pnp = p.pnp.ny.n;
-                    return true;
-                }
-                return false;
+                d = StripsTopology.Dir.Y;
+                s = StripsTopology.Sign.NEG;
             case PZ:
-                if (p.pnn.pz != null && p.pnp.pz != null && p.ppn.pz != null && p.ppp.pz != null) {
-                    p.pnn = p.pnn.pz.p;
-                    p.pnp = p.pnp.pz.p;
-                    p.ppn = p.ppn.pz.p;
-                    p.ppp = p.ppp.pz.p;
-                    return true;
-                }
-                return false;
+                d = StripsTopology.Dir.Z;
+                s = StripsTopology.Sign.POS;
+                break;
             case NZ:
-                if (p.nnn.nz != null && p.nnp.nz != null && p.npn.nz != null && p.npp.nz != null) {
-                    p.nnn = p.nnn.nz.n;
-                    p.nnp = p.nnp.nz.n;
-                    p.npn = p.npn.nz.n;
-                    p.npp = p.npp.nz.n;
-                    return true;
-                }
-                return false;
+                d = StripsTopology.Dir.Z;
+                s = StripsTopology.Sign.NEG;
+                break;
         }
-        return false;
+        if (d == null || s == null)
+            throw new IllegalArgumentException("direction must be in [0-5]");
+
+        StripsTopology.Dir a = d.ortho1();
+        StripsTopology.Dir b = d.ortho2();
+
+        /* collect all of the junctions on the side we're moving */
+        StripsTopology.Junction[] sideJunctions = new StripsTopology.Junction[4];
+        for (int i = 0; i < 4; i++) {
+            PrismIndexer idx = new PrismIndexer();
+            idx.set(d, s);
+            idx.set(a, i < 2 ? StripsTopology.Sign.NEG : StripsTopology.Sign.POS);
+            idx.set(b, i % 2 == 0 ? StripsTopology.Sign.NEG : StripsTopology.Sign.POS);
+            sideJunctions[i] = p.get(idx);
+        }
+
+        /* make sure all of the junctions can move in that direction */
+        for (StripsTopology.Junction j : sideJunctions)
+            if (j.get(d, s) == null) return false;
+
+        /* actually move them */
+        for (int i = 0; i < 4; i++) {
+            PrismIndexer idx = new PrismIndexer();
+            idx.set(d, s);
+            idx.set(a, i < 2 ? StripsTopology.Sign.NEG : StripsTopology.Sign.POS);
+            idx.set(b, i % 2 == 0 ? StripsTopology.Sign.NEG : StripsTopology.Sign.POS);
+            p.set(idx, sideJunctions[i].get(d, s).get(s));
+        }
+        return true;
     }
 
-    private void addEdges(Prism p, StripsTopology.Junction start, StripsTopology.Junction end, StripsTopology.EdgeDirection dir) {
+    private void addEdges(Prism p, StripsTopology.Junction start, StripsTopology.Junction end, StripsTopology.Dir dir) {
         StripsTopology.Junction j = start;
         StripsTopology.Junction next;
         StripsTopology.Bundle bundle;
 
         while (j != end) {
-            switch (dir) {
-                case X: bundle = j.px; break;
-                case Y: bundle = j.py; break;
-                case Z: bundle = j.pz; break;
-                default: bundle = null;
-            }
+            bundle = j.get(dir, StripsTopology.Sign.POS);
             if (bundle == null)
                 break;
             p.allEdges.add(bundle);
-            j = bundle.p;
+            j = bundle.get(StripsTopology.Sign.POS);
         }
         /* If we couldn't get to the end from the start, we head from the end back towards
          * the start. If there's only one break in the edge, this will get all of the
@@ -184,30 +243,18 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
         if (j != end) {
             j = end;
             while (j != start) {
-                switch (dir) {
-                    case X: bundle = j.nx; break;
-                    case Y: bundle = j.ny; break;
-                    case Z: bundle = j.nz; break;
-                    default: bundle = null;
-                }
+                bundle = j.get(dir, StripsTopology.Sign.NEG);
                 if (bundle == null)
                     break;
                 p.allEdges.add(bundle);
-                j = bundle.n;
+                j = bundle.get(StripsTopology.Sign.NEG);
             }
         }
     }
 
     private boolean fillWithRandomUnitPrism(Prism p) {
         StripsTopology.Junction seed = randomJunction();
-        p.nnn = seed;
-        p.nnp = seed;
-        p.npn = seed;
-        p.npp = seed;
-        p.pnn = seed;
-        p.pnp = seed;
-        p.ppn = seed;
-        p.ppp = seed;
+        p.setAll(seed);
 
         /* Grow it one unit in X, Y, and Z; if we fail on any, we just
          * say we have a bad seed and give up. */
@@ -246,28 +293,21 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
         for (int attempts = 0; attempts < targetGrowth * 10 && added < targetGrowth; attempts++) {
             if (grow(p, random.nextInt(6))) {
                 added++;
-                if (p.nnn == null || p.nnp == null || p.npn == null || p.npp == null ||
-                      p.pnn == null || p.pnp == null || p.ppn == null || p.ppp == null) {
-                    throw new IllegalStateException("grow failed");
-                }
             }
         }
 
         /* Add the bundles that make up the 12 cube edges */
-        StripsTopology.Junction j;
-
-        addEdges(p, p.nnn, p.nnp, StripsTopology.EdgeDirection.X);
-        addEdges(p, p.nnn, p.npn, StripsTopology.EdgeDirection.Y);
-        addEdges(p, p.nnn, p.pnn, StripsTopology.EdgeDirection.Z);
-        addEdges(p, p.nnp, p.npp, StripsTopology.EdgeDirection.Y);
-        addEdges(p, p.nnp, p.pnp, StripsTopology.EdgeDirection.Z);
-        addEdges(p, p.npn, p.npp, StripsTopology.EdgeDirection.X);
-        addEdges(p, p.npn, p.ppn, StripsTopology.EdgeDirection.Z);
-        addEdges(p, p.npp, p.ppp, StripsTopology.EdgeDirection.Z);
-        addEdges(p, p.pnn, p.pnp, StripsTopology.EdgeDirection.X);
-        addEdges(p, p.pnn, p.ppn, StripsTopology.EdgeDirection.Y);
-        addEdges(p, p.ppn, p.ppp, StripsTopology.EdgeDirection.X);
-        addEdges(p, p.pnp, p.ppp, StripsTopology.EdgeDirection.Y);
+        for (PrismIndexer i : PrismIndexer.allIndexes()) {
+            for (PrismIndexer j : i.adjacent()) {
+                if (i.index() < j.index()) {
+                    StripsTopology.Dir shared = null;
+                    if (i.x != j.x) shared = StripsTopology.Dir.X;
+                    else if (i.y != j.y) shared = StripsTopology.Dir.Y;
+                    else if (i.z != j.z) shared = StripsTopology.Dir.Z;
+                    addEdges(p, p.get(i), p.get(j), shared);
+                }
+            }
+        }
 
         return p;
     }

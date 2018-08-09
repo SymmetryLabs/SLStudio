@@ -52,8 +52,38 @@ public class StripsTopology {
     private static final float BUCKET_TOLERANCE = 6;
     private static final float ENDPOINT_TOLERANCE = 6;
 
-    public enum EdgeDirection {
-        X, Y, Z, Other
+    public enum Dir {
+        X, Y, Z;
+
+        /** Returns the first orthogonal direction to this direction */
+        public Dir ortho1() {
+            switch (this) {
+                case X: return Y;
+                case Y: case Z: return X;
+            }
+            return null;
+        }
+
+        /** Returns the first orthogonal direction to this direction */
+        public Dir ortho2() {
+            switch (this) {
+                case X: case Y: return Z;
+                case Z: return Y;
+            }
+            return null;
+        }
+
+    }
+    public enum Sign {
+        POS, NEG;
+
+        public Sign other() {
+            if (this == POS)
+                return NEG;
+            if (this == NEG)
+                return POS;
+            return null;
+        }
     }
 
     public class BundleEndpoints {
@@ -64,17 +94,17 @@ public class StripsTopology {
     /** The meeting point of up to 6 bundles. */
     public static class Junction {
         /** The bundle in the positive X direction */
-        public StripsTopology.Bundle px;
+        private StripsTopology.Bundle px;
         /** The bundle in the negative X direction */
-        public StripsTopology.Bundle nx;
+        private StripsTopology.Bundle nx;
         /** The bundle in the positive Y direction */
-        public StripsTopology.Bundle py;
+        private StripsTopology.Bundle py;
         /** The bundle in the negative Y direction */
-        public StripsTopology.Bundle ny;
+        private StripsTopology.Bundle ny;
         /** The bundle in the positive Z direction */
-        public StripsTopology.Bundle pz;
+        private StripsTopology.Bundle pz;
         /** The bundle in the negative X direction */
-        public StripsTopology.Bundle nz;
+        private StripsTopology.Bundle nz;
         /** The approximate location of this junction.
          *  This is calculated as the midpoint of the bundles attached to the junction. */
         public LXVector loc;
@@ -90,6 +120,15 @@ public class StripsTopology {
             if (nz != null) degree++;
             return degree;
         }
+
+        public Bundle get(Dir e, Sign s) {
+            switch (e) {
+                case X: return s == Sign.POS ? px : nx;
+                case Y: return s == Sign.POS ? py : ny;
+                case Z: return s == Sign.POS ? pz : nz;
+            }
+            return null;
+        }
     }
 
     /** A set of parallel, adjacent strips */
@@ -99,16 +138,16 @@ public class StripsTopology {
         private static final int MAX_STRIPS = 4;
 
         /** The direction this bundle points in */
-        public EdgeDirection dir = EdgeDirection.Other;
+        public Dir dir;
 
         /** The model indexes of the strips in this bundle.
          *  These index into model.strips and can be used with model.getStripByIndex() */
         public int[] strips;
 
         /** The junction at the positive end of this bundle */
-        public Junction p = null;
+        private Junction p = null;
         /** The junction at the negative end of this bundle */
-        public Junction n = null;
+        private Junction n = null;
 
         /* Set to true once we're finished adding strips to the bundle; the cached
          * values below can only be used once this is set to true. */
@@ -124,6 +163,10 @@ public class StripsTopology {
         private Bundle() {
             strips = new int[MAX_STRIPS];
             Arrays.fill(strips, NO_STRIP);
+        }
+
+        public Junction get(Sign s) {
+            return s == Sign.POS ? p : s == Sign.NEG ? n : null;
         }
 
         private void addStrip(int strip) {
@@ -304,13 +347,13 @@ public class StripsTopology {
     /** Represents the location of a bundle within the plane perpendicular to the bundle.
      * This is used to bucket strips into bundles. */
     public static class PlanarLocation {
-        public EdgeDirection dir;
+        public Dir dir;
         /** The first coordinate in the plane. For the X plane, this is the Y coordinate. For Y and Z, this is the X coordinate. */
         public float a;
         /** The second coordinate in the plane. For the X and Y plane, this is the Z coordinate. For Z, this is the Y coordinate. */
         public float b;
 
-        PlanarLocation(EdgeDirection dir, float a, float b) {
+        PlanarLocation(Dir dir, float a, float b) {
             this.dir = dir;
             this.a = a;
             this.b = b;
@@ -366,13 +409,13 @@ public class StripsTopology {
             Bundle e = new Bundle();
             e.addStrip(i);
             if (s.xRange < 1e-3 && s.yRange < 1e-3) {
-                e.dir = EdgeDirection.Z;
+                e.dir = Dir.Z;
             } else if (s.xRange < 1e-3 && s.zRange < 1e-3) {
-                e.dir = EdgeDirection.Y;
+                e.dir = Dir.Y;
             } else if (s.yRange < 1e-3 && s.zRange < 1e-3) {
-                e.dir = EdgeDirection.X;
+                e.dir = Dir.X;
             } else {
-                e.dir = EdgeDirection.Other;
+                e.dir = null;
             }
 
             boolean matchesExisting = false;
