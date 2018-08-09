@@ -2,7 +2,6 @@ package com.symmetrylabs.slstudio.model;
 
 import com.google.common.base.Preconditions;
 import com.symmetrylabs.util.FixedWidthOctree;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXVector;
 
 import java.util.*;
@@ -118,9 +117,9 @@ public class StripsTopology {
         /* Caches for expensive-to-compute properties of the bundle, only populated
          * after the bundle is finished. */
         private BundleEndpoints endpoints = null;
-        private float minOrder = Float.MAX_VALUE;
-        private float maxOrder = Float.MIN_VALUE;
-        private float order = Float.MIN_VALUE;
+        private float minProjection = Float.MAX_VALUE;
+        private float maxProjection = Float.MIN_VALUE;
+        private float projection = Float.MIN_VALUE;
 
         private Bundle() {
             strips = new int[MAX_STRIPS];
@@ -177,9 +176,9 @@ public class StripsTopology {
             for (int i = 0; i < count; i++)
                 strips[i] = newStrips[i];
             endpoints = endpoints();
-            minOrder = minProjection();
-            maxOrder = maxProjection();
-            order = projection();
+            minProjection = minProjection();
+            maxProjection = maxProjection();
+            projection = projection();
         }
 
         public BundleEndpoints endpoints() {
@@ -248,27 +247,27 @@ public class StripsTopology {
         /** An edge's "projection" is the projection of it's centroid onto the axis it's aligned with */
         public float projection() {
             if (finished)
-                return order;
-            float order = 0;
+                return projection;
+            float proj = 0;
             int count = 0;
             for (int strip : strips) {
                 if (strip == NO_STRIP)
                     continue;
                 Strip s = model.getStripByIndex(strip);
                 switch (dir) {
-                    case X: order += s.cx; break;
-                    case Y: order += s.cy; break;
-                    case Z: order += s.cz; break;
+                    case X: proj += s.cx; break;
+                    case Y: proj += s.cy; break;
+                    case Z: proj += s.cz; break;
                 }
                 count++;
             }
-            return order / count;
+            return proj / count;
         }
 
         /** Min-projection is the minimum value of the projection of this edge onto its axis */
         public float minProjection() {
             if (finished)
-                return minOrder;
+                return minProjection;
             float min = Float.MAX_VALUE;
             for (int strip : strips) {
                 if (strip == NO_STRIP)
@@ -286,7 +285,7 @@ public class StripsTopology {
         /** Max-projection is the maximum value of the projection of this edge onto its axis */
         public float maxProjection() {
             if (finished)
-                return maxOrder;
+                return maxProjection;
             float max = Float.MIN_VALUE;
             for (int strip : strips) {
                 if (strip == NO_STRIP)
@@ -376,14 +375,13 @@ public class StripsTopology {
                 e.dir = EdgeDirection.Other;
             }
 
-            /* TODO: this doesn't need to be quadratic. */
             boolean matchesExisting = false;
             PlanarLocation pl = e.planarLocation();
-            float order = e.projection();
+            float proj = e.projection();
             for (Bundle testEdge : bundles) {
-                float testOrder = testEdge.projection();
-                float orderDist = Math.abs(order - testOrder);
-                if (pl.equivalent(testEdge.planarLocation()) && orderDist < ORDER_TOLERANCE) {
+                float testProj = testEdge.projection();
+                float projDist = Math.abs(proj - testProj);
+                if (pl.equivalent(testEdge.planarLocation()) && projDist < ORDER_TOLERANCE) {
                     testEdge.addStrip(i);
                     matchesExisting = true;
                     break;
