@@ -149,10 +149,9 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
             StripsTopology.Bundle start = null;
 
             boolean startIsVertical = r.nextBoolean();
+            Dir startDir = startIsVertical ? Dir.Y : Dir.Z;
             for (StripsTopology.Bundle b : slice) {
-                if (startIsVertical && b.dir != Dir.Y) {
-                    continue;
-                } else if (!startIsVertical && b.dir != Dir.Z) {
+                if (b.dir != startDir) {
                     continue;
                 }
 
