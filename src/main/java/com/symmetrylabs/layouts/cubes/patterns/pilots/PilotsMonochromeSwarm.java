@@ -8,12 +8,12 @@ import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
-import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
 
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
-import static processing.core.PApplet.*;
+import static processing.core.PApplet.constrain;
+import static processing.core.PApplet.min;
 
 public class PilotsMonochromeSwarm extends SLPattern<StripsModel<Strip>> {
     private final CompoundParameter fVParameter = new CompoundParameter("fV", 0, -1, 1);
@@ -47,16 +47,16 @@ public class PilotsMonochromeSwarm extends SLPattern<StripsModel<Strip>> {
         float s = 0;
 
         for (Strip strip : model.getStrips()) {
-          int i = 0;
+            int i = 0;
             for (LXVector p : getVectors(strip.points)) {
-                // println("fv: " + fV);
-                colors[p.index] = LXColor.hsb(
-                    0, 0, constrain(100 -
-                        (30 - fV * falloff.getValuef()) * modDist(i + (s * 63) % 61, offset.getValuef() * strip.metrics.numPoints, strip.metrics.numPoints), 0, 100)
-                );
-            ++i;
-          }
-          ++s;
+                float bright = 100 - (30 - fV * falloff.getValuef())
+                                                         * modDist(i + (s * 63) % 61,
+                                                                             offset.getValuef() * strip.metrics.numPoints,
+                                                                             strip.metrics.numPoints);
+                colors[p.index] = LXColor.hsb(0, 0, constrain(bright, 0, 100));
+                ++i;
+            }
+            ++s;
         }
         markModified(SRGB8);
     }

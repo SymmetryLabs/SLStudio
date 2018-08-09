@@ -1,14 +1,15 @@
 package com.symmetrylabs.layouts.cubes.patterns.pilots;
 
 import com.symmetrylabs.color.Ops8;
+import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology;
-import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.midi.*;
+import heronarts.lx.midi.MidiNote;
+import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -85,8 +86,9 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
 
             boolean foundX = false, foundY = false, foundZ = false;
             for (StripsTopology.Bundle maybeMirror : model.getTopology().bundles) {
-                if (maybeMirror.dir != b.dir)
+                if (maybeMirror.dir != b.dir) {
                     continue;
+                }
                 LXVector mm = new LXVector(maybeMirror.endpoints().negative);
                 if (xmirror.dist(mm) < MIRROR_ENDPOINT_TOLERANCE) {
                     xMirrorMap.put(b, maybeMirror);
@@ -100,8 +102,9 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
                     zMirrorMap.put(b, maybeMirror);
                     foundZ = true;
                 }
-                if (foundX && foundY && foundZ)
+                if (foundX && foundY && foundZ) {
                     break;
+                }
             }
         }
         System.out.println(String.format("%d elements in symmetry map", xMirrorMap.size()));
@@ -124,20 +127,24 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
             this.sustaining = true;
         }
 
-        /** @returns true if the effect is still running, false otherwise */
+        /**
+         * @returns true if the effect is still running, false otherwise
+         */
         boolean run(double deltaMs) {
             float alpha = 0;
             age += deltaMs;
             if (sustaining) {
                 attackAge += deltaMs;
-                if (attackAge < attack && attackAge > 0)
+                if (attackAge < attack && attackAge > 0) {
                     alpha = (float) Math.pow(attackAge / attack, 2);
-                else
+                } else {
                     alpha = 1;
+                }
             } else {
                 decayAge += deltaMs;
-                if (decayAge > decay)
+                if (decayAge > decay) {
                     return false;
+                }
                 alpha = 1.f - (float) Math.pow(decayAge / decay, 2);
             }
             return applyColors(alpha);
@@ -148,14 +155,16 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
 
     private class StaticEdgeSet extends LineEffect {
         final List<StripsTopology.Bundle> edges;
+
         public StaticEdgeSet(List<StripsTopology.Bundle> edges, float attack, float decay) {
             super(attack, decay);
             this.edges = edges;
         }
 
         private void turnOnBundle(StripsTopology.Bundle b, int c) {
-            if (b == null)
+            if (b == null) {
                 return;
+            }
             for (int stripIndex : b.strips) {
                 Strip s = model.getStripByIndex(stripIndex);
                 for (LXVector p : getVectors(s.points)) {
@@ -170,12 +179,15 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
             for (StripsTopology.Bundle e : edges) {
                 turnOnBundle(e, c);
 
-                if (xMirrorParam.getValueb())
-                    turnOnBundle(xMirrorMap.getOrDefault(e,null), c);
-                if (yMirrorParam.getValueb())
-                    turnOnBundle(yMirrorMap.getOrDefault(e,null), c);
-                if (zMirrorParam.getValueb())
-                    turnOnBundle(zMirrorMap.getOrDefault(e,null), c);
+                if (xMirrorParam.getValueb()) {
+                    turnOnBundle(xMirrorMap.getOrDefault(e, null), c);
+                }
+                if (yMirrorParam.getValueb()) {
+                    turnOnBundle(yMirrorMap.getOrDefault(e, null), c);
+                }
+                if (zMirrorParam.getValueb()) {
+                    turnOnBundle(zMirrorMap.getOrDefault(e, null), c);
+                }
             }
             return true;
         }
@@ -263,27 +275,34 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
                     for (LXVector p : getVectors(model.getStripByIndex(e.strips[stripIndex]).points)) {
                         float v = Float.MIN_VALUE;
                         switch (e.dir) {
-                            case X: v = p.x; break;
-                            case Y: v = p.y; break;
-                            case Z: v = p.z; break;
+                            case X:
+                                v = p.x;
+                                break;
+                            case Y:
+                                v = p.y;
+                                break;
+                            case Z:
+                                v = p.z;
+                                break;
                         }
 
                         boolean inMask = maskLo < v && v < maskHi;
-                        if (!inMask)
+                        if (!inMask) {
                             continue;
+                        }
                         if (!showBand) {
                             colors[p.index] = Ops8.add(colors[p.index], field);
                             continue;
                         }
 
                         boolean inBand = bandLo < v && v < bandHi;
-                        if (inBand)
+                        if (inBand) {
                             colors[p.index] = Ops8.add(colors[p.index], band);
-                        else if (bandSpeed < 0 && v < bandLo)
+                        } else if (bandSpeed < 0 && v < bandLo) {
                             colors[p.index] = Ops8.add(colors[p.index], field);
-                        else if (bandSpeed > 0 && v > bandHi)
+                        } else if (bandSpeed > 0 && v > bandHi) {
                             colors[p.index] = Ops8.add(colors[p.index], field);
-                        else {
+                        } else {
                             float dist = bandSpeed > 0 ? bandLo - v : v - bandHi;
                             dist = MathUtils.constrain(dist / bandTail, 0.f, 1.f);
                             int c = LXColor.hsba(
@@ -314,34 +333,39 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
         LineEffect newEffect = null;
         switch (note.getPitch()) {
             case 60:
-                if (vertParam.getValueb())
+                if (vertParam.getValueb()) {
                     newEffect = createStaticVerticalLines();
-                else
+                } else {
                     newEffect = createStaticHorizontalLines();
+                }
                 break;
             case 62:
-                if (vertParam.getValueb())
+                if (vertParam.getValueb()) {
                     newEffect = createScrollingVerticalLines(true, false);
-                else
+                } else {
                     newEffect = createScrollingHorizontalLines(true, false);
+                }
                 break;
             case 64:
-                if (vertParam.getValueb())
+                if (vertParam.getValueb()) {
                     newEffect = createScrollingVerticalLines(false, false);
-                else
+                } else {
                     newEffect = createScrollingHorizontalLines(false, false);
+                }
                 break;
             case 65:
-                if (vertParam.getValueb())
+                if (vertParam.getValueb()) {
                     newEffect = createScrollingVerticalLines(true, true);
-                else
+                } else {
                     newEffect = createScrollingHorizontalLines(true, true);
+                }
                 break;
             case 67:
-                if (vertParam.getValueb())
+                if (vertParam.getValueb()) {
                     newEffect = createScrollingVerticalLines(false, true);
-                else
+                } else {
                     newEffect = createScrollingHorizontalLines(false, true);
+                }
                 break;
 
             default:
@@ -365,8 +389,9 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
     @Override
     public void run(double deltaMs) {
         int black = LXColor.gray(0);
-        for (int i = 0; i < colors.length; i++)
+        for (int i = 0; i < colors.length; i++) {
             colors[i] = black;
+        }
         effects.removeIf(e -> !e.run(deltaMs));
     }
 
@@ -384,8 +409,9 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
         double p = 1;
         while (true) {
             p *= r.nextDouble();
-            if (p <= L)
+            if (p <= L) {
                 break;
+            }
             len++;
         }
 
@@ -412,8 +438,9 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
             }
 
             /* There's not enough segments in this line to meet our target length */
-            if (!added)
+            if (!added) {
                 break;
+            }
         }
         return line;
     }

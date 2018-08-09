@@ -1,12 +1,12 @@
 package com.symmetrylabs.layouts.cubes.patterns.pilots;
 
+import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.slstudio.model.StripsTopology.Dir;
 import com.symmetrylabs.slstudio.model.StripsTopology.Sign;
-import com.symmetrylabs.util.EdgeAStar;
-import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
+import com.symmetrylabs.util.EdgeAStar;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.MidiNote;
@@ -95,9 +95,9 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
 
     @Override
     public void onParameterChanged(LXParameter p) {
-        if (p == countParam || p == topRadiusParam || p == rootModeParam)
+        if (p == countParam || p == topRadiusParam || p == rootModeParam) {
             build();
-        else if (p == attackParam || p == decayParam || p == sustainParam || p == releaseParam || p == minBrightParam || p == maxBrightParam){
+        } else if (p == attackParam || p == decayParam || p == sustainParam || p == releaseParam || p == minBrightParam || p == maxBrightParam) {
             globalADSR.attack();
             globalADSR.release();
             for (Root r : roots) {
@@ -113,17 +113,20 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
     private static class RootSpec {
         Root root;
         List<StripsTopology.Bundle> bundles;
-        /** The point that determines which direction roots flow in; the end
-         *  of the first bundle in the list that is closest to gapOrigin is
-         *  the end that we start the gap at. */
+        /**
+         * The point that determines which direction roots flow in; the end
+         * of the first bundle in the list that is closest to gapOrigin is
+         * the end that we start the gap at.
+         */
         LXVector gapOrigin;
     }
 
     private List<RootSpec> buildSliceRoots() {
         HashMap<Float, List<StripsTopology.Bundle>> slices = new HashMap<>();
         for (StripsTopology.Bundle b : model.getTopology().bundles) {
-            if (b.dir == Dir.X)
+            if (b.dir == Dir.X) {
                 continue;
+            }
 
             float x = b.endpoints().negative.x;
             boolean found = false;
@@ -147,10 +150,11 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
 
             boolean startIsVertical = r.nextBoolean();
             for (StripsTopology.Bundle b : slice) {
-                if (startIsVertical && b.dir != Dir.Y)
+                if (startIsVertical && b.dir != Dir.Y) {
                     continue;
-                else if (!startIsVertical && b.dir != Dir.Z)
+                } else if (!startIsVertical && b.dir != Dir.Z) {
                     continue;
+                }
 
                 /* Looking for one with nothing below it and nothing in front
                  * (in negative-Z) of it. */
@@ -176,8 +180,9 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
 
             StripsTopology.Bundle t = start;
             while (t != null) {
-                if (path.contains(t))
+                if (path.contains(t)) {
                     throw new IllegalStateException("cycle in path");
+                }
                 path.add(t);
                 StripsTopology.Bundle pz = t.get(Sign.POS).get(Dir.Z, Sign.POS);
                 StripsTopology.Bundle py = t.get(Sign.POS).get(Dir.Y, Sign.POS);
@@ -209,33 +214,38 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
         /* Generate lists of allowable root top bundles and root bottom bundles */
         List<StripsTopology.Bundle> rootTops = new ArrayList<>();
         for (StripsTopology.Bundle e : model.getTopology().bundles) {
-            if (e.dir != Dir.Y)
+            if (e.dir != Dir.Y) {
                 continue;
+            }
             /* only get elements with nothing above them */
-            if (e.get(Sign.POS).get(Dir.Y, Sign.POS) != null)
+            if (e.get(Sign.POS).get(Dir.Y, Sign.POS) != null) {
                 continue;
+            }
 
             float x = e.endpoints().positive.x;
-            if (Math.abs(model.cx - x) < topRadiusParam.getValuef())
+            if (Math.abs(model.cx - x) < topRadiusParam.getValuef()) {
                 rootTops.add(e);
+            }
         }
 
         List<StripsTopology.Bundle> rootBottoms = new ArrayList<>();
         for (StripsTopology.Bundle e : model.getTopology().bundles) {
-            if (e.dir == Dir.Y)
+            if (e.dir == Dir.Y) {
                 continue;
+            }
 
             /* only get elements with nothing below them that are on the
              * edge of the structure (meaning at least one of the directions
              * in-bottom-plane has no bundle in it). */
             boolean ok = e.get(Sign.NEG).get(Dir.Y, Sign.NEG) == null &&
-                e.get(Sign.POS).get(Dir.Y, Sign.NEG) == null;
+                                     e.get(Sign.POS).get(Dir.Y, Sign.NEG) == null;
             if (ok) {
                 /* Just make sure we have a single direction in the XZ plane
                  * with no neighbor. */
                 ok = false;
-                outer: for (Sign end : Sign.values()) {
-                    for (Dir d : new Dir[] { Dir.X, Dir.Z }) {
+                outer:
+                for (Sign end : Sign.values()) {
+                    for (Dir d : new Dir[]{Dir.X, Dir.Z}) {
                         for (Sign s : Sign.values()) {
                             if (e.get(end).get(d, s) == null) {
                                 ok = true;
@@ -244,8 +254,9 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
                         }
                     }
                 }
-                if (ok)
+                if (ok) {
                     rootBottoms.add(e);
+                }
             }
         }
 
@@ -273,8 +284,9 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
              * that a random pair intersects with an existing root gets pretty high
              * when we add a bunch of roots. */
             for (int j = 0; j < rootBottoms.size() && !added; j++) {
-                if (bottomsUsed[j])
+                if (bottomsUsed[j]) {
                     continue;
+                }
                 r.bottom = rootBottoms.get(j);
 
                 List<StripsTopology.Bundle> path;
@@ -292,8 +304,9 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
                         break;
                     }
                 }
-                if (containsUsed)
+                if (containsUsed) {
                     continue;
+                }
                 used.addAll(path);
 
                 RootSpec spec = new RootSpec();
@@ -308,8 +321,9 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
     }
 
     private void build() {
-        if (!started)
+        if (!started) {
             return;
+        }
 
         if (roots != null) {
             for (Root r : roots) {
@@ -388,19 +402,22 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
         int steps = (int) Math.floor(gapDelay * gapSpeed);
         if (steps > 0) {
             gapDelay -= steps / gapSpeed;
-            for (Iterator<Gap> iter = gaps.iterator(); iter.hasNext();) {
+            for (Iterator<Gap> iter = gaps.iterator(); iter.hasNext(); ) {
                 Gap p = iter.next();
                 p.start += steps;
-                if (p.end >= 0)
+                if (p.end >= 0) {
                     p.end += steps;
-                if (p.end > maxGapAge)
+                }
+                if (p.end > maxGapAge) {
                     iter.remove();
+                }
             }
         }
 
         int black = LXColor.gray(0);
-        for (int i = 0; i < colors.length; i++)
+        for (int i = 0; i < colors.length; i++) {
             colors[i] = black;
+        }
 
         float globalBright = globalADSR.getValuef();
 
@@ -451,8 +468,9 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
                 break;
 
             case 62:
-                if (!gaps.isEmpty() && gaps.peekFirst().end < 0)
+                if (!gaps.isEmpty() && gaps.peekFirst().end < 0) {
                     gaps.peekFirst().end = 0;
+                }
                 gaps.addFirst(new Gap());
                 gaps.peekFirst().start = 0;
                 gaps.peekFirst().end = -1;
@@ -478,8 +496,9 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
                 break;
 
             case 62:
-                if (!gaps.isEmpty() && gaps.peekFirst().end < 0)
+                if (!gaps.isEmpty() && gaps.peekFirst().end < 0) {
                     gaps.peekFirst().end = 0;
+                }
                 break;
 
             case 64:
@@ -489,8 +508,9 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
             case 65:
                 roots.get(nextRootToAttack).adsr.release();
                 nextRootToAttack++;
-                if (nextRootToAttack >= roots.size())
+                if (nextRootToAttack >= roots.size()) {
                     nextRootToAttack = 0;
+                }
                 break;
 
             default:

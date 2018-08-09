@@ -31,7 +31,8 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
     private static class PrismIndexer {
         private StripsTopology.Sign x, y, z;
 
-        PrismIndexer() {}
+        PrismIndexer() {
+        }
 
         PrismIndexer(StripsTopology.Sign x, StripsTopology.Sign y, StripsTopology.Sign z) {
             this.x = x;
@@ -42,26 +43,44 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
         PrismIndexer with(StripsTopology.Dir d, StripsTopology.Sign s) {
             PrismIndexer i = new PrismIndexer(x, y, z);
             switch (d) {
-                case X: i.x = s; return i;
-                case Y: i.y = s; return i;
-                case Z: i.z = s; return i;
+                case X:
+                    i.x = s;
+                    return i;
+                case Y:
+                    i.y = s;
+                    return i;
+                case Z:
+                    i.z = s;
+                    return i;
             }
             return null;
         }
 
         void set(StripsTopology.Dir d, StripsTopology.Sign s) {
             switch (d) {
-                case X: x = s; return;
-                case Y: y = s; return;
-                case Z: z = s; return;
+                case X:
+                    x = s;
+                    return;
+                case Y:
+                    y = s;
+                    return;
+                case Z:
+                    z = s;
+                    return;
             }
         }
 
         int index() {
             int idx = 0;
-            if (x == StripsTopology.Sign.POS) idx |= 0x01;
-            if (y == StripsTopology.Sign.POS) idx |= 0x02;
-            if (z == StripsTopology.Sign.POS) idx |= 0x04;
+            if (x == StripsTopology.Sign.POS) {
+                idx |= 0x01;
+            }
+            if (y == StripsTopology.Sign.POS) {
+                idx |= 0x02;
+            }
+            if (z == StripsTopology.Sign.POS) {
+                idx |= 0x04;
+            }
             return idx;
         }
 
@@ -104,8 +123,9 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
         }
 
         void setAll(StripsTopology.Junction j) {
-            for (int i = 0; i < junctions.length; i++)
+            for (int i = 0; i < junctions.length; i++) {
                 junctions[i] = j;
+            }
         }
     }
 
@@ -130,10 +150,11 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
     @Override
     public void run(double deltaMs) {
         int black = LXColor.gray(0);
-        for (int i = 0; i < colors.length; i++)
+        for (int i = 0; i < colors.length; i++) {
             colors[i] = black;
+        }
 
-        for (Iterator<Prism> iter = prisms.iterator(); iter.hasNext();) {
+        for (Iterator<Prism> iter = prisms.iterator(); iter.hasNext(); ) {
             Prism p = iter.next();
             if (p.adsr.getValuef() == 0) {
                 removeModulator(p.adsr);
@@ -194,8 +215,9 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
                 s = StripsTopology.Sign.NEG;
                 break;
         }
-        if (d == null || s == null)
+        if (d == null || s == null) {
             throw new IllegalArgumentException("direction must be in [0-5]");
+        }
 
         StripsTopology.Dir a = d.ortho1();
         StripsTopology.Dir b = d.ortho2();
@@ -211,8 +233,11 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
         }
 
         /* make sure all of the junctions can move in that direction */
-        for (StripsTopology.Junction j : sideJunctions)
-            if (j.get(d, s) == null) return false;
+        for (StripsTopology.Junction j : sideJunctions) {
+            if (j.get(d, s) == null) {
+                return false;
+            }
+        }
 
         /* actually move them */
         for (int i = 0; i < 4; i++) {
@@ -232,8 +257,9 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
 
         while (j != end) {
             bundle = j.get(dir, StripsTopology.Sign.POS);
-            if (bundle == null)
+            if (bundle == null) {
                 break;
+            }
             p.allEdges.add(bundle);
             j = bundle.get(StripsTopology.Sign.POS);
         }
@@ -244,8 +270,9 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
             j = end;
             while (j != start) {
                 bundle = j.get(dir, StripsTopology.Sign.NEG);
-                if (bundle == null)
+                if (bundle == null) {
                     break;
+                }
                 p.allEdges.add(bundle);
                 j = bundle.get(StripsTopology.Sign.NEG);
             }
@@ -285,8 +312,9 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
         p.adsr = adsr;
 
         boolean found = false;
-        for (int attempts = 0; attempts < 50 && !found; attempts++)
+        for (int attempts = 0; attempts < 50 && !found; attempts++) {
             fillWithRandomUnitPrism(p);
+        }
 
         int targetGrowth = random.nextInt(maxSizeParam.getValuei());
         int added = 0;
@@ -301,9 +329,13 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
             for (PrismIndexer j : i.adjacent()) {
                 if (i.index() < j.index()) {
                     StripsTopology.Dir shared = null;
-                    if (i.x != j.x) shared = StripsTopology.Dir.X;
-                    else if (i.y != j.y) shared = StripsTopology.Dir.Y;
-                    else if (i.z != j.z) shared = StripsTopology.Dir.Z;
+                    if (i.x != j.x) {
+                        shared = StripsTopology.Dir.X;
+                    } else if (i.y != j.y) {
+                        shared = StripsTopology.Dir.Y;
+                    } else if (i.z != j.z) {
+                        shared = StripsTopology.Dir.Z;
+                    }
                     addEdges(p, p.get(i), p.get(j), shared);
                 }
             }
@@ -313,8 +345,9 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
     }
 
     private void releasePitch(int pitch) {
-        if (!midiPrisms.containsKey(pitch))
+        if (!midiPrisms.containsKey(pitch)) {
             return;
+        }
         for (Prism p : midiPrisms.get(pitch)) {
             p.adsr.release();
         }

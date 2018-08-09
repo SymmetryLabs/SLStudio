@@ -2,10 +2,14 @@ package com.symmetrylabs.util;
 
 import com.symmetrylabs.slstudio.model.StripsTopology;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 public class EdgeAStar {
-    public class NotConnectedException extends Exception {}
+    public class NotConnectedException extends Exception {
+    }
 
     private final StripsTopology topology;
 
@@ -55,36 +59,44 @@ public class EdgeAStar {
                     currentFScore = bScore;
                 }
             }
-            if (current == end)
+            if (current == end) {
                 break;
+            }
 
             open.remove(current);
             closed.add(current);
 
-            for (StripsTopology.Sign s1 : StripsTopology.Sign.values())
-                for (StripsTopology.Dir d : StripsTopology.Dir.values())
-                    for (StripsTopology.Sign s2 : StripsTopology.Sign.values())
+            for (StripsTopology.Sign s1 : StripsTopology.Sign.values()) {
+                for (StripsTopology.Dir d : StripsTopology.Dir.values()) {
+                    for (StripsTopology.Sign s2 : StripsTopology.Sign.values()) {
                         visitNeighbor(current.get(s1).get(d, s2));
+                    }
+                }
+            }
         }
 
-        if (current != end)
+        if (current != end) {
             throw new NotConnectedException();
+        }
 
         LinkedList<StripsTopology.Bundle> res = new LinkedList<>();
         do {
             res.addFirst(current);
             current = cameFrom.get(current);
-        } while (current != start && current != null); // current can be null if current == start == end on the first go-through
+        }
+        while (current != start && current != null); // current can be null if current == start == end on the first go-through
         res.addFirst(start);
 
         return res;
     }
 
     private void visitNeighbor(StripsTopology.Bundle neighbor) {
-        if (neighbor == null)
+        if (neighbor == null) {
             return;
-        if (closed.contains(neighbor))
+        }
+        if (closed.contains(neighbor)) {
             return;
+        }
 
         // this node is now up for grabs
         open.add(neighbor);
@@ -93,8 +105,9 @@ public class EdgeAStar {
         float thisScore = gScore.get(current) + dist(current, neighbor);
 
         // if we already have a better path to this node, then there's nothing to do
-        if (thisScore >= gScore.getOrDefault(neighbor, Float.MAX_VALUE))
+        if (thisScore >= gScore.getOrDefault(neighbor, Float.MAX_VALUE)) {
             return;
+        }
 
         cameFrom.put(neighbor, current);
         gScore.put(neighbor, thisScore);

@@ -4,14 +4,17 @@ import com.google.common.base.Preconditions;
 import com.symmetrylabs.util.FixedWidthOctree;
 import heronarts.lx.transform.LXVector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-/** Topology structure for representing axis-aligned grids of equal-length strips
- *
+/**
+ * Topology structure for representing axis-aligned grids of equal-length strips
+ * <p>
  * StripsTopology is capable of representing the topology of any structure that is
  * comprised entirely of approximately-equal-length strips where all strips are aligned
  * to a cartesian axis.
- *
+ * <p>
  * Topology is represented as a graph of "bundles", where each bundle can have up to
  * four strips in it. A bundle is a set of parallel strips that are close to one another.
  * In a dense grid made out of cubes, most bundles will have four strips in them.
@@ -19,7 +22,7 @@ import java.util.*;
  * cubes are resting on the ground and are a couple inches from one another.
  * Each junction in this diagram labelled with a letter would be a bundle; A would have
  * one strip, B would have two and E would have 4.
- *
+ * <p><pre>
  *                          A           B           C
  *                            +-------+   +-------+
  *                            |       |   |       |
@@ -33,13 +36,13 @@ import java.util.*;
  *                            |       |   |       |
  *                            +-------+   +-------+
  *                          G           H           I
- *
+ * </pre><p>
  * Each bundle has pointers to the junction at each end of it. Ends are identified
  * by which end points towards the positive end of the axis it's aligned with; an
  * X-aligned bundle has a positive end towards X+ and a negative end towards X-. Since
  * you can't use + and - in field names, these are called P and N for positive and
  * negative.
- *
+ * <p>
  * Each junction has pointers to up to 6 attached bundles, one in every cardinal
  * direction. These follow the same naming convention: nx is negative-X, pz is
  * positive-Z, etc.
@@ -55,33 +58,46 @@ public class StripsTopology {
     public enum Dir {
         X, Y, Z;
 
-        /** Returns the first orthogonal direction to this direction */
+        /**
+         * Returns the first orthogonal direction to this direction
+         */
         public Dir ortho1() {
             switch (this) {
-                case X: return Y;
-                case Y: case Z: return X;
+                case X:
+                    return Y;
+                case Y:
+                case Z:
+                    return X;
             }
             return null;
         }
 
-        /** Returns the first orthogonal direction to this direction */
+        /**
+         * Returns the first orthogonal direction to this direction
+         */
         public Dir ortho2() {
             switch (this) {
-                case X: case Y: return Z;
-                case Z: return Y;
+                case X:
+                case Y:
+                    return Z;
+                case Z:
+                    return Y;
             }
             return null;
         }
 
     }
+
     public enum Sign {
         POS, NEG;
 
         public Sign other() {
-            if (this == POS)
+            if (this == POS) {
                 return NEG;
-            if (this == NEG)
+            }
+            if (this == NEG) {
                 return POS;
+            }
             return null;
         }
     }
@@ -89,24 +105,50 @@ public class StripsTopology {
     public class BundleEndpoints {
         public LXVector negative;
         public LXVector positive;
+
+        public LXVector get(Sign s) {
+            if (s == Sign.NEG) {
+                return negative;
+            }
+            if (s == Sign.POS) {
+                return positive;
+            }
+            return null;
+        }
     }
 
-    /** The meeting point of up to 6 bundles. */
+    /**
+     * The meeting point of up to 6 bundles.
+     */
     public static class Junction {
-        /** The bundle in the positive X direction */
+        /**
+         * The bundle in the positive X direction
+         */
         private StripsTopology.Bundle px;
-        /** The bundle in the negative X direction */
+        /**
+         * The bundle in the negative X direction
+         */
         private StripsTopology.Bundle nx;
-        /** The bundle in the positive Y direction */
+        /**
+         * The bundle in the positive Y direction
+         */
         private StripsTopology.Bundle py;
-        /** The bundle in the negative Y direction */
+        /**
+         * The bundle in the negative Y direction
+         */
         private StripsTopology.Bundle ny;
-        /** The bundle in the positive Z direction */
+        /**
+         * The bundle in the positive Z direction
+         */
         private StripsTopology.Bundle pz;
-        /** The bundle in the negative X direction */
+        /**
+         * The bundle in the negative X direction
+         */
         private StripsTopology.Bundle nz;
-        /** The approximate location of this junction.
-         *  This is calculated as the midpoint of the bundles attached to the junction. */
+        /**
+         * The approximate location of this junction.
+         * This is calculated as the midpoint of the bundles attached to the junction.
+         */
         public LXVector loc;
 
         /** The number of bundles attached to this junction */
@@ -123,30 +165,43 @@ public class StripsTopology {
 
         public Bundle get(Dir e, Sign s) {
             switch (e) {
-                case X: return s == Sign.POS ? px : nx;
-                case Y: return s == Sign.POS ? py : ny;
-                case Z: return s == Sign.POS ? pz : nz;
+                case X:
+                    return s == Sign.POS ? px : nx;
+                case Y:
+                    return s == Sign.POS ? py : ny;
+                case Z:
+                    return s == Sign.POS ? pz : nz;
             }
             return null;
         }
     }
 
-    /** A set of parallel, adjacent strips */
+    /**
+     * A set of parallel, adjacent strips
+     */
     public class Bundle {
         /* Note that this is just a hit for initialization; the strips array
          * is resized down once the bundle is finished being built. */
         private static final int MAX_STRIPS = 4;
 
-        /** The direction this bundle points in */
+        /**
+         * The direction this bundle points in
+         */
         public Dir dir;
 
-        /** The model indexes of the strips in this bundle.
-         *  These index into model.strips and can be used with model.getStripByIndex() */
+        /**
+         * The model indexes of the strips in this bundle.
+         * These index into model.strips and can be used with model.getStripByIndex()
+         */
         public int[] strips;
 
-        /** The junction at the positive end of this bundle */
+        /**
+         * The junction at the positive end of this bundle
+         */
         private Junction p = null;
-        /** The junction at the negative end of this bundle */
+        /**
+         * The junction at the negative end of this bundle
+         */
         private Junction n = null;
 
         /* Set to true once we're finished adding strips to the bundle; the cached
@@ -182,13 +237,15 @@ public class StripsTopology {
         }
 
         private void finishedAddingStrips() {
-            if (finished)
+            if (finished) {
                 return;
+            }
 
             int count = 0;
             for (int i = 0; i < strips.length; i++) {
-                if (strips[i] != NO_STRIP)
+                if (strips[i] != NO_STRIP) {
                     count++;
+                }
             }
             Integer[] newStrips = new Integer[count];
             int j = 0;
@@ -216,8 +273,9 @@ public class StripsTopology {
                 return 0;
             });
             strips = new int[count];
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < count; i++) {
                 strips[i] = newStrips[i];
+            }
             endpoints = endpoints();
             minProjection = minProjection();
             maxProjection = maxProjection();
@@ -225,8 +283,9 @@ public class StripsTopology {
         }
 
         public BundleEndpoints endpoints() {
-            if (finished)
+            if (finished) {
                 return endpoints;
+            }
 
             float min = minProjection();
             float max = maxProjection();
@@ -275,82 +334,125 @@ public class StripsTopology {
         public PlanarLocation planarLocation() {
             PlanarLocation pl[] = new PlanarLocation[MAX_STRIPS];
             for (int i = 0; i < strips.length; i++) {
-                if (strips[i] == NO_STRIP)
+                if (strips[i] == NO_STRIP) {
                     continue;
+                }
                 Strip s = model.getStripByIndex(strips[i]);
                 switch (dir) {
-                    case X: pl[i] = new PlanarLocation(dir, s.cy, s.cz); break;
-                    case Y: pl[i] = new PlanarLocation(dir, s.cx, s.cz); break;
-                    case Z: pl[i] = new PlanarLocation(dir, s.cx, s.cy); break;
+                    case X:
+                        pl[i] = new PlanarLocation(dir, s.cy, s.cz);
+                        break;
+                    case Y:
+                        pl[i] = new PlanarLocation(dir, s.cx, s.cz);
+                        break;
+                    case Z:
+                        pl[i] = new PlanarLocation(dir, s.cx, s.cy);
+                        break;
                 }
             }
             return PlanarLocation.combine(pl);
         }
 
-        /** An edge's "projection" is the projection of it's centroid onto the axis it's aligned with */
+        /**
+         * An edge's "projection" is the projection of it's centroid onto the axis it's aligned with
+         */
         public float projection() {
-            if (finished)
+            if (finished) {
                 return projection;
+            }
             float proj = 0;
             int count = 0;
             for (int strip : strips) {
-                if (strip == NO_STRIP)
+                if (strip == NO_STRIP) {
                     continue;
+                }
                 Strip s = model.getStripByIndex(strip);
                 switch (dir) {
-                    case X: proj += s.cx; break;
-                    case Y: proj += s.cy; break;
-                    case Z: proj += s.cz; break;
+                    case X:
+                        proj += s.cx;
+                        break;
+                    case Y:
+                        proj += s.cy;
+                        break;
+                    case Z:
+                        proj += s.cz;
+                        break;
                 }
                 count++;
             }
             return proj / count;
         }
 
-        /** Min-projection is the minimum value of the projection of this edge onto its axis */
+        /**
+         * Min-projection is the minimum value of the projection of this edge onto its axis
+         */
         public float minProjection() {
-            if (finished)
+            if (finished) {
                 return minProjection;
+            }
             float min = Float.MAX_VALUE;
             for (int strip : strips) {
-                if (strip == NO_STRIP)
+                if (strip == NO_STRIP) {
                     continue;
+                }
                 Strip s = model.getStripByIndex(strip);
                 switch (dir) {
-                    case X: min = Float.min(min, s.xMin); break;
-                    case Y: min = Float.min(min, s.yMin); break;
-                    case Z: min = Float.min(min, s.zMin); break;
+                    case X:
+                        min = Float.min(min, s.xMin);
+                        break;
+                    case Y:
+                        min = Float.min(min, s.yMin);
+                        break;
+                    case Z:
+                        min = Float.min(min, s.zMin);
+                        break;
                 }
             }
             return min;
         }
 
-        /** Max-projection is the maximum value of the projection of this edge onto its axis */
+        /**
+         * Max-projection is the maximum value of the projection of this edge onto its axis
+         */
         public float maxProjection() {
-            if (finished)
+            if (finished) {
                 return maxProjection;
+            }
             float max = Float.MIN_VALUE;
             for (int strip : strips) {
-                if (strip == NO_STRIP)
+                if (strip == NO_STRIP) {
                     continue;
+                }
                 Strip s = model.getStripByIndex(strip);
                 switch (dir) {
-                    case X: max = Float.max(max, s.xMax); break;
-                    case Y: max = Float.max(max, s.yMax); break;
-                    case Z: max = Float.max(max, s.zMax); break;
+                    case X:
+                        max = Float.max(max, s.xMax);
+                        break;
+                    case Y:
+                        max = Float.max(max, s.yMax);
+                        break;
+                    case Z:
+                        max = Float.max(max, s.zMax);
+                        break;
                 }
             }
             return max;
         }
     }
 
-    /** Represents the location of a bundle within the plane perpendicular to the bundle.
-     * This is used to bucket strips into bundles. */
+    /**
+     * Represents the location of a bundle within the plane perpendicular to the bundle.
+     * This is used to bucket strips into bundles.
+     */
     public static class PlanarLocation {
         public Dir dir;
-        /** The first coordinate in the plane. For the X plane, this is the Y coordinate. For Y and Z, this is the X coordinate. */
+        /**
+         * The first coordinate in the plane. For the X plane, this is the Y coordinate. For Y and Z, this is the X coordinate.
+         */
         public float a;
-        /** The second coordinate in the plane. For the X and Y plane, this is the Z coordinate. For Z, this is the Y coordinate. */
+        /**
+         * The second coordinate in the plane. For the X and Y plane, this is the Z coordinate. For Z, this is the Y coordinate.
+         */
         public float b;
 
         PlanarLocation(Dir dir, float a, float b) {
@@ -367,18 +469,20 @@ public class StripsTopology {
             PlanarLocation res = null;
             int count = 0;
             for (PlanarLocation bucket : buckets) {
-                if (bucket == null)
+                if (bucket == null) {
                     continue;
-                if (res == null)
+                }
+                if (res == null) {
                     res = new PlanarLocation(bucket.dir, bucket.a, bucket.b);
-                else {
+                } else {
                     res.a += bucket.a;
                     res.b += bucket.b;
                 }
                 count++;
             }
-            if (res == null)
+            if (res == null) {
                 return null;
+            }
             res.a /= count;
             res.b /= count;
             return res;
@@ -430,11 +534,13 @@ public class StripsTopology {
                     break;
                 }
             }
-            if (!matchesExisting)
+            if (!matchesExisting) {
                 bundles.add(e);
+            }
         }
-        for (Bundle e : bundles)
+        for (Bundle e : bundles) {
             e.finishedAddingStrips();
+        }
 
         /* Once we have all the bundles, create the junctions at their endpoints. */
         int junctionCountGuess = bundles.size() / 6;
@@ -471,18 +577,21 @@ public class StripsTopology {
             }
             switch (b.dir) {
                 case X:
-                    if (b.p.nx != null)
+                    if (b.p.nx != null) {
                         throw new IllegalStateException("found overlapping bundles");
+                    }
                     b.p.nx = b;
                     break;
                 case Y:
-                    if (b.p.ny != null)
+                    if (b.p.ny != null) {
                         throw new IllegalStateException("found overlapping bundles");
+                    }
                     b.p.ny = b;
                     break;
                 case Z:
-                    if (b.p.nz != null)
+                    if (b.p.nz != null) {
                         throw new IllegalStateException("found overlapping bundles");
+                    }
                     b.p.nz = b;
                     break;
             }
@@ -508,18 +617,21 @@ public class StripsTopology {
             }
             switch (b.dir) {
                 case X:
-                    if (b.n.px != null)
+                    if (b.n.px != null) {
                         throw new IllegalStateException("found overlapping bundles");
+                    }
                     b.n.px = b;
                     break;
                 case Y:
-                    if (b.n.py != null)
+                    if (b.n.py != null) {
                         throw new IllegalStateException("found overlapping bundles");
+                    }
                     b.n.py = b;
                     break;
                 case Z:
-                    if (b.n.pz != null)
+                    if (b.n.pz != null) {
                         throw new IllegalStateException("found overlapping bundles");
+                    }
                     b.n.pz = b;
                     break;
             }
@@ -532,31 +644,14 @@ public class StripsTopology {
             j.loc = new LXVector(0, 0, 0);
             int count = 0;
 
-            if (j.px != null) {
-                j.loc.add(j.px.endpoints().negative);
-                count++;
+            for (Dir d : Dir.values()) {
+                for (Sign s : Sign.values()) {
+                    if (j.get(d, s) != null) {
+                        j.loc.add(j.get(d, s).endpoints.get(s));
+                        count++;
+                    }
+                }
             }
-            if (j.nx != null) {
-                j.loc.add(j.nx.endpoints().positive);
-                count++;
-            }
-            if (j.py != null) {
-                j.loc.add(j.py.endpoints().negative);
-                count++;
-            }
-            if (j.ny != null) {
-                j.loc.add(j.ny.endpoints().positive);
-                count++;
-            }
-            if (j.pz != null) {
-                j.loc.add(j.pz.endpoints().negative);
-                count++;
-            }
-            if (j.nz != null) {
-                j.loc.add(j.nz.endpoints().positive);
-                count++;
-            }
-
             j.loc.mult(1f / count);
         }
     }

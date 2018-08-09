@@ -1,11 +1,8 @@
 package com.symmetrylabs.layouts.cubes.patterns.pilots;
 
 import com.symmetrylabs.color.Ops8;
-import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
-import com.symmetrylabs.slstudio.model.StripsTopology;
-import com.symmetrylabs.slstudio.model.StripsTopology.Junction;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
@@ -21,7 +18,6 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
 public class PilotsSpirits<T extends Strip> extends SLPattern<StripsModel<T>> {
@@ -124,17 +120,19 @@ public class PilotsSpirits<T extends Strip> extends SLPattern<StripsModel<T>> {
             case ROTATING:
             case RED_EATS_YELLOW: {
                 float rate = ROTATION_PERIOD_BASE + (float) Math.sin(2 * Math.PI * phaseAge / ROTATION_PERIOD_RATE) * ROTATION_PERIOD_AMPLITUDE;
-                if (phase == Phase.ROTATING && phaseAge < 1000f)
+                if (phase == Phase.ROTATING && phaseAge < 1000f) {
                     rate = rate / (phaseAge / 1000f);
-                else if (phase == Phase.RED_EATS_YELLOW)
+                } else if (phase == Phase.RED_EATS_YELLOW) {
                     rate -= Math.min(1200f, phaseAge / 2.5f);
+                }
                 theta += 2 * Math.PI * elapsedMs / rate;
 
                 float rad = ellipseMinor + (float) ((ellipseMajor - ellipseMinor) / 2f * (Math.cos(2 * theta) + 1f));
                 float yRad = rad;
                 float rRad = rad;
-                if (phase == Phase.RED_EATS_YELLOW)
+                if (phase == Phase.RED_EATS_YELLOW) {
                     yRad = yRad * Math.max(0.1f, 1f - phaseAge / 4000f);
+                }
 
                 Rotation rot = new Rotation(new Vector3D(0, 0, 1), theta, RotationConvention.VECTOR_OPERATOR);
                 Vector3D apacheOff = rot.applyTo(new Vector3D(1, 0, 0));
@@ -146,8 +144,9 @@ public class PilotsSpirits<T extends Strip> extends SLPattern<StripsModel<T>> {
             }
 
             case CHASE: {
-                if (chaseTarget == null)
+                if (chaseTarget == null) {
                     pickChaseTarget();
+                }
 
                 InterpResult y = expInterpToTarget(chaseStart, chaseTarget);
                 yellowBase = y.loc;
@@ -160,8 +159,9 @@ public class PilotsSpirits<T extends Strip> extends SLPattern<StripsModel<T>> {
                     }
                 } else {
                     redBase = yTrail.peekLast().loc;
-                    if (y.t > 0.99 && autoChaseParam.getValueb())
+                    if (y.t > 0.99 && autoChaseParam.getValueb()) {
                         pickChaseTarget();
+                    }
                 }
                 break;
             }
@@ -196,6 +196,7 @@ public class PilotsSpirits<T extends Strip> extends SLPattern<StripsModel<T>> {
         float t;
         LXVector loc;
     }
+
     private InterpResult expInterpToTarget(LXVector start, LXVector end) {
         LXVector chaseVec = start.copy().mult(-1).add(end);
         float t = 2f * moveAge / (redCatchingUp ? CHASE_TIME + RED_CHASE_DELAY : CHASE_TIME);
@@ -211,8 +212,9 @@ public class PilotsSpirits<T extends Strip> extends SLPattern<StripsModel<T>> {
     }
 
     private void pickChaseTarget() {
-        if (redCatchingUp)
+        if (redCatchingUp) {
             redChaseStart = redBase;
+        }
         chaseStart = yellowBase;
 
         LXVector vs[] = model.getVectorArray();
@@ -225,28 +227,35 @@ public class PilotsSpirits<T extends Strip> extends SLPattern<StripsModel<T>> {
     }
 
     private void updateTrails(double elapsedMs, LXVector yLoc, LXVector rLoc) {
-        for (TrailElement e : yTrail)
+        for (TrailElement e : yTrail) {
             e.age += (float) elapsedMs;
-        for (TrailElement e : rTrail)
+        }
+        for (TrailElement e : rTrail) {
             e.age += (float) elapsedMs;
+        }
 
-        if (yTrail.isEmpty() || yTrail.peekFirst().age > TRAIL_NEW_ELEM_AGE)
+        if (yTrail.isEmpty() || yTrail.peekFirst().age > TRAIL_NEW_ELEM_AGE) {
             yTrail.addFirst(new TrailElement(yLoc));
-        if (rTrail.isEmpty() || rTrail.peekFirst().age > TRAIL_NEW_ELEM_AGE)
+        }
+        if (rTrail.isEmpty() || rTrail.peekFirst().age > TRAIL_NEW_ELEM_AGE) {
             rTrail.addFirst(new TrailElement(rLoc));
+        }
 
         float yMaxKeepAge = phase == Phase.CHASE ? RED_CHASE_DELAY : TRAIL_MAX_AGE;
         float yMaxDisplayAge = phase == Phase.CHASE ? TRAIL_MAX_AGE_CHASE : TRAIL_MAX_AGE;
         float rMaxAge = phase == Phase.RED_EATS_YELLOW ? 2.5f * TRAIL_MAX_AGE : yMaxDisplayAge;
 
         /* Only remove one trail element per frame */
-        if (yTrail.peekLast().age > yMaxKeepAge)
+        if (yTrail.peekLast().age > yMaxKeepAge) {
             yTrail.removeLast();
-        for (TrailElement e : yTrail)
+        }
+        for (TrailElement e : yTrail) {
             e.display = e.age <= yMaxDisplayAge;
+        }
 
-        if (rTrail.peekLast().age > rMaxAge)
+        if (rTrail.peekLast().age > rMaxAge) {
             rTrail.removeLast();
+        }
     }
 
     @Override
@@ -255,11 +264,13 @@ public class PilotsSpirits<T extends Strip> extends SLPattern<StripsModel<T>> {
         moveAge += elapsedMs;
 
         int black = LXColor.gray(0);
-        for (int i = 0; i < colors.length; i++)
+        for (int i = 0; i < colors.length; i++) {
             colors[i] = black;
+        }
 
-        if (phase == Phase.OUT)
+        if (phase == Phase.OUT) {
             return;
+        }
 
         updateLocations(elapsedMs);
 
@@ -321,24 +332,28 @@ public class PilotsSpirits<T extends Strip> extends SLPattern<StripsModel<T>> {
             final float y = v.y;
             final float z = v.z;
             for (TrailElement e : rTrail) {
-                if (!e.display)
+                if (!e.display) {
                     continue;
+                }
                 LXVector rv = e.loc;
                 float d = (rv.x - x) * (rv.x - x) + (rv.y - y) * (rv.y - y) + (rv.z - z) * (rv.z - z);
                 d += t * TRAIL_WIDTH;
-                if (d < rDist)
+                if (d < rDist) {
                     rDist = d;
+                }
                 t++;
             }
             t = 0;
             for (TrailElement e : yTrail) {
-                if (!e.display)
+                if (!e.display) {
                     continue;
+                }
                 LXVector yv = e.loc;
                 float d = (yv.x - x) * (yv.x - x) + (yv.y - y) * (yv.y - y) + (yv.z - z) * (yv.z - z);
                 d += t * TRAIL_WIDTH;
-                if (d < yDist)
+                if (d < yDist) {
                     yDist = d;
+                }
                 t++;
             }
 
@@ -352,13 +367,13 @@ public class PilotsSpirits<T extends Strip> extends SLPattern<StripsModel<T>> {
             if (rStrength > yStrength) {
                 float b = 100f * (float) Math.sqrt(Float.max(0f, 1f - (float) rDist / rArea));
                 color = rDist < rHeartSize
-                    ? LXColor.hsba(rHue, 100 * (1 - (rHeartSize - rDist) / rHeartSize), 100, rAlpha)
-                    : LXColor.hsba(rHue, 100, b, rAlpha);
+                                ? LXColor.hsba(rHue, 100 * (1 - (rHeartSize - rDist) / rHeartSize), 100, rAlpha)
+                                : LXColor.hsba(rHue, 100, b, rAlpha);
             } else {
                 float b = 90f * (float) Math.sqrt(Float.max(0f, 1f - (float) yDist / yArea));
                 color = yDist < yHeartSize
-                    ? LXColor.hsba(yHue, 100 * (1 - (yHeartSize - yDist) / yHeartSize), 100, yAlpha)
-                    : LXColor.hsba(yHue, 100, b, yAlpha);
+                                ? LXColor.hsba(yHue, 100 * (1 - (yHeartSize - yDist) / yHeartSize), 100, yAlpha)
+                                : LXColor.hsba(yHue, 100, b, yAlpha);
             }
             colors[v.index] = Ops8.add(color, colors[v.index]);
         }
@@ -396,10 +411,11 @@ public class PilotsSpirits<T extends Strip> extends SLPattern<StripsModel<T>> {
 
     @Override
     public void noteOnReceived(MidiNoteOn note) {
-        if (note.getPitch() == 60)
+        if (note.getPitch() == 60) {
             nextPhase();
-        else if (note.getPitch() == 61)
+        } else if (note.getPitch() == 61) {
             pickChaseTarget();
+        }
     }
 
     @Override

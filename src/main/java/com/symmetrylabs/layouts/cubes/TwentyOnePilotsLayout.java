@@ -1,33 +1,14 @@
 package com.symmetrylabs.layouts.cubes;
 
-//package com.symmetrylabs.layouts.cubes;
-
-import java.util.*;
-import java.lang.ref.WeakReference;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.lang.Float;
-
-
-import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.output.SLController;
-import com.symmetrylabs.util.CubePhysicalIdMap;
-import com.symmetrylabs.util.listenable.SetListener;
-import heronarts.lx.LX;
-import heronarts.lx.output.FadecandyOutput;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.transform.LXTransform;
-import heronarts.p3lx.ui.UI2dScrollContext;
-
 import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.slstudio.SLStudioLX;
-import com.symmetrylabs.slstudio.network.NetworkMonitor;
-import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.util.dispatch.Dispatcher;
+import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.util.CubePhysicalIdMap;
 import com.symmetrylabs.util.listenable.ListenableSet;
-import com.symmetrylabs.util.Utils;
-import static com.symmetrylabs.util.DistanceUtils.*;
+import heronarts.lx.transform.LXTransform;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -54,106 +35,106 @@ public class TwentyOnePilotsLayout implements Layout {
     static final float TOWER_VERTICAL_SPACING = 2.5f;
     static final float TOWER_RISER = 14;
     static final float SP = 24;
-    static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
+    static final float JUMP = TOWER_HEIGHT + TOWER_VERTICAL_SPACING;
 
     static final float INCHES_PER_METER = 39.3701f;
 
     static final TowerConfig[] TOWER_CONFIG = {
         // row 1 (back)
-        new TowerConfig(SP*2, 0, SP*0, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*1, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 0, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 1, new String[]{"0", "0", "0", "0"}),
         // gap
-        new TowerConfig(SP*2, 0, SP*4, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*5, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*6, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*7, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*8, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*9, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*10, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*11, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*12, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*13, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*14, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*15, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*16, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*17, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*18, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*19, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*20, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*21, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 4, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 5, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 6, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 7, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 8, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 9, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 10, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 11, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 12, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 13, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 14, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 15, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 16, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 17, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 18, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 19, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 20, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 21, new String[]{"0", "0", "0", "0"}),
         // gap
-        new TowerConfig(SP*2, 0, SP*24, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*25, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 24, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 2, 0, SP * 25, new String[]{"0", "0", "0", "0"}),
 
         // row 2
-        new TowerConfig(SP*3, 0, SP*0, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3, 0, SP*1, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3, 0, SP*4, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3, 0, SP*5, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3, 0, SP*6, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3, 0, SP*7, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP * 3, 0, SP * 0, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 3, 0, SP * 1, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 3, 0, SP * 4, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 3, 0, SP * 5, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 3, 0, SP * 6, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 3, 0, SP * 7, new String[]{"0", "0", "0", "0"}),
         // gap
         // new TowerConfig(SP*1, 0, SP*4, new String[] {"0", "0", "0", "0"}),
         // new TowerConfig(SP*1, 0, SP*5, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*1, 0, SP*6, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*1, 0, SP*7, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP * 1, 0, SP * 6, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 1, 0, SP * 7, new String[]{"0", "0", "0", "0"}),
         // new TowerConfig(SP*1, 0, SP*8, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3, 0, SP*9, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3, 0, SP*10, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3, 0, SP*11, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3, 0, SP*12, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3, 0, SP*13, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3, 0, SP*14, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3, 0, SP*15, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3, 0, SP*16, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP * 3, 0, SP * 9, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 3, 0, SP * 10, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 3, 0, SP * 11, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 3, 0, SP * 12, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 3, 0, SP * 13, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 3, 0, SP * 14, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 3, 0, SP * 15, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 3, 0, SP * 16, new String[]{"0", "0", "0", "0"}),
         // new TowerConfig(SP*1, 0, SP*17, new String[] {"0", "0", "0", "0"}),
         // new TowerConfig(SP*1, 0, SP*18, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3, 0, SP*19, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3, 0, SP*20, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP * 3, 0, SP * 19, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 3, 0, SP * 20, new String[]{"0", "0", "0", "0"}),
         // new TowerConfig(SP*1, 0, SP*21, new String[] {"0", "0", "0", "0"}),
         // gap
-        new TowerConfig(SP*3, 0, SP*24, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3, 0, SP*25, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP * 3, 0, SP * 24, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 3, 0, SP * 25, new String[]{"0", "0", "0", "0"}),
 
         // row 3
-        new TowerConfig(SP*4, 0, SP*0, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*4, 0, SP*1, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*4, 0, SP*2, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*4, 0, SP*3, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*4, 0, SP*4, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*4, 0, SP*5, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*4, 0, SP*6, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*4, 0, SP*7, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP * 4, 0, SP * 0, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 4, 0, SP * 1, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 4, 0, SP * 2, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 4, 0, SP * 3, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 4, 0, SP * 4, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 4, 0, SP * 5, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 4, 0, SP * 6, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 4, 0, SP * 7, new String[]{"0", "0", "0", "0"}),
         // gap
-        new TowerConfig(SP*4, 0, SP*18, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*4, 0, SP*19, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*4, 0, SP*20, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*4, 0, SP*21, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*4, 0, SP*22, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*4, 0, SP*23, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*4, 0, SP*24, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*4, 0, SP*25, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP * 4, 0, SP * 18, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 4, 0, SP * 19, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 4, 0, SP * 20, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 4, 0, SP * 21, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 4, 0, SP * 22, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 4, 0, SP * 23, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 4, 0, SP * 24, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 4, 0, SP * 25, new String[]{"0", "0", "0", "0"}),
 
         // row 4
-        new TowerConfig(SP*5, 0, SP*0, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*5, 0, SP*1, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*5, 0, SP*2, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*5, 0, SP*3, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP * 5, 0, SP * 0, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 5, 0, SP * 1, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 5, 0, SP * 2, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 5, 0, SP * 3, new String[]{"0", "0", "0", "0"}),
         // gap
-        new TowerConfig(SP*5, 0, SP*22, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*5, 0, SP*23, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*5, 0, SP*24, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*5, 0, SP*25, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP * 5, 0, SP * 22, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 5, 0, SP * 23, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 5, 0, SP * 24, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 5, 0, SP * 25, new String[]{"0", "0", "0", "0"}),
 
         // row 5
-        new TowerConfig(SP*6, 0, SP*0, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*6, 0, SP*1, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*6, 0, SP*2, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP * 6, 0, SP * 0, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 6, 0, SP * 1, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 6, 0, SP * 2, new String[]{"0", "0", "0", "0"}),
         // gap
-        new TowerConfig(SP*6, 0, SP*23, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*6, 0, SP*24, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*6, 0, SP*25, new String[] {"0", "0", "0", "0"}),
-    };
+        new TowerConfig(SP * 6, 0, SP * 23, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 6, 0, SP * 24, new String[]{"0", "0", "0", "0"}),
+        new TowerConfig(SP * 6, 0, SP * 25, new String[]{"0", "0", "0", "0"}),
+        };
 
     static class TowerConfig {
 

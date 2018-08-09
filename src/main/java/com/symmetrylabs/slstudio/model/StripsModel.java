@@ -1,13 +1,9 @@
 package com.symmetrylabs.slstudio.model;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXAbstractFixture;
+import heronarts.lx.model.LXFixture;
+
+import java.util.*;
 
 /**
  * A model with strips.
@@ -40,8 +36,9 @@ public class StripsModel<T extends Strip> extends SLModel {
     public StripsTopology getTopology() {
         /* This is here so that we don't repeatedly fail to load the topology
          * when inference fails. */
-        if (topologyInferenceAttempted)
+        if (topologyInferenceAttempted) {
             return topology;
+        }
         topologyInferenceAttempted = true;
 
         if (topology == null) {
@@ -59,7 +56,7 @@ public class StripsModel<T extends Strip> extends SLModel {
     }
 
     public Strip getStripById(String id) {
-      return this.stripTable.get(id);
+        return this.stripTable.get(id);
     }
 
     public Strip getStripByIndex(int i) {
