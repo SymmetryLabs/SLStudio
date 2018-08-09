@@ -1,9 +1,13 @@
 package com.symmetrylabs.slstudio.model;
 
-import heronarts.lx.model.LXAbstractFixture;
-import heronarts.lx.model.LXFixture;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-import java.util.*;
+import heronarts.lx.model.LXFixture;
+import heronarts.lx.model.LXAbstractFixture;
 
 /**
  * A model with strips.
