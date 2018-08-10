@@ -51,7 +51,7 @@ public class StripsTopology {
     private static final int NO_STRIP = Integer.MAX_VALUE;
 
     /* All in inches */
-    private static final float ORDER_TOLERANCE = 1;
+    private static final float ORDER_TOLERANCE = 2;
     private static final float BUCKET_TOLERANCE = 6;
     private static final float ENDPOINT_TOLERANCE = 6;
 
