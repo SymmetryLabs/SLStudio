@@ -22,6 +22,9 @@ public class StripsModel<T extends Strip> extends SLModel {
     protected final List<T> stripsUnmodifiable = Collections.unmodifiableList(strips);
     protected final Map<String, Strip> stripTable = new HashMap<>();
 
+    private StripsTopology topology = null;
+    boolean topologyInferenceAttempted = false;
+
     public StripsModel() {
     }
 
@@ -39,12 +42,30 @@ public class StripsModel<T extends Strip> extends SLModel {
         super(fixtures);
     }
 
+    public StripsTopology getTopology() {
+        /* This is here so that we don't repeatedly fail to load the topology
+         * when inference fails. */
+        if (topologyInferenceAttempted) {
+            return topology;
+        }
+        topologyInferenceAttempted = true;
+
+        if (topology == null) {
+            try {
+                topology = new StripsTopology(this);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
+        }
+        return topology;
+    }
+
     public List<T> getStrips() {
         return stripsUnmodifiable;
     }
 
     public Strip getStripById(String id) {
-      return this.stripTable.get(id);
+        return this.stripTable.get(id);
     }
 
     public Strip getStripByIndex(int i) {

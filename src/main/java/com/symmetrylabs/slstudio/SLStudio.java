@@ -64,7 +64,7 @@ public class SLStudio extends PApplet {
     static public void main(String[] args) {
         System.setProperty("com.aparapi.enableShowGeneratedOpenCL", "true");
         System.setProperty("com.aparapi.dumpProfilesOnExit", "true");
-        PApplet.main(concat(new String[] { SLStudio.class.getName() }, args));
+        PApplet.main(concat(args, new String[] { SLStudio.class.getName() }));
     }
 
     @Override
