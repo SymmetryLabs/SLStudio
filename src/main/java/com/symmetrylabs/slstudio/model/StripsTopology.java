@@ -418,7 +418,7 @@ public class StripsTopology {
             if (finished) {
                 return maxProjection;
             }
-            float max = Float.MIN_VALUE;
+            float max = -Float.MAX_VALUE;
             for (int strip : strips) {
                 if (strip == NO_STRIP) {
                     continue;
