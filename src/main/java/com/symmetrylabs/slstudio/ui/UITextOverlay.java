@@ -76,6 +76,11 @@ public class UITextOverlay extends UI2dContext {
         }
     }
 
+    public void reposition() {
+        this.setPosition(bg.getX(), bg.getY());
+        this.setSize(bg.getWidth(), bg.getHeight());
+    }
+
     public void onMousePressed(MouseEvent event, float mx, float my) {
         bg.onMousePressed(event, mx, my);
     }

@@ -529,7 +529,11 @@ public class SLStudioLX extends P3LX {
                 Math.max(100, uiWidth - this.leftPane.getWidth() - this.rightPane.getWidth()),
                 Math.max(100, bottomTrayY)
             );
-            this.helpHelp.redraw();
+            this.framerate.reposition();
+            this.helpHelp.reposition();
+            this.helpText.reposition();
+            this.captionText.reposition();
+            this.warningText.reposition();
         }
 
         private static final String KEY_AUDIO_EXPANDED = "audioExpanded";
