@@ -77,7 +77,7 @@ public class SummerStageLayout extends CubesLayout {
             // col 2
             new TowerConfig(SP * 1, SP * 0, SP * 0, new String[][]{
                 new String[]{"529", "528"}, new String[]{"925", "934"}, new String[]{"1030", "1040"},
-                new String[]{"WIRING_ISSUE_592", "1000"}, new String[]{"985", "979"}, new String[]{"988", "977"}, // 1001 -> 592 8/3/18
+                new String[]{"592", "1000"}, new String[]{"985", "979"}, new String[]{"988", "977"}, // 1001 -> 592 8/3/18
                 new String[]{"991", "1020"}, new String[]{"1037", "1038"}, new String[]{"1012", "1039"},
                 new String[]{"1023", "1024"}, new String[]{"647", "646"}
             }),
@@ -183,7 +183,7 @@ public class SummerStageLayout extends CubesLayout {
             }),
             // col 3
             new TowerConfig(SP * 2, SP * 3, SP * 0, new String[][]{
-                new String[]{"949", "946"}, new String[]{"944", "947"}, new String[]{"929", "995"}
+                new String[]{"949", "946"}, new String[]{"944", "947"}, new String[]{"1010", "1011"}
             }),
             new TowerConfig(SP * 2, SP * 8, SP * 0, new String[][]{
                 new String[]{"673", "672"}, new String[]{"773", "772"}, new String[]{"665", "664"}, new String[]{"811", "810"},
