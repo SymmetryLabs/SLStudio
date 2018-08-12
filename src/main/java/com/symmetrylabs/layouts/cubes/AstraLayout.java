@@ -58,11 +58,11 @@ public class AstraLayout extends CubesLayout implements Layout {
 
     static final TowerConfig[] NORMAL_CONFIG = {
         // left tower of 5
-        new TowerConfig(-50, 0, -40, 0, -45, 0, new String[] {"d880399acc51", "133", "398", "353", "134"}),
+        new TowerConfig(-50, 0, -40, 0, -45, 0, new String[] {"398", "353", "134"}),
         new TowerConfig(0, 0, -40, 0, -90, 0, new String[] {"17", "128"}),
 
         new TowerConfig(150, 0, -40, 0, 0, 0, new String[] {"177", "5"}),
-        new TowerConfig(190, 0, -40, 0, -45, 0, new String[] {"165", "186", "312", "189", "122"}),
+        new TowerConfig(190, 0, -40, 0, -45, 0, new String[] {"186", "189", "122"}),
 
 
 
