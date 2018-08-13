@@ -32,7 +32,7 @@ public class PilotsPlanes extends SLPattern<SLModel> {
         addParameter(normalYParam);
         addParameter(normalZParam);
 
-    off = 0;
+        off = 0;
     }
 
     @Override
