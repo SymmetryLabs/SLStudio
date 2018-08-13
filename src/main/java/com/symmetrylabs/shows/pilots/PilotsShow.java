@@ -1,13 +1,12 @@
 package com.symmetrylabs.shows.pilots;
 
 import com.symmetrylabs.shows.Show;
-import com.symmetrylabs.shows.cubes.CubesController;
-import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.util.CubePhysicalIdMap;
-import com.symmetrylabs.util.listenable.ListenableSet;
-import heronarts.lx.transform.LXTransform;
+import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.model.StripsModel;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.transform.LXVector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,222 +16,112 @@ import java.util.List;
  * This file implements the mapping functions needed to lay out the cubes.
  */
 public class PilotsShow implements Show {
-    ListenableSet<CubesController> controllers = new ListenableSet<>();
-    CubePhysicalIdMap cubePhysicalIdMap = new CubePhysicalIdMap();
+    private static final float STRIP_LENGTH = 29;
+    private static final float CART_SPACING = 2;
+    private static final int N_PIXELS = 29;
+    private static final float PIXEL_PITCH = STRIP_LENGTH / (N_PIXELS + 1f);
 
-    static final float globalOffsetX = 0;
-    static final float globalOffsetY = 0;
-    static final float globalOffsetZ = 168;
+    /**
+     * Each cart is a grid structure that looks as if it were made up of 4
+     * cubes along X and Y and 2 cubes along Z.
+     */
+    private static class Cart {
+        private String id;
+        private LXVector baseLoc;
 
-    static final float globalRotationX = 0;
-    static final float globalRotationY = 90;
-    static final float globalRotationZ = 0;
-
-    static final float CUBE_WIDTH = 24;
-    static final float CUBE_HEIGHT = 24;
-    static final float TOWER_WIDTH = 24;
-    static final float TOWER_HEIGHT = 24;
-    static final float CUBE_SPACING = -1.5f;
-
-    static final float TOWER_VERTICAL_SPACING = 2.5f;
-    static final float TOWER_RISER = 14;
-    static final float SP = 24;
-    static final float JUMP = TOWER_HEIGHT + TOWER_VERTICAL_SPACING;
-
-    static final float INCHES_PER_METER = 39.3701f;
-
-    static final TowerConfig[] TOWER_CONFIG = {
-        // row 1 (back)
-        new TowerConfig(SP * 2, 0, SP * 0, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 1, new String[]{"0", "0", "0", "0"}),
-        // gap
-        new TowerConfig(SP * 2, 0, SP * 4, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 5, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 6, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 7, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 8, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 9, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 10, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 11, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 12, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 13, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 14, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 15, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 16, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 17, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 18, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 19, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 20, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 21, new String[]{"0", "0", "0", "0"}),
-        // gap
-        new TowerConfig(SP * 2, 0, SP * 24, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 2, 0, SP * 25, new String[]{"0", "0", "0", "0"}),
-
-        // row 2
-        new TowerConfig(SP * 3, 0, SP * 0, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 3, 0, SP * 1, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 3, 0, SP * 4, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 3, 0, SP * 5, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 3, 0, SP * 6, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 3, 0, SP * 7, new String[]{"0", "0", "0", "0"}),
-        // gap
-        // new TowerConfig(SP*1, 0, SP*4, new String[] {"0", "0", "0", "0"}),
-        // new TowerConfig(SP*1, 0, SP*5, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP * 1, 0, SP * 6, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 1, 0, SP * 7, new String[]{"0", "0", "0", "0"}),
-        // new TowerConfig(SP*1, 0, SP*8, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP * 3, 0, SP * 9, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 3, 0, SP * 10, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 3, 0, SP * 11, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 3, 0, SP * 12, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 3, 0, SP * 13, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 3, 0, SP * 14, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 3, 0, SP * 15, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 3, 0, SP * 16, new String[]{"0", "0", "0", "0"}),
-        // new TowerConfig(SP*1, 0, SP*17, new String[] {"0", "0", "0", "0"}),
-        // new TowerConfig(SP*1, 0, SP*18, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP * 3, 0, SP * 19, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 3, 0, SP * 20, new String[]{"0", "0", "0", "0"}),
-        // new TowerConfig(SP*1, 0, SP*21, new String[] {"0", "0", "0", "0"}),
-        // gap
-        new TowerConfig(SP * 3, 0, SP * 24, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 3, 0, SP * 25, new String[]{"0", "0", "0", "0"}),
-
-        // row 3
-        new TowerConfig(SP * 4, 0, SP * 0, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 4, 0, SP * 1, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 4, 0, SP * 2, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 4, 0, SP * 3, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 4, 0, SP * 4, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 4, 0, SP * 5, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 4, 0, SP * 6, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 4, 0, SP * 7, new String[]{"0", "0", "0", "0"}),
-        // gap
-        new TowerConfig(SP * 4, 0, SP * 18, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 4, 0, SP * 19, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 4, 0, SP * 20, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 4, 0, SP * 21, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 4, 0, SP * 22, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 4, 0, SP * 23, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 4, 0, SP * 24, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 4, 0, SP * 25, new String[]{"0", "0", "0", "0"}),
-
-        // row 4
-        new TowerConfig(SP * 5, 0, SP * 0, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 5, 0, SP * 1, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 5, 0, SP * 2, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 5, 0, SP * 3, new String[]{"0", "0", "0", "0"}),
-        // gap
-        new TowerConfig(SP * 5, 0, SP * 22, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 5, 0, SP * 23, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 5, 0, SP * 24, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 5, 0, SP * 25, new String[]{"0", "0", "0", "0"}),
-
-        // row 5
-        new TowerConfig(SP * 6, 0, SP * 0, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 6, 0, SP * 1, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 6, 0, SP * 2, new String[]{"0", "0", "0", "0"}),
-        // gap
-        new TowerConfig(SP * 6, 0, SP * 23, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 6, 0, SP * 24, new String[]{"0", "0", "0", "0"}),
-        new TowerConfig(SP * 6, 0, SP * 25, new String[]{"0", "0", "0", "0"}),
-        };
-
-    static class TowerConfig {
-
-        final CubesModel.Cube.Type type;
-        final float x;
-        final float y;
-        final float z;
-        final float xRot;
-        final float yRot;
-        final float zRot;
-        final String[] ids;
-        final float[] yValues;
-
-        TowerConfig(float x, float y, float z, String[] ids) {
-            this(CubesModel.Cube.Type.LARGE, x, y, z, ids);
+        Cart(String id, LXVector baseLoc) {
+            this.id = id;
+            this.baseLoc = baseLoc;
         }
 
-        TowerConfig(float x, float y, float z, float yRot, String[] ids) {
-            this(x, y, z, 0, yRot, 0, ids);
+        private LXVector start(int x, int y, int z) {
+            return new LXVector(x * STRIP_LENGTH, y * STRIP_LENGTH, z * STRIP_LENGTH).add(baseLoc);
         }
 
-        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, String[] ids) {
-            this(type, x, y, z, 0, 0, 0, ids);
-        }
-
-        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float yRot, String[] ids) {
-            this(type, x, y, z, 0, yRot, 0, ids);
-        }
-
-        TowerConfig(float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
-            this(CubesModel.Cube.Type.LARGE, x, y, z, xRot, yRot, zRot, ids);
-        }
-
-        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
-            this.type = type;
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.xRot = xRot;
-            this.yRot = yRot;
-            this.zRot = zRot;
-            this.ids = ids;
-
-            this.yValues = new float[ids.length];
-            for (int i = 0; i < ids.length; i++) {
-                yValues[i] = y + i * (CUBE_HEIGHT + CUBE_SPACING);
+        private void addXStrip(List<Strip> strips, int x, int y, int z) {
+            LXVector start = start(x, y, z);
+            List<LXPoint> points = new ArrayList<>();
+            for (int i = 1; i <= N_PIXELS; i++) {
+                points.add(new LXPoint(start.x + PIXEL_PITCH * i, start.y, start.z));
             }
+            Strip.Metrics metrics = new Strip.Metrics(N_PIXELS, PIXEL_PITCH);
+            strips.add(new Strip(String.format("%s-%d%d%dX", id, x, y, z), metrics, points));
+        }
+
+        private void addYStrip(List<Strip> strips, int x, int y, int z) {
+            LXVector start = start(x, y, z);
+            List<LXPoint> points = new ArrayList<>();
+            for (int i = 1; i <= N_PIXELS; i++) {
+                points.add(new LXPoint(start.x, start.y + PIXEL_PITCH * i, start.z));
+            }
+            Strip.Metrics metrics = new Strip.Metrics(N_PIXELS, PIXEL_PITCH);
+            strips.add(new Strip(String.format("%s-%d%d%dY", id, x, y, z), metrics, points));
+        }
+
+        private void addZStrip(List<Strip> strips, int x, int y, int z) {
+            LXVector start = start(x, y, z);
+            List<LXPoint> points = new ArrayList<>();
+            for (int i = 1; i <= N_PIXELS; i++) {
+                points.add(new LXPoint(start.x, start.y, start.z + PIXEL_PITCH * i));
+            }
+            Strip.Metrics metrics = new Strip.Metrics(N_PIXELS, PIXEL_PITCH);
+            strips.add(new Strip(String.format("%s-%d%d%dZ", id, x, y, z), metrics, points));
+        }
+
+        public List<Strip> getStrips() {
+            List<Strip> strips = new ArrayList<>();
+            for (int x = 0; x < 5; x++) {
+                for (int y = 0; y < 5; y++) {
+                    for (int z = 0; z < 3; z++) {
+                        if (x != 4) addXStrip(strips, x, y, z);
+                        if (y != 4) addYStrip(strips, x, y, z);
+                        if (z != 2) addZStrip(strips, x, y, z);
+                    }
+                }
+            }
+            return strips;
         }
     }
 
+    private Cart[] carts = new Cart[] {
+        /* no extra cart spacing here because they're not actually adjacent;
+         * FSL is in front of BSL. */
+        new Cart("FSL",  new LXVector(
+            24 * STRIP_LENGTH + 4 * CART_SPACING, 0, 0)),
+
+        new Cart("BSL",  new LXVector(
+            20 * STRIP_LENGTH + 4 * CART_SPACING, 0, 3 * STRIP_LENGTH)),
+
+        new Cart("BSCL", new LXVector(
+            16 * STRIP_LENGTH + 3 * CART_SPACING, 0, 3 * STRIP_LENGTH)),
+
+        new Cart("BSC",  new LXVector(
+            12 * STRIP_LENGTH + 2 * CART_SPACING, 0, 3 * STRIP_LENGTH)),
+
+        new Cart("BSCR", new LXVector(
+            8 * STRIP_LENGTH + CART_SPACING, 0, 3 * STRIP_LENGTH)),
+
+        new Cart("BSR",  new LXVector(
+            4 * STRIP_LENGTH, 0, 3 * STRIP_LENGTH)),
+
+        new Cart("FSR",  new LXVector(
+            0, 0, 0)),
+    };
+
+    @Override
     public SLModel buildModel() {
-        // Any global transforms
-        LXTransform globalTransform = new LXTransform();
-        globalTransform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
-        globalTransform.rotateX(globalRotationX * Math.PI / 180.);
-        globalTransform.rotateY(globalRotationY * Math.PI / 180.);
-        globalTransform.rotateZ(globalRotationZ * Math.PI / 180.);
-
-        /* Cubes ----------------------------------------------------------*/
-        List<CubesModel.Tower> towers = new ArrayList<>();
-        List<CubesModel.Cube> allCubes = new ArrayList<>();
-
-        int stripId = 0;
-        for (TowerConfig config : TOWER_CONFIG) {
-            List<CubesModel.Cube> cubes = new ArrayList<>();
-            float x = config.x;
-            float z = config.z;
-            float xRot = config.xRot;
-            float yRot = config.yRot;
-            float zRot = config.zRot;
-            CubesModel.Cube.Type type = config.type;
-
-            for (int i = 0; i < config.ids.length; i++) {
-                float y = config.yValues[i];
-                CubesModel.Cube cube = new CubesModel.Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
-                cubes.add(cube);
-                allCubes.add(cube);
-            }
-            towers.add(new CubesModel.Tower("", cubes));
+        List<Strip> strips = new ArrayList<>();
+        for (Cart cart : carts) {
+            strips.addAll(cart.getStrips());
         }
-        /*-----------------------------------------------------------------*/
-
-        CubesModel.Cube[] allCubesArr = new CubesModel.Cube[allCubes.size()];
-        for (int i = 0; i < allCubesArr.length; i++) {
-            allCubesArr[i] = allCubes.get(i);
-        }
-
-        return new CubesModel(towers, allCubesArr);
+        return new StripsModel<>(strips);
     }
 
-
+    @Override
     public void setupLx(SLStudioLX lx) {
-
     }
 
+    @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
-
     }
 }
