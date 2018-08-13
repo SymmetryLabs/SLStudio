@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.pattern.base;
 
-import com.symmetrylabs.layouts.cubes.CubesModel;
+import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.slstudio.model.SLModel;
 
 import java.util.ArrayList;

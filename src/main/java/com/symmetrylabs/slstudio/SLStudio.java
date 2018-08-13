@@ -2,16 +2,14 @@ package com.symmetrylabs.slstudio;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
-import com.symmetrylabs.layouts.Layout;
-import com.symmetrylabs.layouts.tree.Anemometer;
+import com.symmetrylabs.shows.Show;
+import com.symmetrylabs.shows.kalpa.Anemometer;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
 import heronarts.lx.LX;
-import com.symmetrylabs.layouts.LayoutRegistry;
-import com.symmetrylabs.layouts.tree.TreeModelingTool;
-import com.symmetrylabs.layouts.tree.ui.*;
+import com.symmetrylabs.shows.ShowRegistry;
+import com.symmetrylabs.shows.kalpa.TreeModelingTool;
+import com.symmetrylabs.shows.kalpa.ui.*;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -25,8 +23,8 @@ import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.ui.UIFramerateControl;
-import com.symmetrylabs.layouts.tree.ui.UITreeModelingTool;
-import com.symmetrylabs.layouts.tree.ui.UITreeModelAxes;
+import com.symmetrylabs.shows.kalpa.ui.UITreeModelingTool;
+import com.symmetrylabs.shows.kalpa.ui.UITreeModelAxes;
 import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.DrawHelper;
 import com.symmetrylabs.util.dispatch.Dispatcher;
@@ -37,11 +35,11 @@ import static com.symmetrylabs.util.DistanceConstants.*;
 public class SLStudio extends PApplet {
     public static SLStudio applet;
     public static final Font MONO_FONT = new Font("Inconsolata-Bold-14.vlw", 14, 17);
-    public static final String LAYOUT_FILE_NAME = ".layout";
+    public static final String SHOW_FILE_NAME = ".show";
     public static final String RESTART_FILE_NAME = ".restart";
 
     private SLStudioLX lx;
-    public Layout layout;
+    public Show show;
     private Dispatcher dispatcher;
     private Mappings mappings;
     public OutputControl outputControl;
@@ -72,19 +70,19 @@ public class SLStudio extends PApplet {
         size(displayWidth, displayHeight, P3D);
     }
 
-    /** Gets the layout name from the -Playout= argument or .layout file. */
-    public String getSelectedLayoutName() {
-        String layoutName = System.getProperty("com.symmetrylabs.layout");
-        if (layoutName != null && !layoutName.isEmpty()) return layoutName;
-        String[] lines = loadStrings(LAYOUT_FILE_NAME);
+    /** Gets the show name from the -Pshow= argument or .show file. */
+    public String getSelectedShowName() {
+        String showName = System.getProperty("com.symmetrylabs.show");
+        if (showName != null && !showName.isEmpty()) return showName;
+        String[] lines = loadStrings(SHOW_FILE_NAME);
         if (lines != null && lines.length > 0) return lines[0].trim();
         return null;
     }
 
-    /** Writes out a layout name as the default layout on next startup. */
-    public void saveSelectedLayoutName(String layoutName) {
-        if (layoutName != null) {
-            saveStrings(LAYOUT_FILE_NAME, new String[] {layoutName});
+    /** Writes out a show name as the default show on next startup. */
+    public void saveSelectedShowName(String showName) {
+        if (showName != null) {
+            saveStrings(SHOW_FILE_NAME, new String[] {showName});
         }
     }
 
@@ -95,12 +93,12 @@ public class SLStudio extends PApplet {
 
         Utils.setSketchPath(sketchPath());
 
-        String layoutName = getSelectedLayoutName();
-        saveSelectedLayoutName(layoutName);
-        println("\n---- Layout: " + layoutName + " ----");
+        String showName = getSelectedShowName();
+        saveSelectedShowName(showName);
+        println("\n---- Show: " + showName + " ----");
 
-        layout = LayoutRegistry.getLayout(this, layoutName);
-        LXModel model = layout.buildModel();
+        show = ShowRegistry.getShow(this, showName);
+        LXModel model = show.buildModel();
         printModelStats(model);
 
         new SLStudioLX(this, model, true) {
@@ -112,9 +110,9 @@ public class SLStudio extends PApplet {
 
                 SLStudio.this.dispatcher = Dispatcher.getInstance(lx);
 
-                layout.setupLx(lx);
+                show.setupLx(lx);
 
-                if (TreeModelingTool.isTreeLayout()) {
+                if (TreeModelingTool.isTreeShow()) {
                     treeModelingTool = new TreeModelingTool(lx);
                     lx.engine.registerComponent("treeModelingTool", treeModelingTool);
 
@@ -154,13 +152,13 @@ public class SLStudio extends PApplet {
                 new UIFramerateControl(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
                 new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 2);
 
-                if (TreeModelingTool.isTreeLayout()) {
+                if (TreeModelingTool.isTreeShow()) {
                     ui.preview.addComponent(new UITreeTrunk(applet));
                     uiTreeModelAxes = new UITreeModelAxes();
                     ui.preview.addComponent(uiTreeModelAxes);
                 }
 
-                layout.setupUi(lx, ui);
+                show.setupUi(lx, ui);
             }
         };
 
