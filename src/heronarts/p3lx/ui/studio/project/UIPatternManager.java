@@ -40,38 +40,39 @@ public class UIPatternManager extends UIComponentManager {
         setTitle("PATTERNS");
         this.itemList.setDescription("Available patterns, double-click to add to the active channel");
 
-        List<Class<? extends LXPattern>> patterns = lx.getRegisteredPatterns();
+        List<LX.PatternInfo> patterns = lx.getRegisteredPatternInfo();
         PatternItem[] items = new PatternItem[patterns.size()];
         for (int i = 0; i < items.length; ++i) {
-            items[i] = new PatternItem(patterns.get(i));
+            LX.PatternInfo pi = patterns.get(i);
+            items[i] = new PatternItem(pi.getPattern(), pi.getGroup());
         }
-        Arrays.sort(items, new Comparator<PatternItem>() {
-            @Override
-            public int compare(PatternItem o1, PatternItem o2) {
-                return o1.label.compareToIgnoreCase(o2.label);
-            }
-        });
+        Arrays.sort(items);
         for (PatternItem item : items) {
             this.itemList.addItem(item);
         }
     }
 
-    private class PatternItem extends UIItemList.AbstractItem {
+    private class PatternItem extends UIItemList.AbstractItem implements Comparable<PatternItem> {
 
         final Class<? extends LXPattern> pattern;
         final String label;
+        final String group;
 
-        PatternItem(Class<? extends LXPattern> pattern) {
+        PatternItem(Class<? extends LXPattern> pattern, String group) {
             this.pattern = pattern;
             String simple = pattern.getSimpleName();
             if (simple.endsWith("Pattern")) {
                 simple = simple.substring(0, simple.length() - "Pattern".length());
             }
+            this.group = group;
             this.label = simple;
         }
 
+        @Override
         public String getLabel() {
-            return this.label;
+            if (group == null)
+                return label;
+            return String.format("%s / %s", group, label);
         }
 
         @Override
@@ -104,6 +105,27 @@ public class UIPatternManager extends UIComponentManager {
                     lx.engine.addChannel(new LXPattern[] { instance });
                 }
             }
+        }
+
+        @Override
+        public int compareTo(PatternItem o) {
+            if (group == null && o.group == null) {
+                return label.compareToIgnoreCase(o.label);
+            }
+
+            /* Things without groups are always sorted after things with groups */
+            if (group == null) {
+                return 1;
+            }
+            if (o.group == null) {
+                return -1;
+            }
+
+            int groupCompare = group.compareToIgnoreCase(o.group);
+            if (groupCompare != 0) {
+                return groupCompare;
+            }
+            return label.compareToIgnoreCase(o.label);
         }
     }
 }
