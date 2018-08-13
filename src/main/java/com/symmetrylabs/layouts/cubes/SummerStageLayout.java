@@ -286,7 +286,7 @@ public class SummerStageLayout extends CubesLayout {
             new TowerConfig(SP * 0, SP * 1, SP * 0, new String[][]{new String[]{"873", "872"}, new String[]{"767", "766"}, new String[]{"693", "692"}}),
             new TowerConfig(SP * 0, SP * 2, SP * -1, new String[][]{new String[]{"739", "738"}, new String[]{"553", "552"}, new String[]{"852", "853"}}),
             // col 2
-            new TowerConfig(SP * 1, SP * 1, SP * -1, new String[][]{new String[]{"1092", "694"}, new String[]{"611", "610"}, new String[]{"653", "?11"}}),
+            new TowerConfig(SP * 1, SP * 1, SP * -1, new String[][]{new String[]{"1092", "694"}, new String[]{"611", "610"}, new String[]{"653", "652"}}),
             // col 3
             new TowerConfig(SP * 2, SP * 0, SP * 0, new String[][]{new String[]{"857", "?12"}}),
             new TowerConfig(SP * 2, SP * 2, SP * 0, new String[][]{new String[]{"?", "788"}, new String[]{"801", "800"}}),
@@ -375,7 +375,7 @@ public class SummerStageLayout extends CubesLayout {
             // col 3
             new TowerConfig(SP * 2, SP * 9, SP * 0, new String[][]{new String[]{"986", "972"}}),
             // col 4
-            new TowerConfig(SP * 3, SP * 0, SP * 0, new String[][]{new String[]{"911", "1063"}, new String[]{"700", "792"}, new String[]{"?6", "1094"}, new String[]{"531", "530"}, new String[]{"498", "831"}, new String[]{"794", "795"}, new String[]{"546", "913"}, new String[]{"518", "532"}, new String[]{"849", "848"}, new String[]{"914", "847"}, new String[]{"818", "464"}}),
+            new TowerConfig(SP * 3, SP * 0, SP * 0, new String[][]{new String[]{"911", "1063"}, new String[]{"700", "792"}, new String[]{"437", "1094"}, new String[]{"531", "530"}, new String[]{"498", "831"}, new String[]{"794", "795"}, new String[]{"546", "913"}, new String[]{"518", "532"}, new String[]{"849", "848"}, new String[]{"914", "847"}, new String[]{"818", "464"}}),
             new TowerConfig(SP * 3, SP * 2, SP * -1, new String[][]{new String[]{"1077", "1076"}}),
             new TowerConfig(SP * 3, SP * 7, SP * -1, new String[][]{new String[]{"465", "1089"}}),
             // col     5
