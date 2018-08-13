@@ -1,4 +1,4 @@
-package com.symmetrylabs.layouts.shows.usopen;
+package com.symmetrylabs.shows.usopen;
 
 import java.util.*;
 import java.lang.ref.WeakReference;
@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.lang.Float;
 
+import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.util.CubePhysicalIdMap;
@@ -17,8 +19,6 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transform.LXTransform;
 import heronarts.p3lx.ui.UI2dScrollContext;
 
-import com.symmetrylabs.layouts.Layout;
-import com.symmetrylabs.layouts.cubes.*;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
@@ -28,11 +28,10 @@ import com.symmetrylabs.util.Utils;
 import static com.symmetrylabs.util.DistanceUtils.*;
 import static com.symmetrylabs.util.DistanceConstants.*;
 
-
 /**
  * This file implements the mapping functions needed to lay out the cubes.
  */
-public class USOpenLayout extends CubesLayout {
+public class USOpenShow extends CubesShow {
 
     static final float globalOffsetX = 0;
     static final float globalOffsetY = 0;
