@@ -20,6 +20,8 @@ import heronarts.lx.parameter.DiscreteParameter;
 import java.util.*;
 
 public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
+    public static final String GROUP_NAME = PilotsShow.SHOW_NAME;
+
     private static final float PLANE_TOLERANCE = 3; // inches
 
     private CompoundParameter attackParam = new CompoundParameter("attack", 60, 0, 500);

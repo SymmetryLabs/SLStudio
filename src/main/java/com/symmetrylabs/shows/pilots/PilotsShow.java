@@ -16,6 +16,8 @@ import java.util.List;
  * This file implements the mapping functions needed to lay out the cubes.
  */
 public class PilotsShow implements Show {
+    static final String SHOW_NAME = "pilots";
+
     private static final float STRIP_LENGTH = 29;
     private static final float CART_SPACING = 2;
     private static final int N_PIXELS = 29;

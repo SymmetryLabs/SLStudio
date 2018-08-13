@@ -16,6 +16,8 @@ import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.min;
 
 public class PilotsMonochromeSwarm extends SLPattern<StripsModel<Strip>> {
+    public static final String GROUP_NAME = PilotsShow.SHOW_NAME;
+
     private final CompoundParameter fVParameter = new CompoundParameter("fV", 0, -1, 1);
     private final SawLFO offset = new SawLFO(0, 1, 1000);
     private final SinLFO rate = new SinLFO(350, 1200, 63000);

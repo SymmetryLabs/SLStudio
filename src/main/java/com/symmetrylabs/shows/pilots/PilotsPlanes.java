@@ -9,6 +9,8 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
 
 public class PilotsPlanes extends SLPattern<SLModel> {
+    public static final String GROUP_NAME = PilotsShow.SHOW_NAME;
+
     private static final int redColor = LXColor.hsb(0, 100, 100);
     private static final int yellowColor = LXColor.hsb(51, 85, 100);
 
