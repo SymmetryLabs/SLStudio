@@ -3,6 +3,7 @@ package com.symmetrylabs.layouts;
 import java.util.*;
 
 import com.symmetrylabs.layouts.cubes.OfficeLayout;
+import com.symmetrylabs.layouts.pilots.TwentyOnePilotsLayout;
 import processing.core.PApplet;
 
 import com.symmetrylabs.layouts.cubes.*;
@@ -12,7 +13,6 @@ import com.symmetrylabs.layouts.oslo.TreeModel;
 import com.symmetrylabs.layouts.composite.CompositeLayout;
 import com.symmetrylabs.layouts.obj.ObjLayout;
 import com.symmetrylabs.layouts.tree.*;
-import processing.core.PApplet;
 
 
 public class LayoutRegistry {

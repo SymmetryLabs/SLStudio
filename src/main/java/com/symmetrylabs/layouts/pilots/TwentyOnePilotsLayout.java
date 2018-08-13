@@ -1,6 +1,8 @@
-package com.symmetrylabs.layouts.cubes;
+package com.symmetrylabs.layouts.pilots;
 
 import com.symmetrylabs.layouts.Layout;
+import com.symmetrylabs.layouts.cubes.CubesController;
+import com.symmetrylabs.layouts.cubes.CubesModel;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.util.CubePhysicalIdMap;

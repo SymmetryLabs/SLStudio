@@ -1,4 +1,4 @@
-package com.symmetrylabs.layouts.cubes.patterns.pilots;
+package com.symmetrylabs.layouts.pilots;
 
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;

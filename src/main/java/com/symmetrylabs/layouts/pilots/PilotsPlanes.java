@@ -1,4 +1,4 @@
-package com.symmetrylabs.layouts.cubes.patterns.pilots;
+package com.symmetrylabs.layouts.pilots;
 
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
