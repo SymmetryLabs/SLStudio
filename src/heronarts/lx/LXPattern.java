@@ -60,6 +60,14 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
     public final BooleanParameter autoCycleEligible = new BooleanParameter("Cycle", true);
     public final Timer timer = new Timer();
 
+    /**
+     * Subclasses may define their own group name by hiding this static field.
+     * It is used to determine which group a pattern should be placed in in
+     * the left-hand sidebar UI. The default value of null puts it in the
+     * "Uncategorized" group.
+     */
+    public static String GROUP_NAME = null;
+
     public class Timer {
         public long runNanos = 0;
     }
@@ -319,5 +327,18 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
         if (obj.has(KEY_AUTO_CYCLE)) {
             this.autoCycleEligible.setValue(obj.get(KEY_AUTO_CYCLE).getAsBoolean());
         }
+    }
+
+    /**
+     * Retrieves the group name of a given pattern class.
+     * @param pClass
+     * @return The name of the pattern's declared group, or null if no group was declared.
+     */
+    public static String getGroupName(Class<? extends LXPattern> pClass) {
+        try {
+            return (String) pClass.getField("GROUP_NAME").get(null);
+        } catch (NoSuchFieldException | IllegalAccessException | ClassCastException e) {
+        }
+        return null;
     }
 }
