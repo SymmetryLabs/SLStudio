@@ -2,10 +2,9 @@ package com.symmetrylabs.layouts;
 
 import java.util.*;
 
-import com.symmetrylabs.layouts.cubes.OfficeLayout;
 import processing.core.PApplet;
-
 import com.symmetrylabs.layouts.cubes.*;
+import com.symmetrylabs.layouts.shows.usopen.USOpenLayout;
 //import com.symmetrylabs.layouts.dynamic_JSON.DynamicLayout;
 import com.symmetrylabs.layouts.oslo.OsloLayout;
 import com.symmetrylabs.layouts.oslo.TreeModel;
@@ -46,6 +45,7 @@ public class LayoutRegistry {
         map.put("kalpa", () -> new KalpaLayout());
         map.put("summer_stage", () -> new SummerStageLayout());
         map.put("21_pilots", () -> new TwentyOnePilotsLayout());
+        map.put("us_open", () -> new USOpenLayout());
     }
 
     static interface LayoutBuilder {

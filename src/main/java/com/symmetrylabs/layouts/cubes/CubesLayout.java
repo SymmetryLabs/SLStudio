@@ -24,16 +24,14 @@ import heronarts.p3lx.ui.UI2dScrollContext;
  * This file implements the mapping functions needed to lay out the cubes.
  */
 public abstract class CubesLayout implements Layout {
-    static final float CUBE_WIDTH = 24;
-    static final float CUBE_HEIGHT = 24;
-    static final float CUBE_SPACING = 1.5f;
+    public static final float CUBE_WIDTH = 24;
+    public static final float CUBE_HEIGHT = 24;
+    public static final float CUBE_SPACING = 1.5f;
 
-    static final float TOWER_VERTICAL_SPACING = 2.5f;
-    static final float TOWER_RISER = 14;
-    static final float SP = CUBE_HEIGHT+CUBE_SPACING;
-    static final float JUMP = CUBE_HEIGHT+TOWER_VERTICAL_SPACING;
-
-    static final float INCHES_PER_METER = 39.3701f;
+    public static final float TOWER_VERTICAL_SPACING = 2.5f;
+    public static final float TOWER_RISER = 14;
+    public static final float SP = CUBE_HEIGHT+CUBE_SPACING;
+    public static final float JUMP = CUBE_HEIGHT+TOWER_VERTICAL_SPACING;
 
     ListenableSet<CubesController> controllers = new ListenableSet<>();
     CubePhysicalIdMap cubePhysicalIdMap = new CubePhysicalIdMap();
