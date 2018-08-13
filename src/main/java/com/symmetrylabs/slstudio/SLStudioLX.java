@@ -5,14 +5,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 import com.google.gson.JsonObject;
 
-import com.symmetrylabs.layouts.LayoutRegistry;
+import com.symmetrylabs.shows.ShowRegistry;
 import com.symmetrylabs.slstudio.ui.*;
 import heronarts.lx.*;
 import processing.core.PApplet;
@@ -93,7 +90,7 @@ public class SLStudioLX extends P3LX {
                 "@-D           Delete selected channel, warp, effect, or pattern\n" +
                 "@-F           Toggle frame rate status line\n" +
                 "@-G           Toggle UI geometry\n" +
-                "@-L           Layout selection\n" +
+                "@-L           Load a show\n" +
                 "@-M           Modulation source\n" +
                 "@-N           New channel\n" +
                 "@-P           Performance mode\n" +
@@ -190,11 +187,11 @@ public class SLStudioLX extends P3LX {
                                 markerPainter.toggleVisible();
                                 break;
                             case VK_L:
-                                String layoutName = (String) JOptionPane.showInputDialog(
-                                    null, "Select a layout and click OK to restart.", "Select layout",
-                                    JOptionPane.QUESTION_MESSAGE, null, LayoutRegistry.getNames().toArray(), null);
-                                if (layoutName != null) {
-                                    applet.saveStrings(SLStudio.LAYOUT_FILE_NAME, new String[] {layoutName});
+                                String showName = (String) JOptionPane.showInputDialog(
+                                    null, "Select a show and click OK to restart.", "Load a show",
+                                    JOptionPane.QUESTION_MESSAGE, null, ShowRegistry.getNames().toArray(), null);
+                                if (showName != null) {
+                                    applet.saveStrings(SLStudio.SHOW_FILE_NAME, new String[] {showName});
                                     applet.saveStrings(SLStudio.RESTART_FILE_NAME, new String[0]);
                                     applet.exit();
                                 }

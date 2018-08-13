@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import java.lang.reflect.Modifier;
 
 
-import com.symmetrylabs.layouts.Layout;
+import com.symmetrylabs.shows.Show;
 import heronarts.lx.warp.LXWarp;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import io.github.lukehutch.fastclasspathscanner.scanner.ScanResult;
@@ -39,8 +39,8 @@ public class LXClassLoader {
         return getSubclassStream(LXWarp.class).collect(Collectors.toList());
     }
 
-    public static List<Class<Layout>> findLayouts() {
-        return getSubclassStream(Layout.class).collect(Collectors.toList());
+    public static List<Class<Show>> findShows() {
+        return getSubclassStream(Show.class).collect(Collectors.toList());
     }
 
     public static String guessExistingPatternClassName(String className) {

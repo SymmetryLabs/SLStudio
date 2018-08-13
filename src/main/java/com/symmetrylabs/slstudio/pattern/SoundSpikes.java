@@ -14,7 +14,7 @@ import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.LXUtils;
 
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
-import com.symmetrylabs.layouts.cubes.CubesModel;
+import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.slstudio.model.Strip;
 import heronarts.lx.transform.LXVector;
 

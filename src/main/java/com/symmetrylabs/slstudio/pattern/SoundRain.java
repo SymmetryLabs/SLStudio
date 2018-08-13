@@ -13,7 +13,7 @@ import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.modulator.LinearEnvelope;
 
-import com.symmetrylabs.layouts.cubes.CubesModel;
+import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.slstudio.model.Strip;
 import heronarts.lx.transform.LXVector;
 
