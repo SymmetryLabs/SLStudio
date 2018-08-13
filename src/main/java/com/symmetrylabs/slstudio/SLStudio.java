@@ -1,6 +1,9 @@
 package com.symmetrylabs.slstudio;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.layouts.tree.Anemometer;
@@ -58,10 +61,13 @@ SLStudio extends PApplet {
     public final BooleanParameter mappingModeEnabled = new BooleanParameter("Mappings");
     public Map<String, int[]> mappingColorsPerPixlite;
 
+    /** Persistent warning messages to be shown in the UI. */
+    protected static final Map<String, String> warnings = new HashMap<>();
+
     static public void main(String[] args) {
         System.setProperty("com.aparapi.enableShowGeneratedOpenCL", "true");
         System.setProperty("com.aparapi.dumpProfilesOnExit", "true");
-        PApplet.main(concat(new String[] { SLStudio.class.getName() }, args));
+        PApplet.main(concat(args, new String[] { SLStudio.class.getName() }));
     }
 
     @Override
@@ -157,7 +163,7 @@ SLStudio extends PApplet {
             protected void onUIReady(SLStudioLX lx, SLStudioLX.UI ui) {
                 ui.leftPane.audio.setVisible(true);
                 ui.preview.setCenter(lx.model.cx, lx.model.cy, lx.model.cz);
-                ui.preview.setPhi(0).setMinRadius(0 * FEET).setMaxRadius(150 * FEET).setRadius(150 * FEET);
+                ui.preview.setPhi(0).setMinRadius(0 * FEET).setMaxRadius(150 * FEET).setRadius(25 * FEET);
                 new UIFramerateControl(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
                 new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 2);
 
@@ -200,6 +206,18 @@ SLStudio extends PApplet {
         background(lx.ui.theme.getDarkBackgroundColor());
         DrawHelper.runAll();
         dispatcher.draw();
+    }
+
+    public static void setWarning(String key, String message) {
+        if (message != null && !message.isEmpty()) {
+            System.err.println("WARNING: " + key + ": " + message);
+            warnings.put(key, message);
+        } else {
+            warnings.remove(key);
+        }
+        if (applet != null && applet.lx != null && applet.lx.ui != null) {
+            applet.lx.ui.updateWarningText(warnings);
+        }
     }
 
     private MappingPixlite[] setupPixlites() {

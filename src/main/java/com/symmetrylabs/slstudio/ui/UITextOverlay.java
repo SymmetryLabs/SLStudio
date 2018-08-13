@@ -37,6 +37,7 @@ public class UITextOverlay extends UI2dContext {
 
     public void setText(String text) {
         this.text = text;
+        redraw();
     }
 
     public int getColor() {
@@ -45,6 +46,21 @@ public class UITextOverlay extends UI2dContext {
 
     public void setColor(int c) {
         color = c;
+        redraw();
+    }
+
+    public void setAnchor(int x, int y) {
+        anchorX = x;
+        anchorY = y;
+        redraw();
+    }
+
+    public int getAnchorX() {
+        return anchorX;
+    }
+
+    public int getAnchorY() {
+        return anchorY;
     }
 
     protected void onDraw(UI ui, PGraphics pg) {
@@ -58,6 +74,11 @@ public class UITextOverlay extends UI2dContext {
         if (redrawEveryFrame) {
             redraw();
         }
+    }
+
+    public void reposition() {
+        this.setPosition(bg.getX(), bg.getY());
+        this.setSize(bg.getWidth(), bg.getHeight());
     }
 
     public void onMousePressed(MouseEvent event, float mx, float my) {
