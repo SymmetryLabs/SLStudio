@@ -4,7 +4,7 @@ import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.layouts.tree.TreeModel;
+import com.symmetrylabs.shows.kalpa.TreeModel;
 import static com.symmetrylabs.util.MathUtils.*;
 
 

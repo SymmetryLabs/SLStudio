@@ -5,7 +5,7 @@ import heronarts.lx.LX;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.symmetrylabs.layouts.tree.TreeModel;
+import com.symmetrylabs.shows.kalpa.TreeModel;
 
 
 public abstract class TreeThreadedPattern extends TreePattern {

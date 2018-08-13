@@ -7,7 +7,7 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
-import com.symmetrylabs.layouts.tree.TreeModel;
+import com.symmetrylabs.shows.kalpa.TreeModel;
 import static com.symmetrylabs.util.DistanceConstants.*;
 import static com.symmetrylabs.util.MathUtils.*;
 
