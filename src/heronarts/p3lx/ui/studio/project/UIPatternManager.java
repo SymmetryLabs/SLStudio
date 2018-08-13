@@ -20,9 +20,7 @@
 
 package heronarts.p3lx.ui.studio.project;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXBus;
@@ -30,25 +28,59 @@ import heronarts.lx.LXChannel;
 import heronarts.lx.LXPattern;
 import heronarts.p3lx.P3LX;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.component.UIItemList;
+import heronarts.p3lx.ui.studio.UICollapsibleSection;
 import processing.core.PApplet;
 
-public class UIPatternManager extends UIComponentManager {
+public class UIPatternManager extends UICollapsibleSection {
+    protected final LX lx;
+
+    private class UIPatternGroup extends UIComponentManager {
+        final String name;
+
+        UIPatternGroup(UI ui, LX lx, float x, float y, float w, String name) {
+            super(ui, lx, x, y, w);
+            this.name = name;
+            setTitle(name);
+        }
+    }
 
     public UIPatternManager(UI ui, LX lx, float x, float y, float w) {
-        super(ui, lx, x, y, w);
-        setTitle("PATTERNS");
-        this.itemList.setDescription("Available patterns, double-click to add to the active channel");
+        super(ui, x, y, w, 0);
+        this.lx = lx;
 
-        List<LX.PatternInfo> patterns = lx.getRegisteredPatternInfo();
-        PatternItem[] items = new PatternItem[patterns.size()];
-        for (int i = 0; i < items.length; ++i) {
-            LX.PatternInfo pi = patterns.get(i);
-            items[i] = new PatternItem(pi.getPattern(), pi.getGroup());
+        setTitle("PATTERNS");
+
+        setLayout(UI2dContainer.Layout.VERTICAL);
+
+        List<Class<? extends LXPattern>> patterns = lx.getRegisteredPatterns();
+        HashMap<String, List<PatternItem>> groups = new HashMap<>();
+        for (Class<? extends LXPattern> p : patterns) {
+            String group = LXPattern.getGroupName(p);
+            groups.putIfAbsent(group, new ArrayList<>());
+            groups.get(group).add(new PatternItem(p));
         }
-        Arrays.sort(items);
-        for (PatternItem item : items) {
-            this.itemList.addItem(item);
+
+        for (List<PatternItem> ps : groups.values()) {
+            Collections.sort(ps);
+        }
+        List<String> groupNames = new ArrayList<>(groups.keySet());
+        Collections.sort(groupNames, (a, b) -> {
+            if (a == null && b == null) return 0;
+            if (a == null) return -1;
+            if (b == null) return 1;
+            return a.compareToIgnoreCase(b);
+        });
+
+        for (String groupName : groupNames) {
+            String displayName = groupName == null ? "Uncategorized" : groupName;
+            UIPatternGroup uipg = new UIPatternGroup(ui, lx, x, y, w - 2 * UICollapsibleSection.PADDING, displayName);
+            uipg.addToContainer(this);
+
+            for (PatternItem pi : groups.get(groupName)) {
+                uipg.itemList.addItem(pi);
+            }
         }
     }
 
@@ -56,23 +88,19 @@ public class UIPatternManager extends UIComponentManager {
 
         final Class<? extends LXPattern> pattern;
         final String label;
-        final String group;
 
-        PatternItem(Class<? extends LXPattern> pattern, String group) {
+        PatternItem(Class<? extends LXPattern> pattern) {
             this.pattern = pattern;
             String simple = pattern.getSimpleName();
             if (simple.endsWith("Pattern")) {
                 simple = simple.substring(0, simple.length() - "Pattern".length());
             }
-            this.group = group;
             this.label = simple;
         }
 
         @Override
         public String getLabel() {
-            if (group == null)
-                return label;
-            return String.format("%s / %s", group, label);
+            return label;
         }
 
         @Override
@@ -109,22 +137,6 @@ public class UIPatternManager extends UIComponentManager {
 
         @Override
         public int compareTo(PatternItem o) {
-            if (group == null && o.group == null) {
-                return label.compareToIgnoreCase(o.label);
-            }
-
-            /* Things without groups are always sorted after things with groups */
-            if (group == null) {
-                return 1;
-            }
-            if (o.group == null) {
-                return -1;
-            }
-
-            int groupCompare = group.compareToIgnoreCase(o.group);
-            if (groupCompare != 0) {
-                return groupCompare;
-            }
             return label.compareToIgnoreCase(o.label);
         }
     }

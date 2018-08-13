@@ -39,7 +39,7 @@ import processing.event.MouseEvent;
  */
 public class UICollapsibleSection extends UI2dContainer implements UIMouseFocus {
 
-    private static final int PADDING = 4;
+    public static final int PADDING = 4;
     private static final int TITLE_LABEL_HEIGHT = 12;
     private static final int CHEVRON_PADDING = 20;
     private static final int CLOSED_HEIGHT = TITLE_LABEL_HEIGHT + 2*PADDING;
