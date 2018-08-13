@@ -3,8 +3,8 @@ package com.symmetrylabs.slstudio.ui;
 import java.util.List;
 import java.util.ArrayList;
 
-import com.symmetrylabs.layouts.cubes.CubesController;
-import com.symmetrylabs.layouts.cubes.CubesLayout;
+import com.symmetrylabs.shows.cubes.CubesController;
+import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.listenable.SetListener;
 import heronarts.lx.LX;
@@ -22,24 +22,24 @@ public class UIOutputs extends UICollapsibleSection {
 
         private Dispatcher dispatcher;
 
-        public UIOutputs(LX lx, UI ui, CubesLayout layout, float x, float y, float w) {
+        public UIOutputs(LX lx, UI ui, CubesShow show, float x, float y, float w) {
                 super(ui, x, y, w, 124);
 
                 dispatcher = Dispatcher.getInstance(lx);
 
                 outputList = new UIItemList.ScrollList(ui, 0, 22, w-8, 78);
 
-                updateItems(layout);
+                updateItems(show);
                 outputList.setSingleClickActivate(true);
                 outputList.addToContainer(this);
 
-                layout.addControllerSetListener(new SetListener<CubesController>() {
+                show.addControllerSetListener(new SetListener<CubesController>() {
                     public void onItemAdded(final CubesController c) {
                         dispatcher.dispatchUi(() -> {
                             if (c.networkDevice != null) {
                                 c.networkDevice.version.addListener(deviceVersionListener);
                             }
-                            updateItems(layout);
+                            updateItems(show);
                         });
                     }
 
@@ -48,7 +48,7 @@ public class UIOutputs extends UICollapsibleSection {
                             if (c.networkDevice != null) {
                                 c.networkDevice.version.removeListener(deviceVersionListener);
                             }
-                            updateItems(layout);
+                            updateItems(show);
                         });
                     }
                 });
@@ -73,9 +73,9 @@ public class UIOutputs extends UICollapsibleSection {
                 SLStudio.applet.outputControl.enabled.addListener(param -> redraw());
         }
 
-      private void updateItems(CubesLayout layout) {
+      private void updateItems(CubesShow show) {
             final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
-            for (CubesController c : layout.getSortedControllers()) { items.add(new ControllerItem(c)); }
+            for (CubesController c : show.getSortedControllers()) { items.add(new ControllerItem(c)); }
             outputList.setItems(items);
             setTitle(items.size());
             redraw();

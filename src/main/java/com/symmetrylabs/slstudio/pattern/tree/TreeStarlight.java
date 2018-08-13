@@ -8,7 +8,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import com.symmetrylabs.layouts.tree.TreeModel;
+import com.symmetrylabs.shows.kalpa.TreeModel;
 import static com.symmetrylabs.util.MathUtils.*;
 import static com.symmetrylabs.util.MathConstants.*;
 

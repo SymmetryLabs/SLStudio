@@ -7,7 +7,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.DampedParameter;
 
-import com.symmetrylabs.layouts.tree.TreeModel;
+import com.symmetrylabs.shows.kalpa.TreeModel;
 import static com.symmetrylabs.util.MathConstants.*;
 import static com.symmetrylabs.util.MathUtils.*;
 
