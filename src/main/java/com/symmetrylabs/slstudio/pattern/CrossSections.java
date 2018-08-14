@@ -16,9 +16,9 @@ import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 public class CrossSections extends LXPattern {
 
-    final CompoundParameter x = new CompoundParameter("xPos", 0, model.xMin, model.xMax);
-    final CompoundParameter y = new CompoundParameter("yPos", 0, model.yMin, model.yMax);
-    final CompoundParameter z = new CompoundParameter("zPos", 0, model.zMin, model.zMax);
+    final SinLFO x = new SinLFO(model.xMin, model.xMax, 5000);
+    final SinLFO y = new SinLFO(model.yMin, model.yMax, 6000);
+    final SinLFO z = new SinLFO(model.zMin, model.zMax, 7000);
 
     final CompoundParameter xl = new CompoundParameter("xLvl", 1);
     final CompoundParameter yl = new CompoundParameter("yLvl", 1);
@@ -35,9 +35,13 @@ public class CrossSections extends LXPattern {
 
     public CrossSections(LX lx) {
         super(lx);
-        addParameter(x);
-        addParameter(y);
-        addParameter(z);
+        addModulator(x).trigger();
+        addModulator(y).trigger();
+        addModulator(z).trigger();
+        addParams();
+    }
+
+    protected void addParams() {
         addParameter(xr);
         addParameter(yr);
         addParameter(zr);
@@ -47,6 +51,16 @@ public class CrossSections extends LXPattern {
         addParameter(zl);
         addParameter(yw);
         addParameter(zw);
+    }
+
+    public void onParameterChanged(LXParameter p) {
+        if (p == xr) {
+            x.setPeriod(10000 - 8800 * p.getValuef());
+        } else if (p == yr) {
+            y.setPeriod(10000 - 9000 * p.getValuef());
+        } else if (p == zr) {
+            z.setPeriod(10000 - 9000 * p.getValuef());
+        }
     }
 
     float xv, yv, zv;
