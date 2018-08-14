@@ -33,9 +33,7 @@ import com.symmetrylabs.util.Utils;
 
 import static com.symmetrylabs.util.DistanceConstants.*;
 
-public class
-
-SLStudio extends PApplet {
+public class SLStudio extends PApplet {
     public static SLStudio applet;
     public static final Font MONO_FONT = new Font("Inconsolata-Bold-14.vlw", 14, 17);
     public static final String SHOW_FILE_NAME = ".show";
