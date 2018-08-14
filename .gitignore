@@ -8,7 +8,7 @@ SLStudio/\.tags1
 /cache
 dynamic.json
 /project.lxp
-*.lxp
+/*.lxp
 
 
 
