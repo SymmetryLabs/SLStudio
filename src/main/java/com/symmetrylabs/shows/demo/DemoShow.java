@@ -1,8 +1,10 @@
-package com.symmetrylabs.shows.cubes;
+package com.symmetrylabs.shows.demo;
 
 import java.util.*;
 
 import com.symmetrylabs.shows.Show;
+import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.slstudio.model.SLModel;
 
 import heronarts.lx.transform.LXTransform;

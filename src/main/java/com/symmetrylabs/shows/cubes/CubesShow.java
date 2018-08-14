@@ -21,16 +21,16 @@ import heronarts.p3lx.ui.UI2dScrollContext;
  * This file implements the mapping functions needed to lay out the cubes.
  */
 public abstract class CubesShow implements Show {
-    static final float CUBE_WIDTH = 24;
-    static final float CUBE_HEIGHT = 24;
-    static final float CUBE_SPACING = 1.5f;
+    public static final float CUBE_WIDTH = 24;
+    public static final float CUBE_HEIGHT = 24;
+    public static final float CUBE_SPACING = 1.5f;
 
-    static final float TOWER_VERTICAL_SPACING = 2.5f;
-    static final float TOWER_RISER = 14;
-    static final float SP = CUBE_HEIGHT+CUBE_SPACING;
-    static final float JUMP = CUBE_HEIGHT+TOWER_VERTICAL_SPACING;
+    public static final float TOWER_VERTICAL_SPACING = 2.5f;
+    public static final float TOWER_RISER = 14;
+    public static final float SP = CUBE_HEIGHT+CUBE_SPACING;
+    public static final float JUMP = CUBE_HEIGHT+TOWER_VERTICAL_SPACING;
 
-    static final float INCHES_PER_METER = 39.3701f;
+    public static final float INCHES_PER_METER = 39.3701f;
 
     ListenableSet<CubesController> controllers = new ListenableSet<>();
     CubePhysicalIdMap cubePhysicalIdMap = new CubePhysicalIdMap();
@@ -44,37 +44,37 @@ public abstract class CubesShow implements Show {
 
     public static class TowerConfig {
 
-        final CubesModel.Cube.Type type;
-        final float x;
-        final float y;
-        final float z;
-        final float xRot;
-        final float yRot;
-        final float zRot;
-        final String[] ids;
-        final float[] yValues;
+        public final CubesModel.Cube.Type type;
+        public final float x;
+        public final float y;
+        public final float z;
+        public final float xRot;
+        public final float yRot;
+        public final float zRot;
+        public final String[] ids;
+        public final float[] yValues;
 
-        TowerConfig(float x, float y, float z, String[] ids) {
+        public TowerConfig(float x, float y, float z, String[] ids) {
             this(CubesModel.Cube.Type.LARGE, x, y, z, ids);
         }
 
-        TowerConfig(float x, float y, float z, float yRot, String[] ids) {
+        public TowerConfig(float x, float y, float z, float yRot, String[] ids) {
             this(x, y, z, 0, yRot, 0, ids);
         }
 
-        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, String[] ids) {
+        public TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, String[] ids) {
             this(type, x, y, z, 0, 0, 0, ids);
         }
 
-        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float yRot, String[] ids) {
+        public TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float yRot, String[] ids) {
             this(type, x, y, z, 0, yRot, 0, ids);
         }
 
-        TowerConfig(float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
+        public TowerConfig(float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
             this(CubesModel.Cube.Type.LARGE, x, y, z, xRot, yRot, zRot, ids);
         }
 
-        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
+        public TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
             this.type = type;
             this.x = x;
             this.y = y;

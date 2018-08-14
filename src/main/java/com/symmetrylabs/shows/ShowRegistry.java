@@ -2,16 +2,17 @@ package com.symmetrylabs.shows;
 
 import java.util.*;
 
-import com.symmetrylabs.shows.cubes.OfficeShow;
+import com.symmetrylabs.shows.demo.DemoShow;
+import com.symmetrylabs.shows.office.OfficeShow;
 import com.symmetrylabs.shows.pilots.PilotsShow;
 import processing.core.PApplet;
 
-import com.symmetrylabs.shows.cubes.*;
 import com.symmetrylabs.shows.oslo.OsloShow;
 import com.symmetrylabs.shows.oslo.TreeModel;
 import com.symmetrylabs.shows.composite.CompositeShow;
 import com.symmetrylabs.shows.obj.ObjShow;
 import com.symmetrylabs.shows.kalpa.*;
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
 
 public class ShowRegistry {
     static ShowBuilder DEFAULT_BUILDER = () -> new DemoShow();

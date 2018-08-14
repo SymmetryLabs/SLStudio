@@ -1,6 +1,4 @@
-package com.symmetrylabs.shows.cubes;
-
-//package com.symmetrylabs.shows.cubes;
+package com.symmetrylabs.shows.summerstage;
 
 import java.util.*;
 import java.io.BufferedReader;
@@ -9,6 +7,10 @@ import java.io.IOException;
 import java.lang.Float;
 
 
+import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.shows.cubes.CubesShow;
+import com.symmetrylabs.shows.cubes.UIMappingPanel;
+import com.symmetrylabs.shows.cubes.UIOutputs;
 import com.symmetrylabs.slstudio.model.SLModel;
 
 import heronarts.lx.transform.LXTransform;
@@ -17,7 +19,6 @@ import heronarts.p3lx.ui.UI2dScrollContext;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.util.Utils;
 import static com.symmetrylabs.util.DistanceUtils.*;
-
 
 /**
  * This file implements the mapping functions needed to lay out the cubes.
