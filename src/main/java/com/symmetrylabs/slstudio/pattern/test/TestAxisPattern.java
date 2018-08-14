@@ -42,9 +42,9 @@ public class TestAxisPattern extends LXPattern {
     }
 
     protected void updateXYZVals() {
-        xv = x.getValuef() * model.xRange;
-        yv = y.getValuef() * model.yRange;
-        zv = z.getValuef() * model.zRange;
+        xv = model.xMin + x.getValuef() * model.xRange;
+        yv = model.yMin + y.getValuef() * model.yRange;
+        zv = model.zMin + z.getValuef() * model.zRange;
     }
 
 
