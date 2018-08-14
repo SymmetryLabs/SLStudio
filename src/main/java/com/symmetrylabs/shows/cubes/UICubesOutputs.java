@@ -15,12 +15,12 @@ import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.IntListener;
 
-public class UIOutputs extends UICollapsibleSection {
+public class UICubesOutputs extends UICollapsibleSection {
         private final UIItemList.ScrollList outputList;
 
         private Dispatcher dispatcher;
 
-        public UIOutputs(LX lx, UI ui, CubesShow show, float x, float y, float w) {
+        public UICubesOutputs(LX lx, UI ui, CubesShow show, float x, float y, float w) {
                 super(ui, x, y, w, 724);
 
                 dispatcher = Dispatcher.getInstance(lx);

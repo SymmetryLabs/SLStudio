@@ -17,10 +17,10 @@ import com.symmetrylabs.slstudio.SLStudio;
 /**
  * Mapping Mode: UI Window
  */
-public class UIMappingPanel extends UICollapsibleSection {
+public class UICubesMappingPanel extends UICollapsibleSection {
     private CubesMappingMode mappingMode;
 
-    public UIMappingPanel(LX lx, UI ui, float x, float y, float w) {
+    public UICubesMappingPanel(LX lx, UI ui, float x, float y, float w) {
         super(ui, x, y, w, 124);
 
         mappingMode = CubesMappingMode.getInstance(lx);
