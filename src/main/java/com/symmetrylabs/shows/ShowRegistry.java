@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.symmetrylabs.shows.cubes.OfficeShow;
 import com.symmetrylabs.shows.pilots.PilotsShow;
+import com.symmetrylabs.shows.usopen.USOpenShow;
 import processing.core.PApplet;
 
 import com.symmetrylabs.shows.cubes.*;
