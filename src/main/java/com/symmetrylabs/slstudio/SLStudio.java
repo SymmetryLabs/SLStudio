@@ -15,6 +15,7 @@ import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import processing.core.PFont;
 
 import com.symmetrylabs.slstudio.mappings.Mappings;
@@ -113,11 +114,15 @@ public class SLStudio extends PApplet {
 
                 show.setupLx(lx);
 
-                lx.engine.output.brightness.addListener(parameter -> {
-                    if (parameter.getValuef() > 0.90f) {
-                        parameter.setValue(0.90f);
+                LXParameterListener limitListener = (parameter) -> {
+                    float maxBrightness = 0.75f;
+                    if (parameter.getValuef() > maxBrightness) {
+                        parameter.setValue(maxBrightness);
                     }
-                });
+                };
+
+                lx.engine.output.brightness.addListener(limitListener);
+                limitListener.onParameterChanged(lx.engine.output.brightness);
 
                 if (TreeModelingTool.isTreeShow()) {
                     treeModelingTool = new TreeModelingTool(lx);
