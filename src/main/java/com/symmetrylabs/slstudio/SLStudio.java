@@ -6,6 +6,7 @@ import java.util.Map;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.kalpa.Anemometer;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
+import com.symmetrylabs.slstudio.performance.MidiFighterListener;
 import heronarts.lx.LX;
 import com.symmetrylabs.shows.ShowRegistry;
 import com.symmetrylabs.shows.kalpa.TreeModelingTool;
@@ -112,6 +113,12 @@ public class SLStudio extends PApplet {
 
                 show.setupLx(lx);
 
+                lx.engine.output.brightness.addListener(parameter -> {
+                    if (parameter.getValuef() > 0.90f) {
+                        parameter.setValue(0.90f);
+                    }
+                });
+
                 if (TreeModelingTool.isTreeShow()) {
                     treeModelingTool = new TreeModelingTool(lx);
                     lx.engine.registerComponent("treeModelingTool", treeModelingTool);
@@ -128,8 +135,12 @@ public class SLStudio extends PApplet {
                 lx.engine.registerComponent("outputControl", outputControl);
                 mappingPixlites = setupPixlites();
 
-                SLStudio.this.apc40Listener = new APC40Listener(lx);
-                new FoxListener(lx);
+                lx.engine.midi.whenReady(new Runnable() {
+                    @Override
+                    public void run() {
+                        MidiFighterListener.bindMidi(lx);
+                    }
+                });
 
                 // SLStudio.this.performanceManager = new PerformanceManager(lx);
                 // lx.engine.registerComponent("performanceManager", performanceManager);
@@ -165,8 +176,8 @@ public class SLStudio extends PApplet {
         lx.engine.isChannelMultithreaded.setValue(true);
         lx.engine.isNetworkMultithreaded.setValue(true);
         lx.engine.audio.enabled.setValue(false);
-        lx.engine.output.enabled.setValue(true);
-        lx.engine.framesPerSecond.setValue(120);
+        lx.engine.output.enabled.setValue(false);
+        lx.engine.framesPerSecond.setValue(60);
 
     //performanceManager.start(lx.ui);
 
