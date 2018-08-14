@@ -16,7 +16,7 @@ import processing.core.PVector;
 
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
-import com.symmetrylabs.layouts.cubes.CubesModel;
+import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.color.Ops8;

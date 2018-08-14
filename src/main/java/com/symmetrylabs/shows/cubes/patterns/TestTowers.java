@@ -1,6 +1,6 @@
-package com.symmetrylabs.layouts.cubes.patterns;
+package com.symmetrylabs.shows.cubes.patterns;
 
-import com.symmetrylabs.layouts.cubes.CubesModel;
+import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;

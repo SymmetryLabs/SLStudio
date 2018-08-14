@@ -1541,7 +1541,7 @@
           },
           {
             "id": 6676,
-            "class": "com.symmetrylabs.layouts.cubes.patterns.TestTowers",
+            "class": "com.symmetrylabs.shows.cubes.patterns.TestTowers",
             "modulationColor": -15728385,
             "parameters": {
               "label": "TestTowers",
