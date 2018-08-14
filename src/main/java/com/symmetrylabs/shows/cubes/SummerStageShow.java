@@ -294,7 +294,7 @@ public class SummerStageShow extends CubesShow {
             new TowerConfig(SP * 2, SP * 0, SP * 0, new String[][]{new String[]{"723", "722"}, new String[]{"737", "736"}, new String[]{"859", "858"}}), //new String[]{"851", "850"}
             // col 4
             new TowerConfig(SP * 3, SP * 1, SP * 0, new String[][]{new String[]{"561", "560"}, new String[]{"843", "842"}, new String[]{"591", "590"}}), //new String[]{"723", "722"}
-            new TowerConfig(SP * 3, SP * 0, SP * 0, 180, 0, 0,  new String[][]{new String[]{"851", "850"}})
+            new TowerConfig(SP * 3, SP * 2 - (2 * CUBE_SPACING), SP * 0, 180, 180, 0, new String[][]{new String[]{"851", "850"}})
         }),
 
         new ClusterConfig("CLUSTER_X", SP*36, SP*13, 0, new TowerConfig[]{
@@ -493,11 +493,15 @@ public class SummerStageShow extends CubesShow {
                 float x = config.x;
                 float z = config.z;
 
+                float rX = config.xRot;
+                float rY = config.yRot;
+                float rZ = config.zRot;
+
                 for (int i = 0; i < config.ids.length; i++) {
                     String idA = config.ids[i][0];
                     String idB = config.ids[i][1];
                     float y = config.yValues[i];
-                    CubesModel.DoubleControllerCube cube = new CubesModel.DoubleControllerCube(idA, idB, x, y, z, 0, 0, 0, globalTransform);
+                    CubesModel.DoubleControllerCube cube = new CubesModel.DoubleControllerCube(idA, idB, x, y, z, rX, rY, rZ, globalTransform);
                     cubes.add(cube);
                     allCubes.add(cube);
                 }
