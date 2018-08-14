@@ -259,7 +259,7 @@ public class SummerStageLayout extends CubesLayout {
         new ClusterConfig("CLUSTER_D", SP*13, SP*14, 0, new TowerConfig[]{
             // col 1
             new TowerConfig(SP * 0, SP * 1, SP * -1, new String[][]{new String[]{"509", "508"}, new String[]{"567", "566"}, new String[]{"583", "582"}}),
-            new TowerConfig(SP * 0, SP * 1, SP * -2, new String[][]{new String[]{"679", "678"}, new String[]{"1046", "1054"}, new String[]{"787", "786"}}),  //643. 642 ->> 1046 , 1045 - AS OF 8/3/18
+            new TowerConfig(SP * 0, SP * 1, SP * -2, new String[][]{new String[]{"679", "678"}, new String[]{"1046", "1045"}, new String[]{"787", "786"}}),  //643. 642 ->> 1046 , 1045 - AS OF 8/3/18
             // col 2
             new TowerConfig(SP * 1, SP * 0, SP * 0, new String[][]{new String[]{"765", "764"}, new String[]{"609", "608"}, new String[]{"781", "780"}, new String[]{"669", "668"}}),
             new TowerConfig(SP * 1, SP * 1, SP * -1, new String[][]{new String[]{"603", "602"}, new String[]{"821", "820"}, new String[]{"809", "808"}, new String[]{"721", "720"}}),
@@ -289,11 +289,11 @@ public class SummerStageLayout extends CubesLayout {
             new TowerConfig(SP * 1, SP * 1, SP * -1, new String[][]{new String[]{"1092", "694"}, new String[]{"611", "610"}, new String[]{"653", "652"}}),
             // col 3
             new TowerConfig(SP * 2, SP * 0, SP * 0, new String[][]{new String[]{"857", "?12"}}),
-            new TowerConfig(SP * 2, SP * 2, SP * 0, new String[][]{new String[]{"?", "788"}, new String[]{"801", "800"}}),
+            new TowerConfig(SP * 2, SP * 2, SP * 0, new String[][]{new String[]{"651", "650"}, new String[]{"801", "800"}}),
             new TowerConfig(SP * 2, SP * 0, SP * -1, new String[][]{new String[]{"621", "952"}, new String[]{"789", "788"}, new String[]{"635", "634"}, new String[]{"633", "632"}}),
             // col 4
             new TowerConfig(SP * 3, SP * 1, SP * 0, new String[][]{new String[]{"671", "670"}, new String[]{"689", "688"}}),
-            new TowerConfig(SP * 3, SP * 1, SP * -1, new String[][]{new String[]{"FLICKER-867", "866"}, new String[]{"585", "584"}}) // 867 was flickering
+            new TowerConfig(SP * 3, SP * 1, SP * -1, new String[][]{new String[]{"867", "866"}, new String[]{"585", "584"}}) // 867 was flickering
         }),
 
         new ClusterConfig("CLUSTER_Y", SP*32, SP*13, 0, new TowerConfig[]{
