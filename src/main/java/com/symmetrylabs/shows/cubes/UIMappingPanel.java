@@ -67,7 +67,7 @@ public class UIMappingPanel extends UICollapsibleSection {
             final UILabel selectedFixtureLabel = new UILabel(0, 24, getContentWidth(), 54)
                 .setLabel("");
             selectedFixtureLabel.setBackgroundColor(0xff333333)
-                .setFont(SLStudio.applet.createFont("ArialUnicodeMS-10.vlw", 43))
+                .setFont(SLStudio.applet.createFont("ArialUnicodeMS-10.vlw", 20))
                 .setTextAlignment(PConstants.CENTER, PConstants.TOP);
             selectedFixtureLabel.addToContainer(this);
             mappingMode.selectedMappedFixture.addListener(new LXParameterListener() {
@@ -117,7 +117,7 @@ public class UIMappingPanel extends UICollapsibleSection {
             final UILabel selectedFixtureLabel = new UILabel(0, 24, getContentWidth(), 54)
                 .setLabel("");
             selectedFixtureLabel.setBackgroundColor(0xff333333)
-                .setFont(SLStudio.applet.createFont("ArialUnicodeMS-10.vlw", 43))
+                .setFont(SLStudio.applet.createFont("ArialUnicodeMS-10.vlw", 20))
                 .setTextAlignment(PConstants.CENTER, PConstants.TOP);
             selectedFixtureLabel.addToContainer(this);
             mappingMode.selectedUnMappedFixture.addListener(new LXParameterListener() {

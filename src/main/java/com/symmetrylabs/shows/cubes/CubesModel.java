@@ -27,12 +27,13 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
     protected final List<Cube> cubes = new ArrayList<>();
     protected final List<Face> faces = new ArrayList<>();
     protected final Map<String, Cube> cubeTable = new HashMap<>();
+    protected final Map<String, DoubleControllerCube> cubeTableA = new HashMap<>();
+    protected final Map<String, DoubleControllerCube> cubeTableB = new HashMap<>();
+
 
     private final List<Tower> towersUnmodifiable = Collections.unmodifiableList(towers);
     private final List<Cube> cubesUnmodifiable = Collections.unmodifiableList(cubes);
     private final List<Face> facesUnmodifiable = Collections.unmodifiableList(faces);
-
-    private final Cube[] _cubes;
 
     public CubesModel() {
         this(new ArrayList<>(), new Cube[0]);
@@ -42,14 +43,17 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         super(new Fixture(cubeArr));
         Fixture fixture = (Fixture) this.fixtures.get(0);
 
-        _cubes = cubeArr;
-
         for (Tower tower : towers) {
             this.towers.add(tower);
 
             for (Cube cube : tower.getCubes()) {
                 if (cube != null) {
                     this.cubeTable.put(cube.id, cube);
+                    if (cube instanceof DoubleControllerCube) {
+                        DoubleControllerCube c2 = (DoubleControllerCube) cube;
+                        this.cubeTableA.put(c2.idA, c2);
+                        this.cubeTableB.put(c2.idB, c2);
+                    }
                     this.cubes.add(cube);
                     this.faces.addAll(cube.getFaces());
                     this.strips.addAll(cube.getStrips());
@@ -82,18 +86,18 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         }
     }
 
-    /**
-     * TODO(mcslee): figure out better solution
-     *
-     * @param index
-     * @return
-     */
-    public Cube getCubeByRawIndex(int index) {
-        return _cubes[index];
-    }
-
     public Cube getCubeById(String id) {
         return this.cubeTable.get(id);
+    }
+
+    public PointsGrouping getDoubleCubePoints(String controllerId) {
+        if (cubeTableA.containsKey(controllerId)) {
+            return cubeTableA.get(controllerId).getPointsA();
+        }
+        if (cubeTableB.containsKey(controllerId)) {
+            return cubeTableB.get(controllerId).getPointsB();
+        }
+        return null;
     }
 
     /**
@@ -149,7 +153,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
             this.idB = idB;
         }
 
-        public PointsGrouping getPointsA() {
+        public PointsGrouping getPointsB() {
             return new PointsGrouping()
                 .addPoints(getStrips().get(11).getPoints())
                 .addPoints(getStrips().get(8).getPoints())
@@ -159,7 +163,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
                 .addPoints(getStrips().get(9).getPoints());
         }
 
-        public PointsGrouping getPointsB() {
+        public PointsGrouping getPointsA() {
             return new PointsGrouping()
                 .addPoints(getStrips().get(0).getPoints())
                 .addPoints(getStrips().get(3).getPoints())

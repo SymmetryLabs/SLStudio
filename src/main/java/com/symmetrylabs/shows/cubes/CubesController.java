@@ -307,9 +307,9 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 
     private void connectionWarning() {
         if (dsocket != null) {
-            System.err.println("Disconnected from OPC server");
+            // System.err.println("Disconnected from OPC server");
         }
-        System.err.println("Failed to connect to OPC server " + host);
+        // System.err.println("Failed to connect to OPC server " + host);
     }
 
     private void resetSocket() {

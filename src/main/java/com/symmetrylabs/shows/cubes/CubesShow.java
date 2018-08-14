@@ -133,6 +133,8 @@ public abstract class CubesShow implements Show {
                 controller.enabled.setValue(isEnabled);
             }
         });
+
+        System.out.println("set up controllers");
     }
 
     public CubesController getControllerByDevice(NetworkDevice device) {
