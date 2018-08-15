@@ -61,10 +61,10 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
     public final Timer timer = new Timer();
 
     /**
-     * Subclasses may define their own group name by hiding this static field.
-     * It is used to determine which group a pattern should be placed in in
-     * the left-hand sidebar UI. The default value of null puts it in the
-     * "Uncategorized" group.
+     * Subclasses may declare their own group name by defining a static
+     * String field named GROUP_NAME. It is used to determine which group
+     * a pattern should be placed in in the left-hand sidebar UI. The
+     * default value of null puts it in the "Uncategorized" group.
      */
     public static String GROUP_NAME = null;
 
