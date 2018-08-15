@@ -38,9 +38,4 @@ public class ObjShow implements Show {
         WeakReference<ObjShow> weakRef = instanceByLX.get(lx);
         return weakRef == null ? null : weakRef.get();
     }
-
-    @Override
-    public String getShowName() {
-        return "obj";
-    }
 }

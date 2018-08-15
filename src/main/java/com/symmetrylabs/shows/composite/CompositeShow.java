@@ -244,11 +244,6 @@ public class CompositeShow implements Show {
         return new CompositeModel(strips);
     }
 
-    @Override
-    public String getShowName() {
-        return "composite";
-    }
-
     private static Map<LX, WeakReference<CompositeShow>> instanceByLX = new WeakHashMap<>();
 
     public static CompositeShow getInstance(LX lx) {

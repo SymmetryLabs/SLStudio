@@ -125,9 +125,4 @@ public class DemoShow extends CubesShow implements Show {
 
         return new CubesModel(towers, allCubesArr);
     }
-
-    @Override
-    public String getShowName() {
-        return "demo";
-    }
 }

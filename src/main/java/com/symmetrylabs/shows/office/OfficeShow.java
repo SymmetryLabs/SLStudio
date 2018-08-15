@@ -96,9 +96,4 @@ public class OfficeShow extends CubesShow implements Show {
 
         return new CubesModel(towers, allCubesArr);
     }
-
-    @Override
-    public String getShowName() {
-        return "office";
-    }
 }
