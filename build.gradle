@@ -101,6 +101,7 @@ dependencies {
 	implementation 'org.jcodec:jcodec:0.2.2'
 
 	implementation group: 'uk.co.caprica', name: 'vlcj', version: '3.10.1'
+	implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
 
 	implementation project(':p3lx')
 
