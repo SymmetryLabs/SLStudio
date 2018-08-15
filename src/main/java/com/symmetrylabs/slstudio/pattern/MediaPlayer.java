@@ -1,66 +1,88 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.jogamp.common.net.Uri;
-import com.jogamp.opengl.util.av.GLMediaPlayer;
-import com.jogamp.opengl.util.av.GLMediaPlayerFactory;
-import com.jogamp.opengl.util.texture.TextureSequence;
+import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
-import heronarts.p3lx.P3LX;
-import processing.opengl.PJOGL;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.transform.LXVector;
+import org.jcodec.api.FrameGrab;
+import org.jcodec.api.JCodecException;
+import org.jcodec.common.SeekableDemuxerTrack;
+import org.jcodec.common.io.NIOUtils;
+import org.jcodec.common.model.ColorSpace;
+import org.jcodec.common.model.Picture;
+import org.jcodec.scale.ColorUtil;
+import org.jcodec.scale.Transform;
 
-import java.net.URISyntaxException;
+import java.io.File;
+import java.io.IOException;
 
 public class MediaPlayer extends SLPattern<SLModel> {
-    GLMediaPlayer mediaPlayer;
+    private FrameGrab video;
+    private SeekableDemuxerTrack track;
+    private double time = 0;
+    private double videoLengthMs = 0;
 
     public MediaPlayer(LX lx) {
         super(lx);
-        mediaPlayer = GLMediaPlayerFactory.createDefault();
 
-        Uri mediaUri = null;
+        File file = new File("C:/Users/willh/code/Symmetry/cube-arig-usc-v1.mp4");
         try {
-            mediaUri = Uri.create("file", "", "/Users/willh/Downloads/LED-Cube-Test_Arig-USC-v1.mov", "");
-        } catch (URISyntaxException e) {
+            video = FrameGrab.createFrameGrab(NIOUtils.readableChannel(file));
+            System.out.println("loaded video");
+        } catch (JCodecException | IOException e) {
             e.printStackTrace();
-            return;
+            video = null;
         }
 
-        mediaPlayer.addEventListener(new GLMediaPlayer.GLMediaEventListener() {
-            @Override
-            public void attributesChanged(GLMediaPlayer glMediaPlayer, int i, long l) {
-                if ((i & EVENT_CHANGE_EOS) != 0) {
-                    System.out.println("end of stream");
-                }
-                if ((i & EVENT_CHANGE_ERR) != 0) {
-                    System.out.println("stream error in GL player");
-                }
-                if ((i & EVENT_CHANGE_INIT) != 0) {
-                    System.out.println("stream initialized");
-                }
-            }
+        if (video != null) {
+            track = video.getVideoTrack();
+            videoLengthMs = track.getMeta().getTotalDuration() * 1000;
 
-            @Override
-            public void newFrameAvailable(GLMediaPlayer glMediaPlayer, TextureSequence.TextureFrame textureFrame, long l) {
-                System.out.println("new frame available");
+            /*
+            try {
+                video.seekToSecondSloppy(30.0);
+                Picture nativeFrame = video.getNativeFrame();
+                Transform xform = ColorUtil.getTransform(nativeFrame.getColor(), ColorSpace.RGB);
+                picture = Picture.create(nativeFrame.getWidth(), nativeFrame.getHeight(), ColorSpace.RGB);
+                xform.transform(nativeFrame, picture);
+            } catch (IOException | JCodecException e) {
+                e.printStackTrace();
             }
-        });
-
-        mediaPlayer.initStream(
-            mediaUri,
-            GLMediaPlayer.STREAM_ID_AUTO,
-            GLMediaPlayer.STREAM_ID_NONE,
-            GLMediaPlayer.TEXTURE_COUNT_DEFAULT);
-        try {
-            mediaPlayer.initGL(((PJOGL) ((P3LX) lx).applet.beginPGL()).gl);
-        } catch (GLMediaPlayer.StreamException e) {
-            System.out.println("couldn't initialize GL for media player:");
-            e.printStackTrace();
+            */
         }
     }
 
     @Override
     public void run(double elapsedMs) {
+        time += elapsedMs;
+        while (time > videoLengthMs) {
+            time -= videoLengthMs;
+        }
+
+        Picture nativeFrame;
+        try {
+            video.getVideoTrack().nextFrame();
+            nativeFrame = video.getNativeFrame();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        Transform xform = ColorUtil.getTransform(nativeFrame.getColor(), ColorSpace.RGB);
+        Picture picture = Picture.create(nativeFrame.getWidth(), nativeFrame.getHeight(), ColorSpace.RGB);
+        xform.transform(nativeFrame, picture);
+        byte[] data = picture.getPlaneData(0);
+
+        for (LXVector v : getVectors()) {
+            int i = (int) v.y;
+            int j = (int) v.x;
+            int dataIdx = 3 * (picture.getWidth() * i + j);
+            colors[v.index] = LXColor.rgb(
+                data[dataIdx + 0] + 128,
+                data[dataIdx + 1] + 128,
+                data[dataIdx + 2] + 128);
+        }
     }
 }
