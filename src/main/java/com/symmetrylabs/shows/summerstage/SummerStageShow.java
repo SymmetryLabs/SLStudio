@@ -518,4 +518,9 @@ public class SummerStageShow extends CubesShow {
         new UICubesOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UICubesMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
     }
+
+    @Override
+    public String getShowName() {
+        return "summerstage";
+    }
 }

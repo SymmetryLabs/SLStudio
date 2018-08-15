@@ -126,4 +126,9 @@ public class PilotsShow implements Show {
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
     }
+
+    @Override
+    public String getShowName() {
+        return SHOW_NAME;
+    }
 }

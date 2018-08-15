@@ -105,6 +105,11 @@ public class KalpaShow extends TreeShow implements Show {
         // ui.preview.addComponent(uiTreeLeaves);
         // new UITreeControls(ui, uiTreeStructure, uiTreeLeaves).setExpanded(false).addToContainer(ui.leftPane.global);
     }
+
+    @Override
+    public String getShowName() {
+        return "kalpa";
+    }
 }
 
 //class PixliteOutput extends LXOutputGroup {

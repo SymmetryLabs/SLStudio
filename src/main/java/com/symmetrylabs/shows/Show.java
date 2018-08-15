@@ -21,4 +21,11 @@ public interface Show {
      * and register additional 3-D objects to be rendered in the display.
      */
     default void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {}
+
+    /**
+     * Returns the string identifier for this show. This should match the string
+     * the show is associated with in ShowRegistry, and should also match the
+     * GROUP_NAME of all patterns written for this show.
+     */
+    String getShowName();
 }
