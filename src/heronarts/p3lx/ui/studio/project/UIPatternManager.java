@@ -66,10 +66,20 @@ public class UIPatternManager extends UICollapsibleSection {
             Collections.sort(ps);
         }
         List<String> groupNames = new ArrayList<>(groups.keySet());
+
+        String activeGroup = ui.getActivePatternGroup();
         Collections.sort(groupNames, (a, b) -> {
-            if (a == null && b == null) return 0;
-            if (a == null) return -1;
-            if (b == null) return 1;
+            int aSortKey, bSortKey;
+            if (activeGroup != null) {
+                aSortKey = a == null ? 0 : a.equals(activeGroup) ? -1 : 1;
+                bSortKey = b == null ? 0 : b.equals(activeGroup) ? -1 : 1;
+            } else {
+                aSortKey = a == null ? 0 : 1;
+                bSortKey = b == null ? 0 : 1;
+            }
+            int sortKeyCompare = Integer.compare(aSortKey, bSortKey);
+            if (sortKeyCompare != 0)
+                return sortKeyCompare;
             return a.compareToIgnoreCase(b);
         });
 
