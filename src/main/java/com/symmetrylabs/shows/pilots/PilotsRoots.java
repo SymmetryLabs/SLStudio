@@ -22,6 +22,8 @@ import heronarts.lx.transform.LXVector;
 import java.util.*;
 
 public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
+    public static final String GROUP_NAME = PilotsShow.SHOW_NAME;
+
     private DiscreteParameter countParam = new DiscreteParameter("count", 6, 0, 12);
     /* LEDs per second */
     private DiscreteParameter gapSpeedParam = new DiscreteParameter("speed", 90, 1, 500);

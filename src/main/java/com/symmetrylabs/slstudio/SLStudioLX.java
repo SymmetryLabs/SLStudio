@@ -626,6 +626,11 @@ public class SLStudioLX extends P3LX {
             captionText.setAnchor(6, -6 - numLines * SLStudio.MONO_FONT.lineHeight);
             warningText.setText(text);
         }
+
+        @Override
+        public String getActivePatternGroup() {
+            return ((SLStudio) applet).getSelectedShowName();
+        }
     }
 
     public final UI ui;

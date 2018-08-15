@@ -21,6 +21,8 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class PilotsSpirits<T extends Strip> extends SLPattern<StripsModel<T>> {
+    public static final String GROUP_NAME = PilotsShow.SHOW_NAME;
+
     private CompoundParameter spiritSizeParam = new CompoundParameter("size", 30, 1, 200);
     private CompoundParameter spiritHeartParam = new CompoundParameter("heart", 30, 1, 200);
     private BooleanParameter autoChaseParam = new BooleanParameter("autochase", false);
