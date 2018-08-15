@@ -150,7 +150,10 @@ public class UIPatternList extends UIItemList.ScrollList {
 
         @Override
         public String getLabel() {
-            return this.pattern.getLabel();
+            String groupName = LXPattern.getGroupName(pattern.getClass());
+            if (groupName != null)
+                return String.format("%s / %s", groupName, pattern.getLabel());
+            return pattern.getLabel();
         }
 
         @Override

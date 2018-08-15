@@ -928,4 +928,17 @@ public class UI implements LXEngine.Dispatch {
             }
         }
     }
+
+    /**
+     * Returns the currently-active pattern group.
+     *
+     * The active pattern group is sorted before all other pattern groups
+     * in the pattern browser. The default implementation returns null,
+     * which signals that there is no active pattern group, and so the
+     * default sort order (which places uncategorized patterns first and
+     * all other groups afterwards, sorted alphabetically) is used.
+     */
+    public String getActivePatternGroup() {
+        return null;
+    }
 }
