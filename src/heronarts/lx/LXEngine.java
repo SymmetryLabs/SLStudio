@@ -24,6 +24,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.symmetrylabs.color.Spaces;
+import com.symmetrylabs.util.dmx.DMXEngine;
+import com.symmetrylabs.util.dmx.LXEngineDMXManager;
 import heronarts.lx.audio.LXAudioEngine;
 import heronarts.lx.blend.AddBlend;
 import heronarts.lx.blend.DarkestBlend;
@@ -102,6 +104,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     public final LXMappingEngine mapping = new LXMappingEngine();
 
     public final LXOscEngine osc;
+
+    public final DMXEngine dmx;
 
     public final LXScriptEngine script;
 
@@ -520,6 +524,9 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         // OSC engine
         this.osc = new LXOscEngine(lx);
         LX.initTimer.log("Engine: Osc");
+
+        this.dmx = this.artNet.getDMXEngine();
+        LXEngineDMXManager.configure(this);
 
         // Script engine
         this.script = new LXScriptEngine(lx);
