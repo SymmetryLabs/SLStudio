@@ -1,3 +1,9 @@
 [submodule "submodules/openpixelcontrol"]
 	path = submodules/openpixelcontrol
 	url = git@github.com:SymmetryLabs/openpixelcontrol.git
+[submodule "submodules/LX"]
+	path = submodules/LX
+	url = https://github.com/SymmetryLabs/LX.git
+[submodule "submodules/P3LX"]
+	path = submodules/P3LX
+	url = https://github.com/SymmetryLabs/P3LX.git
