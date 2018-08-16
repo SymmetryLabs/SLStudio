@@ -247,40 +247,40 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     public class TimerStatistics {
         private class TimerPair {
-            long nanos;
+            long elapsedNanos;
             long recordedAtNanos;
-            TimerPair(long nanos, long recordedAtNanos) {
-                this.nanos = nanos;
+            TimerPair(long elapsedNanos, long recordedAtNanos) {
+                this.elapsedNanos = elapsedNanos;
                 this.recordedAtNanos = recordedAtNanos;
             }
         }
 
-        private static final long KEEP_RUN_TIME_PAIRS_FOR_NANOS     = 100000000l;
-        private static final long KEEP_RUN_TIME_PAIRS_FOR_AVG_NANOS = 5000000000l;
-        private static final long KEEP_RUN_TIME_PAIRS_COUNT = 100;
-        private final Queue<TimerPair> runTimerPairs = new ArrayDeque<TimerPair>();
+        private static final long KEEP_TIME_PAIRS_FOR_NANOS = 100000000l;
+        private static final long KEEP_TIME_PAIRS_FOR_AVG_NANOS = 5000000000l;
+        private static final long KEEP_TIME_PAIRS_COUNT = 100;
+        private final Queue<TimerPair> runTimerPairs = new ArrayDeque<>();
 
         /** The time taken in the last run */
-        public long runLastNanos = 0;
+        public long lastNanos = 0;
         /** Technically, both current and avg are averages, but currentNanos
          *  averages over a much smaller window of time and is meant to
          *  represent a stable view of what is happening right now. */
-        public long runCurrentNanos = 0;
+        public long currentNanos = 0;
         /** A longer-windowed running average */
-        public long runAvgNanos = 0;
+        public long avgNanos = 0;
         /** The best time in the queue (using the AVG_NANOS window) */
-        public long runBestNanos = 0;
+        public long bestNanos = 0;
         /** The worst time in the queue (using the AVG_NANOS window) */
-        public long runWorstNanos = 0;
+        public long worstNanos = 0;
 
-        public void addRunTime(long runNanos, long nowNanos) {
-            long expireNanos = nowNanos - KEEP_RUN_TIME_PAIRS_FOR_NANOS;
-            long expireAvgNanos = nowNanos - KEEP_RUN_TIME_PAIRS_FOR_AVG_NANOS;
-            while (this.runTimerPairs.size() > KEEP_RUN_TIME_PAIRS_COUNT
+        public void addTime(long elapsedNanos, long nowNanos) {
+            long expireNanos = nowNanos - KEEP_TIME_PAIRS_FOR_NANOS;
+            long expireAvgNanos = nowNanos - KEEP_TIME_PAIRS_FOR_AVG_NANOS;
+            while (this.runTimerPairs.size() > KEEP_TIME_PAIRS_COUNT
                             && this.runTimerPairs.peek().recordedAtNanos < expireAvgNanos) {
                 this.runTimerPairs.remove();
             }
-            this.runTimerPairs.add(new TimerPair(runNanos, nowNanos));
+            this.runTimerPairs.add(new TimerPair(elapsedNanos, nowNanos));
             long accum = 0;
             int count = 0;
             long accumAvg = 0;
@@ -288,22 +288,22 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             long best = Long.MAX_VALUE;
             for (TimerPair pair : this.runTimerPairs) {
                 if (pair.recordedAtNanos > expireNanos) {
-                    accum += pair.nanos;
+                    accum += pair.elapsedNanos;
                     count++;
                 }
-                accumAvg += pair.nanos;
-                if (pair.nanos > worst) {
-                    worst = pair.nanos;
+                accumAvg += pair.elapsedNanos;
+                if (pair.elapsedNanos > worst) {
+                    worst = pair.elapsedNanos;
                 }
-                if (pair.nanos < best) {
-                    best = pair.nanos;
+                if (pair.elapsedNanos < best) {
+                    best = pair.elapsedNanos;
                 }
             }
-            this.runLastNanos = runNanos;
-            this.runCurrentNanos = count > 0 ? accum / count : runNanos;
-            this.runAvgNanos = accumAvg / this.runTimerPairs.size();
-            this.runWorstNanos = worst;
-            this.runBestNanos = best;
+            this.lastNanos = elapsedNanos;
+            this.currentNanos = count > 0 ? accum / count : elapsedNanos;
+            this.avgNanos = accumAvg / this.runTimerPairs.size();
+            this.worstNanos = worst;
+            this.bestNanos = best;
         }
     }
 
@@ -323,12 +323,12 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         public long outputNanos = 0;
 
         private void addRunTime(long runNanos, long nowNanos) {
-            ts.addRunTime(runNanos, nowNanos);
-            this.runLastNanos = ts.runLastNanos;
-            this.runCurrentNanos = ts.runCurrentNanos;
-            this.runAvgNanos = ts.runAvgNanos;
-            this.runWorstNanos = ts.runWorstNanos;
-            this.runBestNanos = ts.runBestNanos;
+            ts.addTime(runNanos, nowNanos);
+            this.runLastNanos = ts.lastNanos;
+            this.runCurrentNanos = ts.currentNanos;
+            this.runAvgNanos = ts.avgNanos;
+            this.runWorstNanos = ts.worstNanos;
+            this.runBestNanos = ts.bestNanos;
         }
     }
 
@@ -1385,8 +1385,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
                 // Compute network framerate
                 long now = System.nanoTime();
-                timer.ts.addRunTime(now - lastFrame, now);
-                frameRate = 1e9f / timer.ts.runCurrentNanos;
+                timer.ts.addTime(now - lastFrame, now);
+                frameRate = 1e9f / timer.ts.currentNanos;
                 lastFrame = now;
             }
 
