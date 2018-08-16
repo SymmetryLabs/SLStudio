@@ -11,3 +11,4 @@ application.macosx
 /examples/LXStudioDemo/code/*.jar
 .idea
 *.iml
+/out
