@@ -39,6 +39,7 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
     private static final int TEXT_MARGIN = 2;
 
     protected boolean enabled = true;
+    protected boolean canEdit = true;
 
     protected boolean editing = false;
     protected String editBuffer = "";
@@ -79,8 +80,19 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
         return this;
     }
 
+    public UIInputBox setCanEdit(boolean canEdit) {
+        if (this.canEdit != canEdit) {
+            this.canEdit = canEdit;
+            if (this.editing && !this.canEdit) {
+                this.editing = false;
+            }
+            redraw();
+        }
+        return this;
+    }
+
     public void edit() {
-        if (this.enabled && !this.editing) {
+        if (this.enabled && this.canEdit && !this.editing) {
             this.editing = true;
             this.editBuffer = "";
         }
@@ -178,7 +190,7 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
                 this.editing = false;
                 redraw();
             }
-        } else if (this.enabled) {
+        } else if (this.enabled && this.canEdit) {
             // Not editing
             if (this.immediateEdit && isValidCharacter(keyChar)) {
                 consumeKeyEvent();
@@ -214,7 +226,7 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
 
     @Override
     public void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
-        if (this.enabled) {
+        if (this.enabled && this.canEdit) {
             this.dAccum -= dy;
             int offset = (int) (this.dAccum / 5);
             this.dAccum = this.dAccum - (offset * 5);
