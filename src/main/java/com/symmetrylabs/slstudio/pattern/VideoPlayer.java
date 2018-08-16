@@ -20,6 +20,7 @@ import java.nio.IntBuffer;
 
 public class VideoPlayer extends SLPattern<SLModel> {
     CompoundParameter shrinkParam = new CompoundParameter("shrink", 1, 0.1, 20);
+    CompoundParameter yOffsetParam = new CompoundParameter("yoff", 0, 0, 1);
 
     private int[] buf = null;
     private int width;
@@ -33,6 +34,7 @@ public class VideoPlayer extends SLPattern<SLModel> {
         super(lx);
 
         addParameter(shrinkParam);
+        addParameter(yOffsetParam);
 
         if (!new NativeDiscovery().discover()) {
             SLStudio.setWarning("VideoPlayer", "VLC not installed or not found");
@@ -96,7 +98,7 @@ public class VideoPlayer extends SLPattern<SLModel> {
     @Override
     public void save(LX lx, JsonObject json) {
         super.load(lx, json);
-        if (mediaFileName != null) {
+        if (json != null && mediaFileName != null) {
             json.addProperty(KEY_VIDEO_FILE, mediaFileName);
         }
     }
@@ -104,7 +106,7 @@ public class VideoPlayer extends SLPattern<SLModel> {
     @Override
     public void load(LX lx, JsonObject json) {
         super.load(lx, json);
-        if (json.has(KEY_VIDEO_FILE)) {
+        if (json != null && json.has(KEY_VIDEO_FILE)) {
             mediaFileName = json.get(KEY_VIDEO_FILE).getAsString();
         }
     }
@@ -117,7 +119,7 @@ public class VideoPlayer extends SLPattern<SLModel> {
 
         float shrink = shrinkParam.getValuef();
         for (LXVector v : getVectors()) {
-            int i = (int) (shrink * (model.yMax - v.y));
+            int i = (int) ((shrink * (model.yMax - v.y)) + yOffsetParam.getValue() * height);
             int j = (int) (shrink * (v.x - model.xMin));
 
             int color;
