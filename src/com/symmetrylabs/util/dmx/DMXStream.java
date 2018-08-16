@@ -4,6 +4,14 @@ import java.util.Arrays;
 
 public class DMXStream {
 
+    /**
+     * Keeps track of data sent out and doesn't accept external Art-Net
+     * data until the external source mirrors what was sent out. This
+     * allows internal and external sources to modify dmx values more
+     * harmoniously.
+     */
+    private boolean trackExternalIsDirty = false;
+
     public final int[] data = new int[512];
 
     private final int[] lastSentData = new int[data.length];
@@ -13,7 +21,7 @@ public class DMXStream {
 
     void onDataReceived(DMXDataSnapshot snapshot) {
         for (int i = 0; i < snapshot.length; i++) {
-            if (externalIsDirty[i]) {
+            if (trackExternalIsDirty && externalIsDirty[i]) {
                 if (snapshot.data[i] == data[i]) {
                     externalIsDirty[i] = false;
                 }
@@ -24,6 +32,8 @@ public class DMXStream {
     }
 
     void checkForDataChanges() {
+        if (!trackExternalIsDirty)
+            return;
         for (int i = 0; i < data.length; i++) {
             if (data[i] != cleanData[i]) {
                 externalIsDirty[i] = true;
@@ -58,5 +68,16 @@ public class DMXStream {
 
     public void forceDirty() {
         forceDirty = true;
+    }
+
+    public void setTrackExternalIsDirty(boolean trackExternalIsDirty) {
+        this.trackExternalIsDirty = trackExternalIsDirty;
+        if (!trackExternalIsDirty) {
+            Arrays.fill(externalIsDirty, false);
+        }
+    }
+
+    public boolean isTrackExternalIsDirty() {
+        return trackExternalIsDirty;
     }
 }
