@@ -6,3 +6,6 @@
 .idea
 *.iml
 /out
+/build/classes
+/build/libs
+/build/tmp
