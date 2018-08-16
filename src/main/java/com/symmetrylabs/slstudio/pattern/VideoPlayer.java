@@ -13,6 +13,8 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXVector;
 import uk.co.caprica.vlcj.component.DirectMediaPlayerComponent;
 import uk.co.caprica.vlcj.discovery.NativeDiscovery;
+import uk.co.caprica.vlcj.player.MediaPlayer;
+import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.direct.BufferFormat;
 import uk.co.caprica.vlcj.player.direct.DirectMediaPlayer;
 import uk.co.caprica.vlcj.player.direct.format.RV32BufferFormat;
@@ -26,13 +28,22 @@ public class VideoPlayer extends SLPattern<SLModel> {
     CompoundParameter shrinkParam = new CompoundParameter("shrink", 1, 0.1, 20);
     CompoundParameter yOffsetParam = new CompoundParameter("yoff", 0, 0, 1);
     BooleanParameter fitParam = new BooleanParameter("fit", false);
+    BooleanParameter restartParam = new BooleanParameter("restart", false);
 
     /**
-     * If the video timestamp and our own internal timekeeping differ by
-     * more than this amount, we seek the video to match our internal
-     * timekeeping.
+     * A guess at the amount of time it will take vlcj to start playing the
+     * video. We skip the video forward by this amount to compensate for
+     * the expected lag.
      */
-    private static final double TIME_SKEW_THRESHOLD_MS = 150;
+    private static final long INITIAL_SKEW_GUESS_MS = 200;
+
+    /**
+     * Like INITIAL_SKEW_GUESS_MS, but for when we're restarting the video
+     * when it's already playing instead of playing it from scratch. This
+     * ends up taking a little longer that just starting the video from
+     * the beginning.
+     */
+    private static final long RESTART_SKEW_GUESS_MS = 270;
 
     private int[] buf = null;
     private int width;
@@ -51,8 +62,10 @@ public class VideoPlayer extends SLPattern<SLModel> {
         addParameter(shrinkParam);
         addParameter(yOffsetParam);
         addParameter(fitParam);
+        addParameter(restartParam);
 
         fitParam.setMode(BooleanParameter.Mode.MOMENTARY);
+        restartParam.setMode(BooleanParameter.Mode.MOMENTARY);
 
         if (!new NativeDiscovery().discover()) {
             SLStudio.setWarning("VideoPlayer", "VLC not installed or not found");
@@ -82,13 +95,43 @@ public class VideoPlayer extends SLPattern<SLModel> {
             }
         };
         mediaPlayer = mediaPlayerComponent.getMediaPlayer();
-        mediaPlayer.setVolume(0);
+        mediaPlayer.mute(true);
+        mediaPlayer.addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
+            @Override
+            public void finished(MediaPlayer player) {
+                restartVideo();
+            }
+        });
     }
 
     @Override
     public void onParameterChanged(LXParameter p) {
         if (p == fitParam && fitParam.getValueb()) {
             setShrinkToFit();
+        }
+        if (p == restartParam && restartParam.getValueb()) {
+            restartVideo();
+        }
+    }
+
+    @Override
+    public void onActive() {
+        super.onActive();
+        if (mediaFileName == null) {
+            JFileChooser jfc = new JFileChooser();
+            int res = jfc.showOpenDialog(null);
+            if (res == JFileChooser.APPROVE_OPTION) {
+                mediaFileName = jfc.getSelectedFile().getAbsolutePath();
+            }
+        }
+        restartVideo();
+    }
+
+    @Override
+    public void onInactive() {
+        super.onInactive();
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
         }
     }
 
@@ -99,30 +142,23 @@ public class VideoPlayer extends SLPattern<SLModel> {
         shrinkParam.setValue(fit);
     }
 
-    @Override
-    public void onActive() {
-        if (mediaFileName == null) {
-            JFileChooser jfc = new JFileChooser();
-            int res = jfc.showOpenDialog(null);
-            if (res == JFileChooser.APPROVE_OPTION) {
-                mediaFileName = jfc.getSelectedFile().getAbsolutePath();
-            }
-        }
+    private void restartVideo() {
         if (mediaFileName != null) {
-            if (!mediaPlayer.isPlayable()) {
-                mediaPlayer.playMedia(mediaFileName);
-            } else {
-                mediaPlayer.setPosition(0);
-                mediaPlayer.play();
-                time = 0;
-            }
-        }
-    }
+            long skewGuess = 0;
 
-    @Override
-    public void onInactive() {
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.stop();
+            if (!mediaPlayer.isPlayable()) {
+                mediaPlayer.prepareMedia(mediaFileName);
+                skewGuess = INITIAL_SKEW_GUESS_MS;
+            } else if (mediaPlayer.isPlaying()) {
+                mediaPlayer.setPosition(0);
+                skewGuess = RESTART_SKEW_GUESS_MS;
+            } else {
+                skewGuess = INITIAL_SKEW_GUESS_MS;
+            }
+
+            mediaPlayer.play();
+            mediaPlayer.skip(skewGuess);
+            time = 0;
         }
     }
 
@@ -146,12 +182,14 @@ public class VideoPlayer extends SLPattern<SLModel> {
 
     @Override
     public String getCaption() {
-        double avg = 0;
-        for (Double t : timeOffsets) {
-            avg += t;
+        synchronized (timeOffsets) {
+            double avgOffset = 0;
+            for (Double t : timeOffsets) {
+                avgOffset += t;
+            }
+            avgOffset /= timeOffsets.size();
+            return String.format("average skew: %fms", avgOffset);
         }
-        avg /= timeOffsets.size();
-        return String.format("average skew: %fms", avg);
     }
 
     @Override
@@ -165,9 +203,11 @@ public class VideoPlayer extends SLPattern<SLModel> {
         }
 
         double delta = (double) mediaPlayer.getTime() - time;
-        timeOffsets.addFirst(delta);
-        if (timeOffsets.size() > 200) {
-            timeOffsets.removeLast();
+        synchronized (timeOffsets) {
+            timeOffsets.addFirst(delta);
+            if (timeOffsets.size() > 1000) {
+                timeOffsets.removeLast();
+            }
         }
 
         float shrink = shrinkParam.getValuef();
