@@ -6,6 +6,7 @@ import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
 import uk.co.caprica.vlcj.component.DirectMediaPlayerComponent;
 import uk.co.caprica.vlcj.discovery.NativeDiscovery;
@@ -18,27 +19,23 @@ import java.io.File;
 import java.nio.IntBuffer;
 
 public class MediaPlayer extends SLPattern<SLModel> {
-    private boolean enabled = false;
-    private double time = 0;
-    private double videoLengthMs = 0;
+    CompoundParameter scaleParam = new CompoundParameter("scale", 0.1, 1, 4);
 
-    /* simple double-buffer for thread-safe frame update */
-    private int[] front = null;
-    private int[] back = null;
+    private int[] buf = null;
     private int width;
 
     private DirectMediaPlayerComponent mediaPlayerComponent;
+    private DirectMediaPlayer mediaPlayer;
 
     public MediaPlayer(LX lx) {
         super(lx);
 
-        File file = new File("C:/Users/willh/code/Symmetry/cube-arig-usc-v1.mp4");
+        addParameter(scaleParam);
 
         if (!new NativeDiscovery().discover()) {
             SLStudio.setWarning("MediaPlayer", "VLC not installed or not found");
             return;
         }
-        enabled = true;
 
         mediaPlayerComponent = new DirectMediaPlayerComponent((w, h) -> {
             System.out.println(String.format("DMPC w=%d h=%d", w, h));
@@ -49,43 +46,46 @@ public class MediaPlayer extends SLPattern<SLModel> {
                 Memory byteBuf = nativeBuffers[0];
                 IntBuffer intBuf = byteBuf.getByteBuffer(0, byteBuf.size()).asIntBuffer();
 
-                if (back == null || back.length != intBuf.limit()) {
+                if (buf == null || buf.length != intBuf.limit()) {
                     System.out.println("MediaPlayer: realloc image buffer");
-                    back = new int[intBuf.limit()];
-                    front = back;
+                    buf = new int[intBuf.limit()];
                 }
-                intBuf.get(back);
+                intBuf.get(buf);
                 width = bufferFormat.getWidth();
             }
         };
+        mediaPlayer = mediaPlayerComponent.getMediaPlayer();
+        mediaPlayer.prepareMedia("../cube-arig-usc-v1.mp4");
+    }
+
+    @Override
+    public void onActive() {
+        mediaPlayer.setPosition(0);
+        mediaPlayer.play();
+    }
+
+    @Override
+    public void onInactive() {
+        mediaPlayer.stop();
     }
 
     @Override
     public void run(double elapsedMs) {
-        if (!enabled) return;
-
-        if (!mediaPlayerComponent.getMediaPlayer().isPlaying()) {
-            mediaPlayerComponent.getMediaPlayer().playMedia("../cube-arig-usc-v1.mp4");
-            mediaPlayerComponent.getMediaPlayer().skip(30000);
+        if (buf == null) {
+            return;
         }
 
-        time += elapsedMs;
-        while (time > videoLengthMs) {
-            time -= videoLengthMs;
-        }
-
-        if (front == null) return;
-
+        float scale = scaleParam.getValuef();
         for (LXVector v : getVectors()) {
-            int i = (int) v.y;
-            int j = (int) v.x;
-            int dataIdx = 3 * (width * i + j);
-            int vcolor = front[dataIdx];
+            int i = (int) (scale * v.y);
+            int j = (int) (scale * v.x);
+            int dataIdx = width * i + j;
+            int vcolor = buf[dataIdx];
 
             colors[v.index] = LXColor.rgb(
-                vcolor & 0xFF,
-                (vcolor >> 8) & 0xFF,
-                (vcolor >> 16) & 0xFF);
+                (vcolor >> 16) & 0xFF,
+                (vcolor >>  8) & 0xFF,
+                (vcolor      ) & 0xFF);
         }
     }
 }
