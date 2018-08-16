@@ -19,15 +19,27 @@ import uk.co.caprica.vlcj.player.direct.format.RV32BufferFormat;
 
 import javax.swing.*;
 import java.nio.IntBuffer;
+import java.util.Deque;
+import java.util.LinkedList;
 
 public class VideoPlayer extends SLPattern<SLModel> {
     CompoundParameter shrinkParam = new CompoundParameter("shrink", 1, 0.1, 20);
     CompoundParameter yOffsetParam = new CompoundParameter("yoff", 0, 0, 1);
     BooleanParameter fitParam = new BooleanParameter("fit", false);
 
+    /**
+     * If the video timestamp and our own internal timekeeping differ by
+     * more than this amount, we seek the video to match our internal
+     * timekeeping.
+     */
+    private static final double TIME_SKEW_THRESHOLD_MS = 150;
+
     private int[] buf = null;
     private int width;
     private int height;
+    private double time;
+
+    private Deque<Double> timeOffsets = new LinkedList<>();
 
     private DirectMediaPlayerComponent mediaPlayerComponent;
     private DirectMediaPlayer mediaPlayer;
@@ -102,6 +114,7 @@ public class VideoPlayer extends SLPattern<SLModel> {
             } else {
                 mediaPlayer.setPosition(0);
                 mediaPlayer.play();
+                time = 0;
             }
         }
     }
@@ -132,9 +145,29 @@ public class VideoPlayer extends SLPattern<SLModel> {
     }
 
     @Override
+    public String getCaption() {
+        double avg = 0;
+        for (Double t : timeOffsets) {
+            avg += t;
+        }
+        avg /= timeOffsets.size();
+        return String.format("average skew: %fms", avg);
+    }
+
+    @Override
     public void run(double elapsedMs) {
         if (buf == null) {
             return;
+        }
+        time += elapsedMs;
+        if (time > mediaPlayer.getLength()) {
+            time = 0;
+        }
+
+        double delta = (double) mediaPlayer.getTime() - time;
+        timeOffsets.addFirst(delta);
+        if (timeOffsets.size() > 200) {
+            timeOffsets.removeLast();
         }
 
         float shrink = shrinkParam.getValuef();
