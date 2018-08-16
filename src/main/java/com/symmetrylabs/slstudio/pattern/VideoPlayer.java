@@ -45,10 +45,17 @@ public class VideoPlayer extends SLPattern<SLModel> {
      */
     private static final long RESTART_SKEW_GUESS_MS = 270;
 
+    /**
+     * Like INITIAL_SKEW_GUESS_MS, but for when the video loops
+     * automatically.
+     */
+    private static final long LOOP_SKEW_GUESS_MS = 100;
+
     private int[] buf = null;
     private int width;
     private int height;
     private double time;
+    private long skipOnNextFrame = 0;
 
     private Deque<Double> timeOffsets = new LinkedList<>();
 
@@ -95,13 +102,6 @@ public class VideoPlayer extends SLPattern<SLModel> {
             }
         };
         mediaPlayer = mediaPlayerComponent.getMediaPlayer();
-        mediaPlayer.mute(true);
-        mediaPlayer.addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
-            @Override
-            public void finished(MediaPlayer player) {
-                restartVideo();
-            }
-        });
     }
 
     @Override
@@ -147,12 +147,21 @@ public class VideoPlayer extends SLPattern<SLModel> {
             long skewGuess = 0;
 
             if (!mediaPlayer.isPlayable()) {
-                mediaPlayer.prepareMedia(mediaFileName);
+                mediaPlayer.prepareMedia(mediaFileName, "--loop");
+                mediaPlayer.mute(true);
+                mediaPlayer.setRepeat(true);
+                mediaPlayer.addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
+                    @Override
+                    public void finished(MediaPlayer player) {
+                        skipOnNextFrame = LOOP_SKEW_GUESS_MS;
+                    }
+                });
                 skewGuess = INITIAL_SKEW_GUESS_MS;
             } else if (mediaPlayer.isPlaying()) {
                 mediaPlayer.setPosition(0);
                 skewGuess = RESTART_SKEW_GUESS_MS;
             } else {
+                mediaPlayer.setPosition(0);
                 skewGuess = INITIAL_SKEW_GUESS_MS;
             }
 
@@ -188,7 +197,17 @@ public class VideoPlayer extends SLPattern<SLModel> {
                 avgOffset += t;
             }
             avgOffset /= timeOffsets.size();
-            return String.format("average skew: %fms", avgOffset);
+
+            long ms = mediaPlayer.getTime();
+            int s = (int) Math.floor(ms / 1000f);
+            ms -= 1000f * s;
+            int m = (int) Math.floor(s / 60f);
+            s -= m * 60f;
+            int h = (int) Math.floor((float) m / 60f);
+            m -= h * 60f;
+            return String.format(
+                "video time: %02d:%02d:%02d.%03d average skew: %fms",
+                h, m, s, ms, avgOffset);
         }
     }
 
@@ -200,6 +219,11 @@ public class VideoPlayer extends SLPattern<SLModel> {
         time += elapsedMs;
         if (time > mediaPlayer.getLength()) {
             time = 0;
+        }
+
+        if (skipOnNextFrame != 0) {
+            mediaPlayer.skip(skipOnNextFrame);
+            skipOnNextFrame = 0;
         }
 
         double delta = (double) mediaPlayer.getTime() - time;
