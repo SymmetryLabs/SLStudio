@@ -147,7 +147,7 @@ public class VideoPlayer extends SLPattern<SLModel> {
             long skewGuess = 0;
 
             if (!mediaPlayer.isPlayable()) {
-                mediaPlayer.prepareMedia(mediaFileName, "--loop");
+                mediaPlayer.prepareMedia(mediaFileName);
                 mediaPlayer.mute(true);
                 mediaPlayer.setRepeat(true);
                 mediaPlayer.addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
