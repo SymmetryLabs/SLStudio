@@ -12,3 +12,7 @@ application.macosx
 .idea
 *.iml
 /out
+/build/classes
+/build/libs
+/build/resources
+/build/tmp
