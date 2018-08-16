@@ -191,24 +191,24 @@ public class VideoPlayer extends SLPattern<SLModel> {
 
     @Override
     public String getCaption() {
+        double avgOffset = 0;
         synchronized (timeOffsets) {
-            double avgOffset = 0;
             for (Double t : timeOffsets) {
                 avgOffset += t;
             }
             avgOffset /= timeOffsets.size();
-
-            long ms = mediaPlayer.getTime();
-            int s = (int) Math.floor(ms / 1000f);
-            ms -= 1000f * s;
-            int m = (int) Math.floor(s / 60f);
-            s -= m * 60f;
-            int h = (int) Math.floor((float) m / 60f);
-            m -= h * 60f;
-            return String.format(
-                "video time: %02d:%02d:%02d.%03d average skew: %fms",
-                h, m, s, ms, avgOffset);
         }
+
+        long ms = mediaPlayer.getTime();
+        int s = (int) Math.floor(ms / 1000f);
+        ms -= 1000f * s;
+        int m = (int) Math.floor(s / 60f);
+        s -= m * 60f;
+        int h = (int) Math.floor((float) m / 60f);
+        m -= h * 60f;
+        return String.format(
+            "video time: %02d:%02d:%02d.%03d average skew: %fms",
+            h, m, s, ms, avgOffset);
     }
 
     @Override
