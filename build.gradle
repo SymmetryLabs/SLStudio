@@ -58,22 +58,20 @@ docker {
 	}
 }
 
+allprojects {
+	repositories {
+		mavenCentral()
+
+		maven { url 'https://jitpack.io' }
+	}
+}
+
 repositories {
-	mavenCentral()
-
-	maven { url 'https://jitpack.io' }
-
 	// needed for aparapi dependency
 	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
 dependencies {
-	// https://mvnrepository.com/artifact/org.processing/core
-	implementation(group: 'org.processing', name: 'core', version: '3.3.6') {
-		exclude group: 'org.jogamp.gluegen'
-		exclude group: 'org.jogamp.jogl'
-	}
-
 	// https://mvnrepository.com/artifact/com.harium/kdtree
 	implementation group: 'com.harium', name: 'kdtree', version: '1.0.0'
 
@@ -85,15 +83,6 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-math3
 	implementation group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
-
-	// https://mvnrepository.com/artifact/uk.co.xfactory-librarians/coremidi4j
-	implementation group: 'uk.co.xfactory-librarians', name: 'coremidi4j', version: '0.9'
-
-	// https://mvnrepository.com/artifact/com.google.code.gson/gson
-	implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.2'
-
-	// https://mvnrepository.com/artifact/uk.co.xfactory-librarians/coremidi4j
-	implementation group: 'uk.co.xfactory-librarians', name: 'coremidi4j', version: '0.9'
 
 	// https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib
 	implementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: '1.2.60'
@@ -108,10 +97,7 @@ dependencies {
 	// https://github.com/SymmetryLabs/aparapi
 	implementation 'com.github.SymmetryLabs:aparapi:b6fffad'
 
-	implementation files('libs/jogamp-fat.jar')
-
-	// TODO: Add gradle to LX and P3LX so our cross-project dependencies work better
-	implementation files('libs/P3LX.jar')
+	implementation project(':p3lx')
 
 	implementation files('libs/minim.jar')
 
@@ -129,4 +115,48 @@ compileTestKotlin {
 jar {
 	exclude('**/*.swp')
 	exclude('**/*.swo')
+}
+
+subprojects {
+	apply plugin: 'java'
+}
+
+project(':lx') {
+	sourceSets.main {
+		java.srcDirs = ['src']
+	}
+
+	dependencies {
+		// https://mvnrepository.com/artifact/com.google.code.gson/gson
+		compile group: 'com.google.code.gson', name: 'gson', version: '2.8.2'
+
+		// https://mvnrepository.com/artifact/uk.co.xfactory-librarians/coremidi4j
+		implementation group: 'uk.co.xfactory-librarians', name: 'coremidi4j', version: '0.9'
+
+		// https://github.com/SymmetryLabs/ArtNetStack
+		implementation 'com.github.SymmetryLabs:ArtNetStack:44ddfed'
+	}
+}
+
+project(':p3lx') {
+	sourceSets.main {
+		java.srcDirs = ['src']
+		resources.srcDirs = ['data']
+	}
+
+	dependencies {
+		compile project(':lx')
+
+		// https://mvnrepository.com/artifact/org.processing/core
+		compile(group: 'org.processing', name: 'core', version: '3.3.7') {
+			exclude group: 'org.jogamp.gluegen'
+			exclude group: 'org.jogamp.jogl'
+		}
+
+		implementation files('../../libs/jogamp-fat.jar')
+
+		// https://mvnrepository.com/artifact/org.processing/video
+		implementation group: 'org.processing', name: 'video', version: '3.2.3'
+
+	}
 }
