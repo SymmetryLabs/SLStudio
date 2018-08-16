@@ -175,7 +175,7 @@ public class VideoPlayer extends SLPattern<SLModel> {
 
     @Override
     public void save(LX lx, JsonObject json) {
-        super.load(lx, json);
+        super.save(lx, json);
         if (json != null && mediaFileName != null) {
             json.addProperty(KEY_VIDEO_FILE, mediaFileName);
         }
