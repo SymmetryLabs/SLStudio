@@ -7,7 +7,9 @@ import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXVector;
 import uk.co.caprica.vlcj.component.DirectMediaPlayerComponent;
 import uk.co.caprica.vlcj.discovery.NativeDiscovery;
@@ -21,6 +23,7 @@ import java.nio.IntBuffer;
 public class VideoPlayer extends SLPattern<SLModel> {
     CompoundParameter shrinkParam = new CompoundParameter("shrink", 1, 0.1, 20);
     CompoundParameter yOffsetParam = new CompoundParameter("yoff", 0, 0, 1);
+    BooleanParameter fitParam = new BooleanParameter("fit", false);
 
     private int[] buf = null;
     private int width;
@@ -35,6 +38,9 @@ public class VideoPlayer extends SLPattern<SLModel> {
 
         addParameter(shrinkParam);
         addParameter(yOffsetParam);
+        addParameter(fitParam);
+
+        fitParam.setMode(BooleanParameter.Mode.MOMENTARY);
 
         if (!new NativeDiscovery().discover()) {
             SLStudio.setWarning("VideoPlayer", "VLC not installed or not found");
@@ -43,10 +49,9 @@ public class VideoPlayer extends SLPattern<SLModel> {
 
         mediaPlayerComponent = new DirectMediaPlayerComponent((w, h) -> {
             System.out.println(String.format("DMPC w=%d h=%d", w, h));
-            float fitWidth = w / model.xRange;
-            float fitHeight = h / model.yRange;
-            float fit = Float.min(fitWidth, fitHeight);
-            shrinkParam.setValue(fit);
+            width = w;
+            height = h;
+            setShrinkToFit();
             return new RV32BufferFormat(w, h);
         }) {
             @Override
@@ -65,6 +70,21 @@ public class VideoPlayer extends SLPattern<SLModel> {
             }
         };
         mediaPlayer = mediaPlayerComponent.getMediaPlayer();
+        mediaPlayer.setVolume(0);
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        if (p == fitParam && fitParam.getValueb()) {
+            setShrinkToFit();
+        }
+    }
+
+    private void setShrinkToFit() {
+        float fitWidth = width / model.xRange;
+        float fitHeight = height / model.yRange;
+        float fit = Float.min(fitWidth, fitHeight);
+        shrinkParam.setValue(fit);
     }
 
     @Override
