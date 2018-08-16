@@ -617,10 +617,31 @@ public abstract class UI2dComponent extends UIObject {
      * @return this
      */
     public UI2dComponent addToContainer(UIContainer container, int index) {
+        return addToObject(container.getContentTarget(), index);
+    }
+
+    /**
+     * Adds this component to an object, also removing it from any other container or object
+     * that is currently holding it.
+     *
+     * @param object Object to place in
+     * @return this
+     */
+    public final UI2dComponent addToObject(UIObject object) {
+        return addToObject(object, -1);
+    }
+
+    /**
+     * Adds this component to an object at a specified index, also removing it from any
+     * other container or object that is currently holding it.
+     *
+     * @param containerObject Container object to place in
+     * @return this
+     */
+    public UI2dComponent addToObject(UIObject containerObject, int index) {
         if (this.parent != null) {
             removeFromContainer();
         }
-        UIObject containerObject = container.getContentTarget();
         if (containerObject == this) {
             throw new IllegalArgumentException("Cannot add an object to itself");
         }
