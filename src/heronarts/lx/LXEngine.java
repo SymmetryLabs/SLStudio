@@ -24,6 +24,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.symmetrylabs.color.Spaces;
+import com.symmetrylabs.util.artnet.ArtNetEngine;
 import com.symmetrylabs.util.dmx.DMXEngine;
 import com.symmetrylabs.util.dmx.LXEngineDMXManager;
 import heronarts.lx.audio.LXAudioEngine;
@@ -105,6 +106,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     public final LXOscEngine osc;
 
+    public final ArtNetEngine artNet;
     public final DMXEngine dmx;
 
     public final LXScriptEngine script;
@@ -324,6 +326,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         public long inputNanos = 0;
         public long midiNanos = 0;
         public long oscNanos = 0;
+        public long artNetNanos = 0;
         public long outputNanos = 0;
 
         private void addRunTime(long runNanos, long nowNanos) {
@@ -525,8 +528,10 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         this.osc = new LXOscEngine(lx);
         LX.initTimer.log("Engine: Osc");
 
+        this.artNet = new ArtNetEngine(lx);
         this.dmx = this.artNet.getDMXEngine();
         LXEngineDMXManager.configure(this);
+        LX.initTimer.log("Engine: ArtNet/DMX");
 
         // Script engine
         this.script = new LXScriptEngine(lx);
@@ -1056,6 +1061,11 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         this.osc.dispatch();
         this.timer.oscNanos = System.nanoTime() - oscStart;
 
+        // Process Art-Net events
+        long artNetStart = System.nanoTime();
+        this.artNet.dispatch();
+        this.timer.artNetNanos = System.nanoTime() - artNetStart;
+
         // Process UI input events
         if (this.inputDispatch == null) {
             this.timer.inputNanos = 0;
@@ -1096,6 +1106,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         long channelStart = System.nanoTime();
         loopAllChannels(deltaMs);
         blendChannels(deltaMs, channelStart, colorSpace.getEnum());
+        this.artNet.processOutput();
         sendToOutputs(runStart);
         long nowNanos = System.nanoTime();
         this.timer.addRunTime(nowNanos - runStart, nowNanos);
@@ -1315,6 +1326,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             }
             // Otherwise do it ourself here
             long outputStart = System.nanoTime();
+            LXEngine.this.artNet.sendOutput();
             output.send(buffer.main.render);
             long outputEnd = System.nanoTime();
             this.timer.outputNanos = outputEnd - outputStart;
@@ -1376,6 +1388,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
                 for (Runnable runnable : LXEngine.this.networkTaskQueue) {
                     runnable.run();
                 }
+
+                LXEngine.this.artNet.sendOutput();
 
                 if (output.enabled.isOn()) {
                     // Copy from the double-buffer into our local storage and send from here
@@ -1453,6 +1467,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     private static final String KEY_OUTPUT = "output";
     private static final String KEY_MODULATION = "modulation";
     private static final String KEY_OSC = "osc";
+    private static final String KEY_ARTNET = "artnet";
     private static final String KEY_MIDI = "midi";
 
 
@@ -1468,6 +1483,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         obj.add(KEY_COMPONENTS, LXSerializable.Utils.toObject(lx, this.components));
         obj.add(KEY_MODULATION, LXSerializable.Utils.toObject(lx, this.modulation));
         obj.add(KEY_OSC, LXSerializable.Utils.toObject(lx, this.osc));
+        obj.add(KEY_ARTNET, LXSerializable.Utils.toObject(lx, this.artNet));
         obj.add(KEY_MIDI, LXSerializable.Utils.toObject(lx, this.midi));
     }
 
@@ -1536,6 +1552,11 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         // OSC
         if (obj.has(KEY_OSC)) {
             this.osc.load(lx, obj.getAsJsonObject(KEY_OSC));
+        }
+
+        // Art-Net
+        if (obj.has(KEY_ARTNET)) {
+            this.artNet.load(lx, obj.getAsJsonObject(KEY_ARTNET));
         }
 
         // Midi
