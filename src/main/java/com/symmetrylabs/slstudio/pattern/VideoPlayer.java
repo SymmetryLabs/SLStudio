@@ -74,6 +74,10 @@ public class VideoPlayer extends SLPattern<SLModel> {
         fitParam.setMode(BooleanParameter.Mode.MOMENTARY);
         restartParam.setMode(BooleanParameter.Mode.MOMENTARY);
 
+        mediaPlayer = null;
+        mediaPlayerComponent = null;
+        mediaFileName = null;
+
         if (!new NativeDiscovery().discover()) {
             SLStudio.setWarning("VideoPlayer", "VLC not installed or not found");
             return;
@@ -143,6 +147,8 @@ public class VideoPlayer extends SLPattern<SLModel> {
     }
 
     private void restartVideo() {
+        if (mediaPlayer == null)
+            return;
         if (mediaFileName != null) {
             long skewGuess = 0;
 
@@ -191,6 +197,10 @@ public class VideoPlayer extends SLPattern<SLModel> {
 
     @Override
     public String getCaption() {
+        if (mediaPlayer == null) {
+            return "VLC not available, video playback disabled";
+        }
+
         double avgOffset = 0;
         synchronized (timeOffsets) {
             for (Double t : timeOffsets) {
