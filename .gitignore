@@ -5,3 +5,4 @@
 /examples/LXHeadless/bin
 .idea
 *.iml
+/out
