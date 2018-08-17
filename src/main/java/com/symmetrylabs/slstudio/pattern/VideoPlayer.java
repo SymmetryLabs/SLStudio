@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sun.jna.Memory;
 import com.symmetrylabs.slstudio.SLStudio;
@@ -29,6 +30,8 @@ public class VideoPlayer extends SLPattern<SLModel> {
     CompoundParameter yOffsetParam = new CompoundParameter("yoff", 0, 0, 1);
     BooleanParameter fitParam = new BooleanParameter("fit", false);
     BooleanParameter restartParam = new BooleanParameter("restart", false);
+    BooleanParameter chooseFileParam = new BooleanParameter("file", false);
+    BooleanParameter captureParam = new BooleanParameter("capture", false);
 
     /**
      * A guess at the amount of time it will take vlcj to start playing the
@@ -55,13 +58,15 @@ public class VideoPlayer extends SLPattern<SLModel> {
     private int width;
     private int height;
     private double time;
+    private boolean streaming = false;
     private long skipOnNextFrame = 0;
 
     private Deque<Double> timeOffsets = new LinkedList<>();
 
     private DirectMediaPlayerComponent mediaPlayerComponent;
     private DirectMediaPlayer mediaPlayer;
-    private String mediaFileName;
+    private String mediaUrl;
+    private String[] mediaOptions;
 
     public VideoPlayer(LX lx) {
         super(lx);
@@ -70,13 +75,17 @@ public class VideoPlayer extends SLPattern<SLModel> {
         addParameter(yOffsetParam);
         addParameter(fitParam);
         addParameter(restartParam);
+        addParameter(chooseFileParam);
+        addParameter(captureParam);
 
         fitParam.setMode(BooleanParameter.Mode.MOMENTARY);
         restartParam.setMode(BooleanParameter.Mode.MOMENTARY);
+        chooseFileParam.setMode(BooleanParameter.Mode.MOMENTARY);
+        captureParam.setMode(BooleanParameter.Mode.MOMENTARY);
 
         mediaPlayer = null;
         mediaPlayerComponent = null;
-        mediaFileName = null;
+        mediaUrl = null;
 
         if (!new NativeDiscovery().discover()) {
             SLStudio.setWarning("VideoPlayer", "VLC not installed or not found");
@@ -85,6 +94,7 @@ public class VideoPlayer extends SLPattern<SLModel> {
 
         mediaPlayerComponent = new DirectMediaPlayerComponent((w, h) -> {
             System.out.println(String.format("DMPC w=%d h=%d", w, h));
+            buf = null;
             width = w;
             height = h;
             setShrinkToFit();
@@ -116,18 +126,17 @@ public class VideoPlayer extends SLPattern<SLModel> {
         if (p == restartParam && restartParam.getValueb()) {
             restartVideo();
         }
+        if (p == captureParam && captureParam.getValueb()) {
+            useCaptureCard();
+        }
+        if (p == chooseFileParam && chooseFileParam.getValueb()) {
+            showFileBrowser();
+        }
     }
 
     @Override
     public void onActive() {
         super.onActive();
-        if (mediaFileName == null) {
-            JFileChooser jfc = new JFileChooser();
-            int res = jfc.showOpenDialog(null);
-            if (res == JFileChooser.APPROVE_OPTION) {
-                mediaFileName = jfc.getSelectedFile().getAbsolutePath();
-            }
-        }
         restartVideo();
     }
 
@@ -137,6 +146,36 @@ public class VideoPlayer extends SLPattern<SLModel> {
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
         }
+    }
+
+    private void showFileBrowser() {
+        JFileChooser jfc = new JFileChooser();
+        int res = jfc.showOpenDialog(null);
+        if (res == JFileChooser.APPROVE_OPTION) {
+            mediaPlayer.stop();
+            mediaUrl = jfc.getSelectedFile().getAbsolutePath();
+            mediaOptions = null;
+        }
+        streaming = false;
+        restartVideo();
+    }
+
+    private void useCaptureCard() {
+        mediaPlayer.stop();
+        mediaUrl = "dshow://";
+        mediaOptions = new String[] {
+            ":dshow-size=720x480",
+            ":dshow-aspect-ratio=16\\:9",
+            ":dshow-fps=29.97",
+            ":no-dshow-config",
+            ":no-dshow-tuner",
+            ":dshow-audio-bitspersample=0",
+            ":dshow-vdev=Game Capture HD60 S (Video) (#01)",
+            ":dshow-adev=none",
+            ":live-caching=0",
+            };
+        streaming = true;
+        restartVideo();
     }
 
     private void setShrinkToFit() {
@@ -149,11 +188,11 @@ public class VideoPlayer extends SLPattern<SLModel> {
     private void restartVideo() {
         if (mediaPlayer == null)
             return;
-        if (mediaFileName != null) {
+        if (mediaUrl != null) {
             long skewGuess = 0;
 
             if (!mediaPlayer.isPlayable()) {
-                mediaPlayer.prepareMedia(mediaFileName);
+                mediaPlayer.prepareMedia(mediaUrl, mediaOptions);
                 mediaPlayer.mute(true);
                 mediaPlayer.setRepeat(true);
                 mediaPlayer.addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
@@ -178,20 +217,40 @@ public class VideoPlayer extends SLPattern<SLModel> {
     }
 
     private static final String KEY_VIDEO_FILE = "videoFile";
+    private static final String KEY_MEDIA_OPTIONS = "mediaOptions";
+    private static final String KEY_STREAMING = "isStreaming";
 
     @Override
     public void save(LX lx, JsonObject json) {
         super.save(lx, json);
-        if (json != null && mediaFileName != null) {
-            json.addProperty(KEY_VIDEO_FILE, mediaFileName);
+        if (mediaUrl != null) {
+            json.addProperty(KEY_VIDEO_FILE, mediaUrl);
         }
+        if (mediaOptions != null) {
+            JsonArray arr = new JsonArray();
+            for (String opt : mediaOptions) {
+                arr.add(opt);
+            }
+            json.add(KEY_MEDIA_OPTIONS, arr);
+        }
+        json.addProperty(KEY_STREAMING, streaming);
     }
 
     @Override
     public void load(LX lx, JsonObject json) {
         super.load(lx, json);
-        if (json != null && json.has(KEY_VIDEO_FILE)) {
-            mediaFileName = json.get(KEY_VIDEO_FILE).getAsString();
+        if (json.has(KEY_VIDEO_FILE)) {
+            mediaUrl = json.get(KEY_VIDEO_FILE).getAsString();
+        }
+        if (json.has(KEY_MEDIA_OPTIONS)) {
+            JsonArray arr = json.getAsJsonArray(KEY_MEDIA_OPTIONS);
+            mediaOptions = new String[arr.size()];
+            for (int i = 0; i < arr.size(); i++) {
+                mediaOptions[i] = arr.get(i).getAsString();
+            }
+        }
+        if (json.has(KEY_STREAMING)) {
+            streaming = json.get(KEY_STREAMING).getAsBoolean();
         }
     }
 
@@ -199,6 +258,10 @@ public class VideoPlayer extends SLPattern<SLModel> {
     public String getCaption() {
         if (mediaPlayer == null) {
             return "VLC not available, video playback disabled";
+        }
+
+        if (streaming) {
+            return "streaming";
         }
 
         double avgOffset = 0;
@@ -217,7 +280,7 @@ public class VideoPlayer extends SLPattern<SLModel> {
         int h = (int) Math.floor((float) m / 60f);
         m -= h * 60f;
         return String.format(
-            "video time: %02d:%02d:%02d.%03d average skew: %fms",
+            "video time: %02d:%02d:%02d.%03d average skew: %.0fms",
             h, m, s, ms, avgOffset);
     }
 
