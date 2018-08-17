@@ -64,7 +64,8 @@ allprojects {
 
 		maven {
 			url 'https://jitpack.io'
-			credentials { username authToken }
+			// these credentials are for the symmetry-labs account
+			credentials { username 'jp_ad5p43bkk3kiaah4slmihuagci' }
 		}
 	}
 }
