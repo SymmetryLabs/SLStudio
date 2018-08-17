@@ -148,6 +148,12 @@ public class VideoPlayer extends SLPattern<SLModel> {
         }
     }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        mediaPlayer.release();
+    }
+
     private void showFileBrowser() {
         JFileChooser jfc = new JFileChooser();
         int res = jfc.showOpenDialog(null);
@@ -172,6 +178,7 @@ public class VideoPlayer extends SLPattern<SLModel> {
             ":dshow-audio-bitspersample=0",
             ":dshow-vdev=Game Capture HD60 S (Video) (#01)",
             ":dshow-adev=none",
+            ":dshow-caching=0",
             ":live-caching=0",
             };
         streaming = true;
