@@ -76,6 +76,12 @@ repositories {
 }
 
 dependencies {
+	// https://mvnrepository.com/artifact/org.processing/core
+	implementation group: 'org.processing', name: 'core', version: '3.3.6'
+
+	// https://mvnrepository.com/artifact/org.processing/video
+	implementation group: 'org.processing', name: 'video', version: '3.2.3'
+
 	// https://mvnrepository.com/artifact/com.harium/kdtree
 	implementation group: 'com.harium', name: 'kdtree', version: '1.0.0'
 
