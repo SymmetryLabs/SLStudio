@@ -1,15 +1,5 @@
 # SLStudio
 
-## Build setup
-
-Before you can build SL Studio with Gradle, you need to install the required
-credentials to fetch builds from our private repositories, hosted by
-jitpack.io. To install credentials:
-
-1. Go to [jitpack.io/private](https://jitpack.io/private) and scroll down to “Private Repositories”
-2. Click the "Authorize with Github" button and sign in to Github
-3. You’ll be redirected back to Jitpack, and there will be a user token for you to copy. Follow the first half of step 2 on that page to dd the token to `$HOME/.gradle/gradle.properties`. You do not need to modify the `build.gradle` file; that’s already been done for you.
-
 ## Running
 
 From the root of the project, execute
