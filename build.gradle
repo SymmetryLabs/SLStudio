@@ -25,6 +25,10 @@ dependencies {
 jar {
 	exclude('**/*.swp')
 	exclude('**/*.swo')
+
+    from('.') {
+        include 'data/*'
+    }
 }
 
 sourceSets {
