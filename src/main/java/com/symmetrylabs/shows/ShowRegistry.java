@@ -13,6 +13,7 @@ import com.symmetrylabs.shows.composite.CompositeShow;
 import com.symmetrylabs.shows.obj.ObjShow;
 import com.symmetrylabs.shows.kalpa.*;
 import com.symmetrylabs.shows.summerstage.SummerStageShow;
+import com.symmetrylabs.shows.summerbbq.SummerBBQShow;
 
 public class ShowRegistry {
     static ShowBuilder DEFAULT_BUILDER = () -> new DemoShow();
@@ -44,6 +45,7 @@ public class ShowRegistry {
         map.put("kalpa", () -> new KalpaShow());
         map.put("summerstage", () -> new SummerStageShow());
         map.put("pilots", () -> new PilotsShow());
+        map.put("summerbbq", () -> new SummerBBQShow());
     }
 
     static interface ShowBuilder {
