@@ -62,7 +62,11 @@ allprojects {
 	repositories {
 		mavenCentral()
 
-		maven { url 'https://jitpack.io' }
+		maven {
+			url 'https://jitpack.io'
+			// these credentials are for the symmetry-labs account
+			credentials { username 'jp_ad5p43bkk3kiaah4slmihuagci' }
+		}
 	}
 }
 
@@ -72,6 +76,12 @@ repositories {
 }
 
 dependencies {
+	// https://mvnrepository.com/artifact/org.processing/core
+	implementation group: 'org.processing', name: 'core', version: '3.3.6'
+
+	// https://mvnrepository.com/artifact/org.processing/video
+	implementation group: 'org.processing', name: 'video', version: '3.2.3'
+
 	// https://mvnrepository.com/artifact/com.harium/kdtree
 	implementation group: 'com.harium', name: 'kdtree', version: '1.0.0'
 
@@ -107,7 +117,7 @@ dependencies {
 	// https://www.slf4j.org/manual.html
 	implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
 
-	implementation project(':p3lx')
+	implementation 'com.github.SymmetryLabs:p3lx:f134a877'
 
 	implementation files('libs/minim.jar')
 
@@ -125,48 +135,4 @@ compileTestKotlin {
 jar {
 	exclude('**/*.swp')
 	exclude('**/*.swo')
-}
-
-subprojects {
-	apply plugin: 'java'
-}
-
-project(':lx') {
-	sourceSets.main {
-		java.srcDirs = ['src']
-	}
-
-	dependencies {
-		// https://mvnrepository.com/artifact/com.google.code.gson/gson
-		compile group: 'com.google.code.gson', name: 'gson', version: '2.8.2'
-
-		// https://mvnrepository.com/artifact/uk.co.xfactory-librarians/coremidi4j
-		implementation group: 'uk.co.xfactory-librarians', name: 'coremidi4j', version: '0.9'
-
-		// https://github.com/SymmetryLabs/ArtNetStack
-		implementation 'com.github.SymmetryLabs:ArtNetStack:44ddfed'
-	}
-}
-
-project(':p3lx') {
-	sourceSets.main {
-		java.srcDirs = ['src']
-		resources.srcDirs = ['data']
-	}
-
-	dependencies {
-		compile project(':lx')
-
-		// https://mvnrepository.com/artifact/org.processing/core
-		compile(group: 'org.processing', name: 'core', version: '3.3.7') {
-			exclude group: 'org.jogamp.gluegen'
-			exclude group: 'org.jogamp.jogl'
-		}
-
-		implementation files('../../libs/jogamp-fat.jar')
-
-		// https://mvnrepository.com/artifact/org.processing/video
-		implementation group: 'org.processing', name: 'video', version: '3.2.3'
-
-	}
 }
