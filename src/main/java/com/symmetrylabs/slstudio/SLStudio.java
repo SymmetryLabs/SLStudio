@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.net.SocketException;
 
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.kalpa.Anemometer;
@@ -23,6 +24,8 @@ import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.ui.UIFramerateControl;
+import com.symmetrylabs.slstudio.envelop.Envelop;
+import com.symmetrylabs.slstudio.envelop.EnvelopOscListener;
 import com.symmetrylabs.shows.kalpa.ui.UITreeModelingTool;
 import com.symmetrylabs.shows.kalpa.ui.UITreeModelAxes;
 import com.symmetrylabs.util.BlobTracker;
@@ -37,6 +40,7 @@ public class SLStudio extends PApplet {
     public static final Font MONO_FONT = new Font("Inconsolata-Bold-14.vlw", 14, 17);
     public static final String SHOW_FILE_NAME = ".show";
     public static final String RESTART_FILE_NAME = ".restart";
+    public static final int ENVELOP_OSC_PORT = 3377;
 
     private SLStudioLX lx;
     public Show show;
@@ -109,6 +113,16 @@ public class SLStudio extends PApplet {
                 super.initialize(lx, ui);
 
                 SLStudio.this.dispatcher = Dispatcher.getInstance(lx);
+
+                Envelop envelop = Envelop.getInstance(lx);
+                lx.engine.registerComponent("envelop", envelop);
+                lx.engine.addLoopTask(envelop);
+
+                try {
+                    lx.engine.osc.receiver(ENVELOP_OSC_PORT).addListener(new EnvelopOscListener(lx, envelop));
+                } catch (SocketException sx) {
+                    throw new RuntimeException(sx);
+                }
 
                 show.setupLx(lx);
 
