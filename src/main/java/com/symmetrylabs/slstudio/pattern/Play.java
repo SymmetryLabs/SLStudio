@@ -194,12 +194,12 @@ public class Play extends DPat
         if (theta.y != 0) rotateY(Px, mCtr, tSin.y, tCos.y);
         if (theta.z != 0) rotateZ(Px, mCtr, tSin.z, tCos.z);
 
-        Pn.set(Px); setNorm(Pn);
+        PVector Pn = getNorm(Px);
+        PVector V = new PVector();
 
         float mp    = MathUtils.min(Pn.x, Pn.z);
         float yt     = map(t,0,1,.5f-bnc/2,.5f+bnc/2);
         float r,d;
-
 
         switch (pShape.getValuei()) {
             case 0:        V.set(Pn.x, yt                                 , Pn.z);                             break;    // bouncing line
