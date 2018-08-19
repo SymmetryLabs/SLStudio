@@ -38,10 +38,11 @@ public class UIFramerate extends UITextOverlay {
             }
 
             return String.format(
-                "Engine: %5.1ffps    UI: %5.1ffps    Net: %5.1ffps    Frame:%5.1fms, avg%5.1fms, max%5.1fms    16-bit conv:%3d %s",
+                "Engine: %5.1ffps    UI: %5.1ffps    Net: %5.1ffps, worst:%5.1fms    Frame:%5.1fms, avg%5.1fms, max%5.1fms    16-bit conv:%3d %s",
                 Math.min(lx.engine.frameRate(), 999),  // frameRate() sometimes returns Infinity
                 Math.min(lx.applet.frameRate, 999),
                 Math.min(lx.engine.network.frameRate(), 999),
+                lx.engine.network.timer.ts.worstNanos / 1e6,
                 lx.engine.timer.runCurrentNanos / 1e6,
                 lx.engine.timer.runAvgNanos / 1e6,
                 lx.engine.timer.runWorstNanos / 1e6,

@@ -1,1 +1,6 @@
 rootProject.name = 'SLStudio'
+
+include 'lx', 'p3lx'
+
+project(':lx').projectDir = file('submodules/LX')
+project(':p3lx').projectDir = file('submodules/P3LX')

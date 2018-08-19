@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.ui;
 
+import com.symmetrylabs.util.artnet.ui.UIArtNetConfig;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXMappingEngine;
@@ -50,7 +51,7 @@ public class UIOverriddenRightPane extends UIPane {
     private int macroCount = 1;
 
     public UIOverriddenRightPane(UI ui, final LX lx) {
-        super(ui, lx, new String[]{"MODULATION", "OSC + MIDI", "UTILITY"}, ui.getWidth() - WIDTH, WIDTH);
+        super(ui, lx, new String[]{"MODULATION", "EXTERNAL I/O", "UTILITY"}, ui.getWidth() - WIDTH, WIDTH);
         this.ui = ui;
         this.lx = lx;
         this.modulation = this.sections[0];
@@ -75,6 +76,7 @@ public class UIOverriddenRightPane extends UIPane {
 
     private void buildMidiUI() {
         new UIOscManager(this.ui, this.lx, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
+        new UIArtNetConfig(this.ui, this.lx.engine.artNet, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
         new UIMidiSurfaces(this.ui, this.lx.engine.midi, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
         new UIMidiInputs(this.ui, this.lx.engine.midi, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
         new UIMidiMappings(this.ui, this.lx, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);

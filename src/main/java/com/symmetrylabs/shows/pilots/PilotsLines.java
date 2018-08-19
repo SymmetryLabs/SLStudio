@@ -20,6 +20,8 @@ import heronarts.lx.transform.LXVector;
 import java.util.*;
 
 public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
+    public static final String GROUP_NAME = PilotsShow.SHOW_NAME;
+
     private static final float MIRROR_ENDPOINT_TOLERANCE = 6; // inches
 
     private BooleanParameter vertParam = new BooleanParameter("vert");

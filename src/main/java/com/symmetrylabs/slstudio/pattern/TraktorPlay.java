@@ -78,13 +78,12 @@ void  move()      { c     = interp(t,prvA,dstA);
     rAngle  a1    = new rAngle(), a2      = new rAngle(),
             a3    = new rAngle(), a4      = new rAngle();
     PVector cPrev   = new PVector(), cRand    = new PVector(),
-            cMid  = new PVector(), V      = new PVector(),
+            cMid  = new PVector(),
             theta   = new PVector(), thetaX = new PVector(),
             thetaY = new PVector(),
             tSin   = new PVector(), tSinX = new PVector(), tSinY = new PVector(),
             tCos  = new PVector(), tCosX = new PVector(), tCosY = new PVector(),
-            cMidNorm   = new PVector(),
-            Pn    = new PVector(), clockRadius= new PVector();
+            cMidNorm   = new PVector();
     float LastBeat=3, LastMeasure=3;
     int   curRandTempo = 1, curRandTPat = 1;
 
@@ -101,7 +100,7 @@ void  move()      { c     = interp(t,prvA,dstA);
         // addParameter(eq.release);
         // addParameter(eq.slope);
         addModulator(eq).start();
-        addParameter(eq.gain);
+        // addParameter(eq.gain);
 
      // lx.addKeyEventHandler(parent);
         //leap= new LeapMotion(parent).withGestures();
@@ -116,9 +115,6 @@ void  move()      { c     = interp(t,prvA,dstA);
                                                                     "Trngle", "Quad", "Sphr", "Cone",
                                                                     "Noise", "Wave", "?", "?"}            );
 
-        addParameter(pRadius);
-        addParameter(pBounce);
-        addParameter(pAmp);
         addParameter(pTempoMult);
         addParameter(pTimePattern);
         addParameter(pShape);
@@ -315,7 +311,8 @@ void  move()      { c     = interp(t,prvA,dstA);
         if (theta.y != 0) rotateY(Px, mCtr, tSin.y, tCos.y);
         if (theta.z != 0) rotateZ(Px, mCtr, tSin.z, tCos.z);
 
-        Pn.set(Px); setNorm(Pn);
+        PVector Pn = getNorm(Px);
+        PVector V = new PVector();
 
         float mp  = Math.min(Pn.x, Pn.z);
         float yt  = map(t,0,1,0.5f-bnc/2,0.5f+bnc/2);

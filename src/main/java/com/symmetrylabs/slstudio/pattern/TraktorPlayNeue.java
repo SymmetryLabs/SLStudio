@@ -99,13 +99,12 @@ public class TraktorPlayNeue extends DPat
     rAngle  a1    = new rAngle(), a2      = new rAngle(),
         a3    = new rAngle(), a4      = new rAngle();
     PVector cPrev   = new PVector(), cRand    = new PVector(),
-        cMid  = new PVector(), V      = new PVector(),
+        cMid  = new PVector(),
         theta   = new PVector(), thetaX = new PVector(),
         thetaY = new PVector(),
         tSin   = new PVector(), tSinX = new PVector(), tSinY = new PVector(),
         tCos  = new PVector(), tCosX = new PVector(), tCosY = new PVector(),
-        cMidNorm   = new PVector(),
-        Pn    = new PVector(), clockRadius= new PVector();
+        cMidNorm   = new PVector();
     float LastBeat=3, LastMeasure=3;
     int   curRandTempo = 1, curRandTPat = 1;
 
@@ -335,7 +334,8 @@ public class TraktorPlayNeue extends DPat
         if (theta.y != 0) rotateY(Px, mCtr, tSin.y, tCos.y);
         if (theta.z != 0) rotateZ(Px, mCtr, tSin.z, tCos.z);
 
-        Pn.set(Px); setNorm(Pn);
+        PVector Pn = getNorm(Px);
+        PVector V = new PVector();
 
         float mp  = MathUtils.min(Pn.x, Pn.z);
         float yt  = MathUtils.map(t,0,1,.5f-bnc/2,.5f+bnc/2);

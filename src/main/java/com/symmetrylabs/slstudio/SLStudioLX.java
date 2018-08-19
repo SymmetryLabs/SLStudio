@@ -626,6 +626,11 @@ public class SLStudioLX extends P3LX {
             captionText.setAnchor(6, -6 - numLines * SLStudio.MONO_FONT.lineHeight);
             warningText.setText(text);
         }
+
+        @Override
+        public String getActivePatternGroup() {
+            return ((SLStudio) applet).getSelectedShowName();
+        }
     }
 
     public final UI ui;
@@ -686,13 +691,13 @@ public class SLStudioLX extends P3LX {
 
     protected void initialize(SLStudioLX lx, SLStudioLX.UI ui) {
         // Add all warps
-        LXClassLoader.findWarps().stream().forEach(c -> lx.registerWarp(c));
+        LXClassLoader.findWarps().stream().forEach(lx::registerWarp);
 
         // Add all effects
-        LXClassLoader.findEffects().stream().forEach(c -> lx.registerEffect(c));
+        LXClassLoader.findEffects().stream().forEach(lx::registerEffect);
 
         // Add all patterns
-        LXClassLoader.findPatterns().stream().forEach(c -> lx.registerPattern(c));
+        LXClassLoader.findPatterns().stream().forEach(lx::registerPattern);
 
         lx.registerPattern(heronarts.p3lx.pattern.SolidColorPattern.class);
         lx.registerPattern(IteratorTestPattern.class);
