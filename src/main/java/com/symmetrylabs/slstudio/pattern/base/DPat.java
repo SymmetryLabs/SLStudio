@@ -59,6 +59,10 @@ public abstract class DPat extends SLPattern<SLModel> {
         return interp(i - MathUtils.floor(i), vals[MathUtils.floor(i)], vals[MathUtils.ceil(i)]);
     }
 
+    public PVector getNorm(PVector vec) {
+        return new PVector(vec.x / mMax.x, vec.y / mMax.y, vec.z / mMax.z);
+    }
+
     public void setNorm(PVector vec) {
         vec.set(vec.x / mMax.x, vec.y / mMax.y, vec.z / mMax.z);
     }
@@ -110,14 +114,10 @@ public abstract class DPat extends SLPattern<SLModel> {
         return p2;
     }
 
-    PVector vT1 = new PVector(), vT2 = new PVector();
-
     public float calcCone(PVector v1, PVector v2, PVector c) {
-        vT1.set(v1);
-        vT2.set(v2);
-        vT1.sub(c);
-        vT2.sub(c);
-        return MathUtils.degrees(PVector.angleBetween(vT1, vT2));
+        PVector r1 = PVector.sub(v1, c);
+        PVector r2 = PVector.sub(v2, c);
+        return MathUtils.degrees(PVector.angleBetween(r1, r2));
     }
 
     // Pick        addPick(String name, int def, int _max, String[] desc) {
