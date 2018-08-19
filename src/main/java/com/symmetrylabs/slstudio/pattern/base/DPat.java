@@ -84,6 +84,12 @@ public abstract class DPat extends SLPattern<SLModel> {
     }
 
     protected abstract void StartRun(double deltaMs);
+
+    /**
+     * CalcPoint will be invoked in parallel, so implementations of CalcPoint must be
+     * thread-safe!  In particular, be careful in CalcPoint not to mutate PVectors
+     * that are declared at the class or instance level.
+     */
     protected abstract int CalcPoint(PVector p);
 
     public int blend3(int c1, int c2, int c3) {
@@ -321,7 +327,6 @@ public abstract class DPat extends SLPattern<SLModel> {
                 xWaveNz[i] = wvAmp * (NoiseUtils.noise((float) (i / (mMax.y * .3f) - (1e3 + NoiseMove) / 1500f)) - .5f) * (mMax.x / 2f);
         }
 
-        // TODO Threading: For some reason, using parallelStream here messes up the animations.
         int[] colors = (int[]) getArray(SRGB8);
 
         getVectorList().parallelStream().forEach(p -> {
