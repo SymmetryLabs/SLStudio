@@ -71,7 +71,7 @@ public class USOpenShow extends CubesShow {
                 float y = Float.parseFloat(vals[2]) * INCHES_PER_METER * 3.5f; // why need the 3.5?
                 float z = Float.parseFloat(vals[1]) * INCHES_PER_METER * 3.5f; // why need the 3.5?
 
-                CubesModel.Cube cube = new CubesModel.Cube("0", x, y, z, 0, 0, 0, globalTransform, CubesModel.Cube.Type.LARGE);
+                CubesModel.Cube cube = new CubesModel.Cube("0", x, y, z, 0, 45, 0, globalTransform, CubesModel.Cube.Type.LARGE);
                 cubes.add(cube);
                 allCubes.add(cube);
             }
