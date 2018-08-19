@@ -13,86 +13,86 @@ public class PilotsPixlite extends SimplePixlite {
         // vertical - col 1 (left)
         addPixliteOutput(
             new PointsGrouping("1")
-                .addPoints(cart.getStrip((37*0)+7).getPoints())
-                .addPoints(cart.getStrip((37*0)+15).getPoints())
-                .addPoints(cart.getStrip((37*0)+23).getPoints())
-                .addPoints(cart.getStrip((37*0)+31).getPoints())
-                .addPoints(cart.getStrip((37*0)+28).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip((37*0)+20).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip((37*0)+12).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip((37*0)+4).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(cart.getStrip((37*0)+1).getPoints())
                 .addPoints(cart.getStrip((37*0)+9).getPoints())
                 .addPoints(cart.getStrip((37*0)+17).getPoints())
                 .addPoints(cart.getStrip((37*0)+25).getPoints())
+                .addPoints(cart.getStrip((37*0)+28).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip((37*0)+20).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip((37*0)+12).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip((37*0)+4).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip((37*0)+7).getPoints())
+                .addPoints(cart.getStrip((37*0)+15).getPoints())
+                .addPoints(cart.getStrip((37*0)+23).getPoints())
+                .addPoints(cart.getStrip((37*0)+31).getPoints())
         );
 
         // vertical - col 2
         addPixliteOutput(
             new PointsGrouping("2")
-                .addPoints(cart.getStrip((37*1)+7).getPoints())
-                .addPoints(cart.getStrip((37*1)+15).getPoints())
-                .addPoints(cart.getStrip((37*1)+23).getPoints())
-                .addPoints(cart.getStrip((37*1)+31).getPoints())
-                .addPoints(cart.getStrip((37*1)+28).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip((37*1)+20).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip((37*1)+12).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip((37*1)+4).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(cart.getStrip((37*1)+1).getPoints())
                 .addPoints(cart.getStrip((37*1)+9).getPoints())
                 .addPoints(cart.getStrip((37*1)+17).getPoints())
                 .addPoints(cart.getStrip((37*1)+25).getPoints())
+                .addPoints(cart.getStrip((37*1)+28).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip((37*1)+20).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip((37*1)+12).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip((37*1)+4).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip((37*1)+7).getPoints())
+                .addPoints(cart.getStrip((37*1)+15).getPoints())
+                .addPoints(cart.getStrip((37*1)+23).getPoints())
+                .addPoints(cart.getStrip((37*1)+31).getPoints())
         );
 
         // vertical - col 3
         addPixliteOutput(
             new PointsGrouping("3")
-                .addPoints(cart.getStrip((37*2)+7).getPoints())
-                .addPoints(cart.getStrip((37*2)+15).getPoints())
-                .addPoints(cart.getStrip((37*2)+23).getPoints())
-                .addPoints(cart.getStrip((37*2)+31).getPoints())
-                .addPoints(cart.getStrip((37*2)+28).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip((37*2)+20).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip((37*2)+12).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip((37*2)+4).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(cart.getStrip((37*2)+1).getPoints())
                 .addPoints(cart.getStrip((37*2)+9).getPoints())
                 .addPoints(cart.getStrip((37*2)+17).getPoints())
                 .addPoints(cart.getStrip((37*2)+25).getPoints())
+                .addPoints(cart.getStrip((37*2)+28).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip((37*2)+20).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip((37*2)+12).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip((37*2)+4).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip((37*2)+7).getPoints())
+                .addPoints(cart.getStrip((37*2)+15).getPoints())
+                .addPoints(cart.getStrip((37*2)+23).getPoints())
+                .addPoints(cart.getStrip((37*2)+31).getPoints())
         );
 
         // vertical - col 4
         addPixliteOutput(
             new PointsGrouping("4")
-                .addPoints(cart.getStrip((37*3)+7).getPoints())
-                .addPoints(cart.getStrip((37*3)+15).getPoints())
-                .addPoints(cart.getStrip((37*3)+23).getPoints())
-                .addPoints(cart.getStrip((37*3)+31).getPoints())
-                .addPoints(cart.getStrip((37*3)+28).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip((37*3)+20).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip((37*3)+12).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip((37*3)+4).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(cart.getStrip((37*3)+1).getPoints())
                 .addPoints(cart.getStrip((37*3)+9).getPoints())
                 .addPoints(cart.getStrip((37*3)+17).getPoints())
                 .addPoints(cart.getStrip((37*3)+25).getPoints())
+                .addPoints(cart.getStrip((37*3)+28).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip((37*3)+20).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip((37*3)+12).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip((37*3)+4).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip((37*3)+7).getPoints())
+                .addPoints(cart.getStrip((37*3)+15).getPoints())
+                .addPoints(cart.getStrip((37*3)+23).getPoints())
+                .addPoints(cart.getStrip((37*3)+31).getPoints())
         );
 
         // vertical - col 5
         addPixliteOutput(
             new PointsGrouping("5")
-                .addPoints(cart.getStrip(152).getPoints())
-                .addPoints(cart.getStrip(157).getPoints())
-                .addPoints(cart.getStrip(162).getPoints())
-                .addPoints(cart.getStrip(167).getPoints())
-                .addPoints(cart.getStrip(165).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip(160).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip(155).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip(150).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(cart.getStrip(148).getPoints())
                 .addPoints(cart.getStrip(153).getPoints())
                 .addPoints(cart.getStrip(158).getPoints())
                 .addPoints(cart.getStrip(163).getPoints())
+                .addPoints(cart.getStrip(165).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(160).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(155).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(150).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(152).getPoints())
+                .addPoints(cart.getStrip(157).getPoints())
+                .addPoints(cart.getStrip(162).getPoints())
+                .addPoints(cart.getStrip(167).getPoints())
         );
 
         // horizontal - row 1 - A (bottom)
@@ -105,10 +105,10 @@ public class PilotsPixlite extends SimplePixlite {
                 .addPoints(cart.getStrip(2).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(cart.getStrip(0).getPoints())
                 .addPoints(cart.getStrip(37).getPoints())
-                .addPoints(cart.getStrip(39).getPoints())
+                .addPoints(cart.getStrip(40).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(cart.getStrip(3).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip(42).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip(40).getPoints())
+                .addPoints(cart.getStrip(39).getPoints())
+                .addPoints(cart.getStrip(42).getPoints())
         );
 
         // horizontal - row 1 - B
@@ -121,10 +121,10 @@ public class PilotsPixlite extends SimplePixlite {
                 .addPoints(cart.getStrip(151).getPoints())
                 .addPoints(cart.getStrip(117).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(cart.getStrip(80).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip(116).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(77).getPoints())
                 .addPoints(cart.getStrip(114).getPoints())
-                .addPoints(cart.getStrip(113).getPoints())
-                .addPoints(cart.getStrip(77).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(116).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(113).getPoints(), PointsGrouping.REVERSE_ORDERING)
         );
 
         // horizontal - row 2 - A
@@ -137,10 +137,10 @@ public class PilotsPixlite extends SimplePixlite {
                 .addPoints(cart.getStrip((8*1)+2).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(cart.getStrip((8*1)+0).getPoints())
                 .addPoints(cart.getStrip((8*1)+37).getPoints())
-                .addPoints(cart.getStrip((8*1)+39).getPoints())
+                .addPoints(cart.getStrip((8*1)+40).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(cart.getStrip((8*1)+3).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip((8*1)+42).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip((8*1)+40).getPoints())
+                .addPoints(cart.getStrip((8*1)+39).getPoints())
+                .addPoints(cart.getStrip((8*1)+42).getPoints())
         );
 
         // horizontal - row 2 - B
@@ -153,10 +153,10 @@ public class PilotsPixlite extends SimplePixlite {
                 .addPoints(cart.getStrip(156).getPoints())
                 .addPoints(cart.getStrip(125).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(cart.getStrip(88).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip(124).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(85).getPoints())
                 .addPoints(cart.getStrip(122).getPoints())
-                .addPoints(cart.getStrip(121).getPoints())
-                .addPoints(cart.getStrip(85).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(124).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(121).getPoints(), PointsGrouping.REVERSE_ORDERING)
         );
 
         // horizontal - row 3 - A
@@ -169,10 +169,10 @@ public class PilotsPixlite extends SimplePixlite {
                 .addPoints(cart.getStrip((8*2)+2).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(cart.getStrip((8*2)+0).getPoints())
                 .addPoints(cart.getStrip((8*2)+37).getPoints())
-                .addPoints(cart.getStrip((8*2)+39).getPoints())
+                .addPoints(cart.getStrip((8*2)+40).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(cart.getStrip((8*2)+3).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip((8*2)+42).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip((8*2)+40).getPoints())
+                .addPoints(cart.getStrip((8*2)+39).getPoints())
+                .addPoints(cart.getStrip((8*2)+42).getPoints())
         );
 
         // horizontal - row 3 - B
@@ -184,11 +184,11 @@ public class PilotsPixlite extends SimplePixlite {
                 .addPoints(cart.getStrip(159).getPoints())
                 .addPoints(cart.getStrip(161).getPoints())
                 .addPoints(cart.getStrip(133).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip(86).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip(132).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(96).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(93).getPoints())
                 .addPoints(cart.getStrip(130).getPoints())
-                .addPoints(cart.getStrip(129).getPoints())
-                .addPoints(cart.getStrip(93).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(132).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(129).getPoints(), PointsGrouping.REVERSE_ORDERING)
         );
 
         // horizontal - row 4 - A
@@ -201,10 +201,10 @@ public class PilotsPixlite extends SimplePixlite {
                 .addPoints(cart.getStrip((8*3)+2).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(cart.getStrip((8*3)+0).getPoints())
                 .addPoints(cart.getStrip((8*3)+37).getPoints())
-                .addPoints(cart.getStrip((8*3)+39).getPoints())
+                .addPoints(cart.getStrip((8*3)+40).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(cart.getStrip((8*3)+3).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip((8*3)+42).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip((8*3)+40).getPoints())
+                .addPoints(cart.getStrip((8*3)+39).getPoints())
+                .addPoints(cart.getStrip((8*3)+42).getPoints())
         );
 
         // horizontal - row 4 - B
@@ -217,10 +217,10 @@ public class PilotsPixlite extends SimplePixlite {
                 .addPoints(cart.getStrip(166).getPoints())
                 .addPoints(cart.getStrip(141).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(cart.getStrip(104).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip(140).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(101).getPoints())
                 .addPoints(cart.getStrip(138).getPoints())
-                .addPoints(cart.getStrip(137).getPoints())
-                .addPoints(cart.getStrip(101).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(140).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(137).getPoints(), PointsGrouping.REVERSE_ORDERING)
         );
 
         // horizontal - row 5 - A
@@ -233,10 +233,10 @@ public class PilotsPixlite extends SimplePixlite {
                 .addPoints(cart.getStrip(33).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(cart.getStrip(32).getPoints())
                 .addPoints(cart.getStrip(69).getPoints())
-                .addPoints(cart.getStrip(70).getPoints())
+                .addPoints(cart.getStrip(71).getPoints(), PointsGrouping.REVERSE_ORDERING) 
                 .addPoints(cart.getStrip(34).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip(72).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip(71).getPoints())
+                .addPoints(cart.getStrip(70).getPoints())
+                .addPoints(cart.getStrip(72).getPoints())
         );
 
         // horizontal - row 5 - B
@@ -249,10 +249,10 @@ public class PilotsPixlite extends SimplePixlite {
                 .addPoints(cart.getStrip(169).getPoints())
                 .addPoints(cart.getStrip(147).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(cart.getStrip(110).getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(cart.getStrip(146).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(108).getPoints())
                 .addPoints(cart.getStrip(145).getPoints())
-                .addPoints(cart.getStrip(144).getPoints())
-                .addPoints(cart.getStrip(108).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(146).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(cart.getStrip(144).getPoints(), PointsGrouping.REVERSE_ORDERING)
         );
     }
 }
