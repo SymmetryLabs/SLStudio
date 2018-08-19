@@ -68,10 +68,9 @@ public class Play extends DPat
     rAngle    a1         = new rAngle(), a2             = new rAngle(),
         a3         = new rAngle(), a4             = new rAngle();
     PVector    cPrev     = new PVector(), cRand        = new PVector(),
-        cMid     = new PVector(), V             = new PVector(),
+        cMid     = new PVector(),
         theta     = new PVector(), tSin        = new PVector(),
-        tCos    = new PVector(), cMidNorm     = new PVector(),
-        Pn        = new PVector();
+        tCos    = new PVector(), cMidNorm     = new PVector();
     float    LastBeat=3, LastMeasure=3;
     int        curRandTempo = 1, curRandTPat = 1;
 
