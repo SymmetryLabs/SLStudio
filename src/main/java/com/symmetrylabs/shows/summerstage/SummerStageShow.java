@@ -177,7 +177,7 @@ public class SummerStageShow extends CubesShow {
             }),
             // col 4
             new TowerConfig(SP * 3, SP * 3, SP * 0, new String[][]{
-                new String[]{"905", "955"}, new String[]{"941", "937"}, new String[]{"942", "930"}, new String[]{"807", "830"}
+                new String[]{"905", "955"}, new String[]{"941", "937"}, new String[]{"942", "930"}, new String[]{"1052", "830"}
             }),
             new TowerConfig(SP * 3, SP * 8, SP * 0, new String[][]{
                 new String[]{"681", "680"}, new String[]{"595", "804"},
@@ -185,7 +185,7 @@ public class SummerStageShow extends CubesShow {
             }),
             // col 4 (-1)
             new TowerConfig(SP * 3, SP * 4, SP * -1, new String[][]{
-                new String[]{"889", "1087"}
+                new String[]{"604", "1087"}
             }),
             // col 5
             new TowerConfig(SP * 4, SP * 9, SP * 0, new String[][]{
