@@ -5,6 +5,9 @@ import com.google.gson.JsonObject;
 import com.sun.jna.Memory;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.model.StripsModel;
+import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
@@ -25,13 +28,17 @@ import java.nio.IntBuffer;
 import java.util.Deque;
 import java.util.LinkedList;
 
-public class VideoPlayer extends SLPattern<SLModel> {
-    CompoundParameter shrinkParam = new CompoundParameter("shrink", 1, 0.1, 20);
+public class VideoPlayer<T extends Strip> extends SLPattern<StripsModel<T>> {
+    CompoundParameter shrinkParam = new CompoundParameter("shrink", 1, 1.4, 3);
     CompoundParameter yOffsetParam = new CompoundParameter("yoff", 0, 0, 1);
     BooleanParameter fitParam = new BooleanParameter("fit", false);
     BooleanParameter restartParam = new BooleanParameter("restart", false);
     BooleanParameter chooseFileParam = new BooleanParameter("file", false);
     BooleanParameter captureParam = new BooleanParameter("capture", false);
+
+    BooleanParameter maskX = new BooleanParameter("maskx", false);
+    BooleanParameter maskY = new BooleanParameter("masky", false);
+    BooleanParameter maskZ = new BooleanParameter("maskz", false);
 
     /**
      * A guess at the amount of time it will take vlcj to start playing the
@@ -78,6 +85,10 @@ public class VideoPlayer extends SLPattern<SLModel> {
         addParameter(chooseFileParam);
         addParameter(captureParam);
 
+        addParameter(maskX);
+        addParameter(maskY);
+        addParameter(maskZ);
+
         fitParam.setMode(BooleanParameter.Mode.MOMENTARY);
         restartParam.setMode(BooleanParameter.Mode.MOMENTARY);
         chooseFileParam.setMode(BooleanParameter.Mode.MOMENTARY);
@@ -97,7 +108,6 @@ public class VideoPlayer extends SLPattern<SLModel> {
             buf = null;
             width = w;
             height = h;
-            setShrinkToFit();
             return new RV32BufferFormat(w, h);
         }) {
             @Override
@@ -315,21 +325,37 @@ public class VideoPlayer extends SLPattern<SLModel> {
         }
 
         float shrink = shrinkParam.getValuef();
-        for (LXVector v : getVectors()) {
-            int i = (int) ((shrink * (model.yMax - v.y)) + yOffsetParam.getValue() * height);
-            int j = (int) (shrink * (v.x - model.xMin));
+        boolean mx = maskX.getValueb();
+        boolean my = maskY.getValueb();
+        boolean mz = maskZ.getValueb();
 
-            int color;
-            if (i >= height || j >= width || i < 0 || j < 0) {
-                color = LXColor.gray(0);
-            } else {
-                int vcolor = buf[width * i + j];
-                color = LXColor.rgb(
-                    (vcolor >> 16) & 0xFF,
-                    (vcolor >> 8) & 0xFF,
-                    vcolor & 0xFF);
+        for (StripsTopology.Bundle b : model.getTopology().bundles) {
+            for (int sidx : b.strips) {
+                Strip s = model.getStripByIndex(sidx);
+                for (LXVector v : getVectors(s.points)) {
+                    int i = (int) ((shrink * (model.yMax - v.y)) + yOffsetParam.getValue() * height);
+                    int j = (int) (shrink * (v.x - model.xMin));
+
+                    int color;
+
+                    if (mx && b.dir == StripsTopology.Dir.X) {
+                        color = LXColor.gray(0);
+                    } else if (my && b.dir == StripsTopology.Dir.Y) {
+                        color = LXColor.gray(0);
+                    } else if (mz && b.dir == StripsTopology.Dir.Z) {
+                        color = LXColor.gray(0);
+                    } else if (i >= height || j >= width || i < 0 || j < 0) {
+                        color = LXColor.gray(0);
+                    } else {
+                        int vcolor = buf[width * i + j];
+                        color = LXColor.rgb(
+                            (vcolor >> 16) & 0xFF,
+                            (vcolor >> 8) & 0xFF,
+                            vcolor & 0xFF);
+                    }
+                    colors[v.index] = color;
+                }
             }
-            colors[v.index] = color;
         }
     }
 }
