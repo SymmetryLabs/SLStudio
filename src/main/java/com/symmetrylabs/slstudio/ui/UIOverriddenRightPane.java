@@ -6,10 +6,12 @@ import heronarts.lx.LXComponent;
 import heronarts.lx.LXMappingEngine;
 import heronarts.lx.LXModulationEngine;
 import heronarts.lx.audio.BandGate;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.MacroKnobs;
 import heronarts.lx.modulator.MultiStageEnvelope;
 import heronarts.lx.modulator.VariableLFO;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXCompoundModulation;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -19,6 +21,7 @@ import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI2dScrollContext;
 import heronarts.p3lx.ui.UIObject;
 import heronarts.p3lx.ui.component.UIButton;
+import heronarts.p3lx.ui.component.UISlider;
 import heronarts.p3lx.ui.studio.UIPane;
 import heronarts.p3lx.ui.studio.midi.UIMidiInputs;
 import heronarts.p3lx.ui.studio.midi.UIMidiMappings;
@@ -41,6 +44,8 @@ public class UIOverriddenRightPane extends UIPane {
     public final UI2dScrollContext modulation;
     public final UI2dScrollContext midi;
 
+    private final CompoundParameter backgroundLightParam = new CompoundParameter("background", 0.09, 0, 1);
+
     public static final int PADDING = 4;
     public static final int WIDTH = 284;
     private static final int ADD_BUTTON_WIDTH = 38;
@@ -57,6 +62,14 @@ public class UIOverriddenRightPane extends UIPane {
         this.modulation = this.sections[0];
         this.midi = this.sections[1];
         this.utility = this.sections[2];
+
+        ui.setBackgroundColor(LXColor.gray(backgroundLightParam.getValue() * 100));
+        new UISlider(UISlider.Direction.HORIZONTAL, PADDING, PADDING, utility.getWidth() - 2 * PADDING, 20)
+            .setParameter(backgroundLightParam)
+            .addToContainer(utility);
+        backgroundLightParam.addListener(p -> {
+            ui.setBackgroundColor(LXColor.gray(p.getValue() * 100));
+        });
 
         buildUtilityUI();
         buildMidiUI();
