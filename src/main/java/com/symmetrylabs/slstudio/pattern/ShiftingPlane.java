@@ -12,7 +12,10 @@ import heronarts.lx.transform.LXVector;
 import static com.symmetrylabs.util.MathUtils.*;
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
+
 public class ShiftingPlane extends LXPattern {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
 
     final CompoundParameter hueShift = new CompoundParameter("HueVar", 0.5, 0, 1);
 

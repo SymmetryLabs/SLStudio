@@ -18,7 +18,11 @@ import static com.symmetrylabs.util.MathUtils.random;
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 import static processing.core.PApplet.floor;
 
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
+
 public class CubeFlash extends SLPattern<CubesModel> {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
+
     private CompoundParameter rateParameter = new CompoundParameter("Speed", 0.125);
     private CompoundParameter attackParameter = new CompoundParameter("Attack", 0.5);
     private CompoundParameter decayParameter = new CompoundParameter("Decay", 0.5);

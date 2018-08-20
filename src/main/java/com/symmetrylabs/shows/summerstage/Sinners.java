@@ -23,7 +23,11 @@ import heronarts.lx.color.*;
 
 import java.util.*;
 
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
+
 public class Sinners extends SLPattern<CubesModel> {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
+    
     ArrayList<Float> offsets = new ArrayList();
     ArrayList<Float> multipliers = new ArrayList();
     ArrayList<Float> bases = new ArrayList();

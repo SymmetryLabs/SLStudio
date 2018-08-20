@@ -12,7 +12,11 @@ import heronarts.lx.parameter.CompoundParameter;
 
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
+
 public class Spheres extends LXPattern {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
+    
     private CompoundParameter hueParameter = new CompoundParameter("Size", 1.0);
     private CompoundParameter periodParameter = new CompoundParameter("Period", 4000.0, 200.0, 10000.0);
     private CompoundParameter hueVariance = new CompoundParameter("HueVar", 50, 0, 180);

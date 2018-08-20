@@ -12,7 +12,10 @@ import heronarts.lx.transform.LXVector;
 
 import static processing.core.PApplet.*;
 
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
+
 public class SpaceTime extends SLPattern<StripsModel<Strip>> {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
 
     SinLFO pos = new SinLFO(0, 1, 3000);
     SinLFO rate = new SinLFO(1000, 9000, 13000);

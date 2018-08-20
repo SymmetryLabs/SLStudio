@@ -14,7 +14,11 @@ import heronarts.lx.transform.LXVector;
 import static com.symmetrylabs.util.MathUtils.*;
 import static com.symmetrylabs.util.MathConstants.*;
 
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
+
 public class Voronoi extends LXPattern {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
+    
     final CompoundParameter speed = new CompoundParameter("SPEED", 1.8, 0, 10);
     final CompoundParameter width = new CompoundParameter("WIDTH", 0.2, 0.1, 1);
     final DiscreteParameter num = new DiscreteParameter("NUM", 14, 5, 28);

@@ -7,7 +7,11 @@ import heronarts.lx.LX;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.BooleanParameter;
 
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
+
 public class Wasps extends ParticlePattern {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
+    
     private final double SQRT_2PI = FastMath.sqrt(2 * FastMath.PI);
 
     public CompoundParameter speed;

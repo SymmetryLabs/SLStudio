@@ -11,7 +11,11 @@ import heronarts.lx.parameter.CompoundParameter;
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 import static processing.core.PApplet.map;
 
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
+
 public class Rings extends LXPattern {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
+    
     float dx, dy, dz;
     float angleParam, spacingParam;
     float dzParam, centerParam;

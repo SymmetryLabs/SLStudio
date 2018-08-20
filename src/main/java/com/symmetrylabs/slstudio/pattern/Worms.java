@@ -18,7 +18,11 @@ import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
+
 public class Worms extends SLPattern<StripsModel<Strip>> {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
+    
     private final float STRIPS_PER_SECOND = 10;
     private final float TRAIL_TIME = 3000;
     private final float Z_MID_LATE = 82.0f;

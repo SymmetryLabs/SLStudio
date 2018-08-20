@@ -9,7 +9,11 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import processing.core.PVector;
 
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
+
 public class Pong extends DPat {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
+
     SinLFO x, y, z, dx, dy, dz;
     float cRad;
     CompoundParameter pSize;

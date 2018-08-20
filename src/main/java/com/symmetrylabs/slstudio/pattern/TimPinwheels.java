@@ -17,7 +17,10 @@ import static com.symmetrylabs.util.MathConstants.PI;
 //import static com.symmetrylabs.util.MathUtils.pow;
 import static java.lang.StrictMath.atan2;
 
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
+
 public class TimPinwheels extends LXPattern {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
 
     private CompoundParameter horizSpreadParameter = new CompoundParameter("HSpr", 0.75);
     private CompoundParameter vertSpreadParameter = new CompoundParameter("VSpr", 0.5);

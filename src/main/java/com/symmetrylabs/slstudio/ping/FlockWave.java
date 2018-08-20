@@ -34,7 +34,10 @@ import com.symmetrylabs.util.Octahedron;
 
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
+
 public class FlockWave extends SLPattern<SLModel> {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
 
     private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
 

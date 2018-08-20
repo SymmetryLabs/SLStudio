@@ -18,7 +18,10 @@ import java.util.stream.StreamSupport;
 
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
+
 public class Balance extends LXPattern {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
 
     class Sphere {
         float x, y, z;

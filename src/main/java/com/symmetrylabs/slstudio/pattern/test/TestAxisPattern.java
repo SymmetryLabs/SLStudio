@@ -11,8 +11,10 @@ import heronarts.lx.color.LXColor;
 import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.transform.LXVector;
 
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
 
 public class TestAxisPattern extends LXPattern {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
 
     final CompoundParameter x = new CompoundParameter("xPos", 0.3);
     final CompoundParameter y = new CompoundParameter("yPos", 0.3);

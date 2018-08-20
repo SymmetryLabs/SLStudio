@@ -8,8 +8,10 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import processing.core.PVector;
 
-public class AskewPlanes extends DPat {
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
 
+public class AskewPlanes extends DPat {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
 
     float huev = 0;
 

@@ -11,7 +11,11 @@ import processing.core.PVector;
 
 import static processing.core.PConstants.ADD;
 
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
+
 public class Noise extends DPat {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
+    
     private int currModeIndex, iSymm;
     public final CompoundParameter speed = new CompoundParameter("Speed", 0.55, -2, 2);
     public final CompoundParameter density = new CompoundParameter("Dens", 0.6);

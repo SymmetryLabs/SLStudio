@@ -14,7 +14,10 @@ import heronarts.lx.transform.LXVector;
 import static com.symmetrylabs.util.MathUtils.*;
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
+
 public class CrossSections extends LXPattern {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
 
     final SinLFO x = new SinLFO(model.xMin, model.xMax, 5000);
     final SinLFO y = new SinLFO(model.yMin, model.yMax, 6000);

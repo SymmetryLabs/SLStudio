@@ -15,8 +15,10 @@ import heronarts.lx.modulator.TriangleLFO;
 
 //import static com.symmetrylabs.util.MathUtils.*;
 
-public class Psychedelia extends SLPattern<StripsModel<Strip>> {
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
 
+public class Psychedelia extends SLPattern<StripsModel<Strip>> {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
 
     final int NUM = 3;
     SinLFO m = new SinLFO(-0.5, NUM-0.5, 9000);

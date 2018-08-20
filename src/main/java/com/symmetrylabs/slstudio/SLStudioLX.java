@@ -51,6 +51,8 @@ import static java.awt.event.KeyEvent.*;
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 import static heronarts.lx.PolyBuffer.Space.RGB8;
 
+import com.symmetrylabs.shows.summerstage.VerySolidColor;
+
 public class SLStudioLX extends P3LX {
     public static final String COPYRIGHT = "Symmetry Labs";
 
@@ -701,6 +703,7 @@ public class SLStudioLX extends P3LX {
 
         lx.registerPattern(heronarts.p3lx.pattern.SolidColorPattern.class);
         lx.registerPattern(IteratorTestPattern.class);
+        lx.registerPattern(VerySolidColor.class);
 
         lx.registerEffect(FlashEffect.class);
         lx.registerEffect(BlurEffect.class);

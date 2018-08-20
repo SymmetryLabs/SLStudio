@@ -14,7 +14,11 @@ import heronarts.lx.transform.LXVector;
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 import static processing.core.PApplet.*;
 
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
+
 public class Swarm extends SLPattern<StripsModel<Strip>> {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
+    
     private final SawLFO offset = new SawLFO(0, 1, 1000);
     private final SinLFO rate = new SinLFO(350, 1200, 63000);
     private final SinLFO falloff = new SinLFO(15, 50, 17000);

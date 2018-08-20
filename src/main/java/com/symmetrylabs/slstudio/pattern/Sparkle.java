@@ -13,7 +13,11 @@ import heronarts.lx.LXUtils;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
 
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
+
 public class Sparkle extends LXPattern {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
+    
     private CompoundParameter densityParameter = new CompoundParameter("Dens", 0.15);
     private CompoundParameter attackParameter = new CompoundParameter("Attack", 0.4);
     private CompoundParameter decayParameter = new CompoundParameter("Decay", 0.3);

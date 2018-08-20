@@ -18,6 +18,7 @@ import com.symmetrylabs.slstudio.SLStudioLX;
  * This file implements the mapping functions needed to lay out the cubes.
  */
 public class SummerStageShow extends CubesShow {
+    public static final String SHOW_NAME = "ss";
 
     static final float globalOffsetX = 0;
     static final float globalOffsetY = 0;
