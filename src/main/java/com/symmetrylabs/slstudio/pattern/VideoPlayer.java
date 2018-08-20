@@ -211,6 +211,7 @@ public class VideoPlayer<T extends Strip> extends SLPattern<StripsModel<T>> {
             if (!mediaPlayer.isPlayable()) {
                 mediaPlayer.prepareMedia(mediaUrl, mediaOptions);
                 mediaPlayer.mute(true);
+                mediaPlayer.setVolume(0);
                 mediaPlayer.setRepeat(true);
                 mediaPlayer.addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
                     @Override
