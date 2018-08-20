@@ -36,10 +36,6 @@ public class VideoPlayer<T extends Strip> extends SLPattern<StripsModel<T>> {
     BooleanParameter chooseFileParam = new BooleanParameter("file", false);
     BooleanParameter captureParam = new BooleanParameter("capture", false);
 
-    BooleanParameter maskX = new BooleanParameter("maskx", false);
-    BooleanParameter maskY = new BooleanParameter("masky", false);
-    BooleanParameter maskZ = new BooleanParameter("maskz", false);
-
     /**
      * A guess at the amount of time it will take vlcj to start playing the
      * video. We skip the video forward by this amount to compensate for
@@ -84,10 +80,6 @@ public class VideoPlayer<T extends Strip> extends SLPattern<StripsModel<T>> {
         addParameter(restartParam);
         addParameter(chooseFileParam);
         addParameter(captureParam);
-
-        addParameter(maskX);
-        addParameter(maskY);
-        addParameter(maskZ);
 
         fitParam.setMode(BooleanParameter.Mode.MOMENTARY);
         restartParam.setMode(BooleanParameter.Mode.MOMENTARY);
@@ -304,6 +296,11 @@ public class VideoPlayer<T extends Strip> extends SLPattern<StripsModel<T>> {
 
     @Override
     public void run(double elapsedMs) {
+        int black = LXColor.gray(0);
+        for (int i = 0; i < colors.length; i++) {
+            colors[i] = black;
+        }
+
         if (buf == null) {
             return;
         }
@@ -326,9 +323,6 @@ public class VideoPlayer<T extends Strip> extends SLPattern<StripsModel<T>> {
         }
 
         float shrink = shrinkParam.getValuef();
-        boolean mx = maskX.getValueb();
-        boolean my = maskY.getValueb();
-        boolean mz = maskZ.getValueb();
 
         for (StripsTopology.Bundle b : model.getTopology().bundles) {
             for (int sidx : b.strips) {
@@ -336,16 +330,8 @@ public class VideoPlayer<T extends Strip> extends SLPattern<StripsModel<T>> {
                 for (LXVector v : getVectors(s.points)) {
                     int i = (int) ((shrink * (model.yMax - v.y)) + yOffsetParam.getValue() * height);
                     int j = (int) (shrink * (v.x - model.xMin));
-
                     int color;
-
-                    if (mx && b.dir == StripsTopology.Dir.X) {
-                        color = LXColor.gray(0);
-                    } else if (my && b.dir == StripsTopology.Dir.Y) {
-                        color = LXColor.gray(0);
-                    } else if (mz && b.dir == StripsTopology.Dir.Z) {
-                        color = LXColor.gray(0);
-                    } else if (i >= height || j >= width || i < 0 || j < 0) {
+                    if (i >= height || j >= width || i < 0 || j < 0) {
                         color = LXColor.gray(0);
                     } else {
                         int vcolor = buf[width * i + j];
