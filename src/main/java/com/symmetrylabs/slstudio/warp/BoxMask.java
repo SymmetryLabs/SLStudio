@@ -10,7 +10,6 @@ import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
-import heronarts.lx.warp.LXWarp;
 import processing.core.PVector;
 
 public class BoxMask extends LXWarpWithMarkers {
@@ -20,6 +19,7 @@ public class BoxMask extends LXWarpWithMarkers {
     private CompoundParameter cyParam = new CompoundParameter("cy", model.cy, model.yMin, model.yMax);
     private CompoundParameter zSizeParam = new CompoundParameter("zSize", model.zRange/2, 0, model.zRange);
     private CompoundParameter czParam = new CompoundParameter("cz", model.cz, model.zMin, model.zMax);
+    private BooleanParameter invertParam = new BooleanParameter("invert", false);
 
     public BoxMask(LX lx) {
         super(lx);
@@ -29,6 +29,7 @@ public class BoxMask extends LXWarpWithMarkers {
         addParameter(cyParam);
         addParameter(zSizeParam);
         addParameter(czParam);
+        addParameter(invertParam);
     }
 
     @Override
@@ -42,12 +43,14 @@ public class BoxMask extends LXWarpWithMarkers {
             float cy = cyParam.getValuef();
             float zSize = zSizeParam.getValuef();
             float cz = czParam.getValuef();
+            boolean invert = invertParam.getValueb();
 
             for (int i = 0; i < inputVectors.length; i++)  {
                 LXVector iv = inputVectors[i];
-                if (Math.abs(iv.x - cx) < xSize &&
-                      Math.abs(iv.y - cy) < ySize &&
-                      Math.abs(iv.z - cz) < zSize) {
+                boolean inside = Math.abs(iv.x - cx) < xSize &&
+                                                 Math.abs(iv.y - cy) < ySize &&
+                                                 Math.abs(iv.z - cz) < zSize;
+                if (inside ^ invert) {
                     outputVectors[i] = inputVectors[i];
                 } else {
                     outputVectors[i] = null;
