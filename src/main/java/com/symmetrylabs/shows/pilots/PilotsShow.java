@@ -22,7 +22,7 @@ public class PilotsShow implements Show {
     static final float RED_HUE = 0;
     static final float YELLOW_HUE = 51;
     static final int RED = LXColor.hsb(RED_HUE, 100, 100);
-    static final int YELLOW = LXColor.hsb(YELLOW_HUE, 100, 100);
+    static final int YELLOW = LXColor.hsb(YELLOW_HUE, 85, 100);
 
     private static final float STRIP_LENGTH = 29;
     private static final float CART_SPACING = 2;

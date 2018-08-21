@@ -12,9 +12,6 @@ import heronarts.lx.transform.LXVector;
 public class PilotsPlanes extends SLPattern<SLModel> {
     public static final String GROUP_NAME = PilotsShow.SHOW_NAME;
 
-    private static final int redColor = LXColor.hsb(0, 100, 100);
-    private static final int yellowColor = LXColor.hsb(51, 85, 100);
-
     private final CompoundParameter speedParam = new CompoundParameter("speed", 12, -500, 500);
     private final CompoundParameter distParam = new CompoundParameter("dist", 120, 10, 600);
     private final CompoundParameter thickParam = new CompoundParameter("thick", 12, 0, 60);
@@ -66,7 +63,7 @@ public class PilotsPlanes extends SLPattern<SLModel> {
         off += speedParam.getValuef() / 1000f * (float) elapsedMs;
         float dist = distParam.getValuef();
         float halfThick = thickParam.getValuef() / 2f;
-        int color = redParam.getValueb() ? redColor : yellowColor;
+        int color = redParam.getValueb() ? PilotsShow.RED : PilotsShow.YELLOW;
 
         for (LXVector v : getVectors()) {
             float proj = normal.dot(v) + off;
