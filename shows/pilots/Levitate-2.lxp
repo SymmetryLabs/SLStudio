@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1534874910577,
+  "timestamp": 1534875768438,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 4,
+      "focusedChannel": 5,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.1392187476158142,
+          "fader": 0.9759602546691895,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -111,13 +111,13 @@
             "modulationColor": -6357248,
             "parameters": {
               "label": "PilotsPlanes",
-              "speed": 100.00002384185791,
+              "speed": 254.35632467269897,
               "dist": 120.0,
               "thick": 12.0,
               "red": false,
               "x": 1.0,
-              "y": 0.19563432037830353,
-              "z": 0.22878001630306244,
+              "y": 0.5223636627197266,
+              "z": 0.1979801505804062,
               "flips": false,
               "flipc": false
             },
@@ -320,7 +320,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -448,6 +448,47 @@
               "wd": false,
               "cu": false,
               "cd": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 386,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -65296,
+        "parameters": {
+          "label": "Flash",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 387,
+            "class": "com.symmetrylabs.shows.pilots.AllVerticals",
+            "modulationColor": -1179904,
+            "parameters": {
+              "label": "AllVerticals"
             },
             "modulation": {
               "modulators": [],
