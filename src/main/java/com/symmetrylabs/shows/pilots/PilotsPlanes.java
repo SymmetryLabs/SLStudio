@@ -6,6 +6,7 @@ import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXVector;
 
 public class PilotsPlanes extends SLPattern<SLModel> {
@@ -22,6 +23,9 @@ public class PilotsPlanes extends SLPattern<SLModel> {
     private final CompoundParameter normalZParam = new CompoundParameter("z", 0.315, 0, 1);
     private final BooleanParameter redParam = new BooleanParameter("red", true);
 
+    private final BooleanParameter flipSpeedParam = new BooleanParameter("flips", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter flipColorParam = new BooleanParameter("flipc", false).setMode(BooleanParameter.Mode.MOMENTARY);
+
     float off;
 
     public PilotsPlanes(LX lx) {
@@ -34,7 +38,19 @@ public class PilotsPlanes extends SLPattern<SLModel> {
         addParameter(normalYParam);
         addParameter(normalZParam);
 
+        addParameter(flipSpeedParam);
+        addParameter(flipColorParam);
+
         off = 0;
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        if (p == flipSpeedParam) {
+            speedParam.setValue(-speedParam.getValue());
+        } else if (p == flipColorParam) {
+            redParam.setValue(!redParam.getValueb());
+        }
     }
 
     @Override
