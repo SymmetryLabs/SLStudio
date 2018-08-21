@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1534890374652,
+  "timestamp": 1534891971844,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -130,7 +130,7 @@
         "parameters": {
           "label": "Channel-2",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -284,7 +284,7 @@
         "parameters": {
           "label": "Channel-4",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -350,7 +350,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.721102237701416,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -371,6 +371,18 @@
               "cy": 58.0,
               "z": false,
               "cz": 72.5
+            }
+          },
+          {
+            "id": 676,
+            "class": "com.symmetrylabs.slstudio.warp.BundleDirMask",
+            "modulationColor": -7995648,
+            "parameters": {
+              "label": "BundleDirMask",
+              "enabled": true,
+              "x": true,
+              "y": false,
+              "z": false
             }
           }
         ],
@@ -600,8 +612,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 448.76430622515664,
-        "theta": -0.0029999999999999506,
-        "phi": 0.08171667385102721,
+        "theta": -0.04499999999999993,
+        "phi": 0.11471667385102724,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5
