@@ -17,6 +17,7 @@ import static com.symmetrylabs.util.MathConstants.PI;
 import static java.lang.StrictMath.atan2;
 
 public class PilotsPinwheels extends SLPattern<SLModel> {
+    public static final String GROUP_NAME = PilotsShow.SHOW_NAME;
 
     private CompoundParameter horizSpreadParameter = new CompoundParameter("HSpr", 0.75);
     private CompoundParameter vertSpreadParameter = new CompoundParameter("VSpr", 0.5);
