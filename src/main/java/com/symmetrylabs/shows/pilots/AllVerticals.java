@@ -35,6 +35,10 @@ public class AllVerticals<T extends Strip> extends SLPattern<StripsModel<T>> {
 
     @Override
     public void run(double deltaMs) {
+        int black = LXColor.gray(0);
+        for (int i = 0; i < colors.length; i++) {
+            colors[i] = black;
+        }
         for (Bundle b : model.getTopology().bundles) {
             for (int stripIdx : b.strips) {
                 for (LXPoint p : model.getStripByIndex(stripIdx).points) {
