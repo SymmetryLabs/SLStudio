@@ -1,9 +1,11 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.shows.pilots;
 
+import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
-import heronarts.lx.model.LXPoint;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXVector;
@@ -12,12 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.symmetrylabs.util.MathConstants.PI;
-//import static com.symmetrylabs.util.MathUtils.floor;
-//import static com.symmetrylabs.util.MathUtils.max;
-//import static com.symmetrylabs.util.MathUtils.pow;
 import static java.lang.StrictMath.atan2;
 
-public class TimPinwheels extends LXPattern {
+public class PilotsPinwheels extends SLPattern<SLModel> {
 
     private CompoundParameter horizSpreadParameter = new CompoundParameter("HSpr", 0.75);
     private CompoundParameter vertSpreadParameter = new CompoundParameter("VSpr", 0.5);
@@ -28,6 +27,7 @@ public class TimPinwheels extends LXPattern {
     private CompoundParameter clickinessParameter = new CompoundParameter("Clic", 0.5);
     private CompoundParameter hueParameter = new CompoundParameter("Hue", 0.667);
     private CompoundParameter hueSpreadParameter = new CompoundParameter("HSpd", 0.667);
+    private BooleanParameter freezeParameter = new BooleanParameter("freeze", false);
 
     float phase = 0;
     private final int NUM_BLADES = 12;
@@ -71,7 +71,7 @@ public class TimPinwheels extends LXPattern {
     private final List<Pinwheel> pinwheels;
     private final float[] values;
 
-    public TimPinwheels(LX lx) {
+    public PilotsPinwheels(LX lx) {
         super(lx);
 
         addParameter(horizSpreadParameter);
@@ -83,6 +83,7 @@ public class TimPinwheels extends LXPattern {
         addParameter(clickinessParameter);
         addParameter(hueParameter);
         addParameter(hueSpreadParameter);
+        addParameter(freezeParameter);
 
         pinwheels = new ArrayList();
         pinwheels.add(new Pinwheel(0, 0, NUM_BLADES, 0.1f));
@@ -123,6 +124,10 @@ public class TimPinwheels extends LXPattern {
     private float prevRamp = 0;
 
     public void run(double deltaMs) {
+        for (int i = 0; i < colors.length; i++) {
+            colors[i] = LXColor.BLACK;
+        }
+
         float ramp = lx.tempo.rampf();
         float numBeats = (1 + ramp - prevRamp) % 1;
         prevRamp = ramp;
@@ -135,8 +140,10 @@ public class TimPinwheels extends LXPattern {
 
         float fadeAmount = (float) (deltaMs / 1000.0) * MathUtils.pow(sharpnessParameter.getValuef() * 10, 1);
 
-        for (Pinwheel pw : pinwheels) {
-            pw.age(numBeats);
+        if (!freezeParameter.getValueb()) {
+            for (Pinwheel pw : pinwheels) {
+                pw.age(numBeats);
+            }
         }
 
         float derez = derezParameter.getValuef();
@@ -144,7 +151,7 @@ public class TimPinwheels extends LXPattern {
         float zSlope = (zSlopeParameter.getValuef() - 0.5f) * 2;
 
         int i = -1;
-        for (LXPoint p : model.points) {
+        for (LXVector p : getVectors()) {
             ++i;
 
             int value = 0;
