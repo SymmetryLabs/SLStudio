@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.pattern;
 import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -123,6 +124,10 @@ public class TimPinwheels extends LXPattern {
     private float prevRamp = 0;
 
     public void run(double deltaMs) {
+        for (int i = 0; i < colors.length; i++) {
+            colors[i] = LXColor.BLACK;
+        }
+
         float ramp = lx.tempo.rampf();
         float numBeats = (1 + ramp - prevRamp) % 1;
         prevRamp = ramp;
@@ -144,7 +149,7 @@ public class TimPinwheels extends LXPattern {
         float zSlope = (zSlopeParameter.getValuef() - 0.5f) * 2;
 
         int i = -1;
-        for (LXPoint p : model.points) {
+        for (LXVector p : getVectors()) {
             ++i;
 
             int value = 0;
