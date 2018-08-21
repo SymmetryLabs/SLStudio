@@ -55,6 +55,7 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
     private BooleanParameter noColorDown = new BooleanParameter("wd", false);
     private BooleanParameter colorUp = new BooleanParameter("cu", false);
     private BooleanParameter colorDown = new BooleanParameter("cd", false);
+    private BooleanParameter yellowParam = new BooleanParameter("yellow", true);
 
     List<LineEffect> effects = new ArrayList<>();
     /* a map from mode to the effect that that note is currently playing, so
@@ -92,6 +93,7 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
         addParameter(colorSpeedParam);
         addParameter(colorTailParam);
         addParameter(colorWidthParam);
+        addParameter(yellowParam);
 
         addParameter(whiteStatic.setMode(BooleanParameter.Mode.MOMENTARY));
         addParameter(noColorUp.setMode(BooleanParameter.Mode.MOMENTARY));
@@ -204,7 +206,12 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
 
         @Override
         protected boolean applyColors(float alpha) {
-            int c = LXColor.hsba(PilotsShow.YELLOW_HUE, 85, 100, alpha);
+            int c;
+            if (yellowParam.getValueb()) {
+                c = LXColor.hsba(PilotsShow.YELLOW_HUE, 85, 100, alpha);
+            } else {
+                c = LXColor.hsba(PilotsShow.RED_HUE, 100, 100, alpha);
+            }
             for (StripsTopology.Bundle e : edges) {
                 turnOnBundle(e, c);
 
