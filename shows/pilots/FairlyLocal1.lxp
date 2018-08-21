@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1534883931992,
+  "timestamp": 1534884124121,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -150,7 +150,7 @@
             "modulationColor": -16753665,
             "parameters": {
               "label": "BundleDirMask",
-              "enabled": true,
+              "enabled": false,
               "x": true,
               "y": true,
               "z": false
@@ -158,22 +158,6 @@
           }
         ],
         "effects": [
-          {
-            "id": 566,
-            "class": "com.symmetrylabs.slstudio.effect.ColorFilter",
-            "modulationColor": -16056576,
-            "parameters": {
-              "label": "ColorFilter",
-              "enabled": false,
-              "Hue": 241.19999460875988,
-              "Sat": 100.0
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            }
-          },
           {
             "id": 569,
             "class": "heronarts.lx.effect.DesaturationEffect",
@@ -184,37 +168,6 @@
               "amount": 1.0,
               "attack": 100.0,
               "decay": 100.0
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            }
-          },
-          {
-            "id": 572,
-            "class": "heronarts.lx.effect.BlurEffect",
-            "modulationColor": -7929601,
-            "parameters": {
-              "label": "Blur",
-              "enabled": false,
-              "amount": 0.46999998949468136
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            }
-          },
-          {
-            "id": 576,
-            "class": "com.symmetrylabs.slstudio.effect.Strobe",
-            "modulationColor": -16764161,
-            "parameters": {
-              "label": "Strobe",
-              "enabled": false,
-              "Shape": 0,
-              "Freq": 1.0
             },
             "modulation": {
               "modulators": [],
@@ -245,19 +198,20 @@
             "autoCycleEnabled": true
           },
           {
-            "id": 564,
-            "class": "com.symmetrylabs.slstudio.pattern.TimPinwheels",
-            "modulationColor": -16711930,
+            "id": 607,
+            "class": "com.symmetrylabs.shows.pilots.PilotsPinwheels",
+            "modulationColor": -16711884,
             "parameters": {
-              "label": "TimPinwheels",
-              "HSpr": 0.17000001296401024,
-              "VOff": 1.0,
-              "ZSlp": 0.0,
+              "label": "PilotsPinwheels",
+              "HSpr": 0.8399999979883432,
+              "VOff": 0.009999999776482582,
+              "ZSlp": 0.44000000357627866,
               "Shrp": 0.8500000033527613,
               "Drez": 0.0,
-              "Clic": 1.0,
-              "Hue": 0.477000004246831,
-              "HSpd": 0.0
+              "Clic": 0.2699999939650297,
+              "Hue": 0.667,
+              "HSpd": 0.667,
+              "freeze": true
             },
             "modulation": {
               "modulators": [],
