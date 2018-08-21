@@ -23,6 +23,7 @@ public class PilotsPlanes extends SLPattern<SLModel> {
     private final BooleanParameter flipSpeedParam = new BooleanParameter("flips", false).setMode(BooleanParameter.Mode.MOMENTARY);
     private final BooleanParameter flipColorParam = new BooleanParameter("flipc", false).setMode(BooleanParameter.Mode.MOMENTARY);
 
+    boolean flipSpeed = false;
     float off;
 
     public PilotsPlanes(LX lx) {
@@ -44,7 +45,7 @@ public class PilotsPlanes extends SLPattern<SLModel> {
     @Override
     public void onParameterChanged(LXParameter p) {
         if (p == flipSpeedParam && flipSpeedParam.getValueb()) {
-            speedParam.setValue(-speedParam.getValue());
+            flipSpeed = !flipSpeed;
         } else if (p == flipColorParam && flipColorParam.getValueb()) {
             redParam.setValue(!redParam.getValueb());
         }
@@ -60,7 +61,7 @@ public class PilotsPlanes extends SLPattern<SLModel> {
         LXVector normal = new LXVector(normalXParam.getValuef(), normalYParam.getValuef(), normalZParam.getValuef());
         normal.normalize();
 
-        off += speedParam.getValuef() / 1000f * (float) elapsedMs;
+        off += (flipSpeed ? -1 : 1) * speedParam.getValuef() / 1000f * (float) elapsedMs;
         float dist = distParam.getValuef();
         float halfThick = thickParam.getValuef() / 2f;
         int color = redParam.getValueb() ? PilotsShow.RED : PilotsShow.YELLOW;
