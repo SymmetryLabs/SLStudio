@@ -80,18 +80,17 @@ public class Jumpsuit<T extends Strip> extends SLPattern<StripsModel<T>> {
         double decrease = deltaMs / 1000 * decay.getValue();
         if (!yellowLock) {
             yellowLevel = Double.max(0, yellowLevel - decrease);
+            yellowAge += deltaMs;
         }
         if (!redLock) {
             redLevel = Double.max(0, redLevel - decrease);
+            redAge += deltaMs;
         }
 
         int black = LXColor.gray(0);
         for (int i = 0; i < colors.length; i++) {
             colors[i] = black;
         }
-
-        redAge += deltaMs;
-        yellowAge += deltaMs;
 
         double rAlpha, yAlpha;
         double fStart = fadeStart.getValue();
