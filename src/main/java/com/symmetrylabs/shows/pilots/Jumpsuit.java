@@ -6,6 +6,7 @@ import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.modulator.ADSREnvelope;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -14,14 +15,22 @@ import heronarts.lx.transform.LXVector;
 public class Jumpsuit<T extends Strip> extends SLPattern<StripsModel<T>> {
     public static final String GROUP_NAME = PilotsShow.SHOW_NAME;
 
-    public BooleanParameter yellowAttack = new BooleanParameter("y", false);
-    public BooleanParameter redAttack = new BooleanParameter("r", false);
+    private BooleanParameter yellowAttack = new BooleanParameter("y", false);
+    private BooleanParameter redAttack = new BooleanParameter("r", false);
 
-    public CompoundParameter yellowCenter = new CompoundParameter("yc", model.cx, model.xMin, model.xMax);
-    public CompoundParameter redCenter = new CompoundParameter("rc", model.cx, model.xMin, model.xMax);
+    private CompoundParameter yellowCenter = new CompoundParameter("yc", model.cx, model.xMin, model.xMax);
+    private CompoundParameter redCenter = new CompoundParameter("rc", model.cx, model.xMin, model.xMax);
 
-    public CompoundParameter hit = new CompoundParameter("hit", 30, 0, 120);
-    public CompoundParameter decay = new CompoundParameter("decay", 30, 0, 120);
+    private CompoundParameter hit = new CompoundParameter("hit", 30, 0, 120);
+    private CompoundParameter drop = new CompoundParameter("drop", 30, 0, 120);
+
+    private CompoundParameter attack = new CompoundParameter("attack", 0, 100, 500);
+    private CompoundParameter decay = new CompoundParameter("decay", 100, 0, 500);
+    private CompoundParameter sustain = new CompoundParameter("sustain", 0.8, 0, 1);
+    private CompoundParameter release = new CompoundParameter("release", 750, 0, 2000);
+
+    private ADSREnvelope redADSR = new ADSREnvelope("redADSR", 0, 1, attack, decay, sustain, release);
+    private ADSREnvelope yellowADSR = new ADSREnvelope("yellowADSR", 0, 1, attack, decay, sustain, release);
 
     public CompoundParameter fadeStart = new CompoundParameter("fstart", 750, 0, 1500);
     public CompoundParameter fadeFor = new CompoundParameter("fdecay", 2000, 0, 5000);
@@ -47,37 +56,43 @@ public class Jumpsuit<T extends Strip> extends SLPattern<StripsModel<T>> {
         addParameter(redCenter);
 
         addParameter(hit);
-        addParameter(decay);
+        addParameter(drop);
 
         addParameter(fadeStart);
         addParameter(fadeFor);
+
+        addParameter(attack);
+        addParameter(decay);
+        addParameter(sustain);
+        addParameter(release);
+
+        addModulator(redADSR);
+        addModulator(yellowADSR);
     }
 
     @Override
     public void onParameterChanged(LXParameter p) {
         if (p == redAttack) {
             if (redAttack.getValueb()) {
+                redADSR.attack();
                 redLevel += hit.getValue();
-                redLock = true;
-                redAge = 0;
             } else {
-                redLock = false;
+                redADSR.release();
             }
         }
         if (p == yellowAttack) {
             if (yellowAttack.getValueb()) {
+                yellowADSR.attack();
                 yellowLevel += hit.getValue();
-                yellowLock = true;
-                yellowAge = 0;
             } else {
-                yellowLock = false;
+                yellowADSR.release();
             }
         }
     }
 
     @Override
     public void run(double deltaMs) {
-        double decrease = deltaMs / 1000 * decay.getValue();
+        double decrease = deltaMs / 1000 * drop.getValue();
         if (!yellowLock) {
             yellowLevel = Double.max(0, yellowLevel - decrease);
             yellowAge += deltaMs;
@@ -92,20 +107,8 @@ public class Jumpsuit<T extends Strip> extends SLPattern<StripsModel<T>> {
             colors[i] = black;
         }
 
-        double rAlpha, yAlpha;
-        double fStart = fadeStart.getValue();
-        double fFor = fadeFor.getValue();
-
-        if (redAge < fStart) {
-            rAlpha = 1;
-        } else {
-            rAlpha = Double.max(0, (fFor - (redAge - fStart)) / fFor);
-        }
-        if (yellowAge < fStart) {
-            yAlpha = 1;
-        } else {
-            yAlpha = Double.max(0, (fFor - (yellowAge - fStart)) / fFor);
-        }
+        double rAlpha = redADSR.getValuef();
+        double yAlpha = yellowADSR.getValuef();
 
         double rc = redCenter.getValue();
         double yc = yellowCenter.getValue();
