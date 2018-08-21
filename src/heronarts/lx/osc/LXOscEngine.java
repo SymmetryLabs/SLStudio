@@ -85,6 +85,7 @@ public class LXOscEngine extends LXComponent {
     private static final String ROUTE_HUE = "hue";
     private static final String ROUTE_SATURATION = "saturation";
     private static final String ROUTE_BRIGHTNESS = "brightness";
+    private static final String ROUTE_WARP = "warp";
 
     public final static int DEFAULT_RECEIVE_PORT = 3030;
     public final static int DEFAULT_TRANSMIT_PORT = 3131;
@@ -261,6 +262,14 @@ public class LXOscEngine extends LXComponent {
                 }
                 return;
             }
+            if (parts[index].equals(ROUTE_WARP)) {
+                if (parts[index+1].matches("\\d+")) {
+                    oscWarp(message, channel.getWarp(Integer.parseInt(parts[index+1]) - 1), parts, index+2);
+                } else {
+                    oscWarp(message, channel.getWarp(parts[index+1]), parts, index+2);
+                }
+                return;
+            }
             oscComponent(message, channel, parts, index);
         }
 
@@ -270,6 +279,10 @@ public class LXOscEngine extends LXComponent {
 
         private void oscPattern(OscMessage message, LXPattern pattern, String[] parts, int index) {
             oscComponent(message, pattern, parts, index);
+        }
+
+        private void oscWarp(OscMessage message, LXWarp warp, String[] parts, int index) {
+            oscComponent(message, warp, parts, index);
         }
 
         private void oscComponent(OscMessage message, LXComponent component, String[] parts, int index) {
