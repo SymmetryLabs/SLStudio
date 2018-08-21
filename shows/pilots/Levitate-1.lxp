@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1534818537429,
+  "timestamp": 1534824326708,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 1,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -49,11 +49,77 @@
     },
     "channels": [
       {
+        "id": 56,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -65448,
+        "parameters": {
+          "label": "Channel 1",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.993205726146698,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "warps": [
+          {
+            "id": 59,
+            "class": "com.symmetrylabs.slstudio.warp.Mirror",
+            "modulationColor": -65347,
+            "parameters": {
+              "label": "Mirror",
+              "enabled": true,
+              "x": true,
+              "cx": 410.0,
+              "y": true,
+              "cy": 58.0,
+              "z": false,
+              "cz": 72.5
+            }
+          }
+        ],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 57,
+            "class": "com.symmetrylabs.shows.pilots.PilotsPlanes",
+            "modulationColor": -6357248,
+            "parameters": {
+              "label": "PilotsPlanes",
+              "speed": 111.99999776482582,
+              "dist": 120.0,
+              "thick": 12.0,
+              "red": true,
+              "x": 0.23152798414230347,
+              "y": 1.0,
+              "z": 0.0,
+              "flips": false,
+              "flipc": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
         "id": 31,
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -16711844,
         "parameters": {
-          "label": "Channel-1",
+          "label": "Channel 2",
           "arm": false,
           "enabled": true,
           "cue": false,
@@ -111,11 +177,11 @@
         ]
       },
       {
-        "id": 40,
+        "id": 62,
         "class": "heronarts.lx.LXChannel",
-        "modulationColor": -20736,
+        "modulationColor": -51968,
         "parameters": {
-          "label": "Channel-2",
+          "label": "Channel 3",
           "arm": false,
           "enabled": true,
           "cue": false,
@@ -123,7 +189,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.9859494566917419,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -136,9 +202,9 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 41,
+            "id": 65,
             "class": "com.symmetrylabs.shows.pilots.PilotsLines",
-            "modulationColor": -4391168,
+            "modulationColor": -16711902,
             "parameters": {
               "label": "PilotsLines",
               "vert": false,
@@ -149,13 +215,13 @@
               "vcount": 30,
               "hlen": 8,
               "vlen": 4,
-              "attack": 23.999999463558197,
-              "decay": 139.99999687075615,
+              "attack": 60.0,
+              "decay": 300.0,
               "mask": 0.7,
               "speed": 200.0,
               "cdelay": 0.0,
               "cspeed": 400.0,
-              "tail": 18.0000002682209,
+              "tail": 30.0,
               "cwidth": 20.0,
               "ws": false,
               "wu": false,
@@ -335,8 +401,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 479.2960776946311,
-        "theta": 0.023999999999999997,
-        "phi": 0.11699999999999988,
+        "theta": 0.01799999999999981,
+        "phi": 0.11399999999999916,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5
