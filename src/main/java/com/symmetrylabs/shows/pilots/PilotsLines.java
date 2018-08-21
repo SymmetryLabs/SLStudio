@@ -204,7 +204,7 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
 
         @Override
         protected boolean applyColors(float alpha) {
-            int c = LXColor.hsba(0, 0, 100, alpha);
+            int c = LXColor.hsba(PilotsShow.YELLOW_HUE, 85, 100, alpha);
             for (StripsTopology.Bundle e : edges) {
                 turnOnBundle(e, c);
 
@@ -267,14 +267,14 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
 
             /* store the HSB values directly so we can interpolate without having
              * to reverse-engineer them from band and field */
-            h = palette.color.hue.getValuef();
-            bandS = palette.color.saturation.getValuef();
-            fieldS = 0;
-            bandB = palette.color.brightness.getValuef();
+            h = PilotsShow.RED_HUE;
+            bandS = 100;
+            fieldS = 85;
+            bandB = 100;
             fieldB = 100;
             fieldAlpha = alpha;
             band = LXColor.hsba(h, bandS, bandB, alpha);
-            field = LXColor.rgba(255, 255, 255, (int) (255 * alpha));
+            field = LXColor.hsba(PilotsShow.YELLOW_HUE, fieldS, fieldB, (int) (255 * alpha));
 
             for (int i = 0; i < lines.size(); i++) {
                 float maskHi, maskLo;
