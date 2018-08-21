@@ -12,6 +12,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.transform.LXVector;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -41,7 +42,7 @@ public class AllVerticals<T extends Strip> extends SLPattern<StripsModel<T>> {
         }
         for (Bundle b : model.getTopology().bundles) {
             for (int stripIdx : b.strips) {
-                for (LXPoint p : model.getStripByIndex(stripIdx).points) {
+                for (LXVector p : getVectors(model.getStripByIndex(stripIdx).points)) {
                     colors[p.index] = bundles.contains(b) ? LXColor.WHITE : LXColor.BLACK;
                 }
             }
