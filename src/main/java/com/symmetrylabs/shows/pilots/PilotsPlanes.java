@@ -46,9 +46,9 @@ public class PilotsPlanes extends SLPattern<SLModel> {
 
     @Override
     public void onParameterChanged(LXParameter p) {
-        if (p == flipSpeedParam) {
+        if (p == flipSpeedParam && flipSpeedParam.getValueb()) {
             speedParam.setValue(-speedParam.getValue());
-        } else if (p == flipColorParam) {
+        } else if (p == flipColorParam && flipColorParam.getValueb()) {
             redParam.setValue(!redParam.getValueb());
         }
     }
