@@ -15,6 +15,7 @@ public class AngleStrobe extends SLPattern<SLModel> {
 
     private final BooleanParameter trigger = new BooleanParameter("trigger", false).setMode(BooleanParameter.Mode.MOMENTARY);
     private final BooleanParameter reset = new BooleanParameter("reset", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter wipe = new BooleanParameter("wipe", false).setMode(BooleanParameter.Mode.MOMENTARY);
 
     private final CompoundParameter normalXParam = new CompoundParameter("x", 0.9, 0, 1);
     private final CompoundParameter normalYParam = new CompoundParameter("y", 0.3, 0, 1);
@@ -22,6 +23,7 @@ public class AngleStrobe extends SLPattern<SLModel> {
     private final CompoundParameter distParam = new CompoundParameter("dist", 96, 10, 600);
     private final CompoundParameter thickParam = new CompoundParameter("thick", 19, 0, 60);
     private final CompoundParameter offsetParam = new CompoundParameter("offset", 0, 0, 120);
+    private final CompoundParameter wipeTime = new CompoundParameter("twipe", 350, 0, 1500);
 
     private CompoundParameter attack = new CompoundParameter("attack", 0, 100, 500);
     private CompoundParameter decay = new CompoundParameter("decay", 30, 0, 500);
@@ -31,11 +33,14 @@ public class AngleStrobe extends SLPattern<SLModel> {
     private ADSREnvelope adsr = new ADSREnvelope("adsr", 0, 1, attack, decay, sustain, release);
 
     int generation = 0;
+    boolean wiping = false;
+    double wipeAge = 0;
 
     public AngleStrobe(LX lx) {
         super(lx);
         addParameter(trigger);
         addParameter(reset);
+        addParameter(wipe);
 
         addParameter(normalXParam);
         addParameter(normalYParam);
@@ -43,6 +48,7 @@ public class AngleStrobe extends SLPattern<SLModel> {
         addParameter(distParam);
         addParameter(thickParam);
         addParameter(offsetParam);
+        addParameter(wipeTime);
 
         addParameter(attack);
         addParameter(decay);
@@ -61,8 +67,13 @@ public class AngleStrobe extends SLPattern<SLModel> {
             adsr.release();
         }
 
+        if (p == wipe && wipe.getValueb()) {
+            wiping = true;
+            wipeAge = 0;
+        }
+
         if (p == reset && reset.getValueb()) {
-            generation = 0;
+            generation = -1;
         }
     }
 
@@ -71,6 +82,17 @@ public class AngleStrobe extends SLPattern<SLModel> {
         for (int i = 0; i < colors.length; i++) {
             colors[i] = LXColor.BLACK;
         }
+
+        float xyRad = model.rMax;
+        if (wiping) {
+            wipeAge += elapsedMs;
+            if (wipeAge > wipeTime.getValue()) {
+                wiping = false;
+                generation = -1;
+            }
+            xyRad *= Double.max(0, 1 - wipeAge / wipeTime.getValue());
+        }
+        double xyRadSq = Math.pow(xyRad, 2);
 
         LXVector normal = new LXVector(normalXParam.getValuef(), normalYParam.getValuef(), normalZParam.getValuef());
         normal.normalize();
@@ -82,6 +104,11 @@ public class AngleStrobe extends SLPattern<SLModel> {
 
         for (LXVector v : getVectors()) {
             LXVector cv = v.copy().add(negCenter);
+            double xy = Math.pow(cv.x, 2) + Math.pow(cv.y, 2);
+            if (xy > xyRadSq) {
+                continue;
+            }
+
             float proj = normal.dot(cv) + off;
             int count = 0;
             while (proj > dist) {
