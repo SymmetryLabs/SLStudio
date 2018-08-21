@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1534890602441,
+  "timestamp": 1534891902858,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -77,7 +77,7 @@
             "parameters": {
               "label": "ColorFilter",
               "enabled": true,
-              "Hue": 248.39999444782734,
+              "Hue": 277.1999938040972,
               "Sat": 100.0
             },
             "modulation": {
@@ -113,7 +113,7 @@
               "tail": 47.99999959766865,
               "cwidth": 20.0,
               "yellow": true,
-              "ws": false,
+              "ws": true,
               "wu": false,
               "wd": false,
               "cu": false,
@@ -249,22 +249,6 @@
               "modulations": [],
               "triggers": []
             }
-          },
-          {
-            "id": 556,
-            "class": "com.symmetrylabs.slstudio.effect.ColorFilter",
-            "modulationColor": -65334,
-            "parameters": {
-              "label": "ColorFilter",
-              "enabled": true,
-              "Hue": 269.9999939650297,
-              "Sat": 95.00000011175871
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            }
           }
         ],
         "clips": [],
@@ -312,7 +296,7 @@
             "modulationColor": -16711751,
             "parameters": {
               "label": "AngleStrobe",
-              "trigger": false,
+              "trigger": true,
               "reset": false,
               "wipe": false,
               "x": 0.029999999329447746,
@@ -324,7 +308,7 @@
               "twipe": 844.9999889358879,
               "attack": 163.99999856948853,
               "decay": 30.0,
-              "sustain": 0.5300000093877315,
+              "sustain": 1.0,
               "release": 300.0
             },
             "modulation": {
@@ -381,11 +365,11 @@
               "R-SYM": false,
               "X-DUP": false,
               "JOG": false,
-              "GREY": true,
+              "GREY": false,
               "Speed": 0.55,
               "Symm": 0,
               "Anim": 7,
-              "Dens": 0.8900000024586916
+              "Dens": 0.6
             },
             "modulation": {
               "modulators": [],
@@ -597,9 +581,9 @@
         "571": true
       },
       "preview": {
-        "radius": 477.12790091552506,
-        "theta": 0.017999999999999756,
-        "phi": 0.23171667385100747,
+        "radius": 509.1002869121634,
+        "theta": 0.017999999999993386,
+        "phi": 0.027716673851007387,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5
