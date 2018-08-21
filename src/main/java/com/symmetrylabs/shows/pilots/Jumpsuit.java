@@ -21,8 +21,10 @@ public class Jumpsuit<T extends Strip> extends SLPattern<StripsModel<T>> {
     private CompoundParameter yellowCenter = new CompoundParameter("yc", model.cx, model.xMin, model.xMax);
     private CompoundParameter redCenter = new CompoundParameter("rc", model.cx, model.xMin, model.xMax);
 
-    private CompoundParameter hit = new CompoundParameter("hit", 30, 0, 120);
-    private CompoundParameter drop = new CompoundParameter("drop", 30, 0, 120);
+    private CompoundParameter rHit = new CompoundParameter("rhit", 30, 0, 120);
+    private CompoundParameter yHit = new CompoundParameter("yhit", 30, 0, 120);
+    private CompoundParameter rDrop = new CompoundParameter("rdrop", 30, 0, 120);
+    private CompoundParameter yDrop = new CompoundParameter("ydrop", 30, 0, 120);
 
     private CompoundParameter attack = new CompoundParameter("attack", 0, 100, 500);
     private CompoundParameter decay = new CompoundParameter("decay", 100, 0, 500);
@@ -55,8 +57,10 @@ public class Jumpsuit<T extends Strip> extends SLPattern<StripsModel<T>> {
         addParameter(yellowCenter);
         addParameter(redCenter);
 
-        addParameter(hit);
-        addParameter(drop);
+        addParameter(rHit);
+        addParameter(rDrop);
+        addParameter(yHit);
+        addParameter(yDrop);
 
         addParameter(fadeStart);
         addParameter(fadeFor);
@@ -75,7 +79,7 @@ public class Jumpsuit<T extends Strip> extends SLPattern<StripsModel<T>> {
         if (p == redAttack) {
             if (redAttack.getValueb()) {
                 redADSR.attack();
-                redLevel += hit.getValue();
+                redLevel += rHit.getValue();
             } else {
                 redADSR.release();
             }
@@ -83,7 +87,7 @@ public class Jumpsuit<T extends Strip> extends SLPattern<StripsModel<T>> {
         if (p == yellowAttack) {
             if (yellowAttack.getValueb()) {
                 yellowADSR.attack();
-                yellowLevel += hit.getValue();
+                yellowLevel += yHit.getValue();
             } else {
                 yellowADSR.release();
             }
@@ -92,15 +96,11 @@ public class Jumpsuit<T extends Strip> extends SLPattern<StripsModel<T>> {
 
     @Override
     public void run(double deltaMs) {
-        double decrease = deltaMs / 1000 * drop.getValue();
-        if (!yellowLock) {
-            yellowLevel = Double.max(0, yellowLevel - decrease);
-            yellowAge += deltaMs;
-        }
-        if (!redLock) {
-            redLevel = Double.max(0, redLevel - decrease);
-            redAge += deltaMs;
-        }
+        yellowLevel = Double.max(0, yellowLevel - deltaMs / 1000 * yDrop.getValue());
+        redLevel = Double.max(0, redLevel - deltaMs / 1000 * rDrop.getValue());
+
+        yellowAge += deltaMs;
+        redAge += deltaMs;
 
         int black = LXColor.gray(0);
         for (int i = 0; i < colors.length; i++) {
