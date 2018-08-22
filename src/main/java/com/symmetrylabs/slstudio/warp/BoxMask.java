@@ -47,6 +47,10 @@ public class BoxMask extends LXWarpWithMarkers {
 
             for (int i = 0; i < inputVectors.length; i++)  {
                 LXVector iv = inputVectors[i];
+                if (iv == null) {
+                    outputVectors[i] = null;
+                    continue;
+                }
                 boolean inside = Math.abs(iv.x - cx) < xSize &&
                                                  Math.abs(iv.y - cy) < ySize &&
                                                  Math.abs(iv.z - cz) < zSize;
