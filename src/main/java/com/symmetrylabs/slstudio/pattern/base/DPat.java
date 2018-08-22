@@ -324,6 +324,11 @@ public abstract class DPat extends SLPattern<SLModel> {
         // TODO Threading: For some reason, using parallelStream here messes up the animations.
         int[] colors = (int[]) getArray(SRGB8);
 
+        /* clear all colors to transparent black */
+        for (int i = 0; i < colors.length; i++) {
+            colors[i] = 0x00000000;
+        }
+
         getVectorList().parallelStream().forEach(p -> {
             PVector P = new PVector(), tP = new PVector();
 
