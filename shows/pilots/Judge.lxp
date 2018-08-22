@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1534971933074,
+  "timestamp": 1534974548307,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.116666715592146,
-      "focusedChannel": 7,
+      "focusedChannel": 6,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -307,7 +307,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 830.1257934570312,
+              "rad": 0.0,
               "invert": false
             },
             "modulation": {
@@ -346,55 +346,13 @@
         ]
       },
       {
-        "id": 1355,
-        "class": "heronarts.lx.LXChannel",
-        "modulationColor": -11264,
-        "parameters": {
-          "label": "SwarmMult",
-          "arm": false,
-          "enabled": false,
-          "cue": false,
-          "midiMonitor": false,
-          "midiChannel": 16,
-          "autoCycleEnabled": false,
-          "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
-          "crossfadeGroup": 0,
-          "blendMode": 1,
-          "transitionEnabled": false,
-          "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
-        },
-        "warps": [],
-        "effects": [],
-        "clips": [],
-        "patternIndex": 0,
-        "patterns": [
-          {
-            "id": 1364,
-            "class": "com.symmetrylabs.shows.pilots.PilotsMonochromeSwarm",
-            "modulationColor": -13959424,
-            "parameters": {
-              "label": "PilotsMonochromeSwarm",
-              "fV": 0.46000001206994057
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          }
-        ]
-      },
-      {
         "id": 1411,
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -15270144,
         "parameters": {
           "label": "Planes1",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -526,7 +484,7 @@
         "parameters": {
           "label": "Planes2",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -752,13 +710,55 @@
             "modulationColor": -13107456,
             "parameters": {
               "label": "OneBigAngledPlane",
-              "thick": 587.7057605548107,
+              "thick": 442.5821748630733,
               "x": 0.43000001050531866,
               "y": 0.5299999948590994,
               "z": 0.29999999329447746,
               "cx": 410.0,
               "cy": 58.0,
               "cz": 72.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 1355,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -11264,
+        "parameters": {
+          "label": "SwarmMult",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 1,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 1364,
+            "class": "com.symmetrylabs.shows.pilots.PilotsMonochromeSwarm",
+            "modulationColor": -13959424,
+            "parameters": {
+              "label": "PilotsMonochromeSwarm",
+              "fV": 0.6399999856948853
             },
             "modulation": {
               "modulators": [],
