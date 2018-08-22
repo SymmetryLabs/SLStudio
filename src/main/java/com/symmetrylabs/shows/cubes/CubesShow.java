@@ -2,20 +2,23 @@ package com.symmetrylabs.shows.cubes;
 
 import java.util.*;
 import java.lang.ref.WeakReference;
+import java.lang.RuntimeException;
 
-import com.symmetrylabs.shows.Show;
-import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.util.CubePhysicalIdMap;
-import com.symmetrylabs.util.listenable.SetListener;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.p3lx.ui.UI2dScrollContext;
 
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.ListenableSet;
-import heronarts.p3lx.ui.UI2dScrollContext;
+import com.symmetrylabs.shows.Show;
+import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.util.CubePhysicalIdMap;
+import com.symmetrylabs.util.listenable.SetListener;
+import static com.symmetrylabs.util.MathUtils.*;
+
 
 /**
  * This file implements the mapping functions needed to lay out the cubes.
@@ -44,37 +47,37 @@ public abstract class CubesShow implements Show {
 
     public static class TowerConfig {
 
-        final CubesModel.Cube.Type type;
-        final float x;
-        final float y;
-        final float z;
-        final float xRot;
-        final float yRot;
-        final float zRot;
-        final String[] ids;
-        final float[] yValues;
+        final public CubesModel.Cube.Type type;
+        final public float x;
+        final public float y;
+        final public float z;
+        final public float xRot;
+        final public float yRot;
+        final public float zRot;
+        final public String[] ids;
+        final public float[] yValues;
 
-        TowerConfig(float x, float y, float z, String[] ids) {
+        public TowerConfig(float x, float y, float z, String[] ids) {
             this(CubesModel.Cube.Type.LARGE, x, y, z, ids);
         }
 
-        TowerConfig(float x, float y, float z, float yRot, String[] ids) {
+        public TowerConfig(float x, float y, float z, float yRot, String[] ids) {
             this(x, y, z, 0, yRot, 0, ids);
         }
 
-        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, String[] ids) {
+        public TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, String[] ids) {
             this(type, x, y, z, 0, 0, 0, ids);
         }
 
-        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float yRot, String[] ids) {
-            this(type, x, y, z, 0, yRot, 0, ids);
+        public TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float yRot, String[] ids) {
+            this(type, x, y, z, 0.f, yRot, 0.f, ids);
         }
 
-        TowerConfig(float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
+        public TowerConfig(float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
             this(CubesModel.Cube.Type.LARGE, x, y, z, xRot, yRot, zRot, ids);
         }
 
-        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
+        public TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
             this.type = type;
             this.x = x;
             this.y = y;
@@ -84,8 +87,18 @@ public abstract class CubesShow implements Show {
             this.zRot = zRot;
             this.ids = ids;
 
-            this.yValues = new float[ids.length];
-            for (int i = 0; i < ids.length; i++) {
+            if (type != CubesModel.Cube.Type.HD) {
+                yValues = new float[ids.length];
+            } else if (type == CubesModel.Cube.Type.HD){
+                if (ids.length % 2 != 0) {
+                    throw new RuntimeException("DoubleControllerCube requires 2 ids per cubes!");
+                }
+                yValues = new float[floor(ids.length/2)];
+            } else {
+                yValues = null;
+            }
+
+            for (int i = 0; i < yValues.length; i++) {
                 yValues[i] = y + i * (CUBE_HEIGHT + CUBE_SPACING);
             }
         }
