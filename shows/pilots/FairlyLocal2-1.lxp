@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1534899039980,
+  "timestamp": 1534899542661,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -204,13 +204,13 @@
         "parameters": {
           "label": "Snare",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -219,7 +219,7 @@
         },
         "warps": [
           {
-            "id": 573,
+            "id": 1186,
             "class": "com.symmetrylabs.slstudio.warp.Mirror",
             "modulationColor": -16746753,
             "parameters": {
@@ -327,7 +327,7 @@
         "parameters": {
           "label": "Snare Mult",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
