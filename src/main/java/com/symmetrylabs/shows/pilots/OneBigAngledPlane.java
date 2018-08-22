@@ -11,9 +11,9 @@ public class OneBigAngledPlane extends SLPattern<SLModel> {
     public static final String GROUP_NAME = PilotsShow.SHOW_NAME;
 
     private final CompoundParameter thickParam = new CompoundParameter("thick", 12, 0, model.rMax);
-    private final CompoundParameter normalXParam = new CompoundParameter("x", 0.9, 0, 1);
-    private final CompoundParameter normalYParam = new CompoundParameter("y", 0.3, 0, 1);
-    private final CompoundParameter normalZParam = new CompoundParameter("z", 0.315, 0, 1);
+    private final CompoundParameter normalXParam = new CompoundParameter("x", 0.9, -1, 1);
+    private final CompoundParameter normalYParam = new CompoundParameter("y", 0.3, -1, 1);
+    private final CompoundParameter normalZParam = new CompoundParameter("z", 0.315, -1, 1);
     private final CompoundParameter cXParam = new CompoundParameter("cx", model.cx, model.xMin, model.xMax);
     private final CompoundParameter cYParam = new CompoundParameter("cy", model.cy, model.yMin, model.yMax);
     private final CompoundParameter cZParam = new CompoundParameter("cz", model.cz, model.zMin, model.zMax);
