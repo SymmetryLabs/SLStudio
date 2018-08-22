@@ -12,13 +12,14 @@ public class RideChorusPlayer extends VideoPlayer {
         removeParameter(chooseFileParam);
         removeParameter(captureParam);
 
-        // crop: t 600 l 32 r 352 b 32
         mediaUrl = "../14_Ride_Output_01_V3.mov";
         mediaOptions = null;
-        cropTop = 600;
+        cropTop = 610;
         cropLeft = 32;
-        //cropRight = 352;
+        cropRight = 355;
         cropBottom = 32;
+
+        playParam.setValue(false);
     }
 
     @Override

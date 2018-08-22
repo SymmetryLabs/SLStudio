@@ -74,6 +74,8 @@ public class VideoPlayer extends SLPattern<SLModel> {
     protected int cropRight = 0;
     protected int cropBottom = 0;
 
+    boolean pauseOnNextFrame = false;
+
     public VideoPlayer(LX lx) {
         super(lx);
 
@@ -199,8 +201,8 @@ public class VideoPlayer extends SLPattern<SLModel> {
     }
 
     private void setShrinkToFit() {
-        float fitWidth = bufWidth / model.xRange;
-        float fitHeight = bufHeight / model.yRange;
+        float fitWidth = (bufWidth - cropLeft - cropRight - 4) / model.xRange;
+        float fitHeight = (bufHeight - cropTop - cropBottom - 4) / model.yRange;
         float fit = Float.min(fitWidth, fitHeight);
         shrinkParam.setValue(fit);
     }
@@ -226,6 +228,9 @@ public class VideoPlayer extends SLPattern<SLModel> {
             long startTime = getStartTimeMs();
             mediaPlayer.play();
             mediaPlayer.skip(startTime + skewGuess);
+            if (!playParam.getValueb()) {
+                pauseOnNextFrame = true;
+            }
             time = startTime;
         }
     }
@@ -246,7 +251,12 @@ public class VideoPlayer extends SLPattern<SLModel> {
 
             @Override
             public void playing(MediaPlayer player) {
-                playParam.setValue(true);
+                if (pauseOnNextFrame) {
+                    player.pause();
+                    pauseOnNextFrame = false;
+                } else {
+                    playParam.setValue(true);
+                }
             }
 
             @Override
@@ -339,14 +349,15 @@ public class VideoPlayer extends SLPattern<SLModel> {
         if (buf == null) {
             return;
         }
-        time += elapsedMs;
-        if (time > mediaPlayer.getLength()) {
-            time = 0;
-        }
-
-        if (skipOnNextFrame != 0) {
-            mediaPlayer.skip(skipOnNextFrame);
-            skipOnNextFrame = 0;
+        if (playParam.getValueb()) {
+            time += elapsedMs;
+            if (time > mediaPlayer.getLength()) {
+                time = 0;
+            }
+            if (skipOnNextFrame != 0) {
+                mediaPlayer.skip(skipOnNextFrame);
+                skipOnNextFrame = 0;
+            }
         }
 
         double delta = (double) mediaPlayer.getTime() - time;
@@ -369,7 +380,7 @@ public class VideoPlayer extends SLPattern<SLModel> {
             if (i >= croppedHeight || j >= croppedWidth || i < 0 || j < 0) {
                 color = LXColor.gray(0);
             } else {
-                int vcolor = buf[bufWidth * (i + cropLeft) + (j + cropTop)];
+                int vcolor = buf[bufWidth * (i + cropTop) + (j + cropLeft)];
                 color = LXColor.rgb(
                     (vcolor >> 16) & 0xFF,
                     (vcolor >> 8) & 0xFF,
