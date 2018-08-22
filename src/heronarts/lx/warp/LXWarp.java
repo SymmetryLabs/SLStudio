@@ -113,7 +113,11 @@ public abstract class LXWarp extends LXModelComponent implements LXComponent.Ren
                 inputVectors = vectors;
                 outputVectors = new LXVector[inputVectors.length];
                 for (int i = 0; i < inputVectors.length; i++) {
-                    outputVectors[i] = new LXVector(inputVectors[i]);
+                    if (inputVectors[i] == null) {
+                        outputVectors[i] = null;
+                    } else {
+                        outputVectors[i] = new LXVector(inputVectors[i]);
+                    }
                 }
             }
             inputSource = source;
