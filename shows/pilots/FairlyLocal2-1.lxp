@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1534891902858,
+  "timestamp": 1534899039980,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -113,7 +113,7 @@
               "tail": 47.99999959766865,
               "cwidth": 20.0,
               "yellow": true,
-              "ws": true,
+              "ws": false,
               "wu": false,
               "wd": false,
               "cu": false,
@@ -210,7 +210,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -327,7 +327,7 @@
         "parameters": {
           "label": "Snare Mult",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,

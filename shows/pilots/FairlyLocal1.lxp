@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1534897766693,
+  "timestamp": 1534899002695,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -350,7 +350,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.7497594356536865,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -536,7 +536,7 @@
         "parameters": {
           "label": "Bass Mult",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -605,7 +605,7 @@
         "parameters": {
           "label": "Snare",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -684,7 +684,7 @@
               "trigger": false,
               "reset": false,
               "wipe": false,
-              "x": 0.11999999731779099,
+              "x": 0.5400000214576721,
               "y": 0.09999999776482582,
               "z": 0.0,
               "dist": 160.899998549372,
@@ -712,7 +712,7 @@
         "parameters": {
           "label": "Snare Mult",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -867,7 +867,7 @@
         "parameters": {
           "label": "Channel-11",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
