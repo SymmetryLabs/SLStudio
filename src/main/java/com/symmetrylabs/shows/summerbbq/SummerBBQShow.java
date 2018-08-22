@@ -19,7 +19,7 @@ public class SummerBBQShow implements Show {
     public StripsModel<DoubleStrip> buildModel() {
 
         DoubleStrip.Metrics stripMetrics = new DoubleStrip.Metrics(
-                LED_PER_STRIP, STRIP_LENGTH / LED_PER_STRIP, 1); // 1" front/back gap
+                LED_PER_STRIP, STRIP_LENGTH / LED_PER_STRIP, 1, STRIP_LENGTH / LED_PER_STRIP / 2); // 1" front/back gap
 
         CirclesBuilder<DoubleStrip> builder = new CirclesBuilder<>(
                 (String id, LXTransform t) -> new DoubleStrip(id, stripMetrics, t));
@@ -27,27 +27,23 @@ public class SummerBBQShow implements Show {
         float scale = 1.0f;
 
         // circle radii in meters
-        double[] innerCircleRadii = { 2, 2.2, 2.4 };
-        double[] outerCircleRadii = { 3.9, 4.1, 4.3 };
-        double[] wallRadii = { 2.775, 3.15, 3.525 };
+        double[] circleRadii = { 2, 2.2 };
 
-        for (double radius : innerCircleRadii) {
+        for (double radius : circleRadii) {
             builder.addCircle().withRadius(radius * METER * scale)
-                .addStrips(8).withDegreeOffset(55).withDegreeSweep(70)
-                .addStrips(24).withDegreeOffset(155).withDegreeSweep(230)
+                .addStrips(15).withDegreeOffset(90).withDegreeSweep(-72)
                 .build();
-        }
 
-        for (double radius : outerCircleRadii) {
             builder.addCircle().withRadius(radius * METER * scale)
-                .addStrips(48).withDegreeOffset(-75).withDegreeSweep(330)
+                .addStrips(15).withDegreeOffset(90 - 360 / 5).withDegreeSweep(-72)
                 .build();
-        }
 
-        for (double radius : wallRadii) {
             builder.addCircle().withRadius(radius * METER * scale)
-                .addStrips(2).withDegreeOffset(55).withDegreeSpacing(5)
-                .addStrips(2).withDegreeOffset(125).withDegreeSpacing(-5)
+                .addStrips(15).withDegreeOffset(90).withDegreeSweep(72)
+                .build();
+
+            builder.addCircle().withRadius(radius * METER * scale)
+                .addStrips(15).withDegreeOffset(90 + 360 / 5).withDegreeSweep(72)
                 .build();
         }
 

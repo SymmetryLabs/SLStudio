@@ -8,15 +8,21 @@ public class DoubleStrip extends Strip {
     public static class Metrics extends Strip.Metrics {
 
         public final double gap;
+        public final double verticalOffset;
 
         public Metrics(int numPoints, double pixelPitch) {
             this(numPoints, pixelPitch, 0);
         }
 
         public Metrics(int numPoints, double pixelPitch, double gap) {
+            this(numPoints, pixelPitch, gap, 0);
+        }
+
+        public Metrics(int numPoints, double pixelPitch, double gap, double verticalOffset) {
             super(numPoints, pixelPitch);
 
             this.gap = gap;
+            this.verticalOffset = verticalOffset;
         }
     }
 
@@ -39,7 +45,7 @@ public class DoubleStrip extends Strip {
                 points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
             }
 
-            transform.translate(0, 0, (float)metrics.gap);
+            transform.translate(0, (float)metrics.verticalOffset, (float)metrics.gap / 2);
 
             for (int i = 0; i < metrics.numPoints; i++) {
                 points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
