@@ -5,9 +5,6 @@ import com.google.gson.JsonObject;
 import com.sun.jna.Memory;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.model.StripsModel;
-import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
@@ -28,13 +25,14 @@ import java.nio.IntBuffer;
 import java.util.Deque;
 import java.util.LinkedList;
 
-public class VideoPlayer<T extends Strip> extends SLPattern<StripsModel<T>> {
-    CompoundParameter shrinkParam = new CompoundParameter("shrink", 1, 1.4, 3);
-    CompoundParameter yOffsetParam = new CompoundParameter("yoff", 0, 0, 1);
-    BooleanParameter fitParam = new BooleanParameter("fit", false);
-    BooleanParameter restartParam = new BooleanParameter("restart", false);
-    BooleanParameter chooseFileParam = new BooleanParameter("file", false);
-    BooleanParameter captureParam = new BooleanParameter("capture", false);
+public class VideoPlayer extends SLPattern<SLModel> {
+    protected CompoundParameter shrinkParam = new CompoundParameter("shrink", 1, 1.4, 3);
+    protected CompoundParameter yOffsetParam = new CompoundParameter("yoff", 0, 0, 1);
+    protected BooleanParameter fitParam = new BooleanParameter("fit", false);
+    protected BooleanParameter restartParam = new BooleanParameter("restart", false);
+    protected BooleanParameter chooseFileParam = new BooleanParameter("file", false);
+    protected BooleanParameter captureParam = new BooleanParameter("capture", false);
+    protected BooleanParameter playParam = new BooleanParameter("play", false);
 
     /**
      * A guess at the amount of time it will take vlcj to start playing the
@@ -58,8 +56,8 @@ public class VideoPlayer<T extends Strip> extends SLPattern<StripsModel<T>> {
     private static final long LOOP_SKEW_GUESS_MS = 100;
 
     private int[] buf = null;
-    private int width;
-    private int height;
+    private int bufWidth;
+    private int bufHeight;
     private double time;
     private boolean streaming = false;
     private long skipOnNextFrame = 0;
@@ -67,9 +65,14 @@ public class VideoPlayer<T extends Strip> extends SLPattern<StripsModel<T>> {
     private Deque<Double> timeOffsets = new LinkedList<>();
 
     private DirectMediaPlayerComponent mediaPlayerComponent;
-    private DirectMediaPlayer mediaPlayer;
-    private String mediaUrl;
-    private String[] mediaOptions;
+    protected DirectMediaPlayer mediaPlayer;
+    protected String mediaUrl;
+    protected String[] mediaOptions;
+
+    protected int cropTop = 0;
+    protected int cropLeft = 0;
+    protected int cropRight = 0;
+    protected int cropBottom = 0;
 
     public VideoPlayer(LX lx) {
         super(lx);
@@ -80,6 +83,7 @@ public class VideoPlayer<T extends Strip> extends SLPattern<StripsModel<T>> {
         addParameter(restartParam);
         addParameter(chooseFileParam);
         addParameter(captureParam);
+        addParameter(playParam);
 
         fitParam.setMode(BooleanParameter.Mode.MOMENTARY);
         restartParam.setMode(BooleanParameter.Mode.MOMENTARY);
@@ -98,8 +102,8 @@ public class VideoPlayer<T extends Strip> extends SLPattern<StripsModel<T>> {
         mediaPlayerComponent = new DirectMediaPlayerComponent((w, h) -> {
             System.out.println(String.format("DMPC w=%d h=%d", w, h));
             buf = null;
-            width = w;
-            height = h;
+            bufWidth = w;
+            bufHeight = h;
             return new RV32BufferFormat(w, h);
         }) {
             @Override
@@ -107,8 +111,8 @@ public class VideoPlayer<T extends Strip> extends SLPattern<StripsModel<T>> {
                 Memory byteBuf = nativeBuffers[0];
                 IntBuffer intBuf = byteBuf.getByteBuffer(0, byteBuf.size()).asIntBuffer();
 
-                width = bufferFormat.getWidth();
-                height = bufferFormat.getHeight();
+                bufWidth = bufferFormat.getWidth();
+                bufHeight = bufferFormat.getHeight();
 
                 if (buf == null || buf.length != intBuf.limit()) {
                     System.out.println("VideoPlayer: realloc image buffer");
@@ -133,6 +137,13 @@ public class VideoPlayer<T extends Strip> extends SLPattern<StripsModel<T>> {
         }
         if (p == chooseFileParam && chooseFileParam.getValueb()) {
             showFileBrowser();
+        }
+        if (p == playParam) {
+            if (playParam.getValueb()) {
+                mediaPlayer.play();
+            } else {
+                mediaPlayer.pause();
+            }
         }
     }
 
@@ -188,13 +199,13 @@ public class VideoPlayer<T extends Strip> extends SLPattern<StripsModel<T>> {
     }
 
     private void setShrinkToFit() {
-        float fitWidth = width / model.xRange;
-        float fitHeight = height / model.yRange;
+        float fitWidth = bufWidth / model.xRange;
+        float fitHeight = bufHeight / model.yRange;
         float fit = Float.min(fitWidth, fitHeight);
         shrinkParam.setValue(fit);
     }
 
-    private void restartVideo() {
+    protected void restartVideo() {
         if (mediaPlayer == null)
             return;
         if (mediaUrl != null) {
@@ -202,15 +213,7 @@ public class VideoPlayer<T extends Strip> extends SLPattern<StripsModel<T>> {
 
             if (!mediaPlayer.isPlayable()) {
                 mediaPlayer.prepareMedia(mediaUrl, mediaOptions);
-                mediaPlayer.mute(true);
-                mediaPlayer.setVolume(0);
-                mediaPlayer.setRepeat(true);
-                mediaPlayer.addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
-                    @Override
-                    public void finished(MediaPlayer player) {
-                        skipOnNextFrame = LOOP_SKEW_GUESS_MS;
-                    }
-                });
+                initMediaPlayer();
                 skewGuess = INITIAL_SKEW_GUESS_MS;
             } else if (mediaPlayer.isPlaying()) {
                 mediaPlayer.setPosition(0);
@@ -220,10 +223,42 @@ public class VideoPlayer<T extends Strip> extends SLPattern<StripsModel<T>> {
                 skewGuess = INITIAL_SKEW_GUESS_MS;
             }
 
+            long startTime = getStartTimeMs();
             mediaPlayer.play();
-            mediaPlayer.skip(skewGuess);
-            time = 0;
+            mediaPlayer.skip(startTime + skewGuess);
+            time = startTime;
         }
+    }
+
+    protected long getStartTimeMs() {
+        return 0;
+    }
+
+    protected void initMediaPlayer() {
+        mediaPlayer.mute(true);
+        mediaPlayer.setVolume(0);
+        mediaPlayer.setRepeat(true);
+        mediaPlayer.addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
+            @Override
+            public void finished(MediaPlayer player) {
+                skipOnNextFrame = LOOP_SKEW_GUESS_MS;
+            }
+
+            @Override
+            public void playing(MediaPlayer player) {
+                playParam.setValue(true);
+            }
+
+            @Override
+            public void stopped(MediaPlayer player) {
+                playParam.setValue(false);
+            }
+
+            @Override
+            public void paused(MediaPlayer player) {
+                playParam.setValue(false);
+            }
+        });
     }
 
     private static final String KEY_VIDEO_FILE = "videoFile";
@@ -324,25 +359,23 @@ public class VideoPlayer<T extends Strip> extends SLPattern<StripsModel<T>> {
 
         float shrink = shrinkParam.getValuef();
 
-        for (StripsTopology.Bundle b : model.getTopology().bundles) {
-            for (int sidx : b.strips) {
-                Strip s = model.getStripByIndex(sidx);
-                for (LXVector v : getVectors(s.points)) {
-                    int i = (int) ((shrink * (model.yMax - v.y)) + yOffsetParam.getValue() * height);
-                    int j = (int) (shrink * (v.x - model.xMin));
-                    int color;
-                    if (i >= height || j >= width || i < 0 || j < 0) {
-                        color = LXColor.gray(0);
-                    } else {
-                        int vcolor = buf[width * i + j];
-                        color = LXColor.rgb(
-                            (vcolor >> 16) & 0xFF,
-                            (vcolor >> 8) & 0xFF,
-                            vcolor & 0xFF);
-                    }
-                    colors[v.index] = color;
-                }
+        int croppedWidth = bufWidth - cropLeft - cropRight;
+        int croppedHeight = bufHeight - cropTop - cropBottom;
+
+        for (LXVector v : getVectors()) {
+            int i = (int) ((shrink * (model.yMax - v.y)) + yOffsetParam.getValue() * bufHeight);
+            int j = (int) (shrink * (v.x - model.xMin));
+            int color;
+            if (i >= croppedHeight || j >= croppedWidth || i < 0 || j < 0) {
+                color = LXColor.gray(0);
+            } else {
+                int vcolor = buf[bufWidth * (i + cropLeft) + (j + cropTop)];
+                color = LXColor.rgb(
+                    (vcolor >> 16) & 0xFF,
+                    (vcolor >> 8) & 0xFF,
+                    vcolor & 0xFF);
             }
+            colors[v.index] = color;
         }
     }
 }
