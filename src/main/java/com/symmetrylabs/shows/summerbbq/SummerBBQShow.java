@@ -19,7 +19,7 @@ public class SummerBBQShow implements Show {
     public StripsModel<DoubleStrip> buildModel() {
 
         DoubleStrip.Metrics stripMetrics = new DoubleStrip.Metrics(
-                LED_PER_STRIP, STRIP_LENGTH / LED_PER_STRIP, 1); // 1" front/back gap
+                LED_PER_STRIP, STRIP_LENGTH / LED_PER_STRIP, 1, STRIP_LENGTH / LED_PER_STRIP / 2); // 1" front/back gap
 
         CirclesBuilder<DoubleStrip> builder = new CirclesBuilder<>(
                 (String id, LXTransform t) -> new DoubleStrip(id, stripMetrics, t));
@@ -27,26 +27,27 @@ public class SummerBBQShow implements Show {
         float scale = 1.0f;
 
         // circle radii in meters
-        double[] circleRadii = { 2, 2.2, 2, 2.2 };
+        double[] circleRadii = { 2, 2.2 };
 
         for (double radius : circleRadii) {
             builder.addCircle().withRadius(radius * METER * scale)
-                .addStrips(15).withDegreeOffset(90).withDegreeSweep(-360/5)
-                .build();
-
-                builder.addCircle().withRadius(radius * METER * scale)
-                .addStrips(15).withDegreeOffset(90-360/5).withDegreeSweep(-360/5)
+                .addStrips(15).withDegreeOffset(90).withDegreeSweep(-360 / 5)
                 .build();
 
             builder.addCircle().withRadius(radius * METER * scale)
-                .addStrips(15).withDegreeOffset(90).withDegreeSweep(360/5)
+                .addStrips(15).withDegreeOffset(90 - 360 / 5).withDegreeSweep(-360 / 5)
                 .build();
-                builder.addCircle().withRadius(radius * METER * scale)
-                .addStrips(15).withDegreeOffset(90+360/5).withDegreeSweep(360/5)
+
+            builder.addCircle().withRadius(radius * METER * scale)
+                .addStrips(15).withDegreeOffset(90).withDegreeSweep(360 / 5)
+                .build();
+
+            builder.addCircle().withRadius(radius * METER * scale)
+                .addStrips(15).withDegreeOffset(90 + 360 / 5).withDegreeSweep(360 / 5)
                 .build();
         }
 
-    
+
 
         return builder.build();
     }

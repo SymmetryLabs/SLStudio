@@ -59,6 +59,10 @@ public abstract class DPat extends SLPattern<SLModel> {
         return interp(i - MathUtils.floor(i), vals[MathUtils.floor(i)], vals[MathUtils.ceil(i)]);
     }
 
+    public PVector getNorm(PVector vec) {
+        return new PVector(vec.x / mMax.x, vec.y / mMax.y, vec.z / mMax.z);
+    }
+
     public void setNorm(PVector vec) {
         vec.set(vec.x / mMax.x, vec.y / mMax.y, vec.z / mMax.z);
     }
@@ -80,6 +84,12 @@ public abstract class DPat extends SLPattern<SLModel> {
     }
 
     protected abstract void StartRun(double deltaMs);
+
+    /**
+     * CalcPoint will be invoked in parallel, so implementations of CalcPoint must be
+     * thread-safe!  In particular, be careful in CalcPoint not to mutate PVectors
+     * that are declared at the class or instance level.
+     */
     protected abstract int CalcPoint(PVector p);
 
     public int blend3(int c1, int c2, int c3) {
@@ -110,14 +120,10 @@ public abstract class DPat extends SLPattern<SLModel> {
         return p2;
     }
 
-    PVector vT1 = new PVector(), vT2 = new PVector();
-
     public float calcCone(PVector v1, PVector v2, PVector c) {
-        vT1.set(v1);
-        vT2.set(v2);
-        vT1.sub(c);
-        vT2.sub(c);
-        return MathUtils.degrees(PVector.angleBetween(vT1, vT2));
+        PVector r1 = PVector.sub(v1, c);
+        PVector r2 = PVector.sub(v2, c);
+        return MathUtils.degrees(PVector.angleBetween(r1, r2));
     }
 
     // Pick        addPick(String name, int def, int _max, String[] desc) {
@@ -321,7 +327,6 @@ public abstract class DPat extends SLPattern<SLModel> {
                 xWaveNz[i] = wvAmp * (NoiseUtils.noise((float) (i / (mMax.y * .3f) - (1e3 + NoiseMove) / 1500f)) - .5f) * (mMax.x / 2f);
         }
 
-        // TODO Threading: For some reason, using parallelStream here messes up the animations.
         int[] colors = (int[]) getArray(SRGB8);
 
         getVectorList().parallelStream().forEach(p -> {
