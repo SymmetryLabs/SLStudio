@@ -16,6 +16,7 @@ public class AngleStrobe extends SLPattern<SLModel> {
     private final BooleanParameter trigger = new BooleanParameter("trigger", false).setMode(BooleanParameter.Mode.MOMENTARY);
     private final BooleanParameter reset = new BooleanParameter("reset", false).setMode(BooleanParameter.Mode.MOMENTARY);
     private final BooleanParameter wipe = new BooleanParameter("wipe", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter hit = new BooleanParameter("hit", false).setMode(BooleanParameter.Mode.MOMENTARY);
 
     private final CompoundParameter normalXParam = new CompoundParameter("x", 0.9, 0, 1);
     private final CompoundParameter normalYParam = new CompoundParameter("y", 0.3, 0, 1);
@@ -41,6 +42,7 @@ public class AngleStrobe extends SLPattern<SLModel> {
         addParameter(trigger);
         addParameter(reset);
         addParameter(wipe);
+        addParameter(hit);
 
         addParameter(normalXParam);
         addParameter(normalYParam);
@@ -64,6 +66,12 @@ public class AngleStrobe extends SLPattern<SLModel> {
             generation++;
             adsr.attack();
         } else if (p == trigger) {
+            adsr.release();
+        }
+
+        if (p == hit && hit.getValueb()) {
+            adsr.attack();
+        } else if (p == hit) {
             adsr.release();
         }
 
