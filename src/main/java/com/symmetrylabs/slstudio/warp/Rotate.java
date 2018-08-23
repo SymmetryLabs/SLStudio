@@ -34,7 +34,7 @@ public class Rotate extends LXWarp {
 
             LXVector[] res = proj.getArray();
             for (int i = 0; i < res.length; i++) {
-                outputVectors[i].set(res[i]);
+                outputVectors[i] = res[i];
             }
             return true;
         }
