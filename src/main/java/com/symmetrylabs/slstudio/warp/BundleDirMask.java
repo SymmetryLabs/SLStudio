@@ -35,6 +35,8 @@ public class BundleDirMask<T extends Strip> extends LXWarp {
             if (stripModel.getTopology() == null) {
                 SLStudio.setWarning("BundleDirMask", "topology isn't present");
                 return false;
+            } else {
+                SLStudio.setWarning("BundleDirMask", null);
             }
             boolean mx = maskX.getValueb();
             boolean my = maskY.getValueb();

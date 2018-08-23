@@ -3,27 +3,27 @@ package com.symmetrylabs.shows.pilots;
 import com.symmetrylabs.slstudio.pattern.VideoPlayer;
 import heronarts.lx.LX;
 
-public class RideChorusPlayer extends VideoPlayer {
+public class HoldingOntoYouPlayer extends VideoPlayer {
     public static final String GROUP_NAME = PilotsShow.SHOW_NAME;
 
-    public RideChorusPlayer(LX lx) {
+    public HoldingOntoYouPlayer(LX lx) {
         super(lx);
 
         removeParameter(chooseFileParam);
         removeParameter(captureParam);
 
-        mediaUrl = "../14_Ride_Output_01_V3.mov";
+        mediaUrl = "../12_HoldingOntoYou01-HD_V2.mov";
         mediaOptions = null;
-        cropTop = 610;
-        cropLeft = 32;
-        cropRight = 355;
-        cropBottom = 32;
+        cropTop = 1080 / 2;
+        cropLeft = 0;
+        cropRight = 0;
+        cropBottom = 0;
 
         playParam.setValue(false);
     }
 
     @Override
     public long getStartTimeMs() {
-        return 54_000L;
+        return 0L;
     }
 }
