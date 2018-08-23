@@ -24,10 +24,18 @@ public final class CirclesBuilder<T extends Strip> {
     }
 
     public class CircleBuilder {
-        private double radius;
+        private float radius;
+        private float cx, cy, cz;
         private List<T> strips = new ArrayList<>();
 
-        public CircleBuilder withRadius(double radius) {
+        public CircleBuilder withCenter(float cx, float cy, float cz) {
+            this.cx = cx;
+            this.cy = cy;
+            this.cz = cz;
+            return this;
+        }
+
+        public CircleBuilder withRadius(float radius) {
             this.radius = radius;
             return this;
         }
@@ -77,8 +85,9 @@ public final class CirclesBuilder<T extends Strip> {
             private void finish() {
                 for (int i = 0; i < count; ++i) {
                     LXTransform t = new LXTransform();
+                    t.translate(cx, cy, cz);
                     t.rotateY(Math.toRadians(90 - (degreeOffset + i * degreeSpacing)));
-                    t.translate(0, 0, (float)radius);
+                    t.translate(0, 0, radius);
                     strips.add(stripFactory.apply("", t));
                 }
             }
