@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1534984220492,
+  "timestamp": 1534992646897,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5172413792461157,
       "crossfaderBlendMode": 0,
       "speed": 0.3799999952316284,
-      "focusedChannel": 4,
+      "focusedChannel": 11,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -684,7 +684,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.02851272188127041,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -827,7 +827,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.03571426495909691,
           "crossfadeGroup": 0,
           "blendMode": 2,
           "transitionEnabled": false,
@@ -1043,6 +1043,51 @@
             "autoCycleEnabled": true
           }
         ]
+      },
+      {
+        "id": 3387,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16711807,
+        "parameters": {
+          "label": "Channel-12",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 3385,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -13762816,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
       }
     ],
     "master": {
@@ -1206,9 +1251,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 74.59712540657873,
-        "theta": 0.09899999999998621,
-        "phi": 0.09371667385102697,
+        "radius": 462.033409439682,
+        "theta": 0.0839999999999862,
+        "phi": 0.09071667385102697,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5
