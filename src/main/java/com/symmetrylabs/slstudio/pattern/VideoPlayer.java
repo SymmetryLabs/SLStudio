@@ -32,6 +32,7 @@ public class VideoPlayer extends SLPattern<SLModel> {
     BooleanParameter restartParam = new BooleanParameter("restart", false);
     BooleanParameter chooseFileParam = new BooleanParameter("file", false);
     BooleanParameter captureParam = new BooleanParameter("capture", false);
+    BooleanParameter streamParam = new BooleanParameter("stream", false);
 
     /**
      * A guess at the amount of time it will take vlcj to start playing the
@@ -77,11 +78,13 @@ public class VideoPlayer extends SLPattern<SLModel> {
         addParameter(restartParam);
         addParameter(chooseFileParam);
         addParameter(captureParam);
+        addParameter(streamParam);
 
         fitParam.setMode(BooleanParameter.Mode.MOMENTARY);
         restartParam.setMode(BooleanParameter.Mode.MOMENTARY);
         chooseFileParam.setMode(BooleanParameter.Mode.MOMENTARY);
         captureParam.setMode(BooleanParameter.Mode.MOMENTARY);
+        streamParam.setMode(BooleanParameter.Mode.MOMENTARY);
 
         mediaPlayer = null;
         mediaPlayerComponent = null;
@@ -129,6 +132,9 @@ public class VideoPlayer extends SLPattern<SLModel> {
         if (p == captureParam && captureParam.getValueb()) {
             useCaptureCard();
         }
+        if (p == streamParam && streamParam.getValueb()) {
+            useStreamURL();
+        }
         if (p == chooseFileParam && chooseFileParam.getValueb()) {
             showFileBrowser();
         }
@@ -164,6 +170,19 @@ public class VideoPlayer extends SLPattern<SLModel> {
         }
         streaming = false;
         restartVideo();
+    }
+
+    private void useStreamURL() {
+        try {
+            String streamURL = (String)JOptionPane.showInputDialog(null, null, "Stream URL", JOptionPane.PLAIN_MESSAGE, null, null, "");
+            mediaPlayer.stop();
+            mediaUrl = streamURL;
+            streaming = true;
+            restartVideo();
+        }
+        catch (Exception e) {
+            System.err.println("Exception while opening stream: " + e.getMessage());
+        }
     }
 
     private void useCaptureCard() {
