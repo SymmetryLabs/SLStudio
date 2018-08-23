@@ -14,7 +14,7 @@ import static processing.core.PConstants.ADD;
 public class USOpenNoise extends DPat {
     private int currModeIndex, iSymm;
     public final CompoundParameter speed = new CompoundParameter("Speed", 0.55, -2, 2);
-    public final CompoundParameter density = new CompoundParameter("Dens", 0.6);
+    public final CompoundParameter density = new CompoundParameter("Dens", 0.35);
     public final CompoundParameter sharp = new CompoundParameter("Sharp", 0);
     public final DiscreteParameter mode = new DiscreteParameter("Anim", new String[]{"Drip", "Cloud", "Rain", "Fire", "Mach", "Spark", "VWav", "Wave"});
     public final DiscreteParameter symm = new DiscreteParameter("Symm", new String[]{"None", "X", "Y", "Rad"});
