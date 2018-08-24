@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1535001907933,
+  "timestamp": 1535080655512,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 3,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -272,8 +272,8 @@
               "shrink": 2.336585283279419,
               "yoff": 0.11999999731779099,
               "fit": false,
-              "restart": false,
-              "play": false
+              "restart": true,
+              "play": true
             },
             "modulation": {
               "modulators": [],
@@ -299,7 +299,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -337,7 +337,7 @@
               "Lcut2": 63.999998569488525,
               "c2/hue": 0.0,
               "c2/brightness": 100.0,
-              "c2/saturation": 11.000000201165678,
+              "c2/saturation": 10.980392456054688,
               "c2": -7197
             },
             "modulation": {
@@ -353,7 +353,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 830.1257934570312,
+              "rad": 0.0,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
@@ -510,7 +510,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -564,7 +564,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 830.1257934570312,
+              "rad": 0.0,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
@@ -615,7 +615,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -639,7 +639,7 @@
               "release": 379.99999821186066,
               "scale": 10,
               "avoid": false,
-              "count": 19,
+              "count": 18,
               "trigger": false
             },
             "modulation": {
@@ -672,7 +672,26 @@
           "transitionBlendMode": 0
         },
         "warps": [],
-        "effects": [],
+        "effects": [
+          {
+            "id": 11267,
+            "class": "com.symmetrylabs.slstudio.effect.CircleWipe",
+            "modulationColor": -8782080,
+            "parameters": {
+              "label": "CircleWipe",
+              "enabled": true,
+              "rad": 830.1257934570312,
+              "invert": false,
+              "cx": 410.0,
+              "cy": 58.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 0,
         "patterns": [
