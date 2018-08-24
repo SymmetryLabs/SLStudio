@@ -24,6 +24,6 @@ public class MorphPlayer extends VideoPlayer {
 
     @Override
     public long getStartTimeMs() {
-        return 54_000L;
+        return 0L;
     }
 }
