@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1535077946782,
+  "timestamp": 1535078498481,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,7 +14,7 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 0.5016666650772095,
+      "speed": 1.0,
       "focusedChannel": 8,
       "cueA": false,
       "cueB": false,
@@ -656,9 +656,9 @@
             "modulationColor": -26112,
             "parameters": {
               "label": "SplitColor",
-              "x": 0.7430965900421143,
-              "y": -0.21134358644485474,
-              "z": 0.7344284057617188,
+              "x": 0.7262316942214966,
+              "y": -0.1838897466659546,
+              "z": 0.7177833318710327,
               "cx": 410.0,
               "cy": 116.0,
               "cz": 145.0,
