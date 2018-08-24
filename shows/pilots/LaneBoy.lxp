@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1535078498481,
+  "timestamp": 1535127466892,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 1.0,
-      "focusedChannel": 8,
+      "speed": 0.30000001192092896,
+      "focusedChannel": 5,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -191,7 +191,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -611,10 +611,10 @@
               "X-DUP": false,
               "JOG": false,
               "GREY": false,
-              "Speed": -0.03999995440244675,
+              "Speed": 0.9899999901652334,
               "Symm": 0,
               "Anim": 7,
-              "Dens": 0.5
+              "Dens": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -656,9 +656,9 @@
             "modulationColor": -26112,
             "parameters": {
               "label": "SplitColor",
-              "x": 0.7262316942214966,
-              "y": -0.1838897466659546,
-              "z": 0.7177833318710327,
+              "x": 0.23000001907348633,
+              "y": 0.04999995231628418,
+              "z": -0.30000001192092896,
               "cx": 410.0,
               "cy": 116.0,
               "cz": 145.0,
@@ -666,7 +666,7 @@
               "lo/brightness": 100.0,
               "lo/saturation": 0.0,
               "lo": -1,
-              "hi/hue": 183.0899959076196,
+              "hi/hue": 183.058837890625,
               "hi/brightness": 100.0,
               "hi/saturation": 100.0,
               "hi": -16715009
@@ -960,8 +960,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 476.80495992191345,
-        "theta": -0.01199999999999132,
-        "phi": 0.0037166738510261733,
+        "theta": 0.0630000000000086,
+        "phi": 0.03071667385102617,
         "positionX": 431.95635986328125,
         "positionY": 59.0,
         "positionZ": 73.88507080078125

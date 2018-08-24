@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1534983525693,
+  "timestamp": 1535131992114,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -30,7 +30,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 303.15789794921875,
+        "color/hue": 303.058837890625,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
         "color": -65294,
@@ -55,13 +55,13 @@
         "parameters": {
           "label": "IntroBlue",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -76,7 +76,7 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 278.6000031232834,
+              "xSize": 410.0,
               "cx": 410.0,
               "ySize": 80.03999950736761,
               "cy": 58.0,
@@ -163,7 +163,7 @@
         "parameters": {
           "label": "IntroGreen",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -184,7 +184,7 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 278.6000031232834,
+              "xSize": 410.0,
               "cx": 410.0,
               "ySize": 89.31999929994345,
               "cy": 58.0,
@@ -259,7 +259,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -308,7 +308,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 0.0,
+              "rad": 0.19002878940000656,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
@@ -355,13 +355,13 @@
         "parameters": {
           "label": "Planes1",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.49308499693870544,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -443,7 +443,7 @@
               "label": "CircleWipe",
               "enabled": true,
               "rad": 830.1257934570312,
-              "invert": true,
+              "invert": false,
               "cx": 410.0,
               "cy": 58.0
             },
@@ -463,7 +463,7 @@
             "modulationColor": -16711898,
             "parameters": {
               "label": "PilotsPlanes",
-              "speed": 500.0,
+              "speed": 60.00000238418579,
               "dist": 120.0,
               "thick": 16.79999989271164,
               "red": true,
@@ -489,13 +489,13 @@
         "parameters": {
           "label": "Planes2",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.4946275055408478,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -557,7 +557,7 @@
             "modulationColor": -1245440,
             "parameters": {
               "label": "Mirror",
-              "enabled": false,
+              "enabled": true,
               "x": true,
               "cx": 820.0,
               "y": false,
@@ -590,9 +590,9 @@
             "modulationColor": -65382,
             "parameters": {
               "label": "CircleWipe",
-              "enabled": true,
+              "enabled": false,
               "rad": 830.1257934570312,
-              "invert": true,
+              "invert": false,
               "cx": 410.0,
               "cy": 58.0
             },
@@ -612,7 +612,7 @@
             "modulationColor": -65351,
             "parameters": {
               "label": "PilotsPlanes",
-              "speed": 500.0,
+              "speed": 339.9999737739563,
               "dist": 120.0,
               "thick": 21.59999978542328,
               "red": true,
@@ -985,7 +985,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -1053,7 +1053,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.800000011920929,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -1069,7 +1069,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 0.0,
+              "rad": 113.1746684764621,
               "invert": false,
               "cx": 164.00000549852848,
               "cy": 5.8000011667609215
@@ -1086,7 +1086,7 @@
             "modulationColor": -16711927,
             "parameters": {
               "label": "ColorFilter",
-              "enabled": true,
+              "enabled": false,
               "Hue": 115.19999742507935,
               "Sat": 73.00000060349703
             },
@@ -1131,7 +1131,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.800000011920929,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -1147,7 +1147,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 0.0,
+              "rad": 113.1746684764621,
               "invert": false,
               "cx": 647.7999946847558,
               "cy": 4.640001192688942
@@ -1164,7 +1164,7 @@
             "modulationColor": -43264,
             "parameters": {
               "label": "ColorFilter",
-              "enabled": false,
+              "enabled": true,
               "Hue": 115.19999742507935,
               "Sat": 73.00000060349703
             },
