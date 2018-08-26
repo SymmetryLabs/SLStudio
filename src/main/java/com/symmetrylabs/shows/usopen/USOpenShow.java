@@ -81,7 +81,7 @@ public class USOpenShow extends CubesShow {
         new TowerConfig(CubesModel.Cube.Type.HD,      9.8f,         0, 31.3f, 45, new String[] {"1100", "1102", "1055", "1054", "900", "901"}),
 
         // A10***
-        new TowerConfig(CubesModel.Cube.Type.HD,      6.7f,         0,  23.5f, 45, new String[] {"1189", "1050", "1191", "1190"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,      6.7f,         0,  23.5f, 45, new String[] {"37", "1050", "1191", "1190"}),
 
         // A11***
         new TowerConfig(CubesModel.Cube.Type.HD,     13.1f,         0,  22.8f, 45, new String[] {"1113", "1114"}),
@@ -98,7 +98,7 @@ public class USOpenShow extends CubesShow {
 
         // B3***
         new TowerConfig(CubesModel.Cube.Type.HD,      8.0f,      0,    8.7f, 45, new String[] {"143", "150"}),
-        new TowerConfig(CubesModel.Cube.Type.HD,      8.0f+SP,      0, 8.7f-SP, 45, new String[] {"521", "1129"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,      8.0f+SP,      0, 8.7f-SP, 45, new String[] {"521", "331"}),
 
         // B4***
         new TowerConfig(CubesModel.Cube.Type.HD,      4.0f,      0,    6.6f,  0, new String[] {"1246", "1245"}),
@@ -122,11 +122,11 @@ public class USOpenShow extends CubesShow {
 
         // B10***
         new TowerConfig(CubesModel.Cube.Type.HD,     8.0f,      0,   10.3f, 45, new String[] {"1126", "1127"}),
-        new TowerConfig(CubesModel.Cube.Type.HD,  8.0f-SP,      0,   -10.3f+SP, 45, new String[] {"1134", "1135"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,  8.0f-SP,      0,   -10.3f+SP, 45, new String[] {"1250", "501"}),
         new TowerConfig(CubesModel.Cube.Type.HD,  8.0f-SP*0.5f,   JUMP,   -10.3f+SP*0.5f, 45, new String[] {"312", "135"}),
 
         // B11***
-        new TowerConfig(CubesModel.Cube.Type.HD,     4.0f,      0,   -12.7f, 0, new String[] {"1234", "1233"}), // is 12.7 suppose to be negative?
+        new TowerConfig(CubesModel.Cube.Type.HD,     4.0f,      0,   -12.7f, 0, new String[] {"1234", "1233"}),
 
         /**
          * C --------------------------------------------------------------------------------------------------*
@@ -143,28 +143,28 @@ public class USOpenShow extends CubesShow {
         //new TowerConfig(CubesModel.Cube.Type.HD,    -8.8f+SP*1.5f,   JUMP,    5.7f-SP*0.5f, 45, new String[] {"?", "?"}),
 
         // C4***
-        new TowerConfig(CubesModel.Cube.Type.HD,    -3.8f,             0,    6.8f, 0, new String[] {"361", "1007"}), // 360 or 361?
+        new TowerConfig(CubesModel.Cube.Type.HD,    -3.8f,             0,    6.8f, -90, new String[] {"361", "1007"}), // 360 or 361?
 
         // C5***
-        new TowerConfig(CubesModel.Cube.Type.HD,    -3.5f,      JUMP*1.3f,    2.9f,  0, new String[] {"1224", "1225"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,    -3.5f,      JUMP*1.3f,    2.9f,  -90, new String[] {"1224", "1225"}),
 
         // C6***
         new TowerConfig(CubesModel.Cube.Type.HD,    -6.7f,          0,    -0.8f, 45, new String[] {"1117", "1005", "1200", "1201"}),
-        new TowerConfig(CubesModel.Cube.Type.HD,    -6.7f+SP*0.4f, JUMP,    -0.8f+SP*1.5f, 45, new String[] {"1098", "1099"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,    -6.7f+SP*0.4f, JUMP,    -0.8f+SP*1.5f, 45, new String[] {"1242", "1239"}), // CHECK THESE
 
         // C7***
         new TowerConfig(CubesModel.Cube.Type.HD,    -7.0f,          0,   -4.7f, 45, new String[] {"1120", "1121", "1214", "1215"}),
         new TowerConfig(CubesModel.Cube.Type.HD,    -7.0f-SP,       0,  -4.7f-SP, 45, new String[] {"199", "889"}),
 
         // C8***
-        new TowerConfig(CubesModel.Cube.Type.HD,    -3.6f,      JUMP*1.3f,   -9.0f,  0, new String[] {"797", "1230"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,    -3.6f,      JUMP*1.3f,   -9.0f,  -90, new String[] {"797", "1230"}),
 
         // C9***
         new TowerConfig(CubesModel.Cube.Type.HD,    -8.2f,          0,   -9.9f, 45, new String[] {"1238", "1237"}),
-        new TowerConfig(CubesModel.Cube.Type.HD,    -8.2f+SP,       0,   -9.9f+SP, 45, new String[] {"1248", "1247", "1250", "501"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,    -8.2f+SP,       0,   -9.9f+SP, 45, new String[] {"1248", "1247", "1250", "?"}),
 
         // C10??? need ids
-        new TowerConfig(CubesModel.Cube.Type.HD,    -3.8f,          0,   -12.7f, 0, new String[] {"1221", "1220"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,    -3.8f,          0,   -12.7f, -90, new String[] {"1221", "1220"}),
 
         /**
          * D --------------------------------------------------------------------------------------------------*
@@ -208,7 +208,8 @@ public class USOpenShow extends CubesShow {
         new TowerConfig(CubesModel.Cube.Type.HD,    -10.0f,          0,     26.3f, 45, new String[] {"966", "509"}),
 
         // D12???
-        new TowerConfig(CubesModel.Cube.Type.HD,    -12.9f,          0,     22.8f, 45, new String[] {"415HP", "1232"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,    -12.9f,          0,     22.8f, 45, new String[] {"1135", "1232"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,    -12.9f+SP,          0,     22.8f-SP, 45, new String[] {"140", "1134"}),
 
         /**
          * U --------------------------------------------------------------------------------------------------*
