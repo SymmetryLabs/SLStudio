@@ -91,7 +91,7 @@ public abstract class CubesShow implements Show {
                 yValues = new float[ids.length];
             } else if (type == CubesModel.Cube.Type.HD){
                 if (ids.length % 2 != 0) {
-                    throw new RuntimeException("DoubleControllerCube requires 2 ids per cubes!");
+                    throw new RuntimeException("DoubleControllerCube with id (" + ids[0] + ") requires 2 ids per cubes!");
                 }
                 yValues = new float[floor(ids.length/2)];
             } else {

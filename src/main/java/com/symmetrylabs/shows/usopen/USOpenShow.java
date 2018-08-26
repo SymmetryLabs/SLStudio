@@ -41,7 +41,7 @@ public class USOpenShow extends CubesShow {
     static final float globalRotationY = 0;
     static final float globalRotationZ = 0;
 
-    static final float SP = 0.3f; //inchesToMeters(25);
+    static final float SP = 1.35f;
 
 
     static final TowerConfig[] TOWER_CONFIG = {
@@ -49,161 +49,179 @@ public class USOpenShow extends CubesShow {
         /**
          * A --------------------------------------------------------------------------------------------------*
         */
-        // A1
-        new TowerConfig(CubesModel.Cube.Type.LARGE,  0.45f,   JUMP*2, 16.91f, -45, new String[] {"341", "188", "326"}),
+        // A1 - STAGE***
+        new TowerConfig(CubesModel.Cube.Type.LARGE,   1.9f,    JUMP*2,    51.2f+7, -45, new String[] {"341", "188", "326"}),
 
-        // A2
-        new TowerConfig(CubesModel.Cube.Type.LARGE,  2.00f,   JUMP*2, 17.48f, -45, new String[] {"362", "189", "50", "61"}),
-        new TowerConfig(CubesModel.Cube.Type.LARGE,  2.00f+SP, JUMP*5, 17.48f, -45, new String[] {"?", "?"}),
+        // A2 - STAGE***
+        new TowerConfig(CubesModel.Cube.Type.LARGE,   6.9f-SP,    JUMP*2,    53.1f-SP+7, -45, new String[] {"362", "189", "50", "61"}),
+        new TowerConfig(CubesModel.Cube.Type.LARGE,   6.9f,  JUMP*2+JUMP*3, 53.1f+7, -45, new String[] {"71"}),
 
-        // A3
-        new TowerConfig(CubesModel.Cube.Type.LARGE,  2.77f,   JUMP*2, 17.07f, -45, new String[] {"121", "365", "397", "81"}),
+        // A3 - STAGE***
+        new TowerConfig(CubesModel.Cube.Type.LARGE,   9.4f,    JUMP*2,    51.6f+7, -45, new String[] {"121", "365", "397", "128"}), //81->128
 
-        // A4
-        new TowerConfig(CubesModel.Cube.Type.LARGE,  4.17f,   JUMP*2, 17.47f, -45, new String[] {"21", "419"}),
-        new TowerConfig(CubesModel.Cube.Type.LARGE,  4.17f+SP,JUMP*2, 17.47f, -45, new String[] {"367", "25"}),
+        // A4 - STAGE***
+        new TowerConfig(CubesModel.Cube.Type.LARGE,  14.0f-SP*0.5f,    JUMP*2,     52.8f-SP+7, -45, new String[] {"21", "419"}),
+        new TowerConfig(CubesModel.Cube.Type.LARGE,  14.0f+SP*0.5f,   JUMP*2,  52.8f+7, -45, new String[] {"38", "367", "55"}),
 
-        // A5
-        new TowerConfig(CubesModel.Cube.Type.HD,     4.64f,         0, 16.30f, 45, new String[] {"1118", "1119", "1228", "1229"}),
-        new TowerConfig(CubesModel.Cube.Type.HD,     4.64f+SP,      0, 16.30f, 45, new String[] {"1226", "1227"}),
+        // A5 - STAGE***
+        new TowerConfig(CubesModel.Cube.Type.HD,     15.5f,          0,    47.0f+7, 45, new String[] {"1118", "1119", "1228", "1229"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,     15.5f+SP,  JUMP*1,    47.0f+SP+7, 45, new String[] {"1226", "1227"}),
 
-        // A6
-        new TowerConfig(CubesModel.Cube.Type.HD,     4.65f,         0, 15.14f, 45, new String[] {"1086", "?", "1051", "?"}),
-        new TowerConfig(CubesModel.Cube.Type.HD,     4.65f+SP, JUMP*1, 15.14f, 45, new String[] {"1069", "1068"}),
+        // A6 - STAGE***
+        new TowerConfig(CubesModel.Cube.Type.HD,     15.6f,         0, 42.9f+7, 45, new String[] {"1086", "1088", "1051", "1058"}), // 1086???
+        new TowerConfig(CubesModel.Cube.Type.HD,     15.6f+SP, JUMP*1, 42.9f+SP+7, 45, new String[] {"1069", "1068"}),
 
-        // A7
-        new TowerConfig(CubesModel.Cube.Type.HD,     4.31f,         0, 13.78f, 45, new String[] {"1056", "1085", "1081", "1101"}),
+        // A7 - STAGE***
+        new TowerConfig(CubesModel.Cube.Type.HD,     14.6f,         0, 38.2f+7, 45, new String[] {"1056", "1085", "1081", "1101"}),
 
-        // A8
-        new TowerConfig(CubesModel.Cube.Type.HD,     4.63f,         0, 11.00f, 45, new String[] {"1130", "1131", "1132", "1133"}),
+        // A8***
+        new TowerConfig(CubesModel.Cube.Type.HD,     16.0f,         0, 31.6f, 45, new String[] {"1130", "1131", "1132", "1133"}),
 
-        // A9
-        new TowerConfig(CubesModel.Cube.Type.HD,     3.17f,         0, 10.91f, 45, new String[] {"1100", "1102", "1055", "1054", "900", "901"}),
+        // A9***
+        new TowerConfig(CubesModel.Cube.Type.HD,      9.8f,         0, 31.3f, 45, new String[] {"1100", "1102", "1055", "1054", "900", "901"}),
 
-        // A10
-        new TowerConfig(CubesModel.Cube.Type.HD,     1.94f,         0,  8.52f, 45, new String[] {"1189", "1050", "1191", "1190"}),
+        // A10***
+        new TowerConfig(CubesModel.Cube.Type.HD,      6.7f,         0,  23.5f, 45, new String[] {"1189", "1050", "1191", "1190"}),
 
-        // A11
-        new TowerConfig(CubesModel.Cube.Type.HD,     3.89f,         0,  8.32f, 45, new String[] {"1113", "1114"}),
+        // A11***
+        new TowerConfig(CubesModel.Cube.Type.HD,     13.1f,         0,  22.8f, 45, new String[] {"1113", "1114"}),
 
         /**
          * B --------------------------------------------------------------------------------------------------*
         */
-        // B1
-        new TowerConfig(CubesModel.Cube.Type.HD,     2.76f,      0,    7.25f, 45, new String[] {"1124", "1125", "1196", "1197", "1193", "1192"}),
-        new TowerConfig(CubesModel.Cube.Type.HD,     2.76f-SP,   0,    7.25f, 45, new String[] {"1195", "1194"}),
+        // B1***
+        new TowerConfig(CubesModel.Cube.Type.HD,      9.3f,      0,    19.3f, 45, new String[] {"1124", "1125", "1196", "1197", "1193", "1192"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,      9.3f-SP,   0,    19.3f-SP, 45, new String[] {"1195", "1194"}),
 
-        // B2
-        new TowerConfig(CubesModel.Cube.Type.HD,     3.58f,      0,    5.46f, 45, new String[] {"1128", "1129"}),
+        // B2***
+        new TowerConfig(CubesModel.Cube.Type.HD,     10.9f,      0,    13.4f, 45, new String[] {"1128", "1129"}),
 
-        // B3
-        new TowerConfig(CubesModel.Cube.Type.HD,     2.43f,      0,    4.05f, 45, new String[] {"143", "150"}),
-        new TowerConfig(CubesModel.Cube.Type.HD,     2.43f,      0, 4.05f-SP, 45, new String[] {"521", "1129"}),
+        // B3***
+        new TowerConfig(CubesModel.Cube.Type.HD,      8.0f,      0,    8.7f, 45, new String[] {"143", "150"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,      8.0f+SP,      0, 8.7f-SP, 45, new String[] {"521", "1129"}),
 
-        // B4
-        new TowerConfig(CubesModel.Cube.Type.HD,     1.09f,      0,    3.41f, 45, new String[] {"1246", "1245"}),
+        // B4***
+        new TowerConfig(CubesModel.Cube.Type.HD,      4.0f,      0,    6.6f,  0, new String[] {"1246", "1245"}),
 
-        // B5
-        new TowerConfig(CubesModel.Cube.Type.HD,     1.03f,  JUMP*1.3f,    2.44f,  0, new String[] {"0", "0"}),
+        // B5***
+        new TowerConfig(CubesModel.Cube.Type.HD,      3.7f,  JUMP*1.5f, 3.4f,  0, new String[] {"1241", "1240"}),
 
-        // B6
-        new TowerConfig(CubesModel.Cube.Type.HD,     2.36f,      0,    2.22f, 45, new String[] {"0", "0"}),
+        // B6???
+        new TowerConfig(CubesModel.Cube.Type.HD,      6.4f,      0,    2.2f, 45, new String[] {"?", "?", "?", "?"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,      6.4f+SP, JUMP*0.5f,    2.2f+SP, 45, new String[] {"?", "?"}),
 
-        // B7
-        new TowerConfig(CubesModel.Cube.Type.HD,     2.88f,      0,    0.96f, 45, new String[] {"575", "1189", "1231", "?"}),
+        // B7*** just double check
+        new TowerConfig(CubesModel.Cube.Type.HD,      9.8f,      0,    0.0f, 45, new String[] {"575", "1189"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,      9.8f-SP*0.5f,   JUMP,    0.0f-SP*0.5f, 45, new String[] {"1231", "594"}),
 
-        // B8
-        new TowerConfig(CubesModel.Cube.Type.HD,     1.78f,      0,   -0.11f, 45, new String[] {"1244", "1243", "1242", "1239"}),
+        // B8***
+        new TowerConfig(CubesModel.Cube.Type.HD,      7.2f,      0,   -4.8f, 45, new String[] {"1244", "1243", "204", "1084"}),
 
-        // B9
-        new TowerConfig(CubesModel.Cube.Type.HD,     1.04f,  JUMP*1.3f,   -1.40f,  0, new String[] {"1236", "1235"}),
+        // B9***
+        new TowerConfig(CubesModel.Cube.Type.HD,      3.6f,  JUMP*1.5f, -7.2f,  0, new String[] {"1236", "1235"}),
 
-        // B10
-        new TowerConfig(CubesModel.Cube.Type.HD,     2.74f,      0,   -1.35f, 45, new String[] {"1238", "1237"}),
-        new TowerConfig(CubesModel.Cube.Type.HD,  2.74f+SP,      0,   -1.35f, 45, new String[] {"1248", "1247"}),
+        // B10***
+        new TowerConfig(CubesModel.Cube.Type.HD,     8.0f,      0,   10.3f, 45, new String[] {"1126", "1127"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,  8.0f-SP,      0,   -10.3f+SP, 45, new String[] {"1134", "1135"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,  8.0f-SP*0.5f,   JUMP,   -10.3f+SP*0.5f, 45, new String[] {"312", "135"}),
 
-        // B11
-        new TowerConfig(CubesModel.Cube.Type.HD,     1.14f,      0,   -2.51f, 45, new String[] {"0", "0"}),
+        // B11***
+        new TowerConfig(CubesModel.Cube.Type.HD,     4.0f,      0,   -12.7f, 0, new String[] {"1234", "1233"}), // is 12.7 suppose to be negative?
 
         /**
          * C --------------------------------------------------------------------------------------------------*
         */
-        // C1
-        new TowerConfig(CubesModel.Cube.Type.HD,    -2.44f,          0,    6.66f, 45, new String[] {"1212", "1222"}),
+        // C1***
+        new TowerConfig(CubesModel.Cube.Type.HD,    -7.8f,          0,    17.5f, 45, new String[] {"1212", "1222"}),
 
-        // C2
-        new TowerConfig(CubesModel.Cube.Type.HD,    -3.89f,          0,    5.25f, 45, new String[] {"?", "?"}),
+        // C2***
+        new TowerConfig(CubesModel.Cube.Type.HD,   -10.5f,          0,    11.6f, 45, new String[] {"308", "159"}),
 
-        // C3
-        new TowerConfig(CubesModel.Cube.Type.HD,    -3.48f,          0,    3.97f, 45, new String[] {"1218", "1219"}),
+        // C3??? need to get ids for half-off cube
+        new TowerConfig(CubesModel.Cube.Type.HD,    -8.8f,          0,    5.7f, 45, new String[] {"1218", "1219"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,    -8.8f+SP,       0,    5.7f-SP, 45, new String[] {"1206", "1207"}),
+        //new TowerConfig(CubesModel.Cube.Type.HD,    -8.8f+SP*1.5f,   JUMP,    5.7f-SP*0.5f, 45, new String[] {"?", "?"}),
 
-        // C4
-        new TowerConfig(CubesModel.Cube.Type.HD,    -0.74f,          0,    3.42f, 45, new String[] {"360", "1007"}),
+        // C4***
+        new TowerConfig(CubesModel.Cube.Type.HD,    -3.8f,             0,    6.8f, 0, new String[] {"361", "1007"}), // 360 or 361?
 
-        // C5
-        new TowerConfig(CubesModel.Cube.Type.HD,    -0.65f,      JUMP*1.3f,    2.44f,  0, new String[] {"1224", "1225"}),
+        // C5***
+        new TowerConfig(CubesModel.Cube.Type.HD,    -3.5f,      JUMP*1.3f,    2.9f,  0, new String[] {"1224", "1225"}),
 
-        // C6
-        new TowerConfig(CubesModel.Cube.Type.HD,    -2.75f,          0,    1.59f, 45, new String[] {"1117", "1005", "120", "1201", "1122", "1123"}),
+        // C6***
+        new TowerConfig(CubesModel.Cube.Type.HD,    -6.7f,          0,    -0.8f, 45, new String[] {"1117", "1005", "1200", "1201"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,    -6.7f+SP*0.4f, JUMP,    -0.8f+SP*1.5f, 45, new String[] {"1098", "1099"}),
 
-        // C7
-        new TowerConfig(CubesModel.Cube.Type.HD,    -2.20f,          0,   -0.04f, 45, new String[] {"1120", "1121", "1214", "1215", "1198", "1199"}),
-        new TowerConfig(CubesModel.Cube.Type.HD,    -2.20f,          0,-0.04f+SP, 45, new String[] {"199", "889"}),
+        // C7***
+        new TowerConfig(CubesModel.Cube.Type.HD,    -7.0f,          0,   -4.7f, 45, new String[] {"1120", "1121", "1214", "1215"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,    -7.0f-SP,       0,  -4.7f-SP, 45, new String[] {"199", "889"}),
 
-        // C8
-        new TowerConfig(CubesModel.Cube.Type.HD,    -0.67f,      JUMP*1.3f,   -1.39f,  0, new String[] {"797", "1230"}),
+        // C8***
+        new TowerConfig(CubesModel.Cube.Type.HD,    -3.6f,      JUMP*1.3f,   -9.0f,  0, new String[] {"797", "1230"}),
 
-        // C9
-        new TowerConfig(CubesModel.Cube.Type.HD,    -3.12f,          0,   -1.44f, 45, new String[] {"1126", "1127"}),
-        //new TowerConfig(CubesModel.Cube.Type.HD,    -3.12f,          0    -1.44f+SP, 45, new String[] {"1134", "1135"}), // weird position thing
+        // C9***
+        new TowerConfig(CubesModel.Cube.Type.HD,    -8.2f,          0,   -9.9f, 45, new String[] {"1238", "1237"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,    -8.2f+SP,       0,   -9.9f+SP, 45, new String[] {"1248", "1247", "1250", "501"}),
 
-        // C10
-        new TowerConfig(CubesModel.Cube.Type.HD,    -0.72f,          0,   -2.52f, 45, new String[] {"0", "0"}),
+        // C10??? need ids
+        new TowerConfig(CubesModel.Cube.Type.HD,    -3.8f,          0,   -12.7f, 0, new String[] {"1221", "1220"}),
 
         /**
          * D --------------------------------------------------------------------------------------------------*
         */
-        // D1
-        new TowerConfig(CubesModel.Cube.Type.LARGE, -0.57f,     JUMP*2,    16.96f, -45, new String[] {"186", "36", "5", "122"}),
+        // D1 - STAGE***
+        new TowerConfig(CubesModel.Cube.Type.LARGE, -1.6f,       JUMP*2,    51.5f+7, -45, new String[] {"186", "36", "5", "122"}),
 
-        // D2
-        new TowerConfig(CubesModel.Cube.Type.LARGE, -1.50f,     JUMP*2,    17.48f, -45, new String[] {"79", "320", "185"}),
-        new TowerConfig(CubesModel.Cube.Type.LARGE, -1.50f+SP,  JUMP*2,    17.48f, -45, new String[] {"321", "138"}),
+        // D2 - STAGE***
+        new TowerConfig(CubesModel.Cube.Type.LARGE, -5.8f,       JUMP*2,    52.1f+7, -45, new String[] {"79", "320", "185"}),
+        new TowerConfig(CubesModel.Cube.Type.LARGE, -5.8f+SP,    JUMP*2,    52.1f+SP+7, -45, new String[] {"321", "138"}),
 
-        // D3
-        new TowerConfig(CubesModel.Cube.Type.LARGE, -2.86f,     JUMP*2,    17.20f, -45, new String[] {"372", "87", "181", "126"}),
+        // D3 - STAGE***
+        new TowerConfig(CubesModel.Cube.Type.LARGE, -9.2f,       JUMP*2,    52.3f+7, -45, new String[] {"372", "87", "181", "126"}),
 
-        // D4
-        new TowerConfig(CubesModel.Cube.Type.LARGE, -3.77f,     JUMP*2,    17.11f, -45, new String[] {"120", "14", "351"}),
+        // D4 - STAGE***
+        new TowerConfig(CubesModel.Cube.Type.LARGE, -12.5f,      JUMP*2,   52.0f+7, -45, new String[] {"120", "14", "351"}),
 
-        // D5
-        new TowerConfig(CubesModel.Cube.Type.LARGE, -4.74f,     JUMP*2,    17.52f, -45, new String[] {"69", "184", "211"}),
-        new TowerConfig(CubesModel.Cube.Type.LARGE, -4.74f+SP,  JUMP*4,    17.52f, -45, new String[] {"203"}),
+        // D5 - STAGE***
+        new TowerConfig(CubesModel.Cube.Type.LARGE, -16.2f,      JUMP*2,    52.4f+7, -45, new String[] {"69", "184", "211"}),
+        new TowerConfig(CubesModel.Cube.Type.LARGE, -16.2f+SP,  JUMP*2+JUMP*2,    52.4f+SP+7, -45, new String[] {"203"}),
 
-        // D6
-        new TowerConfig(CubesModel.Cube.Type.HD,    -5.49f,          0,    16.00f, 45, new String[] {"1002", "683", "1205", "1208"}),
+        // D6 - STAGE***
+        new TowerConfig(CubesModel.Cube.Type.HD,    -17.9f,          0,    47.4f+7, 45, new String[] {"1002", "683", "1209", "1208"}),
 
-        // D7
-        new TowerConfig(CubesModel.Cube.Type.HD,    -5.32f,          0,    15.15f, 45, new String[] {"1211", "1210", "895", "983"}),
-        new TowerConfig(CubesModel.Cube.Type.HD,    -5.32f+SP,  JUMP*1,    15.15f, 45, new String[] {"572", "806"}),
+        // D7 - STAGE***
+        new TowerConfig(CubesModel.Cube.Type.HD,    -18.6f,          0,    42.5f+7, 45, new String[] {"1211", "1210", "895", "983"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,    -18.6f+SP,  JUMP*1,    42.5f+SP+7, 45, new String[] {"572", "806"}),
 
-        // D8
-        new TowerConfig(CubesModel.Cube.Type.HD,    -5.31f,          0,    14.00f, 45, new String[] {"1216", "1217", "1053", "1062"}),
-        new TowerConfig(CubesModel.Cube.Type.HD,    -5.31f,          0, 14.00f-SP, 45, new String[] {"990", "822"}),
+        // D8 - STAGE***
+        new TowerConfig(CubesModel.Cube.Type.HD,    -18.6f,          0,    38.0f+7, 45, new String[] {"1216", "1217", "1053", "1062"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,    -18.6f+SP,       0, 38.0f+SP+7, 45, new String[] {"990", "822"}),
 
-        // D9
-        new TowerConfig(CubesModel.Cube.Type.HD,    -5.28f,          0,    11.00f, 45, new String[] {"447", "793", "1205", "1202"}),
+        // D9***
+        new TowerConfig(CubesModel.Cube.Type.HD,    -17.0f,          0,    31.8f, 45, new String[] {"447", "793", "1203", "1202"}),
 
-        // D10
-        new TowerConfig(CubesModel.Cube.Type.HD,    -3.69f,          0,    11.27f, 45, new String[] {"614", "636", "1205", "1204", "438", "459"}),
-        new TowerConfig(CubesModel.Cube.Type.HD,    -3.69f,          0, 11.27f-SP, 45, new String[] {"1014", "891"}),
+        // D10***
+        new TowerConfig(CubesModel.Cube.Type.HD,    -11.9f,          0,    32.7f, 45, new String[] {"614", "636", "1205", "1204", "438", "459"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,    -11.9f+SP,       0, 32.7f-SP, 45, new String[] {"1014", "891"}),
 
-        // D11
-        new TowerConfig(CubesModel.Cube.Type.HD,    -3.15f,          0,     9.40f, 45, new String[] {"966", "509"}),
+        // D11***
+        new TowerConfig(CubesModel.Cube.Type.HD,    -10.0f,          0,     26.3f, 45, new String[] {"966", "509"}),
 
-        // D12
-        new TowerConfig(CubesModel.Cube.Type.HD,    -4.02f,          0,     8.33f, 45, new String[] {"415HP", "1232"}),
+        // D12???
+        new TowerConfig(CubesModel.Cube.Type.HD,    -12.9f,          0,     22.8f, 45, new String[] {"415HP", "1232"}),
+
+        /**
+         * U --------------------------------------------------------------------------------------------------*
+        */
+        // U1 ??? these right?
+        new TowerConfig(CubesModel.Cube.Type.HD,    -12.9f,          0,     -22.8f, 45, new String[] {"165", "196"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,    -12.9f-SP,          5,     -22.8f+SP, 45, new String[] {"1049", "1105"}),
+
+        // U2 ???? these right?
+        new TowerConfig(CubesModel.Cube.Type.HD,    12.9f,          0,      -22.8f, 45, new String[] {"1019", "908"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,    12.9f+SP,          5,      -22.8f+SP, 45, new String[] {"590", "640"}),
     };
+
 
     public SLModel buildModel() {
         // Any global transforms
@@ -218,8 +236,8 @@ public class USOpenShow extends CubesShow {
 
         for (TowerConfig config : TOWER_CONFIG) {
             List<CubesModel.Cube> cubes = new ArrayList<>();
-            float x = metersToInches(config.x);
-            float z = metersToInches(config.z);
+            float x = config.x*12f;
+            float z = config.z*12f;
             float yRot = config.yRot;
 
             if (config.type != CubesModel.Cube.Type.HD) {
