@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1535399768052,
+  "timestamp": 1535402743062,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -97,7 +97,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 830.1257934570312,
+              "rad": 0.0,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
@@ -152,7 +152,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -206,7 +206,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 0.0,
+              "rad": 830.1257934570312,
               "invert": true,
               "cx": 410.0,
               "cy": 58.0
@@ -269,7 +269,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -415,7 +415,7 @@
             "modulationColor": -6815489,
             "parameters": {
               "label": "Strobe",
-              "enabled": true,
+              "enabled": false,
               "Shape": 2,
               "Freq": 10.0,
               "Black": false

@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1535341980359,
+  "timestamp": 1535404120414,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0500000528991222,
-      "focusedChannel": 5,
+      "focusedChannel": 6,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -161,7 +161,8 @@
               "label": "Strobe",
               "enabled": false,
               "Shape": 2,
-              "Freq": 10.0
+              "Freq": 10.0,
+              "Black": true
             },
             "modulation": {
               "modulators": [],
@@ -194,10 +195,10 @@
               "X-DUP": false,
               "JOG": false,
               "GREY": false,
-              "Speed": 0.7200000286102295,
+              "Speed": 0.55,
               "Symm": 0,
               "Anim": 3,
-              "Dens": 0.9599999919533729
+              "Dens": 0.6
             },
             "modulation": {
               "modulators": [],
@@ -304,10 +305,10 @@
               "X-DUP": false,
               "JOG": false,
               "GREY": false,
-              "Speed": 1.309999983012676,
+              "Speed": 0.55,
               "Symm": 0,
               "Anim": 4,
-              "Dens": 0.8199999950826168
+              "Dens": 0.6
             },
             "modulation": {
               "modulators": [],
@@ -475,7 +476,8 @@
               "label": "Strobe",
               "enabled": true,
               "Shape": 2,
-              "Freq": 10.0
+              "Freq": 10.0,
+              "Black": true
             },
             "modulation": {
               "modulators": [],
@@ -508,10 +510,10 @@
               "X-DUP": false,
               "JOG": false,
               "GREY": true,
-              "Speed": 0.5100000008940695,
+              "Speed": 0.55,
               "Symm": 0,
               "Anim": 7,
-              "Dens": 0.12000001072883604
+              "Dens": 0.6
             },
             "modulation": {
               "modulators": [],
@@ -608,7 +610,8 @@
               "label": "Strobe",
               "enabled": false,
               "Shape": 2,
-              "Freq": 7.367999857664107
+              "Freq": 7.367999857664107,
+              "Black": true
             },
             "modulation": {
               "modulators": [],
@@ -665,7 +668,7 @@
         "warps": [],
         "effects": [],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 1,
         "patterns": [
           {
             "id": 4347,
@@ -673,10 +676,43 @@
             "modulationColor": -11469056,
             "parameters": {
               "label": "WarpCompatibleSolidColor",
-              "Color/hue": 57.43999871611595,
+              "Color/hue": 57.39130783081055,
               "Color/brightness": 100.0,
-              "Color/saturation": 71.99999894946814,
+              "Color/saturation": 72.1568603515625,
               "Color": -2233
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 5850,
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
+            "modulationColor": -14680320,
+            "parameters": {
+              "label": "Noise",
+              "Hue": 46.799998953938484,
+              "Spark": 0.0,
+              "Wave": 0.0,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
+              "Spin": 0.5,
+              "X-SYM": false,
+              "Y-SYM": false,
+              "R-SYM": false,
+              "X-DUP": false,
+              "JOG": false,
+              "GREY": false,
+              "Speed": 0.55,
+              "Symm": 0,
+              "Anim": 1,
+              "Dens": 0.839999994635582
             },
             "modulation": {
               "modulators": [],
