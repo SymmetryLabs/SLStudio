@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1535127466892,
+  "timestamp": 1535387461256,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,7 +14,7 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 0.30000001192092896,
+      "speed": 1.5800000429153442,
       "focusedChannel": 5,
       "cueA": false,
       "cueB": false,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -539,7 +539,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -572,7 +572,7 @@
             "modulationColor": -7209216,
             "parameters": {
               "label": "TwoTone",
-              "enabled": false,
+              "enabled": true,
               "Lcut1": 1.0,
               "Lcut2": 7.999999821186066,
               "c2/hue": 0.0,
@@ -611,10 +611,10 @@
               "X-DUP": false,
               "JOG": false,
               "GREY": false,
-              "Speed": 0.9899999901652334,
+              "Speed": 0.9499999910593031,
               "Symm": 0,
               "Anim": 7,
-              "Dens": 0.0
+              "Dens": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -656,9 +656,9 @@
             "modulationColor": -26112,
             "parameters": {
               "label": "SplitColor",
-              "x": 0.23000001907348633,
-              "y": 0.04999995231628418,
-              "z": -0.30000001192092896,
+              "x": 0.8789047002792358,
+              "y": -0.43241989612579346,
+              "z": 0.8684653043746948,
               "cx": 410.0,
               "cy": 116.0,
               "cz": 145.0,

@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1535128848970,
+  "timestamp": 1535388517487,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -55,7 +55,7 @@
         "parameters": {
           "label": "RK1",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -148,7 +148,7 @@
         "parameters": {
           "label": "RK2",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -324,7 +324,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -512,12 +512,12 @@
           "label": "Noise",
           "arm": false,
           "enabled": true,
-          "cue": true,
+          "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 3,
           "transitionEnabled": false,
@@ -1100,9 +1100,9 @@
         "3685": true
       },
       "preview": {
-        "radius": 679.6199174660641,
-        "theta": -0.1980000000000175,
-        "phi": 0.051716673851012904,
+        "radius": 451.2005672202254,
+        "theta": -0.012000000000017417,
+        "phi": 0.4117166738510132,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5
