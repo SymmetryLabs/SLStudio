@@ -61,7 +61,7 @@ public class USOpenShow extends CubesShow {
 
         // A4 - STAGE***
         new TowerConfig(CubesModel.Cube.Type.LARGE,  14.0f-SP*0.5f,    JUMP*2,     52.8f-SP+7, -45, new String[] {"21", "419"}),
-        new TowerConfig(CubesModel.Cube.Type.LARGE,  14.0f+SP*0.5f,   JUMP*2,  52.8f+7, -45, new String[] {"38", "389", "55"}),
+        new TowerConfig(CubesModel.Cube.Type.LARGE,  14.0f+SP*0.5f,   JUMP*2,  52.8f+7, -45, new String[] {"412", "389", "55"}),
 
         // A5 - STAGE***
         new TowerConfig(CubesModel.Cube.Type.HD,     15.5f,          0,    47.0f+7, 45, new String[] {"1118", "1119", "1228", "1229"}),
