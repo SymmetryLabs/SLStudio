@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1535398523891,
+  "timestamp": 1535399768052,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,7 +14,7 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 1.0500000528991222,
+      "speed": 1.0,
       "focusedChannel": 4,
       "cueA": false,
       "cueB": false,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -152,7 +152,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -190,8 +190,8 @@
               "Lcut2": 66.99999962002039,
               "c2/hue": 334.0611267089844,
               "c2/brightness": 100.0,
-              "c2/saturation": 0.0,
-              "c2": -1
+              "c2/saturation": 100.0,
+              "c2": -65426
             },
             "modulation": {
               "modulators": [],
@@ -371,7 +371,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 4,
           "transitionEnabled": false,
@@ -388,7 +388,7 @@
               "enabled": true,
               "xSize": 557.5999967008829,
               "cx": 410.0,
-              "ySize": 60.01000237464905,
+              "ySize": 59.99999761581421,
               "cy": 58.0,
               "zSize": 92.79999954625964,
               "cz": 72.5,
@@ -417,7 +417,8 @@
               "label": "Strobe",
               "enabled": true,
               "Shape": 2,
-              "Freq": 10.0
+              "Freq": 10.0,
+              "Black": false
             },
             "modulation": {
               "modulators": [],
@@ -435,10 +436,10 @@
             "modulationColor": -12517121,
             "parameters": {
               "label": "WarpCompatibleSolidColor",
-              "Color/hue": 333.8699932061136,
+              "Color/hue": 333.8823547363281,
               "Color/brightness": 100.0,
-              "Color/saturation": 100.0,
-              "Color": -65425
+              "Color/saturation": 0.0,
+              "Color": -1
             },
             "modulation": {
               "modulators": [],
@@ -764,9 +765,9 @@
         "4607": true
       },
       "preview": {
-        "radius": 519.8422316139489,
-        "theta": -0.027000000000013832,
-        "phi": 0.11471667385101336,
+        "radius": 423.85068476333413,
+        "theta": -1.3835287082653025E-14,
+        "phi": 0.0367166738510133,
         "positionX": 410.0,
         "positionY": 48.0,
         "positionZ": 72.5
