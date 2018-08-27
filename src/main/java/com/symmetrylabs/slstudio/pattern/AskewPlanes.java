@@ -32,9 +32,9 @@ public class AskewPlanes extends DPat {
     CompoundParameter speed3 = new CompoundParameter("speed3", 1, 0, 1000);
     CompoundParameter thickness = new CompoundParameter("Thick", 0.2, 0.1, 0.9);
     class Plane {
-        private final SinLFO a;
-        private final SinLFO b;
-        private final SinLFO c;
+        private SinLFO a = null;
+        private SinLFO b = null;
+        private SinLFO c = null;
         float av = 1;
         float bv = 1;
         float cv = 1;
@@ -78,7 +78,7 @@ public class AskewPlanes extends DPat {
 
 
 
-        void run(double deltaMs) {
+        public void run(double deltaMs) {
             av = a.getValuef();
             bv = b.getValuef();
             cv = c.getValuef();
