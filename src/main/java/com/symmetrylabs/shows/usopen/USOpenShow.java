@@ -34,7 +34,7 @@ import static com.symmetrylabs.util.DistanceConstants.*;
 public class USOpenShow extends CubesShow {
 
     static final float globalOffsetX = 220;
-    static final float globalOffsetY = 0;
+    static final float globalOffsetY = 48;
     static final float globalOffsetZ = 103;
 
     static final float globalRotationX = 0;
@@ -90,7 +90,7 @@ public class USOpenShow extends CubesShow {
          * B --------------------------------------------------------------------------------------------------*
         */
         // B1***
-        new TowerConfig(CubesModel.Cube.Type.HD,      9.3f,      0,    19.3f, 45, new String[] {"1124", "1125", "1196", "1197", "1193", "1192"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,      9.3f,      0,    19.3f, 45, new String[] {"1124", "1125", "1196", "1197", "1249", "1123"}),
         new TowerConfig(CubesModel.Cube.Type.HD,      9.3f-SP,   0,    19.3f-SP, 45, new String[] {"1195", "1194"}),
 
         // B2***
@@ -122,7 +122,7 @@ public class USOpenShow extends CubesShow {
 
         // B10***
         new TowerConfig(CubesModel.Cube.Type.HD,     8.0f,      0,   10.3f, 45, new String[] {"1126", "1127"}),
-        new TowerConfig(CubesModel.Cube.Type.HD,  8.0f-SP,      0,   -10.3f+SP, 45, new String[] {"1250", "501"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,  8.0f-SP,      0,   -10.3f+SP, 45, new String[] {"1250", "352"}),
         new TowerConfig(CubesModel.Cube.Type.HD,  8.0f-SP*0.5f,   JUMP,   -10.3f+SP*0.5f, 45, new String[] {"312", "135"}),
 
         // B11***
@@ -201,7 +201,7 @@ public class USOpenShow extends CubesShow {
         new TowerConfig(CubesModel.Cube.Type.HD,    -17.0f,          0,    31.8f, 45, new String[] {"447", "793", "1203", "1202"}),
 
         // D10***
-        new TowerConfig(CubesModel.Cube.Type.HD,    -11.9f,          0,    32.7f, 45, new String[] {"614", "636", "1205", "1204", "438", "459"}),
+        new TowerConfig(CubesModel.Cube.Type.HD,    -11.9f,          0,    32.7f, 45, new String[] {"614", "636", "1205", "1204", "723", "196"}),
         new TowerConfig(CubesModel.Cube.Type.HD,    -11.9f+SP,       0, 32.7f-SP, 45, new String[] {"1014", "891"}),
 
         // D11***
