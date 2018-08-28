@@ -61,9 +61,8 @@ public class PilotsShow implements Show {
 
     @Override
     public void setupLx(SLStudioLX lx) {
-        lx.addOutput(
-            new PilotsPixlite(lx, "10.200.1.10", ((PilotsModel)lx.model).getCartById("FSL"))
-        );
+        lx.addOutput(new PilotsPixlite(lx, "10.200.1.10", ((PilotsModel)lx.model).getCartById("FSL")));
+        lx.addOutput(new PilotsPixlite(lx, "10.200.1.11", ((PilotsModel)lx.model).getCartById("BSL")));
     }
 
     @Override
