@@ -40,6 +40,7 @@ import heronarts.lx.parameter.LXParameterListener;
 public class LXMidiInput extends LXMidiDevice implements LXSerializable {
 
     private final List<LXMidiListener> listeners = new ArrayList<LXMidiListener>();
+    private final List<BeatListener> beatListeners = new ArrayList<BeatListener>();
     private boolean isOpen = false;
 
     public final BooleanParameter channelEnabled =
@@ -53,6 +54,10 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
     public final BooleanParameter syncEnabled =
         new BooleanParameter("Sync", false)
         .setDescription("Whether midi clock signal from this device is used to control tempo");
+
+    public interface BeatListener {
+        void onBeatClockUpdate(int beatCount);
+    }
 
     LXMidiInput(LXMidiEngine engine, MidiDevice device) {
         super(engine, device);
@@ -96,8 +101,18 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
         return this;
     }
 
+    public LXMidiInput addBeatListener(BeatListener listener) {
+        this.beatListeners.add(listener);
+        return this;
+    }
+
     public LXMidiInput removeListener(LXMidiListener listener) {
         this.listeners.remove(listener);
+        return this;
+    }
+
+    public LXMidiInput removeBeatListener(BeatListener listener) {
+        this.beatListeners.remove(listener);
         return this;
     }
 
@@ -119,6 +134,7 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
 
         @Override
         public void send(MidiMessage midiMessage, long timeStamp) {
+            int lastBeatClock = beatClock;
             if (midiMessage instanceof ShortMessage) {
                 ShortMessage sm = (ShortMessage) midiMessage;
                 LXShortMessage message = null;
@@ -179,6 +195,12 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
                 if (message != null) {
                     message.setInput(LXMidiInput.this);
                     engine.queueInputMessage(message);
+                }
+
+                if (beatClock != lastBeatClock) {
+                    for (BeatListener bl : beatListeners) {
+                        bl.onBeatClockUpdate(beatClock);
+                    }
                 }
             }
         }
