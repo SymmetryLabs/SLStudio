@@ -56,7 +56,7 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
         .setDescription("Whether midi clock signal from this device is used to control tempo");
 
     public interface BeatListener {
-        void onBeatClockUpdate(int beatCount);
+        void onBeatClockUpdate(int beatCount, double periodEstimate);
     }
 
     LXMidiInput(LXMidiEngine engine, MidiDevice device) {
@@ -134,8 +134,10 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
 
         @Override
         public void send(MidiMessage midiMessage, long timeStamp) {
-            int lastBeatClock = beatClock;
             if (midiMessage instanceof ShortMessage) {
+                int lastBeatClock = beatClock;
+                double periodEstimate = 0;
+
                 ShortMessage sm = (ShortMessage) midiMessage;
                 LXShortMessage message = null;
                 switch (sm.getCommand()) {
@@ -184,7 +186,8 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
                             long now = System.nanoTime();
                             MidiBeat beat = new MidiBeat(sm, this.beatClock / PULSES_PER_QUARTER_NOTE);
                             if (this.lastBeatNanos > 0) {
-                                beat.setPeriod((now - this.lastBeatNanos) / 1000000.);
+                                periodEstimate = (now - this.lastBeatNanos) / 1000000.;
+                                beat.setPeriod(periodEstimate);
                             }
                             message = beat;
                             this.lastBeatNanos = now;
@@ -199,7 +202,7 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
 
                 if (beatClock != lastBeatClock) {
                     for (BeatListener bl : beatListeners) {
-                        bl.onBeatClockUpdate(beatClock);
+                        bl.onBeatClockUpdate(beatClock, periodEstimate);
                     }
                 }
             }
