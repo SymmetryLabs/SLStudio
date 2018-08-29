@@ -112,11 +112,10 @@ public class SLStudioLX extends P3LX {
 
             initialize(lx, this);
 
-            setBackgroundColor(this.theme.getDarkBackgroundColor());
-
             this.preview = new UIPreviewWindow(this, lx, UILeftPane.WIDTH, 0,
             this.applet.width - UILeftPane.WIDTH - UIOverriddenRightPane.WIDTH,
             this.applet.height - UIBottomTray.HEIGHT - UIContextualHelpBar.VISIBLE_HEIGHT);
+
             this.leftPane = new UILeftPane(this, lx);
             this.rightPane = new UIOverriddenRightPane(this, lx);
             this.bottomTray = new UIBottomTray(this, lx);

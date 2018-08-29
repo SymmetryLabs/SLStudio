@@ -15,6 +15,7 @@ import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXVector;
 
 import java.util.*;
@@ -41,6 +42,25 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
     private DiscreteParameter hLengthParam = new DiscreteParameter("hlen", 8, 0, 20);
     private DiscreteParameter vCountParam = new DiscreteParameter("vcount", 30, 1, 100);
     private DiscreteParameter vLengthParam = new DiscreteParameter("vlen", 4, 0, 20);
+
+    enum Mode {
+        WHITE_STATIC,
+        NO_COLOR_UP,
+        NO_COLOR_DOWN,
+        COLOR_UP,
+        COLOR_DOWN,
+    };
+    private BooleanParameter whiteStatic = new BooleanParameter("ws", false);
+    private BooleanParameter noColorUp = new BooleanParameter("wu", false);
+    private BooleanParameter noColorDown = new BooleanParameter("wd", false);
+    private BooleanParameter colorUp = new BooleanParameter("cu", false);
+    private BooleanParameter colorDown = new BooleanParameter("cd", false);
+    private BooleanParameter yellowParam = new BooleanParameter("yellow", true);
+
+    List<LineEffect> effects = new ArrayList<>();
+    /* a map from mode to the effect that that note is currently playing, so
+     * that we can flip the sustaining bit on the effect when the note is released. */
+    HashMap<Mode, LineEffect> currentEffects = new HashMap<>();
 
     /* We can't use a mirror warp on this pattern because we're need a topological
      * mirror, not a geometric mirror. This caches the mirror image of the left side
@@ -73,6 +93,13 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
         addParameter(colorSpeedParam);
         addParameter(colorTailParam);
         addParameter(colorWidthParam);
+        addParameter(yellowParam);
+
+        addParameter(whiteStatic.setMode(BooleanParameter.Mode.MOMENTARY));
+        addParameter(noColorUp.setMode(BooleanParameter.Mode.MOMENTARY));
+        addParameter(noColorDown.setMode(BooleanParameter.Mode.MOMENTARY));
+        addParameter(colorUp.setMode(BooleanParameter.Mode.MOMENTARY));
+        addParameter(colorDown.setMode(BooleanParameter.Mode.MOMENTARY));
 
         for (StripsTopology.Bundle b : model.getTopology().bundles) {
             LXVector v = new LXVector(b.endpoints().negative);
@@ -179,7 +206,12 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
 
         @Override
         protected boolean applyColors(float alpha) {
-            int c = LXColor.hsba(0, 0, 100, alpha);
+            int c;
+            if (yellowParam.getValueb()) {
+                c = LXColor.hsba(PilotsShow.YELLOW_HUE, 85, 100, alpha);
+            } else {
+                c = LXColor.hsba(PilotsShow.RED_HUE, 100, 100, alpha);
+            }
             for (StripsTopology.Bundle e : edges) {
                 turnOnBundle(e, c);
 
@@ -242,14 +274,14 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
 
             /* store the HSB values directly so we can interpolate without having
              * to reverse-engineer them from band and field */
-            h = palette.color.hue.getValuef();
-            bandS = palette.color.saturation.getValuef();
-            fieldS = 0;
-            bandB = palette.color.brightness.getValuef();
+            h = PilotsShow.RED_HUE;
+            bandS = 100;
+            fieldS = 85;
+            bandB = 100;
             fieldB = 100;
             fieldAlpha = alpha;
             band = LXColor.hsba(h, bandS, bandB, alpha);
-            field = LXColor.rgba(255, 255, 255, (int) (255 * alpha));
+            field = LXColor.hsba(PilotsShow.YELLOW_HUE, fieldS, fieldB, (int) (255 * alpha));
 
             for (int i = 0; i < lines.size(); i++) {
                 float maskHi, maskLo;
@@ -323,70 +355,118 @@ public class PilotsLines<T extends Strip> extends SLPattern<StripsModel<T>> {
         }
     }
 
-    List<LineEffect> effects = new ArrayList<>();
-    /* a map from midi pitch to the effect that that note is currently playing, so
-     * that we can flip the sustaining bit on the effect when the note is released. */
-    HashMap<Integer, LineEffect> currentEffects = new HashMap<>();
+    private Mode pitchToMode(int pitch) {
+        switch (pitch) {
+            case 60: return Mode.WHITE_STATIC;
+            case 62: return Mode.NO_COLOR_UP;
+            case 64: return Mode.NO_COLOR_DOWN;
+            case 65: return Mode.COLOR_UP;
+            case 67: return Mode.COLOR_DOWN;
+            default:
+                System.out.println(String.format("unknown midi pitch %d", pitch));
+                return null;
+        }
+    }
 
     @Override
     public void noteOnReceived(MidiNoteOn note) {
-        LineEffect cur = currentEffects.getOrDefault(note.getPitch(), null);
+        Mode m = pitchToMode(note.getPitch());
+        if (m != null)
+            runEffect(m);
+    }
+
+    public void runEffect(Mode mode) {
+        LineEffect cur = currentEffects.getOrDefault(mode, null);
         if (cur != null) {
             cur.sustaining = false;
         }
         LineEffect newEffect = null;
-        switch (note.getPitch()) {
-            case 60:
+        switch (mode) {
+            case WHITE_STATIC:
                 if (vertParam.getValueb()) {
                     newEffect = createStaticVerticalLines();
                 } else {
                     newEffect = createStaticHorizontalLines();
                 }
                 break;
-            case 62:
+            case NO_COLOR_UP:
                 if (vertParam.getValueb()) {
                     newEffect = createScrollingVerticalLines(true, false);
                 } else {
                     newEffect = createScrollingHorizontalLines(true, false);
                 }
                 break;
-            case 64:
+            case NO_COLOR_DOWN:
                 if (vertParam.getValueb()) {
                     newEffect = createScrollingVerticalLines(false, false);
                 } else {
                     newEffect = createScrollingHorizontalLines(false, false);
                 }
                 break;
-            case 65:
+            case COLOR_UP:
                 if (vertParam.getValueb()) {
                     newEffect = createScrollingVerticalLines(true, true);
                 } else {
                     newEffect = createScrollingHorizontalLines(true, true);
                 }
                 break;
-            case 67:
+            case COLOR_DOWN:
                 if (vertParam.getValueb()) {
                     newEffect = createScrollingVerticalLines(false, true);
                 } else {
                     newEffect = createScrollingHorizontalLines(false, true);
                 }
                 break;
-
-            default:
-                System.out.println(String.format("unknown midi pitch %d", note.getPitch()));
         }
         if (newEffect != null) {
-            currentEffects.put(note.getPitch(), newEffect);
+            currentEffects.put(mode, newEffect);
             effects.add(newEffect);
+        }
+    }
+
+    private void releaseEffect(Mode m) {
+        LineEffect cur = currentEffects.getOrDefault(m, null);
+        if (cur != null) {
+            cur.sustaining = false;
+            currentEffects.remove(m);
         }
     }
 
     @Override
     public void noteOffReceived(MidiNote note) {
-        LineEffect cur = currentEffects.getOrDefault(note.getPitch(), null);
-        if (cur != null) {
-            cur.sustaining = false;
-            currentEffects.remove(note.getPitch());
+        Mode m = pitchToMode(note.getPitch());
+        if (m != null) {
+            releaseEffect(m);
+        }
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        boolean attack = false;
+        Mode m = null;
+
+        if (p == whiteStatic) {
+            m = Mode.WHITE_STATIC;
+            attack = whiteStatic.getValueb();
+        } else if (p == noColorUp) {
+            m = Mode.NO_COLOR_UP;
+            attack = noColorUp.getValueb();
+        } else if (p == noColorDown) {
+            m = Mode.NO_COLOR_DOWN;
+            attack = noColorDown.getValueb();
+        } else if (p == colorUp) {
+            m = Mode.COLOR_UP;
+            attack = colorUp.getValueb();
+        } else if (p == colorDown) {
+            m = Mode.COLOR_DOWN;
+            attack = colorDown.getValueb();
+        }
+        if (m != null) {
+            if (attack) {
+                runEffect(m);
+            } else {
+                releaseEffect(m);
+            }
         }
     }
 

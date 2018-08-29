@@ -26,13 +26,14 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 public class VideoPlayer extends SLPattern<SLModel> {
-    CompoundParameter shrinkParam = new CompoundParameter("shrink", 1, 0.1, 20);
-    CompoundParameter yOffsetParam = new CompoundParameter("yoff", 0, 0, 1);
-    BooleanParameter fitParam = new BooleanParameter("fit", false);
-    BooleanParameter restartParam = new BooleanParameter("restart", false);
-    BooleanParameter chooseFileParam = new BooleanParameter("file", false);
-    BooleanParameter captureParam = new BooleanParameter("capture", false);
-    BooleanParameter streamParam = new BooleanParameter("stream", false);
+    protected CompoundParameter shrinkParam = new CompoundParameter("shrink", 1, 1.4, 3);
+    protected CompoundParameter yOffsetParam = new CompoundParameter("yoff", 0, 0, 1);
+    protected BooleanParameter fitParam = new BooleanParameter("fit", false);
+    protected BooleanParameter restartParam = new BooleanParameter("restart", false);
+    protected BooleanParameter chooseFileParam = new BooleanParameter("file", false);
+    protected BooleanParameter captureParam = new BooleanParameter("capture", false);
+    protected BooleanParameter streamParam = new BooleanParameter("stream", false);
+    protected BooleanParameter playParam = new BooleanParameter("play", false);
 
     /**
      * A guess at the amount of time it will take vlcj to start playing the
@@ -56,8 +57,8 @@ public class VideoPlayer extends SLPattern<SLModel> {
     private static final long LOOP_SKEW_GUESS_MS = 100;
 
     private int[] buf = null;
-    private int width;
-    private int height;
+    private int bufWidth;
+    private int bufHeight;
     private double time;
     private boolean streaming = false;
     private long skipOnNextFrame = 0;
@@ -65,9 +66,16 @@ public class VideoPlayer extends SLPattern<SLModel> {
     private Deque<Double> timeOffsets = new LinkedList<>();
 
     private DirectMediaPlayerComponent mediaPlayerComponent;
-    private DirectMediaPlayer mediaPlayer;
-    private String mediaUrl;
-    private String[] mediaOptions;
+    protected DirectMediaPlayer mediaPlayer;
+    protected String mediaUrl;
+    protected String[] mediaOptions;
+
+    protected int cropTop = 0;
+    protected int cropLeft = 0;
+    protected int cropRight = 0;
+    protected int cropBottom = 0;
+
+    boolean pauseOnNextFrame = false;
 
     public VideoPlayer(LX lx) {
         super(lx);
@@ -79,6 +87,7 @@ public class VideoPlayer extends SLPattern<SLModel> {
         addParameter(chooseFileParam);
         addParameter(captureParam);
         addParameter(streamParam);
+        addParameter(playParam);
 
         fitParam.setMode(BooleanParameter.Mode.MOMENTARY);
         restartParam.setMode(BooleanParameter.Mode.MOMENTARY);
@@ -98,9 +107,8 @@ public class VideoPlayer extends SLPattern<SLModel> {
         mediaPlayerComponent = new DirectMediaPlayerComponent((w, h) -> {
             System.out.println(String.format("DMPC w=%d h=%d", w, h));
             buf = null;
-            width = w;
-            height = h;
-            setShrinkToFit();
+            bufWidth = w;
+            bufHeight = h;
             return new RV32BufferFormat(w, h);
         }) {
             @Override
@@ -108,8 +116,8 @@ public class VideoPlayer extends SLPattern<SLModel> {
                 Memory byteBuf = nativeBuffers[0];
                 IntBuffer intBuf = byteBuf.getByteBuffer(0, byteBuf.size()).asIntBuffer();
 
-                width = bufferFormat.getWidth();
-                height = bufferFormat.getHeight();
+                bufWidth = bufferFormat.getWidth();
+                bufHeight = bufferFormat.getHeight();
 
                 if (buf == null || buf.length != intBuf.limit()) {
                     System.out.println("VideoPlayer: realloc image buffer");
@@ -137,6 +145,13 @@ public class VideoPlayer extends SLPattern<SLModel> {
         }
         if (p == chooseFileParam && chooseFileParam.getValueb()) {
             showFileBrowser();
+        }
+        if (p == playParam) {
+            if (playParam.getValueb()) {
+                mediaPlayer.play();
+            } else {
+                mediaPlayer.pause();
+            }
         }
     }
 
@@ -205,13 +220,13 @@ public class VideoPlayer extends SLPattern<SLModel> {
     }
 
     private void setShrinkToFit() {
-        float fitWidth = width / model.xRange;
-        float fitHeight = height / model.yRange;
+        float fitWidth = (bufWidth - cropLeft - cropRight - 4) / model.xRange;
+        float fitHeight = (bufHeight - cropTop - cropBottom - 4) / model.yRange;
         float fit = Float.min(fitWidth, fitHeight);
         shrinkParam.setValue(fit);
     }
 
-    private void restartVideo() {
+    protected void restartVideo() {
         if (mediaPlayer == null)
             return;
         if (mediaUrl != null) {
@@ -219,14 +234,7 @@ public class VideoPlayer extends SLPattern<SLModel> {
 
             if (!mediaPlayer.isPlayable()) {
                 mediaPlayer.prepareMedia(mediaUrl, mediaOptions);
-                mediaPlayer.mute(true);
-                mediaPlayer.setRepeat(true);
-                mediaPlayer.addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
-                    @Override
-                    public void finished(MediaPlayer player) {
-                        skipOnNextFrame = LOOP_SKEW_GUESS_MS;
-                    }
-                });
+                initMediaPlayer();
                 skewGuess = INITIAL_SKEW_GUESS_MS;
             } else if (mediaPlayer.isPlaying()) {
                 mediaPlayer.setPosition(0);
@@ -236,10 +244,50 @@ public class VideoPlayer extends SLPattern<SLModel> {
                 skewGuess = INITIAL_SKEW_GUESS_MS;
             }
 
+            long startTime = getStartTimeMs();
             mediaPlayer.play();
-            mediaPlayer.skip(skewGuess);
-            time = 0;
+            mediaPlayer.skip(startTime + skewGuess);
+            if (!playParam.getValueb()) {
+                pauseOnNextFrame = true;
+            }
+            time = startTime;
         }
+    }
+
+    protected long getStartTimeMs() {
+        return 0;
+    }
+
+    protected void initMediaPlayer() {
+        mediaPlayer.mute(true);
+        mediaPlayer.setVolume(0);
+        mediaPlayer.setRepeat(true);
+        mediaPlayer.addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
+            @Override
+            public void finished(MediaPlayer player) {
+                skipOnNextFrame = LOOP_SKEW_GUESS_MS;
+            }
+
+            @Override
+            public void playing(MediaPlayer player) {
+                if (pauseOnNextFrame) {
+                    player.pause();
+                    pauseOnNextFrame = false;
+                } else {
+                    playParam.setValue(true);
+                }
+            }
+
+            @Override
+            public void stopped(MediaPlayer player) {
+                playParam.setValue(false);
+            }
+
+            @Override
+            public void paused(MediaPlayer player) {
+                playParam.setValue(false);
+            }
+        });
     }
 
     private static final String KEY_VIDEO_FILE = "videoFile";
@@ -312,17 +360,23 @@ public class VideoPlayer extends SLPattern<SLModel> {
 
     @Override
     public void run(double elapsedMs) {
+        int black = LXColor.gray(0);
+        for (int i = 0; i < colors.length; i++) {
+            colors[i] = black;
+        }
+
         if (buf == null) {
             return;
         }
-        time += elapsedMs;
-        if (time > mediaPlayer.getLength()) {
-            time = 0;
-        }
-
-        if (skipOnNextFrame != 0) {
-            mediaPlayer.skip(skipOnNextFrame);
-            skipOnNextFrame = 0;
+        if (playParam.getValueb()) {
+            time += elapsedMs;
+            if (time > mediaPlayer.getLength()) {
+                time = 0;
+            }
+            if (skipOnNextFrame != 0) {
+                mediaPlayer.skip(skipOnNextFrame);
+                skipOnNextFrame = 0;
+            }
         }
 
         double delta = (double) mediaPlayer.getTime() - time;
@@ -334,15 +388,18 @@ public class VideoPlayer extends SLPattern<SLModel> {
         }
 
         float shrink = shrinkParam.getValuef();
-        for (LXVector v : getVectors()) {
-            int i = (int) ((shrink * (model.yMax - v.y)) + yOffsetParam.getValue() * height);
-            int j = (int) (shrink * (v.x - model.xMin));
 
+        int croppedWidth = bufWidth - cropLeft - cropRight;
+        int croppedHeight = bufHeight - cropTop - cropBottom;
+
+        for (LXVector v : getVectors()) {
+            int i = (int) ((shrink * (model.yMax - v.y)) + yOffsetParam.getValue() * bufHeight);
+            int j = (int) (shrink * (v.x - model.xMin));
             int color;
-            if (i >= height || j >= width || i < 0 || j < 0) {
+            if (i >= croppedHeight || j >= croppedWidth || i < 0 || j < 0) {
                 color = LXColor.gray(0);
             } else {
-                int vcolor = buf[width * i + j];
+                int vcolor = buf[bufWidth * (i + cropTop) + (j + cropLeft)];
                 color = LXColor.rgb(
                     (vcolor >> 16) & 0xFF,
                     (vcolor >> 8) & 0xFF,
