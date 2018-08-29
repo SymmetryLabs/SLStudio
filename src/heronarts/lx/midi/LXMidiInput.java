@@ -40,8 +40,9 @@ import heronarts.lx.parameter.LXParameterListener;
 public class LXMidiInput extends LXMidiDevice implements LXSerializable {
 
     private final List<LXMidiListener> listeners = new ArrayList<LXMidiListener>();
-    private final List<BeatListener> beatListeners = new ArrayList<BeatListener>();
+    private final List<MidiTimeListener> timeListeners = new ArrayList<MidiTimeListener>();
     private boolean isOpen = false;
+    private MidiTimeClock clock = new MidiTimeClock();
 
     public final BooleanParameter channelEnabled =
         new BooleanParameter("Channel", false)
@@ -55,8 +56,9 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
         new BooleanParameter("Sync", false)
         .setDescription("Whether midi clock signal from this device is used to control tempo");
 
-    public interface BeatListener {
+    public interface MidiTimeListener {
         void onBeatClockUpdate(int beatCount, double periodEstimate);
+        void onMTCUpdate(MidiTime time);
     }
 
     LXMidiInput(LXMidiEngine engine, MidiDevice device) {
@@ -101,8 +103,8 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
         return this;
     }
 
-    public LXMidiInput addBeatListener(BeatListener listener) {
-        this.beatListeners.add(listener);
+    public LXMidiInput addBeatListener(MidiTimeListener listener) {
+        this.timeListeners.add(listener);
         return this;
     }
 
@@ -111,8 +113,8 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
         return this;
     }
 
-    public LXMidiInput removeBeatListener(BeatListener listener) {
-        this.beatListeners.remove(listener);
+    public LXMidiInput removeBeatListener(MidiTimeListener listener) {
+        this.timeListeners.remove(listener);
         return this;
     }
 
@@ -193,6 +195,9 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
                             this.lastBeatNanos = now;
                         }
                         break;
+                    case ShortMessage.MIDI_TIME_CODE:
+                        clock.pushMessage(sm);
+                        break;
                     }
                 }
                 if (message != null) {
@@ -201,7 +206,7 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
                 }
 
                 if (beatClock != lastBeatClock) {
-                    for (BeatListener bl : beatListeners) {
+                    for (MidiTimeListener bl : timeListeners) {
                         bl.onBeatClockUpdate(beatClock, periodEstimate);
                     }
                 }
