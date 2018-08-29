@@ -9,9 +9,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static com.symmetrylabs.util.MathUtils.random;
@@ -29,15 +27,18 @@ public class CubeFlash extends SLPattern<CubesModel> {
     private CompoundParameter hueVarianceParameter = new CompoundParameter("HueVar", 0.25);
     private CompoundParameter saturationParameter = new CompoundParameter("Sat", 0.5);
 
+    static LinkedList<Integer> freeCubes = new LinkedList();
+
     class Flash {
+        int index;
         CubesModel.Cube cube;
         float value;
         float hue;
         boolean hasPeaked;
 
         Flash() {
-            int randomIndex = floor(random(model.getCubes().size()));
-            cube = model.getCubes().get(randomIndex);
+            index = freeCubes.pop();
+            cube = model.getCubes().get(index);
             hue = palette.getHuef() + (random(1) * 120 * hueVarianceParameter.getValuef());
             boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
             hasPeaked = infiniteAttack;
@@ -71,6 +72,11 @@ public class CubeFlash extends SLPattern<CubesModel> {
         addParameter(hueVarianceParameter);
         addParameter(saturationParameter);
         flashes = new LinkedList<Flash>();
+
+        for (int i = 0; i < model.getCubes().size(); i++) {
+            freeCubes.add(i);
+            Collections.shuffle(freeCubes);
+        }
     }
 
     public void run(double deltaMs, PolyBuffer.Space space) {
@@ -80,7 +86,9 @@ public class CubeFlash extends SLPattern<CubesModel> {
         float msPerFlash = 1000 / ((rateParameter.getValuef() + .01f) * 100);
         while (leftoverMs > msPerFlash) {
             leftoverMs -= msPerFlash;
-            flashes.add(new Flash());
+            if (freeCubes.size() > 0) {
+                flashes.add(new Flash());
+            }
         }
 
         setColors(0);
@@ -95,13 +103,19 @@ public class CubeFlash extends SLPattern<CubesModel> {
             }
         });
 
+        boolean needsShuffle = false;
         Iterator<Flash> i = flashes.iterator();
         while (i.hasNext()) {
             Flash flash = i.next();
             boolean dead = flash.age(deltaMs);
             if (dead) {
+                freeCubes.add(flash.index);
+                needsShuffle = true;
                 i.remove();
             }
+        }
+        if (needsShuffle) {
+            Collections.shuffle(freeCubes);
         }
     markModified(SRGB8);
     }
