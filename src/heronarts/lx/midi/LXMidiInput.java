@@ -216,6 +216,13 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
                         bl.onMTCUpdate(time);
                     }
                 }
+            } else if (midiMessage instanceof SysexMessage) {
+                if (clock.pushMessage((SysexMessage) midiMessage)) {
+                    MidiTime time = clock.getTime();
+                    for (MidiTimeListener bl : timeListeners) {
+                        bl.onMTCUpdate(time);
+                    }
+                }
             }
         }
     }

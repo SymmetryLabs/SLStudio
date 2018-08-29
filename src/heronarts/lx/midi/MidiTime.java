@@ -17,7 +17,20 @@ public class MidiTime implements Cloneable {
                         throw new IllegalStateException("unknown FrameRate");
                 }
 
-                /** Returns the FrameRate corresponding to the SMPTE frame rate code that is embedded in MTC messages. */
+                public String toString() {
+                        switch (this) {
+                                case FPS24: return "24fps";
+                                case FPS25: return "25fps";
+                                case FPS2997: return "29.97fps";
+                                case FPS30: return "30fps";
+                        }
+                        return "unknown";
+                }
+
+                /**
+                 * Returns the FrameRate corresponding to the SMPTE frame rate code
+                 * that is embedded in MTC messages.
+                 */
                 public static FrameRate fromRateCode(int rateCode) {
                         switch (rateCode) {
                                 case 0: return FPS24;
@@ -92,7 +105,7 @@ public class MidiTime implements Cloneable {
 
         @Override
         public String toString() {
-                return String.format("%02d:%02d:%02d.%02d", hour, minute, second, frame);
+                return String.format("%02d:%02d:%02d:%02d @ %s", hour, minute, second, frame, rate);
         }
 
         @Override

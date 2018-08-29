@@ -91,9 +91,11 @@ public class MidiTimeClock {
                                 /* swap confirmedTime and timeInFlight; this lets us avoid
                                  * making an allocation on each message receipt by reusing
                                  * these two MidiTime objects. */
-                                t = confirmedTime;
-                                confirmedTime = timeInFlight;
-                                timeInFlight = t;
+                                synchronized (confirmedTime) {
+                                        t = confirmedTime;
+                                        confirmedTime = timeInFlight;
+                                        timeInFlight = t;
+                                }
                                 /* we're finished receiving the frame we started receiving
                                  * in this sequence, so for one quarter-frame we're only
                                  * one frame ahead of the one we're done receiving (because
@@ -109,16 +111,40 @@ public class MidiTimeClock {
                 return updated;
         }
 
-        /** Pushes a MIDI message into the clock.
+        /**
+         * Pushes a MIDI message into the clock.
+         * @param m A SysexMessage. No assumptions are made about the contents
+         *          of the message, and this function will just return false
+         *          if the message is not an MTC-related message.
          * @return true if this message updated the clock time.
          */
         public boolean pushMessage(SysexMessage m) {
-                return false;
+                byte[] data = m.getData();
+                if (data.length != 9) {
+                        return false;
+                }
+                if (data[0] != 0x7F || data[2] != 0x01 || data[3] != 0x01) {
+                        return false;
+                }
+                /* we have to and with 0xFF here to get the unsigned value as an
+                 * int; all Java bytes are signed but we want to treat these as
+                 * unsigned. */
+                synchronized (confirmedTime) {
+                        confirmedTime.minute = 0xFF & data[5];
+                        confirmedTime.second = 0xFF & data[6];
+                        confirmedTime.frame = 0xFF & data[7];
+                        confirmedTime.hour = 0x1F & data[4];
+                        confirmedTime.rate = MidiTime.FrameRate.fromRateCode(((0xFF & data[4]) >> 5) & 0x03);
+                }
+                offsetFrame = 0;
+                return true;
         }
 
         public MidiTime getTime() {
-                /* offsetFrame is basically never zero, so a branch to avoid the
-                 * method call here would be pointless. */
-                return confirmedTime.withAddedFrames(offsetFrame);
+                synchronized (confirmedTime) {
+                        /* offsetFrame is almost never zero, so a branch to avoid the
+                         * method call here would be pointless. */
+                        return confirmedTime.withAddedFrames(offsetFrame);
+                }
         }
 }
