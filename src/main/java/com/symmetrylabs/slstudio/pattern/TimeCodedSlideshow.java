@@ -4,11 +4,14 @@ import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.MidiTime;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.StringParameter;
+import heronarts.lx.transform.LXVector;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -22,10 +25,20 @@ import java.util.concurrent.Semaphore;
 public class TimeCodedSlideshow extends SLPattern<SLModel> {
     private static final String TAG = "TimeCodedSlideshow";
 
-    private static final int PREFETCH_COUNT = 60; // 2 sec at 30FPS
+    private static final int BUFFER_COUNT = 150; // 5 sec at 30FPS
+    /* Sometimes timecode can jump backwards a little, so we keep a couple
+     * frames before the current frame in the buffer just in case. Note
+     * that these frames count towards the BUFFER_COUNT limit. */
+    private static final int KEEP_TRAILING_FRAMES = 15; // 500ms at 30FPS
 
     private final StringParameter directory = new StringParameter("dir", null);
     private final BooleanParameter chooseDir = new BooleanParameter("pick", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    private final CompoundParameter shrinkParam = new CompoundParameter("shrink", 1, 1.4, 3);
+    private final CompoundParameter yOffsetParam = new CompoundParameter("yoff", 0, 0, 1);
+    private final CompoundParameter cropLeftParam = new CompoundParameter("cropL", 0, 0, 1);
+    private final CompoundParameter cropRightParam = new CompoundParameter("cropR", 0, 0, 1);
+    private final CompoundParameter cropTopParam = new CompoundParameter("cropT", 0, 0, 1);
+    private final CompoundParameter cropBottomParam = new CompoundParameter("cropB", 0, 0, 1);
 
     private MidiTime mt;
     private int currentFrame;
@@ -57,11 +70,6 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         void unload() {
             img = null;
         }
-
-        BufferedImage get() {
-            load();
-            return img;
-        }
     }
 
     private Slide[] allFrames;
@@ -72,6 +80,12 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         super(lx);
         addParameter(directory);
         addParameter(chooseDir);
+        addParameter(shrinkParam);
+        addParameter(yOffsetParam);
+        addParameter(cropLeftParam);
+        addParameter(cropRightParam);
+        addParameter(cropTopParam);
+        addParameter(cropBottomParam);
 
         for (LXMidiInput input : lx.engine.midi.inputs) {
             input.addTimeListener(new LXMidiInput.MidiTimeListener() {
@@ -103,17 +117,12 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                 }
                 /* Find the first frame after/including the current frame that
                  * hasn't been loaded, and load it. */
-                int i = currentFrame;
-                do {
+                for (int i = currentFrame; i < allFrames.length; i++) {
                     if (!allFrames[i].loaded()) {
+                        allFrames[i].load();
                         break;
                     }
-                    i = (i + 1) % allFrames.length;
-                } while (i != currentFrame);
-                /* This is a no-op for frames that are already loaded, so it
-                 * won't do anything in the case where all frames are already
-                 * loaded. */
-                allFrames[i].load();
+                }
             }
         });
     }
@@ -178,20 +187,73 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         for (int i = 0; i < files.length; i++) {
             allFrames[i] = new Slide(files[i]);
         }
-        loaderSemaphore.release(PREFETCH_COUNT);
+        loaderSemaphore.release(BUFFER_COUNT);
     }
 
     private void goToFrame(int frame) {
-        int i = currentFrame;
-        int unloaded = 0;
-        currentFrame = frame % allFrames.length;
-        do {
-            if (allFrames[i].loaded()) {
+        /* if we're going backward in time out of our buffer, we clear the
+         * buffer and start again. */
+        if (frame < currentFrame - KEEP_TRAILING_FRAMES) {
+            System.out.println(String.format("backwards: %d to %d", currentFrame, frame));
+            loaderSemaphore.drainPermits();
+            currentFrame = frame;
+            for (int i = 0; i < allFrames.length; i++) {
                 allFrames[i].unload();
-                unloaded++;
             }
-            i = (i + 1) % allFrames.length;
-        } while (i != currentFrame);
-        loaderSemaphore.release(unloaded);
+            loaderSemaphore.release(BUFFER_COUNT);
+        } else {
+            /* otherwise, we release the frames that we've buffered before our
+             * new current (minus our padding) and then queue up that many
+             * frames to be loaded. */
+            currentFrame = frame;
+            for (int i = 0; i < currentFrame - KEEP_TRAILING_FRAMES; i++) {
+                if (allFrames[i].loaded()) {
+                    allFrames[i].unload();
+                    loaderSemaphore.release();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void run(double elapsedMs) {
+        int black = LXColor.gray(0);
+        for (int i = 0; i < colors.length; i++) {
+            colors[i] = black;
+        }
+
+        if (allFrames == null || currentFrame >= allFrames.length) {
+            return;
+        }
+        Slide slide = allFrames[currentFrame];
+        if (!slide.loaded()) {
+            return;
+        }
+        BufferedImage img = slide.img;
+
+        int cropLeft = Math.round(cropLeftParam.getValuef() * img.getWidth());
+        int cropRight = Math.round(cropRightParam.getValuef() * img.getWidth());
+        int cropTop = Math.round(cropTopParam.getValuef() * img.getHeight());
+        int cropBottom = Math.round(cropBottomParam.getValuef() * img.getHeight());
+
+        float shrink = shrinkParam.getValuef();
+        int croppedWidth = img.getWidth() - cropLeft - cropRight;
+        int croppedHeight = img.getHeight() - cropTop - cropBottom;
+
+        for (LXVector v : getVectors()) {
+            int i = (int) ((shrink * (model.yMax - v.y)) + yOffsetParam.getValue() * img.getHeight());
+            int j = (int) (shrink * (v.x - model.xMin));
+            int color;
+            if (i >= croppedHeight || j >= croppedWidth || i < 0 || j < 0) {
+                color = LXColor.gray(0);
+            } else {
+                int vcolor = img.getRGB(j + cropLeft, i + cropTop);
+                color = LXColor.rgb(
+                    (vcolor >> 16) & 0xFF,
+                    (vcolor >> 8) & 0xFF,
+                    vcolor & 0xFF);
+            }
+            colors[v.index] = color;
+        }
     }
 }
