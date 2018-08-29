@@ -17,6 +17,8 @@ dependencies {
 
     // https://github.com/SymmetryLabs/ArtNetStack
     implementation 'com.github.SymmetryLabs:ArtNetStack:44ddfed'
+
+    testCompile 'junit:junit:4.12'
 }
 
 jar {
@@ -28,6 +30,11 @@ sourceSets {
     main {
         java {
             srcDirs 'src'
+        }
+    }
+    test {
+        java {
+            srcDirs 'test'
         }
     }
 }

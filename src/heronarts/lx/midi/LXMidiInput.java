@@ -40,7 +40,9 @@ import heronarts.lx.parameter.LXParameterListener;
 public class LXMidiInput extends LXMidiDevice implements LXSerializable {
 
     private final List<LXMidiListener> listeners = new ArrayList<LXMidiListener>();
+    private final List<MidiTimeListener> timeListeners = new ArrayList<MidiTimeListener>();
     private boolean isOpen = false;
+    private MidiTimeClock clock = new MidiTimeClock();
 
     public final BooleanParameter channelEnabled =
         new BooleanParameter("Channel", false)
@@ -53,6 +55,11 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
     public final BooleanParameter syncEnabled =
         new BooleanParameter("Sync", false)
         .setDescription("Whether midi clock signal from this device is used to control tempo");
+
+    public interface MidiTimeListener {
+        void onBeatClockUpdate(int beatCount, double periodEstimate);
+        void onMTCUpdate(MidiTime time);
+    }
 
     LXMidiInput(LXMidiEngine engine, MidiDevice device) {
         super(engine, device);
@@ -96,8 +103,18 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
         return this;
     }
 
+    public LXMidiInput addTimeListener(MidiTimeListener listener) {
+        this.timeListeners.add(listener);
+        return this;
+    }
+
     public LXMidiInput removeListener(LXMidiListener listener) {
         this.listeners.remove(listener);
+        return this;
+    }
+
+    public LXMidiInput removeTimeListener(MidiTimeListener listener) {
+        this.timeListeners.remove(listener);
         return this;
     }
 
@@ -120,6 +137,10 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
         @Override
         public void send(MidiMessage midiMessage, long timeStamp) {
             if (midiMessage instanceof ShortMessage) {
+                int lastBeatClock = beatClock;
+                double periodEstimate = 0;
+                boolean clockUpdated = false;
+
                 ShortMessage sm = (ShortMessage) midiMessage;
                 LXShortMessage message = null;
                 switch (sm.getCommand()) {
@@ -168,17 +189,39 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
                             long now = System.nanoTime();
                             MidiBeat beat = new MidiBeat(sm, this.beatClock / PULSES_PER_QUARTER_NOTE);
                             if (this.lastBeatNanos > 0) {
-                                beat.setPeriod((now - this.lastBeatNanos) / 1000000.);
+                                periodEstimate = (now - this.lastBeatNanos) / 1000000.;
+                                beat.setPeriod(periodEstimate);
                             }
                             message = beat;
                             this.lastBeatNanos = now;
                         }
+                        break;
+                    case ShortMessage.MIDI_TIME_CODE:
+                        clockUpdated = clock.pushMessage(sm);
                         break;
                     }
                 }
                 if (message != null) {
                     message.setInput(LXMidiInput.this);
                     engine.queueInputMessage(message);
+                }
+                if (beatClock != lastBeatClock) {
+                    for (MidiTimeListener bl : timeListeners) {
+                        bl.onBeatClockUpdate(beatClock, periodEstimate);
+                    }
+                }
+                if (clockUpdated) {
+                    MidiTime time = clock.getTime();
+                    for (MidiTimeListener bl : timeListeners) {
+                        bl.onMTCUpdate(time);
+                    }
+                }
+            } else if (midiMessage instanceof SysexMessage) {
+                if (clock.pushMessage((SysexMessage) midiMessage)) {
+                    MidiTime time = clock.getTime();
+                    for (MidiTimeListener bl : timeListeners) {
+                        bl.onMTCUpdate(time);
+                    }
                 }
             }
         }
