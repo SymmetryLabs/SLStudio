@@ -112,7 +112,7 @@ public class Voronoi extends LXPattern {
             );
         }
         for (Site site: sites) {
-            site.move(speed.getValuef());
+            site.move(lx.engine.speed.getValuef() * speed.getValuef());
         }
     }
 }
