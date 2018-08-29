@@ -18,7 +18,10 @@ import com.symmetrylabs.shows.summerstage.SummerStageShow;
 
 public class Voronoi extends LXPattern {
     public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
-    
+
+    final CompoundParameter hue = new CompoundParameter("HUE", 0, 0, 360);
+    final CompoundParameter sat = new CompoundParameter("SAT", 100, 0, 100);
+
     final CompoundParameter speed = new CompoundParameter("SPEED", 1.8, 0, 10);
     final CompoundParameter width = new CompoundParameter("WIDTH", 0.2, 0.1, 1);
     final DiscreteParameter num = new DiscreteParameter("NUM", 14, 5, 28);
@@ -58,6 +61,8 @@ public class Voronoi extends LXPattern {
 
     public Voronoi(LX lx) {
         super(lx);
+        addParameter(hue);
+        addParameter(sat);
         addParameter(speed);
         addParameter(width);
         addParameter(num);
@@ -101,8 +106,8 @@ public class Voronoi extends LXPattern {
                 }
             }
             colors[p.index] = lx.hsb(
-                palette.getHuef(),
-                palette.getSaturationf(),
+                hue.getValuef(),
+                sat.getValuef(),
                 max(0f, min(100, 100 - sqrt(nextMinDistSq - minDistSq) / lineWidth))
             );
         }
