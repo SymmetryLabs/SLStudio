@@ -29,11 +29,14 @@ public class MidiTime implements Cloneable {
                 }
         };
 
-        public int hour;
-        public int minute;
-        public int second;
-        public int frame;
-        public FrameRate rate;
+        /* Intentionally package-private; we want these to be modifiable by MidiTimeClock
+         * to avoid unnecessary allocations, but unmodifiable to code outside the
+         * midi package, because MidiTime objects are heavily shared. */
+        int hour;
+        int minute;
+        int second;
+        int frame;
+        FrameRate rate;
 
         public MidiTime(int hour, int minute, int second, int frame, FrameRate rate) {
                 this.hour = hour;
@@ -99,5 +102,25 @@ public class MidiTime implements Cloneable {
 
         public static MidiTime zero(FrameRate rate) {
                 return new MidiTime(0, 0, 0, 0, rate);
+        }
+
+        public int getHour() {
+                return hour;
+        }
+
+        public int getMinute() {
+                return minute;
+        }
+
+        public int getSecond() {
+                return second;
+        }
+
+        public int getFrame() {
+                return frame;
+        }
+
+        public FrameRate getRate() {
+                return rate;
         }
 }

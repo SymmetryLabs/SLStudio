@@ -103,7 +103,7 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
         return this;
     }
 
-    public LXMidiInput addBeatListener(MidiTimeListener listener) {
+    public LXMidiInput addTimeListener(MidiTimeListener listener) {
         this.timeListeners.add(listener);
         return this;
     }
@@ -113,7 +113,7 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
         return this;
     }
 
-    public LXMidiInput removeBeatListener(MidiTimeListener listener) {
+    public LXMidiInput removeTimeListener(MidiTimeListener listener) {
         this.timeListeners.remove(listener);
         return this;
     }
@@ -139,6 +139,7 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
             if (midiMessage instanceof ShortMessage) {
                 int lastBeatClock = beatClock;
                 double periodEstimate = 0;
+                boolean clockUpdated = false;
 
                 ShortMessage sm = (ShortMessage) midiMessage;
                 LXShortMessage message = null;
@@ -196,7 +197,7 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
                         }
                         break;
                     case ShortMessage.MIDI_TIME_CODE:
-                        clock.pushMessage(sm);
+                        clockUpdated = clock.pushMessage(sm);
                         break;
                     }
                 }
@@ -204,10 +205,15 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
                     message.setInput(LXMidiInput.this);
                     engine.queueInputMessage(message);
                 }
-
                 if (beatClock != lastBeatClock) {
                     for (MidiTimeListener bl : timeListeners) {
                         bl.onBeatClockUpdate(beatClock, periodEstimate);
+                    }
+                }
+                if (clockUpdated) {
+                    MidiTime time = clock.getTime();
+                    for (MidiTimeListener bl : timeListeners) {
+                        bl.onMTCUpdate(time);
                     }
                 }
             }

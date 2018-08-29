@@ -1,12 +1,15 @@
 package heronarts.lx;
 
 import heronarts.lx.midi.LXMidiInput;
-import heronarts.lx.midi.MidiTimeClock;
+import heronarts.lx.midi.MidiTime;
 import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXModel;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/**
+ * Not really a unit test: this just prints out MTC as it receives it.
+ */
 public class TestMidiClock {
         private static LX lx;
 
@@ -22,6 +25,18 @@ public class TestMidiClock {
                 lx.engine.midi.whenReady(() -> {
                         for (LXMidiInput mi : lx.engine.midi.getInputs()) {
                                 mi.channelEnabled.setValue(true);
+                                mi.addTimeListener(new LXMidiInput.MidiTimeListener() {
+                                        @Override
+                                        public void onBeatClockUpdate(int beatCount, double periodEstimate) {
+                                                System.out.println(String.format(
+                                                                "%16s: beat: %06d period: %.4f", mi.getName(), beatCount, periodEstimate));
+                                        }
+
+                                        @Override
+                                        public void onMTCUpdate(MidiTime time) {
+                                                System.out.println(String.format("%16s: mtc:  %s", mi.getName(), time));
+                                        }
+                                });
                         }
                 });
                 while (true) {

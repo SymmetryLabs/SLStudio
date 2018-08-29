@@ -100,11 +100,12 @@ public class MidiTimeClock {
                                  * one frame elapsed between when we started receiving and
                                  * when we finished). */
                                 offsetFrame = 1;
-                                updated = true;
+                                /* this is not an update though! lastFrame + 3 is the same
+                                 * as newFrame + 1, so to an external observer nothing has
+                                 * changed. */
+                                updated = false;
                                 break;
                 }
-
-                System.out.println(String.format("%d %d %s", type, data, confirmedTime.toString()));
                 return updated;
         }
 
