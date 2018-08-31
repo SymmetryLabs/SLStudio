@@ -293,7 +293,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             // Fill with all black if we don't have cube data
             initPacketData(numPixels, false);
             for (int i = 0; i < numPixels; i++) {
-                setPixel(i, LXColor.GREEN);
+                setPixel(i, LXColor.BLACK);
             }
         }
 

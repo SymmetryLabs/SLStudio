@@ -147,7 +147,7 @@ public class SummerStageShow extends CubesShow {
                 new String[]{"1109", "1108"}, new String[] {"1065", "1074"}
             }),
             new TowerConfig(SP * 10, SP * 11, SP * -1, new String[][]{
-                new String[]{"1091", "1090"}, new String[] {"803", "1010"} // 1096 was flickering
+                new String[]{"1091", "1090"}, new String[] {"BADBOOI-803", "1010"} // 1096 was flickering
             }),
         }),
 
