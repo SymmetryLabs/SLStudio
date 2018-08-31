@@ -17,7 +17,8 @@ import com.symmetrylabs.shows.summerstage.SummerStageShow;
 
 public class Sparkle extends LXPattern {
     public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
-    
+
+    private CompoundParameter speedParameter = new CompoundParameter("Speed", 1.0, 0.0, 2.0);
     private CompoundParameter densityParameter = new CompoundParameter("Dens", 0.15);
     private CompoundParameter attackParameter = new CompoundParameter("Attack", 0.4);
     private CompoundParameter decayParameter = new CompoundParameter("Decay", 0.3);
@@ -61,6 +62,7 @@ public class Sparkle extends LXPattern {
 
     public Sparkle(LX lx) {
         super(lx);
+        addParameter(speedParameter);
         addParameter(densityParameter);
         addParameter(attackParameter);
         addParameter(decayParameter);
@@ -71,6 +73,8 @@ public class Sparkle extends LXPattern {
     }
 
     public void run(double deltaMs) {
+        deltaMs *= speedParameter.getValuef();
+
         leftoverMs += deltaMs;
         float msPerSpark = 1000.f / (float)((densityParameter.getValuef() + .01) * (model.xRange*10));
         while (leftoverMs > msPerSpark) {
