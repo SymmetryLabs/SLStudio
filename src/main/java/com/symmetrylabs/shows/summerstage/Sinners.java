@@ -58,8 +58,8 @@ public class Sinners extends SLPattern<CubesModel> {
         }
         Collections.shuffle(order);
 
-        addParameter(hvar);
         addParameter(hue);
+        addParameter(hvar);
         addParameter(sat);
         addParameter(speed);
         addParameter(density);
