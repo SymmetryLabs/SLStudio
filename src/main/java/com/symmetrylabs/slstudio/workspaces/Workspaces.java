@@ -27,15 +27,16 @@ public class Workspaces extends LXComponent {
 
     private final LX lx;
 
-    private final String path = sketchPath("workspaces");
+    private final String path;
 
     private final List<Workspace> workspaces = new ArrayList<Workspace>();
 
     private int currentWorkspaceIndex = 0;
 
-    public Workspaces(LX lx) {
+    public Workspaces(LX lx, String path) {
         super(lx, "workspaces");
         this.lx = lx;
+        this.path = path;
 
         // not dynamic at runtime
         loadProjectFiles();
