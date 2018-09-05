@@ -11,6 +11,7 @@ import processing.core.PConstants;
 import java.util.ArrayList;
 import java.util.List;
 
+/** A UI component for switching the IP address of each cart. */
 public class CartConfigurator extends UICollapsibleSection {
     private static final int PAD = 4;
 
@@ -50,7 +51,6 @@ public class CartConfigurator extends UICollapsibleSection {
 
         new SaveButton(getContentWidth() - labelWidth, yAccum, labelWidth, elemHeight).addToContainer(this);
         yAccum += elemHeight + PAD;
-        System.out.println(yAccum);
     }
 
     public void setListener(ConfigChangedListener listener) {

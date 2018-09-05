@@ -12,7 +12,7 @@ public class CartConfig {
     public static final String BSCR = "BSCR";
     public static final String BSR = "BSR";
     public static final String FSR = "FSR";
-    public static final List<String> ids = List.of(new String[]{FSL, BSL, BSCL, BSC, BSCR, BSR, FSR });
+    public static final List<String> ids = List.of(new String[]{FSL, BSL, BSCL, BSC, BSCR, BSR, FSR});
 
     public final String modelId;
     public final String address;
@@ -37,6 +37,6 @@ public class CartConfig {
             new CartConfig(BSCR, "10.200.1.14"),
             new CartConfig(BSR, "10.200.1.15"),
             new CartConfig(FSR, "10.200.1.16"),
-        };
+            };
     }
 }
