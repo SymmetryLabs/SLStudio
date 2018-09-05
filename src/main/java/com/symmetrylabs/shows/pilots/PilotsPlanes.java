@@ -61,8 +61,9 @@ public class PilotsPlanes extends SLPattern<SLModel> {
         LXVector normal = new LXVector(normalXParam.getValuef(), normalYParam.getValuef(), normalZParam.getValuef());
         normal.normalize();
 
-        off += (flipSpeed ? -1 : 1) * speedParam.getValuef() / 1000f * (float) elapsedMs;
         float dist = distParam.getValuef();
+        off += (flipSpeed ? -1 : 1) * speedParam.getValuef() / 1000f * (float) elapsedMs;
+        off = off % dist;
         float halfThick = thickParam.getValuef() / 2f;
         int color = redParam.getValueb() ? PilotsShow.RED : PilotsShow.YELLOW;
 
