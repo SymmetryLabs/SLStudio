@@ -746,7 +746,9 @@ public class LXOscEngine extends LXComponent {
 
     public Receiver receiver(int port, InetAddress address, int bufferSize) throws SocketException {
         Receiver receiver = new Receiver(port, address, bufferSize);
-        this.receivers.add(receiver);
+        synchronized (this.receivers) {
+            this.receivers.add(receiver);
+        }
         return receiver;
     }
 
@@ -756,7 +758,9 @@ public class LXOscEngine extends LXComponent {
 
     public Receiver receiver(int port, int bufferSize) throws SocketException {
         Receiver receiver = new Receiver(port, bufferSize);
-        this.receivers.add(receiver);
+        synchronized (this.receivers) {
+            this.receivers.add(receiver);
+        }
         return receiver;
     }
 
@@ -777,8 +781,10 @@ public class LXOscEngine extends LXComponent {
      * input queue.
      */
     public void dispatch() {
-        for (Receiver receiver : this.receivers) {
-            receiver.dispatch();
+        synchronized (this.receivers) {
+            for (Receiver receiver : this.receivers) {
+                receiver.dispatch();
+            }
         }
     }
 
