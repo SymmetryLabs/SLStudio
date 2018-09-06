@@ -169,6 +169,17 @@ public class StripsTopology {
             }
             return null;
         }
+
+        public List<Bundle> getBundles() {
+            List<Bundle> bundles = new ArrayList<>();
+            if (px != null) bundles.add(px);
+            if (nx != null) bundles.add(nx);
+            if (py != null) bundles.add(py);
+            if (ny != null) bundles.add(ny);
+            if (pz != null) bundles.add(pz);
+            if (nz != null) bundles.add(nz);
+            return bundles;
+        }
     }
 
     /**
