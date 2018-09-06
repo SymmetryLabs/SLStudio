@@ -1,5 +1,6 @@
 package com.symmetrylabs.shows.pilots;
 
+import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
@@ -17,7 +18,7 @@ import java.util.List;
 /**
  * This file creates and positions "carts" and creates one pixlite for each of them
  */
-public class PilotsShow implements Show, CartConfigurator.ConfigChangedListener {
+public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigChangedListener {
     static final String SHOW_NAME = "pilots";
 
     static final float RED_HUE = 0;
@@ -78,9 +79,6 @@ public class PilotsShow implements Show, CartConfigurator.ConfigChangedListener 
         configurator.setListener(this);
         configurator.applyConfigs(CartConfig.defaultConfigs());
         configurator.addToContainer(ui.rightPane.utility);
-
-        UIWorkspace wsui = new UIWorkspace(ui, lx, workspace, 0, 0, ui.leftPane.global.getContentWidth());
-        wsui.addToContainer(ui.leftPane.global);
     }
 
     @Override
@@ -96,5 +94,10 @@ public class PilotsShow implements Show, CartConfigurator.ConfigChangedListener 
         for (LXOutput output : outputs) {
             lx.addOutput(output);
         }
+    }
+
+    @Override
+    public Workspace getWorkspace() {
+        return workspace;
     }
 }
