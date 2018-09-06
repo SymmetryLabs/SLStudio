@@ -1,10 +1,12 @@
 package com.symmetrylabs.shows.pilots;
 
+import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.ui.UIOverriddenRightPane;
+import com.symmetrylabs.slstudio.ui.UIWorkspace;
+import com.symmetrylabs.slstudio.workspaces.Workspace;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.transform.LXVector;
@@ -16,7 +18,7 @@ import java.util.List;
 /**
  * This file creates and positions "carts" and creates one pixlite for each of them
  */
-public class PilotsShow implements Show, CartConfigurator.ConfigChangedListener {
+public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigChangedListener {
     static final String SHOW_NAME = "pilots";
 
     static final float RED_HUE = 0;
@@ -27,6 +29,7 @@ public class PilotsShow implements Show, CartConfigurator.ConfigChangedListener 
     private SLStudioLX lx;
     private CartConfigurator configurator;
     private List<PilotsPixlite> outputs = new ArrayList<>();
+    private Workspace workspace;
 
     private PilotsModel.Cart[] carts = new PilotsModel.Cart[] {
         /* no extra cart spacing here because they're not actually adjacent;
@@ -75,6 +78,8 @@ public class PilotsShow implements Show, CartConfigurator.ConfigChangedListener 
     public void setupLx(SLStudioLX lx) {
         this.lx = lx;
         onConfigChanged(CartConfig.defaultConfigs());
+
+        workspace = new Workspace(lx, "shows/pilots");
     }
 
     @Override
@@ -98,5 +103,10 @@ public class PilotsShow implements Show, CartConfigurator.ConfigChangedListener 
         for (LXOutput output : outputs) {
             lx.addOutput(output);
         }
+    }
+
+    @Override
+    public Workspace getWorkspace() {
+        return workspace;
     }
 }

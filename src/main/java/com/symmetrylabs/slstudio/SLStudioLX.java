@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio;
 
 import java.awt.*;
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -673,13 +674,12 @@ public class SLStudioLX extends P3LX {
     protected void setProject(File file, ProjectListener.Change change) {
         super.setProject(file, change);
         if (file != null) {
-            this.applet.saveStrings(
-                PROJECT_FILE_NAME,
-                new String[]{
-                    // Relative path of the project file WRT the default save file location for the sketch
-                    this.applet.saveFile(PROJECT_FILE_NAME).toPath().getParent().relativize(file.toPath()).toString()
-                }
-            );
+            /* We have to turn the paths into absolute paths here to satisfy the
+             * Windows Path implementation. */
+            Path projectDir = applet.saveFile(PROJECT_FILE_NAME).getParentFile().toPath().toAbsolutePath();
+            Path absPath = file.toPath().toAbsolutePath();
+            Path relPath = projectDir.relativize(absPath);
+            this.applet.saveStrings(PROJECT_FILE_NAME, new String[]{relPath.toString()});
         }
     }
 

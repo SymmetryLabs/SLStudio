@@ -1,5 +1,7 @@
 package com.symmetrylabs.slstudio.model;
 
+import com.symmetrylabs.slstudio.SLStudio;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,9 @@ public class StripsModel<T extends Strip> extends SLModel {
 
     private StripsTopology topology = null;
     boolean topologyInferenceAttempted = false;
+    private float orderTolerance = 2;  // tolerance for combining strips into bundles; inches along bundle's axis
+    private float bucketTolerance = 6;  // tolerance for combining strips into bundles; inches perpendicular to bundle's axis
+    private float endpointTolerance = 6;  // tolerance for combining endpoints into junctions; inches in any direction
 
     public StripsModel() {
     }
@@ -52,7 +57,7 @@ public class StripsModel<T extends Strip> extends SLModel {
 
         if (topology == null) {
             try {
-                topology = new StripsTopology(this);
+                topology = new StripsTopology(this, orderTolerance, bucketTolerance, endpointTolerance);
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
@@ -82,6 +87,16 @@ public class StripsModel<T extends Strip> extends SLModel {
 
     private float stripJoiningDistance = DEFAULT_STRIP_JOINING_DISTANCE;
     private Map<T, List<T>> connectivityGraph = null;
+
+    public void setTopologyTolerances(float orderTolerance, float bucketTolerance, float endpointTolerance) {
+        if (topology == null) {
+            this.orderTolerance = orderTolerance;
+            this.bucketTolerance = bucketTolerance;
+            this.endpointTolerance = endpointTolerance;
+        } else {
+            SLStudio.setWarning("StripsModel", "Cannot change topology tolerances after topology is built");
+        }
+    }
 
     public void setJoiningDistance(float dist) {
         stripJoiningDistance = dist;

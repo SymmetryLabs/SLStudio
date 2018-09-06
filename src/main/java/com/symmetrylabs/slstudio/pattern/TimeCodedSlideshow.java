@@ -10,6 +10,7 @@ import heronarts.lx.midi.MidiTime;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.transform.LXVector;
 
@@ -39,6 +40,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     private final CompoundParameter cropRightParam = new CompoundParameter("cropR", 0, 0, 1);
     private final CompoundParameter cropTopParam = new CompoundParameter("cropT", 0, 0, 1);
     private final CompoundParameter cropBottomParam = new CompoundParameter("cropB", 0, 0, 1);
+    private final MutableParameter tcStartFrame = new MutableParameter("tcStart", 0);
 
     private MidiTime mt;
     private int currentFrame;
@@ -86,6 +88,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         addParameter(cropRightParam);
         addParameter(cropTopParam);
         addParameter(cropBottomParam);
+        addParameter(tcStartFrame);
 
         for (LXMidiInput input : lx.engine.midi.inputs) {
             input.addTimeListener(new LXMidiInput.MidiTimeListener() {
@@ -191,6 +194,11 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     }
 
     private void goToFrame(int frame) {
+        frame -= tcStartFrame.getValuei();
+        if (frame < 0) {
+            currentFrame = -1;
+            return;
+        }
         /* if we're going backward in time out of our buffer, we clear the
          * buffer and start again. */
         if (frame < currentFrame - KEEP_TRAILING_FRAMES) {
@@ -217,12 +225,12 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
 
     @Override
     public void run(double elapsedMs) {
-        int black = LXColor.gray(0);
+        int black = 0;
         for (int i = 0; i < colors.length; i++) {
             colors[i] = black;
         }
 
-        if (allFrames == null || currentFrame >= allFrames.length) {
+        if (allFrames == null || currentFrame >= allFrames.length || currentFrame < 0) {
             return;
         }
         Slide slide = allFrames[currentFrame];
@@ -245,7 +253,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
             int j = (int) (shrink * (v.x - model.xMin));
             int color;
             if (i >= croppedHeight || j >= croppedWidth || i < 0 || j < 0) {
-                color = LXColor.gray(0);
+                color = black;
             } else {
                 int vcolor = img.getRGB(j + cropLeft, i + cropTop);
                 color = LXColor.rgb(
