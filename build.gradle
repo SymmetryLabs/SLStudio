@@ -68,6 +68,10 @@ allprojects {
 			credentials { username 'jp_ad5p43bkk3kiaah4slmihuagci' }
 		}
 	}
+
+	tasks.withType(JavaCompile) {
+		sourceCompatibility = '1.8'
+	}
 }
 
 repositories {
