@@ -24,6 +24,9 @@ public class StripsModel<T extends Strip> extends SLModel {
 
     private StripsTopology topology = null;
     boolean topologyInferenceAttempted = false;
+    private float orderTolerance = 2;  // tolerance for combining strips into bundles; inches along bundle's axis
+    private float bucketTolerance = 6;  // tolerance for combining strips into bundles; inches perpendicular to bundle's axis
+    private float endpointTolerance = 6;  // tolerance for combining endpoints into junctions; inches in any direction
 
     public StripsModel() {
     }
@@ -52,7 +55,7 @@ public class StripsModel<T extends Strip> extends SLModel {
 
         if (topology == null) {
             try {
-                topology = new StripsTopology(this);
+                topology = new StripsTopology(this, orderTolerance, bucketTolerance, endpointTolerance);
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
@@ -82,6 +85,12 @@ public class StripsModel<T extends Strip> extends SLModel {
 
     private float stripJoiningDistance = DEFAULT_STRIP_JOINING_DISTANCE;
     private Map<T, List<T>> connectivityGraph = null;
+
+    public void setTopologyTolerances(float orderTolerance, float bucketTolerance, float endpointTolerance) {
+        this.orderTolerance = orderTolerance;
+        this.bucketTolerance = bucketTolerance;
+        this.endpointTolerance = endpointTolerance;
+    }
 
     public void setJoiningDistance(float dist) {
         stripJoiningDistance = dist;

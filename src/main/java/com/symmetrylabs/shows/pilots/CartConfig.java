@@ -2,6 +2,7 @@ package com.symmetrylabs.shows.pilots;
 
 import com.google.common.base.Preconditions;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class CartConfig {
@@ -12,7 +13,7 @@ public class CartConfig {
     public static final String BSCR = "BSCR";
     public static final String BSR = "BSR";
     public static final String FSR = "FSR";
-    public static final List<String> ids = List.of(new String[]{FSL, BSL, BSCL, BSC, BSCR, BSR, FSR});
+    public static final List<String> ids = Arrays.asList(FSL, BSL, BSCL, BSC, BSCR, BSR, FSR);
 
     public final String modelId;
     public final String address;

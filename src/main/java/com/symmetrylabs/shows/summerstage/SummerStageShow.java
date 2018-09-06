@@ -510,7 +510,9 @@ public class SummerStageShow extends CubesShow {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        return new CubesModel(towers, allCubesArr);
+        CubesModel model = new CubesModel(towers, allCubesArr);
+        model.setTopologyTolerances(6, 6, 6);
+        return model;
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
