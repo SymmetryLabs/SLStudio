@@ -3,8 +3,10 @@ package com.symmetrylabs.slstudio.model;
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
+import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXFixture;
+import heronarts.lx.transform.LXTransform;
 
 
 public class Strip extends SLModel {
@@ -35,6 +37,13 @@ public class Strip extends SLModel {
         this.metrics = metrics;
     }
 
+    public Strip(String id, Metrics metrics, LXTransform t) {
+        super(new Fixture(metrics, t));
+
+        this.id = id;
+        this.metrics = metrics;
+    }
+
     public static class Metrics {
         @Expose
         public final int numPoints;
@@ -49,6 +58,17 @@ public class Strip extends SLModel {
         public Metrics(int numPoints, double pitch) {
             this.numPoints = numPoints;
             this.pixelPitch = pitch;
+        }
+    }
+
+    private static class Fixture extends LXAbstractFixture {
+        private Fixture(Metrics metrics, LXTransform t) {
+            for (int i = 0; i < metrics.numPoints; i++) {
+                t.push();
+                t.translate((float)metrics.pixelPitch * i, 0, 0);
+                points.add(new LXPoint(t.x(), t.y(), t.z()));
+                t.pop();
+            }
         }
     }
 }

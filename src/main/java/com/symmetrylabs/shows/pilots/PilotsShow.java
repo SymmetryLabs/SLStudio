@@ -53,14 +53,23 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
             4 * PilotsModel.STRIP_LENGTH, 0, 3 * PilotsModel.STRIP_LENGTH)),
 
         new PilotsModel.Cart(CartConfig.FSR,  new LXVector(
-            0, 0, 0)),
+            0, 0, 0))
+
+        // Temporary, just to send the "same thing" to each cart
+//        new PilotsModel.Cart(CartConfig.FSL,  new LXVector(0, 0, 0)),
+//        new PilotsModel.Cart(CartConfig.BSL,  new LXVector(0, 0, 0)),
+//        new PilotsModel.Cart(CartConfig.BSCL,  new LXVector(0, 0, 0)),
+//        new PilotsModel.Cart(CartConfig.BSC,  new LXVector(0, 0, 0)),
+//        new PilotsModel.Cart(CartConfig.BSCR,  new LXVector(0, 0, 0)),
+//        new PilotsModel.Cart(CartConfig.BSR,  new LXVector(0, 0, 0)),
+//        new PilotsModel.Cart(CartConfig.FSR,  new LXVector(0, 0, 0))
     };
 
     @Override
     public SLModel buildModel() {
         List<Strip> strips = new ArrayList<>();
         for (PilotsModel.Cart cart : carts) {
-            strips.addAll(cart.createStrips());
+            strips.addAll(cart.strips);
         }
         return new PilotsModel(strips, Arrays.asList(carts));
     }
