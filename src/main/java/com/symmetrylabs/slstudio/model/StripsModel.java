@@ -1,5 +1,7 @@
 package com.symmetrylabs.slstudio.model;
 
+import com.symmetrylabs.slstudio.SLStudio;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -87,9 +89,13 @@ public class StripsModel<T extends Strip> extends SLModel {
     private Map<T, List<T>> connectivityGraph = null;
 
     public void setTopologyTolerances(float orderTolerance, float bucketTolerance, float endpointTolerance) {
-        this.orderTolerance = orderTolerance;
-        this.bucketTolerance = bucketTolerance;
-        this.endpointTolerance = endpointTolerance;
+        if (topology == null) {
+            this.orderTolerance = orderTolerance;
+            this.bucketTolerance = bucketTolerance;
+            this.endpointTolerance = endpointTolerance;
+        } else {
+            SLStudio.setWarning("StripsModel", "Cannot change topology tolerances after topology is built");
+        }
     }
 
     public void setJoiningDistance(float dist) {
