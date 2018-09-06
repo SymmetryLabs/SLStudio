@@ -4,9 +4,8 @@ import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.ui.UIOverriddenRightPane;
-import com.symmetrylabs.slstudio.ui.UIWorkspaces;
-import com.symmetrylabs.slstudio.workspaces.Workspaces;
+import com.symmetrylabs.slstudio.ui.UIWorkspace;
+import com.symmetrylabs.slstudio.workspaces.Workspace;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.transform.LXVector;
@@ -29,7 +28,7 @@ public class PilotsShow implements Show, CartConfigurator.ConfigChangedListener 
     private SLStudioLX lx;
     private CartConfigurator configurator;
     private List<PilotsPixlite> outputs = new ArrayList<>();
-    private Workspaces workspaces;
+    private Workspace workspace;
 
     private PilotsModel.Cart[] carts = new PilotsModel.Cart[] {
         /* no extra cart spacing here because they're not actually adjacent;
@@ -70,7 +69,7 @@ public class PilotsShow implements Show, CartConfigurator.ConfigChangedListener 
         this.lx = lx;
         onConfigChanged(CartConfig.defaultConfigs());
 
-        workspaces = new Workspaces(lx, "shows/pilots");
+        workspace = new Workspace(lx, "shows/pilots");
     }
 
     @Override
@@ -80,7 +79,7 @@ public class PilotsShow implements Show, CartConfigurator.ConfigChangedListener 
         configurator.applyConfigs(CartConfig.defaultConfigs());
         configurator.addToContainer(ui.rightPane.utility);
 
-        UIWorkspaces wsui = new UIWorkspaces(ui, lx, workspaces, 0, 0, ui.leftPane.global.getContentWidth());
+        UIWorkspace wsui = new UIWorkspace(ui, lx, workspace, 0, 0, ui.leftPane.global.getContentWidth());
         wsui.addToContainer(ui.leftPane.global);
     }
 

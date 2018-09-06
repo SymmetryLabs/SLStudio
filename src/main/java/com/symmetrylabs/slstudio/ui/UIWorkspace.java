@@ -8,23 +8,20 @@ import heronarts.lx.LX;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
 import heronarts.p3lx.ui.component.UIItemList;
-import heronarts.p3lx.ui.component.UIKnob;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
 
-import com.symmetrylabs.slstudio.workspaces.Workspaces;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
+import com.symmetrylabs.slstudio.workspaces.WorkspaceProject;
 
-public class UIWorkspaces extends UICollapsibleSection {
-    private final Workspaces workspaces;
+public class UIWorkspace extends UICollapsibleSection {
+    private final Workspace workspace;
 
-    public UIWorkspaces(UI ui, LX lx, Workspaces workspaces, float x, float y, float w) {
+    public UIWorkspace(UI ui, LX lx, Workspace workspaces, float x, float y, float w) {
         super(ui, x, y, w, 400);
-        this.workspaces = workspaces;
+        this.workspace = workspaces;
         setTitle("WORKSPACE");
 
         final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
-        for (Workspace workspace : this.workspaces.getAll()) {
+        for (WorkspaceProject workspace : this.workspace.getAll()) {
             items.add(new WorkspaceItem(lx, workspace));
         }
 
@@ -35,16 +32,16 @@ public class UIWorkspaces extends UICollapsibleSection {
 
     private class WorkspaceItem extends UIItemList.AbstractItem {
             final LX lx;
-            final Workspace workspace;
+            final WorkspaceProject project;
 
-            private WorkspaceItem(LX lx, Workspace _workspace) {
+            private WorkspaceItem(LX lx, WorkspaceProject project) {
                 this.lx = lx;
-                this.workspace = _workspace;
+                this.project = project;
                 lx.addProjectListener((file, change) -> redraw());
             }
 
             public String getLabel() {
-                return workspace.getLabel();
+                return project.getLabel();
             }
 
             public boolean isSelected() { 
@@ -57,7 +54,7 @@ public class UIWorkspaces extends UICollapsibleSection {
                 if (currentProject == null || !currentProject.exists()) {
                     return false;
                 }
-                return workspace.matches(currentProject);
+                return project.matches(currentProject);
             }
 
             @Override
@@ -67,7 +64,7 @@ public class UIWorkspaces extends UICollapsibleSection {
 
             @Override
             public void onActivate() {
-                workspaces.openWorkspace(workspace);
+                UIWorkspace.this.workspace.openProject(project);
             }
     }
 }
