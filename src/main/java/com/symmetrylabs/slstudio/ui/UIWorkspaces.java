@@ -21,7 +21,7 @@ public class UIWorkspaces extends UICollapsibleSection {
     public UIWorkspaces(UI ui, LX lx, Workspaces workspaces, float x, float y, float w) {
         super(ui, x, y, w, 400);
         this.workspaces = workspaces;
-        setTitle("Workspaces");
+        setTitle("WORKSPACE");
 
         final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
         for (Workspace workspace : this.workspaces.getAll()) {
