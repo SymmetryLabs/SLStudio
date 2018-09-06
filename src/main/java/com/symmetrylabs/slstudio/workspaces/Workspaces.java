@@ -1,19 +1,16 @@
 package com.symmetrylabs.slstudio.workspaces;
 
-import java.io.File;
-import java.util.List;
-import java.util.ArrayList;
-
-import java.net.SocketException;
-
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
-import heronarts.lx.osc.LXOscEngine;
 import heronarts.lx.osc.LXOscListener;
 import heronarts.lx.osc.OscMessage;
 
+import java.io.File;
+import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class Workspaces extends LXComponent {
     public static final int WORKSPACE_OSC_PORT = 3999;
@@ -51,11 +48,10 @@ public class Workspaces extends LXComponent {
 
     public void openWorkspace(Workspace workspace) {
         int newWorkspaceIndex = workspaces.indexOf(workspace);
-        System.out.println(String.format("openWorkspace new=%d current=%d", newWorkspaceIndex, currentWorkspaceIndex));
         if (currentWorkspaceIndex == newWorkspaceIndex) {
             return;
         }
-
+        System.out.println(String.format("openWorkspace new=%d current=%d", newWorkspaceIndex, currentWorkspaceIndex));
         lx.openProject(workspace.getFile());
         currentWorkspaceIndex = newWorkspaceIndex;
     }
