@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.net.SocketException;
 
+import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.kalpa.Anemometer;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
+import com.symmetrylabs.slstudio.ui.UIWorkspace;
 import heronarts.lx.LX;
 import com.symmetrylabs.shows.ShowRegistry;
 import com.symmetrylabs.shows.kalpa.TreeModelingTool;
@@ -170,6 +172,12 @@ public class SLStudio extends PApplet {
                     ui.preview.addComponent(new UITreeTrunk(applet));
                     uiTreeModelAxes = new UITreeModelAxes();
                     ui.preview.addComponent(uiTreeModelAxes);
+                }
+
+                if (show instanceof HasWorkspace) {
+                    HasWorkspace hwShow = (HasWorkspace) show;
+                    new UIWorkspace(ui, lx, hwShow.getWorkspace(), 0, 0, ui.leftPane.global.getContentWidth())
+                        .addToContainer(ui.leftPane.global);
                 }
 
                 show.setupUi(lx, ui);

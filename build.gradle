@@ -121,7 +121,7 @@ dependencies {
 	// https://www.slf4j.org/manual.html
 	implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
 
-	implementation 'com.github.SymmetryLabs:p3lx:1a9daf1'
+	implementation 'com.github.SymmetryLabs:p3lx:7b7e68d'
 
 	implementation files('libs/minim.jar')
 	implementation files('libs/jogamp-fat.jar')
