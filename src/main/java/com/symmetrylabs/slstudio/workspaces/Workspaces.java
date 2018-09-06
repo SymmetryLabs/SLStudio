@@ -81,7 +81,7 @@ public class Workspaces extends LXComponent {
         public void oscMessage(OscMessage message) {
             if (message.matches("/lx/workspaces/active")) {
                 Workspace workspace = workspaces.get(message.getInt() - 1);
-                openWorkspace(workspace);
+                lx.engine.addTask(() -> openWorkspace(workspace));
             }
         }
     }
