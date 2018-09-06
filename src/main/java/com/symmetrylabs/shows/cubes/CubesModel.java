@@ -333,8 +333,8 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
     }
 
     /**
-     * A face is a component of a cube. It is comprised of four strips forming
-     * the lights on this side of a cube. A whole cube is formed by four faces.
+     * A Face is a component of a Cube, made of 3 strips in a "U" shape (3 of the 4
+     * edges of a square).  A whole cube is formed by 4 of these Faces.
      */
     public static class Face extends StripsModel<CubesStrip> {
 
