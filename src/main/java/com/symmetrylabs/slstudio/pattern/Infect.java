@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.summerstage;
+package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.color.Spaces;
