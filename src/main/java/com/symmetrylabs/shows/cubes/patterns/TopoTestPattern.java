@@ -1,25 +1,40 @@
 package com.symmetrylabs.shows.cubes.patterns;
 
-import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
+import com.symmetrylabs.util.StripsTopologyComponents;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
-import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.EnumParameter;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
-public class TopoTestPattern extends SLPattern<CubesModel> {
-    private DiscreteParameter modeParam = new DiscreteParameter("mode", 0, 0, 2);
+public class TopoTestPattern<T extends Strip> extends SLPattern<StripsModel<T>> {
+    public enum Mode {
+        DIRS,
+        ONE_BY_ONE,
+        COMPONENTS,
+    }
+
+    private EnumParameter<Mode> modeParam = new EnumParameter<>("mode", Mode.DIRS);
     private float elapsed = 0;
     private int i = 0;
-    private Random r = new Random();
+    List<StripsTopologyComponents.ConnectedComponent> components;
 
     public TopoTestPattern(LX lx) {
         super(lx);
         addParameter(modeParam);
+
+        if (model.getTopology() != null) {
+            StripsTopologyComponents stc = new StripsTopologyComponents(model.getTopology());
+            components = stc.getComponents();
+        } else {
+            components = new ArrayList<>();
+        }
     }
 
     private void setStripColor(Strip s, int color) {
@@ -28,7 +43,7 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
         }
     }
 
-    private void setEdgeColor(StripsTopology.Bundle e, int color) {
+    private void setBundleColor(StripsTopology.Bundle e, int color) {
         for (int strip : e.strips) {
             setStripColor(model.getStripByIndex(strip), color);
         }
@@ -36,8 +51,8 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
 
     @Override
     public void run(double deltaMs) {
-        switch (modeParam.getValuei()) {
-            case 0: {
+        switch (modeParam.getEnum()) {
+            case DIRS: {
                 if (model.getTopology() == null) {
                     return;
                 }
@@ -56,12 +71,12 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
                         default:
                             h = 0;
                     }
-                    setEdgeColor(e, LXColor.hsb(h, 100, 100));
+                    setBundleColor(e, LXColor.hsb(h, 100, 100));
                 }
                 break;
             }
 
-            case 1: {
+            case ONE_BY_ONE: {
                 if (model.getTopology() == null) {
                     return;
                 }
@@ -77,20 +92,34 @@ public class TopoTestPattern extends SLPattern<CubesModel> {
                 }
                 System.out.println(i);
                 StripsTopology.Bundle edge = model.getTopology().bundles.get(i);
-                setEdgeColor(edge, LXColor.rgb(255, 255, 255));
+                setBundleColor(edge, LXColor.rgb(255, 255, 255));
                 float h = 0;
                 for (StripsTopology.Sign end : StripsTopology.Sign.values()) {
                     for (StripsTopology.Sign s : StripsTopology.Sign.values()) {
                         for (StripsTopology.Dir d : StripsTopology.Dir.values()) {
                             StripsTopology.Bundle b = edge.get(end).get(d, s);
                             if (b != null) {
-                                setEdgeColor(b, LXColor.hsb(h, 100, 100));
+                                setBundleColor(b, LXColor.hsb(h, 100, 100));
                             }
                             h += 30;
                         }
                     }
                 }
                 break;
+            }
+
+            case COMPONENTS: {
+                float hstep = 330f / components.size();
+                int h = 0;
+                for (StripsTopologyComponents.ConnectedComponent cc : components) {
+                    int c = LXColor.hsb(h, 100, 100);
+                    h += hstep;
+                    for (StripsTopology.Junction j : cc.junctions) {
+                        for (StripsTopology.Bundle b : j.getBundles()) {
+                            setBundleColor(b, c);
+                        }
+                    }
+                }
             }
         }
     }
