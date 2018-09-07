@@ -50,11 +50,6 @@ import java.util.List;
 public class StripsTopology {
     private static final int NO_STRIP = Integer.MAX_VALUE;
 
-    /* All in inches */
-    private static final float ORDER_TOLERANCE = 2;
-    private static final float BUCKET_TOLERANCE = 6;
-    private static final float ENDPOINT_TOLERANCE = 6;
-
     public enum Dir {
         X, Y, Z;
 
@@ -173,6 +168,17 @@ public class StripsTopology {
                     return s == Sign.POS ? pz : nz;
             }
             return null;
+        }
+
+        public List<Bundle> getBundles() {
+            List<Bundle> bundles = new ArrayList<>();
+            if (px != null) bundles.add(px);
+            if (nx != null) bundles.add(nx);
+            if (py != null) bundles.add(py);
+            if (ny != null) bundles.add(ny);
+            if (pz != null) bundles.add(pz);
+            if (nz != null) bundles.add(nz);
+            return bundles;
         }
     }
 
@@ -461,8 +467,8 @@ public class StripsTopology {
             this.b = b;
         }
 
-        boolean equivalent(PlanarLocation pl) {
-            return dir == pl.dir && Math.abs(a - pl.a) < BUCKET_TOLERANCE && Math.abs(b - pl.b) < BUCKET_TOLERANCE;
+        boolean equivalent(PlanarLocation pl, float tolerance) {
+            return dir == pl.dir && Math.abs(a - pl.a) < tolerance && Math.abs(b - pl.b) < tolerance;
         }
 
         static PlanarLocation combine(PlanarLocation buckets[]) {
@@ -500,7 +506,7 @@ public class StripsTopology {
     public final List<Bundle> bundles;
     public final List<Junction> junctions;
 
-    StripsTopology(StripsModel model) {
+    StripsTopology(StripsModel model, float orderTolerance, float bucketTolerance, float endpointTolerance) {
         this.model = model;
         int N = model.getStrips().size();
         bundles = new ArrayList<>(N);
@@ -528,7 +534,7 @@ public class StripsTopology {
             for (Bundle testEdge : bundles) {
                 float testProj = testEdge.projection();
                 float projDist = Math.abs(proj - testProj);
-                if (pl.equivalent(testEdge.planarLocation()) && projDist < ORDER_TOLERANCE) {
+                if (pl.equivalent(testEdge.planarLocation(), bucketTolerance) && projDist < orderTolerance) {
                     testEdge.addStrip(i);
                     matchesExisting = true;
                     break;
@@ -557,7 +563,7 @@ public class StripsTopology {
             BundleEndpoints be = b.endpoints();
 
             List<Junction> js = junctionTree.withinDistance(
-                be.positive.x, be.positive.y, be.positive.z, ENDPOINT_TOLERANCE);
+                be.positive.x, be.positive.y, be.positive.z, endpointTolerance);
             if (!js.isEmpty()) {
                 b.p = js.get(0);
                 float dist = b.endpoints.positive.dist(js.get(0).loc);
@@ -597,7 +603,7 @@ public class StripsTopology {
             }
 
             js = junctionTree.withinDistance(
-                be.negative.x, be.negative.y, be.negative.z, ENDPOINT_TOLERANCE);
+                be.negative.x, be.negative.y, be.negative.z, endpointTolerance);
             if (!js.isEmpty()) {
                 b.n = js.get(0);
                 float dist = b.endpoints.negative.dist(js.get(0).loc);

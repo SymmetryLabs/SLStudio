@@ -13,6 +13,7 @@ import heronarts.lx.midi.MidiNote;
 import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.ADSREnvelope;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.FixedParameter;
@@ -38,6 +39,11 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
     private CompoundParameter maxBrightParam = new CompoundParameter("hit", 100, 0, 100);
 
     private DiscreteParameter rootModeParam = new DiscreteParameter("shape", 0, 0, 2);
+
+    private BooleanParameter trigOneParam = new BooleanParameter("trig1", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    private BooleanParameter trigAllParam = new BooleanParameter("trig", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    private BooleanParameter addGapParam = new BooleanParameter("gap", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    private BooleanParameter regenParam = new BooleanParameter("regen", false).setMode(BooleanParameter.Mode.MOMENTARY);
 
     private static class PathElement {
         Strip[] strips;
@@ -86,6 +92,11 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
 
         addParameter(rootModeParam);
 
+        addParameter(trigAllParam);
+        addParameter(trigOneParam);
+        addParameter(addGapParam);
+        addParameter(regenParam);
+
         globalADSR = makeADSR();
         addModulator(globalADSR);
 
@@ -105,6 +116,28 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
             for (Root r : roots) {
                 r.adsr.attack();
                 r.adsr.release();
+            }
+        } else if (p == trigAllParam) {
+            if (trigAllParam.getValueb()) {
+                globalADSR.attack();
+            } else {
+                globalADSR.release();
+            }
+        } else if (p == addGapParam) {
+            if (addGapParam.getValueb()) {
+                startGap();
+            } else {
+                endGap();
+            }
+        } else if (p == regenParam) {
+            if (regenParam.getValueb()) {
+                build();
+            }
+        } else if (p == trigOneParam) {
+            if (trigOneParam.getValueb()) {
+                attackOne();
+            } else {
+                releaseOne();
             }
         }
     }
@@ -461,30 +494,48 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
         }
     }
 
+    private void startGap() {
+        if (!gaps.isEmpty() && gaps.peekFirst().end < 0) {
+            gaps.peekFirst().end = 0;
+        }
+        gaps.addFirst(new Gap());
+        gaps.peekFirst().start = 0;
+        gaps.peekFirst().end = -1;
+    }
+
+    private void endGap() {
+        if (!gaps.isEmpty() && gaps.peekFirst().end < 0) {
+            gaps.peekFirst().end = 0;
+        }
+    }
+
+    private void attackOne() {
+        roots.get(nextRootToAttack).adsr.attack();
+    }
+
+    private void releaseOne() {
+        roots.get(nextRootToAttack).adsr.release();
+        nextRootToAttack++;
+        if (nextRootToAttack >= roots.size()) {
+            nextRootToAttack = 0;
+        }
+    }
+
     @Override
     public void noteOnReceived(MidiNoteOn note) {
         switch (note.getPitch()) {
             case 60:
                 build();
                 break;
-
             case 62:
-                if (!gaps.isEmpty() && gaps.peekFirst().end < 0) {
-                    gaps.peekFirst().end = 0;
-                }
-                gaps.addFirst(new Gap());
-                gaps.peekFirst().start = 0;
-                gaps.peekFirst().end = -1;
+                startGap();
                 break;
-
             case 64:
                 globalADSR.attack();
                 break;
-
             case 65:
-                roots.get(nextRootToAttack).adsr.attack();
+                attackOne();
                 break;
-
             default:
                 System.out.println(String.format("unknown midi pitch %d", note.getPitch()));
         }
@@ -495,25 +546,15 @@ public class PilotsRoots<T extends Strip> extends SLPattern<StripsModel<T>> {
         switch (note.getPitch()) {
             case 60:
                 break;
-
             case 62:
-                if (!gaps.isEmpty() && gaps.peekFirst().end < 0) {
-                    gaps.peekFirst().end = 0;
-                }
+                endGap();
                 break;
-
             case 64:
                 globalADSR.release();
                 break;
-
             case 65:
-                roots.get(nextRootToAttack).adsr.release();
-                nextRootToAttack++;
-                if (nextRootToAttack >= roots.size()) {
-                    nextRootToAttack = 0;
-                }
+                releaseOne();
                 break;
-
             default:
                 System.out.println(String.format("unknown midi pitch %d", note.getPitch()));
         }
