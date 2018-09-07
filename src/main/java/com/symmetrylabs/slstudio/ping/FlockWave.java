@@ -43,7 +43,7 @@ public class FlockWave extends SLPattern<SLModel> {
     private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
 
     CompoundParameter hueParam = new CompoundParameter("Hue", 0, -1, 1);  // hue adjustment
-    CompoundParameter hVarParam = new CompoundParameter("HVar", 1, 0, 2);  // hue variation
+    CompoundParameter hVarParam = new CompoundParameter("HVar", 1, 0, 4);  // hue variation
     CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
     BooleanParameter oscFollowers = new BooleanParameter("atBlobs");
     BooleanParameter oscBlobs = new BooleanParameter("nearBlobs");
@@ -506,20 +506,20 @@ public class FlockWave extends SLPattern<SLModel> {
     }
 
     public static int shiftHue(int color, float shift, float var, float center) {
-        if (shift == 0) return color;
+        if (shift == 0 && var == 1) return color;
 
         float h = LXColor.h(color) / 360f;
         float s = LXColor.s(color) / 100f;
         float b = LXColor.b(color) / 100f;
         int alpha = color & 0xff000000;
 
-        h += shift;
         h = h - center + 0.5f;
         float hf = (float) Math.floor(h);
         h = h - hf;
         h = h - 0.5f;
         h *= var;
         h = h + center;
+        h += shift;
 
         return alpha | (LXColor.hsb(h * 360f, s * 100f, b * 100f) & 0x00ffffff);
     }
