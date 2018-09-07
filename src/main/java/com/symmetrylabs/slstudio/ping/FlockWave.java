@@ -20,6 +20,7 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
+import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.slstudio.kernel.SLKernel;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
@@ -41,10 +42,11 @@ public class FlockWave extends SLPattern<SLModel> {
 
     private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
 
+    CompoundParameter hueParam = new CompoundParameter("Hue", 0, -2, 2);  // hue adjustment
     CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
     BooleanParameter oscFollowers = new BooleanParameter("atBlobs");
     BooleanParameter oscBlobs = new BooleanParameter("nearBlobs");
-    BooleanParameter everywhere = new BooleanParameter("everywhere");
+    BooleanParameter everywhere = new BooleanParameter("everywhere", true);
     CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);  // focus coordinates (in)
     CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
     CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);
@@ -91,27 +93,28 @@ public class FlockWave extends SLPattern<SLModel> {
         blobTracker = BlobTracker.getInstance(lx);
         blobFollower = new BlobFollower(blobTracker);
 
-        addParameter(oscFollowers);
-        addParameter(oscBlobs);
-        addParameter(everywhere);
-
+        addParameter(hueParam);
         addParameter(timeScale);
         addParameter(size);
         addParameter(detail);
         addParameter(ripple);
+
+        addParameter(palette);
+        addParameter(palStart);
+        addParameter(palStop);
+        addParameter(palShift);
+        addParameter(palBias);
+        addParameter(palCutoff);
+
+        addParameter(oscFollowers);
+        addParameter(oscBlobs);
+        addParameter(everywhere);
 
         addParameter(x);
         addParameter(y);
         addParameter(z);
         addParameter(zScale);
 
-        addParameter(palette);
-        addParameter(palShift);
-        addParameter(palBias);
-        addParameter(palCutoff);
-
-        addParameter(palStart);
-        addParameter(palStop);
         addParameter(spnRad);
         addParameter(maxBirds);
 
@@ -131,6 +134,13 @@ public class FlockWave extends SLPattern<SLModel> {
         blobFollower.advance((float) deltaMs * 0.001f);
         render();
         lastRun = new Date().getTime();
+    }
+
+    public void onActive() {
+        super.onActive();
+        for (int i = 0; i < 1000; i++) {
+            advanceSimulation(0.01f);
+        }
     }
 
     void advanceSimulation(float deltaSec) {
@@ -421,6 +431,7 @@ public class FlockWave extends SLPattern<SLModel> {
 
     void renderPlasma(final Collection<Bird> birds) {
         final int[] colors = (int[]) getArray(SRGB8);
+        final float hueShift = hueParam.getValuef();
 
         synchronized (kernel) {
             if (birds.size() > 0) {
@@ -475,20 +486,30 @@ public class FlockWave extends SLPattern<SLModel> {
                 if (kernel.vectorList != null) {
                     // The result array corresponds to just the vectors in the vector list.
                     IntStream.range(0, kernel.vectorList.size()).parallel().forEach(vi -> {
-                        colors[kernel.vectorList.get(vi).index] = pal.getColor(result[vi]);
+                        colors[kernel.vectorList.get(vi).index] = shiftHue(pal.getColor(result[vi]), hueShift);
                     });
                 } else {
                     // The result array corresponds to all the points in the model.
                     model.getPoints().parallelStream().forEach(p -> {
-                        colors[p.index] = pal.getColor(result[p.index]);
+                        colors[p.index] = shiftHue(pal.getColor(result[p.index]), hueShift);
                     });
                 }
             } else {
-                Arrays.fill(colors, getPalette().getColor(palShift.getValue()));
+                Arrays.fill(colors, shiftHue(getPalette().getColor(palShift.getValue()), hueShift));
             }
         }
 
         markModified(SRGB8);
+    }
+
+    public static int shiftHue(int color, float shift) {
+        if (shift == 0) return color;
+
+        float h = LXColor.h(color);
+        float s = LXColor.s(color);
+        float b = LXColor.b(color);
+        int alpha = color & 0xff000000;
+        return alpha | (LXColor.hsb(h + shift * 360f, s, b) & 0x00ffffff);
     }
 
     PVector getRandomUnitVector() {
