@@ -64,7 +64,7 @@ public abstract class MidiPolyphonicExpressionPattern<M extends SLModel> extends
 
     @Override
     public void noteOnReceived(MidiNoteOn noteOn) {
-        int channel = noteOn.getChannel();
+        int channel = noteOn.getChannel() + 1;  // 1 to 16
         int pitch = noteOn.getPitch();
         double velocity = noteOn.getVelocity() / 127.0;
         getChannelPitches(channels[pitch]).remove(pitch);
@@ -89,7 +89,7 @@ public abstract class MidiPolyphonicExpressionPattern<M extends SLModel> extends
 
     @Override
     public void aftertouchReceived(MidiAftertouch aftertouch) {
-        int channel = aftertouch.getChannel();
+        int channel = aftertouch.getChannel() + 1;  // 1 to 16
         double pressure = aftertouch.getAftertouch() / 127.0;
         for (int pitch : getChannelPitches(channel)) {
             pressures[pitch] = pressure;
@@ -101,7 +101,7 @@ public abstract class MidiPolyphonicExpressionPattern<M extends SLModel> extends
 
     @Override
     public void pitchBendReceived(MidiPitchBend pitchBend) {
-        int channel = pitchBend.getChannel();
+        int channel = pitchBend.getChannel() + 1;  // 1 to 16
         double bend = pitchBend.getNormalized();
         for (int pitch : getChannelPitches(channel)) {
             bends[pitch] = bend;
@@ -113,7 +113,7 @@ public abstract class MidiPolyphonicExpressionPattern<M extends SLModel> extends
 
     @Override
     public void controlChangeReceived(MidiControlChange controlChange) {
-        int channel = controlChange.getChannel();
+        int channel = controlChange.getChannel() + 1;  // 1 to 16
         int controller = controlChange.getCC();
         double value = controlChange.getValue() / 127.0;
         if (controller == SLIDE_CONTROLLER) {
