@@ -42,7 +42,8 @@ public class FlockWave extends SLPattern<SLModel> {
 
     private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
 
-    CompoundParameter hueParam = new CompoundParameter("Hue", 0, -2, 2);  // hue adjustment
+    CompoundParameter hueParam = new CompoundParameter("Hue", 0, -1, 1);  // hue adjustment
+    CompoundParameter hVarParam = new CompoundParameter("HVar", 1, 0, 2);  // hue variation
     CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
     BooleanParameter oscFollowers = new BooleanParameter("atBlobs");
     BooleanParameter oscBlobs = new BooleanParameter("nearBlobs");
@@ -94,6 +95,7 @@ public class FlockWave extends SLPattern<SLModel> {
         blobFollower = new BlobFollower(blobTracker);
 
         addParameter(hueParam);
+        addParameter(hVarParam);
         addParameter(timeScale);
         addParameter(size);
         addParameter(detail);
@@ -432,6 +434,8 @@ public class FlockWave extends SLPattern<SLModel> {
     void renderPlasma(final Collection<Bird> birds) {
         final int[] colors = (int[]) getArray(SRGB8);
         final float hueShift = hueParam.getValuef();
+        final float hueVar = hVarParam.getValuef();
+        final ColorPalette pal = getPalette();
 
         synchronized (kernel) {
             if (birds.size() > 0) {
@@ -480,36 +484,44 @@ public class FlockWave extends SLPattern<SLModel> {
                 kernel.executeForSize(model.points.length);
                 kernel.get(kernel.result);
 
-                final ColorPalette pal = getPalette();
                 final float[] result = kernel.result;
 
                 if (kernel.vectorList != null) {
                     // The result array corresponds to just the vectors in the vector list.
                     IntStream.range(0, kernel.vectorList.size()).parallel().forEach(vi -> {
-                        colors[kernel.vectorList.get(vi).index] = shiftHue(pal.getColor(result[vi]), hueShift);
+                        colors[kernel.vectorList.get(vi).index] = shiftHue(pal.getColor(result[vi]), hueShift, hueVar, pal.getHueCenter());
                     });
                 } else {
                     // The result array corresponds to all the points in the model.
                     model.getPoints().parallelStream().forEach(p -> {
-                        colors[p.index] = shiftHue(pal.getColor(result[p.index]), hueShift);
+                        colors[p.index] = shiftHue(pal.getColor(result[p.index]), hueShift, hueVar, pal.getHueCenter());
                     });
                 }
             } else {
-                Arrays.fill(colors, shiftHue(getPalette().getColor(palShift.getValue()), hueShift));
+                Arrays.fill(colors, shiftHue(pal.getColor(palShift.getValue()), hueShift, hueVar, pal.getHueCenter()));
             }
         }
 
         markModified(SRGB8);
     }
 
-    public static int shiftHue(int color, float shift) {
+    public static int shiftHue(int color, float shift, float var, float center) {
         if (shift == 0) return color;
 
-        float h = LXColor.h(color);
-        float s = LXColor.s(color);
-        float b = LXColor.b(color);
+        float h = LXColor.h(color) / 360f;
+        float s = LXColor.s(color) / 100f;
+        float b = LXColor.b(color) / 100f;
         int alpha = color & 0xff000000;
-        return alpha | (LXColor.hsb(h + shift * 360f, s, b) & 0x00ffffff);
+
+        h += shift;
+        h = h - center + 0.5f;
+        float hf = (float) Math.floor(h);
+        h = h - hf;
+        h = h - 0.5f;
+        h *= var;
+        h = h + center;
+
+        return alpha | (LXColor.hsb(h * 360f, s * 100f, b * 100f) & 0x00ffffff);
     }
 
     PVector getRandomUnitVector() {

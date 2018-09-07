@@ -10,6 +10,7 @@ import heronarts.lx.color.LXColor;
  */
 public class ArrayPalette implements ColorPalette {
     int[] colors;
+    float hueCenter;
 
     public ArrayPalette(int[] colors) {
         this.colors = new int[colors.length];
@@ -42,5 +43,21 @@ public class ArrayPalette implements ColorPalette {
         int low = (int) Math.floor(index);
         int high = (low + 1) < colors.length ? low + 1 : low;
         return Ops16.blend(Spaces.rgb8ToRgb16(colors[low]), Spaces.rgb8ToRgb16(colors[high]), index - low);
+    }
+
+    public float getHueCenter() {
+        if (hueCenter < 0) {
+            float h = 0, s = 0;
+            for (int i = 0; i < colors.length; i++) {
+                float hue = LXColor.h(colors[i]);
+                float sat = LXColor.s(colors[i]);
+                if (sat > s) {
+                    s = sat;
+                    h = hue;
+                }
+            }
+            hueCenter = h/360f;
+        }
+        return hueCenter;
     }
 }

@@ -47,6 +47,8 @@ public class ZigzagPalette implements ColorPalette {
         return new ZigzagPalette(palette, bottom, top, bias, cutoff);
     }
 
+    public float getHueCenter() { return palette.getHueCenter(); }
+
     public void setPalette(ColorPalette palette) {
         this.palette = palette;
     }

@@ -14,4 +14,5 @@ package com.symmetrylabs.slstudio.palettes;
 public interface ColorPalette {
     int getColor(double p);
     long getColor16(double p);
+    float getHueCenter();
 }
