@@ -138,6 +138,10 @@ public class SummerStageShow extends CubesShow {
             new TowerConfig(SP * 11, SP * 13, SP * -1, new String[][]{
                 new String[]{"719", "718"}
             }),
+            // A dummy cube to connect the two components (for StripsTopology)
+            new TowerConfig(SP * 11, SP * 13, SP * -2, new String[][]{
+                new String[]{"dummy1", "dummy2"}
+            }),
 
 
             new TowerConfig(SP * 8, SP * 12, SP * -1, new String[][]{
