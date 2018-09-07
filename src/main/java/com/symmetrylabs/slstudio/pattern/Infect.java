@@ -36,7 +36,7 @@ public class Infect extends SLPattern<StripsModel<? extends Strip>> {
     private CompoundParameter speedParam = new CompoundParameter("Speed", 128, 0, 1000).setDescription("Infection growth speed (strip lengths per minute)");
     private BooleanParameter triggerParam = new BooleanParameter("Trigger", false).setDescription("Trigger a new infection").setMode(BooleanParameter.Mode.MOMENTARY);
     private BooleanParameter gPaletteParam = new BooleanParameter("GPalette", false).setDescription("Use the global palette");
-    private BooleanParameter alphaParam = new BooleanParameter("Alpha", false).setDescription("Set alpha channel");
+    private BooleanParameter alphaParam = new BooleanParameter("Alpha", true).setDescription("Set alpha channel");
     protected Random random = new Random();
 
     public Infect(LX lx) {
@@ -52,6 +52,12 @@ public class Infect extends SLPattern<StripsModel<? extends Strip>> {
         addParameter(triggerParam);
         addParameter(gPaletteParam);
         addParameter(alphaParam);
+    }
+
+    @Override
+    public void onInactive() {
+        infections.clear();
+        infectionsByKey.clear();
     }
 
     @Override
