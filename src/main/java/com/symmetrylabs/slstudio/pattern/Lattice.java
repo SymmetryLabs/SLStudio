@@ -7,7 +7,6 @@ import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology.Dir;
 import com.symmetrylabs.slstudio.model.StripsTopology.Sign;
 import com.symmetrylabs.slstudio.pattern.base.MidiPolyphonicExpressionPattern;
-import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +16,6 @@ import java.util.List;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer.Space;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -49,9 +47,11 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
         Z_NEG
     }
 
-    protected CompoundParameter hueParam = new CompoundParameter("Hue", 0, 0, 2);
+    protected CompoundParameter hueParam = new CompoundParameter("Hue", 0, -1, 1);
+    protected DiscreteParameter speedParam = new DiscreteParameter("Speed", 128, 0, 1000).setDescription("Overall speed in BPM (duration is one beat)");
+    protected DiscreteParameter subspdParam = new DiscreteParameter("Subspd", 0, -3, 4).setDescription("Strip speed multiplier in powers of 2");
+
     protected EnumParameter<ShapeId> shapeParam = new EnumParameter<>("Shape", ShapeId.SWEEP);
-    protected CompoundParameter shpDurParam = new CompoundParameter("ShpDur", 0.5, 0, 2);
     protected EnumParameter<AnimationId> animParam = new EnumParameter<>("Anim", AnimationId.TRAIN);
     protected EnumParameter<DirSign> dirParam = new EnumParameter<>("Dir", DirSign.X_POS);
     protected BooleanParameter triggerParam = new BooleanParameter("Trigger", false).setDescription("Trigger a shape").setMode(BooleanParameter.Mode.MOMENTARY);
@@ -67,8 +67,10 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
         super(lx);
 
         addParameter(hueParam);
+        addParameter(speedParam);
+        addParameter(subspdParam);
+
         addParameter(shapeParam);
-        addParameter(shpDurParam);
         addParameter(animParam);
         addParameter(dirParam);
         addParameter(triggerParam);
@@ -151,7 +153,7 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
     }
 
     public Shape createShape(LXVector origin) {
-        double duration = shpDurParam.getValue();
+        double duration = (60.0 / speedParam.getValue());
 
         switch (shapeParam.getEnum()) {
             case SWEEP:
@@ -163,9 +165,10 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
     }
 
     public Animation createAnimation() {
+        double duration = (60.0 / speedParam.getValue()) * 2 * Math.pow(0.5, subspdParam.getValuei());
         switch (animParam.getEnum()) {
             case TRAIN:
-                return new TrainAnimation(0.5);
+                return new TrainAnimation(duration);
         }
         return null;
     }
