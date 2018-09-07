@@ -20,7 +20,7 @@ import heronarts.lx.midi.MidiPitchBend;
  * MPE standard for polyphonic aftertouch and polyphonic pitch bend, such
  * as the ROLI Seaboard.
  */
-public class MidiPolyphonicExpressionPattern<M extends SLModel> extends SLPattern<M> {
+public abstract class MidiPolyphonicExpressionPattern<M extends SLModel> extends SLPattern<M> {
     static final int MAX_PITCHES = 128;
     static final int SLIDE_CONTROLLER = 74;  // Seaboard "slide" is sent on controller number 74
 
