@@ -18,6 +18,8 @@ public class AskewPlanes extends DPat {
     DiscreteParameter numPlanes = new DiscreteParameter("Number", new String[]{"3", "2", "1"});
 
     CompoundParameter thickness = new CompoundParameter("Thick", 0.2, 0.1, 0.9);
+    CompoundParameter slope = new CompoundParameter("Slope", 10, 1, 20);
+
     class Plane {
         private final SinLFO a;
         private final SinLFO b;
@@ -47,6 +49,7 @@ public class AskewPlanes extends DPat {
     public AskewPlanes(LX lx) {
         super(lx);
         addParameter(thickness);
+        addParameter(slope);
         planes = new Plane[NUM_PLANES];
         for (int i = 0; i < planes.length; ++i) {
             planes[i] = new Plane(i);
@@ -90,7 +93,7 @@ public class AskewPlanes extends DPat {
         return lx.hsb(
             huev + MathUtils.abs(p.x - model.cx) * .3f + p.y * .8f,
             MathUtils.max(0, 100 - .15f * MathUtils.abs(p.x - model.cx)),
-            MathUtils.constrain(700f * thickness.getValuef() - 10f * d, 0, 100)
+            MathUtils.constrain(700f * thickness.getValuef() - (slope.getValuef() * d), 0, 100)
         );
     }
 }
