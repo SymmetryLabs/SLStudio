@@ -337,5 +337,9 @@ public class PaletteLibrary {
             new LinePaletteExtractor(0, 1, 0.6, 0).getPalette(il.get(
                 "maxpixel-cc0-Elgol-Coast-Scotland-Stones-Lake-Isle-Of-Skye-540123.jpg"))
         );
+
+        pl.put("rasta", new ArrayPalette(new int[]{
+            0xff3300, 0xffcc00, 0x339933,
+        }));
     }
 }
