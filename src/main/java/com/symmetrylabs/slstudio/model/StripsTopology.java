@@ -68,7 +68,7 @@ public class StripsTopology {
         }
 
         /**
-         * Returns the first orthogonal direction to this direction
+         * Returns the second orthogonal direction to this direction
          */
         public Dir ortho2() {
             switch (this) {
@@ -191,6 +191,11 @@ public class StripsTopology {
         private static final int MAX_STRIPS = 4;
 
         /**
+         * A unique ID representing this bundle
+         */
+        public final int index;
+
+        /**
          * The direction this bundle points in
          */
         public Dir dir;
@@ -221,9 +226,10 @@ public class StripsTopology {
         private float maxProjection = Float.MIN_VALUE;
         private float projection = Float.MIN_VALUE;
 
-        private Bundle() {
+        private Bundle(int index) {
             strips = new int[MAX_STRIPS];
             Arrays.fill(strips, NO_STRIP);
+            this.index = index;
         }
 
         public Junction get(Sign s) {
@@ -499,13 +505,6 @@ public class StripsTopology {
         }
     }
 
-    /* Used for endpoint determination */
-    private class BundleNode {
-        float x, y, z;
-        Bundle bundle;
-        boolean isNegativeEnd;
-    }
-
     private final StripsModel model;
     public final List<Bundle> bundles;
     public final List<Junction> junctions;
@@ -520,7 +519,7 @@ public class StripsTopology {
         for (int i = 0; i < N; i++) {
             Strip s = model.getStripByIndex(i);
 
-            Bundle e = new Bundle();
+            Bundle e = new Bundle(bundles.size());
             e.addStrip(i);
             if (s.xRange < 1e-3 && s.yRange < 1e-3) {
                 e.dir = Dir.Z;

@@ -45,6 +45,7 @@ public class TopoTestPattern<T extends Strip> extends SLPattern<StripsModel<T>> 
             addParameter(bundleParam);
         } else {
             components = new ArrayList<>();
+            SLStudio.setWarning("TopoTestPattern", "no topology on model");
         }
     }
 
@@ -85,6 +86,9 @@ public class TopoTestPattern<T extends Strip> extends SLPattern<StripsModel<T>> 
 
     @Override
     public String getCaption() {
+        if (model.getTopology() == null) {
+            return null;
+        }
         Bundle b = null;
         if (modeParam.getEnum() == Mode.ITER) {
             b = model.getTopology().bundles.get(i);
@@ -114,10 +118,8 @@ public class TopoTestPattern<T extends Strip> extends SLPattern<StripsModel<T>> 
     @Override
     public void run(double deltaMs) {
         if (model.getTopology() == null) {
-            SLStudio.setWarning("TopoTestPattern", "no topology on model");
             return;
         }
-        SLStudio.setWarning("TopoTestPattern", null);
 
         Arrays.fill(colors, 0);
 
