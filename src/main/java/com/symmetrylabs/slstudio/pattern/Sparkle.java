@@ -30,11 +30,13 @@ public class Sparkle extends LXPattern {
         LXVector vector;
         float value;
         float hue;
+        int index;
         boolean hasPeaked;
 
-        Spark() {
+        Spark(int index) {
             List<LXVector> vectors = getVectorList();
-            vector = vectors.get((int) Math.floor(LXUtils.random(0, vectors.size())));
+            this.index = index;
+            vector = vectors.get(index);
             hue = (float) LXUtils.random(0, 1);
             boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
             hasPeaked = infiniteAttack;
@@ -59,6 +61,8 @@ public class Sparkle extends LXPattern {
 
     private float leftoverMs = 0;
     private List<Spark> sparks;
+    private boolean[] occupied;
+
 
     public Sparkle(LX lx) {
         super(lx);
@@ -70,6 +74,10 @@ public class Sparkle extends LXPattern {
         addParameter(hueVarianceParameter);
         addParameter(saturationParameter);
         sparks = new LinkedList<Spark>();
+        occupied = new boolean[getVectorList().size()];
+        for (int i = 0; i < occupied.length; i++) {
+            occupied[i] = false;
+        }
     }
 
     public void run(double deltaMs) {
@@ -79,7 +87,11 @@ public class Sparkle extends LXPattern {
         float msPerSpark = 1000.f / (float)((densityParameter.getValuef() + .01) * (model.xRange*10));
         while (leftoverMs > msPerSpark) {
             leftoverMs -= msPerSpark;
-            sparks.add(new Spark());
+            int index = (int) Math.floor(LXUtils.random(0, getVectorList().size()));
+            if (!occupied[index]) {
+                sparks.add(new Spark(index));
+                occupied[index] = true;
+            }
         }
 
         Arrays.fill(colors, Ops8.BLACK);
@@ -95,6 +107,7 @@ public class Sparkle extends LXPattern {
             Spark spark = i.next();
             boolean dead = spark.age(deltaMs);
             if (dead) {
+                occupied[spark.index] = false;
                 i.remove();
             }
         }
