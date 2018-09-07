@@ -4,6 +4,7 @@ import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.color.Spaces;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
+import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.slstudio.model.StripsTopology.Bundle;
 import com.symmetrylabs.slstudio.model.StripsTopology.Junction;
 import com.symmetrylabs.slstudio.model.StripsTopology.Sign;
@@ -12,6 +13,8 @@ import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -43,6 +46,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
 
     private DiscreteParameter armsParam = new DiscreteParameter("Arms", 2, 1, 6).setDescription("Initial branch arms from infection origin");
     private CompoundParameter branchParam = new CompoundParameter("Branch", 1.2, 1, 6).setDescription("Branching factor from subsequent junctions");
+    private DiscreteParameter spreadParam = new DiscreteParameter("Spread", 0, -1, 4);
     private BooleanParameter triggerParam = new BooleanParameter("Trigger", false).setDescription("Trigger a new infection").setMode(BooleanParameter.Mode.MOMENTARY);
 
     private DiscreteParameter noteLoParam = new DiscreteParameter("NoteLo", 36, 0, 127).setDescription("Lowest MIDI note of keyboard range");
@@ -63,6 +67,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
 
         addParameter(armsParam);
         addParameter(branchParam);
+        addParameter(spreadParam);
         addParameter(triggerParam);
 
         addParameter(noteLoParam);
@@ -136,7 +141,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     protected void startInfection(int key, float xMin, float xMax) {
         Infection inf = new Infection(
               selectOrigin(xMin, xMax), armsParam.getValue(), branchParam.getValue(),
-              hueParam.getValue(), grayParam.getValueb());
+              spreadParam.getValue(), hueParam.getValue(), grayParam.getValueb());
         infections.add(inf);
         infectionsByKey.put(key, inf);
     }
@@ -161,10 +166,12 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     }
 
     class Infection {
+        public LXVector originVector;
         public Map<Integer, Double> pointAges = new HashMap<>();
         public Map<Bundle, Integer> bundleTraversals = new HashMap<>();
         public List<Segment> growingSegments;
         public double branchFactor;
+        public double spreadFactor;
         public Random random = new Random();
         public double segmentAge = 0;
         public boolean expiring = false;;
@@ -173,9 +180,11 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         public double hue = 0;
         public boolean gray = false;
 
-        public Infection(Junction origin, double initialBranchFactor, double branchFactor, double hue, boolean gray) {
+        public Infection(Junction origin, double initialBranchFactor, double branchFactor, double spreadFactor, double hue, boolean gray) {
+            this.originVector = origin.loc;
             growingSegments = startSegments(origin, initialBranchFactor);
             this.branchFactor = branchFactor;
+            this.spreadFactor = spreadFactor;
             this.hue = hue;
             this.gray = gray;
         }
@@ -205,6 +214,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
             for (Segment s : growingSegments) {
                 double remain = 1 - s.progress;
                 if (progress > remain) {
+                    // We hit a node.  Branch out to some new bundles.
                     advanceSegment(s, remain);
                     List<Segment> nextSegments = startSegments(s.getEnd(), branchFactor);
                     for (Segment ns : nextSegments) {
@@ -240,8 +250,21 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
                 }
             }
 
+            // Order the available bundles in decreasing distance away from the infection origin.
+            Collections.sort(available, new Comparator<Bundle>() {
+                @Override public int compare(Bundle a, Bundle b) {
+                    double aDist = originVector.dist(a.getOpposite(origin).loc);
+                    double bDist = originVector.dist(b.getOpposite(origin).loc);
+                    if (aDist < bDist) return 1;
+                    if (aDist > bDist) return -1;
+                    return 0;
+                }
+            });
+
+            // Use the spread factor to bias the selection of bundles toward those further away.
             while (!available.isEmpty() && selected.size() < targetCount) {
-                Bundle pick = available.get(random.nextInt(available.size()));
+                double index = Math.pow(random.nextDouble(), Math.pow(2, spreadFactor));
+                Bundle pick = available.get((int) (index * available.size()));
                 selected.add(pick);
                 available.remove(pick);
             }

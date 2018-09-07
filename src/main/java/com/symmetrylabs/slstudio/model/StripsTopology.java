@@ -230,6 +230,10 @@ public class StripsTopology {
             return s == Sign.POS ? p : s == Sign.NEG ? n : null;
         }
 
+        public Junction getOpposite(Junction j) {
+            return j == p ? n : p;
+        }
+
         private void addStrip(int strip) {
             Preconditions.checkState(!finished, "cannot add to finished bundle");
             for (int i = 0; i < strips.length; i++) {
