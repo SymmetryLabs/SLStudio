@@ -294,8 +294,8 @@ public class PilotsSpirits<T extends Strip> extends SLPattern<StripsModel<T>> {
         float heartSize = spiritHeartParam.getValuef();
 
         /* Change colors and sizes */
-        float rHue = 0;
-        float yHue = 51;
+        float rHue = PilotsShow.RED_HUE;
+        float yHue = PilotsShow.YELLOW_HUE;
         float rAlpha = 1;
         float yAlpha = 1;
 

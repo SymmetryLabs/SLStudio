@@ -16,6 +16,7 @@ import heronarts.lx.modulator.ADSREnvelope;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXParameter;
 
 import java.util.*;
 
@@ -31,6 +32,9 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
 
     private DiscreteParameter maxSizeParam = new DiscreteParameter("scale", 10, 3, 20);
     private BooleanParameter noIntersectParam = new BooleanParameter("avoid", false);
+
+    private DiscreteParameter count = new DiscreteParameter("count", 6, 1, 20);
+    private BooleanParameter trigger = new BooleanParameter("trigger", false).setMode(BooleanParameter.Mode.MOMENTARY);
 
     private static class PrismIndexer {
         private StripsTopology.Sign x, y, z;
@@ -147,8 +151,22 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
         addParameter(maxSizeParam);
         addParameter(noIntersectParam);
 
+        addParameter(count);
+        addParameter(trigger);
+
         prisms = new ArrayList<>();
         midiPrisms = new HashMap<>();
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        if (p == trigger) {
+            if (trigger.getValueb()) {
+                attackPitch(0, count.getValuei());
+            } else {
+                releasePitch(0);
+            }
+        }
     }
 
     @Override
@@ -346,12 +364,8 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
         }
     }
 
-    @Override
-    public void noteOnReceived(MidiNoteOn note) {
-        releasePitch(note.getPitch());
-
+    private void attackPitch(int pitch, int add) {
         List<Prism> newPrisms = new ArrayList<>();
-        int add = note.getPitch() - 59;
         for (int i = 0; i < add; i++) {
             Prism p = null;
 
@@ -379,7 +393,13 @@ public class PilotsPrisms<T extends Strip> extends SLPattern<StripsModel<T>> {
                 newPrisms.add(p);
             }
         }
-        midiPrisms.put(note.getPitch(), newPrisms);
+        midiPrisms.put(pitch, newPrisms);
+    }
+
+    @Override
+    public void noteOnReceived(MidiNoteOn note) {
+        releasePitch(note.getPitch());
+        attackPitch(note.getPitch(), note.getPitch() - 59);
     }
 
     @Override

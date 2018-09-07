@@ -5,6 +5,7 @@ import heronarts.lx.LXEffect;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.LXWaveshape;
 import heronarts.lx.modulator.SawLFO;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.FunctionalParameter;
@@ -29,6 +30,9 @@ public class Strobe extends LXEffect {
 
     public final CompoundParameter frequency = (CompoundParameter)
         new CompoundParameter("Freq", 1, .05, 10).setUnits(LXParameter.Units.HERTZ);
+    public final BooleanParameter black =
+        new BooleanParameter("Black", true)
+            .setDescription("If false, clears to alpha 0. If true, clears to black with alpha 1.");
 
     private final SawLFO basis = new SawLFO(1, 0, new FunctionalParameter() {
         public double getValue() {
@@ -40,6 +44,7 @@ public class Strobe extends LXEffect {
         super(lx);
         addParameter(mode);
         addParameter(frequency);
+        addParameter(black);
         startModulator(basis);
     }
 
@@ -69,6 +74,7 @@ public class Strobe extends LXEffect {
     @Override
     public void run(double deltaMs, double amount) {
         float amt = this.enabledDamped.getValuef();
+        int clearColor = black.getValueb() ? LXColor.BLACK : 0x0;
         if (amt > 0) {
             float strobef = basis.getValuef();
             strobef = (float) getWaveshape().compute(strobef);
@@ -76,7 +82,7 @@ public class Strobe extends LXEffect {
             if (strobef < 1) {
                 if (strobef == 0) {
                     for (int i = 0; i < colors.length; ++i) {
-                        colors[i] = LXColor.BLACK;
+                        colors[i] = clearColor;
                     }
                 } else {
                     for (int i = 0; i < colors.length; ++i) {

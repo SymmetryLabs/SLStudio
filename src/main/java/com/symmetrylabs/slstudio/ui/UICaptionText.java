@@ -25,7 +25,7 @@ public class UICaptionText extends UITextOverlay {
         sources.remove(source);
     }
 
-    public String getText() {
+    public synchronized String getText() {
         String result = "";
         for (CaptionSource source : sources) {
             String caption = source.getCaption();

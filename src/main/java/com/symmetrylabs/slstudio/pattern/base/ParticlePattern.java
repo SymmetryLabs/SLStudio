@@ -49,7 +49,7 @@ public abstract class ParticlePattern extends SLPattern<SLModel> implements Mark
     public BooleanParameter flattenZ;
     public BooleanParameter drawParticles;
 
-    public CompoundParameter hue;
+    private CompoundParameter hue;
     public CompoundParameter saturation;
 
     public BooleanParameter enableBlobs;
@@ -120,7 +120,7 @@ public abstract class ParticlePattern extends SLPattern<SLModel> implements Mark
         addParameter(flattenZ = new BooleanParameter("flattenZ", false));
         addParameter(drawParticles = new BooleanParameter("drawParticles", false));
 
-        addParameter(hue = new CompoundParameter("hue", 0, 0, 360));
+        addParameter(hue = new CompoundParameter("hue", -1, -1, 360));
         addParameter(saturation = new CompoundParameter("saturation", 30, 0, 100));
 
         addParameter(enableBlobs = new BooleanParameter("enableBlobs", true));
@@ -213,8 +213,16 @@ public abstract class ParticlePattern extends SLPattern<SLModel> implements Mark
         }
     }
 
-    protected int getPaletteColor(float val) {
+    protected double getHue() {
         double h = hue.getValue();
+        if (h == -1) {
+            h = palette.getHue();
+        }
+        return h;
+    }
+
+    protected int getPaletteColor(float val) {
+        double h = getHue();
         double s = saturation.getValue();
         return LXColor.hsb(h, Math.min(s + val * 50, 100), FastMath.min(val * 100, 100));
     }

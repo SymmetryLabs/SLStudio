@@ -6,13 +6,11 @@ import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXVector;
 
 public class PilotsPlanes extends SLPattern<SLModel> {
     public static final String GROUP_NAME = PilotsShow.SHOW_NAME;
-
-    private static final int redColor = LXColor.hsb(0, 100, 100);
-    private static final int yellowColor = LXColor.hsb(51, 85, 100);
 
     private final CompoundParameter speedParam = new CompoundParameter("speed", 12, -500, 500);
     private final CompoundParameter distParam = new CompoundParameter("dist", 120, 10, 600);
@@ -22,6 +20,10 @@ public class PilotsPlanes extends SLPattern<SLModel> {
     private final CompoundParameter normalZParam = new CompoundParameter("z", 0.315, 0, 1);
     private final BooleanParameter redParam = new BooleanParameter("red", true);
 
+    private final BooleanParameter flipSpeedParam = new BooleanParameter("flips", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter flipColorParam = new BooleanParameter("flipc", false).setMode(BooleanParameter.Mode.MOMENTARY);
+
+    boolean flipSpeed = false;
     float off;
 
     public PilotsPlanes(LX lx) {
@@ -34,7 +36,19 @@ public class PilotsPlanes extends SLPattern<SLModel> {
         addParameter(normalYParam);
         addParameter(normalZParam);
 
+        addParameter(flipSpeedParam);
+        addParameter(flipColorParam);
+
         off = 0;
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        if (p == flipSpeedParam && flipSpeedParam.getValueb()) {
+            flipSpeed = !flipSpeed;
+        } else if (p == flipColorParam && flipColorParam.getValueb()) {
+            redParam.setValue(!redParam.getValueb());
+        }
     }
 
     @Override
@@ -47,10 +61,11 @@ public class PilotsPlanes extends SLPattern<SLModel> {
         LXVector normal = new LXVector(normalXParam.getValuef(), normalYParam.getValuef(), normalZParam.getValuef());
         normal.normalize();
 
-        off += speedParam.getValuef() / 1000f * (float) elapsedMs;
         float dist = distParam.getValuef();
+        off += (flipSpeed ? -1 : 1) * speedParam.getValuef() / 1000f * (float) elapsedMs;
+        off = off % dist;
         float halfThick = thickParam.getValuef() / 2f;
-        int color = redParam.getValueb() ? redColor : yellowColor;
+        int color = redParam.getValueb() ? PilotsShow.RED : PilotsShow.YELLOW;
 
         for (LXVector v : getVectors()) {
             float proj = normal.dot(v) + off;

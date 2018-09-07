@@ -2,11 +2,14 @@ package com.symmetrylabs.slstudio;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.net.SocketException;
 
+import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.kalpa.Anemometer;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
 import com.symmetrylabs.slstudio.performance.MidiFighterListener;
+import com.symmetrylabs.slstudio.ui.UIWorkspace;
 import heronarts.lx.LX;
 import com.symmetrylabs.shows.ShowRegistry;
 import com.symmetrylabs.shows.kalpa.TreeModelingTool;
@@ -25,6 +28,8 @@ import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.ui.UIFramerateControl;
+import com.symmetrylabs.slstudio.envelop.Envelop;
+import com.symmetrylabs.slstudio.envelop.EnvelopOscListener;
 import com.symmetrylabs.shows.kalpa.ui.UITreeModelingTool;
 import com.symmetrylabs.shows.kalpa.ui.UITreeModelAxes;
 import com.symmetrylabs.util.BlobTracker;
@@ -39,6 +44,7 @@ public class SLStudio extends PApplet {
     public static final Font MONO_FONT = new Font("Inconsolata-Bold-14.vlw", 14, 17);
     public static final String SHOW_FILE_NAME = ".show";
     public static final String RESTART_FILE_NAME = ".restart";
+    public static final int ENVELOP_OSC_PORT = 3377;
 
     private SLStudioLX lx;
     public Show show;
@@ -112,6 +118,16 @@ public class SLStudio extends PApplet {
 
                 SLStudio.this.dispatcher = Dispatcher.getInstance(lx);
 
+                Envelop envelop = Envelop.getInstance(lx);
+                lx.engine.registerComponent("envelop", envelop);
+                lx.engine.addLoopTask(envelop);
+
+                try {
+                    lx.engine.osc.receiver(ENVELOP_OSC_PORT).addListener(new EnvelopOscListener(lx, envelop));
+                } catch (SocketException sx) {
+                    throw new RuntimeException(sx);
+                }
+
                 show.setupLx(lx);
 
                 LXParameterListener limitListener = (parameter) -> {
@@ -172,6 +188,12 @@ public class SLStudio extends PApplet {
                     ui.preview.addComponent(new UITreeTrunk(applet));
                     uiTreeModelAxes = new UITreeModelAxes();
                     ui.preview.addComponent(uiTreeModelAxes);
+                }
+
+                if (show instanceof HasWorkspace) {
+                    HasWorkspace hwShow = (HasWorkspace) show;
+                    new UIWorkspace(ui, lx, hwShow.getWorkspace(), 0, 0, ui.leftPane.global.getContentWidth())
+                        .addToContainer(ui.leftPane.global);
                 }
 
                 show.setupUi(lx, ui);
