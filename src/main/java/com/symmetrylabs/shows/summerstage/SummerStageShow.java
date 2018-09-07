@@ -35,7 +35,7 @@ public class SummerStageShow extends CubesShow {
 
     static final float TOWER_VERTICAL_SPACING = 0;
     static final float TOWER_RISER = 14;
-    static final float SP = 26f;
+    static final float SP = 25.5f;
     static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
 
     static final float INCHES_PER_METER = 39.3701f;
@@ -515,7 +515,7 @@ public class SummerStageShow extends CubesShow {
         }
 
         CubesModel model = new CubesModel(towers, allCubesArr);
-        model.setTopologyTolerances(6, 6, 6);
+        model.setTopologyTolerances(6, 6, 8);
         return model;
     }
 
