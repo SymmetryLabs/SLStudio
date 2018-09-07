@@ -154,9 +154,13 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
             }
             LXListenableNormalizedParameter param = params.get(cc);
 
-            if (channel == 1) {
-                if (v == 1.0  && (param instanceof BooleanParameter)) {
-                    ((BooleanParameter)param).toggle();
+            if (channel == 1 && (param instanceof BooleanParameter)) {
+                BooleanParameter b = (BooleanParameter)param;
+                boolean on = v == 1.0;
+                if (b.getMode() == BooleanParameter.Mode.MOMENTARY) {
+                    b.setValue(on);
+                } else if (on) {
+                    b.toggle();
                 }
             } else if (!(param instanceof BooleanParameter)) {
                 param.setNormalized(v);
