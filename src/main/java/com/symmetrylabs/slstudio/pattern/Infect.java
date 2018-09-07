@@ -4,6 +4,7 @@ import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.color.Spaces;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
+import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.slstudio.model.StripsTopology.Bundle;
 import com.symmetrylabs.slstudio.model.StripsTopology.Junction;
 import com.symmetrylabs.slstudio.model.StripsTopology.Sign;
@@ -12,6 +13,8 @@ import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -20,6 +23,7 @@ import java.util.Random;
 
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.MidiNote;
 import heronarts.lx.midi.MidiNoteOff;
 import heronarts.lx.midi.MidiNoteOn;
@@ -36,12 +40,14 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     List<Infection> infections;
     Map<Integer, Infection> infectionsByKey;
 
-    private DiscreteParameter armsParam = new DiscreteParameter("Arms", 2, 2, 6).setDescription("Initial branch arms from infection origin");
-    private CompoundParameter branchParam = new CompoundParameter("Branch", 1, 1.2, 6).setDescription("Branching factor from subsequent junctions");
+    private CompoundParameter hueParam = new CompoundParameter("Hue", 0, -1, 1).setDescription("Hue adjustment");
     private CompoundParameter speedParam = new CompoundParameter("Speed", 128, 0, 1000).setDescription("Infection growth speed (strip lengths per minute)");
+    private BooleanParameter grayParam = new BooleanParameter("Gray", false).setDescription("Grayscale output");
+
+    private DiscreteParameter armsParam = new DiscreteParameter("Arms", 2, 1, 6).setDescription("Initial branch arms from infection origin");
+    private CompoundParameter branchParam = new CompoundParameter("Branch", 1.2, 1, 6).setDescription("Branching factor from subsequent junctions");
+    private DiscreteParameter spreadParam = new DiscreteParameter("Spread", 0, -1, 4);
     private BooleanParameter triggerParam = new BooleanParameter("Trigger", false).setDescription("Trigger a new infection").setMode(BooleanParameter.Mode.MOMENTARY);
-    private BooleanParameter gPaletteParam = new BooleanParameter("GPalette", false).setDescription("Use the global palette");
-    private BooleanParameter alphaParam = new BooleanParameter("Alpha", true).setDescription("Set alpha channel");
 
     private DiscreteParameter noteLoParam = new DiscreteParameter("NoteLo", 36, 0, 127).setDescription("Lowest MIDI note of keyboard range");
     private DiscreteParameter noteHiParam = new DiscreteParameter("NoteHi", 72, 0, 127).setDescription("Highest MIDI note of keyboard range");
@@ -55,12 +61,14 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         infections = new ArrayList<>();
         infectionsByKey = new HashMap<>();
 
+        addParameter(hueParam);
+        addParameter(speedParam);
+        addParameter(grayParam);
+
         addParameter(armsParam);
         addParameter(branchParam);
-        addParameter(speedParam);
+        addParameter(spreadParam);
         addParameter(triggerParam);
-        addParameter(gPaletteParam);
-        addParameter(alphaParam);
 
         addParameter(noteLoParam);
         addParameter(noteHiParam);
@@ -131,7 +139,9 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     }
 
     protected void startInfection(int key, float xMin, float xMax) {
-        Infection inf = new Infection(selectOrigin(xMin, xMax), armsParam.getValue(), branchParam.getValue());
+        Infection inf = new Infection(
+              selectOrigin(xMin, xMax), armsParam.getValue(), branchParam.getValue(),
+              spreadParam.getValue(), hueParam.getValue(), grayParam.getValueb());
         infections.add(inf);
         infectionsByKey.put(key, inf);
     }
@@ -156,19 +166,27 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     }
 
     class Infection {
+        public LXVector originVector;
         public Map<Integer, Double> pointAges = new HashMap<>();
         public Map<Bundle, Integer> bundleTraversals = new HashMap<>();
         public List<Segment> growingSegments;
         public double branchFactor;
+        public double spreadFactor;
         public Random random = new Random();
         public double segmentAge = 0;
         public boolean expiring = false;;
         public double expireStartAge = Double.MAX_VALUE;
         public double expireElapsed = 0;
+        public double hue = 0;
+        public boolean gray = false;
 
-        public Infection(Junction origin, double initialBranchFactor, double branchFactor) {
+        public Infection(Junction origin, double initialBranchFactor, double branchFactor, double spreadFactor, double hue, boolean gray) {
+            this.originVector = origin.loc;
             growingSegments = startSegments(origin, initialBranchFactor);
             this.branchFactor = branchFactor;
+            this.spreadFactor = spreadFactor;
+            this.hue = hue;
+            this.gray = gray;
         }
 
         public void beginExpiring() {
@@ -196,6 +214,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
             for (Segment s : growingSegments) {
                 double remain = 1 - s.progress;
                 if (progress > remain) {
+                    // We hit a node.  Branch out to some new bundles.
                     advanceSegment(s, remain);
                     List<Segment> nextSegments = startSegments(s.getEnd(), branchFactor);
                     for (Segment ns : nextSegments) {
@@ -231,8 +250,21 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
                 }
             }
 
+            // Order the available bundles in decreasing distance away from the infection origin.
+            Collections.sort(available, new Comparator<Bundle>() {
+                @Override public int compare(Bundle a, Bundle b) {
+                    double aDist = originVector.dist(a.getOpposite(origin).loc);
+                    double bDist = originVector.dist(b.getOpposite(origin).loc);
+                    if (aDist < bDist) return 1;
+                    if (aDist > bDist) return -1;
+                    return 0;
+                }
+            });
+
+            // Use the spread factor to bias the selection of bundles toward those further away.
             while (!available.isEmpty() && selected.size() < targetCount) {
-                Bundle pick = available.get(random.nextInt(available.size()));
+                double index = Math.pow(random.nextDouble(), Math.pow(2, spreadFactor));
+                Bundle pick = available.get((int) (index * available.size()));
                 selected.add(pick);
                 available.remove(pick);
             }
@@ -302,8 +334,6 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         }
 
         public void renderPoints(long[] array) {
-            boolean usePalette = gPaletteParam.getValueb();
-            boolean setAlpha = alphaParam.getValueb();
             for (Integer index : pointAges.keySet()) {
                 double age = pointAges.get(index);
                 double value = 0;
@@ -317,9 +347,9 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
                 int r = v;
                 int g = v;
                 int b = v;
-                int a = setAlpha ? v : Ops16.MAX;
-                if (usePalette && value > 0) {
-                    long c = Spaces.rgb8ToRgb16(palette.getColor(model.points[index]));
+                int a = v;
+                if (!gray && value > 0) {
+                    long c = Spaces.rgb8ToRgb16(LXColor.hsb(hue * 360, 100, 100));
                     r = Ops16.red(c);
                     g = Ops16.green(c);
                     b = Ops16.blue(c);
