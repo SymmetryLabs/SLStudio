@@ -25,7 +25,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 
-public class Infect<T extends Strip> extends SLPattern<StripsModel<T>> {
+public class Infect extends SLPattern<StripsModel<? extends Strip>> {
     List<Bundle> bundles;
     List<Junction> junctions;
     List<Infection> infections;

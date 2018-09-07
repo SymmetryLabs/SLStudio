@@ -39,7 +39,7 @@ public class Reverb extends LXEffect {
         PolyBuffer buffer = getPolyBuffer();
         Frame sourceFrame = findSourceFrame(time - delay);
         if (sourceFrame != null) {
-            sourceFrame.blendOver(buffer, Space.RGB16, wet);
+            sourceFrame.blendOnto(buffer, Space.RGB16, wet);
         }
 
         PolyBuffer saveBuffer;
@@ -49,9 +49,8 @@ public class Reverb extends LXEffect {
         } else {
             saveBuffer = new PolyBuffer(lx);
         }
-        Frame savedFrame = new Frame(time, saveBuffer);
-        savedFrame.copyFrom(buffer, Space.RGB16);
-        frames.add(savedFrame);
+        saveBuffer.copyFrom(buffer, Space.RGB16);
+        frames.add(new Frame(time, saveBuffer));
 
         removeFramesOlderThan(time - delay);
     }
@@ -83,12 +82,10 @@ public class Reverb extends LXEffect {
             return 0;
         }
 
-        public void copyFrom(PolyBuffer src, Space space) {
-            buffer.copyFrom(src, space);
-        }
-
-        public void blendOver(PolyBuffer dest, Space space, double amount) {
-            addBlend.blend(dest, buffer, amount, dest, space);
+        public void blendOnto(PolyBuffer dest, Space space, double amount) {
+            if (amount > 0) {
+                addBlend.blend(dest, buffer, amount, dest, space);
+            }
         }
     }
 }
