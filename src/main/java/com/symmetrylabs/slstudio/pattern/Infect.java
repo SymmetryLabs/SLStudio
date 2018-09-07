@@ -8,6 +8,10 @@ import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.slstudio.model.StripsTopology.Bundle;
 import com.symmetrylabs.slstudio.model.StripsTopology.Junction;
 import com.symmetrylabs.slstudio.model.StripsTopology.Sign;
+import com.symmetrylabs.slstudio.palettes.ArrayPalette;
+import com.symmetrylabs.slstudio.palettes.ColorPalette;
+import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
+import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 import com.symmetrylabs.slstudio.pattern.base.MidiPolyphonicExpressionPattern;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 
@@ -42,12 +46,19 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
 
     private CompoundParameter hueParam = new CompoundParameter("Hue", 0, -1, 1).setDescription("Hue adjustment");
     private CompoundParameter speedParam = new CompoundParameter("Speed", 128, 0, 1000).setDescription("Infection growth speed (strip lengths per minute)");
-    private BooleanParameter grayParam = new BooleanParameter("Gray", false).setDescription("Grayscale output");
 
     private DiscreteParameter armsParam = new DiscreteParameter("Arms", 2, 1, 6).setDescription("Initial branch arms from infection origin");
     private CompoundParameter branchParam = new CompoundParameter("Branch", 1.2, 1, 6).setDescription("Branching factor from subsequent junctions");
     private DiscreteParameter spreadParam = new DiscreteParameter("Spread", 0, -1, 4);
     private BooleanParameter triggerParam = new BooleanParameter("Trigger", false).setDescription("Trigger a new infection").setMode(BooleanParameter.Mode.MOMENTARY);
+
+    private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
+    DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());
+    CompoundParameter palStart = new CompoundParameter("palStart", 0, 0, 1);  // palette start point (fraction 0 - 1)
+    CompoundParameter palStop = new CompoundParameter("palStop", 1, 0, 1);  // palette stop point (fraction 0 - 1)
+    CompoundParameter palShift = new CompoundParameter("palShift", 0, 0, 1);  // shift in colour palette (fraction 0 - 1)
+    CompoundParameter palBias = new CompoundParameter("palBias", 0, -6, 6);  // bias colour palette toward start or stop
+    CompoundParameter palCutoff = new CompoundParameter("palCutoff", 0, 0, 1);  // palette value cutoff (fraction 0 - 1)
 
     private DiscreteParameter noteLoParam = new DiscreteParameter("NoteLo", 36, 0, 127).setDescription("Lowest MIDI note of keyboard range");
     private DiscreteParameter noteHiParam = new DiscreteParameter("NoteHi", 72, 0, 127).setDescription("Highest MIDI note of keyboard range");
@@ -63,12 +74,18 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
 
         addParameter(hueParam);
         addParameter(speedParam);
-        addParameter(grayParam);
 
         addParameter(armsParam);
         addParameter(branchParam);
         addParameter(spreadParam);
         addParameter(triggerParam);
+
+        addParameter(palette);
+        addParameter(palStart);
+        addParameter(palStop);
+        addParameter(palShift);
+        addParameter(palBias);
+        addParameter(palCutoff);
 
         addParameter(noteLoParam);
         addParameter(noteHiParam);
@@ -90,8 +107,8 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         int lo = noteLoParam.getValuei();
         int hi = noteHiParam.getValuei();
         if (pitch >= lo && pitch < hi) {
-            float xMin = model.xMin + model.xRange * (pitch - lo) / (hi - lo);
-            float xMax = model.xMin + model.xRange * (pitch + 1 - lo) / (hi - lo);
+            float xMin = model.xMin + model.xRange*(pitch - lo)/(hi - lo);
+            float xMax = model.xMin + model.xRange*(pitch + 1 - lo)/(hi - lo);
             startInfection(pitch, xMin, xMax);
         }
     }
@@ -103,7 +120,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
 
     @Override
     public void run(double deltaMs, PolyBuffer.Space preferredSpace) {
-        double deltaSec = deltaMs / 1000.0;
+        double deltaSec = deltaMs/1000.0;
         advanceInfections(deltaSec);
         renderInfections();
     }
@@ -140,8 +157,8 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
 
     protected void startInfection(int key, float xMin, float xMax) {
         Infection inf = new Infection(
-              selectOrigin(xMin, xMax), armsParam.getValue(), branchParam.getValue(),
-              spreadParam.getValue(), hueParam.getValue(), grayParam.getValueb());
+            selectOrigin(xMin, xMax), armsParam.getValue(), branchParam.getValue(),
+            spreadParam.getValue(), hueParam.getValue(), getPalette());
         infections.add(inf);
         infectionsByKey.put(key, inf);
     }
@@ -154,7 +171,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     protected Junction selectOrigin(float xMin, float xMax) {
         Junction origin = null;
         Junction closest = null;
-        float cx = (xMin + xMax) / 2;
+        float cx = (xMin + xMax)/2;
         int count = 0;
         do {
             origin = junctions.get(random.nextInt(junctions.size()));
@@ -163,6 +180,17 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
             else if (Math.abs(origin.loc.x - cx) < Math.abs(closest.loc.x - cx)) closest = origin;
         } while (++count < 100);
         return closest;
+    }
+
+    ColorPalette getPalette() {
+        ZigzagPalette pal = new ZigzagPalette();
+        pal.setPalette(paletteLibrary.get(palette.getOption()));
+        pal.setBottom(palStart.getValue());
+        pal.setTop(palStop.getValue());
+        pal.setBias(palBias.getValue());
+        pal.setShift(palShift.getValue());
+        pal.setCutoff(palCutoff.getValue());
+        return pal;
     }
 
     class Infection {
@@ -174,19 +202,20 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         public double spreadFactor;
         public Random random = new Random();
         public double segmentAge = 0;
-        public boolean expiring = false;;
+        public boolean expiring = false;
+        ;
         public double expireStartAge = Double.MAX_VALUE;
         public double expireElapsed = 0;
         public double hue = 0;
-        public boolean gray = false;
+        public ColorPalette palette;
 
-        public Infection(Junction origin, double initialBranchFactor, double branchFactor, double spreadFactor, double hue, boolean gray) {
+        public Infection(Junction origin, double initialBranchFactor, double branchFactor, double spreadFactor, double hue, ColorPalette palette) {
             this.originVector = origin.loc;
             growingSegments = startSegments(origin, initialBranchFactor);
             this.branchFactor = branchFactor;
             this.spreadFactor = spreadFactor;
             this.hue = hue;
-            this.gray = gray;
+            this.palette = palette;
         }
 
         public void beginExpiring() {
@@ -209,7 +238,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
 
             if (expiring) return;
 
-            double progress = speedParam.getValue() * deltaSec/60.0;
+            double progress = speedParam.getValue()*deltaSec/60.0;
             List<Segment> continuingSegments = new ArrayList<>();
             for (Segment s : growingSegments) {
                 double remain = 1 - s.progress;
@@ -264,7 +293,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
             // Use the spread factor to bias the selection of bundles toward those further away.
             while (!available.isEmpty() && selected.size() < targetCount) {
                 double index = Math.pow(random.nextDouble(), Math.pow(2, spreadFactor));
-                Bundle pick = available.get((int) (index * available.size()));
+                Bundle pick = available.get((int) (index*available.size()));
                 selected.add(pick);
                 available.remove(pick);
             }
@@ -294,29 +323,29 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
             switch (segment.bundle.dir) {
                 case X:
                     if (segment.sign == Sign.POS) {
-                        xMin = xMin + (xMax - xMin) * oldProgress;
-                        xMax = xMin + (xMax - xMin) * newProgress;
+                        xMin = xMin + (xMax - xMin)*oldProgress;
+                        xMax = xMin + (xMax - xMin)*newProgress;
                     } else {
-                        xMax = xMax + (xMin - xMax) * oldProgress;
-                      xMin = xMax + (xMin - xMax) * newProgress;
+                        xMax = xMax + (xMin - xMax)*oldProgress;
+                        xMin = xMax + (xMin - xMax)*newProgress;
                     }
                     break;
                 case Y:
                     if (segment.sign == Sign.POS) {
-                        yMin = yMin + (yMax - yMin) * oldProgress;
-                        yMax = yMin + (yMax - yMin) * newProgress;
+                        yMin = yMin + (yMax - yMin)*oldProgress;
+                        yMax = yMin + (yMax - yMin)*newProgress;
                     } else {
-                        yMax = yMax + (yMin - yMax) * oldProgress;
-                        yMin = yMax + (yMin - yMax) * newProgress;
+                        yMax = yMax + (yMin - yMax)*oldProgress;
+                        yMin = yMax + (yMin - yMax)*newProgress;
                     }
                     break;
                 case Z:
                     if (segment.sign == Sign.POS) {
-                        zMin = zMin + (zMax - zMin) * oldProgress;
-                        zMax = zMin + (zMax - zMin) * newProgress;
+                        zMin = zMin + (zMax - zMin)*oldProgress;
+                        zMax = zMin + (zMax - zMin)*newProgress;
                     } else {
-                        zMax = zMax + (zMin - zMax) * oldProgress;
-                        zMin = zMax + (zMin - zMax) * newProgress;
+                        zMax = zMax + (zMin - zMax)*oldProgress;
+                        zMin = zMax + (zMin - zMax)*newProgress;
                     }
                     break;
             }
@@ -325,8 +354,8 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
                 Strip strip = model.getStripByIndex(si);
                 for (LXPoint point : strip.points) {
                     if (point.x >= xMin && point.x <= xMax &&
-                          point.y >= yMin && point.y <= yMax &&
-                          point.z >= zMin && point.z <= zMax) {
+                        point.y >= yMin && point.y <= yMax &&
+                        point.z >= zMin && point.z <= zMax) {
                         pointAges.put(point.index, 0.0);
                     }
                 }
@@ -343,56 +372,62 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
                     value = 1.0 - (age/segmentAge);
                 }
                 if (value < 0) value = 0;
-                int v = (int) (value * Ops16.MAX + 0.5);
-                int r = v;
-                int g = v;
-                int b = v;
-                int a = v;
-                if (!gray && value > 0) {
-                    long c = Spaces.rgb8ToRgb16(LXColor.hsb(hue * 360, 100, 100));
-                    r = Ops16.red(c);
-                    g = Ops16.green(c);
-                    b = Ops16.blue(c);
-              }
-                array[index] = Ops16.add(array[index], Ops16.rgba(r, g, b, a));
+                long pc = palette.getColor16(value);
+                int r = Ops16.red(pc);
+                int g = Ops16.green(pc);
+                int b = Ops16.blue(pc);
+                int a = (int) (value*Ops16.MAX + 0.5);
+                if (value == 0) r = g = b = 0;
+                array[index] = Ops16.add(array[index], shiftHue(Ops16.rgba(r, g, b, a), hue));
+            }
+        }
+    }
+
+    public long shiftHue(long c, double shift) {
+        if (shift == 0) return c;
+        int color = Spaces.rgb16ToRgb8(c);
+
+        float h = LXColor.h(color);
+        float s = LXColor.s(color);
+        float b = LXColor.b(color);
+        int alpha = color & 0xff000000;
+        return Spaces.rgb8ToRgb16(alpha | (LXColor.hsb(h + shift * 360f, s, b) & 0x00ffffff));
+    }
+
+    class Segment {
+        public final Bundle bundle;
+        public final Sign sign;
+        public final double length;
+        public double progress = 0;
+        public double xMin = Double.MAX_VALUE;
+        public double xMax = Double.MIN_VALUE;
+        public double yMin = Double.MAX_VALUE;
+        public double yMax = Double.MIN_VALUE;
+        public double zMin = Double.MAX_VALUE;
+        public double zMax = Double.MIN_VALUE;
+
+        public Segment(Bundle bundle, Sign sign) {
+            this.bundle = bundle;
+            this.sign = sign;
+            this.length = getStart().loc.dist(getEnd().loc);
+
+            for (int si : bundle.strips) {
+                Strip strip = model.getStripByIndex(si);
+                xMin = Math.min(xMin, strip.xMin);
+                xMax = Math.max(xMax, strip.xMax);
+                yMin = Math.min(yMin, strip.yMin);
+                yMax = Math.max(yMax, strip.yMax);
+                zMin = Math.min(zMin, strip.zMin);
+                zMax = Math.max(zMax, strip.zMax);
             }
         }
 
-        class Segment {
-            public final Bundle bundle;
-            public final Sign sign;
-            public final double length;
-            public double progress = 0;
-            public double xMin = Double.MAX_VALUE;
-            public double xMax = Double.MIN_VALUE;
-            public double yMin = Double.MAX_VALUE;
-            public double yMax = Double.MIN_VALUE;
-            public double zMin = Double.MAX_VALUE;
-            public double zMax = Double.MIN_VALUE;
+        public Junction getStart() {
+            return bundle.get(sign.other());
+        }
 
-            public Segment(Bundle bundle, Sign sign) {
-                this.bundle = bundle;
-                this.sign = sign;
-                this.length = getStart().loc.dist(getEnd().loc);
-
-                for (int si : bundle.strips) {
-                    Strip strip = model.getStripByIndex(si);
-                    xMin = Math.min(xMin, strip.xMin);
-                    xMax = Math.max(xMax, strip.xMax);
-                    yMin = Math.min(yMin, strip.yMin);
-                    yMax = Math.max(yMax, strip.yMax);
-                    zMin = Math.min(zMin, strip.zMin);
-                    zMax = Math.max(zMax, strip.zMax);
-                }
-            }
-
-            public Junction getStart() {
-                return bundle.get(sign.other());
-            }
-
-            public Junction getEnd() {
-                return bundle.get(sign);
-            }
+        public Junction getEnd() {
+            return bundle.get(sign);
         }
     }
 }
