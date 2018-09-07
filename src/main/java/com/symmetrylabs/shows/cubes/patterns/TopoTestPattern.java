@@ -62,7 +62,6 @@ public class TopoTestPattern<T extends Strip> extends SLPattern<StripsModel<T>> 
     }
 
     private void paintBundleNeighbors(Bundle b) {
-        setBundleColor(b, LXColor.rgb(255, 255, 255));
         float h = 0;
         for (Sign end : StripsTopology.Sign.values()) {
             for (Sign s : StripsTopology.Sign.values()) {
@@ -75,6 +74,7 @@ public class TopoTestPattern<T extends Strip> extends SLPattern<StripsModel<T>> 
                 }
             }
         }
+        setBundleColor(b, LXColor.rgb(255, 255, 255));
     }
 
     private String index(Bundle b) {
@@ -90,12 +90,17 @@ public class TopoTestPattern<T extends Strip> extends SLPattern<StripsModel<T>> 
             return null;
         }
         Bundle b = null;
-        if (modeParam.getEnum() == Mode.ITER) {
-            b = model.getTopology().bundles.get(i);
-        } else if (modeParam.getEnum() == Mode.BUNDLE) {
-            b = model.getTopology().bundles.get(bundleParam.getValuei());
-        } else {
-            return null;
+        switch (modeParam.getEnum()) {
+            case ITER:
+                b = model.getTopology().bundles.get(i);
+                break;
+            case BUNDLE:
+                b = model.getTopology().bundles.get(bundleParam.getValuei());
+                break;
+            case CCS:
+                return String.format("%d components", components.size());
+            default:
+                return null;
         }
 
         return String.format(
@@ -146,20 +151,11 @@ public class TopoTestPattern<T extends Strip> extends SLPattern<StripsModel<T>> 
             }
 
             case ITER: {
-                if (model.getTopology() == null) {
-                    return;
-                }
                 elapsed += deltaMs;
-                if (elapsed < 500) {
-                    break;
+                if (elapsed > 500) {
+                    elapsed = 0;
+                    i = (i + 1) % model.getTopology().bundles.size();
                 }
-                elapsed = 0;
-                setColors(0);
-                i++;
-                if (i > model.getTopology().bundles.size()) {
-                    i = 0;
-                }
-                System.out.println(i);
                 Bundle b = model.getTopology().bundles.get(i);
                 paintBundleNeighbors(b);
                 break;
