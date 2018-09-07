@@ -18,6 +18,10 @@ public class AskewPlanes extends DPat {
     DiscreteParameter numPlanes = new DiscreteParameter("Number", new String[]{"3", "2", "1"});
 
     CompoundParameter thickness = new CompoundParameter("Thick", 0.2, 0.1, 0.9);
+    CompoundParameter bleed = new CompoundParameter("Bleed", 1.0f, 0.0f, 2.0f);
+    CompoundParameter speed = new CompoundParameter("Speed", 1.0f, 0.0f, 2.0f);
+
+
     class Plane {
         private final SinLFO a;
         private final SinLFO b;
@@ -47,6 +51,8 @@ public class AskewPlanes extends DPat {
     public AskewPlanes(LX lx) {
         super(lx);
         addParameter(thickness);
+        addParameter(bleed);
+        addParameter(speed);
         planes = new Plane[NUM_PLANES];
         for (int i = 0; i < planes.length; ++i) {
             planes[i] = new Plane(i);
@@ -63,6 +69,8 @@ public class AskewPlanes extends DPat {
     @Override
     protected void StartRun(double deltaMs) {
         huev = palette.getHuef();
+
+        deltaMs *= speed.getValuef();
 
         // This is super fucking bizarre. But if this is a for loop, the framerate
         // tanks to like 30FPS, instead of 60. Call them manually and it works fine.
@@ -84,7 +92,7 @@ public class AskewPlanes extends DPat {
         for (Plane plane : planes) {
             if (i++ <= numPlanes.getValuei() - 1) continue;
             if (plane.denom != 0) {
-                d = MathUtils.min(d, MathUtils.abs(plane.av * (p.x - model.cx) + plane.bv * (p.y - model.cy) + plane.cv) / plane.denom);
+                d = MathUtils.min(d, MathUtils.abs(plane.av * (p.x - model.cx) + plane.bv * (p.y - model.cy) + plane.cv) / (plane.denom * bleed.getValuef()));
             }
         }
         return lx.hsb(
