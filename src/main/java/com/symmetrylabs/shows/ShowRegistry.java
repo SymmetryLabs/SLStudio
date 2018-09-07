@@ -5,6 +5,7 @@ import java.util.*;
 import com.symmetrylabs.shows.demo.DemoShow;
 import com.symmetrylabs.shows.office.OfficeShow;
 import com.symmetrylabs.shows.pilots.PilotsShow;
+import com.symmetrylabs.shows.streetlamp.StreetlampShow;
 import processing.core.PApplet;
 
 import com.symmetrylabs.shows.oslo.OsloShow;
@@ -46,6 +47,7 @@ public class ShowRegistry {
         map.put("summerstage", () -> new SummerStageShow());
         map.put("pilots", () -> new PilotsShow());
         map.put("summerbbq", () -> new SummerBBQShow());
+        map.put("streetlamp", () -> new StreetlampShow());
     }
 
     static interface ShowBuilder {

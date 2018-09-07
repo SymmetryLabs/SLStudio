@@ -7,7 +7,6 @@ import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology.Dir;
 import com.symmetrylabs.slstudio.model.StripsTopology.Sign;
 import com.symmetrylabs.slstudio.pattern.base.MidiPolyphonicExpressionPattern;
-import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +16,6 @@ import java.util.List;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer.Space;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -40,20 +38,18 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
         TRICKLE
     }
 
-    public enum DirSign {
-        X_POS,
-        X_NEG,
-        Y_POS,
-        Y_NEG,
-        Z_POS,
-        Z_NEG
-    }
+    protected CompoundParameter hueParam = new CompoundParameter("Hue", 0, -1, 1);
+    protected DiscreteParameter speedParam = new DiscreteParameter("Speed", 128, 0, 1000).setDescription("Overall speed in BPM (duration is one beat)");
+    protected DiscreteParameter subspdParam = new DiscreteParameter("Subspd", 0, -3, 4).setDescription("Strip speed multiplier in powers of 2");
 
-    protected CompoundParameter hueParam = new CompoundParameter("Hue", 0, 0, 2);
     protected EnumParameter<ShapeId> shapeParam = new EnumParameter<>("Shape", ShapeId.SWEEP);
-    protected CompoundParameter shpDurParam = new CompoundParameter("ShpDur", 0.5, 0, 2);
     protected EnumParameter<AnimationId> animParam = new EnumParameter<>("Anim", AnimationId.TRAIN);
-    protected EnumParameter<DirSign> dirParam = new EnumParameter<>("Dir", DirSign.X_POS);
+
+    protected BooleanParameter negXParam = new BooleanParameter("-X", false).setDescription("Hold for -X direction").setMode(BooleanParameter.Mode.MOMENTARY);
+    protected BooleanParameter posXParam = new BooleanParameter("+X", false).setDescription("Hold for +X direction").setMode(BooleanParameter.Mode.MOMENTARY);
+    protected BooleanParameter negYParam = new BooleanParameter("-Y", false).setDescription("Hold for -Y direction").setMode(BooleanParameter.Mode.MOMENTARY);
+    protected BooleanParameter posYParam = new BooleanParameter("+Y", false).setDescription("Hold for +Y direction").setMode(BooleanParameter.Mode.MOMENTARY);
+    protected BooleanParameter negZParam = new BooleanParameter("-Z", false).setDescription("Hold for -Z direction").setMode(BooleanParameter.Mode.MOMENTARY);
     protected BooleanParameter triggerParam = new BooleanParameter("Trigger", false).setDescription("Trigger a shape").setMode(BooleanParameter.Mode.MOMENTARY);
 
     private DiscreteParameter noteLoParam = new DiscreteParameter("NoteLo", 36, 0, 127).setDescription("Lowest MIDI note of keyboard range");
@@ -67,10 +63,17 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
         super(lx);
 
         addParameter(hueParam);
+        addParameter(speedParam);
+        addParameter(subspdParam);
+
         addParameter(shapeParam);
-        addParameter(shpDurParam);
         addParameter(animParam);
-        addParameter(dirParam);
+
+        addParameter(negXParam);
+        addParameter(posXParam);
+        addParameter(negYParam);
+        addParameter(posYParam);
+        addParameter(negZParam);
         addParameter(triggerParam);
 
         addParameter(noteLoParam);
@@ -132,9 +135,14 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
     protected void trigger(Shape shape) {
         double hue = hueParam.getValue();
         Animation animation = createAnimation();
-        DirSign dirSign = dirParam.getEnum();
-        Dir dir = getDir(dirSign);
-        Sign sign = getSign(dirSign);
+        Dir dir = Dir.Y;
+        Sign sign = Sign.POS;
+
+        if (negXParam.isOn()) { dir = Dir.X; sign = Sign.NEG; }
+        if (posXParam.isOn()) { dir = Dir.X; sign = Sign.POS; }
+        if (negYParam.isOn()) { dir = Dir.Y; sign = Sign.NEG; }
+        if (posYParam.isOn()) { dir = Dir.Y; sign = Sign.POS; }
+        if (negZParam.isOn()) { dir = Dir.Z; sign = Sign.NEG; }
 
         List<ScheduledActivation> newActivations = new ArrayList<>();
         for (Strip strip : model.getStrips()) {
@@ -151,7 +159,7 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
     }
 
     public Shape createShape(LXVector origin) {
-        double duration = shpDurParam.getValue();
+        double duration = (60.0 / speedParam.getValue());
 
         switch (shapeParam.getEnum()) {
             case SWEEP:
@@ -163,9 +171,10 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
     }
 
     public Animation createAnimation() {
+        double duration = (60.0 / speedParam.getValue()) * 2 * Math.pow(0.5, subspdParam.getValuei());
         switch (animParam.getEnum()) {
             case TRAIN:
-                return new TrainAnimation(0.5);
+                return new TrainAnimation(duration);
         }
         return null;
     }
@@ -306,35 +315,6 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
         if (strip.xRange > strip.yRange && strip.xRange > strip.zRange) return Dir.X;
         if (strip.yRange > strip.zRange) return Dir.Y;
         return Dir.Z;
-    }
-
-    public static Dir getDir(DirSign dirSign) {
-        switch (dirSign) {
-            case X_NEG:
-            case X_POS:
-                return Dir.X;
-            case Y_NEG:
-            case Y_POS:
-                return Dir.Y;
-            case Z_NEG:
-            case Z_POS:
-                return Dir.Z;
-        }
-        return null;
-    }
-
-    public static Sign getSign(DirSign dirSign) {
-        switch (dirSign) {
-            case X_NEG:
-            case Y_NEG:
-            case Z_NEG:
-                return Sign.NEG;
-            case X_POS:
-            case Y_POS:
-            case Z_POS:
-                return Sign.POS;
-        }
-        return null;
     }
 
     public static double getPos(LXPoint point, Strip strip, Dir dir, Sign sign) {

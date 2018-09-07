@@ -94,7 +94,8 @@ public class SLStudioLX extends P3LX {
                 "@-F           Toggle frame rate status line\n" +
                 "@-G           Toggle UI geometry\n" +
                 "@-L           Load a show\n" +
-                "@-M           Modulation source\n" +
+                "@-M           Toggle modulation mapping mode\n" +
+                "@-Shift-M     Toggle MIDI mapping mode\n" +
                 "@-N           New channel\n" +
                 "@-P           Performance mode\n" +
                 "@-R           Rename channel or pattern\n" +
