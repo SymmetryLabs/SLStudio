@@ -35,25 +35,25 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
         /* no extra cart spacing here because they're not actually adjacent;
          * FSL is in front of BSL. */
         new PilotsModel.Cart(CartConfig.FSL,  new LXVector(
-            24 * PilotsModel.STRIP_LENGTH + 4 * PilotsModel.CART_SPACING, 0, 0)),
+            0, 0, 0)),
 
         new PilotsModel.Cart(CartConfig.BSL,  new LXVector(
-            20 * PilotsModel.STRIP_LENGTH + 4 * PilotsModel.CART_SPACING, 0, 3 * PilotsModel.STRIP_LENGTH)),
+            4 * PilotsModel.STRIP_LENGTH, 0, 3 * PilotsModel.STRIP_LENGTH)),
 
         new PilotsModel.Cart(CartConfig.BSCL, new LXVector(
-            16 * PilotsModel.STRIP_LENGTH + 3 * PilotsModel.CART_SPACING, 0, 3 * PilotsModel.STRIP_LENGTH)),
+            8 * PilotsModel.STRIP_LENGTH + PilotsModel.CART_SPACING, 0, 3 * PilotsModel.STRIP_LENGTH)),
 
         new PilotsModel.Cart(CartConfig.BSC,  new LXVector(
             12 * PilotsModel.STRIP_LENGTH + 2 * PilotsModel.CART_SPACING, 0, 3 * PilotsModel.STRIP_LENGTH)),
 
         new PilotsModel.Cart(CartConfig.BSCR, new LXVector(
-            8 * PilotsModel.STRIP_LENGTH + PilotsModel.CART_SPACING, 0, 3 * PilotsModel.STRIP_LENGTH)),
+            16 * PilotsModel.STRIP_LENGTH + 3 * PilotsModel.CART_SPACING, 0, 3 * PilotsModel.STRIP_LENGTH)),
 
         new PilotsModel.Cart(CartConfig.BSR,  new LXVector(
-            4 * PilotsModel.STRIP_LENGTH, 0, 3 * PilotsModel.STRIP_LENGTH)),
+            20 * PilotsModel.STRIP_LENGTH + 4 * PilotsModel.CART_SPACING, 0, 3 * PilotsModel.STRIP_LENGTH)),
 
         new PilotsModel.Cart(CartConfig.FSR,  new LXVector(
-            0, 0, 0))
+            24 * PilotsModel.STRIP_LENGTH + 4 * PilotsModel.CART_SPACING, 0, 0))
 
         // Temporary, just to send the "same thing" to each cart
 //        new PilotsModel.Cart(CartConfig.FSL,  new LXVector(0, 0, 0)),
