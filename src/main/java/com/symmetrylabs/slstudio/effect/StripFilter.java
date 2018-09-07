@@ -9,11 +9,13 @@ import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer.Space;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.LXParameter;
 
 public class StripFilter extends ModelSpecificEffect<StripsModel<? extends Strip>> {
     public final BooleanParameter xParam = new BooleanParameter("X", true);
     public final BooleanParameter yParam = new BooleanParameter("Y", true);
     public final BooleanParameter zParam = new BooleanParameter("Z", true);
+    public final BooleanParameter soloParam = new BooleanParameter("Solo", false);
 
     @Override
     protected StripsModel createEmptyModel() {
@@ -26,6 +28,28 @@ public class StripFilter extends ModelSpecificEffect<StripsModel<? extends Strip
         addParameter(xParam);
         addParameter(yParam);
         addParameter(zParam);
+        addParameter(soloParam);
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        if (p instanceof BooleanParameter && soloParam.getValueb()) {
+            BooleanParameter param = (BooleanParameter) p;
+            if (param.getValueb()) {
+                if (param == xParam) {
+                    yParam.setValue(false);
+                    zParam.setValue(false);
+                }
+                if (param == yParam) {
+                    xParam.setValue(false);
+                    zParam.setValue(false);
+                }
+                if (param == zParam) {
+                    xParam.setValue(false);
+                    yParam.setValue(false);
+                }
+            }
+        }
     }
 
     @Override
