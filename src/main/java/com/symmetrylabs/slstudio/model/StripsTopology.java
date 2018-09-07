@@ -180,6 +180,89 @@ public class StripsTopology {
             if (nz != null) bundles.add(nz);
             return bundles;
         }
+
+        private void updateLocationEstimate() {
+            float xsum = 0;
+            float ysum = 0;
+            float zsum = 0;
+            int xcount = 0;
+            int ycount = 0;
+            int zcount = 0;
+
+            if (px != null) {
+                ysum += px.planarLocation().a;
+                zsum += px.planarLocation().b;
+                ycount++;
+                zcount++;
+            }
+            if (nx != null) {
+                ysum += nx.planarLocation().a;
+                zsum += nx.planarLocation().b;
+                ycount++;
+                zcount++;
+            }
+            if (py != null) {
+                xsum += py.planarLocation().a;
+                zsum += py.planarLocation().b;
+                xcount++;
+                zcount++;
+            }
+            if (ny != null) {
+                xsum += ny.planarLocation().a;
+                zsum += ny.planarLocation().b;
+                xcount++;
+                zcount++;
+            }
+            if (pz != null) {
+                xsum += pz.planarLocation().a;
+                ysum += pz.planarLocation().b;
+                xcount++;
+                ycount++;
+            }
+            if (nz != null) {
+                xsum += nz.planarLocation().a;
+                ysum += nz.planarLocation().b;
+                xcount++;
+                ycount++;
+            }
+
+            if (xcount == 0) {
+                if (px != null) {
+                    xsum += px.endpoints().negative.x;
+                    xcount++;
+                }
+                if (nx != null) {
+                    xsum += nx.endpoints().positive.x;
+                    xcount++;
+                }
+            }
+            if (ycount == 0) {
+                if (py != null) {
+                    ysum += py.endpoints().negative.y;
+                    ycount++;
+                }
+                if (ny != null) {
+                    ysum += ny.endpoints().positive.y;
+                    ycount++;
+                }
+            }
+            if (zcount == 0) {
+                if (pz != null) {
+                    zsum += pz.endpoints().negative.z;
+                    zcount++;
+                }
+                if (nz != null) {
+                    zsum += nz.endpoints().positive.z;
+                    zcount++;
+                }
+            }
+
+            if (xcount != 0 && ycount != 0 && zcount != 0) {
+                loc = new LXVector(xsum / xcount, ysum / ycount, zsum / zcount);
+            } else {
+                loc = new LXVector(0, 0, 0);
+            }
+        }
     }
 
     /**
@@ -604,6 +687,7 @@ public class StripsTopology {
                     b.p.nz = b;
                     break;
             }
+            b.p.updateLocationEstimate();
 
             js = junctionTree.withinDistance(
                 be.negative.x, be.negative.y, be.negative.z, endpointTolerance);
@@ -644,24 +728,13 @@ public class StripsTopology {
                     b.n.pz = b;
                     break;
             }
+            b.n.updateLocationEstimate();
         }
 
-        /* Find good locations for each of the junctions now that we have the final
-         * set of bundles for each of them. We take the junction location to be the
-         * midpoint of the endpoints of all of the adjacent bundles. */
+        /* Find good locations for each of the junctions now that we have
+         * the final set of bundles for each of them. */
         for (Junction j : junctions) {
-            j.loc = new LXVector(0, 0, 0);
-            int count = 0;
-
-            for (Dir d : Dir.values()) {
-                for (Sign s : Sign.values()) {
-                    if (j.get(d, s) != null) {
-                        j.loc.add(j.get(d, s).endpoints.get(s));
-                        count++;
-                    }
-                }
-            }
-            j.loc.mult(1f / count);
+            j.updateLocationEstimate();
         }
     }
 }
