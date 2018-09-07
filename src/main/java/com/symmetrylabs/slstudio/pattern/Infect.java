@@ -7,6 +7,7 @@ import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology.Bundle;
 import com.symmetrylabs.slstudio.model.StripsTopology.Junction;
 import com.symmetrylabs.slstudio.model.StripsTopology.Sign;
+import com.symmetrylabs.slstudio.pattern.base.MidiPolyphonicExpressionPattern;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 
 import java.util.ArrayList;
@@ -19,24 +20,32 @@ import java.util.Random;
 
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
+import heronarts.lx.midi.MidiNote;
+import heronarts.lx.midi.MidiNoteOff;
+import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.transform.LXVector;
 
-public class Infect extends SLPattern<StripsModel<? extends Strip>> {
+public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extends Strip>> {
     List<Bundle> bundles;
     List<Junction> junctions;
     List<Infection> infections;
     Map<Integer, Infection> infectionsByKey;
 
-    private DiscreteParameter armsParam = new DiscreteParameter("Arms", 2, 1, 6).setDescription("Initial branch arms from infection origin");
-    private CompoundParameter branchParam = new CompoundParameter("Branch", 1, 1, 6).setDescription("Branching factor from subsequent junctions");
+    private DiscreteParameter armsParam = new DiscreteParameter("Arms", 2, 2, 6).setDescription("Initial branch arms from infection origin");
+    private CompoundParameter branchParam = new CompoundParameter("Branch", 1, 1.2, 6).setDescription("Branching factor from subsequent junctions");
     private CompoundParameter speedParam = new CompoundParameter("Speed", 128, 0, 1000).setDescription("Infection growth speed (strip lengths per minute)");
     private BooleanParameter triggerParam = new BooleanParameter("Trigger", false).setDescription("Trigger a new infection").setMode(BooleanParameter.Mode.MOMENTARY);
     private BooleanParameter gPaletteParam = new BooleanParameter("GPalette", false).setDescription("Use the global palette");
-    private BooleanParameter alphaParam = new BooleanParameter("Alpha", false).setDescription("Set alpha channel");
+    private BooleanParameter alphaParam = new BooleanParameter("Alpha", true).setDescription("Set alpha channel");
+
+    private DiscreteParameter noteLoParam = new DiscreteParameter("NoteLo", 36, 0, 127).setDescription("Lowest MIDI note of keyboard range");
+    private DiscreteParameter noteHiParam = new DiscreteParameter("NoteHi", 72, 0, 127).setDescription("Highest MIDI note of keyboard range");
+
     protected Random random = new Random();
 
     public Infect(LX lx) {
@@ -52,6 +61,9 @@ public class Infect extends SLPattern<StripsModel<? extends Strip>> {
         addParameter(triggerParam);
         addParameter(gPaletteParam);
         addParameter(alphaParam);
+
+        addParameter(noteLoParam);
+        addParameter(noteHiParam);
     }
 
     @Override
@@ -59,10 +71,26 @@ public class Infect extends SLPattern<StripsModel<? extends Strip>> {
         if (p instanceof BooleanParameter) {
             BooleanParameter param = (BooleanParameter) p;
             if (param == triggerParam) {
-                if (param.getValueb()) startInfection(0);
+                if (param.getValueb()) startInfection(0, model.xMin, model.xMax);
                 else stopInfection(0);
             }
         }
+    }
+
+    @Override
+    public void noteOn(int pitch, double velocity) {
+        int lo = noteLoParam.getValuei();
+        int hi = noteHiParam.getValuei();
+        if (pitch >= lo && pitch < hi) {
+            float xMin = model.xMin + model.xRange * (pitch - lo) / (hi - lo);
+            float xMax = model.xMin + model.xRange * (pitch + 1 - lo) / (hi - lo);
+            startInfection(pitch, xMin, xMax);
+        }
+    }
+
+    @Override
+    public void noteOff(int pitch) {
+        stopInfection(pitch);
     }
 
     @Override
@@ -70,15 +98,6 @@ public class Infect extends SLPattern<StripsModel<? extends Strip>> {
         double deltaSec = deltaMs / 1000.0;
         advanceInfections(deltaSec);
         renderInfections();
-    }
-
-    @Override
-    public String getCaption() {
-        int segmentCount = 0;
-        for (Infection inf : infections) {
-            segmentCount += inf.growingSegments.size();
-        }
-        return String.format(Locale.US, "Infections:%3d / Growing segments:%3d", infections.size(), segmentCount);
     }
 
     protected void advanceInfections(double deltaSec) {
@@ -111,8 +130,8 @@ public class Infect extends SLPattern<StripsModel<? extends Strip>> {
         markModified(PolyBuffer.Space.RGB16);
     }
 
-    protected void startInfection(int key) {
-        Infection inf = new Infection(selectOrigin(), armsParam.getValue(), branchParam.getValue());
+    protected void startInfection(int key, float xMin, float xMax) {
+        Infection inf = new Infection(selectOrigin(xMin, xMax), armsParam.getValue(), branchParam.getValue());
         infections.add(inf);
         infectionsByKey.put(key, inf);
     }
@@ -122,8 +141,18 @@ public class Infect extends SLPattern<StripsModel<? extends Strip>> {
         if (inf != null) inf.beginExpiring();
     }
 
-    protected Junction selectOrigin() {
-        return junctions.get(random.nextInt(junctions.size()));
+    protected Junction selectOrigin(float xMin, float xMax) {
+        Junction origin = null;
+        Junction closest = null;
+        float cx = (xMin + xMax) / 2;
+        int count = 0;
+        do {
+            origin = junctions.get(random.nextInt(junctions.size()));
+            if (origin.loc.x >= xMin && origin.loc.x < xMax) return origin;
+            if (closest == null) closest = origin;
+            else if (Math.abs(origin.loc.x - cx) < Math.abs(closest.loc.x - cx)) closest = origin;
+        } while (++count < 100);
+        return closest;
     }
 
     class Infection {

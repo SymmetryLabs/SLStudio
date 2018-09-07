@@ -6,6 +6,7 @@ import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology.Dir;
 import com.symmetrylabs.slstudio.model.StripsTopology.Sign;
+import com.symmetrylabs.slstudio.pattern.base.MidiPolyphonicExpressionPattern;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXVector;
@@ -28,7 +30,7 @@ import heronarts.lx.transform.LXVector;
  * MIDI notes trigger activators, activators trigger strip animations.
  * Activators, their hues, the animations, and the strip directions are selectable.
  */
-public class Lattice extends SLPattern<StripsModel<? extends Strip>> {
+public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? extends Strip>> {
     public enum AnimationId {
         TRAIN
     };
@@ -54,6 +56,9 @@ public class Lattice extends SLPattern<StripsModel<? extends Strip>> {
     protected EnumParameter<DirSign> dirParam = new EnumParameter<>("Dir", DirSign.X_POS);
     protected BooleanParameter triggerParam = new BooleanParameter("Trigger", false).setDescription("Trigger a shape").setMode(BooleanParameter.Mode.MOMENTARY);
 
+    private DiscreteParameter noteLoParam = new DiscreteParameter("NoteLo", 36, 0, 127).setDescription("Lowest MIDI note of keyboard range");
+    private DiscreteParameter noteHiParam = new DiscreteParameter("NoteHi", 72, 0, 127).setDescription("Highest MIDI note of keyboard range");
+
     List<ScheduledActivation> activations = new ArrayList<>();
     List<AnimationRun> activeRuns = new ArrayList<>();
     double timeSec = 0;
@@ -67,6 +72,9 @@ public class Lattice extends SLPattern<StripsModel<? extends Strip>> {
         addParameter(animParam);
         addParameter(dirParam);
         addParameter(triggerParam);
+
+        addParameter(noteLoParam);
+        addParameter(noteHiParam);
     }
 
     @Override
@@ -82,13 +90,14 @@ public class Lattice extends SLPattern<StripsModel<? extends Strip>> {
     }
 
     @Override
-    public void noteOnReceived(MidiNoteOn noteOn) {
-        int pitch = noteOn.getPitch();
-        double velocity = noteOn.getVelocity() / 127.0;
-        if (pitch >= 48 && pitch <= 72) {
-            float x = model.xMin + model.xRange * ((pitch - 48f) / 24f);
+    public void noteOn(int pitch, double velocity) {
+        int lo = noteLoParam.getValuei();
+        int hi = noteHiParam.getValuei();
+        if (pitch >= lo && pitch < hi) {
+            float x = model.xMin + model.xRange * (pitch - lo) / (hi - lo);
             float y = model.yMin + model.yRange * 0.8f;
-            trigger(createShape(new LXVector(x, y, model.cz)));
+            LXVector origin = new LXVector(x, y, model.cz);
+            trigger(createShape(origin));
         }
     }
 
