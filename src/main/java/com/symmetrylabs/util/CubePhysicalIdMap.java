@@ -3,7 +3,9 @@ package com.symmetrylabs.util;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.symmetrylabs.slstudio.SLStudio;
+import processing.core.PApplet;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,10 +14,10 @@ import java.util.Set;
 public class CubePhysicalIdMap {
     protected final Map<String, String> physicalIds = new HashMap<>();
     protected final Set<String> physicalIdsNotFound = new HashSet<>();
-    protected final static String FILENAME = "physid_to_mac.json";
+    protected final static String FILENAME = "data/physid_to_mac.json";
 
     public CubePhysicalIdMap() {
-        byte[] bytes = SLStudio.applet.loadBytes(FILENAME);
+        byte[] bytes = PApplet.loadBytes(new File(FILENAME));
         if (bytes != null) {
             Map<String, String> map;
             try {
