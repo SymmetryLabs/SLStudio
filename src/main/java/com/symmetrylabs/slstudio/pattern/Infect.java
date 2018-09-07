@@ -45,6 +45,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     Map<Integer, Infection> infectionsByKey;
 
     private CompoundParameter hueParam = new CompoundParameter("Hue", 0, -1, 1).setDescription("Hue adjustment");
+    CompoundParameter hVarParam = new CompoundParameter("HVar", 1, 0, 4);  // hue variation
     private CompoundParameter speedParam = new CompoundParameter("Speed", 128, 0, 1000).setDescription("Infection growth speed (strip lengths per minute)");
 
     private DiscreteParameter armsParam = new DiscreteParameter("Arms", 3, 1, 6).setDescription("Initial branch arms from infection origin");
@@ -73,6 +74,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         infectionsByKey = new HashMap<>();
 
         addParameter(hueParam);
+        addParameter(hVarParam);
         addParameter(speedParam);
 
         addParameter(armsParam);
@@ -158,7 +160,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     protected void startInfection(int key, float xMin, float xMax) {
         Infection inf = new Infection(
             selectOrigin(xMin, xMax), armsParam.getValue(), branchParam.getValue(),
-            spreadParam.getValue(), hueParam.getValue(), getPalette());
+            spreadParam.getValue(), hueParam.getValue(), hVarParam.getValue(), getPalette());
         infections.add(inf);
         infectionsByKey.put(key, inf);
     }
@@ -207,14 +209,16 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         public double expireStartAge = Double.MAX_VALUE;
         public double expireElapsed = 0;
         public double hue = 0;
+        public double hueVar = 1;
         public ColorPalette palette;
 
-        public Infection(Junction origin, double initialBranchFactor, double branchFactor, double spreadFactor, double hue, ColorPalette palette) {
+        public Infection(Junction origin, double initialBranchFactor, double branchFactor, double spreadFactor, double hue, double hueVar, ColorPalette palette) {
             this.originVector = origin.loc;
             growingSegments = startSegments(origin, initialBranchFactor);
             this.branchFactor = branchFactor;
             this.spreadFactor = spreadFactor;
             this.hue = hue;
+            this.hueVar = hueVar;
             this.palette = palette;
         }
 
@@ -378,7 +382,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
                 int b = Ops16.blue(pc);
                 int a = (int) (value*Ops16.MAX + 0.5);
                 if (value == 0) r = g = b = 0;
-                array[index] = Ops16.add(array[index], shiftHue(Ops16.rgba(r, g, b, a), hue));
+                array[index] = Ops16.add(array[index], shiftHue(Ops16.rgba(r, g, b, a), hue, hueVar, palette.getHueCenter()));
             }
         }
     }
@@ -392,6 +396,26 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         float b = LXColor.b(color);
         int alpha = color & 0xff000000;
         return Spaces.rgb8ToRgb16(alpha | (LXColor.hsb(h + shift * 360f, s, b) & 0x00ffffff));
+    }
+
+    public static long shiftHue(long c, double shift, double var, double center) {
+        if (shift == 0 && var == 1) return c;
+        int color = Spaces.rgb16ToRgb8(c);
+
+        double h = LXColor.h(color) / 360.0;
+        double s = LXColor.s(color) / 100.0;
+        double b = LXColor.b(color) / 100.0;
+        int alpha = color & 0xff000000;
+
+        h = h - center + 0.5;
+        float hf = (float) Math.floor(h);
+        h = h - hf;
+        h = h - 0.5;
+        h *= var;
+        h = h + center;
+        h += shift;
+
+        return Spaces.rgb8ToRgb16(alpha | (LXColor.hsb(h * 360, s * 100, b * 100) & 0x00ffffff));
     }
 
     class Segment {
