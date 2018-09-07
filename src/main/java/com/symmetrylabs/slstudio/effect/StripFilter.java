@@ -38,7 +38,7 @@ public class StripFilter extends ModelSpecificEffect<StripsModel<? extends Strip
             if (!filterAllows(strip)) {
                 for (LXPoint point : strip.points) {
                     long c = colors[point.index];
-                    colors[point.index] = (alphaFactor == 0) ? c & 0x0000_ffff_ffff_ffffL :
+                    colors[point.index] = (alphaFactor == 0) ? 0 :
                             Ops16.rgba(
                                     Ops16.red(c), Ops16.green(c), Ops16.blue(c),
                                     ((int) (Ops16.alpha(c) * alphaFactor + 0.5))
