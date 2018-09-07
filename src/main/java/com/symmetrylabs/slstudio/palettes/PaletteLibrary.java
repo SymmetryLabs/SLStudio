@@ -107,7 +107,6 @@ public class PaletteLibrary {
     }
 
     static void loadPalettes(PaletteLibrary pl) {
-        pl.put("!solid.red", new ZigzagPalette(new int[] {0xff0000, 0xff0000}));
         /* Images loaded remotely from the Internet */
     /*
     pl.set("cities.london", new com.symmetrylabs.slstudio.palettes.DeckChairSource("5568230b7b2853502527fd4e"), new com.symmetrylabs.slstudio.palettes.ArcPaletteExtractor(0.44, 100));
