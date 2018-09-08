@@ -27,7 +27,7 @@ public class CubeFlash extends SLPattern<CubesModel> {
     private CompoundParameter hueVarianceParameter = new CompoundParameter("HueVar", 0.25);
     private CompoundParameter saturationParameter = new CompoundParameter("Sat", 0.5);
 
-    static LinkedList<Integer> freeCubes = new LinkedList();
+    LinkedList<Integer> freeCubes = new LinkedList();
 
     class Flash {
         int index;
@@ -36,8 +36,8 @@ public class CubeFlash extends SLPattern<CubesModel> {
         float hue;
         boolean hasPeaked;
 
-        Flash() {
-            index = freeCubes.pop();
+        Flash(int index) {
+            this.index = index;
             cube = model.getCubes().get(index);
             hue = palette.getHuef() + (random(1) * 120 * hueVarianceParameter.getValuef());
             boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
@@ -87,7 +87,8 @@ public class CubeFlash extends SLPattern<CubesModel> {
         while (leftoverMs > msPerFlash) {
             leftoverMs -= msPerFlash;
             if (freeCubes.size() > 0) {
-                flashes.add(new Flash());
+                int index = freeCubes.pop();
+                flashes.add(new Flash(index));
             }
         }
 
