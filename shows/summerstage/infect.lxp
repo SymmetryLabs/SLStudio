@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1536354851021,
+  "timestamp": 1536381481409,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -12,7 +12,7 @@
       "scene-3": false,
       "scene-4": false,
       "scene-5": false,
-      "crossfader": 0.5,
+      "crossfader": 0.0,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
       "focusedChannel": 0,
@@ -71,7 +71,7 @@
         "warps": [],
         "effects": [],
         "clips": [],
-        "patternIndex": 7,
+        "patternIndex": 4,
         "patterns": [
           {
             "id": 2598,
@@ -79,11 +79,15 @@
             "modulationColor": -14090496,
             "parameters": {
               "label": "Infect",
-              "Hue": 0.0,
-              "Speed": 128.0,
+              "Hue": -0.2199999950826168,
+              "HVar": 1.0,
+              "Sat": 1.0,
+              "Speed": 622.9999889358878,
+              "Tempo": false,
               "Arms": 3,
               "Branch": 1.2,
               "Spread": 0,
+              "MaxLen": 24,
               "Trigger": false,
               "palette": 0,
               "palStart": 0.0,
@@ -102,16 +106,212 @@
             "autoCycleEnabled": true
           },
           {
+            "id": 2608,
+            "class": "com.symmetrylabs.slstudio.pattern.Infect",
+            "modulationColor": -14811392,
+            "parameters": {
+              "label": "InfectNeon",
+              "Hue": 0.0,
+              "HVar": 1.0,
+              "Sat": 1.0,
+              "Speed": 838.5826771653543,
+              "Tempo": false,
+              "Arms": 3,
+              "Branch": 1.2,
+              "Spread": 0,
+              "MaxLen": 24,
+              "Trigger": false,
+              "palette": 14,
+              "palStart": 0.11999999731779099,
+              "palStop": 0.7500000055879354,
+              "palShift": 0.0,
+              "palBias": 0.0,
+              "palCutoff": 0.14999999664723873,
+              "NoteLo": 36,
+              "NoteHi": 72
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 2612,
+            "class": "com.symmetrylabs.slstudio.pattern.Infect",
+            "modulationColor": -39424,
+            "parameters": {
+              "label": "InfectFire",
+              "Hue": 0.0,
+              "HVar": 1.0,
+              "Sat": 1.4488188976377954,
+              "Speed": 627.9999981373549,
+              "Tempo": false,
+              "Arms": 3,
+              "Branch": 1.2,
+              "Spread": 0,
+              "MaxLen": 24,
+              "Trigger": false,
+              "palette": 29,
+              "palStart": 0.0,
+              "palStop": 0.7500000055879354,
+              "palShift": 0.0,
+              "palBias": 0.0,
+              "palCutoff": 0.0,
+              "NoteLo": 36,
+              "NoteHi": 72
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 2610,
+            "class": "com.symmetrylabs.slstudio.pattern.Infect",
+            "modulationColor": -16731393,
+            "parameters": {
+              "label": "InfectSunset",
+              "Hue": -0.07362204379820092,
+              "HVar": 1.0,
+              "Sat": 1.4488188976377954,
+              "Speed": 826.7716535433071,
+              "Tempo": false,
+              "Arms": 3,
+              "Branch": 1.2,
+              "Spread": 0,
+              "MaxLen": 24,
+              "Trigger": false,
+              "palette": 22,
+              "palStart": 0.08999999798834324,
+              "palStop": 0.6800000071525574,
+              "palShift": 0.0,
+              "palBias": 0.0,
+              "palCutoff": 0.0,
+              "NoteLo": 36,
+              "NoteHi": 73
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 2614,
+            "class": "com.symmetrylabs.slstudio.pattern.Infect",
+            "modulationColor": -56832,
+            "parameters": {
+              "label": "InfectMeteor",
+              "Hue": 0.0,
+              "HVar": 1.0,
+              "Sat": 1.0999999977648258,
+              "Speed": 682.9999875947833,
+              "Tempo": false,
+              "Arms": 3,
+              "Branch": 1.2,
+              "Spread": 0,
+              "MaxLen": 24,
+              "Trigger": false,
+              "palette": 34,
+              "palStart": 0.0,
+              "palStop": 0.3200000151991844,
+              "palShift": 0.0,
+              "palBias": 1.3199999704957008,
+              "palCutoff": 0.0,
+              "NoteLo": 36,
+              "NoteHi": 72
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 2604,
+            "class": "com.symmetrylabs.slstudio.pattern.Infect",
+            "modulationColor": -35584,
+            "parameters": {
+              "label": "InfectRetrowave",
+              "Hue": 0.03937007874015741,
+              "HVar": 3.37007874015748,
+              "Sat": 1.1496062992125984,
+              "Speed": 843.6614282751882,
+              "Tempo": false,
+              "Arms": 3,
+              "Branch": 1.2,
+              "Spread": 0,
+              "MaxLen": 41,
+              "Trigger": false,
+              "palette": 7,
+              "palStart": 0.18999999575316906,
+              "palStop": 1.0,
+              "palShift": 0.0,
+              "palBias": -2.159999817609787,
+              "palCutoff": 0.0,
+              "NoteLo": 36,
+              "NoteHi": 71
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 2606,
+            "class": "com.symmetrylabs.slstudio.pattern.Infect",
+            "modulationColor": -3932416,
+            "parameters": {
+              "label": "InfectIce",
+              "Hue": 0.0,
+              "HVar": 1.0,
+              "Sat": 1.0,
+              "Speed": 649.6062992125984,
+              "Tempo": false,
+              "Arms": 3,
+              "Branch": 1.2,
+              "Spread": 0,
+              "MaxLen": 24,
+              "Trigger": false,
+              "palette": 12,
+              "palStart": 0.0,
+              "palStop": 0.6500000078231096,
+              "palShift": 0.0,
+              "palBias": 0.5999999865889549,
+              "palCutoff": 0.12999999709427357,
+              "NoteLo": 36,
+              "NoteHi": 72
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
             "id": 2600,
             "class": "com.symmetrylabs.slstudio.pattern.Infect",
             "modulationColor": -16763393,
             "parameters": {
               "label": "InfectSalmon",
               "Hue": 0.0,
-              "Speed": 128.0,
+              "HVar": 1.2913385826771653,
+              "Sat": 2.0,
+              "Speed": 622.9999889358878,
+              "Tempo": false,
               "Arms": 3,
               "Branch": 1.2,
               "Spread": 0,
+              "MaxLen": 24,
               "Trigger": false,
               "palette": 2,
               "palStart": 0.0,
@@ -136,10 +336,14 @@
             "parameters": {
               "label": "InfectPastel",
               "Hue": 0.0,
-              "Speed": 128.0,
+              "HVar": 1.0,
+              "Sat": 1.0,
+              "Speed": 652.9999882653356,
+              "Tempo": false,
               "Arms": 3,
               "Branch": 1.2,
               "Spread": 0,
+              "MaxLen": 24,
               "Trigger": false,
               "palette": 4,
               "palStart": 0.5699999872595072,
@@ -148,175 +352,7 @@
               "palBias": -0.23999999463558197,
               "palCutoff": 0.1099999975413084,
               "NoteLo": 36,
-              "NoteHi": 72
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
-            "id": 2604,
-            "class": "com.symmetrylabs.slstudio.pattern.Infect",
-            "modulationColor": -35584,
-            "parameters": {
-              "label": "InfectRetrowave",
-              "Hue": 0.0,
-              "Speed": 128.0,
-              "Arms": 3,
-              "Branch": 1.2,
-              "Spread": 0,
-              "Trigger": false,
-              "palette": 7,
-              "palStart": 0.18999999575316906,
-              "palStop": 1.0,
-              "palShift": 0.0,
-              "palBias": -2.159999817609787,
-              "palCutoff": 0.0,
-              "NoteLo": 36,
-              "NoteHi": 72
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
-            "id": 2606,
-            "class": "com.symmetrylabs.slstudio.pattern.Infect",
-            "modulationColor": -3932416,
-            "parameters": {
-              "label": "InfectIce",
-              "Hue": 0.0,
-              "Speed": 128.0,
-              "Arms": 3,
-              "Branch": 1.2,
-              "Spread": 0,
-              "Trigger": false,
-              "palette": 12,
-              "palStart": 0.0,
-              "palStop": 0.6500000078231096,
-              "palShift": 0.0,
-              "palBias": 0.5999999865889549,
-              "palCutoff": 0.12999999709427357,
-              "NoteLo": 36,
-              "NoteHi": 72
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
-            "id": 2608,
-            "class": "com.symmetrylabs.slstudio.pattern.Infect",
-            "modulationColor": -14811392,
-            "parameters": {
-              "label": "InfectNeon",
-              "Hue": 0.0,
-              "Speed": 128.0,
-              "Arms": 3,
-              "Branch": 1.2,
-              "Spread": 0,
-              "Trigger": false,
-              "palette": 14,
-              "palStart": 0.11999999731779099,
-              "palStop": 0.7500000055879354,
-              "palShift": 0.0,
-              "palBias": 0.0,
-              "palCutoff": 0.14999999664723873,
-              "NoteLo": 36,
-              "NoteHi": 72
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
-            "id": 2610,
-            "class": "com.symmetrylabs.slstudio.pattern.Infect",
-            "modulationColor": -16731393,
-            "parameters": {
-              "label": "InfectSunset",
-              "Hue": 0.0,
-              "Speed": 128.0,
-              "Arms": 3,
-              "Branch": 1.2,
-              "Spread": 0,
-              "Trigger": false,
-              "palette": 22,
-              "palStart": 0.0,
-              "palStop": 0.7500000055879354,
-              "palShift": 0.0,
-              "palBias": 0.23999999463558197,
-              "palCutoff": 0.0,
-              "NoteLo": 36,
-              "NoteHi": 72
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
-            "id": 2612,
-            "class": "com.symmetrylabs.slstudio.pattern.Infect",
-            "modulationColor": -39424,
-            "parameters": {
-              "label": "InfectFire",
-              "Hue": 0.0,
-              "Speed": 627.9999981373549,
-              "Arms": 3,
-              "Branch": 1.2,
-              "Spread": 0,
-              "Trigger": false,
-              "palette": 29,
-              "palStart": 0.13999999687075615,
-              "palStop": 0.4400000125169754,
-              "palShift": 0.0,
-              "palBias": 0.0,
-              "palCutoff": 0.0,
-              "NoteLo": 36,
-              "NoteHi": 72
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
-            "id": 2614,
-            "class": "com.symmetrylabs.slstudio.pattern.Infect",
-            "modulationColor": -56832,
-            "parameters": {
-              "label": "InfectMeteor",
-              "Hue": 0.0,
-              "Speed": 128.0,
-              "Arms": 3,
-              "Branch": 1.2,
-              "Spread": 0,
-              "Trigger": false,
-              "palette": 34,
-              "palStart": 0.0,
-              "palStop": 0.3200000151991844,
-              "palShift": 0.0,
-              "palBias": 1.3199999704957008,
-              "palCutoff": 0.0,
-              "NoteLo": 36,
-              "NoteHi": 72
+              "NoteHi": 71
             },
             "modulation": {
               "modulators": [],
@@ -421,7 +457,7 @@
         "modulationColor": -8847616,
         "parameters": {
           "label": "Audio Input",
-          "device": 5
+          "device": 1
         }
       },
       "output": {
@@ -451,6 +487,19 @@
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 2640,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -11731200,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -558,6 +607,18 @@
     },
     "midi": {
       "inputs": [
+        {
+          "name": "CoreMIDI4J - APC40 mkII",
+          "channel": false,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Midi Fighter Twister",
+          "channel": false,
+          "control": false,
+          "sync": false
+        },
         {
           "name": "CoreMIDI4J - MidiKeys",
           "channel": true,
