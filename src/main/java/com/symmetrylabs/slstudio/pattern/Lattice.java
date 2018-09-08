@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.color.Spaces;
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology.Dir;
@@ -29,6 +30,8 @@ import heronarts.lx.transform.LXVector;
  * Activators, their hues, the animations, and the strip directions are selectable.
  */
 public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? extends Strip>> {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
+
     public enum AnimationId {
         TRAIN
     };
