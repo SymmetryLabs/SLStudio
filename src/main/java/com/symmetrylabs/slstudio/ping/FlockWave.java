@@ -20,7 +20,6 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
-import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.slstudio.kernel.SLKernel;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
@@ -44,6 +43,8 @@ public class FlockWave extends SLPattern<SLModel> {
 
     CompoundParameter hueParam = new CompoundParameter("Hue", 0, -1, 1);  // hue adjustment
     CompoundParameter hVarParam = new CompoundParameter("HVar", 1, 0, 4);  // hue variation
+    CompoundParameter satParam = new CompoundParameter("Sat", 1, 0, 2);  // saturation multiplier
+
     CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
     BooleanParameter oscFollowers = new BooleanParameter("atBlobs");
     BooleanParameter oscBlobs = new BooleanParameter("nearBlobs");
@@ -96,6 +97,7 @@ public class FlockWave extends SLPattern<SLModel> {
 
         addParameter(hueParam);
         addParameter(hVarParam);
+        addParameter(satParam);
         addParameter(timeScale);
         addParameter(size);
         addParameter(detail);
@@ -435,6 +437,7 @@ public class FlockWave extends SLPattern<SLModel> {
         final int[] colors = (int[]) getArray(SRGB8);
         final float hueShift = hueParam.getValuef();
         final float hueVar = hVarParam.getValuef();
+        final float sat = satParam.getValuef();
         final ColorPalette pal = getPalette();
 
         synchronized (kernel) {
@@ -489,37 +492,40 @@ public class FlockWave extends SLPattern<SLModel> {
                 if (kernel.vectorList != null) {
                     // The result array corresponds to just the vectors in the vector list.
                     IntStream.range(0, kernel.vectorList.size()).parallel().forEach(vi -> {
-                        colors[kernel.vectorList.get(vi).index] = shiftHue(pal.getColor(result[vi]), hueShift, hueVar, pal.getHueCenter());
+                        colors[kernel.vectorList.get(vi).index] = adjustHueSat(pal.getColor(result[vi]), hueShift, hueVar, pal.getHueCenter(), sat);
                     });
                 } else {
                     // The result array corresponds to all the points in the model.
                     model.getPoints().parallelStream().forEach(p -> {
-                        colors[p.index] = shiftHue(pal.getColor(result[p.index]), hueShift, hueVar, pal.getHueCenter());
+                        colors[p.index] = adjustHueSat(pal.getColor(result[p.index]), hueShift, hueVar, pal.getHueCenter(), sat);
                     });
                 }
             } else {
-                Arrays.fill(colors, shiftHue(pal.getColor(palShift.getValue()), hueShift, hueVar, pal.getHueCenter()));
+                Arrays.fill(colors, adjustHueSat(pal.getColor(palShift.getValue()), hueShift, hueVar, pal.getHueCenter(), sat));
             }
         }
 
         markModified(SRGB8);
     }
 
-    public static int shiftHue(int color, float shift, float var, float center) {
-        if (shift == 0 && var == 1) return color;
+    public static int adjustHueSat(int color, float hueShift, float hueVar, float hueCenter, float satFactor) {
+        if (hueShift == 0 && hueVar == 1 && satFactor == 1) return color;
 
         float h = LXColor.h(color) / 360f;
         float s = LXColor.s(color) / 100f;
         float b = LXColor.b(color) / 100f;
         int alpha = color & 0xff000000;
 
-        h = h - center + 0.5f;
+        h = h - hueCenter + 0.5f;
         float hf = (float) Math.floor(h);
         h = h - hf;
         h = h - 0.5f;
-        h *= var;
-        h = h + center;
-        h += shift;
+        h *= hueVar;
+        h = h + hueCenter;
+        h += hueShift;
+
+        s *= satFactor;
+        if (s > 1) s = 1;
 
         return alpha | (LXColor.hsb(h * 360f, s * 100f, b * 100f) & 0x00ffffff);
     }

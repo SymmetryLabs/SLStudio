@@ -40,6 +40,8 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
 
     private CompoundParameter hueParam = new CompoundParameter("Hue", 0, -1, 1).setDescription("Hue adjustment");
     private CompoundParameter hVarParam = new CompoundParameter("HVar", 1, 0, 4);  // hue variation
+    CompoundParameter satParam = new CompoundParameter("Sat", 1, 0, 2);  // saturation multiplier
+
     private CompoundParameter speedParam = new CompoundParameter("Speed", 128, 0, 3000).setDescription("Infection growth speed (strip lengths per minute)");
     private BooleanParameter tempoParam = new BooleanParameter("Tempo", false).setDescription("Use the global tempo to trigger infection growth");
 
@@ -71,6 +73,8 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
 
         addParameter(hueParam);
         addParameter(hVarParam);
+        addParameter(satParam);
+
         addParameter(speedParam);
         addParameter(tempoParam);
 
@@ -171,7 +175,8 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     protected void startInfection(int key, float xMin, float xMax) {
         Infection inf = new Infection(
             selectOrigin(xMin, xMax), armsParam.getValue(), branchParam.getValue(),
-            spreadParam.getValue(), hueParam.getValue(), hVarParam.getValue(), getPalette(), maxLenParam.getValuei());
+            spreadParam.getValue(), hueParam.getValue(), hVarParam.getValue(), satParam.getValue(),
+            getPalette(), maxLenParam.getValuei());
         infections.add(inf);
         infectionsByKey.put(key, inf);
     }
@@ -223,11 +228,12 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         public double growStopAge = Double.MAX_VALUE;
         public double hue = 0;
         public double hueVar = 1;
+        public double sat = 1;
         public ColorPalette palette;
         public double grownLength = 0;
         public double maxLength = 0;
 
-        public Infection(Junction origin, double initialBranchFactor, double branchFactor, double spreadFactor, double hue, double hueVar, ColorPalette palette, double maxLength) {
+        public Infection(Junction origin, double initialBranchFactor, double branchFactor, double spreadFactor, double hue, double hueVar, double sat, ColorPalette palette, double maxLength) {
             this.originVector = origin.loc;
             growingSegments = startSegments(origin, initialBranchFactor);
             nextStepSegments = new ArrayList<>();
@@ -235,6 +241,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
             this.spreadFactor = spreadFactor;
             this.hue = hue;
             this.hueVar = hueVar;
+            this.sat = sat;
             this.palette = palette;
             this.maxLength = maxLength;
         }
@@ -425,24 +432,13 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
                 int b = Ops16.blue(pc);
                 int a = (int) (value*Ops16.MAX + 0.5);
                 if (value == 0) r = g = b = 0;
-                array[index] = Ops16.add(array[index], shiftHue(Ops16.rgba(r, g, b, a), hue, hueVar, palette.getHueCenter()));
+                array[index] = Ops16.add(array[index], adjustHueSat(Ops16.rgba(r, g, b, a), hue, hueVar, palette.getHueCenter(), sat));
             }
         }
     }
 
-    public long shiftHue(long c, double shift) {
-        if (shift == 0) return c;
-        int color = Spaces.rgb16ToRgb8(c);
-
-        float h = LXColor.h(color);
-        float s = LXColor.s(color);
-        float b = LXColor.b(color);
-        int alpha = color & 0xff000000;
-        return Spaces.rgb8ToRgb16(alpha | (LXColor.hsb(h + shift * 360f, s, b) & 0x00ffffff));
-    }
-
-    public static long shiftHue(long c, double shift, double var, double center) {
-        if (shift == 0 && var == 1) return c;
+    public static long adjustHueSat(long c, double hueShift, double hueVar, double hueCenter, double satFactor) {
+        if (hueShift == 0 && hueVar == 1 && satFactor == 1) return c;
         int color = Spaces.rgb16ToRgb8(c);
 
         double h = LXColor.h(color) / 360.0;
@@ -450,13 +446,16 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         double b = LXColor.b(color) / 100.0;
         int alpha = color & 0xff000000;
 
-        h = h - center + 0.5;
+        h = h - hueCenter + 0.5;
         float hf = (float) Math.floor(h);
         h = h - hf;
         h = h - 0.5;
-        h *= var;
-        h = h + center;
-        h += shift;
+        h *= hueVar;
+        h = h + hueCenter;
+        h += hueShift;
+
+        s *= satFactor;
+        if (s > 1) s = 1;
 
         return Spaces.rgb8ToRgb16(alpha | (LXColor.hsb(h * 360, s * 100, b * 100) & 0x00ffffff));
     }

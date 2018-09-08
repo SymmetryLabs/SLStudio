@@ -40,6 +40,8 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
 
     protected CompoundParameter hueParam = new CompoundParameter("Hue", 0, -1, 1);
     protected CompoundParameter hVarParam = new CompoundParameter("HVar", 0, -1, 1);
+    protected CompoundParameter satParam = new CompoundParameter("Sat", 1, 0, 1);
+
     protected DiscreteParameter speedParam = new DiscreteParameter("Speed", 128, 12, 300).setDescription("Overall speed in BPM (duration is one beat)");
     protected DiscreteParameter subspdParam = new DiscreteParameter("Subspd", 0, -3, 4).setDescription("Strip speed multiplier in powers of 2");
 
@@ -65,6 +67,8 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
 
         addParameter(hueParam);
         addParameter(hVarParam);
+        addParameter(satParam);
+
         addParameter(speedParam);
         addParameter(subspdParam);
 
@@ -137,6 +141,8 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
     protected void trigger(Shape shape) {
         double hue = hueParam.getValue();
         double hVar = hVarParam.getValue();
+        double sat = satParam.getValue();
+
         Animation animation = createAnimation();
         Dir dir = Dir.Y;
         Sign sign = Sign.POS;
@@ -152,7 +158,7 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
             if (getStripAxis(strip) == dir) {
                 double delay = shape.getDelay(strip);
                 if (delay >= 0) {
-                    newActivations.add(new ScheduledActivation(timeSec + delay, strip, sign, animation, hue, hVar));
+                    newActivations.add(new ScheduledActivation(timeSec + delay, strip, sign, animation, hue, hVar, sat));
 
                 }
             }
@@ -189,14 +195,16 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
         public final Animation animation;
         public final double hue;
         public final double hVar;
+        public final double sat;
 
-        public ScheduledActivation(double startSec, Strip strip, Sign sign, Animation animation, double hue, double hVar) {
+        public ScheduledActivation(double startSec, Strip strip, Sign sign, Animation animation, double hue, double hVar, double sat) {
             this.startSec = startSec;
             this.strip = strip;
             this.sign = sign;
             this.animation = animation;
             this.hue = hue;
             this.hVar = hVar;
+            this.sat = sat;
         }
 
         @Override
@@ -207,7 +215,7 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
         }
 
         public AnimationRun startAnimation() {
-            return new AnimationRun(strip, sign, animation, hue, hVar);
+            return new AnimationRun(strip, sign, animation, hue, hVar, sat);
         }
     }
 
@@ -218,15 +226,17 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
         Animation animation;
         double hue;
         double hVar;
+        double sat;
         double elapsedSec;
 
-        public AnimationRun(Strip strip, Sign sign, Animation animation, double hue, double hVar) {
+        public AnimationRun(Strip strip, Sign sign, Animation animation, double hue, double hVar, double sat) {
             this.strip = strip;
             this.sign = sign;
             this.dir = getStripAxis(strip);
             this.animation = animation;
             this.hue = hue;
             this.hVar = hVar;
+            this.sat = sat;
             elapsedSec = 0;
         }
 
@@ -241,7 +251,7 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
         public void blendOnto(long[] colors) {
             for (LXPoint point : strip.points) {
                 double pos = getPos(point, strip, dir, sign);
-                long c = animation.getColor(elapsedSec, pos, hue, hVar);
+                long c = animation.getColor(elapsedSec, pos, hue, hVar, sat);
                 colors[point.index] = Ops16.add(colors[point.index], c);
             }
         }
@@ -292,7 +302,7 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
      * at each position (0 to 1) along the strip at a given time (in seconds).
      */
     interface Animation {
-        long getColor(double t, double pos, double hue, double hVar);
+        long getColor(double t, double pos, double hue, double hVar, double sat);
         boolean isExpired(double t);
     }
 
@@ -303,10 +313,10 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
             this.duration = duration;
         }
 
-        public long getColor(double t, double pos, double hue, double hVar) {
+        public long getColor(double t, double pos, double hue, double hVar, double sat) {
             double tf = t / duration;
             double h = hue + hVar * (tf * 2 - pos);
-            long c = Spaces.rgb8ToRgb16(LXColor.hsb(h * 360, 100, 100));
+            long c = Spaces.rgb8ToRgb16(LXColor.hsb(h * 360, sat * 100, 100));
             if (tf < 0.5) {
                 return pos < tf * 2 ? c : Ops16.BLACK;
             } else {
