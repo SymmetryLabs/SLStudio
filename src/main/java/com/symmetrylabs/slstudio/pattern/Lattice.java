@@ -39,7 +39,7 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
     }
 
     protected CompoundParameter hueParam = new CompoundParameter("Hue", 0, -1, 1);
-    protected DiscreteParameter speedParam = new DiscreteParameter("Speed", 128, 0, 1000).setDescription("Overall speed in BPM (duration is one beat)");
+    protected DiscreteParameter speedParam = new DiscreteParameter("Speed", 128, 12, 300).setDescription("Overall speed in BPM (duration is one beat)");
     protected DiscreteParameter subspdParam = new DiscreteParameter("Subspd", 0, -3, 4).setDescription("Strip speed multiplier in powers of 2");
 
     protected EnumParameter<ShapeId> shapeParam = new EnumParameter<>("Shape", ShapeId.SWEEP);
