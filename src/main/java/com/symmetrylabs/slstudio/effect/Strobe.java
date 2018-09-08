@@ -12,6 +12,7 @@ import heronarts.lx.parameter.FunctionalParameter;
 import heronarts.lx.parameter.LXParameter;
 
 import java.awt.Color;
+import java.util.Arrays;
 
 import static processing.core.PApplet.lerp;
 
@@ -33,6 +34,10 @@ public class Strobe extends LXEffect {
     public final BooleanParameter black =
         new BooleanParameter("Black", true)
             .setDescription("If false, clears to alpha 0. If true, clears to black with alpha 1.");
+    public final BooleanParameter run =
+            new BooleanParameter("Run", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    public final BooleanParameter hold =
+        new BooleanParameter("Hold", false).setMode(BooleanParameter.Mode.MOMENTARY);
 
     private final SawLFO basis = new SawLFO(1, 0, new FunctionalParameter() {
         public double getValue() {
@@ -45,6 +50,8 @@ public class Strobe extends LXEffect {
         addParameter(mode);
         addParameter(frequency);
         addParameter(black);
+        addParameter(run);
+        addParameter(hold);
         startModulator(basis);
     }
 
@@ -75,7 +82,7 @@ public class Strobe extends LXEffect {
     public void run(double deltaMs, double amount) {
         float amt = this.enabledDamped.getValuef();
         int clearColor = black.getValueb() ? LXColor.BLACK : 0x0;
-        if (amt > 0) {
+        if (amt > 0 && run.isOn()) {
             float strobef = basis.getValuef();
             strobef = (float) getWaveshape().compute(strobef);
             strobef = lerp(1, strobef, amt);
@@ -91,6 +98,10 @@ public class Strobe extends LXEffect {
                         colors[i] = Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]);
                     }
                 }
+            }
+        } else {
+            if (!hold.isOn()) {
+                Arrays.fill(colors, clearColor);
             }
         }
     }
