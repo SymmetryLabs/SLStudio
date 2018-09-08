@@ -1,5 +1,7 @@
 package com.symmetrylabs.util;
 
+import com.symmetrylabs.color.Spaces;
+
 import java.awt.color.ColorSpace;
 
 import org.apache.commons.math3.util.FastMath;
@@ -281,5 +283,52 @@ public final class ColorUtils {
         float H_rad = (float)FastMath.toRadians(lch[2] < 0 ? lch[2] + 360 : lch[2]);
         luv[1] = lch[1] * (float)FastMath.cos(H_rad);
         luv[2] = lch[1] * (float)FastMath.sin(H_rad);
+    }
+
+    public static int adjustHueSat(
+        int color, float hueShift, float hueVar, float hueCenter, float satFactor) {
+        if (hueShift == 0 && hueVar == 1 && satFactor == 1) return color;
+
+        float h = LXColor.h(color) / 360f;
+        float s = LXColor.s(color) / 100f;
+        float b = LXColor.b(color) / 100f;
+        int alpha = color & 0xff000000;
+
+        h = h - hueCenter + 0.5f;
+        float hf = (float) Math.floor(h);
+        h = h - hf;
+        h = h - 0.5f;
+        h *= hueVar;
+        h = h + hueCenter;
+        h += hueShift;
+
+        s *= satFactor;
+        if (s > 1) s = 1;
+
+        return alpha | (LXColor.hsb(h * 360f, s * 100f, b * 100f) & 0x00ffffff);
+    }
+
+    public static long adjustHueSat16(
+        long c, double hueShift, double hueVar, double hueCenter, double satFactor) {
+        if (hueShift == 0 && hueVar == 1 && satFactor == 1) return c;
+        int color = Spaces.rgb16ToRgb8(c);
+
+        double h = LXColor.h(color) / 360.0;
+        double s = LXColor.s(color) / 100.0;
+        double b = LXColor.b(color) / 100.0;
+        int alpha = color & 0xff000000;
+
+        h = h - hueCenter + 0.5;
+        float hf = (float) Math.floor(h);
+        h = h - hf;
+        h = h - 0.5;
+        h *= hueVar;
+        h = h + hueCenter;
+        h += hueShift;
+
+        s *= satFactor;
+        if (s > 1) s = 1;
+
+        return Spaces.rgb8ToRgb16(alpha | (LXColor.hsb(h * 360, s * 100, b * 100) & 0x00ffffff));
     }
 }

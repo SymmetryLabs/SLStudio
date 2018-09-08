@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.pattern.base;
 
 import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.util.ColorUtils;
 import com.symmetrylabs.util.MathUtils;
 import com.symmetrylabs.util.NoiseUtils;
 import heronarts.lx.LX;
@@ -36,6 +37,10 @@ public abstract class DPat extends SLPattern<SLModel> {
 
     public float NoiseMove = random(10000);
     public CompoundParameter pHue;
+    public CompoundParameter pHVar;
+    public CompoundParameter pSat;
+    public CompoundParameter pSpeed;
+
     public CompoundParameter pSpark;
     public CompoundParameter pWave;
     public CompoundParameter pRotX;
@@ -228,6 +233,10 @@ public abstract class DPat extends SLPattern<SLModel> {
     public DPat(LX lx) {
         super(lx);
         pHue = addParam("Hue", 0, 0, 360);
+        pHVar = addParam("HVar", 1, 0, 4);
+        pSat = addParam("Sat", 1, 0, 2);
+        pSpeed = addParam("Speed", 0.55, -2, 2);
+
         pSpark = addParam("Spark", 0);
         pWave = addParam("Wave", 0);
         pTransX = addParam("xPos", .5);
@@ -334,6 +343,11 @@ public abstract class DPat extends SLPattern<SLModel> {
             colors[i] = 0x00000000;
         }
 
+        final float hueShift = pHue.getValuef() / 360f;
+        final float hueVar = pHVar.getValuef();
+        final float hueCenter = 0;
+        final float satFactor = pSat.getValuef();
+
         getVectorList().parallelStream().forEach(p -> {
             PVector P = new PVector(), tP = new PVector();
 
@@ -373,6 +387,8 @@ public abstract class DPat extends SLPattern<SLModel> {
             if (pGrey.getValueb()) {
                 cNew = Ops8.gray(Ops8.level(cNew));
             }
+
+            cNew = ColorUtils.adjustHueSat(cNew, hueShift, hueVar, hueCenter, satFactor);
             colors[p.index] = cNew;
         });
 
