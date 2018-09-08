@@ -30,7 +30,7 @@ public class CubeFuck extends SLPattern<StripsModel<? extends Strip>> {
     CompoundParameter yParam = new CompoundParameter("Y", model.cy, model.yMin, model.yMax);
     CompoundParameter zParam = new CompoundParameter("Z", model.cz, model.zMin, model.zMax);
 
-    BooleanParameter hold = new BooleanParameter("hold", false);
+    BooleanParameter hold = new BooleanParameter("hold", false).setMode(BooleanParameter.Mode.MOMENTARY);
     List<Bundle> fuckBundles = new ArrayList<>();
 
     public CubeFuck(LX lx) {
