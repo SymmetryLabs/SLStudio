@@ -60,6 +60,7 @@ public class BoxFlip extends SLPattern<CubesModel> implements Tempo.Listener {
         addParameter(xBorder);
 
         trigger.setMode(BooleanParameter.Mode.MOMENTARY);
+        useOscillator.setMode(BooleanParameter.Mode.MOMENTARY);
         addParameter(trigger);
 
 
