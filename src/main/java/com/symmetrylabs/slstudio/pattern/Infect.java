@@ -57,6 +57,9 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     private CompoundParameter trigRateParam = new CompoundParameter("TrigRate", 0, 0, 10);
     private DiscreteParameter densityParam = new DiscreteParameter("Density", 6, 1, 30);
     private CompoundParameter softHeadParam = new CompoundParameter("SoftHead");
+    private BooleanParameter autoTrigParam = new BooleanParameter("AutoTrig", false);
+    private BooleanParameter startParam = new BooleanParameter("Start", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    private BooleanParameter stopParam = new BooleanParameter("Stop", false).setMode(BooleanParameter.Mode.MOMENTARY);
 
     private DiscreteParameter armsParam = new DiscreteParameter("Arms", 3, 1, 6).setDescription("Initial branch arms from infection origin");
     private CompoundParameter branchParam = new CompoundParameter("Branch", 1.2, 1, 6).setDescription("Branching factor from subsequent junctions");
@@ -101,6 +104,10 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         addParameter(densityParam);
         addParameter(softHeadParam);
 
+        addParameter(autoTrigParam);
+        addParameter(startParam);
+        addParameter(stopParam);
+
         addParameter(tempoParam);
 
         addParameter(armsParam);
@@ -134,6 +141,15 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
             if (param == nextParam) {
                 if (param.isOn()) nextStep();
             }
+            if (param == startParam && param.isOn()) {
+                autoTrigParam.setValue(true);
+            }
+            if (param == stopParam && param.isOn()) {
+                autoTrigParam.setValue(false);
+                for (Infection inf : infections) {
+                    inf.stopGrowing();
+                }
+            }
         }
     }
 
@@ -156,7 +172,9 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     @Override
     public void run(double deltaMs, PolyBuffer.Space preferredSpace) {
         double deltaSec = deltaMs/1000.0;
-        trigProgress += trigRateParam.getValue() * deltaSec;
+        if (autoTrigParam.isOn()) {
+            trigProgress += trigRateParam.getValue()*deltaSec;
+        }
         while (trigProgress >= 1) {
             nextTrigIndex = (nextTrigIndex + 1) % densityParam.getValuei();
             stopInfection(nextTrigIndex);
@@ -313,7 +331,6 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
             if (!expiring) {
                 expiring = true;
                 expireStartAge = infectionAge;
-                System.out.println("start expiring");
             }
         }
 
@@ -321,7 +338,6 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
             if (growing) {
                 growing = false;
                 growStopAge = infectionAge;
-                System.out.println("stop growing");
                 beginExpiring();
             }
         }
