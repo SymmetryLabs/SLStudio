@@ -108,7 +108,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     public void noteOn(int pitch, double velocity) {
         int lo = noteLoParam.getValuei();
         int hi = noteHiParam.getValuei();
-        if (pitch >= lo && pitch < hi) {
+        if (pitch >= lo && pitch < hi && isWhiteKey(pitch)) {
             float xMin = model.xMin + model.xRange*(pitch - lo)/(hi - lo);
             float xMax = model.xMin + model.xRange*(pitch + 1 - lo)/(hi - lo);
             startInfection(pitch, xMin, xMax);

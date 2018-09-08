@@ -143,4 +143,9 @@ public abstract class MidiPolyphonicExpressionPattern<M extends SLModel> extends
         }
         return result;
     }
+
+    public static boolean isWhiteKey(int pitch) {
+        int pCls = pitch % 12;
+        return pCls == 0 || pCls == 2 || pCls == 4 || pCls == 5 || pCls == 7 || pCls == 9 || pCls == 11;
+    }
 }

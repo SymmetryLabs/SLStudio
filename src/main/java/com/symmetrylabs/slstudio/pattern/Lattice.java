@@ -96,7 +96,7 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
     public void noteOn(int pitch, double velocity) {
         int lo = noteLoParam.getValuei();
         int hi = noteHiParam.getValuei();
-        if (pitch >= lo && pitch < hi) {
+        if (pitch >= lo && pitch < hi && !isWhiteKey(pitch)) {
             float x = model.xMin + model.xRange * (pitch - lo) / (hi - lo);
             float y = model.yMin + model.yRange * 0.8f;
             LXVector origin = new LXVector(x, y, model.cz);
