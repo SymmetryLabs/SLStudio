@@ -43,6 +43,8 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
 
     private CompoundParameter speedParam = new CompoundParameter("Speed", 128, 0, 1500).setDescription("Infection growth speed (strip lengths per minute)");
     private BooleanParameter tempoParam = new BooleanParameter("Tempo", false).setDescription("Use the global tempo to trigger infection growth");
+    private BooleanParameter useNextParam = new BooleanParameter("UseNext", false).setDescription("Use the Next button to trigger infection growth");
+    private BooleanParameter nextParam = new BooleanParameter("Next", false).setMode(BooleanParameter.Mode.MOMENTARY);
 
     private DiscreteParameter armsParam = new DiscreteParameter("Arms", 3, 1, 6).setDescription("Initial branch arms from infection origin");
     private CompoundParameter branchParam = new CompoundParameter("Branch", 1.2, 1, 6).setDescription("Branching factor from subsequent junctions");
@@ -75,6 +77,9 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         addParameter(satParam);
 
         addParameter(speedParam);
+        addParameter(useNextParam);
+        addParameter(nextParam);
+
         addParameter(tempoParam);
 
         addParameter(armsParam);
@@ -101,8 +106,11 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         if (p instanceof BooleanParameter) {
             BooleanParameter param = (BooleanParameter) p;
             if (param == triggerParam) {
-                if (param.getValueb()) startInfection(0, model.xMin, model.xMax);
+                if (param.getValueb()) startInfection(0, model.xMin + model.xRange * 0.3f, model.xMin + model.xRange * 0.7f);
                 else stopInfection(0);
+            }
+            if (param == nextParam) {
+                if (param.isOn()) nextStep();
             }
         }
     }
@@ -131,15 +139,18 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     }
 
     public void onBeat(Tempo tempo, int count) {
-        if (tempoParam.isOn()) {
-            for (Infection inf : infections) {
-                inf.nextStep();
-            }
+        if (tempoParam.isOn() && !useNextParam.isOn()) {
+            nextStep();
+        }
+    }
+
+    public void nextStep() {
+        for (Infection inf : infections) {
+            inf.nextStep();
         }
     }
 
     public void onMeasure(Tempo tempo) { }
-
 
     protected void advanceInfections(double deltaSec) {
         List<Infection> continuingInfections = new ArrayList<>();
@@ -282,9 +293,6 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
             if (!growing) return;
 
             double progress = speedParam.getValue()*deltaSec/60.0;
-            if (tempoParam.isOn()) {
-                progress = 6 * deltaSec;  // advance one strip length in 166 ms
-            }
 
             List<Segment> continuingSegments = new ArrayList<>();
             for (Segment s : growingSegments) {
@@ -304,7 +312,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
             }
 
             grownLength += progress;
-            if (!tempoParam.isOn()) {
+            if (!tempoParam.isOn() && !useNextParam.isOn()) {
                 continuingSegments.addAll(nextStepSegments);
                 nextStepSegments.clear();
             }
