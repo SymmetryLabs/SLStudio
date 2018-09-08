@@ -58,10 +58,12 @@ public class Noise extends DPat {
         if (mode.getValuei() != currModeIndex) {
             currModeIndex = mode.getValuei();
             ttime = rtime;
+            /*
             pSpin.reset();
             zTheta = 0;
             density.reset();
             pSpeed.reset();
+            */
 
             for (int i = 0; i < n.length; i++) {
                 n[i].isActive = false;
