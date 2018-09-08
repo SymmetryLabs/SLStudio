@@ -55,6 +55,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     private CompoundParameter yMaxParam = new CompoundParameter("YMax", model.yMax, model.yMin, model.yMax);
     private CompoundParameter trigRateParam = new CompoundParameter("TrigRate", 0, 0, 10);
     private DiscreteParameter densityParam = new DiscreteParameter("Density", 6, 1, 30);
+    private CompoundParameter softHeadParam = new CompoundParameter("SoftHead");
 
     private DiscreteParameter armsParam = new DiscreteParameter("Arms", 3, 1, 6).setDescription("Initial branch arms from infection origin");
     private CompoundParameter branchParam = new CompoundParameter("Branch", 1.2, 1, 6).setDescription("Branching factor from subsequent junctions");
@@ -97,6 +98,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         addParameter(yMaxParam);
         addParameter(trigRateParam);
         addParameter(densityParam);
+        addParameter(softHeadParam);
 
         addParameter(tempoParam);
 
@@ -475,6 +477,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         }
 
         public void renderPoints(long[] array) {
+            double softHead = softHeadParam.getValue();
             for (Integer index : pointAges.keySet()) {
                 double age = pointAges.get(index);
                 double value = 0;
@@ -484,6 +487,14 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
                     value = 1.0 - age/infectionAge;
                 }
                 if (value < 0) value = 0;
+                if (softHead > 0) {
+                    if (value < 1 - softHead) {
+                        value /= (1 - softHead);
+                    } else {
+                        value = (1 - value) / softHead;
+                    }
+                }
+
                 long pc = palette.getColor16(value);
                 int r = Ops16.red(pc);
                 int g = Ops16.green(pc);
