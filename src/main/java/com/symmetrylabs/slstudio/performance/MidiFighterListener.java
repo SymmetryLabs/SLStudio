@@ -148,6 +148,8 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
         int cc = midiControlChange.getCC();
         double v = midiControlChange.getNormalized();
 
+        System.out.printf("CC %d %d %.2f\n", channel, cc, v);
+
         if (channel == 0 || channel == 1) {
             if (cc >= params.size() || params.get(cc) == null) {
                 return;
@@ -162,7 +164,7 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
                 } else if (on) {
                     b.toggle();
                 }
-            } else if (!(param instanceof BooleanParameter)) {
+            } else if (channel == 0 && !(param instanceof BooleanParameter)) {
                 param.setNormalized(v);
             }
 
