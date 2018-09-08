@@ -123,7 +123,7 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
 
         List<AnimationRun> continuingRuns = new ArrayList<>();
         long[] colors = (long[]) getArray(Space.RGB16);
-        Arrays.fill(colors, 0);
+        Arrays.fill(colors, Ops16.BLACK);
         for (AnimationRun run : activeRuns) {
             run.advance(deltaSec);
             run.blendOnto(colors);
@@ -308,9 +308,9 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
             double h = hue + hVar * (tf * 2 - pos);
             long c = Spaces.rgb8ToRgb16(LXColor.hsb(h * 360, 100, 100));
             if (tf < 0.5) {
-                return pos < tf * 2 ? c : 0;
+                return pos < tf * 2 ? c : Ops16.BLACK;
             } else {
-                return pos > (tf - 0.5) * 2 ? c : 0;
+                return pos > (tf - 0.5) * 2 ? c : Ops16.BLACK;
             }
         }
 
