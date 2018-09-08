@@ -46,7 +46,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     private DiscreteParameter armsParam = new DiscreteParameter("Arms", 3, 1, 6).setDescription("Initial branch arms from infection origin");
     private CompoundParameter branchParam = new CompoundParameter("Branch", 1.2, 1, 6).setDescription("Branching factor from subsequent junctions");
     private DiscreteParameter spreadParam = new DiscreteParameter("Spread", 0, -1, 4);
-    private DiscreteParameter maxLenParam = new DiscreteParameter("MaxLen", 24, 2, 500);
+    private DiscreteParameter maxLenParam = new DiscreteParameter("MaxLen", 24, 2, 200);
     private BooleanParameter triggerParam = new BooleanParameter("Trigger", false).setDescription("Trigger a new infection").setMode(BooleanParameter.Mode.MOMENTARY);
 
     private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
@@ -414,7 +414,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
                 double age = pointAges.get(index);
                 double value = 0;
                 if (expiring) {
-                    value = 1.0 - (age - expireStartAge)/expireStartAge;
+                    value = 1.0 - age/expireStartAge;
                 } else {
                     value = 1.0 - age/infectionAge;
                 }
