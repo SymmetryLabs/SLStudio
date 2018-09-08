@@ -42,7 +42,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     private CompoundParameter hVarParam = new CompoundParameter("HVar", 1, 0, 4);  // hue variation
     CompoundParameter satParam = new CompoundParameter("Sat", 1, 0, 2);  // saturation multiplier
 
-    private CompoundParameter speedParam = new CompoundParameter("Speed", 128, 0, 3000).setDescription("Infection growth speed (strip lengths per minute)");
+    private CompoundParameter speedParam = new CompoundParameter("Speed", 128, 0, 1500).setDescription("Infection growth speed (strip lengths per minute)");
     private BooleanParameter tempoParam = new BooleanParameter("Tempo", false).setDescription("Use the global tempo to trigger infection growth");
 
     private DiscreteParameter armsParam = new DiscreteParameter("Arms", 3, 1, 6).setDescription("Initial branch arms from infection origin");
