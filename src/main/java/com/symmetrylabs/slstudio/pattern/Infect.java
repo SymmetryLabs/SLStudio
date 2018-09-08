@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.color.Spaces;
 import com.symmetrylabs.shows.summerstage.SummerStageShow;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
@@ -494,6 +495,8 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
                         value = (1 - value) / softHead;
                     }
                 }
+
+                value = Spaces.cie_lightness_to_luminance(value);
 
                 long pc = palette.getColor16(value);
                 int r = Ops16.red(pc);
