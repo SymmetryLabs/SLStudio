@@ -53,6 +53,8 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     private BooleanParameter xOnlyParam = new BooleanParameter("XOnly", false);
     private CompoundParameter yMinParam = new CompoundParameter("YMin", model.yMin, model.yMin, model.yMax);
     private CompoundParameter yMaxParam = new CompoundParameter("YMax", model.yMax, model.yMin, model.yMax);
+    private CompoundParameter trigRateParam = new CompoundParameter("TrigRate", 0, 0, 10);
+    private DiscreteParameter densityParam = new DiscreteParameter("Density", 6, 1, 30);
 
     private DiscreteParameter armsParam = new DiscreteParameter("Arms", 3, 1, 6).setDescription("Initial branch arms from infection origin");
     private CompoundParameter branchParam = new CompoundParameter("Branch", 1.2, 1, 6).setDescription("Branching factor from subsequent junctions");
@@ -72,6 +74,8 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     private DiscreteParameter noteHiParam = new DiscreteParameter("NoteHi", 72, 0, 127).setDescription("Highest MIDI note of keyboard range");
 
     protected Random random = new Random();
+    protected double trigProgress = 0;
+    protected int nextTrigIndex = 0;
 
     public Infect(LX lx) {
         super(lx);
@@ -91,6 +95,8 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         addParameter(xOnlyParam);
         addParameter(yMinParam);
         addParameter(yMaxParam);
+        addParameter(trigRateParam);
+        addParameter(densityParam);
 
         addParameter(tempoParam);
 
@@ -147,6 +153,14 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     @Override
     public void run(double deltaMs, PolyBuffer.Space preferredSpace) {
         double deltaSec = deltaMs/1000.0;
+        trigProgress += trigRateParam.getValue() * deltaSec;
+        while (trigProgress >= 1) {
+            nextTrigIndex = (nextTrigIndex + 1) % densityParam.getValuei();
+            stopInfection(nextTrigIndex);
+            startInfectionY(nextTrigIndex, yMinParam.getValuef(), yMaxParam.getValuef());
+            trigProgress -= 1;
+        }
+
         advanceInfections(deltaSec);
         renderInfections();
     }
