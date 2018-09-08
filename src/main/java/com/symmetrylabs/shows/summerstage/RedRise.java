@@ -17,6 +17,8 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 
 public class RedRise extends SLPattern<StripsModel<? extends Strip>> {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
+
     private CompoundParameter hueParam = new CompoundParameter("Hue", 0, -1, 1).setDescription("Hue adjustment");
     private CompoundParameter riseSpdParam = new CompoundParameter("RiseSpd", 10, 0, 100).setDescription("Infection growth speed (strip lengths per minute)");
     private CompoundParameter splitSpdParam = new CompoundParameter("SplitSpd", 50, 0, 100).setDescription("Infection growth speed (strip lengths per minute)");

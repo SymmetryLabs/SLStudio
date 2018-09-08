@@ -1,8 +1,10 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
+import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.slstudio.model.StripsTopology.Bundle;
 import com.symmetrylabs.slstudio.model.StripsTopology.Junction;
 import com.symmetrylabs.slstudio.model.StripsTopology.Sign;
@@ -32,6 +34,8 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXVector;
 
 public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extends Strip>> implements Tempo.Listener {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
+
     List<Bundle> bundles;
     List<Junction> junctions;
     List<Infection> infections;
@@ -45,6 +49,10 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     private BooleanParameter tempoParam = new BooleanParameter("Tempo", false).setDescription("Use the global tempo to trigger infection growth");
     private BooleanParameter useNextParam = new BooleanParameter("UseNext", false).setDescription("Use the Next button to trigger infection growth");
     private BooleanParameter nextParam = new BooleanParameter("Next", false).setMode(BooleanParameter.Mode.MOMENTARY);
+
+    private BooleanParameter xOnlyParam = new BooleanParameter("XOnly", false);
+    private CompoundParameter yMinParam = new CompoundParameter("YMin", model.yMin, model.yMin, model.yMax);
+    private CompoundParameter yMaxParam = new CompoundParameter("YMax", model.yMax, model.yMin, model.yMax);
 
     private DiscreteParameter armsParam = new DiscreteParameter("Arms", 3, 1, 6).setDescription("Initial branch arms from infection origin");
     private CompoundParameter branchParam = new CompoundParameter("Branch", 1.2, 1, 6).setDescription("Branching factor from subsequent junctions");
@@ -80,6 +88,10 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         addParameter(useNextParam);
         addParameter(nextParam);
 
+        addParameter(xOnlyParam);
+        addParameter(yMinParam);
+        addParameter(yMaxParam);
+
         addParameter(tempoParam);
 
         addParameter(armsParam);
@@ -106,7 +118,8 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         if (p instanceof BooleanParameter) {
             BooleanParameter param = (BooleanParameter) p;
             if (param == triggerParam) {
-                if (param.getValueb()) startInfection(0, model.xMin + model.xRange * 0.3f, model.xMin + model.xRange * 0.7f);
+                //if (param.getValueb()) startInfection(0, model.xMin + model.xRange * 0.3f, model.xMin + model.xRange * 0.7f);
+                if (param.getValueb()) startInfectionY(0, yMinParam.getValuef(), yMaxParam.getValuef());
                 else stopInfection(0);
             }
             if (param == nextParam) {
@@ -191,6 +204,15 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         infectionsByKey.put(key, inf);
     }
 
+    protected void startInfectionY(int key, float yMin, float yMax) {
+        Infection inf = new Infection(
+            selectOriginY(yMin, yMax), armsParam.getValue(), branchParam.getValue(),
+            spreadParam.getValue(), hueParam.getValue(), hVarParam.getValue(), satParam.getValue(),
+            getPalette(), maxLenParam.getValuei());
+        infections.add(inf);
+        infectionsByKey.put(key, inf);
+    }
+
     protected void stopInfection(int key) {
         Infection inf = infectionsByKey.get(key);
         if (inf != null) inf.stopGrowing();
@@ -206,6 +228,20 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
             if (origin.loc.x >= xMin && origin.loc.x < xMax) return origin;
             if (closest == null) closest = origin;
             else if (Math.abs(origin.loc.x - cx) < Math.abs(closest.loc.x - cx)) closest = origin;
+        } while (++count < 100);
+        return closest;
+    }
+
+    protected Junction selectOriginY(float yMin, float yMax) {
+        Junction origin = null;
+        Junction closest = null;
+        float cy = (yMin + yMax)/2;
+        int count = 0;
+        do {
+            origin = junctions.get(random.nextInt(junctions.size()));
+            if (origin.loc.y >= yMin && origin.loc.y < yMax) return origin;
+            if (closest == null) closest = origin;
+            else if (Math.abs(origin.loc.y - cy) < Math.abs(closest.loc.y - cy)) closest = origin;
         } while (++count < 100);
         return closest;
     }
@@ -335,6 +371,7 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
             List<Bundle> selected = new ArrayList<>();
             List<Bundle> available = new ArrayList<>();
             for (Bundle bundle : origin.getBundles()) {
+                if (xOnlyParam.isOn() && bundle.dir != StripsTopology.Dir.X) continue;
                 if (bundleTraversals.getOrDefault(bundle, 0) < maxTraversals) {
                     available.add(bundle);
                 }
