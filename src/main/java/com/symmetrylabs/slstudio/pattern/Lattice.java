@@ -35,7 +35,8 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
 
     public enum ShapeId {
         SWEEP,
-        TRICKLE
+        TRICKLE,
+        WIPE
     }
 
     protected CompoundParameter hueParam = new CompoundParameter("Hue", 0, -1, 1);
@@ -58,6 +59,15 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
     private DiscreteParameter noteLoParam = new DiscreteParameter("NoteLo", 36, 0, 127).setDescription("Lowest MIDI note of keyboard range");
     private DiscreteParameter noteHiParam = new DiscreteParameter("NoteHi", 72, 0, 127).setDescription("Highest MIDI note of keyboard range");
 
+    protected BooleanParameter leftParam = new BooleanParameter("Left", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    protected BooleanParameter rightParam = new BooleanParameter("Right", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    protected BooleanParameter upParam = new BooleanParameter("Up", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    protected BooleanParameter downParam = new BooleanParameter("Down", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    protected BooleanParameter horizParam = new BooleanParameter("Horiz", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    protected BooleanParameter vertParam = new BooleanParameter("Vert", false).setMode(BooleanParameter.Mode.MOMENTARY);
+
+    public static final float NONE = Float.MIN_VALUE;
+
     List<ScheduledActivation> activations = new ArrayList<>();
     List<AnimationRun> activeRuns = new ArrayList<>();
     double timeSec = 0;
@@ -74,6 +84,13 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
 
         addParameter(shapeParam);
         addParameter(animParam);
+
+        addParameter(rightParam);
+        addParameter(leftParam);
+        addParameter(upParam);
+        addParameter(downParam);
+        addParameter(horizParam);
+        addParameter(vertParam);
 
         addParameter(negXParam);
         addParameter(posXParam);
@@ -94,6 +111,25 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
                 if (param.getValueb()) {
                     trigger(createShape(new LXVector(model.cx, model.cy, model.cz)));
                 }
+            }
+            double duration = (60.0 / speedParam.getValue());
+            if (param == upParam) {
+                trigger(new WipeShape(new LXVector(NONE, model.yMin, 0), duration), createAnimation(), Dir.Y, Sign.POS, null);
+            }
+            if (param == downParam) {
+                trigger(new WipeShape(new LXVector(NONE, model.yMax, 0f), duration), createAnimation(), Dir.Y, Sign.NEG, null);
+            }
+            if (param == leftParam) {
+                trigger(new WipeShape(new LXVector(model.xMax, NONE, 0f), duration), createAnimation(), Dir.X, Sign.NEG, null);
+            }
+            if (param == rightParam) {
+                trigger(new WipeShape(new LXVector(model.xMin, NONE, 0f), duration), createAnimation(), Dir.X, Sign.POS, null);
+            }
+            if (param == horizParam) {
+                trigger(new WipeShape(new LXVector(model.cx, NONE, 0f), duration), createAnimation(), Dir.X, Sign.POS, new LXVector(model.cx, NONE, 0));
+            }
+            if (param == vertParam) {
+                trigger(new WipeShape(new LXVector(NONE, model.cy, 0f), duration), createAnimation(), Dir.Y, Sign.POS, new LXVector(NONE, model.cy, 0));
             }
         }
     }
@@ -139,10 +175,6 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
     }
 
     protected void trigger(Shape shape) {
-        double hue = hueParam.getValue();
-        double hVar = hVarParam.getValue();
-        double sat = satParam.getValue();
-
         Animation animation = createAnimation();
         Dir dir = Dir.Y;
         Sign sign = Sign.POS;
@@ -153,13 +185,25 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
         if (posYParam.isOn()) { dir = Dir.Y; sign = Sign.POS; }
         if (negZParam.isOn()) { dir = Dir.Z; sign = Sign.NEG; }
 
+        trigger(shape, animation, dir, sign, null);
+    }
+
+    protected void trigger(Shape shape, Animation animation, Dir dir, Sign sign, LXVector origin) {
+        double hue = hueParam.getValue();
+        double hVar = hVarParam.getValue();
+        double sat = satParam.getValue();
+
         List<ScheduledActivation> newActivations = new ArrayList<>();
         for (Strip strip : model.getStrips()) {
             if (getStripAxis(strip) == dir) {
                 double delay = shape.getDelay(strip);
                 if (delay >= 0) {
-                    newActivations.add(new ScheduledActivation(timeSec + delay, strip, sign, animation, hue, hVar, sat));
-
+                    if (origin != null) {
+                        if (dir == Dir.X) sign = strip.cx > origin.x ? Sign.POS : Sign.NEG;
+                        if (dir == Dir.Y) sign = strip.cy > origin.y ? Sign.POS : Sign.NEG;
+                    }
+                    newActivations.add(new ScheduledActivation(
+                          timeSec + delay, strip, sign, animation, hue, hVar, sat));
                 }
             }
         }
@@ -175,6 +219,8 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
                 return new SweepShape(origin, duration);
             case TRICKLE:
                 return new TrickleShape(origin, duration);
+            case WIPE:
+                return new WipeShape(origin, duration);
         }
         return null;
     }
@@ -294,6 +340,24 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
         public double getDelay(Strip strip) {
             if (Math.abs(strip.cx - origin.x) > model.xRange / 48f) return -1;
             return duration * Math.abs(strip.cy - model.yMax) / model.yRange;
+        }
+    }
+
+    class WipeShape implements Shape {
+        LXVector origin;
+        double duration;
+
+        public WipeShape(LXVector origin, double duration) {
+            this.origin = origin;
+            this.duration = duration;
+        }
+
+        public double getDelay(Strip strip) {
+            if (origin.x != NONE) {
+                return duration * Math.abs(strip.cx - origin.x) / model.xRange;
+            } else {
+                return duration * Math.abs(strip.cy - origin.y) / model.yRange;
+            }
         }
     }
 
