@@ -60,6 +60,7 @@ public class RedRise extends SLPattern<StripsModel<? extends Strip>> {
     }
 
     protected void startRise() {
+        splitStartSec = Double.MAX_VALUE;
         riseStartSec = timeSec;
     }
 
