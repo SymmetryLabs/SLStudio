@@ -4,16 +4,13 @@ import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.color.Spaces;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
-import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.slstudio.model.StripsTopology.Bundle;
 import com.symmetrylabs.slstudio.model.StripsTopology.Junction;
 import com.symmetrylabs.slstudio.model.StripsTopology.Sign;
-import com.symmetrylabs.slstudio.palettes.ArrayPalette;
 import com.symmetrylabs.slstudio.palettes.ColorPalette;
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 import com.symmetrylabs.slstudio.pattern.base.MidiPolyphonicExpressionPattern;
-import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,16 +18,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
+import heronarts.lx.Tempo;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.midi.MidiNote;
-import heronarts.lx.midi.MidiNoteOff;
-import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -38,19 +32,21 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXVector;
 
-public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extends Strip>> {
+public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extends Strip>> implements Tempo.Listener {
     List<Bundle> bundles;
     List<Junction> junctions;
     List<Infection> infections;
     Map<Integer, Infection> infectionsByKey;
 
     private CompoundParameter hueParam = new CompoundParameter("Hue", 0, -1, 1).setDescription("Hue adjustment");
-    CompoundParameter hVarParam = new CompoundParameter("HVar", 1, 0, 4);  // hue variation
-    private CompoundParameter speedParam = new CompoundParameter("Speed", 128, 0, 1000).setDescription("Infection growth speed (strip lengths per minute)");
+    private CompoundParameter hVarParam = new CompoundParameter("HVar", 1, 0, 4);  // hue variation
+    private CompoundParameter speedParam = new CompoundParameter("Speed", 128, 0, 3000).setDescription("Infection growth speed (strip lengths per minute)");
+    private BooleanParameter tempoParam = new BooleanParameter("Tempo", false).setDescription("Use the global tempo to trigger infection growth");
 
     private DiscreteParameter armsParam = new DiscreteParameter("Arms", 3, 1, 6).setDescription("Initial branch arms from infection origin");
     private CompoundParameter branchParam = new CompoundParameter("Branch", 1.2, 1, 6).setDescription("Branching factor from subsequent junctions");
     private DiscreteParameter spreadParam = new DiscreteParameter("Spread", 0, -1, 4);
+    private DiscreteParameter maxLenParam = new DiscreteParameter("MaxLen", 24, 2, 500);
     private BooleanParameter triggerParam = new BooleanParameter("Trigger", false).setDescription("Trigger a new infection").setMode(BooleanParameter.Mode.MOMENTARY);
 
     private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
@@ -76,10 +72,12 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         addParameter(hueParam);
         addParameter(hVarParam);
         addParameter(speedParam);
+        addParameter(tempoParam);
 
         addParameter(armsParam);
         addParameter(branchParam);
         addParameter(spreadParam);
+        addParameter(maxLenParam);
         addParameter(triggerParam);
 
         addParameter(palette);
@@ -91,6 +89,8 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
 
         addParameter(noteLoParam);
         addParameter(noteHiParam);
+
+        lx.tempo.addListener(this);
     }
 
     @Override
@@ -127,6 +127,17 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         renderInfections();
     }
 
+    public void onBeat(Tempo tempo, int count) {
+        if (tempoParam.isOn()) {
+            for (Infection inf : infections) {
+                inf.nextStep();
+            }
+        }
+    }
+
+    public void onMeasure(Tempo tempo) { }
+
+
     protected void advanceInfections(double deltaSec) {
         List<Infection> continuingInfections = new ArrayList<>();
         for (Infection inf : infections) {
@@ -160,14 +171,14 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
     protected void startInfection(int key, float xMin, float xMax) {
         Infection inf = new Infection(
             selectOrigin(xMin, xMax), armsParam.getValue(), branchParam.getValue(),
-            spreadParam.getValue(), hueParam.getValue(), hVarParam.getValue(), getPalette());
+            spreadParam.getValue(), hueParam.getValue(), hVarParam.getValue(), getPalette(), maxLenParam.getValuei());
         infections.add(inf);
         infectionsByKey.put(key, inf);
     }
 
     protected void stopInfection(int key) {
         Infection inf = infectionsByKey.get(key);
-        if (inf != null) inf.beginExpiring();
+        if (inf != null) inf.stopGrowing();
     }
 
     protected Junction selectOrigin(float xMin, float xMax) {
@@ -200,49 +211,75 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
         public Map<Integer, Double> pointAges = new HashMap<>();
         public Map<Bundle, Integer> bundleTraversals = new HashMap<>();
         public List<Segment> growingSegments;
+        public List<Segment> nextStepSegments;
         public double branchFactor;
         public double spreadFactor;
         public Random random = new Random();
-        public double segmentAge = 0;
+        public double infectionAge = 0;
+        public boolean growing = true;
         public boolean expiring = false;
-        ;
+
         public double expireStartAge = Double.MAX_VALUE;
-        public double expireElapsed = 0;
+        public double growStopAge = Double.MAX_VALUE;
         public double hue = 0;
         public double hueVar = 1;
         public ColorPalette palette;
+        public double grownLength = 0;
+        public double maxLength = 0;
 
-        public Infection(Junction origin, double initialBranchFactor, double branchFactor, double spreadFactor, double hue, double hueVar, ColorPalette palette) {
+        public Infection(Junction origin, double initialBranchFactor, double branchFactor, double spreadFactor, double hue, double hueVar, ColorPalette palette, double maxLength) {
             this.originVector = origin.loc;
             growingSegments = startSegments(origin, initialBranchFactor);
+            nextStepSegments = new ArrayList<>();
             this.branchFactor = branchFactor;
             this.spreadFactor = spreadFactor;
             this.hue = hue;
             this.hueVar = hueVar;
             this.palette = palette;
+            this.maxLength = maxLength;
         }
 
         public void beginExpiring() {
-            expiring = true;
-            expireStartAge = segmentAge;
-            expireElapsed = 0;
+            if (!expiring) {
+                expiring = true;
+                expireStartAge = infectionAge;
+                System.out.println("start expiring");
+            }
+        }
+
+        public void stopGrowing() {
+            if (growing) {
+                growing = false;
+                growStopAge = infectionAge;
+                System.out.println("stop growing");
+                beginExpiring();
+            }
         }
 
         public boolean isExpired() {
-            return expiring && expireElapsed > expireStartAge;
+            return !growing && infectionAge > growStopAge + expireStartAge;
+        }
+
+        public void nextStep() {
+            growingSegments.addAll(nextStepSegments);
+            nextStepSegments.clear();
         }
 
         /** The "progress" argument is measured in strip lengths. */
         public void advance(double deltaSec) {
-            segmentAge += deltaSec;
+            infectionAge += deltaSec;
             for (Integer i : pointAges.keySet()) {
                 pointAges.put(i, pointAges.get(i) + deltaSec);
             }
-            expireElapsed += deltaSec;
+            if (grownLength > maxLength) beginExpiring();
 
-            if (expiring) return;
+            if (!growing) return;
 
             double progress = speedParam.getValue()*deltaSec/60.0;
+            if (tempoParam.isOn()) {
+                progress = 6 * deltaSec;  // advance one strip length in 166 ms
+            }
+
             List<Segment> continuingSegments = new ArrayList<>();
             for (Segment s : growingSegments) {
                 double remain = 1 - s.progress;
@@ -252,14 +289,20 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
                     List<Segment> nextSegments = startSegments(s.getEnd(), branchFactor);
                     for (Segment ns : nextSegments) {
                         advanceSegment(ns, progress - remain);
-                        continuingSegments.add(ns);
+                        nextStepSegments.add(ns);
                     }
                 } else {
                     advanceSegment(s, progress);
                     continuingSegments.add(s);
                 }
-                growingSegments = continuingSegments;
             }
+
+            grownLength += progress;
+            if (!tempoParam.isOn()) {
+                continuingSegments.addAll(nextStepSegments);
+                nextStepSegments.clear();
+            }
+            growingSegments = continuingSegments;
         }
 
         /** Selects up to `branchFactor` segments radiating from the given junction. */
@@ -371,9 +414,9 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
                 double age = pointAges.get(index);
                 double value = 0;
                 if (expiring) {
-                    value = 1.0 - (age - expireElapsed)/(segmentAge - expireElapsed) - expireElapsed/expireStartAge;
+                    value = 1.0 - (age - expireStartAge)/expireStartAge;
                 } else {
-                    value = 1.0 - (age/segmentAge);
+                    value = 1.0 - age/infectionAge;
                 }
                 if (value < 0) value = 0;
                 long pc = palette.getColor16(value);
