@@ -1,7 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.color.Ops16;
-import com.symmetrylabs.color.Spaces;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology.Bundle;
@@ -11,6 +10,7 @@ import com.symmetrylabs.slstudio.palettes.ColorPalette;
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 import com.symmetrylabs.slstudio.pattern.base.MidiPolyphonicExpressionPattern;
+import com.symmetrylabs.util.ColorUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +24,6 @@ import java.util.Random;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.Tempo;
-import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -432,32 +431,9 @@ public class Infect extends MidiPolyphonicExpressionPattern<StripsModel<? extend
                 int b = Ops16.blue(pc);
                 int a = (int) (value*Ops16.MAX + 0.5);
                 if (value == 0) r = g = b = 0;
-                array[index] = Ops16.add(array[index], adjustHueSat(Ops16.rgba(r, g, b, a), hue, hueVar, palette.getHueCenter(), sat));
+                array[index] = Ops16.add(array[index], ColorUtils.adjustHueSat16(Ops16.rgba(r, g, b, a), hue, hueVar, palette.getHueCenter(), sat));
             }
         }
-    }
-
-    public static long adjustHueSat(long c, double hueShift, double hueVar, double hueCenter, double satFactor) {
-        if (hueShift == 0 && hueVar == 1 && satFactor == 1) return c;
-        int color = Spaces.rgb16ToRgb8(c);
-
-        double h = LXColor.h(color) / 360.0;
-        double s = LXColor.s(color) / 100.0;
-        double b = LXColor.b(color) / 100.0;
-        int alpha = color & 0xff000000;
-
-        h = h - hueCenter + 0.5;
-        float hf = (float) Math.floor(h);
-        h = h - hf;
-        h = h - 0.5;
-        h *= hueVar;
-        h = h + hueCenter;
-        h += hueShift;
-
-        s *= satFactor;
-        if (s > 1) s = 1;
-
-        return Spaces.rgb8ToRgb16(alpha | (LXColor.hsb(h * 360, s * 100, b * 100) & 0x00ffffff));
     }
 
     class Segment {

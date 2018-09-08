@@ -15,7 +15,7 @@ import com.symmetrylabs.shows.summerstage.SummerStageShow;
 
 public class Rings extends LXPattern {
     public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
-    
+
     float dx, dy, dz;
     float angleParam, spacingParam;
     float dzParam, centerParam;
@@ -23,45 +23,45 @@ public class Rings extends LXPattern {
     private NoiseHelper noiseHelper = new NoiseHelper();
     CompoundParameter paletteV = new CompoundParameter("Hue", 0, 0, 360);
     CompoundParameter pHueVar = new CompoundParameter("HueVar", 100, 0, 360);
+    CompoundParameter pSaturation = new CompoundParameter("Sat", 0.5);
+    CompoundParameter pSpeed = new CompoundParameter("Speed", 0.2);
+
+    CompoundParameter pSubspd = new CompoundParameter("Subspd", 2, 0, 4);
     CompoundParameter pDepth = new CompoundParameter("Depth", 0.6);
     CompoundParameter pBright = new CompoundParameter("Bright", 0.75);
-    CompoundParameter pSaturation = new CompoundParameter("Sat", 0.5);
-
-    CompoundParameter pSpeed1 = new CompoundParameter("Speed1", 0.2);
-    CompoundParameter pSpeed2 = new CompoundParameter("Speed2", 0.4);
     CompoundParameter pScale = new CompoundParameter("Scale", 0.65);
 
     public Rings(LX lx) {
         super(lx);
         addParameter(paletteV);
         addParameter(pHueVar);
+        addParameter(pSaturation);
+        addParameter(pSpeed);
+
+        addParameter(pSubspd);
         addParameter(pDepth);
         addParameter(pBright);
-        addParameter(pSaturation);
-
-        addParameter(pSpeed1);
-        addParameter(pSpeed2);
         addParameter(pScale);
     }
 
     public void run(double deltaMs, PolyBuffer.Space space) {
         int[] colors = (int[]) getArray(SRGB8);
 
-        final float xyspeed = pSpeed1.getValuef() * 0.01f;
-        final float zspeed = pSpeed1.getValuef() * 0.08f;
+        final float xyspeed = pSpeed.getValuef() * 0.01f;
+        final float zspeed = pSpeed.getValuef() * 0.08f;
         final float scale = pScale.getValuef() * 20.0f;
         final float br = pBright.getValuef() * 3.0f;
         final float gamma = 3.0f;
         final float depth = 1.0f - pDepth.getValuef();
         final float saturation = pSaturation.getValuef() * 100.0f;
 
-        final float angleSpeed = pSpeed1.getValuef() * 0.002f;
+        final float angleSpeed = pSpeed.getValuef() * 0.002f;
         angleParam = (float) ((angleParam + angleSpeed * deltaMs) % (2 * (float)Math.PI));
         final float angle = MathUtils.sin(angleParam);
 
-        spacingParam += (float) deltaMs * pSpeed2.getValuef() * 0.001f;
+        spacingParam += (float) deltaMs * pSpeed.getValuef() * pSubspd.getValuef() * 0.001f;
         dzParam += (float) deltaMs * 0.000014f;
-        centerParam += (float) deltaMs * pSpeed2.getValuef() * 0.001f;
+        centerParam += (float) deltaMs * pSpeed.getValuef() * pSubspd.getValuef() * 0.001f;
 
         final float spacing = noiseHelper.noise(spacingParam) * 50.0f;
 

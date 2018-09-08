@@ -15,9 +15,8 @@ import com.symmetrylabs.shows.summerstage.SummerStageShow;
 
 public class Noise extends DPat {
     public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
-    
+
     private int currModeIndex, iSymm;
-    public final CompoundParameter speed = new CompoundParameter("Speed", 0.55, -2, 2);
     public final CompoundParameter density = new CompoundParameter("Dens", 0.6);
     public final CompoundParameter sharp = new CompoundParameter("Sharp", 0);
     public final DiscreteParameter mode = new DiscreteParameter("Anim", new String[]{"Drip", "Cloud", "Rain", "Fire", "Mach", "Spark", "VWav", "Wave"});
@@ -30,7 +29,6 @@ public class Noise extends DPat {
 
     public Noise(LX lx) {
         super(lx);
-        addParameter(speed);
         addParameter(symm);
         addParameter(mode);
         addParameter(density);
@@ -50,7 +48,7 @@ public class Noise extends DPat {
 
     @Override
     protected void StartRun(double deltaMs) {
-        zTime += deltaMs * (1 * val(speed) - 0.50f) * 0.002f;
+        zTime += deltaMs * (1 * val(pSpeed) - 0.50f) * 0.002f;
         zTheta += deltaMs * (spin() - 0.5f) * 0.01f;
         rtime += deltaMs;
         iSymm = symm.getValuei();
@@ -63,7 +61,7 @@ public class Noise extends DPat {
             pSpin.reset();
             zTheta = 0;
             density.reset();
-            speed.reset();
+            pSpeed.reset();
 
             for (int i = 0; i < n.length; i++) {
                 n[i].isActive = false;

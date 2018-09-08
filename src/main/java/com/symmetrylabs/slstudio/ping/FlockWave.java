@@ -28,6 +28,7 @@ import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.BlobFollower;
 import com.symmetrylabs.util.BlobTracker;
+import com.symmetrylabs.util.ColorUtils;
 import com.symmetrylabs.util.CubeMarker;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.Octahedron;
@@ -492,42 +493,20 @@ public class FlockWave extends SLPattern<SLModel> {
                 if (kernel.vectorList != null) {
                     // The result array corresponds to just the vectors in the vector list.
                     IntStream.range(0, kernel.vectorList.size()).parallel().forEach(vi -> {
-                        colors[kernel.vectorList.get(vi).index] = adjustHueSat(pal.getColor(result[vi]), hueShift, hueVar, pal.getHueCenter(), sat);
+                        colors[kernel.vectorList.get(vi).index] = ColorUtils.adjustHueSat(pal.getColor(result[vi]), hueShift, hueVar, pal.getHueCenter(), sat);
                     });
                 } else {
                     // The result array corresponds to all the points in the model.
                     model.getPoints().parallelStream().forEach(p -> {
-                        colors[p.index] = adjustHueSat(pal.getColor(result[p.index]), hueShift, hueVar, pal.getHueCenter(), sat);
+                        colors[p.index] = ColorUtils.adjustHueSat(pal.getColor(result[p.index]), hueShift, hueVar, pal.getHueCenter(), sat);
                     });
                 }
             } else {
-                Arrays.fill(colors, adjustHueSat(pal.getColor(palShift.getValue()), hueShift, hueVar, pal.getHueCenter(), sat));
+                Arrays.fill(colors, ColorUtils.adjustHueSat(pal.getColor(palShift.getValue()), hueShift, hueVar, pal.getHueCenter(), sat));
             }
         }
 
         markModified(SRGB8);
-    }
-
-    public static int adjustHueSat(int color, float hueShift, float hueVar, float hueCenter, float satFactor) {
-        if (hueShift == 0 && hueVar == 1 && satFactor == 1) return color;
-
-        float h = LXColor.h(color) / 360f;
-        float s = LXColor.s(color) / 100f;
-        float b = LXColor.b(color) / 100f;
-        int alpha = color & 0xff000000;
-
-        h = h - hueCenter + 0.5f;
-        float hf = (float) Math.floor(h);
-        h = h - hf;
-        h = h - 0.5f;
-        h *= hueVar;
-        h = h + hueCenter;
-        h += hueShift;
-
-        s *= satFactor;
-        if (s > 1) s = 1;
-
-        return alpha | (LXColor.hsb(h * 360f, s * 100f, b * 100f) & 0x00ffffff);
     }
 
     PVector getRandomUnitVector() {
