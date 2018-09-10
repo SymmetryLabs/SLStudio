@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1536612636153,
+  "timestamp": 1536617511837,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -78,7 +78,7 @@
               "label": "Palette",
               "enabled": true,
               "Amount": 1.0,
-              "Palette": 0,
+              "Palette": 32,
               "Bottom": 0.0,
               "Top": 1.0,
               "Shift": 0.0,
@@ -90,7 +90,8 @@
               "modulators": [],
               "modulations": [],
               "triggers": []
-            }
+            },
+            "paletteName": "z-allure-body"
           }
         ],
         "clips": [],
