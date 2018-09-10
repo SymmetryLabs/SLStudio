@@ -47,15 +47,15 @@ public abstract class CubesShow implements Show {
 
     public static class TowerConfig {
 
-        final public CubesModel.Cube.Type type;
-        final public float x;
-        final public float y;
-        final public float z;
-        final public float xRot;
-        final public float yRot;
-        final public float zRot;
-        final public String[] ids;
-        final public float[] yValues;
+        public final CubesModel.Cube.Type type;
+        public final float x;
+        public final float y;
+        public final float z;
+        public final float xRot;
+        public final float yRot;
+        public final float zRot;
+        public final String[] ids;
+        public final float[] yValues;
 
         public TowerConfig(float x, float y, float z, String[] ids) {
             this(CubesModel.Cube.Type.LARGE, x, y, z, ids);
