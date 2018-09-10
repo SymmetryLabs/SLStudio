@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1536605348645,
+  "timestamp": 1536612636153,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -56,6 +56,79 @@
           "label": "Channel-1",
           "arm": false,
           "enabled": true,
+          "cue": true,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "warps": [],
+        "effects": [
+          {
+            "id": 45,
+            "class": "com.symmetrylabs.slstudio.effect.PaletteEffect",
+            "modulationColor": -60160,
+            "parameters": {
+              "label": "Palette",
+              "enabled": true,
+              "Amount": 1.0,
+              "Palette": 0,
+              "Bottom": 0.0,
+              "Top": 1.0,
+              "Shift": 0.0,
+              "Bias": 0.0,
+              "Cutoff": 0.0,
+              "Alpha": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 39,
+            "class": "com.symmetrylabs.slstudio.pattern.Metaballs",
+            "modulationColor": -65506,
+            "parameters": {
+              "label": "Metaballs",
+              "add": 140.39999686181545,
+              "maxhue": 250.0,
+              "falloff": 48.99099979903549,
+              "map": 1,
+              "count": 18,
+              "attract": 44.16000035405158,
+              "repel": 7.009999913498758,
+              "poster": 0,
+              "jump": 14.257999685779216
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 50,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16711882,
+        "parameters": {
+          "label": "Channel-2",
+          "arm": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -74,15 +147,17 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 39,
-            "class": "com.symmetrylabs.slstudio.pattern.Metaballs",
-            "modulationColor": -65506,
+            "id": 51,
+            "class": "com.symmetrylabs.slstudio.pattern.Sparkle",
+            "modulationColor": -15204608,
             "parameters": {
-              "label": "Metaballs",
-              "Add": 0.0,
-              "MaxHue": 250.0,
-              "Falloff": 10.0,
-              "map": 1
+              "label": "Sparkle",
+              "Dens": 0.8899999834597111,
+              "Attack": 0.4399999901652336,
+              "Decay": 0.5400000065565109,
+              "Hue": 0.5,
+              "HueVar": 0.25,
+              "Sat": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -317,9 +392,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 623.6784538234101,
-        "theta": -0.07200000000000051,
-        "phi": 0.21000000000000008,
+        "radius": 735.9647653796067,
+        "theta": -1.0229999999999864,
+        "phi": 0.4080000000000016,
         "positionX": 63.28605270385742,
         "positionY": 50.25,
         "positionZ": 42.42640686035156

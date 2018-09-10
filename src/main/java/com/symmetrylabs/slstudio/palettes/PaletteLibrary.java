@@ -337,5 +337,6 @@ public class PaletteLibrary {
             new LinePaletteExtractor(0, 1, 0.6, 0).getPalette(il.get(
                 "maxpixel-cc0-Elgol-Coast-Scotland-Stones-Lake-Isle-Of-Skye-540123.jpg"))
         );
+        pl.put("z-allure-body", new ArrayPalette(new int[]{0x9f0740, 0x5e1a6d, 0x6d44d4, 0xfb05c5, 0xfd7402, 0xf70d49}));
     }
 }

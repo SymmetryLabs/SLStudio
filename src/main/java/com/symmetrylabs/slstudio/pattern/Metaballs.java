@@ -7,15 +7,19 @@ import com.symmetrylabs.util.MathUtils;
 import com.symmetrylabs.util.SphereMarker;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
+import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXVector;
 import processing.core.PVector;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
 public class Metaballs extends SLPattern<SLModel> {
     public enum FieldMapping {
@@ -23,48 +27,62 @@ public class Metaballs extends SLPattern<SLModel> {
         LUM,
     }
 
-    private final CompoundParameter add = new CompoundParameter("Add", 100, 0, 360);
-    private final CompoundParameter hueLimit = new CompoundParameter("MaxHue", 250,0, 360);
-    private final CompoundParameter falloff = new CompoundParameter("Falloff", 3.6,0.1, 10);
+    private final CompoundParameter add = new CompoundParameter("add", 100, 0, 360);
+    private final CompoundParameter hueLimit = new CompoundParameter("maxhue", 250,0, 360);
+    private final CompoundParameter falloff = new CompoundParameter("falloff", 3.6,0.1, 100);
+    private final CompoundParameter attract = new CompoundParameter("attract", 4,1, 100);
+    private final CompoundParameter repel = new CompoundParameter("repel", 2,1, 12);
+    private final CompoundParameter jump = new CompoundParameter("jump", 5,0.2, 20);
     private final EnumParameter<FieldMapping> mapping = new EnumParameter<>("map", FieldMapping.HUE);
-    private final ArrayList<Ball> balls;
+    private final DiscreteParameter count = new DiscreteParameter("count", 3, 0, 30);
+    private final DiscreteParameter posterize = new DiscreteParameter("poster", 0, 0, 9);
+    private final ArrayList<Ball> balls = new ArrayList<>();
+    private final Random random = new Random();
 
     public Metaballs(LX lx) {
         super(lx);
-        balls = new ArrayList<>();
-        balls.add(new Ball(
-            new Interpolator(lx.model.xRange / 1.8, 12000, lx.model.cx, 0),
-            new Interpolator(lx.model.yRange / 2.1, 8000, lx.model.cy + 0.1 * lx.model.yRange, 1500),
-            new Interpolator(lx.model.zRange / 1.6, 27000, lx.model.cz, 0),
-            1f
-            ));
-        balls.add(new Ball(
-            new Interpolator(lx.model.xRange / 1.4, 9000, lx.model.cx - 0.25 * lx.model.xRange, 2000),
-            new Interpolator(lx.model.yRange / 3.1, 7000, lx.model.cy + 0.1 * lx.model.yRange, 3000),
-            new Interpolator(lx.model.zRange, 30000, lx.model.cz, 0),
-            2f
-        ));
-        balls.add(new Ball(
-            new Interpolator(lx.model.xRange / 2.0, 19000, lx.model.cx, 9000),
-            new Interpolator(lx.model.yRange / 2.0, 23000, lx.model.cy, 3000),
-            new Interpolator(lx.model.zRange * 7.0, 8000, lx.model.cz, 0),
-            1.5f
-        ));
-
         addParameter(add);
         addParameter(hueLimit);
         addParameter(falloff);
         addParameter(mapping);
+        addParameter(count);
+        addParameter(attract);
+        addParameter(repel);
+        addParameter(posterize);
+        addParameter(jump);
+        refillBalls();
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        if (p == count) {
+            refillBalls();
+        }
+    }
+
+    private void refillBalls() {
+        int c = count.getValuei();
+        if (balls.size() > c) {
+            balls.subList(c, balls.size()).clear();
+        } else {
+            while (balls.size() < c) {
+                balls.add(new Ball(1f + 0.5 * random.nextGaussian()));
+            }
+        }
     }
 
     @Override
     public void run(double deltaMs) {
-        float hl = hueLimit.getValuef();
-        float fo = falloff.getValuef();
-        float a = add.getValuef();
+        final float hl = hueLimit.getValuef();
+        final float fo = falloff.getValuef();
+        final float a = add.getValuef();
+        final int poster = posterize.getValuei();
 
         for (Ball b : balls) {
             b.advance(deltaMs);
+        }
+        for (Ball b : balls) {
+            b.commit();
         }
 
         getVectorList().parallelStream().forEach(p -> {
@@ -73,6 +91,10 @@ public class Metaballs extends SLPattern<SLModel> {
                 f += b.eval(p);
             }
             float h = 360e-3f * fo / (float)f - a;
+            if (poster > 0) {
+                int bucket = (int) (h * poster / 360f);
+                h = 360f * bucket / poster;
+            }
 
             int c = 0;
             switch (mapping.getEnum()) {
@@ -91,33 +113,9 @@ public class Metaballs extends SLPattern<SLModel> {
         });
     }
 
-    private final class Interpolator {
-        private final double halfrange, timescale, period, center;
-        double t;
-
-        Interpolator(double halfrange, double period, double center, double timeOffset) {
-            this.halfrange = halfrange;
-            this.period = period;
-            this.center = center;
-            timescale = Math.PI * 2 / period;
-            t = timeOffset;
-        }
-
-        double advance(double deltaMs) {
-            t += deltaMs;
-            while (t > period)
-                t -= period;
-            return get();
-        }
-
-        double get() {
-            return halfrange * Math.sin(t * timescale) + center;
-        }
-    }
-
     private final class Ball {
-        private final Interpolator x, y, z;
         private final double strength;
+        private LXVector target;
 
         /**
          * The negation of the origin of the ball. Calculated on every frame, cached
@@ -127,24 +125,81 @@ public class Metaballs extends SLPattern<SLModel> {
           */
         LXVector c;
 
-        Ball(Interpolator x, Interpolator y, Interpolator z, double strength) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+        /**
+         * The position we'll be in in the next frame. This is used because the balls
+         * need to know the positions of other balls for the repel calculation, but we
+         * don't want them moving during the loop where their positions are calculated.
+         */
+        LXVector next;
+
+        LXVector v;
+
+        Ball(double strength) {
             this.strength = strength;
-            c = new LXVector(0, 0, 0);
+            v = new LXVector(0, 0, 0);
+            target = new LXVector(0, 0, 0);
+            pickRandomTarget();
+            c = target.copy().mult(-1);
+        }
+
+        private void pickRandomTarget() {
+            LXPoint p = null;
+            while (p == null) {
+                p = model.points[random.nextInt(model.points.length)];
+            }
+            target.set(p.x, p.y, p.z);
         }
 
         final void advance(double deltaMs) {
-            c.set(
-                (float) -x.advance(deltaMs),
-                (float) -y.advance(deltaMs),
-                (float) -z.advance(deltaMs));
+            LXVector a = target.copy().add(c);
+            double t = deltaMs / 1000;
+            double d2 = a.magSq();
+
+            /* drop a little energy on each frame */
+            v.mult(0.96f);
+
+            if (d2 > 1e-2) {
+                double d = Math.sqrt(d2);
+                double F = Math.log(Math.pow(d, 1.1) / 10 * attract.getValue());
+                a.mult((float) (F * t / d));
+
+                for (Ball b : balls) {
+                    if (b == this) {
+                        continue;
+                    }
+                    /* points from other center to this center */
+                    LXVector c2c = c.copy().mult(-1).add(b.c);
+                    double rd2 = c2c.magSq();
+                    if (rd2 < 1e-2) {
+                        continue;
+                    }
+                    /* only you can prevent wildfires */
+                    rd2 = Math.max(rd2, 1);
+                    double rF = Math.pow(4, repel.getValue()) / rd2;
+                    c2c.setMag((float) (rF * t));
+                    a.add(c2c);
+                }
+
+                v.add(a);
+
+                if (random.nextFloat() < t / jump.getValue() || d2 < 15) {
+                    pickRandomTarget();
+                }
+            } else {
+                pickRandomTarget();
+            }
+
+            /* negation here because c is the negation of our actual position */
+            next = c.copy().add(v.copy().mult(-1));
+        }
+
+        final void commit() {
+            c = next;
         }
 
         final double eval(LXVector p) {
             LXVector v = c.copy().add(p);
-            double f = strength / Double.max(0.001, Math.sqrt(v.dot(v)));
+            double f = strength / Double.max(0.001, v.mag());
             return f;
         }
     }
@@ -153,8 +208,8 @@ public class Metaballs extends SLPattern<SLModel> {
     public Collection<Marker> getMarkers() {
         List<Marker> markers = new ArrayList<>();
         for (Ball b : balls) {
-            markers.add(new SphereMarker(
-                new PVector((float) b.x.get(), (float) b.y.get(), (float) b.z.get()), 12f, LXColor.RED));
+            markers.add(new SphereMarker(new PVector(-b.c.x, -b.c.y, -b.c.z), 12f, LXColor.RED));
+            markers.add(new SphereMarker(new PVector(b.target.x, b.target.y, b.target.z), 12f, LXColor.GREEN));
         }
         return markers;
     }
