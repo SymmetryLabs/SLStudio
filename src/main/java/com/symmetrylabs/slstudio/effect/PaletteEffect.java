@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.effect;
 
+import com.google.gson.JsonObject;
 import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.lx.color.LXColor;
@@ -11,6 +12,7 @@ import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 
 public class PaletteEffect extends SLEffect {
+    private static final String KEY_PALETTE_NAME = "paletteName";
 
     private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
 
@@ -65,6 +67,28 @@ public class PaletteEffect extends SLEffect {
             if (alpha.getValueb()) {
                 colors[i] = (colors[i] & 0x00ffffff) | a;
             }
+        }
+    }
+
+    @Override
+    public void save(LX lx, JsonObject obj) {
+        super.save(lx, obj);
+        obj.addProperty(KEY_PALETTE_NAME, palette.getOption());
+    }
+
+    @Override
+    public void load(LX lx, JsonObject obj) {
+        super.load(lx, obj);
+        if (obj.has(KEY_PALETTE_NAME)) {
+            String pname = obj.get(KEY_PALETTE_NAME).getAsString();
+            String[] palettes = paletteLibrary.getNames();
+            for (int i = 0; i < palettes.length; i++) {
+                if (palettes[i].equals(pname)) {
+                    palette.setValue(i);
+                    return;
+                }
+            }
+            System.err.println("couldn't find palette '" + pname + "'");
         }
     }
 }
