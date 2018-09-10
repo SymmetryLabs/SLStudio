@@ -2,17 +2,31 @@ package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
+import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.MathUtils;
+import com.symmetrylabs.util.SphereMarker;
 import heronarts.lx.LX;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.transform.LXVector;
+import processing.core.PVector;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class Metaballs extends SLPattern<SLModel> {
+    public enum FieldMapping {
+        HUE,
+        LUM,
+    }
+
     private final CompoundParameter add = new CompoundParameter("Add", 100, 0, 360);
     private final CompoundParameter hueLimit = new CompoundParameter("MaxHue", 250,0, 360);
     private final CompoundParameter falloff = new CompoundParameter("Falloff", 3.6,0.1, 10);
+    private final EnumParameter<FieldMapping> mapping = new EnumParameter<>("map", FieldMapping.HUE);
     private final ArrayList<Ball> balls;
 
     public Metaballs(LX lx) {
@@ -40,6 +54,7 @@ public class Metaballs extends SLPattern<SLModel> {
         addParameter(add);
         addParameter(hueLimit);
         addParameter(falloff);
+        addParameter(mapping);
     }
 
     @Override
@@ -57,11 +72,22 @@ public class Metaballs extends SLPattern<SLModel> {
             for (Ball b : balls) {
                 f += b.eval(p);
             }
-            // subtracting out the 30 degrees gives us the threshold for the interior (red part) of the metaballs
             float h = 360e-3f * fo / (float)f - a;
-            float b = h < hl ? 100f : MathUtils.constrain(100f - 1.2f * (h - hl), 0f,100f);
-            h = MathUtils.constrain(h, 0f, hl);
-            colors[p.index] = lx.hsb(h, 100f, b);
+
+            int c = 0;
+            switch (mapping.getEnum()) {
+                case HUE: {
+                    float b = h < hl ? 100f : MathUtils.constrain(100f - 1.2f * (h - hl), 0f, 100f);
+                    h = MathUtils.constrain(h, 0f, hl);
+                    c = LXColor.hsb(h, 100f, b);
+                    break;
+                }
+                case LUM: {
+                    float b = MathUtils.constrain((360f - h) / 3.6f, 0f, 100f);
+                    c = LXColor.gray(b);
+                }
+            }
+            colors[p.index] = c;
         });
     }
 
@@ -81,6 +107,10 @@ public class Metaballs extends SLPattern<SLModel> {
             t += deltaMs;
             while (t > period)
                 t -= period;
+            return get();
+        }
+
+        double get() {
             return halfrange * Math.sin(t * timescale) + center;
         }
     }
@@ -117,5 +147,15 @@ public class Metaballs extends SLPattern<SLModel> {
             double f = strength / Double.max(0.001, Math.sqrt(v.dot(v)));
             return f;
         }
+    }
+
+    @Override
+    public Collection<Marker> getMarkers() {
+        List<Marker> markers = new ArrayList<>();
+        for (Ball b : balls) {
+            markers.add(new SphereMarker(
+                new PVector((float) b.x.get(), (float) b.y.get(), (float) b.z.get()), 12f, LXColor.RED));
+        }
+        return markers;
     }
 }
