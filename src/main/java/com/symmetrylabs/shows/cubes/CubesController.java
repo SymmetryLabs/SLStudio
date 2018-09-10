@@ -3,11 +3,9 @@ package com.symmetrylabs.shows.cubes;
 import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.component.GammaExpander;
-import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
-import com.symmetrylabs.util.ColorUtils;
+import com.symmetrylabs.util.NetworkUtils;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
@@ -15,12 +13,14 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.output.OPCConstants;
 import org.jetbrains.annotations.NotNull;
-import com.symmetrylabs.color.Ops16;
-import com.symmetrylabs.color.Ops8;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.*;
+import java.net.ConnectException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 
 public class CubesController extends LXOutput implements Comparable<CubesController>, OPCConstants {
     public final String id;
@@ -34,7 +34,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     private OutputStream output;
     protected boolean is16BitColorEnabled = false;
 
-    final int[] STRIP_ORD = new int[] {
+    final int[] STRIP_ORD = new int[]{
         0, 1, 2, // red
         3, 4, 5, // green
         6, 7, 8, // blue
@@ -79,7 +79,8 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         int idInt = Integer.MAX_VALUE;
         try {
             idInt = Integer.parseInt(id);
-        } catch (NumberFormatException e) {}
+        } catch (NumberFormatException e) {
+        }
         this.idInt = idInt;
 
         mappingMode = CubesMappingMode.getInstance(lx);
@@ -128,22 +129,26 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 
     @Override
     protected void onSend(PolyBuffer src) {
-        if (isBroadcast != SLStudio.applet.outputControl.broadcastPacket.isOn())
+        if (isBroadcast != SLStudio.applet.outputControl.broadcastPacket.isOn()) {
             return;
+        }
 
         // Create data socket connection if needed
         if (dsocket == null) {
             try {
                 dsocket = new DatagramSocket();
                 dsocket.connect(new InetSocketAddress(host, 7890));
-                //socket.setTcpNoDelay(true);
-                // output = socket.getOutputStream();
-            }
-            catch (ConnectException e) { connectionWarning(); return; }
-            catch (IOException e) { connectionWarning(); return; }
-
-            if (dsocket == null)
+            } catch (ConnectException e) {
+                connectionWarning();
                 return;
+            } catch (IOException e) {
+                connectionWarning();
+                return;
+            }
+
+            if (dsocket == null) {
+                return;
+            }
         }
 
         // Find the Cube we're outputting to
@@ -151,19 +156,19 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         // if that cube isn't modelled yet
         // Use the mac address to find the cube if we have it
         // Otherwise use the cube id
-        if (!(lx.model instanceof CubesModel))
+        if (!(lx.model instanceof CubesModel)) {
             return;
+        }
 
         PointsGrouping points = null;
-        CubesModel cubesModel = (CubesModel)lx.model;
+        CubesModel cubesModel = (CubesModel) lx.model;
         boolean isDoubleControllerCube = false;
 
         if ((SLStudio.applet.outputControl.testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
             CubesModel.Cube cube = cubesModel.getCubes().get(0);
             if (cube instanceof CubesModel.DoubleControllerCube) {
-                points = ((CubesModel.DoubleControllerCube)cube).getPointsA();
-            }
-            else {
+                points = ((CubesModel.DoubleControllerCube) cube).getPointsA();
+            } else {
                 points = new PointsGrouping(cube.getPoints());
             }
         } else {
@@ -179,8 +184,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
                             points = c2.getPointsB();
                         }
                     }
-                }
-                else if (c.id != null && c.id.equals(id)) {
+                } else if (c.id != null && c.id.equals(id)) {
                     points = new PointsGrouping(c.getPoints());
                 }
             }
@@ -193,32 +197,16 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
                 initPacketData(numPixels, true);
                 long[] srcLongs = (long[]) src.getArray(PolyBuffer.Space.RGB16);
-//                for (int stripNum = 0; stripNum < numStrips; stripNum++) {
-//                    Strip strip = cube.getStrips().get(STRIP_ORD[stripNum]);
-//                    for (int i = 0; i < strip.metrics.numPoints; i++) {
-//                        LXPoint point = strip.getPoints().get(i);
-//                        setPixel(stripNum * strip.metrics.numPoints + i, srcLongs[point.index]);
-//                    }
-//                }
                 for (int i = 0; i < numPixels; i++) {
                     LXPoint point = points.getPoint(i);
-                    long col = isDoubleControllerCube ? Ops16.multiply(srcLongs[point.index], 0.8f) : srcLongs[point.index];
-                    setPixel(i, col);
+                    setPixel(i, srcLongs[point.index]);
                 }
             } else {
                 initPacketData(numPixels, false);
                 int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
-//                for (int stripNum = 0; stripNum < numStrips; stripNum++) {
-//                    Strip strip = cube.getStrips().get(STRIP_ORD[stripNum]);
-//                    for (int i = 0; i < strip.metrics.numPoints; i++) {
-//                        LXPoint point = strip.getPoints().get(i);
-//                        setPixel(stripNum * strip.metrics.numPoints + i, srcInts[point.index]);
-//                    }
-//                }
                 for (int i = 0; i < numPixels; i++) {
                     LXPoint point = points.getPoint(i);
-                    int col = isDoubleControllerCube ? Ops8.multiply(srcInts[point.index], 0.8f) : srcInts[point.index];
-                    setPixel(i, col);
+                    setPixel(i, srcInts[point.index]);
                 }
             }
         } else {
@@ -233,8 +221,9 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         try {
             //println("packetSizeBytes: "+packetSizeBytes);
             dsocket.send(packet);
+        } catch (Exception e) {
+            connectionWarning();
         }
-        catch (Exception e) { connectionWarning(); }
     }
 
     private void connectionWarning() {
