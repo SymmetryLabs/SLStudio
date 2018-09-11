@@ -23,7 +23,8 @@ public class StreetlampShow implements Show {
             DmxUsbOutput.WHITE,
         });
 
-        lx.addOutput(new DummyOutput(lx));
+        //lx.addOutput(new DummyOutput(lx));
+        lx.addOutput(output);
     }
 
     @Override
