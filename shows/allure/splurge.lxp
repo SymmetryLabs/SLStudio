@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1536627510809,
+  "timestamp": 1536684160314,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 1,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -147,7 +147,7 @@
           "label": "Channel-2",
           "arm": false,
           "enabled": true,
-          "cue": true,
+          "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
@@ -175,11 +175,62 @@
               "cx": 410.0,
               "cy": 58.0,
               "cz": 14.499992370605469,
-              "vmin": 0.01,
+              "vmin": 0.19499999586492778,
               "vmax": 0.19999999664723872,
               "cutwhite": 0.3399999924004078,
               "cutblack": 0.0,
               "selmode": 1
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 222,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16711779,
+        "parameters": {
+          "label": "Channel-3",
+          "arm": false,
+          "enabled": true,
+          "cue": true,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 223,
+            "class": "com.symmetrylabs.slstudio.pattern.Crystalline",
+            "modulationColor": -16711708,
+            "parameters": {
+              "label": "Crystalline",
+              "count": 3,
+              "width": 143.99999731779099,
+              "cx": 410.0,
+              "cy": 58.0,
+              "cz": 14.499992370605469,
+              "vmin": 0.5,
+              "vmax": 0.5,
+              "cutwhite": 0.1,
+              "cutblack": 0.4,
+              "selmode": 2
             },
             "modulation": {
               "modulators": [],
@@ -428,8 +479,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 740.4276786711241,
-        "theta": 0.4199999999999997,
-        "phi": 0.6337166738510128,
+        "theta": -1.0919999999999987,
+        "phi": 0.29171667385101163,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 14.499992370605469

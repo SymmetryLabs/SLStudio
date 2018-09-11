@@ -20,8 +20,12 @@ public class Crystalline extends SLPattern<SLModel> {
     private static final int CANDIDATE_COUNT = 500;
 
     public enum DirSelectMode {
-        S2_POISSON_SAMPLE,
-        TETRA,
+        POISSON,
+        TETRAHEDRAL,
+        OCTAHEDRAL,
+        ICOSAHEDRAL,
+        FORWARD,
+        UP,
     }
 
     private static class DirS2 {
@@ -65,12 +69,12 @@ public class Crystalline extends SLPattern<SLModel> {
     private final CompoundParameter cx = new CompoundParameter("cx", model.cx, model.xMin, model.xMax);
     private final CompoundParameter cy = new CompoundParameter("cy", model.cy, model.yMin, model.yMax);
     private final CompoundParameter cz = new CompoundParameter("cz", model.cz, model.zMin, model.zMax);
-    private final CompoundParameter vmin = new CompoundParameter("vmin", 0.01, 0, 0.5);
-    private final CompoundParameter vmax = new CompoundParameter("vmax", 0.05, 0, 0.5);
+    private final CompoundParameter vmin = new CompoundParameter("vmin", 0.02, -1, 1);
+    private final CompoundParameter vmax = new CompoundParameter("vmax", 0.05, -1, 1);
     private final CompoundParameter cutWhite = new CompoundParameter("cutwhite", 0.1, 0, 1);
     private final CompoundParameter cutBlack = new CompoundParameter("cutblack", 0.4, 0, 1);
     private final BooleanParameter reset = new BooleanParameter("reset", false).setMode(BooleanParameter.Mode.MOMENTARY);
-    private final EnumParameter<DirSelectMode> selectMode = new EnumParameter<>("selmode", DirSelectMode.S2_POISSON_SAMPLE);
+    private final EnumParameter<DirSelectMode> selectMode = new EnumParameter<>("selmode", DirSelectMode.POISSON);
     private final Random random = new Random();
     private final List<DirS2> dirs = new ArrayList<>();
 
@@ -92,6 +96,11 @@ public class Crystalline extends SLPattern<SLModel> {
     }
 
     @Override
+    public String getCaption() {
+        return String.format("%d symmetry directions", dirs.size());
+    }
+
+    @Override
     public void onParameterChanged(LXParameter p) {
         if (p == count || p == selectMode) {
             refillDirs();
@@ -101,10 +110,20 @@ public class Crystalline extends SLPattern<SLModel> {
         }
     }
 
+    private boolean antipodalDirectionExists(LXVector v) {
+        LXVector nv = v.copy().normalize();
+        for (DirS2 d : dirs) {
+            if (nv.copy().add(d.n).magSq() < 1e-1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void refillDirs() {
         int c = count.getValuei();
         switch (selectMode.getEnum()) {
-            case S2_POISSON_SAMPLE:
+            case POISSON:
                 if (dirs.size() > c) {
                     dirs.subList(c, dirs.size()).clear();
                 } else {
@@ -113,12 +132,53 @@ public class Crystalline extends SLPattern<SLModel> {
                     }
                 }
                 break;
-            case TETRA:
+
+            case TETRAHEDRAL:
                 dirs.clear();
-                dirs.add(new DirS2(new LXVector(8, 0, -1), random.nextFloat()));
-                dirs.add(new DirS2(new LXVector(-2, 4, -1), random.nextFloat()));
-                dirs.add(new DirS2(new LXVector(-2, -4, -1), random.nextFloat()));
-                dirs.add(new DirS2(new LXVector(0.01f, 0.01f, 1), random.nextFloat()));
+                dirs.add(new DirS2(new LXVector(8, 0, -1), 0));
+                dirs.add(new DirS2(new LXVector(-2, 4, -1), 0));
+                dirs.add(new DirS2(new LXVector(-2, -4, -1), 0));
+                dirs.add(new DirS2(new LXVector(0, 0, 1), 0));
+                break;
+
+            case OCTAHEDRAL:
+                dirs.clear();
+                dirs.add(new DirS2(new LXVector(1, 0, 0), 0));
+                dirs.add(new DirS2(new LXVector(0, 1, 0), 0));
+                dirs.add(new DirS2(new LXVector(0, 0, 1), 0));
+                break;
+
+            case ICOSAHEDRAL:
+                dirs.clear();
+                double phi = (1 + Math.sqrt(5)) / 2;
+                for (double y : new double[]{-1, 1}) {
+                    for (double z : new double[]{-phi, phi}) {
+                        LXVector x = new LXVector(0f, (float) y, (float) z);
+                        if (!antipodalDirectionExists(x)) {
+                            dirs.add(new DirS2(x, 0));
+                        }
+
+                        x = new LXVector((float) z, 0f, (float) y);
+                        if (!antipodalDirectionExists(x)) {
+                            dirs.add(new DirS2(x, 0));
+                        }
+
+                        x = new LXVector((float) y, (float) z, 0f);
+                        if (!antipodalDirectionExists(x)) {
+                            dirs.add(new DirS2(x, 0));
+                        }
+                    }
+                }
+                break;
+
+            case FORWARD:
+                dirs.clear();
+                dirs.add(new DirS2(new LXVector(0, 0, 1), 0));
+                break;
+
+            case UP:
+                dirs.clear();
+                dirs.add(new DirS2(new LXVector(0, 1, 0), 0));
                 break;
         }
     }
