@@ -19,7 +19,8 @@ import java.util.Random;
 public class Crystalline extends SLPattern<SLModel> {
     private static final int CANDIDATE_COUNT = 500;
 
-    public enum DirSelectMode {
+    public enum SymmetryMode {
+        NONE,
         POISSON,
         TETRAHEDRAL,
         OCTAHEDRAL,
@@ -28,15 +29,57 @@ public class Crystalline extends SLPattern<SLModel> {
         UP,
     }
 
-    private static class DirS2 {
+    public enum RadialMode {
+        NONE,
+        SPHERE,
+        CYLINDER,
+    }
+
+    /** Moduli divide space into a periodic pattern based on the projection
+     *  of a point onto the underlying structure of the modulus. For example
+     *  a linear modulus would project each point onto a line, making linear
+     *  stripes. */
+    private abstract class Modulus {
+        float d;
+
+        Modulus() {
+            d = 0;
+        }
+
+        void step(double tms) {
+            d += velocity() * tms / 1000f;
+        }
+
+        float eval(LXVector v) {
+            float w = width();
+            float x = projection(v) + w * d;
+            return (x % w) / w + (x < 0 ? 1 : 0);
+        }
+
+        /** Returns the velocity of the modulus. Velocity is expressed as the
+         *  number of widths moved forward each second. */
+        abstract float velocity();
+
+        /** Returns the divisor of the modular space we're operating in, which
+         *  is also double the width of each stripe. */
+        abstract float width();
+
+        /** Returns the projection of the given vector onto the structure. This
+         *  method operates on the structure without modularity; the eval method
+         *  takes care of making the whole structure periodic over the width of
+         *  the space. */
+        abstract float projection(LXVector v);
+    }
+
+    /** A linear modulus that makes linear stripes */
+    private class LinearModulus extends Modulus {
         final LXVector n;
         final float lat;
         final float lon;
-        float d;
         /* ranges from 0 to 1, identifies a point in the interval [vmin, vmax] */
         float v;
 
-        DirS2(float lat, float lon, float v) {
+        LinearModulus(float lat, float lon, float v) {
             this.lat = lat;
             this.lon = lon;
             this.d = 0;
@@ -47,14 +90,14 @@ public class Crystalline extends SLPattern<SLModel> {
                 (float) Math.cos(lat));
         }
 
-        DirS2(LXVector n, float v) {
+        LinearModulus(LXVector n, float v) {
             this.n = n.copy().normalize();
             this.v = v;
             this.lat = -1;
             this.lon = -1;
         }
 
-        float angDist(DirS2 p) {
+        float angDist(LinearModulus p) {
             if (lat == -1 && lon == -1) {
                 throw new IllegalStateException("can't find angular distance without lat/lon");
             }
@@ -62,34 +105,94 @@ public class Crystalline extends SLPattern<SLModel> {
             return (float) Math.acos(
                 Math.sin(lat) * Math.sin(p.lat) + Math.cos(lon) * Math.cos(p.lon) * Math.cos(Math.abs(lon - p.lon)));
         }
+
+        @Override
+        float velocity() {
+            float min = vmin.getValuef();
+            float max = vmax.getValuef();
+            return min + v * (max - min);
+        }
+
+        @Override
+        float width() {
+            return width.getValuef();
+        }
+
+        @Override
+        float projection(LXVector v) {
+            return v.dot(n);
+        }
+    }
+
+    /** A spherical modulus that makes spherical shells */
+    private class SphericalModulus extends Modulus {
+        @Override
+        float velocity() {
+            return radialVelocity.getValuef();
+        }
+
+        @Override
+        float width() {
+            return radialWidth.getValuef();
+        }
+
+        @Override
+        float projection(LXVector v) {
+            return v.mag();
+        }
+    }
+
+    /** A cylindrical modulus that makes cylindrical shells */
+    private class CylindricalModulus extends Modulus {
+        LXVector n = new LXVector(0, 0, 1);
+        @Override
+        float velocity() {
+            return radialVelocity.getValuef();
+        }
+
+        @Override
+        float width() {
+            return radialWidth.getValuef();
+        }
+
+        @Override
+        float projection(LXVector v) {
+            float nd = v.dot(n);
+            return n.copy().mult(-nd).add(v).mag();
+        }
     }
 
     private final DiscreteParameter count = new DiscreteParameter("count", 3, 0, 40);
-    private final CompoundParameter width = new CompoundParameter("width", 24, 300);
+    private final CompoundParameter width = new CompoundParameter("width", 60, 800);
     private final CompoundParameter cx = new CompoundParameter("cx", model.cx, model.xMin, model.xMax);
     private final CompoundParameter cy = new CompoundParameter("cy", model.cy, model.yMin, model.yMax);
     private final CompoundParameter cz = new CompoundParameter("cz", model.cz, model.zMin, model.zMax);
     private final CompoundParameter vmin = new CompoundParameter("vmin", 0.02, -1, 1);
     private final CompoundParameter vmax = new CompoundParameter("vmax", 0.05, -1, 1);
     private final CompoundParameter cutWhite = new CompoundParameter("cutwhite", 0.1, 0, 1);
-    private final CompoundParameter cutBlack = new CompoundParameter("cutblack", 0.4, 0, 1);
+    private final CompoundParameter radialWidth = new CompoundParameter("rwidth", 60, 1, 800);
+    private final CompoundParameter radialVelocity = new CompoundParameter("rvel", 0.1, -1, 1);
     private final BooleanParameter reset = new BooleanParameter("reset", false).setMode(BooleanParameter.Mode.MOMENTARY);
-    private final EnumParameter<DirSelectMode> selectMode = new EnumParameter<>("selmode", DirSelectMode.POISSON);
+    private final EnumParameter<SymmetryMode> symmetryMode = new EnumParameter<>("symm", SymmetryMode.POISSON);
+    private final EnumParameter<RadialMode> radialMode = new EnumParameter<>("radial", RadialMode.NONE);
     private final Random random = new Random();
-    private final List<DirS2> dirs = new ArrayList<>();
+
+    private final List<Modulus> moduli = new ArrayList<>();
 
     public Crystalline(LX lx) {
         super(lx);
         addParameter(count);
-        addParameter(width);
         addParameter(cx);
         addParameter(cy);
         addParameter(cz);
+        addParameter(width);
         addParameter(vmin);
         addParameter(vmax);
+        addParameter(radialWidth);
+        addParameter(radialVelocity);
         addParameter(cutWhite);
-        addParameter(cutBlack);
-        addParameter(selectMode);
+        addParameter(symmetryMode);
+        addParameter(radialMode);
         addParameter(reset);
         reset.setShouldSerialize(false);
         refillDirs();
@@ -97,118 +200,135 @@ public class Crystalline extends SLPattern<SLModel> {
 
     @Override
     public String getCaption() {
-        return String.format("%d symmetry directions", dirs.size());
+        return String.format("%d symmetry directions", moduli.size());
     }
 
     @Override
     public void onParameterChanged(LXParameter p) {
-        if (p == count || p == selectMode) {
+        if (p == count || p == symmetryMode || p == radialMode) {
             refillDirs();
         } else if (p == reset) {
-            dirs.clear();
+            moduli.clear();
             refillDirs();
         }
     }
 
     private boolean antipodalDirectionExists(LXVector v) {
         LXVector nv = v.copy().normalize();
-        for (DirS2 d : dirs) {
-            if (nv.copy().add(d.n).magSq() < 1e-1) {
-                return true;
+        for (Modulus m : moduli) {
+            if (m instanceof LinearModulus) {
+                LinearModulus d = (LinearModulus) m;
+                if (nv.copy().add(d.n).magSq() < 1e-1) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
     private void refillDirs() {
-        int c = count.getValuei();
-        switch (selectMode.getEnum()) {
+        moduli.clear();
+
+        switch (radialMode.getEnum()) {
+            case NONE:
+                break;
+
+            case SPHERE:
+                moduli.add(new SphericalModulus());
+                break;
+
+            case CYLINDER:
+                moduli.add(new CylindricalModulus());
+                break;
+        }
+
+        switch (symmetryMode.getEnum()) {
+            case NONE:
+                break;
+
             case POISSON:
-                if (dirs.size() > c) {
-                    dirs.subList(c, dirs.size()).clear();
-                } else {
-                    while (dirs.size() < c) {
-                        dirs.add(poissonSampleDir());
-                    }
-                }
+                poissonSampleDirs(count.getValuei());
                 break;
 
             case TETRAHEDRAL:
-                dirs.clear();
-                dirs.add(new DirS2(new LXVector(8, 0, -1), 0));
-                dirs.add(new DirS2(new LXVector(-2, 4, -1), 0));
-                dirs.add(new DirS2(new LXVector(-2, -4, -1), 0));
-                dirs.add(new DirS2(new LXVector(0, 0, 1), 0));
+                moduli.add(new LinearModulus(new LXVector(8, 0, -1), 0));
+                moduli.add(new LinearModulus(new LXVector(-2, 4, -1), 0));
+                moduli.add(new LinearModulus(new LXVector(-2, -4, -1), 0));
+                moduli.add(new LinearModulus(new LXVector(0, 0, 1), 0));
                 break;
 
             case OCTAHEDRAL:
-                dirs.clear();
-                dirs.add(new DirS2(new LXVector(1, 0, 0), 0));
-                dirs.add(new DirS2(new LXVector(0, 1, 0), 0));
-                dirs.add(new DirS2(new LXVector(0, 0, 1), 0));
+                moduli.add(new LinearModulus(new LXVector(1, 0, 0), 0));
+                moduli.add(new LinearModulus(new LXVector(0, 1, 0), 0));
+                moduli.add(new LinearModulus(new LXVector(0, 0, 1), 0));
                 break;
 
             case ICOSAHEDRAL:
-                dirs.clear();
                 double phi = (1 + Math.sqrt(5)) / 2;
                 for (double y : new double[]{-1, 1}) {
                     for (double z : new double[]{-phi, phi}) {
                         LXVector x = new LXVector(0f, (float) y, (float) z);
                         if (!antipodalDirectionExists(x)) {
-                            dirs.add(new DirS2(x, 0));
+                            moduli.add(new LinearModulus(x, 0));
                         }
 
                         x = new LXVector((float) z, 0f, (float) y);
                         if (!antipodalDirectionExists(x)) {
-                            dirs.add(new DirS2(x, 0));
+                            moduli.add(new LinearModulus(x, 0));
                         }
 
                         x = new LXVector((float) y, (float) z, 0f);
                         if (!antipodalDirectionExists(x)) {
-                            dirs.add(new DirS2(x, 0));
+                            moduli.add(new LinearModulus(x, 0));
                         }
                     }
                 }
                 break;
 
             case FORWARD:
-                dirs.clear();
-                dirs.add(new DirS2(new LXVector(0, 0, 1), 0));
+                moduli.add(new LinearModulus(new LXVector(0, 0, 1), 0));
                 break;
 
             case UP:
-                dirs.clear();
-                dirs.add(new DirS2(new LXVector(0, 1, 0), 0));
+                moduli.add(new LinearModulus(new LXVector(0, 1, 0), 0));
                 break;
         }
     }
 
-    private DirS2 poissonSampleDir() {
-        List<DirS2> candidates = new ArrayList<>();
-        for (int i = 0; i < CANDIDATE_COUNT; i++) {
-            candidates.add(new DirS2(180f * random.nextFloat(), 360f * random.nextFloat(), random.nextFloat()));
-        }
-        float maxDist = 0;
-        DirS2 best = candidates.get(0);
-        for (DirS2 candidate : candidates) {
-            for (DirS2 dir : dirs) {
-                float dist = candidate.angDist(dir);
-                if (dist > maxDist) {
-                    best = candidate;
-                    maxDist = dist;
+    private void poissonSampleDirs(int c) {
+        /* We don't build this directly in the moduli list because that
+         * might have other kinds of moduli in it already. */
+        List<LinearModulus> chosen = new ArrayList<>();
+
+        while (chosen.size() < c) {
+            List<LinearModulus> candidates = new ArrayList<>();
+            for (int i = 0; i < CANDIDATE_COUNT; i++) {
+                candidates.add(new LinearModulus(
+                    180f * random.nextFloat(),
+                    360f * random.nextFloat(),
+                    random.nextFloat()));
+            }
+            float maxDist = 0;
+            LinearModulus best = candidates.get(0);
+            for (LinearModulus candidate : candidates) {
+                for (LinearModulus dir : chosen) {
+                    float dist = candidate.angDist(dir);
+                    if (dist > maxDist) {
+                        best = candidate;
+                        maxDist = dist;
+                    }
                 }
             }
+            chosen.add(best);
         }
-        return best;
+
+        moduli.addAll(chosen);
     }
 
     @Override
     public void run(double elapsedMs) {
-        final float velmin = vmin.getValuef();
-        final float velmax = vmax.getValuef();
-        for (DirS2 dir : dirs) {
-            float v = dir.v * (velmax - velmin) + velmin;
-            dir.d = (float) (dir.d + v * elapsedMs / 1000f);
+        for (Modulus m : moduli) {
+            m.step(elapsedMs);
         }
 
         final float w = width.getValuef();
@@ -217,16 +337,14 @@ public class Crystalline extends SLPattern<SLModel> {
         Arrays.fill(colors, off);
 
         final float cw = cutWhite.getValuef();
-        final float cb = cutBlack.getValuef();
 
         LXVector negCenter = new LXVector(-cx.getValuef(), -cy.getValuef(), -cz.getValuef());
         for (LXVector v : getVectors()) {
             v = v.copy().add(negCenter);
             boolean flip = false;
             float min = 1;
-            for (DirS2 d : dirs) {
-                float proj = v.dot(d.n) + w * d.d;
-                proj = (proj % w) / w + (proj < 0 ? 1 : 0);
+            for (Modulus m : moduli) {
+                float proj = m.eval(v);
                 min = Float.min(min, proj);
                 if (proj < 0.5) {
                     flip = !flip;
