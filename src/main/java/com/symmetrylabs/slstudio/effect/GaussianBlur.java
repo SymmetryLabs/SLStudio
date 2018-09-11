@@ -1,6 +1,5 @@
 package com.symmetrylabs.slstudio.effect;
 
-import com.aparapi.Kernel;
 import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.util.FixedWidthOctree;
