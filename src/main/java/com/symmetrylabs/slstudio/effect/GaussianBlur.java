@@ -10,73 +10,9 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class GaussianBlur extends SLEffect {
-
-    class IntBlurKernel extends Kernel {
-        int[] res;
-        int[] c;
-        int[] bkIndexes;
-        int[][] bkNeighbors;
-        float[][] bkCoeffs;
-        int bkMaxNeighbors;
-
-        IntBlurKernel() {
-            bkIndexes = indexes;
-            bkNeighbors = neighbors;
-            bkCoeffs = coeffs;
-            bkMaxNeighbors = maxNeighbors;
-            res = new int[bkIndexes.length];
-        }
-
-        @Override
-        public void run() {
-            int csum = 0;
-            int gid = getGlobalId();
-            int index = bkIndexes[gid];
-            int[] ns = bkNeighbors[gid];
-            float[] cs = bkCoeffs[gid];
-            for (int i = 0; i < bkMaxNeighbors && ns[i] != -1; i++) {
-                csum = Ops8.add(csum, Ops8.multiply(c[ns[i]], 100 * cs[i]));
-            }
-            res[index] = csum;
-        }
-    }
-
-    class LongBlurKernel extends Kernel {
-        long[] res;
-        long[] c;
-        int[] bkIndexes;
-        int[][] bkNeighbors;
-        float[][] bkCoeffs;
-        int bkMaxNeighbors;
-
-        LongBlurKernel() {
-            bkIndexes = indexes;
-            bkNeighbors = neighbors;
-            bkCoeffs = coeffs;
-            bkMaxNeighbors = maxNeighbors;
-            res = new long[bkIndexes.length];
-            ;
-        }
-
-        @Override
-        public void run() {
-            long csum = 0;
-            int gid = getGlobalId();
-            int index = bkIndexes[gid];
-            int[] ns = bkNeighbors[gid];
-            float[] cs = bkCoeffs[gid];
-            for (int i = 0; i < bkMaxNeighbors && ns[i] != -1; i++) {
-                csum = Ops16.add(csum, Ops16.multiply(c[ns[i]], 100 * cs[i]));
-            }
-            res[index] = csum;
-        }
-    }
-
-    private IntBlurKernel intBk = null;
-    private LongBlurKernel longBk = null;
-
     private int indexes[];
     private int neighbors[][];
     private float coeffs[][];
@@ -146,9 +82,6 @@ public class GaussianBlur extends SLEffect {
                 coeffs[i][j] *= scale;
             }
         }
-
-        intBk = new IntBlurKernel();
-        longBk = new LongBlurKernel();
     }
 
     @Override
@@ -161,26 +94,38 @@ public class GaussianBlur extends SLEffect {
             case SRGB8:
             case RGB8: {
                 int[] c = (int[]) getArray(preferredSpace);
-                if (intBk == null) {
-                    return;
-                }
-                intBk.c = c;
-                intBk.execute(indexes.length);
+                int[] res = new int[c.length];
+                IntStream.range(0, indexes.length).parallel().forEach(gid -> {
+                    int csum = 0;
+                    int index = indexes[gid];
+                    for (int i = 0; i < maxNeighbors && neighbors[gid][i] != -1; i++) {
+                        csum = Ops8.add(csum, Ops8.multiply(c[neighbors[gid][i]], 100 * coeffs[gid][i]));
+                    }
+                    res[index] = csum;
+                });
+
                 for (int i = 0; i < c.length; i++) {
-                    c[i] = intBk.res[i];
+                    c[i] = res[i];
                 }
                 break;
             }
 
             case RGB16: {
                 long[] c = (long[]) getArray(preferredSpace);
-                if (longBk == null) {
-                    return;
-                }
-                longBk.c = c;
-                longBk.execute(indexes.length);
+                long[] res = new long[c.length];
+                IntStream.range(0, indexes.length).parallel().forEach(gid -> {
+                    long csum = 0;
+                    int index = indexes[gid];
+                    int[] ns = neighbors[gid];
+                    float[] cs = coeffs[gid];
+                    for (int i = 0; i < maxNeighbors && ns[i] != -1; i++) {
+                        csum = Ops16.add(csum, Ops16.multiply(c[ns[i]], 100 * cs[i]));
+                    }
+                    res[index] = csum;
+                });
+
                 for (int i = 0; i < c.length; i++) {
-                    c[i] = longBk.res[i];
+                    c[i] = res[i];
                 }
                 break;
             }
