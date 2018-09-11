@@ -7,11 +7,10 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXVector;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +18,11 @@ import java.util.Random;
 
 public class Crystalline extends SLPattern<SLModel> {
     private static final int CANDIDATE_COUNT = 500;
+
+    public enum DirSelectMode {
+        S2_POISSON_SAMPLE,
+        TETRA,
+    }
 
     private static class DirS2 {
         final LXVector n;
@@ -39,7 +43,17 @@ public class Crystalline extends SLPattern<SLModel> {
                 (float) Math.cos(lat));
         }
 
+        DirS2(LXVector n, float v) {
+            this.n = n.copy().normalize();
+            this.v = v;
+            this.lat = -1;
+            this.lon = -1;
+        }
+
         float angDist(DirS2 p) {
+            if (lat == -1 && lon == -1) {
+                throw new IllegalStateException("can't find angular distance without lat/lon");
+            }
             /* this is the formula for great-circle distance */
             return (float) Math.acos(
                 Math.sin(lat) * Math.sin(p.lat) + Math.cos(lon) * Math.cos(p.lon) * Math.cos(Math.abs(lon - p.lon)));
@@ -56,6 +70,7 @@ public class Crystalline extends SLPattern<SLModel> {
     private final CompoundParameter cutWhite = new CompoundParameter("cutwhite", 0.1, 0, 1);
     private final CompoundParameter cutBlack = new CompoundParameter("cutblack", 0.4, 0, 1);
     private final BooleanParameter reset = new BooleanParameter("reset", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    private final EnumParameter<DirSelectMode> selectMode = new EnumParameter<>("selmode", DirSelectMode.S2_POISSON_SAMPLE);
     private final Random random = new Random();
     private final List<DirS2> dirs = new ArrayList<>();
 
@@ -70,6 +85,7 @@ public class Crystalline extends SLPattern<SLModel> {
         addParameter(vmax);
         addParameter(cutWhite);
         addParameter(cutBlack);
+        addParameter(selectMode);
         addParameter(reset);
         reset.setShouldSerialize(false);
         refillDirs();
@@ -77,7 +93,7 @@ public class Crystalline extends SLPattern<SLModel> {
 
     @Override
     public void onParameterChanged(LXParameter p) {
-        if (p == count) {
+        if (p == count || p == selectMode) {
             refillDirs();
         } else if (p == reset) {
             dirs.clear();
@@ -87,16 +103,27 @@ public class Crystalline extends SLPattern<SLModel> {
 
     private void refillDirs() {
         int c = count.getValuei();
-        if (dirs.size() > c) {
-            dirs.subList(c, dirs.size()).clear();
-        } else {
-            while (dirs.size() < c) {
-                dirs.add(sampleDir());
-            }
+        switch (selectMode.getEnum()) {
+            case S2_POISSON_SAMPLE:
+                if (dirs.size() > c) {
+                    dirs.subList(c, dirs.size()).clear();
+                } else {
+                    while (dirs.size() < c) {
+                        dirs.add(poissonSampleDir());
+                    }
+                }
+                break;
+            case TETRA:
+                dirs.clear();
+                dirs.add(new DirS2(new LXVector(8, 0, -1), random.nextFloat()));
+                dirs.add(new DirS2(new LXVector(-2, 4, -1), random.nextFloat()));
+                dirs.add(new DirS2(new LXVector(-2, -4, -1), random.nextFloat()));
+                dirs.add(new DirS2(new LXVector(0.01f, 0.01f, 1), random.nextFloat()));
+                break;
         }
     }
 
-    private DirS2 sampleDir() {
+    private DirS2 poissonSampleDir() {
         List<DirS2> candidates = new ArrayList<>();
         for (int i = 0; i < CANDIDATE_COUNT; i++) {
             candidates.add(new DirS2(180f * random.nextFloat(), 360f * random.nextFloat(), random.nextFloat()));
