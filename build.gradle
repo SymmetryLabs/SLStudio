@@ -111,6 +111,8 @@ dependencies {
 	// https://github.com/SymmetryLabs/aparapi
 	implementation 'com.github.SymmetryLabs:aparapi:b6fffad'
 
+	implementation 'com.fazecast:jSerialComm:[2.0.0,3.0.0)'
+
 	// http://mvnrepository.com/artifact/uk.co.caprica/vlcj
 	// http://capricasoftware.co.uk/#/projects/vlcj
 	implementation group: 'uk.co.caprica', name: 'vlcj', version: '3.10.1'

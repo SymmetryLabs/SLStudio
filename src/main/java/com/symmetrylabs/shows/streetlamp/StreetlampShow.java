@@ -3,6 +3,7 @@ package com.symmetrylabs.shows.streetlamp;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.dmx.DmxUsbOutput;
 
 public class StreetlampShow implements Show {
     @Override
@@ -12,7 +13,16 @@ public class StreetlampShow implements Show {
 
     @Override
     public void setupLx(SLStudioLX lx) {
+        DmxUsbOutput output = new DmxUsbOutput(lx);
 
+        output.setColorChannels(new int[] {
+            DmxUsbOutput.RED,
+            DmxUsbOutput.GREEN,
+            DmxUsbOutput.BLUE,
+            DmxUsbOutput.WHITE,
+        });
+
+        lx.addOutput(output);
     }
 
     @Override
