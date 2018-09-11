@@ -4,6 +4,7 @@ import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.dmx.DmxUsbOutput;
+import com.symmetrylabs.slstudio.output.DummyOutput;
 
 public class StreetlampShow implements Show {
     @Override
@@ -22,7 +23,7 @@ public class StreetlampShow implements Show {
             DmxUsbOutput.WHITE,
         });
 
-        lx.addOutput(output);
+        lx.addOutput(new DummyOutput(lx));
     }
 
     @Override
