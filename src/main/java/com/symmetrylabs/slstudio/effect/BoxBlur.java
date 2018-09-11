@@ -11,18 +11,18 @@ import heronarts.lx.transform.LXVector;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class GaussianBlur extends SLEffect {
+public class BoxBlur extends SLEffect {
     private int indexes[];
     private int neighbors[][];
-    private float coeffs[][];
     private int maxNeighbors;
 
-    private final CompoundParameter stdDevParam = new CompoundParameter("stdev", 4, 0.1, 8);
-    private float stdDevForCurrentKernels;
+    private final CompoundParameter radiusParam
+        = new CompoundParameter("radius", 5, 0.1, 50);
+    private float radiusForCurrentKernel;
 
-    public GaussianBlur(LX lx) {
+    public BoxBlur(LX lx) {
         super(lx);
-        addParameter(stdDevParam);
+        addParameter(radiusParam);
         initKernels();
     }
 
@@ -40,52 +40,40 @@ public class GaussianBlur extends SLEffect {
             }
         }
 
-        double stdev = stdDevParam.getValue();
-        double Gscale = Math.pow(1 / (2 * Math.PI * stdev * stdev), 1.5);
-        double expScale = 1 / (2 * stdev * stdev);
+        float radius = radiusParam.getValuef();
 
-        stdDevForCurrentKernels = (float) stdev;
+        radiusForCurrentKernel = (float) radius;
 
-        final LXVector[] vs = getVectorArray();
-        indexes = new int[vs.length];
-
+        /* This is calculated in the loop to take into account null vectors */
+        int nVectors = 0;
         maxNeighbors = 0;
-        for (LXVector v : vs) {
-            List<LXVector> neighbors = octree.withinDistance(v.x, v.y, v.z, (float) (3 * stdev));
+        for (LXVector v : getVectors()) {
+            nVectors++;
+            List<LXVector> neighbors = octree.withinDistance(v.x, v.y, v.z, radius);
             maxNeighbors = Integer.max(neighbors.size(), maxNeighbors);
         }
-        coeffs = new float[vs.length][maxNeighbors];
-        neighbors = new int[vs.length][maxNeighbors];
+        indexes = new int[nVectors];
+        neighbors = new int[nVectors][maxNeighbors];
 
-        for (int i = 0; i < vs.length; i++) {
-            LXVector v = vs[i];
+        int i = 0;
+        for (LXVector v : getVectors()) {
             indexes[i] = v.index;
-            List<LXVector> nslist = octree.withinDistance(v.x, v.y, v.z, (float) (3 * stdev));
+            List<LXVector> nslist = octree.withinDistance(v.x, v.y, v.z, radius);
             int N = nslist.size();
-            float scale = 0;
 
             for (int j = 0; j < N; j++) {
-                LXVector n = nslist.get(j).copy().mult(-1);
-                float distSq = n.add(v).magSq();
-                float coeff = (float) (Gscale * Math.exp(-distSq * expScale));
-                neighbors[i][j] = n.index;
-                coeffs[i][j] = coeff;
-                scale += coeff;
+                neighbors[i][j] = nslist.get(j).index;
             }
             for (int j = N; j < maxNeighbors; j++) {
                 neighbors[i][j] = -1;
             }
-
-            scale = 1f / (float) Math.pow(scale, 0.25);
-            for (int j = 0; j < N; j++) {
-                coeffs[i][j] *= scale;
-            }
+            i++;
         }
     }
 
     @Override
     public void run(double deltaMs, double amount, PolyBuffer.Space preferredSpace) {
-        if (Math.abs(stdDevForCurrentKernels - stdDevParam.getValuef()) > 1) {
+        if (Math.abs(radiusForCurrentKernel - radiusParam.getValuef()) > 1) {
             initKernels();
         }
 
@@ -95,12 +83,25 @@ public class GaussianBlur extends SLEffect {
                 int[] c = (int[]) getArray(preferredSpace);
                 int[] res = new int[c.length];
                 IntStream.range(0, indexes.length).parallel().forEach(gid -> {
-                    int csum = 0;
+                    int r = 0;
+                    int g = 0;
+                    int b = 0;
+                    int a = 0;
                     int index = indexes[gid];
+                    int N = 0;
                     for (int i = 0; i < maxNeighbors && neighbors[gid][i] != -1; i++) {
-                        csum = Ops8.add(csum, Ops8.multiply(c[neighbors[gid][i]], 100 * coeffs[gid][i]));
+                        int nc = c[neighbors[gid][i]];
+                        r += Ops8.red(nc);
+                        g += Ops8.green(nc);
+                        b += Ops8.blue(nc);
+                        a += Ops8.alpha(nc);
+                        N++;
                     }
-                    res[index] = csum;
+                    r /= N;
+                    g /= N;
+                    b /= N;
+                    a /= N;
+                    res[index] = Ops8.rgba(r, g, b, a);
                 });
 
                 for (int i = 0; i < c.length; i++) {
@@ -113,14 +114,25 @@ public class GaussianBlur extends SLEffect {
                 long[] c = (long[]) getArray(preferredSpace);
                 long[] res = new long[c.length];
                 IntStream.range(0, indexes.length).parallel().forEach(gid -> {
-                    long csum = 0;
+                    long r = 0;
+                    long g = 0;
+                    long b = 0;
+                    long a = 0;
                     int index = indexes[gid];
-                    int[] ns = neighbors[gid];
-                    float[] cs = coeffs[gid];
-                    for (int i = 0; i < maxNeighbors && ns[i] != -1; i++) {
-                        csum = Ops16.add(csum, Ops16.multiply(c[ns[i]], 100 * cs[i]));
+                    int N = 0;
+                    for (int i = 0; i < maxNeighbors && neighbors[gid][i] != -1; i++) {
+                        long nc = c[neighbors[gid][i]];
+                        r += Ops16.red(nc);
+                        g += Ops16.green(nc);
+                        b += Ops16.blue(nc);
+                        a += Ops16.alpha(nc);
+                        N++;
                     }
-                    res[index] = csum;
+                    r /= N;
+                    g /= N;
+                    b /= N;
+                    a /= N;
+                    res[index] = Ops16.rgba((int) r, (int) g, (int) b, (int) a);
                 });
 
                 for (int i = 0; i < c.length; i++) {
