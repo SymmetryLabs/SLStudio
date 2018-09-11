@@ -76,23 +76,19 @@ public class Crystalline extends SLPattern<SLModel> {
         final LXVector n;
         final float lat;
         final float lon;
-        /* ranges from 0 to 1, identifies a point in the interval [vmin, vmax] */
-        float v;
 
-        LinearModulus(float lat, float lon, float v) {
+        LinearModulus(float lat, float lon) {
             this.lat = lat;
             this.lon = lon;
             this.d = 0;
-            this.v = v;
             this.n = new LXVector(
                 (float) (Math.sin(lat) * Math.cos(lon)),
                 (float) (Math.sin(lat) * Math.sin(lon)),
                 (float) Math.cos(lat));
         }
 
-        LinearModulus(LXVector n, float v) {
+        LinearModulus(LXVector n) {
             this.n = n.copy().normalize();
-            this.v = v;
             this.lat = -1;
             this.lon = -1;
         }
@@ -108,9 +104,7 @@ public class Crystalline extends SLPattern<SLModel> {
 
         @Override
         float velocity() {
-            float min = vmin.getValuef();
-            float max = vmax.getValuef();
-            return min + v * (max - min);
+            return linearVelocity.getValuef();
         }
 
         @Override
@@ -163,17 +157,16 @@ public class Crystalline extends SLPattern<SLModel> {
     }
 
     private final DiscreteParameter count = new DiscreteParameter("count", 3, 0, 40);
-    private final CompoundParameter width = new CompoundParameter("width", 60, 800);
+    private final CompoundParameter width = new CompoundParameter("width", 260, 800);
     private final CompoundParameter cx = new CompoundParameter("cx", model.cx, model.xMin, model.xMax);
     private final CompoundParameter cy = new CompoundParameter("cy", model.cy, model.yMin, model.yMax);
     private final CompoundParameter cz = new CompoundParameter("cz", model.cz, model.zMin, model.zMax);
-    private final CompoundParameter vmin = new CompoundParameter("vmin", 0.02, -1, 1);
-    private final CompoundParameter vmax = new CompoundParameter("vmax", 0.05, -1, 1);
+    private final CompoundParameter linearVelocity = new CompoundParameter("lvel", 0.02, -1, 1);
     private final CompoundParameter cutWhite = new CompoundParameter("cutwhite", 0.1, 0, 1);
     private final CompoundParameter radialWidth = new CompoundParameter("rwidth", 60, 1, 800);
     private final CompoundParameter radialVelocity = new CompoundParameter("rvel", 0.1, -1, 1);
     private final BooleanParameter reset = new BooleanParameter("reset", false).setMode(BooleanParameter.Mode.MOMENTARY);
-    private final EnumParameter<SymmetryMode> symmetryMode = new EnumParameter<>("symm", SymmetryMode.POISSON);
+    private final EnumParameter<SymmetryMode> symmetryMode = new EnumParameter<>("symm", SymmetryMode.TETRAHEDRAL);
     private final EnumParameter<RadialMode> radialMode = new EnumParameter<>("radial", RadialMode.NONE);
     private final Random random = new Random();
 
@@ -186,8 +179,7 @@ public class Crystalline extends SLPattern<SLModel> {
         addParameter(cy);
         addParameter(cz);
         addParameter(width);
-        addParameter(vmin);
-        addParameter(vmax);
+        addParameter(linearVelocity);
         addParameter(radialWidth);
         addParameter(radialVelocity);
         addParameter(cutWhite);
@@ -251,16 +243,16 @@ public class Crystalline extends SLPattern<SLModel> {
                 break;
 
             case TETRAHEDRAL:
-                moduli.add(new LinearModulus(new LXVector(8, 0, -1), 0));
-                moduli.add(new LinearModulus(new LXVector(-2, 4, -1), 0));
-                moduli.add(new LinearModulus(new LXVector(-2, -4, -1), 0));
-                moduli.add(new LinearModulus(new LXVector(0, 0, 1), 0));
+                moduli.add(new LinearModulus(new LXVector(8, 0, -1)));
+                moduli.add(new LinearModulus(new LXVector(-2, 4, -1)));
+                moduli.add(new LinearModulus(new LXVector(-2, -4, -1)));
+                moduli.add(new LinearModulus(new LXVector(0, 0, 1)));
                 break;
 
             case OCTAHEDRAL:
-                moduli.add(new LinearModulus(new LXVector(1, 0, 0), 0));
-                moduli.add(new LinearModulus(new LXVector(0, 1, 0), 0));
-                moduli.add(new LinearModulus(new LXVector(0, 0, 1), 0));
+                moduli.add(new LinearModulus(new LXVector(1, 0, 0)));
+                moduli.add(new LinearModulus(new LXVector(0, 1, 0)));
+                moduli.add(new LinearModulus(new LXVector(0, 0, 1)));
                 break;
 
             case ICOSAHEDRAL:
@@ -269,28 +261,28 @@ public class Crystalline extends SLPattern<SLModel> {
                     for (double z : new double[]{-phi, phi}) {
                         LXVector x = new LXVector(0f, (float) y, (float) z);
                         if (!antipodalDirectionExists(x)) {
-                            moduli.add(new LinearModulus(x, 0));
+                            moduli.add(new LinearModulus(x));
                         }
 
                         x = new LXVector((float) z, 0f, (float) y);
                         if (!antipodalDirectionExists(x)) {
-                            moduli.add(new LinearModulus(x, 0));
+                            moduli.add(new LinearModulus(x));
                         }
 
                         x = new LXVector((float) y, (float) z, 0f);
                         if (!antipodalDirectionExists(x)) {
-                            moduli.add(new LinearModulus(x, 0));
+                            moduli.add(new LinearModulus(x));
                         }
                     }
                 }
                 break;
 
             case FORWARD:
-                moduli.add(new LinearModulus(new LXVector(0, 0, 1), 0));
+                moduli.add(new LinearModulus(new LXVector(0, 0, 1)));
                 break;
 
             case UP:
-                moduli.add(new LinearModulus(new LXVector(0, 1, 0), 0));
+                moduli.add(new LinearModulus(new LXVector(0, 1, 0)));
                 break;
         }
     }
@@ -305,8 +297,7 @@ public class Crystalline extends SLPattern<SLModel> {
             for (int i = 0; i < CANDIDATE_COUNT; i++) {
                 candidates.add(new LinearModulus(
                     180f * random.nextFloat(),
-                    360f * random.nextFloat(),
-                    random.nextFloat()));
+                    360f * random.nextFloat()));
             }
             float maxDist = 0;
             LinearModulus best = candidates.get(0);
