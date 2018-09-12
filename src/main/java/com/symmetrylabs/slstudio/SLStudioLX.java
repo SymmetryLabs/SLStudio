@@ -74,6 +74,7 @@ public class SLStudioLX extends P3LX {
         public final UIAxes axes;
         public final UIMarkerPainter markerPainter;
         public final UICubeMapDebug cubeMapDebug;
+        public final UICameraControls cameraControls;
 
         private boolean toggleHelpBar = false;
         private boolean toggleClipView = false;
@@ -142,6 +143,8 @@ public class SLStudioLX extends P3LX {
             this.axes = new UIAxes();
             this.markerPainter = new UIMarkerPainter();
             this.cubeMapDebug = new UICubeMapDebug(lx);
+            this.cameraControls = new UICameraControls(this, preview);
+
             this.preview.addComponent(this.cubeMapDebug);
             this.preview.addComponent(axes);
             this.preview.addComponent(markerPainter);
@@ -162,6 +165,7 @@ public class SLStudioLX extends P3LX {
             addLayer(this.helpText);
             addLayer(this.captionText);
             addLayer(this.warningText);
+            addLayer(this.cameraControls);
 
             _toggleClipView();
             _togglePerformanceMode();
@@ -536,6 +540,7 @@ public class SLStudioLX extends P3LX {
             this.helpText.reposition();
             this.captionText.reposition();
             this.warningText.reposition();
+            this.cameraControls.reposition();
         }
 
         private static final String KEY_AUDIO_EXPANDED = "audioExpanded";
