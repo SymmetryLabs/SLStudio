@@ -557,14 +557,15 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
 
         // Set perspective projection
         float radiusValue = this.radiusDamped.getValuef();
+        float aspect = pg.width / (float) pg.height;
         if (this.ortho.isOn()) {
             float halfRadius = radiusValue * .5f;
-            pg.ortho(-halfRadius, halfRadius, -halfRadius, halfRadius);
+            pg.ortho(-halfRadius, halfRadius, aspect * -halfRadius, aspect * halfRadius);
         } else {
             float depthFactor = (float) Math.pow(10, this.depth.getValue());
             pg.perspective(
                 this.perspective.getValuef() / 180.f * PConstants.PI,
-                pg.width / (float) pg.height,
+                aspect,
                 radiusValue / depthFactor,
                 radiusValue * depthFactor
             );
