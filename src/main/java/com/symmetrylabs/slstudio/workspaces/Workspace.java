@@ -80,7 +80,7 @@ public class Workspace extends LXComponent {
     private class SwitchProjectOscListener implements LXOscListener {
         public void oscMessage(OscMessage message) {
             if (message.matches("/lx/workspaces/active")) {
-                WorkspaceProject workspace = projects.get(message.getInt() - 1);
+                WorkspaceProject workspace = projects.get(message.getInt());
                 lx.engine.addTask(() -> openProject(workspace));
             }
         }
