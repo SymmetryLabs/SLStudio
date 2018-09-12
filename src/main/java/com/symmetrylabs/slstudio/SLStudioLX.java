@@ -100,6 +100,7 @@ public class SLStudioLX extends P3LX {
                 "@-S           Save current project\n" +
                 "@-V           Toggle preview display\n" +
                 "@-X           Toggle axis display\n" +
+                "@-T           Toggle orthographic projection\n" +
                 "@-/           Toggle help caption line\n" +
                 "@-\\           Toggle 16-bit color (all)\n" +
                 "@-|           Toggle 16-bit color (selected channel)\n" +
@@ -206,6 +207,9 @@ public class SLStudioLX extends P3LX {
                                 break;
                             case VK_P:
                                 togglePerformanceMode();
+                                break;
+                            case VK_T:
+                                lx.ui.preview.ortho.toggle();
                                 break;
                             case VK_V:
                                 lx.ui.preview.toggleVisible();
