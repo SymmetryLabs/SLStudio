@@ -560,7 +560,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         float aspect = pg.width / (float) pg.height;
         if (this.ortho.isOn()) {
             float halfRadius = radiusValue * .5f;
-            pg.ortho(-halfRadius, halfRadius, aspect * -halfRadius, aspect * halfRadius);
+            pg.ortho(aspect * -halfRadius, aspect * halfRadius, -halfRadius, halfRadius);
         } else {
             float depthFactor = (float) Math.pow(10, this.depth.getValue());
             pg.perspective(
