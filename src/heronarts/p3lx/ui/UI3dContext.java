@@ -71,6 +71,8 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
 
     private final PVector eye = new PVector(0, 0, 0);
 
+    private final PVector up = new PVector(0, -1, 0);
+
     private final PVector centerDamped = new PVector(0, 0, 0);
 
     private final PVector eyeDamped = new PVector(0, 0, 0);
@@ -161,7 +163,8 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     // Radius bounds
     private float minRadius = 1, maxRadius = Float.MAX_VALUE;
 
-    private static final float MAX_PHI = PConstants.HALF_PI * .9f;
+    private static final float MAX_PHI = PConstants.HALF_PI;
+    private static final float PHI_UP_CORRECTION = 0.999f * PConstants.HALF_PI;
 
     private boolean showCenter = false;
 
@@ -520,6 +523,13 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
                 py + rv * sinphi,
                 pz - rv * cosphi * costheta
             );
+            if (pv > PHI_UP_CORRECTION) {
+                this.up.set((float) Math.sin(tv), 0, (float) -Math.cos(tv));
+            } else if (pv < -PHI_UP_CORRECTION) {
+                this.up.set((float) -Math.sin(tv), 0, (float) Math.cos(tv));
+            } else {
+                this.up.set(0, -1, 0);
+            }
             this.eye.set(this.eyeDamped);
             break;
         case MOVE:
@@ -529,6 +539,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
                 py + rv * sinphi,
                 pz + rv * cosphi * costheta
             );
+            this.up.set(0, -1, 0);
             this.center.set(this.centerDamped);
             break;
         }
@@ -552,7 +563,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         pg.camera(
             this.eyeDamped.x, this.eyeDamped.y, this.eyeDamped.z,
             this.centerDamped.x, this.centerDamped.y, this.centerDamped.z,
-            0, -1, 0
+            this.up.x, this.up.y, this.up.z
         );
 
         // Set perspective projection
