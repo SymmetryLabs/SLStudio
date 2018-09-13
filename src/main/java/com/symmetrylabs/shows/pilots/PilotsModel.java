@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.slstudio.model.DiscreteArrayGraph;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXAbstractFixture;
@@ -27,6 +28,8 @@ public class PilotsModel extends StripsModel<Strip> {
 
     public List<Cart> carts = new ArrayList<>();
     public Map<String, Cart> cartMap = new HashMap<>();
+
+    public DiscreteArrayGraph ngraph = new DiscreteArrayGraph(29, 5, 5); // TODO: get these numbers programmatically
 
     public PilotsModel(List<Strip> strips, List<Cart> carts) {
         super(strips);
