@@ -12,7 +12,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Toothpaste<T extends Strip> extends SLPattern<StripsModel<T>> {
+public class Fourier<T extends Strip> extends SLPattern<StripsModel<T>> {
     private static final int BANDS = 6;
 
     private static final double[] frequencies = new double[BANDS];
@@ -26,7 +26,7 @@ public class Toothpaste<T extends Strip> extends SLPattern<StripsModel<T>> {
     private final List<CompoundParameter> amplitudes;
     private final List<CompoundParameter> phaseShifts;
 
-    public Toothpaste(LX lx) {
+    public Fourier(LX lx) {
         super(lx);
 
         amplitudes = new ArrayList<>(BANDS);
