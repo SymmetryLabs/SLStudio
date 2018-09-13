@@ -40,27 +40,27 @@ public class UICameraControls extends UI2dContext implements LXParameterListener
         float x = PAD;
         float y = PAD;
 
-        makeDirButton("F", gotoFront, x, y);
+        makeDirButton(gotoFront, x, y);
         x += BW + PAD;
-        makeDirButton("B", gotoBack, x, y);
+        makeDirButton(gotoBack, x, y);
         x = PAD;
         y += BH + PAD;
 
-        makeDirButton("D", gotoDown, x, y);
+        makeDirButton(gotoDown, x, y);
         x += BW + PAD;
-        makeDirButton("U", gotoUp, x, y);
+        makeDirButton(gotoUp, x, y);
         x = PAD;
         y += BH + PAD;
 
-        makeDirButton("L", gotoLeft, x, y);
+        makeDirButton(gotoLeft, x, y);
         x += BW + PAD;
-        makeDirButton("R", gotoRight, x, y);
+        makeDirButton(gotoRight, x, y);
         x = PAD;
         y += BH + PAD;
 
-        makeDirButton("IL", gotoIsoLeft, x, y);
+        makeDirButton(gotoIsoLeft, x, y);
         x += BW + PAD;
-        makeDirButton("IR", gotoIsoRight, x, y);
+        makeDirButton(gotoIsoRight, x, y);
         x = PAD;
         y += BH + PAD;
 
@@ -71,7 +71,7 @@ public class UICameraControls extends UI2dContext implements LXParameterListener
             .addToContainer(this);
     }
 
-    private UIButton makeDirButton(String label, BooleanParameter param, float x, float y) {
+    private UIButton makeDirButton(BooleanParameter param, float x, float y) {
         UIButton b = new UIButton(x, y, BW, BH);
         b.setParameter(param);
         b.setFont(SLStudio.MONO_FONT.getFont());
