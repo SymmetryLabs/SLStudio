@@ -6,6 +6,7 @@ import heronarts.lx.LXEffect;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
+import org.apache.commons.math3.util.FastMath;
 
 import java.util.stream.IntStream;
 
@@ -24,21 +25,26 @@ public class TwoTone extends LXEffect {
     @Override
     public void run(double deltaMs, double amount) {
         IntStream.range(0, colors.length).parallel().forEach(i -> {
-            final float[] xyz = new float[3];
-            final float[] luv = new float[3];
-            final float[] rgb = new float[3];
-
             int c = colors[i];
-            rgb[0] = ((c & LXColor.RED_MASK) >>> LXColor.RED_SHIFT) / 255f;
-            rgb[1] = ((c & LXColor.GREEN_MASK) >>> LXColor.GREEN_SHIFT) / 255f;
-            rgb[2] = (c & LXColor.BLUE_MASK) / 255f;
+            double r, g, b;
+            r = FastMath.pow(((c & LXColor.RED_MASK) >>> LXColor.RED_SHIFT) / 255.0, 2.2);
+            g = FastMath.pow(((c & LXColor.GREEN_MASK) >>> LXColor.GREEN_SHIFT) / 255.0, 2.2);
+            b = FastMath.pow((c & LXColor.BLUE_MASK) / 255.0, 2.2);
 
-            ColorUtils.rgb2xyz(rgb, xyz);
-            ColorUtils.xyz2luv(xyz, luv);
+            /* This math is based off of the colorspace calculations in ColorUtils.
+             * Since all we need is the luminance, we can skip everything that is
+             * only used for the u/v calculations. */
+            double y = r * 0.2284569f + g * 0.7373523f + b * 0.0341908f;
+            final double Y_r = 1.00000f;
+            final double eps = 216f / 24389f;
+            final double k = 24389f / 27f;
 
-            if (luv[0] < cutoff1.getValue()) {
+            double yy = y / Y_r;
+            double L = yy > eps ? (116 * FastMath.cbrt(yy)) - 16 : k * yy;
+
+            if (L < cutoff1.getValue()) {
                 colors[i] = 0;
-            } else if (luv[0] < cutoff2.getValue()) {
+            } else if (L < cutoff2.getValue()) {
                 colors[i] = palette.getColor();
             } else {
                 colors[i] = c2.getColor();
