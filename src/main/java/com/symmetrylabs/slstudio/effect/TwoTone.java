@@ -5,6 +5,7 @@ import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import org.apache.commons.math3.util.FastMath;
 
@@ -13,17 +14,24 @@ import java.util.stream.IntStream;
 public class TwoTone extends LXEffect {
     CompoundParameter cutoff1 = new CompoundParameter("Lcut1", 1, 0, 100);
     CompoundParameter cutoff2 = new CompoundParameter("Lcut2", 50, 0, 100);
+    ColorParameter c1 = new ColorParameter("c1", LXColor.RED);
     ColorParameter c2 = new ColorParameter("c2", LXColor.WHITE);
+    BooleanParameter useGlobalC1 = new BooleanParameter("globalC1", true).setDescription("if true, uses global palette color for C1 instead of the C1 parameter");
 
     public TwoTone(LX lx) {
         super(lx);
         addParameter(cutoff1);
         addParameter(cutoff2);
+        addParameter(c1);
         addParameter(c2);
+        addParameter(useGlobalC1);
     }
 
     @Override
     public void run(double deltaMs, double amount) {
+        int c1color = useGlobalC1.getValueb() ? palette.getColor() : c1.getColor();
+        int c2color = c2.getColor();
+
         IntStream.range(0, colors.length).parallel().forEach(i -> {
             int c = colors[i];
             double r, g, b;
@@ -45,9 +53,9 @@ public class TwoTone extends LXEffect {
             if (L < cutoff1.getValue()) {
                 colors[i] = 0;
             } else if (L < cutoff2.getValue()) {
-                colors[i] = palette.getColor();
+                colors[i] = c1color;
             } else {
-                colors[i] = c2.getColor();
+                colors[i] = c2color;
             }
         });
     }
