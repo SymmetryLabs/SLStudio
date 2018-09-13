@@ -7,6 +7,8 @@ import heronarts.lx.color.ColorParameter;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 
+import java.util.stream.IntStream;
+
 public class TwoTone extends LXEffect {
     CompoundParameter cutoff1 = new CompoundParameter("Lcut1", 1, 0, 100);
     CompoundParameter cutoff2 = new CompoundParameter("Lcut2", 50, 0, 100);
@@ -21,11 +23,11 @@ public class TwoTone extends LXEffect {
 
     @Override
     public void run(double deltaMs, double amount) {
-        final float[] xyz = new float[3];
-        final float[] luv = new float[3];
-        final float[] rgb = new float[3];
+        IntStream.range(0, colors.length).parallel().forEach(i -> {
+            final float[] xyz = new float[3];
+            final float[] luv = new float[3];
+            final float[] rgb = new float[3];
 
-        for (int i = 0; i < colors.length; i++) {
             int c = colors[i];
             rgb[0] = ((c & LXColor.RED_MASK) >>> LXColor.RED_SHIFT) / 255f;
             rgb[1] = ((c & LXColor.GREEN_MASK) >>> LXColor.GREEN_SHIFT) / 255f;
@@ -41,6 +43,6 @@ public class TwoTone extends LXEffect {
             } else {
                 colors[i] = c2.getColor();
             }
-        }
+        });
     }
 }
