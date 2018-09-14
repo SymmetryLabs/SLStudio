@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1536886587489,
+  "timestamp": 1536949218201,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -79,10 +79,15 @@
               "enabled": true,
               "Lcut1": 1.0,
               "Lcut2": 82.99999926239252,
+              "c1/hue": 0.0,
+              "c1/brightness": 100.0,
+              "c1/saturation": 100.0,
+              "c1": -65536,
               "c2/hue": 0.0,
               "c2/brightness": 100.0,
               "c2/saturation": 0.0,
-              "c2": -1
+              "c2": -1,
+              "globalC1": true
             },
             "modulation": {
               "modulators": [],
@@ -311,7 +316,7 @@
         },
         "warps": [
           {
-            "id": 3394,
+            "id": 21532,
             "class": "com.symmetrylabs.slstudio.warp.Kaleidoscope",
             "modulationColor": -65470,
             "parameters": {
@@ -338,10 +343,15 @@
               "enabled": true,
               "Lcut1": 20.999999530613422,
               "Lcut2": 63.999998569488525,
+              "c1/hue": 0.0,
+              "c1/brightness": 100.0,
+              "c1/saturation": 100.0,
+              "c1": -65536,
               "c2/hue": 0.0,
               "c2/brightness": 100.0,
               "c2/saturation": 10.980392456054688,
-              "c2": -7197
+              "c2": -7197,
+              "globalC1": true
             },
             "modulation": {
               "modulators": [],
@@ -522,7 +532,7 @@
         },
         "warps": [
           {
-            "id": 3544,
+            "id": 21557,
             "class": "com.symmetrylabs.slstudio.warp.Kaleidoscope",
             "modulationColor": -16711914,
             "parameters": {
@@ -549,10 +559,15 @@
               "enabled": true,
               "Lcut1": 11.99999975413084,
               "Lcut2": 50.0,
+              "c1/hue": 0.0,
+              "c1/brightness": 100.0,
+              "c1/saturation": 100.0,
+              "c1": -65536,
               "c2/hue": 0.0,
               "c2/brightness": 100.0,
               "c2/saturation": 0.0,
-              "c2": -1
+              "c2": -1,
+              "globalC1": true
             },
             "modulation": {
               "modulators": [],
@@ -667,7 +682,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.8714285707101226,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -676,7 +691,7 @@
         },
         "warps": [
           {
-            "id": 12540,
+            "id": 21574,
             "class": "com.symmetrylabs.slstudio.warp.BundleDirMask",
             "modulationColor": -16711918,
             "parameters": {
