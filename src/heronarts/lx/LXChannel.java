@@ -237,6 +237,10 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             new CompoundParameter("Fader", 0)
                     .setDescription("Sets the alpha level of the output of this channel");
 
+    public final BooleanParameter autoDisable =
+                    new BooleanParameter("AutoDisable", false)
+                                    .setDescription("If true, disables the channel when the fader goes to zero");
+
     public final ObjectParameter<LXBlend> blendMode;
 
     public final MutableParameter controlSurfaceFocusIndex = (MutableParameter)
@@ -341,6 +345,14 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         addParameter("transitionEnabled", this.transitionEnabled);
         addParameter("transitionTimeSecs", this.transitionTimeSecs);
         addParameter("transitionBlendMode", this.transitionBlendMode);
+        addParameter("autoDisable", this.autoDisable);
+    }
+
+    boolean shouldRun() {
+        if (!this.enabled.isOn()) {
+            return false;
+        }
+        return !this.autoDisable.isOn() || this.fader.getValue() != 0;
     }
 
     public String getOscAddress() {

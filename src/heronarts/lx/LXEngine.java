@@ -1133,7 +1133,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         if (isChannelMultithreaded.isOn()) {
             // Kick off threads per channel
             for (LXChannel channel : this.mutableChannels) {
-                if (channel.enabled.isOn() || channel.cueActive.isOn()) {
+                if (channel.shouldRun() || channel.cueActive.isOn()) {
                     synchronized (channel.thread) {
                         channel.thread.signal.workDone = false;
                         channel.thread.deltaMs = deltaMs;
@@ -1149,7 +1149,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
             // Wait for all the channel threads to finish
             for (LXChannel channel : this.mutableChannels) {
-                if (channel.enabled.isOn() || channel.cueActive.isOn()) {
+                if (channel.shouldRun() || channel.cueActive.isOn()) {
                     synchronized (channel.thread.signal) {
                         while (!channel.thread.signal.workDone) {
                             try {
@@ -1165,7 +1165,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             }
         } else {
             for (LXChannel channel : this.mutableChannels) {
-                if (channel.enabled.isOn() || channel.cueActive.isOn()) {
+                if (channel.shouldRun() || channel.cueActive.isOn()) {
                     // TODO(mcslee): should clips still run even if channel is disabled??
                     channel.loop(deltaMs);
                 }
@@ -1232,7 +1232,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             long blendStart = System.nanoTime();
             double alpha = Spaces.cie_lightness_to_luminance(channel.fader.getValue());
 
-            if (channel.enabled.isOn() && alpha > 0) {
+            if (channel.shouldRun() && alpha > 0) {
                 LXChannel.CrossfadeGroup group = channel.crossfadeGroup.getEnum();
                 LXBlend blend = channel.blendMode.getObject();
                 (group == A ? groupA : group == B ? groupB : main).blendFrom(channel, alpha, blend, space);
@@ -1241,7 +1241,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
                 cue.copyFrom(channel, space);
                 cueOn = true;
             }
-            if (channel.enabled.isOn() || channel.cueActive.isOn()) {
+            if (channel.shouldRun() || channel.cueActive.isOn()) {
                 ((LXChannel.Timer) channel.timer).blendNanos = System.nanoTime() - blendStart;
             }
         }
@@ -1451,7 +1451,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     /**
      * This method is deprecated; use getUIPolyBufferNonThreadSafe instead.
-     * @param array Array to copy into
      */
     @Deprecated
     public int[] getUIBufferNonThreadSafe() {
