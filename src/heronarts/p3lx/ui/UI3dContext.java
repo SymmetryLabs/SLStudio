@@ -655,7 +655,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         case ZOOM:
             if (mouseEvent.isShiftDown()) {
                 this.radius.incrementValue(dy);
-            } else if (mouseEvent.isMetaDown()) {
+            } else if (mouseEvent.isMetaDown() || mouseEvent.isControlDown()) {
                 float dcx = dx * (float) Math.cos(this.thetaDamped.getValuef());
                 float dcz = dx * (float) Math.sin(this.thetaDamped.getValuef());
                 setCenter(this.center.x - dcx, this.center.y + dy, this.center.z - dcz);
