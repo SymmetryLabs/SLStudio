@@ -85,12 +85,12 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
         for (LXChannel c : lx.engine.channels) {
             c.autoDisable.setValue(true);
         }
-
-        workspace = new Workspace(lx, "shows/pilots");
     }
 
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
+        workspace = new Workspace(lx, ui, "shows/pilots");
+
         configurator = new CartConfigurator(ui, 0, 0, ui.rightPane.utility.getContentWidth());
         configurator.setListener(this);
         configurator.applyConfigs(CartConfig.defaultConfigs());

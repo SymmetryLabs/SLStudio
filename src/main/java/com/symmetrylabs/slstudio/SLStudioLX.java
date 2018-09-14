@@ -76,6 +76,8 @@ public class SLStudioLX extends P3LX {
         public final UICubeMapDebug cubeMapDebug;
         public final UICameraControls cameraControls;
 
+        private final List<Runnable> runPostDraw;
+
         private boolean toggleHelpBar = false;
         private boolean toggleClipView = false;
         private boolean clipViewVisible = true;
@@ -375,6 +377,8 @@ public class SLStudioLX extends P3LX {
             });
 
             setResizable(true);
+
+            runPostDraw = new ArrayList<>();
         }
 
         protected SLPattern getFocusedSLPattern() {
@@ -397,6 +401,22 @@ public class SLStudioLX extends P3LX {
             if (this.toggleClipView) {
                 this.toggleClipView = false;
                 _toggleClipView();
+            }
+        }
+
+        public void runAfterDraw(Runnable r) {
+            synchronized (runPostDraw) {
+                runPostDraw.add(r);
+            }
+        }
+
+        @Override
+        protected void endDraw() {
+            synchronized (runPostDraw) {
+                for (Runnable r : runPostDraw) {
+                    r.run();
+                }
+                runPostDraw.clear();
             }
         }
 
