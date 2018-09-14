@@ -168,6 +168,7 @@ public class Crystalline extends SLPattern<SLModel> {
     private final BooleanParameter reset = new BooleanParameter("reset", false).setMode(BooleanParameter.Mode.MOMENTARY);
     private final EnumParameter<SymmetryMode> symmetryMode = new EnumParameter<>("symm", SymmetryMode.TETRAHEDRAL);
     private final EnumParameter<RadialMode> radialMode = new EnumParameter<>("radial", RadialMode.NONE);
+    private final BooleanParameter alphaBg = new BooleanParameter("alpha", true);
     private final Random random = new Random();
 
     private final List<Modulus> moduli = new ArrayList<>();
@@ -185,6 +186,7 @@ public class Crystalline extends SLPattern<SLModel> {
         addParameter(cutWhite);
         addParameter(symmetryMode);
         addParameter(radialMode);
+        addParameter(alphaBg);
         addParameter(reset);
         reset.setShouldSerialize(false);
         refillDirs();
@@ -322,9 +324,8 @@ public class Crystalline extends SLPattern<SLModel> {
             m.step(elapsedMs);
         }
 
-        final float w = width.getValuef();
         final int on = LXColor.WHITE;
-        final int off = 0;
+        final int off = alphaBg.getValueb() ? 0 : LXColor.BLACK;
         Arrays.fill(colors, off);
 
         final float cw = cutWhite.getValuef();
