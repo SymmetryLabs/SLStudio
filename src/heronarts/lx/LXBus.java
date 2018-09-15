@@ -425,6 +425,10 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
             effect.dispose();
         }
         this.mutableEffects.clear();
+        for (LXWarp warp : this.mutableWarps) {
+            warp.dispose();
+        }
+        this.mutableWarps.clear();
         super.dispose();
     }
 
