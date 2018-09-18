@@ -133,9 +133,11 @@ public class Workspace extends LXComponent {
 
     private void loadProjectFiles() {
         final File[] filesArr = new File(path).listFiles((dir, name) -> name.endsWith(".lxp"));
-        for (int i = 0; i < filesArr.length; i++) {
-            WorkspaceProject workspace = new WorkspaceProject(filesArr[i]);
-            this.projects.add(workspace);
+        if (filesArr != null) {
+            for (int i = 0; i < filesArr.length; i++) {
+                WorkspaceProject workspace = new WorkspaceProject(filesArr[i]);
+                this.projects.add(workspace);
+            }
         }
     }
 
