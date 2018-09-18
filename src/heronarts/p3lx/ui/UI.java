@@ -45,7 +45,10 @@ import heronarts.p3lx.P3LX;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -328,6 +331,18 @@ public class UI implements LXEngine.Dispatch {
     private UIControlTarget controlTarget = null;
     private UITriggerSource triggerSource = null;
     private UIModulationSource modulationSource = null;
+
+    /**
+     * A cache of fonts, keyed by name.
+     *
+     * It's possible that the same font will appear in this list multiple
+     * times, because no effort is made to normalize the file names by
+     * which a font is requested. But because most calls to loadFont make
+     * the call with a static string, if the same callsite calls loadFont
+     * a number of times that callsite will only load the font from
+     * disk once, which is good enough for us.
+     */
+    private final Map<String, PFont> fontCache = new ConcurrentHashMap<>();
 
     public UI(P3LX lx) {
         this(lx.applet, lx);
@@ -656,7 +671,7 @@ public class UI implements LXEngine.Dispatch {
      * @return PFont object
      */
     public PFont loadFont(String font) {
-        return this.applet.loadFont(font);
+        return fontCache.computeIfAbsent(font, k -> this.applet.loadFont(font));
     }
 
     void redraw(UI2dComponent object) {
