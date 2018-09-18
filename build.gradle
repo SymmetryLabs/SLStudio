@@ -111,6 +111,8 @@ dependencies {
 	// https://github.com/SymmetryLabs/aparapi
 	implementation 'com.github.SymmetryLabs:aparapi:b6fffad'
 
+	implementation 'com.fazecast:jSerialComm:[2.0.0,3.0.0)'
+
 	// http://mvnrepository.com/artifact/uk.co.caprica/vlcj
 	// http://capricasoftware.co.uk/#/projects/vlcj
 	implementation group: 'uk.co.caprica', name: 'vlcj', version: '3.10.1'
@@ -121,7 +123,7 @@ dependencies {
 	// https://www.slf4j.org/manual.html
 	implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
 
-	implementation 'com.github.SymmetryLabs:p3lx:7b7e68d'
+	implementation 'com.github.SymmetryLabs:p3lx:728b892'
 
 	implementation files('libs/minim.jar')
 	implementation files('libs/jogamp-fat.jar')

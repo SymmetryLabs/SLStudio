@@ -7,6 +7,8 @@ import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.ui.UIWorkspace;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
+import heronarts.lx.LXChannel;
+import heronarts.lx.LXEngine;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.transform.LXVector;
@@ -18,7 +20,7 @@ import java.util.List;
 /**
  * This file creates and positions "carts" and creates one pixlite for each of them
  */
-public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigChangedListener {
+public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigChangedListener, LXEngine.Listener {
     static final String SHOW_NAME = "pilots";
 
     static final float RED_HUE = 0;
@@ -79,11 +81,16 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
         this.lx = lx;
         onConfigChanged(CartConfig.defaultConfigs());
 
-        workspace = new Workspace(lx, "shows/pilots");
+        lx.engine.addListener(this);
+        for (LXChannel c : lx.engine.channels) {
+            c.autoDisable.setValue(true);
+        }
     }
 
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
+        workspace = new Workspace(lx, ui, "shows/pilots");
+
         configurator = new CartConfigurator(ui, 0, 0, ui.rightPane.utility.getContentWidth());
         configurator.setListener(this);
         configurator.applyConfigs(CartConfig.defaultConfigs());
@@ -108,5 +115,18 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
     @Override
     public Workspace getWorkspace() {
         return workspace;
+    }
+
+    @Override
+    public void channelAdded(LXEngine lxEngine, LXChannel lxChannel) {
+        lxChannel.autoDisable.setValue(true);
+    }
+
+    @Override
+    public void channelRemoved(LXEngine lxEngine, LXChannel lxChannel) {
+    }
+
+    @Override
+    public void channelMoved(LXEngine lxEngine, LXChannel lxChannel) {
     }
 }

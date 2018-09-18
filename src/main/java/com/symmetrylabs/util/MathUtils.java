@@ -56,6 +56,10 @@ public final class MathUtils {
         internalRandom.setSeed(seed);
     }
 
+    public static double constrain(double x, double min, double max) {
+        return FastMath.min(FastMath.max(x, min), max);
+    }
+
     public static float constrain(float x, float min, float max) {
         return FastMath.min(FastMath.max(x, min), max);
     }

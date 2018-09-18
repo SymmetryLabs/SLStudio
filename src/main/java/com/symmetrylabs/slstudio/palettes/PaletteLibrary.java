@@ -107,7 +107,6 @@ public class PaletteLibrary {
     }
 
     static void loadPalettes(PaletteLibrary pl) {
-        pl.put("!solid.red", new ZigzagPalette(new int[] {0xff0000, 0xff0000}));
         /* Images loaded remotely from the Internet */
     /*
     pl.set("cities.london", new com.symmetrylabs.slstudio.palettes.DeckChairSource("5568230b7b2853502527fd4e"), new com.symmetrylabs.slstudio.palettes.ArcPaletteExtractor(0.44, 100));
@@ -371,5 +370,10 @@ public class PaletteLibrary {
             0x339933, 0x339933, 0x339933, 0x339933, 0x339933, 0x339933, 0x339933, 0x339933,
             0x339933, 0x339933, 0x339933, 0x339933, 0x339933, 0x339933, 0x339933, 0x339933
         }));
+
+        pl.put("z-allure-body", new ArrayPalette(new int[]{0x9f0740, 0x5e1a6d, 0x6d44d4, 0xfb05c5, 0xfd7402, 0xf70d49}));
+        pl.put("z-allure-splurge", new ArrayPalette(new int[]{0x000000, 0x472557, 0x794344, 0x6B90A7, 0xBAA355, 0xFFFFFF}));
+        pl.put("z-allure-intro", new ArrayPalette(new int[]{0x060606, 0x485356, 0x8AA1A3, 0xE0F7F6, 0xF2FEFF}));
+
     }
 }

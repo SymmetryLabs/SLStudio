@@ -190,13 +190,13 @@ public class SLStudio extends PApplet {
                     ui.preview.addComponent(uiTreeModelAxes);
                 }
 
+                show.setupUi(lx, ui);
+
                 if (show instanceof HasWorkspace) {
                     HasWorkspace hwShow = (HasWorkspace) show;
                     new UIWorkspace(ui, lx, hwShow.getWorkspace(), 0, 0, ui.leftPane.global.getContentWidth())
                         .addToContainer(ui.leftPane.global);
                 }
-
-                show.setupUi(lx, ui);
             }
         };
 

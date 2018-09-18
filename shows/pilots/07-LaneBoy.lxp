@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1535387461256,
+  "timestamp": 1536949242645,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -108,7 +108,7 @@
               "ySize": 116.0,
               "cy": 26.680000700056553,
               "zSize": 47.850000550970435,
-              "cz": 115.99999902769923,
+              "cz": 87.0,
               "invert": false
             }
           },
@@ -226,10 +226,15 @@
               "enabled": true,
               "Lcut1": 5.00000212341547,
               "Lcut2": 48.000000044703484,
+              "c1/hue": 0.0,
+              "c1/brightness": 100.0,
+              "c1/saturation": 100.0,
+              "c1": -65536,
               "c2/hue": 240.4705810546875,
               "c2/brightness": 100.0,
               "c2/saturation": 100.0,
-              "c2": -16645889
+              "c2": -16645889,
+              "globalC1": true
             },
             "modulation": {
               "modulators": [],
@@ -260,7 +265,8 @@
               "label": "Strobe",
               "enabled": false,
               "Shape": 2,
-              "Freq": 10.0
+              "Freq": 10.0,
+              "Black": true
             },
             "modulation": {
               "modulators": [],
@@ -426,10 +432,15 @@
               "enabled": true,
               "Lcut1": 4.999999776482582,
               "Lcut2": 78.99999935179949,
+              "c1/hue": 0.0,
+              "c1/brightness": 100.0,
+              "c1/saturation": 100.0,
+              "c1": -65536,
               "c2/hue": 247.76470947265625,
               "c2/brightness": 100.0,
               "c2/saturation": 100.0,
-              "c2": -14614273
+              "c2": -14614273,
+              "globalC1": true
             },
             "modulation": {
               "modulators": [],
@@ -515,7 +526,7 @@
               "Speed": 0.55,
               "Symm": 0,
               "Anim": 3,
-              "Dens": 0.0
+              "Dens": 0.6
             },
             "modulation": {
               "modulators": [],
@@ -539,7 +550,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -575,10 +586,15 @@
               "enabled": true,
               "Lcut1": 1.0,
               "Lcut2": 7.999999821186066,
+              "c1/hue": 0.0,
+              "c1/brightness": 100.0,
+              "c1/saturation": 100.0,
+              "c1": -65536,
               "c2/hue": 0.0,
               "c2/brightness": 100.0,
               "c2/saturation": 0.0,
-              "c2": -1
+              "c2": -1,
+              "globalC1": true
             },
             "modulation": {
               "modulators": [],
@@ -611,10 +627,10 @@
               "X-DUP": false,
               "JOG": false,
               "GREY": false,
-              "Speed": 0.9499999910593031,
+              "Speed": 0.55,
               "Symm": 0,
               "Anim": 7,
-              "Dens": 0.5
+              "Dens": 0.6
             },
             "modulation": {
               "modulators": [],
@@ -661,7 +677,7 @@
               "z": 0.8684653043746948,
               "cx": 410.0,
               "cy": 116.0,
-              "cz": 145.0,
+              "cz": 87.0,
               "lo/hue": 111.28999751247466,
               "lo/brightness": 100.0,
               "lo/saturation": 0.0,
@@ -902,8 +918,83 @@
       }
     },
     "components": {
-      "outputControl": {
+      "GammaExpander": {
+        "id": 37,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -16728321,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
+      "envelop": {
         "id": 32,
+        "class": "com.symmetrylabs.slstudio.envelop.Envelop",
+        "modulationColor": -16716545,
+        "parameters": {
+          "label": "Envelop",
+          "running": true,
+          "trigger": false
+        },
+        "source": {
+          "id": 33,
+          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Source",
+          "modulationColor": -65393,
+          "parameters": {
+            "label": "Source",
+            "running": true,
+            "trigger": false,
+            "Gain": 0.0,
+            "Range": 24.0,
+            "Attack": 25.0,
+            "Release": 50.0,
+            "Source-1": 0.0,
+            "Source-2": 0.0,
+            "Source-3": 0.0,
+            "Source-4": 0.0,
+            "Source-5": 0.0,
+            "Source-6": 0.0,
+            "Source-7": 0.0,
+            "Source-8": 0.0,
+            "Source-9": 0.0,
+            "Source-10": 0.0,
+            "Source-11": 0.0,
+            "Source-12": 0.0,
+            "Source-13": 0.0,
+            "Source-14": 0.0,
+            "Source-15": 0.0,
+            "Source-16": 0.0
+          }
+        },
+        "decode": {
+          "id": 34,
+          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Decode",
+          "modulationColor": -29184,
+          "parameters": {
+            "label": "Decode",
+            "running": true,
+            "trigger": false,
+            "Gain": 0.0,
+            "Range": 24.0,
+            "Attack": 25.0,
+            "Release": 50.0,
+            "Decode-1": 0.0,
+            "Decode-2": 0.0,
+            "Decode-3": 0.0,
+            "Decode-4": 0.0,
+            "Decode-5": 0.0,
+            "Decode-6": 0.0,
+            "Decode-7": 0.0,
+            "Decode-8": 0.0
+          }
+        }
+      },
+      "outputControl": {
+        "id": 149,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -8651008,
         "parameters": {
