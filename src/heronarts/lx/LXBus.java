@@ -26,6 +26,7 @@ import com.google.gson.JsonObject;
 import heronarts.lx.clip.LXClip;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.model.ModelMetrics;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transform.LXVector;
@@ -92,6 +93,8 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
     protected LXWarp vectorSource = null;
     /** A cached list of all the non-null elements in vectorArray. */
     protected List<LXVector> vectorList = null;
+
+    private ModelMetrics warpedMetrics = new ModelMetrics();
 
     LXBus(LX lx) {
         this(lx, null);
@@ -172,6 +175,14 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
             }
         }
         return null;
+    }
+
+    public ModelMetrics getOriginalMetrics() {
+        return model.getMetrics();
+    }
+
+    public ModelMetrics getWarpedMetrics() {
+        return warpedMetrics;
     }
 
     public final void addEffect(LXEffect effect) {
@@ -287,6 +298,7 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
         }
         if (bus.vectorArray == null) {
             bus.vectorArray = model.getVectorArray();
+            bus.warpedMetrics.recompute(bus.vectorArray);
         }
         return bus.vectorArray;
     }
@@ -295,6 +307,9 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
         vectorArray = newVectorArray;
         vectorSource = newVectorSource;
         vectorList = null;
+
+        warpedMetrics.recompute(vectorArray);
+
         for (LXEffect effect : effects) {
             effect.onVectorsChanged();
         }

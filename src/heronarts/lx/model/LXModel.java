@@ -147,6 +147,9 @@ public class LXModel implements LXFixture {
      */
     public float rRange;
 
+    private ModelMetrics metrics = new ModelMetrics();
+    public ModelMetrics getMetrics() { return metrics; }
+
     /**
      * Constructs a null model with no points
      */
@@ -272,57 +275,26 @@ public class LXModel implements LXFixture {
      * @return
      */
     public LXModel average() {
-        float ax = 0, ay = 0, az = 0;
-        float xMin = 0, xMax = 0, yMin = 0, yMax = 0, zMin = 0, zMax = 0, rMin = 0, rMax = 0;
+        metrics.recompute(points);
 
-        boolean firstPoint = true;
-        for (LXPoint p : this.points) {
-            ax += p.x;
-            ay += p.y;
-            az += p.z;
-            if (firstPoint) {
-                xMin = xMax = p.x;
-                yMin = yMax = p.y;
-                zMin = zMax = p.z;
-                rMin = rMax = p.r;
-            } else {
-                if (p.x < xMin)
-                    xMin = p.x;
-                if (p.x > xMax)
-                    xMax = p.x;
-                if (p.y < yMin)
-                    yMin = p.y;
-                if (p.y > yMax)
-                    yMax = p.y;
-                if (p.z < zMin)
-                    zMin = p.z;
-                if (p.z > zMax)
-                    zMax = p.z;
-                if (p.r < rMin)
-                    rMin = p.r;
-                if (p.r > rMax)
-                    rMax = p.r;
-            }
-            firstPoint = false;
-        }
-        this.ax = ax / Math.max(1, this.points.length);
-        this.ay = ay / Math.max(1, this.points.length);
-        this.az = az / Math.max(1, this.points.length);
-        this.xMin = xMin;
-        this.xMax = xMax;
-        this.xRange = xMax - xMin;
-        this.yMin = yMin;
-        this.yMax = yMax;
-        this.yRange = yMax - yMin;
-        this.zMin = zMin;
-        this.zMax = zMax;
-        this.zRange = zMax - zMin;
-        this.rMin = rMin;
-        this.rMax = rMax;
-        this.rRange = rMax - rMin;
-        this.cx = xMin + xRange / 2.f;
-        this.cy = yMin + yRange / 2.f;
-        this.cz = zMin + zRange / 2.f;
+        this.ax = metrics.getAverageX();
+        this.ay = metrics.getAverageY();
+        this.az = metrics.getAverageZ();
+        this.cx = metrics.getCenterX();
+        this.cy = metrics.getCenterY();
+        this.cz = metrics.getCenterZ();
+        this.xMin = metrics.getXMin();
+        this.xMax = metrics.getXMax();
+        this.xRange = metrics.getXRange();
+        this.yMin = metrics.getYMin();
+        this.yMax = metrics.getYMax();
+        this.yRange = metrics.getYRange();
+        this.zMin = metrics.getZMin();
+        this.zMax = metrics.getZMax();
+        this.zRange = metrics.getZRange();
+        this.rMin = metrics.getRadialMin();
+        this.rMax = metrics.getRadialMax();
+        this.rRange = metrics.getRadialRange();
 
         return this;
     }
