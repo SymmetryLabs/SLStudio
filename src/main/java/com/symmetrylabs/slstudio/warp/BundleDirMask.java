@@ -57,6 +57,7 @@ public class BundleDirMask<T extends Strip> extends LXWarp {
                     }
                 }
             }
+            return true;
         }
         return false;
     }
