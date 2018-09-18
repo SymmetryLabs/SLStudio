@@ -671,7 +671,7 @@ public class UI implements LXEngine.Dispatch {
      * @return PFont object
      */
     public PFont loadFont(String font) {
-        return fontCache.computeIfAbsent(font, k -> this.applet.loadFont(font));
+        return fontCache.computeIfAbsent(font, fname -> this.applet.loadFont(fname));
     }
 
     void redraw(UI2dComponent object) {
