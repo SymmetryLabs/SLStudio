@@ -29,6 +29,6 @@ public class StreetlampShow implements Show {
 
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
-
+        ui.preview.addComponent(new StreetlampVisualizer(lx));
     }
 }
