@@ -8,10 +8,7 @@ import heronarts.p3lx.ui.UI3dComponent;
 import processing.core.PGraphics;
 
 public class StreetlampVisualizer extends UI3dComponent {
-    private static final float BOX_W = 4;
-    private static final float BOX_H = 3;
     private static final float TOWER_H = 14 * 12;
-    private static final float BOX_D = 4;
     private final P3LX lx;
     private final LXModel model;
 
@@ -32,7 +29,7 @@ public class StreetlampVisualizer extends UI3dComponent {
                 StreetlampModel.ELEMENT_X_SIZE * i,
                 -(TOWER_H / 2 - 5 * StreetlampModel.ELEMENT_Y_DELTA),
                 StreetlampModel.ELEMENT_Z_SIZE * (5 - i));
-            pg.box(BOX_W, TOWER_H, BOX_D);
+            pg.box(StreetlampModel.ELEMENT_X_SIZE, TOWER_H, StreetlampModel.ELEMENT_Z_SIZE);
             pg.popMatrix();
         }
 
@@ -42,7 +39,10 @@ public class StreetlampVisualizer extends UI3dComponent {
             pg.pushMatrix();
             pg.translate(p.x, p.y, p.z);
             pg.fill(c);
-            pg.box(BOX_W, BOX_H, BOX_D);
+            pg.box(
+                StreetlampModel.ELEMENT_X_SIZE,
+                StreetlampModel.ELEMENT_Y_DELTA,
+                StreetlampModel.ELEMENT_Z_SIZE);
             pg.popMatrix();
         }
     }
