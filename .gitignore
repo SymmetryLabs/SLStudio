@@ -283,3 +283,14 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+
+# Emacs
+.dir-locals.el
+.meghanada
+
+# Eclipse
+.settings
+.project
+.classpath
+bin
