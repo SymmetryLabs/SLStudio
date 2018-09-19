@@ -24,20 +24,23 @@ public class CubeFlash extends SLPattern<CubesModel> {
     private CompoundParameter decayParameter = new CompoundParameter("Decay", 0.5);
     private CompoundParameter hueVarianceParameter = new CompoundParameter("HueVar", 0.25);
     private CompoundParameter saturationParameter = new CompoundParameter("Sat", 0.5);
+    private boolean[] occupied;
 
     class Flash {
         CubesModel.Cube cube;
         float value;
         float hue;
         boolean hasPeaked;
+        int index;
 
-        Flash() {
-            int randomIndex = floor(random(model.getCubes().size()));
-            cube = model.getCubes().get(randomIndex);
+        Flash(int index) {
+            this.index = index;
+            cube = model.getCubes().get(index);
             hue = palette.getHuef() + (random(1) * 120 * hueVarianceParameter.getValuef());
             boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
             hasPeaked = infiniteAttack;
             value = (infiniteAttack ? 1 : 0);
+
         }
 
         // returns TRUE if this should die
@@ -67,6 +70,11 @@ public class CubeFlash extends SLPattern<CubesModel> {
         addParameter(hueVarianceParameter);
         addParameter(saturationParameter);
         flashes = new LinkedList<Flash>();
+        this.occupied = new boolean[(model.getCubes()).size()];
+
+        for (int i = 0; i < occupied.length; i++) {
+            occupied[i] = false;
+        }
     }
 
     public void run(double deltaMs, PolyBuffer.Space space) {
@@ -76,7 +84,12 @@ public class CubeFlash extends SLPattern<CubesModel> {
         float msPerFlash = 1000 / ((rateParameter.getValuef() + .01f) * 100);
         while (leftoverMs > msPerFlash) {
             leftoverMs -= msPerFlash;
-            flashes.add(new Flash());
+
+            int randomIndex = floor(random(model.getCubes().size()));
+            if (occupied[randomIndex] == false) {
+                flashes.add(new Flash(randomIndex));
+                occupied[randomIndex] = true;
+            }
         }
 
         setColors(0);
@@ -84,10 +97,10 @@ public class CubeFlash extends SLPattern<CubesModel> {
         flashes.parallelStream().forEach(new Consumer<Flash>() {
             @Override
             public void accept(final Flash flash) {
-             int col = LXColor.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
-             for (LXVector v : getVectors(flash.cube.getPoints())) {
-                 colors[v.index] = col;
-             }
+                int col = LXColor.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
+                for (LXVector v : getVectors(flash.cube.getPoints())) {
+                    colors[v.index] = col;
+                }
             }
         });
 
@@ -96,9 +109,10 @@ public class CubeFlash extends SLPattern<CubesModel> {
             Flash flash = i.next();
             boolean dead = flash.age(deltaMs);
             if (dead) {
+                occupied[flash.index] = false;
                 i.remove();
             }
         }
-    markModified(SRGB8);
+        markModified(SRGB8);
     }
 }
