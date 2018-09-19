@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.cubes.patterns;
+package com.symmetrylabs.shows.cubes;
 
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;

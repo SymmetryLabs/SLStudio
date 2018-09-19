@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.slstudio.pattern.test;
 import static processing.core.PApplet.*;
 
 import heronarts.lx.LX;
