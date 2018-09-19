@@ -5,7 +5,6 @@ import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.ui.UIWorkspace;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEngine;
