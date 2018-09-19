@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1537386060324,
+  "timestamp": 1537386878800,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 1,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -49,9 +49,9 @@
     },
     "channels": [
       {
-        "id": 3837,
+        "id": 3879,
         "class": "heronarts.lx.LXChannel",
-        "modulationColor": -65456,
+        "modulationColor": -4325121,
         "parameters": {
           "label": "Channel-1",
           "arm": false,
@@ -75,72 +75,15 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 3843,
-            "class": "com.symmetrylabs.shows.streetlamp.SWave",
-            "modulationColor": -40960,
+            "id": 3894,
+            "class": "com.symmetrylabs.shows.streetlamp.SolidColorCustomColorSpace",
+            "modulationColor": -16711717,
             "parameters": {
-              "label": "SWave",
-              "period": 13499.999944120644,
-              "width": 1.9200000107288362,
-              "amp": 0.05000001937150955,
-              "sat": 18.000001460313797,
-              "hmin": 0.0,
-              "hmax": 60.0,
-              "speed": 0.02000000178813935
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          }
-        ]
-      },
-      {
-        "id": 3853,
-        "class": "heronarts.lx.LXChannel",
-        "modulationColor": -11665664,
-        "parameters": {
-          "label": "Channel-2",
-          "arm": false,
-          "enabled": true,
-          "cue": false,
-          "midiMonitor": false,
-          "midiChannel": 16,
-          "autoCycleEnabled": false,
-          "autoCycleTimeSecs": 60.0,
-          "fader": 0.2857142947614193,
-          "crossfadeGroup": 0,
-          "blendMode": 0,
-          "transitionEnabled": false,
-          "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0,
-          "autoDisable": false
-        },
-        "warps": [],
-        "effects": [],
-        "clips": [],
-        "patternIndex": 0,
-        "patterns": [
-          {
-            "id": 3866,
-            "class": "com.symmetrylabs.slstudio.pattern.Crystalline",
-            "modulationColor": -19712,
-            "parameters": {
-              "label": "Crystalline",
-              "count": 3,
-              "cx": 10.0,
-              "cy": 6.0,
-              "cz": 10.0,
-              "width": 784.0000003576279,
-              "lvel": 0.3599999924004078,
-              "rwidth": 800.0,
-              "rvel": 0.07999998673796682,
-              "cutwhite": 0.0,
-              "symm": 0,
-              "radial": 1,
-              "alpha": true
+              "label": "SolidColorCustomColorSpace",
+              "space": 0,
+              "r": 53083,
+              "g": 65534,
+              "b": 0
             },
             "modulation": {
               "modulators": [],
