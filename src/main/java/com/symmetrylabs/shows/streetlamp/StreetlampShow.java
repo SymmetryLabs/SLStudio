@@ -7,6 +7,8 @@ import com.symmetrylabs.slstudio.dmx.DmxUsbOutput;
 import com.symmetrylabs.slstudio.output.DummyOutput;
 
 public class StreetlampShow implements Show {
+    public static final String SHOW_NAME = "streetlamp";
+
     @Override
     public SLModel buildModel() {
         return StreetlampModel.create();
