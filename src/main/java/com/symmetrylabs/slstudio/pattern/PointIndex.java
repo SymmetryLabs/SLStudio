@@ -13,7 +13,7 @@ public class PointIndex extends LXPattern {
     public PointIndex(LX lx) {
         super(lx);
 
-        indexParam = new DiscreteParameter("index", 0, 0, lx.model.size);
+        addParameter(indexParam = new DiscreteParameter("index", 0, 0, lx.model.size));
     }
 
     public void run(double deltaMs) {
