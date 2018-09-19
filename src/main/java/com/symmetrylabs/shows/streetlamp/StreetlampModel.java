@@ -7,16 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StreetlampModel extends SLModel {
-    private static final int CHUNK_X_SIZE = 4;
-    private static final int CHUNK_Y_DELTA = 3;
-    private static final int CHUNK_Z_SIZE = 4;
+    static final int ELEMENT_X_SIZE = 4;
+    static final int ELEMENT_Y_DELTA = 3;
+    static final int ELEMENT_Z_SIZE = 4;
 
     private StreetlampModel(List<LXPoint> points) {
         super(points);
     }
 
     private static LXPoint P(int x, int y, int z) {
-        return new LXPoint(CHUNK_X_SIZE * x, CHUNK_Y_DELTA * y, CHUNK_Z_SIZE * z);
+        return new LXPoint(ELEMENT_X_SIZE * x, ELEMENT_Y_DELTA * y, ELEMENT_Z_SIZE * z);
     }
 
     public static StreetlampModel create() {

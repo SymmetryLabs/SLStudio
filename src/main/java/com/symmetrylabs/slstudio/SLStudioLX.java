@@ -74,6 +74,9 @@ public class SLStudioLX extends P3LX {
         public final UIAxes axes;
         public final UIMarkerPainter markerPainter;
         public final UICubeMapDebug cubeMapDebug;
+        public final UICameraControls cameraControls;
+
+        private final List<Runnable> runPostDraw;
 
         private boolean toggleHelpBar = false;
         private boolean toggleClipView = false;
@@ -100,6 +103,7 @@ public class SLStudioLX extends P3LX {
                 "@-S           Save current project\n" +
                 "@-V           Toggle preview display\n" +
                 "@-X           Toggle axis display\n" +
+                "@-T           Toggle orthographic projection\n" +
                 "@-/           Toggle help caption line\n" +
                 "@-\\           Toggle 16-bit color (all)\n" +
                 "@-|           Toggle 16-bit color (selected channel)\n" +
@@ -141,6 +145,8 @@ public class SLStudioLX extends P3LX {
             this.axes = new UIAxes();
             this.markerPainter = new UIMarkerPainter();
             this.cubeMapDebug = new UICubeMapDebug(lx);
+            this.cameraControls = new UICameraControls(this, preview);
+
             this.preview.addComponent(this.cubeMapDebug);
             this.preview.addComponent(axes);
             this.preview.addComponent(markerPainter);
@@ -161,6 +167,7 @@ public class SLStudioLX extends P3LX {
             addLayer(this.helpText);
             addLayer(this.captionText);
             addLayer(this.warningText);
+            addLayer(this.cameraControls);
 
             _toggleClipView();
             _togglePerformanceMode();
@@ -206,6 +213,9 @@ public class SLStudioLX extends P3LX {
                                 break;
                             case VK_P:
                                 togglePerformanceMode();
+                                break;
+                            case VK_T:
+                                lx.ui.preview.ortho.toggle();
                                 break;
                             case VK_V:
                                 lx.ui.preview.toggleVisible();
@@ -367,6 +377,8 @@ public class SLStudioLX extends P3LX {
             });
 
             setResizable(true);
+
+            runPostDraw = new ArrayList<>();
         }
 
         protected SLPattern getFocusedSLPattern() {
@@ -389,6 +401,22 @@ public class SLStudioLX extends P3LX {
             if (this.toggleClipView) {
                 this.toggleClipView = false;
                 _toggleClipView();
+            }
+        }
+
+        public void runAfterDraw(Runnable r) {
+            synchronized (runPostDraw) {
+                runPostDraw.add(r);
+            }
+        }
+
+        @Override
+        protected void endDraw() {
+            synchronized (runPostDraw) {
+                for (Runnable r : runPostDraw) {
+                    r.run();
+                }
+                runPostDraw.clear();
             }
         }
 
@@ -532,6 +560,7 @@ public class SLStudioLX extends P3LX {
             this.helpText.reposition();
             this.captionText.reposition();
             this.warningText.reposition();
+            this.cameraControls.reposition();
         }
 
         private static final String KEY_AUDIO_EXPANDED = "audioExpanded";

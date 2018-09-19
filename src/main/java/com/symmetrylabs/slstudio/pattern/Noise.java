@@ -8,6 +8,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import processing.core.PImage;
 import processing.core.PVector;
+import heronarts.lx.parameter.BooleanParameter;
 
 import static processing.core.PConstants.ADD;
 
@@ -18,6 +19,9 @@ public class Noise extends DPat {
     public final CompoundParameter sharp = new CompoundParameter("Sharp", 0);
     public final DiscreteParameter mode = new DiscreteParameter("Anim", new String[]{"Drip", "Cloud", "Rain", "Fire", "Mach", "Spark", "VWav", "Wave"});
     public final DiscreteParameter symm = new DiscreteParameter("Symm", new String[]{"None", "X", "Y", "Rad"});
+    public final BooleanParameter animReset =
+        new BooleanParameter("AnimResets", false)
+        .setDescription("if true, parameters are reset when animation is changed");
 
     private int xSym = 1, ySym = 2, radSym = 3;
     private float zTime, zTheta = 0, zSin, zCos, rtime, ttime;
@@ -30,6 +34,7 @@ public class Noise extends DPat {
         addParameter(symm);
         addParameter(mode);
         addParameter(density);
+        addParameter(animReset);
         mode.setValue(5);
 
         for (int i = 0; i < NUM_NDAT; i++) {
@@ -56,10 +61,12 @@ public class Noise extends DPat {
         if (mode.getValuei() != currModeIndex) {
             currModeIndex = mode.getValuei();
             ttime = rtime;
-            pSpin.reset();
-            zTheta = 0;
-            density.reset();
-            speed.reset();
+            if (animReset.getValueb()) {
+                zTheta = 0;
+                pSpin.reset();
+                density.reset();
+                speed.reset();
+            }
 
             for (int i = 0; i < n.length; i++) {
                 n[i].isActive = false;

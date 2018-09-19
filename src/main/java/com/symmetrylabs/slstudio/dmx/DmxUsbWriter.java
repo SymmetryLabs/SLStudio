@@ -12,6 +12,9 @@ public class DmxUsbWriter implements AutoCloseable {
     private SerialPort port = null;
     private int maxChannel = -1;
 
+    private boolean warning1Emitted = false;
+    private boolean warning2Emitted = false;
+
     byte[] message = new byte[DMX_PRO_MAX_MESSAGE_SIZE];
 
     private SerialPort guessSerialPort() {
@@ -99,12 +102,18 @@ public class DmxUsbWriter implements AutoCloseable {
 
     public synchronized void send() {
         if (port == null) {
-            System.out.println("WARNING: DMX serial port is null.");
+            if (!warning1Emitted) {
+                System.out.println("WARNING: DMX serial port is null.");
+                warning1Emitted = true;
+            }
             return;
         }
 
         if (!port.isOpen()) {
-            System.out.println("WARNING: DMX serial port is closed.");
+            if (!warning2Emitted) {
+                System.out.println("WARNING: DMX serial port is closed.");
+                warning2Emitted = true;
+            }
             return;
         }
 

@@ -47,7 +47,7 @@ public class ShowRegistry {
         map.put("summerstage", () -> new SummerStageShow());
         map.put("pilots", () -> new PilotsShow());
         map.put("summerbbq", () -> new SummerBBQShow());
-        map.put("streetlamp", () -> new StreetlampShow());
+        map.put(StreetlampShow.SHOW_NAME, () -> new StreetlampShow());
     }
 
     static interface ShowBuilder {
