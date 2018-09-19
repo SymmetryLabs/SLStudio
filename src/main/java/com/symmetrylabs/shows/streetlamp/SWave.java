@@ -49,7 +49,7 @@ public class SWave extends SLPattern<SLModel> {
 
     @Override
     public void run(double elapsedMs, PolyBuffer.Space preferredSpace) {
-        int[] colors = (int[]) getArray(PolyBuffer.Space.SRGB8);
+        int[] colors = (int[]) getArray(PolyBuffer.Space.RGB8);
 
         if (hues == null) {
             hues = new double[HUE_GROUPS];
@@ -86,6 +86,6 @@ public class SWave extends SLPattern<SLModel> {
             colors[v.index] = LXColor.hsb(hues[hueGroups[v.index]], s, 100);
         }
 
-        markModified(PolyBuffer.Space.SRGB8);
+        markModified(PolyBuffer.Space.RGB8);
     }
 }

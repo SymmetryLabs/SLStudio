@@ -22,9 +22,9 @@ public class GammaExpander extends LXComponent {
 
     public final BooleanParameter enabled = new BooleanParameter("ON", true);
     public final DiscreteParameter gammaSetIndex = new DiscreteParameter("GMA", gammaSet.length + 1);
-    public final BoundedParameter redGammaFactor = new BoundedParameter("RGMA", 2, 1, 4);
-    public final BoundedParameter greenGammaFactor = new BoundedParameter("GGMA", 2.2, 1, 4);
-    public final BoundedParameter blueGammaFactor = new BoundedParameter("BGMA", 2.8, 1, 4);
+    public final BoundedParameter redGammaFactor = new BoundedParameter("RGMA", 2, 0.1, 4);
+    public final BoundedParameter greenGammaFactor = new BoundedParameter("GGMA", 2.2, 0.1, 4);
+    public final BoundedParameter blueGammaFactor = new BoundedParameter("BGMA", 2.8, 0.1, 4);
 
     private final int redGamma[] = new int[256];
     private final int greenGamma[] = new int[256];
