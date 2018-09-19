@@ -3,7 +3,8 @@ package com.symmetrylabs.shows.kalpa;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.shows.kalpa.config.*;
+import com.symmetrylabs.shows.tree.config.*;
+import com.symmetrylabs.shows.tree.*;
 
 import static com.symmetrylabs.util.DistanceConstants.*;
 

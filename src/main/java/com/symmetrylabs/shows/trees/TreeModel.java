@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.kalpa;
+package com.symmetrylabs.shows.tree;
 
 import java.util.*;
 import java.lang.Integer;
@@ -15,7 +15,7 @@ import heronarts.lx.transform.LXTransform;
 import heronarts.lx.transform.LXVector;
 
 import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.shows.kalpa.config.*;
+import com.symmetrylabs.shows.tree.config.*;
 import static com.symmetrylabs.util.DistanceConstants.*;
 
 

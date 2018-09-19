@@ -12,7 +12,7 @@ import com.symmetrylabs.shows.oslo.OsloShow;
 import com.symmetrylabs.shows.oslo.TreeModel;
 import com.symmetrylabs.shows.composite.CompositeShow;
 import com.symmetrylabs.shows.obj.ObjShow;
-import com.symmetrylabs.shows.kalpa.*;
+import com.symmetrylabs.shows.kalpa.KalpaShow;
 import com.symmetrylabs.shows.summerstage.SummerStageShow;
 import com.symmetrylabs.shows.summerbbq.SummerBBQShow;
 

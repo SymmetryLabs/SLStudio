@@ -1,6 +1,7 @@
-package com.symmetrylabs.shows.cubes.patterns;
+package com.symmetrylabs.shows.cubes;
 
 import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
@@ -16,6 +17,7 @@ import static processing.core.PApplet.floor;
 
 
 public class TestTowers extends SLPattern<CubesModel> {
+    public static final String GROUP_NAME = CubesShow.SHOW_NAME;
 
     public final DiscreteParameter selectedTower;
 

@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.kalpa.ui;
+package com.symmetrylabs.shows.tree.ui;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,8 +24,8 @@ import heronarts.p3lx.ui.component.UITextBox;
 import heronarts.p3lx.ui.component.UIIntegerBox;
 import heronarts.p3lx.ui.component.UIDropMenu;
 
-import com.symmetrylabs.shows.kalpa.*;
-import com.symmetrylabs.shows.kalpa.config.*;
+import com.symmetrylabs.shows.tree.*;
+import com.symmetrylabs.shows.tree.config.*;
 
 
 public class UITreeModelingTool extends UICollapsibleSection {

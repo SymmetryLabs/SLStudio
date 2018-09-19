@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.cubes.patterns;
+package com.symmetrylabs.shows.cubes;
 
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
@@ -9,6 +9,7 @@ import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.transform.LXVector;
 
 public class TestCubeOrientation extends SLPattern<CubesModel> {
+    public static final String GROUP_NAME = CubesShow.SHOW_NAME;
 
     private final int[] cols = new int[] {
         LXColor.RED, LXColor.GREEN, LXColor.BLUE, LXColor.WHITE, lx.hsb(50, 100, 100)

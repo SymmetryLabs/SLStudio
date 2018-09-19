@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.kalpa.ui;
+package com.symmetrylabs.shows.tree.ui;
 
 import processing.core.PConstants;
 
@@ -23,7 +23,7 @@ import processing.core.PGraphics;
 import com.symmetrylabs.slstudio.SLStudio;
 import static com.symmetrylabs.util.MathUtils.*;
 
-import com.symmetrylabs.shows.kalpa.Anemometer;
+import com.symmetrylabs.shows.tree.Anemometer;
 
 
 

@@ -4,7 +4,7 @@ import heronarts.lx.LX;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
-import com.symmetrylabs.shows.kalpa.TreeModel;
+import com.symmetrylabs.shows.tree.TreeModel;
 import static com.symmetrylabs.util.MathUtils.*;
 
 public class TreeGameOfLife extends TreePattern {

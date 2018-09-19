@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.kalpa.ui;
+package com.symmetrylabs.shows.tree.ui;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -10,11 +10,8 @@ import heronarts.p3lx.ui.UI3dComponent;
 import heronarts.lx.color.LXColor;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.shows.kalpa.config.LimbConfig;
-import com.symmetrylabs.shows.kalpa.config.BranchConfig;
-import com.symmetrylabs.shows.kalpa.config.TwigConfig;
-import com.symmetrylabs.shows.kalpa.TreeModel;
-import com.symmetrylabs.shows.kalpa.TreeModelingTool;
+import com.symmetrylabs.shows.tree.config.*;
+import com.symmetrylabs.shows.tree.*;
 import static com.symmetrylabs.util.DistanceConstants.*;
 
 public class UITreeModelAxes extends UI3dComponent {

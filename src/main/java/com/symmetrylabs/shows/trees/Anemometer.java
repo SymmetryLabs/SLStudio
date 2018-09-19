@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.kalpa;
+package com.symmetrylabs.shows.tree;
 
 import heronarts.lx.LXRunnableComponent;
 import heronarts.lx.modulator.LXModulator;

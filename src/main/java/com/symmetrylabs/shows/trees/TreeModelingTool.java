@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.kalpa;
+package com.symmetrylabs.shows.tree;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.StringParameter;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.shows.kalpa.config.*;
+import com.symmetrylabs.shows.tree.config.*;
 
 
 public class TreeModelingTool extends LXComponent {

@@ -6,13 +6,13 @@ import java.net.SocketException;
 
 import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
-import com.symmetrylabs.shows.kalpa.Anemometer;
+import com.symmetrylabs.shows.tree.Anemometer;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
 import com.symmetrylabs.slstudio.ui.UIWorkspace;
 import heronarts.lx.LX;
 import com.symmetrylabs.shows.ShowRegistry;
-import com.symmetrylabs.shows.kalpa.TreeModelingTool;
-import com.symmetrylabs.shows.kalpa.ui.*;
+import com.symmetrylabs.shows.tree.TreeModelingTool;
+import com.symmetrylabs.shows.tree.ui.*;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -28,8 +28,8 @@ import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.ui.UIFramerateControl;
 import com.symmetrylabs.slstudio.envelop.Envelop;
 import com.symmetrylabs.slstudio.envelop.EnvelopOscListener;
-import com.symmetrylabs.shows.kalpa.ui.UITreeModelingTool;
-import com.symmetrylabs.shows.kalpa.ui.UITreeModelAxes;
+import com.symmetrylabs.shows.tree.ui.UITreeModelingTool;
+import com.symmetrylabs.shows.tree.ui.UITreeModelAxes;
 import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.DrawHelper;
 import com.symmetrylabs.util.dispatch.Dispatcher;

@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.kalpa.config;
+package com.symmetrylabs.shows.tree.config;
 
 import java.util.Collections;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.kalpa;
+package com.symmetrylabs.shows.tree;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ import heronarts.lx.parameter.EnumParameter;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
-import com.symmetrylabs.shows.kalpa.*;
-import com.symmetrylabs.shows.kalpa.ui.*;
+import com.symmetrylabs.shows.tree.*;
+import com.symmetrylabs.shows.tree.ui.*;
 
 
 public class TreeModelingPattern extends SLPattern<TreeModel> {

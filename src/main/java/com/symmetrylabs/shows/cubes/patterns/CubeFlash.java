@@ -1,6 +1,7 @@
-package com.symmetrylabs.shows.cubes.patterns;
+package com.symmetrylabs.shows.cubes;
 
 import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.shows.pilots.PilotsShow;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
@@ -19,6 +20,8 @@ import static heronarts.lx.PolyBuffer.Space.SRGB8;
 import static processing.core.PApplet.floor;
 
 public class CubeFlash extends SLPattern<CubesModel> {
+    public static final String GROUP_NAME = CubesShow.SHOW_NAME;
+
     private CompoundParameter rateParameter = new CompoundParameter("Speed", 0.125);
     private CompoundParameter attackParameter = new CompoundParameter("Attack", 0.5);
     private CompoundParameter decayParameter = new CompoundParameter("Decay", 0.5);

@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.kalpa.config;
+package com.symmetrylabs.shows.tree.config;
 
 import java.io.*;
 
@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import heronarts.lx.LX;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.shows.kalpa.TreeModel;
+import com.symmetrylabs.shows.tree.TreeModel;
 
 
 public class TreeConfigStore {

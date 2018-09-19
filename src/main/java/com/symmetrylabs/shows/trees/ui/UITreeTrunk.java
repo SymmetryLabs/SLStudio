@@ -1,4 +1,4 @@
- package com.symmetrylabs.shows.kalpa.ui;
+ package com.symmetrylabs.shows.tree.ui;
 
  import processing.core.PApplet;
  import processing.core.PGraphics;
@@ -9,7 +9,7 @@
  import heronarts.p3lx.ui.UI3dComponent;
  import heronarts.p3lx.ui.UI;
 
- import com.symmetrylabs.shows.kalpa.TreeModel;
+ import com.symmetrylabs.shows.tree.TreeModel;
  import static com.symmetrylabs.util.DistanceConstants.*;
  import static com.symmetrylabs.util.MathUtils.*;
 
