@@ -32,6 +32,131 @@ public class Ops16 {
     public static int green(long argb) { return (int) ((argb & 0x0000_0000_ffff_0000L) >>> 16); }
     public static int blue(long argb) { return (int) (argb & 0x0000_0000_0000_ffffL); }
 
+    /**
+     * Returns hue value of a 16-bit color, from 0 to 1.
+     */
+    public static double hue(long argb) {
+        int r = red(argb);
+        int g = green(argb);
+        int b = blue(argb);
+        int max = (r > g) ? r : g;
+        if (b > max) {
+            max = b;
+        }
+        int min = (r < g) ? r : g;
+        if (b < min) {
+            min = b;
+        }
+        if (max == 0) {
+            return 0;
+        }
+        double range = max - min;
+        if (range == 0) {
+            return 0;
+        }
+        double h;
+        double rc = (max - r) / range;
+        double gc = (max - g) / range;
+        double bc = (max - b) / range;
+        if (r == max) {
+            h = bc - gc;
+        } else if (g == max) {
+            h = 2.f + rc - bc;
+        } else {
+            h = 4.f + gc - rc;
+        }
+        h /= 6.f;
+        if (h < 0) {
+            h += 1.f;
+        }
+        return h;
+    }
+
+    /**
+     * Returns the saturation of a 16-bit color, from 0 to 1.
+     */
+    public static double saturation(long argb) {
+        int r = red(argb);
+        int g = green(argb);
+        int b = blue(argb);
+        int max = (r > g) ? r : g;
+        if (b > max) {
+            max = b;
+        }
+        int min = (r < g) ? r : g;
+        if (b < min) {
+            min = b;
+        }
+        return (max == 0) ? 0 : (max - min) / max;
+    }
+
+    /**
+     * Returns the brightness of a 16-bit color, from 0 to 1.
+     */
+    public static double brightness(long argb) {
+        return level(argb);
+    }
+
+    /**
+     * Returns a color given hue, saturation, and brightness.
+     */
+    public static long hsb(double hue, double saturation, double brightness) {
+        return hsba(hue, saturation, brightness, 1);
+    }
+
+    /**
+     * Returns a color given hue, saturation, brightness, and alpha.
+     */
+    public static long hsba(double hue, double saturation, double brightness, double alpha) {
+        // hue is passed in as 0-1, calculation expects 0-360
+        hue *= 360;
+
+        int r = 0, g = 0, b = 0;
+        if (saturation == 0) {
+            r = g = b = (int)(brightness * MAX + 0.5);
+        } else {
+            double h = (hue - Math.floor(hue)) * 6.;
+            double f = h - Math.floor(h);
+            double p = brightness * (1. - saturation);
+            double q = brightness * (1. - saturation * f);
+            double t = brightness * (1. - (saturation * (1. - f)));
+            switch ((int) h) {
+            case 0:
+                r = (int) (brightness * MAX + 0.5);
+                g = (int) (t * MAX + 0.5);
+                b = (int) (p * MAX + 0.5);
+                break;
+            case 1:
+                r = (int) (q * MAX + 0.5);
+                g = (int) (brightness * MAX + 0.5);
+                b = (int) (p * MAX + 0.5);
+                break;
+            case 2:
+                r = (int) (p * MAX + 0.5);
+                g = (int) (brightness * MAX + 0.5);
+                b = (int) (t * MAX + 0.5);
+                break;
+            case 3:
+                r = (int) (p * MAX + 0.5);
+                g = (int) (q * MAX + 0.5);
+                b = (int) (brightness * MAX + 0.5);
+                break;
+            case 4:
+                r = (int) (t * MAX + 0.5);
+                g = (int) (p * MAX + 0.5);
+                b = (int) (brightness * MAX + 0.5);
+                break;
+            case 5:
+                r = (int) (brightness * MAX + 0.5);
+                g = (int) (p * MAX + 0.5);
+                b = (int) (q * MAX + 0.5);
+                break;
+            }
+        }
+
+        return rgba(r, g, b, (int)(alpha * MAX));
+    }
+
     /** Multiplies the R, G, and B components by a factor from 0.0 to 1.0. */
     public static long multiply(long argb, double v) {
         return rgba(
