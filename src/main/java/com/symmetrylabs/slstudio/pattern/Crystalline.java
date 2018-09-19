@@ -1,8 +1,10 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
+import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -319,13 +321,15 @@ public class Crystalline extends SLPattern<SLModel> {
     }
 
     @Override
-    public void run(double elapsedMs) {
+    public void run(double elapsedMs, PolyBuffer.Space preferredSpace) {
+                long[] colors = (long[]) getArray(PolyBuffer.Space.RGB16);
+
         for (Modulus m : moduli) {
             m.step(elapsedMs);
         }
 
-        final int on = LXColor.WHITE;
-        final int off = alphaBg.getValueb() ? 0 : LXColor.BLACK;
+        final long on = 0xFFFF_FFFF_FFFF_FFFFL;
+        final long off = alphaBg.getValueb() ? 0 : Ops16.rgba(0, 0, 0, 0xFFFF);
         Arrays.fill(colors, off);
 
         final float cw = cutWhite.getValuef();
@@ -350,9 +354,12 @@ public class Crystalline extends SLPattern<SLModel> {
                     colors[v.index] = on;
                 } else {
                     float g = 1f - (x - cw) / (1 - cw);
-                    colors[v.index] = LXColor.gray(100 * g);
+                                        int gi = (int) (g * 0xFFFF);
+                    colors[v.index] = Ops16.rgba(gi, gi, gi, 0xFFFF);
                 }
             }
         }
+
+                markModified(PolyBuffer.Space.RGB16);
     }
 }
