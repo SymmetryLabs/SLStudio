@@ -4,6 +4,8 @@ import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 
+import com.symmetrylabs.shows.tree.TreeModel;
+
 
 public class TreeAudioWaves extends TreeWave {
 

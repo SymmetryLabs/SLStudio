@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern.tree;
 
+import com.symmetrylabs.shows.cubes.CubesShow;
 import heronarts.lx.LX;
 import heronarts.lx.LXUtils;
 import heronarts.lx.color.LXColor;

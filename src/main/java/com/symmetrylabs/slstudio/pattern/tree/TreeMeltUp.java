@@ -6,7 +6,6 @@ import com.symmetrylabs.shows.tree.TreeModel;
 
 
 public class TreeMeltUp extends TreeMelt {
-
     public TreeMeltUp(LX lx) {
         super(lx);
     }

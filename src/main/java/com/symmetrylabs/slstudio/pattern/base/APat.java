@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.slstudio.pattern.base;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
@@ -54,9 +54,7 @@ import java.util.SplittableRandom;
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 import static processing.core.PConstants.ADD;
 
-public class APat extends SLPattern<SLModel>
-
-{
+public abstract class APat extends SLPattern<SLModel> {
     public class Pick {
         public int     NumPicks, Default    ,
             CurRow    , CurCol    ,
@@ -165,7 +163,7 @@ public class APat extends SLPattern<SLModel>
         updateLights();
     }
 
-    APat(LX lx) {
+    public APat(LX lx) {
         super(lx);
 
 

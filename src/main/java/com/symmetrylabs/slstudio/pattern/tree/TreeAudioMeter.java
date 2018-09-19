@@ -10,6 +10,7 @@ import static com.symmetrylabs.util.MathUtils.*;
 
 public class TreeAudioMeter extends TreePattern {
 
+
     public String getAuthor() {
         return "Mark C. Slee";
     }

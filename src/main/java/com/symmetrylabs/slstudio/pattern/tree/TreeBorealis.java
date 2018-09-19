@@ -14,7 +14,6 @@ import static com.symmetrylabs.util.MathUtils.*;
 
 
 public class TreeBorealis extends TreePattern {
-
     public String getAuthor() {
         return "Mark C. Slee";
     }

@@ -1,10 +1,9 @@
-package com.symmetrylabs.shows.cubes;
+package com.symmetrylabs.slstudio.cubes;
 
 import heronarts.lx.LX;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.color.LXColor;
 
-import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.shows.cubes.*;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.transform.LXVector;
 

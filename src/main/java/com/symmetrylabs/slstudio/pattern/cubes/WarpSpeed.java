@@ -1,8 +1,8 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.slstudio.pattern.cubes;
 
-import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.color.Ops8;
-import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXUtils;
@@ -19,9 +19,10 @@ import java.util.List;
 
 import static com.symmetrylabs.util.MathUtils.random;
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
-import static processing.core.PApplet.abs;
+
 
 public class WarpSpeed extends SLPattern<CubesModel> {
+    public static final String GROUP_NAME = CubesShow.SHOW_NAME;
 
     public final CompoundParameter numBars = new CompoundParameter("Density", -40, -500, -0.001);
     public final CompoundParameter size = new CompoundParameter("Length", 0.35, 0.1, 1.0);

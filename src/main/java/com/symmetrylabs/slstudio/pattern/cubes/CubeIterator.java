@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.slstudio.pattern.cubes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import com.symmetrylabs.shows.cubes.CubesShow;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXPoint;
@@ -25,6 +26,7 @@ import com.symmetrylabs.util.MarkerSource;
 import com.symmetrylabs.util.TextMarker;
 
 public class CubeIterator extends SLPattern<CubesModel> implements MarkerSource {
+    public static final String GROUP_NAME = CubesShow.SHOW_NAME;
 
     private final DiscreteParameter cubeIndex = new DiscreteParameter("CubeIndex", 0, 1);
     private final CompoundParameter labelSize = new CompoundParameter("LabelSize", 8, 2, 18);

@@ -1,22 +1,16 @@
-package com.symmetrylabs.shows.cubes.patterns;
+package com.symmetrylabs.slstudio.pattern.cubes;
 
 import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
-import heronarts.lx.PolyBuffer;
-import heronarts.lx.LXPattern;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.DiscreteParameter;
 
-import java.util.List;
 
-import static heronarts.lx.PolyBuffer.Space.SRGB8;
-
-
-public class StripSelector extends LXPattern {
-
-    public final CubesModel model;
+public class StripSelector extends SLPattern<CubesModel> {
+    public static final String GROUP_NAME = CubesShow.SHOW_NAME;
 
     public final DiscreteParameter selectedStrip = new DiscreteParameter("strip", 1, 1, 13);
 

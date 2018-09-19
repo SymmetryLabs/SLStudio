@@ -1,8 +1,7 @@
-package com.symmetrylabs.shows.cubes.patterns;
-
-import static processing.core.PApplet.*;
+package com.symmetrylabs.slstudio.pattern.cubes;
 
 import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
@@ -14,9 +13,12 @@ import heronarts.lx.parameter.LXParameter;
 import com.symmetrylabs.slstudio.model.Strip;
 import heronarts.lx.transform.LXVector;
 
-import static com.symmetrylabs.util.MathUtils.random;
+import static com.symmetrylabs.util.MathUtils.*;
+import static com.symmetrylabs.util.MathConstants.*;
 
 public class StripPlay extends SLPattern<CubesModel> {
+    public static final String GROUP_NAME = CubesShow.SHOW_NAME;
+
     private final int NUM_OSC = 300;
     private final int MAX_PERIOD = 20000;
     private CompoundParameter brightParameter = new CompoundParameter("Bright", 96, 70, 100);

@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.cubes.patterns;
+package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.Strip;
@@ -19,6 +19,7 @@ import heronarts.lx.parameter.EnumParameter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 
 public class TopoTestPattern<T extends Strip> extends SLPattern<StripsModel<T>> {
     public enum Mode {

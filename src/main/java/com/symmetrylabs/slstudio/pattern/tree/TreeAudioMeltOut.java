@@ -3,11 +3,11 @@ package com.symmetrylabs.slstudio.pattern.tree;
 import heronarts.lx.LX;
 
 import com.symmetrylabs.shows.tree.TreeModel;
-import static com.symmetrylabs.util.MathUtils.*;
 
 import static java.lang.StrictMath.abs;
 
 public class TreeAudioMeltOut extends TreeAudioMelt {
+
     public TreeAudioMeltOut(LX lx) {
         super(lx);
     }

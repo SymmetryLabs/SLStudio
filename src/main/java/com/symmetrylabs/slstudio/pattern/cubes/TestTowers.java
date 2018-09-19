@@ -1,19 +1,12 @@
-package com.symmetrylabs.shows.cubes;
+package com.symmetrylabs.slstudio.pattern.cubes;
 
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
-import heronarts.lx.PolyBuffer;
-import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
-import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.modulator.SinLFO;
-
-import static com.symmetrylabs.util.MathUtils.random;
-import static heronarts.lx.PolyBuffer.Space.SRGB8;
-import static processing.core.PApplet.floor;
 
 
 public class TestTowers extends SLPattern<CubesModel> {

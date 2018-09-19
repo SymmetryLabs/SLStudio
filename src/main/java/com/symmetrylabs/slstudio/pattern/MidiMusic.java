@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.cubes.patterns;
+package com.symmetrylabs.slstudio.pattern;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -8,10 +8,9 @@ import java.lang.Math;
 
 import java.util.Stack;
 
-import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -27,7 +26,7 @@ import heronarts.lx.midi.MidiNoteOn;
 import com.symmetrylabs.slstudio.model.Strip;
 import heronarts.lx.transform.LXVector;
 
-public class MidiMusic extends SLPattern<CubesModel> {
+public class MidiMusic extends SLPattern<StripsModel<Strip>> {
 
     private final Stack<LXLayer> newLayers = new Stack<LXLayer>();
 

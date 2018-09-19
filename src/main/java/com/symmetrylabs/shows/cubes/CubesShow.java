@@ -21,7 +21,7 @@ import heronarts.p3lx.ui.UI2dScrollContext;
  * This file implements the mapping functions needed to lay out the cubes.
  */
 public abstract class CubesShow implements Show {
-    static final String SHOW_NAME = "cubes";
+    public static final String SHOW_NAME = "cubes";
 
     public static final float CUBE_WIDTH = 24;
     public static final float CUBE_HEIGHT = 24;
