@@ -39,7 +39,8 @@ public class TestMidiClock {
                                 });
                         }
                 });
-                while (true) {
+                long time = System.nanoTime();
+                while (System.nanoTime() - time < 5_000_000) {
                         lx.engine.run();
                 }
         }
