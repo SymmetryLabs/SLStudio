@@ -74,6 +74,17 @@ allprojects {
 	}
 }
 
+if (hasProperty('localp3lx')) {
+	configurations.all {
+		resolutionStrategy.dependencySubstitution {
+			// when this is runs, the build uses ../p3lx and ../LX instead of the
+			// jitpack dependency specified below
+			substitute module("com.github.SymmetryLabs.p3lx:p3lx") with project(":P3LX")
+			substitute module("com.github.SymmetryLabs.p3lx:LX") with project(":LX")
+		}
+	}
+}
+
 repositories {
 	// needed for aparapi dependency
 	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
