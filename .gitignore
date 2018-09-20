@@ -12,3 +12,6 @@
 *.swp
 /build
 .gradle
+
+# Emacs-Java stuff
+.meghanada
