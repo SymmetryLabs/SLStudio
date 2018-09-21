@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1537567510837,
+  "timestamp": 1537571678594,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -49,9 +49,9 @@
     },
     "channels": [
       {
-        "id": 3907,
+        "id": 3984,
         "class": "heronarts.lx.LXChannel",
-        "modulationColor": -16711695,
+        "modulationColor": -16740097,
         "parameters": {
           "label": "Channel-1",
           "arm": false,
@@ -70,45 +70,18 @@
           "autoDisable": false
         },
         "warps": [],
-        "effects": [
-          {
-            "id": 3915,
-            "class": "com.symmetrylabs.slstudio.effect.ColorFilter",
-            "modulationColor": -16721921,
-            "parameters": {
-              "label": "ColorFilter",
-              "enabled": true,
-              "Hue": 0.0,
-              "Sat": 100.0
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            }
-          }
-        ],
+        "effects": [],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 1,
         "patterns": [
           {
-            "id": 3908,
-            "class": "com.symmetrylabs.slstudio.pattern.Crystalline",
-            "modulationColor": -5374208,
+            "id": 3985,
+            "class": "com.symmetrylabs.shows.streetlamp.Unilines",
+            "modulationColor": -65363,
             "parameters": {
-              "label": "Crystalline",
-              "count": 3,
-              "cx": 10.0,
-              "cy": 6.0,
-              "cz": 10.0,
-              "width": 260.0,
-              "lvel": 0.3199999932944775,
-              "rwidth": 60.0,
-              "rvel": -0.51999998614192,
-              "cutwhite": 0.1,
-              "symm": 0,
-              "radial": 1,
-              "alpha": true
+              "label": "Unilines",
+              "period": 500.0,
+              "xfade": 4.0
             },
             "modulation": {
               "modulators": [],
@@ -116,45 +89,15 @@
               "triggers": []
             },
             "autoCycleEnabled": true
-          }
-        ]
-      },
-      {
-        "id": 3912,
-        "class": "heronarts.lx.LXChannel",
-        "modulationColor": -16712449,
-        "parameters": {
-          "label": "Channel-2",
-          "arm": false,
-          "enabled": true,
-          "cue": false,
-          "midiMonitor": false,
-          "midiChannel": 16,
-          "autoCycleEnabled": false,
-          "autoCycleTimeSecs": 60.0,
-          "fader": 0.7999999923631549,
-          "crossfadeGroup": 0,
-          "blendMode": 0,
-          "transitionEnabled": false,
-          "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0,
-          "autoDisable": false
-        },
-        "warps": [],
-        "effects": [],
-        "clips": [],
-        "patternIndex": 0,
-        "patterns": [
+          },
           {
-            "id": 3913,
-            "class": "heronarts.p3lx.pattern.SolidColorPattern",
-            "modulationColor": -16711891,
+            "id": 3987,
+            "class": "com.symmetrylabs.shows.streetlamp.Bilines",
+            "modulationColor": -65450,
             "parameters": {
-              "label": "SolidColor",
-              "color/hue": 189.6470489501953,
-              "color/brightness": 100.0,
-              "color/saturation": 100.0,
-              "color": -16722177
+              "label": "Bilines",
+              "period": 300.969993295148,
+              "xfade": 0.7450000727549193
             },
             "modulation": {
               "modulators": [],
@@ -403,8 +346,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 61.0,
-        "theta": 0.09300000000000003,
-        "phi": -0.274796370506287,
+        "theta": -0.06300000000000001,
+        "phi": -0.2837963705062876,
         "positionX": 10.0,
         "positionY": 6.0,
         "positionZ": 10.0

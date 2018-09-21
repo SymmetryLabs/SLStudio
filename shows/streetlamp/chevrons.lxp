@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1537386878800,
+  "timestamp": 1537570513973,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -49,9 +49,9 @@
     },
     "channels": [
       {
-        "id": 3879,
+        "id": 3931,
         "class": "heronarts.lx.LXChannel",
-        "modulationColor": -4325121,
+        "modulationColor": -2228480,
         "parameters": {
           "label": "Channel-1",
           "arm": false,
@@ -75,15 +75,29 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 3894,
-            "class": "com.symmetrylabs.shows.streetlamp.SolidColorCustomColorSpace",
-            "modulationColor": -16711717,
+            "id": 3938,
+            "class": "com.symmetrylabs.shows.streetlamp.Bichevron",
+            "modulationColor": -16711919,
             "parameters": {
-              "label": "SolidColorCustomColorSpace",
-              "space": 0,
-              "r": 53083,
-              "g": 65534,
-              "b": 0
+              "label": "Bichevron",
+              "period": 500.0,
+              "xfade": 4.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3940,
+            "class": "com.symmetrylabs.shows.streetlamp.Unichevron",
+            "modulationColor": -11009793,
+            "parameters": {
+              "label": "Unichevron",
+              "period": 500.0,
+              "xfade": 4.0
             },
             "modulation": {
               "modulators": [],
@@ -199,6 +213,19 @@
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 35,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -2621696,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 0.21,
+          "GGMA": 0.37,
+          "BGMA": 0.8
+        }
+      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -262,7 +289,7 @@
         }
       },
       "outputControl": {
-        "id": 36,
+        "id": 37,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -16741889,
         "parameters": {
@@ -319,8 +346,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 61.0,
-        "theta": 0.0,
-        "phi": -1.5707963705062866,
+        "theta": -0.1470000000000001,
+        "phi": -0.20279637050628696,
         "positionX": 10.0,
         "positionY": 6.0,
         "positionZ": 10.0
