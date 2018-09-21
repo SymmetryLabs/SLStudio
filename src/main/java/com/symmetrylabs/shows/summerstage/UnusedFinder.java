@@ -53,7 +53,6 @@ public class UnusedFinder extends SLPattern<CubesModel> {
                 }
         }
 
-        SLStudio.setWarning("NCUBES", String.format("%d", model.getCubes().size()));
     }
         
 }
