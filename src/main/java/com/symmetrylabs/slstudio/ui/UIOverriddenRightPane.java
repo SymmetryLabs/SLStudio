@@ -82,6 +82,8 @@ public class UIOverriddenRightPane extends UIPane {
             SLStudio.applet.uiTreeModelingTool = new UITreeModelingTool(ui, SLStudio.applet.treeModelingTool, 0, 0, this.utility.getContentWidth());
             SLStudio.applet.uiTreeModelingTool.addToContainer(this.utility);
         }
+
+        new UIOfflineRender(this.ui, this.lx, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
     }
 
     private void buildPerformanceUI() {
