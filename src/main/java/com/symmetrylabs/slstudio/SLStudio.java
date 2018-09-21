@@ -156,13 +156,6 @@ public class SLStudio extends PApplet {
                 lx.engine.registerComponent("outputControl", outputControl);
                 mappingPixlites = setupPixlites();
 
-                lx.engine.midi.whenReady(new Runnable() {
-                    @Override
-                    public void run() {
-                        MidiFighterListener.bindMidi(lx);
-                    }
-                });
-
                 // SLStudio.this.performanceManager = new PerformanceManager(lx);
                 // lx.engine.registerComponent("performanceManager", performanceManager);
 
@@ -197,6 +190,13 @@ public class SLStudio extends PApplet {
                     new UIWorkspace(ui, lx, hwShow.getWorkspace(), 0, 0, ui.leftPane.global.getContentWidth())
                         .addToContainer(ui.leftPane.global);
                 }
+
+                lx.engine.midi.whenReady(new Runnable() {
+                    @Override
+                    public void run() {
+                        MidiFighterListener.bindMidi(lx, ui);
+                    }
+                });
             }
         };
 

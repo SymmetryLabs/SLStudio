@@ -1,25 +1,56 @@
 package com.symmetrylabs.slstudio.performance;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.*;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.*;
 import heronarts.lx.midi.remote.LXMidiRemote;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.p3lx.ui.*;
+import heronarts.p3lx.ui.component.UIButton;
+import heronarts.p3lx.ui.component.UIKnob;
+import heronarts.p3lx.ui.component.UIParameterControl;
+import heronarts.p3lx.ui.component.UISwitch;
+import heronarts.p3lx.ui.control.UIChannelControl;
+import heronarts.p3lx.ui.studio.device.UIPatternDevice;
+import heronarts.p3lx.ui.studio.mixer.UIChannelStripControls;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class MidiFighterListener extends LXComponent implements LXMidiListener {
     final int RGB_OFF = 17;
     final int RGB_MED = 32;
     final int RGB_MAX = 47;
+    final int COLOR_RED = 80;
+    final int COLOR_PINK = 90;
+    final int COLOR_ORANGE = 70;
+    final int COLOR_PURPLE = 114;
+
+
+    public enum Type {
+        ACTIVE,
+        CUE
+    };
 
     LXMidiRemote midi;
+    UIWindow cueWindow = null;
+    int originalColor;
+
+    final Type type;
+
+
 
     ArrayList<LXListenableNormalizedParameter> params;
     LXParameterListener[] writeListeners;
     final LX lx;
+    final UI ui;
     int lastActivePatternIndex = -1;
+    int lastActiveChannelIndex = -1;
 
 
     void getAndWriteParams() {
@@ -27,6 +58,37 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
         getParams();
         addWriteListeners();
         writeParamStates();
+        updateCueWindow();
+    }
+
+    void updateCueWindow() {
+        if (cueWindow == null) {
+            return;
+        }
+
+        for (UIObject o : cueWindow.getChildren()) {
+            if (o instanceof UIControlTarget) {
+                ((UI2dComponent)o).removeFromContainer();
+            }
+        }
+
+        for (int i = 0; i < params.size(); i++) {
+            LXListenableNormalizedParameter param = getParam(i);
+            if (param == null) {
+                continue;
+            }
+            if (param instanceof BooleanParameter) {
+                UISwitch s = new UISwitch(0, 0);
+                s.setParameter((BooleanParameter)param);
+                s.addToContainer(cueWindow);
+            } else {
+                UIKnob k = new UIKnob();
+                k.setParameter(param);
+                k.addToContainer(cueWindow);
+            }
+        }
+        
+        setBackgroundColor();
     }
 
 
@@ -48,12 +110,21 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
     }
 
     LXChannel getActiveChannel() {
-        LXBus b = lx.engine.getFocusedChannel();
-        if (!(b instanceof LXChannel)) {
-            return null;
+        if (type == Type.CUE) {
+            int i = getCueIndex();
+            if (i == -1) {
+                return null;
+            }
+            return lx.engine.getChannel(i);
+        } else {
+            LXBus b = lx.engine.getFocusedChannel();
+            if (!(b instanceof LXChannel)) {
+                return null;
+            }
+            LXChannel c = (LXChannel)b;
+            return c;
         }
-        LXChannel c = (LXChannel)b;
-        return c;
+
     }
 
     void getParams() {
@@ -78,7 +149,7 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
         }
         params.clear();
         int buttonStart = knobParams.size();
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < numSlots(); i++) {
             int bI = i - buttonStart;
             if (i < knobParams.size()) {
                 params.add(knobParams.get(i));
@@ -97,9 +168,21 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
         int COLOR_CHANNEL = 1;
         int BRIGHTNESS_CHANNEL = 2;
 
-//        int c = (p instanceof BooleanParameter) ? 70 : 114;
-//        out.sendControlChange(1, knobI, c);
+        if (showCueSelectionMode()) {
+            int nChannels = lx.engine.getChannels().size();
+            out.sendControlChange(VALUE_CHANNEL, knobI, 0);
+            out.sendControlChange(COLOR_CHANNEL, knobI, COLOR_RED);
+            out.sendControlChange(BRIGHTNESS_CHANNEL, knobI, knobI < nChannels ? RGB_MAX : RGB_OFF);
+            return;
+        }
 
+
+        if (type == Type.CUE && knobI == 15) {
+            out.sendControlChange(VALUE_CHANNEL, knobI, 0);
+            out.sendControlChange(COLOR_CHANNEL, knobI, COLOR_RED);
+            out.sendControlChange(BRIGHTNESS_CHANNEL, knobI, RGB_MAX);
+            return;
+        }
 
         if (knobI < params.size() && params.get(knobI) != null) {
             LXListenableNormalizedParameter p = params.get(knobI);
@@ -107,7 +190,7 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
             if (p instanceof BooleanParameter) {
                 BooleanParameter b = (BooleanParameter)p;
                 out.sendControlChange(VALUE_CHANNEL, knobI, 0);
-                out.sendControlChange(COLOR_CHANNEL, knobI, b.isOn() ? 90 : 70);
+                out.sendControlChange(COLOR_CHANNEL, knobI, b.isOn() ? COLOR_PINK : COLOR_ORANGE);
                 out.sendControlChange(BRIGHTNESS_CHANNEL, knobI, RGB_MAX);
 
             } else {
@@ -115,7 +198,7 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
                 int v = (int)(raw * 127);
 
                 out.sendControlChange(VALUE_CHANNEL, knobI, v);
-                out.sendControlChange(COLOR_CHANNEL, knobI, 114);
+                out.sendControlChange(COLOR_CHANNEL, knobI, COLOR_PURPLE);
                 out.sendControlChange(BRIGHTNESS_CHANNEL, knobI, RGB_MAX);
             }
 
@@ -123,6 +206,11 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
             out.sendControlChange(VALUE_CHANNEL, knobI, 0);
             out.sendControlChange(BRIGHTNESS_CHANNEL, knobI, RGB_OFF);
         }
+    }
+
+
+    boolean showCueSelectionMode() {
+        return type == Type.CUE && getCueIndex() == -1;
     }
 
     void writeParamStates() {
@@ -141,6 +229,50 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
         System.out.println(midiNote.toString());
     }
 
+    LXListenableNormalizedParameter getParam(int cc) {
+        if (cc >= params.size()) {
+            return null;
+        }
+        return params.get(cc);
+    }
+
+    void onButtonPress(int cc, boolean on) {
+        if (showCueSelectionMode()) {
+            List<LXChannel> channels = lx.engine.getChannels();
+            if (cc < channels.size() && on) {
+                channels.get(cc).cueActive.setValue(true);
+            }
+            return;
+        }
+
+        if (type == Type.CUE && cc == 15) {
+            getActiveChannel().cueActive.setValue(false);
+            return;
+        }
+
+        LXListenableNormalizedParameter param = getParam(cc);
+        if (param == null || !(param instanceof BooleanParameter)) {
+            return;
+        }
+
+        BooleanParameter b = (BooleanParameter)param;
+        if (b.getMode() == BooleanParameter.Mode.MOMENTARY) {
+            b.setValue(on);
+        } else if (on) {
+            b.toggle();
+        }
+
+    }
+
+    void onKnobTwist(int cc, double v) {
+        LXListenableNormalizedParameter param = getParam(cc);
+        if (param == null || (param instanceof BooleanParameter)) {
+            return;
+        }
+
+        param.setNormalized(v);
+    }
+
     @Override
     public void controlChangeReceived(MidiControlChange midiControlChange) {
 
@@ -148,27 +280,15 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
         int cc = midiControlChange.getCC();
         double v = midiControlChange.getNormalized();
 
-        System.out.printf("CC %d %d %.2f\n", channel, cc, v);
-
-        if (channel == 0 || channel == 1) {
-            if (cc >= params.size() || params.get(cc) == null) {
-                return;
-            }
-            LXListenableNormalizedParameter param = params.get(cc);
-
-            if (channel == 1 && (param instanceof BooleanParameter)) {
-                BooleanParameter b = (BooleanParameter)param;
-                boolean on = v == 1.0;
-                if (b.getMode() == BooleanParameter.Mode.MOMENTARY) {
-                    b.setValue(on);
-                } else if (on) {
-                    b.toggle();
-                }
-            } else if (channel == 0 && !(param instanceof BooleanParameter)) {
-                param.setNormalized(v);
-            }
-
+        if (channel == 0) {
+            onKnobTwist(cc, v);
         }
+
+
+        if (channel == 1) {
+            onButtonPress(cc, v == 1.0);
+        }
+
 
         if (channel == 3) {
             if (v == 1.0f && cc >= 8 && cc <= 13) {
@@ -198,11 +318,43 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
         System.out.println(midiAftertouch.toString());
     }
 
-    MidiFighterListener(LX lx, LXMidiRemote midi) {
+    int getCueIndex() {
+        List<LXChannel> channels = lx.engine.getChannels();
+        for (int i = 0; i < channels.size(); i++) {
+            if (channels.get(i).cueActive.isOn()) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    void pollChanges() {
+        LXChannel c = getActiveChannel();
+        int patternI = -1;
+        int activeI = -1;
+        if (c != null) {
+            patternI = c.getActivePatternIndex();
+            activeI =  c.getIndex();
+        }
+
+        if (activeI != lastActiveChannelIndex || patternI != lastActivePatternIndex) {
+            getAndWriteParams();
+
+        }
+        lastActivePatternIndex = patternI;
+        lastActiveChannelIndex = activeI;
+    }
+
+    int numSlots() {
+        return type == Type.ACTIVE ? 16 : 15;
+    }
+
+    MidiFighterListener(LX lx, UI ui, LXMidiRemote midi, Type type) {
         super(lx);
         this.lx = lx;
-
+        this.ui = ui;
         this.midi = midi;
+        this.type = type;
 
         params = new ArrayList<>();
 
@@ -217,33 +369,37 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
             };
         }
 
-        lx.engine.focusedChannel.addListener(new LXParameterListener() {
-            @Override
-            public void onParameterChanged(LXParameter lxParameter) {
-                getAndWriteParams();
-            }
-        });
 
         lx.engine.addLoopTask(new LXLoopTask() {
             @Override
             public void loop(double v) {
-                LXChannel c = getActiveChannel();
-                if (c == null) {
-                    return;
-                }
-                int i = c.getActivePatternIndex();
-                if (i != lastActivePatternIndex) {
-                    getAndWriteParams();
-                    lastActivePatternIndex = i;
-                }
+                pollChanges();
             }
         });
 
         getAndWriteParams();
 
+        if (type == Type.CUE) {
+            float xOff = ((SLStudioLX.UI)ui).leftPane.getWidth() + 7;
+            float yOff = 25;
+            cueWindow = new UIWindow(ui, "Cue Controller", xOff, yOff, 175, 200);
+            cueWindow.setLayout(UI2dContainer.Layout.HORIZONTAL_GRID);
+            cueWindow.setChildMargin(5, 5);
+            ui.addLayer(cueWindow);
+            originalColor = cueWindow.getBackgroundColor();
+            setBackgroundColor();
+        }
     }
 
-    public static void bindMidi(LX lx) {
+    void setBackgroundColor() {
+        if (cueWindow == null) {
+            return;
+        }
+        int color = getCueIndex() == -1 ? originalColor : LXColor.hsb(0, 100, 30);
+        cueWindow.setBackgroundColor(color);
+    }
+
+    public static void bindMidi(LX lx, UI ui) {
 
         ArrayList<LXMidiInput> twisterInputs = new ArrayList<LXMidiInput>();
         ArrayList<LXMidiOutput> twisterOutputs = new ArrayList<LXMidiOutput>();
@@ -270,7 +426,8 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
             in.open();
             out.open();
             LXMidiRemote twister = new LXMidiRemote(in, out);
-            MidiFighterListener listener = new MidiFighterListener(lx, twister);
+            Type t = i == 0 ? Type.ACTIVE : Type.CUE;
+            MidiFighterListener listener = new MidiFighterListener(lx, ui, twister, t);
             in.addListener(listener);
         }
     }
