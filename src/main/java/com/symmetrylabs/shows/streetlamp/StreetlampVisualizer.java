@@ -1,5 +1,6 @@
 package com.symmetrylabs.shows.streetlamp;
 
+import com.symmetrylabs.color.Ops8;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.p3lx.P3LX;
@@ -41,7 +42,8 @@ public class StreetlampVisualizer extends UI3dComponent {
             int c = colors[p.index];
             pg.pushMatrix();
             pg.translate(p.x, p.y, p.z);
-            pg.fill(c);
+            // drop alpha channel (mimics what output does)
+            pg.fill(0xFF000000 | c);
             pg.box(
                 StreetlampModel.ELEMENT_X_SIZE,
                 StreetlampModel.ELEMENT_Y_DELTA,
