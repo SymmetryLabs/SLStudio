@@ -116,6 +116,14 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
          * the directory into the allFrames array. */
         loaderSemaphore = new Semaphore(0, false);
         lastLoadLoop = System.nanoTime();
+    }
+
+    @Override
+    public void onActive() {
+        super.onActive();
+        stopping = false;
+        loadDirectory();
+
         loaderThread = new Thread(() -> {
             while (!stopping) {
                 try {
@@ -134,13 +142,6 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                 }
             }
         });
-    }
-
-    @Override
-    public void onActive() {
-        super.onActive();
-        stopping = false;
-        loadDirectory();
         try {
             loaderThread.start();
         } catch (IllegalThreadStateException e) {
@@ -150,6 +151,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
 
     @Override
     public void onInactive() {
+        super.onInactive();
         stopping = true;
         loaderThread.interrupt();
         try {
