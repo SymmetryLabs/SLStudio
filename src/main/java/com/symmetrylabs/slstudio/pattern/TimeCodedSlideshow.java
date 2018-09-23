@@ -46,6 +46,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     private int currentFrame;
     private boolean stopping = false;
     private long lastLoadLoop = 0;
+    private boolean currentFrameLoaded;
 
     private static class Slide {
         File path;
@@ -160,10 +161,11 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     @Override
     public String getCaption() {
         return String.format(
-            "time %s / %d frames / frame %d / waiting %d / since last load %ds / dir %s",
+            "time %s / %d frames / frame %d %s / waiting %d / since last load %ds / dir %s",
             mt == null ? "unknown" : mt.toString(),
             allFrames == null ? 0 : allFrames.length,
             currentFrame,
+            currentFrameLoaded ? "ok" : "skip",
             loaderSemaphore.availablePermits(),
             (int) ((System.nanoTime() - lastLoadLoop) / 1e9),
             directory.getString());
@@ -217,13 +219,19 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
             return;
         }
         frame -= tcStartFrame.getValuei();
+
+        /* if we're out of range, set frame to -1. If we were out of range
+         * before, we don't have to do anything. */
         if (frame < 0 || frame >= allFrames.length) {
-            currentFrame = -1;
-            return;
+            if (currentFrame == -1) {
+                return;
+            }
+            frame = -1;
         }
+
         /* if we're going backward in time out of our buffer, we clear the
          * buffer and start again. */
-        if (frame < currentFrame - KEEP_TRAILING_FRAMES) {
+        if (frame == -1 || frame < currentFrame - KEEP_TRAILING_FRAMES) {
             System.out.println(String.format("backwards: %d to %d", currentFrame, frame));
             loaderSemaphore.drainPermits();
             currentFrame = frame;
@@ -256,7 +264,8 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
             return;
         }
         Slide slide = allFrames[currentFrame];
-        if (!slide.loaded()) {
+        currentFrameLoaded = slide.loaded();
+        if (!currentFrameLoaded) {
             return;
         }
         BufferedImage img = slide.img;
