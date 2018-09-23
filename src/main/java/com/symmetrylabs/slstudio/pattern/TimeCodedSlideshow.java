@@ -160,12 +160,12 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     @Override
     public String getCaption() {
         return String.format(
-            "time %s / %d frames / frame %d / waiting %d / since last load %dms / dir %s",
+            "time %s / %d frames / frame %d / waiting %d / since last load %ds / dir %s",
             mt == null ? "unknown" : mt.toString(),
             allFrames == null ? 0 : allFrames.length,
             currentFrame,
             loaderSemaphore.availablePermits(),
-            (System.nanoTime() - lastLoadLoop) / 1000,
+            (System.nanoTime() - lastLoadLoop) / 1e9,
             directory.getString());
     }
 
