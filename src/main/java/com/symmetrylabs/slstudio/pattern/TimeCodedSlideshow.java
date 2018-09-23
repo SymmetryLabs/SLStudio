@@ -46,6 +46,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     private int currentFrame;
     private boolean stopping = false;
     private long lastLoadLoop = 0;
+    private boolean currentFrameLoaded;
 
     private static class Slide {
         File path;
@@ -127,6 +128,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                  * hasn't been loaded, and load it. */
                 for (int i = currentFrame < 0 ? 0 : currentFrame; i < allFrames.length; i++) {
                     if (!allFrames[i].loaded()) {
+                        System.out.println(String.format("load %d", i));
                         allFrames[i].load();
                         break;
                     }
@@ -160,12 +162,13 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     @Override
     public String getCaption() {
         return String.format(
-            "time %s / %d frames / frame %d / waiting %d / since last load %ds / dir %s",
+            "time %s / %d frames / frame %d %s / waiting %d / since last load %ds / dir %s",
             mt == null ? "unknown" : mt.toString(),
             allFrames == null ? 0 : allFrames.length,
             currentFrame,
+            currentFrameLoaded ? "ok" : "skip",
             loaderSemaphore.availablePermits(),
-            (System.nanoTime() - lastLoadLoop) / 1e9,
+            (int) ((System.nanoTime() - lastLoadLoop) / 1e9),
             directory.getString());
     }
 
@@ -256,7 +259,8 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
             return;
         }
         Slide slide = allFrames[currentFrame];
-        if (!slide.loaded()) {
+        currentFrameLoaded = slide.loaded();
+        if (!currentFrameLoaded) {
             return;
         }
         BufferedImage img = slide.img;
