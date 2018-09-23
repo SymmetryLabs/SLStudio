@@ -77,6 +77,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     private Slide[] allFrames;
     private Thread loaderThread;
     private Semaphore loaderSemaphore;
+    private boolean timecodeLive = false;
 
     public TimeCodedSlideshow(LX lx) {
         super(lx);
