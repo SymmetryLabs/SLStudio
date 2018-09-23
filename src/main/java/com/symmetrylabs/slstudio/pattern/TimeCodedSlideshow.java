@@ -106,6 +106,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                     goToFrame(frame);
                 }
             });
+            System.out.println("attached time code listener to " + input.getName());
         }
 
         /* start the semaphore with no permits; we fill it up once we've loaded
