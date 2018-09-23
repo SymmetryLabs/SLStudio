@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1537730067790,
+  "timestamp": 1537734176295,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -55,7 +55,7 @@
         "parameters": {
           "label": "RK1",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -125,7 +125,7 @@
         "parameters": {
           "label": "RK2",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -348,7 +348,7 @@
               "cropR": 0.0,
               "cropT": 0.28999999396502973,
               "cropB": 0.0,
-              "tcStart": 0.0
+              "tcStart": 864360.0
             },
             "modulation": {
               "modulators": [],
@@ -372,7 +372,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.00557423010468483,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -1168,6 +1168,24 @@
         },
         {
           "name": "CoreMIDI4J - Sync Port",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
           "channel": true,
           "control": false,
           "sync": false
