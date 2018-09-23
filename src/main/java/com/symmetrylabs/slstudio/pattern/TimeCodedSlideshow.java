@@ -45,6 +45,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     private MidiTime mt;
     private int currentFrame;
     private boolean stopping = false;
+    private long lastLoadLoop = 0;
 
     private static class Slide {
         File path;
@@ -113,6 +114,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         /* start the semaphore with no permits; we fill it up once we've loaded
          * the directory into the allFrames array. */
         loaderSemaphore = new Semaphore(0, false);
+        lastLoadLoop = System.nanoTime();
         loaderThread = new Thread(() -> {
             while (!stopping) {
                 try {
@@ -120,6 +122,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                 } catch (InterruptedException e) {
                     return;
                 }
+                lastLoadLoop = System.nanoTime();
                 /* Find the first frame after/including the current frame that
                  * hasn't been loaded, and load it. */
                 for (int i = currentFrame < 0 ? 0 : currentFrame; i < allFrames.length; i++) {
@@ -157,11 +160,12 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     @Override
     public String getCaption() {
         return String.format(
-            "time %s / %d frames / cur frame %d / loader queue size %d / dir %s",
+            "time %s / %d frames / frame %d / waiting %d / since last load %dms / dir %s",
             mt == null ? "unknown" : mt.toString(),
             allFrames == null ? 0 : allFrames.length,
             currentFrame,
             loaderSemaphore.availablePermits(),
+            (System.nanoTime() - lastLoadLoop) / 1000,
             directory.getString());
     }
 
