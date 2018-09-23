@@ -77,7 +77,6 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     private Slide[] allFrames;
     private Thread loaderThread;
     private Semaphore loaderSemaphore;
-    private boolean timecodeLive = false;
 
     public TimeCodedSlideshow(LX lx) {
         super(lx);
@@ -122,7 +121,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                 }
                 /* Find the first frame after/including the current frame that
                  * hasn't been loaded, and load it. */
-                for (int i = currentFrame; i < allFrames.length; i++) {
+                for (int i = currentFrame < 0 ? 0 : currentFrame; i < allFrames.length; i++) {
                     if (!allFrames[i].loaded()) {
                         allFrames[i].load();
                         break;
@@ -188,14 +187,20 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
 
         Arrays.sort(files, Comparator.comparing(File::getName));
 
-        allFrames = new Slide[files.length];
+        Slide[] newAllFrames = new Slide[files.length];
         for (int i = 0; i < files.length; i++) {
-            allFrames[i] = new Slide(files[i]);
+            newAllFrames[i] = new Slide(files[i]);
         }
+        /* make this an atomic mutation, so that goToFrame's view of the frame
+         * list is always coherent. */
+        allFrames = newAllFrames;
         loaderSemaphore.release(BUFFER_COUNT);
     }
 
     private void goToFrame(int frame) {
+        if (allFrames == null) {
+            return;
+        }
         frame -= tcStartFrame.getValuei();
         if (frame < 0) {
             currentFrame = -1;
