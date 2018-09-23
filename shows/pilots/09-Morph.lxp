@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1537727274219,
+  "timestamp": 1537730067790,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -298,7 +298,7 @@
           "label": "Video",
           "arm": false,
           "enabled": true,
-          "cue": false,
+          "cue": true,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
@@ -342,12 +342,12 @@
               "label": "TimeCodedSlideshow",
               "dir": "/Users/symmetry/Desktop/morph/morph",
               "pick": false,
-              "shrink": 1.4,
+              "shrink": 2.3099999874830246,
               "yoff": 0.0,
-              "cropL": 1.0,
-              "cropR": 1.0,
-              "cropT": 1.0,
-              "cropB": 1.0,
+              "cropL": 0.005,
+              "cropR": 0.0,
+              "cropT": 0.28999999396502973,
+              "cropB": 0.0,
               "tcStart": 0.0
             },
             "modulation": {
@@ -1141,7 +1141,38 @@
       }
     },
     "midi": {
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "CoreMIDI4J - Port 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 2",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 3",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 4",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Sync Port",
+          "channel": true,
+          "control": false,
+          "sync": false
+        }
+      ],
       "surfaces": [],
       "mapping": []
     }
@@ -1162,8 +1193,8 @@
       },
       "preview": {
         "radius": 539.0619096045314,
-        "theta": 0.0029999999999825618,
-        "phi": 0.15071667385101306,
+        "theta": 0.023999999999999983,
+        "phi": 0.029999999999999975,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5
