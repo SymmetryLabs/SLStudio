@@ -165,7 +165,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
             allFrames == null ? 0 : allFrames.length,
             currentFrame,
             loaderSemaphore.availablePermits(),
-            (System.nanoTime() - lastLoadLoop) / 1e9,
+            (int) ((System.nanoTime() - lastLoadLoop) / 1e9),
             directory.getString());
     }
 
