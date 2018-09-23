@@ -44,6 +44,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
 
     private MidiTime mt;
     private int currentFrame;
+    private boolean stopping = false;
 
     private static class Slide {
         File path;
@@ -113,7 +114,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
          * the directory into the allFrames array. */
         loaderSemaphore = new Semaphore(0, false);
         loaderThread = new Thread(() -> {
-            while (true) {
+            while (!stopping) {
                 try {
                     loaderSemaphore.acquire();
                 } catch (InterruptedException e) {
@@ -134,13 +135,23 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     @Override
     public void onActive() {
         super.onActive();
+        stopping = false;
         loadDirectory();
-        loaderThread.start();
+        try {
+            loaderThread.start();
+        } catch (IllegalThreadStateException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onInactive() {
-        loaderThread.stop();
+        stopping = true;
+        loaderThread.interrupt();
+        try {
+            loaderThread.join();
+        } catch (InterruptedException e) {
+        }
     }
 
     @Override
