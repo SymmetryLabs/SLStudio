@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1537711593681,
+  "timestamp": 1537717567934,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -30,10 +30,10 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 56.84166595339775,
+        "color/hue": 81.77222269773483,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
-        "color": -3584,
+        "color": -6095104,
         "period": 120000.0,
         "range": 0.0,
         "spread": 0.0,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.5910395979881287,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -72,7 +72,7 @@
         "warps": [],
         "effects": [],
         "clips": [],
-        "patternIndex": 1,
+        "patternIndex": 0,
         "patterns": [
           {
             "id": 4179,
@@ -145,7 +145,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 2,
           "transitionEnabled": false,
@@ -182,7 +182,7 @@
             "modulationColor": -9436929,
             "parameters": {
               "label": "Noise",
-              "Hue": 240.0000286102295,
+              "Hue": 270.0,
               "Spark": 0.8199999816715717,
               "Wave": 0.0,
               "xPos": 0.5,
@@ -219,7 +219,7 @@
         "parameters": {
           "label": "GreenWipe",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -255,7 +255,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 0.0,
+              "rad": 830.1927490234375,
               "invert": false,
               "cx": 410.0,
               "cy": 116.0
@@ -273,7 +273,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 0.0,
+              "rad": 830.1927490234375,
               "invert": true,
               "cx": 410.0,
               "cy": 116.0
@@ -331,7 +331,7 @@
         "parameters": {
           "label": "YellowWipe",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -495,7 +495,7 @@
             "modulationColor": -327425,
             "parameters": {
               "label": "Strobe",
-              "enabled": true,
+              "enabled": false,
               "Shape": 2,
               "Freq": 10.0,
               "Black": true
@@ -531,7 +531,7 @@
               "X-DUP": false,
               "JOG": false,
               "GREY": true,
-              "Speed": 0.9000000953674316,
+              "Speed": 0.5499999523162842,
               "Symm": 0,
               "Anim": 7,
               "Dens": 0.6,
@@ -559,7 +559,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.9988011121749878,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -595,7 +595,7 @@
               "label": "TwoTone",
               "enabled": true,
               "Lcut1": 1.0,
-              "Lcut2": 96.38766646385193,
+              "Lcut2": 92.00000166893005,
               "c1/hue": 0.0,
               "c1/brightness": 100.0,
               "c1/saturation": 100.0,
@@ -662,7 +662,7 @@
               "cy": 58.0,
               "cz": 14.499992370605469,
               "width": 387.99999713897705,
-              "lvel": 0.16999995708465576,
+              "lvel": 0.7400000095367432,
               "rwidth": 251.75999571383002,
               "rvel": 0.1,
               "cutwhite": 0.1099999975413084,
@@ -692,7 +692,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
