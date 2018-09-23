@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1536949218201,
+  "timestamp": 1537740109995,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 8,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -66,7 +66,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [
@@ -185,7 +186,8 @@
           "blendMode": 2,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [
@@ -234,7 +236,8 @@
               "Speed": 0.55,
               "Symm": 0,
               "Anim": 1,
-              "Dens": 0.6
+              "Dens": 0.6,
+              "AnimResets": false
             },
             "modulation": {
               "modulators": [],
@@ -252,7 +255,7 @@
         "parameters": {
           "label": "Video",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -263,7 +266,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [],
@@ -271,26 +275,27 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 3188,
-            "class": "com.symmetrylabs.shows.pilots.HoldingOntoYouPlayer",
-            "modulationColor": -16764417,
+            "id": 21657,
+            "class": "com.symmetrylabs.slstudio.pattern.TimeCodedSlideshow",
+            "modulationColor": -16711808,
             "parameters": {
-              "label": "HoldingOntoYouPlayer",
-              "shrink": 2.336585283279419,
-              "yoff": 0.11999999731779099,
-              "fit": false,
-              "restart": false,
-              "stream": false,
-              "play": false
+              "label": "TimeCodedSlideshow",
+              "dir": "/Users/symmetry/Desktop/hoty/hoty",
+              "pick": false,
+              "shrink": 2.3376000121235845,
+              "yoff": 0.5899999868124723,
+              "cropL": 0.0,
+              "cropR": 0.0,
+              "cropT": 0.0,
+              "cropB": 0.0,
+              "tcStart": 1134654.0
             },
             "modulation": {
               "modulators": [],
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true,
-            "videoFile": "../12_HoldingOntoYou01-HD_V2.mov",
-            "isStreaming": false
+            "autoCycleEnabled": true
           }
         ]
       },
@@ -312,7 +317,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [
           {
@@ -421,7 +427,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [],
@@ -466,7 +473,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [
@@ -528,7 +536,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [
           {
@@ -638,7 +647,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [],
@@ -687,7 +697,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [
           {
@@ -927,7 +938,7 @@
         }
       },
       "outputControl": {
-        "id": 149,
+        "id": 148,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -8651008,
         "parameters": {
@@ -1025,7 +1036,20 @@
       }
     },
     "midi": {
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        }
+      ],
       "surfaces": [],
       "mapping": []
     }
@@ -1041,8 +1065,8 @@
       },
       "preview": {
         "radius": 582.2920350046751,
-        "theta": -0.04200000000000015,
-        "phi": 0.08771667385102722,
+        "theta": 0.4380000000000002,
+        "phi": 0.37800000000000017,
         "positionX": 410.0,
         "positionY": 48.0,
         "positionZ": 72.5
