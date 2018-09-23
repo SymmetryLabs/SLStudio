@@ -128,7 +128,6 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                  * hasn't been loaded, and load it. */
                 for (int i = currentFrame < 0 ? 0 : currentFrame; i < allFrames.length; i++) {
                     if (!allFrames[i].loaded()) {
-                        System.out.println(String.format("load %d", i));
                         allFrames[i].load();
                         break;
                     }
@@ -220,13 +219,19 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
             return;
         }
         frame -= tcStartFrame.getValuei();
+
+        /* if we're out of range, set frame to -1. If we were out of range
+         * before, we don't have to do anything. */
         if (frame < 0 || frame >= allFrames.length) {
-            currentFrame = -1;
-            return;
+            if (currentFrame == -1) {
+                return;
+            }
+            frame = -1;
         }
+
         /* if we're going backward in time out of our buffer, we clear the
          * buffer and start again. */
-        if (frame < currentFrame - KEEP_TRAILING_FRAMES) {
+        if (frame == -1 || frame < currentFrame - KEEP_TRAILING_FRAMES) {
             System.out.println(String.format("backwards: %d to %d", currentFrame, frame));
             loaderSemaphore.drainPermits();
             currentFrame = frame;
