@@ -202,7 +202,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
             return;
         }
         frame -= tcStartFrame.getValuei();
-        if (frame < 0) {
+        if (frame < 0 || frame >= allFrames.length) {
             currentFrame = -1;
             return;
         }
