@@ -28,7 +28,9 @@ mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
 //mainClassName = 'com.symmetrylabs.slstudio.SLHeadless'
 
 run {
-	jvmArgs '-XX:+UseParNewGC', '-XX:+UseConcMarkSweepGC'
+	if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
+		jvmArgs '-XX:+UseParNewGC', '-XX:+UseConcMarkSweepGC'
+	}
 
 	// To select a layout from the command line, "gradlew run -Playout=cubes"
 	systemProperty 'com.symmetrylabs.layout', findProperty('layout')
