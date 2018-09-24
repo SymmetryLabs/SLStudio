@@ -288,6 +288,7 @@ public class LXOscEngine extends LXComponent {
         private void oscComponent(OscMessage message, LXComponent component, String[] parts, int index) {
             if (component instanceof LXModulationComponent && parts[index].equals(ROUTE_MODULATION)) {
                 oscComponent(message, ((LXModulationComponent) component).getModulation().getModulator(parts[index+1]), parts, index+2);
+                return;
             }
 
             LXParameter parameter = component.getParameter(parts[index]);
