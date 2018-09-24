@@ -5,8 +5,8 @@ import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.osc.LXOscListener;
 import heronarts.lx.osc.OscMessage;
-
 import java.io.File;
+import java.io.IOException;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +31,7 @@ public class Workspace extends LXComponent {
     private final SLStudioLX.UI ui;
     private final String path;
     private final List<WorkspaceProject> projects = new ArrayList<WorkspaceProject>();
-    private int currentWorkspaceIndex = 0;
+    private int currentWorkspaceIndex = -1;
     private int successfulWorkspaceSwitches = 0;
     private long lastSwitchTime = 0;
 
@@ -44,11 +44,38 @@ public class Workspace extends LXComponent {
         loadProjectFiles();
         Collections.sort(projects, Comparator.comparing(WorkspaceProject::getLabel));
 
+        lx.addProjectListener((f, s) -> {
+            if (s == LX.ProjectListener.Change.OPEN) {
+                setCurrentProject(f);
+            }
+        });
+        setCurrentProject(lx.getProject());
+
         try {
             lx.engine.osc.receiver(WORKSPACE_OSC_PORT).addListener(new SwitchProjectOscListener());
         } catch (SocketException sx) {
             throw new RuntimeException(sx);
         }
+    }
+
+    private void setCurrentProject(File f) {
+        if (f != null) {
+            try {
+                String path = f.getCanonicalPath();
+                for (int i = 0; i < projects.size(); i++) {
+                    WorkspaceProject p = projects.get(i);
+                    if (p.getFile().getCanonicalPath().equals(path)) {
+                        currentWorkspaceIndex = i;
+                        return;
+                    }
+                }
+            } catch (IOException e) {
+                System.err.println("couldn't find project in workspace: ");
+                e.printStackTrace();
+                currentWorkspaceIndex = -1;
+            }
+        }
+        currentWorkspaceIndex = -1;
     }
 
     public void goIndex(int i) {
