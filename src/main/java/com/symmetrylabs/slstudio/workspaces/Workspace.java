@@ -19,12 +19,21 @@ import java.util.concurrent.Semaphore;
 public class Workspace extends LXComponent {
     public static final int WORKSPACE_OSC_PORT = 3999;
 
+    /* Switching projects is expensive, and a poorly-configured OSC sender
+         can DoS SLStudio by sending project-switch events on every frame. This
+         prevents projects from being switched more often than once every 500ms.
+         Note that it does not queue up requests to be served after the debounce
+         time elapses; OSC clients should send the desired project on every
+         frame, so that eventually their request will be honored. */
+    private static final long MIN_TIME_BETWEEN_SWITCHES_NS = (long) 0.5e9;
+
     private final LX lx;
     private final SLStudioLX.UI ui;
     private final String path;
     private final List<WorkspaceProject> projects = new ArrayList<WorkspaceProject>();
     private int currentWorkspaceIndex = 0;
     private int successfulWorkspaceSwitches = 0;
+    private long lastSwitchTime = 0;
 
     public Workspace(LX lx, SLStudioLX.UI ui, String path) {
         super(lx, "workspaces");
@@ -56,6 +65,12 @@ public class Workspace extends LXComponent {
     }
 
     public void openProject(WorkspaceProject workspace) {
+        long now = System.nanoTime();
+        if (now - lastSwitchTime < MIN_TIME_BETWEEN_SWITCHES_NS) {
+            return;
+        }
+        lastSwitchTime = now;
+
         int newWorkspaceIndex = projects.indexOf(workspace);
         if (currentWorkspaceIndex == newWorkspaceIndex) {
             return;
