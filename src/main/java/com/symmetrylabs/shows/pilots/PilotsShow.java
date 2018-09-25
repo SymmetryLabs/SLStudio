@@ -1,5 +1,6 @@
 package com.symmetrylabs.shows.pilots;
 
+import com.google.gson.Gson;
 import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
@@ -12,6 +13,10 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.transform.LXVector;
 
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +27,8 @@ import java.util.List;
 public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigChangedListener, LXEngine.Listener {
     static final String SHOW_NAME = "pilots";
 
+    static final String IP_CONFIGS_FILENAME = "cart_IP_configs.txt";
+
     static final float RED_HUE = 0;
     static final float YELLOW_HUE = 51;
     static final int RED = LXColor.hsb(RED_HUE, 100, 100);
@@ -31,6 +38,7 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
     private CartConfigurator configurator;
     private List<PilotsPixlite> outputs = new ArrayList<>();
     private Workspace workspace;
+    private CartConfig[] initialConfigs;
 
     private PilotsModel.Cart[] carts = new PilotsModel.Cart[] {
         /* no extra cart spacing here because they're not actually adjacent;
@@ -39,22 +47,22 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
             0, 0, 0)),
 
         new PilotsModel.Cart(CartConfig.BSL,  new LXVector(
-            4 * PilotsModel.STRIP_LENGTH, 0, 3 * PilotsModel.STRIP_LENGTH)),
+            1 * PilotsModel.CART_X, 0, 3 * PilotsModel.STRIP_LENGTH)),
 
         new PilotsModel.Cart(CartConfig.BSCL, new LXVector(
-            8 * PilotsModel.STRIP_LENGTH + PilotsModel.CART_SPACING, 0, 3 * PilotsModel.STRIP_LENGTH)),
+            2 * PilotsModel.CART_X + PilotsModel.CART_SPACING, 0, 3 * PilotsModel.STRIP_LENGTH)),
 
         new PilotsModel.Cart(CartConfig.BSC,  new LXVector(
-            12 * PilotsModel.STRIP_LENGTH + 2 * PilotsModel.CART_SPACING, 0, 3 * PilotsModel.STRIP_LENGTH)),
+            3 * PilotsModel.CART_X + 2 * PilotsModel.CART_SPACING, 0, 3 * PilotsModel.STRIP_LENGTH)),
 
         new PilotsModel.Cart(CartConfig.BSCR, new LXVector(
-            16 * PilotsModel.STRIP_LENGTH + 3 * PilotsModel.CART_SPACING, 0, 3 * PilotsModel.STRIP_LENGTH)),
+            4 * PilotsModel.CART_X + 3 * PilotsModel.CART_SPACING, 0, 3 * PilotsModel.STRIP_LENGTH)),
 
         new PilotsModel.Cart(CartConfig.BSR,  new LXVector(
-            20 * PilotsModel.STRIP_LENGTH + 4 * PilotsModel.CART_SPACING, 0, 3 * PilotsModel.STRIP_LENGTH)),
+            5 * PilotsModel.CART_X + 4 * PilotsModel.CART_SPACING, 0, 3 * PilotsModel.STRIP_LENGTH)),
 
         new PilotsModel.Cart(CartConfig.FSR,  new LXVector(
-            24 * PilotsModel.STRIP_LENGTH + 4 * PilotsModel.CART_SPACING, 0, 0))
+            6 * PilotsModel.CART_X + 4 * PilotsModel.CART_SPACING, 0, 0))
 
         // Temporary, just to send the "same thing" to each cart
 //        new PilotsModel.Cart(CartConfig.FSL,  new LXVector(0, 0, 0)),
@@ -78,7 +86,18 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
     @Override
     public void setupLx(SLStudioLX lx) {
         this.lx = lx;
-        onConfigChanged(CartConfig.defaultConfigs());
+
+        initialConfigs = null;
+        try {
+            initialConfigs = CartConfig.readConfigsFromFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        /* If we couldn't load the configs from a file, use the default */
+        if (initialConfigs == null) {
+            initialConfigs = CartConfig.defaultConfigs();
+        }
+        onConfigChanged(initialConfigs);
 
         lx.engine.addListener(this);
         for (LXChannel c : lx.engine.channels) {
@@ -92,22 +111,34 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
 
         configurator = new CartConfigurator(ui, 0, 0, ui.rightPane.utility.getContentWidth());
         configurator.setListener(this);
-        configurator.applyConfigs(CartConfig.defaultConfigs());
+        configurator.applyConfigs(initialConfigs);
         configurator.addToContainer(ui.rightPane.utility);
     }
 
     @Override
     public void onConfigChanged(CartConfig[] configs) {
-        for (LXOutput output : outputs) {
-            lx.removeOutput(output);
-        }
         PilotsModel model = (PilotsModel) lx.model;
-        outputs.clear();
-        for (CartConfig cc : configs) {
-            outputs.add(new PilotsPixlite(lx, cc.address, model.getCartById(cc.modelId)));
-        }
-        for (LXOutput output : outputs) {
-            lx.addOutput(output);
+        lx.engine.addTask(() -> {
+            for (LXOutput output : outputs) {
+                lx.removeOutput(output);
+            }
+            outputs.clear();
+
+            for (CartConfig cc : configs) {
+                outputs.add(new PilotsPixlite(lx, cc.address, model.getCartById(cc.modelId)));
+            }
+            for (LXOutput output : outputs) {
+                lx.addOutput(output);
+            }
+        });
+
+        try {
+            FileWriter writer = new FileWriter(IP_CONFIGS_FILENAME);
+            new Gson().toJson(configs, writer);
+            writer.close();
+        } catch (IOException e) {
+            System.err.println("couldn't write cart configs to file:");
+            e.printStackTrace();
         }
     }
 

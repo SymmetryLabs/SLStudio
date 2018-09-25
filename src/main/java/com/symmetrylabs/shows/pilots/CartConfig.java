@@ -1,9 +1,17 @@
 package com.symmetrylabs.shows.pilots;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import processing.data.JSONArray;
+import processing.data.JSONObject;
 
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class CartConfig {
     public static final String FSL = "FSL";
@@ -38,6 +46,16 @@ public class CartConfig {
             new CartConfig(BSCR, "10.200.1.15"),
             new CartConfig(BSR, "10.200.1.16"),
             new CartConfig(FSR, "10.200.1.17"),
-            };
+        };
+    }
+
+    public static CartConfig[] readConfigsFromFile() throws IOException {
+        Gson gson = new Gson();
+        File f = new File(PilotsShow.IP_CONFIGS_FILENAME);
+        if (!f.exists()) {
+            return null;
+        }
+        BufferedReader br = new BufferedReader(new FileReader(f));
+        return gson.fromJson(br, CartConfig[].class);
     }
 }

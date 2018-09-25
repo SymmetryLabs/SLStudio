@@ -21,6 +21,12 @@ import static com.symmetrylabs.util.MathConstants.*;
 public class PilotsModel extends StripsModel<Strip> {
 
     public static final float STRIP_LENGTH = 29;
+    public static final float CART_X = STRIP_LENGTH*4;
+    public static final float CART_Y = STRIP_LENGTH*4;
+    public static final float CART_Z = STRIP_LENGTH*2;
+
+
+
     public static final int N_PIXELS = 29;
     public static final float CART_SPACING = 2;
     public static final float PIXEL_PITCH = STRIP_LENGTH / (N_PIXELS + 1f);

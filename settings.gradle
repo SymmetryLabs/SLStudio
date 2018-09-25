@@ -1,6 +1,8 @@
 rootProject.name = 'SLStudio'
 
-include 'lx', 'p3lx'
-
-project(':lx').projectDir = file('submodules/LX')
-project(':p3lx').projectDir = file('submodules/P3LX')
+if (hasProperty('localp3lx')) {
+	include ':P3LX'
+	include ':LX'
+	project(':P3LX').projectDir = new File(rootProject.projectDir, '../p3lx')
+	project(':LX').projectDir = new File(rootProject.projectDir, '../LX')
+}

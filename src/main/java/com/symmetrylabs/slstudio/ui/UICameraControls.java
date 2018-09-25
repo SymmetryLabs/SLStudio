@@ -35,7 +35,7 @@ public class UICameraControls extends UI2dContext implements LXParameterListener
     public UICameraControls(UI ui, UI3dContext parent) {
         super(ui, 0, 0, WIDTH, HEIGHT);
         this.parent = parent;
-        reposition();
+        reposition(0);
 
         float x = PAD;
         float y = PAD;
@@ -100,9 +100,9 @@ public class UICameraControls extends UI2dContext implements LXParameterListener
         pg.rect(0, 0, width, height);
     }
 
-    public void reposition() {
+    public void reposition(float rightSideInset) {
         setPosition(
-            parent.getX() + parent.getWidth() - width,
+            parent.getX() + parent.getWidth() - width + rightSideInset,
             parent.getY() + parent.getHeight() - height);
     }
 

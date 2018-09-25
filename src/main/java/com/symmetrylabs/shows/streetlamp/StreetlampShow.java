@@ -22,10 +22,10 @@ public class StreetlampShow implements Show, HasWorkspace {
 
     @Override
     public void setupLx(SLStudioLX lx) {
-                GammaExpander g = GammaExpander.getInstance(lx);
-                g.redGammaFactor.setValue(0.21);
-                g.greenGammaFactor.setValue(0.37);
-                g.blueGammaFactor.setValue(0.80);
+        GammaExpander g = GammaExpander.getInstance(lx);
+        g.redGammaFactor.setValue(0.21);
+        g.greenGammaFactor.setValue(0.37);
+        g.blueGammaFactor.setValue(0.80);
 
         DmxUsbOutput output = new DmxUsbOutput(lx)
                         .setRGBWMode(DmxUsbOutput.RGBWMode.ADD_WHITE)
@@ -44,12 +44,16 @@ public class StreetlampShow implements Show, HasWorkspace {
 
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
-                workspace = new Workspace(lx, ui, "shows/streetlamp");
+        workspace = new Workspace(lx, ui, "shows/streetlamp");
         ui.preview.addComponent(new StreetlampVisualizer(lx));
+        GammaExpander g = GammaExpander.getInstance(lx);
+        new UIKnob(g.redGammaFactor).addToContainer(ui.rightPane.utility);
+        new UIKnob(g.greenGammaFactor).addToContainer(ui.rightPane.utility);
+        new UIKnob(g.blueGammaFactor).addToContainer(ui.rightPane.utility);
     }
 
-        @Override
-        public Workspace getWorkspace() {
-                return workspace;
-        }
+    @Override
+    public Workspace getWorkspace() {
+        return workspace;
+    }
 }
