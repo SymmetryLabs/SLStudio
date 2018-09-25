@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1537736518357,
+  "timestamp": 1537830765503,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -303,7 +303,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.9966639876365662,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -372,7 +372,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.002942857099696994,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -728,7 +728,7 @@
       "modulationColor": -38656,
       "parameters": {
         "label": "Output",
-        "enabled": false,
+        "enabled": true,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -1168,6 +1168,12 @@
         },
         {
           "name": "CoreMIDI4J - Sync Port",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
           "sync": false
