@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1537830765503,
+  "timestamp": 1537891189757,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.02,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -131,7 +131,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.02,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -303,7 +303,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.9966639876365662,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -372,7 +372,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.002942857099696994,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -1143,6 +1143,24 @@
     "midi": {
       "inputs": [
         {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "CoreMIDI4J - Port 1",
           "channel": true,
           "control": false,
@@ -1171,24 +1189,6 @@
           "channel": true,
           "control": false,
           "sync": false
-        },
-        {
-          "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "Real Time Sequencer",
-          "channel": true,
-          "control": false,
-          "sync": false
         }
       ],
       "surfaces": [],
@@ -1211,8 +1211,8 @@
       },
       "preview": {
         "radius": 539.0619096045314,
-        "theta": 0.023999999999999983,
-        "phi": 0.029999999999999975,
+        "theta": 0.0029999999999999853,
+        "phi": 0.01199999999999998,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5

@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1537889352312,
+  "timestamp": 1537890871735,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5172413792461157,
       "crossfaderBlendMode": 0,
       "speed": 0.3799999952316284,
-      "focusedChannel": 3,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -469,7 +469,7 @@
             "parameters": {
               "label": "Rings",
               "Hue": 0.0,
-              "Depth": 0.6199999995529651,
+              "Depth": 0.719999997317791,
               "Bright": 0.75,
               "Sat": 0.5,
               "Speed1": 0.2,
@@ -734,9 +734,9 @@
             "modulationColor": -16745473,
             "parameters": {
               "label": "WarpCompatibleSolidColor",
-              "Color/hue": 297.9699933398515,
-              "Color/brightness": 55.00000100582838,
-              "Color/saturation": 98.00000004470348,
+              "Color/hue": 298.2481689453125,
+              "Color/brightness": 54.90196228027344,
+              "Color/saturation": 97.85713958740234,
               "Color": -7863412
             },
             "modulation": {
@@ -1234,9 +1234,9 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 37,
+        "id": 25253,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16728321,
+        "modulationColor": -16755457,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
@@ -1366,8 +1366,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 600.0106802336979,
-        "theta": 0.002999999999999999,
-        "phi": 0.12300000000000005,
+        "theta": -0.063,
+        "phi": 0.1680000000000001,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5
