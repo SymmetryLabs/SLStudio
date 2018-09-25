@@ -12,8 +12,6 @@ import heronarts.lx.LXEngine;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.transform.LXVector;
-import processing.data.JSONArray;
-import processing.data.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -40,6 +38,7 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
     private CartConfigurator configurator;
     private List<PilotsPixlite> outputs = new ArrayList<>();
     private Workspace workspace;
+    private CartConfig[] initialConfigs;
 
     private PilotsModel.Cart[] carts = new PilotsModel.Cart[] {
         /* no extra cart spacing here because they're not actually adjacent;
@@ -87,11 +86,18 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
     @Override
     public void setupLx(SLStudioLX lx) {
         this.lx = lx;
+
+        initialConfigs = null;
         try {
-            onConfigChanged(CartConfig.readConfigsFromFile());
+            initialConfigs = CartConfig.readConfigsFromFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        /* If we couldn't load the configs from a file, use the default */
+        if (initialConfigs == null) {
+            initialConfigs = CartConfig.defaultConfigs();
+        }
+        onConfigChanged(initialConfigs);
 
         lx.engine.addListener(this);
         for (LXChannel c : lx.engine.channels) {
@@ -105,49 +111,35 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
 
         configurator = new CartConfigurator(ui, 0, 0, ui.rightPane.utility.getContentWidth());
         configurator.setListener(this);
-
-        try {
-            configurator.applyConfigs(CartConfig.readConfigsFromFile());
-        } catch (IOException e) {
-            e.printStackTrace();
-            // if we couldn't read from file apply the defaults..
-            configurator.applyConfigs(CartConfig.defaultConfigs());
-        }
-
-
-
+        configurator.applyConfigs(initialConfigs);
         configurator.addToContainer(ui.rightPane.utility);
     }
 
     @Override
     public void onConfigChanged(CartConfig[] configs) {
-        for (LXOutput output : outputs) {
-            lx.removeOutput(output);
-        }
         PilotsModel model = (PilotsModel) lx.model;
-        outputs.clear();
+        lx.engine.addTask(() -> {
+            for (LXOutput output : outputs) {
+                lx.removeOutput(output);
+            }
+            outputs.clear();
 
-        Gson gson = new Gson();
+            for (CartConfig cc : configs) {
+                outputs.add(new PilotsPixlite(lx, cc.address, model.getCartById(cc.modelId)));
+            }
+            for (LXOutput output : outputs) {
+                lx.addOutput(output);
+            }
+        });
 
-        for (CartConfig cc : configs) {
-            outputs.add(new PilotsPixlite(lx, cc.address, model.getCartById(cc.modelId)));
-        }
-        for (LXOutput output : outputs) {
-            lx.addOutput(output);
-        }
-
-        // encode the configs
-        String jsonString = gson.toJson(configs);
-        // write it to a file
-        FileWriter fileWriter = null;
         try {
-            fileWriter = new FileWriter(IP_CONFIGS_FILENAME);
-            fileWriter.write(jsonString);
-            fileWriter.close();        // dump info to a file
+            FileWriter writer = new FileWriter(IP_CONFIGS_FILENAME);
+            new Gson().toJson(configs, writer);
+            writer.close();
         } catch (IOException e) {
+            System.err.println("couldn't write cart configs to file:");
             e.printStackTrace();
         }
-
     }
 
     @Override
