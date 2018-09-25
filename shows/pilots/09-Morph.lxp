@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1537891189757,
+  "timestamp": 1537899930593,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5172413792461157,
       "crossfaderBlendMode": 0,
       "speed": 0.8166667073965073,
-      "focusedChannel": 2,
+      "focusedChannel": 3,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -298,12 +298,12 @@
           "label": "Video",
           "arm": false,
           "enabled": true,
-          "cue": false,
+          "cue": true,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -340,15 +340,15 @@
             "modulationColor": -9216,
             "parameters": {
               "label": "TimeCodedSlideshow",
-              "dir": "/Users/symmetry/Desktop/morph/morph",
+              "dir": "/Users/symmetry/Desktop/morph-1",
               "pick": false,
-              "shrink": 2.3099999874830246,
-              "yoff": 0.0,
-              "cropL": 0.005,
+              "shrink": 1.7020000010728835,
+              "yoff": 0.009999999776482582,
+              "cropL": 0.014999999776482583,
               "cropR": 0.0,
               "cropT": 0.28999999396502973,
               "cropB": 0.0,
-              "tcStart": 864040.0
+              "tcStart": 863997.0
             },
             "modulation": {
               "modulators": [],
@@ -501,7 +501,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 3,
           "transitionEnabled": false,
@@ -1142,12 +1142,6 @@
     },
     "midi": {
       "inputs": [
-        {
-          "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
         {
           "name": "** Internal Error getting Device Name!",
           "channel": true,
