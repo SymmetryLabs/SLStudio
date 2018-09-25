@@ -96,12 +96,13 @@ public class Workspace extends LXComponent {
         if (now - lastSwitchTime < MIN_TIME_BETWEEN_SWITCHES_NS) {
             return;
         }
-        lastSwitchTime = now;
 
         int newWorkspaceIndex = projects.indexOf(workspace);
-        if (currentWorkspaceIndex == newWorkspaceIndex) {
+        if (currentWorkspaceIndex == newWorkspaceIndex || newWorkspaceIndex < 0) {
             return;
         }
+        lastSwitchTime = now;
+
         System.out.println(String.format("openProject new=%d current=%d", newWorkspaceIndex, currentWorkspaceIndex));
         currentWorkspaceIndex = newWorkspaceIndex;
 
@@ -199,7 +200,12 @@ public class Workspace extends LXComponent {
     private class SwitchProjectOscListener implements LXOscListener {
         public void oscMessage(OscMessage message) {
             if (message.matches("/lx/workspaces/active")) {
-                WorkspaceProject workspace = projects.get(message.getInt());
+                int index = message.getInt();
+                if (index < 0 || index >= projects.size()) {
+                    System.err.println(String.format("workspace project index %d invalid", index));
+                    return;
+                }
+                WorkspaceProject workspace = projects.get(index);
                 openProject(workspace);
             }
         }
