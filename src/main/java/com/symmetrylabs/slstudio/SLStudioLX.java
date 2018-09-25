@@ -443,7 +443,10 @@ public class SLStudioLX extends P3LX {
         private void _togglePerformanceMode() {
             this.leftPane.setVisible(!performanceMode);
             this.rightPane.setVisible(!performanceMode);
-            if (SLStudio.applet.performanceManager == null) return;
+            if (SLStudio.applet.performanceManager == null) {
+                reflow();
+                return;
+            }
             for (UIWindow w : SLStudio.applet.performanceManager.deckWindows) {
                 if (w != null) {
                     w.setVisible(performanceMode);
@@ -455,8 +458,10 @@ public class SLStudioLX extends P3LX {
                 }
             }
 
-            if (lx == null || lx.engine == null || lx.engine.midi == null)
+            if (lx == null || lx.engine == null || lx.engine.midi == null) {
+                reflow();
                 return;
+            }
 
             // lx.engine.midi.whenReady(new Runnable() {
             //   public void run() {
@@ -471,7 +476,7 @@ public class SLStudioLX extends P3LX {
                     PerformanceManager.DeckSide.LEFT)].rebindDeck();
                 SLStudio.applet.performanceManager.deckWindows[SLStudio.applet.performanceManager.focusedDeskIndexForSide(PerformanceManager.DeckSide.RIGHT)].rebindDeck();
             }
-
+            reflow();
         }
 
 
@@ -560,7 +565,8 @@ public class SLStudioLX extends P3LX {
             this.helpText.reposition();
             this.captionText.reposition();
             this.warningText.reposition();
-            this.cameraControls.reposition();
+            this.cameraControls.reposition(
+                performanceMode ? rightPane.getWidth() : 0);
         }
 
         private static final String KEY_AUDIO_EXPANDED = "audioExpanded";
