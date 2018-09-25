@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1537889139887,
+  "timestamp": 1537889352312,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5172413792461157,
       "crossfaderBlendMode": 0,
       "speed": 0.3799999952316284,
-      "focusedChannel": 10,
+      "focusedChannel": 3,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -309,7 +309,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -409,25 +409,6 @@
               "amount": 1.0,
               "attack": 100.0,
               "decay": 100.0
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            }
-          },
-          {
-            "id": 1187,
-            "class": "com.symmetrylabs.slstudio.effect.LCHShift",
-            "modulationColor": -16711722,
-            "parameters": {
-              "label": "LCHShift",
-              "enabled": true,
-              "Lboost": 3.2000000178813934,
-              "Lshift": 0.0,
-              "Cboost": 1.0,
-              "Cshift": 0.0,
-              "Hshift": 0.0
             },
             "modulation": {
               "modulators": [],
