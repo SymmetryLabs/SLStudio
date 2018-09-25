@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1535388517487,
+  "timestamp": 1537736518357,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5172413792461157,
       "crossfaderBlendMode": 0,
       "speed": 0.8166667073965073,
-      "focusedChannel": 0,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -55,7 +55,7 @@
         "parameters": {
           "label": "RK1",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -66,35 +66,12 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [],
-        "clips": [
-          {
-            "id": 3665,
-            "class": "heronarts.lx.clip.LXChannelClip",
-            "modulationColor": -16760321,
-            "parameters": {
-              "label": "Clip-5",
-              "running": false,
-              "trigger": false,
-              "length": 0.0,
-              "loop": false
-            },
-            "index": 4,
-            "parameterLanes": [
-              {
-                "laneType": "pattern",
-                "events": []
-              },
-              {
-                "laneType": "midiNote",
-                "events": []
-              }
-            ]
-          }
-        ],
+        "clips": [],
         "patternIndex": 1,
         "patterns": [
           {
@@ -148,7 +125,7 @@
         "parameters": {
           "label": "RK2",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -159,7 +136,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [
           {
@@ -246,7 +224,8 @@
           "blendMode": 1,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [
@@ -329,7 +308,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [
           {
@@ -355,25 +335,27 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 3663,
-            "class": "com.symmetrylabs.shows.pilots.MorphPlayer",
-            "modulationColor": -16711425,
+            "id": 25309,
+            "class": "com.symmetrylabs.slstudio.pattern.TimeCodedSlideshow",
+            "modulationColor": -9216,
             "parameters": {
-              "label": "MorphPlayer",
-              "shrink": 1.7170732021331787,
+              "label": "TimeCodedSlideshow",
+              "dir": "/Users/symmetry/Desktop/morph/morph",
+              "pick": false,
+              "shrink": 2.3099999874830246,
               "yoff": 0.0,
-              "fit": false,
-              "restart": false,
-              "play": true
+              "cropL": 0.005,
+              "cropR": 0.0,
+              "cropT": 0.28999999396502973,
+              "cropB": 0.0,
+              "tcStart": 864040.0
             },
             "modulation": {
               "modulators": [],
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true,
-            "videoFile": "../cube-arig-usc-v1.mp4",
-            "isStreaming": false
+            "autoCycleEnabled": true
           }
         ]
       },
@@ -395,7 +377,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [
           {
@@ -452,7 +435,8 @@
               "label": "Strobe",
               "enabled": false,
               "Shape": 3,
-              "Freq": 7.313500060047954
+              "Freq": 7.313500060047954,
+              "Black": true
             },
             "modulation": {
               "modulators": [],
@@ -522,7 +506,8 @@
           "blendMode": 3,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [
           {
@@ -634,7 +619,8 @@
               "Speed": 0.55,
               "Symm": 0,
               "Anim": 7,
-              "Dens": 0.6
+              "Dens": 0.6,
+              "AnimResets": false
             },
             "modulation": {
               "modulators": [],
@@ -742,7 +728,7 @@
       "modulationColor": -38656,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -750,8 +736,83 @@
       }
     },
     "components": {
-      "outputControl": {
+      "GammaExpander": {
+        "id": 37,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -16753921,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
+      "envelop": {
         "id": 32,
+        "class": "com.symmetrylabs.slstudio.envelop.Envelop",
+        "modulationColor": -16713729,
+        "parameters": {
+          "label": "Envelop",
+          "running": true,
+          "trigger": false
+        },
+        "source": {
+          "id": 33,
+          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Source",
+          "modulationColor": -16711893,
+          "parameters": {
+            "label": "Source",
+            "running": true,
+            "trigger": false,
+            "Gain": 0.0,
+            "Range": 24.0,
+            "Attack": 25.0,
+            "Release": 50.0,
+            "Source-1": 0.0,
+            "Source-2": 0.0,
+            "Source-3": 0.0,
+            "Source-4": 0.0,
+            "Source-5": 0.0,
+            "Source-6": 0.0,
+            "Source-7": 0.0,
+            "Source-8": 0.0,
+            "Source-9": 0.0,
+            "Source-10": 0.0,
+            "Source-11": 0.0,
+            "Source-12": 0.0,
+            "Source-13": 0.0,
+            "Source-14": 0.0,
+            "Source-15": 0.0,
+            "Source-16": 0.0
+          }
+        },
+        "decode": {
+          "id": 34,
+          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Decode",
+          "modulationColor": -41728,
+          "parameters": {
+            "label": "Decode",
+            "running": true,
+            "trigger": false,
+            "Gain": 0.0,
+            "Range": 24.0,
+            "Attack": 25.0,
+            "Release": 50.0,
+            "Decode-1": 0.0,
+            "Decode-2": 0.0,
+            "Decode-3": 0.0,
+            "Decode-4": 0.0,
+            "Decode-5": 0.0,
+            "Decode-6": 0.0,
+            "Decode-7": 0.0,
+            "Decode-8": 0.0
+          }
+        }
+      },
+      "outputControl": {
+        "id": 148,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -8651008,
         "parameters": {
@@ -1080,7 +1141,50 @@
       }
     },
     "midi": {
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "CoreMIDI4J - Port 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 2",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 3",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 4",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Sync Port",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        }
+      ],
       "surfaces": [],
       "mapping": []
     }
@@ -1100,9 +1204,9 @@
         "3685": true
       },
       "preview": {
-        "radius": 451.2005672202254,
-        "theta": -0.012000000000017417,
-        "phi": 0.4117166738510132,
+        "radius": 539.0619096045314,
+        "theta": 0.023999999999999983,
+        "phi": 0.029999999999999975,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5

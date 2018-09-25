@@ -5,8 +5,8 @@ import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.osc.LXOscListener;
 import heronarts.lx.osc.OscMessage;
-
 import java.io.File;
+import java.io.IOException;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,12 +19,21 @@ import java.util.concurrent.Semaphore;
 public class Workspace extends LXComponent {
     public static final int WORKSPACE_OSC_PORT = 3999;
 
+    /* Switching projects is expensive, and a poorly-configured OSC sender
+         can DoS SLStudio by sending project-switch events on every frame. This
+         prevents projects from being switched more often than once every 500ms.
+         Note that it does not queue up requests to be served after the debounce
+         time elapses; OSC clients should send the desired project on every
+         frame, so that eventually their request will be honored. */
+    private static final long MIN_TIME_BETWEEN_SWITCHES_NS = (long) 0.5e9;
+
     private final LX lx;
     private final SLStudioLX.UI ui;
     private final String path;
     private final List<WorkspaceProject> projects = new ArrayList<WorkspaceProject>();
-    private int currentWorkspaceIndex = 0;
+    private int currentWorkspaceIndex = -1;
     private int successfulWorkspaceSwitches = 0;
+    private long lastSwitchTime = 0;
 
     public Workspace(LX lx, SLStudioLX.UI ui, String path) {
         super(lx, "workspaces");
@@ -35,11 +44,38 @@ public class Workspace extends LXComponent {
         loadProjectFiles();
         Collections.sort(projects, Comparator.comparing(WorkspaceProject::getLabel));
 
+        lx.addProjectListener((f, s) -> {
+            if (s == LX.ProjectListener.Change.OPEN) {
+                setCurrentProject(f);
+            }
+        });
+        setCurrentProject(lx.getProject());
+
         try {
             lx.engine.osc.receiver(WORKSPACE_OSC_PORT).addListener(new SwitchProjectOscListener());
         } catch (SocketException sx) {
             throw new RuntimeException(sx);
         }
+    }
+
+    private void setCurrentProject(File f) {
+        if (f != null) {
+            try {
+                String path = f.getCanonicalPath();
+                for (int i = 0; i < projects.size(); i++) {
+                    WorkspaceProject p = projects.get(i);
+                    if (p.getFile().getCanonicalPath().equals(path)) {
+                        currentWorkspaceIndex = i;
+                        return;
+                    }
+                }
+            } catch (IOException e) {
+                System.err.println("couldn't find project in workspace: ");
+                e.printStackTrace();
+                currentWorkspaceIndex = -1;
+            }
+        }
+        currentWorkspaceIndex = -1;
     }
 
     public void goIndex(int i) {
@@ -56,6 +92,12 @@ public class Workspace extends LXComponent {
     }
 
     public void openProject(WorkspaceProject workspace) {
+        long now = System.nanoTime();
+        if (now - lastSwitchTime < MIN_TIME_BETWEEN_SWITCHES_NS) {
+            return;
+        }
+        lastSwitchTime = now;
+
         int newWorkspaceIndex = projects.indexOf(workspace);
         if (currentWorkspaceIndex == newWorkspaceIndex) {
             return;

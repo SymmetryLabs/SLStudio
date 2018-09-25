@@ -44,6 +44,9 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
 
     private MidiTime mt;
     private int currentFrame;
+    private boolean stopping = false;
+    private long lastLoadLoop = 0;
+    private boolean currentFrameLoaded;
 
     private static class Slide {
         File path;
@@ -106,21 +109,32 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                     goToFrame(frame);
                 }
             });
+            System.out.println("attached time code listener to " + input.getName());
         }
 
         /* start the semaphore with no permits; we fill it up once we've loaded
          * the directory into the allFrames array. */
         loaderSemaphore = new Semaphore(0, false);
+        lastLoadLoop = System.nanoTime();
+    }
+
+    @Override
+    public void onActive() {
+        super.onActive();
+        stopping = false;
+        loadDirectory();
+
         loaderThread = new Thread(() -> {
-            while (true) {
+            while (!stopping) {
                 try {
                     loaderSemaphore.acquire();
                 } catch (InterruptedException e) {
                     return;
                 }
+                lastLoadLoop = System.nanoTime();
                 /* Find the first frame after/including the current frame that
                  * hasn't been loaded, and load it. */
-                for (int i = currentFrame; i < allFrames.length; i++) {
+                for (int i = currentFrame < 0 ? 0 : currentFrame; i < allFrames.length; i++) {
                     if (!allFrames[i].loaded()) {
                         allFrames[i].load();
                         break;
@@ -128,28 +142,34 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                 }
             }
         });
-    }
-
-    @Override
-    public void onActive() {
-        super.onActive();
-        loadDirectory();
-        loaderThread.start();
+        try {
+            loaderThread.start();
+        } catch (IllegalThreadStateException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onInactive() {
-        loaderThread.stop();
+        super.onInactive();
+        stopping = true;
+        loaderThread.interrupt();
+        try {
+            loaderThread.join();
+        } catch (InterruptedException e) {
+        }
     }
 
     @Override
     public String getCaption() {
         return String.format(
-            "time %s / %d frames / cur frame %d / loader queue size %d / dir %s",
+            "time %s / %d frames / frame %d %s / waiting %d / since last load %ds / dir %s",
             mt == null ? "unknown" : mt.toString(),
             allFrames == null ? 0 : allFrames.length,
             currentFrame,
+            currentFrameLoaded ? "ok" : "skip",
             loaderSemaphore.availablePermits(),
+            (int) ((System.nanoTime() - lastLoadLoop) / 1e9),
             directory.getString());
     }
 
@@ -186,22 +206,34 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
 
         Arrays.sort(files, Comparator.comparing(File::getName));
 
-        allFrames = new Slide[files.length];
+        Slide[] newAllFrames = new Slide[files.length];
         for (int i = 0; i < files.length; i++) {
-            allFrames[i] = new Slide(files[i]);
+            newAllFrames[i] = new Slide(files[i]);
         }
+        /* make this an atomic mutation, so that goToFrame's view of the frame
+         * list is always coherent. */
+        allFrames = newAllFrames;
         loaderSemaphore.release(BUFFER_COUNT);
     }
 
     private void goToFrame(int frame) {
-        frame -= tcStartFrame.getValuei();
-        if (frame < 0) {
-            currentFrame = -1;
+        if (allFrames == null) {
             return;
         }
+        frame -= tcStartFrame.getValuei();
+
+        /* if we're out of range, set frame to -1. If we were out of range
+         * before, we don't have to do anything. */
+        if (frame < 0 || frame >= allFrames.length) {
+            if (currentFrame == -1) {
+                return;
+            }
+            frame = -1;
+        }
+
         /* if we're going backward in time out of our buffer, we clear the
          * buffer and start again. */
-        if (frame < currentFrame - KEEP_TRAILING_FRAMES) {
+        if (frame == -1 || frame < currentFrame - KEEP_TRAILING_FRAMES) {
             System.out.println(String.format("backwards: %d to %d", currentFrame, frame));
             loaderSemaphore.drainPermits();
             currentFrame = frame;
@@ -234,7 +266,8 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
             return;
         }
         Slide slide = allFrames[currentFrame];
-        if (!slide.loaded()) {
+        currentFrameLoaded = slide.loaded();
+        if (!currentFrameLoaded) {
             return;
         }
         BufferedImage img = slide.img;
