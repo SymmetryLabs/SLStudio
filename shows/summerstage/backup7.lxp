@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1536459629448,
+  "timestamp": 1536419782528,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.0,
       "crossfaderBlendMode": 0,
       "speed": 1.0078740157480315,
-      "focusedChannel": 7,
+      "focusedChannel": 12,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -55,13 +55,13 @@
         "parameters": {
           "label": "blue cloud",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.07874015748031496,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -206,10 +206,10 @@
             "modulationColor": -65528,
             "parameters": {
               "label": "Noise",
-              "Hue": 360.0,
+              "Hue": 144.56692913385828,
               "HVar": 0.6929133858267716,
               "Sat": 0.9763779527559056,
-              "Speed": 0.5511811023622046,
+              "Speed": 0.55,
               "Spark": 0.0,
               "Wave": 0.0,
               "xPos": 0.5,
@@ -217,7 +217,7 @@
               "xRot": 0.5,
               "yRot": 0.5354330708661418,
               "zRot": 0.5,
-              "Spin": 0.5626850396662393,
+              "Spin": 0.5196850393700787,
               "X-SYM": false,
               "Y-SYM": false,
               "R-SYM": false,
@@ -244,7 +244,7 @@
         "parameters": {
           "label": "bottom fire",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -265,7 +265,7 @@
             "modulationColor": -12583168,
             "parameters": {
               "label": "YMask",
-              "enabled": false,
+              "enabled": true,
               "minY": 74.25,
               "maxY": 233.85000662505627,
               "noiseTop": 60.0,
@@ -281,7 +281,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 2,
         "patterns": [
           {
             "id": 9206,
@@ -291,8 +291,8 @@
               "label": "SolidColor",
               "color/hue": 0.0,
               "color/brightness": 100.0,
-              "color/saturation": 0.0,
-              "color": -1
+              "color/saturation": 100.0,
+              "color": -65536
             },
             "modulation": {
               "modulators": [],
@@ -380,7 +380,7 @@
         "parameters": {
           "label": "red planet",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -627,7 +627,7 @@
         "parameters": {
           "label": "star field",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -648,8 +648,8 @@
             "modulationColor": -15466752,
             "parameters": {
               "label": "Blur",
-              "enabled": true,
-              "amount": 0.029999997932463884
+              "enabled": false,
+              "amount": 0.19999999552965164
             },
             "modulation": {
               "modulators": [],
@@ -750,9 +750,9 @@
             "modulationColor": -65329,
             "parameters": {
               "label": "Sparkle",
-              "Speed": 0.14173228346456693,
-              "Dens": 0.5433070866141733,
-              "Attack": 0.6141732283464567,
+              "Speed": 0.15748031496062992,
+              "Dens": 0.6141732283464567,
+              "Attack": 0.5511811023622047,
               "Decay": 0.4881889763779528,
               "Hue": 0.5354330708661418,
               "HueVar": 0.0,
@@ -839,7 +839,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -849,7 +849,7 @@
         "warps": [],
         "effects": [],
         "clips": [],
-        "patternIndex": 1,
+        "patternIndex": 0,
         "patterns": [
           {
             "id": 20565,
@@ -857,8 +857,8 @@
             "modulationColor": -6357248,
             "parameters": {
               "label": "RedBlue",
-              "hue1": 297.719993731007,
-              "hue2": 360.0,
+              "hue1": 300.4724409448819,
+              "hue2": 306.1417322834646,
               "sat1": 100.0,
               "sat2": 100.0,
               "yBorder": 302.25,
@@ -882,16 +882,16 @@
             "modulationColor": -14352129,
             "parameters": {
               "label": "GreenMagenta",
-              "hue1": 107.71653543307087,
-              "hue2": 297.6377952755905,
+              "hue1": 138.89763779527559,
+              "hue2": 286.2992125984252,
               "sat1": 100.0,
-              "sat2": 95.2755905511811,
+              "sat2": 100.0,
               "yBorder": 302.25,
               "xBorder": 713.25,
               "trigger": false,
               "useX": false,
               "tempo": false,
-              "useOscillator": false,
+              "useOscillator": true,
               "oscBPM": 250
             },
             "modulation": {
@@ -916,7 +916,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -1326,8 +1326,8 @@
               "Stop": false,
               "Duration": 3.0,
               "Radius": 2.5,
-              "YMin": 74.25,
-              "YMax": 396.48999959230423,
+              "YMin": 226.25,
+              "YMax": 378.25,
               "Density": 0.4,
               "MinLen": 4
             },
@@ -1858,8 +1858,8 @@
       "modulationColor": -2817793,
       "parameters": {
         "label": "",
-        "period": 468.75,
-        "bpm": 128.0,
+        "period": 399.59999999999997,
+        "bpm": 150.15015015015015,
         "tap": false,
         "nudgeUp": false,
         "nudgeDown": false,
@@ -1945,9 +1945,9 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 25639,
+        "id": 25021,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -65285,
+        "modulationColor": -16744193,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
@@ -2246,13 +2246,6 @@
           "componentId": 24396,
           "parameterPath": "Hold",
           "pitch": 48
-        },
-        {
-          "channel": 2,
-          "type": "NOTE",
-          "componentId": 14343,
-          "parameterPath": "trigger",
-          "pitch": 49
         }
       ]
     }
@@ -2266,8 +2259,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 741.4931693458691,
-        "theta": 0.04199999999998047,
-        "phi": 0.06671667385101193,
+        "theta": -0.1320000000000196,
+        "phi": 0.04271667385101192,
         "positionX": 754.9600219726562,
         "positionY": 207.25,
         "positionZ": -14.257916450500488
