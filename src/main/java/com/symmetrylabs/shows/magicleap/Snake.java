@@ -3,21 +3,26 @@ package com.symmetrylabs.shows.magicleap;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
-import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.slstudio.model.StripsTopology.Bundle;
 import com.symmetrylabs.slstudio.model.StripsTopology.Dir;
 import com.symmetrylabs.slstudio.model.StripsTopology.Junction;
 import com.symmetrylabs.slstudio.model.StripsTopology.Sign;
+import com.symmetrylabs.slstudio.model.StripsTopology;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
+import com.symmetrylabs.util.StripsTopologyComponents.ConnectedComponent;
+import com.symmetrylabs.util.StripsTopologyComponents;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
+import heronarts.lx.parameter.BooleanParameter.Mode;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.transform.LXVector;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import processing.event.KeyEvent;
-import heronarts.lx.parameter.BooleanParameter.Mode;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.CompoundParameter;
 
 public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
     public static final String GROUP_NAME = MagicLeapShow.SHOW_NAME;
@@ -31,6 +36,7 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
     private Junction start;
     private Bundle current;
     private Junction target;
+    private Junction goal;
     private int progress;
 
     private Dir nextDir;
@@ -42,6 +48,8 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
     private GameState state;
 
     private double timeSinceTick;
+
+    private final List<Junction> validJunctions;
 
     private final BooleanParameter reset =
         new BooleanParameter("reset", false)
@@ -57,8 +65,22 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
         if (topo == null) {
             SLStudio.setWarning("Snake", "no topology on model");
             state = GameState.NO_TOPOLOGY;
+            validJunctions = null;
             return;
         }
+
+        List<ConnectedComponent> components =
+            new StripsTopologyComponents(topo).getComponents();
+
+        int maxSize = 0;
+        ConnectedComponent maxCC = null;
+        for (ConnectedComponent cc : components) {
+            if (cc.junctions.size() > maxSize) {
+                maxSize = cc.junctions.size();
+                maxCC = cc;
+            }
+        }
+        validJunctions = new ArrayList<>(maxCC.junctions);
 
         addParameter(reset);
         addParameter(stepRate);
@@ -66,14 +88,21 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
     }
 
     private void reset() {
-        Random random = new Random();
-        start = topo.junctions.get(random.nextInt(topo.junctions.size()));
-        progress = 0;
+        start = randomJunction();
+        goal = randomJunction();
         target = null;
+        current = null;
+        currentSign = null;
+        progress = 0;
         nextDir = null;
         nextSign = null;
         state = GameState.PLAYING;
         timeSinceTick = 0;
+    }
+
+    private Junction randomJunction() {
+        Random random = new Random();
+        return validJunctions.get(random.nextInt(validJunctions.size()));
     }
 
     @Override
@@ -138,6 +167,13 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
             if (timeSinceTick > stepRate.getValue()) {
                 progress++;
                 timeSinceTick = 0;
+            }
+        }
+
+        for (LXVector v : getVectors()) {
+            float d = v.dist(goal.loc);
+            if (d < 12) {
+                colors[v.index] = 0xFF00FF00;
             }
         }
     }
