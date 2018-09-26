@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1535402743062,
+  "timestamp": 1537944643865,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 4,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -66,7 +66,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [
@@ -79,10 +80,15 @@
               "enabled": true,
               "Lcut1": 1.0,
               "Lcut2": 50.0,
+              "c1/hue": 0.0,
+              "c1/brightness": 100.0,
+              "c1/saturation": 100.0,
+              "c1": -65536,
               "c2/hue": 334.047607421875,
               "c2/brightness": 100.0,
               "c2/saturation": 98.82353210449219,
-              "c2": -64656
+              "c2": -64656,
+              "globalC1": true
             },
             "modulation": {
               "modulators": [],
@@ -152,12 +158,13 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [
           {
@@ -188,10 +195,15 @@
               "enabled": true,
               "Lcut1": 36.999999195337296,
               "Lcut2": 66.99999962002039,
-              "c2/hue": 334.0611267089844,
+              "c1/hue": 0.0,
+              "c1/brightness": 100.0,
+              "c1/saturation": 100.0,
+              "c1": -65536,
+              "c2/hue": 334.1176452636719,
               "c2/brightness": 100.0,
               "c2/saturation": 100.0,
-              "c2": -65426
+              "c2": -65426,
+              "globalC1": true
             },
             "modulation": {
               "modulators": [],
@@ -206,7 +218,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 830.1257934570312,
+              "rad": 830.1927490234375,
               "invert": true,
               "cx": 410.0,
               "cy": 58.0
@@ -245,7 +257,8 @@
               "Speed": 1.2999999523162842,
               "Symm": 0,
               "Anim": 1,
-              "Dens": 0.6
+              "Dens": 0.6,
+              "AnimResets": false
             },
             "modulation": {
               "modulators": [],
@@ -274,7 +287,8 @@
           "blendMode": 1,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [],
@@ -305,7 +319,8 @@
               "Speed": 0.55,
               "Symm": 0,
               "Anim": 4,
-              "Dens": 0.6
+              "Dens": 0.6,
+              "AnimResets": false
             },
             "modulation": {
               "modulators": [],
@@ -334,7 +349,8 @@
           "blendMode": 1,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [],
@@ -373,10 +389,11 @@
           "autoCycleTimeSecs": 60.0,
           "fader": 0.0,
           "crossfadeGroup": 0,
-          "blendMode": 4,
+          "blendMode": 3,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [
           {
@@ -388,9 +405,9 @@
               "enabled": true,
               "xSize": 557.5999967008829,
               "cx": 410.0,
-              "ySize": 59.99999761581421,
+              "ySize": 60.0000015620526,
               "cy": 58.0,
-              "zSize": 92.79999954625964,
+              "zSize": 136.30000019446015,
               "cz": 72.5,
               "invert": false
             }
@@ -416,7 +433,7 @@
             "parameters": {
               "label": "Strobe",
               "enabled": false,
-              "Shape": 2,
+              "Shape": 1,
               "Freq": 10.0,
               "Black": false
             },
@@ -436,7 +453,7 @@
             "modulationColor": -12517121,
             "parameters": {
               "label": "WarpCompatibleSolidColor",
-              "Color/hue": 333.8823547363281,
+              "Color/hue": 312.34235521778464,
               "Color/brightness": 100.0,
               "Color/saturation": 0.0,
               "Color": -1
@@ -555,8 +572,83 @@
       }
     },
     "components": {
-      "outputControl": {
+      "GammaExpander": {
+        "id": 21742,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -16449792,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
+      "envelop": {
         "id": 32,
+        "class": "com.symmetrylabs.slstudio.envelop.Envelop",
+        "modulationColor": -16716545,
+        "parameters": {
+          "label": "Envelop",
+          "running": true,
+          "trigger": false
+        },
+        "source": {
+          "id": 33,
+          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Source",
+          "modulationColor": -65393,
+          "parameters": {
+            "label": "Source",
+            "running": true,
+            "trigger": false,
+            "Gain": 0.0,
+            "Range": 24.0,
+            "Attack": 25.0,
+            "Release": 50.0,
+            "Source-1": 0.0,
+            "Source-2": 0.0,
+            "Source-3": 0.0,
+            "Source-4": 0.0,
+            "Source-5": 0.0,
+            "Source-6": 0.0,
+            "Source-7": 0.0,
+            "Source-8": 0.0,
+            "Source-9": 0.0,
+            "Source-10": 0.0,
+            "Source-11": 0.0,
+            "Source-12": 0.0,
+            "Source-13": 0.0,
+            "Source-14": 0.0,
+            "Source-15": 0.0,
+            "Source-16": 0.0
+          }
+        },
+        "decode": {
+          "id": 34,
+          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Decode",
+          "modulationColor": -29184,
+          "parameters": {
+            "label": "Decode",
+            "running": true,
+            "trigger": false,
+            "Gain": 0.0,
+            "Range": 24.0,
+            "Attack": 25.0,
+            "Release": 50.0,
+            "Decode-1": 0.0,
+            "Decode-2": 0.0,
+            "Decode-3": 0.0,
+            "Decode-4": 0.0,
+            "Decode-5": 0.0,
+            "Decode-6": 0.0,
+            "Decode-7": 0.0,
+            "Decode-8": 0.0
+          }
+        }
+      },
+      "outputControl": {
+        "id": 148,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -8651008,
         "parameters": {
@@ -748,7 +840,38 @@
       }
     },
     "midi": {
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "CoreMIDI4J - Port 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 2",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 3",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 4",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Sync Port",
+          "channel": true,
+          "control": false,
+          "sync": false
+        }
+      ],
       "surfaces": [],
       "mapping": []
     }
@@ -765,9 +888,9 @@
         "4607": true
       },
       "preview": {
-        "radius": 423.85068476333413,
-        "theta": -1.3835287082653025E-14,
-        "phi": 0.0367166738510133,
+        "radius": 545.4137548187742,
+        "theta": 0.0029999999999862845,
+        "phi": 0.2737166738510133,
         "positionX": 410.0,
         "positionY": 48.0,
         "positionZ": 72.5

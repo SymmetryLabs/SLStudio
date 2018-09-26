@@ -9,7 +9,7 @@ import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.shows.kalpa.TreeModel;
+import com.symmetrylabs.shows.tree.TreeModel;
 import static com.symmetrylabs.util.MathUtils.*;
 
 

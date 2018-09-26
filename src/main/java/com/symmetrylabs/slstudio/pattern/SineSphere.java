@@ -1,21 +1,15 @@
 package com.symmetrylabs.slstudio.pattern;
-import com.symmetrylabs.shows.cubes.CubesModel;
-import com.symmetrylabs.slstudio.pattern.base.SLPattern;
-import heronarts.lx.LX;
-import com.symmetrylabs.slstudio.pattern.base.DPat;
-import com.symmetrylabs.util.MathUtils;
-import com.symmetrylabs.util.NoiseUtils;
-import com.symmetrylabs.util.Utils;
 
 import heronarts.lx.LX;
-import heronarts.lx.color.LXColor;
-import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.transform.LXProjection;
 import heronarts.lx.transform.LXVector;
+
+import com.symmetrylabs.slstudio.pattern.base.APat;
+import com.symmetrylabs.util.MathUtils;
+
 import processing.core.PApplet;
 import processing.core.PVector;
 import processing.core.PConstants;

@@ -115,6 +115,9 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
                     trigger(createShape(new LXVector(model.cx, model.cy, model.cz)));
                 }
             }
+            if (!param.getValueb()) {
+                return;
+            }
             double duration = (60.0 / speedParam.getValue());
             if (param == upParam) {
                 trigger(new WipeShape(new LXVector(NONE, model.yMin, 0), duration), createAnimation(), Dir.Y, Sign.POS, null);

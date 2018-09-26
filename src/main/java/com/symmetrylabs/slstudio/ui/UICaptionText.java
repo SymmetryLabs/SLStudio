@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.ui;
 
 import com.symmetrylabs.util.CaptionSource;
+import java.util.WeakHashMap;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,7 +10,7 @@ import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dContext;
 
 public class UICaptionText extends UITextOverlay {
-    Set<CaptionSource> sources = new HashSet<>();
+    WeakHashMap<CaptionSource, Object> sources = new WeakHashMap<>();
     static final String SPACES = "                                                   ";
 
     public UICaptionText(UI ui, UI3dContext parent, int anchorX, int anchorY, int alignX, int alignY) {
@@ -18,7 +19,7 @@ public class UICaptionText extends UITextOverlay {
     }
 
     public synchronized void addSource(CaptionSource source) {
-        sources.add(source);
+        sources.put(source, new Object());
     }
 
     public synchronized void removeSource(CaptionSource source) {
@@ -27,7 +28,7 @@ public class UICaptionText extends UITextOverlay {
 
     public synchronized String getText() {
         String result = "";
-        for (CaptionSource source : sources) {
+        for (CaptionSource source : sources.keySet()) {
             String caption = source.getCaption();
             if (caption != null && !caption.isEmpty()) {
                 String prefix = source.getClass().getSimpleName() + " - ";

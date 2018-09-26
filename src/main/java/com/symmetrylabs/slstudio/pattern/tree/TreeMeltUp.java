@@ -2,11 +2,10 @@ package com.symmetrylabs.slstudio.pattern.tree;
 
 import heronarts.lx.LX;
 
-import com.symmetrylabs.shows.kalpa.TreeModel;
+import com.symmetrylabs.shows.tree.TreeModel;
 
 
 public class TreeMeltUp extends TreeMelt {
-
     public TreeMeltUp(LX lx) {
         super(lx);
     }

@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.effect;
+package com.symmetrylabs.shows.cubes.effects;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXEffect;

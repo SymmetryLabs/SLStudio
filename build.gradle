@@ -28,7 +28,9 @@ mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
 //mainClassName = 'com.symmetrylabs.slstudio.SLHeadless'
 
 run {
-	jvmArgs '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=12345 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.awt.headless=true'
+	if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
+		jvmArgs '-XX:+UseParNewGC', '-XX:+UseConcMarkSweepGC'
+	}
 
 	// To select a layout from the command line, "gradlew run -Playout=cubes"
 	systemProperty 'com.symmetrylabs.layout', findProperty('layout')
@@ -71,6 +73,17 @@ allprojects {
 
 	tasks.withType(JavaCompile) {
 		sourceCompatibility = '1.8'
+	}
+}
+
+if (hasProperty('localp3lx')) {
+	configurations.all {
+		resolutionStrategy.dependencySubstitution {
+			// when this is runs, the build uses ../p3lx and ../LX instead of the
+			// jitpack dependency specified below
+			substitute module("com.github.SymmetryLabs.p3lx:p3lx") with project(":P3LX")
+			substitute module("com.github.SymmetryLabs.p3lx:LX") with project(":LX")
+		}
 	}
 }
 
@@ -123,7 +136,7 @@ dependencies {
 	// https://www.slf4j.org/manual.html
 	implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
 
-	implementation 'com.github.SymmetryLabs:p3lx:728b892'
+	implementation 'com.github.SymmetryLabs.p3lx:P3LX:f0b87df'
 
 	implementation files('libs/minim.jar')
 	implementation files('libs/jogamp-fat.jar')

@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.lang.ref.WeakReference;
 
-import com.symmetrylabs.shows.cubes.patterns.CubesMappingPattern;
+import com.symmetrylabs.slstudio.pattern.cubes.CubesMappingPattern;
 import com.symmetrylabs.util.listenable.SetListener;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
