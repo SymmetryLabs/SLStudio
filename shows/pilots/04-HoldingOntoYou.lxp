@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1537935769709,
+  "timestamp": 1537974970698,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 6,
+      "focusedChannel": 7,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -255,7 +255,7 @@
         "parameters": {
           "label": "Video",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -684,8 +684,8 @@
             "parameters": {
               "label": "Sparkle",
               "Dens": 0.05999999865889549,
-              "Attack": 0.4,
-              "Decay": 0.3,
+              "Attack": 0.2899999935179949,
+              "Decay": 0.3100000023841858,
               "Hue": 0.5,
               "HueVar": 0.25,
               "Sat": 0.5
@@ -1102,9 +1102,9 @@
         "3202": true
       },
       "preview": {
-        "radius": 582.2920350046751,
-        "theta": 0.017999999999999867,
-        "phi": 0.2820000000000001,
+        "radius": 542.1503372110975,
+        "theta": -0.7853981633974483,
+        "phi": 0.6154797077178955,
         "positionX": 410.0,
         "positionY": 48.0,
         "positionZ": 72.5
