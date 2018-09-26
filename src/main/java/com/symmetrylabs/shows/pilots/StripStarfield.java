@@ -15,8 +15,8 @@ import java.util.List;
 public class StripStarfield<T extends Strip> extends SLPattern<StripsModel<T>> {
     public static final String GROUP_NAME = PilotsShow.SHOW_NAME;
 
-    private static final CompoundParameter period = new CompoundParameter("period", 100, 1, 1000);
-    private static final CompoundParameter release = new CompoundParameter("release", 250, 0, 5000);
+    private final CompoundParameter period = new CompoundParameter("period", 100, 1, 1000);
+    private final CompoundParameter release = new CompoundParameter("release", 250, 0, 5000);
 
     private List<List<Integer>> stripKeys;
     private float t = 0;
