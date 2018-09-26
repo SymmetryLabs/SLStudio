@@ -44,6 +44,11 @@ public class RedBlueSinners extends SLPattern<CubesModel> {
     CompoundParameter minPeriod = new CompoundParameter("minPeriod", 0, 0, 1);
     CompoundParameter maxPeriod = new CompoundParameter("maxPeriod", 1, 0, 1);
 
+    CompoundParameter hue1 = new CompoundParameter("hue1", 0, 0, 360);
+    CompoundParameter hue2 = new CompoundParameter("hue2", 180, 0, 360);
+    CompoundParameter sat1 = new CompoundParameter("sat1", 100, 0, 100);
+    CompoundParameter sat2 = new CompoundParameter("sat2", 100, 0, 100);
+
 
 
     public RedBlueSinners(LX lx) {
@@ -58,6 +63,12 @@ public class RedBlueSinners extends SLPattern<CubesModel> {
         }
         Collections.shuffle(order);
         Collections.shuffle(colorOrder);
+
+
+        addParameter(hue1);
+        addParameter(hue2);
+        addParameter(sat1);
+        addParameter(sat2);
 
 
         addParameter(speed);
@@ -91,9 +102,15 @@ public class RedBlueSinners extends SLPattern<CubesModel> {
             s = (s + 1.0f) / 2.0f;
             float c = bases.get(i) + NoiseUtils.noise(pos + n / 100.0f) / 2;
 //            float huevar = hvar.getValuef();
-            float actual_c = LXColor.h(cOR <= 0.5 ? LXColor.RED : LXColor.BLUE);
 
-            setColor(cube, LXColor.hsb(actual_c, 100, s * 100 * falloff));
+            int final_color;
+            if (cOR <= 0.5) {
+                final_color = LXColor.hsb(hue1.getValuef(), sat1.getValuef(), s * 100 * falloff);
+            } else {
+                final_color = LXColor.hsb(hue2.getValuef(), sat2.getValuef(), s * 100 * falloff);
+            }
+
+            setColor(cube, final_color);
         }
 
         n += speed.getValuef() / 1000.0 * deltaMs;
