@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538000751104,
+  "timestamp": 1538003797136,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 0.9833332803100348,
-      "focusedChannel": 4,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -75,15 +75,13 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 26204,
-            "class": "heronarts.p3lx.pattern.SolidColorPattern",
-            "modulationColor": -16711868,
+            "id": 26347,
+            "class": "com.symmetrylabs.shows.pilots.StripStarfield",
+            "modulationColor": -16719105,
             "parameters": {
-              "label": "SolidColor",
-              "color/hue": 0.0,
-              "color/brightness": 0.0,
-              "color/saturation": 100.0,
-              "color": -16777216
+              "label": "StripStarfield",
+              "period": 272.82699646265246,
+              "release": 549.999987706542
             },
             "modulation": {
               "modulators": [],
@@ -337,7 +335,7 @@
               "Speed": 2.0,
               "Symm": 0,
               "Anim": 1,
-              "Dens": 0.9100000262260437,
+              "Dens": 1.0,
               "AnimResets": false
             },
             "modulation": {
@@ -455,9 +453,9 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 26091,
+        "id": 26236,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -8704,
+        "modulationColor": -65484,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
@@ -572,7 +570,26 @@
           ]
         }
       ],
-      "modulations": [],
+      "modulations": [
+        {
+          "source": {
+            "id": 22109
+          },
+          "target": {
+            "componentId": 26347,
+            "parameterPath": "release"
+          },
+          "id": 26349,
+          "class": "heronarts.lx.parameter.LXCompoundModulation",
+          "modulationColor": -16724993,
+          "parameters": {
+            "label": "",
+            "enabled": true,
+            "Polarity": 0,
+            "Range": 0.1699999962002039
+          }
+        }
+      ],
       "triggers": []
     },
     "osc": {
@@ -632,8 +649,8 @@
       },
       "preview": {
         "radius": 542.1503372110975,
-        "theta": -0.005398163397447617,
-        "phi": 0.09947970771789505,
+        "theta": 0.045601836602552376,
+        "phi": 0.24947970771789518,
         "positionX": 410.0,
         "positionY": 48.0,
         "positionZ": 72.5

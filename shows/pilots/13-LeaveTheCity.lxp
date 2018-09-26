@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1537908170278,
+  "timestamp": 1538005079942,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -93,7 +93,7 @@
             "parameters": {
               "label": "ColorFilter",
               "enabled": true,
-              "Hue": 53.99999879300594,
+              "Hue": 51.839998941868544,
               "Sat": 100.0
             },
             "modulation": {
@@ -112,7 +112,7 @@
             "modulationColor": -65405,
             "parameters": {
               "label": "Vortex",
-              "count": 0,
+              "count": 114,
               "size": 6.000000134110452,
               "xrad": 360.7999937683344,
               "zrad": 34.79999954625964,
@@ -140,7 +140,7 @@
         "parameters": {
           "label": "Invert",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -154,7 +154,24 @@
           "transitionBlendMode": 0,
           "autoDisable": true
         },
-        "warps": [],
+        "warps": [
+          {
+            "id": 26771,
+            "class": "com.symmetrylabs.slstudio.warp.BoxMask",
+            "modulationColor": -16770049,
+            "parameters": {
+              "label": "BoxMask",
+              "enabled": true,
+              "xSize": 410.0,
+              "cx": 410.0,
+              "ySize": 58.000003814697266,
+              "cy": 58.0,
+              "zSize": 72.5,
+              "cz": 14.499992370605469,
+              "invert": false
+            }
+          }
+        ],
         "effects": [],
         "clips": [],
         "patternIndex": 0,
@@ -165,10 +182,10 @@
             "modulationColor": -58880,
             "parameters": {
               "label": "WarpCompatibleSolidColor",
-              "Color/hue": 54.11764907836914,
+              "Color/hue": 52.0,
               "Color/brightness": 100.0,
               "Color/saturation": 100.0,
-              "Color": -6656
+              "Color": -8960
             },
             "modulation": {
               "modulators": [],
@@ -276,7 +293,7 @@
       "modulationColor": -38656,
       "parameters": {
         "label": "Output",
-        "enabled": false,
+        "enabled": true,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -486,8 +503,8 @@
       },
       "preview": {
         "radius": 555.0790186313667,
-        "theta": 0.08100000000000011,
-        "phi": -0.04020362949369409,
+        "theta": 0.4200000000000004,
+        "phi": 0.4307963705063058,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5
