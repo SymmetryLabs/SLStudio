@@ -87,7 +87,7 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
                 k.addToContainer(cueWindow);
             }
         }
-        
+
         setBackgroundColor();
     }
 

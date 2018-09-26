@@ -8,7 +8,7 @@ import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.kalpa.Anemometer;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
-import com.symmetrylabs.slstudio.performance.MidiFighterListener;
+import com.symmetrylabs.slstudio.performance.*;
 import com.symmetrylabs.slstudio.ui.UIWorkspace;
 import heronarts.lx.LX;
 import com.symmetrylabs.shows.ShowRegistry;
@@ -23,9 +23,6 @@ import processing.core.PFont;
 
 import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.output.OutputControl;
-import com.symmetrylabs.slstudio.performance.APC40Listener;
-import com.symmetrylabs.slstudio.performance.FoxListener;
-import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.ui.UIFramerateControl;
 import com.symmetrylabs.slstudio.envelop.Envelop;
@@ -197,6 +194,9 @@ public class SLStudio extends PApplet {
                         MidiFighterListener.bindMidi(lx, ui);
                     }
                 });
+
+                Snapper snap = new Snapper(lx, ui);
+                lx.engine.registerComponent("snapper", snap);
             }
         };
 
