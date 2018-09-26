@@ -26,18 +26,30 @@ public class MagicLeapShow extends CubesShow implements Show {
 
 
     static final TowerConfig[] TOWER_CONFIG = {
-        // back row
-        new TowerConfig(SP*0.0f, 0, 0, new String[] {"0", "0", "0", "0", "0"}),
-        new TowerConfig(SP*1.0f, 0, 0, new String[] {"0", "0", "0", "0", "0"}),
-        new TowerConfig(SP*2.0f, 0, 0, new String[] {"0", "0", "0", "0", "0"}),
-        new TowerConfig(SP*3.0f, 0, 0, new String[] {"0", "0", "0", "0", "0"}),
-        new TowerConfig(SP*4.0f, 0, 0, new String[] {"0", "0", "0", "0", "0"}),
 
-        // front
-        new TowerConfig(SP*0.5f, SP*0.5f, -SP, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*1.5f, SP*0.5f, -SP, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2.5f, SP*0.5f, -SP, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3.5f, SP*0.5f, -SP, new String[] {"0", "0", "0", "0"}),
+        // row 1
+        new TowerConfig(SP*1f, 0, SP*0, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP*2f, 0, SP*0, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP*3f, 0, SP*0, new String[] {"0", "0", "0", "0"}),
+
+        // row 2
+        new TowerConfig(SP*0, 0, SP*1, new String[] {"0", "0", "0", "0", "0"}),
+        new TowerConfig(SP*1, 0, SP*1, new String[] {"0", "0", "0", "0", "0"}),
+        new TowerConfig(SP*2, 0, SP*1, new String[] {"0", "0", "0", "0", "0"}),
+        new TowerConfig(SP*3, 0, SP*1, new String[] {"0", "0", "0", "0", "0"}),
+        new TowerConfig(SP*4, 0, SP*1, new String[] {"0", "0", "0", "0", "0"}),
+
+        // row 3
+        new TowerConfig(SP*0, 0, SP*2, new String[] {"0", "0", "0", "0", "0"}),
+        new TowerConfig(SP*1, 0, SP*2, new String[] {"0", "0", "0", "0", "0"}),
+        new TowerConfig(SP*2, 0, SP*2, new String[] {"0", "0", "0", "0", "0"}),
+        new TowerConfig(SP*3, 0, SP*2, new String[] {"0", "0", "0", "0", "0"}),
+        new TowerConfig(SP*4, 0, SP*2, new String[] {"0", "0", "0", "0", "0"}),
+
+        // row 4
+        new TowerConfig(SP*1f, 0, SP*4, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP*2f, 0, SP*4, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP*3f, 0, SP*4, new String[] {"0", "0", "0", "0"}),
     };
 
     public SLModel buildModel() {
