@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1537740109995,
+  "timestamp": 1537935769709,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 2,
+      "focusedChannel": 6,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -255,7 +255,7 @@
         "parameters": {
           "label": "Video",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -653,7 +653,7 @@
         "warps": [],
         "effects": [],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 1,
         "patterns": [
           {
             "id": 3629,
@@ -666,9 +666,29 @@
               "sustain": 1.0,
               "release": 379.99999821186066,
               "scale": 10,
-              "avoid": false,
-              "count": 19,
+              "avoid": true,
+              "count": 9,
               "trigger": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 21894,
+            "class": "com.symmetrylabs.slstudio.pattern.Sparkle",
+            "modulationColor": -16711746,
+            "parameters": {
+              "label": "Sparkle",
+              "Dens": 0.05999999865889549,
+              "Attack": 0.4,
+              "Decay": 0.3,
+              "Hue": 0.5,
+              "HueVar": 0.25,
+              "Sat": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -858,14 +878,14 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.0
       }
     },
     "components": {
       "GammaExpander": {
-        "id": 37,
+        "id": 21742,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16728321,
+        "modulationColor": -16449792,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
@@ -1038,13 +1058,31 @@
     "midi": {
       "inputs": [
         {
-          "name": "** Internal Error getting Device Name!",
+          "name": "CoreMIDI4J - Port 1",
           "channel": true,
           "control": false,
           "sync": false
         },
         {
-          "name": "Real Time Sequencer",
+          "name": "CoreMIDI4J - Port 2",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 3",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 4",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Sync Port",
           "channel": true,
           "control": false,
           "sync": false
@@ -1065,8 +1103,8 @@
       },
       "preview": {
         "radius": 582.2920350046751,
-        "theta": 0.4380000000000002,
-        "phi": 0.37800000000000017,
+        "theta": 0.017999999999999867,
+        "phi": 0.2820000000000001,
         "positionX": 410.0,
         "positionY": 48.0,
         "positionZ": 72.5
