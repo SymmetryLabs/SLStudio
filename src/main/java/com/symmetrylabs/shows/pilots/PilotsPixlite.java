@@ -55,4 +55,16 @@ public class PilotsPixlite extends SimplePixlite {
         addPixliteOutput(new PointsGrouping("15")
             .addPoints(cart.getDatalineByChannel("15").getPoints()));
     }
+
+    @Override
+    public SimplePixlite addPixliteOutput(PointsGrouping pointsGrouping) {
+        try {
+            SimplePixliteOutput spo = new SimplePixliteOutput(pointsGrouping);
+            spo.setLogConnections(false);
+            addChild(spo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
 }

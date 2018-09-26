@@ -25,12 +25,12 @@ public class SimplePixlite extends LXOutputGroup {
         return this;
     }
 
-    private class SimplePixliteOutput extends LXDatagramOutput {
+    protected class SimplePixliteOutput extends LXDatagramOutput {
         private final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
         private final int outputIndex;
         private final int firstUniverseOnOutput;
 
-        private SimplePixliteOutput(PointsGrouping pointsGrouping) throws SocketException {
+        public SimplePixliteOutput(PointsGrouping pointsGrouping) throws SocketException {
             super(lx);
             this.outputIndex = Integer.parseInt(pointsGrouping.id);
             this.firstUniverseOnOutput = outputIndex * 10;
