@@ -182,8 +182,15 @@ public class Snapper extends LXComponent {
         for (LXParameter param : parameters) {
             if (!(param instanceof  LXNormalizedParameter)) continue;
             String name = param.getLabel().toLowerCase();
-            if (name.equals("hue") || name.equals("hue1")) {
-                return (LXNormalizedParameter)param;
+            String[] candidates = new String[]{
+                "hue",
+                "hue1",
+                "color-h",
+            };
+            for (String cand : candidates) {
+                if (name.equals(cand)) {
+                    return (LXNormalizedParameter)param;
+                }
             }
         }
         return null;
