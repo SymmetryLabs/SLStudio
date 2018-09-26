@@ -290,6 +290,12 @@ public class StripsTopology {
         public int[] strips;
 
         /**
+         * The sign of each strip in the bundle. A positive sign means the strip
+         * points in the positive direction of the axis of the bundle.
+         */
+        public Sign[] stripSign;
+
+        /**
          * The junction at the positive end of this bundle
          */
         private Junction p = null;
@@ -311,7 +317,9 @@ public class StripsTopology {
 
         private Bundle(int index) {
             strips = new int[MAX_STRIPS];
+            stripSign = new Sign[MAX_STRIPS];
             Arrays.fill(strips, NO_STRIP);
+            Arrays.fill(stripSign, null);
             this.index = index;
         }
 
@@ -325,9 +333,25 @@ public class StripsTopology {
 
         private void addStrip(int strip) {
             Preconditions.checkState(!finished, "cannot add to finished bundle");
+            Sign sign = null;
+            Strip s = model.getStripByIndex(strip);
+            if (s.size >= 2) {
+                switch (dir) {
+                case X:
+                    sign = s.points[0].x < s.points[1].x ? Sign.POS : Sign.NEG;
+                    break;
+                case Y:
+                    sign = s.points[0].y < s.points[1].y ? Sign.POS : Sign.NEG;
+                    break;
+                case Z:
+                    sign = s.points[0].z < s.points[1].z ? Sign.POS : Sign.NEG;
+                    break;
+                }
+            }
             for (int i = 0; i < strips.length; i++) {
                 if (strips[i] == NO_STRIP) {
                     strips[i] = strip;
+                    stripSign[i] = sign;
                     return;
                 }
             }
@@ -371,6 +395,18 @@ public class StripsTopology {
                 }
                 return 0;
             });
+
+            Sign[] newSigns = new Sign[count];
+            for (int i = 0; i < count; i++) {
+                for (int old = 0; old < MAX_STRIPS; old++) {
+                    if (newStrips[i] == strips[old]) {
+                        newSigns[i] = stripSign[old];
+                        break;
+                    }
+                }
+            }
+            stripSign = newSigns;
+
             strips = new int[count];
             for (int i = 0; i < count; i++) {
                 strips[i] = newStrips[i];
@@ -537,6 +573,26 @@ public class StripsTopology {
             }
             return max;
         }
+
+        /**
+         * Returns the number of points in each strip in each bundle.
+         *
+         * If the bundles in the strips have different numbers of points in each,
+         * throws an IllegalStateException. */
+        public int getStripPointCount() {
+            int count = -1;
+            for (int stripIndex : strips) {
+                if (stripIndex != NO_STRIP) {
+                    int c = model.getStripByIndex(stripIndex).size;
+                    if (count != -1 && c != count) {
+                        throw new IllegalStateException("strips in bundle had different point counts");
+                    } else {
+                        count = c;
+                    }
+                }
+            }
+            return count;
+        }
     }
 
     /**
@@ -603,7 +659,6 @@ public class StripsTopology {
             Strip s = model.getStripByIndex(i);
 
             Bundle e = new Bundle(bundles.size());
-            e.addStrip(i);
             if (s.xRange < 1e-3 && s.yRange < 1e-3) {
                 e.dir = Dir.Z;
             } else if (s.xRange < 1e-3 && s.zRange < 1e-3) {
@@ -613,6 +668,7 @@ public class StripsTopology {
             } else {
                 e.dir = null;
             }
+            e.addStrip(i);
 
             boolean matchesExisting = false;
             PlanarLocation pl = e.planarLocation();
