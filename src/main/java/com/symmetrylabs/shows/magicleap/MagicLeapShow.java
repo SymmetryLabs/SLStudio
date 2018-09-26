@@ -47,9 +47,9 @@ public class MagicLeapShow extends CubesShow implements Show {
         new TowerConfig(SP*4, 0, SP*2, new String[] {"0", "0", "0", "0", "0"}),
 
         // row 4
-        new TowerConfig(SP*1f, 0, SP*4, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2f, 0, SP*4, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3f, 0, SP*4, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP*1f, 0, SP*3, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP*2f, 0, SP*3, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP*3f, 0, SP*3, new String[] {"0", "0", "0", "0"}),
     };
 
     public SLModel buildModel() {
