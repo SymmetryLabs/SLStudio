@@ -1,12 +1,13 @@
 package com.symmetrylabs.slstudio.pattern.tree;
 
+import com.symmetrylabs.shows.cubes.CubesShow;
 import heronarts.lx.LX;
 import heronarts.lx.LXUtils;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 
-import com.symmetrylabs.shows.kalpa.TreeModel;
+import com.symmetrylabs.shows.tree.TreeModel;
 import static com.symmetrylabs.util.MathUtils.*;
 
 

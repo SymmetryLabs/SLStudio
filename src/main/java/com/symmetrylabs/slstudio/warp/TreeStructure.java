@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.warp;
 
-import com.symmetrylabs.shows.kalpa.TreeModel;
+import com.symmetrylabs.shows.tree.TreeModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;

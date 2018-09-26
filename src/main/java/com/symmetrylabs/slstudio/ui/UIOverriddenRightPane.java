@@ -30,8 +30,8 @@ import heronarts.p3lx.ui.studio.modulation.UIComponentModulator;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import heronarts.p3lx.ui.studio.osc.UIOscManager;
 import processing.core.PGraphics;
-import com.symmetrylabs.shows.kalpa.TreeModelingTool;
-import com.symmetrylabs.shows.kalpa.ui.*;
+import com.symmetrylabs.shows.tree.TreeModelingTool;
+import com.symmetrylabs.shows.tree.ui.*;
 import com.symmetrylabs.slstudio.SLStudio;
 
 
@@ -82,6 +82,8 @@ public class UIOverriddenRightPane extends UIPane {
             SLStudio.applet.uiTreeModelingTool = new UITreeModelingTool(ui, SLStudio.applet.treeModelingTool, 0, 0, this.utility.getContentWidth());
             SLStudio.applet.uiTreeModelingTool.addToContainer(this.utility);
         }
+
+        new UIOfflineRender(this.ui, this.lx, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
     }
 
     private void buildPerformanceUI() {

@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1534817384840,
+  "timestamp": 1537841846645,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -66,11 +66,12 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [
           {
-            "id": 51,
+            "id": 21017,
             "class": "com.symmetrylabs.slstudio.warp.BundleDirMask",
             "modulationColor": -16711736,
             "parameters": {
@@ -87,17 +88,17 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 45,
+            "id": 21013,
             "class": "com.symmetrylabs.shows.pilots.Jumpsuit",
             "modulationColor": -11600128,
             "parameters": {
               "label": "Jumpsuit",
               "y": false,
               "r": false,
-              "yc": 114.80000659823418,
-              "rc": 713.3999932184815,
-              "rhit": 84.88461971282959,
-              "rdrop": 37.93834090232849,
+              "yc": 205.00000513056835,
+              "rc": 598.5999950864198,
+              "rhit": 120.0,
+              "rdrop": 14.17000025510788,
               "yhit": 86.03999376296997,
               "ydrop": 108.0000002682209,
               "fstart": 270.00001072883606,
@@ -117,7 +118,7 @@
         ]
       },
       {
-        "id": 62,
+        "id": 21020,
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -16752385,
         "parameters": {
@@ -134,7 +135,8 @@
           "blendMode": 2,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [],
@@ -142,7 +144,7 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 63,
+            "id": 21021,
             "class": "com.symmetrylabs.slstudio.pattern.Noise",
             "modulationColor": -65369,
             "parameters": {
@@ -165,7 +167,8 @@
               "Speed": 1.2699999839067457,
               "Symm": 0,
               "Anim": 3,
-              "Dens": 0.6
+              "Dens": 0.6,
+              "AnimResets": false
             },
             "modulation": {
               "modulators": [],
@@ -281,8 +284,83 @@
       }
     },
     "components": {
-      "outputControl": {
+      "GammaExpander": {
+        "id": 37,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -16753921,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
+      "envelop": {
         "id": 32,
+        "class": "com.symmetrylabs.slstudio.envelop.Envelop",
+        "modulationColor": -16713729,
+        "parameters": {
+          "label": "Envelop",
+          "running": true,
+          "trigger": false
+        },
+        "source": {
+          "id": 33,
+          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Source",
+          "modulationColor": -16711893,
+          "parameters": {
+            "label": "Source",
+            "running": true,
+            "trigger": false,
+            "Gain": 0.0,
+            "Range": 24.0,
+            "Attack": 25.0,
+            "Release": 50.0,
+            "Source-1": 0.0,
+            "Source-2": 0.0,
+            "Source-3": 0.0,
+            "Source-4": 0.0,
+            "Source-5": 0.0,
+            "Source-6": 0.0,
+            "Source-7": 0.0,
+            "Source-8": 0.0,
+            "Source-9": 0.0,
+            "Source-10": 0.0,
+            "Source-11": 0.0,
+            "Source-12": 0.0,
+            "Source-13": 0.0,
+            "Source-14": 0.0,
+            "Source-15": 0.0,
+            "Source-16": 0.0
+          }
+        },
+        "decode": {
+          "id": 34,
+          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Decode",
+          "modulationColor": -41728,
+          "parameters": {
+            "label": "Decode",
+            "running": true,
+            "trigger": false,
+            "Gain": 0.0,
+            "Range": 24.0,
+            "Attack": 25.0,
+            "Release": 50.0,
+            "Decode-1": 0.0,
+            "Decode-2": 0.0,
+            "Decode-3": 0.0,
+            "Decode-4": 0.0,
+            "Decode-5": 0.0,
+            "Decode-6": 0.0,
+            "Decode-7": 0.0,
+            "Decode-8": 0.0
+          }
+        }
+      },
+      "outputControl": {
+        "id": 148,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -21504,
         "parameters": {
@@ -338,9 +416,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 534.7263143468463,
-        "theta": -0.02099999999999992,
-        "phi": 0.2579999999999997,
+        "radius": 557.0009648001211,
+        "theta": -0.02639816339744782,
+        "phi": 0.18647970771789513,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5
