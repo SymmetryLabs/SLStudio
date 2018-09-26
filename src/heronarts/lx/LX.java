@@ -771,6 +771,7 @@ public class LX {
             return cls.getConstructor(LX.class).newInstance(this);
         } catch (Exception x) {
             System.err.println("Exception in instantiateComponent: " + x.getLocalizedMessage());
+            x.printStackTrace();
         }
         return null;
     }
