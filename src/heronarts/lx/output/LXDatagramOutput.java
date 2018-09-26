@@ -47,6 +47,8 @@ public class LXDatagramOutput extends LXOutput {
 
     private final SimpleDateFormat date = new SimpleDateFormat("[HH:mm:ss]");
 
+    private boolean logConnections = true;
+
     public LXDatagramOutput(LX lx) throws SocketException {
         this(lx, new DatagramSocket());
     }
@@ -54,6 +56,14 @@ public class LXDatagramOutput extends LXOutput {
     public LXDatagramOutput(LX lx, DatagramSocket socket) {
         super(lx);
         this.socket = socket;
+    }
+
+    /* If set to true, logConnections will print a message every time a
+     * packet fails to be sent, and every time communication with the
+     * output is reestablished after failure. By default, logConnections
+     * is set. */
+    public void setLogConnections(boolean logConnections) {
+        this.logConnections = logConnections;
     }
 
     public LXDatagramOutput addDatagram(LXDatagram datagram) {
@@ -130,14 +140,14 @@ public class LXDatagramOutput extends LXOutput {
                 datagram.onSend(src);
                 try {
                     this.socket.send(datagram.packet);
-                    if (datagram.destination.failureCount > 0) {
+                    if (datagram.destination.failureCount > 0 && logConnections) {
                         System.out.println(this.date.format(now) + " Recovered connectivity to " + datagram.packet.getAddress());
                     }
                     datagram.destination.error.setValue(false);
                     datagram.destination.failureCount = 0;
                     datagram.destination.sendAfter = 0;
                 } catch (IOException iox) {
-                    if (datagram.destination.failureCount == 0) {
+                    if (datagram.destination.failureCount == 0 && logConnections) {
                         System.out.println(this.date.format(now) + " IOException sending to "
                                 + datagram.packet.getAddress() + " (" + iox.getLocalizedMessage()
                                 + "), will initiate backoff after 3 consecutive failures");
@@ -146,9 +156,11 @@ public class LXDatagramOutput extends LXOutput {
                     if (datagram.destination.failureCount >= 3) {
                         int pow = Math.min(5, datagram.destination.failureCount - 3);
                         long waitFor = (long) (50 * Math.pow(2, pow));
-                        System.out.println(this.date.format(now) + " Retrying " + datagram.packet.getAddress()
-                                + " in " + waitFor + "ms" + " (" + datagram.destination.failureCount
-                                + " consecutive failures)");
+                        if (logConnections) {
+                            System.out.println(this.date.format(now) + " Retrying " + datagram.packet.getAddress()
+                                    + " in " + waitFor + "ms" + " (" + datagram.destination.failureCount
+                                    + " consecutive failures)");
+                        }
                         datagram.destination.sendAfter = now + waitFor;
                         datagram.destination.error.setValue(true);
                     }
