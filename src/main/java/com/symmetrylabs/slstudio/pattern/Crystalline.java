@@ -163,10 +163,10 @@ public class Crystalline extends SLPattern<SLModel> {
     private final CompoundParameter cx = new CompoundParameter("cx", model.cx, model.xMin, model.xMax);
     private final CompoundParameter cy = new CompoundParameter("cy", model.cy, model.yMin, model.yMax);
     private final CompoundParameter cz = new CompoundParameter("cz", model.cz, model.zMin, model.zMax);
-    private final CompoundParameter linearVelocity = new CompoundParameter("lvel", 0.02, -1, 1);
+    private final CompoundParameter linearVelocity = new CompoundParameter("lvel", 0.02, -4, 4);
     private final CompoundParameter cutWhite = new CompoundParameter("cutwhite", 0.1, 0, 1);
     private final CompoundParameter radialWidth = new CompoundParameter("rwidth", 60, 1, 800);
-    private final CompoundParameter radialVelocity = new CompoundParameter("rvel", 0.1, -1, 1);
+    private final CompoundParameter radialVelocity = new CompoundParameter("rvel", 0.1, -4, 4);
     private final BooleanParameter reset = new BooleanParameter("reset", false).setMode(BooleanParameter.Mode.MOMENTARY);
     private final EnumParameter<SymmetryMode> symmetryMode = new EnumParameter<>("symm", SymmetryMode.TETRAHEDRAL);
     private final EnumParameter<RadialMode> radialMode = new EnumParameter<>("radial", RadialMode.NONE);
