@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538068299333,
+  "timestamp": 1538079876840,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -30,7 +30,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 54.73684310913086,
+        "color/hue": 54.82353210449219,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
         "color": -5888,
@@ -81,8 +81,8 @@
             "parameters": {
               "label": "Peaks",
               "count": 11,
-              "height": 100.10000467300415,
-              "omega": -56.709938049316406,
+              "height": 63.999998569488525,
+              "omega": 20.000038146972656,
               "radius": 17.99999995529652,
               "high": 100.0,
               "mid": 57.00000051409007,
@@ -110,7 +110,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -147,7 +147,7 @@
             "modulationColor": -16751617,
             "parameters": {
               "label": "Noise",
-              "Hue": 51.83999877423048,
+              "Hue": 56.87999842688441,
               "Spark": 0.0,
               "Wave": 0.0,
               "xPos": 0.5,
@@ -162,10 +162,10 @@
               "X-DUP": false,
               "JOG": false,
               "GREY": false,
-              "Speed": 0.5699999332427979,
+              "Speed": 0.5399999618530273,
               "Symm": 0,
               "Anim": 6,
-              "Dens": 0.9599999785423279,
+              "Dens": 0.8999999761581421,
               "AnimResets": false
             },
             "modulation": {
@@ -222,8 +222,8 @@
             "modulationColor": -16742401,
             "parameters": {
               "label": "ColorFilter",
-              "enabled": true,
-              "Hue": 43.199999034404755,
+              "enabled": false,
+              "Hue": 51.47999896667898,
               "Sat": 100.0
             },
             "modulation": {
@@ -257,6 +257,59 @@
               "decay": 10.000000447034834,
               "sustain": 1.0,
               "release": 679.9999915063381
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 26854,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16775937,
+        "parameters": {
+          "label": "Stars",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 26861,
+            "class": "com.symmetrylabs.slstudio.pattern.raven.RKPattern03",
+            "modulationColor": -15138561,
+            "parameters": {
+              "label": "RKPattern03",
+              "Res": 404,
+              "Kernel": 2,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": -3.1415927410125732,
+              "rZ": 0.0,
+              "avg split": false,
+              "show tri": false,
+              "show edge": true,
+              "speed": 0.01,
+              "fragment": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -624,7 +677,20 @@
       }
     },
     "midi": {
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        }
+      ],
       "surfaces": [],
       "mapping": []
     }
@@ -642,8 +708,8 @@
       },
       "preview": {
         "radius": 496.62307838467757,
-        "theta": -0.02999999999999992,
-        "phi": -0.06300000000000004,
+        "theta": 0.018000000000000075,
+        "phi": -0.05400000000000012,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 14.499992370605469

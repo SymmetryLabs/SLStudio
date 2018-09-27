@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538003797136,
+  "timestamp": 1538077433529,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 0.9833332803100348,
-      "focusedChannel": 0,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -528,7 +528,7 @@
         }
       },
       "outputControl": {
-        "id": 148,
+        "id": 35,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -8651008,
         "parameters": {
@@ -622,12 +622,6 @@
     "midi": {
       "inputs": [
         {
-          "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
           "name": "Real Time Sequencer",
           "channel": true,
           "control": false,
@@ -649,8 +643,8 @@
       },
       "preview": {
         "radius": 542.1503372110975,
-        "theta": 0.045601836602552376,
-        "phi": 0.24947970771789518,
+        "theta": 0.0,
+        "phi": 0.0,
         "positionX": 410.0,
         "positionY": 48.0,
         "positionZ": 72.5
