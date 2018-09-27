@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538074492682,
+  "timestamp": 1538092421201,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 1,
+      "focusedChannel": 4,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -347,7 +347,7 @@
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -4784384,
         "parameters": {
-          "label": "Channel-5",
+          "label": "OutroPinW",
           "arm": false,
           "enabled": true,
           "cue": false,
@@ -543,7 +543,7 @@
         "parameters": {
           "label": "Bass Mult",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -613,7 +613,7 @@
         "parameters": {
           "label": "Snare",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -694,7 +694,7 @@
               "reset": false,
               "wipe": false,
               "hit": false,
-              "x": 0.2788979113101959,
+              "x": 0.5400000214576721,
               "y": 0.09999999776482582,
               "z": 0.0,
               "dist": 160.899998549372,
@@ -722,7 +722,7 @@
         "parameters": {
           "label": "Snare Mult",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -782,7 +782,7 @@
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -4194560,
         "parameters": {
-          "label": "Channel-10",
+          "label": "LineFall",
           "arm": false,
           "enabled": true,
           "cue": false,
@@ -878,7 +878,7 @@
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -16711843,
         "parameters": {
-          "label": "Channel-11",
+          "label": "NoiseMult",
           "arm": false,
           "enabled": false,
           "cue": false,
@@ -1177,7 +1177,20 @@
       }
     },
     "midi": {
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        }
+      ],
       "surfaces": [],
       "mapping": []
     }
@@ -1191,8 +1204,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 526.7570801965285,
-        "theta": -0.7853981633974483,
-        "phi": 0.6154797077178955,
+        "theta": 0.0,
+        "phi": 0.0,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5
