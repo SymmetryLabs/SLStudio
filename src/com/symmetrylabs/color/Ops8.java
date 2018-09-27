@@ -39,14 +39,8 @@ public class Ops8 {
         int r = red(argb);
         int g = green(argb);
         int b = blue(argb);
-        int max = (r > g) ? r : g;
-        if (b > max) {
-            max = b;
-        }
-        int min = (r < g) ? r : g;
-        if (b < min) {
-            min = b;
-        }
+        double max = max(max(r, g), b);
+        double min = min(min(r, g), b);
         if (max == 0) {
             return 0;
         }
@@ -79,14 +73,8 @@ public class Ops8 {
         int r = red(argb);
         int g = green(argb);
         int b = blue(argb);
-        int max = (r > g) ? r : g;
-        if (b > max) {
-            max = b;
-        }
-        int min = (r < g) ? r : g;
-        if (b < min) {
-            min = b;
-        }
+        double max = max(max(r, g), b);
+        double min = min(min(r, g), b);
         return (max == 0) ? 0 : (max - min) / max;
     }
 
