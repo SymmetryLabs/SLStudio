@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1534899002695,
+  "timestamp": 1538070982697,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 10,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -66,7 +66,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [
           {
@@ -81,7 +82,7 @@
               "ySize": 84.67999940365553,
               "cy": 60.31999994814396,
               "zSize": 47.850000550970435,
-              "cz": 113.09999909251928,
+              "cz": 87.0,
               "invert": false
             }
           }
@@ -94,7 +95,7 @@
             "parameters": {
               "label": "ColorFilter",
               "enabled": true,
-              "Hue": 237.59999468922615,
+              "Hue": 273.59999388456345,
               "Sat": 100.0
             },
             "modulation": {
@@ -141,7 +142,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [
           {
@@ -166,7 +168,7 @@
             "parameters": {
               "label": "BundleDirMask",
               "enabled": true,
-              "x": true,
+              "x": false,
               "y": true,
               "z": false
             }
@@ -237,7 +239,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [
           {
@@ -295,7 +298,8 @@
           "blendMode": 1,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [],
@@ -326,7 +330,8 @@
               "Speed": 0.55,
               "Symm": 0,
               "Anim": 4,
-              "Dens": 0.6
+              "Dens": 0.6,
+              "AnimResets": false
             },
             "modulation": {
               "modulators": [],
@@ -355,7 +360,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [
           {
@@ -467,7 +473,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [
@@ -547,7 +554,8 @@
           "blendMode": 1,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [],
@@ -616,7 +624,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [
           {
@@ -684,6 +693,7 @@
               "trigger": false,
               "reset": false,
               "wipe": false,
+              "hit": false,
               "x": 0.5400000214576721,
               "y": 0.09999999776482582,
               "z": 0.0,
@@ -723,7 +733,8 @@
           "blendMode": 2,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [],
@@ -754,7 +765,8 @@
               "Speed": 0.55,
               "Symm": 0,
               "Anim": 7,
-              "Dens": 0.6
+              "Dens": 0.6,
+              "AnimResets": false
             },
             "modulation": {
               "modulators": [],
@@ -783,7 +795,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [
@@ -809,7 +822,7 @@
             "parameters": {
               "label": "ColorFilter",
               "enabled": true,
-              "Hue": 251.99999436736107,
+              "Hue": 284.39999364316463,
               "Sat": 100.0
             },
             "modulation": {
@@ -867,7 +880,7 @@
         "parameters": {
           "label": "Channel-11",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -878,7 +891,8 @@
           "blendMode": 1,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [],
@@ -927,7 +941,8 @@
               "Speed": 0.55,
               "Symm": 0,
               "Anim": 7,
-              "Dens": 0.9199999928474426
+              "Dens": 0.9199999928474426,
+              "AnimResets": false
             },
             "modulation": {
               "modulators": [],
@@ -1043,8 +1058,83 @@
       }
     },
     "components": {
-      "outputControl": {
+      "GammaExpander": {
+        "id": 43,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -1769728,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
+      "envelop": {
         "id": 32,
+        "class": "com.symmetrylabs.slstudio.envelop.Envelop",
+        "modulationColor": -3408128,
+        "parameters": {
+          "label": "Envelop",
+          "running": true,
+          "trigger": false
+        },
+        "source": {
+          "id": 33,
+          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Source",
+          "modulationColor": -11730689,
+          "parameters": {
+            "label": "Source",
+            "running": true,
+            "trigger": false,
+            "Gain": 0.0,
+            "Range": 24.0,
+            "Attack": 25.0,
+            "Release": 50.0,
+            "Source-1": 0.0,
+            "Source-2": 0.0,
+            "Source-3": 0.0,
+            "Source-4": 0.0,
+            "Source-5": 0.0,
+            "Source-6": 0.0,
+            "Source-7": 0.0,
+            "Source-8": 0.0,
+            "Source-9": 0.0,
+            "Source-10": 0.0,
+            "Source-11": 0.0,
+            "Source-12": 0.0,
+            "Source-13": 0.0,
+            "Source-14": 0.0,
+            "Source-15": 0.0,
+            "Source-16": 0.0
+          }
+        },
+        "decode": {
+          "id": 34,
+          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Decode",
+          "modulationColor": -16711746,
+          "parameters": {
+            "label": "Decode",
+            "running": true,
+            "trigger": false,
+            "Gain": 0.0,
+            "Range": 24.0,
+            "Attack": 25.0,
+            "Release": 50.0,
+            "Decode-1": 0.0,
+            "Decode-2": 0.0,
+            "Decode-3": 0.0,
+            "Decode-4": 0.0,
+            "Decode-5": 0.0,
+            "Decode-6": 0.0,
+            "Decode-7": 0.0,
+            "Decode-8": 0.0
+          }
+        }
+      },
+      "outputControl": {
+        "id": 35,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -8651008,
         "parameters": {
