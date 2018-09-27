@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538070982697,
+  "timestamp": 1538074179616,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 0,
+      "focusedChannel": 10,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -444,7 +444,7 @@
               "Clic": 0.0,
               "Hue": 0.37700000648200516,
               "HSpd": 0.8200000040233135,
-              "freeze": true
+              "freeze": false
             },
             "modulation": {
               "modulators": [],
@@ -822,7 +822,7 @@
             "parameters": {
               "label": "ColorFilter",
               "enabled": true,
-              "Hue": 284.39999364316463,
+              "Hue": 262.79999412596226,
               "Sat": 100.0
             },
             "modulation": {
@@ -1054,7 +1054,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.0
       }
     },
     "components": {
@@ -1190,9 +1190,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 448.76430622515664,
-        "theta": -0.04499999999999993,
-        "phi": 0.11471667385102724,
+        "radius": 526.7570801965285,
+        "theta": -0.7853981633974483,
+        "phi": 0.6154797077178955,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5
