@@ -6,7 +6,9 @@ import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.ColorUtils;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.LXParameter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +19,7 @@ public class StripStarfield<T extends Strip> extends SLPattern<StripsModel<T>> {
 
     private final CompoundParameter period = new CompoundParameter("period", 100, 1, 1000);
     private final CompoundParameter release = new CompoundParameter("release", 250, 0, 5000);
+    private final BooleanParameter sync = new BooleanParameter("sync", false).setMode(BooleanParameter.Mode.MOMENTARY);
 
     private List<List<Integer>> stripKeys;
     private float t = 0;
@@ -28,6 +31,7 @@ public class StripStarfield<T extends Strip> extends SLPattern<StripsModel<T>> {
         super(lx);
         addParameter(period);
         addParameter(release);
+        addParameter(sync);
 
         N = model.getStrips().size();
         L = N == 0 ? 0 : model.getStripByIndex(0).size;
@@ -39,6 +43,13 @@ public class StripStarfield<T extends Strip> extends SLPattern<StripsModel<T>> {
             }
             Collections.shuffle(strip);
             stripKeys.add(strip);
+        }
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        if (p == sync && sync.getValueb()) {
+            t = 0;
         }
     }
 
