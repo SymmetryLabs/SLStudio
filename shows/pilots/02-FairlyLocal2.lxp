@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1534899542661,
+  "timestamp": 1538076648393,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 2,
+      "focusedChannel": 3,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -66,7 +66,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [
@@ -133,9 +134,9 @@
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -7929601,
         "parameters": {
-          "label": "Bass Mult",
+          "label": "BassMult",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -146,7 +147,8 @@
           "blendMode": 1,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [],
@@ -204,7 +206,7 @@
         "parameters": {
           "label": "Snare",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -215,7 +217,8 @@
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [
           {
@@ -296,9 +299,10 @@
             "modulationColor": -16711751,
             "parameters": {
               "label": "AngleStrobe",
-              "trigger": true,
+              "trigger": false,
               "reset": false,
               "wipe": false,
+              "hit": false,
               "x": 0.029999999329447746,
               "y": 0.09999999776482582,
               "z": 0.0,
@@ -325,20 +329,21 @@
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -11469056,
         "parameters": {
-          "label": "Snare Mult",
+          "label": "SnareMult",
           "arm": false,
           "enabled": true,
-          "cue": false,
+          "cue": true,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
           "crossfadeGroup": 0,
-          "blendMode": 2,
+          "blendMode": 1,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0
+          "transitionBlendMode": 0,
+          "autoDisable": true
         },
         "warps": [],
         "effects": [],
@@ -365,11 +370,12 @@
               "R-SYM": false,
               "X-DUP": false,
               "JOG": false,
-              "GREY": false,
+              "GREY": true,
               "Speed": 0.55,
               "Symm": 0,
               "Anim": 7,
-              "Dens": 0.6
+              "Dens": 0.9950000003445894,
+              "AnimResets": false
             },
             "modulation": {
               "modulators": [],
@@ -485,8 +491,83 @@
       }
     },
     "components": {
-      "outputControl": {
+      "GammaExpander": {
+        "id": 43,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -1769728,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
+      "envelop": {
         "id": 32,
+        "class": "com.symmetrylabs.slstudio.envelop.Envelop",
+        "modulationColor": -3408128,
+        "parameters": {
+          "label": "Envelop",
+          "running": true,
+          "trigger": false
+        },
+        "source": {
+          "id": 33,
+          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Source",
+          "modulationColor": -11730689,
+          "parameters": {
+            "label": "Source",
+            "running": true,
+            "trigger": false,
+            "Gain": 0.0,
+            "Range": 24.0,
+            "Attack": 25.0,
+            "Release": 50.0,
+            "Source-1": 0.0,
+            "Source-2": 0.0,
+            "Source-3": 0.0,
+            "Source-4": 0.0,
+            "Source-5": 0.0,
+            "Source-6": 0.0,
+            "Source-7": 0.0,
+            "Source-8": 0.0,
+            "Source-9": 0.0,
+            "Source-10": 0.0,
+            "Source-11": 0.0,
+            "Source-12": 0.0,
+            "Source-13": 0.0,
+            "Source-14": 0.0,
+            "Source-15": 0.0,
+            "Source-16": 0.0
+          }
+        },
+        "decode": {
+          "id": 34,
+          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Decode",
+          "modulationColor": -16711746,
+          "parameters": {
+            "label": "Decode",
+            "running": true,
+            "trigger": false,
+            "Gain": 0.0,
+            "Range": 24.0,
+            "Attack": 25.0,
+            "Release": 50.0,
+            "Decode-1": 0.0,
+            "Decode-2": 0.0,
+            "Decode-3": 0.0,
+            "Decode-4": 0.0,
+            "Decode-5": 0.0,
+            "Decode-6": 0.0,
+            "Decode-7": 0.0,
+            "Decode-8": 0.0
+          }
+        }
+      },
+      "outputControl": {
+        "id": 35,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -8651008,
         "parameters": {
@@ -499,40 +580,47 @@
     "modulation": {
       "modulators": [
         {
-          "id": 571,
-          "class": "heronarts.lx.modulator.VariableLFO",
-          "modulationColor": -5046528,
+          "id": 26345,
+          "class": "heronarts.lx.modulator.MultiStageEnvelope",
+          "modulationColor": -16711862,
           "parameters": {
-            "label": "LFO 3",
-            "running": true,
+            "label": "AngleEnv",
+            "running": false,
             "trigger": false,
-            "loop": true,
-            "wave": 0,
-            "period": 6427.905491133478,
-            "skew": 0.0,
-            "shape": -0.04000002145767212,
-            "phase": 0.789999982342124,
-            "exp": 0.15999997407197952
-          }
+            "loop": false,
+            "period": 687.0479799336837
+          },
+          "stages": [
+            {
+              "basis": 0.0,
+              "value": 1.0,
+              "shape": 1.0
+            },
+            {
+              "basis": 1.0,
+              "value": 0.0,
+              "shape": 1.0
+            }
+          ]
         }
       ],
       "modulations": [
         {
           "source": {
-            "id": 571
+            "id": 26345
           },
           "target": {
             "componentId": 561,
             "parameterPath": "x"
           },
-          "id": 572,
+          "id": 26346,
           "class": "heronarts.lx.parameter.LXCompoundModulation",
-          "modulationColor": -16738305,
+          "modulationColor": -16711795,
           "parameters": {
             "label": "",
             "enabled": true,
             "Polarity": 0,
-            "Range": 0.909999979659915
+            "Range": 0.6899999845772982
           }
         }
       ],
@@ -578,7 +666,7 @@
       "engineExpanded": true,
       "clipViewVisible": true,
       "modulatorExpanded": {
-        "571": true
+        "26345": true
       },
       "preview": {
         "radius": 509.1002869121634,
