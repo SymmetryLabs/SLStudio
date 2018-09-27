@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538074179616,
+  "timestamp": 1538074492682,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 10,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -53,7 +53,7 @@
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -65499,
         "parameters": {
-          "label": "Channel-1",
+          "label": "BridgeVert",
           "arm": false,
           "enabled": true,
           "cue": false,
@@ -79,10 +79,10 @@
               "enabled": true,
               "xSize": 328.0000018328428,
               "cx": 410.0,
-              "ySize": 84.67999940365553,
+              "ySize": 89.31999960511922,
               "cy": 60.31999994814396,
               "zSize": 47.850000550970435,
-              "cz": 87.0,
+              "cz": 71.04999951727689,
               "invert": false
             }
           }
@@ -129,7 +129,7 @@
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -16711851,
         "parameters": {
-          "label": "Channel-2",
+          "label": "BridgePinW",
           "arm": false,
           "enabled": true,
           "cue": false,
@@ -226,7 +226,7 @@
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -65335,
         "parameters": {
-          "label": "Channel-3",
+          "label": "BridgeMouth",
           "arm": false,
           "enabled": true,
           "cue": false,
@@ -285,7 +285,7 @@
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -15104,
         "parameters": {
-          "label": "Channel-4",
+          "label": "BridgeNoise",
           "arm": false,
           "enabled": false,
           "cue": false,
@@ -543,7 +543,7 @@
         "parameters": {
           "label": "Bass Mult",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -613,7 +613,7 @@
         "parameters": {
           "label": "Snare",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -694,7 +694,7 @@
               "reset": false,
               "wipe": false,
               "hit": false,
-              "x": 0.5400000214576721,
+              "x": 0.2788979113101959,
               "y": 0.09999999776482582,
               "z": 0.0,
               "dist": 160.899998549372,
@@ -722,7 +722,7 @@
         "parameters": {
           "label": "Snare Mult",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
