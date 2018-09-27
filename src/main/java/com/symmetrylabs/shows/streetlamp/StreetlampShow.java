@@ -28,8 +28,9 @@ public class StreetlampShow implements Show, HasWorkspace {
         g.blueGammaFactor.setValue(0.80);
 
         DmxUsbOutput output = new DmxUsbOutput(lx)
-                        .setRGBWMode(DmxUsbOutput.RGBWMode.ADD_WHITE)
-                        .setGammaExpander(g);
+                        //.setRGBWMode(DmxUsbOutput.RGBWMode.ADD_WHITE)
+                        //.setGammaExpander(g)
+        ;
 
         output.setColorChannels(new int[] {
             DmxUsbOutput.RED,

@@ -31,7 +31,7 @@ public class DmxUsbOutput extends LXOutput {
     private final BooleanParameter bitModeParam = new BooleanParameter("16-bit", false);
 
     private int[] colorChannels = new int[0];
-    private RGBWMode mode = RGBWMode.ADD_WHITE;
+    private RGBWMode mode = RGBWMode.USE_HSB;
     private GammaExpander gammaExpander = null;
 
     public DmxUsbOutput(LX lx) {
@@ -67,128 +67,70 @@ public class DmxUsbOutput extends LXOutput {
 
         boolean bitMode = bitModeParam.isOn();
 
-        if (false) {
-            long[] colors = (long[])src.getArray(PolyBuffer.Space.RGB16);
+        long[] colors = (long[])src.getArray(PolyBuffer.Space.RGB16);
 
-            for (int i = 0; i < colors.length; ++i) {
-                long color = colors[i];
+        for (int i = 0; i < colors.length; ++i) {
+            long color = colors[i];
 
-                if (gammaExpander != null) {
-                    color = gammaExpander.getExpandedColor16(color);
-                }
-
-                int red = Ops16.red(color);
-                int green = Ops16.green(color);
-                int blue = Ops16.blue(color);
-                int white = 0;
-
-                double saturation, brightness;
-
-                switch (mode) {
-                case USE_HSB:
-                    saturation = Ops16.saturation(color);
-                    brightness = Ops16.brightness(color);
-
-                    red *= saturation;
-                    green *= saturation;
-                    blue *= saturation;
-                    white = (int)((1 - saturation) * brightness * Ops16.MAX);
-                    break;
-
-                case NO_WHITE:
-                    break;
-
-                case ADD_WHITE:
-                    saturation = Ops16.saturation(color);
-                    brightness = Ops16.brightness(color);
-                    white = (int)(Ops16.MAX * Math.pow((1.0 - saturation) * brightness, 2));
-                    break;
-                }
-
-                for (int j = 0; j < colorChannels.length; ++j) {
-                    int colorChannel = colorChannels[j];
-                    int value = 0;
-
-                    switch (colorChannel) {
-                    case RED:
-                        value = red;
-                        break;
-                    case GREEN:
-                        value = green;
-                        break;
-                    case BLUE:
-                        value = blue;
-                        break;
-                    case WHITE:
-                        value = white;
-                        break;
-                    }
-
-                    int channel = 2 * (i * colorChannels.length + j);
-                    dmxWriter.setChannelData(channel, value & 0x00ff);
-                    dmxWriter.setChannelData(channel + 1, (value & 0xff00) >>> 8);
-                }
+            if (gammaExpander != null) {
+                color = gammaExpander.getExpandedColor16(color);
             }
-        }
-        else {
-            int[] colors = (int[])src.getArray(PolyBuffer.Space.RGB8);
 
-            for (int i = 0; i < colors.length; ++i) {
-                int color = colors[i];
+            int red = Ops16.red(color);
+            int green = Ops16.green(color);
+            int blue = Ops16.blue(color);
+            int white = 0;
 
-                if (gammaExpander != null) {
-                    color = gammaExpander.getExpandedColor(color);
+            double saturation, brightness;
+
+            switch (mode) {
+            case USE_HSB:
+                saturation = Ops16.saturation(color);
+                brightness = Ops16.brightness(color);
+
+                red *= saturation;
+                green *= saturation;
+                blue *= saturation;
+                white = (int)((1 - saturation) * brightness * Ops16.MAX);
+                break;
+
+            case NO_WHITE:
+                break;
+
+            case ADD_WHITE:
+                saturation = Ops16.saturation(color);
+                brightness = Ops16.brightness(color);
+                white = (int)(Ops16.MAX * Math.pow((1.0 - saturation) * brightness, 2));
+                break;
+            }
+
+            for (int j = 0; j < colorChannels.length; ++j) {
+                int colorChannel = colorChannels[j];
+                int value = 0;
+
+                switch (colorChannel) {
+                case RED:
+                    value = red;
+                    break;
+                case GREEN:
+                    value = green;
+                    break;
+                case BLUE:
+                    value = blue;
+                    break;
+                case WHITE:
+                    value = white;
+                    break;
                 }
 
-                int red = Ops8.red(color);
-                int green = Ops8.green(color);
-                int blue = Ops8.blue(color);
-                int white = 0;
-
-                double saturation, brightness;
-
-                switch (mode) {
-                case USE_HSB:
-                    saturation = Ops8.saturation(color);
-                    brightness = Ops8.brightness(color);
-
-                    red *= saturation;
-                    green *= saturation;
-                    blue *= saturation;
-                    white = (int)((1 - saturation) * brightness * Ops8.MAX);
-                    break;
-
-                case NO_WHITE:
-                    break;
-
-                case ADD_WHITE:
-                    saturation = Ops8.saturation(color);
-                    brightness = Ops8.brightness(color);
-                    white = (int)(Ops8.MAX * Math.pow((1.0 - saturation) * brightness, 2));
-                    break;
+                if (false) {
+                    int channel = 2 * (i * colorChannels.length + j);
+                    dmxWriter.setChannelData(channel, (value & 0xff00) >>> 8);
+                    dmxWriter.setChannelData(channel + 1, value & 0x00ff);
                 }
-
-                for (int j = 0; j < colorChannels.length; ++j) {
-                    int colorChannel = colorChannels[j];
-                    int value = 0;
-
-                    switch (colorChannel) {
-                    case RED:
-                        value = red;
-                        break;
-                    case GREEN:
-                        value = green;
-                        break;
-                    case BLUE:
-                        value = blue;
-                        break;
-                    case WHITE:
-                        value = white;
-                        break;
-                    }
-
+                else {
                     int channel = i * colorChannels.length + j;
-                    dmxWriter.setChannelData(channel, value);
+                    dmxWriter.setChannelData(channel, (value & 0xff00) >>> 8);
                 }
             }
         }
