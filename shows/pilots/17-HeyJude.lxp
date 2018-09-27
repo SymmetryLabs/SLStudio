@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538088550511,
+  "timestamp": 1538092078259,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 1.0166667196899652,
-      "focusedChannel": 3,
+      "speed": 0.2800000011920929,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -30,7 +30,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 301.0526428222656,
+        "color/hue": 300.941162109375,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
         "color": -65285,
@@ -184,7 +184,7 @@
               "Speed": 0.6699999973177908,
               "Symm": 0,
               "Anim": 4,
-              "Dens": 0.6999999977648258,
+              "Dens": 0.0,
               "AnimResets": false
             },
             "modulation": {
@@ -230,7 +230,7 @@
               "label": "Sparkle",
               "Dens": 0.8399999845772982,
               "Attack": 0.4,
-              "Decay": 0.013000006740912784,
+              "Decay": 0.08300000517629086,
               "Hue": 0.5,
               "HueVar": 0.25,
               "Sat": 0.0
@@ -257,7 +257,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -276,8 +276,9 @@
             "modulationColor": -16758273,
             "parameters": {
               "label": "StripStarfield",
-              "period": 429.6699926313013,
-              "release": 849.9999810010195
+              "period": 423.675993044395,
+              "release": 849.9999810010195,
+              "sync": false
             },
             "modulation": {
               "modulators": [],
@@ -394,9 +395,9 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 26988,
+        "id": 27300,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -65407,
+        "modulationColor": -33024,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
