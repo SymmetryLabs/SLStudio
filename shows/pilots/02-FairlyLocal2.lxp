@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538097178080,
+  "timestamp": 1538101820681,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -588,7 +588,7 @@
             "running": false,
             "trigger": false,
             "loop": false,
-            "period": 594.5774887983566
+            "period": 526.3034986964163
           },
           "stages": [
             {
