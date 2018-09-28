@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538092421201,
+  "timestamp": 1538093778467,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 4,
+      "focusedChannel": 9,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -95,7 +95,7 @@
             "parameters": {
               "label": "ColorFilter",
               "enabled": true,
-              "Hue": 273.59999388456345,
+              "Hue": 302.3999932408333,
               "Sat": 100.0
             },
             "modulation": {
@@ -400,7 +400,7 @@
             "parameters": {
               "label": "ColorFilter",
               "enabled": true,
-              "Hue": 237.59999468922615,
+              "Hue": 262.79999412596226,
               "Sat": 100.0
             },
             "modulation": {
@@ -444,7 +444,7 @@
               "Clic": 0.0,
               "Hue": 0.37700000648200516,
               "HSpd": 0.8200000040233135,
-              "freeze": false
+              "freeze": true
             },
             "modulation": {
               "modulators": [],
@@ -543,7 +543,7 @@
         "parameters": {
           "label": "Bass Mult",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -694,7 +694,7 @@
               "reset": false,
               "wipe": false,
               "hit": false,
-              "x": 0.5400000214576721,
+              "x": 0.11999999731779099,
               "y": 0.09999999776482582,
               "z": 0.0,
               "dist": 160.899998549372,
@@ -722,7 +722,7 @@
         "parameters": {
           "label": "Snare Mult",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -821,7 +821,7 @@
             "modulationColor": -16730369,
             "parameters": {
               "label": "ColorFilter",
-              "enabled": true,
+              "enabled": false,
               "Hue": 262.79999412596226,
               "Sat": 100.0
             },
@@ -1054,7 +1054,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.0
+        "brightness": 1.0
       }
     },
     "components": {
