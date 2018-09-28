@@ -290,6 +290,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
                 }
             }
         } else {
+            // SLStudio.setWarning("CubesController", String.format("Unaccounted: %s", id));
             // Fill with all black if we don't have cube data
             initPacketData(numPixels, false);
             for (int i = 0; i < numPixels; i++) {

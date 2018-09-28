@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.slstudio.pattern.base.DPat;
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
 import com.symmetrylabs.util.MathUtils;
 import com.symmetrylabs.util.NoiseUtils;
 import heronarts.lx.LX;
@@ -13,8 +14,10 @@ import heronarts.lx.parameter.BooleanParameter;
 import static processing.core.PConstants.ADD;
 
 public class Noise extends DPat {
+    public static final String GROUP_NAME = SummerStageShow.SHOW_NAME;
+
     private int currModeIndex, iSymm;
-    public final CompoundParameter speed = new CompoundParameter("Speed", 0.55, -2, 2);
+    public final CompoundParameter speed = new CompoundParameter("OSpeed", 0.55, -2, 2);
     public final CompoundParameter density = new CompoundParameter("Dens", 0.6);
     public final CompoundParameter sharp = new CompoundParameter("Sharp", 0);
     public final DiscreteParameter mode = new DiscreteParameter("Anim", new String[]{"Drip", "Cloud", "Rain", "Fire", "Mach", "Spark", "VWav", "Wave"});

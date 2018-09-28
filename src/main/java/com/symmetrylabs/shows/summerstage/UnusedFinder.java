@@ -46,11 +46,21 @@ public class UnusedFinder extends SLPattern<CubesModel> {
 
         for (CubesModel.Cube c : model.getCubes()) {
                 CubesModel.DoubleControllerCube c2 = (CubesModel.DoubleControllerCube) c;
-                if (!used.contains(c2.idA) || !used.contains(c2.idB)) {
-                    setColor(c, LXColor.BLUE);
-                } else {
-                    setColor(c, LXColor.BLACK);
+                int numOut = 0;
+                if (!used.contains(c2.idA)) {
+                    numOut++;
                 }
+                if (!used.contains(c2.idB)) {
+                    numOut++;
+                }
+                int col = LXColor.BLACK;
+                if (numOut == 1) {
+                    col = LXColor.BLUE;
+                }
+                if (numOut == 2) {
+                    col = LXColor.RED;
+                }
+                setColor(c, col);
         }
 
     }
