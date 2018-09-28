@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538104845236,
+  "timestamp": 1538114864009,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 4,
+      "focusedChannel": 6,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -634,7 +634,7 @@
               "X-DUP": false,
               "JOG": false,
               "GREY": false,
-              "Speed": 0.55,
+              "Speed": 0.20000004768371582,
               "Symm": 0,
               "Anim": 7,
               "Dens": 0.5,
@@ -689,12 +689,12 @@
               "cz": 87.0,
               "lo/hue": 111.28999751247466,
               "lo/brightness": 100.0,
-              "lo/saturation": 0.0,
-              "lo": -1,
-              "hi/hue": 183.058837890625,
+              "lo/saturation": 100.0,
+              "lo": -14287104,
+              "hi/hue": 229.7288368474692,
               "hi/brightness": 100.0,
               "hi/saturation": 100.0,
-              "hi": -16715009
+              "hi": -16765697
             },
             "modulation": {
               "modulators": [],
