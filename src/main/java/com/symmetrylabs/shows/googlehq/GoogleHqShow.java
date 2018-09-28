@@ -16,7 +16,7 @@ public class GoogleHqShow implements Show, HasWorkspace, MarkerSource {
 
     @Override
     public SLModel buildModel() {
-        model = new GoogleHqModel();
+        model = GoogleHqModel.load();
         return model;
     }
 

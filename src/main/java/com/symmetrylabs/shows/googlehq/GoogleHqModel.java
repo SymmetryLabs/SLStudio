@@ -1,7 +1,6 @@
 package com.symmetrylabs.shows.googlehq;
 
-import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.model.StripsModel;
+import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.MarkerSource;
 import de.javagl.obj.FloatTuple;
@@ -9,31 +8,57 @@ import de.javagl.obj.Obj;
 import de.javagl.obj.ObjFace;
 import de.javagl.obj.ObjReader;
 import de.javagl.obj.ReadableObj;
+import heronarts.lx.model.LXPoint;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import processing.core.PGraphics;
 
-public class GoogleHqModel extends StripsModel<Strip> implements MarkerSource {
+public class GoogleHqModel extends SLModel implements MarkerSource {
     private static final String SOURCE_FILE = "shows/googlehq/hybycozo_led.obj";
 
     private ReadableObj model;
     private HashSet<Edge> edges;
 
-    public GoogleHqModel() {
-        model = null;
+    protected GoogleHqModel(List<LXPoint> points, ReadableObj model, HashSet<Edge> edges) {
+        super(points);
+        this.model = model;
+        this.edges = edges;
+    }
+
+    public static GoogleHqModel load() {
+        ReadableObj model;
         try {
             InputStream in = new FileInputStream(SOURCE_FILE);
             model = ObjReader.read(in);
-            loadObj();
         } catch (IOException e) {
             System.err.println("could not read googlehq model file:");
             e.printStackTrace();
-            return;
+            return null;
         }
+
+        HashSet<Edge> edges = new HashSet<>();
+        int NF = model.getNumFaces();
+        for (int fi = 0; fi < NF; fi++) {
+            ObjFace f = model.getFace(fi);
+            int NV = f.getNumVertices();
+            for (int vi = 0; vi < NV; vi++) {
+                Edge e = new Edge(f.getVertexIndex(vi), f.getVertexIndex((vi + 1) % NV));
+                edges.add(e);
+            }
+        }
+        int NV = model.getNumVertices();
+        ArrayList<LXPoint> points = new ArrayList<>(NV);
+        for (int vi = 0; vi < NV; vi++) {
+            FloatTuple v = model.getVertex(vi);
+            points.add(new LXPoint(v.getX(), v.getY(), v.getZ()));
+        }
+        System.out.println(String.format("loaded model with %d edges", edges.size()));
+        return new GoogleHqModel(points, model, edges);
     }
 
     private static class Edge {
@@ -61,20 +86,6 @@ public class GoogleHqModel extends StripsModel<Strip> implements MarkerSource {
             Edge o = (Edge) other;
             return o.v1 == v1 && o.v2 == v2;
         }
-    }
-
-    private void loadObj() {
-        edges = new HashSet<>();
-        int NF = model.getNumFaces();
-        for (int fi = 0; fi < NF; fi++) {
-            ObjFace f = model.getFace(fi);
-            int NV = f.getNumVertices();
-            for (int vi = 0; vi < NV; vi++) {
-                Edge e = new Edge(f.getVertexIndex(vi), f.getVertexIndex((vi + 1) % NV));
-                edges.add(e);
-            }
-        }
-        System.out.println(String.format("loaded model with %d edges", edges.size()));
     }
 
     public class ObjEdgeMarker implements Marker {
