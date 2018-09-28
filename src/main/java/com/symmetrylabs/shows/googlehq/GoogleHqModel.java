@@ -9,12 +9,14 @@ import de.javagl.obj.ObjFace;
 import de.javagl.obj.ObjReader;
 import de.javagl.obj.ReadableObj;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.transform.LXVector;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import processing.core.PGraphics;
 
@@ -22,9 +24,9 @@ public class GoogleHqModel extends SLModel implements MarkerSource {
     private static final String SOURCE_FILE = "shows/googlehq/hybycozo_led.obj";
 
     private ReadableObj model;
-    private HashSet<Edge> edges;
+    private Collection<Edge> edges;
 
-    protected GoogleHqModel(List<LXPoint> points, ReadableObj model, HashSet<Edge> edges) {
+    protected GoogleHqModel(List<LXPoint> points, ReadableObj model, Collection<Edge> edges) {
         super(points);
         this.model = model;
         this.edges = edges;
@@ -47,27 +49,79 @@ public class GoogleHqModel extends SLModel implements MarkerSource {
             ObjFace f = model.getFace(fi);
             int NV = f.getNumVertices();
             for (int vi = 0; vi < NV; vi++) {
-                Edge e = new Edge(f.getVertexIndex(vi), f.getVertexIndex((vi + 1) % NV));
+                Edge e = new Edge(f.getVertexIndex(vi), f.getVertexIndex((vi + 1) % NV), model);
                 edges.add(e);
             }
         }
-        int NV = model.getNumVertices();
-        ArrayList<LXPoint> points = new ArrayList<>(NV);
-        for (int vi = 0; vi < NV; vi++) {
+
+        LinkedList<Edge> goodEdges = new LinkedList<>();
+        Edge knownGoodEdge = new Edge(5581, 5582, model);
+        edges.remove(knownGoodEdge);
+        goodEdges.add(knownGoodEdge);
+
+        while (!edges.isEmpty() && !(goodEdges.size() > 2 && goodEdges.getFirst().sharesVertex(goodEdges.getLast()))) {
+            Edge edgeToMatch = goodEdges.getLast();
+            Edge bestCandidate = null;
+            double minAngle = Double.MAX_VALUE;
+            for (Edge candidate : edges) {
+                if (candidate.sharesVertex(edgeToMatch)) {
+                    double angle = edgeToMatch.subtendedAngle(candidate);
+                    if (angle < minAngle) {
+                        minAngle = angle;
+                        bestCandidate = candidate;
+                    }
+                }
+            }
+            if (bestCandidate == null) {
+                break;
+            }
+            edges.remove(bestCandidate);
+            goodEdges.add(bestCandidate);
+        }
+
+        HashSet<Integer> goodVerts = new HashSet<>();
+        for (Edge e : goodEdges) {
+            goodVerts.add(e.v1);
+            goodVerts.add(e.v2);
+        }
+
+        ArrayList<LXPoint> points = new ArrayList<>(goodVerts.size());
+        for (Integer vi : goodVerts) {
             FloatTuple v = model.getVertex(vi);
             points.add(new LXPoint(v.getX(), v.getY(), v.getZ()));
         }
-        System.out.println(String.format("loaded model with %d edges", edges.size()));
-        return new GoogleHqModel(points, model, edges);
+        System.out.println(
+            String.format(
+                "loaded model with %d edges, %d verts", edges.size(), points.size()));
+        return new GoogleHqModel(points, model, goodEdges);
     }
 
     private static class Edge {
         int v1;
         int v2;
+        LXVector p1;
+        LXVector p2;
+        LXVector dir;
 
-        public Edge(int v1, int v2) {
+        public Edge(int v1, int v2, ReadableObj obj) {
             this.v1 = Math.min(v1, v2);
             this.v2 = Math.max(v1, v2);
+            FloatTuple ft1 = obj.getVertex(this.v1);
+            FloatTuple ft2 = obj.getVertex(this.v2);
+            p1 = new LXVector(ft1.getX(), ft1.getY(), ft1.getZ());
+            p2 = new LXVector(ft2.getX(), ft2.getY(), ft2.getZ());
+            dir = p1.copy().mult(-1).add(p2);
+            dir.normalize();
+        }
+
+        public double subtendedAngle(Edge other) {
+            /* absolute value because we don't care about which way the edges
+                 face (it is 100% arbitrary) */
+            return Math.acos(Math.abs(dir.dot(other.dir)));
+        }
+
+        public boolean sharesVertex(Edge other) {
+            return v1 == other.v1 || v2 == other.v1 || v1 == other.v2 || v2 == other.v2;
         }
 
         @Override
@@ -85,6 +139,11 @@ public class GoogleHqModel extends SLModel implements MarkerSource {
             }
             Edge o = (Edge) other;
             return o.v1 == v1 && o.v2 == v2;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%d/%d", v1, v2);
         }
     }
 
