@@ -88,6 +88,8 @@ public class MagicLeapShow extends CubesShow implements Show {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        return new CubesModel(towers, allCubesArr);
+        CubesModel m = new CubesModel(towers, allCubesArr);
+        m.setTopologyTolerances(2, 6, 8);
+        return m;
     }
 }

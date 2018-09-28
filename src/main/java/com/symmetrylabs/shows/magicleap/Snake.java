@@ -48,6 +48,7 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
     private GameState state;
 
     private double timeSinceTick;
+    private int score;
 
     private final List<Junction> validJunctions;
 
@@ -98,6 +99,7 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
         nextSign = null;
         state = GameState.PLAYING;
         timeSinceTick = 0;
+        score = 0;
     }
 
     private Junction randomJunction() {
@@ -158,6 +160,10 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
             current = null;
             target = null;
             progress = 0;
+            if (start == goal) {
+                score++;
+                goal = randomJunction();
+            }
         } else {
             for (int i = 0; i < current.strips.length; i++) {
                 Strip strip = model.getStripByIndex(current.strips[i]);
@@ -181,8 +187,9 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
     @Override
     public String toString() {
         return String.format(
-            "%s / sta %s / tar %s / cur %s / sig %s / ndi %s / nsi %s / pro %02d / tic %05d",
+            "%s / sco %d / sta %s / tar %s / cur %s / sig %s / ndi %s / nsi %s / pro %02d / tic %05d",
             state,
+            score,
             start == null ? "null" : "ok",
             target == null ? "null" : "ok",
             current == null ? "null" : Integer.toString(current.index),
