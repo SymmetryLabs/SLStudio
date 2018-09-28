@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538076648393,
+  "timestamp": 1538097178080,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -332,7 +332,7 @@
           "label": "SnareMult",
           "arm": false,
           "enabled": true,
-          "cue": true,
+          "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
@@ -588,7 +588,7 @@
             "running": false,
             "trigger": false,
             "loop": false,
-            "period": 687.0479799336837
+            "period": 594.5774887983566
           },
           "stages": [
             {
@@ -654,7 +654,20 @@
       }
     },
     "midi": {
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        }
+      ],
       "surfaces": [],
       "mapping": []
     }

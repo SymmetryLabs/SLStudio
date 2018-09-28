@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538096890337,
+  "timestamp": 1538100534413,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -444,7 +444,7 @@
               "Clic": 0.0,
               "Hue": 0.37700000648200516,
               "HSpd": 0.8200000040233135,
-              "freeze": true
+              "freeze": false
             },
             "modulation": {
               "modulators": [],
@@ -694,7 +694,7 @@
               "reset": false,
               "wipe": false,
               "hit": false,
-              "x": 0.11999999731779099,
+              "x": 0.2073906660079956,
               "y": 0.09999999776482582,
               "z": 0.0,
               "dist": 160.899998549372,
@@ -880,7 +880,7 @@
         "parameters": {
           "label": "NoiseMult",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
