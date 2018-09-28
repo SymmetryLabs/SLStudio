@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1537738799260,
+  "timestamp": 1538117597189,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.116666715592146,
-      "focusedChannel": 6,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -119,7 +119,7 @@
         "parameters": {
           "label": "Palette",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -194,7 +194,7 @@
               "ySize": 73.07999966293573,
               "cy": 58.0,
               "zSize": 97.14999944902956,
-              "cz": 72.5,
+              "cz": 24.649998551830706,
               "invert": false
             }
           }
@@ -300,12 +300,12 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 0.0,
+              "xSize": 410.0,
               "cx": 410.0,
               "ySize": 70.75999971479177,
               "cy": 58.0,
               "zSize": 98.59999941661954,
-              "cz": 72.5,
+              "cz": 30.449998727366378,
               "invert": true
             }
           },
@@ -316,12 +316,12 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 0.0,
+              "xSize": 410.0,
               "cx": 410.0,
               "ySize": 76.55999958515167,
               "cy": 58.0,
               "zSize": 108.74999918974936,
-              "cz": 72.5,
+              "cz": 43.49999912232164,
               "invert": false
             }
           }
@@ -437,7 +437,7 @@
               "cropR": 0.11999999731779099,
               "cropT": 0.5799999874830246,
               "cropB": 0.0,
-              "tcStart": 999424.0
+              "tcStart": 973577.0
             },
             "modulation": {
               "modulators": [],
@@ -602,6 +602,54 @@
             "autoCycleEnabled": true
           }
         ]
+      },
+      {
+        "id": 26543,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -20224,
+        "parameters": {
+          "label": "Thinking",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 26544,
+            "class": "com.symmetrylabs.slstudio.pattern.Sparkle",
+            "modulationColor": -12583168,
+            "parameters": {
+              "label": "Sparkle",
+              "Dens": 0.010000005923211569,
+              "Attack": 0.10800002235919237,
+              "Decay": 0.29899999843910335,
+              "Hue": 0.5,
+              "HueVar": 0.1400000024586916,
+              "Sat": 0.07999999821186066
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
       }
     ],
     "master": {
@@ -700,7 +748,7 @@
       "modulationColor": -38656,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -709,7 +757,7 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 37,
+        "id": 43,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
         "modulationColor": -16753921,
         "parameters": {
@@ -865,12 +913,6 @@
           "sync": false
         },
         {
-          "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
           "name": "Real Time Sequencer",
           "channel": true,
           "control": false,
@@ -890,8 +932,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 421.55694888283364,
-        "theta": 0.1890000000000001,
-        "phi": 0.33900000000000025,
+        "theta": 0.4050000000000002,
+        "phi": 0.28079637050628914,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5
