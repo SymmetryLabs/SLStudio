@@ -31,6 +31,7 @@ public class Sinners extends SLPattern<CubesModel> {
     ArrayList<Float> offsets = new ArrayList();
     ArrayList<Float> multipliers = new ArrayList();
     ArrayList<Float> bases = new ArrayList();
+    ArrayList<Float> dirs = new ArrayList();
     ArrayList<Integer> order = new ArrayList();
 
     float n = 0;
@@ -54,6 +55,7 @@ public class Sinners extends SLPattern<CubesModel> {
             offsets.add(MathUtils.random(1));
             multipliers.add(MathUtils.random(1));
             bases.add(MathUtils.random(1));
+            dirs.add(MathUtils.random(1) > 0.5 ? 1.0f : -1.0f);
             order.add(i);
         }
         Collections.shuffle(order);
@@ -71,7 +73,7 @@ public class Sinners extends SLPattern<CubesModel> {
     public void run(double deltaMs) {
         List<CubesModel.Cube> cubes = model.getCubes();
 
-        
+
         for (int i = 0; i < cubes.size(); i++) {
             CubesModel.Cube cube = cubes.get(i);
 
@@ -91,7 +93,8 @@ public class Sinners extends SLPattern<CubesModel> {
             s = (s + 1.0f) / 2.0f;
             float c = bases.get(i) + NoiseUtils.noise(pos + n / 100.0f) / 2;
             float huevar = hvar.getValuef();
-            float actual_c = (hue.getValuef()) + (c * huevar);
+            float dir = dirs.get(i);
+            float actual_c = (hue.getValuef()) + (c * huevar * dir);
 
             setColor(cube, LXColor.hsb(actual_c * 360, sat.getValuef() * 100, s * 100 * falloff));
         }

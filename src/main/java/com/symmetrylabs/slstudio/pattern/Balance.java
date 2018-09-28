@@ -131,31 +131,31 @@ public class Balance extends LXPattern {
             int color = LXColor.hsb(hue_color, 100, v1);
 
             // Now draw the spheres
-            for (Sphere s : spheres) {
-                float phase_x = (float) ((s.x - phase / (2 * Math.PI) * modelWidth) % modelWidth);
-                float x_dist = LXUtils.wrapdistf(p.x, phase_x, modelWidth);
-
-                float sphere_z = (s == spheres[0]) ? (s.z + sphere1Z.getValuef()) : (s.z - sphere2Z.getValuef());
-
-
-                float d = (float) Math.sqrt((float) Math.pow(x_dist, 2) + (float) Math.pow(
-                    p.y - s.y,
-                    2
-                ) + (float) Math.pow(p.z - sphere_z, 2));
-
-                float distance_from_beat = (beat % 2 == 1) ? 1 - ramp : ramp;
-
-                float r = 40 - (float) Math.pow(distance_from_beat, 0.75) * 20;
-
-                float distance_value = Math.max(0, 1 - Math.max(0, d - r) / 10);
-                float beat_value = 1;
-
-                float value = Math.min(beat_value, distance_value);
-
-                float sphere_color = palette.getHuef() - (1 - hueScale.getValuef()) * d / r * 45;
-
-                color = Ops8.add(color, LXColor.hsb(sphere_color + 270, 60, Math.min(1, value) * 100));
-            }
+//            for (Sphere s : spheres) {
+//                float phase_x = (float) ((s.x - phase / (2 * Math.PI) * modelWidth) % modelWidth);
+//                float x_dist = LXUtils.wrapdistf(p.x, phase_x, modelWidth);
+//
+//                float sphere_z = (s == spheres[0]) ? (s.z + sphere1Z.getValuef()) : (s.z - sphere2Z.getValuef());
+//
+//
+//                float d = (float) Math.sqrt((float) Math.pow(x_dist, 2) + (float) Math.pow(
+//                    p.y - s.y,
+//                    2
+//                ) + (float) Math.pow(p.z - sphere_z, 2));
+//
+//                float distance_from_beat = (beat % 2 == 1) ? 1 - ramp : ramp;
+//
+//                float r = 40 - (float) Math.pow(distance_from_beat, 0.75) * 20;
+//
+//                float distance_value = Math.max(0, 1 - Math.max(0, d - r) / 10);
+//                float beat_value = 1;
+//
+//                float value = Math.min(beat_value, distance_value);
+//
+//                float sphere_color = palette.getHuef() - (1 - hueScale.getValuef()) * d / r * 45;
+//
+//                color = Ops8.add(color, LXColor.hsb(sphere_color + 270, 60, Math.min(1, value) * 100));
+//            }
             colors[p.index] = color;
         });
         markModified(SRGB8);
