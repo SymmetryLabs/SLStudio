@@ -21,7 +21,7 @@ import java.util.List;
 import processing.core.PGraphics;
 
 public class GoogleHqModel extends SLModel implements MarkerSource {
-    private static final String SOURCE_FILE = "shows/googlehq/hybycozo_led.obj";
+    private static final String SOURCE_FILE = "shows/googlehq/hybycozo_curve.obj";
 
     private ReadableObj model;
     private Collection<Edge> edges;
@@ -43,57 +43,12 @@ public class GoogleHqModel extends SLModel implements MarkerSource {
             return null;
         }
 
-        HashSet<Edge> edges = new HashSet<>();
-        int NF = model.getNumFaces();
-        for (int fi = 0; fi < NF; fi++) {
-            ObjFace f = model.getFace(fi);
-            int NV = f.getNumVertices();
-            for (int vi = 0; vi < NV; vi++) {
-                Edge e = new Edge(f.getVertexIndex(vi), f.getVertexIndex((vi + 1) % NV), model);
-                edges.add(e);
-            }
-        }
-
-        LinkedList<Edge> goodEdges = new LinkedList<>();
-        Edge knownGoodEdge = new Edge(5581, 5582, model);
-        edges.remove(knownGoodEdge);
-        goodEdges.add(knownGoodEdge);
-
-        while (!edges.isEmpty() && !(goodEdges.size() > 2 && goodEdges.getFirst().sharesVertex(goodEdges.getLast()))) {
-            Edge edgeToMatch = goodEdges.getLast();
-            Edge bestCandidate = null;
-            double minAngle = Double.MAX_VALUE;
-            for (Edge candidate : edges) {
-                if (candidate.sharesVertex(edgeToMatch)) {
-                    double angle = edgeToMatch.subtendedAngle(candidate);
-                    if (angle < minAngle) {
-                        minAngle = angle;
-                        bestCandidate = candidate;
-                    }
-                }
-            }
-            if (bestCandidate == null) {
-                break;
-            }
-            edges.remove(bestCandidate);
-            goodEdges.add(bestCandidate);
-        }
-
-        HashSet<Integer> goodVerts = new HashSet<>();
-        for (Edge e : goodEdges) {
-            goodVerts.add(e.v1);
-            goodVerts.add(e.v2);
-        }
-
-        ArrayList<LXPoint> points = new ArrayList<>(goodVerts.size());
-        for (Integer vi : goodVerts) {
+        ArrayList<LXPoint> points = new ArrayList<>(model.getNumVertices());
+        for (int vi = 0; vi < model.getNumVertices(); vi++) {
             FloatTuple v = model.getVertex(vi);
             points.add(new LXPoint(v.getX(), v.getY(), v.getZ()));
         }
-        System.out.println(
-            String.format(
-                "loaded model with %d edges, %d verts", edges.size(), points.size()));
-        return new GoogleHqModel(points, model, goodEdges);
+        return new GoogleHqModel(points, model, null);
     }
 
     private static class Edge {
@@ -164,7 +119,9 @@ public class GoogleHqModel extends SLModel implements MarkerSource {
     @Override
     public Collection<Marker> getMarkers() {
         ArrayList<Marker> markers = new ArrayList<>();
-        markers.add(new ObjEdgeMarker());
+        if (edges != null) {
+            markers.add(new ObjEdgeMarker());
+        }
         return markers;
     }
 }
