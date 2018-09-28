@@ -2,20 +2,20 @@ package com.symmetrylabs.shows;
 
 import java.util.*;
 
+import com.symmetrylabs.shows.composite.CompositeShow;
 import com.symmetrylabs.shows.demo.DemoShow;
+import com.symmetrylabs.shows.googlehq.GoogleHqShow;
+import com.symmetrylabs.shows.kalpa.KalpaShow;
+import com.symmetrylabs.shows.magicleap.MagicLeapShow;
+import com.symmetrylabs.shows.obj.ObjShow;
 import com.symmetrylabs.shows.office.OfficeShow;
-import com.symmetrylabs.shows.pilots.PilotsShow;
-import com.symmetrylabs.shows.streetlamp.StreetlampShow;
-import processing.core.PApplet;
-
 import com.symmetrylabs.shows.oslo.OsloShow;
 import com.symmetrylabs.shows.oslo.TreeModel;
-import com.symmetrylabs.shows.composite.CompositeShow;
-import com.symmetrylabs.shows.obj.ObjShow;
-import com.symmetrylabs.shows.magicleap.MagicLeapShow;
-import com.symmetrylabs.shows.kalpa.KalpaShow;
-import com.symmetrylabs.shows.summerstage.SummerStageShow;
+import com.symmetrylabs.shows.pilots.PilotsShow;
+import com.symmetrylabs.shows.streetlamp.StreetlampShow;
 import com.symmetrylabs.shows.summerbbq.SummerBBQShow;
+import com.symmetrylabs.shows.summerstage.SummerStageShow;
+import processing.core.PApplet;
 
 public class ShowRegistry {
     static ShowBuilder DEFAULT_BUILDER = () -> new DemoShow();
@@ -50,6 +50,7 @@ public class ShowRegistry {
         map.put("summerbbq", () -> new SummerBBQShow());
         map.put(StreetlampShow.SHOW_NAME, () -> new StreetlampShow());
         map.put(MagicLeapShow.SHOW_NAME, () -> new MagicLeapShow());
+        map.put(GoogleHqShow.SHOW_NAME, () -> new GoogleHqShow());
     }
 
     static interface ShowBuilder {
