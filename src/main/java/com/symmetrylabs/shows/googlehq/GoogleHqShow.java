@@ -5,15 +5,19 @@ import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
+import com.symmetrylabs.util.Marker;
+import com.symmetrylabs.util.MarkerSource;
+import java.util.Collection;
 
-
-public class GoogleHqShow implements Show, HasWorkspace {
+public class GoogleHqShow implements Show, HasWorkspace, MarkerSource {
     public static final String SHOW_NAME = "googlehq";
     private Workspace workspace;
+    private GoogleHqModel model;
 
     @Override
     public SLModel buildModel() {
-        return new GoogleHqModel();
+        model = new GoogleHqModel();
+        return model;
     }
 
     @Override
@@ -28,5 +32,10 @@ public class GoogleHqShow implements Show, HasWorkspace {
     @Override
     public Workspace getWorkspace() {
         return workspace;
+    }
+
+    @Override
+    public Collection<Marker> getMarkers() {
+        return model.getMarkers();
     }
 }

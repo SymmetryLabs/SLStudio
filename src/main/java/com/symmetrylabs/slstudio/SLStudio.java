@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio;
 import java.util.HashMap;
 import java.util.Map;
 import java.net.SocketException;
+import com.symmetrylabs.util.MarkerSource;
 
 import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
@@ -180,6 +181,9 @@ public class SLStudio extends PApplet {
                     HasWorkspace hwShow = (HasWorkspace) show;
                     new UIWorkspace(ui, lx, hwShow.getWorkspace(), 0, 0, ui.leftPane.global.getContentWidth())
                         .addToContainer(ui.leftPane.global);
+                }
+                if (show instanceof MarkerSource) {
+                    ui.markerPainter.addSource((MarkerSource) show);
                 }
             }
         };
