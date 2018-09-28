@@ -107,6 +107,7 @@ public class SLStudioLX extends P3LX {
                 "@-/           Toggle help caption line\n" +
                 "@-\\           Toggle 16-bit color (all)\n" +
                 "@-|           Toggle 16-bit color (selected channel)\n" +
+                "@-[/]         Decrease/increase rendered point size\n" +
                 "@-Left/Right  Reorder selected channel, warp, or effect\n" +
                 "@-Up/Down     Reorder selected pattern"
             ;
@@ -226,7 +227,6 @@ public class SLStudioLX extends P3LX {
                             case VK_SLASH:
                                 toggleHelpBar = true;
                                 break;
-
                             case VK_BACK_SLASH:
                                 switch (keyChar) {
                                     case '\\':
@@ -244,6 +244,12 @@ public class SLStudioLX extends P3LX {
                                         }
                                         break;
                                 }
+                                break;
+                            case VK_OPEN_BRACKET:
+                                preview.setPointSize(Math.max(1, preview.getPointSize() - 1));
+                                break;
+                            case VK_CLOSE_BRACKET:
+                                preview.setPointSize(Math.min(30, preview.getPointSize() + 1));
                                 break;
                         }
                     }
