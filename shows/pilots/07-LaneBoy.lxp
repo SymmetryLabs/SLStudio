@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538114864009,
+  "timestamp": 1538265463812,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 6,
+      "focusedChannel": 3,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -106,7 +106,7 @@
               "enabled": true,
               "xSize": 410.0,
               "cx": 410.0,
-              "ySize": 33.00000085912893,
+              "ySize": 116.00000762939453,
               "cy": 26.680000700056553,
               "zSize": 65.25000016205013,
               "cz": 87.0,
@@ -123,7 +123,7 @@
               "cx": 410.0,
               "cy": 58.0,
               "cz": 72.5,
-              "angle": 0.0
+              "angle": -0.35446191411007
             }
           }
         ],
@@ -135,7 +135,7 @@
             "parameters": {
               "label": "ColorFilter",
               "enabled": true,
-              "Hue": 183.5999958962202,
+              "Hue": 140.39999686181545,
               "Sat": 100.0
             },
             "modulation": {
@@ -154,7 +154,7 @@
             "modulationColor": -16753409,
             "parameters": {
               "label": "AngleStrobe",
-              "trigger": false,
+              "trigger": true,
               "reset": false,
               "wipe": false,
               "hit": false,
@@ -372,7 +372,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -403,7 +403,7 @@
             "modulationColor": -15662849,
             "parameters": {
               "label": "BundleDirMask",
-              "enabled": false,
+              "enabled": true,
               "x": false,
               "y": true,
               "z": true
@@ -416,11 +416,11 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 418.1999921798706,
-              "cx": 409.99999750699385,
+              "xSize": 419.99999046325684,
+              "cx": 419.99998803105564,
               "ySize": 116.00000762939453,
               "cy": 4.639999896287918,
-              "zSize": 0.0,
+              "zSize": 62.08999916911125,
               "cz": 2.754997389575564,
               "invert": false
             }
@@ -467,7 +467,7 @@
               "ZSlp": 0.6,
               "Shrp": 0.10000000335276127,
               "Drez": 0.10000000335276127,
-              "Clic": 0.35000000335276127,
+              "Clic": 0.0,
               "Hue": 0.667,
               "HSpd": 0.667,
               "freeze": false
@@ -494,7 +494,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -531,7 +531,7 @@
               "Speed": 0.55,
               "Symm": 0,
               "Anim": 3,
-              "Dens": 0.0,
+              "Dens": 0.9300000071525574,
               "AnimResets": false
             },
             "modulation": {
@@ -681,17 +681,17 @@
             "modulationColor": -26112,
             "parameters": {
               "label": "SplitColor",
-              "x": 0.23000001907348633,
+              "x": 0.0,
               "y": 1.0,
-              "z": 0.0,
+              "z": 0.7811106443405151,
               "cx": 410.0,
               "cy": 116.0,
               "cz": 87.0,
-              "lo/hue": 111.28999751247466,
+              "lo/hue": 111.29412078857422,
               "lo/brightness": 100.0,
               "lo/saturation": 100.0,
               "lo": -14287104,
-              "hi/hue": 229.7288368474692,
+              "hi/hue": 229.6470489501953,
               "hi/brightness": 100.0,
               "hi/saturation": 100.0,
               "hi": -16765697
@@ -1075,8 +1075,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 476.80495992191345,
-        "theta": -0.3480000000000002,
-        "phi": 0.2237963705062888,
+        "theta": -0.07799999999999996,
+        "phi": 0.28079637050628886,
         "positionX": 431.95635986328125,
         "positionY": 59.0,
         "positionZ": 73.88507080078125
