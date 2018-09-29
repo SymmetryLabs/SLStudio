@@ -11,6 +11,7 @@ import heronarts.lx.transform.LXVector;
 public class AddSubtractSwitcher extends LXEffect {
     BooleanParameter add;
     BooleanParameter sub;
+    boolean doInvert = false;
 
     public AddSubtractSwitcher(LX lx) {
         super(lx);
@@ -26,20 +27,32 @@ public class AddSubtractSwitcher extends LXEffect {
 
     @Override
     public void run(double deltaMs, double enabledAmount) {
-        LXBus b = getBus();
-        if (!(b instanceof  LXChannel)) {
+        LXBus bus = getBus();
+        if (!(bus instanceof LXChannel)) {
             return;
         }
 
-        LXChannel c = (LXChannel)b;
+        LXChannel c = (LXChannel)bus;
 
 
         if (add.isOn()) {
+            doInvert = false;
             c.blendMode.setValue(0);
         }
 
         if (sub.isOn()) {
-            c.blendMode.setValue(2);
+            doInvert = true;
+            c.blendMode.setValue(1);
+        }
+
+        if (doInvert) {
+            for (LXVector v : getVectors()) {
+                int col = colors[v.index];
+                float h = LXColor.h(col);
+                float s = LXColor.s(col);
+                float b = LXColor.b(col);
+                colors[v.index] = LXColor.hsb(h, s, 100.0f - b);
+            }
         }
     }
 }
