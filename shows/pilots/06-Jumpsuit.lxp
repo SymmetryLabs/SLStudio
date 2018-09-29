@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1537841846645,
+  "timestamp": 1538252254273,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 0,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -53,7 +53,7 @@
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -15532288,
         "parameters": {
-          "label": "Channel-1",
+          "label": "Jumpsuit",
           "arm": false,
           "enabled": true,
           "cue": false,
@@ -98,8 +98,8 @@
               "yc": 205.00000513056835,
               "rc": 598.5999950864198,
               "rhit": 120.0,
-              "rdrop": 14.17000025510788,
-              "yhit": 86.03999376296997,
+              "rdrop": 19.750000834465027,
+              "yhit": 70.48999786376953,
               "ydrop": 108.0000002682209,
               "fstart": 270.00001072883606,
               "fdecay": 2399.9999910593033,
@@ -122,7 +122,7 @@
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -16752385,
         "parameters": {
-          "label": "Channel-2",
+          "label": "Noise",
           "arm": false,
           "enabled": true,
           "cue": false,
@@ -285,9 +285,9 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 37,
+        "id": 21037,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16753921,
+        "modulationColor": -16711919,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
@@ -417,8 +417,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 557.0009648001211,
-        "theta": -0.02639816339744782,
-        "phi": 0.18647970771789513,
+        "theta": 0.048601836602552156,
+        "phi": 0.07847970771789509,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5
