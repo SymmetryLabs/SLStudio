@@ -27,6 +27,8 @@ import processing.event.KeyEvent;
 public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
     public static final String GROUP_NAME = MagicLeapShow.SHOW_NAME;
 
+    private static final double SPARKLE_TIME = 1200;
+
     enum GameState {
         PLAYING,
         GAME_OVER,
@@ -47,10 +49,16 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
 
     private GameState state;
 
+    private double t;
     private double timeSinceTick;
     private int score;
 
+    private Junction sparkleAt;
+    private double sparkleAge;
+
     private final List<Junction> validJunctions;
+
+    private final Random random = new Random();
 
     private final BooleanParameter reset =
         new BooleanParameter("reset", false)
@@ -100,6 +108,7 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
         state = GameState.PLAYING;
         timeSinceTick = 0;
         score = 0;
+        t = 0;
     }
 
     private Junction randomJunction() {
@@ -138,6 +147,21 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
 
     private void tickGame(double elapsedMs, int[] colors) {
         timeSinceTick += elapsedMs;
+        sparkleAge += elapsedMs;
+
+        for (LXVector v : getVectors()) {
+            float d = v.dist(goal.loc);
+            if (d < 6 + 1.8 * Math.sin(t / 1200)) {
+                colors[v.index] = 0xFF00FF00;
+            } else if (sparkleAt != null && sparkleAge < SPARKLE_TIME) {
+                float sd = v.dist(sparkleAt.loc);
+                if (sd < 8 * sparkleAge / SPARKLE_TIME && random.nextFloat() < 0.35) {
+                    colors[v.index] = 0xFFFFFF00;
+                } else if (random.nextFloat() < 0.002) {
+                    colors[v.index] = 0xFFFFFF00;
+                }
+            }
+        }
 
         if (progress == 0) {
             paintJunction(start, colors);
@@ -162,6 +186,8 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
             progress = 0;
             if (start == goal) {
                 score++;
+                sparkleAt = goal;
+                sparkleAge = 0;
                 goal = randomJunction();
             }
         } else {
@@ -173,13 +199,6 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
             if (timeSinceTick > stepRate.getValue()) {
                 progress++;
                 timeSinceTick = 0;
-            }
-        }
-
-        for (LXVector v : getVectors()) {
-            float d = v.dist(goal.loc);
-            if (d < 12) {
-                colors[v.index] = 0xFF00FF00;
             }
         }
     }
@@ -208,6 +227,8 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
 
     @Override
     public void run(double elapsedMs, PolyBuffer.Space preferredSpace) {
+        t += elapsedMs;
+
         int[] colors = (int[]) getArray(PolyBuffer.Space.RGB8);
         Arrays.fill(colors, 0);
         switch (state) {
