@@ -33,6 +33,9 @@ public class Blackout extends LXEffect {
 
         if (kill.isOn()) {
             for (LXChannel c : lx.engine.channels) {
+                if (c.getLabel().contains("Lattice")) {
+                    continue;
+                }
                 c.enabled.setValue(false);
             }
         }
