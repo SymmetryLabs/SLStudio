@@ -42,7 +42,7 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
         WIPE
     }
 
-    protected CompoundParameter hueParam = new CompoundParameter("Hue", 0, -1, 1);
+    protected CompoundParameter hueParam = new CompoundParameter("Hue", 0, 0, 360);
     protected CompoundParameter hVarParam = new CompoundParameter("HVar", 0, -1, 1);
     protected CompoundParameter satParam = new CompoundParameter("Sat", 1, 0, 1);
 
@@ -385,8 +385,8 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
 
         public long getColor(double t, double pos, double hue, double hVar, double sat) {
             double tf = t / duration;
-            double h = hue + hVar * (tf * 2 - pos);
-            long c = Spaces.rgb8ToRgb16(LXColor.hsb(h * 360, sat * 100, 100));
+            double h = hueParam.getValue(); //hue + hVar * (tf * 2 - pos);
+            long c = Spaces.rgb8ToRgb16(LXColor.hsb(h, sat * 100, 100));
             if (tf < 0.5) {
                 return pos < tf * 2 ? c : Ops16.BLACK;
             } else {

@@ -25,7 +25,9 @@ public class Snapper extends LXComponent {
     final UI2dContainer hueGrid;
 
     final ArrayList<CompoundParameter> hueParams;
+    final ArrayList<CompoundParameter> satVals;
     final ArrayList<BooleanParameter> triggerParams;
+    final ArrayList<BooleanParameter> satParams;
 
     final ArrayList<UIButton> hueButtons;
     final String HUES_KEY = "hues";
@@ -36,6 +38,7 @@ public class Snapper extends LXComponent {
     final LXParameterListener channelChangeListener;
 
     LXNormalizedParameter targetHueParam = null;
+    LXNormalizedParameter targetSatParam = null;
     int lastActivePatternIndex = -1;
 
     public static enum Mode {
@@ -167,8 +170,17 @@ public class Snapper extends LXComponent {
 
 
         hueParams = new ArrayList<>();
+        satVals = new ArrayList<>();
         hueButtons = new ArrayList<>();
         triggerParams = new ArrayList<>();
+        satParams = new ArrayList<>();
+
+        for (int i = 0; i < 4; i++) {
+            String name = String.format("sat-%d", i);
+            BooleanParameter p = new BooleanParameter(name, false);
+            addParameter(p);
+            satParams.add(p);
+        }
 
         initDefaultHues();
         setButtons();
@@ -245,6 +257,25 @@ public class Snapper extends LXComponent {
         return null;
     }
 
+    LXNormalizedParameter findSatParameter(Collection<LXParameter> parameters) {
+        for (LXParameter param : parameters) {
+            if (!(param instanceof  LXNormalizedParameter)) continue;
+            String name = param.getLabel().toLowerCase();
+            String[] candidates = new String[]{
+                "sat",
+                "sat1",
+                "color-s",
+                "saturation",
+            };
+            for (String cand : candidates) {
+                if (name.equals(cand)) {
+                    return (LXNormalizedParameter)param;
+                }
+            }
+        }
+        return null;
+    }
+
     LXNormalizedParameter findHueParameter(LXChannel c) {
         LXEffect e = c.getEffect("ColorFilter");
         if (e != null && e.enabled.isOn()) {
@@ -255,14 +286,26 @@ public class Snapper extends LXComponent {
         return findHueParameter(p.getParameters());
     }
 
+    LXNormalizedParameter findSatParameter(LXChannel c) {
+        LXEffect e = c.getEffect("ColorFilter");
+        if (e != null && e.enabled.isOn()) {
+            return findSatParameter(e.getParameters());
+        }
+
+        LXPattern p = c.getActivePattern();
+        return findSatParameter(p.getParameters());
+    }
+
     void setTargetHueParam() {
         LXBus bus = lx.engine.getFocusedChannel();
 
         if (bus instanceof LXChannel) {
             LXChannel chan = (LXChannel)bus;
             targetHueParam = findHueParameter(chan);
+            targetSatParam = findSatParameter(chan);
         } else {
             targetHueParam = null;
+            targetSatParam = null;
             lastActivePatternIndex = -1;
         }
     }
@@ -281,6 +324,7 @@ public class Snapper extends LXComponent {
         int n = 10;
         for (int i = 0; i < n; i++) {
             hueParams.add(new CompoundParameter("hue", (360 / n) * i, 0, 360));
+            satVals.add(new CompoundParameter("sat", 100, 0, 100));
         }
     }
 
@@ -292,6 +336,84 @@ public class Snapper extends LXComponent {
 
         int i = 0;
         for (CompoundParameter param : hueParams) {
+            final CompoundParameter satP = satVals.get(i);
+            UIButton b = new UIButton(0, 0, BUTTON_WIDTH, BUTTON_WIDTH) {
+
+                // @Override
+                // protected void onToggle(boolean active) {
+                //     boolean actuallyActive = targetHueParam != null;
+                //     setActive(actuallyActive);
+
+                //     if (!active) {
+                //         return;
+                //     }
+
+                //     Mode m = mode.getEnum();
+
+                //     setTargetHueParam();
+
+                //     if (m == Mode.NORMAL && actuallyActive) {
+                //         startHue = targetHueParam.getNormalizedf();
+                //         goalHue = param.getNormalizedf();
+                //         if (!useFade.isOn()) {
+                //             targetHueParam.setNormalized(param.getNormalized());
+                //             targetSatParam.setNormalized(satP.getNormalized());
+                //         } else {
+                //             elapsed = 0;
+                //             fadeRunning = true;
+                //         }
+
+                //     }
+
+                //     if (m == Mode.DELETE) {
+                //         hueParams.remove(param);
+                //         mode.setValue(Mode.NORMAL);
+                //         setButtons();
+                //     }
+
+                //     if (m == Mode.LOAD) {
+                //         mode.setValue(Mode.NORMAL);
+                //         if (actuallyActive) {
+                //             param.setNormalized(targetHueParam.getNormalized());
+                //             setButtons();
+                //         }
+                //     }
+                // }
+            };
+
+
+            int bright = LXColor.hsb(param.getValuef(), satP.getValuef(), 100);
+            int dim = LXColor.hsb(param.getValuef(), satP.getValuef(), 50);
+            b.setActiveColor(bright);
+            b.setInactiveColor(bright);
+            b.addToContainer(hueGrid);
+            b.setMappable(true);
+            b.setTriggerable(true);
+            BooleanParameter p;
+            if (i >= triggerParams.size()) {
+                String name = String.format("trig-%d", i);
+                p = new BooleanParameter(name);
+                p.setMode(BooleanParameter.Mode.MOMENTARY);
+                
+                addParameter(p);
+                triggerParams.add(p);
+            } else {
+                p = triggerParams.get(i);
+            }
+            i++;
+            b.setParameter(p);
+            b.setMomentary(true);
+            hueButtons.add(b);
+        }
+
+        for (int j = 0; j < 4; j++) {
+            float[] sats = new float[]{
+                0.0f,
+                33.0f,
+                66.0f,
+                100.0f,
+            };
+            final float sat = sats[j];
             UIButton b = new UIButton(0, 0, BUTTON_WIDTH, BUTTON_WIDTH) {
 
                 @Override
@@ -308,53 +430,27 @@ public class Snapper extends LXComponent {
                     setTargetHueParam();
 
                     if (m == Mode.NORMAL && actuallyActive) {
-                        startHue = targetHueParam.getNormalizedf();
-                        goalHue = param.getNormalizedf();
-                        if (!useFade.isOn()) {
-                            targetHueParam.setNormalized(param.getNormalized());
-                        } else {
-                            elapsed = 0;
-                            fadeRunning = true;
-                        }
+                        targetSatParam.setNormalized(sat / 100.0f);
+
 
                     }
 
-                    if (m == Mode.DELETE) {
-                        hueParams.remove(param);
-                        mode.setValue(Mode.NORMAL);
-                        setButtons();
-                    }
-
-                    if (m == Mode.LOAD) {
-                        mode.setValue(Mode.NORMAL);
-                        if (actuallyActive) {
-                            param.setNormalized(targetHueParam.getNormalized());
-                            setButtons();
-                        }
-                    }
                 }
             };
 
-            int bright = LXColor.hsb(param.getValuef(), 100, 100);
-            int dim = LXColor.hsb(param.getValuef(), 100, 50);
+            float hue = targetHueParam == null ? 0 : targetHueParam.getValuef();
+            int bright = LXColor.hsb(hue, sat, 100);
             b.setActiveColor(bright);
             b.setInactiveColor(bright);
             b.addToContainer(hueGrid);
             b.setMappable(true);
             b.setTriggerable(true);
-            BooleanParameter p;
-            if (i >= triggerParams.size()) {
-                String name = String.format("trig-%d", i);
-                p = new BooleanParameter(name);
-                addParameter(p);
-                triggerParams.add(p);
-            } else {
-                p = triggerParams.get(i);
-            }
-            i++;
-            b.setParameter(p);
+        
+            b.setParameter(satParams.get(j));
             hueButtons.add(b);
         }
+
+
         onChannelChange();
     }
 
@@ -365,6 +461,12 @@ public class Snapper extends LXComponent {
             jHues.add(param.getValuef());
         }
         obj.add(HUES_KEY, jHues);
+
+        JsonArray jSats = new JsonArray();
+        for (CompoundParameter param : satVals) {
+            jSats.add(param.getValuef());
+        }
+        obj.add("sats", jSats);
 
         super.save(lx, obj);
     }
@@ -377,14 +479,66 @@ public class Snapper extends LXComponent {
             hueParams.clear();
 
             JsonArray jHues = obj.getAsJsonArray(HUES_KEY);
+            int i = 0;
             for (JsonElement e : jHues) {
                 float hue = e.getAsFloat();
-                CompoundParameter param = new CompoundParameter("hue", hue, 0, 360);
+                String name = String.format("hue-%d", i++);
+                CompoundParameter param = new CompoundParameter(name, hue, 0, 360);
                 hueParams.add(param);
             }
         }
 
+        String SATS_KEY = "sats";
+
+        if (obj.has(SATS_KEY)) {
+            satVals.clear();
+
+            int j = 0;
+            JsonArray jSats = obj.getAsJsonArray(SATS_KEY);
+            for (JsonElement e : jSats) {
+                float sat = e.getAsFloat();
+                String name = String.format("sat-%d", j++);
+                CompoundParameter param = new CompoundParameter("sat", sat, 0, 100);
+                satVals.add(param);
+            }
+        }
+
         setButtons();
+
+        for (int i = 0; i < satVals.size(); i++) {
+            BooleanParameter p = triggerParams.get(i);
+            CompoundParameter satP = satVals.get(i);
+            CompoundParameter param = hueParams.get(i);
+            p.addListener(new LXParameterListener() {
+                public void onParameterChanged(LXParameter x) {
+                    if (p.getValueb()) {
+
+                        for (LXChannel c : lx.engine.channels) {
+                            LXNormalizedParameter tHue = findHueParameter(c);
+                            LXNormalizedParameter tSat = findSatParameter(c);
+                            if (tHue != null) {
+                                tHue.setNormalized(param.getNormalized());
+                            }
+                            if (tSat != null) {
+                                tSat.setNormalized(satP.getNormalized());
+                            }
+                        }
+                        // setTargetHueParam();
+                        // System.out.println(satP.getLabel());
+                        // System.out.println(param.getLabel());
+                        // if (targetSatParam != null) {
+                        //     targetSatParam.setNormalized(satP.getNormalized());
+
+                        // }
+                        // if (targetHueParam != null) {
+                        //     targetHueParam.setNormalized(param.getNormalized());
+
+                        // }
+                        
+                    }
+                }
+            });
+        }
 
     }
 
