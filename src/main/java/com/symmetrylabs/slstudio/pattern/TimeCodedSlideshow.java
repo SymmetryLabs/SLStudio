@@ -152,11 +152,15 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     @Override
     public void onInactive() {
         super.onInactive();
+        SLStudio.setWarning(TAG, null);
         stopping = true;
-        loaderThread.interrupt();
-        try {
-            loaderThread.join();
-        } catch (InterruptedException e) {
+        if (loaderThread != null) {
+            loaderThread.interrupt();
+            try {
+                loaderThread.join();
+            } catch (InterruptedException e) {
+            }
+            loaderThread = null;
         }
     }
 
