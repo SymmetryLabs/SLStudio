@@ -13,6 +13,7 @@ import com.symmetrylabs.util.StripsTopologyComponents.ConnectedComponent;
 import com.symmetrylabs.util.StripsTopologyComponents;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
+import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter.Mode;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -20,6 +21,8 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXVector;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import processing.event.KeyEvent;
@@ -27,12 +30,22 @@ import processing.event.KeyEvent;
 public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
     public static final String GROUP_NAME = MagicLeapShow.SHOW_NAME;
 
+    private static final int TAIL_PIXELS_PER_POINT = 10;
     private static final double SPARKLE_TIME = 1200;
 
     enum GameState {
         PLAYING,
         GAME_OVER,
         NO_TOPOLOGY
+    }
+
+    private static class TailBit {
+        final int[] pointIndexes;
+
+        TailBit(int size) {
+            pointIndexes = new int[size];
+            Arrays.fill(pointIndexes, -1);
+        }
     }
 
     private Junction start;
@@ -55,6 +68,9 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
 
     private Junction sparkleAt;
     private double sparkleAge;
+
+    private Deque<TailBit> tail;
+    private Deque<TailBit> tailStaging;
 
     private final List<Junction> validJunctions;
 
@@ -109,6 +125,10 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
         timeSinceTick = 0;
         score = 0;
         t = 0;
+        tail = new LinkedList<>();
+        tailStaging = new LinkedList<>();
+        sparkleAt = null;
+        sparkleAge = 0;
     }
 
     private Junction randomJunction() {
@@ -149,22 +169,27 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
         timeSinceTick += elapsedMs;
         sparkleAge += elapsedMs;
 
+        for (TailBit tb : tail) {
+            for (int i = 0; i < tb.pointIndexes.length; i++) {
+                colors[tb.pointIndexes[i]] = 0xFF777777;
+            }
+        }
+
         for (LXVector v : getVectors()) {
             float d = v.dist(goal.loc);
             if (d < 6 + 1.8 * Math.sin(t / 1200)) {
-                colors[v.index] = 0xFF00FF00;
+                colors[v.index] = 0xFFFFFF00;
             } else if (sparkleAt != null && sparkleAge < SPARKLE_TIME) {
                 float sd = v.dist(sparkleAt.loc);
                 if (sd < 8 * sparkleAge / SPARKLE_TIME && random.nextFloat() < 0.35) {
-                    colors[v.index] = 0xFFFFFF00;
+                    colors[v.index] = 0xFF00FF00;
                 } else if (random.nextFloat() < 0.002) {
-                    colors[v.index] = 0xFFFFFF00;
+                    colors[v.index] = 0xFF00FF00;
                 }
             }
         }
 
         if (progress == 0) {
-            paintJunction(start, colors);
             if (nextDir != null && nextSign != null) {
                 currentSign = nextSign;
                 current = start.get(nextDir, nextSign);
@@ -177,6 +202,8 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
                     progress++;
                     timeSinceTick = 0;
                 }
+            } else {
+                paintJunction(start, colors);
             }
         } else if (current != null && progress == current.getStripPointCount()) {
             paintJunction(target, colors);
@@ -191,12 +218,23 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
                 goal = randomJunction();
             }
         } else {
+            TailBit tb = new TailBit(current.strips.length);
             for (int i = 0; i < current.strips.length; i++) {
                 Strip strip = model.getStripByIndex(current.strips[i]);
                 int pointIndex = current.stripSign[i] == currentSign ? progress : strip.size - progress - 1;
-                colors[strip.points[pointIndex].index] = 0xFFFFFFFF;
+                tb.pointIndexes[i] = strip.points[pointIndex].index;
+                colors[tb.pointIndexes[i]] = 0xFFFFFFFF;
             }
+            tailStaging.addLast(tb);
+            if (tailStaging.size() > TAIL_PIXELS_PER_POINT) {
+                tailStaging.removeFirst();
+            }
+
             if (timeSinceTick > stepRate.getValue()) {
+                tail.addFirst(tb);
+                while (tail.size() > TAIL_PIXELS_PER_POINT * score) {
+                    tail.removeLast();
+                }
                 progress++;
                 timeSinceTick = 0;
             }
@@ -274,11 +312,16 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
             break;
         }
         if (current != null && current.dir == nextDir && currentSign != nextSign) {
-            currentSign = nextSign;
-            progress = current.getStripPointCount() - progress;
-            Junction t = start;
-            start = target;
-            target = t;
+            if (score == 0) {
+                currentSign = nextSign;
+                progress = current.getStripPointCount() - progress;
+                Junction t = start;
+                start = target;
+                target = t;
+            } else {
+                /* don't let people reverse back onto themselves */
+                nextSign = currentSign;
+            }
         }
     }
 }
