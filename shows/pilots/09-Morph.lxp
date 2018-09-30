@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538267595659,
+  "timestamp": 1538269089342,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5172413792461157,
       "crossfaderBlendMode": 0,
       "speed": 0.8166667073965073,
-      "focusedChannel": 4,
+      "focusedChannel": 7,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -666,11 +666,11 @@
         ]
       },
       {
-        "id": 25891,
+        "id": 26139,
         "class": "heronarts.lx.LXChannel",
-        "modulationColor": -65313,
+        "modulationColor": -16737793,
         "parameters": {
-          "label": "Vortex",
+          "label": "Sparkle",
           "arm": false,
           "enabled": true,
           "cue": false,
@@ -687,59 +687,68 @@
           "autoDisable": true
         },
         "warps": [],
-        "effects": [
-          {
-            "id": 25894,
-            "class": "heronarts.lx.effect.BlurEffect",
-            "modulationColor": -11861761,
-            "parameters": {
-              "label": "Blur",
-              "enabled": true,
-              "amount": 0.9599999785423279
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            }
-          },
-          {
-            "id": 25897,
-            "class": "com.symmetrylabs.slstudio.effect.ColorFilter",
-            "modulationColor": -65495,
-            "parameters": {
-              "label": "ColorFilter",
-              "enabled": true,
-              "Hue": 179.99999597668648,
-              "Sat": 100.0
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            }
-          }
-        ],
+        "effects": [],
         "clips": [],
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 25892,
-            "class": "com.symmetrylabs.slstudio.pattern.Vortex",
-            "modulationColor": -16770817,
+            "id": 26140,
+            "class": "com.symmetrylabs.slstudio.pattern.Sparkle",
+            "modulationColor": -2883840,
             "parameters": {
-              "label": "Vortex",
-              "count": 170,
-              "size": 3.6000001877546284,
-              "xrad": 311.5999948680401,
-              "zrad": 49.299999222159386,
-              "xc": 410.0,
-              "zc": 65.2499939065426,
-              "omega": 14.40000168979168,
-              "v": 34.02666773676873,
-              "radvar": 0.3799999926239252,
-              "smear": 1.0,
-              "reset": false
+              "label": "Sparkle",
+              "Dens": 0.0,
+              "Attack": 0.5099999975413084,
+              "Decay": 0.12000000402331351,
+              "Hue": 0.5,
+              "HueVar": 0.25,
+              "Sat": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 26144,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16711740,
+        "parameters": {
+          "label": "RedAllDay",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 26142,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -1769217,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
             },
             "modulation": {
               "modulators": [],
