@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538005079942,
+  "timestamp": 1538283766653,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5172413792461157,
       "crossfaderBlendMode": 0,
       "speed": 0.8166667073965073,
-      "focusedChannel": 0,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -112,7 +112,7 @@
             "modulationColor": -65405,
             "parameters": {
               "label": "Vortex",
-              "count": 114,
+              "count": 38,
               "size": 6.000000134110452,
               "xrad": 360.7999937683344,
               "zrad": 34.79999954625964,
@@ -123,69 +123,6 @@
               "radvar": 0.11999999843537808,
               "smear": 0.5999999865889549,
               "reset": false
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          }
-        ]
-      },
-      {
-        "id": 25931,
-        "class": "heronarts.lx.LXChannel",
-        "modulationColor": -16723713,
-        "parameters": {
-          "label": "Invert",
-          "arm": false,
-          "enabled": true,
-          "cue": false,
-          "midiMonitor": false,
-          "midiChannel": 16,
-          "autoCycleEnabled": false,
-          "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
-          "crossfadeGroup": 0,
-          "blendMode": 3,
-          "transitionEnabled": false,
-          "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0,
-          "autoDisable": true
-        },
-        "warps": [
-          {
-            "id": 26771,
-            "class": "com.symmetrylabs.slstudio.warp.BoxMask",
-            "modulationColor": -16770049,
-            "parameters": {
-              "label": "BoxMask",
-              "enabled": true,
-              "xSize": 410.0,
-              "cx": 410.0,
-              "ySize": 58.000003814697266,
-              "cy": 58.0,
-              "zSize": 72.5,
-              "cz": 14.499992370605469,
-              "invert": false
-            }
-          }
-        ],
-        "effects": [],
-        "clips": [],
-        "patternIndex": 0,
-        "patterns": [
-          {
-            "id": 25932,
-            "class": "com.symmetrylabs.shows.pilots.WarpCompatibleSolidColor",
-            "modulationColor": -58880,
-            "parameters": {
-              "label": "WarpCompatibleSolidColor",
-              "Color/hue": 52.0,
-              "Color/brightness": 100.0,
-              "Color/saturation": 100.0,
-              "Color": -8960
             },
             "modulation": {
               "modulators": [],
@@ -475,6 +412,36 @@
     },
     "midi": {
       "inputs": [
+        {
+          "name": "CoreMIDI4J - Port 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 2",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 3",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 4",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Sync Port",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
         {
           "name": "** Internal Error getting Device Name!",
           "channel": true,
