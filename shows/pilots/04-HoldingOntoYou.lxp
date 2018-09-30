@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538276201584,
+  "timestamp": 1538278209082,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,7 +14,7 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 2.0,
+      "speed": 1.0,
       "focusedChannel": 8,
       "cueA": false,
       "cueB": false,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -261,7 +261,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -312,7 +312,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -346,7 +346,7 @@
             "modulationColor": -12058369,
             "parameters": {
               "label": "TwoTone",
-              "enabled": true,
+              "enabled": false,
               "Lcut1": 20.999999530613422,
               "Lcut2": 63.999998569488525,
               "c1/hue": 0.0,
@@ -531,7 +531,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -727,7 +727,7 @@
             "modulationColor": -16711918,
             "parameters": {
               "label": "BundleDirMask",
-              "enabled": false,
+              "enabled": true,
               "x": false,
               "y": false,
               "z": true
@@ -883,9 +883,9 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 21742,
+        "id": 21981,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16449792,
+        "modulationColor": -16741633,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
@@ -1115,8 +1115,8 @@
       },
       "preview": {
         "radius": 542.1503372110975,
-        "theta": -0.7853981633974483,
-        "phi": 0.6154797077178955,
+        "theta": -0.2513981633974478,
+        "phi": 0.31547970771789524,
         "positionX": 410.0,
         "positionY": 48.0,
         "positionZ": 72.5
