@@ -46,6 +46,17 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
             pointIndexes = new int[size];
             Arrays.fill(pointIndexes, -1);
         }
+
+        boolean matches(TailBit other) {
+            for (int pi : pointIndexes) {
+                for (int oi : other.pointIndexes) {
+                    if (pi == oi) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 
     private Junction start;
@@ -70,7 +81,6 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
     private double sparkleAge;
 
     private Deque<TailBit> tail;
-    private Deque<TailBit> tailStaging;
 
     private final List<Junction> validJunctions;
 
@@ -126,7 +136,6 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
         score = 0;
         t = 0;
         tail = new LinkedList<>();
-        tailStaging = new LinkedList<>();
         sparkleAt = null;
         sparkleAge = 0;
     }
@@ -149,7 +158,8 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
         SLStudio.setWarning("Snake", null);
     }
 
-    private void paintJunction(Junction j, int[] colors) {
+    private TailBit paintJunction(Junction j, int[] colors) {
+        ArrayList<Integer> points = new ArrayList<>();
         for (Sign s : Sign.values()) {
             for (Dir d : Dir.values()) {
                 Bundle b = j.get(d, s);
@@ -159,10 +169,17 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
                 for (int i = 0; i < b.strips.length; i++) {
                     Strip strip = model.getStripByIndex(b.strips[i]);
                     int endIndex = s == b.stripSign[i] ? 0 : strip.size - 1;
-                    colors[strip.points[endIndex].index] = 0xFFFFFFFF;
+                    int index = strip.points[endIndex].index;
+                    points.add(index);
+                    colors[index] = 0xFFFFFFFF;
                 }
             }
         }
+        TailBit tb = new TailBit(points.size());
+        for (int i = 0; i < points.size(); i++) {
+            tb.pointIndexes[i] = points.get(i);
+        }
+        return tb;
     }
 
     private void tickGame(double elapsedMs, int[] colors) {
@@ -175,6 +192,7 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
             }
         }
 
+        /* draw goal and goal sparkle */
         for (LXVector v : getVectors()) {
             float d = v.dist(goal.loc);
             if (d < 6 + 1.8 * Math.sin(t / 1200)) {
@@ -206,7 +224,7 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
                 paintJunction(start, colors);
             }
         } else if (current != null && progress == current.getStripPointCount()) {
-            paintJunction(target, colors);
+            tail.add(paintJunction(target, colors));
             start = target;
             current = null;
             target = null;
@@ -225,19 +243,20 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
                 tb.pointIndexes[i] = strip.points[pointIndex].index;
                 colors[tb.pointIndexes[i]] = 0xFFFFFFFF;
             }
-            tailStaging.addLast(tb);
-            if (tailStaging.size() > TAIL_PIXELS_PER_POINT) {
-                tailStaging.removeFirst();
-            }
 
             if (timeSinceTick > stepRate.getValue()) {
-                tail.addFirst(tb);
-                while (tail.size() > TAIL_PIXELS_PER_POINT * score) {
-                    tail.removeLast();
+                for (TailBit old : tail) {
+                    if (old.matches(tb)) {
+                        state = GameState.GAME_OVER;
+                    }
                 }
+                tail.addFirst(tb);
                 progress++;
                 timeSinceTick = 0;
             }
+        }
+        while (tail.size() > TAIL_PIXELS_PER_POINT * score) {
+            tail.removeLast();
         }
     }
 
