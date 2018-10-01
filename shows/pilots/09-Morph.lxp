@@ -480,7 +480,7 @@
             "modulationColor": -9216,
             "parameters": {
               "label": "TimeCodedSlideshow",
-              "dir": "/Users/symmetry/Desktop/morph-1",
+              "dir": "shows/pilots/morph-1",
               "pick": false,
               "shrink": 1.7052000008523462,
               "yoff": 0.009999999776482582,
@@ -503,7 +503,7 @@
             "modulationColor": -6225665,
             "parameters": {
               "label": "TimeCodedSlideshow",
-              "dir": "/Users/symmetry/Desktop/morph-2",
+              "dir": "shows/pilots/morph-2",
               "pick": false,
               "shrink": 1.7135999925434588,
               "yoff": 0.23999999463558197,

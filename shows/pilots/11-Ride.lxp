@@ -429,7 +429,7 @@
             "modulationColor": -26368,
             "parameters": {
               "label": "TimeCodedSlideshow",
-              "dir": "/Users/symmetry/Desktop/ride",
+              "dir": "shows/pilots/ride",
               "pick": false,
               "shrink": 1.863999989628792,
               "yoff": 0.0,

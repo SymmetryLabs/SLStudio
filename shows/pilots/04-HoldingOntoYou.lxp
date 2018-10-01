@@ -280,7 +280,7 @@
             "modulationColor": -16711808,
             "parameters": {
               "label": "TimeCodedSlideshow",
-              "dir": "/Users/symmetry/Desktop/hoty/hoty",
+              "dir": "shows/pilots/hoty/hoty",
               "pick": false,
               "shrink": 2.3376000121235845,
               "yoff": 0.5899999868124723,
