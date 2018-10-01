@@ -80,6 +80,9 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
     private Junction sparkleAt;
     private double sparkleAge;
 
+    private LXVector diedAt;
+    private double diedAge;
+
     private Deque<TailBit> tail;
 
     private final List<Junction> validJunctions;
@@ -213,6 +216,8 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
                 current = start.get(nextDir, nextSign);
                 if (current == null) {
                     state = GameState.GAME_OVER;
+                    diedAt = start.loc;
+                    diedAge = 0;
                 } else {
                     target = current.getOpposite(start);
                 }
@@ -239,7 +244,8 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
             TailBit tb = new TailBit(current.strips.length);
             for (int i = 0; i < current.strips.length; i++) {
                 Strip strip = model.getStripByIndex(current.strips[i]);
-                int pointIndex = current.stripSign[i] == currentSign ? progress : strip.size - progress - 1;
+                int pointIndex = current.stripSign[i] == currentSign
+                    ? progress : strip.size - progress - 1;
                 tb.pointIndexes[i] = strip.points[pointIndex].index;
                 colors[tb.pointIndexes[i]] = 0xFFFFFFFF;
             }
@@ -248,6 +254,9 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
                 for (TailBit old : tail) {
                     if (old.matches(tb)) {
                         state = GameState.GAME_OVER;
+                        LXPoint p = model.points[tb.pointIndexes[0]];
+                        diedAt = new LXVector(p.x, p.y, p.z);
+                        diedAge = 0;
                     }
                 }
                 tail.addFirst(tb);
@@ -257,6 +266,20 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
         }
         while (tail.size() > TAIL_PIXELS_PER_POINT * score) {
             tail.removeLast();
+        }
+    }
+
+    private void drawDead(double elapsedMs, int[] colors) {
+        diedAge += elapsedMs;
+        double limit = diedAge * 36 / 1000;
+        for (LXVector v : getVectors()) {
+            double dist = v.dist(diedAt);
+            boolean red =
+                dist < limit ||
+                (dist < 1.2 * limit && random.nextFloat() < 0.5) ||
+                (dist < 2 * limit && random.nextFloat() < 0.1) ||
+                (random.nextFloat() < 0.002);
+            colors[v.index] = red ? 0xFFFF0000 : 0xFF000000;
         }
     }
 
@@ -293,7 +316,7 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
             tickGame(elapsedMs, colors);
             break;
         case GAME_OVER:
-            Arrays.fill(colors, 0xFFFF0000);
+            drawDead(elapsedMs, colors);
             break;
         case NO_TOPOLOGY:
             Arrays.fill(colors, 0xFFFFFF00);
