@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1537948487095,
+  "timestamp": 1538518272515,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5172413792461157,
       "crossfaderBlendMode": 0,
       "speed": 1.3799999952316284,
-      "focusedChannel": 4,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -103,118 +103,6 @@
               "color/brightness": 100.0,
               "color/saturation": 0.0,
               "color": -1
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          }
-        ]
-      },
-      {
-        "id": 3402,
-        "class": "heronarts.lx.LXChannel",
-        "modulationColor": -16711748,
-        "parameters": {
-          "label": "Noise1",
-          "arm": false,
-          "enabled": true,
-          "cue": false,
-          "midiMonitor": false,
-          "midiChannel": 16,
-          "autoCycleEnabled": false,
-          "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
-          "crossfadeGroup": 0,
-          "blendMode": 0,
-          "transitionEnabled": false,
-          "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0,
-          "autoDisable": true
-        },
-        "warps": [
-          {
-            "id": 20996,
-            "class": "com.symmetrylabs.slstudio.warp.Kaleidoscope",
-            "modulationColor": -16711907,
-            "parameters": {
-              "label": "Kaleidoscope",
-              "enabled": true,
-              "cx": 139.40001521259546,
-              "cy": 0.0,
-              "cz": 87.0,
-              "lat": 19.79999888688326,
-              "lon": -75.59999943673616,
-              "turn": -180.0,
-              "order": 8,
-              "flip": true
-            }
-          },
-          {
-            "id": 20997,
-            "class": "com.symmetrylabs.slstudio.warp.Radiant",
-            "modulationColor": -12648704,
-            "parameters": {
-              "label": "Radiant",
-              "enabled": true,
-              "Radius": 80.65726628592756,
-              "Width": 0.6300000082701445,
-              "cx": 820.0,
-              "cy": 27.840001970529556,
-              "cz": 87.0
-            }
-          }
-        ],
-        "effects": [],
-        "clips": [],
-        "patternIndex": 1,
-        "patterns": [
-          {
-            "id": 3400,
-            "class": "heronarts.lx.pattern.SolidColorPattern",
-            "modulationColor": -16711704,
-            "parameters": {
-              "label": "SolidColor",
-              "color/hue": 0.0,
-              "color/brightness": 100.0,
-              "color/saturation": 100.0,
-              "color": -65536
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
-            "id": 3403,
-            "class": "com.symmetrylabs.slstudio.pattern.Noise",
-            "modulationColor": -9961217,
-            "parameters": {
-              "label": "Noise",
-              "Hue": 0.0,
-              "Spark": 0.0,
-              "Wave": 0.0,
-              "xPos": 0.5,
-              "yPos": 0.5,
-              "xRot": 0.0,
-              "yRot": 0.0,
-              "zRot": 0.5,
-              "Spin": 0.5,
-              "X-SYM": true,
-              "Y-SYM": false,
-              "R-SYM": false,
-              "X-DUP": false,
-              "JOG": false,
-              "GREY": true,
-              "Speed": 1.119999885559082,
-              "Symm": 0,
-              "Anim": 1,
-              "Dens": 0.6,
-              "AnimResets": false
             },
             "modulation": {
               "modulators": [],
@@ -839,6 +727,18 @@
     "midi": {
       "inputs": [
         {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "CoreMIDI4J - Port 1",
           "channel": true,
           "control": false,
@@ -883,7 +783,7 @@
         "3433": true
       },
       "preview": {
-        "radius": 509.2180048520778,
+        "radius": 579.2808645898667,
         "theta": 0.005999999999986108,
         "phi": 0.18971667385101265,
         "positionX": 410.0,
