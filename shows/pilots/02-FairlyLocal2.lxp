@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538101820681,
+  "timestamp": 1538507910804,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -580,7 +580,7 @@
     "modulation": {
       "modulators": [
         {
-          "id": 26345,
+          "id": 26737,
           "class": "heronarts.lx.modulator.MultiStageEnvelope",
           "modulationColor": -16711862,
           "parameters": {
@@ -588,7 +588,7 @@
             "running": false,
             "trigger": false,
             "loop": false,
-            "period": 526.3034986964163
+            "period": 551.3122450665181
           },
           "stages": [
             {
@@ -607,13 +607,13 @@
       "modulations": [
         {
           "source": {
-            "id": 26345
+            "id": 26737
           },
           "target": {
             "componentId": 561,
             "parameterPath": "x"
           },
-          "id": 26346,
+          "id": 26738,
           "class": "heronarts.lx.parameter.LXCompoundModulation",
           "modulationColor": -16711795,
           "parameters": {
@@ -679,7 +679,7 @@
       "engineExpanded": true,
       "clipViewVisible": true,
       "modulatorExpanded": {
-        "26345": true
+        "26737": true
       },
       "preview": {
         "radius": 509.1002869121634,
