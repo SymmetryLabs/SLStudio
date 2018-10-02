@@ -93,7 +93,7 @@ public class PointsGrouping {
         return this;
     }
 
-    public PointsGrouping addPoint(LXPoint[] pointsToAdd, boolean reverseOrdering) {
+    public PointsGrouping addPoints(LXPoint[] pointsToAdd, boolean reverseOrdering) {
         addPoints(Arrays.asList(pointsToAdd), reverseOrdering);
         return this;
     }
