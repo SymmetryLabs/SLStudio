@@ -46,7 +46,7 @@ public class GoogleHqModel extends SLModel implements MarkerSource {
         ArrayList<LXPoint> points = new ArrayList<>(model.getNumVertices());
         for (int vi = 0; vi < model.getNumVertices(); vi++) {
             FloatTuple v = model.getVertex(vi);
-            points.add(new LXPoint(v.getX(), v.getY(), v.getZ()));
+            points.add(new LXPoint(v.getX(), v.getY(), -v.getZ()));
         }
         return new GoogleHqModel(points, model, null);
     }

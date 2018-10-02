@@ -4,12 +4,18 @@ import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.output.PointsGrouping;
+import com.symmetrylabs.slstudio.output.SimplePixlite;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.MarkerSource;
-import java.util.Collection;
 
-public class GoogleHqShow implements Show, HasWorkspace, MarkerSource {
+import java.awt.*;
+import java.util.Collection;
+import java.util.Arrays;
+import heronarts.lx.model.LXPoint;
+
+public class GoogleHqShow implements Show, MarkerSource {
     public static final String SHOW_NAME = "googlehq";
     private Workspace workspace;
     private GoogleHqModel model;
@@ -22,16 +28,21 @@ public class GoogleHqShow implements Show, HasWorkspace, MarkerSource {
 
     @Override
     public void setupLx(SLStudioLX lx) {
+
     }
 
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
-        workspace = new Workspace(lx, ui, "shows/pilots");
-    }
+        lx.addOutput(new SimplePixlite(lx, "10.200.1.16")
+            .addPixliteOutput(new PointsGrouping("1")
+                .addPoints(Arrays.copyOfRange(model.points, 348, 548), PointsGrouping.REVERSE_ORDERING))
+                //.addPoints(Arrays.copyOfRange(model.points, 0, 600)))
 
-    @Override
-    public Workspace getWorkspace() {
-        return workspace;
+            .addPixliteOutput(new PointsGrouping("2")
+                .addPoints(Arrays.copyOfRange(model.points, 0, 349), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(Arrays.copyOfRange(model.points, 549, 799), PointsGrouping.REVERSE_ORDERING))
+                //.addPoints(Arrays.copyOfRange(model.points, 0, 600)))
+        );
     }
 
     @Override
