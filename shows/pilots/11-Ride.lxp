@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538120552282,
+  "timestamp": 1538501122346,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -119,7 +119,7 @@
         "parameters": {
           "label": "Palette",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -173,7 +173,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.9968036413192749,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -189,7 +189,7 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 0.0,
+              "xSize": 410.0,
               "cx": 410.0,
               "ySize": 73.07999966293573,
               "cy": 58.0,
@@ -256,9 +256,9 @@
               "X-DUP": false,
               "JOG": false,
               "GREY": false,
-              "Speed": 0.55,
+              "Speed": 0.6699999973177908,
               "Symm": 0,
-              "Anim": 6,
+              "Anim": 3,
               "Dens": 0.6,
               "AnimResets": false
             },
@@ -300,7 +300,7 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 0.0,
+              "xSize": 410.0,
               "cx": 410.0,
               "ySize": 70.75999971479177,
               "cy": 58.0,
@@ -316,7 +316,7 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 0.0,
+              "xSize": 410.0,
               "cx": 410.0,
               "ySize": 76.55999958515167,
               "cy": 58.0,
@@ -397,7 +397,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -413,9 +413,9 @@
             "parameters": {
               "label": "BundleDirMask",
               "enabled": true,
-              "x": false,
+              "x": true,
               "y": false,
-              "z": false
+              "z": true
             }
           }
         ],
@@ -424,7 +424,7 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 25445,
+            "id": 26582,
             "class": "com.symmetrylabs.slstudio.pattern.TimeCodedSlideshow",
             "modulationColor": -26368,
             "parameters": {
@@ -437,7 +437,7 @@
               "cropR": 0.11999999731779099,
               "cropT": 0.5799999874830246,
               "cropB": 0.0,
-              "tcStart": 999814.0
+              "tcStart": 973577.0
             },
             "modulation": {
               "modulators": [],
@@ -455,7 +455,7 @@
         "parameters": {
           "label": "VideoLightning",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -877,6 +877,18 @@
     "midi": {
       "inputs": [
         {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "CoreMIDI4J - Port 1",
           "channel": true,
           "control": false,
@@ -905,18 +917,6 @@
           "channel": true,
           "control": false,
           "sync": false
-        },
-        {
-          "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "Real Time Sequencer",
-          "channel": true,
-          "control": false,
-          "sync": false
         }
       ],
       "surfaces": [],
@@ -931,9 +931,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 421.55694888283364,
-        "theta": 0.4050000000000002,
-        "phi": 0.28079637050628914,
+        "radius": 569.5906877813252,
+        "theta": 0.0,
+        "phi": 0.0,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5

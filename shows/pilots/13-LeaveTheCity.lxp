@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538283766653,
+  "timestamp": 1538501454637,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5172413792461157,
       "crossfaderBlendMode": 0,
       "speed": 0.8166667073965073,
-      "focusedChannel": 1,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -112,7 +112,7 @@
             "modulationColor": -65405,
             "parameters": {
               "label": "Vortex",
-              "count": 38,
+              "count": 0,
               "size": 6.000000134110452,
               "xrad": 360.7999937683344,
               "zrad": 34.79999954625964,
@@ -239,7 +239,7 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 25388,
+        "id": 43,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
         "modulationColor": -9502465,
         "parameters": {
@@ -325,62 +325,8 @@
       }
     },
     "modulation": {
-      "modulators": [
-        {
-          "id": 25927,
-          "class": "heronarts.lx.modulator.MultiStageEnvelope",
-          "modulationColor": -53504,
-          "parameters": {
-            "label": "Dip",
-            "running": false,
-            "trigger": false,
-            "loop": false,
-            "period": 219.78999464496977
-          },
-          "stages": [
-            {
-              "basis": 0.0,
-              "value": 0.0,
-              "shape": 1.0
-            },
-            {
-              "basis": 0.5124378204345703,
-              "value": 0.0,
-              "shape": 1.0
-            },
-            {
-              "basis": 0.5273631811141968,
-              "value": 1.0,
-              "shape": 0.9838709677419355
-            },
-            {
-              "basis": 1.0,
-              "value": 1.0,
-              "shape": 1.0325182101977106
-            }
-          ]
-        }
-      ],
-      "modulations": [
-        {
-          "source": {
-            "id": 25927
-          },
-          "target": {
-            "componentId": 25918,
-            "parameterPath": "fader"
-          },
-          "id": 25928,
-          "class": "heronarts.lx.parameter.LXCompoundModulation",
-          "modulationColor": -16721153,
-          "parameters": {
-            "label": "",
-            "enabled": true,
-            "Polarity": 1,
-            "Range": 1.0
-          }
-        }
-      ],
+      "modulators": [],
+      "modulations": [],
       "triggers": []
     },
     "osc": {
@@ -413,6 +359,18 @@
     "midi": {
       "inputs": [
         {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "CoreMIDI4J - Port 1",
           "channel": true,
           "control": false,
@@ -441,18 +399,6 @@
           "channel": true,
           "control": false,
           "sync": false
-        },
-        {
-          "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "Real Time Sequencer",
-          "channel": true,
-          "control": false,
-          "sync": false
         }
       ],
       "surfaces": [],
@@ -465,13 +411,11 @@
       "paletteExpanded": true,
       "engineExpanded": true,
       "clipViewVisible": true,
-      "modulatorExpanded": {
-        "25927": true
-      },
+      "modulatorExpanded": {},
       "preview": {
         "radius": 555.0790186313667,
-        "theta": 0.4200000000000004,
-        "phi": 0.4307963705063058,
+        "theta": 0.5730000000000004,
+        "phi": 0.3690000000000002,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5
