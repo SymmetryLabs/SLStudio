@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538269089342,
+  "timestamp": 1538498914234,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5172413792461157,
       "crossfaderBlendMode": 0,
       "speed": 0.8166667073965073,
-      "focusedChannel": 7,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -235,7 +235,7 @@
             "parameters": {
               "label": "Kaleidoscope",
               "enabled": true,
-              "cx": 565.7999974649409,
+              "cx": 303.4000017345141,
               "cy": 58.0,
               "cz": 14.499992370605469,
               "lat": 0.0,
@@ -1271,6 +1271,18 @@
     "midi": {
       "inputs": [
         {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "CoreMIDI4J - Port 1",
           "channel": true,
           "control": false,
@@ -1299,18 +1311,6 @@
           "channel": true,
           "control": false,
           "sync": false
-        },
-        {
-          "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "Real Time Sequencer",
-          "channel": true,
-          "control": false,
-          "sync": false
         }
       ],
       "surfaces": [],
@@ -1333,8 +1333,8 @@
       },
       "preview": {
         "radius": 491.01388600578645,
-        "theta": -0.30539816339744785,
-        "phi": 0.22247970771789516,
+        "theta": -0.005999999999999814,
+        "phi": 0.035999999999999976,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5
