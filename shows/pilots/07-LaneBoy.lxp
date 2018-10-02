@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538265463812,
+  "timestamp": 1538500567890,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 3,
+      "focusedChannel": 5,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -106,7 +106,7 @@
               "enabled": true,
               "xSize": 410.0,
               "cx": 410.0,
-              "ySize": 116.00000762939453,
+              "ySize": 33.00000085912893,
               "cy": 26.680000700056553,
               "zSize": 65.25000016205013,
               "cz": 87.0,
@@ -123,7 +123,7 @@
               "cx": 410.0,
               "cy": 58.0,
               "cz": 72.5,
-              "angle": -0.35446191411007
+              "angle": 0.0
             }
           }
         ],
@@ -135,7 +135,7 @@
             "parameters": {
               "label": "ColorFilter",
               "enabled": true,
-              "Hue": 140.39999686181545,
+              "Hue": 133.199997022748,
               "Sat": 100.0
             },
             "modulation": {
@@ -154,7 +154,7 @@
             "modulationColor": -16753409,
             "parameters": {
               "label": "AngleStrobe",
-              "trigger": true,
+              "trigger": false,
               "reset": false,
               "wipe": false,
               "hit": false,
@@ -342,13 +342,23 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 496,
-            "class": "com.symmetrylabs.slstudio.pattern.StripBounce",
-            "modulationColor": -6356737,
+            "id": 26472,
+            "class": "com.symmetrylabs.slstudio.pattern.Crystalline",
+            "modulationColor": -16711904,
             "parameters": {
-              "label": "StripBounce",
-              "size": 21.69999973848462,
-              "hueVar": 0.0
+              "label": "Crystalline",
+              "count": 5,
+              "cx": 410.0,
+              "cy": 58.0,
+              "cz": 14.499992370605469,
+              "width": 260.0,
+              "lvel": 2.0999999535083766,
+              "rwidth": 60.0,
+              "rvel": 0.1,
+              "cutwhite": 0.1,
+              "symm": 1,
+              "radial": 0,
+              "alpha": true
             },
             "modulation": {
               "modulators": [],
@@ -372,7 +382,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -387,7 +397,7 @@
             "modulationColor": -13041920,
             "parameters": {
               "label": "BoxMask",
-              "enabled": true,
+              "enabled": false,
               "xSize": 532.9999972507358,
               "cx": 410.0,
               "ySize": 81.19999818503857,
@@ -403,7 +413,7 @@
             "modulationColor": -15662849,
             "parameters": {
               "label": "BundleDirMask",
-              "enabled": true,
+              "enabled": false,
               "x": false,
               "y": true,
               "z": true
@@ -416,11 +426,11 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 419.99999046325684,
-              "cx": 419.99998803105564,
+              "xSize": 418.1999921798706,
+              "cx": 409.99999750699385,
               "ySize": 116.00000762939453,
               "cy": 4.639999896287918,
-              "zSize": 62.08999916911125,
+              "zSize": 0.0,
               "cz": 2.754997389575564,
               "invert": false
             }
@@ -494,7 +504,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -531,7 +541,7 @@
               "Speed": 0.55,
               "Symm": 0,
               "Anim": 3,
-              "Dens": 0.9300000071525574,
+              "Dens": 0.0,
               "AnimResets": false
             },
             "modulation": {
@@ -681,9 +691,9 @@
             "modulationColor": -26112,
             "parameters": {
               "label": "SplitColor",
-              "x": 0.0,
+              "x": 0.23000001907348633,
               "y": 1.0,
-              "z": 0.7811106443405151,
+              "z": 0.0,
               "cx": 410.0,
               "cy": 116.0,
               "cz": 87.0,
@@ -1075,8 +1085,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 476.80495992191345,
-        "theta": -0.07799999999999996,
-        "phi": 0.28079637050628886,
+        "theta": 0.0,
+        "phi": 0.0,
         "positionX": 431.95635986328125,
         "positionY": 59.0,
         "positionZ": 73.88507080078125
