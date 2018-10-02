@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538261327422,
+  "timestamp": 1538506132754,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0500000528991222,
-      "focusedChannel": 0,
+      "focusedChannel": 4,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -489,8 +489,8 @@
             "parameters": {
               "label": "Noise",
               "Hue": 0.0,
-              "Spark": 0.0,
-              "Wave": 0.0,
+              "Spark": 0.005999999586492777,
+              "Wave": 0.0169999988283962,
               "xPos": 0.5099999997764826,
               "yPos": 0.5199999883770943,
               "xRot": 0.7099999934434891,
@@ -964,8 +964,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 519.8422316139489,
-        "theta": 0.011999999999985987,
-        "phi": 0.45071667385101377,
+        "theta": -0.18300000000000008,
+        "phi": 0.14100000000000007,
         "positionX": 410.0,
         "positionY": 48.0,
         "positionZ": 72.5
