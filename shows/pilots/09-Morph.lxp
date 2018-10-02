@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538498914234,
+  "timestamp": 1538505709468,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5172413792461157,
       "crossfaderBlendMode": 0,
       "speed": 0.8166667073965073,
-      "focusedChannel": 2,
+      "focusedChannel": 4,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -453,16 +453,14 @@
             }
           },
           {
-            "id": 26134,
-            "class": "com.symmetrylabs.slstudio.effect.LABShift",
-            "modulationColor": -13824,
+            "id": 26234,
+            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
+            "modulationColor": -3145984,
             "parameters": {
-              "label": "LABShift",
+              "label": "BrightnessShift",
               "enabled": true,
-              "Lboost": 1.3999999910593033,
-              "Lshift": 0.0,
-              "Ashift": 0.0,
-              "Bshift": 0.0
+              "Bscale": 2.599999964237213,
+              "Bshift": 3.999999910593033
             },
             "modulation": {
               "modulators": [],
@@ -865,7 +863,7 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 26020,
+        "id": 25938,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
         "modulationColor": -7995137,
         "parameters": {
