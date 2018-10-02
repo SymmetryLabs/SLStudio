@@ -706,12 +706,6 @@ public class StripsTopology {
 
             List<Junction> js = junctionTree.withinDistance(
                 be.positive.x, be.positive.y, be.positive.z, endpointTolerance);
-            if (b.index == 91) {
-                System.out.println(String.format("91P has %d neighbors", js.size()));
-                for (Junction j : js) {
-                    System.out.println(String.format("neighbor has px=%s", j.get(Dir.X, Sign.POS)));
-                }
-            }
 
             if (!js.isEmpty()) {
                 b.p = js.get(0);
