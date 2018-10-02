@@ -26,6 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import processing.event.KeyEvent;
+import processing.core.PConstants;
 
 public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
     public static final String GROUP_NAME = MagicLeapShow.SHOW_NAME;
@@ -327,6 +328,12 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
 
     @Override
     public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+        if (state == GameState.GAME_OVER) {
+            if (keyCode == PConstants.SHIFT) {
+                reset();
+            }
+            return;
+        }
         switch (keyChar) {
         case 'w':
             nextDir = Dir.Y;
