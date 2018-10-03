@@ -1,20 +1,20 @@
 package com.symmetrylabs.slstudio.ui;
 
+import com.symmetrylabs.slstudio.output.OfflineRenderOutput;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.StringParameter;
-import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
+import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.component.UITextBox;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
-import processing.core.PConstants;
-import com.symmetrylabs.slstudio.output.OfflineRenderOutput;
-import java.io.File;
-import java.awt.FileDialog;
-import processing.event.MouseEvent;
-import java.awt.Frame;
 import java.awt.EventQueue;
-import heronarts.p3lx.ui.component.UIButton;
+import java.awt.FileDialog;
+import java.awt.Frame;
+import java.io.File;
+import processing.core.PConstants;
+import processing.event.MouseEvent;
 
 public class UIOfflineRender extends UICollapsibleSection {
     private static final int HEIGHT = 44;
@@ -61,6 +61,7 @@ public class UIOfflineRender extends UICollapsibleSection {
 
         @Override
         public void onMousePressed(MouseEvent event, float mx, float my) {
+            setValue("");
             EventQueue.invokeLater(() -> {
                     FileDialog dialog = new FileDialog(
                         (Frame) null, "Save output data as:", FileDialog.SAVE);

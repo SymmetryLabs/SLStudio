@@ -8,19 +8,24 @@ import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.StringParameter;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.zip.GZIPOutputStream;
+import java.io.DataOutputStream;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 public class OfflineRenderOutput extends LXOutput {
+    public static final String HEADER = "SLOutput";
+    public static final int VERSION = 3;
+
     private File output = null;
-    private Writer writer = null;
+    private DataOutputStream writer = null;
     private LXModel model;
-    private long lastFrameNanos;
+    private long startFrameNanos;
 
     public final BooleanParameter enabled = new BooleanParameter("enabled", false);
     public final StringParameter outputFile = new StringParameter("output", "");
@@ -30,7 +35,9 @@ public class OfflineRenderOutput extends LXOutput {
         this.model = lx.model;
         outputFile.addListener(p -> {
                 dispose();
-                output = new File(outputFile.getString());
+                if (!outputFile.getString().equals("")) {
+                    output = new File(outputFile.getString());
+                }
             });
         enabled.addListener(p -> {
                 if (!enabled.getValueb()) {
@@ -42,10 +49,12 @@ public class OfflineRenderOutput extends LXOutput {
 
     public void dispose() {
         if (writer != null) {
-            try {
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            synchronized (writer) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         writer = null;
@@ -61,12 +70,16 @@ public class OfflineRenderOutput extends LXOutput {
         if (writer == null && output != null) {
             try {
                 OutputStream out = new GZIPOutputStream(new FileOutputStream(output));
-                writer = new BufferedWriter(new OutputStreamWriter(out));
-                writer.write(String.format("SLOutput v=1 pn=%d\n", model.size));
+                writer = new DataOutputStream(out);
+                writer.writeUTF(HEADER);
+                writer.writeInt(VERSION);
+                writer.writeInt(model.size);
                 for (LXPoint p : model.points) {
-                    writer.write(String.format("%f %f %f\n", p.x, p.y, p.z));
+                    writer.writeFloat(p.x);
+                    writer.writeFloat(p.y);
+                    writer.writeFloat(p.z);
                 }
-                lastFrameNanos = System.nanoTime();
+                startFrameNanos = System.nanoTime();
             } catch (IOException e) {
                 System.err.println("could not write model:");
                 e.printStackTrace();
@@ -75,21 +88,23 @@ public class OfflineRenderOutput extends LXOutput {
             }
         }
 
-        long timeSinceLast = System.nanoTime() - lastFrameNanos;
-        lastFrameNanos += timeSinceLast;
-        int[] data = (int[]) colors.getArray(PolyBuffer.Space.RGB8);
+        synchronized (writer) {
+            long frameTime = System.nanoTime() - startFrameNanos;
+            int[] data = (int[]) colors.getArray(PolyBuffer.Space.RGB8);
 
-        try {
-            writer.write(String.format("t=%d", timeSinceLast));
-            writer.write(" c=");
-            for (int i = 0; i < data.length; i++) {
-                writer.write(String.format(i == 0 ? "%x" : ",%x", data[i]));
+            try {
+                writer.writeLong(frameTime);
+                ByteBuffer bb = ByteBuffer.allocate(4 * data.length);
+                IntBuffer ib = bb.asIntBuffer();
+                ib.put(data);
+                byte[] arr = bb.array();
+                writer.writeInt(arr.length);
+                writer.write(arr, 0, arr.length);
+            } catch (IOException e) {
+                System.err.println("failed to write color data:");
+                e.printStackTrace();
+                dispose();
             }
-            writer.write("\n");
-        } catch (IOException e) {
-            System.err.println("failed to write color data:");
-            e.printStackTrace();
-            dispose();
         }
     }
 }
