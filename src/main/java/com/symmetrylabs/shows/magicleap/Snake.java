@@ -65,6 +65,7 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
     private Junction target;
     private Junction goal;
     private int progress;
+    private int player;
 
     private Dir nextDir;
     private Sign currentSign;
@@ -142,6 +143,7 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
         tail = new LinkedList<>();
         sparkleAt = null;
         sparkleAge = 0;
+        player = 0;
     }
 
     private Junction randomJunction() {
@@ -334,39 +336,100 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
             }
             return;
         }
-        switch (keyChar) {
-        case 'w':
-            nextDir = Dir.Y;
-            nextSign = Sign.POS;
-            break;
-        case 'W':
-            nextDir = Dir.Z;
-            nextSign = Sign.POS;
-            break;
-        case 'a':
-            nextDir = Dir.X;
-            nextSign = Sign.NEG;
-            break;
-        case 's':
-            nextDir = Dir.Y;
-            nextSign = Sign.NEG;
-            break;
-        case 'S':
-            nextDir = Dir.Z;
-            nextSign = Sign.NEG;
-            break;
-        case 'd':
-            nextDir = Dir.X;
-            nextSign = Sign.POS;
-            break;
-        case 'f':
-            nextDir = Dir.Z;
-            nextSign = Sign.NEG;
-            break;
-        case 'r':
-            nextDir = Dir.Z;
-            nextSign = Sign.POS;
-            break;
+        if (player == 0) {
+            switch (keyChar) {
+            case 'w':
+            case 'W':
+            case 'a':
+            case 's':
+            case 'S':
+            case 'd':
+            case 'f':
+            case 'r':
+                player = 1;
+                break;
+            case 'i':
+            case 'I':
+            case 'j':
+            case 'k':
+            case 'K':
+            case 'l':
+            case 'p':
+            case ';':
+                player = 2;
+                break;
+            }
+        }
+        if (player == 1) {
+            switch (keyChar) {
+            case 'w':
+                nextDir = Dir.Y;
+                nextSign = Sign.POS;
+                break;
+            case 'W':
+                nextDir = Dir.Z;
+                nextSign = Sign.POS;
+                break;
+            case 'a':
+                nextDir = Dir.X;
+                nextSign = Sign.NEG;
+                break;
+            case 's':
+                nextDir = Dir.Y;
+                nextSign = Sign.NEG;
+                break;
+            case 'S':
+                nextDir = Dir.Z;
+                nextSign = Sign.NEG;
+                break;
+            case 'd':
+                nextDir = Dir.X;
+                nextSign = Sign.POS;
+                break;
+            case 'f':
+                nextDir = Dir.Z;
+                nextSign = Sign.NEG;
+                break;
+            case 'r':
+                nextDir = Dir.Z;
+                nextSign = Sign.POS;
+                break;
+            }
+        } else {
+            switch (keyChar) {
+            case 'i':
+                nextDir = Dir.Y;
+                nextSign = Sign.POS;
+                break;
+            case 'I':
+                nextDir = Dir.Z;
+                nextSign = Sign.POS;
+                break;
+            case 'j':
+                nextDir = Dir.X;
+                nextSign = Sign.NEG;
+                break;
+            case 'k':
+                nextDir = Dir.Y;
+                nextSign = Sign.NEG;
+                break;
+            case 'K':
+                nextDir = Dir.Z;
+                nextSign = Sign.NEG;
+                break;
+            case 'l':
+                nextDir = Dir.X;
+                nextSign = Sign.POS;
+                break;
+            case ';':
+                nextDir = Dir.Z;
+                nextSign = Sign.NEG;
+                break;
+            case 'p':
+                nextDir = Dir.Z;
+                nextSign = Sign.POS;
+                break;
+            }
         }
         if (current != null && current.dir == nextDir && currentSign != nextSign) {
             if (score == 0) {
