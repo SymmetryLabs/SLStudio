@@ -17,7 +17,7 @@ import processing.core.PConstants;
 import processing.event.MouseEvent;
 
 public class UIOfflineRender extends UICollapsibleSection {
-    private static final int HEIGHT = 44;
+    private static final int HEIGHT = 48;
 
     private final StringParameter renderTarget = new StringParameter("target", "scene.lxo");
     private OfflineRenderOutput output;
