@@ -57,6 +57,12 @@ public abstract class LXOutput extends LXComponent {
         return indices;
     }
 
+    /**
+     * If this output has more than this many children and the engine is
+     * multi-threaded, we send to our children in parallel.
+     */
+    private static final int PARALLEL_CHILD_COUNT = 20;
+
     private final LX lx;
     private final List<LXOutput> children = new ArrayList<LXOutput>();
 
@@ -175,8 +181,12 @@ public abstract class LXOutput extends LXComponent {
         if (enabled.isOn() && (fps == 0 || now > lastFrameMillis + 1000/fps)) {
             PolyBuffer out = processOutput(src, src.getBestFreshSpace());
             onSend(out);
-            for (LXOutput child : children) {
-                child.send(out);
+            if (lx.engine.isNetworkMultithreaded.isOn() && children.size() > PARALLEL_CHILD_COUNT) {
+                children.parallelStream().forEach(child -> child.send(out));
+            } else {
+                for (LXOutput child : children) {
+                    child.send(out);
+                }
             }
             lastFrameMillis = now;
         }
