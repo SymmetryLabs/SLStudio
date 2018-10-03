@@ -164,7 +164,7 @@ public class VideoPlayer extends SLPattern<SLModel> {
     @Override
     public void onInactive() {
         super.onInactive();
-        if (mediaPlayer.isPlaying()) {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
         }
     }
@@ -172,7 +172,9 @@ public class VideoPlayer extends SLPattern<SLModel> {
     @Override
     public void dispose() {
         super.dispose();
-        mediaPlayer.release();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+        }
     }
 
     private void showFileBrowser() {
