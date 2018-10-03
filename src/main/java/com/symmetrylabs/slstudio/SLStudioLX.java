@@ -206,6 +206,12 @@ public class SLStudioLX extends P3LX {
                                     applet.exit();
                                 }
                                 break;
+                            case VK_A:
+                                LXMappingEngine.Mode tmode = LXMappingEngine.Mode.TRIGGER_SOURCE;
+                                lx.engine.mapping.setMode(
+                                        lx.engine.mapping.getMode() == tmode ?
+                                        LXMappingEngine.Mode.OFF : tmode);
+                                break;
                             case VK_M:
                                 LXMappingEngine.Mode mode = keyEvent.isShiftDown() ?
                                         LXMappingEngine.Mode.MIDI : LXMappingEngine.Mode.MODULATION_SOURCE;

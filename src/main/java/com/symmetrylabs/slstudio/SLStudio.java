@@ -34,6 +34,8 @@ import com.symmetrylabs.util.DrawHelper;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.Utils;
 
+import heronarts.lx.LXChannel;
+
 import static com.symmetrylabs.util.DistanceConstants.*;
 
 public class SLStudio extends PApplet {

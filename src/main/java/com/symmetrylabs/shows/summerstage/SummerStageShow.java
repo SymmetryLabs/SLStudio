@@ -13,6 +13,7 @@ import heronarts.lx.transform.LXTransform;
 import heronarts.p3lx.ui.UI2dScrollContext;
 
 import com.symmetrylabs.slstudio.SLStudioLX;
+import heronarts.lx.LXChannel;
 
 /**
  * This file implements the mapping functions needed to lay out the cubes.
@@ -62,9 +63,9 @@ public class SummerStageShow extends CubesShow {
             // col 2
             new TowerConfig(SP * 1, SP * 0, SP * 0, new String[][]{
                 new String[]{"529", "528"}, new String[]{"925", "934"}, new String[]{"1030", "1040"},
-                new String[]{"592", "1000"}, new String[]{"985", "979"}, new String[]{"988", "977"}, // 1001 -> 592 8/3/18
+                new String[]{"592", "1000"}, new String[]{"985", "979"}, new String[]{"988", "530"}, // 1001 -> 592 8/3/18
                 new String[]{"991", "1020"}, new String[]{"1037", "1038"}, new String[]{"1012", "1039"},
-                new String[]{"1023", "1024"}, new String[]{"647", "646"}
+                new String[]{"977", "1024"}, new String[]{"647", "646"}
             }),
             // col 3
             new TowerConfig(SP * 2, SP * 10, SP * 0, new String[][]{
@@ -365,7 +366,7 @@ public class SummerStageShow extends CubesShow {
             // col 3
             new TowerConfig(SP * 2, SP * 9, SP * 0, new String[][]{new String[]{"1081", "972"}}),
             // col 4
-            new TowerConfig(SP * 3, SP * 0, SP * 0, new String[][]{new String[]{"911", "1063"}, new String[]{"700", "792"}, new String[]{"437", "1094"}, new String[]{"531", "1127"}, new String[]{"498", "831"}, new String[]{"794", "795"}, new String[]{"546", "913"}, new String[]{"518", "532"}, new String[]{"849", "848"}, new String[]{"914", "847"}, new String[]{"818", "464"}}),
+            new TowerConfig(SP * 3, SP * 0, SP * 0, new String[][]{new String[]{"911", "1063"}, new String[]{"700", "792"}, new String[]{"437", "1094"}, new String[]{"531", "983"}, new String[]{"498", "831"}, new String[]{"794", "795"}, new String[]{"546", "913"}, new String[]{"518", "532"}, new String[]{"849", "848"}, new String[]{"914", "847"}, new String[]{"818", "464"}}),
             new TowerConfig(SP * 3, SP * 2, SP * -1, new String[][]{new String[]{"1077", "1076"}}),
             // col     5
             new TowerConfig(SP * 4, SP * 0, SP * 0, new String[][]{new String[]{"1072", "1073"}}),//new String[]{"573", "572"}});
@@ -519,6 +520,7 @@ public class SummerStageShow extends CubesShow {
         model.setTopologyTolerances(6, 6, 8);
         return model;
     }
+
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         UI2dScrollContext utility = ui.rightPane.utility;

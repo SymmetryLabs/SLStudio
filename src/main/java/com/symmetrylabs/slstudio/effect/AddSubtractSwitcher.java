@@ -11,7 +11,9 @@ import heronarts.lx.transform.LXVector;
 public class AddSubtractSwitcher extends LXEffect {
     BooleanParameter add;
     BooleanParameter sub;
-    boolean doInvert = false;
+    boolean subMode = false;
+    boolean setToAdd = false;
+    LXChannel c = null;
 
     public AddSubtractSwitcher(LX lx) {
         super(lx);
@@ -23,29 +25,52 @@ public class AddSubtractSwitcher extends LXEffect {
         sub = new BooleanParameter("sub", false);
         sub.setMode(BooleanParameter.Mode.MOMENTARY);
         addParameter(sub);
+
+        add.addListener(param -> {
+            if (add.isOn() && c != null) {
+                c.blendMode.setValue(0);
+                boolean alreadyOn = c.enabled.isOn();
+                if (!alreadyOn) {
+                    c.enabled.setValue(true);
+                } else if (!subMode) {
+                    c.enabled.setValue(false);
+                }
+                subMode = false;
+            }
+        });
+
+        sub.addListener(param -> {
+            if (sub.isOn() && c != null) {
+                c.blendMode.setValue(1);
+                boolean alreadyOn = c.enabled.isOn();
+                if (!alreadyOn) {
+                    c.enabled.setValue(true);
+                } else if (subMode) {
+                    c.enabled.setValue(false);
+                }
+                subMode = true;
+            }
+        });
+
+
     }
 
     @Override
     public void run(double deltaMs, double enabledAmount) {
         LXBus bus = getBus();
-        if (!(bus instanceof LXChannel)) {
+        if ((bus instanceof LXChannel)) {
+            c = (LXChannel)bus;            
+        }
+        if (c == null) {
             return;
         }
 
-        LXChannel c = (LXChannel)bus;
-
-
-        if (add.isOn()) {
-            doInvert = false;
+        if (!setToAdd) {
             c.blendMode.setValue(0);
+            setToAdd = true;
         }
 
-        if (sub.isOn()) {
-            doInvert = true;
-            c.blendMode.setValue(1);
-        }
-
-        if (doInvert) {
+        if (subMode) {
             for (LXVector v : getVectors()) {
                 int col = colors[v.index];
                 float h = LXColor.h(col);

@@ -25,17 +25,53 @@ import java.util.*;
 
 import com.symmetrylabs.shows.cubes.*;
 import com.symmetrylabs.slstudio.SLStudio;
+import heronarts.lx.parameter.BooleanParameter;
 
 
 public class UnusedFinder extends SLPattern<CubesModel> {
     final CubesShow show;
+
+    BooleanParameter disable;
+    BooleanParameter enable;
 
     public UnusedFinder(LX lx) {
         super(lx);
 
         show = CubesShow.getInstance(lx);
 
+        enable = new BooleanParameter("enable", false);
+        enable.setMode(BooleanParameter.Mode.MOMENTARY);
+        addParameter(enable);
+
+        disable = new BooleanParameter("disable", false);
+        disable.setMode(BooleanParameter.Mode.MOMENTARY);
+        addParameter(disable);
+
+        enable.addListener(param -> {
+            setEnabled(true);
+        });
+
+        disable.addListener(param -> {
+            setEnabled(false);
+        });
+
+
+
+
      
+    }
+
+    void setEnabled(boolean on) {
+        int n = show.controllers.size();
+        int i = 0;
+        for (CubesController c : show.controllers) {
+            c.enabled.setValue(on);
+            i++;
+            if (i >= n/2) {
+                return;
+            }
+        }
+
     }
 
     public void run(double deltaMs) {

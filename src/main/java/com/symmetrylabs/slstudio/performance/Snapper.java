@@ -14,6 +14,8 @@ import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIKnob;
 import heronarts.p3lx.ui.component.UISwitch;
 
+import com.symmetrylabs.util.dispatch.Dispatcher;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -471,9 +473,39 @@ public class Snapper extends LXComponent {
         super.save(lx, obj);
     }
 
+    void toggleOverlays(boolean on) {
+        for (LXChannel c : lx.engine.channels) {
+            if (c.getLabel().contains("Overlay")) {
+                c.enabled.setValue(on);
+            }
+        }
+    }
+
     @Override
     public void load(LX lx, JsonObject obj) {
         super.load(lx, obj);
+
+        toggleOverlays(true);
+
+        new java.util.Timer().schedule( 
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        toggleOverlays(false);
+                    }
+                }, 
+                1500
+        );
+
+
+        // Dispatcher dispatcher = Dispatcher.getInstance(lx);
+        // dispatcher.dispatchEngine(new Runnable() {
+        //     public void run() {
+        //         toggleOverlays(false);
+        //     }
+        // });
+
+        
 
         if (obj.has(HUES_KEY)) {
             hueParams.clear();
@@ -514,6 +546,9 @@ public class Snapper extends LXComponent {
                     if (p.getValueb()) {
 
                         for (LXChannel c : lx.engine.channels) {
+                            if (c.getLabel().contains("Lattice")) {
+                                continue;
+                            }
                             LXNormalizedParameter tHue = findHueParameter(c);
                             LXNormalizedParameter tSat = findSatParameter(c);
                             if (tHue != null) {
