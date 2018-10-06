@@ -244,7 +244,7 @@ public abstract class DPat extends SLPattern<SLModel> {
         pRotX = addParam("xRot", .5);
         pRotY = addParam("yRot", .5);
         pRotZ = addParam("zRot", .5);
-        pSpin = addParam("Spin", .5);
+        pSpin = addParam("Spin", .5, .4, .6);
 
         pXsym = new BooleanParameter("X-SYM");
         pYsym = new BooleanParameter("Y-SYM");

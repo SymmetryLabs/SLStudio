@@ -48,6 +48,7 @@ public class RedBlueSinners extends SLPattern<CubesModel> {
     CompoundParameter hue2 = new CompoundParameter("hue2", 180, 0, 360);
     CompoundParameter sat1 = new CompoundParameter("sat1", 100, 0, 100);
     CompoundParameter sat2 = new CompoundParameter("sat2", 100, 0, 100);
+    CompoundParameter mix = new CompoundParameter("mix", 0.5);
 
 
 
@@ -69,6 +70,8 @@ public class RedBlueSinners extends SLPattern<CubesModel> {
         addParameter(hue2);
         addParameter(sat1);
         addParameter(sat2);
+
+        addParameter(mix);
 
 
         addParameter(speed);
@@ -104,7 +107,7 @@ public class RedBlueSinners extends SLPattern<CubesModel> {
 //            float huevar = hvar.getValuef();
 
             int final_color;
-            if (cOR <= 0.5) {
+            if (cOR < mix.getValuef()) {
                 final_color = LXColor.hsb(hue1.getValuef(), sat1.getValuef(), s * 100 * falloff);
             } else {
                 final_color = LXColor.hsb(hue2.getValuef(), sat2.getValuef(), s * 100 * falloff);
