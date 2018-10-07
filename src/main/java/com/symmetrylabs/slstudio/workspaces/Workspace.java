@@ -18,22 +18,27 @@ import java.util.concurrent.Semaphore;
 
 public class Workspace extends LXComponent {
     public static final int WORKSPACE_OSC_PORT = 3999;
+    private static final int NO_PROJECT = -1;
 
-    /* Switching projects is expensive, and a poorly-configured OSC sender
-         can DoS SLStudio by sending project-switch events on every frame. This
-         prevents projects from being switched more often than once every 500ms.
-         Note that it does not queue up requests to be served after the debounce
-         time elapses; OSC clients should send the desired project on every
-         frame, so that eventually their request will be honored. */
+    /** Switching projects is expensive, and a poorly-configured OSC sender
+            can DoS SLStudio by sending project-switch events on every frame. This
+            prevents projects from being switched more often than once every 500ms.
+            Note that it does not queue up requests to be served after the debounce
+            time elapses; OSC clients should send the desired project on every
+            frame, so that eventually their request will be honored. */
     private static final long MIN_TIME_BETWEEN_SWITCHES_NS = (long) 0.5e9;
 
     private final LX lx;
     private final SLStudioLX.UI ui;
     private final String path;
     private final List<WorkspaceProject> projects = new ArrayList<WorkspaceProject>();
-    private int currentWorkspaceIndex = -1;
+    private int currentWorkspaceIndex = NO_PROJECT;
     private int successfulWorkspaceSwitches = 0;
     private long lastSwitchTime = 0;
+
+    private int requestsBeforeSwitch = 0;
+    private int matchingRequestsReceived = 0;
+    private int request = NO_PROJECT;
 
     public Workspace(LX lx, SLStudioLX.UI ui, String path) {
         super(lx, "workspaces");
@@ -58,6 +63,19 @@ public class Workspace extends LXComponent {
         }
     }
 
+    /**
+     * Sets the number of OSC requests we must receive before we do a project switch.
+     *
+     * Untrustworthy OSC sources (like Vezer with an untrustworthy time code
+     * source cough cough) will sometimes send a single frame with the wrong
+     * project set in it. Shows can request that we receive the same project
+     * in a number of adjacent frames before we switch to it by setting this
+     * to something nonzero.
+     */
+    public void setRequestsBeforeSwitch(int r) {
+        requestsBeforeSwitch = r;
+    }
+
     private void setCurrentProject(File f) {
         if (f != null) {
             try {
@@ -72,10 +90,10 @@ public class Workspace extends LXComponent {
             } catch (IOException e) {
                 System.err.println("couldn't find project in workspace: ");
                 e.printStackTrace();
-                currentWorkspaceIndex = -1;
+                currentWorkspaceIndex = NO_PROJECT;
             }
         }
-        currentWorkspaceIndex = -1;
+        currentWorkspaceIndex = NO_PROJECT;
     }
 
     public void goIndex(int i) {
@@ -204,6 +222,18 @@ public class Workspace extends LXComponent {
                 if (index < 0 || index >= projects.size()) {
                     System.err.println(String.format("workspace project index %d invalid", index));
                     return;
+                }
+                if (requestsBeforeSwitch > 0 && index != currentWorkspaceIndex) {
+                    if (index != request) {
+                        request = index;
+                        matchingRequestsReceived = 1;
+                        return;
+                    } else {
+                        matchingRequestsReceived++;
+                        if (matchingRequestsReceived < requestsBeforeSwitch) {
+                            return;
+                        }
+                    }
                 }
                 WorkspaceProject workspace = projects.get(index);
                 openProject(workspace);
