@@ -273,7 +273,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         }
     }
 
-    private void copyFrameToColors(BufferedImage img, int[] colors) {
+    private void copyFrameToColors(BufferedImage img, int[] ccs) {
         int cropLeft = Math.round(cropLeftParam.getValuef() * img.getWidth());
         int cropRight = Math.round(cropRightParam.getValuef() * img.getWidth());
         int cropTop = Math.round(cropTopParam.getValuef() * img.getHeight());
@@ -283,7 +283,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         int croppedWidth = img.getWidth() - cropLeft - cropRight;
         int croppedHeight = img.getHeight() - cropTop - cropBottom;
 
-        Arrays.fill(colors, 0);
+        Arrays.fill(ccs, 0);
 
         for (LXVector v : getVectors()) {
             int i = (int) ((shrink * (model.yMax - v.y)) + yOffsetParam.getValue() * img.getHeight());
@@ -298,12 +298,12 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                     (vcolor >> 8) & 0xFF,
                     vcolor & 0xFF);
             }
-            colors[v.index] = color;
+            ccs[v.index] = color;
         }
     }
 
     @Override
-    public void run(double elapsedMs) {
+    public void run(double elapsedMs, PolyBuffer.Space preferredSpace) {
         if (allFrames == null || currentFrame >= allFrames.length || currentFrame < 0) {
             return;
         }
@@ -312,8 +312,8 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         if (!currentFrameLoaded) {
             return;
         }
-        copyFrameToColors(slide.img, (int[]) getArray(PolyBuffer.Space.RGB8));
-        markModified(PolyBuffer.Space.RGB8);
+        copyFrameToColors(slide.img, (int[]) getArray(PolyBuffer.Space.SRGB8));
+        markModified(PolyBuffer.Space.SRGB8);
     }
 
     private void bake(File output) {
