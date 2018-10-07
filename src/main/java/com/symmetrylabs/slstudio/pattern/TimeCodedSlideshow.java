@@ -4,6 +4,7 @@ import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
+import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.MidiTime;
@@ -17,8 +18,12 @@ import heronarts.lx.transform.LXVector;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.concurrent.Semaphore;
@@ -34,6 +39,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
 
     private final StringParameter directory = new StringParameter("dir", null);
     private final BooleanParameter chooseDir = new BooleanParameter("pick", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter bake = new BooleanParameter("bake", false).setMode(BooleanParameter.Mode.MOMENTARY);
     private final CompoundParameter shrinkParam = new CompoundParameter("shrink", 1, 1.4, 3);
     private final CompoundParameter yOffsetParam = new CompoundParameter("yoff", 0, 0, 1);
     private final CompoundParameter cropLeftParam = new CompoundParameter("cropL", 0, 0, 1);
@@ -47,6 +53,11 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     private boolean stopping = false;
     private long lastLoadLoop = 0;
     private boolean currentFrameLoaded;
+
+    private boolean baked = false;
+    private BufferedImage bakedImage = null;
+
+    private int nFrames = 0;
 
     private static class Slide {
         File path;
@@ -92,6 +103,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         addParameter(cropTopParam);
         addParameter(cropBottomParam);
         addParameter(tcStartFrame);
+        addParameter(bake);
 
         for (LXMidiInput input : lx.engine.midi.inputs) {
             input.addTimeListener(new LXMidiInput.MidiTimeListener() {
@@ -124,28 +136,32 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         stopping = false;
         loadDirectory();
 
-        loaderThread = new Thread(() -> {
-            while (!stopping) {
-                try {
-                    loaderSemaphore.acquire();
-                } catch (InterruptedException e) {
-                    return;
-                }
-                lastLoadLoop = System.nanoTime();
-                /* Find the first frame after/including the current frame that
-                 * hasn't been loaded, and load it. */
-                for (int i = currentFrame < 0 ? 0 : currentFrame; i < allFrames.length; i++) {
-                    if (!allFrames[i].loaded()) {
-                        allFrames[i].load();
-                        break;
+        if (!baked) {
+            loaderThread = new Thread(() -> {
+                    while (!stopping) {
+                        try {
+                            loaderSemaphore.acquire();
+                        } catch (InterruptedException e) {
+                            return;
+                        }
+                        lastLoadLoop = System.nanoTime();
+                        /* Find the first frame after/including the current frame that
+                         * hasn't been loaded, and load it. */
+                        for (int i = currentFrame < 0 ? 0 : currentFrame; i < nFrames; i++) {
+                            if (!allFrames[i].loaded()) {
+                                allFrames[i].load();
+                                break;
+                            }
+                        }
                     }
-                }
+            });
+            try {
+                loaderThread.start();
+            } catch (IllegalThreadStateException e) {
+                e.printStackTrace();
             }
-        });
-        try {
-            loaderThread.start();
-        } catch (IllegalThreadStateException e) {
-            e.printStackTrace();
+        } else {
+            loaderThread = null;
         }
     }
 
@@ -166,10 +182,18 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
 
     @Override
     public String getCaption() {
+        if (baked) {
+            return String.format(
+                "time %s / %d frames / frame %d / baked image %s",
+                mt == null ? "unknown" : mt.toString(),
+                nFrames,
+                currentFrame,
+                directory.getString());
+        }
         return String.format(
             "time %s / %d frames / frame %d %s / waiting %d / since last load %ds / dir %s",
             mt == null ? "unknown" : mt.toString(),
-            allFrames == null ? 0 : allFrames.length,
+            nFrames,
             currentFrame,
             currentFrameLoaded ? "ok" : "skip",
             loaderSemaphore.availablePermits(),
@@ -180,14 +204,30 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     @Override
     public void onParameterChanged(LXParameter p) {
         if (p == chooseDir && chooseDir.getValueb()) {
-            JFileChooser jfc = new JFileChooser();
-            jfc.setDialogType(JFileChooser.OPEN_DIALOG);
-            jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            int res = jfc.showOpenDialog(null);
-            if (res == JFileChooser.APPROVE_OPTION) {
-                directory.setValue(jfc.getSelectedFile().getAbsolutePath());
-                loadDirectory();
+            FileDialog dialog = new FileDialog(
+                (Frame) null, "Choose frame directory or baked image:", FileDialog.LOAD);
+            dialog.setVisible(true);
+            String fname = dialog.getFile();
+            if (fname == null) {
+                return;
             }
+
+            File load = new File(dialog.getDirectory(), fname);
+            Path loadPath = load.toPath().toAbsolutePath();
+            Path repoRoot = Paths.get("").toAbsolutePath();
+            Path rel = repoRoot.relativize(loadPath);
+            directory.setValue(rel.toString());
+            loadDirectory();
+
+        } else if (p == bake && bake.getValueb()) {
+            FileDialog dialog = new FileDialog(
+                (Frame) null, "Save baked video as:", FileDialog.SAVE);
+            dialog.setVisible(true);
+            String fname = dialog.getFile();
+            if (fname == null) {
+                return;
+            }
+            bake(new File(dialog.getDirectory(), fname));
         }
     }
 
@@ -198,6 +238,21 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
             return;
         }
         File dir = new File(path);
+
+        if (dir.isFile() && dir.getName().endsWith(".png")) {
+            baked = true;
+            try {
+                bakedImage = ImageIO.read(dir);
+                nFrames = bakedImage.getHeight();
+            } catch (IOException e) {
+                SLStudio.setWarning(TAG, "couldn't load baked slideshow");
+                System.out.println("could not load baked slideshow:");
+                e.printStackTrace();
+                bakedImage = null;
+            }
+            return;
+        }
+
         if (!dir.isDirectory()) {
             SLStudio.setWarning(TAG, "slideshow directory does not exist");
             return;
@@ -214,6 +269,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         for (int i = 0; i < files.length; i++) {
             newAllFrames[i] = new Slide(files[i]);
         }
+        nFrames = newAllFrames.length;
         /* make this an atomic mutation, so that goToFrame's view of the frame
          * list is always coherent. */
         allFrames = newAllFrames;
@@ -221,18 +277,22 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     }
 
     private void goToFrame(int frame) {
-        if (allFrames == null) {
-            return;
-        }
         frame -= tcStartFrame.getValuei();
 
         /* if we're out of range, set frame to -1. If we were out of range
          * before, we don't have to do anything. */
-        if (frame < 0 || frame >= allFrames.length) {
+        if (frame < 0 || frame >= nFrames) {
             if (currentFrame == -1) {
                 return;
             }
             frame = -1;
+        }
+
+        if (baked) {
+            currentFrame = frame;
+        }
+        if (allFrames == null) {
+            return;
         }
 
         /* if we're going backward in time out of our buffer, we clear the
@@ -241,7 +301,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
             System.out.println(String.format("backwards: %d to %d", currentFrame, frame));
             loaderSemaphore.drainPermits();
             currentFrame = frame;
-            for (int i = 0; i < allFrames.length; i++) {
+            for (int i = 0; i < nFrames; i++) {
                 allFrames[i].unload();
             }
             loaderSemaphore.release(BUFFER_COUNT);
@@ -259,23 +319,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         }
     }
 
-    @Override
-    public void run(double elapsedMs) {
-        int black = 0;
-        for (int i = 0; i < colors.length; i++) {
-            colors[i] = black;
-        }
-
-        if (allFrames == null || currentFrame >= allFrames.length || currentFrame < 0) {
-            return;
-        }
-        Slide slide = allFrames[currentFrame];
-        currentFrameLoaded = slide.loaded();
-        if (!currentFrameLoaded) {
-            return;
-        }
-        BufferedImage img = slide.img;
-
+    private void copyFrameToColors(BufferedImage img, int[] ccs) {
         int cropLeft = Math.round(cropLeftParam.getValuef() * img.getWidth());
         int cropRight = Math.round(cropRightParam.getValuef() * img.getWidth());
         int cropTop = Math.round(cropTopParam.getValuef() * img.getHeight());
@@ -285,12 +329,14 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         int croppedWidth = img.getWidth() - cropLeft - cropRight;
         int croppedHeight = img.getHeight() - cropTop - cropBottom;
 
+        Arrays.fill(ccs, 0);
+
         for (LXVector v : getVectors()) {
             int i = (int) ((shrink * (model.yMax - v.y)) + yOffsetParam.getValue() * img.getHeight());
             int j = (int) (shrink * (v.x - model.xMin));
             int color;
             if (i >= croppedHeight || j >= croppedWidth || i < 0 || j < 0) {
-                color = black;
+                color = 0;
             } else {
                 int vcolor = img.getRGB(j + cropLeft, i + cropTop);
                 color = LXColor.rgb(
@@ -298,7 +344,66 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                     (vcolor >> 8) & 0xFF,
                     vcolor & 0xFF);
             }
-            colors[v.index] = color;
+            ccs[v.index] = color;
+        }
+    }
+
+    @Override
+    public void run(double elapsedMs, PolyBuffer.Space preferredSpace) {
+        int[] ccs = (int[]) getArray(PolyBuffer.Space.SRGB8);
+        if (currentFrame >= nFrames || currentFrame < 0) {
+            Arrays.fill(ccs, 0);
+        } else if (baked) {
+            if (bakedImage != null) {
+                /* we can't just pull the colors straight out of the image as
+                 * a single array copy because we want to honor warps that turn
+                 * off pixels. */
+                Arrays.fill(ccs, 0);
+                for (LXVector v : getVectors()) {
+                    ccs[v.index] = bakedImage.getRGB(v.index, currentFrame);
+                }
+            } else {
+                Arrays.fill(ccs, 0);
+            }
+        } else {
+            Slide slide = allFrames[currentFrame];
+            currentFrameLoaded = slide.loaded();
+            if (!currentFrameLoaded) {
+                return;
+            }
+            copyFrameToColors(slide.img, ccs);
+        }
+        markModified(PolyBuffer.Space.SRGB8);
+    }
+
+    private void bake(File output) {
+        if (baked) {
+            System.err.println("slideshow is already baked");
+            return;
+        }
+        final int PN = model.points.length;
+        final int FN = nFrames;
+        BufferedImage res = new BufferedImage(PN, FN, BufferedImage.TYPE_INT_ARGB);
+        LXVector[] vectors = getVectorArray();
+        for (int frame = 0; frame < FN; frame++) {
+            Slide s = allFrames[frame];
+            int[] frameColors = new int[PN];
+            s.load();
+            copyFrameToColors(s.img, frameColors);
+            s.unload();
+            res.setRGB(0, frame, PN, 1, frameColors, 0, PN);
+            if (frame % 100 == 0) {
+                System.out.println(
+                    String.format("baked frame %d for %s", frame, directory.getString()));
+            }
+        }
+        try {
+            ImageIO.write(res, "png", output);
+            System.out.println(
+                String.format("baked %d frames for %s", FN, directory.getString()));
+        } catch (IOException e) {
+            System.err.println("couldn't write baked output:");
+            e.printStackTrace();
         }
     }
 }

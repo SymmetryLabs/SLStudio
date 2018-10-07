@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538278209082,
+  "timestamp": 1538946304095,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 8,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -261,7 +261,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -280,7 +280,7 @@
             "modulationColor": -16711808,
             "parameters": {
               "label": "TimeCodedSlideshow",
-              "dir": "shows/pilots/hoty/hoty",
+              "dir": "shows/pilots/hoty.png",
               "pick": false,
               "shrink": 2.3376000121235845,
               "yoff": 0.5899999868124723,
@@ -288,7 +288,8 @@
               "cropR": 0.0,
               "cropT": 0.0,
               "cropB": 0.0,
-              "tcStart": 1134654.0
+              "tcStart": 1134654.0,
+              "bake": false
             },
             "modulation": {
               "modulators": [],
@@ -346,7 +347,7 @@
             "modulationColor": -12058369,
             "parameters": {
               "label": "TwoTone",
-              "enabled": false,
+              "enabled": true,
               "Lcut1": 20.999999530613422,
               "Lcut2": 63.999998569488525,
               "c1/hue": 0.0,
@@ -372,7 +373,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 0.0,
+              "rad": 830.1927490234375,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
@@ -591,7 +592,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 0.0,
+              "rad": 830.1927490234375,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
@@ -683,12 +684,12 @@
             "modulationColor": -16711746,
             "parameters": {
               "label": "Sparkle",
-              "Dens": 0.7099999785423279,
+              "Dens": 0.05999999865889549,
               "Attack": 0.2899999935179949,
-              "Decay": 1.0,
+              "Decay": 0.3100000023841858,
               "Hue": 0.5,
               "HueVar": 0.25,
-              "Sat": 0.0
+              "Sat": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -1058,6 +1059,18 @@
     "midi": {
       "inputs": [
         {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "CoreMIDI4J - Port 1",
           "channel": true,
           "control": false,
@@ -1083,18 +1096,6 @@
         },
         {
           "name": "CoreMIDI4J - Sync Port",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "Real Time Sequencer",
           "channel": true,
           "control": false,
           "sync": false

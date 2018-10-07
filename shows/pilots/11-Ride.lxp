@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538501122346,
+  "timestamp": 1538947223936,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.116666715592146,
-      "focusedChannel": 2,
+      "focusedChannel": 4,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -429,7 +429,7 @@
             "modulationColor": -26368,
             "parameters": {
               "label": "TimeCodedSlideshow",
-              "dir": "shows/pilots/ride",
+              "dir": "shows/pilots/ride.png",
               "pick": false,
               "shrink": 1.863999989628792,
               "yoff": 0.0,
@@ -437,7 +437,8 @@
               "cropR": 0.11999999731779099,
               "cropT": 0.5799999874830246,
               "cropB": 0.0,
-              "tcStart": 973577.0
+              "tcStart": 973577.0,
+              "bake": false
             },
             "modulation": {
               "modulators": [],
@@ -932,8 +933,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 569.5906877813252,
-        "theta": 0.0,
-        "phi": 0.0,
+        "theta": 0.31800000000000017,
+        "phi": 0.21600000000000014,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5

@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538505709468,
+  "timestamp": 1538946186802,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -478,7 +478,7 @@
             "modulationColor": -9216,
             "parameters": {
               "label": "TimeCodedSlideshow",
-              "dir": "shows/pilots/morph-1",
+              "dir": "shows/pilots/morph-1.png",
               "pick": false,
               "shrink": 1.7052000008523462,
               "yoff": 0.009999999776482582,
@@ -486,7 +486,8 @@
               "cropR": 0.0,
               "cropT": 0.28999999396502973,
               "cropB": 0.0,
-              "tcStart": 863997.0
+              "tcStart": 863997.0,
+              "bake": false
             },
             "modulation": {
               "modulators": [],
@@ -501,7 +502,7 @@
             "modulationColor": -6225665,
             "parameters": {
               "label": "TimeCodedSlideshow",
-              "dir": "shows/pilots/morph-2",
+              "dir": "shows/pilots/morph-2.png",
               "pick": false,
               "shrink": 1.7135999925434588,
               "yoff": 0.23999999463558197,
@@ -509,7 +510,8 @@
               "cropR": 0.25699999439530075,
               "cropT": 0.01999999862164259,
               "cropB": 0.3799999915063381,
-              "tcStart": 890994.0
+              "tcStart": 890994.0,
+              "bake": false
             },
             "modulation": {
               "modulators": [],
@@ -863,9 +865,9 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 25938,
+        "id": 26418,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -7995137,
+        "modulationColor": -16580864,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
