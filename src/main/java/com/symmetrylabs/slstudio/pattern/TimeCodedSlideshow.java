@@ -196,14 +196,6 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     @Override
     public void onParameterChanged(LXParameter p) {
         if (p == chooseDir && chooseDir.getValueb()) {
-            JFileChooser jfc = new JFileChooser();
-            jfc.setDialogType(JFileChooser.OPEN_DIALOG);
-            jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            int res = jfc.showOpenDialog(null);
-            if (res == JFileChooser.APPROVE_OPTION) {
-                directory.setValue(jfc.getSelectedFile().getAbsolutePath());
-                loadDirectory();
-            }
             FileDialog dialog = new FileDialog(
                 (Frame) null, "Choose frame directory or baked image:", FileDialog.LOAD);
             dialog.setVisible(true);
