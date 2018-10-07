@@ -288,7 +288,10 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
             frame = -1;
         }
 
-        if (allFrames == null || baked) {
+        if (baked) {
+            currentFrame = frame;
+        }
+        if (allFrames == null) {
             return;
         }
 
