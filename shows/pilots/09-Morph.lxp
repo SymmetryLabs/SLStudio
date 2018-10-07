@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538945837529,
+  "timestamp": 1538946186802,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -479,7 +479,7 @@
             "parameters": {
               "label": "TimeCodedSlideshow",
               "dir": "shows/pilots/morph-1.png",
-              "pick": true,
+              "pick": false,
               "shrink": 1.7052000008523462,
               "yoff": 0.009999999776482582,
               "cropL": 0.014999999776482583,
@@ -865,9 +865,9 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 26326,
+        "id": 26418,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -65331,
+        "modulationColor": -16580864,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
