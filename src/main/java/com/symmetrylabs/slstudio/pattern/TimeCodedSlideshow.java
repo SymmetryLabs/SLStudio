@@ -335,6 +335,8 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         }
         try {
             ImageIO.write(res, "png", output);
+            System.out.println(
+                String.format("baked %d frames for %s", FN, directory.getString()));
         } catch (IOException e) {
             System.err.println("couldn't write baked output:");
             e.printStackTrace();
