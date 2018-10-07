@@ -215,7 +215,8 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
             File load = new File(dialog.getDirectory(), fname);
             Path loadPath = load.toPath().toAbsolutePath();
             Path repoRoot = Paths.get("").toAbsolutePath();
-            directory.setValue(loadPath.relativize(repoRoot).toString());
+            Path rel = repoRoot.relativize(loadPath);
+            directory.setValue(rel.toString());
             loadDirectory();
 
         } else if (p == bake && bake.getValueb()) {
