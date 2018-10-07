@@ -182,10 +182,18 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
 
     @Override
     public String getCaption() {
+        if (baked) {
+            return String.format(
+                "time %s / %d frames / frame %d / baked image %s",
+                mt == null ? "unknown" : mt.toString(),
+                nFrames,
+                currentFrame,
+                directory.getString());
+        }
         return String.format(
             "time %s / %d frames / frame %d %s / waiting %d / since last load %ds / dir %s",
             mt == null ? "unknown" : mt.toString(),
-            allFrames == null ? 0 : nFrames,
+            nFrames,
             currentFrame,
             currentFrameLoaded ? "ok" : "skip",
             loaderSemaphore.availablePermits(),
@@ -205,8 +213,8 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
             }
 
             File load = new File(dialog.getDirectory(), fname);
-            Path loadPath = load.toPath();
-            Path repoRoot = Paths.get("");
+            Path loadPath = load.toPath().toAbsolutePath();
+            Path repoRoot = Paths.get("").toAbsolutePath();
             directory.setValue(loadPath.relativize(repoRoot).toString());
             loadDirectory();
 
