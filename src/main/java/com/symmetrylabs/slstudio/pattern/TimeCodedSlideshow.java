@@ -4,6 +4,7 @@ import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
+import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.MidiTime;
@@ -17,6 +18,8 @@ import heronarts.lx.transform.LXVector;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -309,24 +312,32 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         if (!currentFrameLoaded) {
             return;
         }
-        copyFrameToColors(slide.img, getArray(PolyBuffer.Space.RGB8));
+        copyFrameToColors(slide.img, (int[]) getArray(PolyBuffer.Space.RGB8));
         markModified(PolyBuffer.Space.RGB8);
     }
 
     private void bake(File output) {
-        BufferedImage res = new BufferedImage(model.points, allFrames.size(), BufferedImage.TYPE_INT_ARGB);
+        final int PN = model.points.length;
+        final int FN = allFrames.length;
+        BufferedImage res = new BufferedImage(PN, FN, BufferedImage.TYPE_INT_ARGB);
         LXVector[] vectors = getVectorArray();
-        for (int frame = 0; frame < allFrames.size(); frame++) {
-            Slide s = allFrames.get(frame);
-            int[] frameColors = new int[model.points];
+        for (int frame = 0; frame < FN; frame++) {
+            Slide s = allFrames[frame];
+            int[] frameColors = new int[PN];
             s.load();
             copyFrameToColors(s.img, frameColors);
             s.unload();
-            res.setRGB(0, frame, model.points, 1, frameColors, 0, model.points);
+            res.setRGB(0, frame, PN, 1, frameColors, 0, PN);
             if (frame % 100 == 0) {
-                System.out.println(String.format("baked frame %d for %s", frame, dir.getString()));
+                System.out.println(
+                    String.format("baked frame %d for %s", frame, directory.getString()));
             }
         }
-        ImageIO.write(res, "png", output);
+        try {
+            ImageIO.write(res, "png", output);
+        } catch (IOException e) {
+            System.err.println("couldn't write baked output:");
+            e.printStackTrace();
+        }
     }
 }
