@@ -46,5 +46,4 @@ public class PulseCheck extends SLPattern<SLModel> {
             colors[p.index] = LXColor.hsba(hues[i].getValuef(), 100, enabled[i].getValuef()* 100, enabled[i].getValuef() );
         }
     }
-
 }
