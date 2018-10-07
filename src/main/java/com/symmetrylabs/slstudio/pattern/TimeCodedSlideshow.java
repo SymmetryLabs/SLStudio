@@ -355,10 +355,13 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
             Arrays.fill(ccs, 0);
         } else if (baked) {
             if (bakedImage != null) {
-                bakedImage.getRGB(
-                    0, currentFrame, model.points.length, 1,
-                    ccs, 0, model.points.length);
-                markModified(PolyBuffer.Space.SRGB8);
+                /* we can't just pull the colors straight out of the image as
+                 * a single array copy because we want to honor warps that turn
+                 * off pixels. */
+                Arrays.fill(ccs, 0);
+                for (LXVector v : getVectors()) {
+                    ccs[v.index] = bakedImage.getRGB(v.index, currentFrame);
+                }
             } else {
                 Arrays.fill(ccs, 0);
             }
