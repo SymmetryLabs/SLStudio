@@ -39,6 +39,7 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
     private List<PilotsPixlite> outputs = new ArrayList<>();
     private Workspace workspace;
     private CartConfig[] initialConfigs;
+    private TimeCodeLog timeCodeLog;
 
     private PilotsModel.Cart[] carts = new PilotsModel.Cart[] {
         /* no extra cart spacing here because they're not actually adjacent;
@@ -103,6 +104,8 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
         for (LXChannel c : lx.engine.channels) {
             c.autoDisable.setValue(true);
         }
+
+        timeCodeLog = new TimeCodeLog(lx);
     }
 
     @Override
