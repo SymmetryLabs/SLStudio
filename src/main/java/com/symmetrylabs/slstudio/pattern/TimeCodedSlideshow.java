@@ -34,6 +34,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
 
     private final StringParameter directory = new StringParameter("dir", null);
     private final BooleanParameter chooseDir = new BooleanParameter("pick", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter bake = new BooleanParameter("bake", false).setMode(BooleanParameter.Mode.MOMENTARY);
     private final CompoundParameter shrinkParam = new CompoundParameter("shrink", 1, 1.4, 3);
     private final CompoundParameter yOffsetParam = new CompoundParameter("yoff", 0, 0, 1);
     private final CompoundParameter cropLeftParam = new CompoundParameter("cropL", 0, 0, 1);
@@ -92,6 +93,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         addParameter(cropTopParam);
         addParameter(cropBottomParam);
         addParameter(tcStartFrame);
+        addParameter(bake);
 
         for (LXMidiInput input : lx.engine.midi.inputs) {
             input.addTimeListener(new LXMidiInput.MidiTimeListener() {
@@ -188,6 +190,15 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                 directory.setValue(jfc.getSelectedFile().getAbsolutePath());
                 loadDirectory();
             }
+        } else if (p == bake && bake.getValueb()) {
+            FileDialog dialog = new FileDialog(
+                (Frame) null, "Save baked video as:", FileDialog.SAVE);
+            dialog.setVisible(true);
+            String fname = dialog.getFile();
+            if (fname == null) {
+                return;
+            }
+            bake(new File(dialog.getDirectory(), fname));
         }
     }
 
@@ -259,23 +270,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         }
     }
 
-    @Override
-    public void run(double elapsedMs) {
-        int black = 0;
-        for (int i = 0; i < colors.length; i++) {
-            colors[i] = black;
-        }
-
-        if (allFrames == null || currentFrame >= allFrames.length || currentFrame < 0) {
-            return;
-        }
-        Slide slide = allFrames[currentFrame];
-        currentFrameLoaded = slide.loaded();
-        if (!currentFrameLoaded) {
-            return;
-        }
-        BufferedImage img = slide.img;
-
+    private void copyFrameToColors(BufferedImage img, int[] colors) {
         int cropLeft = Math.round(cropLeftParam.getValuef() * img.getWidth());
         int cropRight = Math.round(cropRightParam.getValuef() * img.getWidth());
         int cropTop = Math.round(cropTopParam.getValuef() * img.getHeight());
@@ -285,12 +280,14 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         int croppedWidth = img.getWidth() - cropLeft - cropRight;
         int croppedHeight = img.getHeight() - cropTop - cropBottom;
 
+        Arrays.fill(colors, 0);
+
         for (LXVector v : getVectors()) {
             int i = (int) ((shrink * (model.yMax - v.y)) + yOffsetParam.getValue() * img.getHeight());
             int j = (int) (shrink * (v.x - model.xMin));
             int color;
             if (i >= croppedHeight || j >= croppedWidth || i < 0 || j < 0) {
-                color = black;
+                color = 0;
             } else {
                 int vcolor = img.getRGB(j + cropLeft, i + cropTop);
                 color = LXColor.rgb(
@@ -300,5 +297,36 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
             }
             colors[v.index] = color;
         }
+    }
+
+    @Override
+    public void run(double elapsedMs) {
+        if (allFrames == null || currentFrame >= allFrames.length || currentFrame < 0) {
+            return;
+        }
+        Slide slide = allFrames[currentFrame];
+        currentFrameLoaded = slide.loaded();
+        if (!currentFrameLoaded) {
+            return;
+        }
+        copyFrameToColors(slide.img, getArray(PolyBuffer.Space.RGB8));
+        markModified(PolyBuffer.Space.RGB8);
+    }
+
+    private void bake(File output) {
+        BufferedImage res = new BufferedImage(model.points, allFrames.size(), BufferedImage.TYPE_INT_ARGB);
+        LXVector[] vectors = getVectorArray();
+        for (int frame = 0; frame < allFrames.size(); frame++) {
+            Slide s = allFrames.get(frame);
+            int[] frameColors = new int[model.points];
+            s.load();
+            copyFrameToColors(s.img, frameColors);
+            s.unload();
+            res.setRGB(0, frame, model.points, 1, frameColors, 0, model.points);
+            if (frame % 100 == 0) {
+                System.out.println(String.format("baked frame %d for %s", frame, dir.getString()));
+            }
+        }
+        ImageIO.write(res, "png", output);
     }
 }
