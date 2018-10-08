@@ -4,7 +4,9 @@ import java.util.*;
 
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
+import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
+
 
 import heronarts.lx.transform.LXTransform;
 
@@ -28,9 +30,12 @@ public class MagicLeapShow extends CubesShow implements Show {
     static final TowerConfig[] TOWER_CONFIG = {
 
         // row 1
-        new TowerConfig(SP*1f, 0, SP*0, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2f, 0, SP*0, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3f, 0, SP*0, new String[] {"0", "0", "0", "0"}),
+        new TowerConfig(SP*0, 0, SP*0, new String[] {"0", "0", "0", "0", "0"}),
+        new TowerConfig(SP*1, 0, SP*0, new String[] {"0", "0", "0", "0", "0"}),
+        new TowerConfig(SP*2, 0, SP*0, new String[] {"0", "0", "0", "0", "0"}),
+        new TowerConfig(SP*3, 0, SP*0, new String[] {"0", "0", "0", "0", "0"}),
+        new TowerConfig(SP*4, 0, SP*0, new String[] {"0", "0", "0", "0", "0"}),
+        new TowerConfig(SP*5, 0, SP*0, new String[] {"0", "0", "0", "0", "0"}),
 
         // row 2
         new TowerConfig(SP*0, 0, SP*1, new String[] {"0", "0", "0", "0", "0"}),
@@ -38,18 +43,8 @@ public class MagicLeapShow extends CubesShow implements Show {
         new TowerConfig(SP*2, 0, SP*1, new String[] {"0", "0", "0", "0", "0"}),
         new TowerConfig(SP*3, 0, SP*1, new String[] {"0", "0", "0", "0", "0"}),
         new TowerConfig(SP*4, 0, SP*1, new String[] {"0", "0", "0", "0", "0"}),
+        new TowerConfig(SP*5, 0, SP*1, new String[] {"0", "0", "0", "0", "0"}),
 
-        // row 3
-        new TowerConfig(SP*0, 0, SP*2, new String[] {"0", "0", "0", "0", "0"}),
-        new TowerConfig(SP*1, 0, SP*2, new String[] {"0", "0", "0", "0", "0"}),
-        new TowerConfig(SP*2, 0, SP*2, new String[] {"0", "0", "0", "0", "0"}),
-        new TowerConfig(SP*3, 0, SP*2, new String[] {"0", "0", "0", "0", "0"}),
-        new TowerConfig(SP*4, 0, SP*2, new String[] {"0", "0", "0", "0", "0"}),
-
-        // row 4
-        new TowerConfig(SP*1f, 0, SP*3, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*2f, 0, SP*3, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(SP*3f, 0, SP*3, new String[] {"0", "0", "0", "0"}),
     };
 
     public SLModel buildModel() {
@@ -91,5 +86,13 @@ public class MagicLeapShow extends CubesShow implements Show {
         CubesModel m = new CubesModel(towers, allCubesArr);
         m.setTopologyTolerances(2, 6, 8);
         return m;
+    }
+
+    public void setupUi(final SLStudioLX lx, SLStudioLX.UI ui) {
+        super.setupUi(lx, ui);
+
+        lx.addProjectListener((file, change) -> {
+            new GameRunner(lx);
+        });
     }
 }

@@ -77,6 +77,7 @@ public class SLStudioLX extends P3LX {
         public final UICameraControls cameraControls;
 
         private final List<Runnable> runPostDraw;
+        private final List<UIEventHandler> eventHandlers;
 
         private boolean toggleHelpBar = false;
         private boolean toggleClipView = false;
@@ -263,6 +264,9 @@ public class SLStudioLX extends P3LX {
                             root.keyEventConsumed = pattern.keyEventConsumed();
                         }
                     }
+                    for (UIEventHandler handler : eventHandlers) {
+                        handler.onKeyPressed(keyEvent, keyChar, keyCode);
+                    }
                 }
 
                 @Override
@@ -273,6 +277,9 @@ public class SLStudioLX extends P3LX {
                         if (focusedPattern instanceof SLPattern) {
                             ((SLPattern) focusedPattern).onMousePressed(mouseEvent, mx, my);
                         }
+                    }
+                    for (UIEventHandler handler : eventHandlers) {
+                        handler.onMousePressed(mouseEvent, mx, my);
                     }
                 }
 
@@ -285,6 +292,9 @@ public class SLStudioLX extends P3LX {
                             ((SLPattern) focusedPattern).onMouseReleased(mouseEvent, mx, my);
                         }
                     }
+                    for (UIEventHandler handler : eventHandlers) {
+                        handler.onMouseReleased(mouseEvent, mx, my);
+                    }
                 }
 
                 @Override
@@ -295,6 +305,9 @@ public class SLStudioLX extends P3LX {
                         if (focusedPattern instanceof SLPattern) {
                             ((SLPattern) focusedPattern).onMouseClicked(mouseEvent, mx, my);
                         }
+                    }
+                    for (UIEventHandler handler : eventHandlers) {
+                        handler.onMouseClicked(mouseEvent, mx, my);
                     }
                 }
 
@@ -307,6 +320,9 @@ public class SLStudioLX extends P3LX {
                             ((SLPattern) focusedPattern).onMouseDragged(mouseEvent, mx, my, dx, dy);
                         }
                     }
+                    for (UIEventHandler handler : eventHandlers) {
+                        handler.onMouseDragged(mouseEvent, mx, my, dx, dy);
+                    }
                 }
 
                 @Override
@@ -317,6 +333,9 @@ public class SLStudioLX extends P3LX {
                         if (focusedPattern instanceof SLPattern) {
                             ((SLPattern) focusedPattern).onMouseMoved(mouseEvent, mx, my);
                         }
+                    }
+                    for (UIEventHandler handler : eventHandlers) {
+                        handler.onMouseMoved(mouseEvent, mx, my);
                     }
                 }
 
@@ -329,6 +348,9 @@ public class SLStudioLX extends P3LX {
                             ((SLPattern) focusedPattern).onMouseOver(mouseEvent);
                         }
                     }
+                    for (UIEventHandler handler : eventHandlers) {
+                        handler.onMouseOver(mouseEvent);
+                    }
                 }
 
                 @Override
@@ -340,6 +362,9 @@ public class SLStudioLX extends P3LX {
                             ((SLPattern) focusedPattern).onMouseOut(mouseEvent);
                         }
                     }
+                    for (UIEventHandler handler : eventHandlers) {
+                        handler.onMouseOut(mouseEvent);
+                    }
                 }
 
                 @Override
@@ -350,6 +375,9 @@ public class SLStudioLX extends P3LX {
                         if (focusedPattern instanceof SLPattern) {
                             ((SLPattern) focusedPattern).onMouseWheel(mouseEvent, mx, my, delta);
                         }
+                    }
+                    for (UIEventHandler handler : eventHandlers) {
+                        handler.onMouseWheel(mouseEvent, mx, my, delta);
                     }
                 }
 
@@ -365,6 +393,9 @@ public class SLStudioLX extends P3LX {
                             root.keyEventConsumed = pattern.keyEventConsumed();
                         }
                     }
+                    for (UIEventHandler handler : eventHandlers) {
+                        handler.onKeyReleased(keyEvent, keyChar, keyCode);
+                    }
                 }
 
                 @Override
@@ -379,12 +410,16 @@ public class SLStudioLX extends P3LX {
                             root.keyEventConsumed = pattern.keyEventConsumed();
                         }
                     }
+                    for (UIEventHandler handler : eventHandlers) {
+                        handler.onKeyTyped(keyEvent, keyChar, keyCode);
+                    }
                 }
             });
 
             setResizable(true);
 
             runPostDraw = new ArrayList<>();
+            eventHandlers = new ArrayList<>();
         }
 
         protected SLPattern getFocusedSLPattern() {
@@ -396,6 +431,10 @@ public class SLStudioLX extends P3LX {
                 }
             }
             return null;
+        }
+
+        public void addEventHandler(UIEventHandler handler) {
+            this.eventHandlers.add(handler);
         }
 
         @Override

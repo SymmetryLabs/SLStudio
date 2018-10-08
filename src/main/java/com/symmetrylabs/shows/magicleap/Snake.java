@@ -1,5 +1,6 @@
 package com.symmetrylabs.shows.magicleap;
 
+import com.sun.org.apache.bcel.internal.classfile.Unknown;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
@@ -12,6 +13,7 @@ import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.StripsTopologyComponents.ConnectedComponent;
 import com.symmetrylabs.util.StripsTopologyComponents;
 import heronarts.lx.LX;
+import heronarts.lx.LXChannel;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter.Mode;
@@ -25,6 +27,11 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import heronarts.lx.osc.LXOscEngine;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.io.IOException;
+import heronarts.lx.osc.OscMessage;
 import processing.event.KeyEvent;
 import processing.core.PConstants;
 
@@ -33,6 +40,8 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
 
     private static final int TAIL_PIXELS_PER_POINT = 10;
     private static final double SPARKLE_TIME = 1200;
+
+    private LXOscEngine.Transmitter oscTransmitter = null;
 
     enum GameState {
         PLAYING,
@@ -125,6 +134,39 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
         addParameter(reset);
         addParameter(stepRate);
         reset();
+
+        try {
+            this.oscTransmitter = lx.engine.osc.transmitter("localhost", 3344);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        lx.engine.getChannel(0).enabled.addListener(parameter -> {
+            // getChannel() returns null?
+            if (getChannel().enabled.isOn()) {
+                reset();
+                System.out.println("Reset Snake Game");
+            }
+        });
+
+    }
+
+    private void endGame() {
+        reset();
+        if (oscTransmitter != null) {
+            try {
+                OscMessage message1 = new OscMessage("/lx/channel/Snake/enabled").add(0);
+                oscTransmitter.send(message1);
+
+                OscMessage message2 = new OscMessage("/lx/channel/Cycle/enabled").add(1);
+                oscTransmitter.send(message2);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void reset() {
@@ -284,6 +326,9 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
                 (random.nextFloat() < 0.002);
             colors[v.index] = red ? 0xFFFF0000 : 0xFF000000;
         }
+        if (diedAge > 4200) {
+            endGame();
+        }
     }
 
     @Override
@@ -362,38 +407,30 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
         }
         if (player == 1) {
             switch (keyChar) {
-            case 'w':
-                nextDir = Dir.Y;
-                nextSign = Sign.POS;
-                break;
-            case 'W':
-                nextDir = Dir.Z;
-                nextSign = Sign.POS;
-                break;
-            case 'a':
-                nextDir = Dir.X;
-                nextSign = Sign.NEG;
-                break;
-            case 's':
-                nextDir = Dir.Y;
-                nextSign = Sign.NEG;
-                break;
-            case 'S':
-                nextDir = Dir.Z;
-                nextSign = Sign.NEG;
-                break;
-            case 'd':
-                nextDir = Dir.X;
-                nextSign = Sign.POS;
-                break;
-            case 'f':
-                nextDir = Dir.Z;
-                nextSign = Sign.NEG;
-                break;
-            case 'r':
-                nextDir = Dir.Z;
-                nextSign = Sign.POS;
-                break;
+                case 'w':
+                    nextDir = Dir.Y;
+                    nextSign = Sign.POS;
+                    break;
+                case 's':
+                    nextDir = Dir.Y;
+                    nextSign = Sign.NEG;
+                    break;
+                case 'a':
+                    nextDir = Dir.X;
+                    nextSign = Sign.NEG;
+                    break;
+                case 'd':
+                    nextDir = Dir.X;
+                    nextSign = Sign.POS;
+                    break;
+                case 'f':
+                    nextDir = Dir.Z;
+                    nextSign = Sign.NEG;
+                    break;
+                case 'r':
+                    nextDir = Dir.Z;
+                    nextSign = Sign.POS;
+                    break;
             }
         } else {
             switch (keyChar) {
