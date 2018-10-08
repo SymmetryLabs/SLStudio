@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.penfoldswineshow;
+package com.symmetrylabs.shows.penfoldswine;
 
 import java.util.*;
 
@@ -13,7 +13,7 @@ import heronarts.lx.transform.LXTransform;
  * This file implements the mapping functions needed to lay out the cubes.
  */
 public class PenfoldsWineShow extends CubesShow implements Show {
-public static final String SHOW_NAME = "penfoldswineshow";
+public static final String SHOW_NAME = "penfoldswine";
     static final float globalOffsetX = 0;
     static final float globalOffsetY = 0;
     static final float globalOffsetZ = 0;
