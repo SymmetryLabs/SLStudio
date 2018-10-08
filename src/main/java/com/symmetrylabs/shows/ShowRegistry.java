@@ -15,6 +15,7 @@ import com.symmetrylabs.shows.pilots.PilotsShow;
 import com.symmetrylabs.shows.streetlamp.StreetlampShow;
 import com.symmetrylabs.shows.summerbbq.SummerBBQShow;
 import com.symmetrylabs.shows.summerstage.SummerStageShow;
+import com.symmetrylabs.shows.penfoldswineshow.PenfoldsWineShow;
 import processing.core.PApplet;
 
 public class ShowRegistry {
@@ -51,6 +52,7 @@ public class ShowRegistry {
         map.put(StreetlampShow.SHOW_NAME, () -> new StreetlampShow());
         map.put(MagicLeapShow.SHOW_NAME, () -> new MagicLeapShow());
         map.put(GoogleHqShow.SHOW_NAME, () -> new GoogleHqShow());
+        map.put(PenfoldsWineShow.SHOW_NAME, () -> new PenfoldsWineShow());
     }
 
     static interface ShowBuilder {
