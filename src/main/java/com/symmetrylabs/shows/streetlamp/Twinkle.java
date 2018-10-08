@@ -5,6 +5,7 @@ import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import java.util.Arrays;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import java.util.stream.IntStream;
 import java.util.Collections;
@@ -25,6 +26,8 @@ public class Twinkle extends SLPattern<SLModel> {
         new CompoundParameter("attack", 500, 10000);
     private final CompoundParameter releaseParam =
         new CompoundParameter("release", 500, 10000);
+    private final BooleanParameter alpha =
+        new BooleanParameter("alpha", true);
 
     public Twinkle(LX lx) {
         super(lx);
@@ -34,6 +37,7 @@ public class Twinkle extends SLPattern<SLModel> {
         addParameter(reupParam);
         addParameter(attackParam);
         addParameter(releaseParam);
+        addParameter(alpha);
     }
 
     private double adsr(double age, double a, double r) {
@@ -82,7 +86,7 @@ public class Twinkle extends SLPattern<SLModel> {
         long[] colors = (long[]) getArray(PolyBuffer.Space.RGB16);
         for (LXVector v : getVectors()) {
             int t = (int) (0xFFFF * adsr(ages[v.index], a, r));
-            colors[v.index] = Ops16.rgba(0xFFFF, 0xFFFF, 0xFFFF, t);
+            colors[v.index] = alpha.getValueb() ? Ops16.rgba(0xFFFF, 0xFFFF, 0xFFFF, t) : Ops16.rgba(t, t, t, 0xFFFF);
         }
         markModified(PolyBuffer.Space.RGB16);
     }
