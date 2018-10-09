@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1537944643865,
+  "timestamp": 1539047366217,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -870,6 +870,12 @@
           "channel": true,
           "control": false,
           "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
         }
       ],
       "surfaces": [],
@@ -889,8 +895,8 @@
       },
       "preview": {
         "radius": 545.4137548187742,
-        "theta": 0.0029999999999862845,
-        "phi": 0.2737166738510133,
+        "theta": -0.7853981633974483,
+        "phi": 0.6154797077178955,
         "positionX": 410.0,
         "positionY": 48.0,
         "positionZ": 72.5

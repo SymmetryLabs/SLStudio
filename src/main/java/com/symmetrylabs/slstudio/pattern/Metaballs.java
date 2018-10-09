@@ -66,7 +66,7 @@ public class Metaballs extends SLPattern<SLModel> {
             balls.subList(c, balls.size()).clear();
         } else {
             while (balls.size() < c) {
-                balls.add(new Ball(1f + 0.5 * random.nextGaussian()));
+                balls.add(new Ball(1f));
             }
         }
     }

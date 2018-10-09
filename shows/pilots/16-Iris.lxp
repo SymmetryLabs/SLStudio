@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538086340961,
+  "timestamp": 1539047919119,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -258,6 +258,52 @@
         ]
       },
       {
+        "id": 27173,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -786177,
+        "parameters": {
+          "label": "WhiteMix",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 27171,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -65338,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 0.0,
+              "color": -1
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
         "id": 27101,
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -65518,
@@ -289,10 +335,10 @@
             "modulationColor": -65024,
             "parameters": {
               "label": "Sparkle",
-              "Dens": 0.9000000022351742,
+              "Dens": 1.0,
               "Attack": 0.4,
               "Decay": 0.05999999865889549,
-              "Hue": 0.5999999865889549,
+              "Hue": 0.5099999886006117,
               "HueVar": 0.10000000335276127,
               "Sat": 0.8699999917298555
             },
@@ -590,7 +636,7 @@
             {
               "basis": 1.0,
               "value": 0.0,
-              "shape": 1.0
+              "shape": 1.3675080950464673
             }
           ]
         }
@@ -665,13 +711,43 @@
     "midi": {
       "inputs": [
         {
-          "name": "** Internal Error getting Device Name!",
+          "name": "CoreMIDI4J - Port 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 2",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 3",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 4",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Sync Port",
           "channel": true,
           "control": false,
           "sync": false
         },
         {
           "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
           "sync": false
