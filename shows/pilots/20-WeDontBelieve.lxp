@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538406592980,
+  "timestamp": 1539048394300,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5172413792461157,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 2,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -70,7 +70,33 @@
           "autoDisable": true
         },
         "warps": [],
-        "effects": [],
+        "effects": [
+          {
+            "id": 27204,
+            "class": "com.symmetrylabs.slstudio.effect.TwoTone",
+            "modulationColor": -3735297,
+            "parameters": {
+              "label": "TwoTone",
+              "enabled": true,
+              "Lcut1": 1.0,
+              "Lcut2": 50.0,
+              "c1/hue": 0.0,
+              "c1/brightness": 100.0,
+              "c1/saturation": 24.999999441206455,
+              "c1": -16449,
+              "c2/hue": 190.2699957471341,
+              "c2/brightness": 100.0,
+              "c2/saturation": 22.99999948590994,
+              "c2": -3869185,
+              "globalC1": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 0,
         "patterns": [
@@ -86,11 +112,11 @@
               "rX": 0.0,
               "rY": 0.0,
               "rZ": 0.0,
-              "clear bg": false,
-              "speed": 0.010000000149011612,
-              "hue1": 0.0,
-              "hue2": 192.09999760612843,
-              "hue3": 255.0
+              "clear bg": true,
+              "speed": 0.030000001192092896,
+              "hue1": 2.5500027928501368,
+              "hue2": 181.0500016529113,
+              "hue3": 188.70000148192048
             },
             "modulation": {
               "modulators": [],
@@ -145,7 +171,7 @@
         ]
       },
       {
-        "id": 26773,
+        "id": 27191,
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -261889,
         "parameters": {
@@ -188,7 +214,7 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 26771,
+            "id": 27192,
             "class": "heronarts.lx.pattern.SolidColorPattern",
             "modulationColor": -16770817,
             "parameters": {
@@ -208,7 +234,7 @@
         ]
       },
       {
-        "id": 26776,
+        "id": 27197,
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -65440,
         "parameters": {
@@ -251,7 +277,7 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 26774,
+            "id": 27198,
             "class": "heronarts.lx.pattern.SolidColorPattern",
             "modulationColor": -17664,
             "parameters": {
@@ -371,12 +397,12 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.0
+        "brightness": 1.0
       }
     },
     "components": {
       "GammaExpander": {
-        "id": 26803,
+        "id": 26988,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
         "modulationColor": -65475,
         "parameters": {
@@ -496,18 +522,6 @@
     "midi": {
       "inputs": [
         {
-          "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "Real Time Sequencer",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
           "name": "CoreMIDI4J - Port 1",
           "channel": true,
           "control": false,
@@ -533,6 +547,18 @@
         },
         {
           "name": "CoreMIDI4J - Sync Port",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
           "sync": false

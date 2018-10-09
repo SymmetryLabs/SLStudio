@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538946186802,
+  "timestamp": 1539049664195,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.5172413792461157,
       "crossfaderBlendMode": 0,
-      "speed": 0.8166667073965073,
-      "focusedChannel": 4,
+      "speed": 1.0,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -235,7 +235,7 @@
             "parameters": {
               "label": "Kaleidoscope",
               "enabled": true,
-              "cx": 303.4000017345141,
+              "cx": 213.20000320217986,
               "cy": 58.0,
               "cz": 14.499992370605469,
               "lat": 0.0,
@@ -269,7 +269,7 @@
             "modulationColor": -16711718,
             "parameters": {
               "label": "Strobe",
-              "enabled": true,
+              "enabled": false,
               "Shape": 2,
               "Freq": 10.0,
               "Black": true
@@ -406,7 +406,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -470,7 +470,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 1,
         "patterns": [
           {
             "id": 25309,
@@ -697,7 +697,7 @@
             "modulationColor": -2883840,
             "parameters": {
               "label": "Sparkle",
-              "Dens": 0.0,
+              "Dens": 0.05000000074505806,
               "Attack": 0.5099999975413084,
               "Decay": 0.12000000402331351,
               "Hue": 0.5,
@@ -1271,18 +1271,6 @@
     "midi": {
       "inputs": [
         {
-          "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "Real Time Sequencer",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
           "name": "CoreMIDI4J - Port 1",
           "channel": true,
           "control": false,
@@ -1308,6 +1296,18 @@
         },
         {
           "name": "CoreMIDI4J - Sync Port",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
           "sync": false
