@@ -30,15 +30,25 @@ public class PongGame<T extends Strip> extends SLPattern<StripsModel<T>> {
 
     final float MIN_VELOCITY_PER_AXIS = 0.075f;
 
-    final CompoundParameter paddleHeight = new CompoundParameter("padHght", model.yRange*0.15f, model.yRange*0.1f, model.yRange*0.5f);
-    final CompoundParameter paddleWidth = new CompoundParameter("padWdth", model.yRange*0.05f, model.yRange*0.01f, model.yRange*0.2f);
+    enum GameState {
+        READY,
+        PLAYING,
+        VICTORY,
+        GAME_OVER
+    }
 
+    final BooleanParameter startGame = new BooleanParameter("start", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    final CompoundParameter paddleHeight = new CompoundParameter("padHght", model.yRange*0.15f, model.yRange*0.1f, model.yRange*0.5f);
+    final CompoundParameter paddleWidth = new CompoundParameter("padWdth", model.yRange*0.01f, model.yRange*0.01f, model.yRange*0.2f);
     final CompoundParameter ballRadius = new CompoundParameter("ballRad", model.yRange*0.05f, model.yRange*0.025f, model.yRange*0.1f);
     final CompoundParameter ballVelocity = new CompoundParameter("ballVel", 0);
     final BooleanParameter resetBall = new BooleanParameter("resetBall").setMode(BooleanParameter.Mode.MOMENTARY);
     final BooleanParameter autoBallVelocity = new BooleanParameter("autoBall", true);
 
-    final LinearEnvelope ballVelocityDriver = new LinearEnvelope(0, 1, 50000);
+    final LinearEnvelope ballVelocityDriver = new LinearEnvelope(0, 1, 60000);
+    final LinearEnvelope victoryEnvelope = new LinearEnvelope(0, 1, 3000);
+
+    private GameState state;
 
     private int redScore = 0;
     private int blueScore = 0;
@@ -49,20 +59,20 @@ public class PongGame<T extends Strip> extends SLPattern<StripsModel<T>> {
 
     public PongGame(LX lx) {
         super(lx);
+        addParameter(startGame);
         addParameter(paddleHeight);
-        addParameter(paddleWidth);
-//
-
         addParameter(redPaddle.position);
         addParameter(bluePaddle.position);
-//        addParameter(bluePosition);
-
         addParameter(ballRadius);
         addParameter(ballVelocity);
         addParameter(resetBall);
         addParameter(autoBallVelocity);
 
-        addModulator(ballVelocityDriver).trigger();
+        addModulator(ballVelocityDriver);
+        addModulator(victoryEnvelope);
+        victoryEnvelope.setLooping(false);
+
+        this.state = GameState.READY;
 
         try {
             this.oscTransmitter = lx.engine.osc.transmitter("localhost", 3344);
@@ -72,53 +82,37 @@ public class PongGame<T extends Strip> extends SLPattern<StripsModel<T>> {
             e.printStackTrace();
         }
 
-        lx.engine.getChannel(0).enabled.addListener(parameter -> {
-            // getChannel() returns null?
+        startGame.addListener(parameter -> {
+            if (startGame.isOn()) {
+                start();
+            }
+        });
+
+        lx.engine.getChannel(1).enabled.addListener(parameter -> {
             if (getChannel().enabled.isOn()) {
-                reset();
-                System.out.println("Reset Pong Game");
+                start();
             }
         });
     }
 
-    public void run(double deltaMs) {
-        setColors(0);
-        ball.run();
-        redPaddle.run();
-        bluePaddle.run();
-        drawScoreboard();
+    public void start() {
+        this.state = GameState.PLAYING;
+        reset();
+        ball.start();
+        //System.out.println("Game of Pong started!");
     }
 
     public void reset() {
-        redScore = 0;
-        blueScore = 0;
         ball.reset();
+        victoryEnvelope.reset();
         bluePaddle.position.setValue(0.5f);
         redPaddle.position.setValue(0.5f);
-    }
-
-    void scoreRed() {
-        redScore++;
-
-        if (redScore >= 3) {
-            triggerVictory(LXColor.RED);
-        }
-        System.out.println("red score: " + redScore + ", blueScore: " + blueScore);
-    }
-
-    void scoreBlue() {
-        blueScore++;
-
-        if (blueScore >= 3) {
-            triggerVictory(LXColor.BLUE);
-        }
-        System.out.println("red score: " + redScore + ", blueScore: " + blueScore);
-    }
-
-    void triggerVictory(int col) {
         redScore = 0;
         blueScore = 0;
-        reset();
+    }
+
+    public void endGame() {
+        state = GameState.READY;
 
         if (oscTransmitter != null) {
             try {
@@ -132,6 +126,71 @@ public class PongGame<T extends Strip> extends SLPattern<StripsModel<T>> {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void run(double deltaMs) {
+        setColors(0);
+
+        if (state == GameState.READY) {
+            return;
+        }
+
+        if (state == GameState.PLAYING) {
+            ball.run();
+        }
+
+        redPaddle.run();
+        bluePaddle.run();
+        drawScoreboard();
+
+        if (state == GameState.VICTORY) {
+            int col = getWinningColor();
+
+            for (LXPoint p : model.points) {
+                if (dist(p.x, p.y, ball.victoryPos.x, ball.victoryPos.y) < victoryEnvelope.getValuef() * model.xRange*2) {
+                    colors[p.index] = col;
+                }
+            }
+
+            if (victoryEnvelope.finished()) {
+                this.state = GameState.GAME_OVER;
+            }
+        }
+
+        if (state == GameState.GAME_OVER) {
+            endGame();
+        }
+    }
+
+    void scoreRed() {
+        redScore++;
+        if (redScore >= 3) {
+            triggerVictory();
+        }
+        //System.out.println("red score: " + redScore + ", blueScore: " + blueScore);
+    }
+
+    void scoreBlue() {
+        blueScore++;
+        if (blueScore >= 3) {
+            triggerVictory();
+        }
+        //System.out.println("red score: " + redScore + ", blueScore: " + blueScore);
+    }
+
+    int getWinningColor() {
+        if (redScore > blueScore) {
+            return LXColor.RED;
+        } else {
+            return LXColor.BLUE;
+        }
+    }
+
+    void triggerVictory() {
+        this.state = GameState.VICTORY;
+        ball.victoryPos = new LXVector(ball.position);
+        ball.stop();
+        victoryEnvelope.start();
     }
 
     void drawScoreboard() {
@@ -163,13 +222,18 @@ public class PongGame<T extends Strip> extends SLPattern<StripsModel<T>> {
         switch (keyChar) {
             case 'w': redPaddle.velocity = 0.01f; break;
             case 's': redPaddle.velocity = -0.01f; break;
+            case 'i': bluePaddle.velocity = 0.01f; break;
+            case 'k': bluePaddle.velocity = -0.01f; break;
+            case 'x': reset();
         }
     }
 
     public void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
         switch (keyChar) {
             case 'w':    redPaddle.velocity = 0; break;
-            case 's': bluePaddle.velocity = 0; break;
+            case 's': redPaddle.velocity = 0; break;
+            case 'i':    bluePaddle.velocity = 0; break;
+            case 'k': bluePaddle.velocity = 0; break;
         }
     }
 
@@ -227,7 +291,6 @@ public class PongGame<T extends Strip> extends SLPattern<StripsModel<T>> {
         }
 
         void detectCollision(float yPosVal) {
-            //for (LXPoint p : model.points) {
             if (ball.position.y > yPosVal && ball.position.y < yPosVal + paddleHeight.getValuef()) {
                 if (ball.position.x > model.xMax - paddleWidth.getValuef()) {
                     ball.velocity.x = ball.velocity.x * -1;
@@ -237,10 +300,8 @@ public class PongGame<T extends Strip> extends SLPattern<StripsModel<T>> {
                     ball.velocity.y = ball.velocity.y * -1;
                 }
             }
-            //}
         }
     }
-
 
     class Ball {
         final float MIN_VELOCITY = 0.5f;
@@ -248,6 +309,7 @@ public class PongGame<T extends Strip> extends SLPattern<StripsModel<T>> {
 
         LXVector position = new LXVector(model.cx, model.cy, 0);
         LXVector velocity = new LXVector(random(-1, 1), random(-1, 1), 0).normalize();
+        LXVector victoryPos = null;
 
         Ball() {
             ballVelocity.addListener((parameter) -> {
@@ -262,14 +324,25 @@ public class PongGame<T extends Strip> extends SLPattern<StripsModel<T>> {
         }
 
         void setVelocity() {
-            ball.velocity.normalize().mult(MIN_VELOCITY + ballVelocity.getValuef()*VELOCITY_SCALAR);
+            velocity.normalize().mult(MIN_VELOCITY + ballVelocity.getValuef()*VELOCITY_SCALAR);
         }
 
         void reset() {
+            stop();
+            position.set(model.cx, model.cy);
+        }
+
+        void stop() {
+            ballVelocityDriver.reset();
+            ballVelocity.setValue(0);
+            ball.velocity.mult(0);
+        }
+
+        void start() {
+            reset();
             if (autoBallVelocity.isOn()) {
                 ballVelocityDriver.trigger();
             }
-            position.set(model.cx, model.cy);
             velocity.set(random(-1, 1), random(-1, 1)).normalize();
             setVelocity();
         }
@@ -292,19 +365,20 @@ public class PongGame<T extends Strip> extends SLPattern<StripsModel<T>> {
                 || position.y - ballRadius.getValuef() < model.yMin) {
                 velocity.y = velocity.y * -1;
             }
-            if (position.x - ballRadius.getValuef()*2 > model.xMax) {
-                scoreRed();
-                this.reset();
-            }
-            if (position.x + ballRadius.getValuef()*2 < model.xMin) {
-                scoreBlue();
-                this.reset();
-            }
 
             for (LXPoint p : model.points) {
                 if (dist(p.x, p.y, position.x, position.y) < ballRadius.getValuef()) {
                     colors[p.index] = LXColor.WHITE;
                 }
+            }
+
+            if (position.x - ballRadius.getValuef()*2 > model.xMax) {
+                scoreRed();
+                start();
+            }
+            if (position.x + ballRadius.getValuef()*2 < model.xMin) {
+                scoreBlue();
+                start();
             }
         }
     }

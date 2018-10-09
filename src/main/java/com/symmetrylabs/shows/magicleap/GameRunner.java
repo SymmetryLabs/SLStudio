@@ -15,31 +15,23 @@ import heronarts.lx.osc.OscMessage;
 public class GameRunner {
 
     public GameRunner(SLStudioLX lx) {
-//        try {
-//            lx.engine.osc.receiver(3344).addListener(message -> {
-//                try {
-//                    String[] parts = message.getAddressPattern().getValue().split("/");
-//
-//                    System.out.println(message.getAddressPattern());
-//
-////                    if (parts[1].equals("lx")) {
-////                        if (parts[2].equals("snake")) {
-////                            int enabled = message.getInt();
-////                            lx.engine.getChannel("Snake").enabled.setValue(enabled);
-////                        }
-////                    }
-//
-//                } catch (Exception x) {
-//                    System.err.println("[OSC] No route for message: " + message.getAddressPattern().getValue());
-//                }
-//            });
-//        } catch (SocketException e) {
-//            throw new RuntimeException(e);
-//        }
-
         final BooleanParameter pongIsPressed = new BooleanParameter("IsPressed", false);
         final BooleanParameter snakeIsPressed = new BooleanParameter("IsPressed", false);
         final BooleanParameter upIsPressed = new BooleanParameter("IsPressed", false);
+
+        /*
+         PONG: r (both controllers)
+         SNAKE: f (both controllers)
+         RED-UP: w
+         RED (DOWN): s
+         RED (LEFT): a
+         RED (RIGHT): d
+         BLUE (UP): i
+         BLUE (DOWN): k
+         BLUE (LEFT): j
+         BLUE (RIGHT): l
+         */
+
 
         lx.ui.addEventHandler(new UIEventHandler() {
             public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {

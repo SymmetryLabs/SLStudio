@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538638328464,
+  "timestamp": 1539110930929,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 0.7166666500270367,
-      "focusedChannel": 0,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -124,12 +124,12 @@
             "modulationColor": -12452096,
             "parameters": {
               "label": "PongGame",
-              "padHght": 24.899999578669664,
-              "padWdth": 1.2450000047683716,
+              "start": false,
+              "padHght": 25.39799956944585,
               "redPos": 0.5,
               "bluePos": 0.5,
-              "ballRad": 6.224999904632568,
-              "ballVel": 0.008040999993681908,
+              "ballRad": 6.940874912449159,
+              "ballVel": 0.01772555522620678,
               "resetBall": false,
               "autoBall": true
             },
@@ -473,7 +473,7 @@
         "parameters": {
           "label": "Output Control",
           "Broadcast packet enabled": false,
-          "Test broadcast enabled": true
+          "Test broadcast enabled": false
         }
       }
     },

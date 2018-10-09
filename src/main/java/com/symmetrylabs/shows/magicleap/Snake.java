@@ -438,31 +438,23 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
                 nextDir = Dir.Y;
                 nextSign = Sign.POS;
                 break;
-            case 'I':
-                nextDir = Dir.Z;
-                nextSign = Sign.POS;
-                break;
+                case 'k':
+                    nextDir = Dir.Y;
+                    nextSign = Sign.NEG;
+                    break;
             case 'j':
                 nextDir = Dir.X;
-                nextSign = Sign.NEG;
-                break;
-            case 'k':
-                nextDir = Dir.Y;
-                nextSign = Sign.NEG;
-                break;
-            case 'K':
-                nextDir = Dir.Z;
                 nextSign = Sign.NEG;
                 break;
             case 'l':
                 nextDir = Dir.X;
                 nextSign = Sign.POS;
                 break;
-            case ';':
+            case 'f':
                 nextDir = Dir.Z;
                 nextSign = Sign.NEG;
                 break;
-            case 'p':
+            case 'r':
                 nextDir = Dir.Z;
                 nextSign = Sign.POS;
                 break;
