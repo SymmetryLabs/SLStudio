@@ -225,6 +225,8 @@ public class Workspace extends LXComponent {
                 }
                 if (requestsBeforeSwitch > 0 && index != currentWorkspaceIndex) {
                     if (index != request) {
+                        System.out.println(String.format(
+                            "received request for project %d, waiting for debounce", index));
                         request = index;
                         matchingRequestsReceived = 1;
                         return;
@@ -234,6 +236,7 @@ public class Workspace extends LXComponent {
                             return;
                         }
                     }
+                    System.out.println(String.format("starting switch to project %d", index));
                 }
                 WorkspaceProject workspace = projects.get(index);
                 openProject(workspace);
