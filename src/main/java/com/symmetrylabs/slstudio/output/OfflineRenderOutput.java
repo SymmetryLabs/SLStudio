@@ -23,11 +23,14 @@ public class OfflineRenderOutput extends LXOutput {
     public static final int VERSION = 3;
 
     private File output = null;
-    private DataOutputStream writer = null;
     private LXModel model;
     private long startFrameNanos;
+    private long lastFrameNanos;
+    private BufferedImage img = null;
 
-    public final BooleanParameter enabled = new BooleanParameter("enabled", false);
+    public final BooleanParameter start = new BooleanParameter("start", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    public final DiscreteParameter framesToCapture = new DiscreteParameter("frames", 1200, 30000);
+    public final CompoundParameter frameRate = new CompoundParameter("rate", 30, 60);
     public final StringParameter outputFile = new StringParameter("output", "");
 
     public OfflineRenderOutput(LX lx) {
@@ -39,26 +42,21 @@ public class OfflineRenderOutput extends LXOutput {
                     output = new File(outputFile.getString());
                 }
             });
-        enabled.addListener(p -> {
-                if (!enabled.getValueb()) {
-                    dispose();
-                    writer = null;
+        start.addListener(p -> {
+                if (start.getValueb()) {
+                    createImage();
+                    startFrameNanos = System.nanoTime();
                 }
             });
     }
 
     public void dispose() {
-        if (writer != null) {
-            synchronized (writer) {
-                try {
-                    writer.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        writer = null;
+        img = null;
         output = null;
+    }
+
+    private void createImage() {
+
     }
 
     @Override
