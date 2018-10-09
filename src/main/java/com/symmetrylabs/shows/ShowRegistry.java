@@ -52,7 +52,7 @@ public class ShowRegistry {
         map.put(StreetlampShow.SHOW_NAME, () -> new StreetlampShow());
         map.put(MagicLeapShow.SHOW_NAME, () -> new MagicLeapShow());
         map.put(GoogleHqShow.SHOW_NAME, () -> new GoogleHqShow());
-        map.put(PenfoldsWine.SHOW_NAME, () -> new PenfoldsWineShow());
+        map.put(PenfoldsWineShow.SHOW_NAME, () -> new PenfoldsWineShow());
     }
 
     static interface ShowBuilder {
