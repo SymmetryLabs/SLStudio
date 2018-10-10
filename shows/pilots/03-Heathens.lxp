@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539126820893,
+  "timestamp": 1539197503630,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -586,7 +586,7 @@
         "parameters": {
           "label": "Lines",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,

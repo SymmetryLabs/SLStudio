@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538946304095,
+  "timestamp": 1539197895333,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 1.0,
-      "focusedChannel": 2,
+      "speed": 2.0,
+      "focusedChannel": 6,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -147,7 +147,7 @@
             "modulationColor": -5373697,
             "parameters": {
               "label": "RKPattern03",
-              "Res": 353,
+              "Res": 81,
               "Kernel": 5,
               "audioLink": false,
               "rX": 0.0,
@@ -289,7 +289,9 @@
               "cropT": 0.0,
               "cropB": 0.0,
               "tcStart": 1134654.0,
-              "bake": false
+              "bake": false,
+              "run": false,
+              "runReset": false
             },
             "modulation": {
               "modulators": [],
@@ -313,7 +315,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -373,7 +375,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 830.1927490234375,
+              "rad": 0.0,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
@@ -532,7 +534,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -592,7 +594,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 830.1927490234375,
+              "rad": 0.0,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
@@ -684,12 +686,12 @@
             "modulationColor": -16711746,
             "parameters": {
               "label": "Sparkle",
-              "Dens": 0.05999999865889549,
+              "Dens": 0.7099999785423279,
               "Attack": 0.2899999935179949,
-              "Decay": 0.3100000023841858,
+              "Decay": 1.0,
               "Hue": 0.5,
               "HueVar": 0.25,
-              "Sat": 0.5
+              "Sat": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -728,7 +730,7 @@
             "modulationColor": -16711918,
             "parameters": {
               "label": "BundleDirMask",
-              "enabled": true,
+              "enabled": false,
               "x": false,
               "y": false,
               "z": true
@@ -1059,18 +1061,6 @@
     "midi": {
       "inputs": [
         {
-          "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "Real Time Sequencer",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
           "name": "CoreMIDI4J - Port 1",
           "channel": true,
           "control": false,
@@ -1096,6 +1086,18 @@
         },
         {
           "name": "CoreMIDI4J - Sync Port",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
           "channel": true,
           "control": false,
           "sync": false
