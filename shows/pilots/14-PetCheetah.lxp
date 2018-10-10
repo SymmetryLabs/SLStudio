@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538077433529,
+  "timestamp": 1539143585792,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 0.9833332803100348,
-      "focusedChannel": 1,
+      "speed": 1.0,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -81,7 +81,8 @@
             "parameters": {
               "label": "StripStarfield",
               "period": 272.82699646265246,
-              "release": 549.999987706542
+              "release": 549.999987706542,
+              "sync": false
             },
             "modulation": {
               "modulators": [],
@@ -621,6 +622,42 @@
     },
     "midi": {
       "inputs": [
+        {
+          "name": "CoreMIDI4J - Port 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 2",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 3",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 4",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Sync Port",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
         {
           "name": "Real Time Sequencer",
           "channel": true,
