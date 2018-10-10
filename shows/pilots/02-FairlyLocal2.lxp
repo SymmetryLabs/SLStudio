@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538507910804,
+  "timestamp": 1539203031981,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -599,7 +599,7 @@
             {
               "basis": 1.0,
               "value": 0.0,
-              "shape": 1.0
+              "shape": 0.6633687122997756
             }
           ]
         }
