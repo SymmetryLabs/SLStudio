@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538252254273,
+  "timestamp": 1539206961834,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 1,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -81,6 +81,22 @@
               "y": false,
               "z": true
             }
+          },
+          {
+            "id": 26793,
+            "class": "com.symmetrylabs.slstudio.warp.BoxMask",
+            "modulationColor": -14287104,
+            "parameters": {
+              "label": "BoxMask",
+              "enabled": true,
+              "xSize": 311.6000021994114,
+              "cx": 410.0,
+              "ySize": 83.52000492274757,
+              "cy": 58.0,
+              "zSize": 43.50000064820051,
+              "cz": 59.44999373100693,
+              "invert": false
+            }
           }
         ],
         "effects": [],
@@ -94,11 +110,11 @@
             "parameters": {
               "label": "Jumpsuit",
               "y": false,
-              "r": false,
+              "r": true,
               "yc": 205.00000513056835,
               "rc": 598.5999950864198,
-              "rhit": 120.0,
-              "rdrop": 19.750000834465027,
+              "rhit": 79.50144052505493,
+              "rdrop": 21.893046498298645,
               "yhit": 70.48999786376953,
               "ydrop": 108.0000002682209,
               "fstart": 270.00001072883606,
@@ -403,7 +419,20 @@
       }
     },
     "midi": {
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        }
+      ],
       "surfaces": [],
       "mapping": []
     }
@@ -417,8 +446,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 557.0009648001211,
-        "theta": 0.048601836602552156,
-        "phi": 0.07847970771789509,
+        "theta": -0.602398163397442,
+        "phi": 0.46247970771789537,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5
