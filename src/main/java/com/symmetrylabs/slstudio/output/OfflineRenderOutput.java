@@ -6,17 +6,14 @@ import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.StringParameter;
-import java.io.BufferedWriter;
-import java.io.DataOutputStream;
+import java.awt.EventQueue;
+import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.zip.GZIPOutputStream;
-import java.io.DataOutputStream;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
+import javax.imageio.ImageIO;
 
 public class OfflineRenderOutput extends LXOutput {
     public static final String HEADER = "SLOutput";
@@ -25,27 +22,29 @@ public class OfflineRenderOutput extends LXOutput {
     private File output = null;
     private LXModel model;
     private long startFrameNanos;
-    private long lastFrameNanos;
+    private int lastFrameWritten;
     private BufferedImage img = null;
+    private int framesToCapture;
+    private double frameRate;
 
-    public final BooleanParameter start = new BooleanParameter("start", false).setMode(BooleanParameter.Mode.MOMENTARY);
-    public final DiscreteParameter framesToCapture = new DiscreteParameter("frames", 1200, 30000);
-    public final CompoundParameter frameRate = new CompoundParameter("rate", 30, 60);
-    public final StringParameter outputFile = new StringParameter("output", "");
+    public final BooleanParameter pStart = new BooleanParameter("pStart", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    public final DiscreteParameter pFramesToCapture = new DiscreteParameter("frames", 1200, 0, 30000);
+    public final CompoundParameter pFrameRate = new CompoundParameter("rate", 30, 1, 60);
+    public final StringParameter pOutputFile = new StringParameter("output", "");
+    public final StringParameter pStatus = new StringParameter("status", "IDLE");
 
     public OfflineRenderOutput(LX lx) {
         super(lx);
         this.model = lx.model;
-        outputFile.addListener(p -> {
+        pOutputFile.addListener(p -> {
                 dispose();
-                if (!outputFile.getString().equals("")) {
-                    output = new File(outputFile.getString());
+                if (!pOutputFile.getString().equals("")) {
+                    output = new File(pOutputFile.getString());
                 }
             });
-        start.addListener(p -> {
-                if (start.getValueb()) {
+        pStart.addListener(p -> {
+                if (pStart.getValueb()) {
                     createImage();
-                    startFrameNanos = System.nanoTime();
                 }
             });
     }
@@ -53,56 +52,46 @@ public class OfflineRenderOutput extends LXOutput {
     public void dispose() {
         img = null;
         output = null;
+        pStatus.setValue("IDLE");
     }
 
     private void createImage() {
-
+        startFrameNanos = System.nanoTime();
+        lastFrameWritten = -1;
+        framesToCapture = pFramesToCapture.getValuei();
+        frameRate = pFrameRate.getValue();
+        img = new BufferedImage(model.points.length, pFramesToCapture.getValuei(), BufferedImage.TYPE_INT_ARGB);
     }
 
     @Override
     protected void onSend(PolyBuffer colors) {
-        if (!enabled.getValueb() || output == null) {
+        if (img == null) {
             return;
         }
+        pStatus.setValue("REC");
 
-        if (writer == null && output != null) {
-            try {
-                OutputStream out = new GZIPOutputStream(new FileOutputStream(output));
-                writer = new DataOutputStream(out);
-                writer.writeUTF(HEADER);
-                writer.writeInt(VERSION);
-                writer.writeInt(model.size);
-                for (LXPoint p : model.points) {
-                    writer.writeFloat(p.x);
-                    writer.writeFloat(p.y);
-                    writer.writeFloat(p.z);
-                }
-                startFrameNanos = System.nanoTime();
-            } catch (IOException e) {
-                System.err.println("could not write model:");
-                e.printStackTrace();
-                dispose();
-                return;
-            }
+        double elapsedSec = 1e-9 * (double) (System.nanoTime() - startFrameNanos);
+        int inFrame = (int) Math.floor(frameRate * elapsedSec);
+        if (inFrame <= lastFrameWritten) {
+            return;
         }
+        lastFrameWritten++;
 
-        synchronized (writer) {
-            long frameTime = System.nanoTime() - startFrameNanos;
-            int[] data = (int[]) colors.getArray(PolyBuffer.Space.RGB8);
+        int[] carr = (int[]) colors.getArray(PolyBuffer.Space.SRGB8);
+        img.setRGB(0, lastFrameWritten, model.points.length, 1, carr, 0, model.points.length);
 
-            try {
-                writer.writeLong(frameTime);
-                ByteBuffer bb = ByteBuffer.allocate(4 * data.length);
-                IntBuffer ib = bb.asIntBuffer();
-                ib.put(data);
-                byte[] arr = bb.array();
-                writer.writeInt(arr.length);
-                writer.write(arr, 0, arr.length);
-            } catch (IOException e) {
-                System.err.println("failed to write color data:");
-                e.printStackTrace();
-                dispose();
-            }
+        if (lastFrameWritten == framesToCapture - 1) {
+            final BufferedImage imgToWrite = img;
+            final File outputToWrite = output;
+            EventQueue.invokeLater(() -> {
+                try {
+                    ImageIO.write(imgToWrite, "png", outputToWrite);
+                } catch (IOException e) {
+                    System.err.println("couldn't save output image:");
+                    e.printStackTrace();
+                }
+            });
+            dispose();
         }
     }
 }

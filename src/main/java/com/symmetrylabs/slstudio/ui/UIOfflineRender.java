@@ -6,6 +6,8 @@ import heronarts.lx.parameter.StringParameter;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.component.UIButton;
+import heronarts.p3lx.ui.component.UIDoubleBox;
+import heronarts.p3lx.ui.component.UIIntegerBox;
 import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.component.UITextBox;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
@@ -17,7 +19,7 @@ import processing.core.PConstants;
 import processing.event.MouseEvent;
 
 public class UIOfflineRender extends UICollapsibleSection {
-    private static final int HEIGHT = 48;
+    private static final int HEIGHT = 110;
 
     private final StringParameter renderTarget = new StringParameter("target", "scene.lxo");
     private OfflineRenderOutput output;
@@ -29,24 +31,51 @@ public class UIOfflineRender extends UICollapsibleSection {
         lx.addOutput(output);
 
         setTitle("OFFLINE RENDER");
-        setTitleX(20);
-        addTopLevelComponent(
-            new UIButton(4, 4, 12, 12).setParameter(output.enabled).setBorderRounding(4));
 
-        UI2dContainer border = (UI2dContainer) new UI2dContainer(0, 0, getContentWidth(), getContentHeight())
-            .setBackgroundColor(ui.theme.getDarkBackgroundColor())
-            .setBorderRounding(4)
-            .addToContainer(this);
+        final int pad = 6;
+        final int height = 14;
+        int cy = pad;
 
-        new UILabel(6, 6, 46, 14)
+        new UILabel(6, cy, 46, height)
             .setLabel("File")
             .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
-            .addToContainer(border);
-
-        new UIFileBox(52, 6, w - 64, 14)
-            .setParameter(output.outputFile)
+            .addToContainer(this);
+        new UIFileBox(52, cy, w - 64, height)
+            .setParameter(output.pOutputFile)
             .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
-            .addToContainer(border);
+            .addToContainer(this);
+        cy += height + pad;
+
+        new UILabel(6, cy, 46, height)
+            .setLabel("Frames")
+            .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
+            .addToContainer(this);
+        new UIIntegerBox(52, cy, w - 64, height)
+            .setParameter(output.pFramesToCapture)
+            .setTextAlignment(PConstants.RIGHT, PConstants.CENTER)
+            .addToContainer(this);
+        cy += height + pad;
+
+        new UILabel(6, cy, 46, height)
+            .setLabel("FPS")
+            .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
+            .addToContainer(this);
+        new UIDoubleBox(52, cy, w - 64, height)
+            .setParameter(output.pFrameRate)
+            .setTextAlignment(PConstants.RIGHT, PConstants.CENTER)
+            .addToContainer(this);
+        cy += height + pad;
+
+        new UITextBox(6, cy, 46, 18)
+            .setParameter(output.pStatus)
+            .setCanEdit(false)
+            .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+            .addToContainer(this);
+
+        new UIButton(w - 12 - 52, cy, 52, 18)
+            .setParameter(output.pStart)
+            .setLabel("Start")
+            .addToContainer(this);
     }
 
     private static class UIFileBox extends UITextBox {
