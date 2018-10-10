@@ -75,6 +75,15 @@ public class SLStudio extends PApplet {
     @Override
     public void settings() {
         size(displayWidth, displayHeight, P3D);
+
+        String hidpiprop = System.getProperty("com.symmetrylabs.hidpi");
+        String osname = System.getProperty("os.name");
+        boolean useHiDpi =
+            hidpiprop != null ||
+            displayDensity() == 2 && (osname != null && osname.startsWith("Windows"));
+        System.out.println(
+            useHiDpi ? "requesting high-DPI pixel density" : "using normal pixel density");
+        pixelDensity(useHiDpi ? 2 : 1);
     }
 
     /** Gets the show name from the -Pshow= argument or .show file. */
