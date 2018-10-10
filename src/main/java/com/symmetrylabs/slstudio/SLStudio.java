@@ -82,7 +82,10 @@ public class SLStudio extends PApplet {
             hidpiprop != null ||
             displayDensity() == 2 && (osname != null && osname.startsWith("Windows"));
         System.out.println(
-            useHiDpi ? "requesting high-DPI pixel density" : "using normal pixel density");
+            String.format(
+                "%s (dpi=%d os=%s)",
+                useHiDpi ? "requesting high-DPI pixel density" : "using normal pixel density",
+                displayDensity(), osname));
         pixelDensity(useHiDpi ? 2 : 1);
     }
 
