@@ -51,7 +51,6 @@ public class OfflineRenderOutput extends LXOutput {
 
     public void dispose() {
         img = null;
-        output = null;
         pStatus.setValue("IDLE");
     }
 
@@ -75,12 +74,8 @@ public class OfflineRenderOutput extends LXOutput {
         if (inFrame <= lastFrameWritten) {
             return;
         }
-        lastFrameWritten++;
-
-        int[] carr = (int[]) colors.getArray(PolyBuffer.Space.SRGB8);
-        img.setRGB(0, lastFrameWritten, model.points.length, 1, carr, 0, model.points.length);
-
-        if (lastFrameWritten == framesToCapture - 1) {
+        lastFrameWritten = inFrame;
+        if (lastFrameWritten >= framesToCapture) {
             final BufferedImage imgToWrite = img;
             final File outputToWrite = output;
             EventQueue.invokeLater(() -> {
@@ -92,6 +87,9 @@ public class OfflineRenderOutput extends LXOutput {
                 }
             });
             dispose();
+        } else {
+            int[] carr = (int[]) colors.getArray(PolyBuffer.Space.RGB8);
+            img.setRGB(0, lastFrameWritten, model.points.length, 1, carr, 0, model.points.length);
         }
     }
 }
