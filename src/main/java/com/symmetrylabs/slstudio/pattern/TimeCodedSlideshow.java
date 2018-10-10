@@ -52,6 +52,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
 
     private MidiTime mt;
     private int currentFrame;
+    private int lastFrameReceived;
     private boolean stopping = false;
     private long lastLoadLoop = 0;
     private boolean currentFrameLoaded;
@@ -126,6 +127,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                     frame = 60 * frame + mt.getMinute();
                     frame = 60 * frame + mt.getSecond();
                     frame = mt.getRate().fps() * frame + mt.getFrame();
+                    lastFrameReceived = frame;
                     goToFrame(frame);
                 }
             });
@@ -190,20 +192,23 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
 
     @Override
     public String getCaption() {
+        int offset = lastFrameReceived - tcStartFrame.getValuei();
         if (baked) {
             return String.format(
-                "time %s / %d frames / frame %d / baked image %s",
+                "time %s / %d frames / frame %d / offset %d / baked image %s",
                 mt == null ? "unknown" : mt.toString(),
                 nFrames,
                 currentFrame,
+                offset,
                 directory.getString());
         }
         return String.format(
-            "time %s / %d frames / frame %d %s / waiting %d / since last load %ds / dir %s",
+            "time %s / %d frames / frame %d %s / offset %d / waiting %d / since last load %ds / dir %s",
             mt == null ? "unknown" : mt.toString(),
             nFrames,
             currentFrame,
             currentFrameLoaded ? "ok" : "skip",
+            offset,
             loaderSemaphore.availablePermits(),
             (int) ((System.nanoTime() - lastLoadLoop) / 1e9),
             directory.getString());
