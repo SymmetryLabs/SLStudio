@@ -47,6 +47,8 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     private final CompoundParameter cropTopParam = new CompoundParameter("cropT", 0, 0, 1);
     private final CompoundParameter cropBottomParam = new CompoundParameter("cropB", 0, 0, 1);
     private final MutableParameter tcStartFrame = new MutableParameter("tcStart", 0);
+    private final BooleanParameter freewheel = new BooleanParameter("run", false);
+    private final BooleanParameter freewheelReset = new BooleanParameter("runReset", false).setMode(BooleanParameter.Mode.MOMENTARY);
 
     private MidiTime mt;
     private int currentFrame;
@@ -58,6 +60,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     private BufferedImage bakedImage = null;
 
     private int nFrames = 0;
+    private double freewheelTime = 0;
 
     private static class Slide {
         File path;
@@ -104,6 +107,8 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         addParameter(cropBottomParam);
         addParameter(tcStartFrame);
         addParameter(bake);
+        addParameter(freewheel);
+        addParameter(freewheelReset);
 
         for (LXMidiInput input : lx.engine.midi.inputs) {
             input.addTimeListener(new LXMidiInput.MidiTimeListener() {
@@ -114,6 +119,9 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                 @Override
                 public void onMTCUpdate(MidiTime midiTime) {
                     mt = midiTime.clone();
+                    if (freewheel.getValueb()) {
+                        return;
+                    }
                     int frame = mt.getHour();
                     frame = 60 * frame + mt.getMinute();
                     frame = 60 * frame + mt.getSecond();
@@ -228,6 +236,10 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                 return;
             }
             bake(new File(dialog.getDirectory(), fname));
+
+        } else if (p == freewheelReset && freewheelReset.getValueb()) {
+            currentFrame = -1;
+            freewheelTime = 0;
         }
     }
 
@@ -350,6 +362,14 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
 
     @Override
     public void run(double elapsedMs, PolyBuffer.Space preferredSpace) {
+        if (freewheel.getValueb()) {
+            freewheelTime += elapsedMs;
+            if (freewheelTime > 1000 / 30) {
+                freewheelTime = 0;
+                currentFrame++;
+            }
+        }
+
         int[] ccs = (int[]) getArray(PolyBuffer.Space.SRGB8);
         if (currentFrame >= nFrames || currentFrame < 0) {
             Arrays.fill(ccs, 0);
