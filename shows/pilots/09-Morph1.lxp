@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539195582100,
+  "timestamp": 1539196128542,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -339,32 +339,6 @@
               "triggers": []
             },
             "autoCycleEnabled": true
-          },
-          {
-            "id": 25901,
-            "class": "com.symmetrylabs.slstudio.pattern.TimeCodedSlideshow",
-            "modulationColor": -6225665,
-            "parameters": {
-              "label": "TimeCodedSlideshow",
-              "dir": "shows/pilots/morph-2.png",
-              "pick": false,
-              "shrink": 1.7135999925434588,
-              "yoff": 0.23999999463558197,
-              "cropL": 0.010999999241903424,
-              "cropR": 0.25699999439530075,
-              "cropT": 0.01999999862164259,
-              "cropB": 0.3799999915063381,
-              "tcStart": 890994.0,
-              "bake": false,
-              "run": false,
-              "runReset": false
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
           }
         ]
       },
@@ -643,7 +617,7 @@
         }
       },
       "outputControl": {
-        "id": 148,
+        "id": 35,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -8651008,
         "parameters": {
