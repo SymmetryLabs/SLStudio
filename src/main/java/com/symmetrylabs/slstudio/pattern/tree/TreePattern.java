@@ -3,7 +3,8 @@ package com.symmetrylabs.slstudio.pattern.tree;
 import heronarts.lx.LX;
 
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
-import com.symmetrylabs.shows.tree.*;
+import com.symmetrylabs.shows.tree.TreeModel;
+import com.symmetrylabs.shows.tree.TreeShow;
 
 
 public abstract class TreePattern extends SLPattern<TreeModel> {
