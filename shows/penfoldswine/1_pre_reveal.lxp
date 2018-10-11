@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539205932329,
+  "timestamp": 1539282187367,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.0,
       "crossfaderBlendMode": 0,
-      "speed": 0.8499999921768904,
-      "focusedChannel": 1,
+      "speed": 0.46666664257645607,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -94,7 +94,7 @@
             "parameters": {
               "label": "Blur",
               "enabled": true,
-              "amount": 0.8100000042468309
+              "amount": 0.8700000029057264
             },
             "modulation": {
               "modulators": [],
@@ -146,7 +146,23 @@
           "transitionBlendMode": 0,
           "autoDisable": false
         },
-        "warps": [],
+        "warps": [
+          {
+            "id": 2548,
+            "class": "com.symmetrylabs.slstudio.warp.Mirror",
+            "modulationColor": -65331,
+            "parameters": {
+              "label": "Mirror",
+              "enabled": true,
+              "x": true,
+              "cx": 242.0,
+              "y": false,
+              "cy": 72.0,
+              "z": false,
+              "cz": -127.5
+            }
+          }
+        ],
         "effects": [
           {
             "id": 2512,
@@ -175,8 +191,8 @@
             "parameters": {
               "label": "Swim",
               "HueVar": 0.1,
-              "Crazy": 0.20000000670552254,
-              "Speed": 0.09000000916421413
+              "Crazy": 0.03999999910593033,
+              "Speed": 0.040000010281801224
             },
             "modulation": {
               "modulators": [],
