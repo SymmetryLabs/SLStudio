@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539233210634,
+  "timestamp": 1539234477313,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 4,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -106,7 +106,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -203,7 +203,46 @@
           "autoDisable": true
         },
         "warps": [],
-        "effects": [],
+        "effects": [
+          {
+            "id": 28299,
+            "class": "com.symmetrylabs.slstudio.effect.SLDesaturation",
+            "modulationColor": -16711857,
+            "parameters": {
+              "label": "SLDesaturation",
+              "enabled": true,
+              "amount": 1.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 28302,
+            "class": "com.symmetrylabs.slstudio.effect.PaletteEffect",
+            "modulationColor": -65486,
+            "parameters": {
+              "label": "Palette",
+              "enabled": true,
+              "Amount": 1.0,
+              "Palette": 19,
+              "Bottom": 0.0,
+              "Top": 0.7200000062584877,
+              "Shift": 0.0,
+              "Bias": 0.0,
+              "Cutoff": 0.0,
+              "Alpha": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "paletteName": "sky.cloudy"
+          }
+        ],
         "clips": [],
         "patternIndex": 0,
         "patterns": [
@@ -215,12 +254,12 @@
               "label": "PilotsPinwheels",
               "HSpr": 0.7400000002235174,
               "VOff": 0.0,
-              "ZSlp": 0.0,
-              "Shrp": 0.01899999869056046,
+              "ZSlp": 0.6799999866634607,
+              "Shrp": 0.029999999329447746,
               "Drez": 0.0,
-              "Clic": 0.11999999731779099,
+              "Clic": 0.0,
               "Hue": 0.570000009611249,
-              "HSpd": 1.0,
+              "HSpd": 0.5000000111758709,
               "freeze": false
             },
             "modulation": {
@@ -245,7 +284,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -269,7 +308,7 @@
               "cy": 58.0,
               "cz": 14.499992370605469,
               "width": 435.9999960660934,
-              "lvel": -0.07999992370605469,
+              "lvel": 0.0,
               "rwidth": 539.3999892845749,
               "rvel": -0.5399999856948856,
               "cutwhite": 0.6299999859184027,
