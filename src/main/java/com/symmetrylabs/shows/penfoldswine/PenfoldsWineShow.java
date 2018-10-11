@@ -2,18 +2,24 @@ package com.symmetrylabs.shows.penfoldswine;
 
 import java.util.*;
 
+import com.symmetrylabs.slstudio.SLStudioLX;
+import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.slstudio.model.SLModel;
 
+import com.symmetrylabs.slstudio.workspaces.Workspace;
 import heronarts.lx.transform.LXTransform;
 
 /**
  * This file implements the mapping functions needed to lay out the cubes.
  */
-public class PenfoldsWineShow extends CubesShow implements Show {
+public class PenfoldsWineShow extends CubesShow implements Show, HasWorkspace {
 public static final String SHOW_NAME = "penfoldswine";
+
+    private Workspace workspace;
+
     static final float globalOffsetX = 0;
     static final float globalOffsetY = 0;
     static final float globalOffsetZ = 0;
@@ -69,32 +75,7 @@ public static final String SHOW_NAME = "penfoldswine";
             new    TowerConfig(123-175+12+(SP*4), TOWER_RISER*5, -117, 0, 0, 0, new String[] {"" }),
             new    TowerConfig(123-175+12+(SP*5), TOWER_RISER*5, -117, 0, 0, 0, new String[] {"" }),
             new    TowerConfig(123-175+12+(SP*7.5f), TOWER_RISER*5, -117, 0, 0, 0, new String[] {"" }),
-            new    TowerConfig(123-175+12+(SP*8.5f), TOWER_RISER*5, -117, 0, 0, 0, new String[] {"" }),    
-
-    
-
-        // group 7
-//        new TowerConfig(124, TOWER_RISER, -139, new String[] {"82", "4"}),
-//
-//
-//        // other side
-//        new TowerConfig(124, TOWER_RISER, -RIGHT_SIDE_SPACING, -90, new String[] {"383"}),
-//        new TowerConfig(124, JUMP*2+TOWER_RISER, -RIGHT_SIDE_SPACING, -90, new String[] {"358"}),
-//
-//        new TowerConfig(112, 0, -RIGHT_SIDE_SPACING-24, -90, new String[] {"91", "40", "340", "360"}),
-//
-//        new TowerConfig(88, JUMP+TOWER_RISER, -RIGHT_SIDE_SPACING-12, -90, new String[] {"172"}),
-//
-//        new TowerConfig(100, JUMP*2+TOWER_RISER, -RIGHT_SIDE_SPACING-48, -90, new String[] {"57"}),
-//
-//        new TowerConfig(64, 0, -RIGHT_SIDE_SPACING-24, -90, new String[] {"390", "408", "185"}),
-//
-//        new TowerConfig(52, TOWER_RISER, -RIGHT_SIDE_SPACING-48, -90, new String[] {"369"}),
-//        new TowerConfig(52, JUMP*2+TOWER_RISER, -RIGHT_SIDE_SPACING-48, -90, new String[] {"398"}),
-//
-//        new TowerConfig(76, 0, -RIGHT_SIDE_SPACING-60, -90, new String[] {"326", "128", "391", "341"}),
-//
-//        new TowerConfig(28, 0, -RIGHT_SIDE_SPACING-60, -90, new String[] {"129", "13", "77"})
+            new    TowerConfig(123-175+12+(SP*8.5f), TOWER_RISER*5, -117, 0, 0, 0, new String[] {"" }),
     };
 
 
@@ -136,5 +117,16 @@ public static final String SHOW_NAME = "penfoldswine";
         }
 
         return new CubesModel(towers, allCubesArr);
+    }
+
+    @Override
+    public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
+        workspace = new Workspace(lx, ui, "shows/penfoldswine");
+        workspace.setRequestsBeforeSwitch(2);
+    }
+
+    @Override
+    public Workspace getWorkspace() {
+        return workspace;
     }
 }
