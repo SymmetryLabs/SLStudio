@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539230557443,
+  "timestamp": 1539231825536,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -137,7 +137,7 @@
               "red": false,
               "x": 1.0,
               "y": 0.10999999940395355,
-              "z": 0.0,
+              "z": 0.17000027000904083,
               "flips": false,
               "flipc": false
             },
@@ -404,7 +404,7 @@
               "thick": 29.79999975860119,
               "offset": 2.4,
               "twipe": 350.0,
-              "attack": 127.99999937415123,
+              "attack": 10.0,
               "decay": 24.999999664723877,
               "sustain": 1.0,
               "release": 700.0000290572643
@@ -797,13 +797,13 @@
           "sync": false
         },
         {
-          "name": "Real Time Sequencer",
+          "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
           "sync": false
         },
         {
-          "name": "** Internal Error getting Device Name!",
+          "name": "Real Time Sequencer",
           "channel": true,
           "control": false,
           "sync": false

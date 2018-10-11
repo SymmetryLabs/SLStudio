@@ -26,7 +26,7 @@ public class AngleStrobe extends SLPattern<SLModel> {
     private final CompoundParameter offsetParam = new CompoundParameter("offset", 0, 0, 120);
     private final CompoundParameter wipeTime = new CompoundParameter("twipe", 350, 0, 1500);
 
-    private CompoundParameter attack = new CompoundParameter("attack", 0, 100, 500);
+    private CompoundParameter attack = new CompoundParameter("attack", 0, 10, 500);
     private CompoundParameter decay = new CompoundParameter("decay", 30, 0, 500);
     private CompoundParameter sustain = new CompoundParameter("sustain", 0.95, 0, 1);
     private CompoundParameter release = new CompoundParameter("release", 300, 0, 2000);

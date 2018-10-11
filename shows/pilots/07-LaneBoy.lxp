@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538500567890,
+  "timestamp": 1539231777927,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 5,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -106,7 +106,7 @@
               "enabled": true,
               "xSize": 410.0,
               "cx": 410.0,
-              "ySize": 33.00000085912893,
+              "ySize": 116.00000762939453,
               "cy": 26.680000700056553,
               "zSize": 65.25000016205013,
               "cz": 87.0,
@@ -123,7 +123,7 @@
               "cx": 410.0,
               "cy": 58.0,
               "cz": 72.5,
-              "angle": 0.0
+              "angle": -0.4998552796759128
             }
           }
         ],
@@ -165,7 +165,7 @@
               "thick": 44.799999503791334,
               "offset": 22.799999651312827,
               "twipe": 350.0,
-              "attack": 100.0,
+              "attack": 10.0,
               "decay": 15.000000335276125,
               "sustain": 0.7000000055879354,
               "release": 260.0000008940697
@@ -382,7 +382,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -397,7 +397,7 @@
             "modulationColor": -13041920,
             "parameters": {
               "label": "BoxMask",
-              "enabled": false,
+              "enabled": true,
               "xSize": 532.9999972507358,
               "cx": 410.0,
               "ySize": 81.19999818503857,
@@ -413,7 +413,7 @@
             "modulationColor": -15662849,
             "parameters": {
               "label": "BundleDirMask",
-              "enabled": false,
+              "enabled": true,
               "x": false,
               "y": true,
               "z": true
@@ -426,11 +426,11 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 418.1999921798706,
-              "cx": 409.99999750699385,
+              "xSize": 419.99999046325684,
+              "cx": 419.99998803105564,
               "ySize": 116.00000762939453,
               "cy": 4.639999896287918,
-              "zSize": 0.0,
+              "zSize": 62.08999916911125,
               "cz": 2.754997389575564,
               "invert": false
             }
@@ -504,7 +504,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -541,7 +541,7 @@
               "Speed": 0.55,
               "Symm": 0,
               "Anim": 3,
-              "Dens": 0.0,
+              "Dens": 0.0072656250558793545,
               "AnimResets": false
             },
             "modulation": {
@@ -691,9 +691,9 @@
             "modulationColor": -26112,
             "parameters": {
               "label": "SplitColor",
-              "x": 0.23000001907348633,
+              "x": 0.0,
               "y": 1.0,
-              "z": 0.0,
+              "z": 0.8222488164901733,
               "cx": 410.0,
               "cy": 116.0,
               "cz": 87.0,
@@ -940,9 +940,9 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 43,
+        "id": 26566,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16728321,
+        "modulationColor": -65407,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
