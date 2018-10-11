@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539195007382,
+  "timestamp": 1539230557443,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 2,
+      "focusedChannel": 3,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -78,11 +78,11 @@
               "label": "Mirror",
               "enabled": true,
               "x": true,
-              "cx": 410.0,
+              "cx": 409.99999750699385,
               "y": true,
               "cy": 58.0,
               "z": false,
-              "cz": 72.5
+              "cz": 14.49999824464328
             }
           },
           {
@@ -97,12 +97,31 @@
               "ySize": 62.63999989628792,
               "cy": 58.0,
               "zSize": 43.50000064820051,
-              "cz": 87.0,
+              "cz": 62.349999253973394,
               "invert": false
             }
           }
         ],
-        "effects": [],
+        "effects": [
+          {
+            "id": 25833,
+            "class": "com.symmetrylabs.slstudio.effect.CircleWipe",
+            "modulationColor": -36608,
+            "parameters": {
+              "label": "CircleWipe",
+              "enabled": false,
+              "rad": 99.6231303621824,
+              "invert": false,
+              "cx": 319.80000146766577,
+              "cy": 58.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 0,
         "patterns": [
@@ -166,6 +185,22 @@
               "cy": 58.0,
               "zSize": 63.800000194460154,
               "cz": 87.0,
+              "invert": true
+            }
+          },
+          {
+            "id": 25836,
+            "class": "com.symmetrylabs.slstudio.warp.BoxMask",
+            "modulationColor": -16736001,
+            "parameters": {
+              "label": "BoxMask",
+              "enabled": false,
+              "xSize": 213.20000439882278,
+              "cx": 623.1999965309718,
+              "ySize": 87.00000507384534,
+              "cy": 58.0,
+              "zSize": 94.24999951384962,
+              "cz": 14.499992370605469,
               "invert": true
             }
           }
@@ -258,7 +293,7 @@
             "modulationColor": -14156032,
             "parameters": {
               "label": "ColorFilter",
-              "enabled": true,
+              "enabled": false,
               "Hue": 0.0,
               "Sat": 0.0
             },
@@ -370,9 +405,9 @@
               "offset": 2.4,
               "twipe": 350.0,
               "attack": 127.99999937415123,
-              "decay": 19.999999552965164,
-              "sustain": 0.4800000227987766,
-              "release": 2000.0
+              "decay": 24.999999664723877,
+              "sustain": 1.0,
+              "release": 700.0000290572643
             },
             "modulation": {
               "modulators": [],
@@ -732,7 +767,31 @@
     "midi": {
       "inputs": [
         {
-          "name": "** Internal Error getting Device Name!",
+          "name": "CoreMIDI4J - Port 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 2",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 3",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 4",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Sync Port",
           "channel": true,
           "control": false,
           "sync": false
@@ -742,9 +801,22 @@
           "channel": true,
           "control": false,
           "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
         }
       ],
-      "surfaces": [],
+      "surfaces": [
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        }
+      ],
       "mapping": []
     }
   },
@@ -757,8 +829,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 484.7262015535227,
-        "theta": 0.03600000000000016,
-        "phi": 0.3097166738510104,
+        "theta": 0.0060000000000000634,
+        "phi": 1.5707963705062866,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5
