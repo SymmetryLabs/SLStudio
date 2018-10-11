@@ -12,25 +12,30 @@ public class Noise extends LXWarp {
 
     private final float RANGE = 75;
 
-    private CompoundParameter amount = new CompoundParameter("amt", .3f);
+    private CompoundParameter range = new CompoundParameter("range", .3f);
+    private CompoundParameter density = new CompoundParameter("dens", .3f, .01f, 1);
 
     public Noise(LX lx) {
         super(lx);
-        addParameter(amount);
+        addParameter(range);
+        addParameter(density);
     }
 
     public boolean run(double deltaMs, boolean inputVectorsChanged) {
-        float range = RANGE * amount.getValuef();
+        if (range.getValuef() > 0) {
+            float rangeVal = RANGE * range.getValuef();
 
-        for (int i = 0; i < inputVectors.length; i++) {
-            LXVector iv = inputVectors[i];
-            if (iv == null) {
-                outputVectors[i] = null;
-            } else {
-                LXVector ov = new LXVector(iv);
-                ov.add(random(-range, range),
-                    random(-range, range),
-                outputVectors[i] = ov;
+            for (int i = 0; i < inputVectors.length; i++) {
+                LXVector iv = inputVectors[i];
+                if (iv == null) {
+                    outputVectors[i] = null;
+                } else {
+                    LXVector ov = new LXVector(iv);
+                    ov.add(random(-rangeVal, rangeVal),
+                        random(-rangeVal, rangeVal),
+                        random(-rangeVal, rangeVal));
+                    outputVectors[i] = random(1) < density.getValuef() ? ov : null;
+                }
             }
         }
         return true;
