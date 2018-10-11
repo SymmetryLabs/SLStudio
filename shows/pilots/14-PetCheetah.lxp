@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539234477313,
+  "timestamp": 1539235118714,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -106,7 +106,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -227,11 +227,11 @@
               "label": "Palette",
               "enabled": true,
               "Amount": 1.0,
-              "Palette": 19,
+              "Palette": 24,
               "Bottom": 0.0,
-              "Top": 0.7200000062584877,
-              "Shift": 0.0,
-              "Bias": 0.0,
+              "Top": 0.640000008046627,
+              "Shift": 0.019999999552965164,
+              "Bias": 0.35999999195337296,
               "Cutoff": 0.0,
               "Alpha": false
             },
@@ -240,7 +240,23 @@
               "modulations": [],
               "triggers": []
             },
-            "paletteName": "sky.cloudy"
+            "paletteName": "sky.pink"
+          },
+          {
+            "id": 28305,
+            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
+            "modulationColor": -20480,
+            "parameters": {
+              "label": "BrightnessShift",
+              "enabled": true,
+              "Bscale": 1.0799999982118607,
+              "Bshift": 55.99999874830246
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
           }
         ],
         "clips": [],
@@ -284,7 +300,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -308,7 +324,7 @@
               "cy": 58.0,
               "cz": 14.499992370605469,
               "width": 435.9999960660934,
-              "lvel": 0.0,
+              "lvel": 0.11999988555908203,
               "rwidth": 539.3999892845749,
               "rvel": -0.5399999856948856,
               "cutwhite": 0.6299999859184027,
