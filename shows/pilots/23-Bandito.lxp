@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538517983910,
+  "timestamp": 1539231196930,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0500000528991222,
-      "focusedChannel": 1,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -30,7 +30,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 56.84166595339775,
+        "color/hue": 56.94117736816406,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
         "color": -3584,
@@ -93,9 +93,9 @@
             "modulationColor": -16716033,
             "parameters": {
               "label": "Strobe",
-              "enabled": false,
+              "enabled": true,
               "Shape": 2,
-              "Freq": 2.5374999999999996,
+              "Freq": 10.0,
               "Black": true
             },
             "modulation": {
@@ -134,7 +134,7 @@
               "maxhue": 250.0,
               "falloff": 88.01200026795269,
               "map": 1,
-              "count": 9,
+              "count": 11,
               "attract": 19.83999964594841,
               "repel": 6.839999891817569,
               "poster": 5,
@@ -178,7 +178,7 @@
             "modulationColor": -14090496,
             "parameters": {
               "label": "Strobe",
-              "enabled": false,
+              "enabled": true,
               "Shape": 0,
               "Freq": 10.0,
               "Black": true
@@ -448,7 +448,31 @@
     "midi": {
       "inputs": [
         {
-          "name": "** Internal Error getting Device Name!",
+          "name": "CoreMIDI4J - Port 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 2",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 3",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 4",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Sync Port",
           "channel": true,
           "control": false,
           "sync": false
@@ -458,9 +482,22 @@
           "channel": true,
           "control": false,
           "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
         }
       ],
-      "surfaces": [],
+      "surfaces": [
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        }
+      ],
       "mapping": []
     }
   },
