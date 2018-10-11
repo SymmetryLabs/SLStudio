@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539196128542,
+  "timestamp": 1539222285846,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,7 +14,7 @@
       "scene-5": false,
       "crossfader": 0.5172413792461157,
       "crossfaderBlendMode": 0,
-      "speed": 1.0,
+      "speed": 0.18000000715255737,
       "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
@@ -537,14 +537,14 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.0
       }
     },
     "components": {
       "GammaExpander": {
-        "id": 26510,
+        "id": 26564,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16711804,
+        "modulationColor": -16729345,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
@@ -628,220 +628,7 @@
       }
     },
     "modulation": {
-      "modulators": [
-        {
-          "id": 3563,
-          "class": "heronarts.lx.modulator.MultiStageEnvelope",
-          "modulationColor": -13106945,
-          "parameters": {
-            "label": "Env 1",
-            "running": false,
-            "trigger": false,
-            "loop": false,
-            "period": 1000.0
-          },
-          "stages": [
-            {
-              "basis": 0.0,
-              "value": 0.0,
-              "shape": 1.0
-            },
-            {
-              "basis": 0.009950248524546623,
-              "value": 0.9661017060279846,
-              "shape": 2.393029432263199
-            },
-            {
-              "basis": 0.13432836532592773,
-              "value": 1.0,
-              "shape": 0.6017782915348293
-            },
-            {
-              "basis": 0.3681592047214508,
-              "value": 0.0,
-              "shape": 0.223330349125619
-            },
-            {
-              "basis": 1.0,
-              "value": 0.0,
-              "shape": 1.0
-            }
-          ]
-        },
-        {
-          "id": 3565,
-          "class": "heronarts.lx.modulator.MultiStageEnvelope",
-          "modulationColor": -65290,
-          "parameters": {
-            "label": "Env 2",
-            "running": false,
-            "trigger": false,
-            "loop": false,
-            "period": 1000.0
-          },
-          "stages": [
-            {
-              "basis": 0.0,
-              "value": 0.0,
-              "shape": 1.0
-            },
-            {
-              "basis": 0.0,
-              "value": 1.0,
-              "shape": 1.0
-            },
-            {
-              "basis": 0.1094527393579483,
-              "value": 1.0,
-              "shape": 1.0
-            },
-            {
-              "basis": 0.3681592047214508,
-              "value": 0.0,
-              "shape": 0.11562016266048218
-            },
-            {
-              "basis": 1.0,
-              "value": 0.0,
-              "shape": 0.41784184873610725
-            }
-          ]
-        },
-        {
-          "id": 3583,
-          "class": "heronarts.lx.modulator.MultiStageEnvelope",
-          "modulationColor": -14089985,
-          "parameters": {
-            "label": "Env 3",
-            "running": false,
-            "trigger": false,
-            "loop": false,
-            "period": 1000.0
-          },
-          "stages": [
-            {
-              "basis": 0.0,
-              "value": 0.0,
-              "shape": 1.0
-            },
-            {
-              "basis": 0.004975124262273312,
-              "value": 0.9491525292396545,
-              "shape": 1.3986440051671871
-            },
-            {
-              "basis": 0.12935324013233185,
-              "value": 1.0,
-              "shape": 0.5049930270144918
-            },
-            {
-              "basis": 0.34825870394706726,
-              "value": 0.0,
-              "shape": 0.38878729008536733
-            },
-            {
-              "basis": 1.0,
-              "value": 0.0,
-              "shape": 1.0
-            }
-          ]
-        },
-        {
-          "id": 3584,
-          "class": "heronarts.lx.modulator.MultiStageEnvelope",
-          "modulationColor": -65465,
-          "parameters": {
-            "label": "Env 4",
-            "running": false,
-            "trigger": false,
-            "loop": false,
-            "period": 1000.0
-          },
-          "stages": [
-            {
-              "basis": 0.0,
-              "value": 0.0,
-              "shape": 1.0
-            },
-            {
-              "basis": 0.0,
-              "value": 1.0,
-              "shape": 1.0
-            },
-            {
-              "basis": 0.06467662006616592,
-              "value": 1.0,
-              "shape": 0.8499266658266295
-            },
-            {
-              "basis": 0.3781094551086426,
-              "value": 0.0,
-              "shape": 0.165384879534147
-            },
-            {
-              "basis": 1.0,
-              "value": 0.0,
-              "shape": 1.0
-            }
-          ]
-        },
-        {
-          "id": 3681,
-          "class": "heronarts.lx.modulator.MultiStageEnvelope",
-          "modulationColor": -65512,
-          "parameters": {
-            "label": "Env 5",
-            "running": false,
-            "trigger": false,
-            "loop": false,
-            "period": 3003.0218519166474
-          },
-          "stages": [
-            {
-              "basis": 0.0,
-              "value": 0.0,
-              "shape": 1.0
-            },
-            {
-              "basis": 0.019900497049093246,
-              "value": 1.0,
-              "shape": 1.0
-            },
-            {
-              "basis": 0.2189054787158966,
-              "value": 1.0,
-              "shape": 1.0
-            },
-            {
-              "basis": 0.5373134613037109,
-              "value": 0.0,
-              "shape": 0.49574011466082
-            },
-            {
-              "basis": 1.0,
-              "value": 0.0,
-              "shape": 1.0
-            }
-          ]
-        },
-        {
-          "id": 3685,
-          "class": "heronarts.lx.modulator.VariableLFO",
-          "modulationColor": -4718848,
-          "parameters": {
-            "label": "LFO 1",
-            "running": false,
-            "trigger": false,
-            "loop": true,
-            "wave": 0,
-            "period": 4830.3059162082,
-            "skew": 0.0,
-            "shape": 0.0,
-            "phase": 0.0,
-            "exp": 0.0
-          }
-        }
-      ],
+      "modulators": [],
       "modulations": [],
       "triggers": []
     },
@@ -927,14 +714,7 @@
       "paletteExpanded": true,
       "engineExpanded": true,
       "clipViewVisible": true,
-      "modulatorExpanded": {
-        "3563": true,
-        "3565": true,
-        "3583": true,
-        "3584": true,
-        "3681": true,
-        "3685": true
-      },
+      "modulatorExpanded": {},
       "preview": {
         "radius": 491.01388600578645,
         "theta": -0.005999999999999814,

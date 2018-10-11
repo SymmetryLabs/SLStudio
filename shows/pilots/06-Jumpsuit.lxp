@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539206961834,
+  "timestamp": 1539211260223,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 0,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -110,11 +110,11 @@
             "parameters": {
               "label": "Jumpsuit",
               "y": false,
-              "r": true,
+              "r": false,
               "yc": 205.00000513056835,
               "rc": 598.5999950864198,
-              "rhit": 79.50144052505493,
-              "rdrop": 21.893046498298645,
+              "rhit": 120.0,
+              "rdrop": 19.750000834465027,
               "yhit": 70.48999786376953,
               "ydrop": 108.0000002682209,
               "fstart": 270.00001072883606,
