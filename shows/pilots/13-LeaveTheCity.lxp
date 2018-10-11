@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538501454637,
+  "timestamp": 1539298723339,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -94,7 +94,7 @@
               "label": "ColorFilter",
               "enabled": true,
               "Hue": 51.839998941868544,
-              "Sat": 100.0
+              "Sat": 51.00000109523535
             },
             "modulation": {
               "modulators": [],
@@ -359,18 +359,6 @@
     "midi": {
       "inputs": [
         {
-          "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "Real Time Sequencer",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
           "name": "CoreMIDI4J - Port 1",
           "channel": true,
           "control": false,
@@ -399,9 +387,70 @@
           "channel": true,
           "control": false,
           "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
         }
       ],
-      "surfaces": [],
+      "surfaces": [
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        }
+      ],
       "mapping": []
     }
   },

@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539196927048,
+  "timestamp": 1539298917894,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -77,8 +77,8 @@
             "parameters": {
               "label": "Kaleidoscope",
               "enabled": true,
-              "cx": 196.80000346902818,
-              "cy": 49.87999982655967,
+              "cx": 122.99999301262528,
+              "cy": -5.070521183370147E-6,
               "cz": 14.499992370605469,
               "lat": 0.0,
               "lon": -10.799999758601189,
@@ -111,7 +111,7 @@
             "modulationColor": -16711718,
             "parameters": {
               "label": "Strobe",
-              "enabled": false,
+              "enabled": true,
               "Shape": 2,
               "Freq": 10.0,
               "Black": true

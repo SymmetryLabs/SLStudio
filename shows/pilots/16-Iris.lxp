@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539047919119,
+  "timestamp": 1539298737870,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 1.0333333350718021,
-      "focusedChannel": 3,
+      "speed": 1.0,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -242,10 +242,10 @@
               "label": "Peaks",
               "count": 11,
               "height": 0.0,
-              "omega": -76.79999828338623,
+              "omega": -56.709938049316406,
               "radius": 9.999999776482582,
               "high": 100.0,
-              "mid": 54.9999987706542,
+              "mid": 69.99999843537807,
               "low": 0.0
             },
             "modulation": {
@@ -338,7 +338,7 @@
               "Dens": 1.0,
               "Attack": 0.4,
               "Decay": 0.05999999865889549,
-              "Hue": 0.5099999886006117,
+              "Hue": 0.40999999083578587,
               "HueVar": 0.10000000335276127,
               "Sat": 0.8699999917298555
             },
@@ -364,7 +364,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.10210210084915161,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -386,7 +386,7 @@
               "Dens": 0.029999999329447746,
               "Attack": 0.23000000379979613,
               "Decay": 0.21000000201165675,
-              "Hue": 0.549999987706542,
+              "Hue": 0.35999999195337296,
               "HueVar": 0.15000000223517418,
               "Sat": 0.4900000002235174
             },
@@ -741,19 +741,98 @@
           "sync": false
         },
         {
-          "name": "Real Time Sequencer",
+          "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
           "sync": false
         },
         {
-          "name": "** Internal Error getting Device Name!",
+          "name": "Real Time Sequencer",
           "channel": true,
           "control": false,
           "sync": false
         }
       ],
-      "surfaces": [],
+      "surfaces": [
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        }
+      ],
       "mapping": []
     }
   },
