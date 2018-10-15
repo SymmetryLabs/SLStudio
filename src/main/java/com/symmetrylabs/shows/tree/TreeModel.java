@@ -2,21 +2,16 @@ package com.symmetrylabs.shows.tree;
 
 import java.util.*;
 import java.lang.Integer;
-
-import processing.core.PApplet;
-import processing.data.JSONArray;
-import processing.data.JSONObject;
-import static processing.core.PApplet.*;
+import java.util.Arrays;
 
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.model.LXPoint;
-import heronarts.lx.transform.LXMatrix;
 import heronarts.lx.transform.LXTransform;
-import heronarts.lx.transform.LXVector;
 
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.shows.tree.config.*;
 import static com.symmetrylabs.util.DistanceConstants.*;
+import static com.symmetrylabs.util.MathConstants.*;
 
 
 public class TreeModel extends SLModel {
@@ -170,6 +165,7 @@ public class TreeModel extends SLModel {
 
             int i = 0;
             for (Branch branch : branches) {
+                System.out.println(i + " of " + config.getBranches().size() );
                 branch.reconfigure(t, config.getBranches().get(i++));
             }
             t.pop();
@@ -291,6 +287,13 @@ public class TreeModel extends SLModel {
             return config;
         }
 
+        public Twig getTwigByWiringIndex(int index) {
+            for (Twig twig : twigs) {
+                if (index == twig.getConfig().index) return twig;
+            }
+            return null;
+        }
+
         public List<Twig> getTwigs() {
             return twigs;
         }
@@ -321,9 +324,8 @@ public class TreeModel extends SLModel {
                 this.y = t.y();
                 this.z = t.z();
 
-                int i = 1;
                 for (TwigConfig twigConfig : config.getTwigs()) {
-                    Twig twig = new Twig(i++, t, twigConfig);
+                    Twig twig = new Twig(t, twigConfig);
                     twigs.add(twig);
 
                     for (LXPoint p : twig.points) {
@@ -383,13 +385,13 @@ public class TreeModel extends SLModel {
           }
         }
 
-        public Twig(int index, LXTransform t, TwigConfig config) {
+        public Twig(LXTransform t, TwigConfig config) {
             super(new Fixture(t, config));
             this.config = config;
             this.azimuth = config.azimuth;
             this.elevation = config.elevation;
             this.tilt = config.tilt;
-            this.index = index;
+            this.index = config.index;
 
             Fixture f = (Fixture) this.fixtures.get(0);
             this.leaves = Collections.unmodifiableList(f.leaves);
@@ -408,8 +410,8 @@ public class TreeModel extends SLModel {
             t.push();
             t.translate(config.x, config.y, config.z);
             t.rotateX(config.elevation * PI / 180.);
-            t.rotateY(config.tilt * PI / 180.);
             t.rotateZ(config.azimuth * PI / 180.);
+            t.rotateY(config.tilt * PI / 180.);
 
             this.x = t.x();
             this.y = t.y();
@@ -433,6 +435,10 @@ public class TreeModel extends SLModel {
             return leaves.toArray(new Leaf[leaves.size()]);
         }
 
+        public List<LXPoint> getPoints() {
+            return Arrays.asList(points);
+        }
+
         private static class Fixture extends LXAbstractFixture {
             private final List<Leaf> leaves = new ArrayList<Leaf>();
             private final float x, y, z;
@@ -441,8 +447,8 @@ public class TreeModel extends SLModel {
                 t.push();
                 t.translate(config.x, config.y + 5*INCHES, config.z);
                 t.rotateX(config.elevation * PI / 180.);
-                t.rotateY(config.tilt * PI / 180.);
                 t.rotateZ(config.azimuth * PI / 180.);
+                t.rotateY(config.tilt * PI / 180.);
 
                 this.x = t.x();
                 this.y = t.y();

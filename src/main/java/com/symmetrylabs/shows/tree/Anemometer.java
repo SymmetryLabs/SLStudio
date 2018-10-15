@@ -141,7 +141,7 @@ public class Anemometer extends LXRunnableComponent {
 
         private void onRun(double deltaMs) {
             float n = noise(i);
-            float speedRaw = MAX_WIND_SPEED * n*n * erratic.getValuef();
+            float speedRaw = MAX_WIND_SPEED * n * erratic.getValuef();
             speedModulator.parameterRaw.setValue(constrain(speedRaw, 0, MAX_WIND_SPEED));
             directionModulator.parameterRaw.setValue(360 * n);
             i = i + (0.005f * erratic.getValuef());

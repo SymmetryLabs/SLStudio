@@ -1,33 +1,39 @@
-package com.symmetrylabs.slstudio.output;
+package com.symmetrylabs.shows.tree;
 
 import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.slstudio.component.GammaExpander;
 import heronarts.lx.LX;
 import heronarts.lx.output.LXDatagram;
+import heronarts.lx.model.LXPoint;
 
 import java.net.UnknownHostException;
 
-public class ArtNetDatagram extends LXDatagram {
+public class AssignableArtNetDatagram extends LXDatagram {
 
     private final static int DEFAULT_UNIVERSE = 0;
     private final static int ARTNET_HEADER_LENGTH = 18;
     private final static int ARTNET_PORT = 6454;
     private final static int SEQUENCE_INDEX = 12;
 
-    private final int[] pointIndices;
+    public String ipAddress;
+    private int[] pointIndices;
+    public int universe = 0;
     private boolean sequenceEnabled = false;
     private byte sequence = 1;
 
     private GammaExpander GammaExpander;
 
-    public ArtNetDatagram(LX lx, String ipAddress, int[] indices, int universeNumber) {
+    public AssignableArtNetDatagram(LX lx, String ipAddress, int[] indices, int universeNumber) {
         this(lx, ipAddress, indices, 3 * indices.length, universeNumber);
     }
 
-    public ArtNetDatagram(LX lx, String ipAddress, int[] indices, int dataLength, int universeNumber) {
+    public AssignableArtNetDatagram(LX lx, String ipAddress, int[] indices, int dataLength, int universeNumber) {
         super(ARTNET_HEADER_LENGTH + dataLength + (dataLength % 2));
-
+        this.ipAddress = ipAddress;
         this.pointIndices = indices;
+        //System.out.println("A: " + universeNumber +  ", " + this.universe);
+        this.universe = universeNumber;
+        //System.out.println("B: " + universeNumber +  ", " + this.universe);
 
         GammaExpander = GammaExpander.getInstance(lx);
 
@@ -35,7 +41,7 @@ public class ArtNetDatagram extends LXDatagram {
             setAddress(ipAddress);
             setPort(ARTNET_PORT);
         } catch (UnknownHostException e) {
-            System.out.println("MappingPixlite with ip address (" + ipAddress + ") is not on the network.");
+            //System.out.println("MappingPixlite with ip address (" + ipAddress + ") is not on the network.");
         }
 
         this.buffer[0] = 'A';
@@ -62,9 +68,13 @@ public class ArtNetDatagram extends LXDatagram {
         }
     }
 
-    public ArtNetDatagram setSequenceEnabled(boolean sequenceEnabled) {
+    public AssignableArtNetDatagram setSequenceEnabled(boolean sequenceEnabled) {
         this.sequenceEnabled = sequenceEnabled;
         return this;
+    }
+
+    public void setIndices(int[] indices) {
+        this.pointIndices = indices;
     }
 
     @Override
@@ -81,11 +91,6 @@ public class ArtNetDatagram extends LXDatagram {
         // We need to slow down the speed at which we send the packets so that we don't overload our switches. 3us seems to
         // be about right - Yona
         busySleep(3000);
-    }
-
-    public void setUniverse(int universe) {
-        this.buffer[14] = (byte) (universe & 0xff); // Universe LSB
-        this.buffer[15] = (byte) ((universe >>> 8) & 0xff); // Universe MSB
     }
 
     LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {

@@ -29,7 +29,6 @@ import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.ui.UIFramerateControl;
 import com.symmetrylabs.slstudio.envelop.Envelop;
 import com.symmetrylabs.slstudio.envelop.EnvelopOscListener;
-import com.symmetrylabs.shows.tree.ui.UITreeModelingTool;
 import com.symmetrylabs.shows.tree.ui.UITreeModelAxes;
 import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.DrawHelper;
@@ -54,7 +53,6 @@ public class SLStudio extends PApplet {
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
-    public TreeModelingTool treeModelingTool;
     public UITreeModelingTool uiTreeModelingTool = null;
     public UITreeModelAxes uiTreeModelAxes = null;
     public Anemometer anemometer;
@@ -141,18 +139,6 @@ public class SLStudio extends PApplet {
 
                 show.setupLx(lx);
 
-                if (TreeModelingTool.isTreeShow()) {
-                    treeModelingTool = new TreeModelingTool(lx);
-                    lx.engine.registerComponent("treeModelingTool", treeModelingTool);
-
-                    anemometer = new Anemometer();
-                    lx.engine.modulation.addModulator(anemometer.speedModulator);
-                    lx.engine.modulation.addModulator(anemometer.directionModulator);
-                    lx.engine.registerComponent("anemomter", anemometer);
-                    lx.engine.addLoopTask(anemometer);
-                    anemometer.start();
-                }
-
                 outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
                 mappingPixlites = setupPixlites();
@@ -180,12 +166,6 @@ public class SLStudio extends PApplet {
                 ui.preview.setPhi(0).setMinRadius(0 * FEET).setMaxRadius(150 * FEET).setRadius(25 * FEET);
                 new UIFramerateControl(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
                 new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 2);
-
-                if (TreeModelingTool.isTreeShow()) {
-                    ui.preview.addComponent(new UITreeTrunk(applet));
-                    uiTreeModelAxes = new UITreeModelAxes();
-                    ui.preview.addComponent(uiTreeModelAxes);
-                }
 
                 show.setupUi(lx, ui);
 

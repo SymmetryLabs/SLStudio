@@ -21,10 +21,8 @@ import heronarts.p3lx.ui.UIContainer;
 import processing.core.PGraphics;
 
 import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.shows.tree.*;
 import static com.symmetrylabs.util.MathUtils.*;
-
-import com.symmetrylabs.shows.tree.Anemometer;
-
 
 
 public class UIAnemometer extends UICollapsibleSection {

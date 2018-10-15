@@ -1,8 +1,10 @@
 package com.symmetrylabs.shows.tree.config;
 
 import java.io.*;
+import java.util.*;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import heronarts.lx.LX;
 
@@ -43,7 +45,7 @@ public class TreeConfigStore {
         File file = new File(getConfigFilePath());
 
         try {
-            writeConfig(file);
+            //writeConfig(file);
         } catch (Exception e) {
             e.printStackTrace();
         }

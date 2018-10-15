@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.ui;
 
-import com.symmetrylabs.util.artnet.ui.UIArtNetConfig;
+import processing.core.PGraphics;
+
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXMappingEngine;
@@ -29,8 +30,9 @@ import heronarts.p3lx.ui.studio.midi.UIMidiSurfaces;
 import heronarts.p3lx.ui.studio.modulation.UIComponentModulator;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import heronarts.p3lx.ui.studio.osc.UIOscManager;
-import processing.core.PGraphics;
-import com.symmetrylabs.shows.tree.TreeModelingTool;
+
+import com.symmetrylabs.util.artnet.ui.UIArtNetConfig;
+import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.shows.tree.ui.*;
 import com.symmetrylabs.slstudio.SLStudio;
 
@@ -78,9 +80,9 @@ public class UIOverriddenRightPane extends UIPane {
 
     private void buildUtilityUI() {
         if (TreeModelingTool.isTreeShow()) {
-            new UIAnemometer(ui, lx, SLStudio.applet.anemometer, 0, 0, this.utility.getContentWidth(), 500).addToContainer(this.utility);
-            SLStudio.applet.uiTreeModelingTool = new UITreeModelingTool(ui, SLStudio.applet.treeModelingTool, 0, 0, this.utility.getContentWidth());
-            SLStudio.applet.uiTreeModelingTool.addToContainer(this.utility);
+            //new UIAnemometer(ui, lx, SLStudio.applet.anemometer, 0, 0, this.utility.getContentWidth(), 500).addToContainer(this.utility);
+            UITreeModelingTool.getInstance(ui, TreeModelingTool.getInstance(lx), 0, 0, this.utility.getContentWidth());
+            UITreeModelingTool.getInstance().addToContainer(this.utility);
         }
 
         new UIOfflineRender(this.ui, this.lx, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);

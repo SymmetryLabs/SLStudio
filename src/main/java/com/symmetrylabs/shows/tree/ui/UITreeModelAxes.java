@@ -5,22 +5,42 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 import static processing.core.PConstants.*;
 
+import heronarts.lx.LX;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
 import heronarts.lx.color.LXColor;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.shows.tree.config.*;
-import com.symmetrylabs.shows.tree.*;
+import com.symmetrylabs.shows.tree.config.LimbConfig;
+import com.symmetrylabs.shows.tree.config.BranchConfig;
+import com.symmetrylabs.shows.tree.config.TwigConfig;
+import com.symmetrylabs.shows.tree.TreeModel;
+import com.symmetrylabs.shows.tree.TreeModelingTool;
 import static com.symmetrylabs.util.DistanceConstants.*;
 
 public class UITreeModelAxes extends UI3dComponent {
 
+    private static UITreeModelAxes instance = null;
+
     private final TreeModelingTool modelingTool;
 
-    public UITreeModelAxes() {
-        this.modelingTool = SLStudio.applet.treeModelingTool;
+    private UITreeModelAxes(LX lx) {
+        this.modelingTool = TreeModelingTool.getInstance(lx);
         visible.setValue(false);
+    }
+
+    public static UITreeModelAxes getInstance(LX lx) {
+        if (instance == null)
+            instance = new UITreeModelAxes(lx);
+
+        return instance;
+    }
+
+    public static UITreeModelAxes getInstance() {
+        if (instance != null)
+            return instance;
+
+        return null;
     }
 
     @Override

@@ -10,6 +10,7 @@ import static com.symmetrylabs.util.DistanceConstants.*;
 public class BranchConfig {
     public static final String DEFAULT_IP_ADDRESS = "0.0.0.0";
     public static final int DEFAULT_CHANNEL = 1;
+    public static int NUM_TWIGS = 8;
 
     public static final float DEFAULT_X = 0*FEET;
     public static final float MIN_X = -15*FEET;
@@ -41,6 +42,7 @@ public class BranchConfig {
     public static final float MAX_TILT =  180;
     private static boolean TILT_ENABLED = true;
 
+    public boolean locked;
     public String ipAddress;
     public int channel;
     public float x;
@@ -51,11 +53,12 @@ public class BranchConfig {
     public float tilt;
     private TwigConfig[] twigs;
 
-    public BranchConfig(float x, float y, float z, float azimuth, float elevation, float tilt, TwigConfig[] twigs) {
-        this(DEFAULT_IP_ADDRESS, DEFAULT_CHANNEL, x, y, z, azimuth, elevation, tilt, twigs);
+    public BranchConfig(boolean locked, float x, float y, float z, float azimuth, float elevation, float tilt, TwigConfig[] twigs) {
+        this(locked, DEFAULT_IP_ADDRESS, DEFAULT_CHANNEL, x, y, z, azimuth, elevation, tilt, twigs);
     }
 
-    public BranchConfig(String ipAddress, int channel, float x, float y, float z, float azimuth, float elevation, float tilt, TwigConfig[] twigs) {
+    public BranchConfig(boolean locked, String ipAddress, int channel, float x, float y, float z, float azimuth, float elevation, float tilt, TwigConfig[] twigs) {
+        this.locked = locked;
         this.ipAddress = ipAddress;
         this.channel = channel;
         this.x = x;
@@ -128,6 +131,6 @@ public class BranchConfig {
     }
 
     public BranchConfig getCopy() {
-        return new BranchConfig(x, y, z, azimuth, elevation, tilt, twigs);
+        return new BranchConfig(locked, x, y, z, azimuth, elevation, tilt, twigs);
     }
 }

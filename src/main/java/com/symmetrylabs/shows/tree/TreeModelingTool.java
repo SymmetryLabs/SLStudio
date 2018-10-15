@@ -1,5 +1,6 @@
 package com.symmetrylabs.shows.tree;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.JsonObject;
@@ -12,12 +13,17 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.ObjectParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.StringParameter;
+import heronarts.lx.parameter.BooleanParameter;
 
 import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.tree.config.*;
+import com.symmetrylabs.shows.tree.*;
 
 
 public class TreeModelingTool extends LXComponent {
+
+    private static TreeModelingTool instance = null;
 
     public static enum Mode {
         LIMB, BRANCH, TWIG
@@ -37,7 +43,7 @@ public class TreeModelingTool extends LXComponent {
     public final BranchManipulator branchManipulator;
     public final TwigManipulator twigManipulator;
 
-    public TreeModelingTool(LX lx) {
+    private TreeModelingTool(LX lx) {
         super(lx, "TreeModelingTool");
         this.tree = (TreeModel) lx.model;
         this.store = new TreeConfigStore(lx);
@@ -55,18 +61,21 @@ public class TreeModelingTool extends LXComponent {
         this.selectedBranch = new ObjectParameter<TreeModel.Branch>("selectedBranch", getSelectedLimb().getBranchesArray());
         this.selectedTwig   = new ObjectParameter<TreeModel.Twig>("selectedTwig", getSelectedBranch().getTwigsArray());
 
+        selectedTwig.setOptions(new String[] {"1", "2", "3", "4", "5", "6", "7", "8"});
+
         selectedLimb.addListener(parameter -> {
             mode.setValue(Mode.LIMB);
             limbManipulator.repurposeParameters();
             updateBranches();
             updateTwigs();
-            System.out.println("selectedLimb listener");
+            mode.setValue(Mode.LIMB);
         });
 
         selectedBranch.addListener(parameter -> {
             mode.setValue(Mode.BRANCH);
             branchManipulator.repurposeParameters();
             updateTwigs();
+            mode.setValue(Mode.BRANCH);
         });
 
         selectedTwig.addListener(parameter -> {
@@ -77,6 +86,20 @@ public class TreeModelingTool extends LXComponent {
         limbManipulator.repurposeParameters();
         branchManipulator.repurposeParameters();
         twigManipulator.repurposeParameters();
+    }
+
+    public static TreeModelingTool getInstance(LX lx) {
+        if (instance == null)
+            instance = new TreeModelingTool(lx);
+
+        return instance;
+    }
+
+    public static TreeModelingTool getInstance() {
+        if (instance != null) {
+            return instance;
+        }
+        return null;
     }
 
     private void updateBranches() {
@@ -135,6 +158,7 @@ public class TreeModelingTool extends LXComponent {
         public final CompoundParameter height = new CompoundParameter("height", LimbConfig.DEFAULT_HEIGHT, LimbConfig.MIN_HEIGHT, LimbConfig.MAX_HEIGHT);
         public final CompoundParameter azimuth    = new CompoundParameter("azim", LimbConfig.DEFAULT_AZIMUTH, LimbConfig.MIN_AZIMUTH, LimbConfig.MAX_AZIMUTH);
         public final CompoundParameter elevation = new CompoundParameter("elev", LimbConfig.DEFAULT_ELEVATION, LimbConfig.MIN_ELEVATION, LimbConfig.MAX_ELEVATION);
+        public final BooleanParameter locked = new BooleanParameter("locked", false);
 
         private LimbManipulator(LX lx) {
             super(lx);
@@ -142,6 +166,15 @@ public class TreeModelingTool extends LXComponent {
             addParameter(height);
             addParameter(azimuth);
             addParameter(elevation);
+            addParameter(locked);
+
+            locked.addListener(parameter -> {
+                for (TreeModel.Branch branch : getSelectedLimb().getBranches()) {
+                    if (((BooleanParameter) parameter).isOn()) {
+                        branch.getConfig().locked = true;
+                    }
+                }
+            });
         }
 
         public void onParameterChanged(LXParameter parameter) {
@@ -151,6 +184,7 @@ public class TreeModelingTool extends LXComponent {
                 config.height = height.getValuef();
                 config.azimuth = azimuth.getValuef();
                 config.elevation = elevation.getValuef();
+                config.locked = locked.isOn();
                 tree.reconfigure();
             }
             if (mode.getEnum() != Mode.LIMB) {
@@ -165,6 +199,7 @@ public class TreeModelingTool extends LXComponent {
             height.setValue(config.height);
             azimuth.setValue(config.azimuth);
             elevation.setValue(config.elevation);
+            locked.setValue(config.locked);
             disableParameters = false;
         }
     }
@@ -181,6 +216,7 @@ public class TreeModelingTool extends LXComponent {
         public final CompoundParameter azimuth = new CompoundParameter("azim", BranchConfig.DEFAULT_AZIMUTH, BranchConfig.MIN_AZIMUTH, BranchConfig.MAX_AZIMUTH);
         public final CompoundParameter elevation = new CompoundParameter("elev", BranchConfig.DEFAULT_ELEVATION, BranchConfig.MIN_ELEVATION, BranchConfig.MAX_ELEVATION);
         public final CompoundParameter tilt = new CompoundParameter("tilt", BranchConfig.DEFAULT_TILT, BranchConfig.MIN_TILT, BranchConfig.MAX_TILT);
+        public final BooleanParameter locked = new BooleanParameter("locked", false);
 
         private BranchManipulator(LX lx) {
             super(lx);
@@ -192,6 +228,13 @@ public class TreeModelingTool extends LXComponent {
             addParameter(azimuth);
             addParameter(elevation);
             addParameter(tilt);
+            addParameter(locked);
+
+            locked.addListener(parameter -> {
+                if (!((BooleanParameter) parameter).isOn()) {
+                    limbManipulator.locked.setValue(false);
+                }
+            });
 
             // type has an "exclusive" listener
             // (todo) clean this up a bit
@@ -221,6 +264,7 @@ public class TreeModelingTool extends LXComponent {
                 config.azimuth = azimuth.getValuef();
                 config.elevation = elevation.getValuef();
                 config.tilt = tilt.getValuef();
+                config.locked = locked.isOn();
                 tree.reconfigure();
             }
             if (mode.getEnum() != Mode.BRANCH) {
@@ -239,6 +283,7 @@ public class TreeModelingTool extends LXComponent {
             azimuth.setValue(config.azimuth);
             elevation.setValue(config.elevation);
             tilt.setValue(config.tilt);
+            locked.setValue(config.locked);
             disableParameters = false;
         }
     }
@@ -252,6 +297,8 @@ public class TreeModelingTool extends LXComponent {
         public final CompoundParameter azimuth = new CompoundParameter("azim", TwigConfig.DEFAULT_AZIMUTH, TwigConfig.MIN_AZIMUTH, TwigConfig.MAX_AZIMUTH);
         public final CompoundParameter elevation = new CompoundParameter("elev", TwigConfig.DEFAULT_ELEVATION, TwigConfig.MIN_ELEVATION, TwigConfig.MAX_ELEVATION);
         public final CompoundParameter tilt = new CompoundParameter("tilt", TwigConfig.DEFAULT_TILT, TwigConfig.MIN_TILT, TwigConfig.MAX_TILT);
+        public final DiscreteParameter index = new DiscreteParameter("index", new String[] {"1", "2", "3", "4", "5", "6", "7", "8"});
+        public final BooleanParameter locked = new BooleanParameter("locked", false);
 
         private TwigManipulator(LX lx) {
             super(lx);
@@ -261,6 +308,7 @@ public class TreeModelingTool extends LXComponent {
             addParameter(azimuth);
             addParameter(elevation);
             addParameter(tilt);
+            addParameter(index);
         }
 
         public void onParameterChanged(LXParameter parameter) {
@@ -272,6 +320,7 @@ public class TreeModelingTool extends LXComponent {
                 config.azimuth = azimuth.getValuef();
                 config.elevation = elevation.getValuef();
                 config.tilt = tilt.getValuef();
+                config.index = index.getValuei()+1;
                 tree.reconfigure();
                 branchManipulator.type.setValue(0); // Custom
             }
@@ -289,6 +338,9 @@ public class TreeModelingTool extends LXComponent {
             azimuth.setValue(config.azimuth);
             elevation.setValue(config.elevation);
             tilt.setValue(config.tilt);
+            index.setValue(config.index-1);
+
+            //System.out.println("config: " + config.index + ", param: " + index.getValuei());
             disableParameters = false;
         }
     }
