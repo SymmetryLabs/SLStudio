@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539282187367,
+  "timestamp": 1539650317482,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.0,
       "crossfaderBlendMode": 0,
-      "speed": 0.46666664257645607,
-      "focusedChannel": 0,
+      "speed": 0.3333333022892475,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -192,7 +192,56 @@
               "label": "Swim",
               "HueVar": 0.1,
               "Crazy": 0.03999999910593033,
-              "Speed": 0.040000010281801224
+              "Speed": 0.035000010626390576
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 3683,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -6160640,
+        "parameters": {
+          "label": "Rings",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": false
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 3684,
+            "class": "com.symmetrylabs.slstudio.pattern.Rings",
+            "modulationColor": -10092289,
+            "parameters": {
+              "label": "Rings",
+              "Hue": 0.0,
+              "Depth": 0.480000002682209,
+              "Bright": 0.75,
+              "Sat": 0.0,
+              "Speed1": 0.12000000178813935,
+              "Speed2": 0.06000000759959223,
+              "Scale": 0.3900000058114529
             },
             "modulation": {
               "modulators": [],

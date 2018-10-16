@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539228870317,
+  "timestamp": 1539656407857,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.0,
       "crossfaderBlendMode": 0,
       "speed": 0.6333333104848862,
-      "focusedChannel": 1,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -53,7 +53,7 @@
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -65283,
         "parameters": {
-          "label": "Channel-1",
+          "label": "Rings Red",
           "arm": false,
           "enabled": true,
           "cue": false,
@@ -89,26 +89,8 @@
           }
         ],
         "clips": [],
-        "patternIndex": 1,
+        "patternIndex": 0,
         "patterns": [
-          {
-            "id": 1170,
-            "class": "heronarts.lx.pattern.SolidColorPattern",
-            "modulationColor": -16128,
-            "parameters": {
-              "label": "SolidColor",
-              "color/hue": 0.0,
-              "color/brightness": 100.0,
-              "color/saturation": 100.0,
-              "color": -65536
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
           {
             "id": 4116,
             "class": "com.symmetrylabs.slstudio.pattern.Rings",
@@ -116,7 +98,7 @@
             "parameters": {
               "label": "Rings",
               "Hue": 0.0,
-              "Depth": 0.6,
+              "Depth": 0.5700000006705522,
               "Bright": 0.75,
               "Sat": 1.0,
               "Speed1": 0.14000000134110452,
@@ -137,7 +119,7 @@
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -16711818,
         "parameters": {
-          "label": "Channel-2",
+          "label": "Rings White",
           "arm": false,
           "enabled": true,
           "cue": false,
@@ -162,74 +144,19 @@
             "parameters": {
               "label": "ColorFilter",
               "enabled": true,
-              "Hue": 28.799999356269836,
+              "Hue": 0.0,
               "Sat": 0.0
-            },
-            "modulation": {
-              "modulators": [
-                {
-                  "id": 4320,
-                  "class": "heronarts.lx.modulator.VariableLFO",
-                  "modulationColor": -16711764,
-                  "parameters": {
-                    "label": "LFO",
-                    "running": true,
-                    "trigger": false,
-                    "loop": true,
-                    "wave": 0,
-                    "period": 21168.65311857544,
-                    "skew": 0.0,
-                    "shape": 0.0,
-                    "phase": 0.0,
-                    "exp": 0.0
-                  }
-                }
-              ],
-              "modulations": [
-                {
-                  "source": {
-                    "id": 4320
-                  },
-                  "target": {
-                    "componentId": 4127,
-                    "parameterPath": "Sat"
-                  },
-                  "id": 4321,
-                  "class": "heronarts.lx.parameter.LXCompoundModulation",
-                  "modulationColor": -16711846,
-                  "parameters": {
-                    "label": "",
-                    "enabled": true,
-                    "Polarity": 0,
-                    "Range": 1.0
-                  }
-                }
-              ],
-              "triggers": []
-            }
-          }
-        ],
-        "clips": [],
-        "patternIndex": 1,
-        "patterns": [
-          {
-            "id": 4124,
-            "class": "heronarts.lx.pattern.SolidColorPattern",
-            "modulationColor": -16711806,
-            "parameters": {
-              "label": "SolidColor",
-              "color/hue": 0.0,
-              "color/brightness": 100.0,
-              "color/saturation": 100.0,
-              "color": -65536
             },
             "modulation": {
               "modulators": [],
               "modulations": [],
               "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
           {
             "id": 4130,
             "class": "com.symmetrylabs.slstudio.pattern.Rings",
@@ -237,12 +164,78 @@
             "parameters": {
               "label": "Rings",
               "Hue": 0.0,
-              "Depth": 0.5800000004470348,
+              "Depth": 0.480000002682209,
               "Bright": 0.75,
               "Sat": 0.5,
               "Speed1": 0.08000000268220903,
               "Speed2": 0.05000000782310965,
               "Scale": 0.2100000098347664
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 4407,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -14876928,
+        "parameters": {
+          "label": "Rings Gold",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": false
+        },
+        "warps": [],
+        "effects": [
+          {
+            "id": 4410,
+            "class": "com.symmetrylabs.slstudio.effect.ColorFilter",
+            "modulationColor": -16711798,
+            "parameters": {
+              "label": "ColorFilter",
+              "enabled": true,
+              "Hue": 39.599999114871025,
+              "Sat": 100.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 4408,
+            "class": "com.symmetrylabs.slstudio.pattern.Rings",
+            "modulationColor": -6422784,
+            "parameters": {
+              "label": "Rings",
+              "Hue": 0.0,
+              "Depth": 0.4700000029057264,
+              "Bright": 0.75,
+              "Sat": 0.5,
+              "Speed1": 0.08000000268220903,
+              "Speed2": 0.05000000782310965,
+              "Scale": 0.1600000109523535
             },
             "modulation": {
               "modulators": [],
@@ -477,9 +470,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 262.4783108125483,
-        "theta": -0.09000000000000002,
-        "phi": 0.10200000000000004,
+        "radius": 308.49980571284493,
+        "theta": -0.06000000000000008,
+        "phi": -0.03299999999999999,
         "positionX": 39.88426208496094,
         "positionY": 69.0,
         "positionZ": -131.19944763183594

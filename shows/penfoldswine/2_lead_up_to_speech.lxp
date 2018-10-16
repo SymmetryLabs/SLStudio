@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539234792700,
+  "timestamp": 1539652170534,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -12,8 +12,8 @@
       "scene-3": false,
       "scene-4": false,
       "scene-5": false,
-      "crossfader": 0.0,
-      "crossfaderBlendMode": 0,
+      "crossfader": 0.5000000018626451,
+      "crossfaderBlendMode": 1,
       "speed": 0.4499999713152647,
       "focusedChannel": 0,
       "cueA": false,
@@ -53,7 +53,7 @@
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -4653312,
         "parameters": {
-          "label": "Channel-1",
+          "label": "Circle",
           "arm": false,
           "enabled": true,
           "cue": false,
@@ -62,7 +62,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 1,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -70,23 +70,7 @@
           "autoDisable": false
         },
         "warps": [],
-        "effects": [
-          {
-            "id": 1169,
-            "class": "heronarts.lx.effect.BlurEffect",
-            "modulationColor": -9371393,
-            "parameters": {
-              "label": "Blur",
-              "enabled": false,
-              "amount": 0.880000002682209
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            }
-          }
-        ],
+        "effects": [],
         "clips": [],
         "patternIndex": 0,
         "patterns": [
@@ -96,8 +80,8 @@
             "modulationColor": -38400,
             "parameters": {
               "label": "TriggerableCircle",
-              "rate": 5000.0,
-              "easing": 0,
+              "rate": 16880.000069737434,
+              "easing": 1,
               "hue": 0.0,
               "trigger": false
             },
@@ -115,7 +99,7 @@
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -65434,
         "parameters": {
-          "label": "Channel-2",
+          "label": "Sparkle Red",
           "arm": false,
           "enabled": true,
           "cue": false,
@@ -124,7 +108,135 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 1,
+          "blendMode": 1,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": false
+        },
+        "warps": [],
+        "effects": [
+          {
+            "id": 4072,
+            "class": "com.symmetrylabs.slstudio.effect.ColorFilter",
+            "modulationColor": -16711864,
+            "parameters": {
+              "label": "ColorFilter",
+              "enabled": true,
+              "Hue": 0.0,
+              "Sat": 100.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 1177,
+            "class": "com.symmetrylabs.slstudio.pattern.Sparkle",
+            "modulationColor": -16711887,
+            "parameters": {
+              "label": "Sparkle",
+              "Dens": 0.9000000022351742,
+              "Attack": 0.880000002682209,
+              "Decay": 0.3,
+              "Hue": 0.0,
+              "HueVar": 0.0,
+              "Sat": 1.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": false
+          }
+        ]
+      },
+      {
+        "id": 4092,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16739073,
+        "parameters": {
+          "label": "Circle",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 2,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": false
+        },
+        "warps": [],
+        "effects": [
+          {
+            "id": 4103,
+            "class": "com.symmetrylabs.slstudio.effect.ColorFilter",
+            "modulationColor": -16711742,
+            "parameters": {
+              "label": "ColorFilter",
+              "enabled": true,
+              "Hue": 0.0,
+              "Sat": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 4094,
+            "class": "com.symmetrylabs.shows.penfoldswine.TriggerableCircle",
+            "modulationColor": -17664,
+            "parameters": {
+              "label": "TriggerableCircle",
+              "rate": 16894.99973412603,
+              "easing": 1,
+              "hue": 0.0,
+              "trigger": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 4099,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -14080,
+        "parameters": {
+          "label": "Sparkle White",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 2,
           "blendMode": 1,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -137,24 +249,24 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 1177,
+            "id": 4100,
             "class": "com.symmetrylabs.slstudio.pattern.Sparkle",
-            "modulationColor": -16711887,
+            "modulationColor": -5243136,
             "parameters": {
               "label": "Sparkle",
-              "Dens": 0.6200000084936619,
-              "Attack": 1.0,
+              "Dens": 0.15,
+              "Attack": 0.4,
               "Decay": 0.3,
-              "Hue": 0.0,
-              "HueVar": 0.0,
-              "Sat": 0.2299999948590994
+              "Hue": 0.5,
+              "HueVar": 0.25,
+              "Sat": 0.0
             },
             "modulation": {
               "modulators": [],
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": false
+            "autoCycleEnabled": true
           }
         ]
       }
@@ -339,7 +451,42 @@
     "modulation": {
       "modulators": [],
       "modulations": [],
-      "triggers": []
+      "triggers": [
+        {
+          "source": {
+            "componentId": 1166,
+            "parameterPath": "trigger"
+          },
+          "target": {
+            "componentId": 4094,
+            "parameterPath": "trigger"
+          },
+          "id": 4106,
+          "class": "heronarts.lx.parameter.LXTriggerModulation",
+          "modulationColor": -16730625,
+          "parameters": {
+            "label": "",
+            "enabled": true
+          }
+        },
+        {
+          "source": {
+            "componentId": 4094,
+            "parameterPath": "trigger"
+          },
+          "target": {
+            "componentId": 1166,
+            "parameterPath": "trigger"
+          },
+          "id": 4107,
+          "class": "heronarts.lx.parameter.LXTriggerModulation",
+          "modulationColor": -11731200,
+          "parameters": {
+            "label": "",
+            "enabled": true
+          }
+        }
+      ]
     },
     "osc": {
       "id": 24,
@@ -380,7 +527,10 @@
       "paletteExpanded": true,
       "engineExpanded": true,
       "clipViewVisible": true,
-      "modulatorExpanded": {},
+      "modulatorExpanded": {
+        "4094": true,
+        "1166": true
+      },
       "preview": {
         "radius": 271.5107869561114,
         "theta": -0.05099999999999999,
