@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539652170534,
+  "timestamp": 1539711776822,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -81,6 +81,8 @@
             "parameters": {
               "label": "TriggerableCircle",
               "rate": 16880.000069737434,
+              "xPos": 142.5,
+              "yPos": 72.0,
               "easing": 1,
               "hue": 0.0,
               "trigger": false
@@ -209,6 +211,8 @@
             "parameters": {
               "label": "TriggerableCircle",
               "rate": 16894.99973412603,
+              "xPos": 142.5,
+              "yPos": 72.0,
               "easing": 1,
               "hue": 0.0,
               "trigger": false
@@ -533,11 +537,11 @@
       },
       "preview": {
         "radius": 271.5107869561114,
-        "theta": -0.05099999999999999,
-        "phi": 0.051000000000000004,
-        "positionX": 39.88426208496094,
-        "positionY": 69.0,
-        "positionZ": -131.19944763183594
+        "theta": -0.08100000000000002,
+        "phi": 0.09900000000000005,
+        "positionX": 131.52818298339844,
+        "positionY": 67.0,
+        "positionZ": -16.992544174194336
       }
     }
   }

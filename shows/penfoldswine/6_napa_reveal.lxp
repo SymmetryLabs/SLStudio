@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539658724586,
+  "timestamp": 1539727467406,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -81,7 +81,7 @@
             "parameters": {
               "label": "TriggerableCircle",
               "rate": 5000.0,
-              "xPos": 175.5800014846027,
+              "xPos": 253.06999975256622,
               "yPos": 143.25,
               "easing": 2,
               "hue": 0.0,
@@ -128,7 +128,7 @@
             "modulationColor": -3080448,
             "parameters": {
               "label": "Sparkle",
-              "Dens": 0.2999999985098839,
+              "Dens": 0.4199999958276749,
               "Attack": 0.4,
               "Decay": 0.3,
               "Hue": 0.5,
@@ -194,7 +194,7 @@
             "parameters": {
               "label": "TriggerableCircle",
               "rate": 5000.0,
-              "xPos": 171.88999744318426,
+              "xPos": 249.37999571114779,
               "yPos": 143.25,
               "easing": 2,
               "hue": 0.0,
@@ -241,7 +241,7 @@
             "modulationColor": -16763649,
             "parameters": {
               "label": "Sparkle",
-              "Dens": 0.08000000156462192,
+              "Dens": 0.10000000111758708,
               "Attack": 0.4,
               "Decay": 0.3,
               "Hue": 0.5,
@@ -522,9 +522,9 @@
         "radius": 271.5107869561114,
         "theta": -0.05099999999999999,
         "phi": 0.051000000000000004,
-        "positionX": 39.88426208496094,
-        "positionY": 69.0,
-        "positionZ": -131.19944763183594
+        "positionX": 144.49740600585938,
+        "positionY": 68.0,
+        "positionZ": -18.101959228515625
       }
     }
   }

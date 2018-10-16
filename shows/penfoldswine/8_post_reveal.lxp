@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539656407857,
+  "timestamp": 1539726209306,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -470,12 +470,12 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 308.49980571284493,
-        "theta": -0.06000000000000008,
-        "phi": -0.03299999999999999,
-        "positionX": 39.88426208496094,
-        "positionY": 69.0,
-        "positionZ": -131.19944763183594
+        "radius": 264.03156751696827,
+        "theta": -0.054000000000000076,
+        "phi": 0.039,
+        "positionX": 126.49952697753906,
+        "positionY": 73.0,
+        "positionZ": -17.072071075439453
       }
     }
   }

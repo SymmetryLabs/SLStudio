@@ -31,51 +31,135 @@ public static final String SHOW_NAME = "penfoldswine";
     static final float SP = 24;
 
     static final TowerConfig[] TOWER_CONFIG = {
-        // group 1
-        new TowerConfig(48-175, 0, -144, 0, 0, 0, new String[] {""}),
-        new TowerConfig(72-175, 0, -168, 0, 0, 0, new String[] {""}),
-        new TowerConfig(72-175, 0, -144, 0, 0, 0, new String[] {"" }),
-        new TowerConfig(72-175, 0, -120, 0, 0, 0, new String[] {"" }),
-        new TowerConfig(72-175, TOWER_RISER, -120, 0, 0, 0, new String[] {"" }),
-        new TowerConfig(78-175, TOWER_RISER*2, -111, 0, 0, 0, new String[] {"" }),
-        new TowerConfig(87-175, TOWER_RISER*3, -114, 0, 0, 0, new String[] {"" }),    
-        new TowerConfig(99-175, TOWER_RISER*4, -117, 0, 0, 0, new String[] {"" }),
-        new TowerConfig(123-175, TOWER_RISER*4, -117, 0, 0, 0, new String[] {"" }),
-        //new TowerConfig(147-175, TOWER_RISER*3, -117, 0, 0, 0, new String[] {"" }),
-        new TowerConfig(171-175, TOWER_RISER*4, -117, 0, 0, 0, new String[] {"" }),
-            new TowerConfig(171-175-12-SP, TOWER_RISER*3, -117, 0, 0, 0, new String[] {"" }),
-            new TowerConfig(171-175-12, TOWER_RISER*3, -117, 0, 0, 0, new String[] {"" }),
-            new TowerConfig(171-175-12+SP, TOWER_RISER*3, -117, 0, 0, 0, new String[] {"" }),
-        new TowerConfig(195-175, TOWER_RISER*4, -117, 0, 0, 0, new String[] {"" }),
-        new TowerConfig(219-175, TOWER_RISER*4, -117, 0, 0, 0, new String[] {"" }),
-        new TowerConfig(243-175, TOWER_RISER*4, -117, 0, 0, 0, new String[] {"" }),
-        new TowerConfig(267-175, TOWER_RISER*4, -117, 0, 0, 0, new String[] {"" }),
-            new TowerConfig(171-175-12+(SP*3), TOWER_RISER*3, -117, 0, 0, 0, new String[] {"" }),
-                new TowerConfig(171-175-12+(SP*3), TOWER_RISER*2, -117, 0, 0, 0, new String[] {"" }),
-                new TowerConfig(171-175-12+(SP*2), TOWER_RISER*2, -117, 0, 0, 0, new String[] {"" }),
-                new TowerConfig(171-175-12+(SP*4), TOWER_RISER*2, -117, 0, 0, 0, new String[] {"" }),
-                new TowerConfig(171-175-12+(SP*4), TOWER_RISER*1, -117, 0, 0, 0, new String[] {"" }),
-                new TowerConfig(171-175-12+(SP*2), TOWER_RISER*1, -117, 0, 0, 0, new String[] {"" }),
-            new TowerConfig(171-175-12+(SP*4), TOWER_RISER*3, -117, 0, 0, 0, new String[] {"" }),
-            new TowerConfig(171-175-12+(SP*5), TOWER_RISER*3, -117, 0, 0, 0, new String[] {"" }),
-            new TowerConfig(171-175-12+(SP*6), TOWER_RISER*3, -117, 0, 0, 0, new String[] {"" }),
-        new TowerConfig(291-175, TOWER_RISER*4, -117, 0, 0, 0, new String[] {"" }),
-        new TowerConfig(315-175, TOWER_RISER*4, -117, 0, 0, 0, new String[] {"" }),
-        new TowerConfig(339-175, TOWER_RISER*4, -117, 0, 0, 0, new String[] {"" }),
-        new TowerConfig(363-175, TOWER_RISER*4, -117, 0, 0, 0, new String[] {"" }),
-            new TowerConfig(363-175+10, TOWER_RISER*3, -114, 0, 0, 0, new String[] {"" }),
-            new TowerConfig(363-175+20, TOWER_RISER*2, -111, 0, 0, 0, new String[] {"" }),
-        new TowerConfig(363-175+30, 0, -120, 0, 0, 0, new String[] {"" }),
-        new TowerConfig(363-175+30, TOWER_RISER, -120, 0, 0, 0, new String[] {"" }),
-        new TowerConfig(363-175+30, 0, -144, 0, 0, 0, new String[] {"" }),
-        new TowerConfig(363-175+30, 0, -168, 0, 0, 0, new String[] {"" }),
-            new TowerConfig(123-175+12, TOWER_RISER*5, -117, 0, 0, 0, new String[] {"" }),
-            new TowerConfig(123-175+12+SP, TOWER_RISER*5, -117, 0, 0, 0, new String[] {"" }),
-            new TowerConfig(123-175+12+(SP*2), TOWER_RISER*5, -117, 0, 0, 0, new String[] {"" }),
-            new    TowerConfig(123-175+12+(SP*4), TOWER_RISER*5, -117, 0, 0, 0, new String[] {"" }),
-            new    TowerConfig(123-175+12+(SP*5), TOWER_RISER*5, -117, 0, 0, 0, new String[] {"" }),
-            new    TowerConfig(123-175+12+(SP*7.5f), TOWER_RISER*5, -117, 0, 0, 0, new String[] {"" }),
-            new    TowerConfig(123-175+12+(SP*8.5f), TOWER_RISER*5, -117, 0, 0, 0, new String[] {"" }),
+
+        /**
+         * Layer A -----------------------------------------------------------------------------------*
+        */
+        // A1
+        new TowerConfig(SP*-1.75f, 0, SP*-1.5f, new String[] {""}),
+        // A2
+        new TowerConfig(SP*-0.75f, 0, SP*-2.5f, new String[] {""}),
+        // A3
+        new TowerConfig(SP*-0.75f, 0, SP*-1.5f, new String[] {""}),
+        // A4
+        new TowerConfig(SP*-0.75f, 0, SP*-0.5f, new String[] {""}),
+        // A5
+        new TowerConfig(SP*12f+9, 0, SP*-2.5f, new String[] {""}),
+        // A6
+        new TowerConfig(SP*12.5f+3, 0, SP*-1.5f, new String[] {""}),
+        // A7
+        new TowerConfig(SP*12f+9, 0, SP*-0.5f, new String[] {""}),
+
+
+        /**
+         * Layer B -----------------------------------------------------------------------------------*
+        */
+        // B1
+        new TowerConfig(SP*-1, TOWER_RISER, -SP,  new String[] {""}),
+        // B2
+        new TowerConfig(SP*-0.5f, TOWER_RISER, 0,  new String[] {""}),
+        // (gap)
+        // B3
+        new TowerConfig(SP*4.5f+2, TOWER_RISER, 0,  new String[] {""}),
+        // (gap)
+        // B4
+        new TowerConfig(SP*6.5f+2, TOWER_RISER, 0,  new String[] {""}),
+        // (gap)
+        // B5
+        new TowerConfig(SP*11.5f+3, TOWER_RISER, 0,  new String[] {""}),
+        // B6
+        new TowerConfig(SP*12f+3, TOWER_RISER, -SP,  new String[] {""}),
+
+
+        /**
+         * Layer C -----------------------------------------------------------------------------------*
+        */
+        // C1
+        new TowerConfig(SP*0-6, TOWER_RISER*2, 0, new String[] {""}),
+        // (gap)
+        // C2
+        new TowerConfig(SP*4.5f+2, TOWER_RISER*2, 0, new String[] {""}),
+        // C3
+        new TowerConfig(SP*5.5f+2, TOWER_RISER*2, 0, new String[] {""}),
+        // C4
+        new TowerConfig(SP*6.5f+2, TOWER_RISER*2, 0, new String[] {""}),
+        // (gap)
+        // C5
+        new TowerConfig(SP*11f+9, TOWER_RISER*2, 0, new String[] {""}),
+
+        /**
+         * Layer D -----------------------------------------------------------------------------------*
+        */
+        // D1
+        new TowerConfig(SP*0, TOWER_RISER*3, 0, new String[] {""}),
+        // (gap)
+        // D2
+        new TowerConfig(SP*1.5f, TOWER_RISER*3, 0, new String[] {""}),
+        // D3
+        new TowerConfig(SP*2.5f, TOWER_RISER*3, 0, new String[] {""}),
+        // D4
+        new TowerConfig(SP*3.5f, TOWER_RISER*3, 0, new String[] {""}),
+        // (gap)
+        // D5
+        new TowerConfig(SP*5.5f+3, TOWER_RISER*3, 0, new String[] {""}),
+        // D6
+        new TowerConfig(SP*6.5f+3, TOWER_RISER*3, 0, new String[] {""}),
+        // D7
+        new TowerConfig(SP*7.5f+3, TOWER_RISER*3, 0, new String[] {""}),
+        // D8
+        new TowerConfig(SP*8.5f+3, TOWER_RISER*3, 0, new String[] {""}),
+        // D9
+        new TowerConfig(SP*9.5f+3, TOWER_RISER*3, 0, new String[] {""}),
+        // (gap)
+        // D10
+        new TowerConfig(SP*11f+3, TOWER_RISER*3, 0, new String[] {""}),
+
+        /**
+         * Layer E -----------------------------------------------------------------------------------*
+        */
+        // E1
+        new TowerConfig(SP*0.0f,TOWER_RISER*4, 0, new String[] {""}),
+        // E2
+        new TowerConfig(SP*1.0f,TOWER_RISER*4, 0, new String[] {""}),
+        // (gap)
+        // E3
+        new TowerConfig(SP*3.0f+3,TOWER_RISER*4, 0, new String[] {""}),
+        // E4
+        new TowerConfig(SP*4.0f+3,TOWER_RISER*4, 0, new String[] {""}),
+        // E5
+        new TowerConfig(SP*5.0f+3,TOWER_RISER*4, 0, new String[] {""}),
+        // E6
+        new TowerConfig(SP*6.0f+3,TOWER_RISER*4, 0, new String[] {""}),
+        // E7
+        new TowerConfig(SP*7.0f+3,TOWER_RISER*4, 0, new String[] {""}),
+        // E8
+        new TowerConfig(SP*8.0f+3,TOWER_RISER*4, 0, new String[] {""}),
+        // E9
+        new TowerConfig(SP*9.0f+3,TOWER_RISER*4, 0, new String[] {""}),
+        // E10
+        new TowerConfig(SP*10.0f+3,TOWER_RISER*4, 0, new String[] {""}),
+        // E11
+        new TowerConfig(SP*11.0f+3,TOWER_RISER*4, 0, new String[] {""}),
+
+        /**
+         * Layer F -----------------------------------------------------------------------------------*
+        */
+        // F1
+        new TowerConfig( SP*1.5f, TOWER_RISER*5, 0, new String[] {""}),
+        // F2
+        new TowerConfig( SP*2.5f, TOWER_RISER*5, 0, new String[] {""}),
+        // F3
+        new TowerConfig( SP*3.5f, TOWER_RISER*5, 0, new String[] {""}),
+        // (gap)
+        // F4
+        new    TowerConfig( SP*5.5f, TOWER_RISER*5, 0, new String[] {""}),
+        // F5
+        new    TowerConfig( SP*6.5f, TOWER_RISER*5, 0, new String[] {""}),
+        // (gap)
+        // F6
+        new    TowerConfig( SP*9f-3, TOWER_RISER*5, 0, new String[] {""}),
+        // F7
+        new    TowerConfig( SP*10f-3, TOWER_RISER*5, 0, new String[] {""}),
     };
 
 

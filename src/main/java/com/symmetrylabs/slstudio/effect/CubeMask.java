@@ -10,8 +10,6 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.MutableParameter;
-import heronarts.lx.transform.LXVector;
 import com.symmetrylabs.shows.cubes.CubesModel;
 
 
@@ -34,7 +32,6 @@ public class CubeMask extends ModelSpecificEffect<CubesModel> {
         for (CubesModel.Cube cube : model.getCubes()) {
             Mask mask = new Mask(cube);
             masks.add(mask);
-            //addParameter(mask.parameter);
         }
 
         this.selectedMask = new DiscreteParameter("select", 0, 0, masks.size());
@@ -129,7 +126,6 @@ public class CubeMask extends ModelSpecificEffect<CubesModel> {
         for (Mask mask : masks) {
             json.addProperty(mask.getParameter().getLabel(), mask.isEnabled());
         }
-
         obj.add("masks", json);
     }
 
@@ -140,15 +136,11 @@ public class CubeMask extends ModelSpecificEffect<CubesModel> {
         if (obj.has("masks")) {
             JsonObject json = obj.getAsJsonObject("masks");
 
-            System.out.println(json);
             for (Mask mask : masks) {
                 String path = mask.getParameter().getLabel();
-                System.out.println(path);
-
                 if (json.has(path)) {
                     JsonElement value = json.get(path);
                     mask.setEnabled(value.getAsBoolean());
-                    System.out.println(value.getAsBoolean());
                 }
             }
         }
