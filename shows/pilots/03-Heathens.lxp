@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539197503630,
+  "timestamp": 1539728160175,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -49,7 +49,7 @@
     },
     "channels": [
       {
-        "id": 1100,
+        "id": 28779,
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -16759041,
         "parameters": {
@@ -108,7 +108,7 @@
         "patternIndex": 1,
         "patterns": [
           {
-            "id": 1098,
+            "id": 28780,
             "class": "heronarts.lx.pattern.SolidColorPattern",
             "modulationColor": -13566208,
             "parameters": {
@@ -126,7 +126,7 @@
             "autoCycleEnabled": true
           },
           {
-            "id": 1101,
+            "id": 28782,
             "class": "com.symmetrylabs.slstudio.pattern.Noise",
             "modulationColor": -1113857,
             "parameters": {
@@ -162,7 +162,7 @@
         ]
       },
       {
-        "id": 1116,
+        "id": 28790,
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -16711916,
         "parameters": {
@@ -198,7 +198,7 @@
         ],
         "effects": [
           {
-            "id": 1145,
+            "id": 28798,
             "class": "heronarts.lx.effect.DesaturationEffect",
             "modulationColor": -16711837,
             "parameters": {
@@ -1225,7 +1225,7 @@
       "modulationColor": -38656,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -1354,6 +1354,18 @@
     "midi": {
       "inputs": [
         {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "CoreMIDI4J - Port 1",
           "channel": true,
           "control": false,
@@ -1382,21 +1394,70 @@
           "channel": true,
           "control": false,
           "sync": false
-        },
-        {
-          "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "Real Time Sequencer",
-          "channel": true,
-          "control": false,
-          "sync": false
         }
       ],
-      "surfaces": [],
+      "surfaces": [
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        }
+      ],
       "mapping": []
     }
   },
