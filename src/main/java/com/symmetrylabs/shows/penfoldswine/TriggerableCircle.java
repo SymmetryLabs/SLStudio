@@ -24,6 +24,9 @@ public class TriggerableCircle extends LXPattern {
 
     final CompoundParameter rate = new CompoundParameter("rate", 5000, 500, 20000);
 
+    final CompoundParameter xPos = new CompoundParameter("xPos", model.cx, model.xMin, model.xMax);
+    final CompoundParameter yPos = new CompoundParameter("yPos", model.cy, model.yMin, model.yMax);
+
     final EnumParameter<QuadraticEnvelope.Ease> easing = new EnumParameter<>("easing", QuadraticEnvelope.Ease.BOTH);
 
     final QuadraticEnvelope envelope = new QuadraticEnvelope(0, 1, rate);
@@ -33,17 +36,15 @@ public class TriggerableCircle extends LXPattern {
     final BooleanParameter trigger = new BooleanParameter("trigger")
         .setMode(BooleanParameter.Mode.MOMENTARY);
 
-    private float targetRadius;
-
     public TriggerableCircle(LX lx) {
         super(lx);
         addParameter(rate);
+        addParameter(xPos);
+        addParameter(yPos);
         addParameter(easing);
         addModulator(envelope);
         addParameter(hue);
         addParameter(trigger);
-
-        this.targetRadius = sqrt(pow(model.xRange/2, 2) + pow(model.yRange/2, 2)) + 1;
 
         easing.addListener(parameter -> {
             envelope.setEase(easing.getEnum());
@@ -57,8 +58,10 @@ public class TriggerableCircle extends LXPattern {
     }
 
     public void run(double deltaMs) {
+        float targetRadius = sqrt(pow(model.xRange, 2) + pow(model.yRange, 2)) + 1;
+
         for (LXVector p : getVectors()) {
-            if (dist(p.x, p.y, model.cx, model.cy) < (envelope.getValuef() * targetRadius)) {
+            if (dist(p.x, p.y, xPos.getValuef(), yPos.getValuef()) < (envelope.getValuef() * targetRadius)) {
                 colors[p.index] = lx.hsb(hue.getValuef(), 100, 100);
             } else {
                 colors[p.index] = LXColor.BLACK;
