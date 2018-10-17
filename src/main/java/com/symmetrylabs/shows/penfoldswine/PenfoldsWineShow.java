@@ -205,6 +205,8 @@ public static final String SHOW_NAME = "penfoldswine";
 
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
+      super.setupUi(lx, ui);
+
         workspace = new Workspace(lx, ui, "shows/penfoldswine");
         workspace.setRequestsBeforeSwitch(2);
     }
