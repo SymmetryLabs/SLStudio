@@ -36,130 +36,145 @@ public static final String SHOW_NAME = "penfoldswine";
          * Layer A -----------------------------------------------------------------------------------*
         */
         // A1
-        new TowerConfig(SP*-1.75f, 0, SP*-1.5f, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-1.75f, 0, SP*-1.5f, new String[] {"520","876"}),
         // A2
-        new TowerConfig(SP*-0.75f, 0, SP*-2.5f, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-0.75f, 0, SP*-2.5f, new String[] {"1210","1211"}),
         // A3
-        new TowerConfig(SP*-0.75f, 0, SP*-1.5f, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-0.75f, 0, SP*-1.5f, new String[] {"996","997"}),
         // A4
-        new TowerConfig(SP*-0.75f, 0, SP*-0.5f, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-0.75f, 0, SP*-0.5f, new String[] {"999","935"}),
         // A5
-        new TowerConfig(SP*12f+9, 0, SP*-2.5f, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*12f+9, 0, SP*-2.5f, new String[] {"594","1231"}),
         // A6
-        new TowerConfig(SP*12.5f+3, 0, SP*-1.5f, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*12.5f+3, 0, SP*-1.5f, new String[] {"1018","1104"}),
         // A7
-        new TowerConfig(SP*12f+9, 0, SP*-0.5f, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*12f+9, 0, SP*-0.5f, new String[] {"830","1052"}),
 
 
         /**
          * Layer B -----------------------------------------------------------------------------------*
         */
         // B1
-        new TowerConfig(SP*-1, TOWER_RISER, -SP,  new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-1, TOWER_RISER, -SP,  new String[] {"1111","1112"}),
         // B2
-        new TowerConfig(SP*-0.5f, TOWER_RISER, 0,  new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-0.5f, TOWER_RISER, 0,  new String[] {"1109","1108"}),
         // (gap)
         // B3
-        new TowerConfig(SP*4.5f+2, TOWER_RISER, 0,  new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*4.5f+2, TOWER_RISER, 0,  new String[] {"654","1083"}),
         // (gap)
         // B4
-        new TowerConfig(SP*6.5f+2, TOWER_RISER, 0,  new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*6.5f+2, TOWER_RISER, 0,  new String[] {"942","930"}),
         // (gap)
-        // B5
-        new TowerConfig(SP*11.5f+3, TOWER_RISER, 0,  new String[] {""}),
+        // B5 hinge
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*11.5f+3, TOWER_RISER, 0,  new String[] {"1241","1240"}),
         // B6
-        new TowerConfig(SP*12f+3, TOWER_RISER, -SP,  new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*12f+3, TOWER_RISER, -SP,  new String[] {"918","917"}),
 
 
         /**
          * Layer C -----------------------------------------------------------------------------------*
         */
         // C1
-        new TowerConfig(SP*0-6, TOWER_RISER*2, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*0-6, TOWER_RISER*2, 0, new String[] {"924","923"}),
         // (gap)
         // C2
-        new TowerConfig(SP*4.5f+2, TOWER_RISER*2, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*4.5f+2, TOWER_RISER*2, 0, new String[] {"929","995"}),
         // C3
-        new TowerConfig(SP*5.5f+2, TOWER_RISER*2, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f+2, TOWER_RISER*2, 0, new String[] {"1027","612"}),
         // C4
-        new TowerConfig(SP*6.5f+2, TOWER_RISER*2, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*6.5f+2, TOWER_RISER*2, 0, new String[] {"771","770"}),
         // (gap)
         // C5
-        new TowerConfig(SP*11f+9, TOWER_RISER*2, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*11f+9, TOWER_RISER*2, 0, new String[] {"940","948"}),
 
         /**
          * Layer D -----------------------------------------------------------------------------------*
         */
         // D1
-        new TowerConfig(SP*0, TOWER_RISER*3, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*0, TOWER_RISER*3, 0, new String[] {"919","910"}),
         // (gap)
         // D2
-        new TowerConfig(SP*1.5f, TOWER_RISER*3, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*1.5f, TOWER_RISER*3, 0, new String[] {"1067","1066"}),
         // D3
-        new TowerConfig(SP*2.5f, TOWER_RISER*3, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*2.5f, TOWER_RISER*3, 0, new String[] {"957","956"}),
         // D4
-        new TowerConfig(SP*3.5f, TOWER_RISER*3, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*3.5f, TOWER_RISER*3, 0, new String[] {"604","1087"}),
         // (gap)
         // D5
-        new TowerConfig(SP*5.5f+3, TOWER_RISER*3, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f+3, TOWER_RISER*3, 0, new String[] {"1009","1008"}),
         // D6
-        new TowerConfig(SP*6.5f+3, TOWER_RISER*3, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*6.5f+3, TOWER_RISER*3, 0, new String[] {"691","690"}),
         // D7
-        new TowerConfig(SP*7.5f+3, TOWER_RISER*3, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*7.5f+3, TOWER_RISER*3, 0, new String[] {"906","912"}),
         // D8
-        new TowerConfig(SP*8.5f+3, TOWER_RISER*3, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*8.5f+3, TOWER_RISER*3, 0, new String[] {"926","998"}),
         // D9
-        new TowerConfig(SP*9.5f+3, TOWER_RISER*3, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*9.5f+3, TOWER_RISER*3, 0, new String[] {"641","978"}),
         // (gap)
         // D10
-        new TowerConfig(SP*11f+3, TOWER_RISER*3, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*11f+3, TOWER_RISER*3, 0, new String[] {"1041","1042"}),
 
         /**
          * Layer E -----------------------------------------------------------------------------------*
         */
         // E1
-        new TowerConfig(SP*0.0f,TOWER_RISER*4, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*0.0f,TOWER_RISER*4, 0, new String[] {"481","480"}),
         // E2
-        new TowerConfig(SP*1.0f,TOWER_RISER*4, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*1.0f,TOWER_RISER*4, 0, new String[] {"928","918"}),
         // (gap)
         // E3
-        new TowerConfig(SP*3.0f+3,TOWER_RISER*4, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*3.0f+3,TOWER_RISER*4, 0, new String[] {"1047","883"}),
         // E4
-        new TowerConfig(SP*4.0f+3,TOWER_RISER*4, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*4.0f+3,TOWER_RISER*4, 0, new String[] {"1075","593"}),
         // E5
-        new TowerConfig(SP*5.0f+3,TOWER_RISER*4, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*5.0f+3,TOWER_RISER*4, 0, new String[] {"960","974"}),
         // E6
-        new TowerConfig(SP*6.0f+3,TOWER_RISER*4, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*6.0f+3,TOWER_RISER*4, 0, new String[] {"905","955"}),
         // E7
-        new TowerConfig(SP*7.0f+3,TOWER_RISER*4, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*7.0f+3,TOWER_RISER*4, 0, new String[] {"441","440"}),
         // E8
-        new TowerConfig(SP*8.0f+3,TOWER_RISER*4, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*8.0f+3,TOWER_RISER*4, 0, new String[] {"495","494"}),
         // E9
-        new TowerConfig(SP*9.0f+3,TOWER_RISER*4, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*9.0f+3,TOWER_RISER*4, 0, new String[] {"1065","1074"}),
         // E10
-        new TowerConfig(SP*10.0f+3,TOWER_RISER*4, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*10.0f+3,TOWER_RISER*4, 0, new String[] {"759","547"}),
         // E11
-        new TowerConfig(SP*11.0f+3,TOWER_RISER*4, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*11.0f+3,TOWER_RISER*4, 0, new String[] {"949","946"}),
 
         /**
          * Layer F -----------------------------------------------------------------------------------*
         */
         // F1
-        new TowerConfig( SP*1.5f, TOWER_RISER*5, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD,  SP*1.5f, TOWER_RISER*5, 0, new String[] {"713","712"}),
         // F2
-        new TowerConfig( SP*2.5f, TOWER_RISER*5, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD,  SP*2.5f, TOWER_RISER*5, 0, new String[] {"763","742"}),
         // F3
-        new TowerConfig( SP*3.5f, TOWER_RISER*5, 0, new String[] {""}),
+        new TowerConfig(CubesModel.Cube.Type.HD,  SP*3.5f, TOWER_RISER*5, 0, new String[] {"944","947"}),
         // (gap)
         // F4
-        new    TowerConfig( SP*5.5f, TOWER_RISER*5, 0, new String[] {""}),
+        new    TowerConfig(CubesModel.Cube.Type.HD,  SP*5.5f, TOWER_RISER*5, 0, new String[] {"516","1101"}),
         // F5
-        new    TowerConfig( SP*6.5f, TOWER_RISER*5, 0, new String[] {""}),
+        new    TowerConfig(CubesModel.Cube.Type.HD,  SP*6.5f, TOWER_RISER*5, 0, new String[] {"727","726"}),
         // (gap)
         // F6
-        new    TowerConfig( SP*9f-3, TOWER_RISER*5, 0, new String[] {""}),
+        new    TowerConfig(CubesModel.Cube.Type.HD,  SP*9f-3, TOWER_RISER*5, 0, new String[] {"927","915"}),
         // F7
-        new    TowerConfig( SP*10f-3, TOWER_RISER*5, 0, new String[] {""}),
+        new    TowerConfig(CubesModel.Cube.Type.HD,  SP*10f-3, TOWER_RISER*5, 0, new String[] {"1099","1098"}),
+
+        /**
+         * Layer G -----------------------------------------------------------------------------------*
+        */
+        // G1
+        new TowerConfig(CubesModel.Cube.Type.HD,  SP*3+3f, TOWER_RISER*6, 0, new String[] {"889","119"}),
+        // G2
+        new TowerConfig(CubesModel.Cube.Type.HD,  SP*4+3f, TOWER_RISER*6, 0, new String[] {"1051","1058"}),
+        // G3
+        new TowerConfig(CubesModel.Cube.Type.HD,  SP*5+3f, TOWER_RISER*6, 0, new String[] {"1014","891"}),
+        // (gap)
+        // G4
+        new    TowerConfig(CubesModel.Cube.Type.HD,  SP*6.5f+3f, TOWER_RISER*6, 0, new String[] {"1132","1133"}),
+        // G5
+        new    TowerConfig(CubesModel.Cube.Type.HD,  SP*7.5f, TOWER_RISER*6, 0, new String[] {"1224","1225"}),
     };
 
 
