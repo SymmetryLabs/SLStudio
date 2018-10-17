@@ -194,18 +194,17 @@ public static final String SHOW_NAME = "penfoldswine";
         for (TowerConfig config : TOWER_CONFIG) {
             List<CubesModel.Cube> cubes = new ArrayList<>();
             float x = config.x;
+            float y = config.yValues[0];
             float z = config.z;
             float xRot = config.xRot;
             float yRot = config.yRot;
             float zRot = config.zRot;
             CubesModel.Cube.Type type = config.type;
 
-            for (int i = 0; i < config.ids.length; i++) {
-                float y = config.yValues[i];
-                CubesModel.Cube cube = new CubesModel.Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
-                cubes.add(cube);
-                allCubes.add(cube);
-            }
+            CubesModel.DoubleControllerCube cube = new CubesModel.DoubleControllerCube(config.ids[0], config.ids[1], x, y, z, xRot, yRot, zRot, globalTransform);
+            cubes.add(cube);
+            allCubes.add(cube);
+
             towers.add(new CubesModel.Tower("", cubes));
         }
         /*-----------------------------------------------------------------*/
