@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539217898614,
+  "timestamp": 1539727268874,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.0,
       "crossfaderBlendMode": 0,
       "speed": 0.4500000234693289,
-      "focusedChannel": 1,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -62,7 +62,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 1,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -127,7 +127,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 1,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -402,12 +402,12 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 236.5114498653868,
-        "theta": -0.09899999999999902,
+        "radius": 241.28568278801941,
+        "theta": -0.10799999999999903,
         "phi": 0.05700000000000022,
-        "positionX": 39.88426208496094,
-        "positionY": 69.0,
-        "positionZ": -131.19944763183594
+        "positionX": 139.48899841308594,
+        "positionY": 68.0,
+        "positionZ": -17.783254623413086
       }
     }
   }
