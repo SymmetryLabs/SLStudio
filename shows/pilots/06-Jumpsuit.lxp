@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539211260223,
+  "timestamp": 1540000943395,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -113,8 +113,8 @@
               "r": false,
               "yc": 205.00000513056835,
               "rc": 598.5999950864198,
-              "rhit": 120.0,
-              "rdrop": 19.750000834465027,
+              "rhit": 116.1184573173523,
+              "rdrop": 37.61195182800293,
               "yhit": 70.48999786376953,
               "ydrop": 108.0000002682209,
               "fstart": 270.00001072883606,
@@ -292,18 +292,18 @@
       "modulationColor": -13172481,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.0
       }
     },
     "components": {
       "GammaExpander": {
-        "id": 21037,
+        "id": 26810,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16711919,
+        "modulationColor": -7340288,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
@@ -421,6 +421,36 @@
     "midi": {
       "inputs": [
         {
+          "name": "CoreMIDI4J - Port 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 2",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 3",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 4",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Sync Port",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
@@ -433,7 +463,62 @@
           "sync": false
         }
       ],
-      "surfaces": [],
+      "surfaces": [
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        }
+      ],
       "mapping": []
     }
   },
