@@ -40,10 +40,11 @@ public class PulseCheck extends SLPattern<SLModel> {
         setColors(0);
         for (int i = 0; i < model.carts.size(); i++) {
             PilotsModel.Cart cart = model.carts.get(i);
-            PilotsModel.Cart.Dataline d = cart.datalines.get(cart.datalines.size() - 11);
-            Strip s = d.strips.get(d.strips.size() - 1);
-            LXPoint p = s.getPoints().get(s.getPoints().size() - (1 + vis.getValuei()));
-            colors[p.index] = LXColor.hsba(hues[i].getValuef(), 100, enabled[i].getValuef()* 100, enabled[i].getValuef() );
+            for ( PilotsModel.Cart.Dataline d : cart.datalines ){
+                Strip s = d.strips.get(d.strips.size() - 1);
+                LXPoint p = s.getPoints().get(s.getPoints().size() - (1 + vis.getValuei()));
+                colors[p.index] = LXColor.hsba(hues[i].getValuef(), 100, enabled[i].getValuef()* 100, enabled[i].getValuef() );
+            }
         }
     }
 }
