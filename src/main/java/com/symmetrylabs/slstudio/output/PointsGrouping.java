@@ -97,4 +97,8 @@ public class PointsGrouping {
         addPoints(Arrays.asList(pointsToAdd), reverseOrdering);
         return this;
     }
+
+    public void addPoint(LXPoint point) {
+        points.add(point);
+    }
 }

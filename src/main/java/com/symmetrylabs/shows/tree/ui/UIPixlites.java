@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.ArrayList;
 
 import heronarts.lx.LX;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.output.LXOutput;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
+import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
 import heronarts.p3lx.ui.component.UIItemList;
 
@@ -23,18 +25,27 @@ public class UIPixlites extends UICollapsibleSection {
 
     public final UIItemList.ScrollList pixlitePorts;
 
+    public final BroadcastPixlite broadcastPixlite;
+
     public UIPixlites(LX lx, UI ui, float x, float y, float w) {
         super(ui, x, y, w, 230);
         setTitle("PIXLITE DATALINES");
         setPadding(5);
         TreeModel tree = (TreeModel)lx.model;
+        TreeShow show = (TreeShow)SLStudio.applet.show;
 
-        this.pixlitePorts = new UIItemList.ScrollList(ui, 0, 0, w, 200);
+        this.broadcastPixlite = BroadcastPixlite.getInstance(lx);
+        lx.addOutput(broadcastPixlite);
+
+        new UIButton(getContentWidth()/3*2, 0, getContentWidth()/3, 20)
+            .setParameter(broadcastPixlite.enabled)
+            .setLabel("Test Broadcast")
+            .addToContainer(this);
+
+        this.pixlitePorts = new UIItemList.ScrollList(ui, 0, 25, w-10, 180);
         pixlitePorts.setSingleClickActivate(true);
         pixlitePorts.setShowCheckboxes(true);
         pixlitePorts.addToContainer(this);
-
-        TreeShow show = (TreeShow)SLStudio.applet.show;
 
         List<PortItem> portItems = new ArrayList<>();
 
