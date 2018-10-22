@@ -6,6 +6,7 @@ import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -19,9 +20,15 @@ public class PulseCheck extends SLPattern<SLModel> {
     private BooleanParameter enabled[];
     private BooleanParameter alpha;
     private DiscreteParameter vis;
+    private final SinLFO bLFO = new SinLFO(0, 100, 4500);
+    private final SinLFO sLFO = new SinLFO(0, 100, 3500);
 
     public PulseCheck(LX lx) {
         super(lx);
+
+        addModulator(bLFO).trigger();
+        addModulator(sLFO).trigger();
+
         this.hues = new CompoundParameter[model.carts.size()];
         this.enabled = new BooleanParameter[model.carts.size()];
         this.alpha = new BooleanParameter("alpha", true);
@@ -43,7 +50,7 @@ public class PulseCheck extends SLPattern<SLModel> {
             for ( PilotsModel.Cart.Dataline d : cart.datalines ){
                 Strip s = d.strips.get(d.strips.size() - 1);
                 LXPoint p = s.getPoints().get(s.getPoints().size() - (1 + vis.getValuei()));
-                colors[p.index] = LXColor.hsba(hues[i].getValuef(), 100, enabled[i].getValuef()* 100, enabled[i].getValuef() );
+                colors[p.index] = LXColor.hsba(hues[i].getValuef(), sLFO.getValuef(), enabled[i].getValuef()* 100, enabled[i].getValuef() );
             }
         }
     }
