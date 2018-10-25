@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1540094214989,
+  "timestamp": 1540436640132,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 7,
+      "focusedChannel": 6,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -531,7 +531,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.34410712122917175,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -567,7 +567,7 @@
               "label": "TwoTone",
               "enabled": true,
               "Lcut1": 1.0,
-              "Lcut2": 99.08262491226196,
+              "Lcut2": 99.07925128936768,
               "c1/hue": 0.0,
               "c1/brightness": 100.0,
               "c1/saturation": 100.0,
@@ -664,7 +664,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -675,7 +675,7 @@
         "warps": [],
         "effects": [],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 1,
         "patterns": [
           {
             "id": 5850,
@@ -710,45 +710,17 @@
               "triggers": []
             },
             "autoCycleEnabled": true
-          }
-        ]
-      },
-      {
-        "id": 28883,
-        "class": "heronarts.lx.LXChannel",
-        "modulationColor": -16711860,
-        "parameters": {
-          "label": "Channel-8",
-          "arm": false,
-          "enabled": true,
-          "cue": false,
-          "midiMonitor": false,
-          "midiChannel": 16,
-          "autoCycleEnabled": false,
-          "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
-          "crossfadeGroup": 0,
-          "blendMode": 0,
-          "transitionEnabled": false,
-          "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0,
-          "autoDisable": true
-        },
-        "warps": [],
-        "effects": [],
-        "clips": [],
-        "patternIndex": 0,
-        "patterns": [
+          },
           {
-            "id": 28881,
-            "class": "heronarts.lx.pattern.SolidColorPattern",
-            "modulationColor": -13500161,
+            "id": 26068,
+            "class": "com.symmetrylabs.shows.pilots.WarpCompatibleSolidColor",
+            "modulationColor": -5832960,
             "parameters": {
-              "label": "SolidColor",
-              "color/hue": 53.849998796358705,
-              "color/brightness": 100.0,
-              "color/saturation": 100.0,
-              "color": -6912
+              "label": "WarpCompatibleSolidColor",
+              "Color/hue": 57.43999871611595,
+              "Color/brightness": 100.0,
+              "Color/saturation": 100.0,
+              "Color": -3072
             },
             "modulation": {
               "modulators": [],
@@ -1028,6 +1000,102 @@
         }
       ],
       "surfaces": [
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
         {
           "description": "APC40 mkII"
         },
