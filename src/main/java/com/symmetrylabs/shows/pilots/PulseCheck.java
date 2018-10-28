@@ -51,6 +51,10 @@ public class PulseCheck extends SLPattern<SLModel> {
                 Strip s = d.strips.get(d.strips.size() - 1);
                 LXPoint p = s.getPoints().get(s.getPoints().size() - (1 + vis.getValuei()));
                 colors[p.index] = LXColor.hsba(hues[i].getValuef(), sLFO.getValuef(), enabled[i].getValuef()* 100, enabled[i].getValuef() );
+
+                s = d.strips.get(0);
+                p = s.getPoints().get(0);
+                colors[p.index] = LXColor.hsba(hues[i].getValuef(), 100-sLFO.getValuef(), enabled[i].getValuef()* 100, enabled[i].getValuef() );
             }
         }
     }
