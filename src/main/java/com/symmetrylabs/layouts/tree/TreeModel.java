@@ -348,7 +348,7 @@ public class TreeModel extends SLModel {
      *--------------------------------------------------------------*/
     public static class Twig extends SLModel {
 
-        public static final int NUM_LEAVES = 16;
+        public static final int NUM_LEAVES = 15;
 
         private TwigConfig config;
 
@@ -362,28 +362,46 @@ public class TreeModel extends SLModel {
 
         public final List<Leaf> leaves;
 
+//        public static final Leaf.Config[] LEAVES = {
+//          new Leaf.Config(Leaf.Size.LARGE, 0, -5.0f*INCHES,  1.5f*INCHES,  95), // A
+//          new Leaf.Config(Leaf.Size.LARGE, 1, -7.0f*INCHES,  5.0f*INCHES,  75), // B
+//          new Leaf.Config(Leaf.Size.SMALL, 2, -3.5f*INCHES,  5.5f*INCHES,  25), // C
+//          new Leaf.Config(Leaf.Size.SMALL, 3, -7.0f*INCHES,  8.5f*INCHES, 105), // D
+//          new Leaf.Config(Leaf.Size.LARGE, 4, -8.0f*INCHES, 11.0f*INCHES,  60), // E
+//          new Leaf.Config(Leaf.Size.SMALL, 5, -3.5f*INCHES, 11.0f*INCHES,  35), // F
+//          new Leaf.Config(Leaf.Size.LARGE, 6, -3.0f*INCHES, 14.0f*INCHES,  45), // G
+//          new Leaf.Config(Leaf.Size.SMALL, 7, -2.5f*INCHES, 17.5f*INCHES,  20), // H
+//          null, // I
+//          null, // J
+//          null, // K
+//          null, // L
+//          null, // M
+//          null, // N
+//          null, // O
+//          null, // P
+//        };
+
         public static final Leaf.Config[] LEAVES = {
-          new Leaf.Config(Leaf.Size.LARGE, 0, -5.0f*INCHES,  1.5f*INCHES,  95), // A
-          new Leaf.Config(Leaf.Size.LARGE, 1, -7.0f*INCHES,  5.0f*INCHES,  75), // B
-          new Leaf.Config(Leaf.Size.SMALL, 2, -3.5f*INCHES,  5.5f*INCHES,  25), // C
-          new Leaf.Config(Leaf.Size.SMALL, 3, -7.0f*INCHES,  8.5f*INCHES, 105), // D
-          new Leaf.Config(Leaf.Size.LARGE, 4, -8.0f*INCHES, 11.0f*INCHES,  60), // E
-          new Leaf.Config(Leaf.Size.SMALL, 5, -3.5f*INCHES, 11.0f*INCHES,  35), // F
-          new Leaf.Config(Leaf.Size.LARGE, 6, -3.0f*INCHES, 14.0f*INCHES,  45), // G
-          new Leaf.Config(Leaf.Size.SMALL, 7, -2.5f*INCHES, 17.5f*INCHES,  20), // H
-          null, // I
-          null, // J
-          null, // K
-          null, // L
-          null, // M
-          null, // N
-          null, // O
-          null, // P
+            new Leaf.Config(Leaf.Size.LARGE, 0, -5.0f*INCHES,  1.5f*INCHES,  95), // A
+            new Leaf.Config(Leaf.Size.LARGE, 1, -7.0f*INCHES,  5.0f*INCHES,  75), // B
+            new Leaf.Config(Leaf.Size.LARGE, 2, -3.5f*INCHES,  5.5f*INCHES,  25), // C
+            new Leaf.Config(Leaf.Size.LARGE, 3, -7.0f*INCHES,  8.5f*INCHES, 105), // D
+            new Leaf.Config(Leaf.Size.LARGE, 4, -8.0f*INCHES, 11.0f*INCHES,  60), // E
+            new Leaf.Config(Leaf.Size.LARGE, 5, -3.5f*INCHES, 11.0f*INCHES,  35), // F
+            new Leaf.Config(Leaf.Size.LARGE, 6, -3.0f*INCHES, 14.0f*INCHES,  45), // G
+            new Leaf.Config(Leaf.Size.LARGE, 7, -2.5f*INCHES, 17.5f*INCHES,  0), // H (tip)
+            null, // I
+            null, // J
+            null, // K
+            null, // L
+            null, // M
+            null, // N
+            null, // O
         };
 
         static {
           // The last eight leaves are just inverse of the first about the y-axis.
-          for (int i = 0; i < 8; ++i) {
+          for (int i = 0; i < 7; ++i) {
             Leaf.Config thisLeaf = LEAVES[i];
             int index = LEAVES.length - 1 - i;
             LEAVES[index] = new Leaf.Config(thisLeaf.size, index, -thisLeaf.x, thisLeaf.y, -thisLeaf.theta);
@@ -554,21 +572,6 @@ public class TreeModel extends SLModel {
                 points[i++].update(t.x(), t.y(), t.z());
                 t.translate(0, LED_SPACING, 0);
                 points[i++].update(t.x(), t.y(), t.z());
-
-                t.translate(.1f*INCHES, 0, 0);
-                points[i++].update(t.x(), t.y(), t.z());
-                t.translate(0, -LED_SPACING, 0);
-                points[i++].update(t.x(), t.y(), t.z());
-                t.translate(0, -LED_SPACING, 0);
-                points[i++].update(t.x(), t.y(), t.z());
-                t.translate(0, -LED_SPACING, 0);
-                points[i++].update(t.x(), t.y(), t.z());
-            }
-            else if (config.size == Size.SMALL) {
-                t.translate(-.05f*INCHES, 0, 0);
-                points[i++].update(t.x(), t.y(), t.z());
-                t.translate(0, LED_SPACING, 0);
-                points[i++].update(t.x(), t.y(), t.z());
                 t.translate(0, LED_SPACING, 0);
                 points[i++].update(t.x(), t.y(), t.z());
 
@@ -578,7 +581,26 @@ public class TreeModel extends SLModel {
                 points[i++].update(t.x(), t.y(), t.z());
                 t.translate(0, -LED_SPACING, 0);
                 points[i++].update(t.x(), t.y(), t.z());
+                t.translate(0, -LED_SPACING, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+                t.translate(0, -LED_SPACING, 0);
+                points[i++].update(t.x(), t.y(), t.z());
             }
+//            else if (config.size == Size.SMALL) {
+//                t.translate(-.05f*INCHES, 0, 0);
+//                points[i++].update(t.x(), t.y(), t.z());
+//                t.translate(0, LED_SPACING, 0);
+//                points[i++].update(t.x(), t.y(), t.z());
+//                t.translate(0, LED_SPACING, 0);
+//                points[i++].update(t.x(), t.y(), t.z());
+//
+//                t.translate(.1f*INCHES, 0, 0);
+//                points[i++].update(t.x(), t.y(), t.z());
+//                t.translate(0, -LED_SPACING, 0);
+//                points[i++].update(t.x(), t.y(), t.z());
+//                t.translate(0, -LED_SPACING, 0);
+//                points[i++].update(t.x(), t.y(), t.z());
+//            }
             t.pop();
         }
 
@@ -594,21 +616,6 @@ public class TreeModel extends SLModel {
                     addPoint(new LXPoint(t));
                     t.translate(0, LED_SPACING, 0);
                     addPoint(new LXPoint(t));
-
-                    t.translate(.1f*INCHES, 0, 0);
-                    addPoint(new LXPoint(t));
-                    t.translate(0, -LED_SPACING, 0);
-                    addPoint(new LXPoint(t));
-                    t.translate(0, -LED_SPACING, 0);
-                    addPoint(new LXPoint(t));
-                    t.translate(0, -LED_SPACING, 0);
-                    addPoint(new LXPoint(t));
-                }
-                else if (config.size == Size.SMALL) {
-                    t.translate(-.05f*INCHES, 0, 0);
-                    addPoint(new LXPoint(t));
-                    t.translate(0, LED_SPACING, 0);
-                    addPoint(new LXPoint(t));
                     t.translate(0, LED_SPACING, 0);
                     addPoint(new LXPoint(t));
 
@@ -618,7 +625,26 @@ public class TreeModel extends SLModel {
                     addPoint(new LXPoint(t));
                     t.translate(0, -LED_SPACING, 0);
                     addPoint(new LXPoint(t));
+                    t.translate(0, -LED_SPACING, 0);
+                    addPoint(new LXPoint(t));
+                    t.translate(0, -LED_SPACING, 0);
+                    addPoint(new LXPoint(t));
                 }
+//                else if (config.size == Size.SMALL) {
+//                    t.translate(-.05f*INCHES, 0, 0);
+//                    addPoint(new LXPoint(t));
+//                    t.translate(0, LED_SPACING, 0);
+//                    addPoint(new LXPoint(t));
+//                    t.translate(0, LED_SPACING, 0);
+//                    addPoint(new LXPoint(t));
+//
+//                    t.translate(.1f*INCHES, 0, 0);
+//                    addPoint(new LXPoint(t));
+//                    t.translate(0, -LED_SPACING, 0);
+//                    addPoint(new LXPoint(t));
+//                    t.translate(0, -LED_SPACING, 0);
+//                    addPoint(new LXPoint(t));
+//                }
                 t.pop();
             }
         }
