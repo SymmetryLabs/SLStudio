@@ -33,6 +33,13 @@ public class ShowRegistry {
     static ShowBuilder DEFAULT_BUILDER = () -> new DemoShow();
 
     /** Builds and returns the show with the given name. */
+    public static Show getShow(String name) {
+        Map<String, ShowBuilder> builders = new HashMap<>();
+        registerShows(null, builders);
+        return builders.getOrDefault(name, DEFAULT_BUILDER).build();
+    }
+
+    /** Builds and returns the show with the given name. */
     public static Show getShow(PApplet applet, String name) {
         Map<String, ShowBuilder> builders = new HashMap<>();
         registerShows(applet, builders);
@@ -52,7 +59,11 @@ public class ShowRegistry {
     private static void registerShows(PApplet applet, Map<String, ShowBuilder> map) {
         // This is the central registry of shows.  Add an entry here for each available show.
         map.put("demo", () -> new DemoShow());
-        map.put("oslo", () -> new OsloShow(applet, TreeModel.ModelMode.MAJOR_LIMBS));
+        if (applet != null) {
+            map.put("oslo", () -> new OsloShow(applet, TreeModel.ModelMode.MAJOR_LIMBS));
+        } else {
+            System.err.println("disabling Oslo show, which requires Processing");
+        }
         map.put("composite", () -> new CompositeShow());
         map.put("obj", () -> new ObjShow());
         map.put("office", () -> new OfficeShow());

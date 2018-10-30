@@ -1,10 +1,15 @@
 buildscript {
 	repositories {
+    mavenLocal()
 		mavenCentral()
 		jcenter()
+    google()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
 	}
 	dependencies {
 		classpath 'edu.sc.seis.gradle:launch4j:2.4.2'
+    classpath "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 	}
 }
 
@@ -17,6 +22,12 @@ plugins {
 	id 'edu.sc.seis.macAppBundle' version '2.3.0'
 }
 
+configure(subprojects) {
+  apply plugin: 'java'
+  apply plugin: 'kotlin'
+  sourceCompatibility = 1.8
+}
+
 apply plugin: 'com.palantir.docker'
 
 // For building windows executable. See https://github.com/TheBoegl/gradle-launch4j
@@ -25,7 +36,7 @@ apply plugin: 'edu.sc.seis.launch4j'
 group = 'com.symmetrylabs'
 version = '1.0'
 
-mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
+mainClassName = 'com.symmetrylabs.slstudio.ui.Lwjgl3Launcher'
 //mainClassName = 'com.symmetrylabs.slstudio.SLHeadless'
 
 run {
@@ -70,6 +81,9 @@ allprojects {
 			// these credentials are for the symmetry-labs account
 			credentials { username 'jp_ad5p43bkk3kiaah4slmihuagci' }
 		}
+
+		// Required since imgui uses version 1.2 of Kotlin
+		maven { url "https://dl.bintray.com/kotlin/kotlin-dev" }
 	}
 
 	tasks.withType(JavaCompile) {
@@ -144,6 +158,10 @@ dependencies {
 	implementation group: 'de.javagl', name: 'obj', version: '0.3.0'
 
 	testCompile 'junit:junit:4.12'
+
+  compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+  compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+	compile "com.github.kotlin-graphics:imgui:v1.63-beta-03"
 }
 
 compileKotlin {
