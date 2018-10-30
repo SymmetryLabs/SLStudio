@@ -2,10 +2,10 @@ package com.symmetrylabs.slstudio.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;
-import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
 import heronarts.lx.model.LXModel;
@@ -14,8 +14,7 @@ public class ModelRenderer {
     protected LXModel model;
     protected Mesh mesh;
     protected ShaderProgram pointShader;
-    protected Camera cam;
-    protected CameraInputController camController;
+    public final Camera cam;
 
     public ModelRenderer(LXModel model) {
         this.model = model;
@@ -41,14 +40,9 @@ public class ModelRenderer {
         cam.far = 10000f;
         cam.update();
 
-        camController = new CameraInputController(cam);
-        camController.target.set(model.cx, model.cy, model.cz);
-        Gdx.input.setInputProcessor(camController);
     }
 
     public void draw() {
-        camController.update();
-
         pointShader.begin();
         pointShader.setUniformMatrix("u_mvp", cam.combined);
         mesh.render(pointShader, GL20.GL_POINTS);
