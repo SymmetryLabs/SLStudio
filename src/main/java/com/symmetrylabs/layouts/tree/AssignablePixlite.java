@@ -46,39 +46,38 @@ public class AssignablePixlite extends LXOutputGroup {
                 Port port = new Port(lx, datalineA, datalineB, portIndex++);
                 ports.add(port);
                 addChild(port);
-
             }
         } catch (SocketException e) {
             e.printStackTrace();
         }
 
-        System.out.println("/*- Pixlite (" + ipAddress + ") ---------------------------------------------------*/");
+        //System.out.println("/*- Pixlite (" + ipAddress + ") ---------------------------------------------------*/");
 //        System.out.println("NUM PORTS: " + ports.size());
 //        System.out.println("NUM DATALINES: " + datalines.size());
 
-        for (int i = 0; i < ports.size(); i++) {
-            System.out.println("----------------------------");
-            System.out.println("Pixlite Port (physical): " + ports.get(i).index);
-            System.out.println("-Dataline A (virtual port): " + ports.get(i).datalineA.index);
-            for (AssignableArtNetDatagram datagram : ports.get(0).datalineA.artNetDatagrams) {
-                System.out.println("--Artnet Datagram: ip: " + datagram.ipAddress + ", universe: " + datagram.universe);
-            }
+//        for (int i = 0; i < ports.size(); i++) {
+//            System.out.println("----------------------------");
+//            System.out.println("Pixlite Port (physical): " + ports.get(i).index);
+//            System.out.println("-Dataline A (virtual port): " + ports.get(i).datalineA.index);
+//            for (AssignableArtNetDatagram datagram : ports.get(0).datalineA.artNetDatagrams) {
+//                System.out.println("--Artnet Datagram: ip: " + datagram.ipAddress + ", universe: " + datagram.universe);
+//            }
+//
+//            System.out.println("-dataline B (virtual port): " + ports.get(i).datalineB.index);
+//            for (AssignableArtNetDatagram datagram : ports.get(0).datalineB.artNetDatagrams) {
+//                System.out.println("--Artnet Datagram: ip: " + datagram.ipAddress + ", universe: " + datagram.universe);
+//            }
+//            System.out.println("");
+//        }
 
-            System.out.println("-dataline B (virtual port): " + ports.get(i).datalineB.index);
-            for (AssignableArtNetDatagram datagram : ports.get(0).datalineB.artNetDatagrams) {
-                System.out.println("--Artnet Datagram: ip: " + datagram.ipAddress + ", universe: " + datagram.universe);
-            }
-            System.out.println("");
-        }
 
-
-        final TreeModelingTool.BranchManipulator manipulator = SLStudio.applet.treeModelingTool.branchManipulator;
+        final TreeModelingTool.BranchManipulator manipulator = TreeModelingTool.getInstance(lx).branchManipulator;
 
         manipulator.ipAddress.addListener(parameter -> {
             String ip = ((StringParameter)parameter).getString();
             if (this.ipAddress.equals(ip)) {
                 int portIndex = manipulator.channel.getValuei()-1;
-                ports.get(portIndex).setBranch(SLStudio.applet.treeModelingTool.getSelectedBranch());
+                ports.get(portIndex).setBranch(TreeModelingTool.getInstance(lx).getSelectedBranch());
             }
         });
 
@@ -86,7 +85,7 @@ public class AssignablePixlite extends LXOutputGroup {
             String ip = manipulator.ipAddress.getString();
             if (this.ipAddress.equals(ip)) {
                 int portIndex = ((DiscreteParameter)parameter).getValuei()-1;
-                ports.get(portIndex).setBranch(SLStudio.applet.treeModelingTool.getSelectedBranch());
+                ports.get(portIndex).setBranch(TreeModelingTool.getInstance(lx).getSelectedBranch());
             }
         });
     }

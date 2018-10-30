@@ -22,6 +22,8 @@ import com.symmetrylabs.layouts.tree.config.*;
 
 public class TreeModelingTool extends LXComponent {
 
+    private static TreeModelingTool instance = null;
+
     public static enum Mode {
         LIMB, BRANCH, TWIG
     }
@@ -83,6 +85,20 @@ public class TreeModelingTool extends LXComponent {
         limbManipulator.repurposeParameters();
         branchManipulator.repurposeParameters();
         twigManipulator.repurposeParameters();
+    }
+
+    public static TreeModelingTool getInstance(LX lx) {
+        if (instance == null)
+            instance = new TreeModelingTool(lx);
+
+        return instance;
+    }
+
+    public static TreeModelingTool getInstance() {
+        if (instance != null) {
+            return instance;
+        }
+        return null;
     }
 
     private void updateBranches() {

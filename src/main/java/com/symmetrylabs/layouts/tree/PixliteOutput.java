@@ -28,7 +28,7 @@ public class PixliteOutput extends LXOutputGroup {
 
     PixliteOutput(LX lx, TreeModel.Branch branch) throws SocketException {
         super(lx);
-        this.manipulator = SLStudio.applet.treeModelingTool.branchManipulator;
+        this.manipulator = TreeModelingTool.getInstance(lx).branchManipulator;
         this.config = branch.getConfig();
 
         this.channelA = new ReceiverChannel(lx, branch, ReceiverChannel.Type.A);

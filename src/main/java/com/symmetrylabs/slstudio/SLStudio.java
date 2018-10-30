@@ -45,7 +45,7 @@ public class SLStudio extends PApplet {
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
-    public TreeModelingTool treeModelingTool;
+    //public TreeModelingTool treeModelingTool = null;
     public UITreeModelingTool uiTreeModelingTool = null;
     public UITreeModelAxes uiTreeModelAxes = null;
     public Anemometer anemometer;
@@ -106,8 +106,8 @@ public class SLStudio extends PApplet {
                 SLStudio.this.dispatcher = Dispatcher.getInstance(lx);
 
                 if (TreeModelingTool.isTreeLayout()) {
-                    treeModelingTool = new TreeModelingTool(lx);
-                    lx.engine.registerComponent("treeModelingTool", treeModelingTool);
+                    //treeModelingTool = new TreeModelingTool(lx);
+                    lx.engine.registerComponent("treeModelingTool", TreeModelingTool.getInstance(lx));
 
                     anemometer = new Anemometer();
                     lx.engine.modulation.addModulator(anemometer.speedModulator);
@@ -151,7 +151,7 @@ public class SLStudio extends PApplet {
 
                 if (TreeModelingTool.isTreeLayout()) {
                     ui.preview.addComponent(new UITreeTrunk(applet));
-                    uiTreeModelAxes = new UITreeModelAxes();
+                    uiTreeModelAxes = UITreeModelAxes.getInstance(lx);
                     ui.preview.addComponent(uiTreeModelAxes);
                 }
 

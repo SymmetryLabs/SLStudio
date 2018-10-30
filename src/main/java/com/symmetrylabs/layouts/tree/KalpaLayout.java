@@ -1,4 +1,4 @@
-package com.symmetrylabs.layouts.tree;
+package com.symmetrylabs.layouts.kalpa;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -6,22 +6,32 @@ import java.util.HashMap;
 import java.util.Map;
 import java.net.SocketException;
 
-import heronarts.lx.LX;
+
 import heronarts.lx.model.LXPoint;
 
-import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.layouts.Layout;
+import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.layouts.tree.*;
 import com.symmetrylabs.layouts.tree.config.*;
+import com.symmetrylabs.layouts.tree.ui.*;
+import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI3dComponent;
+
+import static com.symmetrylabs.util.DistanceConstants.*;
+
+import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI3dComponent;
+import processing.core.PGraphics;
 import static com.symmetrylabs.util.DistanceConstants.*;
 
 
-public class KalpaLayout extends TreeLayout implements Layout {
+public class KalpaLayout implements Layout {
 
     public final Map<String, AssignablePixlite> pixlites = new HashMap<>();
     public final List<AssignablePixlite.Port> pixlitePorts = new ArrayList<>();
+
 
     // female
     final TwigConfig[] BRANCH_TYPE_A = new TwigConfig[]{
@@ -58,7 +68,6 @@ public class KalpaLayout extends TreeLayout implements Layout {
         new BranchConfig(false, -12.239999f, 1.7999998f, 10.8f, 7.2f, 20.880001f, -7.2f, BRANCH_TYPE_A)
     };
 
-    @Override
     public SLModel buildModel() {
         TwigConfig.setZEnabled(false);
         TwigConfig.setElevationEnabled(false);
@@ -70,7 +79,7 @@ public class KalpaLayout extends TreeLayout implements Layout {
 
         TreeConfig config = new TreeConfig(new LimbConfig[] {
             // bottom
-            new LimbConfig(false, 50, 6*FEET, 0.0f, -90, 0, new BranchConfig[] {
+            new LimbConfig(false, 50, 13*FEET, -120.0f, -45, 0, new BranchConfig[] {
                 new BranchConfig(false, "0.0.0.0", 0, 28.439999f, 12.0f, -8.28f, 43.920002f, 0.0f, 172.8f, BRANCH_TYPE_A),
                 new BranchConfig(false, "10.200.1.103", 5, 21.960005f, 21.0f, -5.7599936f, -21.6f, 0.0f, -7.2f, BRANCH_TYPE_A),
                 new BranchConfig(false, "10.200.1.100", 7, 11.879999f, 35.7f, -3.6f, -20.519999f, 0.0f, -8.28f, BRANCH_TYPE_A),
@@ -81,7 +90,7 @@ public class KalpaLayout extends TreeLayout implements Layout {
                 new BranchConfig(false, "10.200.1.103", 6, -6.479999f, 21.7999998f, 12.24f, 9.0f, 20.880001f, -7.2f, BRANCH_TYPE_A)
             }),
 
-            new LimbConfig(false, 50, 6*FEET, -60.0f, -90, 0, new BranchConfig[] {
+            new LimbConfig(false, 50, 13*FEET, -180.0f, -45, 0, new BranchConfig[] {
                 new BranchConfig(false, "0.0.0.0", 0, 28.439999f, 12.0f, -8.28f, 43.920002f, 0.0f, 172.8f, BRANCH_TYPE_A),
                 new BranchConfig(false, "0.0.0.0", 0, 21.960005f, 21.0f, -5.7599936f, -21.6f, 0.0f, -7.2f, BRANCH_TYPE_A),
                 new BranchConfig(false, "0.0.0.0", 0, 11.879999f, 35.7f, -3.6f, -20.519999f, 0.0f, -8.28f, BRANCH_TYPE_A),
@@ -92,7 +101,7 @@ public class KalpaLayout extends TreeLayout implements Layout {
                 new BranchConfig(false, "10.200.1.109", 7, -6.479999f, 21.7999998f, 12.24f, 9.0f, 20.880001f, -7.2f, BRANCH_TYPE_A)
             }),
 
-            new LimbConfig(false, 50, 6*FEET, -120.0f, -90, 0, new BranchConfig[] {
+            new LimbConfig(false, 50, 13*FEET, -240.0f, -45, 0, new BranchConfig[] {
                 new BranchConfig(false, "10.200.1.108", 6, 28.439999f, 12.0f, -8.28f, 43.920002f, 0.0f, 172.8f, BRANCH_TYPE_A), // READDRESS
                 new BranchConfig(false, "0.0.0.0", 0, 21.960005f, 21.0f, -5.7599936f, -21.6f, 0.0f, -7.2f, BRANCH_TYPE_A),
                 new BranchConfig(false, "0.0.0.0", 0, 11.879999f, 35.7f, -3.6f, -20.519999f, 0.0f, -8.28f, BRANCH_TYPE_A),
@@ -103,7 +112,7 @@ public class KalpaLayout extends TreeLayout implements Layout {
                 new BranchConfig(false, "10.200.1.108", 4, -6.479999f, 21.7999998f, 12.24f, 9.0f, 20.880001f, -7.2f, BRANCH_TYPE_A)
             }),
 
-            new LimbConfig(false, 50, 6*FEET, -180.0f, -90, 0, new BranchConfig[] {
+            new LimbConfig(false, 50, 13*FEET, -300.0f, -45, 0, new BranchConfig[] {
                 new BranchConfig(false, "0.0.0.0", 0, 28.439999f, 12.0f, -8.28f, 43.920002f, 0.0f, 172.8f, BRANCH_TYPE_A),
                 new BranchConfig(false, "10.200.1.101", 3, 21.960005f, 21.0f, -5.7599936f, -21.6f, 0.0f, -7.2f, BRANCH_TYPE_A),
                 new BranchConfig(false, "10.200.1.101", 2, 11.879999f, 35.7f, -3.6f, -20.519999f, 0.0f, -8.28f, BRANCH_TYPE_A),
@@ -114,7 +123,7 @@ public class KalpaLayout extends TreeLayout implements Layout {
                 new BranchConfig(false, "0.0.0.0", 0, -6.479999f, 21.7999998f, 12.24f, 9.0f, 20.880001f, -7.2f, BRANCH_TYPE_A)
             }),
 
-            new LimbConfig(false, 50, 6*FEET, -240.0f, -90, 0, new BranchConfig[] {
+            new LimbConfig(false, 50, 13*FEET, -0.0f, -45, 0, new BranchConfig[] {
                 new BranchConfig(false, "0.0.0.0", 0, 28.439999f, 12.0f, -8.28f, 43.920002f, 0.0f, 172.8f, BRANCH_TYPE_A),
                 new BranchConfig(false, "0.0.0.0", 0, 21.960005f, 21.0f, -5.7599936f, -21.6f, 0.0f, -7.2f, BRANCH_TYPE_A),
                 new BranchConfig(false, "0.0.0.0", 0, 11.879999f, 35.7f, -3.6f, -20.519999f, 0.0f, -8.28f, BRANCH_TYPE_A),
@@ -125,7 +134,7 @@ public class KalpaLayout extends TreeLayout implements Layout {
                 new BranchConfig(false, "10.200.1.103", 7, -6.479999f, 21.7999998f, 12.24f, 9.0f, 20.880001f, -7.2f, BRANCH_TYPE_A)
             }),
 
-            new LimbConfig(false, 50, 6*FEET, -300.0f, -90, 0, new BranchConfig[] {
+            new LimbConfig(false, 50, 13*FEET, -60.0f, -45, 0, new BranchConfig[] {
                 new BranchConfig(false, "0.0.0.0", 0, 28.439999f, 12.0f, -8.28f, 43.920002f, 0.0f, 172.8f, BRANCH_TYPE_A),
                 new BranchConfig(false, "10.200.1.104", 5, 21.960005f, 21.0f, -5.7599936f, -21.6f, 0.0f, -7.2f, BRANCH_TYPE_A),
                 new BranchConfig(false, "10.200.1.105", 2, 11.879999f, 35.7f, -3.6f, -20.519999f, 0.0f, -8.28f, BRANCH_TYPE_A),
@@ -137,7 +146,7 @@ public class KalpaLayout extends TreeLayout implements Layout {
             }),
 
             // middle
-            new LimbConfig(false, 40, 87, -90.0f, -63, 0, new BranchConfig[] {
+            new LimbConfig(false, 40, 14.25f*FEET, -90.0f, -63, 0, new BranchConfig[] {
                 new BranchConfig(false, "10.200.1.103", 4, 28.439999f, 12.0f, -8.28f, 43.920002f, 0.0f, 172.8f, BRANCH_TYPE_A),
                 new BranchConfig(false, "0.0.0.0", 0, 21.960005f, 21.0f, -5.7599936f, -21.6f, 0.0f, -7.2f, BRANCH_TYPE_A),
                 new BranchConfig(false, "0.0.0.0", 0, 11.879999f, 35.7f, -3.6f, -20.519999f, 0.0f, -8.28f, BRANCH_TYPE_A),
@@ -148,7 +157,7 @@ public class KalpaLayout extends TreeLayout implements Layout {
                 new BranchConfig(false, "0.0.0.0", 0, -6.479999f, 21.7999998f, 12.24f, 9.0f, 20.880001f, -7.2f, BRANCH_TYPE_A)
             }),
 
-            new LimbConfig(false, 40, 87, -210.0f, -63, 0, new BranchConfig[] {
+            new LimbConfig(false, 40, 14.25f*FEET, -210.0f, -63, 0, new BranchConfig[] {
                 new BranchConfig(false, "0.0.0.0", 0, 28.439999f, 12.0f, -8.28f, 43.920002f, 0.0f, 172.8f, BRANCH_TYPE_A),
                 new BranchConfig(false, "10.200.1.102", 7, 21.960005f, 21.0f, -5.7599936f, -21.6f, 0.0f, -7.2f, BRANCH_TYPE_A),
                 new BranchConfig(false, "10.200.1.102", 8, 11.879999f, 35.7f, -3.6f, -20.519999f, 0.0f, -8.28f, BRANCH_TYPE_A),
@@ -159,7 +168,7 @@ public class KalpaLayout extends TreeLayout implements Layout {
                 new BranchConfig(false, "10.200.1.102", 1, -6.479999f, 21.7999998f, 12.24f, 9.0f, 20.880001f, -7.2f, BRANCH_TYPE_A)
             }),
 
-            new LimbConfig(false, 40, 87, -330.0f, -63, 0, new BranchConfig[] {
+            new LimbConfig(false, 40, 14.25f*FEET, -330.0f, -63, 0, new BranchConfig[] {
                 new BranchConfig(false, "0.0.0.0", 0, 28.439999f, 12.0f, -8.28f, 43.920002f, 0.0f, 172.8f, BRANCH_TYPE_A),
                 new BranchConfig(false, "0.0.0.0", 0, 21.960005f, 21.0f, -5.7599936f, -21.6f, 0.0f, -7.2f, BRANCH_TYPE_A),
                 new BranchConfig(false, "10.200.1.104", 7, 11.879999f, 35.7f, -3.6f, -20.519999f, 0.0f, -8.28f, BRANCH_TYPE_A),
@@ -171,48 +180,42 @@ public class KalpaLayout extends TreeLayout implements Layout {
             }),
 
             // top
-            new LimbConfig(false, 5, 130, -90, -53, 0, new BranchConfig[] {
+            new LimbConfig(false, 5, 19*FEET, -90, -53, 0, new BranchConfig[] {
                 new BranchConfig(false, "10.200.1.107", 7, 0, 12.0f, 0, 0, 0, 0, BRANCH_TYPE_A)
             }),
-            new LimbConfig(false, 5, 130, -150, -53, 0, new BranchConfig[] {
+            new LimbConfig(false, 5, 19*FEET, -150, -53, 0, new BranchConfig[] {
                 new BranchConfig(false, "10.200.1.107", 2, 0, 12.0f, 0, 0, 0, 0, BRANCH_TYPE_A)
             }),
-            new LimbConfig(false, 5, 130, -270, -53, 0, new BranchConfig[] {
+            new LimbConfig(false, 5, 19*FEET, -270, -53, 0, new BranchConfig[] {
                 new BranchConfig(false, "10.200.1.107", 4, 0, 12.0f, 0, 0, 0, 0, BRANCH_TYPE_A)
             }),
 
             // top top
-             new LimbConfig(false, 5, 150, -30, -53, 0, new BranchConfig[] {
-                 new BranchConfig(false, "10.200.1.107", 6, 0, 12.0f, 0, 0, 0, 180, BRANCH_TYPE_A)
-             }),
-             new LimbConfig(false, 5, 150, -210, -53, 0, new BranchConfig[] {
-                 new BranchConfig(false, "10.200.1.107", 3, 0, 12.0f, 0, 0, 0, 180, BRANCH_TYPE_A)
-             }),
-             new LimbConfig(false, 5, 150, -330, -53, 0, new BranchConfig[] {
-                 new BranchConfig(false, "10.200.1.107", 5, 0, 12.0f, 0, 0, 0, 180, BRANCH_TYPE_A)
-             }),
+            new LimbConfig(false, 5, 19*FEET, -30, -53, 0, new BranchConfig[] {
+                new BranchConfig(false, "10.200.1.107", 6, 0, 12.0f, 0, 0, 0, 180, BRANCH_TYPE_A)
+            }),
+            new LimbConfig(false, 5, 19*FEET, -210, -53, 0, new BranchConfig[] {
+                new BranchConfig(false, "10.200.1.107", 3, 0, 12.0f, 0, 0, 0, 180, BRANCH_TYPE_A)
+            }),
+            new LimbConfig(false, 5, 19*FEET, -330, -53, 0, new BranchConfig[] {
+                new BranchConfig(false, "10.200.1.107", 5, 0, 12.0f, 0, 0, 0, 180, BRANCH_TYPE_A)
+            }),
         });
 
         return new TreeModel(config);
     }
 
-    @Override
     public void setupLx(SLStudioLX lx) {
-        lx.engine.framesPerSecond.setValue(30);
-//        for (TreeModel.Branch branch : ((TreeModel)lx.model).getBranches()) {
-//            try {
-//                PixliteOutput output = new PixliteOutput(lx, branch);
-//                pixliteOutputs.put(branch, output);
-//                lx.addOutput(output);
-//            } catch (SocketException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        //lx.engine.framesPerSecond.setValue(30);
 
         final String[] ipAddresses = new String[] {
             "10.200.1.100", "10.200.1.101", "10.200.1.102", "10.200.1.103", "10.200.1.104",
             "10.200.1.105", "10.200.1.106", "10.200.1.107", "10.200.1.108", "10.200.1.109"
         };
+
+//        for (int i = 0; i < ipAddresses.length; i++) {
+//            addPixlite(lx, new AssignablePixlite(lx, ipAddresses[i]));
+//        }
 
         for (int i = 0; i < ipAddresses.length; i++) {
             AssignablePixlite pixlite = new AssignablePixlite(lx, ipAddresses[i]);
@@ -229,18 +232,30 @@ public class KalpaLayout extends TreeLayout implements Layout {
                     System.out.println(port.index + " - " + branch.getConfig().channel);
                     port.setBranch(branch);
                 }
-
             }
         }
     }
 
-    @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
-        // ui.preview.addComponent(new UITreeGround(applet));
-        // UITreeStructure uiTreeStructure = new UITreeStructure((TreeModel) lx.model);
-        // ui.preview.addComponent(uiTreeStructure);
+
+        ui.preview.addComponent(new UIRocoBuilding());
+
+        ui.preview.addComponent(new UITreeGround(SLStudio.applet));
+        ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
         // UITreeLeaves uiTreeLeaves = new UITreeLeaves(lx, applet, (TreeModel) lx.model);
         // ui.preview.addComponent(uiTreeLeaves);
         // new UITreeControls(ui, uiTreeStructure, uiTreeLeaves).setExpanded(false).addToContainer(ui.leftPane.global);
+
     }
 }
+
+class UIRocoBuilding extends UI3dComponent {
+    protected void onDraw(UI ui, PGraphics pg) {
+        pg.fill(0xff8c5431);
+        pg.pushMatrix();
+        pg.translate(0, 18*FEET, 34*FEET);
+        pg.box(100*FEET, 34*FEET,33*FEET);
+        pg.popMatrix();
+    }
+}
+
