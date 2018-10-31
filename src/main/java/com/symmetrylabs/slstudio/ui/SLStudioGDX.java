@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.symmetrylabs.LXClassLoader;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.ShowRegistry;
 import heronarts.lx.LX;
@@ -17,6 +18,7 @@ public class SLStudioGDX extends ApplicationAdapter {
     private ModelRenderer renderer;
     private ImGuiManager ui;
     private LX lx;
+    private PatternWindow patternWindow;
 
     CameraInputController camController;
 
@@ -37,6 +39,10 @@ public class SLStudioGDX extends ApplicationAdapter {
         camController.target.set(model.cx, model.cy, model.cz);
         Gdx.input.setInputProcessor(
             new ImGuiManager.DelegatingInputProcessor(camController));
+
+        loadLxComponents();
+
+        patternWindow = new PatternWindow(lx, showName);
     }
 
     @Override
@@ -55,7 +61,11 @@ public class SLStudioGDX extends ApplicationAdapter {
         renderer.draw();
         ui.startFrame();
 
+        UI.begin("Internals", null, 0);
         UI.text("framerate: %.0f fps", ImGuiManager.IO.getFramerate());
+        UI.end();
+
+        patternWindow.draw();
 
         ui.endFrame();
     }
@@ -64,5 +74,18 @@ public class SLStudioGDX extends ApplicationAdapter {
     public void dispose () {
         renderer.dispose();
         ui.dispose();
+    }
+
+    private void loadLxComponents() {
+        // Add all warps
+        LXClassLoader.findWarps().stream().forEach(lx::registerWarp);
+
+        // Add all effects
+        LXClassLoader.findEffects().stream().forEach(lx::registerEffect);
+
+        // Add all patterns
+        LXClassLoader.findPatterns().stream().forEach(lx::registerPattern);
+
+        lx.registerPattern(heronarts.p3lx.pattern.SolidColorPattern.class);
     }
 }
