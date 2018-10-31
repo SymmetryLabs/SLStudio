@@ -17,6 +17,8 @@ Java_com_symmetrylabs_slstudio_ui_UI_init(JNIEnv *env, jclass cls, jlong windowH
 	env->SetStaticIntField(cls, fid, ImGuiTreeNodeFlags_Leaf);
 	fid = env->GetStaticFieldID(cls, "TREE_FLAG_DEFAULT_OPEN", "I");
 	env->SetStaticIntField(cls, fid, ImGuiTreeNodeFlags_DefaultOpen);
+	fid = env->GetStaticFieldID(cls, "TREE_FLAG_SELECTED", "I");
+	env->SetStaticIntField(cls, fid, ImGuiTreeNodeFlags_Selected);
 
 	glfwInit();
 	GLFWwindow* window = reinterpret_cast<GLFWwindow*>(windowHandle);

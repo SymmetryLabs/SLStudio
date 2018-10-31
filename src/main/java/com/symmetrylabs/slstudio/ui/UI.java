@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.ui;
 public class UI {
     public static int TREE_FLAG_LEAF;
     public static int TREE_FLAG_DEFAULT_OPEN;
+    public static int TREE_FLAG_SELECTED;
 
     public static native boolean init(long windowPointer);
     public static native void newFrame();

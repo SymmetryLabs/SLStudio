@@ -61,7 +61,8 @@ public class ModelRenderer {
         lx.engine.copyUIBuffer(lxColorBuffer, UI_COLOR_SPACE);
         int[] colors = (int[]) lxColorBuffer.getArray(UI_COLOR_SPACE);
         for (int i = 0; i < model.points.length; i++) {
-            colors[i] = i % 3 == 0 ? 0xFFFF0000 : i % 3 == 1 ? 0xFF00FF00 : 0xFF0000FF;
+            //colors[i] = i % 3 == 0 ? 0xFFFF0000 : i % 3 == 1 ? 0xFF00FF00 : 0xFF0000FF;
+            colors[i] = 0xFFFF0000;
         }
 
         GL11.glEnable(GL11.GL_POINT_SMOOTH);

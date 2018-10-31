@@ -131,20 +131,6 @@ public abstract class ParticlePattern extends SLPattern<SLModel> implements Mark
     }
 
     @Override
-    public void onActive() {
-        super.onActive();
-
-        lx.ui.addMarkerSource(this);
-    }
-
-    @Override
-    public void onInactive() {
-        super.onInactive();
-
-        lx.ui.removeMarkerSource(this);
-    }
-
-    @Override
     public List<Marker> getMarkers() {
         List<Marker> markers = new ArrayList<Marker>();
 

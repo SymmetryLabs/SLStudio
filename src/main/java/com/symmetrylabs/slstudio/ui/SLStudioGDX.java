@@ -17,6 +17,7 @@ public class SLStudioGDX extends ApplicationAdapter {
     private ModelRenderer renderer;
     private LX lx;
     private PatternWindow patternWindow;
+    private ChannelWindow channelWindow;
 
     CameraInputController camController;
 
@@ -39,6 +40,9 @@ public class SLStudioGDX extends ApplicationAdapter {
         loadLxComponents();
 
         patternWindow = new PatternWindow(lx, showName);
+        channelWindow = new ChannelWindow(lx);
+
+        lx.engine.start();
     }
 
     @Override
@@ -64,6 +68,7 @@ public class SLStudioGDX extends ApplicationAdapter {
         UI.end();
 
         patternWindow.draw();
+        channelWindow.draw();
 
         UI.render();
     }
@@ -72,18 +77,12 @@ public class SLStudioGDX extends ApplicationAdapter {
     public void dispose () {
         renderer.dispose();
         UI.shutdown();
+        lx.engine.stop();
     }
 
     private void loadLxComponents() {
-        // Add all warps
         LXClassLoader.findWarps().stream().forEach(lx::registerWarp);
-
-        // Add all effects
         LXClassLoader.findEffects().stream().forEach(lx::registerEffect);
-
-        // Add all patterns
         LXClassLoader.findPatterns().stream().forEach(lx::registerPattern);
-
-        lx.registerPattern(heronarts.p3lx.pattern.SolidColorPattern.class);
     }
 }

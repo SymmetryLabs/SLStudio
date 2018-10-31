@@ -33,7 +33,7 @@ import com.symmetrylabs.util.MarkerSource;
 
 public abstract class SLPattern<M extends SLModel> extends LXPattern implements Renderable, MarkerSource, CaptionSource {
 
-    protected final SLStudioLX lx;
+    protected final LX lx;
     protected M model;  // overrides LXPattern's model field with a more specific type
     protected boolean isModelCompatible;  // false if lx.model is of an incompatible type
 
@@ -43,7 +43,7 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
 
     public SLPattern(LX lx) {
         super(lx);
-        this.lx = (SLStudioLX) lx;
+        this.lx = lx;
         setModel(lx.model);
         createParameters();
     }
@@ -113,8 +113,10 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
     @Override
     public void onActive() {
         super.onActive();
-        ((SLStudioLX) lx).ui.addMarkerSource(this);
-        ((SLStudioLX) lx).ui.addCaptionSource(this);
+        if (lx instanceof SLStudioLX) {
+            ((SLStudioLX) lx).ui.addMarkerSource(this);
+            ((SLStudioLX) lx).ui.addCaptionSource(this);
+        }
 
         synchronized (this) {
             if (!isManaged && renderer != null) {
@@ -127,8 +129,10 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
     @Override
     public void onInactive() {
         super.onInactive();
-        ((SLStudioLX) lx).ui.removeMarkerSource(this);
-        ((SLStudioLX) lx).ui.removeCaptionSource(this);
+        if (lx instanceof SLStudioLX) {
+            ((SLStudioLX) lx).ui.removeMarkerSource(this);
+            ((SLStudioLX) lx).ui.removeCaptionSource(this);
+        }
 
         synchronized (this) {
             if (renderer != null) {

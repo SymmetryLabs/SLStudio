@@ -1,7 +1,8 @@
 package com.symmetrylabs.slstudio.ui;
 
-import glm_.vec2.Vec2;
 import heronarts.lx.LX;
+import heronarts.lx.LXBus;
+import heronarts.lx.LXChannel;
 import heronarts.lx.LXPattern;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,10 +59,9 @@ public class PatternWindow {
                     if (filterText.length() == 0 || pi.label.toLowerCase().contains(filterText.toLowerCase())) {
                         boolean selected = UI.treeNode(
                             String.format("%s/%s", groupName, pi.label),
-                            imgui.TreeNodeFlag.Leaf.getI(),
-                            pi.label);
+                            UI.TREE_FLAG_LEAF, pi.label);
                         if (UI.isItemClicked()) {
-                            System.out.println(pi.label);
+                            activate(pi);
                         }
                         UI.treePop();
                     }
@@ -70,6 +70,30 @@ public class PatternWindow {
             }
         }
         UI.end();
+    }
+
+    private void activate(PatternItem pi) {
+        LXPattern instance = null;
+        try {
+            instance = pi.pattern.getConstructor(LX.class).newInstance(lx);
+        } catch (NoSuchMethodException nsmx) {
+            nsmx.printStackTrace();
+        } catch (java.lang.reflect.InvocationTargetException itx) {
+            itx.printStackTrace();
+        } catch (IllegalAccessException ix) {
+            ix.printStackTrace();
+        } catch (InstantiationException ix) {
+            ix.printStackTrace();
+        }
+
+        if (instance != null) {
+            LXBus channel = lx.engine.getFocusedChannel();
+            if (channel instanceof LXChannel) {
+                ((LXChannel) channel).addPattern(instance);
+            } else {
+                lx.engine.addChannel(new LXPattern[] { instance });
+            }
+        }
     }
 
     private static class PatternItem implements Comparable<PatternItem> {
