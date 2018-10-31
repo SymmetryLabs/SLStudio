@@ -55,6 +55,7 @@ public class ImGuiManager {
 
         @Override
         public boolean keyDown(int keycode) {
+            IO.getKeysDown()[keycode] = true;
             if (IO.getWantCaptureKeyboard()) {
                 return true;
             }
@@ -63,6 +64,7 @@ public class ImGuiManager {
 
         @Override
         public boolean keyTyped(char character) {
+            IO.addInputCharacter(character);
             if (IO.getWantCaptureKeyboard()) {
                 return true;
             }
@@ -71,6 +73,7 @@ public class ImGuiManager {
 
         @Override
         public boolean keyUp(int keycode) {
+            IO.getKeysDown()[keycode] = false;
             if (IO.getWantCaptureKeyboard()) {
                 return true;
             }
