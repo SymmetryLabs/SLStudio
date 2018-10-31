@@ -12,10 +12,11 @@ import heronarts.lx.model.LXModel;
 import static com.symmetrylabs.slstudio.ui.ImGuiManager.UI;
 
 public class SLStudioGDX extends ApplicationAdapter {
-    String showName;
-    Show show;
-    ModelRenderer renderer;
-    ImGuiManager ui;
+    private String showName;
+    private Show show;
+    private ModelRenderer renderer;
+    private ImGuiManager ui;
+    private LX lx;
 
     CameraInputController camController;
 
@@ -25,7 +26,9 @@ public class SLStudioGDX extends ApplicationAdapter {
         show = ShowRegistry.getShow(showName);
 
         LXModel model = show.buildModel();
-        renderer = new ModelRenderer(model);
+        lx = new LX(model);
+
+        renderer = new ModelRenderer(lx, model);
 
         ui = new ImGuiManager();
         ui.create();
@@ -40,7 +43,12 @@ public class SLStudioGDX extends ApplicationAdapter {
     public void render() {
         Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl20.glClearColor(0, 0, 0, 1);
-        Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl20.glClear(
+            GL20.GL_COLOR_BUFFER_BIT
+            | (Gdx.graphics.getBufferFormat().coverageSampling
+                 ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
+
+        lx.engine.onDraw();
 
         camController.update();
 
@@ -48,7 +56,6 @@ public class SLStudioGDX extends ApplicationAdapter {
         ui.startFrame();
 
         UI.text("framerate: %.0f fps", ImGuiManager.IO.getFramerate());
-        UI.text("Hi");
 
         ui.endFrame();
     }
