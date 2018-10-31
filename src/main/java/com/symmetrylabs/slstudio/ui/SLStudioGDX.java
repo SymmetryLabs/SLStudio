@@ -4,19 +4,17 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import com.symmetrylabs.LXClassLoader;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.ShowRegistry;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXModel;
 
-import static com.symmetrylabs.slstudio.ui.ImGuiManager.UI;
-
 public class SLStudioGDX extends ApplicationAdapter {
     private String showName;
     private Show show;
     private ModelRenderer renderer;
-    private ImGuiManager ui;
     private LX lx;
     private PatternWindow patternWindow;
 
@@ -32,13 +30,11 @@ public class SLStudioGDX extends ApplicationAdapter {
 
         renderer = new ModelRenderer(lx, model);
 
-        ui = new ImGuiManager();
-        ui.create();
+        UI.init(((Lwjgl3Graphics) Gdx.graphics).getWindow().getWindowHandle());
 
         camController = new CameraInputController(renderer.cam);
         camController.target.set(model.cx, model.cy, model.cz);
-        Gdx.input.setInputProcessor(
-            new ImGuiManager.DelegatingInputProcessor(camController));
+        Gdx.input.setInputProcessor(new DelegatingInputProcessor(camController));
 
         loadLxComponents();
 
@@ -59,21 +55,23 @@ public class SLStudioGDX extends ApplicationAdapter {
         camController.update();
 
         renderer.draw();
-        ui.startFrame();
+        UI.newFrame();
 
-        UI.begin("Internals", null, 0);
-        UI.text("framerate: %.0f fps", ImGuiManager.IO.getFramerate());
+        UI.begin("Internals");
+        UI.text("engine: % 4.0fms, % 3.0ffps",
+                        1e-6f * lx.engine.timer.runNanos,
+                        1e9f / lx.engine.timer.runNanos);
         UI.end();
 
         patternWindow.draw();
 
-        ui.endFrame();
+        UI.render();
     }
 
     @Override
     public void dispose () {
         renderer.dispose();
-        ui.dispose();
+        UI.shutdown();
     }
 
     private void loadLxComponents() {

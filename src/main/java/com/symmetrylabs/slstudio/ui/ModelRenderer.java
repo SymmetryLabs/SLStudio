@@ -86,7 +86,12 @@ public class ModelRenderer {
         colorVbo.bind(pointShader);
 
         Gdx.gl.glDrawArrays(GL20.GL_POINTS, 0, model.points.length);
+
+        pointShader.disableVertexAttribute("a_color");
+        pointShader.disableVertexAttribute("a_position");
         pointShader.end();
+
+        Gdx.gl.glBindBuffer(GL20.GL_ARRAY_BUFFER, 0);
 
         GL11.glDisable(GL11.GL_POINT_SMOOTH);
     }

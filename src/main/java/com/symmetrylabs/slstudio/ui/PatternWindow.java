@@ -8,13 +8,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.symmetrylabs.slstudio.ui.ImGuiManager.UI;
-
 public class PatternWindow {
     private final LX lx;
     private final HashMap<String, List<PatternItem>> groups = new HashMap<>();
     private final List<String> groupNames;
-    private final char[] filterText = new char[128];
+    private String filterText = "";
 
     public PatternWindow(LX lx, String activeGroup) {
         this.lx = lx;
@@ -48,22 +46,21 @@ public class PatternWindow {
     }
 
     public void draw() {
-        UI.begin("Patterns", null, 0);
-        UI.inputText("filter", filterText, 0);
-        String filter = new String(filterText).trim();
+        UI.begin("Patterns");
+        filterText = UI.inputText("filter", filterText);
 
         for (String groupName : groupNames) {
             String displayName = groupName == null ? "Uncategorized" : groupName;
             /* If this returns true, the tree is expanded and we should display
                  its contents */
-            if (UI.treeNode(displayName)) {
+            if (UI.treeNode(displayName, UI.TREE_FLAG_DEFAULT_OPEN)) {
                 for (PatternItem pi : groups.get(groupName)) {
-                    if (filter.length() == 0 || pi.label.matches(filter)) {
-                        boolean selected = UI.treeNodeEx(
+                    if (filterText.length() == 0 || pi.label.toLowerCase().contains(filterText.toLowerCase())) {
+                        boolean selected = UI.treeNode(
                             String.format("%s/%s", groupName, pi.label),
                             imgui.TreeNodeFlag.Leaf.getI(),
                             pi.label);
-                        if (UI.isItemClicked(0)) {
+                        if (UI.isItemClicked()) {
                             System.out.println(pi.label);
                         }
                         UI.treePop();

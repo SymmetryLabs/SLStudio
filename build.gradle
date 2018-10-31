@@ -47,6 +47,8 @@ run {
 	// To select a layout from the command line, "gradlew run -Playout=cubes"
 	systemProperty 'com.symmetrylabs.layout', findProperty('layout')
 
+	systemProperty 'java.library.path', '/home/haldean/SLStudio/slimgui/build'
+
 	doLast {
 		while (file(".restart").exists()) {
 			file(".restart").delete()
