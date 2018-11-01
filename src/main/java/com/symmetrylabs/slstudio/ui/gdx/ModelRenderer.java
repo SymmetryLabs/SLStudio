@@ -11,8 +11,6 @@ import com.badlogic.gdx.math.Vector3;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
-import java.nio.FloatBuffer;
-import java.util.Arrays;
 import org.lwjgl.opengl.GL11;
 
 public class ModelRenderer {

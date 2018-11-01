@@ -36,9 +36,6 @@ apply plugin: 'edu.sc.seis.launch4j'
 group = 'com.symmetrylabs'
 version = '1.0'
 
-mainClassName = 'com.symmetrylabs.slstudio.ui.swing.SLStudioSwing'
-//mainClassName = 'com.symmetrylabs.slstudio.SLHeadless'
-
 run {
 	if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
 		jvmArgs '-XX:+UseParNewGC', '-XX:+UseConcMarkSweepGC'
@@ -91,6 +88,16 @@ allprojects {
 	tasks.withType(JavaCompile) {
 		sourceCompatibility = '1.8'
 	}
+}
+
+if (hasProperty('slstudio.swing')) {
+	mainClassName = 'com.symmetrylabs.slstudio.ui.swing.SLStudioSwing'
+} else if (hasProperty('slstudio.gdx')) {
+	mainClassName = 'com.symmetrylabs.slstudio.ui.gdx.Lwjgl3Launcher'
+} else if (hasProperty('slstudio.headless')) {
+	mainClassName = 'com.symmetrylabs.slstudio.SLHeadless'
+} else {
+	mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
 }
 
 repositories {
@@ -161,8 +168,14 @@ dependencies {
 
 	testCompile 'junit:junit:4.12'
 
+	// gdx dependencies
   compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
   compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+
+	// swing dependencies
+	compile "org.jogamp.jogl:jogl-all:2.3.2"
+	compile "org.jogamp.jogl:newt:2.3.2"
+	compile "com.github.kotlin-graphics:glm:0.01"
 }
 
 compileKotlin {
