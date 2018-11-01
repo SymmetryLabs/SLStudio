@@ -89,6 +89,16 @@ Java_com_symmetrylabs_slstudio_ui_UI_inputText(
 	return env->NewStringUTF(input_buf);
 }
 
+JNIEXPORT jfloat JNICALL
+Java_com_symmetrylabs_slstudio_ui_UI_sliderFloat(
+	JNIEnv * env, jclass, jstring jlabel, jfloat v, jfloat v0, jfloat v1) {
+	const char *label = env->GetStringUTFChars(jlabel, 0);
+	jfloat res = v;
+	ImGui::SliderFloat(label, &res, v0, v1);
+	env->ReleaseStringUTFChars(jlabel, label);
+	return res;
+}
+
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_UI_treeNode(
 	JNIEnv *env, jclass, jstring jid, jint flags, jstring jlabel) {
@@ -120,14 +130,24 @@ Java_com_symmetrylabs_slstudio_ui_UI_wantCaptureMouse(JNIEnv *, jclass) {
 	return ImGui::GetIO().WantCaptureMouse;
 }
 
+void update_modifiers() {
+	ImGuiIO &io = ImGui::GetIO();
+	io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
+	io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
+	io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
+	io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
+}
+
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_UI_keyDown(JNIEnv *, jclass, jint keycode) {
 	ImGui::GetIO().KeysDown[keycode] = true;
+	update_modifiers();
 }
 
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_UI_keyUp(JNIEnv *, jclass, jint keycode) {
 	ImGui::GetIO().KeysDown[keycode] = false;
+	update_modifiers();
 }
 
 JNIEXPORT void JNICALL

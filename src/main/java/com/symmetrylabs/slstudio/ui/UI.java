@@ -19,7 +19,10 @@ public class UI {
     public static void text(String t, Object... objs) {
         text(String.format(t, objs));
     }
+
     public static native String inputText(String label, String text);
+
+    public static native float sliderFloat(String label, float v, float v0, float v1);
 
     public static boolean treeNode(String label) {
         return treeNode(label, 0, label);

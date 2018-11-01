@@ -73,6 +73,14 @@ JNIEXPORT jstring JNICALL Java_com_symmetrylabs_slstudio_ui_UI_inputText
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_UI
+ * Method:    sliderFloat
+ * Signature: (Ljava/lang/String;FFF)F
+ */
+JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_UI_sliderFloat
+  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_UI
  * Method:    treeNode
  * Signature: (Ljava/lang/String;ILjava/lang/String;)Z
  */

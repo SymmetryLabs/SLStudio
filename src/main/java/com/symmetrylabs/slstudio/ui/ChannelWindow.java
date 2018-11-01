@@ -3,13 +3,16 @@ package com.symmetrylabs.slstudio.ui;
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXPattern;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChannelWindow {
     private final LX lx;
+    private final List<ComponentWindow> windows;
 
     public ChannelWindow(LX lx) {
         this.lx = lx;
+        windows = new ArrayList<>();
     }
 
     public void draw() {
@@ -26,11 +29,14 @@ public class ChannelWindow {
                     if (patName.endsWith("Pattern")) {
                         patName = patName.substring(0, patName.length() - "Pattern".length());
                     }
-                    UI.treeNode(String.format("%s/%s", chanName, patName),
+                    String name = String.format("%s / %s", chanName, patName);
+                    UI.treeNode(name,
                                             UI.TREE_FLAG_LEAF | (i == active ? UI.TREE_FLAG_SELECTED : 0),
                                             patName);
-                    if (UI.isItemClicked()) {
+                    if (UI.isItemClicked(0)) {
                         chan.goIndex(i);
+                    } else if (UI.isItemClicked(1)) {
+                        windows.add(new ComponentWindow(lx, name, pat));
                     }
                     UI.treePop();
                 }
@@ -39,5 +45,9 @@ public class ChannelWindow {
         }
 
         UI.end();
+
+        for (ComponentWindow w : windows) {
+            w.draw();
+        }
     }
 }
