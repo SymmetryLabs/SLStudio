@@ -58,7 +58,7 @@ public class SLStudioGDX extends ApplicationAdapter {
                  ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
         renderer.cam.viewportHeight = Gdx.graphics.getHeight();
         renderer.cam.viewportWidth = Gdx.graphics.getWidth();
-        cam.update();
+        renderer.cam.update();
 
         lx.engine.onDraw();
 
