@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.ui;
+package com.symmetrylabs.slstudio.ui.gdx;
 
 public class UI {
     public static int TREE_FLAG_LEAF;

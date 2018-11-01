@@ -1,7 +1,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-#include "com_symmetrylabs_slstudio_ui_UI.h"
+#include "com_symmetrylabs_slstudio_ui_gdx_UI.h"
 #include "handle.hpp"
 #include "imgui.h"
 #include "examples/imgui_impl_opengl2.h"
@@ -10,7 +10,7 @@
 #define MAX_INPUT_LENGTH 511
 
 JNIEXPORT jboolean JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_init(JNIEnv *env, jclass cls, jlong windowHandle) {
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_init(JNIEnv *env, jclass cls, jlong windowHandle) {
 	jfieldID fid;
 
 	fid = env->GetStaticFieldID(cls, "TREE_FLAG_LEAF", "I");
@@ -37,20 +37,20 @@ Java_com_symmetrylabs_slstudio_ui_UI_init(JNIEnv *env, jclass cls, jlong windowH
 	return 1;
 }
 
-JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_UI_newFrame(JNIEnv *, jclass) {
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_newFrame(JNIEnv *, jclass) {
 	ImGui_ImplOpenGL2_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 }
 
 JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_render(JNIEnv *, jclass) {
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_render(JNIEnv *, jclass) {
 	ImGui::Render();
 	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_shutdown(JNIEnv *, jclass) {
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_shutdown(JNIEnv *, jclass) {
 	ImGui_ImplOpenGL2_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
@@ -58,26 +58,26 @@ Java_com_symmetrylabs_slstudio_ui_UI_shutdown(JNIEnv *, jclass) {
 }
 
 JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_begin(JNIEnv *env, jclass, jstring jstr) {
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_begin(JNIEnv *env, jclass, jstring jstr) {
 	const char *str = env->GetStringUTFChars(jstr, 0);
 	ImGui::Begin(str);
 	env->ReleaseStringUTFChars(jstr, str);
 }
 
 JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_end(JNIEnv *, jclass) {
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_end(JNIEnv *, jclass) {
 	ImGui::End();
 }
 
 JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_text(JNIEnv *env, jclass, jstring jstr) {
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_text(JNIEnv *env, jclass, jstring jstr) {
 	const char *str = env->GetStringUTFChars(jstr, 0);
 	ImGui::Text(str);
 	env->ReleaseStringUTFChars(jstr, str);
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_inputText(
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_inputText(
 	JNIEnv *env, jclass, jstring jlabel, jstring jstr) {
 	const char *label = env->GetStringUTFChars(jlabel, 0);
 	const char *str = env->GetStringUTFChars(jstr, 0);
@@ -90,7 +90,7 @@ Java_com_symmetrylabs_slstudio_ui_UI_inputText(
 }
 
 JNIEXPORT jfloat JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_sliderFloat(
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_sliderFloat(
 	JNIEnv * env, jclass, jstring jlabel, jfloat v, jfloat v0, jfloat v1) {
 	const char *label = env->GetStringUTFChars(jlabel, 0);
 	jfloat res = v;
@@ -100,7 +100,7 @@ Java_com_symmetrylabs_slstudio_ui_UI_sliderFloat(
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_treeNode(
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_treeNode(
 	JNIEnv *env, jclass, jstring jid, jint flags, jstring jlabel) {
 	const char *id = env->GetStringUTFChars(jid, 0);
 	const char *label = env->GetStringUTFChars(jlabel, 0);
@@ -111,22 +111,22 @@ Java_com_symmetrylabs_slstudio_ui_UI_treeNode(
 }
 
 JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_treePop(JNIEnv *, jclass) {
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_treePop(JNIEnv *, jclass) {
 	ImGui::TreePop();
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_isItemClicked(JNIEnv *, jclass, jint button) {
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_isItemClicked(JNIEnv *, jclass, jint button) {
 	return ImGui::IsItemClicked(button) ? 1 : 0;
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_wantCaptureKeyboard(JNIEnv *, jclass) {
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_wantCaptureKeyboard(JNIEnv *, jclass) {
 	return ImGui::GetIO().WantCaptureKeyboard;
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_wantCaptureMouse(JNIEnv *, jclass) {
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_wantCaptureMouse(JNIEnv *, jclass) {
 	return ImGui::GetIO().WantCaptureMouse;
 }
 
@@ -139,28 +139,28 @@ void update_modifiers() {
 }
 
 JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_keyDown(JNIEnv *, jclass, jint keycode) {
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_keyDown(JNIEnv *, jclass, jint keycode) {
 	ImGui::GetIO().KeysDown[keycode] = true;
 	update_modifiers();
 }
 
 JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_keyUp(JNIEnv *, jclass, jint keycode) {
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_keyUp(JNIEnv *, jclass, jint keycode) {
 	ImGui::GetIO().KeysDown[keycode] = false;
 	update_modifiers();
 }
 
 JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_addInputCharacter(JNIEnv *, jclass, jchar c) {
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_addInputCharacter(JNIEnv *, jclass, jchar c) {
 	ImGui::GetIO().AddInputCharacter((ImWchar) c);
 }
 
 JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_scrolled(JNIEnv *, jclass, jfloat amount) {
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_scrolled(JNIEnv *, jclass, jfloat amount) {
 	ImGui::GetIO().MouseWheel -= amount;
 }
 
 JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_showDemoWindow(JNIEnv *, jclass) {
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_showDemoWindow(JNIEnv *, jclass) {
 	ImGui::ShowDemoWindow();
 }

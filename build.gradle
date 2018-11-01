@@ -36,7 +36,7 @@ apply plugin: 'edu.sc.seis.launch4j'
 group = 'com.symmetrylabs'
 version = '1.0'
 
-mainClassName = 'com.symmetrylabs.slstudio.ui.Lwjgl3Launcher'
+mainClassName = 'com.symmetrylabs.slstudio.ui.gdx.Lwjgl3Launcher'
 //mainClassName = 'com.symmetrylabs.slstudio.SLHeadless'
 
 run {

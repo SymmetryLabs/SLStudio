@@ -1,8 +1,7 @@
-package com.symmetrylabs.slstudio.ui;
+package com.symmetrylabs.slstudio.ui.gdx;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.symmetrylabs.slstudio.ui.SLStudioGDX;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {
