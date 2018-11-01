@@ -35,6 +35,9 @@ public class SLStudioGDX extends ApplicationAdapter {
 
         camController = new CameraInputController(renderer.cam);
         camController.target.set(model.cx, model.cy, model.cz);
+        camController.translateUnits = model.xRange;
+        camController.scrollFactor *= -0.2f;
+
         Gdx.input.setInputProcessor(new DelegatingInputProcessor(camController));
 
         loadLxComponents();
@@ -53,12 +56,15 @@ public class SLStudioGDX extends ApplicationAdapter {
             GL20.GL_COLOR_BUFFER_BIT
             | (Gdx.graphics.getBufferFormat().coverageSampling
                  ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
+        renderer.cam.viewportHeight = Gdx.graphics.getHeight();
+        renderer.cam.viewportWidth = Gdx.graphics.getWidth();
 
         lx.engine.onDraw();
 
         camController.update();
 
         renderer.draw();
+
         UI.newFrame();
 
         UI.begin("Internals");
@@ -69,6 +75,8 @@ public class SLStudioGDX extends ApplicationAdapter {
 
         patternWindow.draw();
         channelWindow.draw();
+
+        UI.showDemoWindow();
 
         UI.render();
     }
@@ -84,5 +92,7 @@ public class SLStudioGDX extends ApplicationAdapter {
         LXClassLoader.findWarps().stream().forEach(lx::registerWarp);
         LXClassLoader.findEffects().stream().forEach(lx::registerEffect);
         LXClassLoader.findPatterns().stream().forEach(lx::registerPattern);
+
+        lx.registerPattern(heronarts.p3lx.pattern.SolidColorPattern.class);
     }
 }

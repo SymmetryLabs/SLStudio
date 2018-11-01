@@ -48,6 +48,7 @@ public class DelegatingInputProcessor implements InputProcessor {
 
     @Override
     public boolean scrolled(int amount) {
+        UI.scrolled(amount);
         if (UI.wantCaptureMouse()) {
             return true;
         }

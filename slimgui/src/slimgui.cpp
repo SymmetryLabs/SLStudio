@@ -106,8 +106,8 @@ Java_com_symmetrylabs_slstudio_ui_UI_treePop(JNIEnv *, jclass) {
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_symmetrylabs_slstudio_ui_UI_isItemClicked(JNIEnv *, jclass) {
-	return ImGui::IsItemClicked() ? 1 : 0;
+Java_com_symmetrylabs_slstudio_ui_UI_isItemClicked(JNIEnv *, jclass, jint button) {
+	return ImGui::IsItemClicked(button) ? 1 : 0;
 }
 
 JNIEXPORT jboolean JNICALL
@@ -133,4 +133,14 @@ Java_com_symmetrylabs_slstudio_ui_UI_keyUp(JNIEnv *, jclass, jint keycode) {
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_UI_addInputCharacter(JNIEnv *, jclass, jchar c) {
 	ImGui::GetIO().AddInputCharacter((ImWchar) c);
+}
+
+JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_UI_scrolled(JNIEnv *, jclass, jfloat amount) {
+	ImGui::GetIO().MouseWheel -= amount;
+}
+
+JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_UI_showDemoWindow(JNIEnv *, jclass) {
+	ImGui::ShowDemoWindow();
 }

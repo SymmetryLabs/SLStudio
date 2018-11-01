@@ -31,14 +31,21 @@ public class UI {
     public static native void treePop();
 
     /* Interaction */
-    public static native boolean isItemClicked();
+    public static boolean isItemClicked() {
+        return isItemClicked(0);
+    }
+    public static native boolean isItemClicked(int mouseButton);
 
     /* IO */
-    public static native boolean wantCaptureKeyboard();
-    public static native boolean wantCaptureMouse();
-    public static native void keyDown(int keycode);
-    public static native void keyUp(int keycode);
-    public static native void addInputCharacter(char c);
+    static native boolean wantCaptureKeyboard();
+    static native boolean wantCaptureMouse();
+    static native void keyDown(int keycode);
+    static native void keyUp(int keycode);
+    static native void addInputCharacter(char c);
+    static native void scrolled(float amount);
+
+    /* Testing */
+    static native void showDemoWindow();
 
     static {
         System.loadLibrary("slimgui");

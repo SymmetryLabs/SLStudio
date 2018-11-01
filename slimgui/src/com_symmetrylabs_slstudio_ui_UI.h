@@ -90,10 +90,10 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_UI_treePop
 /*
  * Class:     com_symmetrylabs_slstudio_ui_UI
  * Method:    isItemClicked
- * Signature: ()Z
+ * Signature: (I)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_UI_isItemClicked
-  (JNIEnv *, jclass);
+  (JNIEnv *, jclass, jint);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_UI
@@ -134,6 +134,22 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_UI_keyUp
  */
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_UI_addInputCharacter
   (JNIEnv *, jclass, jchar);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_UI
+ * Method:    scrolled
+ * Signature: (F)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_UI_scrolled
+  (JNIEnv *, jclass, jfloat);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_UI
+ * Method:    showDemoWindow
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_UI_showDemoWindow
+  (JNIEnv *, jclass);
 
 #ifdef __cplusplus
 }

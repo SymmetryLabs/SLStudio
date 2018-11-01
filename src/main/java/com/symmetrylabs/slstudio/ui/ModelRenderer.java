@@ -60,22 +60,17 @@ public class ModelRenderer {
     public void draw() {
         lx.engine.copyUIBuffer(lxColorBuffer, UI_COLOR_SPACE);
         int[] colors = (int[]) lxColorBuffer.getArray(UI_COLOR_SPACE);
-        for (int i = 0; i < model.points.length; i++) {
-            //colors[i] = i % 3 == 0 ? 0xFFFF0000 : i % 3 == 1 ? 0xFF00FF00 : 0xFF0000FF;
-            colors[i] = 0xFFFF0000;
-        }
 
         GL11.glEnable(GL11.GL_POINT_SMOOTH);
         GL11.glPointSize(2);
 
-        for (int i = 0; i < model.points.length; i++) {
+        for (int i = 0; i < colors.length; i++) {
             int c = colors[i];
-            glColorBuffer[4 * i + 0] = (0xFF & (c >> 16)) / 255.f;
-            glColorBuffer[4 * i + 1] = (0xFF & (c >> 8)) / 255.f;
-            glColorBuffer[4 * i + 2] = (0xFF & c) / 255.f;
+            glColorBuffer[4 * i + 0] = (float) ((0x00FF0000 & c) >> 16) / 255.f;
+            glColorBuffer[4 * i + 1] = (float) ((0x0000FF00 & c) >> 8) / 255.f;
+            glColorBuffer[4 * i + 2] = (float)  (0x000000FF & c) / 255.f;
             glColorBuffer[4 * i + 3] = 1.f;
         }
-        colorVbo.setVertices(glColorBuffer, 0, model.points.length * 4);
 
         pointShader.begin();
         pointShader.setUniformMatrix("u_mvp", cam.combined);
@@ -85,6 +80,7 @@ public class ModelRenderer {
 
         pointShader.enableVertexAttribute("a_color");
         colorVbo.bind(pointShader);
+        colorVbo.setVertices(glColorBuffer, 0, model.points.length * 4);
 
         Gdx.gl.glDrawArrays(GL20.GL_POINTS, 0, model.points.length);
 

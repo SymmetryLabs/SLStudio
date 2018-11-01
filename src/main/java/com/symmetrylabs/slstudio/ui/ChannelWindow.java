@@ -16,7 +16,7 @@ public class ChannelWindow {
         UI.begin("Channels");
 
         for (LXChannel chan : lx.engine.getChannels()) {
-            String chanName = String.format("Channel %d", chan.getIndex());
+            String chanName = String.format("Channel %d", chan.getIndex() + 1);
             if (UI.treeNode(chanName, UI.TREE_FLAG_DEFAULT_OPEN)) {
                 int active = chan.getActivePatternIndex();
                 List<LXPattern> patterns = chan.getPatterns();
