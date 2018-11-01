@@ -36,7 +36,7 @@ apply plugin: 'edu.sc.seis.launch4j'
 group = 'com.symmetrylabs'
 version = '1.0'
 
-mainClassName = 'com.symmetrylabs.slstudio.ui.gdx.Lwjgl3Launcher'
+mainClassName = 'com.symmetrylabs.slstudio.ui.swing.SLStudioSwing'
 //mainClassName = 'com.symmetrylabs.slstudio.SLHeadless'
 
 run {
@@ -163,7 +163,6 @@ dependencies {
 
   compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
   compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-	compile "com.github.kotlin-graphics:imgui:v1.63-beta-03"
 }
 
 compileKotlin {
