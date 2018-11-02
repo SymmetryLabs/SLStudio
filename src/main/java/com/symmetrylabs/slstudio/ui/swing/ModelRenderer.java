@@ -45,18 +45,8 @@ public class ModelRenderer {
         this.gl = gl;
         N = model.points.length;
 
-        String[] vertSrc = new String[] { "#version 330 core\n", readShader("vertex.glsl") };
-        String[] fragSrc = new String[] { "#version 330 core\n", readShader("fragment.glsl") };
-
-        int vert = gl.glCreateShader(GL2ES2.GL_VERTEX_SHADER);
-        gl.glShaderSource(vert, 2, vertSrc, null);
-        gl.glCompileShader(vert);
-        assertShaderOK(vert, "vertex");
-
-        int frag = gl.glCreateShader(GL2ES2.GL_FRAGMENT_SHADER);
-        gl.glShaderSource(frag, 2, fragSrc, null);
-        gl.glCompileShader(frag);
-        assertShaderOK(frag, "fragment");
+        int vert = createShader("vertex", GL2ES2.GL_VERTEX_SHADER, readShader("vertex-330.glsl"));
+        int frag = createShader("fragment", GL2ES2.GL_VERTEX_SHADER, readShader("vertex-330.glsl"));
 
         program = gl.glCreateProgram();
         gl.glAttachShader(program, vert);
@@ -93,11 +83,15 @@ public class ModelRenderer {
         lxColors = new PolyBuffer(lx);
     }
 
-    private void assertShaderOK(int shader, String name) {
+    private int createShader(String name, int type, String src) {
+        int shader = gl.glCreateShader(type);
+        gl.glShaderSource(shader, 1, new String[] { src }, null);
+        gl.glCompileShader(shader);
+
         IntBuffer tmp = IntBuffer.allocate(1);
         gl.glGetShaderiv(shader, gl.GL_COMPILE_STATUS, tmp);
         if (tmp.get(0) == 1) {
-            return;
+            return shader;
         }
         gl.glGetShaderiv(shader, gl.GL_INFO_LOG_LENGTH, tmp);
         ByteBuffer buf = ByteBuffer.allocate(tmp.get(0));
