@@ -3,7 +3,7 @@ package com.symmetrylabs.slstudio.ui.swing;
 import com.jogamp.newt.awt.NewtCanvasAWT;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2ES2;
+import com.jogamp.opengl.GL4ES3;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLEventListener;
@@ -34,11 +34,11 @@ public class SLStudioSwing extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        final GLWindow glEmbed = GLWindow.create(new GLCapabilities(GLProfile.getGL2ES2()));
+        final GLWindow glEmbed = GLWindow.create(new GLCapabilities(GLProfile.getGL4ES3()));
         glEmbed.addGLEventListener(new GLEventListener() {
             @Override
             public void init(GLAutoDrawable d) {
-                renderer = new ModelRenderer(lx, model, (GL2ES2) d.getGL());
+                renderer = new ModelRenderer(lx, model, (GL4ES3) d.getGL());
             }
 
             @Override

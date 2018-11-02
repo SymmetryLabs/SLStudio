@@ -2,7 +2,7 @@ package com.symmetrylabs.slstudio.ui.swing;
 
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2ES2;
+import com.jogamp.opengl.GL4ES3;
 import glm.glm;
 import glm.mat4x4.Mat4;
 import glm.vec3.Vec3;
@@ -26,7 +26,7 @@ public class ModelRenderer {
 
     protected final LX lx;
     protected final LXModel model;
-    protected final GL2ES2 gl;
+    protected final GL4ES3 gl;
     protected final int N;
 
     protected final int program;
@@ -39,14 +39,14 @@ public class ModelRenderer {
     protected final float[] renderColors;
     protected final PolyBuffer lxColors;
 
-    public ModelRenderer(LX lx, LXModel model, GL2ES2 gl) {
+    public ModelRenderer(LX lx, LXModel model, GL4ES3 gl) {
         this.model = model;
         this.lx = lx;
         this.gl = gl;
         N = model.points.length;
 
-        int vert = createShader("vertex", GL2ES2.GL_VERTEX_SHADER, readShader("vertex-330.glsl"));
-        int frag = createShader("fragment", GL2ES2.GL_VERTEX_SHADER, readShader("vertex-330.glsl"));
+        int vert = createShader("vertex", GL4ES3.GL_VERTEX_SHADER, readShader("vertex-330.glsl"));
+        int frag = createShader("fragment", GL4ES3.GL_VERTEX_SHADER, readShader("vertex-330.glsl"));
 
         program = gl.glCreateProgram();
         gl.glAttachShader(program, vert);
@@ -65,7 +65,7 @@ public class ModelRenderer {
         positionVbo = tmp.get(0);
         colorVbo = tmp.get(1);
 
-        gl.glBindBuffer(GL2ES2.GL_ARRAY_BUFFER, positionVbo);
+        gl.glBindBuffer(GL4ES3.GL_ARRAY_BUFFER, positionVbo);
 
         float[] vertdata = new float[3 * N];
         for (int i = 0; i < N; i++) {
@@ -75,9 +75,9 @@ public class ModelRenderer {
         }
         FloatBuffer vertbuf = Buffers.newDirectFloatBuffer(vertdata);
         // 4 because a float is 4 bytes long.
-        gl.glBufferData(GL2ES2.GL_ARRAY_BUFFER, 4 * 3 * N, vertbuf, GL.GL_STATIC_DRAW);
+        gl.glBufferData(GL4ES3.GL_ARRAY_BUFFER, 4 * 3 * N, vertbuf, GL.GL_STATIC_DRAW);
 
-        gl.glBindBuffer(GL2ES2.GL_ARRAY_BUFFER, 0);
+        gl.glBindBuffer(GL4ES3.GL_ARRAY_BUFFER, 0);
 
         renderColors = new float[4 * N];
         lxColors = new PolyBuffer(lx);
@@ -158,16 +158,16 @@ public class ModelRenderer {
         gl.glUniformMatrix4fv(mvpUniform, 1, false, mvpBuf);
 
         gl.glEnableVertexAttribArray(positionAttr);
-        gl.glBindBuffer(GL2ES2.GL_ARRAY_BUFFER, positionVbo);
-        gl.glVertexAttribPointer(positionAttr, 3, GL2ES2.GL_FLOAT, false, 0, 0);
+        gl.glBindBuffer(GL4ES3.GL_ARRAY_BUFFER, positionVbo);
+        gl.glVertexAttribPointer(positionAttr, 3, GL4ES3.GL_FLOAT, false, 0, 0);
 
         gl.glEnableVertexAttribArray(colorAttr);
-        gl.glBindBuffer(GL2ES2.GL_ARRAY_BUFFER, colorVbo);
+        gl.glBindBuffer(GL4ES3.GL_ARRAY_BUFFER, colorVbo);
         FloatBuffer colorBuf = Buffers.newDirectFloatBuffer(renderColors);
-        gl.glBufferData(GL2ES2.GL_ARRAY_BUFFER, 4 * 4 * N, colorBuf, GL.GL_DYNAMIC_DRAW);
-        gl.glVertexAttribPointer(colorAttr, 4, GL2ES2.GL_FLOAT, false, 0, 0);
+        gl.glBufferData(GL4ES3.GL_ARRAY_BUFFER, 4 * 4 * N, colorBuf, GL.GL_DYNAMIC_DRAW);
+        gl.glVertexAttribPointer(colorAttr, 4, GL4ES3.GL_FLOAT, false, 0, 0);
 
-        gl.glDrawArrays(GL2ES2.GL_POINTS, 0, N);
+        gl.glDrawArrays(GL4ES3.GL_POINTS, 0, N);
 
         gl.glDisableVertexAttribArray(positionAttr);
         gl.glDisableVertexAttribArray(colorAttr);
