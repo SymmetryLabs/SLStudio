@@ -7,6 +7,7 @@ import com.symmetrylabs.shows.demo.DemoShow;
 import com.symmetrylabs.shows.googlehq.GoogleHqShow;
 import com.symmetrylabs.shows.kalpa.KalpaShow;
 import com.symmetrylabs.shows.magicleap.MagicLeapShow;
+import com.symmetrylabs.shows.mikey.MikeyShow;
 import com.symmetrylabs.shows.obj.ObjShow;
 import com.symmetrylabs.shows.office.OfficeShow;
 import com.symmetrylabs.shows.oslo.OsloShow;
@@ -53,6 +54,7 @@ public class ShowRegistry {
         map.put(MagicLeapShow.SHOW_NAME, () -> new MagicLeapShow());
         map.put(GoogleHqShow.SHOW_NAME, () -> new GoogleHqShow());
         map.put(PenfoldsWineShow.SHOW_NAME, () -> new PenfoldsWineShow());
+        map.put(MikeyShow.SHOW_NAME, () -> new MikeyShow());
     }
 
     static interface ShowBuilder {
