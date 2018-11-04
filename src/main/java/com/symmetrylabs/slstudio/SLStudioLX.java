@@ -39,6 +39,7 @@ import com.symmetrylabs.LXClassLoader;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.util.MarkerSource;
+import com.symmetrylabs.layouts.tree.TreeModelingTool;
 
 import javax.swing.*;
 
@@ -526,6 +527,9 @@ public class SLStudioLX extends P3LX {
 
         @Override
         public void save(LX lx, JsonObject object) {
+            TreeModelingTool.getInstance().store.writeConfig();
+
+
             object.addProperty(KEY_AUDIO_EXPANDED, this.leftPane.audio.isExpanded());
             object.addProperty(KEY_PALETTE_EXPANDED, this.leftPane.palette.isExpanded());
             object.addProperty(KEY_ENGINE_EXPANDED, this.leftPane.engine.isExpanded());

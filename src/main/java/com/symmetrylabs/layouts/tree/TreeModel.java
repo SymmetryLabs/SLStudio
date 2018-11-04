@@ -136,6 +136,7 @@ public class TreeModel extends SLModel {
         public float height;
         public float azimuth;
         public float elevation;
+        public float tilt;
 
         public final List<Branch> branches;
         public final List<Twig> twigs;
@@ -148,6 +149,7 @@ public class TreeModel extends SLModel {
             this.height = config.height;
             this.azimuth = config.azimuth;
             this.elevation = elevation;
+            this.tilt = config.tilt;
 
             Fixture f = (Fixture) this.fixtures.get(0);
             this.branches = Collections.unmodifiableList(f.branches);

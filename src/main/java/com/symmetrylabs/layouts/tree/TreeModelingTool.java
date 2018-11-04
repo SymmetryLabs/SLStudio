@@ -32,7 +32,7 @@ public class TreeModelingTool extends LXComponent {
     public final EnumParameter<Mode> mode = new EnumParameter<Mode>("mode", Mode.LIMB);
 
     public final TreeModel tree;
-    private final TreeConfigStore store;
+    public final TreeConfigStore store;
 
     public final ObjectParameter selectedLimb;
     public final ObjectParameter selectedBranch;
@@ -42,7 +42,7 @@ public class TreeModelingTool extends LXComponent {
     public final BranchManipulator branchManipulator;
     public final TwigManipulator twigManipulator;
 
-    public TreeModelingTool(LX lx) {
+    private TreeModelingTool(LX lx) {
         super(lx, "TreeModelingTool");
         this.tree = (TreeModel) lx.model;
         this.store = new TreeConfigStore(lx);

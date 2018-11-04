@@ -57,7 +57,7 @@ public class PixliteOutput extends LXOutputGroup {
 
         // this is to be able to update points in a datagram and not have to resize buffer
         // (need to fix so we don't waste network traffic
-        private final int DATAGRAM_NUM_POINTS = 500;
+        private final int DATAGRAM_NUM_POINTS = 600;
 
         public static enum Type { A, B }
         public final Type type;

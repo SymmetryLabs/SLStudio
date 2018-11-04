@@ -122,6 +122,8 @@ public class AssignablePixlite extends LXOutputGroup {
             for (TreeModel.Twig twig : twigsA) {
                 if (twig != null) {
                     pointsA.addAll(twig.getPoints());
+                } else {
+                    pointsA.addAll(branch.getTwigByWiringIndex(8).getPoints()); // null
                 }
             }
             datalineA.setPoints(pointsA);
@@ -136,6 +138,8 @@ public class AssignablePixlite extends LXOutputGroup {
             for (TreeModel.Twig twig : twigsB) {
                 if (twig != null) {
                     pointsB.addAll(twig.getPoints());
+                } else {
+                    pointsB.addAll(branch.getTwigByWiringIndex(8).getPoints()); // null
                 }
             }
             datalineB.setPoints(pointsB);
@@ -147,7 +151,7 @@ public class AssignablePixlite extends LXOutputGroup {
 
     public class Dataline extends LXDatagramOutput {
 
-        private final int DATALINE_NUM_POINTS = 500; // arbitrary
+        private final int DATALINE_NUM_POINTS = 600; // arbitrary
         private final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
 
         private final List<AssignableArtNetDatagram> artNetDatagrams = new ArrayList<>();
