@@ -605,7 +605,7 @@ public class TreeModel extends SLModel {
      * Currently modeled as a single point. Room for improvement!
      */
     public static class Leaf extends SLModel {
-        public static final int NUM_LEDS = 7;
+        public static final int NUM_LEDS = 10;
         public static final float LED_OFFSET = .75f*INCHES;
         public static final float LED_SPACING = 1.3f*INCHES;
         public static final float WIDTH = 4.75f*INCHES;

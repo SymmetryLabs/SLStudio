@@ -504,6 +504,7 @@ public class TreeModel extends SLModel {
             SMALL, LARGE
         }
 
+        public static final int NUM_LEDS = 10;
         public static final float LED_SPACING = 1.3f*INCHES;
         public static final float WIDTH = 4.75f*INCHES;
         public static final float LENGTH = 6.5f*INCHES;
