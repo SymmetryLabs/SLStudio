@@ -351,6 +351,7 @@ public class TreeModel extends SLModel {
     public static class Twig extends SLModel {
 
         public static final int NUM_LEAVES = 15;
+        public static final int NUM_LEDS = NUM_LEAVES * Leaf.NUM_LEDS;
 
         private TwigConfig config;
 

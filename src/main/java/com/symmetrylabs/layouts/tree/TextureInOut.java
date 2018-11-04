@@ -28,7 +28,7 @@ public class TextureInOut extends TexturePattern {
         .setDescription("Size of the streak");
     
     private final LXModulator[] leaves = new LXModulator[TreeModel.Twig.NUM_LEAVES]; 
-    private final int[] assemblageMask = new int[TreeModel.Leaf.NUM_LEDS];
+    private final int[] twigMask = new int[TreeModel.Twig.NUM_LEDS];
     
     public TextureInOut(LX lx) {
         super(lx);
