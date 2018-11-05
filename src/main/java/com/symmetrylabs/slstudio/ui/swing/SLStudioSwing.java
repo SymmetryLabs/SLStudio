@@ -14,11 +14,14 @@ import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.ShowRegistry;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXModel;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
+import javax.swing.JTree;
+import javax.swing.border.EmptyBorder;
 
 public class SLStudioSwing extends JFrame {
     private String showName;
@@ -52,7 +55,7 @@ public class SLStudioSwing extends JFrame {
             @Override
             public void display(GLAutoDrawable d) {
                 GL gl = d.getGL();
-                gl.glClearColor(0.1f, 0.1f, 0.4f, 1.f);
+                gl.glClearColor(0.05f, 0.05f, 0.05f, 1.f);
                 gl.glClear(GL.GL_COLOR_BUFFER_BIT);
                 lx.engine.onDraw();
                 if (renderer != null) {
@@ -70,6 +73,12 @@ public class SLStudioSwing extends JFrame {
         NewtCanvasAWT canvas = new NewtCanvasAWT(glEmbed);
         add(canvas, BorderLayout.CENTER);
 
+        loadLxComponents();
+        JTree patternTree = new JTree(new PatternListDataModel(lx, showName));
+        patternTree.setPreferredSize(new Dimension(200, 0));
+        patternTree.setBorder(new EmptyBorder(5, 5, 5, 5));
+        add(patternTree, BorderLayout.WEST);
+
         FPSAnimator animator = new FPSAnimator(glEmbed, 60);
         animator.start();
 
@@ -80,7 +89,6 @@ public class SLStudioSwing extends JFrame {
             }
         });
 
-        loadLxComponents();
         lx.engine.start();
     }
 
@@ -95,7 +103,6 @@ public class SLStudioSwing extends JFrame {
         LXClassLoader.findWarps().stream().forEach(lx::registerWarp);
         LXClassLoader.findEffects().stream().forEach(lx::registerEffect);
         LXClassLoader.findPatterns().stream().forEach(lx::registerPattern);
-
         lx.registerPattern(heronarts.p3lx.pattern.SolidColorPattern.class);
     }
 }

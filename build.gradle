@@ -45,6 +45,8 @@ run {
 	systemProperty 'com.symmetrylabs.layout', findProperty('layout')
 
 	systemProperty 'java.library.path', '/home/haldean/SLStudio/slimgui/build'
+	systemProperty 'awt.useSystemAAFontSettings', 'on'
+	systemProperty 'swing.aatext', true
 
 	doLast {
 		while (file(".restart").exists()) {
