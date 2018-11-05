@@ -50,10 +50,10 @@ public class PilotsPixlite extends SimplePixlite {
             .addPoints(cart.getDatalineByChannel("13").getPoints()));
 
         addPixliteOutput(new PointsGrouping("14")
-            .addPoints(cart.getDatalineByChannel("14").getPoints()));
+            .addPoints(cart.getDatalineByChannel("14").getPoints()).addPoints(cart.getDatalineByChannel("15").getPoints()));
 
         addPixliteOutput(new PointsGrouping("15")
-            .addPoints(cart.getDatalineByChannel("15").getPoints()));
+            .addPoints(cart.getDatalineByChannel("15").getPoints()).addPoints(cart.getDatalineByChannel("14").getPoints()));
     }
 
     @Override
