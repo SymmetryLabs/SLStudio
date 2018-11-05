@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.symmetrylabs.shows.composite.CompositeShow;
 import com.symmetrylabs.shows.demo.DemoShow;
+import com.symmetrylabs.shows.flower.FlowerShow;
 import com.symmetrylabs.shows.googlehq.GoogleHqShow;
 import com.symmetrylabs.shows.kalpa.KalpaShow;
 import com.symmetrylabs.shows.magicleap.MagicLeapShow;
@@ -55,6 +56,7 @@ public class ShowRegistry {
         map.put(GoogleHqShow.SHOW_NAME, () -> new GoogleHqShow());
         map.put(PenfoldsWineShow.SHOW_NAME, () -> new PenfoldsWineShow());
         map.put(MikeyShow.SHOW_NAME, () -> new MikeyShow());
+        map.put(FlowerShow.SHOW_NAME, () -> new FlowerShow());
     }
 
     static interface ShowBuilder {
