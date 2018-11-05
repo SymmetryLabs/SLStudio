@@ -2,7 +2,7 @@ package com.symmetrylabs.slstudio.ui.swing;
 
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL4ES3;
+import com.jogamp.opengl.GL4;
 import glm.glm;
 import glm.mat4x4.Mat4;
 import glm.vec3.Vec3;
@@ -26,7 +26,7 @@ public class ModelRenderer {
 
     protected final LX lx;
     protected final LXModel model;
-    protected final GL4ES3 gl;
+    protected final GL4 gl;
     protected final int N;
 
     protected final int program;
@@ -39,14 +39,16 @@ public class ModelRenderer {
     protected final float[] renderColors;
     protected final PolyBuffer lxColors;
 
-    public ModelRenderer(LX lx, LXModel model, GL4ES3 gl) {
+    protected float aspect;
+
+    public ModelRenderer(LX lx, LXModel model, GL4 gl) {
         this.model = model;
         this.lx = lx;
         this.gl = gl;
         N = model.points.length;
 
-        int vert = createShader("vertex", GL4ES3.GL_VERTEX_SHADER, readShader("vertex-330.glsl"));
-        int frag = createShader("fragment", GL4ES3.GL_VERTEX_SHADER, readShader("vertex-330.glsl"));
+        int vert = createShader("vertex", GL4.GL_VERTEX_SHADER, readShader("vertex-330.glsl"));
+        int frag = createShader("fragment", GL4.GL_FRAGMENT_SHADER, readShader("fragment-330.glsl"));
 
         program = gl.glCreateProgram();
         gl.glAttachShader(program, vert);
@@ -65,7 +67,7 @@ public class ModelRenderer {
         positionVbo = tmp.get(0);
         colorVbo = tmp.get(1);
 
-        gl.glBindBuffer(GL4ES3.GL_ARRAY_BUFFER, positionVbo);
+        gl.glBindBuffer(GL4.GL_ARRAY_BUFFER, positionVbo);
 
         float[] vertdata = new float[3 * N];
         for (int i = 0; i < N; i++) {
@@ -75,17 +77,21 @@ public class ModelRenderer {
         }
         FloatBuffer vertbuf = Buffers.newDirectFloatBuffer(vertdata);
         // 4 because a float is 4 bytes long.
-        gl.glBufferData(GL4ES3.GL_ARRAY_BUFFER, 4 * 3 * N, vertbuf, GL.GL_STATIC_DRAW);
+        gl.glBufferData(GL4.GL_ARRAY_BUFFER, 4 * 3 * N, vertbuf, GL.GL_STATIC_DRAW);
 
-        gl.glBindBuffer(GL4ES3.GL_ARRAY_BUFFER, 0);
+        gl.glBindBuffer(GL4.GL_ARRAY_BUFFER, 0);
 
         renderColors = new float[4 * N];
         lxColors = new PolyBuffer(lx);
     }
 
+    public void setAspect(int w, int h) {
+        aspect = (float) w / (float) h;
+    }
+
     private int createShader(String name, int type, String src) {
         int shader = gl.glCreateShader(type);
-        gl.glShaderSource(shader, 1, new String[] { src }, null);
+        gl.glShaderSource(shader, 1, new String[] { src }, new int[] { src.length() }, 0);
         gl.glCompileShader(shader);
 
         IntBuffer tmp = IntBuffer.allocate(1);
@@ -97,7 +103,8 @@ public class ModelRenderer {
         ByteBuffer buf = ByteBuffer.allocate(tmp.get(0));
         gl.glGetShaderInfoLog(shader, tmp.get(0), null, buf);
         String log = StandardCharsets.UTF_8.decode(buf).toString();
-        throw new RuntimeException(name + " shader failed to load: " + log);
+        throw new RuntimeException(
+            String.format("%s shader failed to load: %s", name, log));
     }
 
     private void assertLinkOK(int program) {
@@ -117,8 +124,6 @@ public class ModelRenderer {
         lx.engine.copyUIBuffer(lxColors, UI_COLOR_SPACE);
         int[] colors = (int[]) lxColors.getArray(UI_COLOR_SPACE);
 
-        //gl.glPointSize(2);
-
         for (int i = 0; i < colors.length; i++) {
             int c = colors[i];
             renderColors[4 * i + 0] = (float) ((0x00FF0000 & c) >> 16) / 255.f;
@@ -127,47 +132,34 @@ public class ModelRenderer {
             renderColors[4 * i + 3] = 1.f;
         }
 
-        /*
-        Mat4 proj = glm_.perspective(glm_.radians(45f), 1.33f, 0.1f, 10f);
-        Mat4 view = glm_.translate(new Mat4(1f), new Vec3(0, 0, -100));
+        Mat4 proj = glm_.perspective(glm_.radians(45f), aspect, 0.01f, 10000f);
+        Mat4 view = glm_.lookAt(
+            new Vec3(model.cx, model.cy, model.cz - model.rMax),
+            new Vec3(model.cx, model.cy, model.cz),
+            new Vec3(0, 1, 0));
         Mat4 model = new Mat4(1f);
         Mat4 mvp = proj.times(view).times(model);
-        */
 
         FloatBuffer mvpBuf = FloatBuffer.allocate(16);
-        //mvp.to(mvpBuf);
-        mvpBuf.put(-0.83001506f);
-        mvpBuf.put(0.0f);
-        mvpBuf.put(0.0f);
-        mvpBuf.put(340.30618f);
-        mvpBuf.put(0.0f);
-        mvpBuf.put(1.5108352f);
-        mvpBuf.put(0.0f);
-        mvpBuf.put(-87.62844f);
-        mvpBuf.put(0.0f);
-        mvpBuf.put(0.0f);
-        mvpBuf.put(1.0002f);
-        mvpBuf.put(886.37024f);
-        mvpBuf.put(0.0f);
-        mvpBuf.put(0.0f);
-        mvpBuf.put(1.0f);
-        mvpBuf.put(888.19275f);
+        mvp.to(mvpBuf);
         mvpBuf.rewind();
+
+        gl.glPointSize(2);
 
         gl.glUseProgram(program);
         gl.glUniformMatrix4fv(mvpUniform, 1, false, mvpBuf);
 
         gl.glEnableVertexAttribArray(positionAttr);
-        gl.glBindBuffer(GL4ES3.GL_ARRAY_BUFFER, positionVbo);
-        gl.glVertexAttribPointer(positionAttr, 3, GL4ES3.GL_FLOAT, false, 0, 0);
+        gl.glBindBuffer(GL4.GL_ARRAY_BUFFER, positionVbo);
+        gl.glVertexAttribPointer(positionAttr, 3, GL4.GL_FLOAT, false, 0, 0);
 
         gl.glEnableVertexAttribArray(colorAttr);
-        gl.glBindBuffer(GL4ES3.GL_ARRAY_BUFFER, colorVbo);
+        gl.glBindBuffer(GL4.GL_ARRAY_BUFFER, colorVbo);
         FloatBuffer colorBuf = Buffers.newDirectFloatBuffer(renderColors);
-        gl.glBufferData(GL4ES3.GL_ARRAY_BUFFER, 4 * 4 * N, colorBuf, GL.GL_DYNAMIC_DRAW);
-        gl.glVertexAttribPointer(colorAttr, 4, GL4ES3.GL_FLOAT, false, 0, 0);
+        gl.glBufferData(GL4.GL_ARRAY_BUFFER, 4 * 4 * N, colorBuf, GL.GL_DYNAMIC_DRAW);
+        gl.glVertexAttribPointer(colorAttr, 4, GL4.GL_FLOAT, false, 0, 0);
 
-        gl.glDrawArrays(GL4ES3.GL_POINTS, 0, N);
+        gl.glDrawArrays(GL4.GL_POINTS, 0, N);
 
         gl.glDisableVertexAttribArray(positionAttr);
         gl.glDisableVertexAttribArray(colorAttr);
@@ -183,7 +175,10 @@ public class ModelRenderer {
     private static String readShader(String name) {
         StringBuilder sb = new StringBuilder();
         try {
-            Files.lines(Paths.get("src/main/resources/" + name)).forEach(sb::append);
+            Files.lines(Paths.get("src/main/resources/" + name)).forEach((l) -> {
+                    sb.append(l);
+                    sb.append("\n");
+                });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

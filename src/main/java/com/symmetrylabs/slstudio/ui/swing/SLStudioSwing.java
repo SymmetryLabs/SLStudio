@@ -3,11 +3,12 @@ package com.symmetrylabs.slstudio.ui.swing;
 import com.jogamp.newt.awt.NewtCanvasAWT;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL4ES3;
+import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
+import com.jogamp.opengl.util.FPSAnimator;
 import com.symmetrylabs.LXClassLoader;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.ShowRegistry;
@@ -15,6 +16,8 @@ import heronarts.lx.LX;
 import heronarts.lx.model.LXModel;
 import java.awt.EventQueue;
 import java.awt.BorderLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 
 public class SLStudioSwing extends JFrame {
@@ -34,11 +37,12 @@ public class SLStudioSwing extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        final GLWindow glEmbed = GLWindow.create(new GLCapabilities(GLProfile.getGL4ES3()));
+        final GLWindow glEmbed = GLWindow.create(
+            new GLCapabilities(GLProfile.get(GLProfile.GL4)));
         glEmbed.addGLEventListener(new GLEventListener() {
             @Override
             public void init(GLAutoDrawable d) {
-                renderer = new ModelRenderer(lx, model, (GL4ES3) d.getGL());
+                renderer = new ModelRenderer(lx, model, (GL4) d.getGL());
             }
 
             @Override
@@ -50,6 +54,7 @@ public class SLStudioSwing extends JFrame {
                 GL gl = d.getGL();
                 gl.glClearColor(0.1f, 0.1f, 0.4f, 1.f);
                 gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+                lx.engine.onDraw();
                 if (renderer != null) {
                     renderer.draw();
                 }
@@ -58,11 +63,25 @@ public class SLStudioSwing extends JFrame {
             @Override
             public void reshape(GLAutoDrawable d, int x, int y, int w, int h) {
                 d.getGL().glViewport(0, 0, w, h);
+                renderer.setAspect(w, h);
             }
         });
 
         NewtCanvasAWT canvas = new NewtCanvasAWT(glEmbed);
         add(canvas, BorderLayout.CENTER);
+
+        FPSAnimator animator = new FPSAnimator(glEmbed, 60);
+        animator.start();
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                animator.stop();
+            }
+        });
+
+        loadLxComponents();
+        lx.engine.start();
     }
 
     public static void main(String[] args) {
@@ -70,5 +89,13 @@ public class SLStudioSwing extends JFrame {
         EventQueue.invokeLater(() -> {
                 sl.setVisible(true);
             });
+    }
+
+    private void loadLxComponents() {
+        LXClassLoader.findWarps().stream().forEach(lx::registerWarp);
+        LXClassLoader.findEffects().stream().forEach(lx::registerEffect);
+        LXClassLoader.findPatterns().stream().forEach(lx::registerPattern);
+
+        lx.registerPattern(heronarts.p3lx.pattern.SolidColorPattern.class);
     }
 }
