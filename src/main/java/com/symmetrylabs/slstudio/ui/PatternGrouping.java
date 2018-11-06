@@ -3,7 +3,9 @@ package com.symmetrylabs.slstudio.ui;
 import heronarts.lx.LX;
 import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
+import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
+import heronarts.lx.warp.LXWarp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,6 +15,8 @@ public class PatternGrouping {
     private final LX lx;
     public final HashMap<String, List<Item>> groups = new HashMap<>();
     public final List<String> groupNames;
+    public final List<WarpItem> warps;
+    public final List<EffectItem> effects;
 
     public PatternGrouping(LX lx, String activeGroup) {
         this.lx = lx;
@@ -43,6 +47,20 @@ public class PatternGrouping {
                     return sortKeyCompare;
                 return a.compareToIgnoreCase(b);
             });
+
+        List<Class<? extends LXEffect>> effectClasses = lx.getRegisteredEffects();
+        effects = new ArrayList<>();
+        for (Class<? extends LXEffect> effectClass : effectClasses) {
+            effects.add(new EffectItem(effectClass));
+        }
+        Collections.sort(effects);
+
+        List<Class<? extends LXWarp>> warpClasses = lx.getRegisteredWarps();
+        warps = new ArrayList<>();
+        for (Class<? extends LXWarp> warpClass : warpClasses) {
+            warps.add(new WarpItem(warpClass));
+        }
+        Collections.sort(warps);
     }
 
     public static class Item implements Comparable<Item> {
@@ -60,6 +78,54 @@ public class PatternGrouping {
 
         @Override
         public int compareTo(Item o) {
+            return label.compareToIgnoreCase(o.label);
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
+    }
+
+    public static class WarpItem implements Comparable<WarpItem> {
+        public final Class<? extends LXWarp> warp;
+        public final String label;
+
+        WarpItem(Class<? extends LXWarp> warp) {
+            this.warp = warp;
+            String simple = warp.getSimpleName();
+            if (simple.endsWith("Warp")) {
+                simple = simple.substring(0, simple.length() - "Warp".length());
+            }
+            this.label = simple;
+        }
+
+        @Override
+        public int compareTo(WarpItem o) {
+            return label.compareToIgnoreCase(o.label);
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
+    }
+
+    public static class EffectItem implements Comparable<EffectItem> {
+        public final Class<? extends LXEffect> effect;
+        public final String label;
+
+        EffectItem(Class<? extends LXEffect> effect) {
+            this.effect = effect;
+            String simple = effect.getSimpleName();
+            if (simple.endsWith("Effect")) {
+                simple = simple.substring(0, simple.length() - "Effect".length());
+            }
+            this.label = simple;
+        }
+
+        @Override
+        public int compareTo(EffectItem o) {
             return label.compareToIgnoreCase(o.label);
         }
 

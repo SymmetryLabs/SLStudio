@@ -76,6 +76,14 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_text(JNIEnv *env, jclass, jstring jstr)
 	env->ReleaseStringUTFChars(jstr, str);
 }
 
+JNIEXPORT jboolean JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_button(JNIEnv *env, jclass, jstring jstr) {
+	const char *str = env->GetStringUTFChars(jstr, 0);
+	bool res = ImGui::Button(str);
+	env->ReleaseStringUTFChars(jstr, str);
+	return res ? 1 : 0;
+}
+
 JNIEXPORT jstring JNICALL
 Java_com_symmetrylabs_slstudio_ui_gdx_UI_inputText(
 	JNIEnv *env, jclass, jstring jlabel, jstring jstr) {

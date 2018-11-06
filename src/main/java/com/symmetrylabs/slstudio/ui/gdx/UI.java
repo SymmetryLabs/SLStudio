@@ -20,6 +20,8 @@ public class UI {
         text(String.format(t, objs));
     }
 
+    public static native boolean button(String t);
+
     public static native String inputText(String label, String text);
 
     public static native float sliderFloat(String label, float v, float v0, float v1);

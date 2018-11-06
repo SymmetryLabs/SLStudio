@@ -65,6 +65,14 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_text
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    button
+ * Signature: (Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_button
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
  * Method:    inputText
  * Signature: (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
  */
