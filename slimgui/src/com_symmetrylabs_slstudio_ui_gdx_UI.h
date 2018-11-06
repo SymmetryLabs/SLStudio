@@ -121,6 +121,14 @@ JNIEXPORT jstring JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_inputText
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    colorPicker
+ * Signature: (Ljava/lang/String;I)I
+ */
+JNIEXPORT jint JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_colorPicker
+  (JNIEnv *, jclass, jstring, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
  * Method:    sliderFloat
  * Signature: (Ljava/lang/String;FFF)F
  */

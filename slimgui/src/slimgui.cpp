@@ -140,6 +140,27 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_inputText(
 	return env->NewStringUTF(input_buf);
 }
 
+JNIEXPORT jint JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_colorPicker(
+	JNIEnv *env, jclass, jstring jlabel, jint jcolor) {
+	const char *label = env->GetStringUTFChars(jlabel, 0);
+
+	unsigned int c = static_cast<unsigned int>(jcolor);
+	float color[4] {
+		(float)((c >> 16) & 0xFF) / 255,
+		(float)((c >>  8) & 0xFF) / 255,
+		(float)((c      ) & 0xFF) / 255,
+		255.f};
+	ImGui::ColorEdit3(label, color, ImGuiColorEditFlags_HSV | ImGuiColorEditFlags_Float);
+	unsigned int res =
+		0xFF000000 |
+		(0xFF & (int)(color[0] * 255)) << 16 |
+		(0xFF & (int)(color[1] * 255)) <<  8 |
+		(0xFF & (int)(color[2] * 255));
+	env->ReleaseStringUTFChars(jlabel, label);
+	return static_cast<jint>(res);
+}
+
 JNIEXPORT jfloat JNICALL
 Java_com_symmetrylabs_slstudio_ui_gdx_UI_sliderFloat(
 	JNIEnv * env, jclass, jstring jlabel, jfloat v, jfloat v0, jfloat v1) {

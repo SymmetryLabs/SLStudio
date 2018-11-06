@@ -31,6 +31,8 @@ public class UI {
 
     public static native String inputText(String label, String text);
 
+    public static native int colorPicker(String label, int color);
+
     public static native float sliderFloat(String label, float v, float v0, float v1);
     public static native int sliderInt(String label, int v, int v0, int v1);
 
