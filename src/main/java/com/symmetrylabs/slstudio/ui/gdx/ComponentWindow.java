@@ -19,6 +19,7 @@ public class ComponentWindow {
     }
 
     public void draw() {
+        UI.setNextWindowDefaultToCursor(UI.DEFAULT_WIDTH, 350);
         UI.begin(name);
         for (LXParameter param : comp.getParameters()) {
             if (param instanceof BoundedParameter) {

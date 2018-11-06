@@ -5,12 +5,16 @@ public class UI {
     public static int TREE_FLAG_DEFAULT_OPEN;
     public static int TREE_FLAG_SELECTED;
 
+    public static int DEFAULT_WIDTH = 250;
+
     public static native boolean init(long windowPointer);
     public static native void newFrame();
     public static native void render();
     public static native boolean shutdown();
 
     /* Layout */
+    public static native void setNextWindowDefaults(int x, int y, int w, int h);
+    public static native void setNextWindowDefaultToCursor(int w, int h);
     public static native void begin(String label);
     public static native void end();
 

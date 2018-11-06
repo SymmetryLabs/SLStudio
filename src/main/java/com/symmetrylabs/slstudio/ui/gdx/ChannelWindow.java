@@ -19,6 +19,7 @@ public class ChannelWindow {
     }
 
     public void draw() {
+        UI.setNextWindowDefaults(25, 500, UI.DEFAULT_WIDTH, 300);
         UI.begin("Channels");
 
         boolean add = UI.button("Add");

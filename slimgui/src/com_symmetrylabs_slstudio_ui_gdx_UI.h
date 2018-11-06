@@ -41,6 +41,22 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_shutdown
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    setNextWindowDefaults
+ * Signature: (IIII)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_setNextWindowDefaults
+  (JNIEnv *, jclass, jint, jint, jint, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    setNextWindowDefaultToCursor
+ * Signature: (II)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_setNextWindowDefaultToCursor
+  (JNIEnv *, jclass, jint, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
  * Method:    begin
  * Signature: (Ljava/lang/String;)V
  */

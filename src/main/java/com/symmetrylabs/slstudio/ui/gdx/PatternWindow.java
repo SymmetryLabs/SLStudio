@@ -23,6 +23,7 @@ public class PatternWindow {
     }
 
     public void draw() {
+        UI.setNextWindowDefaults(25, 25, UI.DEFAULT_WIDTH, 450);
         UI.begin("Components");
         filterText = UI.inputText("filter", filterText);
 

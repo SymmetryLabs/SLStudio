@@ -58,6 +58,21 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_shutdown(JNIEnv *, jclass) {
 }
 
 JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_setNextWindowDefaults(
+	JNIEnv *env, jclass, jint x, jint y, jint w, jint h) {
+	ImGui::SetNextWindowSize(ImVec2(w, h), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_FirstUseEver);
+}
+
+JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_setNextWindowDefaultToCursor(
+	JNIEnv *env, jclass, jint w, jint h) {
+	ImGui::SetNextWindowSize(ImVec2(w, h), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowPos(
+		ImVec2(ImGui::GetCursorPosX(), ImGui::GetCursorPosY()), ImGuiCond_FirstUseEver);
+}
+
+JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_gdx_UI_begin(JNIEnv *env, jclass, jstring jstr) {
 	const char *str = env->GetStringUTFChars(jstr, 0);
 	ImGui::Begin(str);
