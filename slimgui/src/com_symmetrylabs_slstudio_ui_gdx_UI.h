@@ -73,6 +73,22 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_button
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    checkbox
+ * Signature: (Ljava/lang/String;Z)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_checkbox
+  (JNIEnv *, jclass, jstring, jboolean);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    selectable
+ * Signature: (Ljava/lang/String;Z)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_selectable
+  (JNIEnv *, jclass, jstring, jboolean);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
  * Method:    inputText
  * Signature: (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
  */

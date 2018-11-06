@@ -25,6 +25,8 @@ public class ComponentWindow {
                 drawBoundedParam((BoundedParameter) param);
             } else if (param instanceof DiscreteParameter) {
                 drawDiscreteParam((DiscreteParameter) param);
+            } else if (param instanceof BooleanParameter) {
+                drawBooleanParam((BooleanParameter) param);
             }
         }
         UI.end();
@@ -52,6 +54,14 @@ public class ComponentWindow {
             if (start != res) {
                 p.setValue(res);
             }
+        }
+    }
+
+    public static void drawBooleanParam(BooleanParameter p) {
+        boolean start = p.getValueb();
+        boolean res = UI.checkbox(p.getLabel(), start);
+        if (res != start) {
+            p.setValue(res);
         }
     }
 

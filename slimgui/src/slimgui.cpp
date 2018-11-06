@@ -84,6 +84,26 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_button(JNIEnv *env, jclass, jstring jst
 	return res ? 1 : 0;
 }
 
+JNIEXPORT jboolean JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_checkbox(
+	JNIEnv *env, jclass, jstring jlabel, jboolean v) {
+	const char *label = env->GetStringUTFChars(jlabel, 0);
+	bool res = v == 1 ? true : false;
+	ImGui::Checkbox(label, &res);
+	env->ReleaseStringUTFChars(jlabel, label);
+	return res ? 1 : 0;
+}
+
+JNIEXPORT jboolean JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_selectable(
+	JNIEnv *env, jclass, jstring jlabel, jboolean v) {
+	const char *label = env->GetStringUTFChars(jlabel, 0);
+	bool res = v == 1 ? true : false;
+	ImGui::Selectable(label, &res);
+	env->ReleaseStringUTFChars(jlabel, label);
+	return res ? 1 : 0;
+}
+
 JNIEXPORT jstring JNICALL
 Java_com_symmetrylabs_slstudio_ui_gdx_UI_inputText(
 	JNIEnv *env, jclass, jstring jlabel, jstring jstr) {

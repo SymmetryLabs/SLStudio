@@ -21,6 +21,8 @@ public class UI {
     }
 
     public static native boolean button(String t);
+    public static native boolean checkbox(String label, boolean v);
+    public static native boolean selectable(String label, boolean v);
 
     public static native String inputText(String label, String text);
 
