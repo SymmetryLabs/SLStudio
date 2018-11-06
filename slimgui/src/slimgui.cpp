@@ -68,8 +68,7 @@ JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_gdx_UI_setNextWindowDefaultToCursor(
 	JNIEnv *env, jclass, jint w, jint h) {
 	ImGui::SetNextWindowSize(ImVec2(w, h), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowPos(
-		ImVec2(ImGui::GetCursorPosX(), ImGui::GetCursorPosY()), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowPos(ImGui::GetCursorScreenPos(), ImGuiCond_FirstUseEver);
 }
 
 JNIEXPORT void JNICALL
@@ -195,6 +194,11 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_treePop(JNIEnv *, jclass) {
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_gdx_UI_isItemClicked(JNIEnv *, jclass, jint button) {
 	return ImGui::IsItemClicked(button) ? 1 : 0;
+}
+
+JNIEXPORT jboolean JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_isItemActive(JNIEnv *, jclass) {
+	return ImGui::IsItemActive() ? 1 : 0;
 }
 
 JNIEXPORT jboolean JNICALL

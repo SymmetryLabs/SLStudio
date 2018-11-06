@@ -47,7 +47,7 @@ public class ComponentWindow {
             int start = p.getValuei();
             int res = UI.sliderInt(p.getLabel(), start, p.getMinValue(), p.getMaxValue() - 1);
             if (start != res) {
-                p.setValue(start);
+                p.setValue(res);
             }
         } else {
             int start = p.getValuei();
@@ -60,7 +60,13 @@ public class ComponentWindow {
 
     public static void drawBooleanParam(BooleanParameter p) {
         boolean start = p.getValueb();
-        boolean res = UI.checkbox(p.getLabel(), start);
+        boolean res;
+        if (p.getMode() == BooleanParameter.Mode.TOGGLE) {
+            res = UI.checkbox(p.getLabel(), start);
+        } else {
+            UI.button(p.getLabel());
+            res = UI.isItemActive();
+        }
         if (res != start) {
             p.setValue(res);
         }

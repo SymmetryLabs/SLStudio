@@ -49,6 +49,7 @@ public class UI {
         return isItemClicked(0);
     }
     public static native boolean isItemClicked(int mouseButton);
+    public static native boolean isItemActive();
 
     /* IO */
     static native boolean wantCaptureKeyboard();
