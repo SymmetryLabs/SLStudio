@@ -24,20 +24,27 @@ public class UI {
     public static void text(String t, Object... objs) {
         text(String.format(t, objs));
     }
-
     public static native boolean button(String t);
     public static native boolean checkbox(String label, boolean v);
     public static native boolean selectable(String label, boolean v);
-
     public static native String inputText(String label, String text);
-
     public static native int colorPicker(String label, int color);
-
     public static native float sliderFloat(String label, float v, float v0, float v1);
     public static native int sliderInt(String label, int v, int v0, int v1);
-
     public static native int combo(String label, int selected, String[] options);
 
+    /* Menus */
+    public static native boolean beginMainMenuBar();
+    public static native void endMainMenuBar();
+    public static native boolean beginMenu(String label);
+    public static native void endMenu();
+    public static native boolean menuItem(
+        String label, String shortcut, boolean selected, boolean enabled);
+    public static boolean menuItem(String label) {
+        return menuItem(label, null, false, true);
+    }
+
+    /* Trees */
     public static boolean treeNode(String label) {
         return treeNode(label, 0, label);
     }

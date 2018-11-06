@@ -153,6 +153,46 @@ JNIEXPORT jint JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_combo
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    beginMainMenuBar
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_beginMainMenuBar
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    endMainMenuBar
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_endMainMenuBar
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    beginMenu
+ * Signature: (Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_beginMenu
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    endMenu
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_endMenu
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    menuItem
+ * Signature: (Ljava/lang/String;Ljava/lang/String;ZZ)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_menuItem
+  (JNIEnv *, jclass, jstring, jstring, jboolean, jboolean);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
  * Method:    treeNode
  * Signature: (Ljava/lang/String;ILjava/lang/String;)Z
  */

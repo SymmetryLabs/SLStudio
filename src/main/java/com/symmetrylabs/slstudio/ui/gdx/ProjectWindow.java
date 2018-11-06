@@ -9,17 +9,17 @@ import heronarts.lx.warp.LXWarp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChannelWindow implements Window {
+public class ProjectWindow implements Window {
     private final LX lx;
 
-    public ChannelWindow(LX lx) {
+    public ProjectWindow(LX lx) {
         this.lx = lx;
     }
 
     @Override
     public void draw() {
         UI.setNextWindowDefaults(25, 500, UI.DEFAULT_WIDTH, 300);
-        UI.begin("Channels");
+        UI.begin("Project");
 
         boolean add = UI.button("Add");
         if (add) {

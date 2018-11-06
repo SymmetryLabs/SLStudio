@@ -206,6 +206,46 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_combo(
 }
 
 JNIEXPORT jboolean JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_beginMainMenuBar(JNIEnv *env, jclass) {
+	return ImGui::BeginMainMenuBar() ? 1 : 0;
+}
+
+JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_endMainMenuBar(JNIEnv *, jclass) {
+	return ImGui::EndMainMenuBar();
+}
+
+JNIEXPORT jboolean JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_beginMenu(JNIEnv *env, jclass, jstring jlabel) {
+	const char *label = env->GetStringUTFChars(jlabel, 0);
+	bool res = ImGui::BeginMenu(label);
+	env->ReleaseStringUTFChars(jlabel, label);
+	return res ? 1 : 0;
+}
+
+JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_endMenu(JNIEnv *, jclass) {
+	ImGui::EndMenu();
+}
+
+JNIEXPORT jboolean JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_menuItem(
+	JNIEnv *env, jclass, jstring jlabel, jstring jshortcut,
+	jboolean selected, jboolean enabled) {
+	const char *shortcut =
+		jshortcut == NULL ? NULL : env->GetStringUTFChars(jshortcut, 0);
+	const char *label = env->GetStringUTFChars(jlabel, 0);
+
+	bool res = ImGui::MenuItem(label, shortcut, selected == 1, enabled == 1);
+
+	if (shortcut != NULL) {
+		env->ReleaseStringUTFChars(jshortcut, shortcut);
+	}
+	env->ReleaseStringUTFChars(jlabel, label);
+	return res ? 1 : 0;
+}
+
+JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_gdx_UI_treeNode(
 	JNIEnv *env, jclass, jstring jid, jint flags, jstring jlabel) {
 	const char *id = env->GetStringUTFChars(jid, 0);

@@ -40,9 +40,13 @@ public class SLStudioGDX extends ApplicationAdapter {
 
         loadLxComponents();
 
+        WindowManager.get().add(new MainMenu(lx));
         WindowManager.get().add(new PatternWindow(lx, showName));
-        WindowManager.get().add(new ChannelWindow(lx));
+        WindowManager.get().add(new ProjectWindow(lx));
 
+        lx.engine.isMultithreaded.setValue(true);
+        lx.engine.isChannelMultithreaded.setValue(true);
+        lx.engine.isNetworkMultithreaded.setValue(true);
         lx.engine.start();
     }
 
@@ -67,9 +71,12 @@ public class SLStudioGDX extends ApplicationAdapter {
         UI.newFrame();
 
         UI.begin("Internals");
-        UI.text("engine: % 4.0fms, % 3.0ffps",
-                        1e-6f * lx.engine.timer.runNanos,
-                        1e9f / lx.engine.timer.runNanos);
+        UI.text("engine average: % 4.0fms, % 3.0ffps",
+                        1e-6f * lx.engine.timer.runAvgNanos,
+                        1e9f / lx.engine.timer.runAvgNanos);
+        UI.text("    worst-case: % 4.0fms, % 3.0ffps",
+                        1e-6f * lx.engine.timer.runWorstNanos,
+                        1e9f / lx.engine.timer.runWorstNanos);
         UI.end();
 
         WindowManager.get().draw();
@@ -80,10 +87,11 @@ public class SLStudioGDX extends ApplicationAdapter {
     }
 
     @Override
-    public void dispose () {
+    public void dispose() {
         renderer.dispose();
         UI.shutdown();
         lx.engine.stop();
+        lx.dispose();
     }
 
     private void loadLxComponents() {
