@@ -89,6 +89,22 @@ JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_sliderFloat
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    sliderInt
+ * Signature: (Ljava/lang/String;III)I
+ */
+JNIEXPORT jint JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_sliderInt
+  (JNIEnv *, jclass, jstring, jint, jint, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    combo
+ * Signature: (Ljava/lang/String;I[Ljava/lang/String;)I
+ */
+JNIEXPORT jint JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_combo
+  (JNIEnv *, jclass, jstring, jint, jobjectArray);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
  * Method:    treeNode
  * Signature: (Ljava/lang/String;ILjava/lang/String;)Z
  */

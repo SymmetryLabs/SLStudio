@@ -23,6 +23,8 @@ public class ComponentWindow {
         for (LXParameter param : comp.getParameters()) {
             if (param instanceof BoundedParameter) {
                 drawBoundedParam((BoundedParameter) param);
+            } else if (param instanceof DiscreteParameter) {
+                drawDiscreteParam((DiscreteParameter) param);
             }
         }
         UI.end();
@@ -36,11 +38,26 @@ public class ComponentWindow {
         }
     }
 
+    public static void drawDiscreteParam(DiscreteParameter p) {
+        String[] options = p.getOptions();
+        if (options == null) {
+            int start = p.getValuei();
+            int res = UI.sliderInt(p.getLabel(), start, p.getMinValue(), p.getMaxValue() - 1);
+            if (start != res) {
+                p.setValue(start);
+            }
+        } else {
+            int start = p.getValuei();
+            int res = UI.combo(p.getLabel(), start, options);
+            if (start != res) {
+                p.setValue(res);
+            }
+        }
+    }
+
     protected boolean isEligibleControlParameter(LXParameter parameter) {
-        return parameter instanceof BoundedParameter;
-            /*
-            parameter instanceof DiscreteParameter ||
-            parameter instanceof BooleanParameter;
-            */
+        return parameter instanceof BoundedParameter
+            || parameter instanceof DiscreteParameter
+            || parameter instanceof BooleanParameter;
     }
 }

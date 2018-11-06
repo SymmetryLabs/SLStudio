@@ -107,6 +107,40 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_sliderFloat(
 	return res;
 }
 
+JNIEXPORT jint JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_sliderInt(
+	JNIEnv *env, jclass, jstring jlabel, jint v, jint v0, jint v1) {
+	const char *label = env->GetStringUTFChars(jlabel, 0);
+	jint res = v;
+	ImGui::SliderInt(label, &res, v0, v1);
+	env->ReleaseStringUTFChars(jlabel, label);
+	return res;
+}
+
+JNIEXPORT jint JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_combo(
+	JNIEnv *env, jclass, jstring jlabel, jint selected, jobjectArray joptions) {
+	jsize optionsLen = env->GetArrayLength(joptions);
+	const char **options = new const char*[optionsLen];
+	for (int i = 0; i < optionsLen; i++) {
+		jstring joption = (jstring) env->GetObjectArrayElement(joptions, i);
+		options[i] = env->GetStringUTFChars(joption, 0);
+	}
+	const char *label = env->GetStringUTFChars(jlabel, 0);
+
+	jint res = selected;
+	ImGui::Combo(label, &res, options, optionsLen);
+
+	for (int i = 0; i < optionsLen; i++) {
+		jstring joption = (jstring) env->GetObjectArrayElement(joptions, i);
+		env->ReleaseStringUTFChars(joption, options[i]);
+	}
+	env->ReleaseStringUTFChars(jlabel, label);
+	delete[] options;
+
+	return res;
+}
+
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_gdx_UI_treeNode(
 	JNIEnv *env, jclass, jstring jid, jint flags, jstring jlabel) {

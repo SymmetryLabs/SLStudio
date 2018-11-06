@@ -5,6 +5,7 @@ import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
+import heronarts.lx.warp.LXWarp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,24 +23,43 @@ public class ChannelWindow {
 
         boolean add = UI.button("Add");
         if (add) {
-            lx.engine.addTask(() -> { lx.engine.addChannel(); });
+            lx.engine.addTask(() -> lx.engine.addChannel());
         }
 
         LXBus focused = lx.engine.getFocusedChannel();
 
         for (LXChannel chan : lx.engine.getChannels()) {
             String chanName = String.format("Channel %d", chan.getIndex() + 1);
-            int flags = UI.TREE_FLAG_DEFAULT_OPEN;
-            if (chan == focused) {
-                flags |= UI.TREE_FLAG_SELECTED;
-            }
-            if (UI.treeNode(chanName, flags)) {
+            int chanFlags = UI.TREE_FLAG_DEFAULT_OPEN |
+                (chan == focused ? UI.TREE_FLAG_SELECTED : 0);
+
+            if (UI.treeNode(chanName, chanFlags)) {
                 if (UI.isItemClicked(1)) {
-                    lx.engine.setFocusedChannel(chan);
+                    lx.engine.addTask(() -> lx.engine.setFocusedChannel(chan));
                 }
 
                 float fader = UI.sliderFloat("##fader", chan.fader.getValuef(), 0, 1);
                 chan.fader.setValue(fader);
+
+                List<LXWarp> warps = chan.getWarps();
+                if (!warps.isEmpty() && UI.treeNode("Warps", UI.TREE_FLAG_DEFAULT_OPEN)) {
+                    for (int i = 0; i < warps.size(); i++) {
+                        LXWarp warp = warps.get(i);
+                        String warpName = warp.getClass().getSimpleName();
+                        String id = String.format("%s / %s", chanName, warpName);
+                        int flags = UI.TREE_FLAG_LEAF |
+                            (warp.enabled.getValueb() ? UI.TREE_FLAG_SELECTED : 0);
+
+                        UI.treeNode(id, flags, warpName);
+                        if (UI.isItemClicked(0)) {
+                            warp.enabled.setValue(!warp.enabled.getValueb());
+                        } else if (UI.isItemClicked(1)) {
+                            windows.add(new ComponentWindow(lx, id, warp));
+                        }
+                        UI.treePop();
+                    }
+                    UI.treePop();
+                }
 
                 if (UI.treeNode("Patterns", UI.TREE_FLAG_DEFAULT_OPEN)) {
                     int active = chan.getActivePatternIndex();
@@ -47,40 +67,35 @@ public class ChannelWindow {
                     for (int i = 0; i < patterns.size(); i++) {
                         LXPattern pat = patterns.get(i);
                         String patName = pat.getClass().getSimpleName();
-                        if (patName.endsWith("Pattern")) {
-                            patName = patName.substring(0, patName.length() - "Pattern".length());
-                        }
-                        String name = String.format("%s / %s", chanName, patName);
-                        UI.treeNode(name,
-                                                UI.TREE_FLAG_LEAF | (i == active ? UI.TREE_FLAG_SELECTED : 0),
-                                                patName);
+                        String id = String.format("%s / %s", chanName, patName);
+                        int flags = UI.TREE_FLAG_LEAF | (i == active ? UI.TREE_FLAG_SELECTED : 0);
+
+                        UI.treeNode(id, flags, patName);
                         if (UI.isItemClicked(0)) {
-                            chan.goIndex(i);
+                            final int index = i;
+                            lx.engine.addTask(() -> chan.goIndex(index));
                         } else if (UI.isItemClicked(1)) {
-                            windows.add(new ComponentWindow(lx, name, pat));
+                            windows.add(new ComponentWindow(lx, id, pat));
                         }
                         UI.treePop();
                     }
                     UI.treePop();
                 }
 
-                if (UI.treeNode("Effects", UI.TREE_FLAG_DEFAULT_OPEN)) {
-                    List<LXEffect> effects = chan.getEffects();
+                List<LXEffect> effects = chan.getEffects();
+                if (!effects.isEmpty() && UI.treeNode("Effects", UI.TREE_FLAG_DEFAULT_OPEN)) {
                     for (int i = 0; i < effects.size(); i++) {
                         LXEffect eff = effects.get(i);
                         String effName = eff.getClass().getSimpleName();
-                        if (effName.endsWith("Effect")) {
-                            effName = effName.substring(0, effName.length() - "Effect".length());
-                        }
-                        String name = String.format("%s / %s", chanName, effName);
-                        UI.treeNode(name,
-                                                UI.TREE_FLAG_LEAF |
-                                                (eff.enabled.getValueb() ? UI.TREE_FLAG_SELECTED : 0),
-                                                effName);
+                        String id = String.format("%s / %s", chanName, effName);
+                        int flags = UI.TREE_FLAG_LEAF |
+                            (eff.enabled.getValueb() ? UI.TREE_FLAG_SELECTED : 0);
+
+                        UI.treeNode(id, flags, effName);
                         if (UI.isItemClicked(0)) {
                             eff.enabled.setValue(!eff.enabled.getValueb());
                         } else if (UI.isItemClicked(1)) {
-                            windows.add(new ComponentWindow(lx, name, eff));
+                            windows.add(new ComponentWindow(lx, id, eff));
                         }
                         UI.treePop();
                     }
