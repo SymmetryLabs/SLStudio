@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class PatternWindow {
+public class PatternWindow implements Window {
     private final LX lx;
     private final PatternGrouping grouping;
     private String filterText = "";
@@ -22,6 +22,7 @@ public class PatternWindow {
         this.grouping = new PatternGrouping(lx, activeGroup);
     }
 
+    @Override
     public void draw() {
         UI.setNextWindowDefaults(25, 25, UI.DEFAULT_WIDTH, 450);
         UI.begin("Components");

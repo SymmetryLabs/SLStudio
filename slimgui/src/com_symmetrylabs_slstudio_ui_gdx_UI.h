@@ -65,6 +65,14 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_begin
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    beginClosable
+ * Signature: (Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_beginClosable
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
  * Method:    end
  * Signature: ()V
  */

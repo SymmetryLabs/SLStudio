@@ -16,6 +16,7 @@ public class UI {
     public static native void setNextWindowDefaults(int x, int y, int w, int h);
     public static native void setNextWindowDefaultToCursor(int w, int h);
     public static native void begin(String label);
+    public static native boolean beginClosable(String label);
     public static native void end();
 
     /* Widgets */

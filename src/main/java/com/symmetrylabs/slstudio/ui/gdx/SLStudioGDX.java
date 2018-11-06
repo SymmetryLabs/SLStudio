@@ -16,8 +16,6 @@ public class SLStudioGDX extends ApplicationAdapter {
     private Show show;
     private ModelRenderer renderer;
     private LX lx;
-    private PatternWindow patternWindow;
-    private ChannelWindow channelWindow;
 
     CameraInputController camController;
 
@@ -42,8 +40,8 @@ public class SLStudioGDX extends ApplicationAdapter {
 
         loadLxComponents();
 
-        patternWindow = new PatternWindow(lx, showName);
-        channelWindow = new ChannelWindow(lx);
+        WindowManager.get().add(new PatternWindow(lx, showName));
+        WindowManager.get().add(new ChannelWindow(lx));
 
         lx.engine.start();
     }
@@ -74,8 +72,7 @@ public class SLStudioGDX extends ApplicationAdapter {
                         1e9f / lx.engine.timer.runNanos);
         UI.end();
 
-        patternWindow.draw();
-        channelWindow.draw();
+        WindowManager.get().draw();
 
         UI.showDemoWindow();
 

@@ -7,20 +7,23 @@ import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 
-public class ComponentWindow {
+public class ComponentWindow extends CloseableWindow {
     private final LX lx;
     private final LXComponent comp;
-    private final String name;
 
     public ComponentWindow(LX lx, String name, LXComponent comp) {
+        super(name);
         this.lx = lx;
-        this.name = name;
         this.comp = comp;
     }
 
-    public void draw() {
+    @Override
+    protected void windowSetup() {
         UI.setNextWindowDefaultToCursor(UI.DEFAULT_WIDTH, 350);
-        UI.begin(name);
+    }
+
+    @Override
+    protected void drawContents() {
         for (LXParameter param : comp.getParameters()) {
             if (param instanceof BoundedParameter) {
                 drawBoundedParam((BoundedParameter) param);
@@ -30,7 +33,6 @@ public class ComponentWindow {
                 drawBooleanParam((BooleanParameter) param);
             }
         }
-        UI.end();
     }
 
     public static void drawBoundedParam(BoundedParameter p) {

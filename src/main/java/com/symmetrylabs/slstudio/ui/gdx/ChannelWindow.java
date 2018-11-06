@@ -9,15 +9,14 @@ import heronarts.lx.warp.LXWarp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChannelWindow {
+public class ChannelWindow implements Window {
     private final LX lx;
-    private final List<ComponentWindow> windows;
 
     public ChannelWindow(LX lx) {
         this.lx = lx;
-        windows = new ArrayList<>();
     }
 
+    @Override
     public void draw() {
         UI.setNextWindowDefaults(25, 500, UI.DEFAULT_WIDTH, 300);
         UI.begin("Channels");
@@ -55,7 +54,7 @@ public class ChannelWindow {
                         if (UI.isItemClicked(0)) {
                             warp.enabled.setValue(!warp.enabled.getValueb());
                         } else if (UI.isItemClicked(1)) {
-                            windows.add(new ComponentWindow(lx, id, warp));
+                            WindowManager.get().add(new ComponentWindow(lx, id, warp));
                         }
                         UI.treePop();
                     }
@@ -76,7 +75,7 @@ public class ChannelWindow {
                             final int index = i;
                             lx.engine.addTask(() -> chan.goIndex(index));
                         } else if (UI.isItemClicked(1)) {
-                            windows.add(new ComponentWindow(lx, id, pat));
+                            WindowManager.get().add(new ComponentWindow(lx, id, pat));
                         }
                         UI.treePop();
                     }
@@ -96,7 +95,7 @@ public class ChannelWindow {
                         if (UI.isItemClicked(0)) {
                             eff.enabled.setValue(!eff.enabled.getValueb());
                         } else if (UI.isItemClicked(1)) {
-                            windows.add(new ComponentWindow(lx, id, eff));
+                            WindowManager.get().add(new ComponentWindow(lx, id, eff));
                         }
                         UI.treePop();
                     }
@@ -108,9 +107,5 @@ public class ChannelWindow {
         }
 
         UI.end();
-
-        for (ComponentWindow w : windows) {
-            w.draw();
-        }
     }
 }
