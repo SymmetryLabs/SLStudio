@@ -271,6 +271,11 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_isItemActive(JNIEnv *, jclass) {
 	return ImGui::IsItemActive() ? 1 : 0;
 }
 
+JNIEXPORT jfloat JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_getFrameRate(JNIEnv *, jclass) {
+	return ImGui::GetIO().Framerate;
+}
+
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_gdx_UI_wantCaptureKeyboard(JNIEnv *, jclass) {
 	return ImGui::GetIO().WantCaptureKeyboard;

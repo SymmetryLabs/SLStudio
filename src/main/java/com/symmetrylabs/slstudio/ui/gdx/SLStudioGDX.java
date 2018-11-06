@@ -77,6 +77,7 @@ public class SLStudioGDX extends ApplicationAdapter {
         UI.text("    worst-case: % 4.0fms, % 3.0ffps",
                         1e-6f * lx.engine.timer.runWorstNanos,
                         1e9f / lx.engine.timer.runWorstNanos);
+        UI.text("ui frame rate:  % 3.0ffps", UI.getFrameRate());
         UI.end();
 
         WindowManager.get().draw();

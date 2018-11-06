@@ -39,7 +39,9 @@ public class ProjectWindow implements Window {
                 }
 
                 float fader = UI.sliderFloat("##fader", chan.fader.getValuef(), 0, 1);
-                chan.fader.setValue(fader);
+                if (fader != chan.fader.getValuef()) {
+                    lx.engine.addTask(() -> chan.fader.setValue(fader));
+                }
 
                 List<LXWarp> warps = chan.getWarps();
                 if (!warps.isEmpty() && UI.treeNode("Warps", UI.TREE_FLAG_DEFAULT_OPEN)) {
@@ -52,7 +54,7 @@ public class ProjectWindow implements Window {
 
                         UI.treeNode(id, flags, warpName);
                         if (UI.isItemClicked(0)) {
-                            warp.enabled.setValue(!warp.enabled.getValueb());
+                            lx.engine.addTask(() -> warp.enabled.setValue(!warp.enabled.getValueb()));
                         } else if (UI.isItemClicked(1)) {
                             WindowManager.get().add(new ComponentWindow(lx, id, warp));
                         }
@@ -93,7 +95,7 @@ public class ProjectWindow implements Window {
 
                         UI.treeNode(id, flags, effName);
                         if (UI.isItemClicked(0)) {
-                            eff.enabled.setValue(!eff.enabled.getValueb());
+                            lx.engine.addTask(() -> eff.enabled.setValue(!eff.enabled.getValueb()));
                         } else if (UI.isItemClicked(1)) {
                             WindowManager.get().add(new ComponentWindow(lx, id, eff));
                         }

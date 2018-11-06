@@ -46,61 +46,14 @@ public class ComponentWindow extends CloseableWindow {
                 continue;
             }
             if (param instanceof BoundedParameter) {
-                drawBoundedParam((BoundedParameter) param);
+                ParameterUI.draw(lx, (BoundedParameter) param);
             } else if (param instanceof DiscreteParameter) {
-                drawDiscreteParam((DiscreteParameter) param);
+                ParameterUI.draw(lx, (DiscreteParameter) param);
             } else if (param instanceof BooleanParameter) {
-                drawBooleanParam((BooleanParameter) param);
+                ParameterUI.draw(lx, (BooleanParameter) param);
             } else if (param instanceof ColorParameter) {
-                drawColorParam((ColorParameter) param);
+                ParameterUI.draw(lx, (ColorParameter) param);
             }
-        }
-    }
-
-    public static void drawBoundedParam(BoundedParameter p) {
-        float start = p.getValuef();
-        float res = UI.sliderFloat(p.getLabel(), start, (float) p.range.v0, (float) p.range.v1);
-        if (start != res) {
-            p.setValue(res);
-        }
-    }
-
-    public static void drawDiscreteParam(DiscreteParameter p) {
-        String[] options = p.getOptions();
-        if (options == null) {
-            int start = p.getValuei();
-            int res = UI.sliderInt(p.getLabel(), start, p.getMinValue(), p.getMaxValue() - 1);
-            if (start != res) {
-                p.setValue(res);
-            }
-        } else {
-            int start = p.getValuei();
-            int res = UI.combo(p.getLabel(), start, options);
-            if (start != res) {
-                p.setValue(res);
-            }
-        }
-    }
-
-    public static void drawBooleanParam(BooleanParameter p) {
-        boolean start = p.getValueb();
-        boolean res;
-        if (p.getMode() == BooleanParameter.Mode.TOGGLE) {
-            res = UI.checkbox(p.getLabel(), start);
-        } else {
-            UI.button(p.getLabel());
-            res = UI.isItemActive();
-        }
-        if (res != start) {
-            p.setValue(res);
-        }
-    }
-
-    public static void drawColorParam(ColorParameter p) {
-        int start = p.getColor();
-        int res = UI.colorPicker(p.getLabel(), start);
-        if (res != start) {
-            p.setColor(res);
         }
     }
 

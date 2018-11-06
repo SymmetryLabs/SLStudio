@@ -13,23 +13,27 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public abstract class SLWarp<M extends SLModel> extends LXWarp implements MarkerSource {
-    protected SLStudioLX lx;
+    protected final SLStudioLX sllx;
 
     public SLWarp(LX lx) {
         super(lx);
-        this.lx = (SLStudioLX) lx;
+        this.sllx = lx instanceof SLStudioLX ? (SLStudioLX) lx : null;
     }
 
     @Override
     public void onEnable() {
         super.onEnable();
-        lx.ui.addMarkerSource(this);
+        if (sllx != null) {
+            sllx.ui.addMarkerSource(this);
+        }
     }
 
     @Override
     public void onDisable() {
         super.onDisable();
-        lx.ui.removeMarkerSource(this);
+        if (sllx != null) {
+            sllx.ui.removeMarkerSource(this);
+        }
     }
 
     public Collection<Marker> getMarkers() {

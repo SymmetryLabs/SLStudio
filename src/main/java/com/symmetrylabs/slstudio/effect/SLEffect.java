@@ -14,13 +14,13 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 
 public abstract class SLEffect<M extends SLModel> extends LXEffect {
-    protected final SLStudioLX lx;
+    protected final SLStudioLX sllx;
     protected M model;
 
     public SLEffect(LX lx) {
         super(lx);
 
-        this.lx = (SLStudioLX)lx;
+        this.sllx = lx instanceof SLStudioLX ? (SLStudioLX)lx : null;
         setModel(lx.model);
     }
 

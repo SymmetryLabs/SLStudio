@@ -62,6 +62,7 @@ public class UI {
     public static native boolean isItemActive();
 
     /* IO */
+    static native float getFrameRate();
     static native boolean wantCaptureKeyboard();
     static native boolean wantCaptureMouse();
     static native void keyDown(int keycode);
