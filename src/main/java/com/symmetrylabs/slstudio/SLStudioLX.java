@@ -45,7 +45,7 @@ import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.util.CaptionSource;
 import com.symmetrylabs.util.MarkerSource;
-import com.symmetrylabs.layouts.tree.TreeModelingTool;
+import com.symmetrylabs.shows.tree.TreeModelingTool;
 
 import javax.swing.*;
 

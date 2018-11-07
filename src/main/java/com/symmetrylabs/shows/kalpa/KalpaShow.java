@@ -1,4 +1,4 @@
-package com.symmetrylabs.layouts.kalpa;
+package com.symmetrylabs.shows.kalpa;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import processing.core.PGraphics;
 import static com.symmetrylabs.util.DistanceConstants.*;
 
 
-public class KalpaLayout implements Layout {
+public class KalpaShow implements Layout {
 
     public final Map<String, AssignablePixlite> pixlites = new HashMap<>();
     public final List<AssignablePixlite.Port> pixlitePorts = new ArrayList<>();
@@ -360,4 +360,3 @@ class UIRocoBuilding extends UI3dComponent {
         pg.popMatrix();
     }
 }
-

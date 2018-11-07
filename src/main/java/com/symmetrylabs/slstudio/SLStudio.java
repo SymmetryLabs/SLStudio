@@ -134,6 +134,7 @@ public class SLStudio extends PApplet {
                 if (TreeModelingTool.isTreeLayout()) {
                     //treeModelingTool = new TreeModelingTool(lx);
                     lx.engine.registerComponent("treeModelingTool", TreeModelingTool.getInstance(lx));
+                }
 
                 try {
                     lx.engine.osc.receiver(ENVELOP_OSC_PORT).addListener(new EnvelopOscListener(lx, envelop));
