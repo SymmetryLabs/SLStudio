@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.tree;
+package com.symmetrylabs.layouts.tree;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import heronarts.lx.output.LXDatagramOutput;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.output.ArtNetDatagram;
-import com.symmetrylabs.shows.tree.config.*;
+import com.symmetrylabs.layouts.tree.config.*;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 
 
@@ -46,11 +46,30 @@ public class AssignablePixlite extends LXOutputGroup {
                 Port port = new Port(lx, datalineA, datalineB, portIndex++);
                 ports.add(port);
                 addChild(port);
-
             }
         } catch (SocketException e) {
             e.printStackTrace();
         }
+
+        //System.out.println("/*- Pixlite (" + ipAddress + ") ---------------------------------------------------*/");
+//        System.out.println("NUM PORTS: " + ports.size());
+//        System.out.println("NUM DATALINES: " + datalines.size());
+
+//        for (int i = 0; i < ports.size(); i++) {
+//            System.out.println("----------------------------");
+//            System.out.println("Pixlite Port (physical): " + ports.get(i).index);
+//            System.out.println("-Dataline A (virtual port): " + ports.get(i).datalineA.index);
+//            for (AssignableArtNetDatagram datagram : ports.get(0).datalineA.artNetDatagrams) {
+//                System.out.println("--Artnet Datagram: ip: " + datagram.ipAddress + ", universe: " + datagram.universe);
+//            }
+//
+//            System.out.println("-dataline B (virtual port): " + ports.get(i).datalineB.index);
+//            for (AssignableArtNetDatagram datagram : ports.get(0).datalineB.artNetDatagrams) {
+//                System.out.println("--Artnet Datagram: ip: " + datagram.ipAddress + ", universe: " + datagram.universe);
+//            }
+//            System.out.println("");
+//        }
+
 
         final TreeModelingTool.BranchManipulator manipulator = TreeModelingTool.getInstance(lx).branchManipulator;
 
@@ -58,7 +77,7 @@ public class AssignablePixlite extends LXOutputGroup {
             String ip = ((StringParameter)parameter).getString();
             if (this.ipAddress.equals(ip)) {
                 int portIndex = manipulator.channel.getValuei()-1;
-                ports.get(portIndex).setBranch(TreeModelingTool.getInstance().getSelectedBranch());
+                ports.get(portIndex).setBranch(TreeModelingTool.getInstance(lx).getSelectedBranch());
             }
         });
 
@@ -66,7 +85,7 @@ public class AssignablePixlite extends LXOutputGroup {
             String ip = manipulator.ipAddress.getString();
             if (this.ipAddress.equals(ip)) {
                 int portIndex = ((DiscreteParameter)parameter).getValuei()-1;
-                ports.get(portIndex).setBranch(TreeModelingTool.getInstance().getSelectedBranch());
+                ports.get(portIndex).setBranch(TreeModelingTool.getInstance(lx).getSelectedBranch());
             }
         });
     }
@@ -103,6 +122,8 @@ public class AssignablePixlite extends LXOutputGroup {
             for (TreeModel.Twig twig : twigsA) {
                 if (twig != null) {
                     pointsA.addAll(twig.getPoints());
+                } else {
+                    pointsA.addAll(branch.getTwigByWiringIndex(8).getPoints()); // null
                 }
             }
             datalineA.setPoints(pointsA);
@@ -117,6 +138,8 @@ public class AssignablePixlite extends LXOutputGroup {
             for (TreeModel.Twig twig : twigsB) {
                 if (twig != null) {
                     pointsB.addAll(twig.getPoints());
+                } else {
+                    pointsB.addAll(branch.getTwigByWiringIndex(8).getPoints()); // null
                 }
             }
             datalineB.setPoints(pointsB);
@@ -128,7 +151,7 @@ public class AssignablePixlite extends LXOutputGroup {
 
     public class Dataline extends LXDatagramOutput {
 
-        private final int DATALINE_NUM_POINTS = 500; // arbitrary
+        private final int DATALINE_NUM_POINTS = 600; // arbitrary
         private final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
 
         private final List<AssignableArtNetDatagram> artNetDatagrams = new ArrayList<>();
@@ -178,16 +201,6 @@ public class AssignablePixlite extends LXOutputGroup {
                 artNetDatagrams.add(datagram);
                 addDatagram(datagram);
             }
-        }
-
-        protected void onSend(int[] colors) {
-            if (!BroadcastPixlite.getInstance().enabled.isOn()) {
-                return;
-            }
-
-            System.out.println("ipAddress: " + ipAddress);
-
-            super.onSend(colors);
         }
 
     }

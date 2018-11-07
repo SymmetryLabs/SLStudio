@@ -131,6 +131,10 @@ public class SLStudio extends PApplet {
                 lx.engine.registerComponent("envelop", envelop);
                 lx.engine.addLoopTask(envelop);
 
+                if (TreeModelingTool.isTreeLayout()) {
+                    //treeModelingTool = new TreeModelingTool(lx);
+                    lx.engine.registerComponent("treeModelingTool", TreeModelingTool.getInstance(lx));
+
                 try {
                     lx.engine.osc.receiver(ENVELOP_OSC_PORT).addListener(new EnvelopOscListener(lx, envelop));
                 } catch (SocketException sx) {
@@ -169,6 +173,12 @@ public class SLStudio extends PApplet {
 
                 show.setupUi(lx, ui);
 
+                if (TreeModelingTool.isTreeLayout()) {
+                    ui.preview.addComponent(new UITreeTrunk(applet));
+                    uiTreeModelAxes = UITreeModelAxes.getInstance(lx);
+                    ui.preview.addComponent(uiTreeModelAxes);
+                }
+
                 if (show instanceof HasWorkspace) {
                     HasWorkspace hwShow = (HasWorkspace) show;
                     new UIWorkspace(ui, lx, hwShow.getWorkspace(), 0, 0, ui.leftPane.global.getContentWidth())
@@ -184,7 +194,7 @@ public class SLStudio extends PApplet {
         lx.engine.isNetworkMultithreaded.setValue(true);
         lx.engine.audio.enabled.setValue(false);
         lx.engine.output.enabled.setValue(true);
-        lx.engine.framesPerSecond.setValue(120);
+        //lx.engine.framesPerSecond.setValue(120);
 
     //performanceManager.start(lx.ui);
 

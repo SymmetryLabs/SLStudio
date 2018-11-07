@@ -4,6 +4,7 @@ import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.slstudio.component.GammaExpander;
 import heronarts.lx.LX;
 import heronarts.lx.output.LXDatagram;
+import heronarts.lx.model.LXPoint;
 
 import java.net.UnknownHostException;
 
@@ -14,7 +15,7 @@ public class ArtNetDatagram extends LXDatagram {
     private final static int ARTNET_PORT = 6454;
     private final static int SEQUENCE_INDEX = 12;
 
-    private final int[] pointIndices;
+    private int[] pointIndices;
     private boolean sequenceEnabled = false;
     private byte sequence = 1;
 
@@ -35,7 +36,7 @@ public class ArtNetDatagram extends LXDatagram {
             setAddress(ipAddress);
             setPort(ARTNET_PORT);
         } catch (UnknownHostException e) {
-            System.out.println("MappingPixlite with ip address (" + ipAddress + ") is not on the network.");
+            //System.out.println("MappingPixlite with ip address (" + ipAddress + ") is not on the network.");
         }
 
         this.buffer[0] = 'A';
@@ -65,6 +66,21 @@ public class ArtNetDatagram extends LXDatagram {
     public ArtNetDatagram setSequenceEnabled(boolean sequenceEnabled) {
         this.sequenceEnabled = sequenceEnabled;
         return this;
+    }
+
+    public void setUniverse(int universe) {
+        this.buffer[14] = (byte) (universe & 0xff); // Universe LSB
+        this.buffer[15] = (byte) ((universe >>> 8) & 0xff); // Universe MSB
+    }
+
+    public void updatePoints(LXPoint[] points) {
+        // FINISH - need to refactor and have datagram buffer adapt size
+        int[] indices = new int[points.length];
+        int i = 0;
+        for (LXPoint p : points) {
+            indices[i++] = p.index;
+        }
+        this.pointIndices = indices;
     }
 
     @Override

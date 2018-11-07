@@ -82,10 +82,6 @@ public class UIOverriddenRightPane extends UIPane {
     }
 
     private void buildUtilityUI() {
-        if (TreeModelingTool.isTreeShow()) {
-            new UIPixlites(this.lx, this.ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
-        }
-
         new UIOfflineRender(this.ui, this.lx, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
 
         ui.setBackgroundColor(LXColor.gray(backgroundLightParam.getValue() * 100));
@@ -95,6 +91,13 @@ public class UIOverriddenRightPane extends UIPane {
         backgroundLightParam.addListener(p -> {
             ui.setBackgroundColor(LXColor.gray(p.getValue() * 100));
         });
+
+        if (TreeModelingTool.isTreeLayout()) {
+            new UIPixlites(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
+            SLStudio.applet.uiTreeModelingTool = new UITreeModelingTool(ui, TreeModelingTool.getInstance(lx), 0, 0, this.utility.getContentWidth());
+            SLStudio.applet.uiTreeModelingTool.addToContainer(this.utility);
+            //new UIAnemometer(ui, lx, SLStudio.applet.anemometer, 0, 0, this.utility.getContentWidth(), 200).addToContainer(this.utility);
+        }
     }
 
     private void buildPerformanceUI() {

@@ -74,21 +74,6 @@ public class UITreeModelingTool extends UICollapsibleSection {
         });
     }
 
-    public static UITreeModelingTool getInstance() {
-        if (instance != null) {
-            return instance;
-        }
-
-        return null;
-    }
-
-    public static UITreeModelingTool getInstance(UI ui, TreeModelingTool modelingTool, float x, float y, float w) {
-        if (instance == null) {
-            instance = new UITreeModelingTool(ui, modelingTool, x, y, w);
-        }
-        return instance;
-    }
-
     private void redrawWindow() {
         redraw();
     }
@@ -356,13 +341,13 @@ public class UITreeModelingTool extends UICollapsibleSection {
             new UILabel(0, 79, getContentWidth()/2, 14)
                 .setLabel("A")
                 .setTextAlignment(CENTER, CENTER)
-                .setBackgroundColor(LXColor.scaleBrightness(LXColor.RED, 0.35f))
+                .setBackgroundColor(LXColor.scaleBrightness(LXColor.BLUE, 0.35f))
                 .addToContainer(this);
 
             new UILabel(getContentWidth()/2, 79, getContentWidth()/2, 14)
                 .setLabel("B")
                 .setTextAlignment(CENTER, CENTER)
-                .setBackgroundColor(LXColor.scaleBrightness(LXColor.BLUE, 0.35f))
+                .setBackgroundColor(LXColor.scaleBrightness(LXColor.RED, 0.35f))
                 .addToContainer(this);
 
             new UIToggleSet(0, 92, getContentWidth(), 30)

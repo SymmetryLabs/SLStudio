@@ -26,9 +26,9 @@ public class TreeModelingPattern extends SLPattern<TreeModel> {
 
     public TreeModelingPattern(LX lx) {
         super(lx);
-        this.modelingTool = TreeModelingTool.getInstance();
-        this.uiModelingTool = UITreeModelingTool.getInstance();
-        this.uiTreeModelAxes = UITreeModelAxes.getInstance();
+        this.modelingTool = TreeModelingTool.getInstance(lx);
+        this.uiModelingTool = SLStudio.applet.uiTreeModelingTool;
+        this.uiTreeModelAxes = UITreeModelAxes.getInstance(lx);
         addParameter(siblingBrightness);
     }
 
@@ -63,7 +63,7 @@ public class TreeModelingPattern extends SLPattern<TreeModel> {
                 i1 = 0;
                 points = modelingTool.getSelectedLimb().getPoints();
                 for (LXPoint p : points) {
-                    colors[p.index] = i1++ > (points.size()-1)/2 ? LXColor.RED : LXColor.BLUE;
+                    colors[p.index] = i1++ > (points.size()-1)/2 ? LXColor.BLUE : LXColor.RED;
                 }
                 break;
 
@@ -83,7 +83,7 @@ public class TreeModelingPattern extends SLPattern<TreeModel> {
                 i1 = 0;
                 points =  modelingTool.getSelectedBranch().getPoints();
                 for (LXPoint p : points) {
-                    colors[p.index] = i1++ > (points.size()-1)/2 ? LXColor.BLUE : LXColor.RED;
+                    colors[p.index] = i1++ > (points.size()-1)/2 ? LXColor.RED : LXColor.BLUE;
                 }
 
 //                if (uiModelingTool.displayTwigIndices.isOn()) {
@@ -133,20 +133,20 @@ public class TreeModelingPattern extends SLPattern<TreeModel> {
                 i1 = 0;
                 points = modelingTool.getSelectedTwig().getPoints();
                 for (LXPoint p : points) {
-                    colors[p.index] = i1++ > (points.size()-1)/2 ? LXColor.BLUE : LXColor.RED;
+                    colors[p.index] = i1++ > (points.size()-1)/2 ? LXColor.RED : LXColor.BLUE;
                 }
 
                 if (uiModelingTool.displayTwigIndices.isOn()) {
-                        TreeModel.Twig twig = modelingTool.getSelectedTwig();
-                        int ti = twig.getConfig().index-1;
-                        int ti1 = -1;
-                        for (TreeModel.Leaf leaf : twig.getLeaves()) {
-                            if (ti1++ < ti) {
-                                for (LXPoint p : leaf.getPoints()) {
-                                    colors[p.index] = LXColor.GREEN;
-                                }
+                    TreeModel.Twig twig = modelingTool.getSelectedTwig();
+                    int ti = twig.getConfig().index-1;
+                    int ti1 = -1;
+                    for (TreeModel.Leaf leaf : twig.getLeaves()) {
+                        if (ti1++ < ti) {
+                            for (LXPoint p : leaf.getPoints()) {
+                                colors[p.index] = LXColor.GREEN;
                             }
                         }
+                    }
                 }
                 break;
 

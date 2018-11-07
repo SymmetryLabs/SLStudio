@@ -33,7 +33,7 @@ public class TreeModelingTool extends LXComponent {
     public final EnumParameter<Mode> mode = new EnumParameter<Mode>("mode", Mode.LIMB);
 
     public final TreeModel tree;
-    private final TreeConfigStore store;
+    public final TreeConfigStore store;
 
     public final ObjectParameter selectedLimb;
     public final ObjectParameter selectedBranch;

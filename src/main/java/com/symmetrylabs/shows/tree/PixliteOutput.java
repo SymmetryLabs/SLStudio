@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.tree;
+package com.symmetrylabs.layouts.tree;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import heronarts.lx.output.LXDatagramOutput;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.output.ArtNetDatagram;
-import com.symmetrylabs.shows.tree.config.*;
+import com.symmetrylabs.layouts.tree.config.*;
 
 
 public class PixliteOutput extends LXOutputGroup {
@@ -28,7 +28,7 @@ public class PixliteOutput extends LXOutputGroup {
 
     PixliteOutput(LX lx, TreeModel.Branch branch) throws SocketException {
         super(lx);
-        this.manipulator = TreeModelingTool.getInstance().branchManipulator;
+        this.manipulator = TreeModelingTool.getInstance(lx).branchManipulator;
         this.config = branch.getConfig();
 
         this.channelA = new ReceiverChannel(lx, branch, ReceiverChannel.Type.A);
@@ -57,7 +57,7 @@ public class PixliteOutput extends LXOutputGroup {
 
         // this is to be able to update points in a datagram and not have to resize buffer
         // (need to fix so we don't waste network traffic
-        private final int DATAGRAM_NUM_POINTS = 500;
+        private final int DATAGRAM_NUM_POINTS = 600;
 
         public static enum Type { A, B }
         public final Type type;
@@ -84,7 +84,7 @@ public class PixliteOutput extends LXOutputGroup {
             public void onParameterChanged(LXParameter parameter) {
                 int firstUniverse = getFirstUniverse(pixlitePort.getValuei());
                 int i = 0;
-                for (ArtNetDatagram datagram : artNetDatagrams) {
+                for (ArtNetDatagram datagram : artNetDatagrams){
                     datagram.setUniverse(firstUniverse + i++);
                 }
             }
