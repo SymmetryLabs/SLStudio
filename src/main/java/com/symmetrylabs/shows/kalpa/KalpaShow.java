@@ -9,7 +9,7 @@ import java.net.SocketException;
 
 import heronarts.lx.model.LXPoint;
 
-import com.symmetrylabs.layouts.Layout;
+import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
@@ -28,7 +28,7 @@ import processing.core.PGraphics;
 import static com.symmetrylabs.util.DistanceConstants.*;
 
 
-public class KalpaShow implements Layout {
+public class KalpaShow implements Show {
 
     public final Map<String, AssignablePixlite> pixlites = new HashMap<>();
     public final List<AssignablePixlite.Port> pixlitePorts = new ArrayList<>();

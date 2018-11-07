@@ -18,7 +18,6 @@ import heronarts.p3lx.ui.component.UIItemList;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.shows.tree.*;
-import com.symmetrylabs.layouts.kalpa.KalpaLayout;
 import com.symmetrylabs.shows.tree.config.*;
 import static com.symmetrylabs.util.MathUtils.*;
 

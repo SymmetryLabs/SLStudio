@@ -99,11 +99,6 @@ public class ArtNetDatagram extends LXDatagram {
         busySleep(3000);
     }
 
-    public void setUniverse(int universe) {
-        this.buffer[14] = (byte) (universe & 0xff); // Universe LSB
-        this.buffer[15] = (byte) ((universe >>> 8) & 0xff); // Universe MSB
-    }
-
     LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
         int i = offset;
         int[] byteOffset = BYTE_ORDERING[this.byteOrder.ordinal()];
