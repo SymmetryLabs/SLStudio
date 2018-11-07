@@ -15,7 +15,7 @@ import heronarts.p3lx.ui.component.UIItemList;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.shows.tree.*;
-import com.symmetrylabs.layouts.kalpa.KalpaLayout;
+import com.symmetrylabs.shows.kalpa.KalpaShow;
 import com.symmetrylabs.shows.tree.config.*;
 import static com.symmetrylabs.util.MathUtils.*;
 
@@ -36,8 +36,8 @@ public class UIPixlites extends UICollapsibleSection {
         pixlitePorts.addToContainer(this);
 
 
-        // hardcoding Kalpa layout for now
-        KalpaLayout layout = (KalpaLayout)SLStudio.applet.layout;
+        // hardcoding Kalpa show for now
+        KalpaShow layout = (KalpaShow)SLStudio.applet.layout;
 
         List<PortItem> portItems = new ArrayList<>();
 
@@ -132,5 +132,3 @@ public class UIPixlites extends UICollapsibleSection {
 //        }
 //    }
 }
-
-

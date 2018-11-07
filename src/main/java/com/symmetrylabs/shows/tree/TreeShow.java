@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.symmetrylabs.shows.tree.ui.UIPixlites;
 import com.symmetrylabs.shows.tree.ui.UITreeModelAxes;
 import com.symmetrylabs.shows.tree.ui.UITreeTrunk;
 import com.symmetrylabs.slstudio.SLStudio;
@@ -42,6 +43,14 @@ public abstract class TreeShow implements Show {
         //ui.preview.addComponent(new UITreeTrunk(SLStudio.applet));
 
         ui.preview.addComponent(UITreeModelAxes.getInstance(lx));
+        ui.preview.addComponent(new UITreeTrunk(SLStudio.applet));
+        UITreeModelAxes uiTreeModelAxes = UITreeModelAxes.getInstance(lx);
+        ui.preview.addComponent(uiTreeModelAxes);
+
+        new UIPixlites(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.utility);
+        new UITreeModelingTool(
+            ui, TreeModelingTool.getInstance(lx), 0, 0, ui.rightPane.utility.getContentWidth())
+            .addToContainer(ui.rightPane.utility);
     }
 
 }

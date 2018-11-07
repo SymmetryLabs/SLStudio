@@ -12,8 +12,6 @@ import com.symmetrylabs.slstudio.output.MappingPixlite;
 import com.symmetrylabs.slstudio.ui.UIWorkspace;
 import heronarts.lx.LX;
 import com.symmetrylabs.shows.ShowRegistry;
-import com.symmetrylabs.shows.tree.TreeModelingTool;
-import com.symmetrylabs.shows.tree.ui.*;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -29,7 +27,6 @@ import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.ui.UIFramerateControl;
 import com.symmetrylabs.slstudio.envelop.Envelop;
 import com.symmetrylabs.slstudio.envelop.EnvelopOscListener;
-import com.symmetrylabs.shows.tree.ui.UITreeModelAxes;
 import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.DrawHelper;
 import com.symmetrylabs.util.dispatch.Dispatcher;
@@ -53,8 +50,6 @@ public class SLStudio extends PApplet {
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
-    public UITreeModelingTool uiTreeModelingTool = null;
-    public UITreeModelAxes uiTreeModelAxes = null;
     public Anemometer anemometer;
     public LX lx_OG;
 
@@ -131,11 +126,6 @@ public class SLStudio extends PApplet {
                 lx.engine.registerComponent("envelop", envelop);
                 lx.engine.addLoopTask(envelop);
 
-                if (TreeModelingTool.isTreeLayout()) {
-                    //treeModelingTool = new TreeModelingTool(lx);
-                    lx.engine.registerComponent("treeModelingTool", TreeModelingTool.getInstance(lx));
-                }
-
                 try {
                     lx.engine.osc.receiver(ENVELOP_OSC_PORT).addListener(new EnvelopOscListener(lx, envelop));
                 } catch (SocketException sx) {
@@ -173,12 +163,6 @@ public class SLStudio extends PApplet {
                 new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 2);
 
                 show.setupUi(lx, ui);
-
-                if (TreeModelingTool.isTreeLayout()) {
-                    ui.preview.addComponent(new UITreeTrunk(applet));
-                    uiTreeModelAxes = UITreeModelAxes.getInstance(lx);
-                    ui.preview.addComponent(uiTreeModelAxes);
-                }
 
                 if (show instanceof HasWorkspace) {
                     HasWorkspace hwShow = (HasWorkspace) show;

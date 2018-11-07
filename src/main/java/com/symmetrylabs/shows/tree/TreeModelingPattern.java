@@ -27,7 +27,7 @@ public class TreeModelingPattern extends SLPattern<TreeModel> {
     public TreeModelingPattern(LX lx) {
         super(lx);
         this.modelingTool = TreeModelingTool.getInstance(lx);
-        this.uiModelingTool = SLStudio.applet.uiTreeModelingTool;
+        this.uiModelingTool = UITreeModelingTool.getInstance(lx);
         this.uiTreeModelAxes = UITreeModelAxes.getInstance(lx);
         addParameter(siblingBrightness);
     }
