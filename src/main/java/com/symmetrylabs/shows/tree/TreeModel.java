@@ -221,6 +221,10 @@ public class TreeModel extends SLModel {
                     for (LXPoint p : branch.points) {
                         this.points.add(p);
                     }
+                    twigs.addAll(branch.getTwigs());
+                    for (Twig twig : branch.getTwigs()) {
+                        leaves.addAll(twig.getLeaves());
+                    }
                 }
 
                 t.pop();
@@ -327,6 +331,7 @@ public class TreeModel extends SLModel {
                 for (TwigConfig twigConfig : config.getTwigs()) {
                     Twig twig = new Twig(t, twigConfig);
                     twigs.add(twig);
+                    leaves.addAll(twig.getLeaves());
 
                     for (LXPoint p : twig.points) {
                         this.points.add(p);
