@@ -138,10 +138,10 @@ public class TreeModel extends SLModel {
         public Limb(LXTransform t, LimbConfig config) {
             super(new Fixture(t, config));
             this.config = config;
-            this.length = length;
+            this.length = config.length;
             this.height = config.height;
             this.azimuth = config.azimuth;
-            this.elevation = elevation;
+            this.elevation = config.elevation;
 
             Fixture f = (Fixture) this.fixtures.get(0);
             this.branches = Collections.unmodifiableList(f.branches);
