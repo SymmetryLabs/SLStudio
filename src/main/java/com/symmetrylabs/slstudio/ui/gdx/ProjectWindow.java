@@ -19,7 +19,7 @@ public class ProjectWindow implements Window {
     @Override
     public void draw() {
         UI.setNextWindowDefaults(25, 500, UI.DEFAULT_WIDTH, 300);
-        UI.begin("Project");
+        UI.beginDocked("Project");
 
         boolean add = UI.button("Add");
         if (add) {

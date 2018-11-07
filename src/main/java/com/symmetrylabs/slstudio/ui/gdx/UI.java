@@ -19,6 +19,7 @@ public class UI {
     public static native void setNextWindowDefaultToCursor(int w, int h);
     public static native void setNextWindowContentSize(int w, int h);
     public static native void begin(String label);
+    public static native void beginDocked(String label);
     public static native boolean beginClosable(String label);
     public static native void end();
     public static native void sameLine();
