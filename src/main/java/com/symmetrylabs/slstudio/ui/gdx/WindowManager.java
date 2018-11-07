@@ -13,11 +13,13 @@ public class WindowManager {
     private final List<Window> windows;
     private final List<Window> toAdd;
     private final List<Window> toRemove;
+    private boolean uiEnabled;
 
     protected WindowManager() {
         windows = new ArrayList<>();
         toAdd = new ArrayList<>();
         toRemove = new ArrayList<>();
+        uiEnabled = true;
     }
 
     public void add(Window w) {
@@ -25,6 +27,9 @@ public class WindowManager {
     }
 
     public void draw() {
+        if (!uiEnabled) {
+            return;
+        }
         for (Window w : windows) {
             w.draw();
         }
@@ -36,5 +41,13 @@ public class WindowManager {
 
     void windowClosed(Window w) {
         toRemove.add(w);
+    }
+
+    void enableUI() {
+        uiEnabled = true;
+    }
+
+    void disableUI() {
+        uiEnabled = false;
     }
 }

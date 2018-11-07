@@ -32,7 +32,11 @@ public class MainMenu implements Window {
                         }
 
                         final File project = new File(dialog.getDirectory(), fname);
-                        lx.engine.addTask(() -> lx.openProject(project));
+                        WindowManager.get().disableUI();
+                        lx.engine.addTask(() -> {
+                                lx.openProject(project);
+                                WindowManager.get().enableUI();
+                            });
                     });
             }
             if (UI.menuItem("Save")) {

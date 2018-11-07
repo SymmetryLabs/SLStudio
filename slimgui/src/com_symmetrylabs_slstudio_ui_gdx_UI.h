@@ -57,6 +57,14 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_setNextWindowDef
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    setNextWindowContentSize
+ * Signature: (II)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_setNextWindowContentSize
+  (JNIEnv *, jclass, jint, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
  * Method:    begin
  * Signature: (Ljava/lang/String;)V
  */
@@ -77,6 +85,86 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_beginClosabl
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_end
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    sameLine
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_sameLine
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    columnsStart
+ * Signature: (ILjava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_columnsStart
+  (JNIEnv *, jclass, jint, jstring);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    nextColumn
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_nextColumn
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    columnsEnd
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_columnsEnd
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    separator
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_separator
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    spacing
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_spacing
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    beginChild
+ * Signature: (Ljava/lang/String;ZI)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_beginChild
+  (JNIEnv *, jclass, jstring, jboolean, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    endChild
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_endChild
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    beginGroup
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_beginGroup
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    endGroup
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_endGroup
   (JNIEnv *, jclass);
 
 /*
@@ -130,10 +218,10 @@ JNIEXPORT jint JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_colorPicker
 /*
  * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
  * Method:    sliderFloat
- * Signature: (Ljava/lang/String;FFF)F
+ * Signature: (Ljava/lang/String;FFFZ)F
  */
 JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_sliderFloat
-  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat);
+  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat, jboolean);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_gdx_UI

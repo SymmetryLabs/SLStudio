@@ -19,6 +19,8 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_init(JNIEnv *env, jclass cls, jlong win
 	env->SetStaticIntField(cls, fid, ImGuiTreeNodeFlags_DefaultOpen);
 	fid = env->GetStaticFieldID(cls, "TREE_FLAG_SELECTED", "I");
 	env->SetStaticIntField(cls, fid, ImGuiTreeNodeFlags_Selected);
+	fid = env->GetStaticFieldID(cls, "WINDOW_HORIZ_SCROLL", "I");
+	env->SetStaticIntField(cls, fid, ImGuiWindowFlags_HorizontalScrollbar);
 
 	glfwInit();
 	GLFWwindow* window = reinterpret_cast<GLFWwindow*>(windowHandle);
@@ -72,6 +74,11 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_setNextWindowDefaultToCursor(
 }
 
 JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_setNextWindowContentSize(JNIEnv *, jclass, jint w, jint h) {
+	ImGui::SetNextWindowContentSize(ImVec2(w, h));
+}
+
+JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_gdx_UI_begin(JNIEnv *env, jclass, jstring jstr) {
 	const char *str = env->GetStringUTFChars(jstr, 0);
 	ImGui::Begin(str);
@@ -90,6 +97,63 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_beginClosable(JNIEnv *env, jclass, jstr
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_gdx_UI_end(JNIEnv *, jclass) {
 	ImGui::End();
+}
+
+JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_sameLine(JNIEnv *, jclass) {
+	ImGui::SameLine();
+}
+
+JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_columnsStart(JNIEnv *env, jclass, jint num, jstring jlabel) {
+	const char *label = env->GetStringUTFChars(jlabel, 0);
+	ImGui::Columns(num, label);
+	env->ReleaseStringUTFChars(jlabel, label);
+}
+
+JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_nextColumn(JNIEnv *, jclass) {
+	ImGui::NextColumn();
+}
+
+JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_columnsEnd(JNIEnv *, jclass) {
+	ImGui::Columns(1);
+}
+
+JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_separator(JNIEnv *, jclass) {
+	ImGui::Separator();
+}
+
+JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_spacing(JNIEnv *, jclass) {
+	ImGui::Dummy(ImVec2(5, 5));
+}
+
+JNIEXPORT jboolean JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_beginChild(
+	JNIEnv *env, jclass, jstring jid, jboolean border, jint flags) {
+	const char *id = env->GetStringUTFChars(jid, 0);
+	bool res = ImGui::BeginChild(id, ImVec2(0, 0), border == 1, flags);
+	env->ReleaseStringUTFChars(jid, id);
+	return res ? 1 : 0;
+
+}
+
+JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_endChild(JNIEnv *, jclass) {
+	ImGui::EndChild();
+}
+
+JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_beginGroup(JNIEnv *, jclass) {
+	ImGui::BeginGroup();
+}
+
+JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_endGroup(JNIEnv *, jclass) {
+	ImGui::EndGroup();
 }
 
 JNIEXPORT void JNICALL
@@ -163,10 +227,14 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_colorPicker(
 
 JNIEXPORT jfloat JNICALL
 Java_com_symmetrylabs_slstudio_ui_gdx_UI_sliderFloat(
-	JNIEnv * env, jclass, jstring jlabel, jfloat v, jfloat v0, jfloat v1) {
+	JNIEnv * env, jclass, jstring jlabel, jfloat v, jfloat v0, jfloat v1, jboolean vert) {
 	const char *label = env->GetStringUTFChars(jlabel, 0);
 	jfloat res = v;
-	ImGui::SliderFloat(label, &res, v0, v1);
+	if (vert) {
+		ImGui::VSliderFloat(label, ImVec2(20, 200), &res, v0, v1);
+	} else {
+		ImGui::SliderFloat(label, &res, v0, v1);
+	}
 	env->ReleaseStringUTFChars(jlabel, label);
 	return res;
 }

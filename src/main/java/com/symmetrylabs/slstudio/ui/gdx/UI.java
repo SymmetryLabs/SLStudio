@@ -5,6 +5,8 @@ public class UI {
     public static int TREE_FLAG_DEFAULT_OPEN;
     public static int TREE_FLAG_SELECTED;
 
+    public static int WINDOW_HORIZ_SCROLL;
+
     public static int DEFAULT_WIDTH = 250;
 
     public static native boolean init(long windowPointer);
@@ -15,9 +17,23 @@ public class UI {
     /* Layout */
     public static native void setNextWindowDefaults(int x, int y, int w, int h);
     public static native void setNextWindowDefaultToCursor(int w, int h);
+    public static native void setNextWindowContentSize(int w, int h);
     public static native void begin(String label);
     public static native boolean beginClosable(String label);
     public static native void end();
+    public static native void sameLine();
+
+    public static native void columnsStart(int num, String id);
+    public static native void nextColumn();
+    public static native void columnsEnd();
+
+    public static native void separator();
+    public static native void spacing();
+
+    public static native boolean beginChild(String id, boolean border, int flags);
+    public static native void endChild();
+    public static native void beginGroup();
+    public static native void endGroup();
 
     /* Widgets */
     public static native void text(String t);
@@ -29,7 +45,10 @@ public class UI {
     public static native boolean selectable(String label, boolean v);
     public static native String inputText(String label, String text);
     public static native int colorPicker(String label, int color);
-    public static native float sliderFloat(String label, float v, float v0, float v1);
+    public static float sliderFloat(String label, float v, float v0, float v1) {
+        return sliderFloat(label, v, v0, v1, false);
+    }
+    public static native float sliderFloat(String label, float v, float v0, float v1, boolean vert);
     public static native int sliderInt(String label, int v, int v0, int v1);
     public static native int combo(String label, int selected, String[] options);
 
