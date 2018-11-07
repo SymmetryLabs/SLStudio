@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.pattern.tree;
 
-import com.symmetrylabs.shows.tree.TreeModel.*;
+import com.symmetrylabs.layouts.tree.TreeModel.*;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
