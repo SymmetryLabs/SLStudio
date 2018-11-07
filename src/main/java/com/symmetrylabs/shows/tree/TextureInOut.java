@@ -2,7 +2,7 @@ package com.symmetrylabs.slstudio.pattern.tree;
 
 import heronarts.lx.LX;
 
-import com.symmetrylabs.layouts.tree.TreeModel;
+import com.symmetrylabs.shows.tree.TreeModel;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.FunctionalParameter;
 import heronarts.lx.modulator.LXModulator;

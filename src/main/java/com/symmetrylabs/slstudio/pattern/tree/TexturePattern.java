@@ -2,7 +2,7 @@ package com.symmetrylabs.slstudio.pattern.tree;
 
 import heronarts.lx.LX;
 
-import com.symmetrylabs.layouts.tree.TreeModel;
+import com.symmetrylabs.shows.tree.TreeModel;
 
 
 public abstract class TexturePattern extends TreePattern {

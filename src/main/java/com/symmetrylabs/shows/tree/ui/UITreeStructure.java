@@ -1,6 +1,6 @@
-package com.symmetrylabs.layouts.tree.ui;
+package com.symmetrylabs.shows.tree.ui;
 
-import com.symmetrylabs.layouts.tree.TreeModel;
+import com.symmetrylabs.shows.tree.TreeModel;
 import static com.symmetrylabs.util.DistanceConstants.*;
 
 import com.symmetrylabs.slstudio.ui.UICylinder;

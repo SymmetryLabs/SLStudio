@@ -1,4 +1,4 @@
-package com.symmetrylabs.layouts.tree;
+package com.symmetrylabs.shows.tree;
 
 import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.slstudio.component.GammaExpander;

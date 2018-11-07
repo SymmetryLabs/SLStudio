@@ -1,4 +1,4 @@
-package com.symmetrylabs.layouts.tree;
+package com.symmetrylabs.shows.tree;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import heronarts.lx.output.LXDatagramOutput;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.output.ArtNetDatagram;
-import com.symmetrylabs.layouts.tree.config.*;
+import com.symmetrylabs.shows.tree.config.*;
 
 
 public class PixliteOutput extends LXOutputGroup {

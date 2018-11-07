@@ -1,4 +1,4 @@
-package com.symmetrylabs.layouts.tree.ui;
+package com.symmetrylabs.shows.tree.ui;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -14,9 +14,9 @@ import heronarts.p3lx.ui.studio.UICollapsibleSection;
 import heronarts.p3lx.ui.component.UIItemList;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.layouts.tree.*;
+import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.layouts.kalpa.KalpaLayout;
-import com.symmetrylabs.layouts.tree.config.*;
+import com.symmetrylabs.shows.tree.config.*;
 import static com.symmetrylabs.util.MathUtils.*;
 
 

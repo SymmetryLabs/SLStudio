@@ -1,4 +1,4 @@
-package com.symmetrylabs.layouts.tree;
+package com.symmetrylabs.shows.tree;
 
 import java.util.List;
 
@@ -11,8 +11,8 @@ import heronarts.lx.parameter.DiscreteParameter;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
-import com.symmetrylabs.layouts.tree.*;
-import com.symmetrylabs.layouts.tree.ui.*;
+import com.symmetrylabs.shows.tree.*;
+import com.symmetrylabs.shows.tree.ui.*;
 
 
 public class TreeTwigSelector extends SLPattern<TreeModel> {

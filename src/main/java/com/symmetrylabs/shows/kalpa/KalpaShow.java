@@ -13,10 +13,10 @@ import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.layouts.tree.*;
-import com.symmetrylabs.layouts.tree.config.*;
-import com.symmetrylabs.layouts.tree.ui.*;
-import com.symmetrylabs.layouts.tree.ui.UIScheduler;
+import com.symmetrylabs.shows.tree.*;
+import com.symmetrylabs.shows.tree.config.*;
+import com.symmetrylabs.shows.tree.ui.*;
+import com.symmetrylabs.shows.tree.ui.UIScheduler;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
 
