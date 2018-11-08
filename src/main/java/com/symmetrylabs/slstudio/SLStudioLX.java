@@ -625,8 +625,10 @@ public class SLStudioLX extends P3LX {
 
         @Override
         public void save(LX lx, JsonObject object) {
-            TreeModelingTool.getInstance().store.writeConfig();
-
+                // TODO: figure out how to get this hook out of here
+                if (TreeModelingTool.isTreeShow()) {
+                        TreeModelingTool.getInstance().store.writeConfig();
+                }
 
             object.addProperty(KEY_AUDIO_EXPANDED, this.leftPane.audio.isExpanded());
             object.addProperty(KEY_PALETTE_EXPANDED, this.leftPane.palette.isExpanded());
