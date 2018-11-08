@@ -18,6 +18,7 @@ import com.symmetrylabs.shows.streetlamp.StreetlampShow;
 import com.symmetrylabs.shows.summerbbq.SummerBBQShow;
 import com.symmetrylabs.shows.summerstage.SummerStageShow;
 import com.symmetrylabs.shows.penfoldswine.PenfoldsWineShow;
+import com.symmetrylabs.shows.arlo.ArloShow;
 import processing.core.PApplet;
 
 public class ShowRegistry {
@@ -57,6 +58,7 @@ public class ShowRegistry {
         map.put(PenfoldsWineShow.SHOW_NAME, () -> new PenfoldsWineShow());
         map.put(MikeyShow.SHOW_NAME, () -> new MikeyShow());
         map.put(FlowerShow.SHOW_NAME, () -> new FlowerShow());
+        map.put(ArloShow.SHOW_NAME, () -> new ArloShow());
     }
 
     static interface ShowBuilder {
