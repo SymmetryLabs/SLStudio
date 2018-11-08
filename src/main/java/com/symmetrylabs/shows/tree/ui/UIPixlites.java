@@ -37,7 +37,7 @@ public class UIPixlites extends UICollapsibleSection {
 
 
         // hardcoding Kalpa show for now
-        KalpaShow layout = (KalpaShow)SLStudio.applet.layout;
+        KalpaShow layout = (KalpaShow)SLStudio.applet.show;
 
         List<PortItem> portItems = new ArrayList<>();
 

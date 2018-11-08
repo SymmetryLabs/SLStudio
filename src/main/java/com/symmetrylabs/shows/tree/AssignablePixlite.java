@@ -51,26 +51,6 @@ public class AssignablePixlite extends LXOutputGroup {
             e.printStackTrace();
         }
 
-        //System.out.println("/*- Pixlite (" + ipAddress + ") ---------------------------------------------------*/");
-//        System.out.println("NUM PORTS: " + ports.size());
-//        System.out.println("NUM DATALINES: " + datalines.size());
-
-//        for (int i = 0; i < ports.size(); i++) {
-//            System.out.println("----------------------------");
-//            System.out.println("Pixlite Port (physical): " + ports.get(i).index);
-//            System.out.println("-Dataline A (virtual port): " + ports.get(i).datalineA.index);
-//            for (AssignableArtNetDatagram datagram : ports.get(0).datalineA.artNetDatagrams) {
-//                System.out.println("--Artnet Datagram: ip: " + datagram.ipAddress + ", universe: " + datagram.universe);
-//            }
-//
-//            System.out.println("-dataline B (virtual port): " + ports.get(i).datalineB.index);
-//            for (AssignableArtNetDatagram datagram : ports.get(0).datalineB.artNetDatagrams) {
-//                System.out.println("--Artnet Datagram: ip: " + datagram.ipAddress + ", universe: " + datagram.universe);
-//            }
-//            System.out.println("");
-//        }
-
-
         final TreeModelingTool.BranchManipulator manipulator = TreeModelingTool.getInstance(lx).branchManipulator;
 
         manipulator.ipAddress.addListener(parameter -> {

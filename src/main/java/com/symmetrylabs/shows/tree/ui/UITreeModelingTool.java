@@ -30,7 +30,7 @@ import com.symmetrylabs.shows.tree.config.*;
 
 public class UITreeModelingTool extends UICollapsibleSection {
 
-    private static UITreeModelingTool instance = null;
+    public static UITreeModelingTool instance = null;
 
     private final UI ui;
 

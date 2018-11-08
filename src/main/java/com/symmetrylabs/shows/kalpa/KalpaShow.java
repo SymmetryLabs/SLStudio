@@ -28,7 +28,7 @@ import processing.core.PGraphics;
 import static com.symmetrylabs.util.DistanceConstants.*;
 
 
-public class KalpaShow implements Show {
+public class KalpaShow extends TreeShow {
 
     public final Map<String, AssignablePixlite> pixlites = new HashMap<>();
     public final List<AssignablePixlite.Port> pixlitePorts = new ArrayList<>();
@@ -301,6 +301,7 @@ public class KalpaShow implements Show {
     }
 
     public void setupLx(SLStudioLX lx) {
+        super.setupLx(lx);
         //lx.engine.framesPerSecond.setValue(30);
 
         lx.engine.registerComponent("scheduleControls", ScheduleControls.getInstance(lx));
@@ -335,19 +336,13 @@ public class KalpaShow implements Show {
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
-
+        super.setupUi(lx, ui);
         ui.preview.addComponent(new UIRocoBuilding());
-
-        ui.preview.addComponent(new UITreeGround(SLStudio.applet));
         ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
         // UITreeLeaves uiTreeLeaves = new UITreeLeaves(lx, applet, (TreeModel) lx.model);
         // ui.preview.addComponent(uiTreeLeaves);
         // new UITreeControls(ui, uiTreeStructure, uiTreeLeaves).setExpanded(false).addToContainer(ui.leftPane.global);
-
-
-
         new UIScheduler(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.utility);
-
     }
 }
 

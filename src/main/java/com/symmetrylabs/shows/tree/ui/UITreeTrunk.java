@@ -91,6 +91,7 @@
          public void onDraw(UI ui, PGraphics pg) {
              pg.beginShape(TRIANGLE_STRIP);
              pg.tint(0x451800);
+             pg.noStroke();
              for (int i = 0; i <= this.detail; ++i) {
                  int ii = i % this.detail;
                  pg.vertex(this.base[ii].x, this.base[ii].y, this.base[ii].z);

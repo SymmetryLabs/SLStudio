@@ -167,7 +167,6 @@ public class TreeModel extends SLModel {
 
             int i = 0;
             for (Branch branch : branches) {
-                System.out.println(i + " of " + config.getBranches().size() );
                 branch.reconfigure(t, config.getBranches().get(i++));
             }
             t.pop();

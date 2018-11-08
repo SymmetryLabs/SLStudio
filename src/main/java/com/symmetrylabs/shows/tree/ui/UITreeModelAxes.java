@@ -120,7 +120,7 @@ public class UITreeModelAxes extends UI3dComponent {
                 break;
         }
 
+        pg.noStroke();
         pg.popMatrix();
     }
 }
-

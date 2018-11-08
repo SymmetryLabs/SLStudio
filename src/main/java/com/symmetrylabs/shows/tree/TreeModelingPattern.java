@@ -19,7 +19,6 @@ public class TreeModelingPattern extends SLPattern<TreeModel> {
     private final int ORANGE = 0xffff8000;
 
     private final TreeModelingTool modelingTool;
-    private final UITreeModelingTool uiModelingTool;
     private final UITreeModelAxes uiTreeModelAxes;
 
     public final CompoundParameter siblingBrightness = new CompoundParameter("SibBri", 0.4f);
@@ -27,7 +26,6 @@ public class TreeModelingPattern extends SLPattern<TreeModel> {
     public TreeModelingPattern(LX lx) {
         super(lx);
         this.modelingTool = TreeModelingTool.getInstance(lx);
-        this.uiModelingTool = UITreeModelingTool.getInstance(lx);
         this.uiTreeModelAxes = UITreeModelAxes.getInstance(lx);
         addParameter(siblingBrightness);
     }
@@ -136,7 +134,7 @@ public class TreeModelingPattern extends SLPattern<TreeModel> {
                     colors[p.index] = i1++ > (points.size()-1)/2 ? LXColor.RED : LXColor.BLUE;
                 }
 
-                if (uiModelingTool.displayTwigIndices.isOn()) {
+                if (UITreeModelingTool.instance.displayTwigIndices.isOn()) {
                     TreeModel.Twig twig = modelingTool.getSelectedTwig();
                     int ti = twig.getConfig().index-1;
                     int ti1 = -1;

@@ -31,9 +31,7 @@ public class AssignableArtNetDatagram extends LXDatagram {
         super(ARTNET_HEADER_LENGTH + dataLength + (dataLength % 2));
         this.ipAddress = ipAddress;
         this.pointIndices = indices;
-        System.out.println("A: " + universeNumber +  ", " + this.universe);
         this.universe = universeNumber;
-        System.out.println("B: " + universeNumber +  ", " + this.universe);
 
         GammaExpander = GammaExpander.getInstance(lx);
 
