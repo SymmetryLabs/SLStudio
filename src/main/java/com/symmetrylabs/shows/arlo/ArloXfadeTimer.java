@@ -32,8 +32,9 @@ public class ArloXfadeTimer implements LXLoopTask, CaptionSource {
         lastRunNanos = runNanos;
 
         double xfadeValue = lx.engine.crossfader.getValue();
-        if (Math.abs(xfadeValue - lastXfadeValue) > 0.01) {
+        if (Math.abs(xfadeValue - lastXfadeValue) > 0.1) {
             timeSinceLastXfade = 0;
+            inLightShow = xfadeValue < 0.5;
         }
         lastXfadeValue = xfadeValue;
 
