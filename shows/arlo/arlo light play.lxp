@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1541702986646,
+  "timestamp": 1541710615908,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -12,10 +12,10 @@
       "scene-3": false,
       "scene-4": false,
       "scene-5": false,
-      "crossfader": 1.0,
+      "crossfader": 0.0,
       "crossfaderBlendMode": 0,
       "speed": 0.24999996088445187,
-      "focusedChannel": 2,
+      "focusedChannel": 3,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -693,7 +693,25 @@
         "arm": false
       },
       "warps": [],
-      "effects": [],
+      "effects": [
+        {
+          "id": 610,
+          "class": "heronarts.lx.effect.DesaturationEffect",
+          "modulationColor": -44800,
+          "parameters": {
+            "label": "Desaturation",
+            "enabled": true,
+            "amount": 0.0,
+            "attack": 100.0,
+            "decay": 100.0
+          },
+          "modulation": {
+            "modulators": [],
+            "modulations": [],
+            "triggers": []
+          }
+        }
+      ],
       "clips": []
     },
     "tempo": {
