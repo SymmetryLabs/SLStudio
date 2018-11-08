@@ -43,7 +43,7 @@ public static final String SHOW_NAME = "arlo";
         new TowerConfig(CubesModel.Cube.Type.HD, SP*5, SP*4, SP*0, -45, -180-45+90, 0, new String[] {"966","500"}),
         //Center Near Door
         new TowerConfig(CubesModel.Cube.Type.HD, SP*4.8f, SP*4, SP*-3, -45, 180-45, 0, new String[] {"614","636"}),
-        
+
         //BackLeft Facing Couch Right
         new TowerConfig(CubesModel.Cube.Type.HD, SP*0, SP*4, SP*-6, -45, 180-45, 0, new String[] {"5410ecfd752a","1089"}),
         //BackLeft Facing Couch Middle
@@ -230,6 +230,8 @@ new TowerConfig(CubesModel.Cube.Type.HD, SP*5, SP*2, SP*-6, 0, 0, 0, new String[
 
         workspace = new Workspace(lx, ui, "shows/arlo");
         workspace.setRequestsBeforeSwitch(2);
+
+        ArloXfadeTimer.attach(lx, ui);
     }
 
     @Override
