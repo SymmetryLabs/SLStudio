@@ -43,6 +43,7 @@ public class TextureSparkle extends TexturePattern {
 
     private void initialize(SinLFO level) {
         level.setRange(0, random(this.bright.getValuef(), 100)).setPeriod(min(7000, speed.getValuef() * random(1, 2)));
+        startModulator(this.levels[i]);
     }
 
     public void run(double deltaMs) {
