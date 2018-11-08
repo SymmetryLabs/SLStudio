@@ -232,6 +232,7 @@ new TowerConfig(CubesModel.Cube.Type.HD, SP*5, SP*2, SP*-6, 0, 0, 0, new String[
         workspace.setRequestsBeforeSwitch(2);
 
         ArloXfadeTimer.attach(lx, ui);
+        ArloFaderLimiter.attach(lx);
     }
 
     @Override
