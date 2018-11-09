@@ -3,18 +3,19 @@ package com.symmetrylabs.slstudio.pattern.tree;
 import com.symmetrylabs.shows.tree.TreeModel.*;
 import heronarts.lx.LX;
 import heronarts.lx.audio.GraphicMeter;
-import heronarts.lx.audio.LXAudioInput;
+import heronarts.lx.audio.LXAudioEngine;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.EnumParameter;
+import heronarts.lx.parameter.LXParameter;
 import java.util.HashMap;
 import java.util.List;
 
 public class TreeEq extends TreePattern {
     private double t = 0;
-    private final LXAudioInput audioInput = lx.engine.audio.getInput();
     private final GraphicMeter eq =
-        new GraphicMeter(audioInput.mix, model.getBranches().size());
+        new GraphicMeter(lx.engine.audio.input.mix, model.getBranches().size());
 
     private final CompoundParameter attack = new CompoundParameter("Attk", 0.73);
     private final CompoundParameter gain = new CompoundParameter("Gain", 0.65);
@@ -22,6 +23,7 @@ public class TreeEq extends TreePattern {
     private final CompoundParameter release = new CompoundParameter("Rls", 0.33);
     private final CompoundParameter slope = new CompoundParameter("Slope", 0.5);
     private final CompoundParameter spin = new CompoundParameter("Spin", 5, 0, 20);
+    public final EnumParameter<LXAudioEngine.Mode> mode = new EnumParameter<LXAudioEngine.Mode>("Mode", LXAudioEngine.Mode.INPUT);
 
     private final HashMap<Branch, Double> maxDists = new HashMap<>();
 
@@ -36,6 +38,7 @@ public class TreeEq extends TreePattern {
         addParameter(release);
         addParameter(slope);
         addParameter(spin);
+        addParameter(mode);
         startModulator(eq);
 
         for (Branch b : model.getBranches()) {
@@ -44,6 +47,17 @@ public class TreeEq extends TreePattern {
                 maxDist = Math.max(maxDist, dist(b, p));
             }
             maxDists.put(b, maxDist);
+        }
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        if (p == mode) {
+            if (mode.getEnum() == LXAudioEngine.Mode.INPUT) {
+                eq.setBuffer(lx.engine.audio.input.mix);
+            } else {
+                eq.setBuffer(lx.engine.audio.output.mix);
+            }
         }
     }
 
