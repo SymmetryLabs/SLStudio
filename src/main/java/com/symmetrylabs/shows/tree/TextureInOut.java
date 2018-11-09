@@ -43,4 +43,18 @@ public class TextureInOut extends TexturePattern {
             }).randomBasis());
         }
     }
+
+    public void run(double deltaMs) {
+        int ai = 0;
+        float falloff = 100 / this.size.getValuef();
+        for (LXModulator leaf : this.leaves) {
+            float pos = leaf.getValuef();
+            for (int i = 0; i < TreeModel.Leaf.NUM_LEDS; ++i) {
+                float d = (float) abs(i - (TreeModel.Twig.NUM_LEDS-1)/2.f);
+                float b = (float) max(0, 100 - falloff * abs(i - pos));
+                twigMask[ai++] = LXColor.gray(b);
+            }
+        }
+        setTwigMask(twigMask);
+    }
 }
