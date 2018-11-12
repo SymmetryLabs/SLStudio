@@ -33,7 +33,7 @@ public class FlowersModel extends SLModel {
     public static FlowersModel load() {
         ReadableObj model;
         try {
-            InputStream in = new FileInputStream(SOURCE_FILE);
+            InputStream in = new FileInputStream(GEOMETRY_FILE);
             model = ObjReader.read(in);
         } catch (IOException e) {
             System.err.println("could not read flowers point file:");
