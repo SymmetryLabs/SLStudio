@@ -4,7 +4,7 @@ import java.util.*;
 
 import com.symmetrylabs.shows.composite.CompositeShow;
 import com.symmetrylabs.shows.demo.DemoShow;
-import com.symmetrylabs.shows.flower.FlowerShow;
+import com.symmetrylabs.shows.flowers.FlowerShow;
 import com.symmetrylabs.shows.flowers.FlowersShow;
 import com.symmetrylabs.shows.googlehq.GoogleHqShow;
 import com.symmetrylabs.shows.kalpa.KalpaShow;

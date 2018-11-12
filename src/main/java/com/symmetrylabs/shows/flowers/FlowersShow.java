@@ -1,7 +1,6 @@
 package com.symmetrylabs.shows.flowers;
 
 import com.symmetrylabs.shows.Show;
-import com.symmetrylabs.shows.flower.FlowerModel;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.output.SimplePixlite;
@@ -15,7 +14,7 @@ public class FlowersShow implements Show {
 
     @Override
     public SLModel buildModel() {
-        return FlowerModel.create();
+        return FlowersModel.load();
     }
 
     @Override

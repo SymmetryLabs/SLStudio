@@ -1,15 +1,14 @@
-package com.symmetrylabs.shows.flower;
+package com.symmetrylabs.shows.flowers;
 
-import com.symmetrylabs.slstudio.pattern.base.SLPattern;
-import com.symmetrylabs.shows.flower.FlowerModel.Direction;
-import com.symmetrylabs.shows.flower.FlowerModel.FlowerPoint;
-import com.symmetrylabs.shows.flower.FlowerModel.Group;
+import com.symmetrylabs.shows.flowers.FlowerModel.Direction;
+import com.symmetrylabs.shows.flowers.FlowerModel.FlowerPoint;
+import com.symmetrylabs.shows.flowers.FlowerModel.Group;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 
-public class PetalSpin extends SLPattern<FlowerModel> {
-    public static final String GROUP_NAME = FlowerShow.SHOW_NAME;
+public class PetalSpin extends FlowerPattern {
+    public static final String GROUP_NAME = FlowersShow.SHOW_NAME;
 
     private final CompoundParameter rateParam = new CompoundParameter("rate", 150, 1, 2000);
     private final CompoundParameter fadeParam = new CompoundParameter("fade", 0.4, 0, 1);
@@ -40,7 +39,7 @@ public class PetalSpin extends SLPattern<FlowerModel> {
         float curLevel = 100.f - 100.f * (float) Math.pow(grayLevel / 100.f, 3);
         int curColor = LXColor.gray(curLevel);
 
-        for (FlowerPoint fp : model.getFlowerPoints()) {
+        for (FlowerPoint fp : flowerPoints) {
             colors[fp.index] =
                 fp.direction == cur ? curColor : fp.direction == last ? gray : 0x00000000;
         }

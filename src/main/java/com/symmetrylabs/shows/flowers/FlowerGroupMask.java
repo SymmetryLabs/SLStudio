@@ -1,16 +1,17 @@
-package com.symmetrylabs.shows.flower;
+package com.symmetrylabs.shows.flowers;
 
-import com.symmetrylabs.slstudio.effect.ModelSpecificEffect;
-import com.symmetrylabs.shows.flower.FlowerModel.Direction;
-import com.symmetrylabs.shows.flower.FlowerModel.FlowerPoint;
-import com.symmetrylabs.shows.flower.FlowerModel.Group;
+import com.symmetrylabs.shows.flowers.FlowerModel.Direction;
+import com.symmetrylabs.shows.flowers.FlowerModel.FlowerPoint;
+import com.symmetrylabs.shows.flowers.FlowerModel.Group;
 import heronarts.lx.LX;
+import heronarts.lx.LXEffect;
+import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXVector;
 
-public class FlowerGroupMask extends ModelSpecificEffect<FlowerModel> {
+public class FlowerGroupMask extends LXEffect {
     private BooleanParameter stamen = new BooleanParameter("stamen", false);
     private BooleanParameter petal1 = new BooleanParameter("petal1", false);
     private BooleanParameter petal2 = new BooleanParameter("petal2", false);
@@ -34,11 +35,6 @@ public class FlowerGroupMask extends ModelSpecificEffect<FlowerModel> {
     }
 
     @Override
-    protected FlowerModel createEmptyModel() {
-        return new FlowerModel();
-    }
-
-    @Override
     public void run(double deltaMs, double amount) {
         boolean gs = stamen.getValueb();
         boolean gp1 = petal1.getValueb();
@@ -49,7 +45,12 @@ public class FlowerGroupMask extends ModelSpecificEffect<FlowerModel> {
         boolean db = b.getValueb();
         boolean dc = c.getValueb();
 
-        for (FlowerPoint fp : getModel().getFlowerPoints()) {
+        for (LXPoint point : model.points) {
+            if (!(point instanceof FlowerPoint)) {
+                continue;
+            }
+            FlowerPoint fp = (FlowerPoint) point;
+
             boolean ok = true;
             switch (fp.group) {
             case STAMEN: ok = gs; break;

@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.flower;
+package com.symmetrylabs.shows.flowers;
 
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
