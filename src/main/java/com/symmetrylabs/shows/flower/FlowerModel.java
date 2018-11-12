@@ -2,6 +2,7 @@ package com.symmetrylabs.shows.flower;
 
 import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.transform.LXVector;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,6 @@ public class FlowerModel extends SLModel {
         A,
         B,
         C,
-        DOWN,
         UP,
     }
 
@@ -49,16 +49,55 @@ public class FlowerModel extends SLModel {
     }
 
     public static FlowerModel create() {
+        return create(new LXVector(0, 0, 0));
+    }
+
+    /* ABC XZ are chosen so that they form an equilaterial triangle about the origin */
+    private static final float AX = (float) (4. / Math.tan(60. / 180. * Math.PI));
+    private static final float BX = 0;
+    private static final float CX = (float) (-4. / Math.tan(60. / 180. * Math.PI));
+    private static final float UPY = 2.f;
+    private static final float P2Y = 1.f;
+    private static final float P1Y = -1.f;
+    private static final float STY = -4.f;
+    private static final float AZ = -4.f / 3.f;
+    private static final float BZ = 8.f / 3.f;
+    private static final float CZ = -4.f / 3.f;
+
+    public static FlowerModel create(LXVector base) {
         List<FlowerPoint> points = new ArrayList<>();
-        /* D1 */ points.add(new FlowerPoint(5, -10, 0, Group.STEM, Direction.DOWN));
-        /* A1 */ points.add(new FlowerPoint(5, -2, 0, Group.PETAL1, Direction.A));
-        /* A2 */ points.add(new FlowerPoint(5, 2, 0, Group.PETAL2, Direction.A));
-        /* B2 */ points.add(new FlowerPoint(0, 2, 5, Group.PETAL2, Direction.B));
-        /* B1 */ points.add(new FlowerPoint(0, -2, 5, Group.PETAL1, Direction.B));
-        /* D2 */ points.add(new FlowerPoint(-5, -10, 0, Group.STEM, Direction.DOWN));
-        /* C1 */ points.add(new FlowerPoint(-5, -2, 0, Group.PETAL1, Direction.C));
-        /* C2 */ points.add(new FlowerPoint(-5, 2, 0, Group.PETAL2, Direction.C));
-        /* U1 */ points.add(new FlowerPoint(0, 10, 0, Group.STAMEN, Direction.UP));
+
+        points.add(
+            new FlowerPoint(
+                base.x + AX, base.y + STY, base.z + AZ, Group.STEM, Direction.A));
+        points.add(
+            new FlowerPoint(
+                base.x + AX, base.y + P1Y, base.z + AZ, Group.PETAL1, Direction.A));
+        points.add(
+            new FlowerPoint(
+                base.x + AX, base.y + P2Y, base.z + AZ, Group.PETAL2, Direction.A));
+        points.add(
+            new FlowerPoint(
+                base.x + BX, base.y + P2Y, base.z + BZ, Group.PETAL2, Direction.B));
+        points.add(
+            new FlowerPoint(
+                base.x + BX, base.y + P1Y, base.z + BZ, Group.PETAL1, Direction.B));
+        points.add(
+            new FlowerPoint(
+                base.x + BX, base.y + STY, base.z + BZ, Group.STEM, Direction.B));
+        points.add(
+            new FlowerPoint(
+                base.x + CX, base.y + STY, base.z + CZ, Group.STEM, Direction.C));
+        points.add(
+            new FlowerPoint(
+                base.x + CX, base.y + P1Y, base.z + CZ, Group.PETAL1, Direction.C));
+        points.add(
+            new FlowerPoint(
+                base.x + CX, base.y + P2Y, base.z + CZ, Group.PETAL2, Direction.C));
+        points.add(
+            new FlowerPoint(
+                base.x,  base.y + UPY, base.z, Group.STAMEN, Direction.UP));
+
         List<LXPoint> lxPoints = new ArrayList<>();
         for (FlowerPoint fp : points) {
             lxPoints.add(fp);
