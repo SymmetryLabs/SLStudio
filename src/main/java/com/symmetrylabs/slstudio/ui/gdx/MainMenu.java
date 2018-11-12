@@ -1,10 +1,15 @@
 package com.symmetrylabs.slstudio.ui.gdx;
 
+import com.symmetrylabs.shows.ShowRegistry;
+import com.symmetrylabs.slstudio.SLStudio;
 import heronarts.lx.LX;
 import java.awt.EventQueue;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class MainMenu implements Window {
     private final LX lx;
@@ -48,6 +53,20 @@ public class MainMenu implements Window {
             }
             if (UI.menuItem("Save As...")) {
                 runSaveAs();
+            }
+            UI.endMenu();
+        }
+        if (UI.beginMenu("Show")) {
+            for (String showName : ShowRegistry.getNames()) {
+                if (UI.menuItem(showName)) {
+                    try {
+                        Files.write(Paths.get(SLStudio.SHOW_FILE_NAME), showName.getBytes());
+                        Files.write(Paths.get(SLStudio.RESTART_FILE_NAME), "".getBytes());
+                    } catch (IOException e) {
+                        System.err.println("couldn't write new show: " + e.getMessage());
+                    }
+                    System.exit(0);
+                }
             }
             UI.endMenu();
         }

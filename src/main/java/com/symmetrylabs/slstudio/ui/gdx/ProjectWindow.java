@@ -63,6 +63,11 @@ public class ProjectWindow implements Window {
         if (enabled != chan.enabled.getValueb()) {
             lx.engine.addTask(() -> chan.enabled.setValue(enabled));
         }
+        final boolean cued = UI.selectable(
+            String.format("CUE##cue-%d", chan.getIndex()), chan.cueActive.getValueb());
+        if (cued != chan.cueActive.getValueb()) {
+            lx.engine.addTask(() -> chan.cueActive.setValue(cued));
+        }
         UI.endGroup();
 
         UI.sameLine();

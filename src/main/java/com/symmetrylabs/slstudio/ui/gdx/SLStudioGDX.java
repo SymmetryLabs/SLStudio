@@ -8,10 +8,15 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import com.symmetrylabs.LXClassLoader;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.ShowRegistry;
+import com.symmetrylabs.slstudio.SLStudio;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXModel;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class SLStudioGDX extends ApplicationAdapter {
+    private static final String DEFAULT_SHOW = "demo";
     private String showName;
     private Show show;
     private ModelRenderer renderer;
@@ -21,7 +26,13 @@ public class SLStudioGDX extends ApplicationAdapter {
 
     @Override
     public void create() {
-        showName = "pilots";
+        try {
+            showName = Files.readAllLines(Paths.get(SLStudio.SHOW_FILE_NAME)).get(0);
+        } catch (IOException e) {
+            System.err.println(
+                "couldn't read " + SLStudio.SHOW_FILE_NAME + ": " + e.getMessage());
+            showName = DEFAULT_SHOW;
+        }
         show = ShowRegistry.getShow(showName);
 
         LXModel model = show.buildModel();

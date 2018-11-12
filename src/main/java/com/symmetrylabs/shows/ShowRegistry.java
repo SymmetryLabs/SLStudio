@@ -31,6 +31,7 @@ import processing.core.PApplet;
 
 public class ShowRegistry {
     static ShowBuilder DEFAULT_BUILDER = () -> new DemoShow();
+    static boolean showedProcessingWarning = false;
 
     /** Builds and returns the show with the given name. */
     public static Show getShow(String name) {
@@ -61,8 +62,9 @@ public class ShowRegistry {
         map.put("demo", () -> new DemoShow());
         if (applet != null) {
             map.put("oslo", () -> new OsloShow(applet, TreeModel.ModelMode.MAJOR_LIMBS));
-        } else {
+        } else if (!showedProcessingWarning) {
             System.err.println("disabling Oslo show, which requires Processing");
+            showedProcessingWarning = true;
         }
         map.put("composite", () -> new CompositeShow());
         map.put("obj", () -> new ObjShow());
