@@ -19,8 +19,11 @@ import java.awt.EventQueue;
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import javax.swing.JFrame;
 import javax.swing.JTree;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
 public class SLStudioSwing extends JFrame {
@@ -30,11 +33,21 @@ public class SLStudioSwing extends JFrame {
     private LX lx;
 
     public SLStudioSwing() {
-        showName = "pilots";
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException
+                         | InstantiationException
+                         | IllegalAccessException
+                         | UnsupportedLookAndFeelException e) {
+            System.err.println("falling back to default look-and-feel: " + e);
+        }
+
+        showName = "flowers";
         show = ShowRegistry.getShow(showName);
 
         LXModel model = show.buildModel();
         lx = new LX(model);
+        lx.openProject(new File("flowers-test.lxp"));
 
         setTitle("SLStudio");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -74,6 +87,9 @@ public class SLStudioSwing extends JFrame {
         add(canvas, BorderLayout.CENTER);
 
         loadLxComponents();
+
+        add(new ChannelPane(lx), BorderLayout.SOUTH);
+
         JTree patternTree = new JTree(new PatternListDataModel(lx, showName));
         patternTree.setPreferredSize(new Dimension(200, 0));
         patternTree.setBorder(new EmptyBorder(5, 5, 5, 5));

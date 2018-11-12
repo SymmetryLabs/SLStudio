@@ -58,16 +58,6 @@ public class ProjectWindow implements Window {
         if (fader != chan.fader.getValuef()) {
             lx.engine.addTask(() -> chan.fader.setValue(fader));
         }
-        final boolean enabled = UI.checkbox(
-            String.format("##enabled-%d", chan.getIndex()), chan.enabled.getValueb());
-        if (enabled != chan.enabled.getValueb()) {
-            lx.engine.addTask(() -> chan.enabled.setValue(enabled));
-        }
-        final boolean cued = UI.selectable(
-            String.format("CUE##cue-%d", chan.getIndex()), chan.cueActive.getValueb());
-        if (cued != chan.cueActive.getValueb()) {
-            lx.engine.addTask(() -> chan.cueActive.setValue(cued));
-        }
         UI.endGroup();
 
         UI.sameLine();
@@ -127,5 +117,17 @@ public class ProjectWindow implements Window {
             }
         }
         UI.endGroup();
+
+        final boolean enabled = UI.checkbox(
+            String.format("ENABLED##enabled-%d", chan.getIndex()), chan.enabled.getValueb());
+        if (enabled != chan.enabled.getValueb()) {
+            lx.engine.addTask(() -> chan.enabled.setValue(enabled));
+        }
+        UI.sameLine();
+        final boolean cued = UI.checkbox(
+            String.format("CUE##cue-%d", chan.getIndex()), chan.cueActive.getValueb());
+        if (cued != chan.cueActive.getValueb()) {
+            lx.engine.addTask(() -> chan.cueActive.setValue(cued));
+        }
     }
 }
