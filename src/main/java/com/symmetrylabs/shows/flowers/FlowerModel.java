@@ -25,31 +25,64 @@ public class FlowerModel extends SLModel {
         public final Group group;
         public final Direction direction;
 
+        public FlowerPoint(Group g, Direction d) {
+            super(0, 0, 0);
+            group = g;
+            direction = d;
+            setBaseLocation(new LXVector(0, 0, 0));
+        }
+
         public FlowerPoint(float x, float y, float z, Group g, Direction d) {
             super(x, y, z);
             group = g;
             direction = d;
         }
+
+        void setBaseLocation(LXVector base) {
+            switch (group) {
+            case STEM: y = STY; break;
+            case PETAL1: y = P1Y; break;
+            case PETAL2: y = P2Y; break;
+            case STAMEN: y = UPY; break;
+            }
+            y += base.y;
+            switch (direction) {
+            case UP: x = 0; z = 0; break;
+            case A: x = AX; z = AZ; break;
+            case B: x = BX; z = BZ; break;
+            case C: x = CX; z = CZ; break;
+            }
+            x += base.x;
+            z += base.z;
+        }
     }
 
     private final List<FlowerPoint> flowerPoints;
+    private final FlowerData flowerData;
 
     public FlowerModel() {
         super();
         flowerPoints = new ArrayList<>();
+        flowerData = null;
     }
 
-    public FlowerModel(List<LXPoint> points, List<FlowerPoint> flowerPoints) {
+    public FlowerModel(
+        List<LXPoint> points, List<FlowerPoint> flowerPoints, FlowerData flowerData) {
         super(points);
         this.flowerPoints = flowerPoints;
+        this.flowerData = flowerData;
     }
 
     public List<FlowerPoint> getFlowerPoints() {
         return flowerPoints;
     }
 
+    public FlowerData getFlowerData() {
+        return flowerData;
+    }
+
     public static FlowerModel create() {
-        return create(new LXVector(0, 0, 0));
+        return create(new FlowerData(new LXVector(0, 0, 0)));
     }
 
     /* ABC XZ are chosen so that they form an equilaterial triangle about the origin */
@@ -64,44 +97,27 @@ public class FlowerModel extends SLModel {
     private static final float BZ = 8.f / 3.f;
     private static final float CZ = -4.f / 3.f;
 
-    public static FlowerModel create(LXVector base) {
+    public static FlowerModel create(FlowerData fd) {
         List<FlowerPoint> points = new ArrayList<>();
 
-        points.add(
-            new FlowerPoint(
-                base.x + AX, base.y + STY, base.z + AZ, Group.STEM, Direction.A));
-        points.add(
-            new FlowerPoint(
-                base.x + AX, base.y + P1Y, base.z + AZ, Group.PETAL1, Direction.A));
-        points.add(
-            new FlowerPoint(
-                base.x + AX, base.y + P2Y, base.z + AZ, Group.PETAL2, Direction.A));
-        points.add(
-            new FlowerPoint(
-                base.x + BX, base.y + P2Y, base.z + BZ, Group.PETAL2, Direction.B));
-        points.add(
-            new FlowerPoint(
-                base.x + BX, base.y + P1Y, base.z + BZ, Group.PETAL1, Direction.B));
-        points.add(
-            new FlowerPoint(
-                base.x + BX, base.y + STY, base.z + BZ, Group.STEM, Direction.B));
-        points.add(
-            new FlowerPoint(
-                base.x + CX, base.y + STY, base.z + CZ, Group.STEM, Direction.C));
-        points.add(
-            new FlowerPoint(
-                base.x + CX, base.y + P1Y, base.z + CZ, Group.PETAL1, Direction.C));
-        points.add(
-            new FlowerPoint(
-                base.x + CX, base.y + P2Y, base.z + CZ, Group.PETAL2, Direction.C));
-        points.add(
-            new FlowerPoint(
-                base.x,  base.y + UPY, base.z, Group.STAMEN, Direction.UP));
+        points.add(new FlowerPoint(Group.STEM, Direction.A));
+        points.add(new FlowerPoint(Group.PETAL1, Direction.A));
+        points.add(new FlowerPoint(Group.PETAL2, Direction.A));
+        points.add(new FlowerPoint(Group.PETAL2, Direction.B));
+        points.add(new FlowerPoint(Group.PETAL1, Direction.B));
+        points.add(new FlowerPoint(Group.STEM, Direction.B));
+        points.add(new FlowerPoint(Group.STEM, Direction.C));
+        points.add(new FlowerPoint(Group.PETAL1, Direction.C));
+        points.add(new FlowerPoint(Group.PETAL2, Direction.C));
+        points.add(new FlowerPoint(Group.STAMEN, Direction.UP));
+        for (FlowerPoint fp : points) {
+            fp.setBaseLocation(fd.location);
+        }
 
         List<LXPoint> lxPoints = new ArrayList<>();
         for (FlowerPoint fp : points) {
             lxPoints.add(fp);
         }
-        return new FlowerModel(lxPoints, points);
+        return new FlowerModel(lxPoints, points, fd);
     }
 }

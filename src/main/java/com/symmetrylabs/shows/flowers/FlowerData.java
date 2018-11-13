@@ -3,25 +3,22 @@ package com.symmetrylabs.shows.flowers;
 import heronarts.lx.transform.LXVector;
 
 public class FlowerData {
-    public enum Harness { A, B }
+    public LXVector location;
+    public FlowerRecord record;
 
-    public final String id;
-    public final String panelId;
-    public final Harness harness;
-    public final int harnessIndex;
-    public final LXVector pos;
+    public FlowerData(LXVector location) {
+        this.record = null;
+        this.location = location;
+    }
 
-    public FlowerData(
-        String id, String panelId, Harness harness, int harnessIndex, LXVector pos) {
-        this.id = id;
-        this.panelId = panelId;
-        this.harness = harness;
-        this.harnessIndex = harnessIndex;
-        this.pos = pos;
+    public FlowerData(FlowerRecord record, LXVector location) {
+        this.record = record;
+        this.location = location;
     }
 
     @Override
     public String toString() {
-        return String.format("%s/%s%d", panelId, harness, harnessIndex);
+        return String.format(
+            "%s [%f %f %f]", record, location.x, location.y, location.z);
     }
 }
