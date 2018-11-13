@@ -12,6 +12,15 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Selec
 
     private final DiscreteParameter flowerParam;
 
+    private static final int[] PANEL_COLORS = new int[] {
+        0xFFFF0000,
+        0xFFFFFF00,
+        0xFF00FF00,
+        0xFF00FFFF,
+        0xFF0000FF,
+        0xFFFF00FF,
+    };
+
     public FlowerInspector(LX lx) {
         super(lx);
         flowerParam = new DiscreteParameter("flower", 0, 0, model.getFlowers().size());
@@ -25,6 +34,14 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Selec
     @Override
     public void run(double elapsedMs) {
         Arrays.fill(colors, 0);
+        for (FlowerModel fm : model.getFlowers()) {
+            FlowerData fd = fm.getFlowerData();
+            if (fd.record.panelId != null) {
+                for (LXPoint p : fm.points) {
+                    colors[p.index] = PANEL_COLORS[fd.record.panelId.hashCode() % PANEL_COLORS.length];
+                }
+            }
+        }
         for (LXPoint p : get().points) {
             colors[p.index] = 0xFFFFFFFF;
         }

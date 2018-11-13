@@ -46,6 +46,8 @@ public class UIFlowerTool extends UI2dContainer {
     private final List<SelectionListener> listeners = new ArrayList<>();
     private final BooleanParameter saveParam =
         new BooleanParameter("save").setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter runPanelizerParam =
+        new BooleanParameter("panelizer").setMode(BooleanParameter.Mode.MOMENTARY);
 
     public UIFlowerTool(SLStudioLX lx, SLStudioLX.UI ui) {
         super(0, 0, ui.rightPane.model.getContentWidth(), 1000);
@@ -53,7 +55,7 @@ public class UIFlowerTool extends UI2dContainer {
         this.ui = ui;
         model = (FlowersModel) lx.model;
 
-        flowers = new UICollapsibleSection(ui, 0, 0, getContentWidth(), 325);
+        flowers = new UICollapsibleSection(ui, 0, 0, getContentWidth(), 350);
         flowers.setTitle("FLOWERS");
 
         new UIButton(0, 2, flowers.getContentWidth(), 20)
@@ -62,9 +64,15 @@ public class UIFlowerTool extends UI2dContainer {
             .addToContainer(flowers);
         saveParam.addListener(p -> model.storeRecords());
 
+        new UIButton(0, 24, flowers.getContentWidth(), 20)
+            .setParameter(runPanelizerParam)
+            .setLabel("RUN PANELIZER")
+            .addToContainer(flowers);
+        runPanelizerParam.addListener(p -> model.panelize());
+
         flowerList =
             new UIItemList.ScrollList(
-                ui, 0, 28, flowers.getContentWidth(), 172);
+                ui, 0, 52, flowers.getContentWidth(), 172);
         for (FlowerModel fm : model.getFlowers()) {
             flowerList.addItem(new FlowerItem(fm));
         }
@@ -114,7 +122,7 @@ public class UIFlowerTool extends UI2dContainer {
         CompoundParameter pYO = new CompoundParameter("YO", 0, -1000, 1000);
 
         public FlowerEditor() {
-            super(0, 212, flowers.getContentWidth(), 80);
+            super(0, 236, flowers.getContentWidth(), 80);
             id = new UILabel(0, 0, getContentWidth(), 10);
             id.setLabel("Select a flower");
             id.setTextAlignment(PConstants.LEFT, PConstants.TOP).setTextOffset(0,  1);

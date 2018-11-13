@@ -24,8 +24,9 @@ import java.util.List;
 import processing.core.PGraphics;
 
 public class FlowersModel extends SLModel {
-    private static final String GEOMETRY_FILE = "shows/flowers/locations.obj";
-    private static final File RECORD_FILE = new File("shows/flowers/records.json");
+    static final String GEOMETRY_FILE = "shows/flowers/locations.obj";
+    static final File RECORD_FILE = new File("shows/flowers/records.json");
+    static final File PANEL_FILE = new File("shows/flowers/panels.txt");
 
     private static final float RECORD_MATCH_SQDIST_INCHES = 3.f * 3.f;
 
@@ -58,6 +59,14 @@ public class FlowersModel extends SLModel {
         }
     }
 
+    public void panelize() {
+        List<FlowerData> data = new ArrayList<>();
+        for (FlowerModel fm : flowers) {
+            data.add(fm.getFlowerData());
+        }
+        Panelizer.panelize(data);
+    }
+
     public static FlowersModel load() {
         ReadableObj model;
         try {
@@ -72,7 +81,10 @@ public class FlowersModel extends SLModel {
         List<FlowerData> flowerData = new ArrayList<>();
         for (int vi = 0; vi < model.getNumVertices(); vi++) {
             FloatTuple v = model.getVertex(vi);
-            flowerData.add(new FlowerData(new LXVector(v.getX(), v.getY(), v.getZ())));
+            /* SLStudio uses a left-handed coordinate system (to the complete and
+             * utter bafflement of your narrator); negate Z to bring a model from
+             * a RHCS to a LHCS */
+            flowerData.add(new FlowerData(new LXVector(v.getX(), v.getY(), -v.getZ())));
         }
 
         if (RECORD_FILE.exists()) {
