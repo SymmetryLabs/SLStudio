@@ -29,7 +29,6 @@ public class FlowerModel extends SLModel {
             super(0, 0, 0);
             group = g;
             direction = d;
-            setBaseLocation(new LXVector(0, 0, 0));
         }
 
         public FlowerPoint(float x, float y, float z, Group g, Direction d) {
@@ -54,6 +53,7 @@ public class FlowerModel extends SLModel {
             }
             x += base.x;
             z += base.z;
+            update();
         }
     }
 
@@ -66,10 +66,12 @@ public class FlowerModel extends SLModel {
         flowerData = null;
     }
 
-    public FlowerModel(
-        List<LXPoint> points, List<FlowerPoint> flowerPoints, FlowerData flowerData) {
+    private FlowerModel(List<LXPoint> points, FlowerData flowerData) {
         super(points);
-        this.flowerPoints = flowerPoints;
+        flowerPoints = new ArrayList<>(points.size());
+        for (int i = 0; i < points.size(); i++) {
+            flowerPoints.add((FlowerPoint) points.get(i));
+        }
         this.flowerData = flowerData;
     }
 
@@ -79,6 +81,13 @@ public class FlowerModel extends SLModel {
 
     public FlowerData getFlowerData() {
         return flowerData;
+    }
+
+    public void onDataUpdated() {
+        for (FlowerPoint fp : flowerPoints) {
+            fp.setBaseLocation(flowerData.location);
+        }
+        update(true, true);
     }
 
     public static FlowerModel create() {
@@ -118,6 +127,6 @@ public class FlowerModel extends SLModel {
         for (FlowerPoint fp : points) {
             lxPoints.add(fp);
         }
-        return new FlowerModel(lxPoints, points, fd);
+        return new FlowerModel(lxPoints, fd);
     }
 }

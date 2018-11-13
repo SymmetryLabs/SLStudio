@@ -5,15 +5,21 @@ import heronarts.lx.transform.LXVector;
 public class FlowerData {
     public LXVector location;
     public FlowerRecord record;
+    /* the height of the flower in the original geometry file */
+    public final float geometryHeight;
 
     public FlowerData(LXVector location) {
-        this.record = null;
-        this.location = location;
+        this(null, location);
     }
 
     public FlowerData(FlowerRecord record, LXVector location) {
         this.record = record;
         this.location = location;
+        geometryHeight = location.y;
+    }
+
+    public void recalculateLocation() {
+        location.y = record.overrideHeight ? record.yOverride : geometryHeight;
     }
 
     @Override

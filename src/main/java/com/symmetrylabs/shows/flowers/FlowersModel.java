@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import processing.core.PGraphics;
 
 public class FlowersModel extends SLModel {
     private static final String GEOMETRY_FILE = "shows/flowers/locations.obj";
-    private static final File ADDRESS_FILE = new File("shows/flowers/addressing.json");
+    private static final File RECORD_FILE = new File("shows/flowers/records.json");
 
     private static final float RECORD_MATCH_SQDIST_INCHES = 3.f * 3.f;
 
@@ -39,6 +40,22 @@ public class FlowersModel extends SLModel {
 
     public List<FlowerModel> getFlowers() {
         return flowers;
+    }
+
+    public void storeRecords() {
+        List<FlowerRecord> records = new ArrayList<>();
+        for (FlowerModel fm : flowers) {
+            records.add(fm.getFlowerData().record);
+        }
+        try {
+            FileWriter writer = new FileWriter(RECORD_FILE);
+            new Gson().toJson(records, writer);
+            writer.close();
+            System.out.println("wrote records to " + RECORD_FILE.toString());
+        } catch (IOException e) {
+            System.err.println("couldn't write record file:");
+            e.printStackTrace();
+        }
     }
 
     public static FlowersModel load() {
@@ -58,10 +75,10 @@ public class FlowersModel extends SLModel {
             flowerData.add(new FlowerData(new LXVector(v.getX(), v.getY(), v.getZ())));
         }
 
-        if (ADDRESS_FILE.exists()) {
+        if (RECORD_FILE.exists()) {
             try {
                 FlowerRecord[] records = new Gson().fromJson(
-                    new BufferedReader(new FileReader(ADDRESS_FILE)), FlowerRecord[].class);
+                    new BufferedReader(new FileReader(RECORD_FILE)), FlowerRecord[].class);
                 matchRecords(flowerData, records);
             } catch (IOException e) {
                 System.err.println("could not read flower data file:");

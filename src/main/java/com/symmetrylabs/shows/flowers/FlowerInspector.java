@@ -5,8 +5,9 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.DiscreteParameter;
 import java.util.Arrays;
+import java.util.List;
 
-public class FlowerInspector extends FlowerPattern {
+public class FlowerInspector extends FlowerPattern implements UIFlowerTool.SelectionListener {
     public static final String GROUP_NAME = FlowersShow.SHOW_NAME;
 
     private final DiscreteParameter flowerParam;
@@ -32,5 +33,28 @@ public class FlowerInspector extends FlowerPattern {
     @Override
     public String getCaption() {
         return get().getFlowerData().toString();
+    }
+
+    @Override
+    public void onActive() {
+        super.onActive();
+        UIFlowerTool.get().addListener(this);
+    }
+
+    @Override
+    public void onInactive() {
+        super.onInactive();
+        UIFlowerTool.get().removeListener(this);
+    }
+
+    @Override
+    public void onFlowerSelected(FlowerData data) {
+        List<FlowerModel> flowers = model.getFlowers();
+        for (int i = 0; i < flowers.size(); i++) {
+            if (flowers.get(i).getFlowerData().record.id == data.record.id) {
+                flowerParam.setValue(i);
+                return;
+            }
+        }
     }
 }
