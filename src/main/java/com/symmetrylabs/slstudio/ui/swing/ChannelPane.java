@@ -68,9 +68,9 @@ public class ChannelPane extends JPanel {
             cue.addChangeListener(ce -> {
                     lx.engine.addTask(() -> chan.cueActive.setValue(cue.isSelected()));
                 });
-                chan.cueActive.addListener(p -> {
-                        cue.setSelected(chan.cueActive.getValueb());
-                    });
+            chan.cueActive.addListener(p -> {
+                    cue.setSelected(chan.cueActive.getValueb());
+                });
             right.add(cue);
 
             add(right, BorderLayout.EAST);
