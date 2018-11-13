@@ -35,6 +35,7 @@ public class UIFlowerTool extends UI2dContainer {
     private final FlowersModel model;
     private final FlowerEditor flowerEditor;
     private final UIItemList.ScrollList flowerList;
+    private final UICollapsibleSection flowers;
 
     public UIFlowerTool(SLStudioLX lx, SLStudioLX.UI ui) {
         super(0, 0, ui.rightPane.model.getContentWidth(), 1000);
@@ -42,16 +43,21 @@ public class UIFlowerTool extends UI2dContainer {
         this.ui = ui;
         model = (FlowersModel) lx.model;
 
-        flowerEditor = new FlowerEditor();
-        addTopLevelComponent(flowerEditor);
+        flowers = new UICollapsibleSection(ui, 0, 0, getContentWidth(), 300);
+        flowers.setTitle("FLOWERS");
 
         flowerList =
             new UIItemList.ScrollList(
-                ui, 6, 12 + flowerEditor.getHeight(), getContentWidth() - 12, 200);
+                ui, 0, 0, flowers.getContentWidth(), 200);
         for (FlowerModel fm : model.getFlowers()) {
             flowerList.addItem(new FlowerItem(fm.getFlowerData()));
         }
-        addTopLevelComponent(flowerList);
+        flowerList.addToContainer(flowers);
+
+        flowerEditor = new FlowerEditor();
+        flowerEditor.addToContainer(flowers);
+
+        addTopLevelComponent(flowers);
     }
 
     void onUpdate() {
@@ -74,8 +80,8 @@ public class UIFlowerTool extends UI2dContainer {
         DiscreteParameter pHI = new DiscreteParameter("HI", 0, -1, 10);
 
         public FlowerEditor() {
-            super(6, 6, UIFlowerTool.this.getContentWidth() - 12, 60);
-            id = new UILabel(0, 0, getContentWidth(), 14);
+            super(0, 212, flowers.getContentWidth(), 60);
+            id = new UILabel(0, 0, getContentWidth(), 10);
             id.setLabel("Select a flower");
             id.setTextAlignment(PConstants.LEFT, PConstants.TOP).setTextOffset(0,  1);
             id.addToContainer(this);
@@ -95,14 +101,15 @@ public class UIFlowerTool extends UI2dContainer {
                     onUpdate();
                 });
 
-            float LH = 14;
+            float LH = 10;
             float Y1 = id.getHeight() + 4;
             float Y2 = Y1 + LH + 4;
             float H = 20;
             float PW = 40;
+            float PP = 12;
 
             new UILabel(0, Y1, PW, LH).setLabel("PANEL").addToContainer(this);
-            new UILabel(PW + 4, Y1, getContentWidth() - PW, LH)
+            new UILabel(PW + PP, Y1, getContentWidth() - PW, LH)
                 .setLabel("HARNESS").addToContainer(this);
 
             panel = new UITextBox(0, Y2, PW, H);
@@ -110,17 +117,17 @@ public class UIFlowerTool extends UI2dContainer {
             panel.addToContainer(this);
             panel.setEnabled(false);
 
-            harnessA = new UIButton(PW + 4, Y2, H, H);
+            harnessA = new UIButton(PW + PP, Y2, H, H);
             harnessA.setLabel("A").setParameter(pHA);
             harnessA.addToContainer(this);
             harnessA.setEnabled(false);
 
-            harnessB = new UIButton(PW + 4 + H + 2, Y2, H, H);
+            harnessB = new UIButton(PW + PP + H + 2, Y2, H, H);
             harnessB.setLabel("B").setParameter(pHB);
             harnessB.addToContainer(this);
             harnessB.setEnabled(false);
 
-            harnessIndex = new UIIntegerBox(PW + 4 + 2 * (H + 2), Y2, 40, H);
+            harnessIndex = new UIIntegerBox(PW + PP + 2 * (H + 2), Y2, 40, H);
             harnessIndex.setParameter(pHI);
             harnessIndex.addToContainer(this);
             harnessIndex.setEnabled(false);
