@@ -23,5 +23,6 @@ public class FlowersShow implements Show {
 
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
+        UIFlowerTool.attach(lx, ui);
     }
 }

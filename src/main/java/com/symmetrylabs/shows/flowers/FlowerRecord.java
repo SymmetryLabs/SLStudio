@@ -55,11 +55,14 @@ public class FlowerRecord {
     @Override
     public String toString() {
         if (panelId == null) {
-            return String.format("%d unmapped", id);
+            return String.format("%04d@?", id);
+        }
+        if (harness == Harness.UNKNOWN) {
+            return String.format("%04d@%s/?", id, panelId);
         }
         if (harnessIndex < 0) {
-            return String.format("%d@%s/%s?", id, panelId, harness);
+            return String.format("%04d@%s/%s?", id, panelId, harness);
         }
-        return String.format("%d@%s/%s%d", id, panelId, harness, harnessIndex);
+        return String.format("%04d@%s/%s%d", id, panelId, harness, harnessIndex);
     }
 }
