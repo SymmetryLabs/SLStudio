@@ -112,13 +112,13 @@ public class FlowerModel extends SLModel {
         points.add(new FlowerPoint(Group.STEM, Direction.A));
         points.add(new FlowerPoint(Group.PETAL1, Direction.A));
         points.add(new FlowerPoint(Group.PETAL2, Direction.A));
+        points.add(new FlowerPoint(Group.STAMEN, Direction.UP));
         points.add(new FlowerPoint(Group.PETAL2, Direction.B));
         points.add(new FlowerPoint(Group.PETAL1, Direction.B));
         points.add(new FlowerPoint(Group.STEM, Direction.B));
         points.add(new FlowerPoint(Group.STEM, Direction.C));
         points.add(new FlowerPoint(Group.PETAL1, Direction.C));
         points.add(new FlowerPoint(Group.PETAL2, Direction.C));
-        points.add(new FlowerPoint(Group.STAMEN, Direction.UP));
         for (FlowerPoint fp : points) {
             fp.setBaseLocation(fd.location);
         }
