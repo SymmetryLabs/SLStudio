@@ -20,7 +20,7 @@ public class FlowerShow implements Show {
     @Override
     public void setupLx(SLStudioLX lx) {
         FlowerPixlite pixlite = new FlowerPixlite(
-            lx, "10.200.1.103", (FlowerModel) lx.model);
+            lx, "10.200.1.101", (FlowerModel) lx.model);
         lx.addOutput(pixlite);
     }
 
