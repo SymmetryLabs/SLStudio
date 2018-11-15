@@ -4,6 +4,7 @@ import heronarts.lx.LX;
 import heronarts.lx.modulator.*;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.LXParameter;
 
 import com.symmetrylabs.shows.tree.TreeModel;
 import static com.symmetrylabs.util.MathConstants.*;
@@ -26,6 +27,10 @@ public abstract class TreeMelt extends TreeBuffer {
         new CompoundParameter("Melt", 0.5f)
             .setDescription("Amount of melt distortion");
 
+    public final BooleanParameter resetOnAuto =
+        new BooleanParameter("RstOnAu", false)
+        .setDescription("If set, level is reset when auto is turned off");
+
     private final LXModulator meltDamped = startModulator(new DampedParameter(this.melt, 2, 2, 1.5f));
     private LXModulator rot = startModulator(new SawLFO(0, 1, 39000));
     private LXModulator autoLevel = startModulator(new TriangleLFO(-0.5f, 1, startModulator(new SinLFO(3000, 7000, 19000))));
@@ -35,9 +40,17 @@ public abstract class TreeMelt extends TreeBuffer {
         addParameter("level", this.level);
         addParameter("auto", this.auto);
         addParameter("melt", this.melt);
+        addParameter("resetOnAuto", this.resetOnAuto);
         for (int i = 0; i < this.multipliers.length; ++i) {
             float r = random(0.6f, 1);
             this.multipliers[i] = r * r * r;
+        }
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        if (p == auto && resetOnAuto.getValueb()) {
+            autoLevel.setValue(1.f);
         }
     }
 
