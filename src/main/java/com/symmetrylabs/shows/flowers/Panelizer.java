@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import com.symmetrylabs.shows.flowers.FlowerRecord.Harness;
 
 /** Guesses at an initial configuration for flower records */
 public class Panelizer {
@@ -21,7 +22,7 @@ public class Panelizer {
         List<PanelConfig> configs = new ArrayList<>();
         List<String> lines;
         try {
-            lines = Files.readAllLines(FlowersModel.PANEL_FILE.toPath());
+            lines = Files.readAllLines(FlowersModelLoader.PANEL_FILE.toPath());
         } catch (IOException e) {
             System.err.println(String.format("couldn't read panel file: %s", e.getMessage()));
             return;
@@ -43,15 +44,29 @@ public class Panelizer {
 
         int p = 0;
         int f = 0;
+        int hi = 0;
+        Harness h = Harness.A;
         for (FlowerData fd : data) {
             if (p >= configs.size()) {
                 break;
             }
             PanelConfig pc = configs.get(p);
             fd.record.panelId = pc.id;
+            fd.record.harness = h;
+            fd.record.harnessIndex = hi;
+            hi++;
+            if (hi >= 9 && h == Harness.A) {
+                hi = 0;
+                h = Harness.B;
+            } else if (hi >= 9) {
+                hi = 0;
+                h = Harness.UNKNOWN;
+            }
             f++;
             if (f >= pc.count) {
                 f = 0;
+                hi = 0;
+                h = Harness.A;
                 p++;
             }
         }

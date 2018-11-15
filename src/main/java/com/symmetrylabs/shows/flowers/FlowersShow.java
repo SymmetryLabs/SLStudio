@@ -14,7 +14,7 @@ public class FlowersShow implements Show {
 
     @Override
     public SLModel buildModel() {
-        return FlowersModel.load();
+        return FlowersModelLoader.load();
     }
 
     @Override
