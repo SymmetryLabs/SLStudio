@@ -16,7 +16,6 @@ import heronarts.lx.output.LXOutputGroup;
 import heronarts.lx.output.LXDatagramOutput;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.output.ArtNetDatagram;
 import com.symmetrylabs.shows.tree.config.*;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 

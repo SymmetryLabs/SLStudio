@@ -83,6 +83,10 @@ public class ArtNetDatagram extends LXDatagram {
         this.pointIndices = indices;
     }
 
+    public void setIndices(int[] indices) {
+        this.pointIndices = indices;
+    }
+
     @Override
     public void onSend(int[] colors) {
         copyPointsGamma(colors, this.pointIndices, ARTNET_HEADER_LENGTH);
