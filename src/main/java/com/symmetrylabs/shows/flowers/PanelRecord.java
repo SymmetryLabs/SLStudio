@@ -17,10 +17,10 @@ public class PanelRecord implements Comparable<PanelRecord> {
 
     @Override
     public int compareTo(PanelRecord other) {
-        int rcompare = Integer.compare(row(), other.row());
-        if (rcompare != 0) {
-            return rcompare;
+        int ccompare = Integer.compare(col(), other.col());
+        if (ccompare != 0) {
+            return ccompare;
         }
-        return Integer.compare(col(), other.col());
+        return Integer.compare(row(), other.row());
     }
 }

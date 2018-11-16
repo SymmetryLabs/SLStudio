@@ -33,8 +33,9 @@ public class UIFlowerTool extends UI2dContainer {
         return INSTANCE;
     }
 
-    public interface SelectionListener {
+    public interface Listener {
         void onFlowerSelected(FlowerData data);
+        void onUpdate();
     }
 
     private final SLStudioLX lx;
@@ -43,7 +44,7 @@ public class UIFlowerTool extends UI2dContainer {
     private final FlowerEditor flowerEditor;
     private final UIItemList.ScrollList flowerList;
     private final UICollapsibleSection flowers;
-    private final List<SelectionListener> listeners = new ArrayList<>();
+    private final List<Listener> listeners = new ArrayList<>();
     private final BooleanParameter saveParam =
         new BooleanParameter("save").setMode(BooleanParameter.Mode.MOMENTARY);
     private final BooleanParameter runPanelizerParam =
@@ -86,20 +87,23 @@ public class UIFlowerTool extends UI2dContainer {
 
     private void onUpdate() {
         flowerList.redraw();
+        for (Listener l : listeners) {
+            l.onUpdate();
+        }
     }
 
     private void setCurrent(FlowerModel fm) {
         flowerEditor.setCurrent(fm);
-        for (SelectionListener l : listeners) {
+        for (Listener l : listeners) {
             l.onFlowerSelected(fm.getFlowerData());
         }
     }
 
-    public void addListener(SelectionListener l) {
+    public void addListener(Listener l) {
         listeners.add(l);
     }
 
-    public void removeListener(SelectionListener l) {
+    public void removeListener(Listener l) {
         listeners.remove(l);
     }
 
@@ -108,6 +112,7 @@ public class UIFlowerTool extends UI2dContainer {
         FlowerData current;
         UILabel id;
         UITextBox panel;
+        UIIntegerBox pixliteId;
         UIIntegerBox harnessIndex;
         UIDoubleBox yOverride;
         UIButton overrideHeight;
@@ -115,11 +120,14 @@ public class UIFlowerTool extends UI2dContainer {
         UIButton harnessB;
 
         StringParameter pP = new StringParameter("P");
+        DiscreteParameter pPX = new DiscreteParameter("PX", 0, 0, 256);
         BooleanParameter pHA = new BooleanParameter("HA");
         BooleanParameter pHB = new BooleanParameter("HB");
         DiscreteParameter pHI = new DiscreteParameter("HI", 0, -1, 10);
         BooleanParameter pOH = new BooleanParameter("OH");
         CompoundParameter pYO = new CompoundParameter("YO", 0, -1000, 1000);
+
+        boolean loading = false;
 
         public FlowerEditor() {
             super(0, 236, flowers.getContentWidth(), 80);
@@ -147,6 +155,7 @@ public class UIFlowerTool extends UI2dContainer {
                     onUpdate();
                 });
             pYO.addListener(p -> onUpdate());
+            pPX.setFormatter(v -> Integer.toString((int) v)).addListener(p -> onUpdate());
 
             float LH = 10;
             float H = 20;
@@ -159,7 +168,8 @@ public class UIFlowerTool extends UI2dContainer {
             float Y4 = Y3 + LH + RP;
 
             new UILabel(0, Y1, PW, LH).setLabel("PANEL").addToContainer(this);
-            new UILabel(PW + PP, Y1, getContentWidth() - PW, LH)
+            new UILabel(PW + PP, Y1, PW, LH).setLabel("PIXLITE").addToContainer(this);
+            new UILabel(2 * (PW + PP), Y1, getContentWidth() - PW, LH)
                 .setLabel("HARNESS").addToContainer(this);
 
             panel = new UITextBox(0, Y2, PW, H);
@@ -167,17 +177,22 @@ public class UIFlowerTool extends UI2dContainer {
             panel.addToContainer(this);
             panel.setEnabled(false);
 
-            harnessA = new UIButton(PW + PP, Y2, H, H);
+            pixliteId = new UIIntegerBox(PW + PP, Y2, PW, H);
+            pixliteId.setParameter(pPX);
+            pixliteId.addToContainer(this);
+            pixliteId.setEnabled(false);
+
+            harnessA = new UIButton(2 * (PW + PP), Y2, H, H);
             harnessA.setLabel("A").setParameter(pHA);
             harnessA.addToContainer(this);
             harnessA.setEnabled(false);
 
-            harnessB = new UIButton(PW + PP + H + 2, Y2, H, H);
+            harnessB = new UIButton(2 * (PW + PP) + H + 2, Y2, H, H);
             harnessB.setLabel("B").setParameter(pHB);
             harnessB.addToContainer(this);
             harnessB.setEnabled(false);
 
-            harnessIndex = new UIIntegerBox(PW + PP + 2 * (H + 2), Y2, 40, H);
+            harnessIndex = new UIIntegerBox(2 * (PW + PP) + 2 * (H + 2), Y2, PW, H);
             harnessIndex.setParameter(pHI);
             harnessIndex.addToContainer(this);
             harnessIndex.setEnabled(false);
@@ -199,15 +214,21 @@ public class UIFlowerTool extends UI2dContainer {
         void setCurrent(FlowerModel fm) {
             currentModel = fm;
             current = fm.getFlowerData();
+            loading = true;
+
             id.setLabel(String.format("FLOWER %04d", current.record.id));
             pP.setValue(current.record.panelId == null ? "" : current.record.panelId);
+            pPX.setValue(current.record.pixliteId);
             pHA.setValue(current.record.harness == FlowerRecord.Harness.A);
             pHB.setValue(current.record.harness == FlowerRecord.Harness.B);
             pHI.setValue(current.record.harnessIndex);
             pYO.setValue(current.record.yOverride);
             pOH.setValue(current.record.overrideHeight);
 
+            loading = false;
+
             panel.setEnabled(true);
+            pixliteId.setEnabled(true);
             harnessA.setEnabled(true);
             harnessB.setEnabled(true);
             harnessIndex.setEnabled(true);
@@ -218,7 +239,11 @@ public class UIFlowerTool extends UI2dContainer {
         }
 
         void onUpdate() {
+            if (loading) {
+                return;
+            }
             current.record.panelId = "".equals(pP.getString()) ? null : pP.getString();
+            current.record.pixliteId = pPX.getValuei();
             current.record.harness =
                 pHA.getValueb() ? FlowerRecord.Harness.A :
                 pHB.getValueb() ? FlowerRecord.Harness.B :

@@ -14,8 +14,12 @@ import heronarts.lx.transform.LXVector;
 public class FlowerRecord {
     public enum Harness { A, B, UNKNOWN }
 
+    public static final int UNKNOWN_HARNESS_INDEX = -1;
+    public static final int UNKNOWN_PIXLITE_ID = 0;
+
     public int id;
     public String panelId;
+    public int pixliteId;
     public Harness harness;
     public int harnessIndex;
     public float x;
@@ -24,26 +28,27 @@ public class FlowerRecord {
     public float yOverride;
 
     public FlowerRecord(int id, float x, float z) {
-        this(id, null, Harness.UNKNOWN, -1, x, z, false, 0);
+        this(id, null, UNKNOWN_PIXLITE_ID, Harness.UNKNOWN, UNKNOWN_HARNESS_INDEX, x, z, false, 0);
     }
 
     public FlowerRecord(
-        int id, String panelId, Harness harness, int harnessIndex, float x, float z) {
-        this(id, panelId, harness, harnessIndex, x, z, false, 0);
+        int id, String panelId, int pixliteId, Harness harness, int harnessIndex, float x, float z) {
+        this(id, panelId, pixliteId, harness, harnessIndex, x, z, false, 0);
     }
 
     public FlowerRecord(
-        int id, String panelId, Harness harness, int harnessIndex, float x, float z,
+        int id, String panelId, int pixliteId, Harness harness, int harnessIndex, float x, float z,
         float yOverride) {
-        this(id, panelId, harness, harnessIndex, x, z, true, yOverride);
+        this(id, panelId, pixliteId, harness, harnessIndex, x, z, true, yOverride);
     }
 
     private FlowerRecord(
-        int id, String panelId, Harness harness, int harnessIndex, float x, float z,
+        int id, String panelId, int pixliteId, Harness harness, int harnessIndex, float x, float z,
         boolean overrideHeight, float yOverride) {
 
         this.id = id;
         this.panelId = panelId;
+        this.pixliteId = pixliteId;
         this.harness = harness;
         this.harnessIndex = harnessIndex;
         this.x = x;
@@ -54,15 +59,15 @@ public class FlowerRecord {
 
     @Override
     public String toString() {
-        if (panelId == null) {
-            return String.format("%04d@?", id);
-        }
-        if (harness == Harness.UNKNOWN) {
-            return String.format("%04d@%s/?", id, panelId);
-        }
-        if (harnessIndex < 0) {
-            return String.format("%04d@%s/%s?", id, panelId, harness);
-        }
-        return String.format("%04d@%s/%s%d", id, panelId, harness, harnessIndex);
+        String panelStr =
+            panelId == null ? "?" : panelId;
+        String pixliteStr =
+            pixliteId == UNKNOWN_PIXLITE_ID ? "?" : Integer.toString(pixliteId);
+        String harnessStr =
+            harness == Harness.UNKNOWN ? "?" : harness.toString();
+        String harnessIndexStr =
+            harnessIndex == UNKNOWN_HARNESS_INDEX ? "?" : Integer.toString(harnessIndex);
+        return String.format(
+            "%04d@%s:%s/%s/%s", id, panelStr, pixliteStr, harnessStr, harnessIndexStr);
     }
 }
