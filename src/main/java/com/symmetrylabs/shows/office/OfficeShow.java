@@ -24,14 +24,14 @@ public class OfficeShow extends CubesShow implements Show {
     static final float globalRotationX = 0;
     static final float globalRotationY = 180;
     static final float globalRotationZ = 0;
-
+    static final float cuberotation = -45-45;
 
     static final TowerConfig[] TOWER_CONFIG = {
-        new TowerConfig(SP*0.f, 0, -SP*0.f, (float) Math.PI / 4, new String[] {"172", "1117", "398", "54"}),
-        new TowerConfig(SP*0.f, 0, -SP*1.f, (float) Math.PI / 4, new String[] {"106", "390"}),
-        new TowerConfig(SP*1.f, 0, -SP*1.f, (float) Math.PI / 4, new String[] {"47", "6", "418", "1118"}),
-        new TowerConfig(SP*1.f, 0, -SP*2.f, (float) Math.PI / 4, new String[] {"175", "422"}),
-        new TowerConfig(SP*2.f, 0, -SP*2.f, (float) Math.PI / 4, new String[] {"62", "1119", "192", "141"}),
+        new TowerConfig(0, 0, 0, 0, cuberotation, 0, new String[] { "47", "6", "418", "1118"}),
+        new TowerConfig(SP*1 , 0, 0, 0, cuberotation, 0, new String[] { "106", "390" }),
+        new TowerConfig(SP*1, 0, SP*1, 0, cuberotation, 0, new String[] {"172", "1117", "398", "54"}),
+        new TowerConfig(SP*2, 0, SP*1, 0, cuberotation, 0, new String[] { "175", "422"}),
+        new TowerConfig(SP*2, 0, SP*2, 0, cuberotation, 0, new String[] { "62", "1119", "192", "141"}),
     };
 
     public SLModel buildModel() {
