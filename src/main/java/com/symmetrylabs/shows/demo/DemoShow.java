@@ -24,42 +24,42 @@ public class DemoShow extends CubesShow implements Show {
 
     static final TowerConfig[] TOWER_CONFIG = {
         // group 1
-        new TowerConfig(0, 0, 48, new String[] {"92", "203", "64"}),
-        new TowerConfig(0, 0, 0, new String[] {"87", "351", "366"}),
-        new TowerConfig(-24, TOWER_RISER, 12, new String[] {"22", "10"}),
-        new TowerConfig(12, JUMP+TOWER_RISER, -25, new String[] {"85"}),
-        new TowerConfig(12, JUMP+TOWER_RISER, 25, new String[] {"94"}),
+        new TowerConfig(CubesModel.Cube.Type.SMALL, 0, 0, 0, new String[] {"92"}),
+        // new TowerConfig(0, 0, 0, new String[] {"87", "351", "366"}),
+        // new TowerConfig(-24, TOWER_RISER, 12, new String[] {"22", "10"}),
+        // new TowerConfig(12, JUMP+TOWER_RISER, -25, new String[] {"85"}),
+        // new TowerConfig(12, JUMP+TOWER_RISER, 25, new String[] {"94"}),
 
-        // group 2
-        new TowerConfig(25, TOWER_RISER, 11, new String[] {"115"}),
-        new TowerConfig(26, 2*JUMP+TOWER_RISER, 36, new String[] {"15"}),
-        new TowerConfig(51, 0, 24, new String[] {"63", "314", "71", "43"}),
+        // // group 2
+        // new TowerConfig(25, TOWER_RISER, 11, new String[] {"115"}),
+        // new TowerConfig(26, 2*JUMP+TOWER_RISER, 36, new String[] {"15"}),
+        // new TowerConfig(51, 0, 24, new String[] {"63", "314", "71", "43"}),
 
-        // group 3
-        new TowerConfig(38, 0, -14, new String[] {"70", "337", "76", "31"}),
-        new TowerConfig(63, TOWER_RISER, -2, new String[] {"182"}),
-        new TowerConfig(50, TOWER_RISER, -39, new String[] {"137"}),
+        // // group 3
+        // new TowerConfig(38, 0, -14, new String[] {"70", "337", "76", "31"}),
+        // new TowerConfig(63, TOWER_RISER, -2, new String[] {"182"}),
+        // new TowerConfig(50, TOWER_RISER, -39, new String[] {"137"}),
 
-        // group 4
-        new TowerConfig(88, 0, -14, new String[] {"17", "356", "132", "83"}),
-        new TowerConfig(76, JUMP+TOWER_RISER, 12, new String[] {"52"}),
-        new TowerConfig(63, 2*JUMP+TOWER_RISER, -26, new String[] {"11"}),
-        new TowerConfig(100, TOWER_RISER, -39, new String[] {"56"}),
-        new TowerConfig(113, 2*JUMP+TOWER_RISER, -26, new String[] {"352"}),
+        // // group 4
+        // new TowerConfig(88, 0, -14, new String[] {"17", "356", "132", "83"}),
+        // new TowerConfig(76, JUMP+TOWER_RISER, 12, new String[] {"52"}),
+        // new TowerConfig(63, 2*JUMP+TOWER_RISER, -26, new String[] {"11"}),
+        // new TowerConfig(100, TOWER_RISER, -39, new String[] {"56"}),
+        // new TowerConfig(113, 2*JUMP+TOWER_RISER, -26, new String[] {"352"}),
 
-        // group 5
-        new TowerConfig(88, 0, -65, new String[] {"120", "68", "54", "46"}),
-        new TowerConfig(63, JUMP+TOWER_RISER, -53, new String[] {"181"}),
-        new TowerConfig(76, TOWER_RISER, -90, new String[] {"38"}),
-        new TowerConfig(100, 2*JUMP+TOWER_RISER, -90, new String[] {"62"}),
+        // // group 5
+        // new TowerConfig(88, 0, -65, new String[] {"120", "68", "54", "46"}),
+        // new TowerConfig(63, JUMP+TOWER_RISER, -53, new String[] {"181"}),
+        // new TowerConfig(76, TOWER_RISER, -90, new String[] {"38"}),
+        // new TowerConfig(100, 2*JUMP+TOWER_RISER, -90, new String[] {"62"}),
 
-        // group 6
-        new TowerConfig(125, 0, -78, new String[] {"7", "127", "86"}),
-        new TowerConfig(113, JUMP+TOWER_RISER, -53, new String[] {"320"}),
+        // // group 6
+        // new TowerConfig(125, 0, -78, new String[] {"7", "127", "86"}),
+        // new TowerConfig(113, JUMP+TOWER_RISER, -53, new String[] {"320"}),
 
-        // group 7
-        new TowerConfig(112, 0, -115, new String[] {"90", "121", "32"}),
-        new TowerConfig(87, JUMP+TOWER_RISER, -103, new String[] {"156"})
+        // // group 7
+        // new TowerConfig(112, 0, -115, new String[] {"90", "121", "32"}),
+        // new TowerConfig(87, JUMP+TOWER_RISER, -103, new String[] {"156"})
 
         // group 7
 //        new TowerConfig(124, TOWER_RISER, -139, new String[] {"82", "4"}),
