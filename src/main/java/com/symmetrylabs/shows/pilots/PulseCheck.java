@@ -6,6 +6,7 @@ import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -19,6 +20,7 @@ public class PulseCheck extends SLPattern<SLModel> {
     private BooleanParameter enabled[];
     private BooleanParameter alpha;
     private DiscreteParameter vis;
+    public final SinLFO pulse = new SinLFO("pulse", 10, 90, 1500);
 
     public PulseCheck(LX lx) {
         super(lx);
@@ -26,6 +28,7 @@ public class PulseCheck extends SLPattern<SLModel> {
         this.enabled = new BooleanParameter[model.carts.size()];
         this.alpha = new BooleanParameter("alpha", true);
         this.vis = new DiscreteParameter("visible", 0, 0, 2);
+        addModulator(pulse).start();
         addParameter(vis);
         addParameter(alpha);
         for (int i = 0; i < model.carts.size(); i++) {
@@ -43,11 +46,10 @@ public class PulseCheck extends SLPattern<SLModel> {
             for (PilotsModel.Cart.Dataline d : cart.datalines){
                 for (Strip s : d.strips){
                     LXPoint p = s.getPoints().get(s.getPoints().size() - (1 + vis.getValuei()));
-                    colors[p.index] = LXColor.hsba(hues[i].getValuef(), 100, enabled[i].getValuef()* 100, enabled[i].getValuef() );
+                    colors[p.index] = LXColor.hsba(hues[i].getValuef(), pulse.getValuef(), enabled[i].getValuef()* 100, enabled[i].getValuef() );
 
-                    s = d.strips.get(0);
-                    p = s.getPoints().get(s.getPoints().size() - (1 + vis.getValuei()));
-                    colors[p.index] = LXColor.hsba(hues[i].getValuef(), 100, enabled[i].getValuef()* 100, enabled[i].getValuef() );
+                    p = s.getPoints().get(0 + vis.getValuei());
+                    colors[p.index] = LXColor.hsba(hues[i].getValuef(), pulse.getValuef(), enabled[i].getValuef()* 100, enabled[i].getValuef() );
                 }
             }
         }
