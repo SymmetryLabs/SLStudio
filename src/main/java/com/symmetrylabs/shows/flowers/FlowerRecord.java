@@ -12,15 +12,15 @@ import heronarts.lx.transform.LXVector;
  * geometry file with yOverride.
  */
 public class FlowerRecord {
-    public enum Harness { A, B, UNKNOWN }
-
+    public static final int UNKNOWN_HARNESS = 0;
     public static final int UNKNOWN_HARNESS_INDEX = -1;
     public static final int UNKNOWN_PIXLITE_ID = 0;
+    public static final int MAX_HARNESS_SIZE = 9;
 
     public int id;
     public String panelId;
     public int pixliteId;
-    public Harness harness;
+    public int harness;
     public int harnessIndex;
     public float x;
     public float z;
@@ -28,22 +28,22 @@ public class FlowerRecord {
     public float yOverride;
 
     public FlowerRecord(int id, float x, float z) {
-        this(id, null, UNKNOWN_PIXLITE_ID, Harness.UNKNOWN, UNKNOWN_HARNESS_INDEX, x, z, false, 0);
+        this(id, null, UNKNOWN_PIXLITE_ID, UNKNOWN_HARNESS, UNKNOWN_HARNESS_INDEX, x, z, false, 0);
     }
 
     public FlowerRecord(
-        int id, String panelId, int pixliteId, Harness harness, int harnessIndex, float x, float z) {
+        int id, String panelId, int pixliteId, int harness, int harnessIndex, float x, float z) {
         this(id, panelId, pixliteId, harness, harnessIndex, x, z, false, 0);
     }
 
     public FlowerRecord(
-        int id, String panelId, int pixliteId, Harness harness, int harnessIndex, float x, float z,
+        int id, String panelId, int pixliteId, int harness, int harnessIndex, float x, float z,
         float yOverride) {
         this(id, panelId, pixliteId, harness, harnessIndex, x, z, true, yOverride);
     }
 
     private FlowerRecord(
-        int id, String panelId, int pixliteId, Harness harness, int harnessIndex, float x, float z,
+        int id, String panelId, int pixliteId, int harness, int harnessIndex, float x, float z,
         boolean overrideHeight, float yOverride) {
 
         this.id = id;
@@ -64,7 +64,7 @@ public class FlowerRecord {
         String pixliteStr =
             pixliteId == UNKNOWN_PIXLITE_ID ? "?" : Integer.toString(pixliteId);
         String harnessStr =
-            harness == Harness.UNKNOWN ? "?" : harness.toString();
+            harness == UNKNOWN_HARNESS_INDEX ? "?" : Integer.toString(harness);
         String harnessIndexStr =
             harnessIndex == UNKNOWN_HARNESS_INDEX ? "?" : Integer.toString(harnessIndex);
         return String.format(

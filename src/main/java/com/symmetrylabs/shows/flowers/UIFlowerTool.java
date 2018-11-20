@@ -116,11 +116,11 @@ public class UIFlowerTool extends UI2dContainer {
         UIIntegerBox harnessIndex;
         UIDoubleBox yOverride;
         UIButton overrideHeight;
-        UIButton harnessA;
-        UIButton harnessB;
+        UIIntegerBox harness;
 
         StringParameter pP = new StringParameter("P");
         DiscreteParameter pPX = new DiscreteParameter("PX", 0, 0, 256);
+        DiscreteParameter pH = new DiscreteParameter("H", FlowerRecord.UNKNOWN_HARNESS, FlowerRecord.UNKNOWN_HARNESS, 5);
         BooleanParameter pHA = new BooleanParameter("HA");
         BooleanParameter pHB = new BooleanParameter("HB");
         DiscreteParameter pHI = new DiscreteParameter("HI", 0, -1, 10);
@@ -138,18 +138,7 @@ public class UIFlowerTool extends UI2dContainer {
 
             pP.addListener(p -> onUpdate());
             pHI.setFormatter(v -> Integer.toString((int) v)).addListener(p -> onUpdate());
-            pHA.addListener(p -> {
-                    if (pHA.getValueb()) {
-                        pHB.setValue(false);
-                    }
-                    onUpdate();
-                });
-            pHB.addListener(p -> {
-                    if (pHB.getValueb()) {
-                        pHA.setValue(false);
-                    }
-                    onUpdate();
-                });
+            pH.setFormatter(v -> Integer.toString((int) v)).addListener(p -> onUpdate());
             pOH.addListener(p -> {
                     yOverride.setEnabled(pOH.getValueb());
                     onUpdate();
@@ -182,17 +171,12 @@ public class UIFlowerTool extends UI2dContainer {
             pixliteId.addToContainer(this);
             pixliteId.setEnabled(false);
 
-            harnessA = new UIButton(2 * (PW + PP), Y2, H, H);
-            harnessA.setLabel("A").setParameter(pHA);
-            harnessA.addToContainer(this);
-            harnessA.setEnabled(false);
+            harness = new UIIntegerBox(2 * (PW + PP), Y2, PW, H);
+            harness.setParameter(pH);
+            harness.addToContainer(this);
+            harness.setEnabled(false);
 
-            harnessB = new UIButton(2 * (PW + PP) + H + 2, Y2, H, H);
-            harnessB.setLabel("B").setParameter(pHB);
-            harnessB.addToContainer(this);
-            harnessB.setEnabled(false);
-
-            harnessIndex = new UIIntegerBox(2 * (PW + PP) + 2 * (H + 2), Y2, PW, H);
+            harnessIndex = new UIIntegerBox(3 * (PW + PP), Y2, PW, H);
             harnessIndex.setParameter(pHI);
             harnessIndex.addToContainer(this);
             harnessIndex.setEnabled(false);
@@ -219,8 +203,7 @@ public class UIFlowerTool extends UI2dContainer {
             id.setLabel(String.format("FLOWER %04d", current.record.id));
             pP.setValue(current.record.panelId == null ? "" : current.record.panelId);
             pPX.setValue(current.record.pixliteId);
-            pHA.setValue(current.record.harness == FlowerRecord.Harness.A);
-            pHB.setValue(current.record.harness == FlowerRecord.Harness.B);
+            pH.setValue(current.record.harness);
             pHI.setValue(current.record.harnessIndex);
             pYO.setValue(current.record.yOverride);
             pOH.setValue(current.record.overrideHeight);
@@ -229,8 +212,7 @@ public class UIFlowerTool extends UI2dContainer {
 
             panel.setEnabled(true);
             pixliteId.setEnabled(true);
-            harnessA.setEnabled(true);
-            harnessB.setEnabled(true);
+            harness.setEnabled(true);
             harnessIndex.setEnabled(true);
             yOverride.setEnabled(pOH.getValueb());
             overrideHeight.setEnabled(true);
@@ -244,10 +226,7 @@ public class UIFlowerTool extends UI2dContainer {
             }
             current.record.panelId = "".equals(pP.getString()) ? null : pP.getString();
             current.record.pixliteId = pPX.getValuei();
-            current.record.harness =
-                pHA.getValueb() ? FlowerRecord.Harness.A :
-                pHB.getValueb() ? FlowerRecord.Harness.B :
-                FlowerRecord.Harness.UNKNOWN;
+            current.record.harness = pH.getValuei();
             current.record.harnessIndex = pHI.getValuei();
             current.record.overrideHeight = pOH.getValueb();
             current.record.yOverride = pYO.getValuef();

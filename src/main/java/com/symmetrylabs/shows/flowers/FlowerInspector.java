@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import com.symmetrylabs.shows.flowers.FlowerRecord.Harness;
 import com.symmetrylabs.shows.flowers.FlowerModel.FlowerPoint;
 
 public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Listener {
@@ -39,7 +38,7 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
         0xFFFF00FF,
     };
 
-    private static final int[] HARNESS_COLORS = new int[] {
+    private static final int[] COLORS = new int[] {
         0xFFFF0000,
         0xFFFF9900,
         0xFFFFFF00,
@@ -80,13 +79,11 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
 
             int panelColor = fd.record.panelId == null ?
                 0xFF000000 : PANEL_COLORS[fd.record.panelId.hashCode() % PANEL_COLORS.length];
-            int pixliteColor = HARNESS_COLORS[fd.record.pixliteId % HARNESS_COLORS.length];
-            int harnessColor =
-                fd.record.harness == Harness.A ? 0xFFFF0000 :
-                fd.record.harness == Harness.B ? 0xFF00FF00 :
-                0xFF000000;
-            int harnessIndexColor = fd.record.harnessIndex < 0 ?
-                0xFF000000 : HARNESS_COLORS[fd.record.harnessIndex];
+            int pixliteColor = COLORS[fd.record.pixliteId % COLORS.length];
+            int harnessColor = fd.record.harness == FlowerRecord.UNKNOWN_HARNESS ?
+                0xFF000000 : COLORS[fd.record.harness % COLORS.length];
+            int harnessIndexColor = fd.record.harnessIndex == FlowerRecord.UNKNOWN_HARNESS_INDEX ?
+                0xFF000000 : COLORS[fd.record.harnessIndex];
 
             boolean matches =
                 activePanel == null

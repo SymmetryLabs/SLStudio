@@ -14,18 +14,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AssignablePixlite extends LXOutputGroup {
-    private static final int NUM_DATALINES = 16;
+    private static final int DEFAULT_NUM_DATALINES = 16;
 
     public final String ipAddress;
     private final List<Dataline> datalines = new ArrayList<>();
 
     public AssignablePixlite(LX lx, String ipAddress) {
+        this(lx, ipAddress, DEFAULT_NUM_DATALINES);
+    }
+
+    public AssignablePixlite(LX lx, String ipAddress, int numDatalines) {
         super(lx);
         this.ipAddress = ipAddress;
 
         try {
             int portIndex = 1;
-            for (int i = 1; i < NUM_DATALINES + 1; i++) {
+            for (int i = 1; i < numDatalines + 1; i++) {
                 Dataline dataline = new Dataline(lx, ipAddress, i);
                 datalines.add(dataline);
                 addChild(dataline);

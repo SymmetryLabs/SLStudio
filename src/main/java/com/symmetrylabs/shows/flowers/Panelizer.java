@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import com.symmetrylabs.shows.flowers.FlowerRecord.Harness;
 
 /** Guesses at an initial configuration for flower records */
 public class Panelizer {
@@ -45,7 +44,7 @@ public class Panelizer {
         int p = 0;
         int f = 0;
         int hi = 0;
-        Harness h = Harness.A;
+        int h = 1;
         for (FlowerData fd : data) {
             if (p >= configs.size()) {
                 break;
@@ -55,18 +54,18 @@ public class Panelizer {
             fd.record.harness = h;
             fd.record.harnessIndex = hi;
             hi++;
-            if (hi >= 9 && h == Harness.A) {
+            if (hi >= 9 && h < 4) {
                 hi = 0;
-                h = Harness.B;
+                h++;
             } else if (hi >= 9) {
                 hi = 0;
-                h = Harness.UNKNOWN;
+                h = FlowerRecord.UNKNOWN_HARNESS;
             }
             f++;
             if (f >= pc.count) {
                 f = 0;
                 hi = 0;
-                h = Harness.A;
+                h = 1;
                 p++;
             }
         }
