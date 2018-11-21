@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1542327950453,
+  "timestamp": 1542766137746,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5344827584922314,
       "crossfaderBlendMode": 0,
       "speed": 1.7961716651916504,
-      "focusedChannel": 5,
+      "focusedChannel": 13,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -155,8 +155,8 @@
             "parameters": {
               "label": "TreeSphericalWave",
               "input": 0.0,
-              "yPos": 221.4677276611328,
-              "xPos": 0.0,
+              "yPos": 165.6840362548828,
+              "xPos": -56.4321174621582,
               "zPos": 0.0,
               "speed": 0.0010000000474974513,
               "falloff": 0.0,
@@ -228,8 +228,8 @@
               "label": "TreeVortex",
               "speed": 2000.0,
               "size": 48.0,
-              "xPos": 0.0,
-              "yPos": 221.4677276611328,
+              "xPos": -56.4321174621582,
+              "yPos": 165.6840362548828,
               "xSlope": 0.20000000298023224,
               "ySlope": 0.5,
               "zSlope": 0.30000001192092896
@@ -345,8 +345,8 @@
               "label": "TreeVortex",
               "speed": 3180.893510309278,
               "size": 46.920000024139874,
-              "xPos": 18.17018697179435,
-              "yPos": 191.17141516692146,
+              "xPos": -56.4321174621582,
+              "yPos": 165.6840362548828,
               "xSlope": 0.20000000298023224,
               "ySlope": 0.5,
               "zSlope": 0.30000001192092896
@@ -1385,7 +1385,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -1396,7 +1396,7 @@
         "warps": [],
         "effects": [],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 2,
         "patterns": [
           {
             "id": 4094,
@@ -1405,9 +1405,39 @@
             "parameters": {
               "label": "SolidColor",
               "color/hue": 0.0,
-              "color/brightness": 67.00000073760748,
+              "color/brightness": 67.05882263183594,
               "color/saturation": 0.0,
               "color": -5526613
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4933,
+            "class": "com.symmetrylabs.shows.tree.TreeModelingPattern",
+            "modulationColor": -1113857,
+            "parameters": {
+              "label": "TreeModeling",
+              "SibBri": 0.4000000059604645
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4935,
+            "class": "com.symmetrylabs.shows.tree.TreeModelingPattern",
+            "modulationColor": -65280,
+            "parameters": {
+              "label": "TreeModeling",
+              "SibBri": 0.4000000059604645
             },
             "modulation": {
               "modulators": [],
@@ -1453,7 +1483,7 @@
       "modulationColor": -16711831,
       "parameters": {
         "label": "Audio",
-        "enabled": true,
+        "enabled": false,
         "mode": 0
       },
       "meter": {
@@ -1462,7 +1492,7 @@
         "modulationColor": -16711858,
         "parameters": {
           "label": "Meter",
-          "running": true,
+          "running": false,
           "trigger": false,
           "gain": -2.8799999999999937,
           "range": 68.7,
@@ -1524,7 +1554,7 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 42,
+        "id": 41,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
         "modulationColor": -1442048,
         "parameters": {
@@ -1537,20 +1567,6 @@
         }
       },
       "treeModelingTool": {},
-      "scheduleControls": {
-        "id": 39,
-        "class": "com.symmetrylabs.shows.tree.ScheduleControls",
-        "modulationColor": -1965825,
-        "parameters": {
-          "label": "",
-          "running": false,
-          "trigger": false,
-          "startHour": 0,
-          "startMinute": 1,
-          "endHour": 0,
-          "endMinute": 1
-        }
-      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -1671,8 +1687,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 474.32340549223574,
-        "theta": 4.350000000000017,
-        "phi": -0.09900000000000034,
+        "theta": 4.191000000000012,
+        "phi": 0.4979999999999999,
         "positionX": 72.0,
         "positionY": 108.05232238769531,
         "positionZ": -76.97056579589844
