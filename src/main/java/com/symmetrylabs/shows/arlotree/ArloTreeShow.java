@@ -13,6 +13,7 @@ import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.shows.arlo.ArloXfadeTimer;
 import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.shows.tree.config.*;
 import com.symmetrylabs.shows.tree.ui.*;
@@ -93,5 +94,11 @@ public class ArloTreeShow extends TreeShow {
                 }
             }
         }
+    }
+
+    @Override
+    public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
+        super.setupUi(lx, ui);
+        ArloXfadeTimer.attach(lx, ui);
     }
 }
