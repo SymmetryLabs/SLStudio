@@ -40,13 +40,15 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
 
     private static final int[] COLORS = new int[] {
         0xFFFF0000,
+        0xFFFF4400,
         0xFFFF9900,
         0xFFFFFF00,
+        0xFF66FF00,
         0xFF00FF00,
-        0xFF00FF99,
+        0xFF00FFBB,
         0xFF00FFFF,
         0xFF0000FF,
-        0xFF8800FF,
+        0xFFAA00FF,
         0xFFFF00FF,
     };
 

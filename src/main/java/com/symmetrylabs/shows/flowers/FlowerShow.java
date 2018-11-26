@@ -19,7 +19,7 @@ public class FlowerShow implements Show {
     public SLModel buildModel() {
         ArrayList<FlowerModel> flowers = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
-            FlowerData fd = new FlowerData(new LXVector(10 * i, 0, 0));
+            FlowerData fd = new FlowerData(new LXVector(14.f * (int) (i / 3), 0, 14.f * (i % 3)));
             flowers.add(FlowerModel.create(fd));
         }
         return new SLModel(new FlowerFixture(flowers));
@@ -27,8 +27,7 @@ public class FlowerShow implements Show {
 
     @Override
     public void setupLx(SLStudioLX lx) {
-        FlowerPixlite pixlite = new FlowerPixlite(
-            lx, "10.200.1.101", lx.model);
+        FlowerPixlite pixlite = new FlowerPixlite(lx, "10.200.1.103", lx.model);
         lx.addOutput(pixlite);
     }
 
@@ -41,6 +40,12 @@ public class FlowerShow implements Show {
             super(lx, ip);
             addPixliteOutput(
                 new PointsGrouping("1").addPoints(model.getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("2").addPoints(model.getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("3").addPoints(model.getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("4").addPoints(model.getPoints()));
         }
 
         @Override

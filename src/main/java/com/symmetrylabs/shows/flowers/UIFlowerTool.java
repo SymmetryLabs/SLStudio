@@ -21,9 +21,10 @@ import java.util.List;
 public class UIFlowerTool extends UI2dContainer {
     private static UIFlowerTool INSTANCE;
 
-    public static void attach(SLStudioLX lx, SLStudioLX.UI ui) {
+    public static UIFlowerTool attach(SLStudioLX lx, SLStudioLX.UI ui) {
         INSTANCE = new UIFlowerTool(lx, ui);
         INSTANCE.addToContainer(ui.rightPane.model);
+        return INSTANCE;
     }
 
     static UIFlowerTool get() {

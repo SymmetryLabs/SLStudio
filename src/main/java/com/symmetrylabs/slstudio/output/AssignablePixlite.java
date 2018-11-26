@@ -24,13 +24,17 @@ public class AssignablePixlite extends LXOutputGroup {
     }
 
     public AssignablePixlite(LX lx, String ipAddress, int numDatalines) {
+        this(lx, ipAddress, numDatalines, Dataline.DEFAULT_DATALINE_NUM_POINTS);
+    }
+
+    public AssignablePixlite(LX lx, String ipAddress, int numDatalines, int datalineNumPoints) {
         super(lx);
         this.ipAddress = ipAddress;
 
         try {
             int portIndex = 1;
             for (int i = 1; i < numDatalines + 1; i++) {
-                Dataline dataline = new Dataline(lx, ipAddress, i);
+                Dataline dataline = new Dataline(lx, ipAddress, i, datalineNumPoints);
                 datalines.add(dataline);
                 addChild(dataline);
             }
@@ -45,19 +49,25 @@ public class AssignablePixlite extends LXOutputGroup {
     }
 
     public class Dataline extends LXDatagramOutput {
-        private static final int DATALINE_NUM_POINTS = 600; // arbitrary
+        private static final int DEFAULT_DATALINE_NUM_POINTS = 300; // arbitrary
         private static final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
 
         private final List<ArtNetDatagram> artNetDatagrams = new ArrayList<>();
         public final String ipAddress;
         public final int index;
         private final int numUniverses;
+        private final int datalineNumPoints;
 
         public Dataline(LX lx, String ipAddress, int index) throws SocketException {
+            this(lx, ipAddress, index, DEFAULT_DATALINE_NUM_POINTS);
+        }
+
+        public Dataline(LX lx, String ipAddress, int index, int datalineNumPoints) throws SocketException {
             super(lx);
             this.ipAddress = ipAddress;
             this.index = index;
-            this.numUniverses = (DATALINE_NUM_POINTS / MAX_NUM_POINTS_PER_UNIVERSE) + 1;
+            this.datalineNumPoints = datalineNumPoints;
+            this.numUniverses = (datalineNumPoints / MAX_NUM_POINTS_PER_UNIVERSE) + 1;
             createDatagrams(lx, index*10);
         }
 
@@ -76,6 +86,7 @@ public class AssignablePixlite extends LXOutputGroup {
                     ? (indices.length % MAX_NUM_POINTS_PER_UNIVERSE)
                     : MAX_NUM_POINTS_PER_UNIVERSE;
 
+                System.out.println((String.format("%d %d %d", counter, numDatagramIndices, indices.length)));
                 int[] datagramIndices = new int[numDatagramIndices];
                 for (int i1 = 0; i1 < numDatagramIndices; i1++) {
                     datagramIndices[i1] = indices[counter++];

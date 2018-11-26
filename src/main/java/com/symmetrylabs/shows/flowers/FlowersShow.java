@@ -14,11 +14,12 @@ import java.util.HashSet;
 import com.symmetrylabs.slstudio.output.AssignablePixlite;
 import com.symmetrylabs.slstudio.output.AssignablePixlite.Dataline;
 
-public class FlowersShow implements Show {
+public class FlowersShow implements Show, UIFlowerTool.Listener {
     public static final String SHOW_NAME = "flowers";
 
     private final HashMap<Integer, AssignablePixlite> pixlites = new HashMap<>();
     private static final String PIXLITE_IP_FORMAT = "10.200.1.%d";
+    private SLStudioLX lx;
 
     @Override
     public SLModel buildModel() {
@@ -27,6 +28,7 @@ public class FlowersShow implements Show {
 
     @Override
     public void setupLx(SLStudioLX lx) {
+        this.lx = lx;
         updatePixlites(lx, (FlowersModel) lx.model);
     }
 
@@ -52,7 +54,7 @@ public class FlowersShow implements Show {
                 harness.put(fr.harness, emptyDataLine());
             }
             if (fr.harnessIndex != FlowerRecord.UNKNOWN_HARNESS_INDEX) {
-                harness.get(fr.harness).set(fr.harnessIndex, fm);
+                harness.get(fr.harness).set(fr.harnessIndex - 1, fm);
             }
         }
 
@@ -67,7 +69,9 @@ public class FlowersShow implements Show {
         }
         for (Integer id : toAdd) {
             String ip = String.format(PIXLITE_IP_FORMAT, id);
-            AssignablePixlite pixlite = new AssignablePixlite(lx, ip, 4);
+            System.out.println(String.format("adding new pixlite %s", ip));
+            // 4 datalines, 90 (9 flowers, 10 LEDs/flower) points per dataline
+            AssignablePixlite pixlite = new AssignablePixlite(lx, ip, 4, 90);
             pixlites.put(id, pixlite);
             lx.addOutput(pixlite);
         }
@@ -99,7 +103,7 @@ public class FlowersShow implements Show {
 
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
-        UIFlowerTool.attach(lx, ui);
+        UIFlowerTool.attach(lx, ui).addListener(this);
     }
 
     private List<FlowerModel> emptyDataLine() {
@@ -108,5 +112,13 @@ public class FlowersShow implements Show {
             fms.add(null);
         }
         return fms;
+    }
+
+    @Override
+    public void onFlowerSelected(FlowerData d) {}
+
+    @Override
+    public void onUpdate() {
+        updatePixlites(lx, (FlowersModel) lx.model);
     }
 }
