@@ -17,6 +17,7 @@ import heronarts.p3lx.ui.studio.UICollapsibleSection;
 import processing.core.PConstants;
 import java.util.ArrayList;
 import java.util.List;
+import heronarts.p3lx.ui.component.UIItemList.ScrollList;
 
 public class UIFlowerTool extends UI2dContainer {
     private static UIFlowerTool INSTANCE;
@@ -45,6 +46,7 @@ public class UIFlowerTool extends UI2dContainer {
     private final FlowerEditor flowerEditor;
     private final UIItemList.ScrollList flowerList;
     private final UICollapsibleSection flowers;
+    private final PixlitePane pixlites;
     private final List<Listener> listeners = new ArrayList<>();
     private final BooleanParameter saveParam =
         new BooleanParameter("save").setMode(BooleanParameter.Mode.MOMENTARY);
@@ -84,10 +86,14 @@ public class UIFlowerTool extends UI2dContainer {
         flowerEditor.addToContainer(flowers);
 
         addTopLevelComponent(flowers);
+
+        pixlites = new PixlitePane();
+        addTopLevelComponent(pixlites);
     }
 
     private void onUpdate() {
         flowerList.redraw();
+        pixlites.redraw();
         for (Listener l : listeners) {
             l.onUpdate();
         }
@@ -199,17 +205,7 @@ public class UIFlowerTool extends UI2dContainer {
         void setCurrent(FlowerModel fm) {
             currentModel = fm;
             current = fm.getFlowerData();
-            loading = true;
-
-            id.setLabel(String.format("FLOWER %04d", current.record.id));
-            pP.setValue(current.record.panelId == null ? "" : current.record.panelId);
-            pPX.setValue(current.record.pixliteId);
-            pH.setValue(current.record.harness);
-            pHI.setValue(current.record.harnessIndex);
-            pYO.setValue(current.record.yOverride);
-            pOH.setValue(current.record.overrideHeight);
-
-            loading = false;
+            reload();
 
             panel.setEnabled(true);
             pixliteId.setEnabled(true);
@@ -219,6 +215,18 @@ public class UIFlowerTool extends UI2dContainer {
             overrideHeight.setEnabled(true);
 
             redraw();
+        }
+
+        void reload() {
+            loading = true;
+            id.setLabel(String.format("FLOWER %04d", current.record.id));
+            pP.setValue(current.record.panelId == null ? "" : current.record.panelId);
+            pPX.setValue(current.record.pixliteId);
+            pH.setValue(current.record.harness);
+            pHI.setValue(current.record.harnessIndex);
+            pYO.setValue(current.record.yOverride);
+            pOH.setValue(current.record.overrideHeight);
+            loading = false;
         }
 
         void onUpdate() {
@@ -238,6 +246,28 @@ public class UIFlowerTool extends UI2dContainer {
         }
     }
 
+    class PixlitePane extends UICollapsibleSection {
+        UIItemList.ScrollList pixliteList;
+
+        public PixlitePane() {
+            super(ui, 0, 360, UIFlowerTool.this.getContentWidth(), 180);
+            setTitle("PIXLITES");
+
+            pixliteList =
+                new UIItemList.ScrollList(ui, 0, 2, getContentWidth(), getContentHeight());
+            updatePixliteList();
+            pixliteList.addToContainer(this);
+        }
+
+        private void updatePixliteList() {
+            List<PixliteItem> items = new ArrayList<>();
+            for (Integer pixliteId : model.getPixliteIds()) {
+                items.add(new PixliteItem(pixliteId));
+            }
+            pixliteList.setItems(items);
+        }
+    }
+
     class FlowerItem extends UIItemList.AbstractItem {
         private final FlowerModel model;
 
@@ -253,6 +283,24 @@ public class UIFlowerTool extends UI2dContainer {
         @Override
         public void onFocus() {
             UIFlowerTool.this.setCurrent(model);
+        }
+    }
+
+    class PixliteItem extends UIItemList.AbstractItem {
+        private final int id;
+
+        PixliteItem(int id) {
+            this.id = id;
+        }
+
+        @Override
+        public String getLabel() {
+            return String.format("%d", id);
+        }
+
+        @Override
+        public void onFocus() {
+            System.out.println(id);
         }
     }
 }

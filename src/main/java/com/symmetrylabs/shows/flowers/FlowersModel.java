@@ -14,14 +14,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-import processing.core.PGraphics;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import processing.core.PGraphics;
 
 public class FlowersModel extends SLModel implements LXModel.Listener {
     private ReadableObj model;
     private List<FlowerModel> flowers;
     private List<PanelRecord> panels;
+    private HashMap<Integer, HashMap<Integer, List<FlowerModel>>> flowerByHarness = new HashMap<>();
 
     protected FlowersModel(List<FlowerModel> flowers, ReadableObj model) {
         super(new FlowerFixture(flowers));
@@ -31,7 +35,7 @@ public class FlowersModel extends SLModel implements LXModel.Listener {
         }
         this.model = model;
         panels = new ArrayList<>();
-        recalculatePanels();
+        onDataUpdated();
     }
 
     public List<FlowerModel> getFlowers() {
@@ -42,7 +46,18 @@ public class FlowersModel extends SLModel implements LXModel.Listener {
         return panels;
     }
 
-    public void recalculatePanels() {
+    public Set<Integer> getPixliteIds() {
+        return flowerByHarness.keySet();
+    }
+
+    public Map<Integer, List<FlowerModel>> getPixliteHarnesses(Integer pixliteId) {
+        if (!flowerByHarness.containsKey(pixliteId) || flowerByHarness.get(pixliteId) == null) {
+            return null;
+        }
+        return flowerByHarness.get(pixliteId);
+    }
+
+    public void onDataUpdated() {
         HashSet<String> toRemove = new HashSet<>();
         HashSet<String> toAdd = new HashSet<>();
         for (FlowerModel fm : flowers) {
@@ -60,11 +75,31 @@ public class FlowersModel extends SLModel implements LXModel.Listener {
             panels.add(new PanelRecord(id));
         }
         Collections.sort(panels);
+
+        for (FlowerModel fm : flowers) {
+            FlowerRecord fr = fm.getFlowerData().record;
+            if (fr.pixliteId == FlowerRecord.UNKNOWN_PIXLITE_ID ||
+                    fr.harness == FlowerRecord.UNKNOWN_HARNESS ||
+                    fr.harnessIndex == FlowerRecord.UNKNOWN_HARNESS_INDEX) {
+                continue;
+            }
+
+            if (!flowerByHarness.containsKey(fr.pixliteId)) {
+                flowerByHarness.put(fr.pixliteId, new HashMap<>());
+            }
+            HashMap<Integer, List<FlowerModel>> harness = flowerByHarness.get(fr.pixliteId);
+            if (!harness.containsKey(fr.harness)) {
+                harness.put(fr.harness, emptyDataLine());
+            }
+            if (fr.harnessIndex != FlowerRecord.UNKNOWN_HARNESS_INDEX) {
+                harness.get(fr.harness).set(fr.harnessIndex - 1, fm);
+            }
+        }
     }
 
     @Override
     public void onModelUpdated(LXModel model) {
-        recalculatePanels();
+        onDataUpdated();
         update(true, false);
     }
 
@@ -98,5 +133,13 @@ public class FlowersModel extends SLModel implements LXModel.Listener {
                 points.addAll(model.getPoints());
             }
         }
+    }
+
+    private List<FlowerModel> emptyDataLine() {
+        List<FlowerModel> fms = new ArrayList<>();
+        for (int i = 0; i < FlowerRecord.MAX_HARNESS_SIZE; i++) {
+            fms.add(null);
+        }
+        return fms;
     }
 }

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import com.symmetrylabs.slstudio.output.AssignablePixlite;
 import com.symmetrylabs.slstudio.output.AssignablePixlite.Dataline;
 
@@ -34,28 +35,10 @@ public class FlowersShow implements Show, UIFlowerTool.Listener {
 
     private void updatePixlites(SLStudioLX lx, FlowersModel model) {
         HashSet<Integer> allPixliteIds = new HashSet<>();
-        HashMap<Integer, HashMap<Integer, List<FlowerModel>>> all = new HashMap<>();
 
         for (FlowerModel fm : model.getFlowers()) {
             FlowerRecord fr = fm.getFlowerData().record;
             allPixliteIds.add(fr.pixliteId);
-
-            if (fr.pixliteId == FlowerRecord.UNKNOWN_PIXLITE_ID ||
-                fr.harness == FlowerRecord.UNKNOWN_HARNESS ||
-                fr.harnessIndex == FlowerRecord.UNKNOWN_HARNESS_INDEX) {
-                continue;
-            }
-
-            if (!all.containsKey(fr.pixliteId)) {
-                all.put(fr.pixliteId, new HashMap<>());
-            }
-            HashMap<Integer, List<FlowerModel>> harness = all.get(fr.pixliteId);
-            if (!harness.containsKey(fr.harness)) {
-                harness.put(fr.harness, emptyDataLine());
-            }
-            if (fr.harnessIndex != FlowerRecord.UNKNOWN_HARNESS_INDEX) {
-                harness.get(fr.harness).set(fr.harnessIndex - 1, fm);
-            }
         }
 
         HashSet<Integer> toRemove = new HashSet<>(pixlites.keySet());
@@ -78,14 +61,15 @@ public class FlowersShow implements Show, UIFlowerTool.Listener {
 
         for (Integer pixliteId : pixlites.keySet()) {
             AssignablePixlite pixlite = pixlites.get(pixliteId);
-            if (!all.containsKey(pixliteId) || all.get(pixliteId) == null) {
+            Map<Integer, List<FlowerModel>> harnesses = model.getPixliteHarnesses(pixliteId);
+            if (harnesses == null) {
                 continue;
             }
-            for (Integer harness : all.get(pixliteId).keySet()) {
+            for (Integer harness : harnesses.keySet()) {
                 Dataline dataline = pixlite.get(harness);
                 int[] indexes = new int[9 * 10]; // 9 flowers with 10 points per flower
                 int nextIndex = 0;
-                for (FlowerModel fm : all.get(pixliteId).get(harness)) {
+                for (FlowerModel fm : harnesses.get(harness)) {
                     if (fm == null) {
                         for (int i = 0; i < 10; i++) {
                             indexes[nextIndex++] = -1;
@@ -104,14 +88,6 @@ public class FlowersShow implements Show, UIFlowerTool.Listener {
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         UIFlowerTool.attach(lx, ui).addListener(this);
-    }
-
-    private List<FlowerModel> emptyDataLine() {
-        List<FlowerModel> fms = new ArrayList<>();
-        for (int i = 0; i < FlowerRecord.MAX_HARNESS_SIZE; i++) {
-            fms.add(null);
-        }
-        return fms;
     }
 
     @Override
