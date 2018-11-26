@@ -76,6 +76,7 @@ public class FlowersModel extends SLModel implements LXModel.Listener {
         }
         Collections.sort(panels);
 
+        flowerByHarness.clear();
         for (FlowerModel fm : flowers) {
             FlowerRecord fr = fm.getFlowerData().record;
             if (fr.pixliteId == FlowerRecord.UNKNOWN_PIXLITE_ID ||

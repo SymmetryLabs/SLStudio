@@ -94,12 +94,12 @@ public class UIFlowerTool extends UI2dContainer {
     }
 
     private void onUpdate() {
-        flowerEditor.reload();
-        pixlites.reload();
-        flowerList.redraw();
         for (Listener l : listeners) {
             l.onUpdate();
         }
+        flowerEditor.reload();
+        pixlites.reload();
+        flowerList.redraw();
     }
 
     private void setCurrentFlower(FlowerModel fm) {
@@ -227,6 +227,9 @@ public class UIFlowerTool extends UI2dContainer {
         }
 
         void reload() {
+            if (current == null) {
+                return;
+            }
             loading = true;
             id.setLabel(String.format("FLOWER %04d", current.record.id));
             pP.setValue(current.record.panelId == null ? "" : current.record.panelId);
@@ -261,25 +264,132 @@ public class UIFlowerTool extends UI2dContainer {
         UILabel selectedLabel;
         UILabel harnessLabels[];
 
+        DiscreteParameter swapPixWithP = new DiscreteParameter("swapWith", 2, 2, 256);
+        DiscreteParameter swapHarness1P = new DiscreteParameter("swapH1", 1, 1, 5);
+        DiscreteParameter swapHarness2P = new DiscreteParameter("swapH2", 2, 1, 5);
+
         public PixlitePane() {
-            super(ui, 0, 360, UIFlowerTool.this.getContentWidth(), 300);
+            super(ui, 0, 360, UIFlowerTool.this.getContentWidth(), 350);
             setTitle("PIXLITES");
 
             pixliteList =
-                new UIItemList.ScrollList(ui, 0, 2, getContentWidth(), getContentHeight() - 140);
+                new UIItemList.ScrollList(ui, 0, 2, getContentWidth(), getContentHeight() - 190);
             pixliteList.addToContainer(this);
 
-            float y = getContentHeight() - 135;
-            selectedLabel = new UILabel(0, y, getContentWidth(), 20);
+            float y = getContentHeight() - 185;
+            selectedLabel = new UILabel(4, y, getContentWidth(), 20);
             selectedLabel.addToContainer(this);
             y += 20;
 
             harnessLabels = new UILabel[4];
             for (int i = 0; i < 4; i++) {
-                harnessLabels[i] = new UILabel(0, y + i * 16, getContentWidth(), 14);
+                harnessLabels[i] = new UILabel(4, y + i * 16, getContentWidth(), 14);
                 harnessLabels[i].addToContainer(this);
             }
+            y += 4 * 16 + 12;
+
+            new UILabel(4, y, getContentWidth(), 14).setLabel("QUICK FIXES").addToContainer(this);
+            y += 18;
+
+            swapPixWithP.setFormatter(v -> Integer.toString((int) v));
+            new UILabel(4, y, 100, 20)
+                .setLabel("Swap with pixlite")
+                .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
+                .addToContainer(this);
+            new UIIntegerBox(100, y, 40, 20)
+                .setParameter(swapPixWithP)
+                .addToContainer(this);
+            final BooleanParameter swapPixGo =
+                new BooleanParameter("swap", false).setMode(BooleanParameter.Mode.MOMENTARY);
+            swapPixGo.addListener(p -> {
+                    if (swapPixGo.getValueb()) {
+                        runSwapPixlite();
+                    }
+                });
+            new UIButton(145, y, 40, 20)
+                .setLabel("SWAP")
+                .setParameter(swapPixGo)
+                .addToContainer(this);
+            y += 22;
+
+            swapHarness1P.setFormatter(v -> Integer.toString((int) v));
+            swapHarness2P.setFormatter(v -> Integer.toString((int) v));
+            new UILabel(4, y, 80, 20)
+                .setLabel("Swap harness")
+                .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
+                .addToContainer(this);
+            new UIIntegerBox(80, y, 40, 20)
+                .setParameter(swapHarness1P)
+                .addToContainer(this);
+            new UILabel(120, y, 35, 20)
+                .setLabel("with")
+                .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+                .addToContainer(this);
+            new UIIntegerBox(155, y, 40, 20)
+                .setParameter(swapHarness2P)
+                .addToContainer(this);
+
+            final BooleanParameter swapHarnessGo =
+                new BooleanParameter("swap", false).setMode(BooleanParameter.Mode.MOMENTARY);
+            swapHarnessGo.addListener(p -> {
+                    if (swapHarnessGo.getValueb()) {
+                        runSwapHarness();
+                    }
+                });
+            new UIButton(200, y, 40, 20)
+                .setLabel("SWAP")
+                .setParameter(swapHarnessGo)
+                .addToContainer(this);
+
             reload();
+        }
+
+        void runSwapPixlite() {
+            int a = selectedPixlite;
+            int b = swapPixWithP.getValuei();
+
+            for (FlowerModel fm : model.getFlowers()) {
+                FlowerData fd = fm.getFlowerData();
+                if (fd.record.pixliteId == a) {
+                    fd.record.pixliteId = b;
+                } else if (fd.record.pixliteId == b) {
+                    fd.record.pixliteId = a;
+                }
+            }
+
+            model.onDataUpdated();
+            UIFlowerTool.this.onUpdate();
+
+            selectedPixlite = b;
+            swapPixWithP.setValue(a);
+
+            List<? extends UIItemList.Item> items = pixliteList.getItems();
+            for (int i = 0; i < items.size(); i++) {
+                PixliteItem pi = (PixliteItem) items.get(i);
+                if (pi.id == selectedPixlite) {
+                    pixliteList.setFocusIndex(i);
+                    break;
+                }
+            }
+        }
+
+        void runSwapHarness() {
+            int a = swapHarness1P.getValuei();
+            int b = swapHarness2P.getValuei();
+
+            for (FlowerModel fm : model.getFlowers()) {
+                FlowerData fd = fm.getFlowerData();
+                if (fd.record.pixliteId == selectedPixlite) {
+                    if (fd.record.harness == a) {
+                        fd.record.harness = b;
+                    } else if (fd.record.harness == b) {
+                        fd.record.harness = a;
+                    }
+                }
+            }
+
+            model.onDataUpdated();
+            UIFlowerTool.this.onUpdate();
         }
 
         void reload() {
