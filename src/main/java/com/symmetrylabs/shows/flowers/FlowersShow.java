@@ -19,7 +19,7 @@ public class FlowersShow implements Show, UIFlowerTool.Listener {
     public static final String SHOW_NAME = "flowers";
 
     private final HashMap<Integer, AssignablePixlite> pixlites = new HashMap<>();
-    private static final String PIXLITE_IP_FORMAT = "10.200.1.%d";
+    static final String PIXLITE_IP_FORMAT = "10.200.1.%d";
     private SLStudioLX lx;
 
     @Override
@@ -92,6 +92,9 @@ public class FlowersShow implements Show, UIFlowerTool.Listener {
 
     @Override
     public void onFlowerSelected(FlowerData d) {}
+
+    @Override
+    public void onPixliteSelected(int pixliteId) {}
 
     @Override
     public void onUpdate() {

@@ -17,6 +17,7 @@ import heronarts.p3lx.ui.studio.UICollapsibleSection;
 import processing.core.PConstants;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import heronarts.p3lx.ui.component.UIItemList.ScrollList;
 
 public class UIFlowerTool extends UI2dContainer {
@@ -37,6 +38,7 @@ public class UIFlowerTool extends UI2dContainer {
 
     public interface Listener {
         void onFlowerSelected(FlowerData data);
+        void onPixliteSelected(int pixliteId);
         void onUpdate();
     }
 
@@ -92,17 +94,24 @@ public class UIFlowerTool extends UI2dContainer {
     }
 
     private void onUpdate() {
+        flowerEditor.reload();
+        pixlites.reload();
         flowerList.redraw();
-        pixlites.redraw();
         for (Listener l : listeners) {
             l.onUpdate();
         }
     }
 
-    private void setCurrent(FlowerModel fm) {
+    private void setCurrentFlower(FlowerModel fm) {
         flowerEditor.setCurrent(fm);
         for (Listener l : listeners) {
             l.onFlowerSelected(fm.getFlowerData());
+        }
+    }
+
+    private void setCurrentPixlite(int pixliteId) {
+        for (Listener l : listeners) {
+            l.onPixliteSelected(pixliteId);
         }
     }
 
@@ -130,7 +139,7 @@ public class UIFlowerTool extends UI2dContainer {
         DiscreteParameter pH = new DiscreteParameter("H", FlowerRecord.UNKNOWN_HARNESS, FlowerRecord.UNKNOWN_HARNESS, 5);
         BooleanParameter pHA = new BooleanParameter("HA");
         BooleanParameter pHB = new BooleanParameter("HB");
-        DiscreteParameter pHI = new DiscreteParameter("HI", 0, -1, 10);
+        DiscreteParameter pHI = new DiscreteParameter("HI", 0, 0, 10);
         BooleanParameter pOH = new BooleanParameter("OH");
         CompoundParameter pYO = new CompoundParameter("YO", 0, -1000, 1000);
 
@@ -248,23 +257,70 @@ public class UIFlowerTool extends UI2dContainer {
 
     class PixlitePane extends UICollapsibleSection {
         UIItemList.ScrollList pixliteList;
+        int selectedPixlite;
+        UILabel selectedLabel;
+        UILabel harnessLabels[];
 
         public PixlitePane() {
-            super(ui, 0, 360, UIFlowerTool.this.getContentWidth(), 180);
+            super(ui, 0, 360, UIFlowerTool.this.getContentWidth(), 300);
             setTitle("PIXLITES");
 
             pixliteList =
-                new UIItemList.ScrollList(ui, 0, 2, getContentWidth(), getContentHeight());
-            updatePixliteList();
+                new UIItemList.ScrollList(ui, 0, 2, getContentWidth(), getContentHeight() - 140);
             pixliteList.addToContainer(this);
+
+            float y = getContentHeight() - 135;
+            selectedLabel = new UILabel(0, y, getContentWidth(), 20);
+            selectedLabel.addToContainer(this);
+            y += 20;
+
+            harnessLabels = new UILabel[4];
+            for (int i = 0; i < 4; i++) {
+                harnessLabels[i] = new UILabel(0, y + i * 16, getContentWidth(), 14);
+                harnessLabels[i].addToContainer(this);
+            }
+            reload();
         }
 
-        private void updatePixliteList() {
+        void reload() {
             List<PixliteItem> items = new ArrayList<>();
             for (Integer pixliteId : model.getPixliteIds()) {
                 items.add(new PixliteItem(pixliteId));
             }
             pixliteList.setItems(items);
+            reloadSelected();
+        }
+
+        void reloadSelected() {
+            selectedLabel.setLabel(
+                String.format("PIXLITE " + FlowersShow.PIXLITE_IP_FORMAT, selectedPixlite));
+
+            Map<Integer, List<FlowerModel>> flowerByHarness = model.getPixliteHarnesses(selectedPixlite);
+            StringBuilder sb;
+
+            for (int i = 1; i <= 4; i++) {
+                List<FlowerModel> h =
+                    flowerByHarness != null && flowerByHarness.containsKey(i) ?
+                    flowerByHarness.get(i) : FlowersModel.emptyDataLine();
+                sb = new StringBuilder(String.format("H%d:", i));
+                harnessStr(sb, h);
+                harnessLabels[i - 1].setLabel(sb.toString());
+            }
+            redraw();
+        }
+
+        private void harnessStr(StringBuilder sb, List<FlowerModel> h) {
+            for (FlowerModel m : h) {
+                sb.append(" ");
+                sb.append(index(m));
+            }
+        }
+
+        private String index(FlowerModel m) {
+            if (m == null) {
+                return "####";
+            }
+            return String.format("%04d", m.getFlowerData().record.id);
         }
     }
 
@@ -282,7 +338,7 @@ public class UIFlowerTool extends UI2dContainer {
 
         @Override
         public void onFocus() {
-            UIFlowerTool.this.setCurrent(model);
+            UIFlowerTool.this.setCurrentFlower(model);
         }
     }
 
@@ -300,7 +356,9 @@ public class UIFlowerTool extends UI2dContainer {
 
         @Override
         public void onFocus() {
-            System.out.println(id);
+            pixlites.selectedPixlite = id;
+            pixlites.reloadSelected();
+            UIFlowerTool.this.setCurrentPixlite(id);
         }
     }
 }

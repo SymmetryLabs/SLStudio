@@ -13,7 +13,7 @@ import heronarts.lx.transform.LXVector;
  */
 public class FlowerRecord {
     public static final int UNKNOWN_HARNESS = 0;
-    public static final int UNKNOWN_HARNESS_INDEX = -1;
+    public static final int UNKNOWN_HARNESS_INDEX = 0;
     public static final int UNKNOWN_PIXLITE_ID = 0;
     public static final int MAX_HARNESS_SIZE = 9;
 

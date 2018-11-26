@@ -135,7 +135,7 @@ public class FlowersModel extends SLModel implements LXModel.Listener {
         }
     }
 
-    private List<FlowerModel> emptyDataLine() {
+    static List<FlowerModel> emptyDataLine() {
         List<FlowerModel> fms = new ArrayList<>();
         for (int i = 0; i < FlowerRecord.MAX_HARNESS_SIZE; i++) {
             fms.add(null);

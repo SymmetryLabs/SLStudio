@@ -75,7 +75,7 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
             activePanel = null;
         }
         int activePixlite = pixlite.getOption().equals(OPTION_ALL) ?
-            FlowerRecord.UNKNOWN_PIXLITE_ID : Integer.parseInt(pixlite.getOption());
+            -1 : Integer.parseInt(pixlite.getOption());
 
         for (FlowerModel fm : model.getFlowers()) {
             FlowerData fd = fm.getFlowerData();
@@ -92,7 +92,7 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
                 activePanel == null
                 || (fd.record.panelId != null && activePanel.equals(fd.record.panelId));
             matches = matches && (
-                activePixlite == FlowerRecord.UNKNOWN_PIXLITE_ID || activePixlite == fd.record.pixliteId);
+                activePixlite == -1 || activePixlite == fd.record.pixliteId);
 
             if (matches) {
                 for (FlowerPoint p : fm.getFlowerPoints()) {
@@ -148,6 +148,18 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
         for (int i = 0; i < flowers.size(); i++) {
             if (flowers.get(i).getFlowerData().record.id == data.record.id) {
                 flowerParam.setValue(i);
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void onPixliteSelected(int pixliteId) {
+        String[] options = pixlite.getOptions();
+        String idStr = Integer.toString(pixliteId);
+        for (int i = 0; i < options.length; i++) {
+            if (options[i].equals(idStr)) {
+                pixlite.setValue(i);
                 return;
             }
         }
