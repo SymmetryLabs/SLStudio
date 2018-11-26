@@ -52,15 +52,16 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
 
     public FlowerInspector(LX lx) {
         super(lx);
-        flowerParam = new DiscreteParameter("flower", 0, 0, model.getFlowers().size());
+        flowerParam = new DiscreteParameter("flower", -1, -1, model.getFlowers().size());
         addParameter(flowerParam);
         addParameter(mode);
         addParameter(panel);
         addParameter(pixlite);
     }
 
-    private FlowerModel get() {
-        return model.getFlowers().get(flowerParam.getValuei());
+    private FlowerModel getSelected() {
+        int i = flowerParam.getValuei();
+        return i < 0 ? null : model.getFlowers().get(i);
     }
 
     @Override
@@ -109,14 +110,21 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
                 }
             }
         }
-        for (LXPoint p : get().points) {
-            colors[p.index] = 0xFFFFFFFF;
+        FlowerModel selected = getSelected();
+        if (selected != null) {
+            for (LXPoint p : selected.points) {
+                colors[p.index] = 0xFFFFFFFF;
+            }
         }
     }
 
     @Override
     public String getCaption() {
-        return get().getFlowerData().toString();
+        FlowerModel selected = getSelected();
+        String fstr = selected == null ? "NONE" : selected.getFlowerData().toString();
+        String panstr = panel.getOption();
+        String pixstr = pixlite.getOption();
+        return String.format("flower %s / panel %s / pixlite %s", fstr, panstr, pixstr);
     }
 
     @Override
