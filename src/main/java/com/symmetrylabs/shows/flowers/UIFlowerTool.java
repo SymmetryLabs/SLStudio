@@ -4,6 +4,8 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI2dScrollContext;
@@ -262,31 +264,27 @@ public class UIFlowerTool extends UI2dContainer {
         UIItemList.ScrollList pixliteList;
         int selectedPixlite;
         UILabel selectedLabel;
-        UILabel harnessLabels[];
+
+        HarnessIndexEditParameter[][] harnessEditorP;
 
         DiscreteParameter swapPixWithP = new DiscreteParameter("swapWith", 2, 2, 256);
         DiscreteParameter swapHarness1P = new DiscreteParameter("swapH1", 1, 1, 5);
         DiscreteParameter swapHarness2P = new DiscreteParameter("swapH2", 2, 1, 5);
 
+        boolean loading = false;
+
         public PixlitePane() {
-            super(ui, 0, 360, UIFlowerTool.this.getContentWidth(), 350);
+            super(ui, 0, 360, UIFlowerTool.this.getContentWidth(), 550);
             setTitle("PIXLITES");
 
             pixliteList =
-                new UIItemList.ScrollList(ui, 0, 2, getContentWidth(), getContentHeight() - 190);
+                new UIItemList.ScrollList(ui, 0, 2, getContentWidth(), 180);
             pixliteList.addToContainer(this);
 
-            float y = getContentHeight() - 185;
+            float y = 185;
             selectedLabel = new UILabel(4, y, getContentWidth(), 20);
             selectedLabel.addToContainer(this);
             y += 20;
-
-            harnessLabels = new UILabel[4];
-            for (int i = 0; i < 4; i++) {
-                harnessLabels[i] = new UILabel(4, y + i * 16, getContentWidth(), 14);
-                harnessLabels[i].addToContainer(this);
-            }
-            y += 4 * 16 + 12;
 
             new UILabel(4, y, getContentWidth(), 14).setLabel("QUICK FIXES").addToContainer(this);
             y += 18;
@@ -340,6 +338,55 @@ public class UIFlowerTool extends UI2dContainer {
                 .setLabel("SWAP")
                 .setParameter(swapHarnessGo)
                 .addToContainer(this);
+            y += 22;
+
+            new UILabel(4, y, getContentWidth(), 14).setLabel("HARNESS EDITOR").addToContainer(this);
+            y += 18;
+
+            harnessEditorP = new HarnessIndexEditParameter[4][9];
+            for (int h = 0; h < 4; h++) {
+                for (int i = 0; i < 9; i++) {
+                    harnessEditorP[h][i] = new HarnessIndexEditParameter(h + 1, i + 1, this);
+                }
+            }
+
+            final float labelWidth = 30;
+            final float spacing = (getContentWidth() - labelWidth - 10) / 4;
+            final float width = spacing - 4;
+            final float height = 20;
+            final float[] cols = new float[] {
+                4,
+                4 + labelWidth,
+                4 + labelWidth + spacing,
+                4 + labelWidth + 2 * spacing,
+                4 + labelWidth + 3 * spacing };
+            final float[] widths = new float[] {labelWidth - 4, width, width, width, width};
+
+            for (int i = 0; i <= 9; i++) {
+                for (int h = 0; h <= 4; h++) {
+                    if (i == 0) {
+                        if (h == 0) {
+                            continue;
+                        }
+                        new UILabel(cols[h], y, widths[h], height)
+                            .setLabel(String.format("H%d", h))
+                            .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+                            .addToContainer(this);
+                    } else {
+                        if (h == 0) {
+                            new UILabel(cols[h], y, widths[h], height)
+                                .setLabel(String.format("%d", i))
+                                .setTextAlignment(PConstants.RIGHT, PConstants.CENTER)
+                                .addToContainer(this);
+                        } else {
+                            new UIIntegerBox(cols[h], y, widths[h], height)
+                                .setParameter(harnessEditorP[h - 1][i - 1])
+                                .addToContainer(this);
+                        }
+                    }
+                }
+                y += 22;
+            }
 
             reload();
         }
@@ -392,6 +439,26 @@ public class UIFlowerTool extends UI2dContainer {
             UIFlowerTool.this.onUpdate();
         }
 
+        void setHarnessIndex(int harness, int index, int newFlowerId) {
+            for (FlowerModel fm : model.getFlowers()) {
+                FlowerData fd = fm.getFlowerData();
+                if (fd.record.id == newFlowerId) {
+                    fd.record.pixliteId = selectedPixlite;
+                    fd.record.harness = harness;
+                    fd.record.harnessIndex = index;
+                } else if (fd.record.pixliteId == selectedPixlite) {
+                    if (fd.record.harness == harness && fd.record.harnessIndex == index) {
+                        fd.record.pixliteId = FlowerRecord.UNKNOWN_PIXLITE_ID;
+                        fd.record.harness = FlowerRecord.UNKNOWN_HARNESS;
+                        fd.record.harnessIndex = FlowerRecord.UNKNOWN_HARNESS_INDEX;
+                    }
+                }
+            }
+
+            model.onDataUpdated();
+            UIFlowerTool.this.onUpdate();
+        }
+
         void reload() {
             List<PixliteItem> items = new ArrayList<>();
             for (Integer pixliteId : model.getPixliteIds()) {
@@ -402,35 +469,24 @@ public class UIFlowerTool extends UI2dContainer {
         }
 
         void reloadSelected() {
+            loading = true;
             selectedLabel.setLabel(
                 String.format("PIXLITE " + FlowersShow.PIXLITE_IP_FORMAT, selectedPixlite));
 
             Map<Integer, List<FlowerModel>> flowerByHarness = model.getPixliteHarnesses(selectedPixlite);
             StringBuilder sb;
 
-            for (int i = 1; i <= 4; i++) {
-                List<FlowerModel> h =
-                    flowerByHarness != null && flowerByHarness.containsKey(i) ?
-                    flowerByHarness.get(i) : FlowersModel.emptyDataLine();
-                sb = new StringBuilder(String.format("H%d:", i));
-                harnessStr(sb, h);
-                harnessLabels[i - 1].setLabel(sb.toString());
+            for (int h = 1; h <= 4; h++) {
+                List<FlowerModel> fms =
+                    flowerByHarness != null && flowerByHarness.containsKey(h) ?
+                    flowerByHarness.get(h) : FlowersModel.emptyDataLine();
+                for (int i = 0; i < 9; i++) {
+                    harnessEditorP[h - 1][i].setValue(
+                        fms.get(i) == null ? -1 : fms.get(i).getFlowerData().record.id);
+                }
             }
+            loading = false;
             redraw();
-        }
-
-        private void harnessStr(StringBuilder sb, List<FlowerModel> h) {
-            for (FlowerModel m : h) {
-                sb.append(" ");
-                sb.append(index(m));
-            }
-        }
-
-        private String index(FlowerModel m) {
-            if (m == null) {
-                return "####";
-            }
-            return String.format("%04d", m.getFlowerData().record.id);
         }
     }
 
@@ -469,6 +525,25 @@ public class UIFlowerTool extends UI2dContainer {
             pixlites.selectedPixlite = id;
             pixlites.reloadSelected();
             UIFlowerTool.this.setCurrentPixlite(id);
+        }
+    }
+
+    class HarnessIndexEditParameter extends DiscreteParameter implements LXParameterListener {
+        final int h;
+        final int i;
+        final PixlitePane pp;
+
+        HarnessIndexEditParameter(int h, int i, PixlitePane pp) {
+            super(String.format("h%di%d", h, i), -1, -1, 10000);
+            this.h = h;
+            this.i = i;
+            this.pp = pp;
+            addListener(this);
+            setFormatter(v -> Integer.toString((int) v));
+        }
+
+        public void onParameterChanged(LXParameter p) {
+            pp.setHarnessIndex(h, i, getValuei());
         }
     }
 }
