@@ -51,6 +51,9 @@ public class FlowersShow implements Show, UIFlowerTool.Listener {
             pixlites.remove(id);
         }
         for (Integer id : toAdd) {
+            if (id == FlowerRecord.UNKNOWN_PIXLITE_ID) {
+                continue;
+            }
             String ip = String.format(PIXLITE_IP_FORMAT, id);
             System.out.println(String.format("adding new pixlite %s", ip));
             // 4 datalines, 90 (9 flowers, 10 LEDs/flower) points per dataline
