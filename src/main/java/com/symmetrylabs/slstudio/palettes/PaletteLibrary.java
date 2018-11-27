@@ -340,5 +340,14 @@ public class PaletteLibrary {
         pl.put("z-allure-body", new ArrayPalette(new int[]{0x9f0740, 0x5e1a6d, 0x6d44d4, 0xfb05c5, 0xfd7402, 0xf70d49}));
         pl.put("z-allure-splurge", new ArrayPalette(new int[]{0x000000, 0x472557, 0x794344, 0x6B90A7, 0xBAA355, 0xFFFFFF}));
         pl.put("z-allure-intro", new ArrayPalette(new int[]{0x060606, 0x485356, 0x8AA1A3, 0xE0F7F6, 0xF2FEFF}));
+        pl.put("hb/sunrise", new NonuniformGradientPalette(new NonuniformGradientPalette.Point[] {
+                    new NonuniformGradientPalette.Point(0x000000, 0),
+                    new NonuniformGradientPalette.Point(0x472557, 0.1),
+                    new NonuniformGradientPalette.Point(0x794344, 0.25),
+                    new NonuniformGradientPalette.Point(0xBA844A, 0.55),
+                    new NonuniformGradientPalette.Point(0xD6B162, 0.65),
+                    new NonuniformGradientPalette.Point(0xFFE9A3, 0.85),
+                    new NonuniformGradientPalette.Point(0xFFFFFF, 0.99),
+                }));
     }
 }
