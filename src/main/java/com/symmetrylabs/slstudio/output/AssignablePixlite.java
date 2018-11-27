@@ -86,7 +86,6 @@ public class AssignablePixlite extends LXOutputGroup {
                     ? (indices.length % MAX_NUM_POINTS_PER_UNIVERSE)
                     : MAX_NUM_POINTS_PER_UNIVERSE;
 
-                System.out.println((String.format("%d %d %d", counter, numDatagramIndices, indices.length)));
                 int[] datagramIndices = new int[numDatagramIndices];
                 for (int i1 = 0; i1 < numDatagramIndices; i1++) {
                     datagramIndices[i1] = indices[counter++];
