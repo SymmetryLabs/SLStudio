@@ -14,18 +14,21 @@ import com.symmetrylabs.util.ColorUtils;
 public class BrightnessShift extends LXEffect {
     public final CompoundParameter Bscale = new CompoundParameter("Bscale", 1, 0, 4);
     public final CompoundParameter Bshift = new CompoundParameter("Bshift", 0, -100, 100);
+    public final CompoundParameter Bexp = new CompoundParameter("Bexp", 1, 0.01, 10);
 
     public BrightnessShift(LX lx) {
         super(lx);
 
         addParameter(Bscale);
         addParameter(Bshift);
+        addParameter(Bexp);
     }
 
     @Override
     public void run(double deltaMs, double amount) {
         float shift = Bshift.getValuef();
         float scale = Bscale.getValuef();
+        float exp = Bexp.getValuef();
 
         for (LXVector p : getVectors()) {
             int rgb = colors[p.index];
@@ -65,7 +68,7 @@ public class BrightnessShift extends LXEffect {
             h *= 360.f;
             float s = (max == 0) ? 0 : (max - min) * 100.f / max;
             float br = 100.f * max / 255.f;
-            br = scale * br + shift;
+            br = scale * 100.f * (float) Math.pow(br / 100.f, exp) + shift;
             br = br > 100 ? 100 : br < 0 ? 0 : br;
 
             colors[p.index] = LXColor.hsba(h, s, br, a / 255.f);
