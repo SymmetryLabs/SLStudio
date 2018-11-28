@@ -23,6 +23,8 @@ package heronarts.lx.output;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.parameter.BooleanParameter;
 
+import com.symmetrylabs.color.Ops16;
+
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -164,16 +166,17 @@ public abstract class LXDatagram {
         int i = offset;
         int[] byteOffset = BYTE_ORDERING[this.byteOrder.ordinal()];
         for (int index : pointIndices) {
-            long c = (index >= 0) ? colors16[index] : 0;
-            int red = (int) ((c >> 32) & 0xffff);
-            int green = (int) ((c >> 16) & 0xffff);
-            int blue = (int) (c & 0xffff);
-            dest[i + byteOffset[0]] = (byte) (red >>> 8);
-            dest[i + byteOffset[0] + 1] = (byte) (red & 0xff);
-            dest[i + byteOffset[1]] = (byte) (green >>> 8);
-            dest[i + byteOffset[1] + 1] = (byte) (green & 0xff);
-            dest[i + byteOffset[2]] = (byte) (blue >>> 8);
-            dest[i + byteOffset[2] + 1] = (byte) (blue & 0xff);
+            long c = (index >= 0 && index < colors16.length) ? colors16[index] : 0;
+            int red = Ops16.red(c);
+            int green = Ops16.green(c);
+            int blue = Ops16.blue(c);
+
+            dest[i + 2 * byteOffset[0]] = (byte) (red >>> 8);
+            dest[i + 2 * byteOffset[0] + 1] = (byte) (red & 0xff);
+            dest[i + 2 * byteOffset[1]] = (byte) (green >>> 8);
+            dest[i + 2 * byteOffset[1] + 1] = (byte) (green & 0xff);
+            dest[i + 2 * byteOffset[2]] = (byte) (blue >>> 8);
+            dest[i + 2 * byteOffset[2] + 1] = (byte) (blue & 0xff);
             i += 6;
         }
         return this;
