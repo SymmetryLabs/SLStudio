@@ -35,28 +35,107 @@ public static final String SHOW_NAME = "arlo";
         /**
          * From the Prespective of the Front Door -------------------------------------------------------*
         */
-        //BackRight Left
-        new TowerConfig(CubesModel.Cube.Type.HD, 0, SP*4, 0, -45, 180-45, 0, new String[] {"1069","1068"}),
-        //BackRight Center
-        new TowerConfig(CubesModel.Cube.Type.HD, SP*3, SP*4, SP*-1, -45, 180-45, 0, new String[] {"143","150"}),        // new TowerConfig(CubesModel.Cube.Type.HD, SP*-0.75f, 0, SP*-1.5f, new String[] {"996","997"}),
-        //BackRight Right
-        new TowerConfig(CubesModel.Cube.Type.HD, SP*5, SP*4, SP*0, -45, -180-45+90, 0, new String[] {"966","500"}),
-        //Center Near Door
-        new TowerConfig(CubesModel.Cube.Type.HD, SP*4.8f, SP*4, SP*-3, -45, 180-45, 0, new String[] {"614","636"}),
 
-        //BackLeft Facing Couch Right
-        new TowerConfig(CubesModel.Cube.Type.HD, SP*0, SP*4, SP*-6, -45, 180-45, 0, new String[] {"5410ecfd752a","1089"}),
-        //BackLeft Facing Couch Middle
-        new TowerConfig(CubesModel.Cube.Type.HD, SP*3, SP*4, SP*-6, -45, 180-45, 0, new String[] {"415hp","1050"}),
-        //BackLeft Facing Couch Left
-        new TowerConfig(CubesModel.Cube.Type.HD, SP*5, SP*4, SP*-6, -45, 180-45, 0, new String[] {"5410ecf5e2e2","5410ecf6b63e"}),
+        // Middle Cubes Left To Right
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-4, SP * 1, 0, 0, -45, 0, new String[] {"361","1007"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-2, SP*1, SP*0, 0, -45, 0, new String[] {"900","901"}),        
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*0, SP*1, SP*0, 0, -45, 0, new String[] {"0","1133"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*2, SP*1, SP*0, 0, -45, 0, new String[] {"1132 ","54:10:ec:f5:e4:d7"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*4, SP*1, SP*0, 0, -45, 0, new String[] {"1130","1128"}),
+        //Left Towers Right To Left
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-6, SP*0, SP*-1, 0, -90, 0, new String[] {"1224","54:10:ec:f5:6e:84"}),
+                new TowerConfig(CubesModel.Cube.Type.HD, SP*-6, SP*1, SP*-1, 0, -45, 0, new String[] {"1124","1227"}),
+                new TowerConfig(CubesModel.Cube.Type.HD, SP*-6, SP*2, SP*-1, 0, -90, 0, new String[] {"572","806"}),
 
-        //Tower Cube B
-    new TowerConfig(CubesModel.Cube.Type.HD, SP*5, SP*0, SP*-6, 0, 0, 0, new String[] {"135","312"}),
-        //Tower Cube M
-new TowerConfig(CubesModel.Cube.Type.HD, SP*5, SP*1, SP*-6, 0, 0, 0, new String[] {"5410ecfd52a4","5410ecfd7ce6"}),
-        //Tower Cube T
-new TowerConfig(CubesModel.Cube.Type.HD, SP*5, SP*2, SP*-6, 0, 0, 0, new String[] {"683","1002"}),
+                new TowerConfig(CubesModel.Cube.Type.HD, SP*-7.5f, SP*0, SP*-2.5f, 0, -90, 0, new String[] {"590","1129"}),
+                new TowerConfig(CubesModel.Cube.Type.HD, SP*-7.5f, SP*1, SP*-2.5f, 0, -45, 0, new String[] {"1125","1237"}),
+                new TowerConfig(CubesModel.Cube.Type.HD, SP*-7.5f, SP*2, SP*-2.5f, 0, -90, 0, new String[] {"1124","1125"}),
+
+                new TowerConfig(CubesModel.Cube.Type.HD, SP*-9, SP*0, SP*-4, 0, -90, 0, new String[] {"1131","1129"}),
+                new TowerConfig(CubesModel.Cube.Type.HD, SP*-9, SP*1, SP*-4, 0, -45, 0, new String[] {"308","159"}),
+                new TowerConfig(CubesModel.Cube.Type.HD, SP*-9, SP*2, SP*-4, 0, -90, 0, new String[] {"1196","1197"}),
+                //Right Towers Left To Right
+                new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*0, SP*-2, 0, 45, 0, new String[] {"1120","1122"}),
+                new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*1, SP*-2, 0, 0, 0, new String[] {"1121","1119"}),
+
+                new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*2, SP*-3, 0, 45, 0, new String[] {"1135","1232"}),
+        
+                new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*0, SP*-4.1f, 0, 45, 0, new String[] {"1127","1215"}),
+                new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*1, SP*-4.1f, 0, 0, 0, new String[] {"1123","1194"}),
+
+                new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*2, SP*-5f, 0, 45, 0, new String[] {"1053","1062"}),
+
+                new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*0, SP*-5.8f, 0, 45, 0, new String[] {"1086","1088"}),
+                new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*1, SP*-5.8f, 0, 0, 0, new String[] {"723","196"}),
+
+                new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*0, SP*-7.2f, 0, 45, 0, new String[] {"1191","1190"}),
+                new TowerConfig(CubesModel.Cube.Type.HD, SP*5.2f, SP*1, SP*-7.2f, 0, 45, 0, new String[] {"1216","1217"}),
+                                new TowerConfig(CubesModel.Cube.Type.LARGE, SP*5.2f, SP*1, SP*-7.2f, 0, 45, 0, new String[] {"5410ecf56e84","5410ecf5e4d7"}),
+
+
+
+
+        // new TowerConfig(CubesModel.Cube.Type.HD, SP*-4, SP * 1, 0, 0, -45, 0, new String[] {"1120", "1121"}),
+        // new TowerConfig(CubesModel.Cube.Type.HD, SP*-2, SP*1, SP*0, 0, -45, 0, new String[] {"1122", "1123"}),        
+        // new TowerConfig(CubesModel.Cube.Type.HD, SP*0, SP*1, SP*0, 0, -45, 0, new String[] {"1124","1125"}),
+        // new TowerConfig(CubesModel.Cube.Type.HD, SP*2, SP*1, SP*0, 0, -45, 0, new String[] {"1126","1127"}),
+        // new TowerConfig(CubesModel.Cube.Type.HD, SP*4, SP*1, SP*0, 0, -45, 0, new String[] {"1128","1129"}),
+        // //Left Towers Right To Left
+        // new TowerConfig(CubesModel.Cube.Type.HD, SP*-6, SP*0, SP*-1, 0, -90, 0, new String[] {"1130","1131"}),
+    //       new TowerConfig(CubesModel.Cube.Type.HD, SP*-6, SP*1, SP*-1, 0, -45, 0, new String[] {"1132","1227"}),
+    //       new TowerConfig(CubesModel.Cube.Type.HD, SP*-6, SP*2, SP*-1, 0, -90, 0, new String[] {"1133","806"}),
+
+    //       new TowerConfig(CubesModel.Cube.Type.HD, SP*-7.5f, SP*0, SP*-2.5f, 0, -90, 0, new String[] {"590","640"}),
+    //       new TowerConfig(CubesModel.Cube.Type.HD, SP*-7.5f, SP*1, SP*-2.5f, 0, -45, 0, new String[] {"1238","1237"}),
+    //       new TowerConfig(CubesModel.Cube.Type.HD, SP*-7.5f, SP*2, SP*-2.5f, 0, -90, 0, new String[] {"1124","1125"}),
+
+    //       new TowerConfig(CubesModel.Cube.Type.HD, SP*-9, SP*0, SP*-4, 0, -90, 0, new String[] {"1128","1129"}),
+    //       new TowerConfig(CubesModel.Cube.Type.HD, SP*-9, SP*1, SP*-4, 0, -45, 0, new String[] {"308","159"}),
+    //       new TowerConfig(CubesModel.Cube.Type.HD, SP*-9, SP*2, SP*-4, 0, -90, 0, new String[] {"1196","1197"}),
+    //       //Right Towers Left To Right
+    //       new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*0, SP*-2, 0, 45, 0, new String[] {"5410ecf56e84","1125"}),
+    //       new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*1, SP*-2, 0, 0, 0, new String[] {"1118","1119"}),
+
+    //       new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*2, SP*-3, 0, 45, 0, new String[] {"1135","1232"}),
+        
+    //       new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*0, SP*-4.1f, 0, 45, 0, new String[] {"1214","1215"}),
+    //       new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*1, SP*-4.1f, 0, 0, 0, new String[] {"1195","1194"}),
+
+    //       new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*2, SP*-5f, 0, 45, 0, new String[] {"1053","1062"}),
+
+    //       new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*0, SP*-5.8f, 0, 45, 0, new String[] {"1086","1088"}),
+    //       new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*1, SP*-5.8f, 0, 0, 0, new String[] {"723","196"}),
+
+    //       new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*0, SP*-7.2f, 0, 45, 0, new String[] {"1191","1190"}),
+             
+
+/*
+ 5410ecf56e84
+ 5410ecf5e4d7
+ 5410ecf5e5aa
+ 5410ecf5fd6b
+ 5410ecf6272a
+ 5410ecf65045
+ 5410ecf67178
+ 5410ecf671ca
+ 5410ec8fc7
+ 5410ecf6a9b4
+ 5410ecfd512c
+ 5410ecfd5554
+ 5410ecfd58fb
+ 5410ecfd5d77
+ 
+
+*/
+
+//         new TowerConfig(CubesModel.Cube.Type.HD, SP*0, SP*0, SP*0, 0, 0, 0, new String[] {"415hp","1050"}),
+//         new TowerConfig(CubesModel.Cube.Type.HD, SP*0, SP*0, SP*0, 0, 0, 0, new String[] {"5410ecf5e2e2","5410ecf6b63e"}),
+
+//     new TowerConfig(CubesModel.Cube.Type.HD, SP*5, SP*0, SP*-6, 0, 0, 0, new String[] {"135","312"}),
+
+// new TowerConfig(CubesModel.Cube.Type.HD, SP*5, SP*1, SP*-6, 0, 0, 0, new String[] {"5410ecfd52a4","5410ecfd7ce6"}),
+
+// new TowerConfig(CubesModel.Cube.Type.HD, SP*5, SP*2, SP*-6, 0, 0, 0, new String[] {"683","1002"}),
 
         // /**
         //  * Layer B -----------------------------------------------------------------------------------*
