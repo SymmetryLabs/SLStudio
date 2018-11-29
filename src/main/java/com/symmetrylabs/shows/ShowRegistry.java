@@ -7,6 +7,7 @@ import com.symmetrylabs.shows.arlosohoroof.ArloSohoRoofShow;
 import com.symmetrylabs.shows.arlotree.ArloTreeShow;
 import com.symmetrylabs.shows.composite.CompositeShow;
 import com.symmetrylabs.shows.demo.DemoShow;
+import com.symmetrylabs.shows.exploratorium.ExploratoriumShow;
 import com.symmetrylabs.shows.flowers.FlowerShow;
 import com.symmetrylabs.shows.flowers.FlowersShow;
 import com.symmetrylabs.shows.googlehq.GoogleHqShow;
@@ -17,11 +18,11 @@ import com.symmetrylabs.shows.obj.ObjShow;
 import com.symmetrylabs.shows.office.OfficeShow;
 import com.symmetrylabs.shows.oslo.OsloShow;
 import com.symmetrylabs.shows.oslo.TreeModel;
+import com.symmetrylabs.shows.penfoldswine.PenfoldsWineShow;
 import com.symmetrylabs.shows.pilots.PilotsShow;
 import com.symmetrylabs.shows.streetlamp.StreetlampShow;
 import com.symmetrylabs.shows.summerbbq.SummerBBQShow;
 import com.symmetrylabs.shows.summerstage.SummerStageShow;
-import com.symmetrylabs.shows.penfoldswine.PenfoldsWineShow;
 import processing.core.PApplet;
 
 public class ShowRegistry {
@@ -65,6 +66,7 @@ public class ShowRegistry {
         map.put(FlowersShow.SHOW_NAME, () -> new FlowersShow());
         map.put(ArloTreeShow.SHOW_NAME, () -> new ArloTreeShow());
         map.put(ArloSohoRoofShow.SHOW_NAME, () -> new ArloSohoRoofShow());
+        map.put(ExploratoriumShow.SHOW_NAME, () -> new ExploratoriumShow());
     }
 
     static interface ShowBuilder {

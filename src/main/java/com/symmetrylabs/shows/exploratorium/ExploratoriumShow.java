@@ -1,6 +1,4 @@
-package com.symmetrylabs.shows.office;
-
-//package com.symmetrylabs.shows.cubes;
+package com.symmetrylabs.shows.exploratorium;
 
 import java.util.*;
 
@@ -15,23 +13,41 @@ import com.symmetrylabs.shows.Show;
 /**
  * This file implements the mapping functions needed to lay out the cubes.
  */
-public class OfficeShow extends CubesShow implements Show {
+public class ExploratoriumShow extends CubesShow implements Show {
+    public static final String SHOW_NAME = "exploratorium";
 
     static final float globalOffsetX = 0;
     static final float globalOffsetY = 0;
     static final float globalOffsetZ = 0;
 
     static final float globalRotationX = 0;
-    static final float globalRotationY = 180;
+    static final float globalRotationY = 0;
     static final float globalRotationZ = 0;
-    static final float cuberotation = -45-45;
+    static final float cuberotation = 0;
 
     static final TowerConfig[] TOWER_CONFIG = {
-        new TowerConfig(0, 0, 0, 0, cuberotation, 0, new String[] { "47", "6", "418", "1118"}),
-        new TowerConfig(SP*1 , 0, 0, 0, cuberotation, 0, new String[] { "106", "390" }),
-        new TowerConfig(SP*1, 0, SP*1, 0, cuberotation, 0, new String[] {"172", "1117", "398", "54"}),
-        new TowerConfig(SP*2, 0, SP*1, 0, cuberotation, 0, new String[] { "175", "422"}),
-        new TowerConfig(SP*2, 0, SP*2, 0, cuberotation, 0, new String[] { "62", "1119", "192", "141"}),
+        new TowerConfig(0, 0, 0, 180, -45+90, 0, new String[] { "326", "329", "39",}),
+        new TowerConfig(0, SP*1, -SP*1.5f, 180, -45+90, 0, new String[] { "5410ecf67aeb",}),
+        new TowerConfig(SP*1.5f, SP*1, 0, 180, -45+90, 0, new String[] { "120",}),
+        new TowerConfig(SP*1.5f, SP*1, SP*1.5f, 180, -45+90, 0, new String[] { "122",}),
+        new TowerConfig(SP*3, 0, SP*1.5f, 180, -45+90, 0, new String[] { "6",}),
+        new TowerConfig(SP*3, 0, 0, 180, -45+90, 0, new String[] { "106", "351",}),
+
+        new TowerConfig(SP*4.5f, SP*1, 0, 180, -45+90, 0, new String[] { "61", "362",}),
+        new TowerConfig(SP*4.5f, 0, -SP*1.5f, 180, -45+90, 0, new String[] { "188", "69",}),
+
+        new TowerConfig(SP*9, 0, 0, 180, -45+90, 0, new String[] { "77", "9", "384",}),
+        new TowerConfig(SP*9, SP*1, -SP*1.5f, 180, -45+90, 0, new String[] { "31",}),
+        new TowerConfig(SP*7.5f, SP*1, 0, 180, -45+90, 0, new String[] { "50",}),
+        new TowerConfig(SP*7.5f, SP*1, SP*1.5f, 180, -45+90, 0, new String[] { "38",}),
+        new TowerConfig(SP*6, 0, SP*1.5f, 180, -45+90, 0, new String[] { "197",}),
+        new TowerConfig(SP*6, 0, 0, 180, -45+90, 0, new String[] { "111", "14",}),
+
+        new TowerConfig(SP*1.5f, SP*3, -SP*4.5f, 180, -45+90, 0, new String[] { "356",}),
+        new TowerConfig(SP*1.5f, SP*2, -SP*6, 180, -45+90, 0, new String[] { "365", "418",}),
+
+        new TowerConfig(SP*7.5f, SP*3, -SP*4.5f, 180, -45+90, 0, new String[] { "390",}),
+        new TowerConfig(SP*7.5f, SP*2, -SP*6, 180, -45+90, 0, new String[] { "55", "15",}),
     };
 
     public SLModel buildModel() {
