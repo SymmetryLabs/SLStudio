@@ -2,9 +2,12 @@ package com.symmetrylabs.shows.exploratorium;
 
 import java.util.*;
 
+import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
+import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.workspaces.Workspace;
 
 import heronarts.lx.transform.LXTransform;
 
@@ -13,7 +16,7 @@ import com.symmetrylabs.shows.Show;
 /**
  * This file implements the mapping functions needed to lay out the cubes.
  */
-public class ExploratoriumShow extends CubesShow implements Show {
+public class ExploratoriumShow extends CubesShow implements Show, HasWorkspace {
     public static final String SHOW_NAME = "exploratorium";
 
     static final float globalOffsetX = 0;
@@ -24,6 +27,8 @@ public class ExploratoriumShow extends CubesShow implements Show {
     static final float globalRotationY = 0;
     static final float globalRotationZ = 0;
     static final float cuberotation = 0;
+
+    private Workspace workspace;
 
     static final TowerConfig[] TOWER_CONFIG = {
         new TowerConfig(0, 0, 0, 180, -45+90, 0, new String[] { "326", "329", "39",}),
@@ -88,5 +93,15 @@ public class ExploratoriumShow extends CubesShow implements Show {
         }
 
         return new CubesModel(towers, allCubesArr);
+    }
+
+    @Override
+    public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
+        workspace = new Workspace(lx, ui, "shows/exploratorium");
+    }
+
+    @Override
+    public Workspace getWorkspace() {
+        return workspace;
     }
 }
