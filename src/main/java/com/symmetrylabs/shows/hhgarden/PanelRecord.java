@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.flowers;
+package com.symmetrylabs.shows.hhgarden;
 
 public class PanelRecord implements Comparable<PanelRecord> {
     public final String id;

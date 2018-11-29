@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.flowers;
+package com.symmetrylabs.shows.hhgarden;
 
 import heronarts.lx.transform.LXVector;
 

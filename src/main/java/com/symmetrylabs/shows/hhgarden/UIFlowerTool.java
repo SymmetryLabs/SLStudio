@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.flowers;
+package com.symmetrylabs.shows.hhgarden;
 
 import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.parameter.BooleanParameter;
@@ -471,7 +471,7 @@ public class UIFlowerTool extends UI2dContainer {
         void reloadSelected() {
             loading = true;
             selectedLabel.setLabel(
-                String.format("PIXLITE " + FlowersShow.PIXLITE_IP_FORMAT, selectedPixlite));
+                String.format("PIXLITE " + HHGardenShow.PIXLITE_IP_FORMAT, selectedPixlite));
 
             Map<Integer, List<FlowerModel>> flowerByHarness = model.getPixliteHarnesses(selectedPixlite);
             StringBuilder sb;

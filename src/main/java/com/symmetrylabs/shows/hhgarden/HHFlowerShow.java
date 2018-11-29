@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.flowers;
+package com.symmetrylabs.shows.hhgarden;
 
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
@@ -12,8 +12,8 @@ import heronarts.lx.transform.LXVector;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlowerShow implements Show {
-    public static final String SHOW_NAME = "flower";
+public class HHFlowerShow implements Show {
+    public static final String SHOW_NAME = "hhflower";
 
     @Override
     public SLModel buildModel() {

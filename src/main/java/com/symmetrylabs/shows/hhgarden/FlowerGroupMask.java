@@ -1,8 +1,8 @@
-package com.symmetrylabs.shows.flowers;
+package com.symmetrylabs.shows.hhgarden;
 
-import com.symmetrylabs.shows.flowers.FlowerModel.Direction;
-import com.symmetrylabs.shows.flowers.FlowerModel.FlowerPoint;
-import com.symmetrylabs.shows.flowers.FlowerModel.Group;
+import com.symmetrylabs.shows.hhgarden.FlowerModel.Direction;
+import com.symmetrylabs.shows.hhgarden.FlowerModel.FlowerPoint;
+import com.symmetrylabs.shows.hhgarden.FlowerModel.Group;
 import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.lx.model.LXPoint;

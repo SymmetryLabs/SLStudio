@@ -1,6 +1,6 @@
-package com.symmetrylabs.shows.flowers;
+package com.symmetrylabs.shows.hhgarden;
 
-import com.symmetrylabs.shows.flowers.FlowerModel.FlowerPoint;
+import com.symmetrylabs.shows.hhgarden.FlowerModel.FlowerPoint;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import java.util.stream.Stream;

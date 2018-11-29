@@ -1,14 +1,14 @@
-package com.symmetrylabs.shows.flowers;
+package com.symmetrylabs.shows.hhgarden;
 
-import com.symmetrylabs.shows.flowers.FlowerModel.Direction;
-import com.symmetrylabs.shows.flowers.FlowerModel.FlowerPoint;
-import com.symmetrylabs.shows.flowers.FlowerModel.Group;
+import com.symmetrylabs.shows.hhgarden.FlowerModel.Direction;
+import com.symmetrylabs.shows.hhgarden.FlowerModel.FlowerPoint;
+import com.symmetrylabs.shows.hhgarden.FlowerModel.Group;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 
 public class PetalSpin extends FlowerPattern {
-    public static final String GROUP_NAME = FlowersShow.SHOW_NAME;
+    public static final String GROUP_NAME = HHGardenShow.SHOW_NAME;
 
     private final CompoundParameter rateParam = new CompoundParameter("rate", 150, 1, 2000);
     private final CompoundParameter fadeParam = new CompoundParameter("fade", 0.4, 0, 1);

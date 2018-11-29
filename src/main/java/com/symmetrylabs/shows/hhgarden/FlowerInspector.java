@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.flowers;
+package com.symmetrylabs.shows.hhgarden;
 
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import com.symmetrylabs.shows.flowers.FlowerModel.FlowerPoint;
+import com.symmetrylabs.shows.hhgarden.FlowerModel.FlowerPoint;
 
 public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Listener {
-    public static final String GROUP_NAME = FlowersShow.SHOW_NAME;
+    public static final String GROUP_NAME = HHGardenShow.SHOW_NAME;
 
     public static enum Mode {
         ALL,

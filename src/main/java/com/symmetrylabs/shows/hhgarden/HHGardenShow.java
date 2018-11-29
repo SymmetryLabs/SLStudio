@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.flowers;
+package com.symmetrylabs.shows.hhgarden;
 
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
@@ -15,8 +15,8 @@ import java.util.Map;
 import com.symmetrylabs.slstudio.output.AssignablePixlite;
 import com.symmetrylabs.slstudio.output.AssignablePixlite.Dataline;
 
-public class FlowersShow implements Show, UIFlowerTool.Listener {
-    public static final String SHOW_NAME = "flowers";
+public class HHGardenShow implements Show, UIFlowerTool.Listener {
+    public static final String SHOW_NAME = "hhgarden";
 
     private final HashMap<Integer, AssignablePixlite> pixlites = new HashMap<>();
     static final String PIXLITE_IP_FORMAT = "10.200.1.%d";
