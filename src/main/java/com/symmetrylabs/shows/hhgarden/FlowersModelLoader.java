@@ -19,9 +19,9 @@ import java.util.List;
 public class FlowersModelLoader {
     private static final float RECORD_MATCH_SQDIST_INCHES = 3.f * 3.f;
 
-    static final String GEOMETRY_FILE = "shows/flowers/locations.obj";
-    static final File RECORD_FILE = new File("shows/flowers/records.json");
-    static final File PANEL_FILE = new File("shows/flowers/panels.txt");
+    static final String GEOMETRY_FILE = "shows/hhgarden/locations.obj";
+    static final File RECORD_FILE = new File("shows/hhgarden/records.json");
+    static final File PANEL_FILE = new File("shows/hhgarden/panels.txt");
 
     public static FlowersModel load() {
         ReadableObj model;

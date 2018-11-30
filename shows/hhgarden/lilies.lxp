@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1543281251557,
+  "timestamp": 1543619211220,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -73,7 +73,7 @@
         "effects": [
           {
             "id": 149,
-            "class": "com.symmetrylabs.shows.flowers.FlowerGroupMask",
+            "class": "com.symmetrylabs.shows.hhgarden.FlowerGroupMask",
             "modulationColor": -7936,
             "parameters": {
               "label": "FlowerGroupMask",
@@ -99,7 +99,7 @@
         "patterns": [
           {
             "id": 112,
-            "class": "com.symmetrylabs.shows.flowers.FlowerInspector",
+            "class": "com.symmetrylabs.shows.hhgarden.FlowerInspector",
             "modulationColor": -65426,
             "parameters": {
               "label": "FlowerInspector",
@@ -225,7 +225,7 @@
         "effects": [
           {
             "id": 157,
-            "class": "com.symmetrylabs.shows.flowers.FlowerGroupMask",
+            "class": "com.symmetrylabs.shows.hhgarden.FlowerGroupMask",
             "modulationColor": -16717825,
             "parameters": {
               "label": "FlowerGroupMask",
@@ -325,7 +325,7 @@
         "effects": [
           {
             "id": 168,
-            "class": "com.symmetrylabs.shows.flowers.FlowerGroupMask",
+            "class": "com.symmetrylabs.shows.hhgarden.FlowerGroupMask",
             "modulationColor": -65397,
             "parameters": {
               "label": "FlowerGroupMask",
@@ -494,19 +494,6 @@
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 37,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -5243136,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -665,12 +652,12 @@
         "139": true
       },
       "preview": {
-        "radius": 767.1719926884075,
-        "theta": 1.7760000000000087,
-        "phi": 0.0707963705062829,
-        "positionX": 792.1343383789062,
-        "positionY": 42.75281524658203,
-        "positionZ": -662.2294311523438
+        "radius": 1244.0,
+        "theta": 3.786000000000003,
+        "phi": 0.49620362949371244,
+        "positionX": 846.3702392578125,
+        "positionY": 622.5409545898438,
+        "positionZ": 41.7528076171875
       }
     }
   }

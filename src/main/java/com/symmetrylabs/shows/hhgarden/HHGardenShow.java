@@ -1,27 +1,30 @@
 package com.symmetrylabs.shows.hhgarden;
 
+import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.output.SimplePixlite;
+import com.symmetrylabs.slstudio.output.AssignablePixlite.Dataline;
+import com.symmetrylabs.slstudio.output.AssignablePixlite;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
+import com.symmetrylabs.slstudio.output.SimplePixlite;
+import com.symmetrylabs.slstudio.workspaces.Workspace;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
+import heronarts.p3lx.ui.UI3dContext;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import com.symmetrylabs.slstudio.output.AssignablePixlite;
-import com.symmetrylabs.slstudio.output.AssignablePixlite.Dataline;
-import heronarts.p3lx.ui.UI3dContext;
 
-public class HHGardenShow implements Show, UIFlowerTool.Listener {
+public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener {
     public static final String SHOW_NAME = "hhgarden";
 
     private final HashMap<Integer, AssignablePixlite> pixlites = new HashMap<>();
     static final String PIXLITE_IP_FORMAT = "10.200.1.%d";
     private SLStudioLX lx;
+    private Workspace workspace;
 
     @Override
     public SLModel buildModel() {
@@ -93,6 +96,7 @@ public class HHGardenShow implements Show, UIFlowerTool.Listener {
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         UIFlowerTool.attach(lx, ui).addListener(this);
         ui.preview.setInteractionMode(UI3dContext.InteractionMode.ZOOM_Z_UP);
+        workspace = new Workspace(lx, ui, "shows/hhgarden");
     }
 
     @Override
@@ -104,5 +108,10 @@ public class HHGardenShow implements Show, UIFlowerTool.Listener {
     @Override
     public void onUpdate() {
         updatePixlites(lx, (FlowersModel) lx.model);
+    }
+
+    @Override
+    public Workspace getWorkspace() {
+        return workspace;
     }
 }
