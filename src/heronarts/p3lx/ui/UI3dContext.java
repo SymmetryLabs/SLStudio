@@ -677,13 +677,24 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     public void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
         switch (this.interactionMode) {
         case ZOOM:
+                if (mouseEvent.isShiftDown()) {
+                        this.radius.incrementValue(dy);
+                } else if (mouseEvent.isMetaDown() || mouseEvent.isControlDown()) {
+                        float dcx = dx * (float) Math.cos(this.thetaDamped.getValuef());
+                        float dcz = dx * (float) Math.sin(this.thetaDamped.getValuef());
+                        setCenter(this.center.x - dcx, this.center.y + dy, this.center.z - dcz);
+                } else {
+                        this.theta.incrementValue(-dx * .003);
+                        this.phi.incrementValue(dy * .003);
+                }
+                break;
         case ZOOM_Z_UP:
             if (mouseEvent.isShiftDown()) {
                 this.radius.incrementValue(dy);
             } else if (mouseEvent.isMetaDown() || mouseEvent.isControlDown()) {
                 float dcx = dx * (float) Math.cos(this.thetaDamped.getValuef());
                 float dcz = dx * (float) Math.sin(this.thetaDamped.getValuef());
-                setCenter(this.center.x - dcx, this.center.y + dy, this.center.z - dcz);
+                setCenter(this.center.x + dcx, this.center.y - dcz, this.center.z + dy);
             } else {
                 this.theta.incrementValue(-dx * .003);
                 this.phi.incrementValue(dy * .003);
