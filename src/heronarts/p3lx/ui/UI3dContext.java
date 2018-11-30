@@ -55,9 +55,16 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
      */
     public enum InteractionMode {
         /**
-         * Camera has a fixed center point, eye rotates around this point and zooms on it
+         * Camera has a fixed center point, eye rotates around this point and zooms on it,
+         * Y is up
          */
         ZOOM,
+
+        /**
+         * Camera has a fixed center point, eye rotates around this point and zooms on it,
+         * Z is up
+         */
+        ZOOM_Z_UP,
 
         /**
          * Camera has a fixed radius, eye moves around like a FPS video-game
@@ -300,6 +307,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
             PVector position = this.center;
             switch (interactionMode) {
             case ZOOM:
+            case ZOOM_Z_UP:
                 position = this.center;
                 break;
             case MOVE:
@@ -456,8 +464,8 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
      * @return this
      */
     public UI3dContext setCenter(float x, float y, float z) {
-        if (this.interactionMode != InteractionMode.ZOOM) {
-            throw new IllegalStateException("setCenter() only allowed in ZOOM mode");
+        if (this.interactionMode != InteractionMode.ZOOM && this.interactionMode != InteractionMode.ZOOM_Z_UP) {
+            throw new IllegalStateException("setCenter() only allowed in ZOOM modes");
         }
         this.positionX.setValue(this.center.x = x);
         this.positionY.setValue(this.center.y = y);
@@ -529,6 +537,22 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
                 this.up.set((float) -Math.sin(tv), 0, (float) Math.cos(tv));
             } else {
                 this.up.set(0, -1, 0);
+            }
+            this.eye.set(this.eyeDamped);
+            break;
+        case ZOOM_Z_UP:
+            this.centerDamped.set(px, py, pz);
+            this.eyeDamped.set(
+                    px - rv * cosphi * sintheta,
+                    py - rv * cosphi * costheta,
+                    pz + rv * sinphi
+                    );
+            if (pv > PHI_UP_CORRECTION) {
+                    this.up.set((float) -Math.sin(tv), (float) -Math.cos(tv), 0);
+            } else if (pv < -PHI_UP_CORRECTION) {
+                    this.up.set((float) Math.sin(tv), (float) Math.cos(tv), 0);
+            } else {
+                    this.up.set(0, 0, -1);
             }
             this.eye.set(this.eyeDamped);
             break;
@@ -653,6 +677,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     public void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
         switch (this.interactionMode) {
         case ZOOM:
+        case ZOOM_Z_UP:
             if (mouseEvent.isShiftDown()) {
                 this.radius.incrementValue(dy);
             } else if (mouseEvent.isMetaDown() || mouseEvent.isControlDown()) {
@@ -689,6 +714,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     public void onMouseWheel(MouseEvent mouseEvent, float mx, float my, float delta) {
         switch (this.interactionMode) {
         case ZOOM:
+        case ZOOM_Z_UP:
             this.radius.incrementValue(delta * this.radius.getValue() / 1000.);
             break;
         case MOVE:
