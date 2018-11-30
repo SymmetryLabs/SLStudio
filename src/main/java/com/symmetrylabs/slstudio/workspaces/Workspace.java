@@ -18,7 +18,7 @@ import java.util.concurrent.Semaphore;
 
 public class Workspace extends LXComponent {
     public static final int WORKSPACE_OSC_PORT = 3999;
-    private static final int NO_PROJECT = -1;
+    public static final int NO_PROJECT = -1;
 
     /** Switching projects is expensive, and a poorly-configured OSC sender
             can DoS SLStudio by sending project-switch events on every frame. This
@@ -107,6 +107,10 @@ public class Workspace extends LXComponent {
 
     public int size() {
         return projects.size();
+    }
+
+    public void advance() {
+        goIndex((currentWorkspaceIndex + 1) % projects.size());
     }
 
     public void openProject(WorkspaceProject workspace) {
