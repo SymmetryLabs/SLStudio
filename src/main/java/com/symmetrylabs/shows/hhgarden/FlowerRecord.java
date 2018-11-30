@@ -8,8 +8,8 @@ import heronarts.lx.transform.LXVector;
  * The xz position here is used as an identifier to match the flower with a
  * point in the geometry file. The actual location of the flower used for model
  * creation is taken from the geometry file, with the one exception of the
- * flower's height: if overrideHeight is set, we override the height from the
- * geometry file with yOverride.
+ * flower's height: if heightOverrideEnabled is set, we override the height from the
+ * geometry file with heightOverride.
  */
 public class FlowerRecord {
     public static final int UNKNOWN_HARNESS = 0;
@@ -24,8 +24,8 @@ public class FlowerRecord {
     public int harnessIndex;
     public float x;
     public float z;
-    public boolean overrideHeight;
-    public float yOverride;
+    public boolean heightOverrideEnabled;
+    public float heightOverride;
 
     public FlowerRecord(int id, float x, float z) {
         this(id, null, UNKNOWN_PIXLITE_ID, UNKNOWN_HARNESS, UNKNOWN_HARNESS_INDEX, x, z, false, 0);
@@ -36,16 +36,9 @@ public class FlowerRecord {
         this(id, panelId, pixliteId, harness, harnessIndex, x, z, false, 0);
     }
 
-    public FlowerRecord(
-        int id, String panelId, int pixliteId, int harness, int harnessIndex, float x, float z,
-        float yOverride) {
-        this(id, panelId, pixliteId, harness, harnessIndex, x, z, true, yOverride);
-    }
-
     private FlowerRecord(
         int id, String panelId, int pixliteId, int harness, int harnessIndex, float x, float z,
-        boolean overrideHeight, float yOverride) {
-
+        boolean heightOverrideEnabled, float heightOverride) {
         this.id = id;
         this.panelId = panelId;
         this.pixliteId = pixliteId;
@@ -53,8 +46,8 @@ public class FlowerRecord {
         this.harnessIndex = harnessIndex;
         this.x = x;
         this.z = z;
-        this.overrideHeight = overrideHeight;
-        this.yOverride = yOverride;
+        this.heightOverrideEnabled = heightOverrideEnabled;
+        this.heightOverride = heightOverride;
     }
 
     @Override

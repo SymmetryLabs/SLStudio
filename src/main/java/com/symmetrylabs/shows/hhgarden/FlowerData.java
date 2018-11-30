@@ -15,11 +15,11 @@ public class FlowerData {
     public FlowerData(FlowerRecord record, LXVector location) {
         this.record = record;
         this.location = location;
-        geometryHeight = location.y;
+        geometryHeight = location.z;
     }
 
     public void recalculateLocation() {
-        location.y = record.overrideHeight ? record.yOverride : geometryHeight;
+        location.z = record.heightOverrideEnabled ? record.heightOverride : geometryHeight;
     }
 
     @Override

@@ -132,8 +132,8 @@ public class UIFlowerTool extends UI2dContainer {
         UITextBox panel;
         UIIntegerBox pixliteId;
         UIIntegerBox harnessIndex;
-        UIDoubleBox yOverride;
-        UIButton overrideHeight;
+        UIDoubleBox heightOverride;
+        UIButton heightOverrideEnabled;
         UIIntegerBox harness;
 
         StringParameter pP = new StringParameter("P");
@@ -158,7 +158,7 @@ public class UIFlowerTool extends UI2dContainer {
             pHI.setFormatter(v -> Integer.toString((int) v)).addListener(p -> onUpdate());
             pH.setFormatter(v -> Integer.toString((int) v)).addListener(p -> onUpdate());
             pOH.addListener(p -> {
-                    yOverride.setEnabled(pOH.getValueb());
+                    heightOverride.setEnabled(pOH.getValueb());
                     onUpdate();
                 });
             pYO.addListener(p -> onUpdate());
@@ -202,15 +202,15 @@ public class UIFlowerTool extends UI2dContainer {
             new UILabel(0, Y3, getContentWidth(), LH)
                 .setLabel("OVERRIDE HEIGHT").addToContainer(this);
 
-            overrideHeight = new UIButton(0, Y4, H, H);
-            overrideHeight.setLabel("").setParameter(pOH);
-            overrideHeight.addToContainer(this);
-            overrideHeight.setEnabled(false);
+            heightOverrideEnabled = new UIButton(0, Y4, H, H);
+            heightOverrideEnabled.setLabel("").setParameter(pOH);
+            heightOverrideEnabled.addToContainer(this);
+            heightOverrideEnabled.setEnabled(false);
 
-            yOverride = new UIDoubleBox(H + 4, Y4, PW, H);
-            yOverride.setParameter(pYO);
-            yOverride.addToContainer(this);
-            yOverride.setEnabled(false);
+            heightOverride = new UIDoubleBox(H + 4, Y4, PW, H);
+            heightOverride.setParameter(pYO);
+            heightOverride.addToContainer(this);
+            heightOverride.setEnabled(false);
         }
 
         void setCurrent(FlowerModel fm) {
@@ -222,8 +222,8 @@ public class UIFlowerTool extends UI2dContainer {
             pixliteId.setEnabled(true);
             harness.setEnabled(true);
             harnessIndex.setEnabled(true);
-            yOverride.setEnabled(pOH.getValueb());
-            overrideHeight.setEnabled(true);
+            heightOverride.setEnabled(pOH.getValueb());
+            heightOverrideEnabled.setEnabled(true);
 
             redraw();
         }
@@ -238,8 +238,8 @@ public class UIFlowerTool extends UI2dContainer {
             pPX.setValue(current.record.pixliteId);
             pH.setValue(current.record.harness);
             pHI.setValue(current.record.harnessIndex);
-            pYO.setValue(current.record.yOverride);
-            pOH.setValue(current.record.overrideHeight);
+            pYO.setValue(current.record.heightOverride);
+            pOH.setValue(current.record.heightOverrideEnabled);
             loading = false;
         }
 
@@ -251,8 +251,8 @@ public class UIFlowerTool extends UI2dContainer {
             current.record.pixliteId = pPX.getValuei();
             current.record.harness = pH.getValuei();
             current.record.harnessIndex = pHI.getValuei();
-            current.record.overrideHeight = pOH.getValueb();
-            current.record.yOverride = pYO.getValuef();
+            current.record.heightOverrideEnabled = pOH.getValueb();
+            current.record.heightOverride = pYO.getValuef();
             current.recalculateLocation();
             currentModel.onDataUpdated();
             UIFlowerTool.this.onUpdate();

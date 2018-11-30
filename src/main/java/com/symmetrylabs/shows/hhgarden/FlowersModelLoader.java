@@ -37,10 +37,8 @@ public class FlowersModelLoader {
         List<FlowerData> flowerData = new ArrayList<>();
         for (int vi = 0; vi < model.getNumVertices(); vi++) {
             FloatTuple v = model.getVertex(vi);
-            /* SLStudio uses a left-handed coordinate system (to the complete and
-             * utter bafflement of your narrator); negate Z to bring a model from
-             * a RHCS to a LHCS */
-            flowerData.add(new FlowerData(new LXVector(v.getX(), v.getY(), -v.getZ())));
+            /* Change coordinate system to Z-up and LHS */
+            flowerData.add(new FlowerData(new LXVector(v.getX(), v.getZ(), v.getY())));
         }
 
         if (RECORD_FILE.exists()) {
@@ -68,7 +66,8 @@ public class FlowersModelLoader {
             for (FlowerRecord r : records) {
                 float sqdist = (float) (
                     Math.pow(fd.location.x - r.x, 2) +
-                    Math.pow(fd.location.z - r.z, 2));
+                    /* compare Y against Z to compensate for the coordinate change on import */
+                    Math.pow(fd.location.y - r.z, 2));
                 if (sqdist < RECORD_MATCH_SQDIST_INCHES) {
                     fd.record = r;
                     break;
@@ -94,9 +93,7 @@ public class FlowersModelLoader {
 
     private static void updateHeights(List<FlowerData> data) {
         for (FlowerData fd : data) {
-            if (fd.record.overrideHeight) {
-                fd.location.y = fd.record.yOverride;
-            }
+            fd.recalculateLocation();
         }
     }
 

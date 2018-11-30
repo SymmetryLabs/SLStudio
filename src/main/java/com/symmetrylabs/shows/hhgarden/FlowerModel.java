@@ -39,19 +39,19 @@ public class FlowerModel extends SLModel {
 
         void setBaseLocation(LXVector base) {
             switch (group) {
-            case STEM: y = STY; break;
-            case PETAL1: y = P1Y; break;
-            case PETAL2: y = P2Y; break;
-            case STAMEN: y = UPY; break;
+            case STEM: z = STZ; break;
+            case PETAL1: z = P1Z; break;
+            case PETAL2: z = P2Z; break;
+            case STAMEN: z = UPZ; break;
             }
-            y += base.y;
             switch (direction) {
-            case UP: x = 0; z = 0; break;
-            case A: x = AX; z = AZ; break;
-            case B: x = BX; z = BZ; break;
-            case C: x = CX; z = CZ; break;
+            case UP: x = 0; y = 0; break;
+            case A: x = AX; y = AY; break;
+            case B: x = BX; y = BY; break;
+            case C: x = CX; y = CY; break;
             }
             x += base.x;
+            y += base.y;
             z += base.z;
             update();
         }
@@ -98,13 +98,13 @@ public class FlowerModel extends SLModel {
     private static final float AX = (float) (4. / Math.tan(60. / 180. * Math.PI));
     private static final float BX = 0;
     private static final float CX = (float) (-4. / Math.tan(60. / 180. * Math.PI));
-    private static final float UPY = 2.f;
-    private static final float P2Y = 1.f;
-    private static final float P1Y = -1.f;
-    private static final float STY = -4.f;
-    private static final float AZ = -4.f / 3.f;
-    private static final float BZ = 8.f / 3.f;
-    private static final float CZ = -4.f / 3.f;
+    private static final float AY = -4.f / 3.f;
+    private static final float BY = 8.f / 3.f;
+    private static final float CY = -4.f / 3.f;
+    private static final float UPZ = 2.f;
+    private static final float P2Z = 1.f;
+    private static final float P1Z = -1.f;
+    private static final float STZ = -4.f;
 
     public static FlowerModel create(FlowerData fd) {
         List<FlowerPoint> points = new ArrayList<>();

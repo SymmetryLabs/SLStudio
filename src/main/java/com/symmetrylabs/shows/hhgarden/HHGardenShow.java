@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Map;
 import com.symmetrylabs.slstudio.output.AssignablePixlite;
 import com.symmetrylabs.slstudio.output.AssignablePixlite.Dataline;
+import heronarts.p3lx.ui.UI3dContext;
 
 public class HHGardenShow implements Show, UIFlowerTool.Listener {
     public static final String SHOW_NAME = "hhgarden";
@@ -91,6 +92,7 @@ public class HHGardenShow implements Show, UIFlowerTool.Listener {
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         UIFlowerTool.attach(lx, ui).addListener(this);
+        ui.preview.setInteractionMode(UI3dContext.InteractionMode.ZOOM_Z_UP);
     }
 
     @Override
