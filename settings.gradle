@@ -3,6 +3,6 @@ rootProject.name = 'SLStudio'
 if (hasProperty('localp3lx')) {
 	include ':P3LX'
 	include ':LX'
-	project(':P3LX').projectDir = new File(rootProject.projectDir, '../P3LX')
+	project(':P3LX').projectDir = new File(rootProject.projectDir, '../p3lx')
 	project(':LX').projectDir = new File(rootProject.projectDir, '../LX')
 }
