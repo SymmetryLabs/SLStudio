@@ -785,7 +785,7 @@ public class UI implements LXEngine.Dispatch {
         switch (mouseEvent.getAction()) {
         case MouseEvent.WHEEL:
             int wheelCount = mouseEvent.getCount();
-            if (PApplet.platform == PConstants.WINDOWS) {
+            if (PApplet.platform != PConstants.MACOSX) {
                 wheelCount *= 50;
             }
             this.root.mouseWheel(mouseEvent, mouseEvent.getX(), mouseEvent.getY(), wheelCount);
