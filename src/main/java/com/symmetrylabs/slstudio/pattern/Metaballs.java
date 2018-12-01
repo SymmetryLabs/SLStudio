@@ -32,9 +32,9 @@ public class Metaballs extends SLPattern<SLModel> {
     private final CompoundParameter falloff = new CompoundParameter("falloff", 3.6,0.1, 100);
     private final CompoundParameter attract = new CompoundParameter("attract", 4,1, 100);
     private final CompoundParameter repel = new CompoundParameter("repel", 2,1, 12);
-    private final CompoundParameter jump = new CompoundParameter("jump", 5,0.2, 20);
+    private final CompoundParameter jump = new CompoundParameter("jump", 5,0.2, 60);
     private final EnumParameter<FieldMapping> mapping = new EnumParameter<>("map", FieldMapping.HUE);
-    private final DiscreteParameter count = new DiscreteParameter("count", 3, 0, 30);
+    private final DiscreteParameter count = new DiscreteParameter("count", 3, 0, 60);
     private final DiscreteParameter posterize = new DiscreteParameter("poster", 0, 0, 9);
     private final ArrayList<Ball> balls = new ArrayList<>();
     private final Random random = new Random();
@@ -143,9 +143,32 @@ public class Metaballs extends SLPattern<SLModel> {
         }
 
         private void pickRandomTarget() {
+            double[] weights = new double[model.points.length];
+            double totalWeight = 0;
+            LXVector[] vs = getVectorArray();
+            for (int i = 0; i < vs.length; i++) {
+                LXVector v = vs[i];
+                double minDist = Float.MAX_VALUE;
+                for (Ball b : balls) {
+                    minDist = Double.min(minDist, b.target.dist(v));
+                }
+                /* the further away the nearest current target is, the higher its weight */
+                weights[i] = minDist;
+                totalWeight += minDist;
+            }
+            for (int i = 0; i < weights.length; i++) {
+                weights[i] /= totalWeight;
+            }
+
+            double w = random.nextDouble();
+            double accum = 0;
             LXPoint p = null;
-            while (p == null) {
-                p = model.points[random.nextInt(model.points.length)];
+            for (int i = 0; i < weights.length; i++) {
+                accum += weights[i];
+                if (w < accum) {
+                    p = model.points[i];
+                    break;
+                }
             }
             target.set(p.x, p.y, p.z);
         }
