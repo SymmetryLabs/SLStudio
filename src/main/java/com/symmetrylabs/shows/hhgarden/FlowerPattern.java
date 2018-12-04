@@ -5,7 +5,9 @@ import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import java.util.stream.Stream;
 
-public class FlowerPattern extends SLPattern<FlowersModel> {
+public abstract class FlowerPattern extends SLPattern<FlowersModel> {
+    public static final String GROUP_NAME = HHGardenShow.SHOW_NAME;
+
     protected FlowerPoint[] flowerPoints;
 
     public FlowerPattern(LX lx) {
