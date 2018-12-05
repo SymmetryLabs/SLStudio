@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FlowerModel extends SLModel {
+    public static final int POINT_COUNT = 10;
+
     public enum Group {
         STAMEN,
         PETAL1,

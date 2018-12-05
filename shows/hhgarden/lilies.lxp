@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1543622152813,
+  "timestamp": 1543969256024,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 0.6166666466742754,
-      "focusedChannel": 2,
+      "focusedChannel": 3,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -121,7 +121,7 @@
             "modulationColor": -38400,
             "parameters": {
               "label": "Ripple",
-              "speed": 71.99999865889549,
+              "speed": -277.9999935179949,
               "dist": 234.20000817626715,
               "x": -1.0,
               "z": -0.1049999906122685,
@@ -221,7 +221,21 @@
           "transitionBlendMode": 0,
           "autoDisable": false
         },
-        "warps": [],
+        "warps": [
+          {
+            "id": 1420,
+            "class": "com.symmetrylabs.slstudio.warp.SwapAxis",
+            "modulationColor": -65288,
+            "parameters": {
+              "label": "SwapAxis",
+              "enabled": true,
+              "x": 2,
+              "y": 0,
+              "z": 2,
+              "norm": true
+            }
+          }
+        ],
         "effects": [
           {
             "id": 157,
@@ -270,7 +284,7 @@
             "modulationColor": -16711695,
             "parameters": {
               "label": "Noise",
-              "Hue": 342.36000121571124,
+              "Hue": 212.76000411249697,
               "Spark": 0.0,
               "Wave": 0.0,
               "xPos": 0.5,
@@ -285,9 +299,9 @@
               "X-DUP": false,
               "JOG": false,
               "GREY": false,
-              "Speed": 0.5899999991059302,
+              "Speed": 0.030000011622905554,
               "Symm": 0,
-              "Anim": 4,
+              "Anim": 3,
               "Dens": 0.5200000017881393,
               "AnimResets": false
             },
@@ -360,13 +374,30 @@
             }
           },
           {
-            "id": 297,
-            "class": "heronarts.lx.effect.BlurEffect",
-            "modulationColor": -65424,
+            "id": 1421,
+            "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
+            "modulationColor": -9502976,
             "parameters": {
-              "label": "Blur",
+              "label": "ColorShift",
               "enabled": true,
-              "amount": 0.9800000004470348
+              "Shift": 172.79999613761902
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 1424,
+            "class": "heronarts.lx.effect.DesaturationEffect",
+            "modulationColor": -65345,
+            "parameters": {
+              "label": "Desaturation",
+              "enabled": true,
+              "amount": 0.2200000174343586,
+              "attack": 100.0,
+              "decay": 100.0
             },
             "modulation": {
               "modulators": [],
@@ -422,12 +453,12 @@
             "modulationColor": -31232,
             "parameters": {
               "label": "Raindrops",
-              "Number": -87.9999989271164,
-              "Size": 0.1,
+              "Number": -183.99999678134918,
+              "Size": 0.30699999537318945,
               "SizeVar": 0.21000000648200512,
-              "Speed": -5459.000034444034,
-              "SpeedVar": 0.5,
-              "HueVar": 0.5
+              "Speed": -4788.999899663031,
+              "SpeedVar": 0.5599999874830246,
+              "HueVar": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -702,8 +733,8 @@
       },
       "preview": {
         "radius": 1244.0,
-        "theta": 4.317000000000021,
-        "phi": 0.2982036294937122,
+        "theta": 5.0520000000000005,
+        "phi": 0.19620362949371206,
         "positionX": 846.3702392578125,
         "positionY": 622.5409545898438,
         "positionZ": 41.7528076171875
