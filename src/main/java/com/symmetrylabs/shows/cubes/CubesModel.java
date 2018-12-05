@@ -1,21 +1,21 @@
 package com.symmetrylabs.shows.cubes;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
-import heronarts.lx.model.LXPoint;
+import com.symmetrylabs.slstudio.output.PointsGrouping;
 import heronarts.lx.model.LXAbstractFixture;
+import heronarts.lx.model.LXModel;
+import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXTransform;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.symmetrylabs.util.MathUtils.*;
 import static com.symmetrylabs.util.DistanceConstants.*;
 import static com.symmetrylabs.util.MathConstants.*;
-import com.symmetrylabs.slstudio.output.PointsGrouping;
 
 /**
  * Top-level model of the entire sculpture. This contains a set of
@@ -43,23 +43,33 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         super(new Fixture(cubeArr));
         Fixture fixture = (Fixture) this.fixtures.get(0);
 
-        for (Tower tower : towers) {
-            this.towers.add(tower);
-
-            for (Cube cube : tower.getCubes()) {
-                if (cube != null) {
-                    this.cubeTable.put(cube.id, cube);
-                    if (cube instanceof DoubleControllerCube) {
-                        DoubleControllerCube c2 = (DoubleControllerCube) cube;
-                        this.cubeTableA.put(c2.idA, c2);
-                        this.cubeTableB.put(c2.idB, c2);
-                    }
-                    this.cubes.add(cube);
-                    this.faces.addAll(cube.getFaces());
-                    this.strips.addAll(cube.getStrips());
-                }
+        this.towers.addAll(towers);
+        for (Cube cube : cubeArr) {
+            if (cube != null) {
+                this.cubes.add(cube);
+                this.faces.addAll(cube.getFaces());
+                this.strips.addAll(cube.getStrips());
             }
         }
+        updateCubeTables();
+    }
+
+    private void updateCubeTables() {
+        for (Cube c : cubes) {
+            cubeTable.put(c.id, c);
+            if (c instanceof DoubleControllerCube) {
+                DoubleControllerCube c2 = (DoubleControllerCube) c;
+                cubeTableA.put(c2.idA, c2);
+                cubeTableB.put(c2.idB, c2);
+            }
+        }
+    }
+
+    @Override
+    public LXModel update(boolean normalize, boolean recurse) {
+        super.update(normalize, recurse);
+        updateCubeTables();
+        return this;
     }
 
     public List<Tower> getTowers() {
@@ -243,35 +253,35 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         /**
          * Front left corner x coordinate
          */
-        public final float x;
+        public float x;
 
         /**
          * Front left corner y coordinate
          */
-        public final float y;
+        public float y;
 
         /**
          * Front left corner z coordinate
          */
-        public final float z;
+        public float z;
 
         /**
          * Rotation about the x-axis
          */
-        public final float rx;
+        public float rx;
 
         /**
          * Rotation about the y-axis
          */
-        public final float ry;
+        public float ry;
 
         /**
          * Rotation about the z-axis
          */
-        public final float rz;
+        public float rz;
 
         public Cube(String id, float x, float y, float z, float rx, float ry, float rz, LXTransform t, Type type) {
-            super(new Fixture(x, y, z, rx, ry, rz, t, type));
+            super(new Fixture(type));
 
             Fixture fixture = (Fixture) this.fixtures.get(0);
 
@@ -294,10 +304,28 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
 
             this.faces.addAll(fixture.faces);
             this.strips.addAll(fixture.strips);
+            updatePoints(t);
         }
 
         public List<Face> getFaces() {
             return facesUnmodifiable;
+        }
+
+        public void updatePoints(LXTransform t) {
+            t.push();
+            t.translate(x, y+type.EDGE_HEIGHT, z);
+            t.translate(type.EDGE_WIDTH/2, type.EDGE_HEIGHT/2, type.EDGE_WIDTH/2);
+            t.rotateX(rx * Math.PI / 180.);
+            t.rotateY((ry * Math.PI / 180.) - HALF_PI);
+            t.rotateZ(rz * Math.PI / 180.);
+            t.translate(-type.EDGE_WIDTH/2, -type.EDGE_HEIGHT/2, -type.EDGE_WIDTH/2);
+
+            for (int i = 0; i < FACES_PER_CUBE; i++) {
+                faces.get(i).updatePoints(t);
+                t.translate(type.EDGE_WIDTH, 0, 0);
+                t.rotateY(-HALF_PI);
+            }
+            t.pop();
         }
 
         private static class Fixture extends LXAbstractFixture {
@@ -305,29 +333,15 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
             private final List<Face> faces = new ArrayList<>();
             private final List<CubesStrip> strips = new ArrayList<>();
 
-            private Fixture(float x, float y, float z, float rx, float ry, float rz, LXTransform t, Cube.Type type) {
-                // LXTransform t = new LXTransform();
-                t.push();
-                t.translate(x, y+type.EDGE_HEIGHT, z);
-                t.translate(type.EDGE_WIDTH/2, type.EDGE_HEIGHT/2, type.EDGE_WIDTH/2);
-                t.rotateX(rx * Math.PI / 180.);
-                t.rotateY((ry * Math.PI / 180.) - HALF_PI);
-                t.rotateZ(rz * Math.PI / 180.);
-                t.translate(-type.EDGE_WIDTH/2, -type.EDGE_HEIGHT/2, -type.EDGE_WIDTH/2);
-
+            private Fixture(Type type) {
                 for (int i = 0; i < FACES_PER_CUBE; i++) {
-                    Face face = new Face(type.FACE_METRICS, t);
-                    this.faces.add(face);
-                    for (CubesStrip s : face.getStrips()) {
-                        this.strips.add(s);
-                    }
+                    Face face = new Face(type.FACE_METRICS);
+                    faces.add(face);
+                    strips.addAll(face.getStrips());
                     for (LXPoint p : face.points) {
-                        this.points.add(p);
+                        points.add(p);
                     }
-                    t.translate(type.EDGE_WIDTH, 0, 0);
-                    t.rotateY(-HALF_PI);
                 }
-                t.pop();
             }
         }
     }
@@ -350,31 +364,41 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
             }
         }
 
-        public Face(Metrics metrics, LXTransform transform) {
-            super(new Fixture(metrics, transform));
+        private final Metrics metrics;
+
+        public Face(Metrics metrics) {
+            super(new Fixture(metrics));
 
             Fixture fixture = (Fixture) this.fixtures.get(0);
-            this.strips.addAll(fixture.strips);
+            strips.addAll(fixture.strips);
+            this.metrics = metrics;
+        }
+
+        public void updatePoints(LXTransform t) {
+            t.push();
+            for (int i = 0; i < STRIPS_PER_FACE; i++) {
+                CubesStrip strip = strips.get(i);
+                strip.updatePoints(t);
+                t.translate(i % 2 == 0 ? metrics.horizontal.length : metrics.vertical.length, 0, 0);
+                t.rotateZ(-HALF_PI);
+            }
+            t.pop();
         }
 
         private static class Fixture extends LXAbstractFixture {
 
             private final List<CubesStrip> strips = new ArrayList<>();
 
-            private Fixture(Metrics metrics, LXTransform transform) {
-                transform.push();
+            private Fixture(Metrics metrics) {
                 for (int i = 0; i < STRIPS_PER_FACE; i++) {
                     boolean isHorizontal = (i % 2 == 0);
                     CubesStrip.Metrics stripMetrics = isHorizontal ? metrics.horizontal : metrics.vertical;
-                    CubesStrip strip = new CubesStrip(i+"", stripMetrics, isHorizontal, transform);
+                    CubesStrip strip = new CubesStrip(i+"", stripMetrics, isHorizontal);
                     this.strips.add(strip);
-                    transform.translate(isHorizontal ? metrics.horizontal.length : metrics.vertical.length, 0, 0);
-                    transform.rotateZ(-HALF_PI);
                     for (LXPoint p : strip.points) {
                         this.points.add(p);
                     }
                 }
-                transform.pop();
             }
         }
     }
@@ -390,14 +414,14 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
             public final float length;
             public final int ledsPerMeter;
 
-            public final float POINT_SPACING;
+            public final float pointSpacing;
 
             public Metrics(float length, int numPoints, int ledsPerMeter) {
                 super(numPoints);
 
                 this.length = length;
                 this.ledsPerMeter = ledsPerMeter;
-                this.POINT_SPACING = INCHES_PER_METER / ledsPerMeter;
+                this.pointSpacing = INCHES_PER_METER / ledsPerMeter;
             }
 
             public Metrics(int numPoints, float spacing) {
@@ -405,7 +429,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
 
                 this.length = numPoints * spacing;
                 this.ledsPerMeter = floor((INCHES_PER_METER / this.length) * numPoints);
-                this.POINT_SPACING = spacing;
+                this.pointSpacing = spacing;
             }
         }
 
@@ -413,22 +437,36 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
             super(id, metrics, points);
         }
 
-        public CubesStrip(String id, Metrics metrics, boolean isHorizontal, LXTransform transform) {
-            super(id, metrics, new Fixture(metrics, transform));
+        public CubesStrip(String id, Metrics metrics, boolean isHorizontal) {
+            super(id, metrics, new Fixture(metrics));
             this.isHorizontal = isHorizontal;
         }
 
-        private static class Fixture extends LXAbstractFixture {
-            private Fixture(Metrics metrics, LXTransform transform) {
-                float offset = (metrics.length - (metrics.numPoints - 1) * metrics.POINT_SPACING) / 2f;
+        public void updatePoints(LXTransform t) {
+          Metrics m = (Metrics) metrics;
+            float offset = (m.length - (m.numPoints - 1) * m.pointSpacing) / 2f;
 
+            t.push();
+            t.translate(offset, -Cube.CHANNEL_WIDTH / 2f, 0);
+            for (int i = 0; i < m.numPoints; i++) {
+                points[i].update(t.x(), t.y(), t.z());
+                t.translate(m.pointSpacing, 0, 0);
+            }
+            t.pop();
+        }
+
+        private static class Fixture extends LXAbstractFixture {
+            private Fixture(Metrics metrics) {
+                float offset = (metrics.length - (metrics.numPoints - 1) * metrics.pointSpacing) / 2f;
+
+                LXTransform transform = new LXTransform();
                 transform.push();
                 transform.translate(offset, -Cube.CHANNEL_WIDTH / 2f, 0);
 
                 for (int i = 0; i < metrics.numPoints; i++) {
                     LXPoint point = new LXPoint(transform.x(), transform.y(), transform.z());
                     this.points.add(point);
-                    transform.translate(metrics.POINT_SPACING, 0, 0);
+                    transform.translate(metrics.pointSpacing, 0, 0);
                 }
 
                 transform.pop();
