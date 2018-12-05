@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1543969267755,
+  "timestamp": 1543969716497,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 0.6166666466742754,
-      "focusedChannel": 3,
+      "speed": 0.33333328552544117,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -121,7 +121,7 @@
             "modulationColor": -38400,
             "parameters": {
               "label": "Ripple",
-              "speed": -277.9999935179949,
+              "speed": -500.0,
               "dist": 234.20000817626715,
               "x": -1.0,
               "z": -0.1049999906122685,
@@ -184,11 +184,11 @@
               "R-SYM": false,
               "X-DUP": false,
               "JOG": false,
-              "GREY": false,
-              "Speed": 0.55,
+              "GREY": true,
+              "Speed": -0.03999995440244675,
               "Symm": 0,
               "Anim": 4,
-              "Dens": 0.6099999997764826,
+              "Dens": 0.46000000312924383,
               "AnimResets": false
             },
             "modulation": {
@@ -266,7 +266,7 @@
             "parameters": {
               "label": "SLDesaturation",
               "enabled": true,
-              "amount": 0.42000001296401024
+              "amount": 0.19000001810491085
             },
             "modulation": {
               "modulators": [],
@@ -284,7 +284,7 @@
             "modulationColor": -16711695,
             "parameters": {
               "label": "Noise",
-              "Hue": 212.76000411249697,
+              "Hue": 196.20000508613884,
               "Spark": 0.0,
               "Wave": 0.0,
               "xPos": 0.5,
@@ -302,7 +302,7 @@
               "Speed": 0.030000011622905554,
               "Symm": 0,
               "Anim": 3,
-              "Dens": 0.5200000017881393,
+              "Dens": 0.8099999953061342,
               "AnimResets": false
             },
             "modulation": {
@@ -456,7 +456,7 @@
               "Number": -183.99999678134918,
               "Size": 0.30699999537318945,
               "SizeVar": 0.21000000648200512,
-              "Speed": -4788.999899663031,
+              "Speed": -3515.9999281167984,
               "SpeedVar": 0.5599999874830246,
               "HueVar": 0.0
             },
@@ -733,8 +733,8 @@
       },
       "preview": {
         "radius": 1244.0,
-        "theta": 5.0520000000000005,
-        "phi": 0.19620362949371206,
+        "theta": 5.132999999999983,
+        "phi": 0.3222036294937122,
         "positionX": 846.3702392578125,
         "positionY": 622.5409545898438,
         "positionZ": 41.7528076171875
