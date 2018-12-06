@@ -5,6 +5,7 @@ import java.util.*;
 import com.symmetrylabs.shows.arlo.ArloShow;
 import com.symmetrylabs.shows.arlosohoroof.ArloSohoRoofShow;
 import com.symmetrylabs.shows.arlotree.ArloTreeShow;
+import com.symmetrylabs.shows.artbasel.ArtBaselShow;
 import com.symmetrylabs.shows.composite.CompositeShow;
 import com.symmetrylabs.shows.demo.DemoShow;
 import com.symmetrylabs.shows.exploratorium.ExploratoriumShow;
@@ -67,6 +68,7 @@ public class ShowRegistry {
         map.put(ArloTreeShow.SHOW_NAME, () -> new ArloTreeShow());
         map.put(ArloSohoRoofShow.SHOW_NAME, () -> new ArloSohoRoofShow());
         map.put(ExploratoriumShow.SHOW_NAME, () -> new ExploratoriumShow());
+        map.put(ArtBaselShow.SHOW_NAME, () -> new ArtBaselShow());
     }
 
     static interface ShowBuilder {
