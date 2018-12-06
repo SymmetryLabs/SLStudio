@@ -9,6 +9,7 @@ import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
 import com.symmetrylabs.util.FileUtils;
 
+import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEngine;
 import heronarts.lx.color.LXColor;
@@ -36,7 +37,7 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
     static final int RED = LXColor.hsb(RED_HUE, 100, 100);
     static final int YELLOW = LXColor.hsb(YELLOW_HUE, 85, 100);
 
-    private SLStudioLX lx;
+    private LX lx;
     private CartConfigurator configurator;
     private List<PilotsPixlite> outputs = new ArrayList<>();
     private Workspace workspace;
@@ -87,7 +88,7 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
     }
 
     @Override
-    public void setupLx(SLStudioLX lx) {
+    public void setupLx(LX lx) {
         this.lx = lx;
 
         initialConfigs = CartConfig.readConfigsFromFile();

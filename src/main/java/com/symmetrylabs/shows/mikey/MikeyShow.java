@@ -22,13 +22,9 @@ public class MikeyShow implements Show {
     }
 
     @Override
-    public void setupLx(SLStudioLX lx) {
+    public void setupLx(LX lx) {
         MikeyPixlite pixlite = new MikeyPixlite(lx, "10.200.1.40", (MikeyModel) lx.model);
         lx.addOutput(pixlite);
-    }
-
-    @Override
-    public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
     }
 
     static class MikeyModel extends StripsModel<Strip> {

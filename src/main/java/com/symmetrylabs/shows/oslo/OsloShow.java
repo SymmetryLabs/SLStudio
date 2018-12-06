@@ -3,6 +3,7 @@ package com.symmetrylabs.shows.oslo;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
+import heronarts.lx.LX;
 import processing.core.PApplet;
 
 public class OsloShow implements Show {
@@ -20,7 +21,7 @@ public class OsloShow implements Show {
     }
 
     @Override
-    public void setupLx(SLStudioLX lx) {
+    public void setupLx(LX lx) {
     }
 
     @Override

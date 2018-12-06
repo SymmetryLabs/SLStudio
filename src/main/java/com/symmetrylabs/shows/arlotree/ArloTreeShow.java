@@ -18,6 +18,7 @@ import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.shows.tree.config.*;
 import com.symmetrylabs.shows.tree.ui.*;
 import com.symmetrylabs.shows.tree.ui.UIScheduler;
+import heronarts.lx.LX;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
 
@@ -69,7 +70,7 @@ public class ArloTreeShow extends TreeShow {
         return new TreeModel(config);
     }
 
-    public void setupLx(SLStudioLX lx) {
+    public void setupLx(LX lx) {
         super.setupLx(lx);
         //lx.engine.framesPerSecond.setValue(30);
 

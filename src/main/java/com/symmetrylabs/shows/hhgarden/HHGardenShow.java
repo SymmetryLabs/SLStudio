@@ -29,7 +29,7 @@ public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener, 
 
     private final HashMap<Integer, AssignablePixlite> pixlites = new HashMap<>();
     static final String PIXLITE_IP_FORMAT = "10.200.1.%d";
-    private SLStudioLX lx;
+    private LX lx;
     private Workspace workspace;
 
     @Override
@@ -38,7 +38,7 @@ public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener, 
     }
 
     @Override
-    public void setupLx(SLStudioLX lx) {
+    public void setupLx(LX lx) {
         this.lx = lx;
         NetworkMonitor.getInstance(lx).start();
 
@@ -49,7 +49,7 @@ public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener, 
         }
     }
 
-    private void updatePixlites(SLStudioLX lx, FlowersModel model) {
+    private void updatePixlites(LX lx, FlowersModel model) {
         HashSet<Integer> allPixliteIds = new HashSet<>();
 
         for (FlowerModel fm : model.getFlowers()) {

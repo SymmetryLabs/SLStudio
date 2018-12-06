@@ -8,6 +8,7 @@ import com.symmetrylabs.slstudio.dmx.DmxUsbOutput;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.output.DummyOutput;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
+import heronarts.lx.LX;
 import heronarts.p3lx.ui.component.UIKnob;
 
 public class StreetlampShow implements Show, HasWorkspace {
@@ -21,7 +22,7 @@ public class StreetlampShow implements Show, HasWorkspace {
     }
 
     @Override
-    public void setupLx(SLStudioLX lx) {
+    public void setupLx(LX lx) {
         GammaExpander g = GammaExpander.getInstance(lx);
         g.redGammaFactor.setValue(0.21);
         g.greenGammaFactor.setValue(0.37);

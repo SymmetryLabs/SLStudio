@@ -26,13 +26,9 @@ public class HHFlowerShow implements Show {
     }
 
     @Override
-    public void setupLx(SLStudioLX lx) {
+    public void setupLx(LX lx) {
         FlowerPixlite pixlite = new FlowerPixlite(lx, "10.200.1.255", lx.model);
         lx.addOutput(pixlite);
-    }
-
-    @Override
-    public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
     }
 
     static class FlowerPixlite extends SimplePixlite {

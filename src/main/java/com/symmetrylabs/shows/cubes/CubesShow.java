@@ -95,7 +95,7 @@ public abstract class CubesShow implements Show {
 
     public abstract SLModel buildModel();
 
-    public void setupLx(SLStudioLX lx) {
+    public void setupLx(LX lx) {
         instanceByLX.put(lx, new WeakReference<>(this));
 
         final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();

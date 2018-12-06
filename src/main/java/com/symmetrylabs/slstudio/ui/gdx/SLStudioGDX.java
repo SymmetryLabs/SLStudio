@@ -37,6 +37,7 @@ public class SLStudioGDX extends ApplicationAdapter {
 
         LXModel model = show.buildModel();
         lx = new LX(model);
+        show.setupLx(lx);
 
         renderer = new ModelRenderer(lx, model);
 

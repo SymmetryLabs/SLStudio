@@ -13,6 +13,7 @@ import com.symmetrylabs.util.MarkerSource;
 import java.awt.*;
 import java.util.Collection;
 import java.util.Arrays;
+import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 
 public class GoogleHqShow implements Show, MarkerSource {
@@ -27,7 +28,7 @@ public class GoogleHqShow implements Show, MarkerSource {
     }
 
     @Override
-    public void setupLx(SLStudioLX lx) {
+    public void setupLx(LX lx) {
 
     }
 

@@ -28,7 +28,7 @@ public abstract class TreeShow implements Show {
         lx.addOutput(pixlite);
     }
 
-    public void setupLx(SLStudioLX lx) {
+    public void setupLx(LX lx) {
         lx.engine.registerComponent("treeModelingTool", TreeModelingTool.getInstance(lx));
 
         //anemometer = new Anemometer();
