@@ -34,14 +34,9 @@ public class ModelRenderer {
         pointShader = new ShaderProgram(vert, frag);
 
         int N = model.points.length;
-        float[] vertdata = new float[3 * N];
-        for (int i = 0; i < N; i++) {
-            vertdata[3 * i + 0] = model.points[i].x;
-            vertdata[3 * i + 1] = model.points[i].y;
-            vertdata[3 * i + 2] = model.points[i].z;
-        }
-        positionVbo = new VertexBufferObject(true, N, VertexAttribute.Position());
-        positionVbo.setVertices(vertdata, 0, 3 * N);
+        positionVbo = new VertexBufferObject(false, N, VertexAttribute.Position());
+        updatePoints();
+        model.addListener(m -> updatePoints());
 
         cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(model.cx, model.cy, model.zMin - model.rMax);
@@ -53,6 +48,17 @@ public class ModelRenderer {
         glColorBuffer = new float[4 * N];
         lxColorBuffer = new PolyBuffer(lx);
         colorVbo = new VertexBufferObject(false, N, VertexAttribute.ColorUnpacked());
+    }
+
+    private void updatePoints() {
+        int N = model.points.length;
+        float[] vertdata = new float[3 * N];
+        for (int i = 0; i < N; i++) {
+            vertdata[3 * i + 0] = model.points[i].x;
+            vertdata[3 * i + 1] = model.points[i].y;
+            vertdata[3 * i + 2] = model.points[i].z;
+        }
+        positionVbo.setVertices(vertdata, 0, 3 * N);
     }
 
     public void draw() {
@@ -81,6 +87,9 @@ public class ModelRenderer {
         colorVbo.setVertices(glColorBuffer, 0, model.points.length * 4);
 
         Gdx.gl.glDrawArrays(GL20.GL_POINTS, 0, model.points.length);
+
+        positionVbo.unbind(pointShader);
+        colorVbo.unbind(pointShader);
 
         pointShader.disableVertexAttribute("a_color");
         pointShader.disableVertexAttribute("a_position");
