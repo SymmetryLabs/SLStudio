@@ -1,5 +1,6 @@
 package com.symmetrylabs.shows;
 
+import heronarts.lx.LX;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 
@@ -17,8 +18,14 @@ public interface Show {
     default void setupLx(SLStudioLX lx) {}
 
     /**
-     * This will be called when the UI is ready.  Use this to add panels to the UI
-     * and register additional 3-D objects to be rendered in the display.
+     * This will be called when the UI is ready if we're using the P3LX UI. Use
+     * this to add panels to the UI and register additional 3-D objects to be
+     * rendered in the display.
      */
     default void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {}
+
+    /**
+     * This will be called when the UI is ready for all UIs.
+     */
+    default void setupUi(LX lx) {}
 }

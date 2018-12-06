@@ -4,17 +4,17 @@ import java.util.*;
 import java.lang.ref.WeakReference;
 
 import com.symmetrylabs.shows.Show;
+import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.network.NetworkDevice;
+import com.symmetrylabs.slstudio.network.NetworkMonitor;
+import com.symmetrylabs.slstudio.ui.gdx.WindowManager;
 import com.symmetrylabs.util.CubePhysicalIdMap;
+import com.symmetrylabs.util.dispatch.Dispatcher;
+import com.symmetrylabs.util.listenable.ListenableSet;
 import com.symmetrylabs.util.listenable.SetListener;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
-
-import com.symmetrylabs.slstudio.SLStudioLX;
-import com.symmetrylabs.slstudio.network.NetworkMonitor;
-import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.util.dispatch.Dispatcher;
-import com.symmetrylabs.util.listenable.ListenableSet;
 import heronarts.p3lx.ui.UI2dScrollContext;
 
 /**
@@ -160,5 +160,9 @@ public abstract class CubesShow implements Show {
         UI2dScrollContext utility = ui.rightPane.utility;
         new UICubesOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UICubesMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
+    }
+
+    public void setupUi(LX lx) {
+        WindowManager.get().add(new CubeEditor((CubesModel) lx.model));
     }
 }

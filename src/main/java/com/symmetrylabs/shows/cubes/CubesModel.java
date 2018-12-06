@@ -245,7 +245,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
 
         public final Type type;
 
-        public final String id;
+        public String id;
 
         protected final List<Face> faces = new ArrayList<>();
         private final List<Face> facesUnmodifiable = Collections.unmodifiableList(faces);

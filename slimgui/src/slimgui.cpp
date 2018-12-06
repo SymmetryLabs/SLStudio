@@ -335,6 +335,15 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_combo(
 	return res;
 }
 
+JNIEXPORT jfloat JNICALL
+Java_com_symmetrylabs_slstudio_ui_gdx_UI_floatBox(JNIEnv *env, jclass, jstring jlabel, jfloat v) {
+	const char *label = env->GetStringUTFChars(jlabel, 0);
+	jfloat res = v;
+	ImGui::DragFloat(label, &res);
+	env->ReleaseStringUTFChars(jlabel, label);
+	return res;
+}
+
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_gdx_UI_beginMainMenuBar(JNIEnv *env, jclass) {
 	return ImGui::BeginMainMenuBar() ? 1 : 0;

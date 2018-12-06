@@ -59,6 +59,8 @@ public class SLStudioGDX extends ApplicationAdapter {
         lx.engine.isChannelMultithreaded.setValue(true);
         lx.engine.isNetworkMultithreaded.setValue(true);
         lx.engine.start();
+
+        show.setupUi(lx);
     }
 
     @Override

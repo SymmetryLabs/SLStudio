@@ -249,6 +249,14 @@ JNIEXPORT jint JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_combo
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
+ * Method:    floatBox
+ * Signature: (Ljava/lang/String;F)F
+ */
+JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_floatBox
+  (JNIEnv *, jclass, jstring, jfloat);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_gdx_UI
  * Method:    beginMainMenuBar
  * Signature: ()Z
  */
