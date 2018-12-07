@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544168905953,
+  "timestamp": 1544169016990,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 3,
+      "focusedChannel": 6,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -30,10 +30,10 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 81.77222269773483,
+        "color/hue": 56.84166595339775,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
-        "color": -6095104,
+        "color": -3584,
         "period": 120000.0,
         "range": 0.0,
         "spread": 0.0,
@@ -154,7 +154,7 @@
             "modulationColor": -9436929,
             "parameters": {
               "label": "Noise",
-              "Hue": 270.0,
+              "Hue": 240.0000286102295,
               "Spark": 0.8199999816715717,
               "Wave": 0.0,
               "xPos": 0.5,
@@ -304,7 +304,7 @@
           "label": "YellowWipe",
           "arm": false,
           "enabled": false,
-          "cue": true,
+          "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
@@ -454,7 +454,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.6539633870124817,
+          "fader": 0.8034040927886963,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -483,7 +483,7 @@
             "modulationColor": -327425,
             "parameters": {
               "label": "Strobe",
-              "enabled": false,
+              "enabled": true,
               "Shape": 2,
               "Freq": 10.0,
               "Black": true
@@ -519,7 +519,7 @@
               "X-DUP": false,
               "JOG": false,
               "GREY": true,
-              "Speed": 0.5499999523162842,
+              "Speed": 0.9000000953674316,
               "Symm": 0,
               "Anim": 7,
               "Dens": 0.6,
@@ -547,7 +547,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.9682432413101196,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -583,7 +583,7 @@
               "label": "TwoTone",
               "enabled": true,
               "Lcut1": 1.0,
-              "Lcut2": 92.00000166893005,
+              "Lcut2": 95.99999785423279,
               "c1/hue": 0.0,
               "c1/brightness": 100.0,
               "c1/saturation": 100.0,
@@ -607,7 +607,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 0.0,
+              "rad": 167.27215751646145,
               "invert": true,
               "cx": 410.0,
               "cy": 116.0
@@ -642,7 +642,7 @@
             "parameters": {
               "label": "BrightnessShift",
               "enabled": true,
-              "Bscale": 0.5600000080466271,
+              "Bscale": 0.6000000071525574,
               "Bshift": 0.0
             },
             "modulation": {
@@ -707,7 +707,7 @@
         "warps": [],
         "effects": [],
         "clips": [],
-        "patternIndex": 1,
+        "patternIndex": 0,
         "patterns": [
           {
             "id": 5850,
@@ -864,7 +864,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.9714285712689161
       }
     },
     "components": {
