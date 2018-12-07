@@ -2,20 +2,28 @@ package com.symmetrylabs.shows;
 
 import java.util.*;
 
+import com.symmetrylabs.shows.arlo.ArloShow;
+import com.symmetrylabs.shows.arlosohoroof.ArloSohoRoofShow;
+import com.symmetrylabs.shows.arlotree.ArloTreeShow;
+import com.symmetrylabs.shows.artbasel.ArtBaselShow;
 import com.symmetrylabs.shows.composite.CompositeShow;
 import com.symmetrylabs.shows.demo.DemoShow;
+import com.symmetrylabs.shows.exploratorium.ExploratoriumShow;
+import com.symmetrylabs.shows.hhgarden.HHFlowerShow;
+import com.symmetrylabs.shows.hhgarden.HHGardenShow;
 import com.symmetrylabs.shows.googlehq.GoogleHqShow;
 import com.symmetrylabs.shows.kalpa.KalpaShow;
 import com.symmetrylabs.shows.magicleap.MagicLeapShow;
+import com.symmetrylabs.shows.mikey.MikeyShow;
 import com.symmetrylabs.shows.obj.ObjShow;
 import com.symmetrylabs.shows.office.OfficeShow;
 import com.symmetrylabs.shows.oslo.OsloShow;
 import com.symmetrylabs.shows.oslo.TreeModel;
+import com.symmetrylabs.shows.penfoldswine.PenfoldsWineShow;
 import com.symmetrylabs.shows.pilots.PilotsShow;
 import com.symmetrylabs.shows.streetlamp.StreetlampShow;
 import com.symmetrylabs.shows.summerbbq.SummerBBQShow;
 import com.symmetrylabs.shows.summerstage.SummerStageShow;
-import com.symmetrylabs.shows.penfoldswine.PenfoldsWineShow;
 import processing.core.PApplet;
 
 public class ShowRegistry {
@@ -53,6 +61,14 @@ public class ShowRegistry {
         map.put(MagicLeapShow.SHOW_NAME, () -> new MagicLeapShow());
         map.put(GoogleHqShow.SHOW_NAME, () -> new GoogleHqShow());
         map.put(PenfoldsWineShow.SHOW_NAME, () -> new PenfoldsWineShow());
+        map.put(MikeyShow.SHOW_NAME, () -> new MikeyShow());
+        map.put(HHFlowerShow.SHOW_NAME, () -> new HHFlowerShow());
+        map.put(ArloShow.SHOW_NAME, () -> new ArloShow());
+        map.put(HHGardenShow.SHOW_NAME, () -> new HHGardenShow());
+        map.put(ArloTreeShow.SHOW_NAME, () -> new ArloTreeShow());
+        map.put(ArloSohoRoofShow.SHOW_NAME, () -> new ArloSohoRoofShow());
+        map.put(ExploratoriumShow.SHOW_NAME, () -> new ExploratoriumShow());
+        map.put(ArtBaselShow.SHOW_NAME, () -> new ArtBaselShow());
     }
 
     static interface ShowBuilder {

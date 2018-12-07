@@ -146,4 +146,3 @@ public class CubeMask extends ModelSpecificEffect<CubesModel> {
         }
     }
 }
-

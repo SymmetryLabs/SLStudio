@@ -34,6 +34,8 @@ run {
 
 	// To select a layout from the command line, "gradlew run -Playout=cubes"
 	systemProperty 'com.symmetrylabs.layout', findProperty('layout')
+	// To start SLStudio with Live turned off, "gradlew run -PstartMuted=true"
+	systemProperty 'com.symmetrylabs.startMuted', findProperty('startMuted')
 
 	doLast {
 		while (file(".restart").exists()) {
@@ -79,9 +81,9 @@ allprojects {
 if (hasProperty('localp3lx')) {
 	configurations.all {
 		resolutionStrategy.dependencySubstitution {
-			// when this is runs, the build uses ../p3lx and ../LX instead of the
+			// when this is runs, the build uses ../P3LX and ../LX instead of the
 			// jitpack dependency specified below
-			substitute module("com.github.SymmetryLabs.p3lx:p3lx") with project(":P3LX")
+			substitute module("com.github.SymmetryLabs.p3lx:P3LX") with project(":P3LX")
 			substitute module("com.github.SymmetryLabs.p3lx:LX") with project(":LX")
 		}
 	}
@@ -136,7 +138,7 @@ dependencies {
 	// https://www.slf4j.org/manual.html
 	implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
 
-	implementation 'com.github.SymmetryLabs.p3lx:P3LX:1aa2d03'
+	implementation 'com.github.SymmetryLabs.p3lx:P3LX:6bce9df'
 
 	implementation files('libs/minim.jar')
 	implementation files('libs/jogamp-fat.jar')

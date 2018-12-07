@@ -25,6 +25,12 @@ public class SimplePixlite extends LXOutputGroup {
         return this;
     }
 
+    public SimplePixlite addPixliteOutput(String id, PointsGrouping pointsGrouping) {
+        pointsGrouping.id = id;
+        addPixliteOutput(pointsGrouping);
+        return this;
+    }
+
     protected class SimplePixliteOutput extends LXDatagramOutput {
         private final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
         private final int outputIndex;

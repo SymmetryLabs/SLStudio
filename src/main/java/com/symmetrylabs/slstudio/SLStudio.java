@@ -12,8 +12,6 @@ import com.symmetrylabs.slstudio.output.MappingPixlite;
 import com.symmetrylabs.slstudio.ui.UIWorkspace;
 import heronarts.lx.LX;
 import com.symmetrylabs.shows.ShowRegistry;
-import com.symmetrylabs.shows.tree.TreeModelingTool;
-import com.symmetrylabs.shows.tree.ui.*;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -29,8 +27,6 @@ import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.ui.UIFramerateControl;
 import com.symmetrylabs.slstudio.envelop.Envelop;
 import com.symmetrylabs.slstudio.envelop.EnvelopOscListener;
-import com.symmetrylabs.shows.tree.ui.UITreeModelingTool;
-import com.symmetrylabs.shows.tree.ui.UITreeModelAxes;
 import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.DrawHelper;
 import com.symmetrylabs.util.dispatch.Dispatcher;
@@ -54,9 +50,6 @@ public class SLStudio extends PApplet {
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
-    public TreeModelingTool treeModelingTool;
-    public UITreeModelingTool uiTreeModelingTool = null;
-    public UITreeModelAxes uiTreeModelAxes = null;
     public Anemometer anemometer;
     public LX lx_OG;
 
@@ -141,18 +134,6 @@ public class SLStudio extends PApplet {
 
                 show.setupLx(lx);
 
-                if (TreeModelingTool.isTreeShow()) {
-                    treeModelingTool = new TreeModelingTool(lx);
-                    lx.engine.registerComponent("treeModelingTool", treeModelingTool);
-
-                    anemometer = new Anemometer();
-                    lx.engine.modulation.addModulator(anemometer.speedModulator);
-                    lx.engine.modulation.addModulator(anemometer.directionModulator);
-                    lx.engine.registerComponent("anemomter", anemometer);
-                    lx.engine.addLoopTask(anemometer);
-                    anemometer.start();
-                }
-
                 outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
                 mappingPixlites = setupPixlites();
@@ -181,12 +162,6 @@ public class SLStudio extends PApplet {
                 new UIFramerateControl(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
                 new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 2);
 
-                if (TreeModelingTool.isTreeShow()) {
-                    ui.preview.addComponent(new UITreeTrunk(applet));
-                    uiTreeModelAxes = new UITreeModelAxes();
-                    ui.preview.addComponent(uiTreeModelAxes);
-                }
-
                 show.setupUi(lx, ui);
 
                 if (show instanceof HasWorkspace) {
@@ -203,8 +178,10 @@ public class SLStudio extends PApplet {
         lx.engine.isChannelMultithreaded.setValue(true);
         lx.engine.isNetworkMultithreaded.setValue(true);
         lx.engine.audio.enabled.setValue(false);
-        lx.engine.output.enabled.setValue(true);
-        lx.engine.framesPerSecond.setValue(120);
+
+        String startMuted = System.getProperty("com.symmetrylabs.startMuted");
+        lx.engine.output.enabled.setValue(startMuted == null || "".equals(startMuted));
+        //lx.engine.framesPerSecond.setValue(120);
 
     //performanceManager.start(lx.ui);
 
