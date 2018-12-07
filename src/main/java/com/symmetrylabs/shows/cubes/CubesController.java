@@ -97,7 +97,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             packetData = new byte[packetSizeBytes];
             packet = new DatagramPacket(packetData, packetSizeBytes);
         }
-        packetData[0] = 0; // Channel
+        packetData[0] = 5; // Channel
         packetData[1] = use16 ? COMMAND_SET_16BIT_PIXEL_COLORS : COMMAND_SET_PIXEL_COLORS;
         packetData[2] = (byte) ((contentSizeBytes >> 8) & 0xFF);
         packetData[3] = (byte) (contentSizeBytes & 0xFF);
@@ -183,6 +183,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             }
         }
 
+        boolean TRYME = true;
         // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
         // TODO: refactor here
         if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(id)) {
@@ -234,14 +235,18 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             for (int i = 0; i < numPixels; i++) {
                 setPixel(i, LXColor.BLACK);
             }
+            TRYME = false;
         }
 
-        // Send the cube data to the cube. yay!
-        try {
-            dsocket.send(packet);
-        }
-        catch (Exception e) {
-            SLStudio.setWarning("CubesController", "failed to send packet: " + e.getMessage());
+        if (TRYME){
+            // Send the cube data to the cube. yay!
+            try {
+                dsocket.send(packet);
+            }
+            catch (Exception e) {
+                SLStudio.setWarning("CubesController", "failed to send packet: " + e.getMessage());
+            }
+
         }
     }
 
