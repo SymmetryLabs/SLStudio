@@ -38,82 +38,108 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
     static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
 
     static final float INCHES_PER_METER = 39.3701f;
-    static final float BALCONY_RADIUS = INCHES_PER_METER * 5f;
-
-    private static final File ID_FILE = new File("shows/artbasel/cube-ids.txt");
 
     private Workspace workspace;
 
-    private LinkedList<String[]> loadIds() {
-        List<String> lines;
-        try {
-            lines = Files.readAllLines(ID_FILE.toPath());
-        } catch (IOException e) {
-            System.err.println(String.format("couldn't read ID file: %s", e.getMessage()));
-            return null;
+    static final TowerConfig[] TOWER_CONFIG = {
+        /* stick the tower configs here, like this:
+        new TowerConfig(x, y, z, xr, yr, zr, new String[][] {
+                new String[] {"id1-A", "id1-B"},
+                new String[] {"id2-A", "id2-B"},
+            }),
+        */
+    };
+
+    static class TowerConfig {
+
+        final CubesModel.Cube.Type type;
+        final float x;
+        final float y;
+        final float z;
+        final float xRot;
+        final float yRot;
+        final float zRot;
+        final String[][] ids;
+        final float[] yValues;
+
+        TowerConfig(float x, float y, float z, String[][] ids) {
+            this(CubesModel.Cube.Type.LARGE, x, y, z, ids);
         }
-        LinkedList<String[]> res = new LinkedList<>();
-        for (String line : lines) {
-            line = line.trim();
-            if (line.startsWith("#") || line.length() == 0) {
-                continue;
-            }
-            String[] lineBits = line.split(" ");
-            if (lineBits.length != 2) {
-                System.err.println(String.format("bad format on line: '%s'", line));
-                continue;
-            }
-            res.addLast(lineBits);
+
+        TowerConfig(float x, float y, float z, float yRot, String[][] ids) {
+            this(x, y, z, 0, yRot, 0, ids);
         }
-        return res;
+
+        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, String[][] ids) {
+            this(type, x, y, z, 0, 0, 0, ids);
+        }
+
+        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float yRot, String[][] ids) {
+            this(type, x, y, z, 0, yRot, 0, ids);
+        }
+
+        TowerConfig(float x, float y, float z, float xRot, float yRot, float zRot, String[][] ids) {
+            this(CubesModel.Cube.Type.LARGE, x, y, z, xRot, yRot, zRot, ids);
+        }
+
+        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float xRot, float yRot, float zRot, String[][] ids) {
+            this.type = type;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.xRot = xRot;
+            this.yRot = yRot;
+            this.zRot = zRot;
+            this.ids = ids;
+
+            this.yValues = new float[ids.length];
+            for (int i = 0; i < ids.length; i++) {
+                yValues[i] = y + i * (CUBE_HEIGHT + CUBE_SPACING);
+            }
+        }
     }
 
     public SLModel buildModel() {
         // Any global transforms
-        LXTransform transform = new LXTransform();
+        LXTransform globalTransform = new LXTransform();
+        globalTransform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
+        globalTransform.rotateX(globalRotationX * Math.PI / 180.);
+        globalTransform.rotateY(globalRotationY * Math.PI / 180.);
+        globalTransform.rotateZ(globalRotationZ * Math.PI / 180.);
 
+        /* Cubes ----------------------------------------------------------*/
         List<CubesModel.Tower> towers = new ArrayList<>();
         List<CubesModel.Cube> allCubes = new ArrayList<>();
-        LinkedList<String[]> ids = loadIds();
 
-        for (int t = 0; allCubes.size() < 60; t++) {
-            int cubeCount = t % 2 == 0 ? 4 : 3;
-            transform.push();
-            float theta = (9.f * t + 14.7f) * (float) Math.PI / 180.f;
-            float x = BALCONY_RADIUS * (float) -Math.cos(theta);
-            float z = BALCONY_RADIUS * (float) Math.sin(theta);
-            transform.translate(x, cubeCount == 3 ? CUBE_HEIGHT / 2 : 0, z);
-            transform.rotateY(theta + 0.05);
+        int stripId = 0;
+        for (TowerConfig config : TOWER_CONFIG) {
+            List<CubesModel.Cube> cubes = new ArrayList<>();
+            float x = config.x;
+            float z = config.z;
+            float xRot = config.xRot;
+            float yRot = config.yRot;
+            float zRot = config.zRot;
+            CubesModel.Cube.Type type = config.type;
 
-            List<CubesModel.Cube> towerCubes = new ArrayList<>();
-            for (int i = 0; i < cubeCount; i++) {
-                String[] idPair;
-                if (ids.isEmpty()) {
-                    idPair = new String[] {
-                        String.format("UNMAPPED-%02d-A", allCubes.size() + 1),
-                        String.format("UNMAPPED-%02d-B", allCubes.size() + 1),
-                    };
-                } else {
-                    idPair = ids.removeFirst();
-                }
-                CubesModel.Cube c = new CubesModel.DoubleControllerCube(
-                    idPair[0], idPair[1], 0, SP * i, 0, 0, 0, 0, transform);
-                towerCubes.add(c);
-                allCubes.add(c);
+            for (int i = 0; i < config.ids.length; i++) {
+                float y = config.yValues[i];
+                CubesModel.DoubleControllerCube cube =
+                    new CubesModel.DoubleControllerCube(
+                        config.ids[i][0], config.ids[i][1],
+                        x, y, z, xRot, yRot, zRot, globalTransform);
+                cubes.add(cube);
+                allCubes.add(cube);
             }
-            towers.add(new CubesModel.Tower(Integer.toString(t + 1), towerCubes));
-            transform.pop();
+            towers.add(new CubesModel.Tower("", cubes));
         }
-        System.out.println(String.format("%d total cubes in structure", allCubes.size()));
+        /*-----------------------------------------------------------------*/
 
         CubesModel.Cube[] allCubesArr = new CubesModel.Cube[allCubes.size()];
         for (int i = 0; i < allCubesArr.length; i++) {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        CubesModel model = new CubesModel(towers, allCubesArr);
-        model.setTopologyTolerances(6, 6, 8);
-        return model;
+        return new CubesModel(towers, allCubesArr);
     }
 
     @Override
