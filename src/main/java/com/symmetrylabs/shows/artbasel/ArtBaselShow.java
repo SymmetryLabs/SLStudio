@@ -79,11 +79,11 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
         for (int t = 0; allCubes.size() < 60; t++) {
             int cubeCount = t % 2 == 0 ? 4 : 3;
             transform.push();
-            float theta = 9.f * t * (float) Math.PI / 180.f;
+            float theta = (9.f * t + 14.7f) * (float) Math.PI / 180.f;
             float x = BALCONY_RADIUS * (float) -Math.cos(theta);
             float z = BALCONY_RADIUS * (float) Math.sin(theta);
             transform.translate(x, cubeCount == 3 ? CUBE_HEIGHT / 2 : 0, z);
-            transform.rotateY(theta);
+            transform.rotateY(theta + 0.05);
 
             List<CubesModel.Cube> towerCubes = new ArrayList<>();
             for (int i = 0; i < cubeCount; i++) {
