@@ -1,9 +1,11 @@
 package com.symmetrylabs.shows.artbasel;
 
+import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.shows.cubes.UICubesMappingPanel;
 import com.symmetrylabs.shows.cubes.UICubesOutputs;
+import com.symmetrylabs.slstudio.workspaces.Workspace;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.transform.LXTransform;
@@ -13,7 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
-public class ArtBaselShow extends CubesShow {
+public class ArtBaselShow extends CubesShow implements HasWorkspace {
     public static final String SHOW_NAME = "artbasel";
 
     static final float globalOffsetX = 0;
@@ -39,6 +41,8 @@ public class ArtBaselShow extends CubesShow {
     static final float BALCONY_RADIUS = INCHES_PER_METER * 5f;
 
     private static final File ID_FILE = new File("shows/artbasel/cube-ids.txt");
+
+    private Workspace workspace;
 
     private LinkedList<String[]> loadIds() {
         List<String> lines;
@@ -112,9 +116,17 @@ public class ArtBaselShow extends CubesShow {
         return model;
     }
 
+    @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
+        super.setupUi(lx, ui);
+        workspace = new Workspace(lx, ui, "shows/artbasel");
         UI2dScrollContext utility = ui.rightPane.utility;
         new UICubesOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UICubesMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
+    }
+
+    @Override
+    public Workspace getWorkspace() {
+        return workspace;
     }
 }
