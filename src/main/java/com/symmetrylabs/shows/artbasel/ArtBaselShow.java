@@ -120,9 +120,6 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
         workspace = new Workspace(lx, ui, "shows/artbasel");
-        UI2dScrollContext utility = ui.rightPane.utility;
-        new UICubesOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
-        new UICubesMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
     }
 
     @Override
