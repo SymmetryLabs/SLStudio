@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539197503630,
+  "timestamp": 1544164520909,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5172413792461157,
       "crossfaderBlendMode": 0,
       "speed": 0.3799999952316284,
-      "focusedChannel": 1,
+      "focusedChannel": 11,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -309,7 +309,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.996666669845581,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -880,9 +880,9 @@
             "parameters": {
               "label": "SolidColor",
               "color/hue": 0.0,
-              "color/brightness": 100.0,
+              "color/brightness": 50.19607925415039,
               "color/saturation": 0.0,
-              "color": -1
+              "color": -8355712
             },
             "modulation": {
               "modulators": [],
@@ -1086,7 +1086,24 @@
           "autoDisable": true
         },
         "warps": [],
-        "effects": [],
+        "effects": [
+          {
+            "id": 26264,
+            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
+            "modulationColor": -16727041,
+            "parameters": {
+              "label": "BrightnessShift",
+              "enabled": true,
+              "Bscale": 0.6000000089406967,
+              "Bshift": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 1,
         "patterns": [
@@ -1396,7 +1413,20 @@
           "sync": false
         }
       ],
-      "surfaces": [],
+      "surfaces": [
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        }
+      ],
       "mapping": []
     }
   },
@@ -1409,8 +1439,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 600.0106802336979,
-        "theta": -0.063,
-        "phi": 0.1680000000000001,
+        "theta": -3.288,
+        "phi": 0.49500000000000033,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5

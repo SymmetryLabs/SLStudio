@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538709085118,
+  "timestamp": 1544163317686,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -254,7 +254,7 @@
               "cx": 410.0,
               "ySize": 0.0,
               "cy": 60.319998651742935,
-              "zSize": 144.99999837949872,
+              "zSize": 100.5,
               "cz": 72.5,
               "invert": false
             }
@@ -444,7 +444,7 @@
               "Clic": 0.0,
               "Hue": 0.37700000648200516,
               "HSpd": 0.8200000040233135,
-              "freeze": false
+              "freeze": true
             },
             "modulation": {
               "modulators": [],
@@ -543,7 +543,7 @@
         "parameters": {
           "label": "Bass Mult",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -619,7 +619,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.4714285647496581,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -694,7 +694,7 @@
               "reset": false,
               "wipe": false,
               "hit": false,
-              "x": 0.5400000214576721,
+              "x": 0.11999999731779099,
               "y": 0.09999999776482582,
               "z": 0.0,
               "dist": 160.899998549372,
@@ -722,7 +722,7 @@
         "parameters": {
           "label": "Snare Mult",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -1059,9 +1059,9 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 43,
+        "id": 1034,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -1769728,
+        "modulationColor": -16252673,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
@@ -1211,11 +1211,11 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 526.7570801965285,
-        "theta": 0.0,
-        "phi": 0.0,
-        "positionX": 410.0,
-        "positionY": 58.0,
-        "positionZ": 72.5
+        "theta": 2.8859999999999997,
+        "phi": 0.2730000000000002,
+        "positionX": 430.16607666015625,
+        "positionY": 126.25,
+        "positionZ": 27.598876953125
       }
     }
   }

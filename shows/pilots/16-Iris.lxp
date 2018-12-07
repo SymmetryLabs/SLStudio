@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539298737870,
+  "timestamp": 1544166936053,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 2,
+      "focusedChannel": 3,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -241,7 +241,7 @@
             "parameters": {
               "label": "Peaks",
               "count": 11,
-              "height": 0.0,
+              "height": 112.00000047683716,
               "omega": -56.709938049316406,
               "radius": 9.999999776482582,
               "high": 100.0,
@@ -279,7 +279,24 @@
           "autoDisable": true
         },
         "warps": [],
-        "effects": [],
+        "effects": [
+          {
+            "id": 28448,
+            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
+            "modulationColor": -7667968,
+            "parameters": {
+              "label": "BrightnessShift",
+              "enabled": true,
+              "Bscale": 0.7200000062584877,
+              "Bshift": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 0,
         "patterns": [
@@ -304,7 +321,7 @@
         ]
       },
       {
-        "id": 27101,
+        "id": 28436,
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -65518,
         "parameters": {
@@ -364,7 +381,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.10210210084915161,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -383,7 +400,7 @@
             "modulationColor": -3932416,
             "parameters": {
               "label": "Sparkle",
-              "Dens": 0.029999999329447746,
+              "Dens": 0.1599999964237213,
               "Attack": 0.23000000379979613,
               "Decay": 0.21000000201165675,
               "Hue": 0.35999999195337296,
@@ -505,7 +522,7 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 26988,
+        "id": 21981,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
         "modulationColor": -65407,
         "parameters": {
@@ -598,7 +615,7 @@
           "modulationColor": -14679809,
           "parameters": {
             "label": "PeaksHit",
-            "running": false,
+            "running": true,
             "trigger": false,
             "loop": false,
             "period": 726.2537744335135
@@ -754,6 +771,18 @@
         }
       ],
       "surfaces": [
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
         {
           "description": "APC40 mkII"
         },

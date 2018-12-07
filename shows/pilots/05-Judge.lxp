@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538251696998,
+  "timestamp": 1544164570979,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 1.116666715592146,
-      "focusedChannel": 9,
+      "speed": 0.9729365706443787,
+      "focusedChannel": 7,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -111,7 +111,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 0.0,
+              "rad": 0.14202102275013573,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
@@ -239,7 +239,7 @@
             "modulationColor": -13107456,
             "parameters": {
               "label": "OneBigAngledPlane",
-              "thick": 830.1927490234375,
+              "thick": 734.142333984375,
               "x": 0.4299999475479126,
               "y": 0.5299999713897705,
               "z": 0.2999999523162842,
@@ -288,7 +288,7 @@
             "modulationColor": -13959424,
             "parameters": {
               "label": "PilotsMonochromeSwarm",
-              "fV": 0.0
+              "fV": 0.3999999761581421
             },
             "modulation": {
               "modulators": [],
@@ -312,7 +312,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.6694276332855225,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -327,7 +327,7 @@
             "modulationColor": -590080,
             "parameters": {
               "label": "BoxMask",
-              "enabled": true,
+              "enabled": false,
               "xSize": 508.3999978005886,
               "cx": 426.3999904692173,
               "ySize": 86.99999935179949,
@@ -349,7 +349,7 @@
               "ySize": 76.55999958515167,
               "cy": 58.0,
               "zSize": 39.15000074543059,
-              "cz": -24.650000498816304,
+              "cz": -2.0325794594100444E-6,
               "invert": false
             }
           },
@@ -361,11 +361,11 @@
               "label": "BoxMask",
               "enabled": false,
               "xSize": 90.20000714808702,
-              "cx": 762.5999921187758,
+              "cx": 712.5,
               "ySize": 77.71999955922365,
               "cy": 58.0,
               "zSize": 44.950000615790486,
-              "cz": -27.55000112064176,
+              "cz": -2.0325794594100444E-6,
               "invert": false
             }
           }
@@ -394,7 +394,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 0.0,
+              "rad": 734.142333984375,
               "invert": true,
               "cx": 410.0,
               "cy": 58.0
@@ -415,7 +415,7 @@
             "modulationColor": -16711898,
             "parameters": {
               "label": "PilotsPlanes",
-              "speed": 12.000024318695068,
+              "speed": 479.3700575828552,
               "dist": 120.0,
               "thick": 16.79999989271164,
               "red": true,
@@ -447,7 +447,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.668292224407196,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -462,7 +462,7 @@
             "modulationColor": -512,
             "parameters": {
               "label": "BoxMask",
-              "enabled": true,
+              "enabled": false,
               "xSize": 311.6000021994114,
               "cx": 410.0,
               "ySize": 71.91999968886375,
@@ -484,7 +484,7 @@
               "ySize": 58.0,
               "cy": 58.0,
               "zSize": 58.000000324100256,
-              "cz": -39.15000047989183,
+              "cz": -2.0325794594100444E-6,
               "invert": false
             }
           },
@@ -496,11 +496,11 @@
               "label": "BoxMask",
               "enabled": false,
               "xSize": 82.00000733137131,
-              "cx": 762.5999921187758,
+              "cx": 712.5,
               "ySize": 93.95999919623137,
               "cy": 58.0,
               "zSize": 49.30000051856041,
-              "cz": -31.900000413060134,
+              "cz": -2.0325794594100444E-6,
               "invert": false
             }
           },
@@ -510,9 +510,9 @@
             "modulationColor": -1245440,
             "parameters": {
               "label": "Mirror",
-              "enabled": true,
+              "enabled": false,
               "x": true,
-              "cx": 820.0,
+              "cx": 712.5,
               "y": false,
               "cy": 58.0,
               "z": false,
@@ -544,7 +544,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 0.0,
+              "rad": 734.142333984375,
               "invert": true,
               "cx": 410.0,
               "cy": 58.0
@@ -565,7 +565,7 @@
             "modulationColor": -65351,
             "parameters": {
               "label": "PilotsPlanes",
-              "speed": 12.000024318695068,
+              "speed": 479.3700575828552,
               "dist": 120.0,
               "thick": 21.59999978542328,
               "red": true,
@@ -718,10 +718,10 @@
               "label": "BoxMask",
               "enabled": false,
               "xSize": 410.0,
-              "cx": 0.0,
-              "ySize": 116.0,
+              "cx": 2.044677103185677E-6,
+              "ySize": 99.0,
               "cy": 58.0,
-              "zSize": 145.0,
+              "zSize": 100.5,
               "cz": 72.5,
               "invert": false
             }
@@ -753,6 +753,22 @@
               "enabled": false,
               "Hue": 284.39999364316463,
               "Sat": 100.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 26358,
+            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
+            "modulationColor": -13107456,
+            "parameters": {
+              "label": "BrightnessShift",
+              "enabled": true,
+              "Bscale": 0.6800000071525574,
+              "Bshift": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -1079,18 +1095,6 @@
     "midi": {
       "inputs": [
         {
-          "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "Real Time Sequencer",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
           "name": "CoreMIDI4J - Port 1",
           "channel": true,
           "control": false,
@@ -1119,9 +1123,34 @@
           "channel": true,
           "control": false,
           "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
         }
       ],
-      "surfaces": [],
+      "surfaces": [
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        }
+      ],
       "mapping": []
     }
   },

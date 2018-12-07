@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539231777927,
+  "timestamp": 1544165423777,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 1.0,
-      "focusedChannel": 0,
+      "speed": 0.30000001192092896,
+      "focusedChannel": 7,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -106,8 +106,8 @@
               "enabled": true,
               "xSize": 410.0,
               "cx": 410.0,
-              "ySize": 116.00000762939453,
-              "cy": 26.680000700056553,
+              "ySize": 99.0,
+              "cy": 48.749996185302734,
               "zSize": 65.25000016205013,
               "cz": 87.0,
               "invert": false
@@ -382,7 +382,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -403,7 +403,7 @@
               "ySize": 81.19999818503857,
               "cy": 53.35999880731106,
               "zSize": 42.05000230111182,
-              "cz": -27.550000205114433,
+              "cz": -2.0325794594100444E-6,
               "invert": false
             }
           },
@@ -426,11 +426,11 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 419.99999046325684,
-              "cx": 419.99998803105564,
-              "ySize": 116.00000762939453,
-              "cy": 4.639999896287918,
-              "zSize": 62.08999916911125,
+              "xSize": 364.9390161037445,
+              "cx": 364.939017101148,
+              "ySize": 99.0,
+              "cy": 48.749996185302734,
+              "zSize": 43.03479252755642,
               "cz": 2.754997389575564,
               "invert": false
             }
@@ -504,7 +504,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -541,7 +541,7 @@
               "Speed": 0.55,
               "Symm": 0,
               "Anim": 3,
-              "Dens": 0.0072656250558793545,
+              "Dens": 0.0,
               "AnimResets": false
             },
             "modulation": {
@@ -600,7 +600,7 @@
             "modulationColor": -7209216,
             "parameters": {
               "label": "TwoTone",
-              "enabled": false,
+              "enabled": true,
               "Lcut1": 1.0,
               "Lcut2": 7.999999821186066,
               "c1/hue": 0.0,
@@ -647,7 +647,7 @@
               "Speed": 0.20000004768371582,
               "Symm": 0,
               "Anim": 7,
-              "Dens": 0.5,
+              "Dens": 0.0,
               "AnimResets": false
             },
             "modulation": {
@@ -691,9 +691,9 @@
             "modulationColor": -26112,
             "parameters": {
               "label": "SplitColor",
-              "x": 0.0,
-              "y": 1.0,
-              "z": 0.8222488164901733,
+              "x": 0.23000001907348633,
+              "y": 0.04999995231628418,
+              "z": -0.30000001192092896,
               "cx": 410.0,
               "cy": 116.0,
               "cz": 87.0,
@@ -810,7 +810,24 @@
           "autoDisable": true
         },
         "warps": [],
-        "effects": [],
+        "effects": [
+          {
+            "id": 26740,
+            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
+            "modulationColor": -16711755,
+            "parameters": {
+              "label": "BrightnessShift",
+              "enabled": true,
+              "Bscale": 0.6000000089406967,
+              "Bshift": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 0,
         "patterns": [
@@ -1060,6 +1077,36 @@
     "midi": {
       "inputs": [
         {
+          "name": "CoreMIDI4J - Port 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 2",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 3",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 4",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Sync Port",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
@@ -1072,7 +1119,20 @@
           "sync": false
         }
       ],
-      "surfaces": [],
+      "surfaces": [
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        }
+      ],
       "mapping": []
     }
   },
