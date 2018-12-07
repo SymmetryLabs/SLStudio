@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539197895333,
+  "timestamp": 1544166750792,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 2.0,
-      "focusedChannel": 6,
+      "speed": 1.0,
+      "focusedChannel": 8,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -375,7 +375,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 0.0,
+              "rad": 734.142333984375,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
@@ -434,7 +434,24 @@
           "autoDisable": true
         },
         "warps": [],
-        "effects": [],
+        "effects": [
+          {
+            "id": 27461,
+            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
+            "modulationColor": -16728065,
+            "parameters": {
+              "label": "BrightnessShift",
+              "enabled": true,
+              "Bscale": 0.6000000089406967,
+              "Bshift": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 0,
         "patterns": [
@@ -534,7 +551,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -715,7 +732,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.8502480983734131,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -730,7 +747,7 @@
             "modulationColor": -16711918,
             "parameters": {
               "label": "BundleDirMask",
-              "enabled": false,
+              "enabled": true,
               "x": false,
               "y": false,
               "z": true
@@ -745,10 +762,26 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 830.1927490234375,
+              "rad": 0.0,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 27957,
+            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
+            "modulationColor": -1310465,
+            "parameters": {
+              "label": "BrightnessShift",
+              "enabled": true,
+              "Bscale": 0.8000000044703484,
+              "Bshift": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -881,7 +914,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.9199999994412065
       }
     },
     "components": {
@@ -1103,7 +1136,20 @@
           "sync": false
         }
       ],
-      "surfaces": [],
+      "surfaces": [
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        }
+      ],
       "mapping": []
     }
   },
@@ -1118,8 +1164,8 @@
       },
       "preview": {
         "radius": 542.1503372110975,
-        "theta": -0.2513981633974478,
-        "phi": 0.31547970771789524,
+        "theta": -0.9353981633974491,
+        "phi": 0.4924797077178954,
         "positionX": 410.0,
         "positionY": 48.0,
         "positionZ": 72.5

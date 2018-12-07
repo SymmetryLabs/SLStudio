@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1538180820291,
+  "timestamp": 1544166044651,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 1.0333333350718021,
-      "focusedChannel": 1,
+      "speed": 1.0,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -70,7 +70,24 @@
           "autoDisable": true
         },
         "warps": [],
-        "effects": [],
+        "effects": [
+          {
+            "id": 27009,
+            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
+            "modulationColor": -10354433,
+            "parameters": {
+              "label": "BrightnessShift",
+              "enabled": true,
+              "Bscale": 0.7200000062584877,
+              "Bshift": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 0,
         "patterns": [
@@ -82,7 +99,7 @@
               "label": "Peaks",
               "count": 11,
               "height": 63.999998569488525,
-              "omega": 20.000038146972656,
+              "omega": -56.709938049316406,
               "radius": 17.99999995529652,
               "high": 100.0,
               "mid": 57.00000051409007,
@@ -162,10 +179,10 @@
               "X-DUP": false,
               "JOG": false,
               "GREY": false,
-              "Speed": 0.5399999618530273,
+              "Speed": 1.5799999237060547,
               "Symm": 0,
               "Anim": 6,
-              "Dens": 0.8999999761581421,
+              "Dens": 0.6499999761581421,
               "AnimResets": false
             },
             "modulation": {
@@ -222,9 +239,25 @@
             "modulationColor": -16742401,
             "parameters": {
               "label": "ColorFilter",
-              "enabled": false,
+              "enabled": true,
               "Hue": 51.47999896667898,
               "Sat": 100.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 26977,
+            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
+            "modulationColor": -16737281,
+            "parameters": {
+              "label": "BrightnessShift",
+              "enabled": true,
+              "Bscale": 0.4400000125169754,
+              "Bshift": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -268,7 +301,7 @@
         ]
       },
       {
-        "id": 26854,
+        "id": 26964,
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -16775937,
         "parameters": {
@@ -294,7 +327,7 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 26861,
+            "id": 26965,
             "class": "com.symmetrylabs.slstudio.pattern.raven.RKPattern03",
             "modulationColor": -15138561,
             "parameters": {
@@ -421,7 +454,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.785714284516871
       }
     },
     "components": {
@@ -721,7 +754,20 @@
           "sync": false
         }
       ],
-      "surfaces": [],
+      "surfaces": [
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        }
+      ],
       "mapping": []
     }
   },
@@ -737,9 +783,9 @@
         "187": true
       },
       "preview": {
-        "radius": 496.62307838467757,
-        "theta": 0.018000000000000075,
-        "phi": -0.05400000000000012,
+        "radius": 583.8371585757919,
+        "theta": -3.6899999999999955,
+        "phi": 0.20099999999999996,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 14.499992370605469
