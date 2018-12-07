@@ -21,9 +21,9 @@ import com.symmetrylabs.shows.oslo.OsloShow;
 import com.symmetrylabs.shows.oslo.TreeModel;
 import com.symmetrylabs.shows.penfoldswine.PenfoldsWineShow;
 import com.symmetrylabs.shows.pilots.PilotsShow;
+import com.symmetrylabs.shows.pilots_v2.Pilots_v2_Show;
 import com.symmetrylabs.shows.streetlamp.StreetlampShow;
 import com.symmetrylabs.shows.summerbbq.SummerBBQShow;
-import com.symmetrylabs.shows.summerstage.Pilots_v2_Show;
 import com.symmetrylabs.shows.summerstage.SummerStageShow;
 import processing.core.PApplet;
 
