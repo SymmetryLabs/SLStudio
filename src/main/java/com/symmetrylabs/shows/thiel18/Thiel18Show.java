@@ -41,6 +41,9 @@ public class Thiel18Show extends CubesShow {
     static final ClusterConfig[] clusters = new ClusterConfig[] {
         new ClusterConfig("US", 0, 0, 0, new TowerConfig[] {
                 /* back layer */
+                new TowerConfig(-5*SP, SP - 4, 0, new String[][] {
+                        new String[] {"550", "551"},
+                    }),
                 new TowerConfig(-4*SP, SP, 0, new String[][] {
                         new String[] {"702", "366"},
                         new String[] {"808", "809"},
@@ -157,6 +160,33 @@ public class Thiel18Show extends CubesShow {
                         new String[] {"1045", "1046"},
                         new String[] {"959", "954"},
                         new String[] {"972", "1081"},
+                    }),
+            }),
+        new ClusterConfig("pool-towers", -15*12, 0, -10*12 -4*SP, new TowerConfig[] {
+                new TowerConfig(0, 0, 0, 90, new String[][] {
+                        new String[] {"", ""},
+                        new String[] {"", ""},
+                        new String[] {"", ""},
+                    }),
+                new TowerConfig(0, 0, -20*12, 90, new String[][] {
+                        new String[] {"", ""},
+                        new String[] {"", ""},
+                        new String[] {"", ""},
+                    }),
+                new TowerConfig(-25*12, 0, 24, 90, new String[][] {
+                        new String[] {"", ""},
+                        new String[] {"", ""},
+                        new String[] {"", ""},
+                    }),
+                new TowerConfig(-26*12, 0, -9*12, 90, new String[][] {
+                        new String[] {"", ""},
+                        new String[] {"", ""},
+                        new String[] {"", ""},
+                    }),
+                new TowerConfig(-25*12, 0, -20*12, 90, new String[][] {
+                        new String[] {"", ""},
+                        new String[] {"", ""},
+                        new String[] {"", ""},
                     }),
             }),
     };
