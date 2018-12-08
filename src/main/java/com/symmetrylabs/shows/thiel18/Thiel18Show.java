@@ -91,6 +91,10 @@ public class Thiel18Show extends CubesShow {
                         new String[] {"885", "897"},
                         new String[] {"821", "443"},
                     }),
+                new TowerConfig(4*SP, 0, 0, new String[][] {
+                        new String[] {"1073", "1072"},
+                        new String[] {"602", "603"},
+                    }),
 
                 /* layer 2 */
                 new TowerConfig(-3.5f*SP, 0, -1*SP, new String[][] {
@@ -100,7 +104,7 @@ public class Thiel18Show extends CubesShow {
                     }),
                 new TowerConfig(-2.5f*SP, 0.5f*SP, -1*SP, new String[][] {
                         new String[] {"983", "531"},
-                        new String[] {"831", ""},
+                        new String[] {"831", "498"},
                         new String[] {"795", "794"},
                         new String[] {"864", "865"},
                     }),
@@ -129,6 +133,30 @@ public class Thiel18Show extends CubesShow {
                 /* layer 4 */
                 new TowerConfig(-3.5f*SP, 0, -3*SP, new String[][] {
                         new String[] {"668", "669"},
+                    }),
+            }),
+        new ClusterConfig("door", 20*12, 0, -30*12, new TowerConfig[] {
+                new TowerConfig(0, 0, -SP, new String[][] {
+                        new String[] {"", ""},
+                        new String[] {"", ""},
+                        new String[] {"", ""},
+                    }),
+                new TowerConfig(0, 6, 0, new String[][] {
+                        new String[] {"", ""},
+                        new String[] {"", ""},
+                        new String[] {"", ""},
+                        new String[] {"", ""},
+                    }),
+                new TowerConfig(0, 6, 144, new String[][] {
+                        new String[] {"", ""},
+                        new String[] {"", ""},
+                        new String[] {"", ""},
+                        new String[] {"", ""},
+                    }),
+                new TowerConfig(0, 0, 144+SP, new String[][] {
+                        new String[] {"", ""},
+                        new String[] {"", ""},
+                        new String[] {"", ""},
                     }),
             }),
     };
