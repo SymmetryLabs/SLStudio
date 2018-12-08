@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544143981686,
+  "timestamp": 1544161688843,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 0.41666663624346256,
-      "focusedChannel": 1,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -79,7 +79,7 @@
               "enabled": true,
               "cx": 0.5320892333984375,
               "cy": 98.25,
-              "cz": 119.04305267333984,
+              "cz": 95.63619232177734,
               "lat": 0.0,
               "lon": 0.0,
               "turn": 0.0,
@@ -90,7 +90,7 @@
         ],
         "effects": [],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 1,
         "patterns": [
           {
             "id": 279,
@@ -118,6 +118,27 @@
               "Anim": 0,
               "Dens": 0.27000000737607477,
               "AnimResets": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 368,
+            "class": "com.symmetrylabs.slstudio.pattern.Rings",
+            "modulationColor": -16711759,
+            "parameters": {
+              "label": "Rings",
+              "Hue": 0.0,
+              "Depth": 0.6,
+              "Bright": 0.75,
+              "Sat": 0.5,
+              "Speed1": 0.2,
+              "Speed2": 0.4,
+              "Scale": 0.65
             },
             "modulation": {
               "modulators": [],
@@ -226,7 +247,7 @@
               "enabled": true,
               "cx": 152.71144374208097,
               "cy": 98.25,
-              "cz": 119.04305267333984,
+              "cz": 95.63619232177734,
               "lat": 0.0,
               "lon": 0.0,
               "turn": 0.0,
@@ -349,7 +370,7 @@
       "modulationColor": -16711918,
       "parameters": {
         "label": "Audio",
-        "enabled": false,
+        "enabled": true,
         "mode": 0
       },
       "meter": {
@@ -358,7 +379,7 @@
         "modulationColor": -65299,
         "parameters": {
           "label": "Meter",
-          "running": false,
+          "running": true,
           "trigger": false,
           "gain": 0.0,
           "range": 48.0,
@@ -366,17 +387,17 @@
           "release": 100.0,
           "slope": 4.5,
           "Band-1": 0.0,
-          "Band-2": 0.0,
+          "Band-2": 0.0029312764358895294,
           "Band-3": 0.0,
           "Band-4": 0.0,
           "Band-5": 0.0,
-          "Band-6": 0.0,
-          "Band-7": 0.0,
-          "Band-8": 0.0,
-          "Band-9": 0.0,
-          "Band-10": 0.0,
-          "Band-11": 0.0,
-          "Band-12": 0.0,
+          "Band-6": 0.1619889752646798,
+          "Band-7": 0.20801046634133113,
+          "Band-8": 0.035465181852515126,
+          "Band-9": 0.017490933780467954,
+          "Band-10": 0.651857937460447,
+          "Band-11": 0.4196642998902672,
+          "Band-12": 0.17514414360452568,
           "Band-13": 0.0,
           "Band-14": 0.0,
           "Band-15": 0.0,
@@ -420,9 +441,9 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 249,
+        "id": 340,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -65319,
+        "modulationColor": -6291712,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
@@ -552,11 +573,11 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 300.0,
-        "theta": 0.07500000000000076,
-        "phi": 0.07679637050628729,
-        "positionX": -11.96453857421875,
-        "positionY": 98.25,
-        "positionZ": 99.03202056884766
+        "theta": -0.31799999999999934,
+        "phi": 0.10079637050628731,
+        "positionX": 78.24394989013672,
+        "positionY": 50.25,
+        "positionZ": 43.55033493041992
       }
     }
   }

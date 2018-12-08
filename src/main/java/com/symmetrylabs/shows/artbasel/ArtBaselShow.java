@@ -42,12 +42,47 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
     private Workspace workspace;
 
     static final TowerConfig[] TOWER_CONFIG = {
-        /* stick the tower configs here, like this:
-        new TowerConfig(x, y, z, xr, yr, zr, new String[][] {
-                new String[] {"id1-A", "id1-B"},
-                new String[] {"id2-A", "id2-B"},
+        //stick the tower configs here, like this:
+        
+        new TowerConfig(0, 0, 0, 0, 0, 0, new String[][] {
+                new String[] {"1024", "1025"},
+                new String[] {"791", "790"},
             }),
-        */
+
+        new TowerConfig(0, 0, 0, 0, 0, 0, new String[][] {
+                new String[] {"1024", "1025"},
+                new String[] {"791", "790"},
+                new String[] {"487", "486"},
+                new String[] {"515", "514"},
+                new String[] {"491", "490"},
+                new String[] {"477", "476"},
+            }),
+
+        new TowerConfig(0, 0, 0, 0, 0, 0, new String[][] {
+                new String[] {"1041", "1025"},
+                new String[] {"1027", "612"},
+                new String[] {"773", "772"},
+                new String[] {"1027", "612"},
+                new String[] {"916", "917"},
+                new String[] {"905", "955"},
+            }),
+
+        new TowerConfig(0, 0, 0, 0, 0, 0, new String[][] {
+                new String[] {"1109", "1108"},
+                new String[] {"654", "1003"},
+                new String[] {"929", "995"},
+                new String[] {"928", "918"},
+                new String[] {"1004", "1018"},
+            }),
+        
+        // new TowerConfig(x, y, z, xr, yr, zr, new String[][] {
+        //         new String[] {"727", "726"},
+        //         new String[] {"654", "1003"},
+        //         new String[] {"929", "995"},
+        //         new String[] {"928", "918"},
+        //         new String[] {"1004", "1018"},
+        //     }),
+        
     };
 
     static class TowerConfig {
