@@ -40,72 +40,95 @@ public class Thiel18Show extends CubesShow {
 
     static final ClusterConfig[] clusters = new ClusterConfig[] {
         new ClusterConfig("US", 0, 0, 0, new TowerConfig[] {
+                /* back layer */
                 new TowerConfig(-4*SP, SP, 0, new String[][] {
-                        new String[] {"", ""},
-                        new String[] {"", ""},
+                        new String[] {"702", "366"},
+                        new String[] {"808", "809"},
                     }),
                 new TowerConfig(-3*SP, 0, 0, new String[][] {
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
+                        new String[] {"750", "751"},
+                        new String[] {"526", "527"},
+                        new String[] {"466", "467"},
+                        new String[] {"723", "442"},
                     }),
-                new TowerConfig(-2*SP, 0, 0, new String[][] {
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
+                new TowerConfig(-2*SP, 0.5f*SP, 0, new String[][] {
+                        new String[] {"970", "778"},
+                        new String[] {"994", "971"},
+                        new String[] {"1070", "1097"},
+                        new String[] {"902", "1078"},
                     }),
-                new TowerConfig(-1*SP, 0, 0, new String[][] {
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
+                new TowerConfig(-1*SP, 0.5f*SP, 0, new String[][] {
+                        new String[] {"1020", "991"},
+                        new String[] {"1038", "1037"},
+                        new String[] {"558", "559"},
+                        new String[] {"710", "711"},
+                        new String[] {"746", "747"},
                     }),
-                new TowerConfig(0*SP, 0, 0, new String[][] {
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
+                new TowerConfig(-0.5f*SP, 5.5f*SP, 0, new String[][] {
+                        new String[] {"874", "875"},
                     }),
-                new TowerConfig(1*SP, 0, 0, new String[][] {
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
+                new TowerConfig(0*SP, 0.5f*SP, 0, new String[][] {
+                        new String[] {"1039", "1012"},
+                        new String[] {"1024", "977"},
+                        new String[] {"646", "647"},
+                        new String[] {"766", "767"},
+                        new String[] {"774", "775"},
+                    }),
+                new TowerConfig(1*SP, 0.5f*SP, 0, new String[][] {
+                        new String[] {"1063", "911"},
+                        new String[] {"792", "700"},
+                        new String[] {"462", "962"},
+                        new String[] {"474", "475"},
                     }),
                 new TowerConfig(2*SP, 0, 0, new String[][] {
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
+                        new String[] {"1110", "953"},
+                        new String[] {"812", "813"},
+                        new String[] {"648", "649"},
+                        new String[] {"1106", "1107"},
                     }),
                 new TowerConfig(3*SP, 0, 0, new String[][] {
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
+                        new String[] {"894", "893"},
+                        new String[] {"885", "897"},
+                        new String[] {"821", "443"},
                     }),
-                new TowerConfig(-3.5f*SP, 0, -SP, new String[][] {
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
+
+                /* layer 2 */
+                new TowerConfig(-3.5f*SP, 0, -1*SP, new String[][] {
+                        new String[] {"738", "739"},
+                        new String[] {"552", "553"},
+                        new String[] {"853", "852"},
                     }),
+                new TowerConfig(-2.5f*SP, 0.5f*SP, -1*SP, new String[][] {
+                        new String[] {"983", "531"},
+                        new String[] {"831", ""},
+                        new String[] {"795", "794"},
+                        new String[] {"864", "865"},
+                    }),
+                new TowerConfig(1.5f*SP, 0.5f*SP, -1*SP, new String[][] {
+                        new String[] {"588", "589"},
+                        new String[] {"724", "725"},
+                        new String[] {"1016", "1017"},
+                        new String[] {"582", "583"},
+                    }),
+                new TowerConfig(2.5f*SP, 0, -1*SP, new String[][] {
+                        new String[] {"832", "833"},
+                        new String[] {"586", "587"},
+                        new String[] {"760", "761"},
+                    }),
+
+                /* layer 3 */
                 new TowerConfig(-3.5f*SP, 0, -2*SP, new String[][] {
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                    }),
-                new TowerConfig(2.5f*SP, 0, -SP, new String[][] {
-                        new String[] {"", ""},
-                        new String[] {"", ""},
-                        new String[] {"", ""},
+                        new String[] {"484", "485"},
+                        new String[] {"698", "699"},
                     }),
                 new TowerConfig(2.5f*SP, 0, -2*SP, new String[][] {
-                        new String[] {"", ""},
-                        new String[] {"", ""},
+                        new String[] {"913", "546"},
+                        new String[] {"532", "518"},
+                    }),
+
+                /* layer 4 */
+                new TowerConfig(-3.5f*SP, 0, -3*SP, new String[][] {
+                        new String[] {"668", "669"},
                     }),
             }),
     };
