@@ -2,7 +2,7 @@ package com.symmetrylabs.shows.thiel18;
 
 import java.util.*;
 
-
+import com.symmetrylabs.shows.arlo.ArloFaderLimiter;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.shows.cubes.UICubesMappingPanel;
@@ -288,8 +288,8 @@ public class Thiel18Show extends CubesShow {
                 float rZ = config.zRot;
 
                 for (int i = 0; i < config.ids.length; i++) {
-                    String idA = config.ids[i][0];
-                    String idB = config.ids[i][1];
+                    String idA = config.ids[i][1];
+                    String idB = config.ids[i][0];
                     float y = config.yValues[i];
                     CubesModel.DoubleControllerCube cube =
                         new CubesModel.DoubleControllerCube(
@@ -316,5 +316,6 @@ public class Thiel18Show extends CubesShow {
         UI2dScrollContext utility = ui.rightPane.utility;
         new UICubesOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UICubesMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
+        ArloFaderLimiter.attach(lx, 0.72f);
     }
 }
