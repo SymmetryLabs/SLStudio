@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1541292577514,
+  "timestamp": 1544432807865,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 1,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -93,27 +93,17 @@
             "autoCycleEnabled": true
           },
           {
-            "id": 26941,
-            "class": "com.symmetrylabs.shows.pilots.PulseCheck",
-            "modulationColor": -16711899,
+            "id": 28072,
+            "class": "com.symmetrylabs.slstudio.pattern.Sparkle",
+            "modulationColor": -16711885,
             "parameters": {
-              "label": "PulseCheck",
-              "visible": 0,
-              "alpha": true,
-              "cart0": 180.0,
-              "EN0": true,
-              "cart1": 180.0,
-              "EN1": true,
-              "cart2": 180.0,
-              "EN2": true,
-              "cart3": 180.0,
-              "EN3": true,
-              "cart4": 180.0,
-              "EN4": true,
-              "cart5": 180.0,
-              "EN5": true,
-              "cart6": 180.0,
-              "EN6": true
+              "label": "Sparkle",
+              "Dens": 0.15,
+              "Attack": 0.4,
+              "Decay": 0.3,
+              "Hue": 0.5,
+              "HueVar": 0.25,
+              "Sat": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -331,19 +321,6 @@
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 26951,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16729089,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -495,6 +472,18 @@
         }
       ],
       "surfaces": [
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
         {
           "description": "APC40 mkII"
         },
