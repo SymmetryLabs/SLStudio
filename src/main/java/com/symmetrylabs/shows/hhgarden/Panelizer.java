@@ -112,10 +112,12 @@ public class Panelizer {
                     }
                     float row1 = fd1.record.x;
                     float row2 = fd2.record.x;
+                    float col1 = fd1.record.z;
+                    float col2 = fd2.record.z;
                     if (Math.abs(row1 - row2) > 5) {
-                        return Float.compare(row1, row2);
+                        return -Float.compare(row1, row2);
                     }
-                    return Float.compare(fd1.record.z, fd2.record.z);
+                    return Float.compare(col1, col2);
                 });
             int h = 1;
             int hi = 1;

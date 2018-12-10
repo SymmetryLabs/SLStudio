@@ -41,11 +41,9 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
     private static final int[] COLORS9 = new int[] {
         0xFFFF0000,
         0xFFFF4400,
-        0xFFFF9900,
         0xFFFFFF00,
         0xFF66FF00,
         0xFF00FF00,
-        0xFF00FFBB,
         0xFF00FFFF,
         0xFF0000FF,
         0xFFAA00FF,
@@ -84,9 +82,9 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
                 0xFF000000 : COLORS[fd.record.panelId.hashCode() % COLORS.length];
             int pixliteColor = COLORS[fd.record.pixliteId % COLORS.length];
             int harnessColor = fd.record.harness == FlowerRecord.UNKNOWN_HARNESS ?
-                0xFF000000 : COLORS[fd.record.harness % COLORS.length];
+                0xFF000000 : COLORS[(fd.record.harness - 1) % COLORS.length];
             int harnessIndexColor = fd.record.harnessIndex == FlowerRecord.UNKNOWN_HARNESS_INDEX ?
-                0xFF000000 : COLORS9[fd.record.harnessIndex];
+                0xFF000000 : COLORS9[fd.record.harnessIndex - 1];
 
             boolean matches =
                 activePanel == null

@@ -88,7 +88,7 @@ public class FlowersModelLoader {
             if (fd.record != null) {
                 continue;
             }
-            fd.record = new FlowerRecord(nextId++, fd.location.x, fd.location.z);
+            fd.record = new FlowerRecord(nextId++, fd.location.x, fd.location.y);
         }
     }
 
