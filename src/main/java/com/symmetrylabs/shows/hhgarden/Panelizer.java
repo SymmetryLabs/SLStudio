@@ -43,29 +43,15 @@ public class Panelizer {
 
         int p = 0;
         int f = 0;
-        int hi = 0;
-        int h = 1;
         for (FlowerData fd : data) {
             if (p >= configs.size()) {
                 break;
             }
             PanelConfig pc = configs.get(p);
             fd.record.panelId = pc.id;
-            fd.record.harness = h;
-            fd.record.harnessIndex = hi;
-            hi++;
-            if (hi >= 9 && h < 4) {
-                hi = 0;
-                h++;
-            } else if (hi >= 9) {
-                hi = 0;
-                h = FlowerRecord.UNKNOWN_HARNESS;
-            }
             f++;
             if (f >= pc.count) {
                 f = 0;
-                hi = 0;
-                h = 1;
                 p++;
             }
         }
