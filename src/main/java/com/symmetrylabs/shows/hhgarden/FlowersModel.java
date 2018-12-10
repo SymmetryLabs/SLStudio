@@ -126,6 +126,7 @@ public class FlowersModel extends SLModel implements LXModel.Listener {
             data.add(fm.getFlowerData());
         }
         Panelizer.panelize(data);
+        Panelizer.harnessize(data);
     }
 
     private static class FlowerFixture extends LXAbstractFixture {

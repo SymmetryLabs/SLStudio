@@ -29,7 +29,7 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
     private final DiscreteParameter flowerParam;
     private static final String OPTION_ALL = "ALL";
 
-    private static final int[] PANEL_COLORS = new int[] {
+    private static final int[] COLORS = new int[] {
         0xFFFF0000,
         0xFFFFFF00,
         0xFF00FF00,
@@ -38,7 +38,7 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
         0xFFFF00FF,
     };
 
-    private static final int[] COLORS = new int[] {
+    private static final int[] COLORS9 = new int[] {
         0xFFFF0000,
         0xFFFF4400,
         0xFFFF9900,
@@ -81,12 +81,12 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
             FlowerData fd = fm.getFlowerData();
 
             int panelColor = fd.record.panelId == null ?
-                0xFF000000 : PANEL_COLORS[fd.record.panelId.hashCode() % PANEL_COLORS.length];
+                0xFF000000 : COLORS[fd.record.panelId.hashCode() % COLORS.length];
             int pixliteColor = COLORS[fd.record.pixliteId % COLORS.length];
             int harnessColor = fd.record.harness == FlowerRecord.UNKNOWN_HARNESS ?
                 0xFF000000 : COLORS[fd.record.harness % COLORS.length];
             int harnessIndexColor = fd.record.harnessIndex == FlowerRecord.UNKNOWN_HARNESS_INDEX ?
-                0xFF000000 : COLORS[fd.record.harnessIndex];
+                0xFF000000 : COLORS9[fd.record.harnessIndex];
 
             boolean matches =
                 activePanel == null

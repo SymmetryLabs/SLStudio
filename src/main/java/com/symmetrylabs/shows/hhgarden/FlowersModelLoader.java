@@ -22,6 +22,7 @@ public class FlowersModelLoader {
     static final String GEOMETRY_FILE = "shows/hhgarden/locations.obj";
     static final File RECORD_FILE = new File("shows/hhgarden/records.json");
     static final File PANEL_FILE = new File("shows/hhgarden/panels.txt");
+    static final File PIXLITE_FILE = new File("shows/hhgarden/pixlites.txt");
 
     public static FlowersModel load() {
         ReadableObj model;
