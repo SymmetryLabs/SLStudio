@@ -217,15 +217,18 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
                 new String[]{"663","662"},
                 new String[]{"617","616"},
                 new String[]{"?13","?14"},
-                new String[]{"5410ecf4fd2d","5410ecf4fd2d"},
+                new String[]{"5410ecf5efb5","5410ecf4fd2d"},
             }),
             new TowerConfig(SP * 3, SP * 0, SP * 0, new String[][]{
                 new String[]{"1092","951"},
                 new String[]{"611","610"},
                 new String[]{"653","652"},
-                new String[]{"","5410ecf4c80a"},
+                new String[]{"397","5410ecf4c80a"},
             }),
         }),
+
+//        new String[]{"453","664"},
+
 
         new ClusterConfig("cart1",SP*0*CART_WIDE - SP*FLANK_SPACING, SP*0, -SP*CART_FORWARD_OFFSET, new TowerConfig[]{
             // col 1
