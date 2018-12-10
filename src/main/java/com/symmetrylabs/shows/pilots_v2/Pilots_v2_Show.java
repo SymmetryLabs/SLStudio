@@ -44,6 +44,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
 
     static final float CART_WIDE = 4;
     static final float CART_FORWARD_OFFSET = 3;
+    static final float FLANK_SPACING = 1;
 
     static final float INCHES_PER_METER = 39.3701f;
 
@@ -53,7 +54,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
         /**--------------------------------------------------------------------------------------------------------------------------
          * LEFT FACE
         */
-        new ClusterConfig("cart7",SP*6*CART_WIDE, SP*0, SP*CART_FORWARD_OFFSET, new TowerConfig[]{
+        new ClusterConfig("cart7",SP*6*CART_WIDE + SP*FLANK_SPACING, SP*0, -SP*CART_FORWARD_OFFSET, new TowerConfig[]{
 
             // col 1
             new TowerConfig(SP * 0, SP * 0, SP * 0, new String[][]{
@@ -78,7 +79,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
                 new String[]{"523","522"},
                 new String[]{"749","748"},
                 new String[]{"981","982"},
-                new String[]{"0","0"},
+                new String[]{"592","1000"},
             }),
         }),
 
@@ -121,12 +122,12 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
             new TowerConfig(SP * 1, SP * 0, SP * 0, new String[][]{
                 new String[]{"555","554"},
                 new String[]{"625","624"},
-                new String[]{"697","696"},
+                new String[]{"1010","576"},
                 new String[]{"993","973"},
             }),
             new TowerConfig(SP * 2, SP * 0, SP * 0, new String[][]{
                 new String[]{"837","836"},
-                new String[]{"629","628"},
+                new String[]{"629","1005"},
                 new String[]{"627","626"},
                 new String[]{"203","156"},
             }),
@@ -210,23 +211,23 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
                 new String[]{"543","542"},
                 new String[]{"659","658"},
                 new String[]{"980","1006"},
-                new String[]{"0","0"},
+                new String[]{"","5410ecf5d969"},
             }),
             new TowerConfig(SP * 2, SP * 0, SP * 0, new String[][]{
                 new String[]{"663","662"},
                 new String[]{"617","616"},
-                new String[]{"952","943"},
-                new String[]{"0","0"},
+                new String[]{"?13","?14"},
+                new String[]{"5410ecf4fd2d","5410ecf4fd2d"},
             }),
             new TowerConfig(SP * 3, SP * 0, SP * 0, new String[][]{
                 new String[]{"1092","951"},
                 new String[]{"611","610"},
                 new String[]{"653","652"},
-                new String[]{"0","0"},
+                new String[]{"","5410ecf4c80a"},
             }),
         }),
 
-        new ClusterConfig("cart1",SP*0*CART_WIDE, SP*0, SP*CART_FORWARD_OFFSET, new TowerConfig[]{
+        new ClusterConfig("cart1",SP*0*CART_WIDE - SP*FLANK_SPACING, SP*0, -SP*CART_FORWARD_OFFSET, new TowerConfig[]{
             // col 1
             new TowerConfig(SP * 0, SP * 0, SP * 0, new String[][]{
                 new String[]{"545","439"},

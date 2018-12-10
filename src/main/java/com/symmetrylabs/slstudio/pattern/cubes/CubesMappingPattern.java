@@ -7,14 +7,15 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.transform.LXVector;
 
 
 public class CubesMappingPattern extends SLPattern<CubesModel> {
     private final SinLFO pulse = new SinLFO(20, 100, 800);
 
     public int mappedAndOnNetworkColor = LXColor.GREEN;
-    public int mappedButNotOnNetworkColor = LXColor.BLACK;
-    public int unMappedButOnNetworkColor = LXColor.BLACK;
+    public int mappedButNotOnNetworkColor = LXColor.RED;
+    public int unMappedButOnNetworkColor = LXColor.BLUE;
 
     private CubesMappingMode mappingMode;
 
@@ -85,21 +86,24 @@ public class CubesMappingPattern extends SLPattern<CubesModel> {
     }
 
     private void setFixtureColor(String id, int col, boolean dotted) {
-//        if (id.equals("-"))
-//            return;
-//
-//        // we iterate all cubes and call continue here because multiple cubes might have zero as id
-//        for (CubesModel.Cube c : model.getCubes()) {
-//            if (!c.id.equals(id))
-//                continue;
-//
-//            int i = 0;
-//            for (LXVector v : getVectorList(c.points)) {
-//                if (dotted) {
-//                    col = (i++ % 2 == 0) ? LXColor.scaleBrightness(LXColor.GREEN, 0.2f) : LXColor.BLACK;
-//                }
-//                setColor(v.index, col);
-//            }
-//        }
+        if (id.equals("-"))
+            return;
+
+        // Do something with all the mapped fixtures on the network
+        // we iterate all cubes and call continue here because multiple cubes might have zero as id
+        for (CubesModel.Cube c : model.getCubes()) {
+            if (!c.id.equals(id))
+                continue;
+
+            int i = 0;
+            for (LXVector v : (c.getVectorArray())) {
+                if (dotted) {
+                    col = (i++ % 2 == 0) ? LXColor.scaleBrightness(LXColor.GREEN, 0.2f) : LXColor.BLACK;
+                }
+                setColor(v.index, col);
+            }
+        }
+
+        // Do something with all the unmapped fixtures on the network
     }
 }
