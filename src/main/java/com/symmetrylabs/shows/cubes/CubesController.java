@@ -97,7 +97,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             packetData = new byte[packetSizeBytes];
             packet = new DatagramPacket(packetData, packetSizeBytes);
         }
-        packetData[0] = 0; // Channel
+        packetData[0] = 7; // Channel
         packetData[1] = use16 ? COMMAND_SET_16BIT_PIXEL_COLORS : COMMAND_SET_PIXEL_COLORS;
         packetData[2] = (byte) ((contentSizeBytes >> 8) & 0xFF);
         packetData[3] = (byte) (contentSizeBytes & 0xFF);
@@ -125,6 +125,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 
     @Override
     protected void onSend(PolyBuffer src) {
+        // What the fuck is this?
         if (isBroadcast != SLStudio.applet.outputControl.broadcastPacket.isOn())
             return;
 
@@ -181,81 +182,39 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             }
         }
 
-//        CubesModel cubesModel = (CubesModel)lx.model;
-//        CubesModel.Cube cube = null;
-//        if ((SLStudio.applet.outputControl.testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
-//            cube = cubesModel.getCubes().get(0);
-//        } else {
-//            for (CubesModel.Cube c : cubesModel.getCubes()) {
-//                if (c.id != null && c.id.equals(id)) {
-//                    cube = c;
-//                    break;
-//                }
-//            }
-//        }
-
-//        // Initialize packet data base on cube type.
-//        // If we don't know the cube type, default to
-//        // using the cube type with the most pixels
+        // OLD CODE BEGIN
+        // Initialize packet data base on cube type.
+        // If we don't know the cube type, default to
+        // using the cube type with the most pixels
 //        CubesModel.Cube.Type cubeType = cube != null ? cube.type : CubesModel.Cube.CUBE_TYPE_WITH_MOST_PIXELS;
 //        int numPixels = cubeType.POINTS_PER_CUBE;
-//
-//        // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
-//        // TODO: refactor here
-//        if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(id)) {
-//            initPacketData(numPixels, false);
-//            if (mappingMode.inUnMappedMode()) {
-//                if (mappingMode.inDisplayAllMode()) {
-//                    int col = mappingMode.getUnMappedColor();
-//
-//                    for (int i = 0; i < numPixels; i++)
-//                        setPixel(i, col);
-//                } else {
-//                    if (mappingMode.isSelectedUnMappedFixture(id)) {
-//                        int col = mappingMode.getUnMappedColor();
-//
-//                        for (int i = 0; i < numPixels; i++)
-//                            setPixel(i, col);
-//                    } else {
-//                        for (int i = 0; i < numPixels; i++)
-//                            setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
-//                    }
-//                }
-//            } else {
-//                for (int i = 0; i < numPixels; i++)
-//                    setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
-//            }
-//        } else if (cube != null) {
-//            // Fill the datagram with pixel data
-//            if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
-//                initPacketData(numPixels, true);
-//                long[] srcLongs = (long[]) src.getArray(PolyBuffer.Space.RGB16);
-//                for (int stripNum = 0; stripNum < numStrips; stripNum++) {
-//                    Strip strip = cube.getStrips().get(STRIP_ORD[stripNum]);
-//                    for (int i = 0; i < strip.metrics.numPoints; i++) {
-//                        LXPoint point = strip.getPoints().get(i);
-//                        setPixel(stripNum * strip.metrics.numPoints + i, srcLongs[point.index]);
-//                    }
-//                }
-//            } else {
-//                initPacketData(numPixels, false);
-//                int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
-//                for (int stripNum = 0; stripNum < numStrips; stripNum++) {
-//                    Strip strip = cube.getStrips().get(STRIP_ORD[stripNum]);
-//                    for (int i = 0; i < strip.metrics.numPoints; i++) {
-//                        LXPoint point = strip.getPoints().get(i);
-//                        setPixel(stripNum * strip.metrics.numPoints + i, srcInts[point.index]);
-//                    }
-//                }
-//            }
-//        } else {
-//            // Fill with all black if we don't have cube data
-//            initPacketData(numPixels, false);
-//            for (int i = 0; i < numPixels; i++) {
-//                setPixel(i, LXColor.BLACK);
-//            }
-//        }
 
+        // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
+        // TODO: refactor here
+        if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(id)) {
+            initPacketData(numPixels, false);
+            if (mappingMode.inUnMappedMode()) {
+                if (mappingMode.inDisplayAllMode()) {
+                    int col = mappingMode.getUnMappedColor();
+
+                    for (int i = 0; i < numPixels; i++)
+                        setPixel(i, col);
+                } else {
+                    if (mappingMode.isSelectedUnMappedFixture(id)) {
+                        int col = mappingMode.getUnMappedColor();
+
+                        for (int i = 0; i < numPixels; i++)
+                            setPixel(i, col);
+                    } else {
+                        for (int i = 0; i < numPixels; i++)
+                            setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
+                    }
+                }
+            } else {
+                for (int i = 0; i < numPixels; i++)
+                    setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
+            }
+        }
         if (points != null) {
             int numPixels = points.size();
 
@@ -291,10 +250,10 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             }
         } else {
             // Fill with all black if we don't have cube data
-            initPacketData(numPixels, false);
-            for (int i = 0; i < numPixels; i++) {
-                setPixel(i, LXColor.BLACK);
-            }
+//            initPacketData(numPixels, false);
+//            for (int i = 0; i < numPixels; i++) {
+//                setPixel(i, LXColor.BLUE);
+//            }
         }
 
         // Send the cube data to the cube. yay!

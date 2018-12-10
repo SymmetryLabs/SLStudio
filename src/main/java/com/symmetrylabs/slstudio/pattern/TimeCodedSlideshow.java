@@ -384,8 +384,14 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                  * a single array copy because we want to honor warps that turn
                  * off pixels. */
                 Arrays.fill(ccs, 0);
-                for (LXVector v : getVectors()) {
-                    ccs[v.index] = bakedImage.getRGB(v.index, currentFrame);
+
+                try {
+                    for (LXVector v : getVectors()) {
+                        ccs[v.index] = bakedImage.getRGB(v.index, currentFrame);
+                    }
+                }
+                catch (Exception e) {
+                    System.out.println("bad index");
                 }
             } else {
                 Arrays.fill(ccs, 0);

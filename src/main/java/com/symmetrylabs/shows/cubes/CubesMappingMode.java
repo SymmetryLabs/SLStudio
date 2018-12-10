@@ -23,6 +23,7 @@ import heronarts.lx.color.LXColor;
  *  2) get cubes not mapped but on network to pulse
  *  3) get a "display orientation" mode
  */
+
 public class CubesMappingMode {
 
     public static enum MappingModeType {MAPPED, UNMAPPED};
@@ -74,6 +75,7 @@ public class CubesMappingMode {
 
         cubesModel = lx.model instanceof CubesModel ? (CubesModel)lx.model : new CubesModel();
         for (CubesModel.Cube cube : cubesModel.getCubes()) {
+            // initially just add all fixtures to the fixtures pool
             fixturesMappedButNotOnNetwork.add(cube.id);
         }
 
