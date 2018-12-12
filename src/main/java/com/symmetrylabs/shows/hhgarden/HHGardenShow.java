@@ -15,6 +15,7 @@ import heronarts.lx.LXEngine;
 import heronarts.lx.model.LXPoint;
 import heronarts.p3lx.ui.UI3dContext;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
