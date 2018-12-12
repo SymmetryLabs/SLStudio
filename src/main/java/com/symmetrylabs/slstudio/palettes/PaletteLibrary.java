@@ -349,5 +349,13 @@ public class PaletteLibrary {
                     new NonuniformGradientPalette.Point(0xFFE9A3, 0.80),
                     new NonuniformGradientPalette.Point(0xFFFFFF, 0.99),
                 }));
+        pl.put("hb/rain", new NonuniformGradientPalette(new NonuniformGradientPalette.Point[] {
+                    new NonuniformGradientPalette.Point(0x000000, 0.00),
+                    new NonuniformGradientPalette.Point(0x20214F, 0.20),
+                    new NonuniformGradientPalette.Point(0x3E5F8A, 0.40),
+                    new NonuniformGradientPalette.Point(0x58758C, 0.60),
+                    new NonuniformGradientPalette.Point(0x8A9597, 0.80),
+                    new NonuniformGradientPalette.Point(0xD7D7D7, 1.00),
+                }));
     }
 }
