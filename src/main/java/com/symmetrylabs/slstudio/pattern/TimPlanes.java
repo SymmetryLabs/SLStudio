@@ -113,7 +113,7 @@ public class TimPlanes extends LXPattern {//SLPattern<StripsModel<Strip>>  {
 
         LXVector normalizedPoint = new LXVector(0, 0, 0);
 
-        for (LXPoint p : model.points) {
+        for (LXVector p : getVectors()) {
             if (MathUtils.random(1.0f) < derez) {
                 continue;
             }
