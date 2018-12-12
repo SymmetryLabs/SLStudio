@@ -10,6 +10,8 @@ import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.slstudio.output.SimplePixlite;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
 import heronarts.lx.LX;
+import heronarts.lx.LXChannel;
+import heronarts.lx.LXEngine;
 import heronarts.lx.model.LXPoint;
 import heronarts.p3lx.ui.UI3dContext;
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener {
+public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener, LXEngine.Listener {
     public static final String SHOW_NAME = "hhgarden";
 
     private final HashMap<Integer, AssignablePixlite> pixlites = new HashMap<>();
@@ -35,6 +37,10 @@ public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener {
     public void setupLx(SLStudioLX lx) {
         this.lx = lx;
         updatePixlites(lx, (FlowersModel) lx.model);
+        lx.engine.addListener(this);
+        for (LXChannel c : lx.engine.channels) {
+            c.autoDisable.setValue(true);
+        }
     }
 
     private void updatePixlites(SLStudioLX lx, FlowersModel model) {
@@ -113,5 +119,18 @@ public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener {
     @Override
     public Workspace getWorkspace() {
         return workspace;
+    }
+
+    @Override
+    public void channelAdded(LXEngine lxEngine, LXChannel lxChannel) {
+        lxChannel.autoDisable.setValue(true);
+    }
+
+    @Override
+    public void channelRemoved(LXEngine lxEngine, LXChannel lxChannel) {
+    }
+
+    @Override
+    public void channelMoved(LXEngine lxEngine, LXChannel lxChannel) {
     }
 }
