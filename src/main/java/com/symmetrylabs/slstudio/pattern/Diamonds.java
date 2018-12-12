@@ -28,6 +28,8 @@ public class Diamonds extends SLPattern<SLModel> {
     private List<Diamond> diamonds = new ArrayList<>();
     private final Random random = new Random();
 
+    private CompoundParameter reupParam =
+        new CompoundParameter("reup", 0, 0, 1000);
     private CompoundParameter releaseParam =
         new CompoundParameter("release", 300, 0, 2000);
     private CompoundParameter sizeParam =
@@ -38,11 +40,14 @@ public class Diamonds extends SLPattern<SLModel> {
         new BooleanParameter("trigger", false)
         .setMode(BooleanParameter.Mode.MOMENTARY);
 
+    double sinceLastReUp;
+
     public Diamonds(LX lx) {
         super(lx);
         addParameter(releaseParam);
         addParameter(sizeParam);
         addParameter(shrinkParam);
+        addParameter(reupParam);
         addParameter(trigger);
     }
 
@@ -71,6 +76,14 @@ public class Diamonds extends SLPattern<SLModel> {
 
     @Override
     public void run(double elapsedMs, PolyBuffer.Space preferredSpace) {
+        if (reupParam.getValuef() > 0) {
+            float reup = reupParam.getValuef();
+            sinceLastReUp += elapsedMs;
+            while (sinceLastReUp > reup) {
+                addDiamond();
+                sinceLastReUp -= reup;
+            }
+        }
         for (Diamond d : diamonds) {
             d.age += (float) elapsedMs;
         }
