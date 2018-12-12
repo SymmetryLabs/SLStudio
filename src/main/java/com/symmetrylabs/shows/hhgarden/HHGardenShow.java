@@ -80,7 +80,10 @@ public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener, 
             }
             for (Integer harness : harnesses.keySet()) {
                 Dataline dataline = pixlite.get(harness);
-                int[] indexes = new int[9 * 10]; // 9 flowers with 10 points per flower
+                // 9 flowers with 10 points per flower plus 30 for the "send extra pixels to
+                // reduce flashing" hack
+                int[] indexes = new int[9 * 10 + 30];
+                Arrays.fill(indexes, -1);
                 int nextIndex = 0;
                 for (FlowerModel fm : harnesses.get(harness)) {
                     if (fm == null) {
