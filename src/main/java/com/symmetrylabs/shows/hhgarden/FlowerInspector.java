@@ -3,8 +3,10 @@ package com.symmetrylabs.shows.hhgarden;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
+import heronarts.lx.parameter.LXParameter;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +29,26 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
     private final DiscreteParameter panel = new DiscreteParameter("panel", new String[]{"ALL"});
     private final DiscreteParameter pixlite = new DiscreteParameter("pixlite", new String[]{"ALL"});
     private final DiscreteParameter flowerParam;
+
+    private final BooleanParameter prevPanel =
+        new BooleanParameter("prevPanel", false)
+        .setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter nextPanel =
+        new BooleanParameter("nextPanel", false)
+        .setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter clearPanel =
+        new BooleanParameter("clearPanel", false)
+        .setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter prevPixlite =
+        new BooleanParameter("prevPixlite", false)
+        .setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter nextPixlite =
+        new BooleanParameter("nextPixlite", false)
+        .setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter clearPixlite =
+        new BooleanParameter("clearPixlite", false)
+        .setMode(BooleanParameter.Mode.MOMENTARY);
+
     private static final String OPTION_ALL = "ALL";
 
     private static final int[] COLORS = new int[] {
@@ -57,11 +79,35 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
         addParameter(mode);
         addParameter(panel);
         addParameter(pixlite);
+
+        addParameter(prevPanel);
+        addParameter(nextPanel);
+        addParameter(clearPanel);
+        addParameter(prevPixlite);
+        addParameter(nextPixlite);
+        addParameter(clearPixlite);
     }
 
     private FlowerModel getSelected() {
         int i = flowerParam.getValuei();
         return i < 0 ? null : model.getFlowers().get(i);
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        if (p == prevPanel && prevPanel.getValueb()) {
+            panel.setValue((panel.getValuei() - 1) % panel.getRange());
+        } else if (p == nextPanel && nextPanel.getValueb()) {
+            panel.setValue((panel.getValuei() + 1) % panel.getRange());
+        } else if (p == clearPanel && clearPanel.getValueb()) {
+            panel.setValue(0);
+        } else if (p == prevPixlite && prevPixlite.getValueb()) {
+            pixlite.setValue((pixlite.getValuei() - 1) % pixlite.getRange());
+        } else if (p == nextPixlite && nextPixlite.getValueb()) {
+            pixlite.setValue((pixlite.getValuei() + 1) % pixlite.getRange());
+        } else if (p == clearPixlite && clearPixlite.getValueb()) {
+            pixlite.setValue(0);
+        }
     }
 
     @Override
