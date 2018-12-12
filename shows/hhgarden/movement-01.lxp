@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544582834542,
+  "timestamp": 1544606968932,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 9,
+      "focusedChannel": 8,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -93,7 +93,7 @@
               "label": "Palette",
               "enabled": true,
               "Amount": 1.0,
-              "Palette": 9,
+              "Palette": 10,
               "Bottom": 0.0,
               "Top": 1.0,
               "Shift": 0.0,
@@ -161,7 +161,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.7683453559875488,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -400,7 +400,7 @@
             "modulationColor": -16711774,
             "parameters": {
               "label": "Awaken",
-              "palette": 9,
+              "palette": 10,
               "speed": 60.0,
               "width": 1300.0,
               "wipeOut": false,
@@ -585,7 +585,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.012986984103918076,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -618,8 +618,8 @@
             "parameters": {
               "label": "ColorFilter",
               "enabled": true,
-              "Hue": 284.3999943137169,
-              "Sat": 100.0
+              "Hue": 280.43999458663166,
+              "Sat": 62.00000084936619
             },
             "modulation": {
               "modulators": [],
@@ -663,7 +663,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.05000000074505806,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -966,8 +966,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 1068.7454365405065,
-        "theta": -1.2509999999999883,
-        "phi": 0.232796370506288,
+        "theta": -1.5089999999999808,
+        "phi": 0.274796370506288,
         "positionX": 792.1343383789062,
         "positionY": 663.562744140625,
         "positionZ": 42.75281524658203
