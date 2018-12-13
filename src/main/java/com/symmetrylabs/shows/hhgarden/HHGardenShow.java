@@ -4,6 +4,7 @@ import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.output.ArtNetDatagram;
 import com.symmetrylabs.slstudio.output.AssignablePixlite.Dataline;
 import com.symmetrylabs.slstudio.output.AssignablePixlite;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
@@ -23,6 +24,7 @@ import java.util.Map;
 
 public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener, LXEngine.Listener {
     public static final String SHOW_NAME = "hhgarden";
+    private static final boolean DEBUG_UNMAPPED = false;
 
     private final HashMap<Integer, AssignablePixlite> pixlites = new HashMap<>();
     static final String PIXLITE_IP_FORMAT = "10.200.1.%d";
@@ -98,6 +100,11 @@ public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener, 
                     }
                 }
                 dataline.setIndices(indexes);
+                if (DEBUG_UNMAPPED) {
+                    for (ArtNetDatagram andg : dataline.getArtNetDatagrams()) {
+                        andg.setUnmappedPointColor(0xFF0000);
+                    }
+                }
             }
         }
     }

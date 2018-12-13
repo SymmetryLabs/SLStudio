@@ -18,6 +18,7 @@ public class ArtNetDatagram extends LXDatagram {
     private int[] pointIndices;
     private boolean sequenceEnabled = false;
     private byte sequence = 1;
+    private int unmappedPointColor = 0x000000;
 
     private GammaExpander GammaExpander;
 
@@ -61,6 +62,11 @@ public class ArtNetDatagram extends LXDatagram {
         for (int i = ARTNET_HEADER_LENGTH; i < this.buffer.length; ++i) {
             this.buffer[i] = 0;
         }
+    }
+
+    public ArtNetDatagram setUnmappedPointColor(int c) {
+        unmappedPointColor = c;
+        return this;
     }
 
     public ArtNetDatagram setSequenceEnabled(boolean sequenceEnabled) {
@@ -107,7 +113,7 @@ public class ArtNetDatagram extends LXDatagram {
         int i = offset;
         int[] byteOffset = BYTE_ORDERING[this.byteOrder.ordinal()];
         for (int index : pointIndices) {
-            int colorValue = (index >= 0) ? colors[index] : 0;
+            int colorValue = (index >= 0) ? colors[index] : unmappedPointColor;
 
             int gammaExpanded = GammaExpander.getExpandedColor(colorValue);
             buffer[i + byteOffset[0]] = (byte) Ops8.red(gammaExpanded);

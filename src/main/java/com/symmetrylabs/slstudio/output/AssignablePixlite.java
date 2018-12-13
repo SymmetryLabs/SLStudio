@@ -11,6 +11,7 @@ import heronarts.lx.output.LXOutputGroup;
 
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AssignablePixlite extends LXOutputGroup {
@@ -69,6 +70,10 @@ public class AssignablePixlite extends LXOutputGroup {
             this.datalineNumPoints = datalineNumPoints;
             this.numUniverses = (datalineNumPoints / MAX_NUM_POINTS_PER_UNIVERSE) + 1;
             createDatagrams(lx, index*10);
+        }
+
+        public List<ArtNetDatagram> getArtNetDatagrams() {
+            return Collections.unmodifiableList(artNetDatagrams);
         }
 
         public void setPoints(List<LXPoint> points) {
