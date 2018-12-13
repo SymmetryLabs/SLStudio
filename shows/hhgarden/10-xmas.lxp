@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544669269147,
+  "timestamp": 1544691054262,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 0.6166666466742754,
-      "focusedChannel": 2,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -80,7 +80,7 @@
             "modulationColor": -3276545,
             "parameters": {
               "label": "Sparkle",
-              "Dens": 0.3399999957531691,
+              "Dens": 0.8599999841302634,
               "Attack": 0.4,
               "Decay": 0.3,
               "Hue": 0.5,
@@ -146,8 +146,8 @@
               "c1/brightness": 100.0,
               "c1/saturation": 100.0,
               "c1": -65536,
-              "c2/hue": 125.64999719150364,
-              "c2/brightness": 85.00000033527613,
+              "c2/hue": 125.52995300292969,
+              "c2/brightness": 85.09803771972656,
               "c2/saturation": 100.0,
               "c2": -16721644,
               "globalC1": false
@@ -471,8 +471,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 882.5084743040202,
-        "theta": 5.240999999999927,
-        "phi": 0.5117963705062903,
+        "theta": 4.451999999999928,
+        "phi": 0.4607963705062903,
         "positionX": 846.3702392578125,
         "positionY": 622.5409545898438,
         "positionZ": 41.7528076171875

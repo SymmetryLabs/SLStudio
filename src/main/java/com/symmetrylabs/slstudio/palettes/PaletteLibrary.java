@@ -342,8 +342,8 @@ public class PaletteLibrary {
         pl.put("z-allure-intro", new ArrayPalette(new int[]{0x060606, 0x485356, 0x8AA1A3, 0xE0F7F6, 0xF2FEFF}));
         pl.put("hb/sunrise", new NonuniformGradientPalette(new NonuniformGradientPalette.Point[] {
                     new NonuniformGradientPalette.Point(0x000000, 0.00),
-                    new NonuniformGradientPalette.Point(0x472557, 0.07),
-                    new NonuniformGradientPalette.Point(0x794344, 0.30),
+                    new NonuniformGradientPalette.Point(0x4725A7, 0.07),
+                    new NonuniformGradientPalette.Point(0x794384, 0.30),
                     new NonuniformGradientPalette.Point(0xBA844A, 0.60),
                     new NonuniformGradientPalette.Point(0xD6B162, 0.70),
                     new NonuniformGradientPalette.Point(0xFFE9A3, 0.80),
