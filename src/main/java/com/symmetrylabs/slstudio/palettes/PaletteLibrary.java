@@ -357,5 +357,13 @@ public class PaletteLibrary {
                     new NonuniformGradientPalette.Point(0x8A9597, 0.80),
                     new NonuniformGradientPalette.Point(0xD7D7D7, 1.00),
                 }));
+        pl.put("hb/wind", new NonuniformGradientPalette(new NonuniformGradientPalette.Point[] {
+                    new NonuniformGradientPalette.Point(0x464531, 0.00),
+                    new NonuniformGradientPalette.Point(0x8A6642, 0.15),
+                    new NonuniformGradientPalette.Point(0xCDA434, 0.40),
+                    new NonuniformGradientPalette.Point(0xE6C45E, 0.65),
+                    new NonuniformGradientPalette.Point(0xE6D690, 0.85),
+                    new NonuniformGradientPalette.Point(0xEAE6CA, 1.00),
+                }));
     }
 }
