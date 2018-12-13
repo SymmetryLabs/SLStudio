@@ -28,11 +28,12 @@ public class Metaballs extends SLPattern<SLModel> {
     }
 
     private final CompoundParameter add = new CompoundParameter("add", 100, 0, 360);
-    private final CompoundParameter hueLimit = new CompoundParameter("maxhue", 250,0, 360);
-    private final CompoundParameter falloff = new CompoundParameter("falloff", 3.6,0.1, 100);
-    private final CompoundParameter attract = new CompoundParameter("attract", 4,1, 100);
-    private final CompoundParameter repel = new CompoundParameter("repel", 2,1, 12);
-    private final CompoundParameter jump = new CompoundParameter("jump", 5,0.2, 60);
+    private final CompoundParameter hueLimit = new CompoundParameter("maxhue", 250, 0, 360);
+    private final CompoundParameter hueRotate = new CompoundParameter("rotate", 0, 0, 360);
+    private final CompoundParameter falloff = new CompoundParameter("falloff", 3.6, 0.1, 100);
+    private final CompoundParameter attract = new CompoundParameter("attract", 4, 1, 100);
+    private final CompoundParameter repel = new CompoundParameter("repel", 2, 1, 12);
+    private final CompoundParameter jump = new CompoundParameter("jump", 5, 0.2, 60);
     private final EnumParameter<FieldMapping> mapping = new EnumParameter<>("map", FieldMapping.HUE);
     private final DiscreteParameter count = new DiscreteParameter("count", 3, 0, 60);
     private final DiscreteParameter posterize = new DiscreteParameter("poster", 0, 0, 9);
@@ -43,6 +44,7 @@ public class Metaballs extends SLPattern<SLModel> {
         super(lx);
         addParameter(add);
         addParameter(hueLimit);
+        addParameter(hueRotate);
         addParameter(falloff);
         addParameter(mapping);
         addParameter(count);
@@ -77,6 +79,7 @@ public class Metaballs extends SLPattern<SLModel> {
         final float fo = falloff.getValuef();
         final float a = add.getValuef();
         final int poster = posterize.getValuei();
+        final float rot = hueRotate.getValuef();
 
         for (Ball b : balls) {
             b.advance(deltaMs);
@@ -100,7 +103,7 @@ public class Metaballs extends SLPattern<SLModel> {
             switch (mapping.getEnum()) {
                 case HUE: {
                     float b = h < hl ? 100f : MathUtils.constrain(100f - 1.2f * (h - hl), 0f, 100f);
-                    h = MathUtils.constrain(h, 0f, hl);
+                    h = (MathUtils.constrain(h, 0f, hl) + rot) % 360.f;
                     c = LXColor.hsb(h, 100f, b);
                     break;
                 }

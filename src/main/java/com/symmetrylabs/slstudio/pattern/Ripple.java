@@ -14,6 +14,7 @@ public class Ripple extends SLPattern<SLModel> {
     private final CompoundParameter speedParam = new CompoundParameter("speed", 12, -500, 500);
     private final CompoundParameter distParam = new CompoundParameter("dist", 120, 10, 600);
     private final CompoundParameter normalXParam = new CompoundParameter("x", 0.9, -1, 1);
+    private final CompoundParameter normalYParam = new CompoundParameter("y", 0, -1, 1);
     private final CompoundParameter normalZParam = new CompoundParameter("z", 0.315, -1, 1);
     private final CompoundParameter amplParam = new CompoundParameter("ampl", 40, 0, 120);
     private final CompoundParameter wavelParam = new CompoundParameter("wavel", 40, 0, model.rRange);
@@ -28,6 +29,7 @@ public class Ripple extends SLPattern<SLModel> {
         addParameter(speedParam);
         addParameter(distParam);
         addParameter(normalXParam);
+        addParameter(normalYParam);
         addParameter(normalZParam);
         addParameter(amplParam);
         addParameter(wavelParam);
@@ -44,9 +46,12 @@ public class Ripple extends SLPattern<SLModel> {
             colors[i] = black;
         }
 
-        LXVector normal = new LXVector(normalXParam.getValuef(), 0, normalZParam.getValuef());
+        LXVector normal = new LXVector(normalXParam.getValuef(), normalYParam.getValuef(), normalZParam.getValuef());
         normal.normalize();
-        LXVector wave = normal.copy().cross(0, 1, 0);
+        LXVector wave =
+            Math.abs(normalYParam.getValuef()) < Math.abs(normalZParam.getValuef())
+            ? normal.copy().cross(0, 1, 0)
+            : normal.copy().cross(0, 0, 1);
 
         float dist = distParam.getValuef();
         off += (flipSpeed ? -1 : 1) * speedParam.getValuef() / 1000f * (float) elapsedMs;
