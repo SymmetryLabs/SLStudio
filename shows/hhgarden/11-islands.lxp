@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544670257314,
+  "timestamp": 1544676481134,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0833333283662796,
-      "focusedChannel": 0,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -105,50 +105,6 @@
               "repel": 3.9799999557435517,
               "poster": 0,
               "jump": 60.0
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          }
-        ]
-      },
-      {
-        "id": 2351,
-        "class": "heronarts.lx.LXChannel",
-        "modulationColor": -16711769,
-        "parameters": {
-          "label": "Channel-2",
-          "arm": false,
-          "enabled": true,
-          "cue": false,
-          "midiMonitor": false,
-          "midiChannel": 16,
-          "autoCycleEnabled": false,
-          "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
-          "crossfadeGroup": 0,
-          "blendMode": 1,
-          "transitionEnabled": false,
-          "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0,
-          "autoDisable": true
-        },
-        "warps": [],
-        "effects": [],
-        "clips": [],
-        "patternIndex": 0,
-        "patterns": [
-          {
-            "id": 2352,
-            "class": "com.symmetrylabs.shows.hhgarden.FlowerTextureInOut",
-            "modulationColor": -16711892,
-            "parameters": {
-              "label": "FlowerTextureInOut",
-              "rotate": true,
-              "speed": 3690.3434346019703
             },
             "modulation": {
               "modulators": [],
@@ -396,9 +352,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 675.2635821388808,
-        "theta": 4.460999999999923,
-        "phi": 0.30179637050629016,
+        "radius": 1221.2912157699516,
+        "theta": 3.2039999999999336,
+        "phi": 1.5707963705062866,
         "positionX": 846.3702392578125,
         "positionY": 622.5409545898438,
         "positionZ": 41.7528076171875

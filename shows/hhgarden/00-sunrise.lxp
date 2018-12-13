@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544606968932,
+  "timestamp": 1544682329959,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 8,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -161,7 +161,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.7683453559875488,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -184,6 +184,7 @@
               "size": 346.4094784633914,
               "shrink": 0.669999985024333,
               "reup": 0.0,
+              "alpha": false,
               "trigger": false
             },
             "modulation": {
@@ -208,7 +209,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -231,6 +232,7 @@
               "size": 34.64095036276707,
               "shrink": 1.0,
               "reup": 49.99999709427357,
+              "alpha": false,
               "trigger": false
             },
             "modulation": {
@@ -425,13 +427,13 @@
         "parameters": {
           "label": "StamenUp",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -561,6 +563,7 @@
               "size": 363.7299420304923,
               "shrink": 0.44999999217689035,
               "reup": 0.0,
+              "alpha": false,
               "trigger": false
             },
             "modulation": {
@@ -585,7 +588,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.012986984103918076,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -619,7 +622,8 @@
               "label": "ColorFilter",
               "enabled": true,
               "Hue": 280.43999458663166,
-              "Sat": 62.00000084936619
+              "Sat": 62.00000084936619,
+              "Alpha": false
             },
             "modulation": {
               "modulators": [],
@@ -681,7 +685,8 @@
               "label": "ColorFilter",
               "enabled": true,
               "Hue": 43.199999034404755,
-              "Sat": 66.0000005736947
+              "Sat": 66.0000005736947,
+              "Alpha": false
             },
             "modulation": {
               "modulators": [],
@@ -909,7 +914,7 @@
         }
       },
       "outputControl": {
-        "id": 396,
+        "id": 401,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -16725505,
         "parameters": {
