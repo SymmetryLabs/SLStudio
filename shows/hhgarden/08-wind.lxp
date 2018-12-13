@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544662645452,
+  "timestamp": 1544663646750,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 0,
+      "focusedChannel": 5,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -403,7 +403,7 @@
             "modulationColor": -16767745,
             "parameters": {
               "label": "Vortex",
-              "count": 0,
+              "count": 199,
               "size": 17.99999986588955,
               "xrad": 750.8080076247574,
               "zrad": 42.99266297871286,
@@ -445,7 +445,25 @@
           "transitionBlendMode": 0,
           "autoDisable": true
         },
-        "warps": [],
+        "warps": [
+          {
+            "id": 1957,
+            "class": "com.symmetrylabs.slstudio.warp.Kaleidoscope",
+            "modulationColor": -1376512,
+            "parameters": {
+              "label": "Kaleidoscope",
+              "enabled": true,
+              "cx": 792.1343383789062,
+              "cy": 663.562744140625,
+              "cz": 42.75281524658203,
+              "lat": 0.0,
+              "lon": 0.0,
+              "turn": 0.0,
+              "order": 4,
+              "flip": true
+            }
+          }
+        ],
         "effects": [
           {
             "id": 1895,
@@ -454,8 +472,8 @@
             "parameters": {
               "label": "Reverb",
               "enabled": true,
-              "Wet": 0.41600000858306885,
-              "Delay": 0.5
+              "Wet": 0.2480000123381615,
+              "Delay": 0.06000001028180123
             },
             "modulation": {
               "modulators": [],
@@ -491,14 +509,33 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 1888,
-            "class": "com.symmetrylabs.slstudio.pattern.Swim",
-            "modulationColor": -22528,
+            "id": 1955,
+            "class": "com.symmetrylabs.slstudio.pattern.Play",
+            "modulationColor": -15991040,
             "parameters": {
-              "label": "Swim",
-              "HueVar": 0.0019999999552965165,
-              "Crazy": 0.20000000670552254,
-              "Speed": 0.5
+              "label": "Play",
+              "Hue": 0.0,
+              "Spark": 0.0,
+              "Wave": 0.0,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
+              "Spin": 0.5,
+              "X-SYM": false,
+              "Y-SYM": false,
+              "R-SYM": false,
+              "X-DUP": false,
+              "JOG": false,
+              "GREY": false,
+              "Rad": 0.10000000149011612,
+              "Bnc": 0.8300000037997961,
+              "Amp": 0.46000001206994057,
+              "tempo": 1.0,
+              "TMult": 0,
+              "TPat": 1,
+              "Shape": 4
             },
             "modulation": {
               "modulators": [],
@@ -528,8 +565,8 @@
       "modulationColor": -16711932,
       "parameters": {
         "label": "",
-        "period": 500.0,
-        "bpm": 120.0,
+        "period": 595.6666666666666,
+        "bpm": 100.72747621712368,
         "tap": false,
         "nudgeUp": false,
         "nudgeDown": false,
@@ -746,9 +783,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 816.8908837887909,
-        "theta": -1.7819999999999556,
-        "phi": 0.13079637050628956,
+        "radius": 803.0219761743261,
+        "theta": -1.4999999999999565,
+        "phi": 0.20279637050628938,
         "positionX": 792.1343383789062,
         "positionY": 663.562744140625,
         "positionZ": 42.75281524658203
