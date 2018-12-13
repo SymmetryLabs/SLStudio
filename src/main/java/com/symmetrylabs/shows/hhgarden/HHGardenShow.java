@@ -102,7 +102,7 @@ public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener, 
                 dataline.setIndices(indexes);
                 if (DEBUG_UNMAPPED) {
                     for (ArtNetDatagram andg : dataline.getArtNetDatagrams()) {
-                        andg.setUnmappedPointColor(0xFF0000);
+                        andg.setUnmappedPointColor(0xFF0000, true);
                     }
                 }
             }

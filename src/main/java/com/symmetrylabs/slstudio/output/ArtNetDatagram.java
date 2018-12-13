@@ -14,11 +14,16 @@ public class ArtNetDatagram extends LXDatagram {
     private final static int ARTNET_HEADER_LENGTH = 18;
     private final static int ARTNET_PORT = 6454;
     private final static int SEQUENCE_INDEX = 12;
+    private final static long FLASH_NANOS = 100_000_000;
 
     private int[] pointIndices;
     private boolean sequenceEnabled = false;
     private byte sequence = 1;
+
     private int unmappedPointColor = 0x000000;
+    private boolean flashUnmapped = false;
+    private boolean flashInOn = true;
+    private long lastFlashNanos = System.nanoTime();
 
     private GammaExpander GammaExpander;
 
@@ -64,8 +69,9 @@ public class ArtNetDatagram extends LXDatagram {
         }
     }
 
-    public ArtNetDatagram setUnmappedPointColor(int c) {
+    public ArtNetDatagram setUnmappedPointColor(int c, boolean flash) {
         unmappedPointColor = c;
+        flashUnmapped = flash;
         return this;
     }
 
@@ -112,8 +118,13 @@ public class ArtNetDatagram extends LXDatagram {
     LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
         int i = offset;
         int[] byteOffset = BYTE_ORDERING[this.byteOrder.ordinal()];
+        int unmappedC = flashUnmapped && !flashInOn ? 0 : unmappedPointColor;
+        if (System.nanoTime() - lastFlashNanos > FLASH_NANOS) {
+            lastFlashNanos = System.nanoTime();
+            flashInOn = !flashInOn;
+        }
         for (int index : pointIndices) {
-            int colorValue = (index >= 0) ? colors[index] : unmappedPointColor;
+            int colorValue = (index >= 0) ? colors[index] : unmappedC;
 
             int gammaExpanded = GammaExpander.getExpandedColor(colorValue);
             buffer[i + byteOffset[0]] = (byte) Ops8.red(gammaExpanded);
