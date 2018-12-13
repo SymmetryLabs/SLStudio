@@ -63,9 +63,7 @@ public class FlowerModel extends SLModel {
     private final FlowerData flowerData;
 
     public FlowerModel() {
-        super();
-        flowerPoints = new ArrayList<>();
-        flowerData = null;
+        this(new ArrayList<LXPoint>(), null);
     }
 
     private FlowerModel(List<LXPoint> points, FlowerData flowerData) {
