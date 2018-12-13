@@ -98,7 +98,7 @@ public class AssignablePixlite extends LXOutputGroup {
             for (int i = 0; i < numUniverses; i++) {
                 int[] indices = new int[MAX_NUM_POINTS_PER_UNIVERSE];
                 for (int j = 0; j < indices.length; j++) {
-                    indices[j] = 0;
+                    indices[j] = -1;
                 }
                 ArtNetDatagram datagram =
                     new ArtNetDatagram(
