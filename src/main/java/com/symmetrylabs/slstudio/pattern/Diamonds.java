@@ -39,6 +39,8 @@ public class Diamonds extends SLPattern<SLModel> {
     private BooleanParameter trigger =
         new BooleanParameter("trigger", false)
         .setMode(BooleanParameter.Mode.MOMENTARY);
+    private BooleanParameter alphaParam =
+        new BooleanParameter("alpha", false);
 
     double sinceLastReUp;
 
@@ -48,6 +50,7 @@ public class Diamonds extends SLPattern<SLModel> {
         addParameter(sizeParam);
         addParameter(shrinkParam);
         addParameter(reupParam);
+        addParameter(alphaParam);
         addParameter(trigger);
     }
 
@@ -91,6 +94,7 @@ public class Diamonds extends SLPattern<SLModel> {
         float release = releaseParam.getValuef();
         float size = sizeParam.getValuef();
         float shrink = shrinkParam.getValuef();
+        boolean alpha = alphaParam.getValueb();
         for (LXVector v : getVectors()) {
             float max = 0;
             float minAge = release;
@@ -107,7 +111,11 @@ public class Diamonds extends SLPattern<SLModel> {
                 }
             }
             int gray = (int) Math.round((float) 0xFFFF * max);
-            colors[v.index] = Ops16.rgba(gray, gray, gray, 0xFFFF);
+            if (alpha) {
+                colors[v.index] = Ops16.rgba(0xFFFF, 0xFFFF, 0xFFFF, gray);
+            } else {
+                colors[v.index] = Ops16.rgba(gray, gray, gray, 0xFFFF);
+            }
         }
         markModified(PolyBuffer.Space.RGB16);
         diamonds.removeIf(d -> d.age > release);
