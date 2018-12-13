@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544732572620,
+  "timestamp": 1544734553333,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -59,20 +59,20 @@
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
-          "autoCycleEnabled": false,
+          "autoCycleEnabled": true,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
-          "transitionEnabled": false,
-          "transitionTimeSecs": 5.0,
+          "transitionEnabled": true,
+          "transitionTimeSecs": 8.0,
           "transitionBlendMode": 0,
           "autoDisable": true
         },
         "warps": [],
         "effects": [],
         "clips": [],
-        "patternIndex": 3,
+        "patternIndex": 0,
         "patterns": [
           {
             "id": 2225,
@@ -167,8 +167,8 @@
             "parameters": {
               "label": "Swim",
               "HueVar": 0.1,
-              "Crazy": 0.5,
-              "Speed": 0.5,
+              "Crazy": 0.3200000040233135,
+              "Speed": 0.36000000312924385,
               "Hue": 277.1999938040972,
               "Mono": true
             },
@@ -185,12 +185,36 @@
             "modulationColor": -12975873,
             "parameters": {
               "label": "Diamonds",
-              "release": 300.0,
+              "release": 860.0000000000002,
               "size": 173.20473632812502,
-              "shrink": 0.1,
-              "reup": 0.0,
+              "shrink": 0.23999999687075615,
+              "reup": 169.99999932944772,
               "alpha": false,
               "trigger": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4218,
+            "class": "com.symmetrylabs.slstudio.pattern.raven.RKPattern01",
+            "modulationColor": -1442048,
+            "parameters": {
+              "label": "RKPattern01",
+              "Res": 200,
+              "Kernel": 3,
+              "audioLink": false,
+              "rX": 0.942477801237751,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "amt": 20.0,
+              "speed": 3.1415927410125732,
+              "dsp": 1.5707963705062866,
+              "nDsp": 1.0
             },
             "modulation": {
               "modulators": [],
@@ -212,20 +236,20 @@
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
-          "autoCycleEnabled": false,
+          "autoCycleEnabled": true,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
-          "transitionEnabled": false,
-          "transitionTimeSecs": 5.0,
+          "transitionEnabled": true,
+          "transitionTimeSecs": 8.0,
           "transitionBlendMode": 0,
           "autoDisable": true
         },
         "warps": [],
         "effects": [],
         "clips": [],
-        "patternIndex": 3,
+        "patternIndex": 0,
         "patterns": [
           {
             "id": 4146,
@@ -312,6 +336,42 @@
               "Speed": 0.5,
               "Hue": 39.599999114871025,
               "Mono": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4216,
+            "class": "heronarts.p3lx.pattern.SolidColorPattern",
+            "modulationColor": -16741889,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 282.1176452636719,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -5046017
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4221,
+            "class": "heronarts.p3lx.pattern.SolidColorPattern",
+            "modulationColor": -7405313,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 232.47059631347656,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -16768769
             },
             "modulation": {
               "modulators": [],
@@ -559,9 +619,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 927.9225007914506,
-        "theta": 4.802999999999977,
-        "phi": 0.5777963705062891,
+        "radius": 1265.6781876402035,
+        "theta": 5.0459999999999665,
+        "phi": 1.0427963705062893,
         "positionX": 846.3702392578125,
         "positionY": 622.5409545898438,
         "positionZ": 41.7528076171875
