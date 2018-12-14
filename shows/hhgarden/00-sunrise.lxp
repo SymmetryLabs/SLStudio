@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544682329959,
+  "timestamp": 1544743659925,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -209,7 +209,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -293,6 +293,7 @@
               "speed": 71.99999821186066,
               "dist": 361.8999945931136,
               "x": 0.9,
+              "y": 0.0,
               "z": 0.315,
               "ampl": 43.199999034404755,
               "wavel": 868.2949575111334,
@@ -643,7 +644,9 @@
               "label": "Swim",
               "HueVar": 0.1,
               "Crazy": 0.21000000275671482,
-              "Speed": 0.21000000275671482
+              "Speed": 0.21000000275671482,
+              "Hue": 0.0,
+              "Mono": false
             },
             "modulation": {
               "modulators": [],
@@ -722,7 +725,9 @@
               "label": "Swim",
               "HueVar": 0.1,
               "Crazy": 0.2900000046938658,
-              "Speed": 0.31000000424683094
+              "Speed": 0.31000000424683094,
+              "Hue": 0.0,
+              "Mono": false
             },
             "modulation": {
               "modulators": [],
