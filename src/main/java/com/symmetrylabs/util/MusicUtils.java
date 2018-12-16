@@ -25,6 +25,7 @@ public class MusicUtils {
     public static final int PITCH_C6 = PITCH_C0 + 6 * 12;
     public static final int PITCH_C7 = PITCH_C0 + 7 * 12;
     public static final int MAX_PITCH = 127;
+    public static final int NUM_PITCHES = MAX_PITCH + 1;
 
     public static final int CLASS_C = 0;
     public static final int CLASS_C_SHARP = 1;

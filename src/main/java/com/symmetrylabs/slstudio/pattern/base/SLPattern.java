@@ -38,8 +38,8 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
     private volatile Renderer renderer;
     private ReusableBuffer reusableBuffer = new ReusableBuffer();
     private boolean isManaged = false;
-    private boolean isActive = false;
     private boolean isChannelListenerAttached = false;
+    protected boolean isActive = false;
 
     public SLPattern(LX lx) {
         super(lx);

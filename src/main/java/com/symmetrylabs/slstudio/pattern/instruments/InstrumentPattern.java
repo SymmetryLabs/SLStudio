@@ -1,14 +1,11 @@
 package com.symmetrylabs.slstudio.pattern.instruments;
 
 import com.symmetrylabs.color.Ops16;
-import com.symmetrylabs.color.Spaces;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.MidiPolyphonicExpressionPattern;
-import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.CubeMarker;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.MusicUtils;
-import com.symmetrylabs.util.Octahedron;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,11 +16,10 @@ import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.Tempo;
 import heronarts.lx.audio.LXAudioBuffer;
-import heronarts.lx.midi.MidiNoteOn;
+import heronarts.lx.audio.LXAudioInput;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
-import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXVector;
 import processing.core.PVector;
 
@@ -55,7 +51,9 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     private final CompoundParameter orientParam = new CompoundParameter("Orient", 0, -1, 1);
 
     private final EnumParameter<TriggerSource> sourceParam = new EnumParameter<>("Source", TriggerSource.BEAT);
-    private final CompoundParameter gainParam = new CompoundParameter("Gain", 1, 0, 10);
+    private final CompoundParameter floorParam = new CompoundParameter("Floor", 1/16f, 0, 4);
+    private final CompoundParameter minCeilParam = new CompoundParameter("MinCeil", 12, 1, 64);
+    private final CompoundParameter gainParam = new CompoundParameter("Gain", 0, -30, 30);  // decibels
     private final DiscreteParameter pitchLoParam = new DiscreteParameter("PitchLo", MusicUtils.PITCH_C1, 0, 127);
     private final DiscreteParameter pitchHiParam = new DiscreteParameter("PitchHi", MusicUtils.PITCH_C5, 0, 127);
     private final CompoundParameter falloffParam = new CompoundParameter("Falloff", 2, 0, 12);
@@ -64,17 +62,24 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     private Instrument instrument;
     private Note[] lastNotes;
 
+    // Beat note trigger
     private Integer beat;
     private boolean measure;
 
+    // MIDI note trigger
     private Note[] midiNotes;
 
+    // Audio note trigger
     private LXAudioBuffer audio;
     private float[] samples;
     private FFT fft;
-    private float[] bands;
     private float[] hertzLo;
     private float[] hertzHi;
+    private float globalCeiling;
+    private float[] bands;
+    private float[] values;
+    private float[] floors;
+    private float[] ceilings;
 
     public InstrumentPattern(LX lx) {
         super(lx);
@@ -95,6 +100,8 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
         addParameter(orientParam);
 
         addParameter(sourceParam);
+        addParameter(floorParam);
+        addParameter(minCeilParam);
         addParameter(gainParam);
         addParameter(pitchLoParam);
         addParameter(pitchHiParam);
@@ -112,6 +119,16 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
         initAudio();
     }
 
+    @Override public void onActive() {
+        super.onActive();
+        enableDisableAudio();
+    }
+
+    @Override public void onInactive() {
+        enableDisableAudio();
+        super.onInactive();
+    }
+
     protected void initBeat() {
         beat = null;
         measure = false;
@@ -123,7 +140,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     }
 
     protected Note[] setupNotes() {
-        Note[] notes = new Note[MusicUtils.MAX_PITCH + 1];
+        Note[] notes = new Note[MusicUtils.NUM_PITCHES];
         for (int p = 0; p < notes.length; p++) {
             notes[p] = new Note(false, false, 0);
         }
@@ -131,17 +148,35 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     }
 
     protected void initAudio() {
-        audio = lx.engine.audio.getInput().mix;
-        samples = new float[audio.bufferSize()];
-        fft = new FFT(audio.bufferSize(), audio.sampleRate());
-        fft.window(FFT.HAMMING);
-
-        bands = new float[MusicUtils.MAX_PITCH + 1];
-        hertzLo = new float[MusicUtils.MAX_PITCH + 1];
-        hertzHi = new float[MusicUtils.MAX_PITCH + 1];
+        hertzLo = new float[MusicUtils.NUM_PITCHES];
+        hertzHi = new float[MusicUtils.NUM_PITCHES];
         for (int p = 0; p <= MusicUtils.MAX_PITCH; p++) {
             hertzLo[p] = (float) MusicUtils.pitchToHertz(p - 0.4);
             hertzHi[p] = (float) MusicUtils.pitchToHertz(p + 0.4);
+        }
+        bands = new float[MusicUtils.NUM_PITCHES];
+        values = new float[MusicUtils.NUM_PITCHES];
+        floors = new float[MusicUtils.NUM_PITCHES];
+        ceilings = new float[MusicUtils.NUM_PITCHES];
+    }
+
+    protected void enableDisableAudio() {
+        if (getChannel() != null) {
+            LXAudioInput input = getChannel().audioInput;
+            if (isActive && sourceParam.getEnum() == TriggerSource.AUDIO) {
+                input.open();
+                input.start();
+                audio = input.mix;
+                samples = new float[audio.bufferSize()];
+                fft = new FFT(audio.bufferSize(), audio.sampleRate());
+                fft.window(FFT.HAMMING);
+            } else {
+                if (input.isOpen()) {
+                    input.stop();
+                }
+                input.close();
+                audio = null;
+            }
         }
     }
 
@@ -215,11 +250,58 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     }
 
     protected void putAudioNotes(Note[] notes) {
-        audio.getSamples(samples);
-        fft.forward(samples);
-        for (int pitch = 0; pitch <= MusicUtils.MAX_PITCH; pitch++) {
-            bands[pitch] = fft.calcAvg(hertzLo[pitch], hertzHi[pitch]);
+        readAudioBands();
+        normalizeAudioBands();
+    }
+
+    protected void readAudioBands() {
+        if (audio != null) {
+            audio.getSamples(samples);
+            fft.forward(samples);
+            int pitchLo = pitchLoParam.getValuei();
+            int pitchHi = pitchHiParam.getValuei();
+            float bandMax = 0;
+            for (int pitch = 0; pitch <= MusicUtils.MAX_PITCH; pitch++) {
+                bands[pitch] = fft.calcAvg(hertzLo[pitch], hertzHi[pitch]);
+                if (pitch >= pitchLo && pitch <= pitchHi) {
+                    bandMax = Math.max(bandMax, bands[pitch]);
+                }
+            }
+            globalCeiling = Math.max(globalCeiling, bandMax / 4);
+            globalCeiling = moveToward(globalCeiling, bandMax, 0.5f, 0.001f);
         }
+    }
+
+    private void normalizeAudioBands() {
+        float FLOOR_FALL_RATE = 0.03f;
+        float FLOOR_RISE_RATE = 0.008f;
+        float FLOOR_NOISE_MARGIN = floorParam.getValuef();
+
+        float MIN_CEILING = minCeilParam.getValuef();
+        float CEILING_FALL_RATE = 0.004f;
+        float CEILING_RISE_RATE = 0.004f; //1/32f;
+        float CEILING_HEADROOM = 0.004f;
+
+        float gain = (float) Math.pow(10, gainParam.getValuef()/20) / globalCeiling;
+
+        for (int b = 0; b < bands.length; b++) {
+            float level = bands[b] * gain;
+            floors[b] = moveToward(floors[b], level, FLOOR_RISE_RATE, FLOOR_FALL_RATE);
+            ceilings[b] = moveToward(ceilings[b], level, CEILING_RISE_RATE, CEILING_FALL_RATE);
+            float floor = floors[b] * (1 + FLOOR_NOISE_MARGIN);
+            float ceiling = ceilings[b] * (1 + CEILING_HEADROOM);
+            float minCeiling = floor + MIN_CEILING;
+            if (ceilings[b] < minCeiling) ceiling = ceilings[b] = minCeiling;
+            values[b] = (level > floor ? level - floor : 0) / (ceiling - floor);
+        }
+    }
+
+    private float lerp(float start, float stop, float fraction) {
+        return start + (stop - start) * fraction;
+    }
+
+    private float moveToward(float start, float goal, float upFrac, float downFrac) {
+        return lerp(start, goal, goal > start ? upFrac : downFrac);
     }
 
     private CubeMarker makeBar(float x, float z, float minY, float maxY, float thickness, int color) {
@@ -232,13 +314,14 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
 
     @Override public List<Marker> getMarkers() {
         List<Marker> markers = new ArrayList<>();
+        float yScale = 100;
+        int pitchLo = pitchLoParam.getValuei();
+        int pitchHi = pitchHiParam.getValuei();
         for (int i = 0; i < bands.length; i++) {
-            markers.add(makeBar(i*10 - 100, -100, 0, bands[i], 8, 0xffff0080));
-            //markers.add(makeBar(i*10 - 100, -100, floors[i], ceilings[i], 8, 0xff0000ff));
-            //markers.add(makeBar(i*10 - 100, -150, 0, values[i], 8, 0xffffffff));
-        }
-        for (int i = 0; i < samples.length; i++) {
-            markers.add(makeBar(i, -100, 0, samples[i]*100, 0, 0xff804000));
+            markers.add(makeBar(i*10, 0, 0, bands[i] * yScale, 8, 0xff00c0c0));
+            markers.add(makeBar(i*10, 0, floors[i] * yScale, ceilings[i] * yScale, 8, 0xff004080));
+            markers.add(makeBar(i*10, -50, 0, values[i] * yScale, 8,
+                (i >= pitchLo && i <= pitchHi) ? 0xffc0c000 : 0xff606060));
         }
         return markers;
     }
