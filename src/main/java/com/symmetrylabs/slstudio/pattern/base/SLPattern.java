@@ -40,6 +40,9 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
     private volatile Renderer renderer;
     private ReusableBuffer reusableBuffer = new ReusableBuffer();
     private boolean isManaged = false;
+    private boolean isActive = false;
+    private boolean isAssignedToChannel = false;
+    private boolean isMarkerCaptionEnabled = false;
 
     public SLPattern(LX lx) {
         super(lx);
@@ -113,8 +116,12 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
     @Override
     public void onActive() {
         super.onActive();
-        ((SLStudioLX) lx).ui.addMarkerSource(this);
-        ((SLStudioLX) lx).ui.addCaptionSource(this);
+        if (!isAssignedToChannel && getChannel() != null) {
+            isAssignedToChannel = true;
+            getChannel().enabled.addListener(param -> updateMarkerCaptionEnabled());
+        }
+        isActive = true;
+        updateMarkerCaptionEnabled();
 
         synchronized (this) {
             if (!isManaged && renderer != null) {
@@ -127,8 +134,8 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
     @Override
     public void onInactive() {
         super.onInactive();
-        ((SLStudioLX) lx).ui.removeMarkerSource(this);
-        ((SLStudioLX) lx).ui.removeCaptionSource(this);
+        isActive = false;
+        updateMarkerCaptionEnabled();
 
         synchronized (this) {
             if (renderer != null) {
@@ -136,6 +143,20 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
                 renderer = null;
             }
         }
+    }
+
+    protected void updateMarkerCaptionEnabled() {
+        boolean newEnabled = isActive && getChannel() != null && getChannel().enabled.isOn();
+
+        if (newEnabled && !isMarkerCaptionEnabled) {
+            ((SLStudioLX) lx).ui.addMarkerSource(this);
+            ((SLStudioLX) lx).ui.addCaptionSource(this);
+        }
+        if (!newEnabled && isMarkerCaptionEnabled) {
+            ((SLStudioLX) lx).ui.removeMarkerSource(this);
+            ((SLStudioLX) lx).ui.removeCaptionSource(this);
+        }
+        isMarkerCaptionEnabled = newEnabled;
     }
 
     public Collection<Marker> getMarkers() {
