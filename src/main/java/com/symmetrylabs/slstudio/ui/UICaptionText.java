@@ -19,7 +19,7 @@ public class UICaptionText extends UITextOverlay {
     }
 
     public synchronized void addSource(CaptionSource source) {
-        sources.put(source, new Object());
+        sources.put(source, this);
     }
 
     public synchronized void removeSource(CaptionSource source) {

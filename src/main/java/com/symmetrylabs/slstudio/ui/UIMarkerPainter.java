@@ -8,13 +8,13 @@ import processing.core.PGraphics;
 
 import java.util.HashSet;
 import java.util.Set;
-
+import java.util.WeakHashMap;
 
 public class UIMarkerPainter extends UI3dComponent {
-    Set<MarkerSource> sources = new HashSet<>();
+    WeakHashMap<MarkerSource, Object> sources = new WeakHashMap<>();
 
     public synchronized void addSource(MarkerSource source) {
-        sources.add(source);
+        sources.put(source, this);
     }
 
     public synchronized void removeSource(MarkerSource source) {
@@ -22,7 +22,7 @@ public class UIMarkerPainter extends UI3dComponent {
     }
 
     protected synchronized void onDraw(UI ui, PGraphics pg) {
-        for (MarkerSource source : sources) {
+        for (MarkerSource source : sources.keySet()) {
             for (Marker marker : source.getMarkers()) {
                 marker.draw(pg);
             }

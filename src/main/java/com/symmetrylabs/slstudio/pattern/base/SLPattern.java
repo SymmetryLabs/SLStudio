@@ -1,6 +1,5 @@
 package com.symmetrylabs.slstudio.pattern.base;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,7 +16,6 @@ import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXBuffer;
 import heronarts.lx.model.LXModel;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -40,6 +38,8 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
     private volatile Renderer renderer;
     private ReusableBuffer reusableBuffer = new ReusableBuffer();
     private boolean isManaged = false;
+    private boolean isActive = false;
+    private boolean isChannelListenerAttached = false;
 
     public SLPattern(LX lx) {
         super(lx);
@@ -113,8 +113,12 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
     @Override
     public void onActive() {
         super.onActive();
-        ((SLStudioLX) lx).ui.addMarkerSource(this);
-        ((SLStudioLX) lx).ui.addCaptionSource(this);
+        if (!isChannelListenerAttached && getChannel() != null) {
+            getChannel().enabled.addListener(param -> showOrHideMarkers());
+            isChannelListenerAttached = true;
+        }
+        isActive = true;
+        showOrHideMarkers();
 
         synchronized (this) {
             if (!isManaged && renderer != null) {
@@ -127,14 +131,24 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
     @Override
     public void onInactive() {
         super.onInactive();
-        ((SLStudioLX) lx).ui.removeMarkerSource(this);
-        ((SLStudioLX) lx).ui.removeCaptionSource(this);
+        isActive = false;
+        showOrHideMarkers();
 
         synchronized (this) {
             if (renderer != null) {
                 renderer.stop();
                 renderer = null;
             }
+        }
+    }
+
+    protected void showOrHideMarkers() {
+        if (isActive && getChannel() != null && getChannel().enabled.isOn()) {
+            lx.ui.addMarkerSource(this);
+            lx.ui.addCaptionSource(this);
+        } else {
+            lx.ui.removeMarkerSource(this);
+            lx.ui.removeCaptionSource(this);
         }
     }
 
