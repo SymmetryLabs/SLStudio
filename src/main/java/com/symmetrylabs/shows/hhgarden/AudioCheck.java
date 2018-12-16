@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import heronarts.lx.LX;
-import heronarts.lx.PolyBuffer;
 import heronarts.lx.audio.LXAudioBuffer;
 import heronarts.lx.audio.LXAudioInput;
 import processing.core.PVector;
@@ -33,7 +32,9 @@ public class AudioCheck extends SLPattern<SLModel> {
 
     @Override public void onInactive() {
         LXAudioInput input = getChannel().audioInput;
-        input.stop();
+        if (input.isOpen()) {
+            input.stop();
+        }
         input.close();
         super.onInactive();
     }
