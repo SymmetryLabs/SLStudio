@@ -50,20 +50,22 @@ public class AudioCheck extends SLPattern<SLModel> {
         float xScale = 1;
         float yScale = 200;
 
-        audioBuffer.getSamples(audioSamples);
         List<Marker> markers = new ArrayList<>();
-        markers.add(new CubeMarker(
-            new PVector(xScale * audioSamples.length / 2, 0, 0),
-            new PVector(xScale * audioSamples.length / 2, yScale, 0),
-            0xff00c0c0
-        ));
-        markers.add(new CubeMarker(
-            new PVector(xScale * audioSamples.length / 2, 0, 0),
-            new PVector(xScale * audioSamples.length / 2, 0, 0),
-            0xff404040
-        ));
-        for (int i = 0; i < audioSamples.length; i++) {
-            markers.add(makeBar(xScale * i, 0, 0, yScale * audioSamples[i], 0, 0xffc0c000));
+        if (audioBuffer != null) {
+            audioBuffer.getSamples(audioSamples);
+            markers.add(new CubeMarker(
+                new PVector(xScale*audioSamples.length/2, 0, 0),
+                new PVector(xScale*audioSamples.length/2, yScale, 0),
+                0xff00c0c0
+            ));
+            markers.add(new CubeMarker(
+                new PVector(xScale*audioSamples.length/2, 0, 0),
+                new PVector(xScale*audioSamples.length/2, 0, 0),
+                0xff404040
+            ));
+            for (int i = 0; i < audioSamples.length; i++) {
+                markers.add(makeBar(xScale*i, 0, 0, yScale*audioSamples[i], 0, 0xffc0c000));
+            }
         }
         return markers;
     }
