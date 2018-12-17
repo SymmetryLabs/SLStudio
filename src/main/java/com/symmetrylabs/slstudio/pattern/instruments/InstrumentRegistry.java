@@ -23,7 +23,7 @@ public class InstrumentRegistry {
     private static synchronized Map<String, InstrumentBuilder> getMap() {
         if (map == null) {
             map = new HashMap<>();
-            map.put("Jet", () -> new Jet());
+            map.put("Jet", () -> new EmitterInstrument(new JetEmitter()));
             map.put("Sprinkle", () -> new EmitterInstrument(new SprinkleEmitter()));
         }
         return map;

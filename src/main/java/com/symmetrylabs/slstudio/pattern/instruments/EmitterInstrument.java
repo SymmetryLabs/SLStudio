@@ -69,8 +69,8 @@ public class EmitterInstrument implements Instrument {
         // Convenience utilities
         public LXVector randomXyDisc() {
             while (true) {
-                float x = random.nextFloat();
-                float y = random.nextFloat();
+                float x = random.nextFloat() * 2 - 1;
+                float y = random.nextFloat() * 2 - 1;
                 if (x*x + y*y < 1) {
                     return new LXVector(x, y, 0);
                 }
@@ -79,9 +79,9 @@ public class EmitterInstrument implements Instrument {
 
         public LXVector randomSphere() {
             while (true) {
-                float x = random.nextFloat();
-                float y = random.nextFloat();
-                float z = random.nextFloat();
+                float x = random.nextFloat() * 2 - 1;
+                float y = random.nextFloat() * 2 - 1;
+                float z = random.nextFloat() * 2 - 1;
                 if (x*x + y*y + z*z < 1) {
                     return new LXVector(x, y, z);
                 }

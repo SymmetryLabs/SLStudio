@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.pattern.instruments;
 
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
+import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXVector;
 
 /**
@@ -13,12 +14,12 @@ public interface Instrument {
     void run(LXModel model, ParameterSet paramSet, Note[] notes, double deltaSec, PolyBuffer buffer);
 
     interface ParameterSet {
-        long generateColor(double variation);
-        LXVector generatePosition(LXVector variation);
-
-        double getSize();
+        long getColor(double variation);
+        LXVector getPosition(LXVector variation);
+        LXPoint getPoint(LXVector variation);
+        double getSize(double variation);
         double getRate();
-        double getOrient();
+        LXVector getVelocity();
 
         int getPitchLo();
         int getPitchHi();

@@ -54,7 +54,7 @@ public class MusicUtils {
     private static double tunedHertz = 440;
     private static int tunedPitch = PITCH_C4 + CLASS_A;
     private static Key keySignature = Key.C;
-    private static boolean useAccidentalSymbols = true;
+    private static boolean useAccidentalSymbols = false;
 
     private static final EnumMap<Key, String[]> PITCH_CLASS_NAMES = new EnumMap<Key, String[]>(
         ImmutableMap.<Key, String[]>builder()

@@ -12,9 +12,9 @@ public class SprinkleEmitter extends EmitterInstrument.AbstractEmitter implement
     @Override
     public Puff emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
         return new Puff(
-            paramSet.generatePosition(randomXyDisc()),
-            intensity * paramSet.getSize(),
-            paramSet.generateColor(randomVariation()),
+            new LXVector(paramSet.getPoint(randomXyDisc())),
+            paramSet.getSize(intensity),
+            paramSet.getColor(randomVariation()),
             1.0 / paramSet.getRate()
         );
     }
@@ -32,6 +32,7 @@ public class SprinkleEmitter extends EmitterInstrument.AbstractEmitter implement
             this.color = color;
             this.lifetime = lifetime;
             brightness = 1.0;
+            System.out.println("new puff: " + center);
         }
 
         public void advance(double deltaSec, double intensity, boolean sustain) {

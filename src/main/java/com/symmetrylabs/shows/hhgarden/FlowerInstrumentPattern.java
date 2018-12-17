@@ -33,17 +33,17 @@ public class FlowerInstrumentPattern extends InstrumentPattern {
         MASK_GROUPS[FlowerMask.STEM.ordinal()][Group.STEM.ordinal()] = true;
     }
 
-    private final EnumParameter<FlowerMask> flPartParam = new EnumParameter<>("FlPart", FlowerMask.ALL);
+    private final EnumParameter<FlowerMask> maskParam = new EnumParameter<>("Mask", FlowerMask.ALL);
 
     public FlowerInstrumentPattern(LX lx) {
         super(lx);
-        addParameter(flPartParam);
+        addParameter(maskParam);
     }
 
     private void applyMask(int[] colors) {
         FlowerPoint[] points = FlowerUtils.getFlowerPoints(model);
         if (points != null) {
-            FlowerMask mask = flPartParam.getEnum();
+            FlowerMask mask = maskParam.getEnum();
             boolean[] maskGroups = MASK_GROUPS[mask.ordinal()];
             for (int i = 0; i < points.length; i++) {
                 if (!maskGroups[points[i].group.ordinal()]) {
@@ -56,7 +56,7 @@ public class FlowerInstrumentPattern extends InstrumentPattern {
     private void applyMask(long[] colors) {
         FlowerPoint[] points = FlowerUtils.getFlowerPoints(model);
         if (points != null) {
-            FlowerMask mask = flPartParam.getEnum();
+            FlowerMask mask = maskParam.getEnum();
             boolean[] maskGroups = MASK_GROUPS[mask.ordinal()];
             for (int i = 0; i < points.length; i++) {
                 if (!maskGroups[points[i].group.ordinal()]) {
