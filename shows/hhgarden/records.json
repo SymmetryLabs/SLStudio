@@ -24814,39 +24814,5 @@
     "z": 348.8961,
     "heightOverrideEnabled": false,
     "heightOverride": 0.0
-  },
-    {
-    "id": 2256,
-    "panelId": "A1",
-    "pixliteId": 166,
-    "harness": 1,
-    "harnessIndex": 1,
-    "x": 170.13428,
-    "z": 348.8961,
-    "heightOverrideEnabled": false,
-    "heightOverride": 0.0
-  },
-
-    {
-    "id": 2257,
-    "panelId": "A1",
-    "pixliteId": 166,
-    "harness": 1,
-    "harnessIndex": 1,
-    "x": 170.13428,
-    "z": 348.8961,
-    "heightOverrideEnabled": false,
-    "heightOverride": 0.0
-  },
-    {
-    "id": 2258,
-    "panelId": "A1",
-    "pixliteId": 166,
-    "harness": 1,
-    "harnessIndex": 1,
-    "x": 170.13428,
-    "z": 348.8961,
-    "heightOverrideEnabled": false,
-    "heightOverride": 0.0
   }
 ]
