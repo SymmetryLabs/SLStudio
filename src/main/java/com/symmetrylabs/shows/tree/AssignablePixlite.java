@@ -133,7 +133,7 @@ public class AssignablePixlite extends LXOutputGroup {
         private final int DATALINE_NUM_POINTS = 600; // arbitrary
         private final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
 
-        private final List<AssignableArtNetDatagram> artNetDatagrams = new ArrayList<>();
+        private final List<AssignableArtNetDmxDatagram> artNetDatagrams = new ArrayList<>();
 
         public final String ipAddress;
         public final int index;
@@ -176,7 +176,7 @@ public class AssignablePixlite extends LXOutputGroup {
                 for (int j = 0; j < indices.length; j++) {
                     indices[j] = 0;
                 }
-                AssignableArtNetDatagram datagram = new AssignableArtNetDatagram(lx, ipAddress, indices, indices.length*3, startUniverse++ - 1);
+                AssignableArtNetDmxDatagram datagram = new AssignableArtNetDmxDatagram(lx, ipAddress, indices, indices.length*3, startUniverse++ - 1);
                 artNetDatagrams.add(datagram);
                 addDatagram(datagram);
             }

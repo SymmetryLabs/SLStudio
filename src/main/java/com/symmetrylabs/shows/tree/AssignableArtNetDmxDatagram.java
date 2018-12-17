@@ -8,7 +8,7 @@ import heronarts.lx.model.LXPoint;
 
 import java.net.UnknownHostException;
 
-public class AssignableArtNetDatagram extends LXDatagram {
+public class AssignableArtNetDmxDatagram extends LXDatagram {
 
     private final static int DEFAULT_UNIVERSE = 0;
     private final static int ARTNET_HEADER_LENGTH = 18;
@@ -23,11 +23,11 @@ public class AssignableArtNetDatagram extends LXDatagram {
 
     private GammaExpander GammaExpander;
 
-    public AssignableArtNetDatagram(LX lx, String ipAddress, int[] indices, int universeNumber) {
+    public AssignableArtNetDmxDatagram(LX lx, String ipAddress, int[] indices, int universeNumber) {
         this(lx, ipAddress, indices, 3 * indices.length, universeNumber);
     }
 
-    public AssignableArtNetDatagram(LX lx, String ipAddress, int[] indices, int dataLength, int universeNumber) {
+    public AssignableArtNetDmxDatagram(LX lx, String ipAddress, int[] indices, int dataLength, int universeNumber) {
         super(ARTNET_HEADER_LENGTH + dataLength + (dataLength % 2));
         this.ipAddress = ipAddress;
         this.pointIndices = indices;
@@ -66,7 +66,7 @@ public class AssignableArtNetDatagram extends LXDatagram {
         }
     }
 
-    public AssignableArtNetDatagram setSequenceEnabled(boolean sequenceEnabled) {
+    public AssignableArtNetDmxDatagram setSequenceEnabled(boolean sequenceEnabled) {
         this.sequenceEnabled = sequenceEnabled;
         return this;
     }
