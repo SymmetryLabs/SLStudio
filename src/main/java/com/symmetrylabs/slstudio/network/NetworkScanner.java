@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.net.DatagramSocket;
+import com.symmetrylabs.slstudio.output.ArtNetPollDatagram;
+import com.symmetrylabs.slstudio.output.ArtNetDatagramUtil;
+import java.io.IOException;
 
 import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.util.listenable.ListenableSet;
@@ -43,6 +47,14 @@ public class NetworkScanner {
                                 updateDevice(NetworkDevice.fromIdentifier(src, reply.getSysexContent()));
                             }
                         });
+                }
+            }
+            if (discoverArtNet) {
+                ArtNetPollDatagram poll = new ArtNetPollDatagram(broadcast);
+                try (DatagramSocket socket = new DatagramSocket(ArtNetDatagramUtil.ARTNET_PORT, broadcast)) {
+                    socket.send(poll.getPacket());
+                } catch (IOException e) {
+                    System.err.println("unable to send artnet discovery packet: " + e.getMessage());
                 }
             }
         }
