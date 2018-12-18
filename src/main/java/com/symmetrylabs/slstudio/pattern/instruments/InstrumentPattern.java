@@ -353,8 +353,10 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
 
         for (int p = 0; p < notes.length; p++) {
             notes[p].attack = false;
+            if (p < pitchLo || p > pitchHi) {
+                notes[p].sustain = false;
+            }
         }
-
 
         int pitchMid = (int) (pitchLo + pitchHi)/2;
         float lastAverage = 0;
