@@ -179,11 +179,13 @@ public class SLStudio extends PApplet {
         lx.engine.isNetworkMultithreaded.setValue(true);
         lx.engine.audio.enabled.setValue(false);
 
-        String startMuted = System.getProperty("com.symmetrylabs.startMuted");
-        lx.engine.output.enabled.setValue(startMuted == null || "".equals(startMuted));
-        //lx.engine.framesPerSecond.setValue(120);
-
-    //performanceManager.start(lx.ui);
+        String startMutedStr = System.getProperty("com.symmetrylabs.startMuted");
+        boolean startMuted = startMutedStr == null || "".equals(startMutedStr);
+        /* don't mess with enabled if startMuted isn't set; output.enabled is set to
+             the value stored in the project file */
+        if (startMuted) {
+            lx.engine.output.enabled.setValue(false);
+        }
 
         long setupFinish = System.nanoTime();
         println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms");
