@@ -60,7 +60,7 @@ public class PilotsPixlite extends SimplePixlite {
     public SimplePixlite addPixliteOutput(PointsGrouping pointsGrouping) {
         try {
             SimplePixliteOutput spo = new SimplePixliteOutput(pointsGrouping);
-            spo.setLogConnections(false);
+//            spo.setLogConnections(false);
             addChild(spo);
         } catch (Exception e) {
             e.printStackTrace();

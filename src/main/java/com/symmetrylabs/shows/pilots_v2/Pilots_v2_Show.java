@@ -44,7 +44,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
 
     static final float CART_WIDE = 4;
     static final float CART_FORWARD_OFFSET = 3;
-    static final float FLANK_SPACING = 1;
+    static final float FLANK_SPACING = -0.5f;
 
     static final float INCHES_PER_METER = 39.3701f;
 
