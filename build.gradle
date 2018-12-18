@@ -34,8 +34,6 @@ run {
 
 	// To select a layout from the command line, "gradlew run -Playout=cubes"
 	systemProperty 'com.symmetrylabs.layout', findProperty('layout')
-	// To start SLStudio with Live turned off, "gradlew run -PstartMuted=true"
-	systemProperty 'com.symmetrylabs.startMuted', findProperty('startMuted')
 
 	doLast {
 		while (file(".restart").exists()) {
