@@ -20,6 +20,7 @@ public interface Instrument {
         LXPoint getPoint(LXVector variation);
         double getSize(double variation);
         double getRate();
+        double getDecaySec();
         LXVector getDirection();
 
         int getPitchLo();

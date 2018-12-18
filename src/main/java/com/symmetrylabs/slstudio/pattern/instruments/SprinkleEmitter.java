@@ -15,7 +15,7 @@ public class SprinkleEmitter extends EmitterInstrument.AbstractEmitter implement
             new LXVector(paramSet.getPoint(randomXyDisc())),
             paramSet.getSize(intensity),
             paramSet.getColor(randomVariation()),
-            1.0 / paramSet.getRate()
+            paramSet.getDecaySec()
         );
     }
 

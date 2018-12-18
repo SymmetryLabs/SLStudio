@@ -33,7 +33,7 @@ public class JetEmitter extends AbstractEmitter implements Emitter {
         int height = (int) Math.ceil(model.yRange / GRID_RESOLUTION);
         Fluid fluid = new Fluid(width, height);
         fluid.setDiffusion(10);
-        fluid.setRetention(0.01f);  // 99% decrease in one second
+        fluid.setRetention((float) Math.pow(0.01, 1/0.5));  // 99% decrease in 0.5 seconds
         return fluid;
     }
 
@@ -49,6 +49,8 @@ public class JetEmitter extends AbstractEmitter implements Emitter {
             for (Fluid fluid : fluids) {
                 if (fluid != null) {
                     fluid.setDiffusion((float) paramSet.getSize(0) / GRID_RESOLUTION);
+                    System.out.println("run update retention " + paramSet.getDecaySec());
+                    fluid.setRetention((float) Math.pow(0.01, 1/(paramSet.getDecaySec() + 0.001)));
                     fluid.setVelocity(velocity);
                     fluid.advance(fluidSec, periodSec);
                 }
