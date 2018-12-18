@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544164570979,
+  "timestamp": 1545125909793,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -188,7 +188,7 @@
               "z": 0.2999999523162842,
               "cx": 410.0,
               "cy": 58.0,
-              "cz": 72.5,
+              "cz": 24.0,
               "lo/hue": 107.76470947265625,
               "lo/brightness": 100.0,
               "lo/saturation": 100.0,
@@ -239,13 +239,13 @@
             "modulationColor": -13107456,
             "parameters": {
               "label": "OneBigAngledPlane",
-              "thick": 734.142333984375,
+              "thick": 718.9308471679688,
               "x": 0.4299999475479126,
               "y": 0.5299999713897705,
               "z": 0.2999999523162842,
               "cx": 410.0,
               "cy": 58.0,
-              "cz": 72.5
+              "cz": 24.0
             },
             "modulation": {
               "modulators": [],
@@ -333,7 +333,7 @@
               "ySize": 86.99999935179949,
               "cy": 58.0,
               "zSize": 72.5,
-              "cz": 87.0,
+              "cz": 24.0,
               "invert": false
             }
           },
@@ -361,7 +361,7 @@
               "label": "BoxMask",
               "enabled": false,
               "xSize": 90.20000714808702,
-              "cx": 712.5,
+              "cx": 699.75,
               "ySize": 77.71999955922365,
               "cy": 58.0,
               "zSize": 44.950000615790486,
@@ -394,7 +394,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 734.142333984375,
+              "rad": 718.9308471679688,
               "invert": true,
               "cx": 410.0,
               "cy": 58.0
@@ -468,7 +468,7 @@
               "ySize": 71.91999968886375,
               "cy": 58.0,
               "zSize": 47.850000550970435,
-              "cz": 63.79999929785731,
+              "cz": 24.0,
               "invert": false
             }
           },
@@ -496,7 +496,7 @@
               "label": "BoxMask",
               "enabled": false,
               "xSize": 82.00000733137131,
-              "cx": 712.5,
+              "cx": 699.75,
               "ySize": 93.95999919623137,
               "cy": 58.0,
               "zSize": 49.30000051856041,
@@ -512,11 +512,11 @@
               "label": "Mirror",
               "enabled": false,
               "x": true,
-              "cx": 712.5,
+              "cx": 699.75,
               "y": false,
               "cy": 58.0,
               "z": false,
-              "cz": 72.5
+              "cz": 24.0
             }
           }
         ],
@@ -544,7 +544,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 734.142333984375,
+              "rad": 718.9308471679688,
               "invert": true,
               "cx": 410.0,
               "cy": 58.0
@@ -718,11 +718,11 @@
               "label": "BoxMask",
               "enabled": false,
               "xSize": 410.0,
-              "cx": 2.044677103185677E-6,
+              "cx": 12.75,
               "ySize": 99.0,
               "cy": 58.0,
               "zSize": 100.5,
-              "cz": 72.5,
+              "cz": 24.0,
               "invert": false
             }
           }
@@ -970,23 +970,10 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.7714285654947162
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 43,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16753921,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -1095,6 +1082,12 @@
     "midi": {
       "inputs": [
         {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "CoreMIDI4J - Port 1",
           "channel": true,
           "control": false,
@@ -1129,15 +1122,57 @@
           "channel": true,
           "control": false,
           "sync": false
-        },
-        {
-          "name": "Real Time Sequencer",
-          "channel": true,
-          "control": false,
-          "sync": false
         }
       ],
       "surfaces": [
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
         {
           "description": "APC40 mkII"
         },

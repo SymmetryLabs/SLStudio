@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539235118714,
+  "timestamp": 1545126210378,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -30,7 +30,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 56.84166595339775,
+        "color/hue": 56.915889739990234,
         "color/brightness": 100.0,
         "color/saturation": 83.92156982421875,
         "color": -3031,
@@ -442,23 +442,10 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.7285714270547032
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 26236,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -65484,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -616,6 +603,12 @@
     "midi": {
       "inputs": [
         {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "CoreMIDI4J - Port 1",
           "channel": true,
           "control": false,
@@ -647,12 +640,6 @@
         },
         {
           "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "Real Time Sequencer",
           "channel": true,
           "control": false,
           "sync": false

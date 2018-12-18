@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544169016990,
+  "timestamp": 1545126072699,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 6,
+      "focusedChannel": 4,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -30,7 +30,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 56.84166595339775,
+        "color/hue": 56.94117736816406,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
         "color": -3584,
@@ -227,7 +227,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 734.142333984375,
+              "rad": 718.9308471679688,
               "invert": false,
               "cx": 410.0,
               "cy": 116.0
@@ -245,7 +245,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 734.142333984375,
+              "rad": 718.9308471679688,
               "invert": true,
               "cx": 410.0,
               "cy": 116.0
@@ -339,7 +339,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 734.142333984375,
+              "rad": 718.9308471679688,
               "invert": false,
               "cx": 410.0,
               "cy": 116.0
@@ -357,7 +357,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 734.142333984375,
+              "rad": 718.9308471679688,
               "invert": true,
               "cx": 410.0,
               "cy": 116.0
@@ -454,7 +454,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.8034040927886963,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -483,7 +483,7 @@
             "modulationColor": -327425,
             "parameters": {
               "label": "Strobe",
-              "enabled": true,
+              "enabled": false,
               "Shape": 2,
               "Freq": 10.0,
               "Black": true
@@ -519,10 +519,10 @@
               "X-DUP": false,
               "JOG": false,
               "GREY": true,
-              "Speed": 0.9000000953674316,
+              "Speed": -0.1600000411272049,
               "Symm": 0,
               "Anim": 7,
-              "Dens": 0.6,
+              "Dens": 0.3000000067055225,
               "AnimResets": false
             },
             "modulation": {
@@ -547,7 +547,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.9682432413101196,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -565,7 +565,7 @@
               "enabled": true,
               "cx": 410.0,
               "cy": 58.0,
-              "cz": 72.5,
+              "cz": 24.0,
               "lat": 0.0,
               "lon": 0.0,
               "turn": 0.0,
@@ -864,23 +864,10 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.9714285712689161
+        "brightness": 0.8285714276134968
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 25387,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -65321,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -989,6 +976,12 @@
     "midi": {
       "inputs": [
         {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "CoreMIDI4J - Port 1",
           "channel": true,
           "control": false,
@@ -1020,12 +1013,6 @@
         },
         {
           "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "Real Time Sequencer",
           "channel": true,
           "control": false,
           "sync": false

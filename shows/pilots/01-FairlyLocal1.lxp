@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544163317686,
+  "timestamp": 1545125515172,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -82,7 +82,7 @@
               "ySize": 89.31999960511922,
               "cy": 60.31999994814396,
               "zSize": 47.850000550970435,
-              "cz": 71.04999951727689,
+              "cz": 24.0,
               "invert": false
             }
           }
@@ -158,7 +158,7 @@
               "y": false,
               "cy": 58.0,
               "z": false,
-              "cz": 72.5
+              "cz": 24.0
             }
           },
           {
@@ -255,7 +255,7 @@
               "ySize": 0.0,
               "cy": 60.319998651742935,
               "zSize": 100.5,
-              "cz": 72.5,
+              "cz": 24.0,
               "invert": false
             }
           }
@@ -376,7 +376,7 @@
               "y": false,
               "cy": 58.0,
               "z": false,
-              "cz": 72.5
+              "cz": 24.0
             }
           },
           {
@@ -640,7 +640,7 @@
               "y": false,
               "cy": 58.0,
               "z": true,
-              "cz": 72.5
+              "cz": 24.0
             }
           }
         ],
@@ -1054,23 +1054,10 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.8142857132479548
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 1034,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16252673,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -1179,13 +1166,13 @@
     "midi": {
       "inputs": [
         {
-          "name": "** Internal Error getting Device Name!",
+          "name": "Real Time Sequencer",
           "channel": true,
           "control": false,
           "sync": false
         },
         {
-          "name": "Real Time Sequencer",
+          "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
           "sync": false
