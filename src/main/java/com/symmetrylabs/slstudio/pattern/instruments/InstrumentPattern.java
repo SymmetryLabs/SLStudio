@@ -358,43 +358,9 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
             }
         }
 
-        /*
-        int pitchMid = (int) (pitchLo + pitchHi)/2;
-        float lastAverage = 0;
-        float average = 0;
-        int count = 0;
-        for (int p = pitchLo; p <= pitchHi; p++) {
-            lastAverage += lastValues[p];
-            average += values[p];
-            count++;
-        }
-        if (count > 0) {
-            lastAverage /= count;
-            average /= count;
-        }
-
-        if (average > lastAverage + attackTh) {
-            notes[pitchMid].attack = true;
-            notes[pitchMid].sustain = true;
-            peaks[pitchMid] = average;
-        }
-        notes[pitchMid].intensity = average * intensityFactor;
-        if (notes[pitchMid].sustain) {
-            peaks[pitchMid] = Math.max(peaks[pitchMid], average);
-            if (average < peaks[pitchMid] * releasTh) {
-                notes[pitchMid].sustain = false;
-                peaks[pitchMid] = 0;
-            }
-        }
-        */
-
         for (int p = pitchLo; p <= pitchHi; p++) {
             int prev = Math.max(p - 1, 0);
             int next = Math.min(p + 1, values.length - 1);
-            /*
-            if (values[p] > lastValues[p] + attackTh &&
-                  values[p] > values[prev] && values[p] > values[next]) {
-                  */
             if (values[p] > 1 + attackTh) {
                 if (values[p] >= values[prev] && values[p] >= values[next]) {
                     if (!notes[p].sustain) {
