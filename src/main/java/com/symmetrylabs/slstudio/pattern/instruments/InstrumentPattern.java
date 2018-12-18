@@ -358,6 +358,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
             }
         }
 
+        /*
         int pitchMid = (int) (pitchLo + pitchHi)/2;
         float lastAverage = 0;
         float average = 0;
@@ -385,17 +386,23 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
                 peaks[pitchMid] = 0;
             }
         }
+        */
 
-
-        /*
         for (int p = pitchLo; p <= pitchHi; p++) {
             int prev = Math.max(p - 1, 0);
             int next = Math.min(p + 1, values.length - 1);
+            /*
             if (values[p] > lastValues[p] + attackTh &&
                   values[p] > values[prev] && values[p] > values[next]) {
-                notes[p].attack = true;
-                notes[p].sustain = true;
-                peaks[p] = values[0];
+                  */
+            if (values[p] > 1 + attackTh) {
+                if (values[p] >= values[prev] && values[p] >= values[next]) {
+                    if (!notes[p].sustain) {
+                        notes[p].attack = true;
+                        notes[p].sustain = true;
+                        peaks[p] = values[p];
+                    }
+                }
             }
             notes[p].intensity = values[p] * intensityFactor;
             if (notes[p].sustain) {
@@ -406,8 +413,6 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
                 }
             }
         }
-        */
-
     }
 
     private float lerp(float start, float stop, float fraction) {
@@ -460,23 +465,35 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
             int pitchLo = pitchLoParam.getValuei();
             int pitchHi = pitchHiParam.getValuei();
 
-            // z = 0: raw band energy values
+            // z = -200: raw band energy values
             markers.add(new CubeMarker(
-                new PVector(bands.length*10/2, rawScale*globalCeiling/2, 0),
+                new PVector(bands.length*10/2, rawScale*globalCeiling/2, -200),
                 new PVector(bands.length*10/2, rawScale*globalCeiling/2, 0),
                 0xff002000
             ));
+            // z = 0; normalized values
+            markers.add(new CubeMarker(
+                new PVector(bands.length*10/2, yScale/2, 0),
+                new PVector(bands.length*10/2, yScale/2, 0),
+                0xff606000
+            ));
+            markers.add(new CubeMarker(
+                new PVector(bands.length*10/2, (yScale * (1 + attackThParam.getValuef()))/2, 0),
+                new PVector(bands.length*10/2, (yScale * (1 + attackThParam.getValuef()))/2, 0),
+                0xffa0a000
+            ));
+
             for (int i = 0; i < bands.length; i++) {
                 boolean inRange = (i >= pitchLo && i <= pitchHi);
-                markers.add(makeBar(i*10, 0, 0, bands[i]*rawScale, 8, inRange ? 0xff004000 : 0xff001000));
+                // z = -200: raw band energy values
+                markers.add(makeBar(i*10, -200, 0, bands[i]*rawScale, 8, inRange ? 0xff004000 : 0xff001000));
 
-                // z = 100: scaled according to global energy levels
-                markers.add(makeBar(i*10, 100, 0, levels[i]*yScale, 8, inRange ? 0xff008080 : 0xff002020));
-                markers.add(makeBar(
-                    i*10, 100, floors[i]*yScale, ceilings[i]*yScale, 8, inRange ? 0xff002040 : 0xff000810));
+                // z = -100: scaled according to global energy levels
+                markers.add(makeBar(i*10, -100, 0, levels[i]*yScale, 8, inRange ? 0xff008080 : 0xff002020));
+                markers.add(makeBar(i*10, -100, floors[i]*yScale, ceilings[i]*yScale, 8, inRange ? 0xff002040 : 0xff000810));
 
-                // z = 200: normalized according to per-band floor and ceiling
-                markers.add(makeBar(i*10, 200, 0, values[i]*yScale, 8, inRange ? 0xffc0c000 : 0xff303000));
+                // z = 0: normalized according to per-band floor and ceiling
+                markers.add(makeBar(i*10, 0, 0, values[i]*yScale, 8, inRange ? 0xffc0c000 : 0xff303000));
             }
         }
         return markers;

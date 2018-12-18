@@ -16,28 +16,40 @@ import static heronarts.lx.PolyBuffer.Space.RGB16;
 
 public class FluidEmitter extends AbstractEmitter implements Emitter {
     private LXModel model;
-    private RgbFluid fluid;
-    private float periodSec = (1 / 60f) / 10;  // 10 iterations per frame
+    private Fluid[] fluids;
+    private float periodSec = (1 / 60f) / 5;  // 5 iterations per frame
     private static final float GRID_RESOLUTION = 10;
 
     public void initFluid(LXModel model) {
         if (model != this.model) {
-            fluid = new RgbFluid(
-                (int) Math.ceil(model.xRange / GRID_RESOLUTION),
-                (int) Math.ceil(model.yRange / GRID_RESOLUTION)
-            );
-            fluid.setDiffusion(2);
-            fluid.setRetention(0.8f);  // 20% decrease every second
             this.model = model;
+            fluids = new Fluid[] {
+                setupFluid(), setupFluid(), setupFluid()
+            };
         }
     }
 
+    private Fluid setupFluid() {
+        int width = (int) Math.ceil(model.xRange / GRID_RESOLUTION);
+        int height = (int) Math.ceil(model.yRange / GRID_RESOLUTION);
+        Fluid fluid = new Fluid(width, height);
+        fluid.setDiffusion(2);
+        fluid.setRetention(0.8f);  // 20% decrease every second
+        return fluid;
+    }
+
     public void run(double deltaSec, ParameterSet paramSet) {
+        if (deltaSec > 0.2) deltaSec = 0.2;
         float fluidSec = (float) (deltaSec * paramSet.getRate());
-        if (fluid != null) {
-            LXVector dir = paramSet.getDirection();
-            fluid.setVelocity(new PVector(dir.x, dir.y, 0).mult(15));
-            fluid.advance(fluidSec, periodSec);
+        LXVector dir = paramSet.getDirection();
+        PVector velocity = new PVector(dir.x, dir.y, 0).mult(15);
+        if (fluids != null) {
+            for (Fluid fluid : fluids) {
+                if (fluid != null) {
+                    fluid.setVelocity(velocity);
+                    fluid.advance(fluidSec, periodSec);
+                }
+            }
         }
     }
 
@@ -49,13 +61,9 @@ public class FluidEmitter extends AbstractEmitter implements Emitter {
             float v = (model.points[i].y - model.yMin) / GRID_RESOLUTION;
             int uLo = (int) Math.floor(u);
             int vLo = (int) Math.floor(v);
-            FloatRgb sw = fluid.getCell(uLo, vLo);
-            FloatRgb se = fluid.getCell(uLo + 1, vLo);
-            FloatRgb nw = fluid.getCell(uLo, vLo + 1);
-            FloatRgb ne = fluid.getCell(uLo + 1, vLo + 1);
-            float r = lerp(lerp(sw.r, se.r, u - uLo), lerp(nw.r, ne.r, u - uLo), v - vLo);
-            float g = lerp(lerp(sw.g, se.g, u - uLo), lerp(nw.g, ne.g, u - uLo), v - vLo);
-            float b = lerp(lerp(sw.b, se.b, u - uLo), lerp(nw.b, ne.b, u - uLo), v - vLo);
+            float r = lerpCells(fluids[0], uLo, u - uLo, vLo, v - vLo);
+            float g = lerpCells(fluids[1], uLo, u - uLo, vLo, v - vLo);
+            float b = lerpCells(fluids[2], uLo, u - uLo, vLo, v - vLo);
             colors[i] = Ops16.rgba(
                 (int) (r * Ops16.MAX),
                 (int) (g * Ops16.MAX),
@@ -64,6 +72,14 @@ public class FluidEmitter extends AbstractEmitter implements Emitter {
             );
         }
         buffer.markModified(RGB16);
+    }
+
+    private float lerpCells(Fluid fluid, int uLo, float uFrac, int vLo, float vFrac) {
+        return lerp(
+            lerp(fluid.getCell(uLo, vLo), fluid.getCell(uLo + 1, vLo), uFrac),
+            lerp(fluid.getCell(uLo, vLo + 1), fluid.getCell(uLo + 1, vLo + 1), uFrac),
+            vFrac
+        );
     }
 
     private float lerp(float start, float stop, float fraction) {
@@ -90,7 +106,9 @@ public class FluidEmitter extends AbstractEmitter implements Emitter {
         public long color;
         public double rate;
 
-        private FloatRgb floatColor;
+        private float r;
+        private float g;
+        private float b;
         private int u;
         private int v;
         private float addRate = 50;
@@ -100,11 +118,9 @@ public class FluidEmitter extends AbstractEmitter implements Emitter {
             this.center = center;
             this.size = size;
             this.color = color;
-            floatColor = new FloatRgb(
-                (float) Ops16.red(color) / Ops16.MAX,
-                (float) Ops16.green(color) / Ops16.MAX,
-                (float) Ops16.blue(color) / Ops16.MAX
-            );
+            r = (float) Ops16.red(color) / Ops16.MAX;
+            g = (float) Ops16.green(color) / Ops16.MAX;
+            b = (float) Ops16.blue(color) / Ops16.MAX;
             this.rate = rate;
 
             u = (int) Math.floor((center.x - model.xMin) / GRID_RESOLUTION);
@@ -114,8 +130,9 @@ public class FluidEmitter extends AbstractEmitter implements Emitter {
         public void advance(double deltaSec, double intensity, boolean sustain) {
             float fluidSec = (float) (deltaSec * rate);
             if (sustain) {
-                fluid.addCell(u, v, new FloatRgb(floatColor).scale(
-                    (float) (intensity * addRate * fluidSec)));
+                fluids[0].addCell(u, v, (float) (r * intensity * addRate * fluidSec));
+                fluids[1].addCell(u, v, (float) (g * intensity * addRate * fluidSec));
+                fluids[2].addCell(u, v, (float) (b * intensity * addRate * fluidSec));
             } else {
                 expired = true;
             }
