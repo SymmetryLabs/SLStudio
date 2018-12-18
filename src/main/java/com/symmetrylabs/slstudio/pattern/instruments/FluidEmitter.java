@@ -1,17 +1,16 @@
 package com.symmetrylabs.slstudio.pattern.instruments;
 
 import com.symmetrylabs.color.Ops16;
-import com.symmetrylabs.slstudio.pattern.instruments.RgbFluid.FloatRgb;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.transform.LXVector;
 import processing.core.PVector;
 
-import static com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.*;
+import static com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.AbstractEmitter;
+import static com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.Emitter;
+import static com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.Mark;
+import static com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.ParameterSet;
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 
 public class FluidEmitter extends AbstractEmitter implements Emitter {
