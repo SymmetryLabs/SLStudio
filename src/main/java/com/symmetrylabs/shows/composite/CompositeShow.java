@@ -262,7 +262,7 @@ public class CompositeShow implements Show {
          */
 
         // Put cubes on SLControllers
-        networkMonitor.deviceList.addListener(new SetListener<NetworkDevice>() {
+        networkMonitor.opcDeviceList.addListener(new SetListener<NetworkDevice>() {
             public void onItemAdded(NetworkDevice device) {
                 String physicalId = cubePhysicalIdMap.getPhysicalId(device.deviceId);
                 final PointsGrouping points = new PointsGrouping(physicalId);

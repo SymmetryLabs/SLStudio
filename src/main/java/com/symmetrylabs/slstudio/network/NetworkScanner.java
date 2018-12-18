@@ -27,7 +27,6 @@ public class NetworkScanner {
     protected static long MAX_MILLIS_WITHOUT_REPLY = 10000;
 
     protected boolean discoverOpc = true;
-    protected boolean discoverArtNet = false;
 
     public NetworkScanner(Dispatcher dispatcher) {
         this.dispatcher = dispatcher;
@@ -36,26 +35,16 @@ public class NetworkScanner {
     public void scan() {
         expireDevices();
         for (InetAddress broadcast : NetworkUtils.getBroadcastAddresses()) {
-            if (discoverOpc) {
-                try (OpcSocket socket = new OpcSocket(broadcast)) {
-                    socket.send(new OpcMessage(0x88, 4));
-                    socket.send(new OpcMessage(0, SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY));
-                    socket.listenMultiple(1000, (src, reply) -> {
-                            if (reply.rawLength == 6) {
-                                updateDevice(NetworkDevice.fromMacAddress(src, reply.bytes));
-                            } else if (reply.isSysex(SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY_REPLY)) {
-                                updateDevice(NetworkDevice.fromIdentifier(src, reply.getSysexContent()));
-                            }
-                        });
-                }
-            }
-            if (discoverArtNet) {
-                ArtNetPollDatagram poll = new ArtNetPollDatagram(broadcast);
-                try (DatagramSocket socket = new DatagramSocket(ArtNetDatagramUtil.ARTNET_PORT, broadcast)) {
-                    socket.send(poll.getPacket());
-                } catch (IOException e) {
-                    System.err.println("unable to send artnet discovery packet: " + e.getMessage());
-                }
+            try (OpcSocket socket = new OpcSocket(broadcast)) {
+                socket.send(new OpcMessage(0x88, 4));
+                socket.send(new OpcMessage(0, SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY));
+                socket.listenMultiple(1000, (src, reply) -> {
+                        if (reply.rawLength == 6) {
+                            updateDevice(NetworkDevice.fromMacAddress(src, reply.bytes));
+                        } else if (reply.isSysex(SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY_REPLY)) {
+                            updateDevice(NetworkDevice.fromIdentifier(src, reply.getSysexContent()));
+                        }
+                    });
             }
         }
     }
