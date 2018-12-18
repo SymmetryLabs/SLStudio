@@ -5,6 +5,7 @@ import com.symmetrylabs.color.Ops16;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.transform.LXVector;
+import processing.core.PVector;
 
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 
@@ -15,77 +16,89 @@ public class JetEmitter extends EmitterInstrument.AbstractEmitter implements Emi
             paramSet.getPosition(randomXyDisc()),
             paramSet.getSize(intensity),
             paramSet.getColor(randomVariation()),
-            paramSet.getVelocity(),
-            paramSet.getRate(),
-            1
+            paramSet.getDirection(),
+            paramSet.getRate() * 2
         );
     }
 
     class Jet implements EmitterInstrument.Mark {
-        public static final int NUM_STOPS = 100;
-
         public LXVector center;
-        public double radius;
+        public double size;
         public long color;
-        public LXVector velocity;
+        public LXVector direction;
         public double rate;
-        public double lifetime;
-        public double brightness;
-        public long[] stream = new long[NUM_STOPS];
-        public LXVector[] points = new LXVector[NUM_STOPS];
 
-        private double accumSec;
+        private Fluid fluid = new Fluid(100, 11);
+        private int originU = fluid.height / 2;  // near one end
+        private int originV = fluid.height / 2;
+        private float periodSec;
+        private float addRate;
 
-        public Jet(LXVector center, double radius, long color, LXVector velocity, double rate, double lifetime) {
+        public Jet(LXVector center, double size, long color, LXVector direction, double rate) {
             this.center = center;
-            this.radius = radius;
+            this.size = size;
             this.color = color;
+            this.direction = direction;
             this.rate = rate;
-            this.lifetime = lifetime;
-            brightness = 1.0;
 
-            LXVector p = new LXVector(center);
-            LXVector dp = new LXVector(velocity).mult(10 / (float) rate);
-            for (int i = 0; i < points.length; i++) {
-                p.add(dp);
-                points[i] = new LXVector(p);
-            }
+            fluid.setDiffusion(2);
+            fluid.setVelocity(new PVector(15, 0));
+            periodSec = (1 / 60f) / 5;  // 5 iterations per frame
+            addRate = 50;
         }
 
         public void advance(double deltaSec, double intensity, boolean sustain) {
-            double periodSec = (1 / rate) / 100;
-            accumSec += deltaSec;
-            while (accumSec > periodSec) {
-                for (int i = stream.length - 1; i > 0; i--) {
-                    stream[i] = stream[i - 1];
-                }
-                stream[0] = Ops16.multiply(color, intensity);
-                accumSec -= periodSec;
+            float fluidSec = (float) (deltaSec * rate);
+            if (sustain) {
+                fluid.addCell(originU, originV, (float) (intensity * addRate * fluidSec));
             }
+            fluid.advance(fluidSec, periodSec);
             if (!sustain) {
-                brightness *= Math.pow(0.01, deltaSec/lifetime);
+                fluid.setRetention(0.5f);
             }
         }
 
         public boolean isExpired() {
-            return brightness < 0.01;
+            return fluid.getLastMax() < 0.01;
         }
 
         public void render(LXModel model, PolyBuffer buffer) {
+            float scale = 20 * (float) size / fluid.width;
+            LXVector uBasis = new LXVector(direction);
+            LXVector vBasis = new LXVector(-uBasis.y, uBasis.x, 0);
+            LXVector negCenter = new LXVector(center).mult(-1);
+
             long[] colors = (long[]) buffer.getArray(RGB16);
-            LXVector p = new LXVector(0, 0, 0);
+            int cr = Ops16.red(color);
+            int cg = Ops16.green(color);
+            int cb = Ops16.blue(color);
             for (int i = 0; i < model.points.length; i++) {
-                p.x = model.points[i].x;
-                p.y = model.points[i].y;
-                p.z = model.points[i].z;
-                for (int j = 0; j < points.length; j++) {
-                    double dist = points[j].dist(p) / ((1 + (float) j/points.length) * radius);
-                    if (dist < 1) {
-                        colors[i] = Ops16.add(colors[i], color, (1 - dist*dist)*brightness);
-                    }
-                }
+                LXVector p = new LXVector(model.points[i]).add(negCenter);
+                float u = originU + p.dot(uBasis) / scale;
+                float v = originV + p.dot(vBasis) / scale;
+                int uLo = (int) Math.floor(u);
+                int vLo = (int) Math.floor(v);
+                float value = lerp(
+                    lerp(fluid.getCell(uLo, vLo), fluid.getCell(uLo + 1, vLo), u - uLo),
+                    lerp(fluid.getCell(uLo, vLo + 1), fluid.getCell(uLo + 1, vLo + 1), u - uLo),
+                    v - vLo
+                );
+
+                int r = Ops16.red(colors[i]);
+                int g = Ops16.green(colors[i]);
+                int b = Ops16.blue(colors[i]);
+                colors[i] = Ops16.rgba(
+                    (int) (r + cr * value),
+                    (int) (g + cg * value),
+                    (int) (b + cb * value),
+                    Ops16.MAX
+                );
             }
             buffer.markModified(RGB16);
+        }
+
+        private float lerp(float start, float stop, float fraction) {
+            return start + (stop - start) * fraction;
         }
     }
 }

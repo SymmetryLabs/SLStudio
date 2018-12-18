@@ -22,8 +22,7 @@ public class EmitterInstrument implements Instrument {
         this.emitter = emitter;
     }
 
-    @Override
-    public void run(LXModel model, ParameterSet paramSet, Note[] notes, double deltaSec, PolyBuffer buffer) {
+    @Override public void run(LXModel model, ParameterSet paramSet, Note[] notes, double deltaSec, PolyBuffer buffer) {
         for (int i = paramSet.getPitchLo(); i <= paramSet.getPitchHi(); i++) {
             if (notes[i].attack) {
                 pitchMarks.add(new PitchMark(i, emitter.emit(paramSet, i, notes[i].intensity)));
@@ -41,6 +40,10 @@ public class EmitterInstrument implements Instrument {
             }
         }
         pitchMarks = survivingPitchMarks;
+    }
+
+    @Override public String getCaption() {
+        return String.format("%s: %d", emitter.getClass().getSimpleName(), pitchMarks.size());
     }
 
     class PitchMark {

@@ -12,6 +12,7 @@ import heronarts.lx.transform.LXVector;
  */
 public interface Instrument {
     void run(LXModel model, ParameterSet paramSet, Note[] notes, double deltaSec, PolyBuffer buffer);
+    String getCaption();
 
     interface ParameterSet {
         long getColor(double variation);
@@ -19,7 +20,7 @@ public interface Instrument {
         LXPoint getPoint(LXVector variation);
         double getSize(double variation);
         double getRate();
-        LXVector getVelocity();
+        LXVector getDirection();
 
         int getPitchLo();
         int getPitchHi();
