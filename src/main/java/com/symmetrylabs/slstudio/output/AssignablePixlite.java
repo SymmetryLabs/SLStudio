@@ -14,10 +14,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class AssignablePixlite extends LXOutputGroup {
+public class AssignablePixlite extends ArtNetOutput {
     private static final int DEFAULT_NUM_DATALINES = 16;
 
-    public final String ipAddress;
     private final List<Dataline> datalines = new ArrayList<>();
 
     public AssignablePixlite(LX lx, String ipAddress) {
@@ -29,8 +28,7 @@ public class AssignablePixlite extends LXOutputGroup {
     }
 
     public AssignablePixlite(LX lx, String ipAddress, int numDatalines, int datalineNumPoints) {
-        super(lx);
-        this.ipAddress = ipAddress;
+        super(lx, ipAddress);
 
         try {
             int portIndex = 1;
