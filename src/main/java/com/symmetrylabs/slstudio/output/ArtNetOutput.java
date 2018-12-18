@@ -14,6 +14,7 @@ public class ArtNetOutput extends LXOutputGroup {
         super(lx);
         this.ipAddress = ipAddress;
 
+        enabled.setValue(false);
         NetworkMonitor.getInstance(lx).artNetDeviceList.addListenerWithInit(
             new SetListener<InetAddress>() {
                 @Override
