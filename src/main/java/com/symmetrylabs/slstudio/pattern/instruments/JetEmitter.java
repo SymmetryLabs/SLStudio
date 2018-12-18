@@ -2,141 +2,152 @@ package com.symmetrylabs.slstudio.pattern.instruments;
 
 import com.symmetrylabs.color.Ops16;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.transform.LXVector;
 import processing.core.PVector;
 
-import static com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.*;
+import static com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.AbstractEmitter;
+import static com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.Emitter;
+import static com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.Mark;
+import static com.symmetrylabs.slstudio.pattern.instruments.Instrument.ParameterSet;
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 
 public class JetEmitter extends AbstractEmitter implements Emitter {
-    public static final int MAX_JETS = 20;
+    private LXModel model;
+    private Fluid[] fluids;
+    private float periodSec = (1 / 60f) / 5;  // 5 iterations per frame
+    private static final float GRID_RESOLUTION = 10;
 
-    @Override
-    public Jet emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
-        System.out.println("new jet " + pitch + " at " + intensity);
-        return new Jet(
-            paramSet.getPosition(randomXyDisc()),
-            paramSet.getSize(intensity),
-            paramSet.getColor(randomVariation()),
-            paramSet.getDirection(),
-            paramSet.getRate() * 2
+    public void initFluid(LXModel model) {
+        if (model != this.model) {
+            this.model = model;
+            fluids = new Fluid[] {
+                setupFluid(), setupFluid(), setupFluid()
+            };
+        }
+    }
+
+    private Fluid setupFluid() {
+        int width = (int) Math.ceil(model.xRange / GRID_RESOLUTION);
+        int height = (int) Math.ceil(model.yRange / GRID_RESOLUTION);
+        Fluid fluid = new Fluid(width, height);
+        fluid.setDiffusion(10);
+        fluid.setRetention(0.01f);  // 99% decrease in one second
+        return fluid;
+    }
+
+    public void run(double deltaSec, ParameterSet paramSet) {
+        if (deltaSec > 0.2) deltaSec = 0.2;
+        float rate = (float) paramSet.getRate();
+        float speedUp = rate < 1 ? 1 : rate;
+        float speed = rate < 1 ? 50 * rate : 50;
+        float fluidSec = (float) (deltaSec * speedUp);
+        LXVector dir = paramSet.getDirection();
+        PVector velocity = new PVector(dir.x, dir.y, 0).mult(speed);
+        if (fluids != null) {
+            for (Fluid fluid : fluids) {
+                if (fluid != null) {
+                    fluid.setDiffusion((float) paramSet.getSize(0) / GRID_RESOLUTION);
+                    fluid.setVelocity(velocity);
+                    fluid.advance(fluidSec, periodSec);
+                }
+            }
+        }
+    }
+
+    public void render(LXModel model, PolyBuffer buffer) {
+        initFluid(model);
+        long[] colors = (long[]) buffer.getArray(RGB16);
+        for (int i = 0; i < model.points.length; i++) {
+            float u = (model.points[i].x - model.xMin) / GRID_RESOLUTION;
+            float v = (model.points[i].y - model.yMin) / GRID_RESOLUTION;
+            int uLo = (int) Math.floor(u);
+            int vLo = (int) Math.floor(v);
+            float r = lerpCells(fluids[0], uLo, u - uLo, vLo, v - vLo);
+            float g = lerpCells(fluids[1], uLo, u - uLo, vLo, v - vLo);
+            float b = lerpCells(fluids[2], uLo, u - uLo, vLo, v - vLo);
+            colors[i] = Ops16.rgba(
+                (int) (r * Ops16.MAX),
+                (int) (g * Ops16.MAX),
+                (int) (b * Ops16.MAX),
+                Ops16.MAX
+            );
+        }
+        buffer.markModified(RGB16);
+    }
+
+    private float lerpCells(Fluid fluid, int uLo, float uFrac, int vLo, float vFrac) {
+        return lerp(
+            lerp(fluid.getCell(uLo, vLo), fluid.getCell(uLo + 1, vLo), uFrac),
+            lerp(fluid.getCell(uLo, vLo + 1), fluid.getCell(uLo + 1, vLo + 1), uFrac),
+            vFrac
         );
     }
 
+    private float lerp(float start, float stop, float fraction) {
+        return start + (stop - start) * fraction;
+    }
+
     @Override
-    public List<Mark> discardMarks(List<Mark> unexpiredMarks) {
-        List<Mark> marks = new ArrayList<>(unexpiredMarks);
-        List<Mark> discardedMarks = new ArrayList<>();
-        while (marks.size() > MAX_JETS) {
-            Jet weakest = null;
-            float smallestTotal = 0;
-            for (Mark mark : marks) {
-                if (mark instanceof Jet) {
-                    Jet jet = (Jet) mark;
-                    if (weakest == null || jet.getFluidTotal() < smallestTotal) {
-                        weakest = jet;
-                        smallestTotal = jet.getFluidTotal();
-                    }
-                }
-            }
-            if (weakest != null) {
-                discardedMarks.add(weakest);
-                marks.remove(weakest);
-            } else {
-                break;
-            }
+    public Jet emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
+        if (model != null) {
+            float rate = (float) paramSet.getRate();
+            float speedUp = rate < 1 ? 1 : rate;
+            return new Jet(
+                model,
+                new LXVector(paramSet.getPoint(randomXyDisc())),
+                paramSet.getSize(intensity),
+                paramSet.getColor(randomVariation()),
+                speedUp
+            );
         }
-        return discardedMarks;
+        return null;
     }
 
     class Jet implements Mark {
         public LXVector center;
         public double size;
         public long color;
-        public LXVector direction;
-        public double rate;
+        public double speedUp;
 
-        private Fluid fluid = new Fluid(100, 11);
-        private int originU = fluid.height / 2;  // near one end
-        private int originV = fluid.height / 2;
-        private float periodSec;
-        private float addRate;
+        private float r;
+        private float g;
+        private float b;
+        private int u;
+        private int v;
+        private float addRate = 2000;
+        private boolean expired;
 
-        public Jet(LXVector center, double size, long color, LXVector direction, double rate) {
+        public Jet(LXModel model, LXVector center, double size, long color, double speedUp) {
             this.center = center;
             this.size = size;
             this.color = color;
-            this.direction = direction;
-            this.rate = rate;
+            r = (float) Ops16.red(color) / Ops16.MAX;
+            g = (float) Ops16.green(color) / Ops16.MAX;
+            b = (float) Ops16.blue(color) / Ops16.MAX;
+            this.speedUp = speedUp;
 
-            fluid.setDiffusion(2);
-            fluid.setVelocity(new PVector(15, 0));
-            periodSec = (1 / 60f) / 3;  // 3 iterations per frame
-            addRate = 50;
+            u = (int) Math.floor((center.x - model.xMin) / GRID_RESOLUTION);
+            v = (int) Math.floor((center.y - model.yMin) / GRID_RESOLUTION);
         }
 
         public void advance(double deltaSec, double intensity, boolean sustain) {
-            // System.out.println("mark " + this + " advance");
-            float fluidSec = (float) (deltaSec * rate);
+            float fluidSec = (float) (deltaSec * speedUp);
             if (sustain) {
-                fluid.addCell(originU, originV, (float) (intensity * addRate * fluidSec));
-            }
-            fluid.advance(fluidSec, periodSec);
-            if (!sustain) {
-                fluid.setRetention(0.5f);
+                float addQuantity = (float) (intensity * intensity * addRate * fluidSec);
+                fluids[0].addCell(u, v, r * addQuantity);
+                fluids[1].addCell(u, v, g * addQuantity);
+                fluids[2].addCell(u, v, b * addQuantity);
+            } else {
+                expired = true;
             }
         }
 
         public boolean isExpired() {
-            return fluid.getLastMax() < 0.001;
+            return expired;
         }
 
-        public float getFluidTotal() {
-            return fluid.getLastTotal();
-        }
-
-        public void render(LXModel model, PolyBuffer buffer) {
-            float scale = 20 * (float) size / fluid.width;
-            LXVector uBasis = new LXVector(direction);
-            LXVector vBasis = new LXVector(-uBasis.y, uBasis.x, 0);
-            LXVector negCenter = new LXVector(center).mult(-1);
-
-            long[] colors = (long[]) buffer.getArray(RGB16);
-            int cr = Ops16.red(color);
-            int cg = Ops16.green(color);
-            int cb = Ops16.blue(color);
-            for (int i = 0; i < model.points.length; i++) {
-                LXVector p = new LXVector(model.points[i]).add(negCenter);
-                float u = originU + p.dot(uBasis) / scale;
-                float v = originV + p.dot(vBasis) / scale;
-                int uLo = (int) Math.floor(u);
-                int vLo = (int) Math.floor(v);
-                float value = lerp(
-                    lerp(fluid.getCell(uLo, vLo), fluid.getCell(uLo + 1, vLo), u - uLo),
-                    lerp(fluid.getCell(uLo, vLo + 1), fluid.getCell(uLo + 1, vLo + 1), u - uLo),
-                    v - vLo
-                );
-
-                int r = Ops16.red(colors[i]);
-                int g = Ops16.green(colors[i]);
-                int b = Ops16.blue(colors[i]);
-                colors[i] = Ops16.rgba(
-                    (int) (r + cr * value),
-                    (int) (g + cg * value),
-                    (int) (b + cb * value),
-                    Ops16.MAX
-                );
-            }
-            buffer.markModified(RGB16);
-        }
-
-        private float lerp(float start, float stop, float fraction) {
-            return start + (stop - start) * fraction;
-        }
+        public void render(LXModel model, PolyBuffer buffer) { }
     }
 }
