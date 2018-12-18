@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.net.DatagramSocket;
-import com.symmetrylabs.slstudio.output.ArtNetPollDatagram;
-import com.symmetrylabs.slstudio.output.ArtNetDatagramUtil;
-import java.io.IOException;
 
 import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.util.listenable.ListenableSet;
@@ -26,8 +22,6 @@ public class NetworkScanner {
     protected final Dispatcher dispatcher;
     protected static long MAX_MILLIS_WITHOUT_REPLY = 10000;
 
-    protected boolean discoverOpc = true;
-
     public NetworkScanner(Dispatcher dispatcher) {
         this.dispatcher = dispatcher;
     }
@@ -39,12 +33,12 @@ public class NetworkScanner {
                 socket.send(new OpcMessage(0x88, 4));
                 socket.send(new OpcMessage(0, SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY));
                 socket.listenMultiple(1000, (src, reply) -> {
-                        if (reply.rawLength == 6) {
-                            updateDevice(NetworkDevice.fromMacAddress(src, reply.bytes));
-                        } else if (reply.isSysex(SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY_REPLY)) {
-                            updateDevice(NetworkDevice.fromIdentifier(src, reply.getSysexContent()));
-                        }
-                    });
+                    if (reply.rawLength == 6) {
+                        updateDevice(NetworkDevice.fromMacAddress(src, reply.bytes));
+                    } else if (reply.isSysex(SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY_REPLY)) {
+                        updateDevice(NetworkDevice.fromIdentifier(src, reply.getSysexContent()));
+                    }
+                });
             }
         }
     }
