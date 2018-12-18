@@ -7,7 +7,7 @@ public class SphereMarker implements Marker {
     PVector pos;
     float size;
     int rgb;
-    static final int NUM_SEGMENTS = 24;
+    static final int NUM_SEGMENTS = 48;
 
     public SphereMarker(PVector pos, float size, int rgb) {
         this.pos = pos.copy();

@@ -50,8 +50,6 @@ public class EmitterInstrument implements Instrument {
                 mark.advance(deltaSec, notes[pitch].intensity, notes[pitch].sustain);
                 if (!mark.isExpired()) {
                     survivingPitchMarks.add(pitchMark);
-                } else {
-                    System.out.println("expired: " + pitchMark.mark);
                 }
             }
         }

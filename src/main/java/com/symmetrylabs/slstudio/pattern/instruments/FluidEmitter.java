@@ -32,8 +32,8 @@ public class FluidEmitter extends AbstractEmitter implements Emitter {
         int width = (int) Math.ceil(model.xRange / GRID_RESOLUTION);
         int height = (int) Math.ceil(model.yRange / GRID_RESOLUTION);
         Fluid fluid = new Fluid(width, height);
-        fluid.setDiffusion(2);
-        fluid.setRetention(0.8f);  // 20% decrease every second
+        fluid.setDiffusion(10);
+        fluid.setRetention(0.01f);  // 99% decrease in one second
         return fluid;
     }
 
@@ -41,10 +41,11 @@ public class FluidEmitter extends AbstractEmitter implements Emitter {
         if (deltaSec > 0.2) deltaSec = 0.2;
         float fluidSec = (float) (deltaSec * paramSet.getRate());
         LXVector dir = paramSet.getDirection();
-        PVector velocity = new PVector(dir.x, dir.y, 0).mult(15);
+        PVector velocity = new PVector(dir.x, dir.y, 0).mult(50);
         if (fluids != null) {
             for (Fluid fluid : fluids) {
                 if (fluid != null) {
+                    fluid.setDiffusion((float) paramSet.getSize(0) / GRID_RESOLUTION);
                     fluid.setVelocity(velocity);
                     fluid.advance(fluidSec, periodSec);
                 }
@@ -90,7 +91,7 @@ public class FluidEmitter extends AbstractEmitter implements Emitter {
         if (model != null) {
             return new Jet(
                 model,
-                paramSet.getPosition(randomXyDisc()),
+                new LXVector(paramSet.getPoint(randomXyDisc())),
                 paramSet.getSize(intensity),
                 paramSet.getColor(randomVariation()),
                 paramSet.getRate()
@@ -110,7 +111,7 @@ public class FluidEmitter extends AbstractEmitter implements Emitter {
         private float b;
         private int u;
         private int v;
-        private float addRate = 50;
+        private float addRate = 2000;
         private boolean expired;
 
         public Jet(LXModel model, LXVector center, double size, long color, double rate) {
@@ -129,9 +130,10 @@ public class FluidEmitter extends AbstractEmitter implements Emitter {
         public void advance(double deltaSec, double intensity, boolean sustain) {
             float fluidSec = (float) (deltaSec * rate);
             if (sustain) {
-                fluids[0].addCell(u, v, (float) (r * intensity * addRate * fluidSec));
-                fluids[1].addCell(u, v, (float) (g * intensity * addRate * fluidSec));
-                fluids[2].addCell(u, v, (float) (b * intensity * addRate * fluidSec));
+                float addQuantity = (float) (intensity * intensity * addRate * fluidSec);
+                fluids[0].addCell(u, v, r * addQuantity);
+                fluids[1].addCell(u, v, g * addQuantity);
+                fluids[2].addCell(u, v, b * addQuantity);
             } else {
                 expired = true;
             }
