@@ -66,7 +66,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
             new TowerConfig(SP * 1, SP * 0, SP * 0, new String[][]{
                 new String[]{"457","456"},
                 new String[]{"525","524"},
-                new String[]{"721","0"},
+                new String[]{"721","720"},
                 new String[]{"581","580"},
             }),
             new TowerConfig(SP * 2, SP * 0, SP * 0, new String[][]{
@@ -87,7 +87,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
             // col 1
             new TowerConfig(SP * 0, SP * 0, SP * 0, new String[][]{
                 new String[]{"992","819"},
-                new String[]{"857","856"},
+                new String[]{"857","460"},
                 new String[]{"465","458"},
                 new String[]{"565","672"},
             }),
@@ -126,7 +126,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
                 new String[]{"993","973"},
             }),
             new TowerConfig(SP * 2, SP * 0, SP * 0, new String[][]{
-                new String[]{"5410ecf63691","836"},
+                new String[]{"5410ecf63691","664"},
                 new String[]{"5410ecfd7b9c","1005"},
                 new String[]{"627","626"},
                 new String[]{"203","156"},
@@ -158,7 +158,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
             }),
             new TowerConfig(SP * 2, SP * 0, SP * 0, new String[][]{
                 new String[]{"731","730"},
-                new String[]{"461","460"},
+                new String[]{"461","493"},
                 new String[]{"479","478"},
                 new String[]{"651","650"},
             }),
@@ -179,7 +179,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
                 new String[]{"665","134"},
             }),
             new TowerConfig(SP * 1, SP * 0, SP * 0, new String[][]{
-                new String[]{"841","840"},
+                new String[]{"837","840"},
                 new String[]{"863","862"},
                 new String[]{"805","556"},
                 new String[]{"619","618"},
@@ -211,13 +211,13 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
                 new String[]{"543","542"},
                 new String[]{"659","658"},
                 new String[]{"980","1006"},
-                new String[]{"","5410ecf5d969"},
+                new String[]{"696","5410ecf5d969"},
             }),
             new TowerConfig(SP * 2, SP * 0, SP * 0, new String[][]{
                 new String[]{"663","662"},
                 new String[]{"617","616"},
                 new String[]{"?13","?14"},
-                new String[]{"5410ecf5efb5","5410ecf4fd2d"},
+                new String[]{"1200", "628"},
             }),
             new TowerConfig(SP * 3, SP * 0, SP * 0, new String[][]{
                 new String[]{"1092","951"},
