@@ -29,14 +29,26 @@ public class EmitterInstrument implements Instrument {
             }
         }
 
+        List<Mark> unexpiredMarks = new ArrayList<>();
+        for (PitchMark pitchMark : pitchMarks) {
+            if (!pitchMark.mark.isExpired()) {
+                unexpiredMarks.add(pitchMark.mark);
+            }
+        }
+        List<Mark> discardedMarks = emitter.discardMarks(unexpiredMarks);
+
         List<PitchMark> survivingPitchMarks = new ArrayList<>();
         for (PitchMark pitchMark : pitchMarks) {
             int pitch = pitchMark.pitch;
             Mark mark = pitchMark.mark;
-            mark.render(model, buffer);
-            mark.advance(deltaSec, notes[pitch].intensity, notes[pitch].sustain);
-            if (!mark.isExpired()) {
-                survivingPitchMarks.add(pitchMark);
+            if (!discardedMarks.contains(mark)) {
+                mark.render(model, buffer);
+                mark.advance(deltaSec, notes[pitch].intensity, notes[pitch].sustain);
+                if (!mark.isExpired()) {
+                    survivingPitchMarks.add(pitchMark);
+                } else {
+                    System.out.println("expired: " + pitchMark.mark);
+                }
             }
         }
         pitchMarks = survivingPitchMarks;
@@ -58,6 +70,7 @@ public class EmitterInstrument implements Instrument {
 
     public interface Emitter {
         Mark emit(ParameterSet paramSet, int pitch, double intensity);
+        List<Mark> discardMarks(List<Mark> marks);
     }
 
     public interface Mark {
@@ -68,6 +81,10 @@ public class EmitterInstrument implements Instrument {
 
     public static abstract class AbstractEmitter {
         Random random = new Random();
+
+        public List<Mark> discardMarks(List<Mark> marks) {
+            return new ArrayList<>();
+        }
 
         // Convenience utilities
         public LXVector randomXyDisc() {

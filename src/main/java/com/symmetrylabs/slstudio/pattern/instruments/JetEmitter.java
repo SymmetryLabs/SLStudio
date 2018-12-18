@@ -2,14 +2,20 @@ package com.symmetrylabs.slstudio.pattern.instruments;
 
 import com.symmetrylabs.color.Ops16;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.transform.LXVector;
 import processing.core.PVector;
 
+import static com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.*;
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 
-public class JetEmitter extends EmitterInstrument.AbstractEmitter implements EmitterInstrument.Emitter {
+public class JetEmitter extends AbstractEmitter implements Emitter {
+    public static final int MAX_JETS = 20;
+
     @Override
     public Jet emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
         return new Jet(
@@ -21,7 +27,33 @@ public class JetEmitter extends EmitterInstrument.AbstractEmitter implements Emi
         );
     }
 
-    class Jet implements EmitterInstrument.Mark {
+    @Override
+    public List<Mark> discardMarks(List<Mark> unexpiredMarks) {
+        List<Mark> marks = new ArrayList<>(unexpiredMarks);
+        List<Mark> discardedMarks = new ArrayList<>();
+        while (marks.size() > MAX_JETS) {
+            Jet weakest = null;
+            float smallestTotal = 0;
+            for (Mark mark : marks) {
+                if (mark instanceof Jet) {
+                    Jet jet = (Jet) mark;
+                    if (weakest == null || jet.getFluidTotal() < smallestTotal) {
+                        weakest = jet;
+                        smallestTotal = jet.getFluidTotal();
+                    }
+                }
+            }
+            if (weakest != null) {
+                discardedMarks.add(weakest);
+                marks.remove(weakest);
+            } else {
+                break;
+            }
+        }
+        return discardedMarks;
+    }
+
+    class Jet implements Mark {
         public LXVector center;
         public double size;
         public long color;
@@ -43,11 +75,12 @@ public class JetEmitter extends EmitterInstrument.AbstractEmitter implements Emi
 
             fluid.setDiffusion(2);
             fluid.setVelocity(new PVector(15, 0));
-            periodSec = (1 / 60f) / 5;  // 5 iterations per frame
+            periodSec = (1 / 60f) / 3;  // 3 iterations per frame
             addRate = 50;
         }
 
         public void advance(double deltaSec, double intensity, boolean sustain) {
+            System.out.println("mark " + this + " advance");
             float fluidSec = (float) (deltaSec * rate);
             if (sustain) {
                 fluid.addCell(originU, originV, (float) (intensity * addRate * fluidSec));
@@ -59,7 +92,12 @@ public class JetEmitter extends EmitterInstrument.AbstractEmitter implements Emi
         }
 
         public boolean isExpired() {
+            System.out.println("mark " + this + " max: " + fluid.getLastMax());
             return fluid.getLastMax() < 0.01;
+        }
+
+        public float getFluidTotal() {
+            return fluid.getLastTotal();
         }
 
         public void render(LXModel model, PolyBuffer buffer) {
