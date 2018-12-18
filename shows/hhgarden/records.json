@@ -16293,9 +16293,9 @@
   {
     "id": 1481,
     "panelId": "C6",
-    "pixliteId": 0,
-    "harness": 0,
-    "harnessIndex": 0,
+    "pixliteId": 107,
+    "harness": 1,
+    "harnessIndex": 1,
     "x": 570.1343,
     "z": 448.8961,
     "heightOverrideEnabled": false,
