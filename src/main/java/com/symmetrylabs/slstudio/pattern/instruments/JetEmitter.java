@@ -18,6 +18,7 @@ public class JetEmitter extends AbstractEmitter implements Emitter {
 
     @Override
     public Jet emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
+        System.out.println("new jet " + pitch + " at " + intensity);
         return new Jet(
             paramSet.getPosition(randomXyDisc()),
             paramSet.getSize(intensity),
@@ -80,7 +81,7 @@ public class JetEmitter extends AbstractEmitter implements Emitter {
         }
 
         public void advance(double deltaSec, double intensity, boolean sustain) {
-            System.out.println("mark " + this + " advance");
+            // System.out.println("mark " + this + " advance");
             float fluidSec = (float) (deltaSec * rate);
             if (sustain) {
                 fluid.addCell(originU, originV, (float) (intensity * addRate * fluidSec));
@@ -92,8 +93,7 @@ public class JetEmitter extends AbstractEmitter implements Emitter {
         }
 
         public boolean isExpired() {
-            System.out.println("mark " + this + " max: " + fluid.getLastMax());
-            return fluid.getLastMax() < 0.01;
+            return fluid.getLastMax() < 0.001;
         }
 
         public float getFluidTotal() {

@@ -25,7 +25,10 @@ public class EmitterInstrument implements Instrument {
     @Override public void run(LXModel model, ParameterSet paramSet, Note[] notes, double deltaSec, PolyBuffer buffer) {
         for (int i = paramSet.getPitchLo(); i <= paramSet.getPitchHi(); i++) {
             if (notes[i].attack) {
-                pitchMarks.add(new PitchMark(i, emitter.emit(paramSet, i, notes[i].intensity)));
+                Mark mark = emitter.emit(paramSet, i, notes[i].intensity);
+                if (mark != null) {
+                    pitchMarks.add(new PitchMark(i, mark));
+                }
             }
         }
 
@@ -37,6 +40,7 @@ public class EmitterInstrument implements Instrument {
         }
         List<Mark> discardedMarks = emitter.discardMarks(unexpiredMarks);
 
+        // Advance and render each Mark.
         List<PitchMark> survivingPitchMarks = new ArrayList<>();
         for (PitchMark pitchMark : pitchMarks) {
             int pitch = pitchMark.pitch;
@@ -52,6 +56,10 @@ public class EmitterInstrument implements Instrument {
             }
         }
         pitchMarks = survivingPitchMarks;
+
+        // Global advance and render.
+        emitter.run(deltaSec, paramSet);
+        emitter.render(model, buffer);
     }
 
     @Override public String getCaption() {
@@ -71,6 +79,8 @@ public class EmitterInstrument implements Instrument {
     public interface Emitter {
         Mark emit(ParameterSet paramSet, int pitch, double intensity);
         List<Mark> discardMarks(List<Mark> marks);
+        void run(double deltaSec, ParameterSet paramSet);
+        void render(LXModel model, PolyBuffer buffer);
     }
 
     public interface Mark {
@@ -85,6 +95,10 @@ public class EmitterInstrument implements Instrument {
         public List<Mark> discardMarks(List<Mark> marks) {
             return new ArrayList<>();
         }
+
+        public void run(double deltaSec, ParameterSet paramSet) {}
+
+        public void render(LXModel model, PolyBuffer buffer) {}
 
         // Convenience utilities
         public LXVector randomXyDisc() {
