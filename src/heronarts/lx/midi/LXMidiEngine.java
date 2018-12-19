@@ -393,18 +393,8 @@ public class LXMidiEngine implements LXSerializable {
         for (JsonObject remembered : this.rememberMidiInputs) {
             inputs.add(remembered);
         }
-        JsonArray surfaces = new JsonArray();
-        for (LXMidiSurface surface : this.mutableSurfaces) {
-            if (surface.enabled.isOn()) {
-                surfaces.add(LXSerializable.Utils.toObject(lx, surface));
-            }
-        }
-        for (JsonObject remembered : this.rememberMidiSurfaces) {
-            surfaces.add(remembered);
-        }
 
         object.add(KEY_INPUTS, inputs);
-        object.add(KEY_SURFACES, surfaces);
         object.add(KEY_MAPPINGS, LXSerializable.Utils.toArray(lx, this.mutableMappings));
     }
 
@@ -437,29 +427,6 @@ public class LXMidiEngine implements LXSerializable {
                                     input.load(lx, inputObj);
                                     break;
                                 }
-                            }
-                            if (!found) {
-                                rememberMidiInputs.add(inputObj);
-                            }
-                        }
-                    }
-                }
-                if (object.has(KEY_SURFACES)) {
-                    JsonArray surfaces = object.getAsJsonArray(KEY_SURFACES);
-                    if (surfaces.size() > 0) {
-                        for (JsonElement element : surfaces) {
-                            JsonObject surfaceObj = element.getAsJsonObject();
-                            String surfaceDescription = surfaceObj.get(LXMidiSurface.KEY_DESCRIPTION).getAsString();
-                            boolean found = false;
-                            for (LXMidiSurface surface : mutableSurfaces) {
-                                if (surfaceDescription.equals(surface.getDescription())) {
-                                    found = true;
-                                    surface.enabled.setValue(true);
-                                    break;
-                                }
-                            }
-                            if (!found) {
-                                rememberMidiSurfaces.add(surfaceObj);
                             }
                         }
                     }

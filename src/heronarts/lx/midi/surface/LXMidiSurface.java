@@ -32,7 +32,7 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-public abstract class LXMidiSurface implements LXMidiListener, LXSerializable {
+public abstract class LXMidiSurface implements LXMidiListener {
 
     public static final String APC40_MK2 = "APC40 mkII";
 
@@ -97,17 +97,4 @@ public abstract class LXMidiSurface implements LXMidiListener, LXSerializable {
             this.output.sendControlChange(channel, cc, value);
         }
     }
-
-    public static final String KEY_DESCRIPTION = "description";
-
-    @Override
-    public void load(LX lx, JsonObject object) {
-
-    }
-
-    @Override
-    public void save(LX lx, JsonObject object) {
-        object.addProperty(KEY_DESCRIPTION, this.input.getDescription());
-    }
-
 }
