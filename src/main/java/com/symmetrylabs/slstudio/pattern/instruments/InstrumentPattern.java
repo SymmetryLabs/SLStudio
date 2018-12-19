@@ -53,7 +53,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     private final CompoundParameter spreadParam = new CompoundParameter("Spread", -2, -6, 0);
     private final CompoundParameter twistParam = new CompoundParameter("Twist", 0, -1, 1);
     private final CompoundParameter rateParam = new CompoundParameter("Rate", 0, -5, 5);
-    private final CompoundParameter decayParam = new CompoundParameter("Decay", 0.5, 0, 2);
+    private final CompoundParameter decayParam = new CompoundParameter("Decay", 0.5, 0, 4);
 
     private final EnumParameter<TriggerSource> sourceParam = new EnumParameter<>("Source", TriggerSource.BEAT);
     private final CompoundParameter intensityParam = new CompoundParameter("Intensity", 0, -30, 30);
@@ -184,6 +184,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
         initBeat();
         initMidi();
         initAudio();
+        index = new OctreeModelIndex(model, getVectors());
     }
 
     @Override public void onVectorsChanged() {
