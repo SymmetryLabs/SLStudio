@@ -22,7 +22,7 @@ public class SwimEmitter implements Emitter {
             paramSet.getHueVar(),
             paramSet.getSat(),
             paramSet.getRate(),
-            paramSet.getOrient(),
+            paramSet.getTwist(),
             paramSet.getPitchFraction(pitch),
             0.1 / (0.005 + intensity * intensity),  // intensity = 0, 0.5, 1 -> attack = 20, 0.4, 0.1
             paramSet.getDecaySec()

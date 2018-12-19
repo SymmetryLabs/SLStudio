@@ -51,7 +51,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     private final CompoundParameter sizeVarParam = new CompoundParameter("SizeVar", 0.5, 0, 1);
 
     private final CompoundParameter spreadParam = new CompoundParameter("Spread", -2, -6, 0);
-    private final CompoundParameter orientParam = new CompoundParameter("Orient", 0, -1, 1);
+    private final CompoundParameter twistParam = new CompoundParameter("Twist", 0, -1, 1);
     private final CompoundParameter rateParam = new CompoundParameter("Rate", 0, -5, 5);
     private final CompoundParameter decayParam = new CompoundParameter("Decay", 0.5, 0, 2);
 
@@ -144,7 +144,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
         addParameter(sizeVarParam);
 
         addParameter(spreadParam);
-        addParameter(orientParam);
+        addParameter(twistParam);
         addParameter(rateParam);
         addParameter(decayParam);
 
@@ -589,12 +589,12 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
             return decayParam.getValue();
         }
 
-        public double getOrient() {
-            return orientParam.getValue();
+        public double getTwist() {
+            return twistParam.getValue();
         }
 
         public LXVector getDirection() {
-            double radians = orientParam.getValue() * 2 * Math.PI;
+            double radians = twistParam.getValue() * 2 * Math.PI;
             return new LXVector((float) Math.cos(radians), (float) Math.sin(radians), 0);
         }
 

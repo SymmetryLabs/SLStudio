@@ -25,7 +25,7 @@ public interface Instrument {
         double getSize(double variation);
         double getRate();
         double getDecaySec();
-        double getOrient();
+        double getTwist();
         LXVector getDirection();
 
         int getPitchLo();
