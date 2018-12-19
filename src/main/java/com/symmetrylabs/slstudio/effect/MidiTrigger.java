@@ -25,13 +25,15 @@ public class MidiTrigger extends MidiPolyphonicExpressionEffect {
 
     private CompoundParameter attackParam = new CompoundParameter("Attack", 0.5, 0, 2);
     private CompoundParameter decayParam = new CompoundParameter("Decay", 0.5, 0, 2);
-    private CompoundParameter growParam = new CompoundParameter("Grow", 0, -5, 3);
-    private CompoundParameter shrinkParam = new CompoundParameter("Shrink", 0, -5, 3);
+    private CompoundParameter inParam = new CompoundParameter("In", 0, -5, 3);
+    private CompoundParameter outParam = new CompoundParameter("Out", 0, -5, 3);
 
+    private CompoundParameter brtParam = new CompoundParameter("Brt", 1, 0, 1);
     private DiscreteParameter pitchLoParam = new DiscreteParameter("PitchLo", MusicUtils.PITCH_C1, 0, 127);
     private DiscreteParameter pitchHiParam = new DiscreteParameter("PitchHi", MusicUtils.PITCH_C5, 0, 127);
     private EnumParameter<Shape> shapeParam = new EnumParameter<>("Shape", Shape.ALL);
     private BooleanParameter holdParam = new BooleanParameter("Hold").setMode(BooleanParameter.Mode.TOGGLE);
+    private BooleanParameter followParam = new BooleanParameter("Follow").setMode(BooleanParameter.Mode.TOGGLE);
 
     private BooleanParameter xPosParam = new BooleanParameter("XPOS").setMode(BooleanParameter.Mode.MOMENTARY);
     private BooleanParameter xNegParam = new BooleanParameter("XNEG").setMode(BooleanParameter.Mode.MOMENTARY);
@@ -39,8 +41,10 @@ public class MidiTrigger extends MidiPolyphonicExpressionEffect {
     private BooleanParameter holeParam = new BooleanParameter("HOLE").setMode(BooleanParameter.Mode.MOMENTARY);
 
     protected float[] amplitudes;
-    protected float coverage;
+    protected float leadProgress;
+    protected float trailProgress;
     protected float radius;
+    protected boolean needReset;
 
     public MidiTrigger(LX lx) {
         super(lx);
@@ -49,12 +53,21 @@ public class MidiTrigger extends MidiPolyphonicExpressionEffect {
 
         addParameter(attackParam);
         addParameter(decayParam);
-        addParameter(growParam);
-        addParameter(shrinkParam);
+        addParameter(inParam);
+        addParameter(outParam);
+
+        addParameter(brtParam);
         addParameter(pitchLoParam);
         addParameter(pitchHiParam);
         addParameter(shapeParam);
+
         addParameter(holdParam);
+        addParameter(followParam);
+
+        addParameter(xPosParam);
+        addParameter(xNegParam);
+        addParameter(discParam);
+        addParameter(holeParam);
 
         amplitudes = new float[model.points.length];
         radius = (float) Math.hypot(Math.hypot(model.xRange, model.yRange), model.zRange)/2;
@@ -73,15 +86,32 @@ public class MidiTrigger extends MidiPolyphonicExpressionEffect {
         double deltaSec = deltaMs / 1000;
         double attackSec = attackParam.getValue();
         double decaySec = decayParam.getValue();
-        double growSec = Math.pow(2, growParam.getValue());
-        double shrinkSec = Math.pow(2, shrinkParam.getValue());
+        double growSec = Math.pow(2, inParam.getValue());
+        double shrinkSec = Math.pow(2, outParam.getValue());
+        boolean follow = followParam.isOn();
 
+        System.out.println(String.format("lead %.3f  trail %.3f", leadProgress, trailProgress));
         if (isSustaining()) {
-            coverage += deltaSec / growSec;
+            if (follow) {
+                if (needReset) {
+                    leadProgress = 0;
+                    needReset = false;
+                }
+            } else {
+                trailProgress = 0;
+            }
+            leadProgress += deltaSec / growSec;
         } else {
-            coverage -= deltaSec / shrinkSec;
+            if (follow) {
+                leadProgress += deltaSec / growSec;
+                trailProgress += deltaSec / shrinkSec;
+                needReset = true;
+            } else {
+                leadProgress -= deltaSec / shrinkSec;
+            }
         }
-        coverage = Math.max(0, Math.min(1, coverage));
+        leadProgress = Math.max(0, Math.min(1, leadProgress));
+        trailProgress = Math.max(0, Math.min(leadProgress, trailProgress));
 
         for (int i = 0; i < model.points.length; i++) {
             if (isInCoverage(model.points[i])) {
@@ -93,9 +123,10 @@ public class MidiTrigger extends MidiPolyphonicExpressionEffect {
         }
 
         if (enabledAmount > 0) {
+            double brt = brtParam.getValue();
             long[] colors = (long[]) getArray(RGB16);
             for (int i = 0; i < colors.length; i++) {
-                colors[i] = Ops16.multiply(colors[i], amplitudes[i]);
+                colors[i] = Ops16.multiply(colors[i], amplitudes[i] * brt);
             }
             markModified(RGB16);
         }
@@ -105,21 +136,20 @@ public class MidiTrigger extends MidiPolyphonicExpressionEffect {
         float dx = point.x - model.cx;
         float dy = point.y - model.cy;
         float dz = point.z - model.cz;
-        float size;
+        float dFrac = (dx * dx + dy * dy + dz * dz) / (radius * radius);
+        float xFrac = (point.x - model.xMin) / model.xRange;
 
         switch (shapeParam.getEnum()) {
             case ALL:
-                return coverage > 0;
+                return leadProgress > trailProgress;
             case XPOS:
-                return point.x < model.xMin + coverage * model.xRange;
+                return leadProgress > xFrac && xFrac > trailProgress;
             case XNEG:
-                return point.x > model.xMax - coverage * model.xRange;
+                return leadProgress > (1 - xFrac) && (1 - xFrac) > trailProgress;
             case DISC:
-                size = coverage * radius;
-                return (dx * dx + dy * dy + dz * dz) < (size * size);
+                return leadProgress > dFrac && dFrac > trailProgress;
             case HOLE:
-                size = (1 - coverage) * radius;
-                return (dx * dx + dy * dy + dz * dz) > (size * size);
+                return leadProgress > (1 - dFrac) && (1 - dFrac) > trailProgress;
         }
         return false;
     }
