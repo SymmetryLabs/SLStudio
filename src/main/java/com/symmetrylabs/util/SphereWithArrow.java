@@ -9,6 +9,16 @@ public class SphereWithArrow extends SphereMarker implements Marker {
 
     public SphereWithArrow(
         PVector pos, float size, int rgb,
+        boolean showX, boolean showY, boolean showZ,
+        PVector arrow, int arrowRgb
+    ) {
+        super(pos, size, rgb, showX, showY, showZ);
+        this.arrow = arrow;
+        this.arrowRgb = arrowRgb;
+    }
+
+    public SphereWithArrow(
+        PVector pos, float size, int rgb,
         PVector arrow, int arrowRgb
     ) {
         super(pos, size, rgb);

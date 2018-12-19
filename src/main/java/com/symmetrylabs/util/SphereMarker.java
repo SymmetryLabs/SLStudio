@@ -8,11 +8,21 @@ public class SphereMarker implements Marker {
     float size;
     int rgb;
     static final int NUM_SEGMENTS = 48;
+    boolean showX;
+    boolean showY;
+    boolean showZ;
 
-    public SphereMarker(PVector pos, float size, int rgb) {
+    public SphereMarker(PVector pos, float size, int rgb, boolean showX, boolean showY, boolean showZ) {
         this.pos = pos.copy();
         this.size = size;
         this.rgb = rgb;
+        this.showX = showX;
+        this.showY = showY;
+        this.showZ = showZ;
+    }
+
+    public SphereMarker(PVector pos, float size, int rgb) {
+        this(pos, size, rgb, true, true, true);
     }
 
     public void draw(PGraphics pg) {
@@ -27,9 +37,15 @@ public class SphereMarker implements Marker {
         for (int i = 1; i <= NUM_SEGMENTS; i++) {
             float np = (float) Math.sin(TAU * i / NUM_SEGMENTS) * size;
             float nq = (float) Math.cos(TAU * i / NUM_SEGMENTS) * size;
-            pg.line(x + p, y + q, z, x + np, y + nq, z);
-            pg.line(x, y + p, z + q, x, y + np, z + nq);
-            pg.line(x + q, y, z + p, x + nq, y, z + np);
+            if (showZ) {
+                pg.line(x + p, y + q, z, x + np, y + nq, z);
+            }
+            if (showX) {
+                pg.line(x, y + p, z + q, x, y + np, z + nq);
+            }
+            if (showY) {
+                pg.line(x + q, y, z + p, x + nq, y, z + np);
+            }
             p = np;
             q = nq;
         }

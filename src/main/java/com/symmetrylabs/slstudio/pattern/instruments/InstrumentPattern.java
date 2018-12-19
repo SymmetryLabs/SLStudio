@@ -457,18 +457,20 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
                 boolean altColor = altPositions.contains(i);
                 markers.add(new SphereWithArrow(
                     new PVector(positions[i].x, positions[i].y, z), spread, altColor ? 0xff800040 : 0xff004080,
+                    false, false, true,
                     new PVector(vel.x, vel.y, vel.z), 0xffc0c080));
             }
         } else {
             markers.add(new SphereWithArrow(
                 new PVector(x, y, z), spread, 0xffa0a060,
+                false, false, true,
                 new PVector(vel.x, vel.y, vel.z), 0xffc0c080));
         }
 
-        // Show size as a green square.
+        // Show size as a green cube.
         float size = (float) paramSet.getSize(0);
         markers.add(new CubeMarker(
-            new PVector(x, y, z), new PVector(size, size, 0), 0xff40a040));
+            new PVector(x, y, z), new PVector(size, size, size), 0xff40a040));
 
         if (sourceParam.getEnum() == TriggerSource.AUDIO) {
             float rawScale = 4;
