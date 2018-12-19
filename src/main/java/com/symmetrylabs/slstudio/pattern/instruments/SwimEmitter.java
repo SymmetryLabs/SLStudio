@@ -32,15 +32,12 @@ public class SwimEmitter implements Emitter {
         );
     }
 
-    class Swimmer implements Mark {
+    class Swimmer extends AttackDecayMark {
         public double hue;
         public double hueVar;
         public double sat;
         public double rate;
         public double crazy;
-        public double attack;
-        public double decay;
-        public double brightness;
 
         private LXProjection projection = null;
 
@@ -50,43 +47,23 @@ public class SwimEmitter implements Emitter {
         private final SinLFO yPos = new SinLFO(-1, 1, 13234);
         private final SinLFO sineHeight = new SinLFO(1, 2.5, 13234);
         private final SawLFO phaseLFO = new SawLFO(0, 2 * Math.PI, 15000 - 13000 * 0.5);
-        private final List<LXModulator> modulators = Arrays.asList(
-            rotationX, rotationY, rotationZ, yPos, phaseLFO
-        );
 
-        public Swimmer(double hue, double hueVar, double sat, double rate, double crazy, double phase, double attack, double decay) {
+        public Swimmer(double hue, double hueVar, double sat, double rate, double crazy, double phase, double attackSec, double decaySec) {
+            super(attackSec, decaySec);
+
             this.hue = hue;
             this.hueVar = hueVar;
             this.sat = sat;
             this.rate = rate;
             this.crazy = crazy;
-            this.attack = attack;
-            this.decay = decay;
-            brightness = 0;
 
-            rotationX.trigger();
-            rotationY.trigger();
-            rotationZ.trigger();
-            yPos.trigger();
+            addModulator(rotationX).trigger();
+            addModulator(rotationY).trigger();
+            addModulator(rotationZ).trigger();
+            addModulator(yPos).trigger();
+            addModulator(phaseLFO).trigger();
             phaseLFO.setPeriod(5000 - 4500 * rate);
-            phaseLFO.trigger();
             phaseLFO.setValue(phase * 2 * Math.PI);
-        }
-
-        public List<LXModulator> getModulators() {
-            return modulators;
-        }
-
-        public void advance(double deltaSec, double intensity, boolean sustain) {
-            if (sustain) {
-                brightness = Math.min(1, brightness + deltaSec / attack);
-            } else {
-                brightness *= Math.pow(0.01, deltaSec / decay);
-            }
-        }
-
-        public boolean isExpired() {
-            return brightness < 0.001;
         }
 
         public void render(LXModel model, PolyBuffer buffer) {
@@ -131,7 +108,7 @@ public class SwimEmitter implements Emitter {
                             + Math.abs(p.y - model.yMax / 2) * .6f
                             + Math.abs(p.z - model.zMax)
                     );
-                long c = Ops16.hsb(pointHue / 360, sat, (v1/100) * brightness);
+                long c = Ops16.hsb(pointHue / 360, sat, (v1/100) * amplitude);
                 colors[p.index] = Ops16.add(colors[p.index], c);
             });
 

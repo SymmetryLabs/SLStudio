@@ -8,7 +8,7 @@ import heronarts.lx.transform.LXVector;
 
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 
-public class SprinkleEmitter implements Emitter {
+public class PuffEmitter implements Emitter {
     @Override
     public Puff emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
         return new Puff(
@@ -19,29 +19,18 @@ public class SprinkleEmitter implements Emitter {
         );
     }
 
-    class Puff implements Mark {
+    class Puff extends AttackDecayMark {
         public LXVector center;
         public double radius;
         public long color;
         public double lifetime;
-        public double brightness;
 
-        public Puff(LXVector center, double radius, long color, double lifetime) {
+        public Puff(LXVector center, double radius, long color, double decaySec) {
+            super(0, decaySec);
+
             this.center = center;
             this.radius = radius;
             this.color = color;
-            this.lifetime = lifetime;
-            brightness = 1.0;
-        }
-
-        public void advance(double deltaSec, double intensity, boolean sustain) {
-            if (!sustain) {
-                brightness *= Math.pow(0.01, deltaSec/lifetime);
-            }
-        }
-
-        public boolean isExpired() {
-            return brightness < 0.001;
         }
 
         public void render(LXModel model, PolyBuffer buffer) {
@@ -51,9 +40,11 @@ public class SprinkleEmitter implements Emitter {
                 p.x = model.points[i].x;
                 p.y = model.points[i].y;
                 p.z = model.points[i].z;
-                double dist = center.dist(p) / radius;
-                if (dist < 1) {
-                    colors[i] = Ops16.add(colors[i], color, (1 - dist * dist) * brightness);
+                if (Math.abs(p.x - center.x) < radius && Math.abs(p.y - center.y) < radius) {
+                    double dist = center.dist(p) / radius;
+                    if (dist < 1) {
+                        colors[i] = Ops16.add(colors[i], color, (1 - dist * dist) * amplitude);
+                    }
                 }
             }
             buffer.markModified(RGB16);
