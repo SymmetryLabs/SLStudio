@@ -60,6 +60,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     private final DiscreteParameter pitchLoParam = new DiscreteParameter("PitchLo", MusicUtils.PITCH_C1, 0, 127);
     private final DiscreteParameter pitchHiParam = new DiscreteParameter("PitchHi", MusicUtils.PITCH_C5, 0, 127);
 
+    private final CompoundParameter retrigParam = new CompoundParameter("Retrig", 0, 0, 10);
     private final CompoundParameter floorParam = new CompoundParameter("Floor", 0.1f, 0, 1);
     private final CompoundParameter ceilingParam = new CompoundParameter("Ceiling", 0.1f, 0, 1);
     private final CompoundParameter attackThParam = new CompoundParameter("AttackTh", 0.1f, 0, 1);
@@ -80,6 +81,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
 
     // MIDI note trigger
     private Note[] midiNotes;
+    private float[] retrigSec;
 
     // Audio note trigger
     private LXAudioBuffer audio;
@@ -165,11 +167,11 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
         addParameter(pitchLoParam);
         addParameter(pitchHiParam);
 
+        addParameter(retrigParam);
         addParameter(floorParam);
         addParameter(ceilingParam);
         addParameter(attackThParam);
         addParameter(releasThParam);
-
         addParameter(gainParam);
         addParameter(falloffParam);
 
@@ -210,6 +212,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
 
     protected void initMidi() {
         midiNotes = setupNotes();
+        retrigSec = new float[MusicUtils.NUM_PITCHES];
     }
 
     protected Note[] setupNotes() {
@@ -317,6 +320,13 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
 
     protected void putMidiNotes(double deltaSec, Note[] notes) {
         for (int p = 0; p < notes.length; p++) {
+            if (midiNotes[p].sustain && retrigSec[p] > 0) {
+                retrigSec[p] -= deltaSec;
+                if (retrigSec[p] <= 0 && retrigParam.getValue() > 0) {
+                    midiNotes[p].attack = true;
+                    retrigSec[p] = 1 / retrigParam.getValuef();
+                }
+            }
             notes[p].copyFrom(midiNotes[p]);
             midiNotes[p].attack = false;
         }
@@ -326,6 +336,9 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
         midiNotes[pitch].attack = true;
         midiNotes[pitch].sustain = true;
         midiNotes[pitch].intensity = velocity * getIntensityFactor();
+        if (retrigParam.getValue() > 0) {
+            retrigSec[pitch] = 1 / retrigParam.getValuef();
+        }
     }
 
     @Override public void notePressure(int pitch, double pressure) {
