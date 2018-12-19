@@ -31,7 +31,9 @@ public class SweeperPattern extends SLPattern<SLModel> {
 
         sweepers = new Sweeper[] {
           new Sweeper("A", 1000, 390, 400, 0, 0.5f),
-            new Sweeper("B", 674, 616, 400, 0.5f, 1)
+            new Sweeper("B", 674, 616, 400, 0.5f, 1),
+            new Sweeper("C", 416, 653, 450, 0.5f, 1),
+            new Sweeper("D", 1068, 713, 450, 0.5f, 1),
         };
 
         addParameter(hueParam);
@@ -82,7 +84,7 @@ public class SweeperPattern extends SLPattern<SLModel> {
             int i = 0;
             for (LXPoint point : points) {
                 indexes[i] = point.index;
-                angles[i] = (float) (Math.atan2(point.y - y, point.x - x) / (2 * Math.PI));
+                angles[i] = (float) ((Math.atan2(point.y - y, point.x - x) / (2 * Math.PI)) + 1) % 1.0f;
                 amplitudes[i] = 0;
                 i++;
             }
