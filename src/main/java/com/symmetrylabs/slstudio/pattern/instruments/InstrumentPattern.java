@@ -260,7 +260,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
         }
 
         long[] colors = (long[]) getPolyBuffer().getArray(RGB16);
-        Arrays.fill(colors, 0);
+        Arrays.fill(colors, Ops16.BLACK);
         getPolyBuffer().markModified(RGB16);
 
         if (instrument == null) {
@@ -571,29 +571,10 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
             for (float dist : new float[] {30, 90, 270}) {
                 List<LXPoint> points = index.pointsWithin(pos, dist);
                 if (points.size() > 0) {
-                    return getNearestPoint(points, pos);
+                    return MarkUtils.getNearestPoint(points, pos);
                 }
             }
-            return getNearestPoint(model.getPoints(), pos);
-        }
-
-        protected LXPoint getNearestPoint(List<LXPoint> points, LXVector pos) {
-            LXPoint nearest = null;
-            float minSqDist = 0;
-            for (LXPoint point : points) {
-                float dx = point.x - pos.x;
-                float sqDist = dx * dx;
-                if (nearest == null || sqDist < minSqDist) {
-                    float dy = point.y - pos.y;
-                    float dz = point.z - pos.z;
-                    sqDist += dy * dy + dz * dz;
-                    if (nearest == null || sqDist < minSqDist) {
-                        nearest = point;
-                        minSqDist = sqDist;
-                    }
-                }
-            }
-            return nearest;
+            return MarkUtils.getNearestPoint(model.getPoints(), pos);
         }
 
         public double getSize(double variation) {

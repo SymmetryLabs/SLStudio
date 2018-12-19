@@ -42,6 +42,25 @@ public class MarkUtils {
         return random.nextDouble() * 2 - 1;
     }
 
+    public static LXPoint getNearestPoint(List<LXPoint> points, LXVector pos) {
+        LXPoint nearest = null;
+        float minSqDist = 0;
+        for (LXPoint point : points) {
+            float dx = point.x - pos.x;
+            float sqDist = dx * dx;
+            if (nearest == null || sqDist < minSqDist) {
+                float dy = point.y - pos.y;
+                float dz = point.z - pos.z;
+                sqDist += dy * dy + dz * dz;
+                if (nearest == null || sqDist < minSqDist) {
+                    nearest = point;
+                    minSqDist = sqDist;
+                }
+            }
+        }
+        return nearest;
+    }
+
     public static List<LXPoint> getAllPointsWithin(LXModel model, LXVector center, double radius) {
         List<LXPoint> points = new ArrayList<>();
         LXVector p = new LXVector(0, 0, 0);
