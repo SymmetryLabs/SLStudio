@@ -39,7 +39,7 @@ public class ArtNetNetworkScanner {
                 socket.send(poll.getPacket());
                 executor.submit(new ListenTask(socket, ARTNET_DISCOVERY_TIMEOUT));
             } catch (IOException e) {
-                System.err.println("unable to send artnet discovery packet: " + e.getMessage());
+                System.err.println("unable to send ArtNet discovery packet: " + e.getMessage());
             }
         }
     }
@@ -51,6 +51,9 @@ public class ArtNetNetworkScanner {
                 List<InetAddress> addrs = new ArrayList<>(deviceList);
                 for (InetAddress addr : addrs) {
                     if (now > lastReplyMillis.get(addr) + MAX_MILLIS_WITHOUT_REPLY) {
+                        if (!deviceList.contains(addr)) {
+                            System.out.println("lost ArtNet device at " + addr.getHostAddress());
+                        }
                         deviceList.remove(addr);
                         lastReplyMillis.remove(addr);
                     }
@@ -62,6 +65,9 @@ public class ArtNetNetworkScanner {
     public void updateDevice(final InetAddress addr) {
         dispatcher.dispatchEngine(new Runnable() {
             public void run() {
+                if (!deviceList.contains(addr)) {
+                    System.out.println("found new ArtNet device at " + addr.getHostAddress());
+                }
                 lastReplyMillis.put(addr, System.currentTimeMillis());
                 deviceList.add(addr);
             }
