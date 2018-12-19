@@ -59,12 +59,6 @@ public class SweeperPattern extends SLPattern<SLModel> {
     }
 
     class Sweeper {
-        public float x;
-        public float y;
-        public float radius;
-        public float startAngle;
-        public float sweepAngle;
-
         private CompoundParameter param;
         private float lastParamValue;
         private int[] indexes;
@@ -74,45 +68,52 @@ public class SweeperPattern extends SLPattern<SLModel> {
         private boolean initialized;
 
         public Sweeper(String name, float x, float y, boolean useArcCluster, float radius, float startAngle, float sweepAngle) {
-            this.x = x;
-            this.y = y;
-            this.radius = radius;
-            this.startAngle = floorMod(startAngle, 1);
-            this.sweepAngle = sweepAngle;
-            param = new CompoundParameter(name);
-            SweeperPattern.this.addParameter(param);
+            initParam(name);
 
             LXVector center = new LXVector(x, y, model.cz);
+            startAngle = floorMod(startAngle, 1);
+
             LXVector clusterCenter = new LXVector(center);
             if (useArcCluster) {
                 double radians = (startAngle + sweepAngle/2) * (2 * Math.PI);
                 clusterCenter.x += Math.cos(radians) * radius;
                 clusterCenter.y += Math.sin(radians) * radius;
             }
-            int cluster = partition.getClusterNumber(MarkUtils.getNearestPoint(model.getPoints(), clusterCenter));
+            int cluster = getNearestCluster(clusterCenter);
             List<LXPoint> points = new ArrayList<>();
             for (LXPoint point : MarkUtils.getAllPointsWithin(model, center, radius)) {
               if (partition.getClusterNumber(point) == cluster) {
                   points.add(point);
                 }
             }
+            initArrays(points);
+            int i = 0;
+            for (LXPoint point : points) {
+                float bearing = floorMod((float) (Math.atan2(point.y - y, point.x - x) / (2 * Math.PI)), 1);
+                positions[i++] = sweepAngle > 0 ?
+                    floorMod(bearing - startAngle, 1) / sweepAngle :
+                    floorMod(startAngle - bearing, 1) / -sweepAngle;
+            }
+        }
+
+        protected void initParam(String name) {
+            param = new CompoundParameter(name);
+            SweeperPattern.this.addParameter(param);
+        }
+
+        protected void initArrays(List<LXPoint> points) {
             indexes = new int[points.size()];
             states = new boolean[points.size()];
             positions = new float[points.size()];
             amplitudes = new float[points.size()];
             int i = 0;
             for (LXPoint point : points) {
-                indexes[i] = point.index;
-                float bearing = floorMod((float) (Math.atan2(point.y - y, point.x - x) / (2 * Math.PI)), 1);
-                if (sweepAngle > 0) {
-                    positions[i] = floorMod(bearing - startAngle, 1) / sweepAngle;
-                } else {
-                    positions[i] = floorMod(startAngle - bearing, 1) / -sweepAngle;
-                }
-                amplitudes[i] = 0;
-                i++;
+                indexes[i++] = point.index;
             }
-            lastParamValue = param.getValuef();
+        }
+
+        protected int getNearestCluster(LXVector center) {
+            return partition.getClusterNumber(MarkUtils.getNearestPoint(model.getPoints(), center));
         }
 
         protected float floorMod(float num, float den) {
