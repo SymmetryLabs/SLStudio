@@ -19,7 +19,7 @@ public class SparkleEmitter implements Emitter {
     @Override
     public Sparkle emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
         return new Sparkle(
-            new LXVector(paramSet.getPoint(MarkUtils.randomXyDisc())),
+            new LXVector(paramSet.getPoint(pitch, MarkUtils.randomXyDisc())),
             paramSet.getSize(0),
             paramSet.getHue(),
             paramSet.getHueVar(),

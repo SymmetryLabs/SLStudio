@@ -14,7 +14,8 @@ public class PuffEmitter implements Emitter {
     @Override
     public Puff emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
         return new Puff(
-            new LXVector(paramSet.getPoint(MarkUtils.randomXyDisc())),
+            //new LXVector(paramSet.getPoint(pitch, MarkUtils.randomXyDisc())),
+            paramSet.getPosition(pitch, MarkUtils.randomXyDisc()),
             paramSet.getSize(intensity),
             paramSet.getColor(MarkUtils.randomVariation()),
             paramSet.getDecaySec()

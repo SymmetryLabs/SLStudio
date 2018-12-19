@@ -98,6 +98,34 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
 
     // Geometry
     private OctreeModelIndex index;
+    private LXVector[] positions = new LXVector[] {
+        new LXVector(1282, 424, 0),
+        new LXVector(1152, 401, 0),
+        new LXVector(1125, 535, 0),
+        new LXVector(983, 439, 0),
+        new LXVector(972, 624, 0),
+        new LXVector(838, 496, 0),
+        new LXVector(776, 409, 0),
+        new LXVector(661, 390, 0),
+        new LXVector(552, 390, 0),
+        new LXVector(463, 449, 0),
+        new LXVector(439, 539, 0),
+        new LXVector(442, 661, 0),
+
+        new LXVector(1415, 824, 0),
+        new LXVector(1296, 884, 0),
+        new LXVector(1163, 933, 0),
+        new LXVector(1000, 947, 0),
+        new LXVector(853, 902, 0),
+        new LXVector(700, 731, 0),
+        new LXVector(658, 918, 0),
+        new LXVector(435, 959, 0),
+        new LXVector(244, 929, 0),
+        new LXVector(149, 794, 0),
+        new LXVector(157, 625, 0),
+        new LXVector(170, 452, 0),
+    };
+    private List<Integer> altPositions = Arrays.asList(1, 3, 6, 8, 10, 13, 15, 18, 20, 22);
 
     public InstrumentPattern(LX lx) {
         super(lx);
@@ -409,6 +437,10 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
         );
     }
 
+    protected boolean usePitchForPosition() {
+        return xParam.getValuef() < model.xMin + 1 && yParam.getValuef() < model.yMin + 1;
+    }
+
     @Override public List<Marker> getMarkers() {
         List<Marker> markers = new ArrayList<>();
 
@@ -418,11 +450,20 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
 
         // Show spread range as a yellowish sphere.
         // Show direction and rate as a bright yellow vector.
-        LXVector vel = paramSet.getDirection().mult((float) paramSet.getRate() * radius / 10);
+        LXVector vel = paramSet.getDirection().mult((float) paramSet.getRate() * radius / 50);
         float spread = (float) Math.pow(2, spreadParam.getValuef()) * radius;
-        markers.add(new SphereWithArrow(
-            new PVector(x, y, z), spread, 0xffa0a060,
-            new PVector(vel.x, vel.y, vel.z), 0xffc0c080));
+        if (usePitchForPosition()) {
+            for (int i = 0; i < positions.length; i++) {
+                boolean altColor = altPositions.contains(i);
+                markers.add(new SphereWithArrow(
+                    new PVector(positions[i].x, positions[i].y, z), spread, altColor ? 0xff800040 : 0xff004080,
+                    new PVector(vel.x, vel.y, vel.z), 0xffc0c080));
+            }
+        } else {
+            markers.add(new SphereWithArrow(
+                new PVector(x, y, z), spread, 0xffa0a060,
+                new PVector(vel.x, vel.y, vel.z), 0xffc0c080));
+        }
 
         // Show size as a green square.
         float size = (float) paramSet.getSize(0);
@@ -504,10 +545,18 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
             return Ops16.hsb(hue, sat, brt);
         }
 
-        public LXVector getPosition(LXVector variation) {
+        public LXVector getPosition(int pitch, LXVector variation) {
             float x = xParam.getValuef();
             float y = yParam.getValuef();
             float z = model.cz;
+            if (usePitchForPosition()) {
+                int offset = pitch - pitchLoParam.getValuei();
+                if (offset < 0 || offset >= positions.length) {
+                    offset = 0;
+                }
+                x = positions[offset].x;
+                y = positions[offset].y;
+            }
             float spread = (float) Math.pow(2, spreadParam.getValuef()) * radius;
             return new LXVector(
                 x + variation.x * spread,
@@ -516,20 +565,16 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
             );
         }
 
-        public LXPoint getPoint(LXVector variation) {
-            LXVector pos = getPosition(variation);
-            LXPoint nearest = index.nearestPoint(pos);
-            if (nearest == null) {
-                // Stupid hack because index.nearestPoint doesn't actually work.
-                for (float dist : new float[] {30, 90, 270}) {
-                    List<LXPoint> points = index.pointsWithin(pos, dist);
-                    if (points.size() > 0) {
-                        return getNearestPoint(points, pos);
-                    }
+        public LXPoint getPoint(int pitch, LXVector variation) {
+            LXVector pos = getPosition(pitch, variation);
+            // Stupid hack because index.nearestPoint doesn't actually work.
+            for (float dist : new float[] {30, 90, 270}) {
+                List<LXPoint> points = index.pointsWithin(pos, dist);
+                if (points.size() > 0) {
+                    return getNearestPoint(points, pos);
                 }
-                return getNearestPoint(model.getPoints(), pos);
             }
-            return nearest;
+            return getNearestPoint(model.getPoints(), pos);
         }
 
         protected LXPoint getNearestPoint(List<LXPoint> points, LXVector pos) {
@@ -537,12 +582,15 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
             float minSqDist = 0;
             for (LXPoint point : points) {
                 float dx = point.x - pos.x;
-                float dy = point.y - pos.y;
-                float dz = point.z - pos.z;
-                float sqDist = dx * dx + dy * dy + dz * dz;
+                float sqDist = dx * dx;
                 if (nearest == null || sqDist < minSqDist) {
-                    nearest = point;
-                    minSqDist = sqDist;
+                    float dy = point.y - pos.y;
+                    float dz = point.z - pos.z;
+                    sqDist += dy * dy + dz * dz;
+                    if (nearest == null || sqDist < minSqDist) {
+                        nearest = point;
+                        minSqDist = sqDist;
+                    }
                 }
             }
             return nearest;

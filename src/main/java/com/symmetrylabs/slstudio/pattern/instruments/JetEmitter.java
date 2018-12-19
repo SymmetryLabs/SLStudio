@@ -23,7 +23,7 @@ public class JetEmitter implements Emitter {
             float speedUp = rate < 1 ? 1 : rate;
             return new Jet(
                 model,
-                new LXVector(paramSet.getPoint(MarkUtils.randomXyDisc())),
+                new LXVector(paramSet.getPoint(pitch, MarkUtils.randomXyDisc())),
                 paramSet.getSize(intensity),
                 paramSet.getColor(MarkUtils.randomVariation()),
                 speedUp

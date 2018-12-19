@@ -20,8 +20,8 @@ public interface Instrument {
         double getHueVar();
         double getSat();
         long getColor(double variation);
-        LXVector getPosition(LXVector variation);
-        LXPoint getPoint(LXVector variation);
+        LXVector getPosition(int pitch, LXVector variation);
+        LXPoint getPoint(int pitch, LXVector variation);
         double getSize(double variation);
         double getRate();
         double getDecaySec();
