@@ -66,6 +66,7 @@ public class Swim extends LXPattern {
     @Override
     public void run(double deltaMs, PolyBuffer.Space space) {
         int[] colors = (int[]) getArray(SRGB8);
+
         final float phase = phaseLFO.getValuef();
         final float upDownRange = (model.yMax - model.yMin) / 4;
 

@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern.instruments;
 
 import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.AbstractMark;
 
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
@@ -107,7 +108,7 @@ public class JetEmitter extends AbstractEmitter implements Emitter {
         return null;
     }
 
-    class Jet implements Mark {
+    class Jet extends AbstractMark implements Mark {
         public LXVector center;
         public double size;
         public long color;

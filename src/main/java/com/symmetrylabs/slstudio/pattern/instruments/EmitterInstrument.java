@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import heronarts.lx.LXPattern;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
+import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.transform.LXVector;
 
 /**
@@ -22,11 +24,14 @@ public class EmitterInstrument implements Instrument {
         this.emitter = emitter;
     }
 
-    @Override public void run(LXModel model, ParameterSet paramSet, Note[] notes, double deltaSec, PolyBuffer buffer) {
+    @Override public void run(LXModel model, LXPattern pattern, ParameterSet paramSet, Note[] notes, double deltaSec, PolyBuffer buffer) {
         for (int i = paramSet.getPitchLo(); i <= paramSet.getPitchHi(); i++) {
             if (notes[i].attack) {
                 Mark mark = emitter.emit(paramSet, i, notes[i].intensity);
                 if (mark != null) {
+                    for (LXModulator modulator : mark.getModulators()) {
+                        pattern.addModulator(modulator);
+                    }
                     pitchMarks.add(new PitchMark(i, mark));
                 }
             }
@@ -48,12 +53,22 @@ public class EmitterInstrument implements Instrument {
             if (!discardedMarks.contains(mark)) {
                 mark.render(model, buffer);
                 mark.advance(deltaSec, notes[pitch].intensity, notes[pitch].sustain);
-                if (!mark.isExpired()) {
+                if (mark.isExpired()) {
+                    discardedMarks.add(mark);
+                } else {
                     survivingPitchMarks.add(pitchMark);
                 }
             }
         }
         pitchMarks = survivingPitchMarks;
+
+        // Clean up any pattern resources used by expired Marks.
+        for (Mark mark : discardedMarks) {
+            for (LXModulator modulator : mark.getModulators()) {
+                modulator.stop();
+                pattern.removeModulator(modulator);
+            }
+        }
 
         // Global advance and render.
         emitter.run(deltaSec, paramSet);
@@ -84,6 +99,7 @@ public class EmitterInstrument implements Instrument {
     public interface Mark {
         void advance(double deltaSec, double intensity, boolean sustain);
         void render(LXModel model, PolyBuffer buffer);
+        List<LXModulator> getModulators();
         boolean isExpired();
     }
 
@@ -91,7 +107,12 @@ public class EmitterInstrument implements Instrument {
         Random random = new Random();
 
         public List<Mark> discardMarks(List<Mark> marks) {
-            return new ArrayList<>();
+            int numToDiscard = Math.max(0, marks.size() - getLimit());
+            return marks.subList(0, numToDiscard);
+        }
+
+        private int getLimit() {
+            return 10;
         }
 
         public void run(double deltaSec, ParameterSet paramSet) {}
@@ -122,6 +143,12 @@ public class EmitterInstrument implements Instrument {
 
         public double randomVariation() {
             return random.nextDouble() * 2 - 1;
+        }
+    }
+
+    public static abstract class AbstractMark {
+        public List<LXModulator> getModulators() {
+            return new ArrayList<>();
         }
     }
 }

@@ -238,7 +238,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
         if (instrument == null) {
             instrument = InstrumentRegistry.getInstrument(instrParam.getOption());
         }
-        instrument.run(model, paramSet, notes, deltaMs / 1000.0, getPolyBuffer());
+        instrument.run(model, this, paramSet, notes, deltaMs / 1000.0, getPolyBuffer());
     }
 
     protected void putBeatNotes(double deltaSec, Note[] notes) {
@@ -485,6 +485,18 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     }
 
     class ParameterSet implements Instrument.ParameterSet {
+        public double getHue() {
+            return hueParam.getValue();
+        }
+
+        public double getHueVar() {
+            return hueVarParam.getValue();
+        }
+
+        public double getSat() {
+            return satParam.getValue();
+        }
+
         public long getColor(double variation) {
             double hue = hueParam.getValue() + hueVarParam.getValue() * variation;
             double sat = satParam.getValue();
@@ -548,12 +560,25 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
             return decayParam.getValue();
         }
 
+        public double getOrient() {
+            return orientParam.getValue();
+        }
+
         public LXVector getDirection() {
             double radians = orientParam.getValue() * 2 * Math.PI;
             return new LXVector((float) Math.cos(radians), (float) Math.sin(radians), 0);
         }
 
-        public int getPitchLo() { return pitchLoParam.getValuei(); }
-        public int getPitchHi() { return pitchHiParam.getValuei(); }
+        public int getPitchLo() {
+            return pitchLoParam.getValuei();
+        }
+
+        public int getPitchHi() {
+            return Math.max(pitchLoParam.getValuei(), pitchHiParam.getValuei());
+        }
+
+        public double getPitchFraction(double pitch) {
+            return (pitch - getPitchLo()) / (getPitchHi() - getPitchLo());
+        }
     }
 }

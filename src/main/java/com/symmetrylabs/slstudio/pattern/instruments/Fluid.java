@@ -56,7 +56,6 @@ public class Fluid {
         float total = 0;
         float max = 0;
         float retentionFactor = (float) Math.pow(retention, deltaSec);
-        System.out.println(String.format("%s: ret=%.4f retFac=%.4f", this, retention, retentionFactor));
         for (int tx = 0; tx < width; tx++) {
             for (int ty = 0; ty < height; ty++) {
                 int x = tx - xi;

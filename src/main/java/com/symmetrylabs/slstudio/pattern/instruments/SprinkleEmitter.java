@@ -1,14 +1,17 @@
 package com.symmetrylabs.slstudio.pattern.instruments;
 
 import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.AbstractMark;
+import com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.Mark;
 
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.transform.LXVector;
 
+import static com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.*;
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 
-public class SprinkleEmitter extends EmitterInstrument.AbstractEmitter implements EmitterInstrument.Emitter {
+public class SprinkleEmitter extends AbstractEmitter implements Emitter {
     @Override
     public Puff emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
         return new Puff(
@@ -19,7 +22,7 @@ public class SprinkleEmitter extends EmitterInstrument.AbstractEmitter implement
         );
     }
 
-    class Puff implements EmitterInstrument.Mark {
+    class Puff extends AbstractMark implements Mark {
         public LXVector center;
         public double radius;
         public long color;
@@ -32,7 +35,6 @@ public class SprinkleEmitter extends EmitterInstrument.AbstractEmitter implement
             this.color = color;
             this.lifetime = lifetime;
             brightness = 1.0;
-            System.out.println("new puff: " + center);
         }
 
         public void advance(double deltaSec, double intensity, boolean sustain) {
@@ -42,7 +44,7 @@ public class SprinkleEmitter extends EmitterInstrument.AbstractEmitter implement
         }
 
         public boolean isExpired() {
-            return brightness < 0.01;
+            return brightness < 0.001;
         }
 
         public void render(LXModel model, PolyBuffer buffer) {

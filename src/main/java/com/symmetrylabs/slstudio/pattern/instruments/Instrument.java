@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern.instruments;
 
+import heronarts.lx.LXPattern;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
@@ -11,20 +12,25 @@ import heronarts.lx.transform.LXVector;
  * control colour, position, and movement.
  */
 public interface Instrument {
-    void run(LXModel model, ParameterSet paramSet, Note[] notes, double deltaSec, PolyBuffer buffer);
+    void run(LXModel model, LXPattern pattern, ParameterSet paramSet, Note[] notes, double deltaSec, PolyBuffer buffer);
     String getCaption();
 
     interface ParameterSet {
+        double getHue();
+        double getHueVar();
+        double getSat();
         long getColor(double variation);
         LXVector getPosition(LXVector variation);
         LXPoint getPoint(LXVector variation);
         double getSize(double variation);
         double getRate();
         double getDecaySec();
+        double getOrient();
         LXVector getDirection();
 
         int getPitchLo();
         int getPitchHi();
+        double getPitchFraction(double pitch);
     }
 
     /** A Note represents the state of a musical note. */
