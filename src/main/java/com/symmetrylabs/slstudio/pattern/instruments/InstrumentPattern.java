@@ -38,7 +38,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     };
 
     private final CompoundParameter hueParam = new CompoundParameter("Hue", 0, -1, 1);
-    private final CompoundParameter hueVarParam = new CompoundParameter("HueVar", 0, 0, 1);
+    private final CompoundParameter hueVarParam = new CompoundParameter("HueVar", 0, -1, 1);
     private final CompoundParameter satParam = new CompoundParameter("Sat", 0, 0, 1);
     private final CompoundParameter brtParam = new CompoundParameter("Brt", 1, 0, 1);
 

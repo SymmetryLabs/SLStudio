@@ -18,8 +18,8 @@ public class SwimEmitter implements Emitter {
     @Override
     public Swimmer emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
         return new Swimmer(
-            paramSet.getHue(),
-            paramSet.getHueVar(),
+            paramSet.getHue() + paramSet.getHueVar() * paramSet.getPitchFraction(pitch),
+            0,
             paramSet.getSat(),
             paramSet.getRate(),
             paramSet.getTwist(),
