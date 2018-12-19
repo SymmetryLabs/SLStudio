@@ -128,6 +128,10 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     private List<Integer> altPositions = Arrays.asList(1, 3, 6, 8, 10, 13, 15, 18, 20, 22);
 
     public InstrumentPattern(LX lx) {
+        this(lx, null);
+    }
+
+    public InstrumentPattern(LX lx, Instrument fixedInstrument) {
         super(lx);
         pitchLoParam.setFormatter(MusicUtils.MIDI_PITCH_FORMATTER);
         pitchHiParam.setFormatter(MusicUtils.MIDI_PITCH_FORMATTER);
@@ -137,7 +141,15 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
         addParameter(satParam);
         addParameter(brtParam);
 
-        addParameter(instrParam);
+        if (fixedInstrument != null) {
+            instrument = fixedInstrument;
+        } else {
+            addParameter(instrParam);
+            instrParam.addListener(param -> {
+                instrument = null;  // will be reconstructed in run()
+            });
+        }
+
         addParameter(xParam);
         addParameter(yParam);
         addParameter(sizeParam);
@@ -163,9 +175,6 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
 
         pitchLoParam.setFormatter(new MusicUtils.MidiPitchFormatter());
         pitchHiParam.setFormatter(new MusicUtils.MidiPitchFormatter());
-        instrParam.addListener(param -> {
-            instrument = null;  // will be reconstructed in run()
-        });
 
         notes = setupNotes();
         sourceParam.addListener(param -> {
