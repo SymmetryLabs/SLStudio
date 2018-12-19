@@ -39,6 +39,10 @@ public class SweeperPattern extends SLPattern<SLModel> {
             new Sweeper("B", 416, 653, true, 450, -0.04f, 0.7f),
             new Sweeper("C", 674, 616, true, 400, 0.4f, 0.67f),
           new Sweeper("D", 1062, 330, false, 418, 0.51f, -0.51f),
+            new Sweeper("X1", model.xMax, -model.xRange, null),
+            new Sweeper("X2", model.xMax, -model.xRange, null),
+            new Sweeper("XU", model.xMax, -model.xRange, new LXVector(model.cx, model.yMax, 0)),
+            new Sweeper("XL", model.xMax, -model.xRange, new LXVector(model.cx, model.yMin, 0)),
         };
 
         addParameter(hueParam);
@@ -93,6 +97,23 @@ public class SweeperPattern extends SLPattern<SLModel> {
                 positions[i++] = sweepAngle > 0 ?
                     floorMod(bearing - startAngle, 1) / sweepAngle :
                     floorMod(startAngle - bearing, 1) / -sweepAngle;
+            }
+        }
+
+        public Sweeper(String name, float startX, float sweepX, LXVector clusterCenter) {
+            initParam(name);
+
+            List<LXPoint> points;
+            if (clusterCenter != null) {
+                int cluster = getNearestCluster(clusterCenter);
+                points = partition.getCluster(cluster);
+            } else {
+                points = model.getPoints();
+            }
+            initArrays(points);
+            int i = 0;
+            for (LXPoint point : points) {
+                positions[i++] = (point.x - startX) / sweepX;
             }
         }
 
