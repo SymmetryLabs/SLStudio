@@ -47,24 +47,24 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     private final CompoundParameter xParam = new CompoundParameter("X", model.cx, model.xMin, model.xMax);
     private final CompoundParameter yParam = new CompoundParameter("Y", model.cy, model.yMin, model.yMax);
     private final float radius = (float) Math.hypot(Math.hypot(model.xRange/2, model.yRange/2), model.zRange/2);
-    private final CompoundParameter spreadParam = new CompoundParameter("Spread", -2, -6, 0);
-
     private final CompoundParameter sizeParam = new CompoundParameter("Size", -5, -6, 0);
     private final CompoundParameter sizeVarParam = new CompoundParameter("SizeVar", 0.5, 0, 1);
+
+    private final CompoundParameter spreadParam = new CompoundParameter("Spread", -2, -6, 0);
+    private final CompoundParameter orientParam = new CompoundParameter("Orient", 0, -1, 1);
     private final CompoundParameter rateParam = new CompoundParameter("Rate", 0, -5, 5);
     private final CompoundParameter decayParam = new CompoundParameter("Decay", 0.5, 0, 4);
-    private final CompoundParameter orientParam = new CompoundParameter("Orient", 0, -1, 1);
 
     private final EnumParameter<TriggerSource> sourceParam = new EnumParameter<>("Source", TriggerSource.BEAT);
     private final CompoundParameter intensityParam = new CompoundParameter("Intensity", 0, -30, 30);
+    private final DiscreteParameter pitchLoParam = new DiscreteParameter("PitchLo", MusicUtils.PITCH_C1, 0, 127);
+    private final DiscreteParameter pitchHiParam = new DiscreteParameter("PitchHi", MusicUtils.PITCH_C5, 0, 127);
+
     private final CompoundParameter floorParam = new CompoundParameter("Floor", 0.1f, 0, 1);
     private final CompoundParameter ceilingParam = new CompoundParameter("Ceiling", 0.3f, 0, 1);
     private final CompoundParameter attackThParam = new CompoundParameter("AttackTh", 0.4f, 0, 1);
     private final CompoundParameter releasThParam = new CompoundParameter("ReleasTh", 0.3f, 0, 1);
-
     private final CompoundParameter gainParam = new CompoundParameter("Gain", 0, -30, 30);  // decibels
-    private final DiscreteParameter pitchLoParam = new DiscreteParameter("PitchLo", MusicUtils.PITCH_C1, 0, 127);
-    private final DiscreteParameter pitchHiParam = new DiscreteParameter("PitchHi", MusicUtils.PITCH_C5, 0, 127);
     private final CompoundParameter falloffParam = new CompoundParameter("Falloff", 2, 0, 12);
 
     private final ParameterSet paramSet = new ParameterSet();
@@ -112,23 +112,25 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
         addParameter(instrParam);
         addParameter(xParam);
         addParameter(yParam);
-        addParameter(spreadParam);
         addParameter(sizeParam);
         addParameter(sizeVarParam);
+
+        addParameter(spreadParam);
+        addParameter(orientParam);
         addParameter(rateParam);
         addParameter(decayParam);
-        addParameter(orientParam);
 
         addParameter(sourceParam);
         addParameter(intensityParam);
+        addParameter(pitchLoParam);
+        addParameter(pitchHiParam);
+
         addParameter(floorParam);
         addParameter(ceilingParam);
         addParameter(attackThParam);
         addParameter(releasThParam);
 
         addParameter(gainParam);
-        addParameter(pitchLoParam);
-        addParameter(pitchHiParam);
         addParameter(falloffParam);
 
         pitchLoParam.setFormatter(new MusicUtils.MidiPitchFormatter());
