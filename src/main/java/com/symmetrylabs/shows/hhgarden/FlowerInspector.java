@@ -1,20 +1,26 @@
 package com.symmetrylabs.shows.hhgarden;
 
+import com.symmetrylabs.shows.hhgarden.FlowerModel.FlowerPoint;
+import com.symmetrylabs.util.Marker;
+import com.symmetrylabs.util.MarkerSource;
 import heronarts.lx.LX;
-import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import com.symmetrylabs.shows.hhgarden.FlowerModel.FlowerPoint;
+import com.symmetrylabs.util.TextMarker;
+import processing.core.PVector;
+import heronarts.lx.transform.LXVector;
+import heronarts.lx.parameter.CompoundParameter;
 
-public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Listener {
+public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Listener, MarkerSource {
     public static final String GROUP_NAME = HHGardenShow.SHOW_NAME;
 
     public static enum Mode {
@@ -29,6 +35,7 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
     private final DiscreteParameter panel = new DiscreteParameter("panel", new String[]{"ALL"});
     private final DiscreteParameter pixlite = new DiscreteParameter("pixlite", new String[]{"ALL"});
     private final DiscreteParameter flowerParam;
+    private final CompoundParameter labelSize = new CompoundParameter("labelSize", 8, 0, 18);
 
     private final BooleanParameter prevPanel =
         new BooleanParameter("prevPanel", false)
@@ -86,6 +93,8 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
         addParameter(prevPixlite);
         addParameter(nextPixlite);
         addParameter(clearPixlite);
+
+        addParameter(labelSize);
     }
 
     private FlowerModel getSelected() {
@@ -231,5 +240,24 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
             pixliteOptions[i + 1] = Integer.toString(pixliteIds.get(i));
         }
         pixlite.setOptions(pixliteOptions);
+    }
+
+    @Override
+    public Collection<Marker> getMarkers() {
+        List<Marker> markers = new ArrayList<>();
+        float size = labelSize.getValuef();
+        if (size < 0.1) {
+            return markers;
+        }
+        for (FlowerModel fm : model.getFlowers()) {
+            FlowerData fd = fm.getFlowerData();
+            LXVector lxloc = fd.location;
+            PVector loc = new PVector(lxloc.x, lxloc.y, lxloc.z);
+            markers.add(
+                new TextMarker(
+                    loc, size, 0xFFFFFFFF, TextMarker.FlipDir.Z,
+                    String.format("%d", fd.record.id)));
+        }
+        return markers;
     }
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.net.SocketException;
 import com.symmetrylabs.util.MarkerSource;
+import java.io.File;
 
 import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
@@ -40,6 +41,7 @@ public class SLStudio extends PApplet {
     public static final String SHOW_FILE_NAME = ".show";
     public static final String RESTART_FILE_NAME = ".restart";
     public static final int ENVELOP_OSC_PORT = 3377;
+    public static final String MUTE_FILE_NAME = "start-muted";
 
     private SLStudioLX lx;
     public Show show;
@@ -179,11 +181,11 @@ public class SLStudio extends PApplet {
         lx.engine.isNetworkMultithreaded.setValue(true);
         lx.engine.audio.enabled.setValue(false);
 
-        String startMuted = System.getProperty("com.symmetrylabs.startMuted");
-        lx.engine.output.enabled.setValue(startMuted == null || "".equals(startMuted));
-        //lx.engine.framesPerSecond.setValue(120);
-
-    //performanceManager.start(lx.ui);
+        /* don't mess with enabled if the mute file isn't there; output.enabled is
+             set to the value stored in the project file */
+        if (new File(MUTE_FILE_NAME).exists()) {
+            lx.engine.output.enabled.setValue(false);
+        }
 
         long setupFinish = System.nanoTime();
         println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms");
