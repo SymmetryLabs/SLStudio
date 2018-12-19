@@ -71,6 +71,7 @@ public class SweeperPattern extends SLPattern<SLModel> {
         private boolean[] states;
         private float[] positions;
         private float[] amplitudes;
+        private boolean initialized;
 
         public Sweeper(String name, float x, float y, boolean useArcCluster, float radius, float startAngle, float sweepAngle) {
             this.x = x;
@@ -125,6 +126,11 @@ public class SweeperPattern extends SLPattern<SLModel> {
             float decaySec = decayParam.getValuef();
 
             float nextParamValue = param.getValuef();
+            if (!initialized) {
+                // Prevent a flash on startup when parameters change from zero.
+                lastParamValue = nextParamValue;
+                initialized = true;
+            }
             float min = Math.min(lastParamValue, nextParamValue);
             float max = Math.max(lastParamValue, nextParamValue);
 
