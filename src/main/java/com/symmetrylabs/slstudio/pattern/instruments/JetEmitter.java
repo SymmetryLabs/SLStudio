@@ -24,7 +24,7 @@ public class JetEmitter implements Emitter {
             return new Jet(
                 model,
                 new LXVector(paramSet.getPoint(pitch, MarkUtils.randomXyDisc())),
-                paramSet.getSize(intensity),
+                paramSet.getSize(2 * intensity - 1),
                 paramSet.getColor(MarkUtils.randomVariation()),
                 speedUp
             );

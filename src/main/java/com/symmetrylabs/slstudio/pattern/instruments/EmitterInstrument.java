@@ -19,7 +19,8 @@ import heronarts.lx.transform.LXVector;
  * can either expire on its own or when the note is released.
  */
 public class EmitterInstrument implements Instrument {
-    private HashMap<Integer, Mark> pitchMarks = new LinkedHashMap<>();
+    private HashMap<Integer, Mark> lastAttack = new HashMap<>();
+    private HashMap<MarkKey, Mark> pitchMarks = new LinkedHashMap<>();
     private final Emitter emitter;
 
     public EmitterInstrument(Emitter emitter) {
@@ -33,27 +34,31 @@ public class EmitterInstrument implements Instrument {
             }
         }
 
-        List<Integer> pitches = new ArrayList<>(pitchMarks.keySet());
-        List<Integer> pitchesToDiscard = new ArrayList<>();
-        int numToDiscard = pitches.size() - emitter.getMaxCount();
+        List<MarkKey> keys = new ArrayList<>(pitchMarks.keySet());
+        List<MarkKey> keysToDiscard = new ArrayList<>();
+        int numToDiscard = keys.size() - emitter.getMaxCount();
         if (numToDiscard > 0) {
-            pitchesToDiscard = pitches.subList(0, numToDiscard);
-            pitches = pitches.subList(numToDiscard, pitches.size());
+            keysToDiscard = keys.subList(0, numToDiscard);
+            keys = keys.subList(numToDiscard, keys.size());
         }
 
         // Advance and render each Mark.
-        for (Integer pitch : pitches) {
-            Mark mark = pitchMarks.get(pitch);
+        for (MarkKey key : keys) {
+            Mark mark = pitchMarks.get(key);
             mark.render(model, buffer);
-            mark.advance(deltaSec, notes[pitch].intensity, notes[pitch].sustain);
+            if (mark == lastAttack.get(key.pitch)) {
+                mark.advance(deltaSec, notes[key.pitch].intensity, notes[key.pitch].sustain);
+            } else {
+                mark.advance(deltaSec, 0, false);
+            }
             if (mark.isExpired()) {
-                pitchesToDiscard.add(pitch);
+                keysToDiscard.add(key);
             }
         }
 
         // Remove any expired Marks.
-        for (Integer pitch : pitchesToDiscard) {
-            removeMark(pitch, pattern);
+        for (MarkKey key : keysToDiscard) {
+            removeMark(key, pattern);
         }
 
         // Global advance and render.
@@ -61,24 +66,35 @@ public class EmitterInstrument implements Instrument {
         emitter.render(model, buffer);
     }
 
-    protected void addMark(int pitch, Mark mark, LXPattern pattern) {
-        if (mark != null) {
-            removeMark(pitch, pattern);
-            for (LXModulator modulator : mark.getModulators()) {
-                pattern.addModulator(modulator);
-            }
-            pitchMarks.put(pitch, mark);
+    /** An integer with its own distinct identity. */
+    class MarkKey {
+        int pitch;
+        public MarkKey(int pitch) {
+            this.pitch = pitch;
         }
     }
 
-    protected void removeMark(int pitch, LXPattern pattern) {
-        Mark mark = pitchMarks.get(pitch);
+    protected void addMark(int pitch, Mark mark, LXPattern pattern) {
+        if (mark != null) {
+            for (LXModulator modulator : mark.getModulators()) {
+                pattern.addModulator(modulator);
+            }
+            pitchMarks.put(new MarkKey(pitch), mark);
+            lastAttack.put(pitch, mark);
+        }
+    }
+
+    protected void removeMark(MarkKey key, LXPattern pattern) {
+        Mark mark = pitchMarks.get(key);
         if (mark != null) {
             for (LXModulator modulator : mark.getModulators()) {
                 modulator.stop();
                 pattern.removeModulator(modulator);
             }
-            pitchMarks.remove(pitch);
+            pitchMarks.remove(key);
+            if (lastAttack.get(key.pitch) == mark) {
+                lastAttack.remove(key.pitch);
+            }
         }
     }
 
