@@ -10,6 +10,7 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
+import heronarts.lx.parameter.LXParameter;
 
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 
@@ -32,14 +33,19 @@ public class MidiTrigger extends MidiPolyphonicExpressionEffect {
     private EnumParameter<Shape> shapeParam = new EnumParameter<>("Shape", Shape.ALL);
     private BooleanParameter holdParam = new BooleanParameter("Hold").setMode(BooleanParameter.Mode.TOGGLE);
 
+    private BooleanParameter xPosParam = new BooleanParameter("XPOS").setMode(BooleanParameter.Mode.MOMENTARY);
+    private BooleanParameter xNegParam = new BooleanParameter("XNEG").setMode(BooleanParameter.Mode.MOMENTARY);
+    private BooleanParameter discParam = new BooleanParameter("DISC").setMode(BooleanParameter.Mode.MOMENTARY);
+    private BooleanParameter holeParam = new BooleanParameter("HOLE").setMode(BooleanParameter.Mode.MOMENTARY);
+
     protected float[] amplitudes;
     protected float coverage;
     protected float radius;
 
     public MidiTrigger(LX lx) {
         super(lx);
-        amplitudes = new float[model.points.length];
-        radius = (float) Math.hypot(Math.hypot(model.xRange, model.yRange), model.zRange)/2;
+        pitchLoParam.setFormatter(MusicUtils.MIDI_PITCH_FORMATTER);
+        pitchHiParam.setFormatter(MusicUtils.MIDI_PITCH_FORMATTER);
 
         addParameter(attackParam);
         addParameter(decayParam);
@@ -49,6 +55,18 @@ public class MidiTrigger extends MidiPolyphonicExpressionEffect {
         addParameter(pitchHiParam);
         addParameter(shapeParam);
         addParameter(holdParam);
+
+        amplitudes = new float[model.points.length];
+        radius = (float) Math.hypot(Math.hypot(model.xRange, model.yRange), model.zRange)/2;
+    }
+
+    @Override public void onParameterChanged(LXParameter param) {
+        if (param instanceof BooleanParameter && ((BooleanParameter) param).isOn()) {
+            if (param == xPosParam) shapeParam.setValue(Shape.XPOS);
+            if (param == xNegParam) shapeParam.setValue(Shape.XNEG);
+            if (param == discParam) shapeParam.setValue(Shape.DISC);
+            if (param == holeParam) shapeParam.setValue(Shape.HOLE);
+        }
     }
 
     public void run(double deltaMs, double enabledAmount, PolyBuffer.Space preferredSpace) {
@@ -107,12 +125,25 @@ public class MidiTrigger extends MidiPolyphonicExpressionEffect {
     }
 
     protected boolean isSustaining() {
-        if (holdParam.isOn()) return true;
+        for (BooleanParameter param : new BooleanParameter[] {holdParam, xPosParam, xNegParam, discParam, holeParam}) {
+            if (param.isOn()) return true;
+        }
         for (int i = pitchLoParam.getValuei(); i <= pitchHiParam.getValuei(); i++) {
             if (velocities[i] > 0) {
                 return true;
             }
         }
         return false;
+    }
+
+    @Override public void noteOn(int pitch, double velocity) {
+        int pitchLo = pitchLoParam.getValuei();
+        int pitchHi = pitchHiParam.getValuei();
+        if (pitch >= pitchLo && pitch <= pitchHi) {
+            int ordinal = pitch - (pitchLo + 1);
+            if (ordinal >= 0 && ordinal < Shape.values().length) {
+                shapeParam.setValue(ordinal);
+            }
+        }
     }
 }
