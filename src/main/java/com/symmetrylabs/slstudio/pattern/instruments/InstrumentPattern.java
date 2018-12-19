@@ -53,7 +53,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     private final CompoundParameter spreadParam = new CompoundParameter("Spread", -2, -6, 0);
     private final CompoundParameter orientParam = new CompoundParameter("Orient", 0, -1, 1);
     private final CompoundParameter rateParam = new CompoundParameter("Rate", 0, -5, 5);
-    private final CompoundParameter decayParam = new CompoundParameter("Decay", 0.5, 0, 4);
+    private final CompoundParameter decayParam = new CompoundParameter("Decay", 0.5, 0, 2);
 
     private final EnumParameter<TriggerSource> sourceParam = new EnumParameter<>("Source", TriggerSource.BEAT);
     private final CompoundParameter intensityParam = new CompoundParameter("Intensity", 0, -30, 30);
@@ -61,8 +61,8 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     private final DiscreteParameter pitchHiParam = new DiscreteParameter("PitchHi", MusicUtils.PITCH_C5, 0, 127);
 
     private final CompoundParameter floorParam = new CompoundParameter("Floor", 0.1f, 0, 1);
-    private final CompoundParameter ceilingParam = new CompoundParameter("Ceiling", 0.3f, 0, 1);
-    private final CompoundParameter attackThParam = new CompoundParameter("AttackTh", 0.4f, 0, 1);
+    private final CompoundParameter ceilingParam = new CompoundParameter("Ceiling", 0.1f, 0, 1);
+    private final CompoundParameter attackThParam = new CompoundParameter("AttackTh", 0.1f, 0, 1);
     private final CompoundParameter releasThParam = new CompoundParameter("ReleasTh", 0.3f, 0, 1);
     private final CompoundParameter gainParam = new CompoundParameter("Gain", 0, -30, 30);  // decibels
     private final CompoundParameter falloffParam = new CompoundParameter("Falloff", 2, 0, 12);

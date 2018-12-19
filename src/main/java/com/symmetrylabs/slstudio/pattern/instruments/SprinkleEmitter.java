@@ -1,28 +1,25 @@
 package com.symmetrylabs.slstudio.pattern.instruments;
 
 import com.symmetrylabs.color.Ops16;
-import com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.AbstractMark;
-import com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.Mark;
 
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.transform.LXVector;
 
-import static com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.*;
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 
-public class SprinkleEmitter extends AbstractEmitter implements Emitter {
+public class SprinkleEmitter implements Emitter {
     @Override
     public Puff emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
         return new Puff(
-            new LXVector(paramSet.getPoint(randomXyDisc())),
+            new LXVector(paramSet.getPoint(RandomUtils.randomXyDisc())),
             paramSet.getSize(intensity),
-            paramSet.getColor(randomVariation()),
+            paramSet.getColor(RandomUtils.randomVariation()),
             paramSet.getDecaySec()
         );
     }
 
-    class Puff extends AbstractMark implements Mark {
+    class Puff implements Mark {
         public LXVector center;
         public double radius;
         public long color;

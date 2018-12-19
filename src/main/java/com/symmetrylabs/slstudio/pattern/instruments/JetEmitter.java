@@ -1,24 +1,36 @@
 package com.symmetrylabs.slstudio.pattern.instruments;
 
 import com.symmetrylabs.color.Ops16;
-import com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.AbstractMark;
 
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.transform.LXVector;
 import processing.core.PVector;
 
-import static com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.AbstractEmitter;
-import static com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.Emitter;
-import static com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.Mark;
 import static com.symmetrylabs.slstudio.pattern.instruments.Instrument.ParameterSet;
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 
-public class JetEmitter extends AbstractEmitter implements Emitter {
+public class JetEmitter implements Emitter {
     private LXModel model;
     private Fluid[] fluids;
     private float periodSec = (1 / 60f) / 5;  // 5 iterations per frame
     private static final float GRID_RESOLUTION = 10;
+
+    @Override
+    public Jet emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
+        if (model != null) {
+            float rate = (float) paramSet.getRate();
+            float speedUp = rate < 1 ? 1 : rate;
+            return new Jet(
+                model,
+                new LXVector(paramSet.getPoint(RandomUtils.randomXyDisc())),
+                paramSet.getSize(intensity),
+                paramSet.getColor(RandomUtils.randomVariation()),
+                speedUp
+            );
+        }
+        return null;
+    }
 
     public void initFluid(LXModel model) {
         if (model != this.model) {
@@ -92,23 +104,7 @@ public class JetEmitter extends AbstractEmitter implements Emitter {
         return start + (stop - start) * fraction;
     }
 
-    @Override
-    public Jet emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
-        if (model != null) {
-            float rate = (float) paramSet.getRate();
-            float speedUp = rate < 1 ? 1 : rate;
-            return new Jet(
-                model,
-                new LXVector(paramSet.getPoint(randomXyDisc())),
-                paramSet.getSize(intensity),
-                paramSet.getColor(randomVariation()),
-                speedUp
-            );
-        }
-        return null;
-    }
-
-    class Jet extends AbstractMark implements Mark {
+    class Jet implements Mark {
         public LXVector center;
         public double size;
         public long color;

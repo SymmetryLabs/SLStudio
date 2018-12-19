@@ -1,8 +1,6 @@
 package com.symmetrylabs.slstudio.pattern.instruments;
 
 import com.symmetrylabs.color.Ops16;
-import com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.AbstractEmitter;
-import com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.Mark;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,10 +15,9 @@ import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.transform.LXProjection;
 
-import static com.symmetrylabs.slstudio.pattern.instruments.EmitterInstrument.*;
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 
-public class SwimEmitter extends AbstractEmitter implements Emitter {
+public class SwimEmitter implements Emitter {
     @Override
     public Swimmer emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
         return new Swimmer(
