@@ -23,9 +23,9 @@ public class JetEmitter implements Emitter {
             float speedUp = rate < 1 ? 1 : rate;
             return new Jet(
                 model,
-                new LXVector(paramSet.getPoint(RandomUtils.randomXyDisc())),
+                new LXVector(paramSet.getPoint(MarkUtils.randomXyDisc())),
                 paramSet.getSize(intensity),
-                paramSet.getColor(RandomUtils.randomVariation()),
+                paramSet.getColor(MarkUtils.randomVariation()),
                 speedUp
             );
         }
@@ -62,7 +62,6 @@ public class JetEmitter implements Emitter {
             for (Fluid fluid : fluids) {
                 if (fluid != null) {
                     fluid.setDiffusion((float) paramSet.getSize(0) / GRID_RESOLUTION);
-                    System.out.println("run update retention " + paramSet.getDecaySec());
                     fluid.setRetention((float) Math.pow(0.01, 1/(paramSet.getDecaySec() + 0.001)));
                     fluid.setVelocity(velocity);
                     fluid.advance(fluidSec, periodSec);

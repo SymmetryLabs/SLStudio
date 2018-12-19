@@ -9,7 +9,7 @@ public abstract class AttackDecayMark implements Mark {
     protected double amplitude; // rises to 1, sustains, then decays
     protected double attackSec;
     protected double decaySec;
-    protected boolean sustaining = true;
+    protected boolean isSustaining = true;
     protected List<LXModulator> modulators = new ArrayList<>();
 
     public AttackDecayMark(double attackSec, double decaySec) {
@@ -32,11 +32,11 @@ public abstract class AttackDecayMark implements Mark {
                 amplitude = 0;
             }
         }
-        sustaining = sustain;
+        isSustaining = sustain;
     }
 
     public boolean isExpired() {
-        return !sustaining && amplitude < 0.001;
+        return !isSustaining && amplitude < 0.001;
     }
 
     public List<LXModulator> getModulators() {

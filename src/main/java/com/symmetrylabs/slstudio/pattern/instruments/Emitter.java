@@ -1,8 +1,5 @@
 package com.symmetrylabs.slstudio.pattern.instruments;
 
-import java.util.List;
-import java.util.Map;
-
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
 

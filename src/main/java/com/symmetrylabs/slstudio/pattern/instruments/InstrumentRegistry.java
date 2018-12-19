@@ -25,6 +25,7 @@ public class InstrumentRegistry {
             map = new HashMap<>();
             map.put("Jet", () -> new EmitterInstrument(new JetEmitter()));
             map.put("Puff", () -> new EmitterInstrument(new PuffEmitter()));
+            map.put("Sparkle", () -> new EmitterInstrument(new SparkleEmitter()));
             map.put("Swim", () -> new EmitterInstrument(new SwimEmitter()));
         }
         return map;

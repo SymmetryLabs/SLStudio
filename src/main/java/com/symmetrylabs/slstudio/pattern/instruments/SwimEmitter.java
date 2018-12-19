@@ -2,15 +2,12 @@ package com.symmetrylabs.slstudio.pattern.instruments;
 
 import com.symmetrylabs.color.Ops16;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.StreamSupport;
 
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
-import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.transform.LXProjection;
@@ -108,8 +105,7 @@ public class SwimEmitter implements Emitter {
                             + Math.abs(p.y - model.yMax / 2) * .6f
                             + Math.abs(p.z - model.zMax)
                     );
-                long c = Ops16.hsb(pointHue / 360, sat, (v1/100) * amplitude);
-                colors[p.index] = Ops16.add(colors[p.index], c);
+                MarkUtils.addColor(colors, p.index, Ops16.hsb(pointHue / 360, sat, (v1/100) * amplitude));
             });
 
             buffer.markModified(RGB16);

@@ -1,9 +1,11 @@
 package com.symmetrylabs.slstudio.pattern.instruments;
 
-import com.symmetrylabs.color.Ops16;
+import java.util.ArrayList;
+import java.util.List;
 
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
+import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXVector;
 
 import static heronarts.lx.PolyBuffer.Space.RGB16;
@@ -12,9 +14,9 @@ public class PuffEmitter implements Emitter {
     @Override
     public Puff emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
         return new Puff(
-            new LXVector(paramSet.getPoint(RandomUtils.randomXyDisc())),
+            new LXVector(paramSet.getPoint(MarkUtils.randomXyDisc())),
             paramSet.getSize(intensity),
-            paramSet.getColor(RandomUtils.randomVariation()),
+            paramSet.getColor(MarkUtils.randomVariation()),
             paramSet.getDecaySec()
         );
     }
@@ -23,7 +25,10 @@ public class PuffEmitter implements Emitter {
         public LXVector center;
         public double radius;
         public long color;
-        public double lifetime;
+        public int[] indexes;
+        public double[] intensities;
+
+        protected LXModel model;
 
         public Puff(LXVector center, double radius, long color, double decaySec) {
             super(0, decaySec);
@@ -34,18 +39,24 @@ public class PuffEmitter implements Emitter {
         }
 
         public void render(LXModel model, PolyBuffer buffer) {
-            long[] colors = (long[]) buffer.getArray(RGB16);
-            LXVector p = new LXVector(0, 0, 0);
-            for (int i = 0; i < model.points.length; i++) {
-                p.x = model.points[i].x;
-                p.y = model.points[i].y;
-                p.z = model.points[i].z;
-                if (Math.abs(p.x - center.x) < radius && Math.abs(p.y - center.y) < radius) {
-                    double dist = center.dist(p) / radius;
-                    if (dist < 1) {
-                        colors[i] = Ops16.add(colors[i], color, (1 - dist * dist) * amplitude);
-                    }
+            if (model != this.model) {
+                this.model = model;
+                List<LXPoint> points = MarkUtils.getAllPointsWithin(model, center, radius);
+                indexes = new int[points.size()];
+                intensities = new double[points.size()];
+                for (int i = 0; i < points.size(); i++) {
+                    LXPoint p = points.get(i);
+                    indexes[i] = p.index;
+                    double dx = center.x - p.x;
+                    double dy = center.y - p.y;
+                    double dz = center.z - p.z;
+                    intensities[i] = 1 - (dx*dx + dy*dy + dz*dz)/(radius*radius);
                 }
+            }
+
+            long[] colors = (long[]) buffer.getArray(RGB16);
+            for (int i = 0; i < indexes.length; i++) {
+                MarkUtils.addColor(colors, indexes[i], color, intensities[i] * amplitude);
             }
             buffer.markModified(RGB16);
         }
