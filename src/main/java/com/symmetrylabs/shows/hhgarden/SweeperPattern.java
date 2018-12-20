@@ -45,9 +45,9 @@ public class SweeperPattern extends SLPattern<SLModel> {
             new Sweeper("C", 674, 616, true, 400, 0.4f, 0.67f),
           new Sweeper("D", 1062, 330, false, 418, 0.51f, -0.51f),
             new Sweeper("X", Axis.X, model.xMax, -model.xRange, null),
-            new Sweeper("Z", Axis.Z, model.zMin, model.zRange, null),
             new Sweeper("XU", Axis.X, model.xMax, -model.xRange, new LXVector(model.cx, model.yMax, 0)),
             new Sweeper("XL", Axis.X, model.xMax, -model.xRange, new LXVector(model.cx, model.yMin, 0)),
+            new Sweeper("Z", Axis.Z, model.zMin, model.zRange, null),
         };
 
         addParameter(hueParam);

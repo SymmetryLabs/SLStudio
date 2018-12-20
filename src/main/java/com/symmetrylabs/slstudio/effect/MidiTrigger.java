@@ -169,8 +169,8 @@ public class MidiTrigger extends MidiPolyphonicExpressionEffect {
         int pitchLo = pitchLoParam.getValuei();
         int pitchHi = pitchHiParam.getValuei();
         if (pitch >= pitchLo && pitch <= pitchHi) {
-            int ordinal = pitch - (pitchLo + 1);
-            if (ordinal >= 0 && ordinal < Shape.values().length) {
+            int ordinal = pitch - pitchLo;
+            if (ordinal >= 1 && ordinal < Shape.values().length) {
                 shapeParam.setValue(ordinal);
             }
         }
