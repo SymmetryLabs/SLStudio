@@ -2,8 +2,6 @@ package com.symmetrylabs.slstudio.pattern.instruments;
 
 import com.symmetrylabs.util.NoiseUtils;
 
-import java.util.List;
-
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
@@ -23,6 +21,10 @@ public class RippleEmitter implements Emitter {
             1/(0.05 + paramSet.getRate()/4),
             paramSet.getDecaySec()
         );
+    }
+
+    @Override public int getMaxCount() {
+        return 40;
     }
 
     class Ripple extends AttackDecayMark {

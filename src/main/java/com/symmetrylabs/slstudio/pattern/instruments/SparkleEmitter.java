@@ -30,6 +30,10 @@ public class SparkleEmitter implements Emitter {
         );
     }
 
+    @Override public int getMaxCount() {
+        return 40;
+    }
+
     class Sparkle implements Mark {
         public LXVector center;
         public double radius;

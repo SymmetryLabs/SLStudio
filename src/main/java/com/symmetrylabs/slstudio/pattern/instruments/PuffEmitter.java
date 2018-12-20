@@ -24,6 +24,10 @@ public class PuffEmitter implements Emitter {
         );
     }
 
+    @Override public int getMaxCount() {
+        return 60;
+    }
+
     class Puff extends AttackDecayMark {
         public LXVector center;
         public float radius;

@@ -29,6 +29,10 @@ public class SwimEmitter implements Emitter {
         );
     }
 
+    @Override public int getMaxCount() {
+        return 12;
+    }
+
     class Swimmer extends AttackDecayMark {
         public double hue;
         public double hueVar;
