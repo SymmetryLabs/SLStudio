@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545306323778,
+  "timestamp": 1545310192816,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -1036,7 +1036,7 @@
         "parameters": {
           "label": "Output Control",
           "Broadcast packet enabled": false,
-          "Test broadcast enabled": true
+          "Test broadcast enabled": false
         }
       }
     },

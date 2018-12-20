@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545295922727,
+  "timestamp": 1545309524010,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 2,
+      "focusedChannel": 3,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -70,7 +70,26 @@
           "autoDisable": true
         },
         "warps": [],
-        "effects": [],
+        "effects": [
+          {
+            "id": 34452,
+            "class": "com.symmetrylabs.slstudio.effect.StripFilter",
+            "modulationColor": -2304,
+            "parameters": {
+              "label": "StripFilter",
+              "enabled": true,
+              "X": false,
+              "Y": false,
+              "Z": true,
+              "Solo": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 0,
         "patterns": [
@@ -195,6 +214,141 @@
             "autoCycleEnabled": true
           }
         ]
+      },
+      {
+        "id": 34449,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -65331,
+        "parameters": {
+          "label": "Channel-3",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": false
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 1,
+        "patterns": [
+          {
+            "id": 34447,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -65372,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34450,
+            "class": "com.symmetrylabs.slstudio.pattern.Sparkle",
+            "modulationColor": -45568,
+            "parameters": {
+              "label": "Sparkle",
+              "Dens": 0.28999999687075617,
+              "Attack": 0.4,
+              "Decay": 0.3,
+              "Hue": 0.5,
+              "HueVar": 0.25,
+              "Sat": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 34457,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -23040,
+        "parameters": {
+          "label": "Channel-4",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": false
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 1,
+        "patterns": [
+          {
+            "id": 34455,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -15204608,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34458,
+            "class": "com.symmetrylabs.slstudio.pattern.test.TestAxisPattern",
+            "modulationColor": -16754945,
+            "parameters": {
+              "label": "TestAxis",
+              "xPos": 0.3,
+              "yPos": 0.3,
+              "zPos": 0.0,
+              "xSize": 0.3,
+              "ySize": 0.3,
+              "zSize": 0.3,
+              "xLvl": 0.0,
+              "yLvl": 0.0,
+              "zLvl": 0.450000012293458
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
       }
     ],
     "master": {
@@ -206,26 +360,7 @@
         "arm": false
       },
       "warps": [],
-      "effects": [
-        {
-          "id": 27413,
-          "class": "com.symmetrylabs.slstudio.effect.StripFilter",
-          "modulationColor": -16750337,
-          "parameters": {
-            "label": "StripFilter",
-            "enabled": true,
-            "X": false,
-            "Y": false,
-            "Z": true,
-            "Solo": false
-          },
-          "modulation": {
-            "modulators": [],
-            "modulations": [],
-            "triggers": []
-          }
-        }
-      ],
+      "effects": [],
       "clips": []
     },
     "tempo": {
@@ -316,7 +451,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.08571428619325161
+        "brightness": 0.0
       }
     },
     "components": {
@@ -402,7 +537,7 @@
         "parameters": {
           "label": "Output Control",
           "Broadcast packet enabled": false,
-          "Test broadcast enabled": false
+          "Test broadcast enabled": true
         }
       }
     },
@@ -464,9 +599,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 516.500575109985,
-        "theta": -0.5603981633974416,
-        "phi": 0.7144797077178956,
+        "radius": 892.2273448797235,
+        "theta": 0.09360183660255735,
+        "phi": 0.42647970771789534,
         "positionX": 367.97686767578125,
         "positionY": 14.0,
         "positionZ": 43.397613525390625

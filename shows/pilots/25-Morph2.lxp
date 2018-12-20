@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545308034957,
+  "timestamp": 1545309890271,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -90,22 +90,6 @@
         ],
         "effects": [
           {
-            "id": 25909,
-            "class": "com.symmetrylabs.slstudio.effect.ColorFilter",
-            "modulationColor": -16711815,
-            "parameters": {
-              "label": "ColorFilter",
-              "enabled": false,
-              "Hue": 3.5999999195337296,
-              "Sat": 100.0
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            }
-          },
-          {
             "id": 25912,
             "class": "com.symmetrylabs.slstudio.effect.Strobe",
             "modulationColor": -16711718,
@@ -146,7 +130,7 @@
             "modulationColor": -13697280,
             "parameters": {
               "label": "PilotsPlanes",
-              "speed": 78.82094383239746,
+              "speed": 149.99991655349731,
               "dist": 84.60000079125166,
               "thick": 41.39999934285879,
               "red": true,
@@ -740,8 +724,8 @@
       },
       "preview": {
         "radius": 538.2922487288112,
-        "theta": -0.10199999999999965,
-        "phi": 0.3120000000000004,
+        "theta": 0.4740000000000004,
+        "phi": 0.4320000000000005,
         "positionX": 306.68487548828125,
         "positionY": 111.25,
         "positionZ": -19.669160842895508
