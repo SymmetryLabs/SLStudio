@@ -326,6 +326,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
                 t.rotateY(-HALF_PI);
             }
             t.pop();
+            update(true, true);
         }
 
         private static class Fixture extends LXAbstractFixture {
