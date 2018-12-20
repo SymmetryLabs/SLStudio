@@ -55,7 +55,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     private final CompoundParameter rateParam = new CompoundParameter("Rate", 0, -5, 5);
     private final CompoundParameter decayParam = new CompoundParameter("Decay", 0.5, 0, 4);
 
-    private final EnumParameter<TriggerSource> sourceParam = new EnumParameter<>("Source", TriggerSource.BEAT);
+    private final EnumParameter<TriggerSource> sourceParam = new EnumParameter<>("Source", TriggerSource.MIDI);
     private final CompoundParameter intensityParam = new CompoundParameter("Intensity", 0, -30, 30);
     private final DiscreteParameter pitchLoParam = new DiscreteParameter("PitchLo", MusicUtils.PITCH_C1, 0, 127);
     private final DiscreteParameter pitchHiParam = new DiscreteParameter("PitchHi", MusicUtils.PITCH_C5, 0, 127);
@@ -492,8 +492,10 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
 
         // Show size as a green cube.
         float size = (float) paramSet.getSize(0);
+        PVector cubePos = usePitchForPosition() ? new PVector(positions[0].x, positions[0].y, z) :
+            new PVector(x, y, z);
         markers.add(new CubeMarker(
-            new PVector(x, y, z), new PVector(size, size, size), 0xff40a040));
+            cubePos, new PVector(size, size, size), 0xff40a040));
 
         if (sourceParam.getEnum() == TriggerSource.AUDIO) {
             float rawScale = 4;
