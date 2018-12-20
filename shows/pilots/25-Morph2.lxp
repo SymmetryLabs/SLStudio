@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539298917894,
+  "timestamp": 1545272324608,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -78,7 +78,7 @@
               "label": "Kaleidoscope",
               "enabled": true,
               "cx": 122.99999301262528,
-              "cy": -5.070521183370147E-6,
+              "cy": 48.749996185302734,
               "cz": 14.499992370605469,
               "lat": 0.0,
               "lon": -10.799999758601189,
@@ -95,9 +95,9 @@
             "modulationColor": -16711815,
             "parameters": {
               "label": "ColorFilter",
-              "enabled": true,
-              "Hue": 187.19999581575394,
-              "Sat": 0.0
+              "enabled": false,
+              "Hue": 3.5999999195337296,
+              "Sat": 100.0
             },
             "modulation": {
               "modulators": [],
@@ -111,10 +111,24 @@
             "modulationColor": -16711718,
             "parameters": {
               "label": "Strobe",
-              "enabled": true,
+              "enabled": false,
               "Shape": 2,
-              "Freq": 10.0,
-              "Black": true
+              "Freq": 5.721500095631927,
+              "Black": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 30928,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -16774401,
+            "parameters": {
+              "label": "SOS_strobeNoMore",
+              "enabled": true
             },
             "modulation": {
               "modulators": [],
@@ -132,10 +146,10 @@
             "modulationColor": -13697280,
             "parameters": {
               "label": "PilotsPlanes",
-              "speed": 120.00000849366188,
+              "speed": 100.00002384185791,
               "dist": 84.60000079125166,
               "thick": 41.39999934285879,
-              "red": true,
+              "red": false,
               "x": 0.9,
               "y": 0.3,
               "z": 0.315,
@@ -182,7 +196,7 @@
               "enabled": false,
               "cx": 410.0,
               "cy": 58.0,
-              "cz": 72.5,
+              "cz": 24.0,
               "lat": 0.0,
               "lon": 0.0,
               "turn": 25.20000346004963,
@@ -211,14 +225,12 @@
             }
           },
           {
-            "id": 26234,
-            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
-            "modulationColor": -3145984,
+            "id": 30925,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -65386,
             "parameters": {
-              "label": "BrightnessShift",
-              "enabled": true,
-              "Bscale": 2.599999964237213,
-              "Bshift": 3.999999910593033
+              "label": "SOS_strobeNoMore",
+              "enabled": true
             },
             "modulation": {
               "modulators": [],
@@ -363,19 +375,6 @@
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 26510,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16711804,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -697,31 +696,7 @@
     "midi": {
       "inputs": [
         {
-          "name": "CoreMIDI4J - Port 1",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 2",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 3",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 4",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Sync Port",
+          "name": "CoreMIDI4J - ShowSession",
           "channel": true,
           "control": false,
           "sync": false
@@ -739,7 +714,6 @@
           "sync": false
         }
       ],
-      "surfaces": [],
       "mapping": []
     }
   },
@@ -758,12 +732,12 @@
         "3685": true
       },
       "preview": {
-        "radius": 491.01388600578645,
-        "theta": -0.005999999999999814,
-        "phi": 0.035999999999999976,
-        "positionX": 410.0,
-        "positionY": 58.0,
-        "positionZ": 72.5
+        "radius": 538.2922487288112,
+        "theta": -0.10199999999999965,
+        "phi": 0.3120000000000004,
+        "positionX": 306.68487548828125,
+        "positionY": 111.25,
+        "positionZ": -19.669160842895508
       }
     }
   }

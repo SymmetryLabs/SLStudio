@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544166750792,
+  "timestamp": 1545274826492,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -136,6 +136,20 @@
               "triggers": []
             },
             "paletteName": "sky.red"
+          },
+          {
+            "id": 31354,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -16711738,
+            "parameters": {
+              "label": "SOS_strobeNoMore",
+              "enabled": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
           }
         ],
         "clips": [],
@@ -270,7 +284,22 @@
           "autoDisable": true
         },
         "warps": [],
-        "effects": [],
+        "effects": [
+          {
+            "id": 31351,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -65488,
+            "parameters": {
+              "label": "SOS_strobeNoMore",
+              "enabled": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 0,
         "patterns": [
@@ -315,7 +344,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -333,7 +362,7 @@
               "enabled": true,
               "cx": 410.0,
               "cy": 58.0,
-              "cz": 72.5,
+              "cz": 24.0,
               "lat": 0.0,
               "lon": 0.0,
               "turn": -180.0,
@@ -375,10 +404,24 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 734.142333984375,
+              "rad": 718.9308471679688,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 31348,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -16514817,
+            "parameters": {
+              "label": "SOS_strobeNoMore",
+              "enabled": true
             },
             "modulation": {
               "modulators": [],
@@ -436,14 +479,12 @@
         "warps": [],
         "effects": [
           {
-            "id": 27461,
-            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
-            "modulationColor": -16728065,
+            "id": 31357,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -5964032,
             "parameters": {
-              "label": "BrightnessShift",
-              "enabled": true,
-              "Bscale": 0.6000000089406967,
-              "Bshift": 0.0
+              "label": "SOS_strobeNoMore",
+              "enabled": false
             },
             "modulation": {
               "modulators": [],
@@ -569,7 +610,7 @@
               "enabled": true,
               "cx": 410.0,
               "cy": 58.0,
-              "cz": 72.5,
+              "cz": 24.0,
               "lat": 0.0,
               "lon": 0.0,
               "turn": 0.0,
@@ -611,10 +652,24 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 0.0,
+              "rad": 718.9308471679688,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 31360,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -52224,
+            "parameters": {
+              "label": "SOS_strobeNoMore",
+              "enabled": true
             },
             "modulation": {
               "modulators": [],
@@ -703,12 +758,12 @@
             "modulationColor": -16711746,
             "parameters": {
               "label": "Sparkle",
-              "Dens": 0.7099999785423279,
+              "Dens": 0.05999999865889549,
               "Attack": 0.2899999935179949,
-              "Decay": 1.0,
+              "Decay": 0.3100000023841858,
               "Hue": 0.5,
               "HueVar": 0.25,
-              "Sat": 0.0
+              "Sat": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -732,7 +787,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.8502480983734131,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -762,7 +817,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 0.0,
+              "rad": 718.9308471679688,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
@@ -774,14 +829,12 @@
             }
           },
           {
-            "id": 27957,
-            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
-            "modulationColor": -1310465,
+            "id": 31363,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -6881536,
             "parameters": {
-              "label": "BrightnessShift",
-              "enabled": true,
-              "Bscale": 0.8000000044703484,
-              "Bshift": 0.0
+              "label": "SOS_strobeNoMore",
+              "enabled": true
             },
             "modulation": {
               "modulators": [],
@@ -914,23 +967,10 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.9199999994412065
+        "brightness": 1.0
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 21981,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16741633,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -1094,31 +1134,7 @@
     "midi": {
       "inputs": [
         {
-          "name": "CoreMIDI4J - Port 1",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 2",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 3",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 4",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Sync Port",
+          "name": "CoreMIDI4J - ShowSession",
           "channel": true,
           "control": false,
           "sync": false
@@ -1136,20 +1152,6 @@
           "sync": false
         }
       ],
-      "surfaces": [
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        }
-      ],
       "mapping": []
     }
   },
@@ -1163,12 +1165,12 @@
         "3202": true
       },
       "preview": {
-        "radius": 542.1503372110975,
-        "theta": -0.9353981633974491,
-        "phi": 0.4924797077178954,
-        "positionX": 410.0,
-        "positionY": 48.0,
-        "positionZ": 72.5
+        "radius": 796.417124497486,
+        "theta": -0.24839816339744947,
+        "phi": 0.4564797077178957,
+        "positionX": 310.298828125,
+        "positionY": 114.25,
+        "positionZ": -48.65185546875
       }
     }
   }

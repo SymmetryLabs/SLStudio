@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539047519268,
+  "timestamp": 1545273999762,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -189,12 +189,12 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 410.0,
-              "cx": 410.0,
+              "xSize": 378.7045601606369,
+              "cx": 355.04000122845173,
               "ySize": 73.07999966293573,
-              "cy": 58.0,
+              "cy": 97.6000006407499,
               "zSize": 97.14999944902956,
-              "cz": 24.649998551830706,
+              "cz": -10.16999942343682,
               "invert": false
             }
           }
@@ -300,12 +300,12 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 410.0,
-              "cx": 410.0,
+              "xSize": 398.44266736507416,
+              "cx": 355.04000122845173,
               "ySize": 70.75999971479177,
-              "cy": 58.0,
+              "cy": 97.6000006407499,
               "zSize": 98.59999941661954,
-              "cz": 30.449998727366378,
+              "cz": -1.1249994384124875,
               "invert": true
             }
           },
@@ -316,17 +316,32 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 410.0,
-              "cx": 410.0,
-              "ySize": 76.55999958515167,
-              "cy": 58.0,
-              "zSize": 108.74999918974936,
-              "cz": 43.49999912232164,
+              "xSize": 446.7055465579033,
+              "cx": 355.04000122845173,
+              "ySize": 73.58999965153635,
+              "cy": 98.59000065676865,
+              "zSize": 100.5,
+              "cz": -6.149999326094985,
               "invert": false
             }
           }
         ],
-        "effects": [],
+        "effects": [
+          {
+            "id": 31189,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -3801344,
+            "parameters": {
+              "label": "SOS_strobeNoMore",
+              "enabled": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 1,
         "patterns": [
@@ -438,7 +453,9 @@
               "cropT": 0.5799999874830246,
               "cropB": 0.0,
               "tcStart": 973577.0,
-              "bake": false
+              "bake": false,
+              "run": false,
+              "runReset": false
             },
             "modulation": {
               "modulators": [],
@@ -757,19 +774,6 @@
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 43,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16753921,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -878,37 +882,7 @@
     "midi": {
       "inputs": [
         {
-          "name": "CoreMIDI4J - Port 1",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 2",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 3",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 4",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Sync Port",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "Real Time Sequencer",
+          "name": "CoreMIDI4J - ShowSession",
           "channel": true,
           "control": false,
           "sync": false
@@ -918,9 +892,14 @@
           "channel": true,
           "control": false,
           "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
+          "channel": true,
+          "control": false,
+          "sync": false
         }
       ],
-      "surfaces": [],
       "mapping": []
     }
   },
@@ -932,9 +911,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 569.5906877813252,
-        "theta": 0.31800000000000017,
-        "phi": 0.21600000000000014,
+        "radius": 1728.9325516286833,
+        "theta": -0.0029999999999946337,
+        "phi": 0.30300000000000016,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5
