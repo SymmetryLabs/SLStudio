@@ -93,6 +93,7 @@ public class MidiTrigger extends MidiPolyphonicExpressionEffect {
         if (isSustaining()) {
             if (follow) {
                 if (needReset) {
+                    trailProgress = 0;
                     leadProgress = 0;
                     needReset = false;
                 }
