@@ -27,6 +27,7 @@ import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.ui.UIFramerateControl;
 import com.symmetrylabs.slstudio.envelop.Envelop;
 import com.symmetrylabs.slstudio.envelop.EnvelopOscListener;
+import com.symmetrylabs.slstudio.midi.NotationXLListener;
 import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.DrawHelper;
 import com.symmetrylabs.util.dispatch.Dispatcher;
@@ -172,6 +173,13 @@ public class SLStudio extends PApplet {
                 if (show instanceof MarkerSource) {
                     ui.markerPainter.addSource((MarkerSource) show);
                 }
+
+                lx.engine.midi.whenReady(new Runnable() {
+                    @Override
+                    public void run() {
+                        NotationXLListener.bindMidi(lx, ui);
+                    }
+                });
             }
         };
 
