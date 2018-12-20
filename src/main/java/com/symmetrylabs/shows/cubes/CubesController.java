@@ -215,6 +215,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
                     setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
             }
         }
+        boolean fault_condition = true;
         if (points != null) {
             int numPixels = points.size();
 
@@ -229,10 +230,25 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 //                        setPixel(stripNum * strip.metrics.numPoints + i, srcLongs[point.index]);
 //                    }
 //                }
-                for (int i = 0; i < numPixels; i++) {
-                    LXPoint point = points.getPoint(i);
-                    setPixel(i, srcLongs[point.index]);
+
+                // check 16 bit power
+                fault_condition = power_level_has_fault_condition(points, is16BitColorEnabled, srcLongs);
+                if (!fault_condition) {
+                    for (int i = 0; i < numPixels; i++) {
+                        LXPoint point = points.getPoint(i);
+                        setPixel(i, srcLongs[point.index]);
+                    }
                 }
+                else{
+                    for (int i = 0; i < numPixels; i++) {
+                        LXPoint point = points.getPoint(i);
+                        setPixel(i, LXColor.GREEN);
+                    }
+                }
+                // NATE:: end 16 bit power mon;
+
+
+
             } else {
                 initPacketData(numPixels, false);
                 int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
@@ -243,17 +259,33 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 //                        setPixel(stripNum * strip.metrics.numPoints + i, srcInts[point.index]);
 //                    }
 //                }
-                for (int i = 0; i < numPixels; i++) {
-                    LXPoint point = points.getPoint(i);
-                    setPixel(i, srcInts[point.index]);
+
+
+                // power check before we send this data accross
+                fault_condition = true; // if we ever have 8 bit for now just do red
+                if (!fault_condition){
+                    for (int i = 0; i < numPixels; i++) {
+                        LXPoint point = points.getPoint(i);
+                        setPixel(i, srcInts[point.index]);
+                    }
                 }
+                // if there's a fault for now set it to BLUE we'll scale later
+                else {
+                    for (int i = 0; i < numPixels; i++) {
+                        LXPoint point = points.getPoint(i);
+                        setPixel(i, LXColor.RED);
+                    }
+                }
+                // NATE: end 8 bit power mon
+
+
             }
         } else {
             // Fill with all black if we don't have cube data
-//            initPacketData(numPixels, false);
-//            for (int i = 0; i < numPixels; i++) {
-//                setPixel(i, LXColor.BLUE);
-//            }
+            initPacketData(numPixels, false);
+            for (int i = 0; i < numPixels; i++) {
+                setPixel(i, LXColor.GREEN);
+            }
         }
 
         // Send the cube data to the cube. yay!
@@ -263,6 +295,30 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         }
         catch (Exception e) { connectionWarning(); }
     }
+
+
+        private boolean power_level_has_fault_condition (PointsGrouping points, boolean is16BitColorEnabled, long[] poly) {
+            double THRESH = 0.7;
+            numPixels = points.size();
+
+            double aggregate = 0; // just count up the mean intensity
+            double pixel_contribution = 0; // contribution from one pixel
+
+            for (int i = 0; i < numPixels; i++) {
+                LXPoint point = points.getPoint(i);
+                long c = poly[point.index];
+
+                if (is16BitColorEnabled){
+                    pixel_contribution = Ops16.mean(c);
+                }
+                aggregate += pixel_contribution;
+            }
+            double normalize = aggregate/numPixels;
+
+            return (normalize > THRESH);
+
+        }
+    // this function looks at the buffer getting sent out every time and if there's a fault condition it reports it.
 
     private void connectionWarning() {
         if (dsocket != null) {
