@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544166044651,
+  "timestamp": 1545294426153,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 0,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.6700000166893005,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -72,14 +72,12 @@
         "warps": [],
         "effects": [
           {
-            "id": 27009,
-            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
-            "modulationColor": -10354433,
+            "id": 31620,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -65450,
             "parameters": {
-              "label": "BrightnessShift",
-              "enabled": true,
-              "Bscale": 0.7200000062584877,
-              "Bshift": 0.0
+              "label": "SOS_strobeNoMore",
+              "enabled": true
             },
             "modulation": {
               "modulators": [],
@@ -99,7 +97,7 @@
               "label": "Peaks",
               "count": 11,
               "height": 63.999998569488525,
-              "omega": -56.709938049316406,
+              "omega": 20.000038146972656,
               "radius": 17.99999995529652,
               "high": 100.0,
               "mid": 57.00000051409007,
@@ -179,10 +177,10 @@
               "X-DUP": false,
               "JOG": false,
               "GREY": false,
-              "Speed": 1.5799999237060547,
+              "Speed": 0.5399999618530273,
               "Symm": 0,
               "Anim": 6,
-              "Dens": 0.6499999761581421,
+              "Dens": 0.8999999761581421,
               "AnimResets": false
             },
             "modulation": {
@@ -224,7 +222,7 @@
               "label": "Mirror",
               "enabled": true,
               "x": true,
-              "cx": 410.0,
+              "cx": 361.91000107489526,
               "y": false,
               "cy": 58.0,
               "z": false,
@@ -239,7 +237,7 @@
             "modulationColor": -16742401,
             "parameters": {
               "label": "ColorFilter",
-              "enabled": true,
+              "enabled": false,
               "Hue": 51.47999896667898,
               "Sat": 100.0
             },
@@ -250,14 +248,12 @@
             }
           },
           {
-            "id": 26977,
-            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
-            "modulationColor": -16737281,
+            "id": 31617,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -2621696,
             "parameters": {
-              "label": "BrightnessShift",
-              "enabled": true,
-              "Bscale": 0.4400000125169754,
-              "Bshift": 0.0
+              "label": "SOS_strobeNoMore",
+              "enabled": true
             },
             "modulation": {
               "modulators": [],
@@ -313,7 +309,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.006304700393229723,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -454,7 +450,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.785714284516871
+        "brightness": 1.0
       }
     },
     "components": {
@@ -540,7 +536,7 @@
         "parameters": {
           "label": "Output Control",
           "Broadcast packet enabled": false,
-          "Test broadcast enabled": false
+          "Test broadcast enabled": true
         }
       }
     },
@@ -712,36 +708,6 @@
     "midi": {
       "inputs": [
         {
-          "name": "CoreMIDI4J - Port 1",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 2",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 3",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 4",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Sync Port",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
           "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
@@ -752,20 +718,6 @@
           "channel": true,
           "control": false,
           "sync": false
-        }
-      ],
-      "surfaces": [
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
         }
       ],
       "mapping": []
@@ -784,8 +736,8 @@
       },
       "preview": {
         "radius": 583.8371585757919,
-        "theta": -3.6899999999999955,
-        "phi": 0.20099999999999996,
+        "theta": -6.404999999999993,
+        "phi": 0.16499999999999987,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 14.499992370605469
