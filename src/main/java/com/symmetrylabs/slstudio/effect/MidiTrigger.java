@@ -90,7 +90,6 @@ public class MidiTrigger extends MidiPolyphonicExpressionEffect {
         double shrinkSec = Math.pow(2, outParam.getValue());
         boolean follow = followParam.isOn();
 
-        System.out.println(String.format("lead %.3f  trail %.3f", leadProgress, trailProgress));
         if (isSustaining()) {
             if (follow) {
                 if (needReset) {
