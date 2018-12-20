@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545270409765,
+  "timestamp": 1545281058311,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -103,7 +103,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 718.9308471679688,
+              "rad": 0.0,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
@@ -218,7 +218,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 0.0,
+              "rad": 718.9308471679688,
               "invert": true,
               "cx": 410.0,
               "cy": 58.0
@@ -282,7 +282,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -405,10 +405,10 @@
               "enabled": true,
               "xSize": 557.5999967008829,
               "cx": 368.7800009213388,
-              "ySize": 73.97689400799572,
+              "ySize": 51.206894516944885,
               "cy": 101.56000070482489,
               "zSize": 100.5,
-              "cz": -23.234998944215477,
+              "cz": -20.219999011605978,
               "invert": false
             }
           },
@@ -444,14 +444,12 @@
             }
           },
           {
-            "id": 28683,
-            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
-            "modulationColor": -4914945,
+            "id": 31450,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -1704192,
             "parameters": {
-              "label": "BrightnessShift",
-              "enabled": true,
-              "Bscale": 0.35999999195337296,
-              "Bshift": 0.0
+              "label": "SOS_strobeNoMore",
+              "enabled": true
             },
             "modulation": {
               "modulators": [],
@@ -584,10 +582,23 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.9285714281722903
+        "brightness": 1.0
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 31257,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -7470849,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -845,6 +856,12 @@
     "midi": {
       "inputs": [
         {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "Real Time Sequencer",
           "channel": true,
           "control": false,
@@ -866,9 +883,9 @@
         "4607": true
       },
       "preview": {
-        "radius": 930.1008005114384,
-        "theta": 0.09360183660254999,
-        "phi": 0.16847970771789517,
+        "radius": 593.6915971679597,
+        "theta": 0.17160183660254952,
+        "phi": 0.22547970771789497,
         "positionX": 410.0,
         "positionY": 48.0,
         "positionZ": 72.5

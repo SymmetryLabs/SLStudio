@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545273999762,
+  "timestamp": 1545280924747,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.116666715592146,
-      "focusedChannel": 2,
+      "focusedChannel": 6,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -300,7 +300,7 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 398.44266736507416,
+              "xSize": 398.2113499045372,
               "cx": 355.04000122845173,
               "ySize": 70.75999971479177,
               "cy": 97.6000006407499,
@@ -316,7 +316,7 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 446.7055465579033,
+              "xSize": 446.0411179661751,
               "cx": 355.04000122845173,
               "ySize": 73.58999965153635,
               "cy": 98.59000065676865,
@@ -434,7 +434,22 @@
             }
           }
         ],
-        "effects": [],
+        "effects": [
+          {
+            "id": 31385,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -65282,
+            "parameters": {
+              "label": "SOS_strobeNoMore",
+              "enabled": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 0,
         "patterns": [
@@ -544,6 +559,20 @@
               "enabled": true,
               "Hue": 179.99999597668648,
               "Sat": 100.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 31388,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -16711869,
+            "parameters": {
+              "label": "SOS_strobeNoMore",
+              "enabled": true
             },
             "modulation": {
               "modulators": [],
@@ -774,6 +803,19 @@
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 31257,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -7470849,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -881,12 +923,6 @@
     },
     "midi": {
       "inputs": [
-        {
-          "name": "CoreMIDI4J - ShowSession",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
         {
           "name": "** Internal Error getting Device Name!",
           "channel": true,
