@@ -1,20 +1,18 @@
 package com.symmetrylabs.shows.pilots_v2;
 
-import java.util.*;
-
-
 import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.shows.cubes.UICubesMappingPanel;
 import com.symmetrylabs.shows.cubes.UICubesOutputs;
+import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
-
 import com.symmetrylabs.slstudio.workspaces.Workspace;
 import heronarts.lx.transform.LXTransform;
 import heronarts.p3lx.ui.UI2dScrollContext;
 
-import com.symmetrylabs.slstudio.SLStudioLX;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This file implements the mapping functions needed to lay out the cubes.
@@ -87,7 +85,8 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
             // col 1
             new TowerConfig(SP * 0, SP * 0, SP * 0, new String[][]{
                 new String[]{"992","819"},
-                new String[]{"857","856"},
+//                new String[]{"857","856"},
+                new String[]{"857","460"},
                 new String[]{"465","458"},
                 new String[]{"811","810"},
             }),
@@ -100,7 +99,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
             new TowerConfig(SP * 2, SP * 0, SP * 0, new String[][]{
                 new String[]{"561","560"},
                 new String[]{"843","842"},
-                new String[]{"851","0"},
+                new String[]{"851","5410ecf48cc9"},
 //                new String[]{"5410ecf5efb5","5410ecf4fd2d"},
                 new String[]{"697","628"},
             }),
@@ -146,7 +145,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
         new ClusterConfig("cart4",SP*3*CART_WIDE, SP*0, SP*0, new TowerConfig[]{
             // col 1
             new TowerConfig(SP * 0, SP * 0, SP * 0, new String[][]{
-                new String[]{"709","708"},
+                new String[]{"708","709"},
                 new String[]{"503","502"},
                 new String[]{"511","510"},
                 new String[]{"665","134"},
@@ -159,7 +158,8 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
             }),
             new TowerConfig(SP * 2, SP * 0, SP * 0, new String[][]{
                 new String[]{"731","730"},
-                new String[]{"461","460"},
+//                new String[]{"461","460"},
+                new String[]{"461","493"},
                 new String[]{"479","478"},
                 new String[]{"1080","1061"},
             }),
