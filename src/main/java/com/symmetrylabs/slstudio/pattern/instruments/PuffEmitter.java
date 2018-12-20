@@ -14,12 +14,13 @@ import static heronarts.lx.PolyBuffer.Space.RGB16;
 public class PuffEmitter implements Emitter {
     @Override
     public Puff emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
+        double variation = 2 * intensity - 1;
         return new Puff(
             new LXVector(paramSet.getPoint(pitch, MarkUtils.randomXyDisc())),
-            paramSet.getSize(2 * intensity - 1),
+            paramSet.getSize(variation),
             paramSet.getColor(MarkUtils.randomVariation()),
             paramSet.getTwist(),
-            1/(1 + paramSet.getRate() * 4),
+            1/(1 + paramSet.getRate(variation) * 4),
             paramSet.getDecaySec()
         );
     }

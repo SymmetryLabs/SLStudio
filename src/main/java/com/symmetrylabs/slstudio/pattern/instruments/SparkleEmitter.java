@@ -25,7 +25,7 @@ public class SparkleEmitter implements Emitter {
             paramSet.getHueVar(),
             paramSet.getSat(),
             paramSet.getTwist(),
-            1/(1 + paramSet.getRate() * 4),
+            1/(1 + paramSet.getRate(2 * intensity - 1) * 4),
             paramSet.getDecaySec() + 0.05
         );
     }
