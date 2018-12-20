@@ -61,6 +61,7 @@ public class SwimEmitter implements Emitter {
             addModulator(phaseLFO).trigger();
             phaseLFO.setPeriod(5000 - 4500 * rate);
             phaseLFO.setValue(phase * 2 * Math.PI);
+            yPos.setValue(phase * 2 * Math.PI);
         }
 
         public void render(LXModel model, PolyBuffer buffer) {
