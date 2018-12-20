@@ -22,8 +22,10 @@ public interface Instrument {
         long getColor(double variation);
         LXVector getPosition(int pitch, LXVector variation);
         LXPoint getPoint(int pitch, LXVector variation);
+        default double getSize() { return getSize(0); }
         double getSize(double variation);
-        double getRate();
+        default double getRate() { return getRate(0); }
+        double getRate(double variation);
         double getDecaySec();
         double getTwist();
         LXVector getDirection();

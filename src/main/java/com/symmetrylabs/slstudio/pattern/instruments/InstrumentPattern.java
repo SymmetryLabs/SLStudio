@@ -53,6 +53,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     private final CompoundParameter spreadParam = new CompoundParameter("Spread", -3, -6, 0);
     private final CompoundParameter twistParam = new CompoundParameter("Twist", 0, -1, 1);
     private final CompoundParameter rateParam = new CompoundParameter("Rate", 0, -5, 5);
+    private final CompoundParameter rateVarParam = new CompoundParameter("RateVar", 0, 0, 6);
     private final CompoundParameter decayParam = new CompoundParameter("Decay", 0.5, 0, 4);
 
     private final EnumParameter<TriggerSource> sourceParam = new EnumParameter<>("Source", TriggerSource.MIDI);
@@ -160,6 +161,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
         addParameter(spreadParam);
         addParameter(twistParam);
         addParameter(rateParam);
+        addParameter(rateVarParam);
         addParameter(decayParam);
 
         addParameter(sourceParam);
@@ -608,8 +610,8 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
             return Math.pow(2, sizeParam.getValue()) * radius * (1 + variation * sizeVarParam.getValue());
         }
 
-        public double getRate() {
-            return Math.pow(2, rateParam.getValue());
+        public double getRate(double variation) {
+            return Math.pow(2, rateParam.getValue() + rateVarParam.getValue() * variation);
         }
 
         public double getDecaySec() {
