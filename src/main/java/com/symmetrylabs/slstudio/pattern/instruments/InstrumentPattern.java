@@ -335,14 +335,14 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     @Override public void noteOn(int pitch, double velocity) {
         midiNotes[pitch].attack = true;
         midiNotes[pitch].sustain = true;
-        midiNotes[pitch].intensity = velocity * getIntensityFactor();
+        midiNotes[pitch].intensity = (velocity * velocity) * getIntensityFactor();
         if (retrigParam.getValue() > 0) {
             retrigSec[pitch] = 1 / retrigParam.getValuef();
         }
     }
 
     @Override public void notePressure(int pitch, double pressure) {
-        midiNotes[pitch].intensity = pressure * getIntensityFactor();
+        midiNotes[pitch].intensity = (pressure * pressure) * getIntensityFactor();
     }
 
     @Override public void noteOff(int pitch) {
