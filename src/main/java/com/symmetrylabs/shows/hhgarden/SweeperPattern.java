@@ -24,10 +24,15 @@ public class SweeperPattern extends SLPattern<SLModel> {
     private final CompoundParameter satParam = new CompoundParameter("Sat", 0, 0, 1);
 
     private final CompoundParameter attackParam = new CompoundParameter("Attack", 0.5, 0, 1);
-    private final CompoundParameter decayParam = new CompoundParameter("Decay", 0.5, 0, 2);
+    private final CompoundParameter decayParam = new CompoundParameter("Decay", 0.5, 0, 4);
 
     protected Sweeper[] sweepers;
     protected PointPartition partition;
+
+    protected float knobMin = 0.15f; // Novation LaunchKey knobs are hard to turn to extremes
+    protected float knobMax = 0.85f;
+
+    enum Axis {X, Y, Z};
 
     public SweeperPattern(LX lx) {
         super(lx);
@@ -39,10 +44,10 @@ public class SweeperPattern extends SLPattern<SLModel> {
             new Sweeper("B", 416, 653, true, 450, -0.04f, 0.7f),
             new Sweeper("C", 674, 616, true, 400, 0.4f, 0.67f),
           new Sweeper("D", 1062, 330, false, 418, 0.51f, -0.51f),
-            new Sweeper("X1", model.xMax, -model.xRange, null),
-            new Sweeper("X2", model.xMax, -model.xRange, null),
-            new Sweeper("XU", model.xMax, -model.xRange, new LXVector(model.cx, model.yMax, 0)),
-            new Sweeper("XL", model.xMax, -model.xRange, new LXVector(model.cx, model.yMin, 0)),
+            new Sweeper("X", Axis.X, model.xMax, -model.xRange, null),
+            new Sweeper("Z", Axis.Z, model.zMin, model.zRange, null),
+            new Sweeper("XU", Axis.X, model.xMax, -model.xRange, new LXVector(model.cx, model.yMax, 0)),
+            new Sweeper("XL", Axis.X, model.xMax, -model.xRange, new LXVector(model.cx, model.yMin, 0)),
         };
 
         addParameter(hueParam);
@@ -94,13 +99,14 @@ public class SweeperPattern extends SLPattern<SLModel> {
             int i = 0;
             for (LXPoint point : points) {
                 float bearing = floorMod((float) (Math.atan2(point.y - y, point.x - x) / (2 * Math.PI)), 1);
-                positions[i++] = sweepAngle > 0 ?
+                float pos = sweepAngle > 0 ?
                     floorMod(bearing - startAngle, 1) / sweepAngle :
                     floorMod(startAngle - bearing, 1) / -sweepAngle;
+                positions[i++] = knobMin + pos * (knobMax - knobMin);
             }
         }
 
-        public Sweeper(String name, float startX, float sweepX, LXVector clusterCenter) {
+        public Sweeper(String name, Axis axis, float startValue, float sweepValue, LXVector clusterCenter) {
             initParam(name);
 
             List<LXPoint> points;
@@ -113,7 +119,10 @@ public class SweeperPattern extends SLPattern<SLModel> {
             initArrays(points);
             int i = 0;
             for (LXPoint point : points) {
-                positions[i++] = (point.x - startX) / sweepX;
+                positions[i++] =
+                    axis == Axis.X ? (point.x - startValue) / sweepValue :
+                        axis == Axis.Y ? (point.y - startValue) / sweepValue :
+                            (point.z - startValue) / sweepValue;
             }
         }
 
