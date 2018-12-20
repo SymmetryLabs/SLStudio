@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.output;
 import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.slstudio.component.GammaExpander;
 import heronarts.lx.LX;
+import heronarts.lx.PolyBuffer;
 import heronarts.lx.output.LXDatagram;
 import heronarts.lx.model.LXPoint;
 
@@ -97,6 +98,11 @@ public class ArtNetDatagram extends LXDatagram {
 
     public void setIndices(int[] indices) {
         this.pointIndices = indices;
+    }
+
+    @Override
+    public void onSend(PolyBuffer src) {
+        this.onSend((int[]) src.getArray(PolyBuffer.Space.SRGB8));
     }
 
     @Override
