@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544165423777,
+  "timestamp": 1545306323778,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -90,11 +90,11 @@
               "label": "Mirror",
               "enabled": true,
               "x": true,
-              "cx": 410.0,
+              "cx": 375.65000076778233,
               "y": false,
               "cy": 58.0,
               "z": false,
-              "cz": 72.5
+              "cz": 9.930000314489007
             }
           },
           {
@@ -105,11 +105,11 @@
               "label": "BoxMask",
               "enabled": true,
               "xSize": 410.0,
-              "cx": 410.0,
+              "cx": 355.04000122845173,
               "ySize": 99.0,
-              "cy": 48.749996185302734,
-              "zSize": 65.25000016205013,
-              "cz": 87.0,
+              "cy": 73.49999658577141,
+              "zSize": 64.32000080868602,
+              "cz": -31.274998764507473,
               "invert": false
             }
           },
@@ -120,9 +120,9 @@
             "parameters": {
               "label": "Rotate",
               "enabled": true,
-              "cx": 410.0,
-              "cy": 58.0,
-              "cz": 72.5,
+              "cx": 355.04000122845173,
+              "cy": 67.90000016018747,
+              "cz": 24.0,
               "angle": -0.4998552796759128
             }
           }
@@ -209,11 +209,11 @@
               "label": "BoxMask",
               "enabled": true,
               "xSize": 0.0,
-              "cx": 410.0,
+              "cx": 368.7800009213388,
               "ySize": 78.87999953329563,
               "cy": 58.0,
               "zSize": 95.69999948143959,
-              "cz": 72.5,
+              "cz": 24.0,
               "invert": false
             }
           }
@@ -399,10 +399,10 @@
               "label": "BoxMask",
               "enabled": true,
               "xSize": 532.9999972507358,
-              "cx": 410.0,
+              "cx": 361.91000107489526,
               "ySize": 81.19999818503857,
-              "cy": 53.35999880731106,
-              "zSize": 42.05000230111182,
+              "cy": 100.22999923110012,
+              "zSize": 0.0,
               "cz": -2.0325794594100444E-6,
               "invert": false
             }
@@ -426,8 +426,8 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 364.9390161037445,
-              "cx": 364.939017101148,
+              "xSize": 351.87804079055786,
+              "cx": 364.62804079055786,
               "ySize": 99.0,
               "cy": 48.749996185302734,
               "zSize": 43.03479252755642,
@@ -584,7 +584,7 @@
               "enabled": true,
               "cx": 410.0,
               "cy": 58.0,
-              "cz": 72.5,
+              "cz": 24.0,
               "lat": 0.0,
               "lon": 0.0,
               "turn": 0.0,
@@ -696,7 +696,7 @@
               "z": -0.30000001192092896,
               "cx": 410.0,
               "cy": 116.0,
-              "cz": 87.0,
+              "cz": 24.0,
               "lo/hue": 111.29412078857422,
               "lo/brightness": 100.0,
               "lo/saturation": 100.0,
@@ -746,7 +746,7 @@
               "enabled": true,
               "cx": 410.0,
               "cy": 58.0,
-              "cz": 72.5,
+              "cz": 24.0,
               "lat": 0.0,
               "lon": 3.5999999195337296,
               "turn": 180.0,
@@ -812,14 +812,12 @@
         "warps": [],
         "effects": [
           {
-            "id": 26740,
-            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
-            "modulationColor": -16711755,
+            "id": 31758,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -39936,
             "parameters": {
-              "label": "BrightnessShift",
-              "enabled": true,
-              "Bscale": 0.6000000089406967,
-              "Bshift": 0.0
+              "label": "SOS_strobeNoMore",
+              "enabled": true
             },
             "modulation": {
               "modulators": [],
@@ -1038,7 +1036,7 @@
         "parameters": {
           "label": "Output Control",
           "Broadcast packet enabled": false,
-          "Test broadcast enabled": false
+          "Test broadcast enabled": true
         }
       }
     },
@@ -1077,36 +1075,6 @@
     "midi": {
       "inputs": [
         {
-          "name": "CoreMIDI4J - Port 1",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 2",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 3",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 4",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Sync Port",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
           "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
@@ -1117,20 +1085,6 @@
           "channel": true,
           "control": false,
           "sync": false
-        }
-      ],
-      "surfaces": [
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
         }
       ],
       "mapping": []
@@ -1144,12 +1098,12 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 476.80495992191345,
-        "theta": 0.0,
-        "phi": 0.0,
-        "positionX": 431.95635986328125,
-        "positionY": 59.0,
-        "positionZ": 73.88507080078125
+        "radius": 417.4690721750316,
+        "theta": -0.05100000000000073,
+        "phi": 0.401999999999999,
+        "positionX": 357.24761962890625,
+        "positionY": 76.25,
+        "positionZ": -26.318944931030273
       }
     }
   }

@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544163317686,
+  "timestamp": 1545308498113,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 9,
+      "focusedChannel": 4,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -78,11 +78,11 @@
               "label": "BoxMask",
               "enabled": true,
               "xSize": 328.0000018328428,
-              "cx": 410.0,
+              "cx": 361.91000107489526,
               "ySize": 89.31999960511922,
               "cy": 60.31999994814396,
               "zSize": 47.850000550970435,
-              "cz": 71.04999951727689,
+              "cz": 24.0,
               "invert": false
             }
           }
@@ -154,11 +154,11 @@
               "label": "Mirror",
               "enabled": true,
               "x": true,
-              "cx": 410.0,
+              "cx": 361.91000107489526,
               "y": false,
               "cy": 58.0,
               "z": false,
-              "cz": 72.5
+              "cz": 24.0
             }
           },
           {
@@ -251,11 +251,11 @@
               "label": "BoxMask",
               "enabled": true,
               "xSize": 500.1999979838729,
-              "cx": 410.0,
+              "cx": 361.91000107489526,
               "ySize": 0.0,
               "cy": 60.319998651742935,
               "zSize": 100.5,
-              "cz": 72.5,
+              "cz": 24.0,
               "invert": false
             }
           }
@@ -372,11 +372,11 @@
               "label": "Mirror",
               "enabled": true,
               "x": true,
-              "cx": 410.0,
+              "cx": 361.91000107489526,
               "y": false,
               "cy": 58.0,
               "z": false,
-              "cz": 72.5
+              "cz": 24.0
             }
           },
           {
@@ -416,7 +416,7 @@
             "parameters": {
               "label": "Desaturation",
               "enabled": false,
-              "amount": 1.0,
+              "amount": 0.5800000093877316,
               "attack": 100.0,
               "decay": 100.0
             },
@@ -619,7 +619,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.4714285647496581,
+          "fader": 0.7571428557857871,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -636,15 +636,30 @@
               "label": "Mirror",
               "enabled": true,
               "x": true,
-              "cx": 410.0,
+              "cx": 361.91000107489526,
               "y": false,
               "cy": 58.0,
               "z": true,
-              "cz": 72.5
+              "cz": 24.0
             }
           }
         ],
-        "effects": [],
+        "effects": [
+          {
+            "id": 32875,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -8978177,
+            "parameters": {
+              "label": "SOS_strobeNoMore",
+              "enabled": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 1,
         "patterns": [
@@ -1191,14 +1206,6 @@
           "sync": false
         }
       ],
-      "surfaces": [
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        }
-      ],
       "mapping": []
     }
   },
@@ -1210,9 +1217,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 526.7570801965285,
-        "theta": 2.8859999999999997,
-        "phi": 0.2730000000000002,
+        "radius": 236.60101494533575,
+        "theta": -0.12000000000000208,
+        "phi": 0.23399999999999982,
         "positionX": 430.16607666015625,
         "positionY": 126.25,
         "positionZ": 27.598876953125

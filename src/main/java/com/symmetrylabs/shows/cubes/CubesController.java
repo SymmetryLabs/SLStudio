@@ -20,6 +20,7 @@ import java.io.OutputStream;
 import java.net.*;
 
 public class CubesController extends LXOutput implements Comparable<CubesController>, OPCConstants {
+    private static final double MAX_POWER_CAP = 0.6;
     public final String id;
     public final int idInt;
     public final InetAddress host;
@@ -242,7 +243,15 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
                 else{
                     for (int i = 0; i < numPixels; i++) {
                         LXPoint point = points.getPoint(i);
-                        setPixel(i, LXColor.GREEN);
+
+                        long color = srcLongs[point.index];
+
+//                      long nurfed = Ops16.hsb(0,0,lx.engine.powerCap.getValuef());
+                        long nurfed = Ops16.hsb(0,0, MAX_POWER_CAP);
+                        long defanged = Ops16.multiply(color, nurfed);
+
+//                        setPixel(i, Ops16.hsb(0,100,0.1));
+                        setPixel(i, defanged);
                     }
                 }
                 // NATE:: end 16 bit power mon;
@@ -273,7 +282,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
                 else {
                     for (int i = 0; i < numPixels; i++) {
                         LXPoint point = points.getPoint(i);
-                        setPixel(i, LXColor.RED);
+                        setPixel(i, LXColor.BLACK);
                     }
                 }
                 // NATE: end 8 bit power mon
@@ -284,7 +293,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             // Fill with all black if we don't have cube data
             initPacketData(numPixels, false);
             for (int i = 0; i < numPixels; i++) {
-                setPixel(i, LXColor.GREEN);
+                setPixel(i, LXColor.BLACK);
             }
         }
 
@@ -298,7 +307,9 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 
 
         private boolean power_level_has_fault_condition (PointsGrouping points, boolean is16BitColorEnabled, long[] poly) {
-            double THRESH = 0.7;
+//            double THRESH = 0.7;
+//            double THRESH = lx.engine.powerCap.getValuef();
+            double THRESH = MAX_POWER_CAP;
             numPixels = points.size();
 
             double aggregate = 0; // just count up the mean intensity

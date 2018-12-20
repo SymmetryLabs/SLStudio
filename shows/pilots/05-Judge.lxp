@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544164570979,
+  "timestamp": 1545307249221,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 0.9729365706443787,
-      "focusedChannel": 7,
+      "speed": 0.9399999976158142,
+      "focusedChannel": 5,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -111,7 +111,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 0.14202102275013573,
+              "rad": 0.0,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
@@ -186,9 +186,9 @@
               "x": 0.4299999475479126,
               "y": 0.5299999713897705,
               "z": 0.2999999523162842,
-              "cx": 410.0,
+              "cx": 348.1700013820082,
               "cy": 58.0,
-              "cz": 72.5,
+              "cz": 24.0,
               "lo/hue": 107.76470947265625,
               "lo/brightness": 100.0,
               "lo/saturation": 100.0,
@@ -239,13 +239,13 @@
             "modulationColor": -13107456,
             "parameters": {
               "label": "OneBigAngledPlane",
-              "thick": 734.142333984375,
+              "thick": 718.9308471679688,
               "x": 0.4299999475479126,
               "y": 0.5299999713897705,
               "z": 0.2999999523162842,
               "cx": 410.0,
               "cy": 58.0,
-              "cz": 72.5
+              "cz": 24.0
             },
             "modulation": {
               "modulators": [],
@@ -312,7 +312,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.6694276332855225,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -329,11 +329,11 @@
               "label": "BoxMask",
               "enabled": false,
               "xSize": 508.3999978005886,
-              "cx": 426.3999904692173,
+              "cx": 371.4399916976691,
               "ySize": 86.99999935179949,
-              "cy": 58.0,
-              "zSize": 72.5,
-              "cz": 87.0,
+              "cy": 77.80000032037495,
+              "zSize": 56.420000359416015,
+              "cz": 24.0,
               "invert": false
             }
           },
@@ -345,7 +345,7 @@
               "label": "BoxMask",
               "enabled": false,
               "xSize": 90.20000714808702,
-              "cx": 57.400007881224155,
+              "cx": 78.01000742055476,
               "ySize": 76.55999958515167,
               "cy": 58.0,
               "zSize": 39.15000074543059,
@@ -361,7 +361,7 @@
               "label": "BoxMask",
               "enabled": false,
               "xSize": 90.20000714808702,
-              "cx": 712.5,
+              "cx": 699.75,
               "ySize": 77.71999955922365,
               "cy": 58.0,
               "zSize": 44.950000615790486,
@@ -394,8 +394,8 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 734.142333984375,
-              "invert": true,
+              "rad": 0.0,
+              "invert": false,
               "cx": 410.0,
               "cy": 58.0
             },
@@ -415,7 +415,7 @@
             "modulationColor": -16711898,
             "parameters": {
               "label": "PilotsPlanes",
-              "speed": 479.3700575828552,
+              "speed": 60.00000238418579,
               "dist": 120.0,
               "thick": 16.79999989271164,
               "red": true,
@@ -447,7 +447,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.668292224407196,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -464,11 +464,11 @@
               "label": "BoxMask",
               "enabled": false,
               "xSize": 311.6000021994114,
-              "cx": 410.0,
+              "cx": 348.1700013820082,
               "ySize": 71.91999968886375,
-              "cy": 58.0,
+              "cy": 101.56000070482489,
               "zSize": 47.850000550970435,
-              "cz": 63.79999929785731,
+              "cz": 24.0,
               "invert": false
             }
           },
@@ -496,7 +496,7 @@
               "label": "BoxMask",
               "enabled": false,
               "xSize": 82.00000733137131,
-              "cx": 712.5,
+              "cx": 699.75,
               "ySize": 93.95999919623137,
               "cy": 58.0,
               "zSize": 49.30000051856041,
@@ -510,13 +510,13 @@
             "modulationColor": -1245440,
             "parameters": {
               "label": "Mirror",
-              "enabled": false,
+              "enabled": true,
               "x": true,
-              "cx": 712.5,
+              "cx": 699.75,
               "y": false,
               "cy": 58.0,
               "z": false,
-              "cz": 72.5
+              "cz": 24.0
             }
           }
         ],
@@ -543,9 +543,9 @@
             "modulationColor": -65382,
             "parameters": {
               "label": "CircleWipe",
-              "enabled": true,
-              "rad": 734.142333984375,
-              "invert": true,
+              "enabled": false,
+              "rad": 0.0,
+              "invert": false,
               "cx": 410.0,
               "cy": 58.0
             },
@@ -565,7 +565,7 @@
             "modulationColor": -65351,
             "parameters": {
               "label": "PilotsPlanes",
-              "speed": 479.3700575828552,
+              "speed": 339.9999737739563,
               "dist": 120.0,
               "thick": 21.59999978542328,
               "red": true,
@@ -637,7 +637,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 0.0,
+              "rad": 718.9308471679688,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
@@ -718,11 +718,11 @@
               "label": "BoxMask",
               "enabled": false,
               "xSize": 410.0,
-              "cx": 2.044677103185677E-6,
+              "cx": 12.75,
               "ySize": 99.0,
               "cy": 58.0,
               "zSize": 100.5,
-              "cz": 72.5,
+              "cz": 24.0,
               "invert": false
             }
           }
@@ -761,14 +761,12 @@
             }
           },
           {
-            "id": 26358,
-            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
-            "modulationColor": -13107456,
+            "id": 31855,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -15597824,
             "parameters": {
-              "label": "BrightnessShift",
-              "enabled": true,
-              "Bscale": 0.6800000071525574,
-              "Bshift": 0.0
+              "label": "SOS_strobeNoMore",
+              "enabled": true
             },
             "modulation": {
               "modulators": [],
@@ -846,7 +844,7 @@
               "bMaxAngle": 62.6999999396503,
               "bPull": 200.0,
               "bTrackingMode": 1,
-              "Speed": 0.21000000089406967,
+              "Speed": 1.0599999725818634,
               "Accel": 3.0,
               "Dampen": 0.75,
               "FocusX": 0.0,
@@ -1095,36 +1093,6 @@
     "midi": {
       "inputs": [
         {
-          "name": "CoreMIDI4J - Port 1",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 2",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 3",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 4",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Sync Port",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
           "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
@@ -1135,20 +1103,6 @@
           "channel": true,
           "control": false,
           "sync": false
-        }
-      ],
-      "surfaces": [
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
         }
       ],
       "mapping": []
@@ -1162,12 +1116,12 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 569.2171672187098,
-        "theta": 0.008999999999999814,
-        "phi": 0.41171667385101574,
-        "positionX": 410.0,
-        "positionY": 48.0,
-        "positionZ": 72.5
+        "radius": 667.8769649692659,
+        "theta": 0.09300000000000236,
+        "phi": 0.8377166738510144,
+        "positionX": 324.3813781738281,
+        "positionY": 40.25,
+        "positionZ": -23.352968215942383
       }
     }
   }

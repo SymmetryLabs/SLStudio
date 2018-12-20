@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545272324608,
+  "timestamp": 1545308034957,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -146,10 +146,10 @@
             "modulationColor": -13697280,
             "parameters": {
               "label": "PilotsPlanes",
-              "speed": 100.00002384185791,
+              "speed": 78.82094383239746,
               "dist": 84.60000079125166,
               "thick": 41.39999934285879,
-              "red": false,
+              "red": true,
               "x": 0.9,
               "y": 0.3,
               "z": 0.315,
@@ -375,6 +375,19 @@
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 43,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -16753921,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -695,12 +708,6 @@
     },
     "midi": {
       "inputs": [
-        {
-          "name": "CoreMIDI4J - ShowSession",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
         {
           "name": "** Internal Error getting Device Name!",
           "channel": true,

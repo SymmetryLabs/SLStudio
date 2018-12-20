@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545294426153,
+  "timestamp": 1545305739688,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 2,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.6700000166893005,
+          "fader": 4.0434629772789776E-4,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -162,7 +162,7 @@
             "modulationColor": -16751617,
             "parameters": {
               "label": "Noise",
-              "Hue": 56.87999842688441,
+              "Hue": 39.599999114871025,
               "Spark": 0.0,
               "Wave": 0.0,
               "xPos": 0.5,
@@ -309,7 +309,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.006304700393229723,
+          "fader": 1.9448947568889707E-4,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -580,7 +580,7 @@
           "stages": [
             {
               "basis": 0.0,
-              "value": 1.0,
+              "value": 0.5932203531265259,
               "shape": 1.0
             },
             {
@@ -604,12 +604,12 @@
           "stages": [
             {
               "basis": 0.0,
-              "value": 1.0,
+              "value": 0.508474588394165,
               "shape": 1.0
             },
             {
-              "basis": 0.9552238583564758,
-              "value": 1.0,
+              "basis": 0.8258706331253052,
+              "value": 0.47457629442214966,
               "shape": 1.0
             },
             {

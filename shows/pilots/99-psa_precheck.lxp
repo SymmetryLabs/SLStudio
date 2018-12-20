@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1541292577514,
+  "timestamp": 1545295922727,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 1,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -72,7 +72,7 @@
         "warps": [],
         "effects": [],
         "clips": [],
-        "patternIndex": 1,
+        "patternIndex": 0,
         "patterns": [
           {
             "id": 26938,
@@ -84,36 +84,6 @@
               "color/brightness": 100.0,
               "color/saturation": 100.0,
               "color": -65536
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
-            "id": 26941,
-            "class": "com.symmetrylabs.shows.pilots.PulseCheck",
-            "modulationColor": -16711899,
-            "parameters": {
-              "label": "PulseCheck",
-              "visible": 0,
-              "alpha": true,
-              "cart0": 180.0,
-              "EN0": true,
-              "cart1": 180.0,
-              "EN1": true,
-              "cart2": 180.0,
-              "EN2": true,
-              "cart3": 180.0,
-              "EN3": true,
-              "cart4": 180.0,
-              "EN4": true,
-              "cart5": 180.0,
-              "EN5": true,
-              "cart6": 180.0,
-              "EN6": true
             },
             "modulation": {
               "modulators": [],
@@ -139,7 +109,7 @@
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
           "crossfadeGroup": 0,
-          "blendMode": 2,
+          "blendMode": 1,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0,
@@ -236,7 +206,26 @@
         "arm": false
       },
       "warps": [],
-      "effects": [],
+      "effects": [
+        {
+          "id": 27413,
+          "class": "com.symmetrylabs.slstudio.effect.StripFilter",
+          "modulationColor": -16750337,
+          "parameters": {
+            "label": "StripFilter",
+            "enabled": true,
+            "X": false,
+            "Y": false,
+            "Z": true,
+            "Solo": false
+          },
+          "modulation": {
+            "modulators": [],
+            "modulations": [],
+            "triggers": []
+          }
+        }
+      ],
       "clips": []
     },
     "tempo": {
@@ -327,14 +316,14 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.0
+        "brightness": 0.08571428619325161
       }
     },
     "components": {
       "GammaExpander": {
-        "id": 26951,
+        "id": 27098,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16729089,
+        "modulationColor": -459008,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
@@ -452,36 +441,6 @@
     "midi": {
       "inputs": [
         {
-          "name": "CoreMIDI4J - Port 1",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 2",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 3",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 4",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Sync Port",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
           "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
@@ -492,62 +451,6 @@
           "channel": true,
           "control": false,
           "sync": false
-        }
-      ],
-      "surfaces": [
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
         }
       ],
       "mapping": []
@@ -561,9 +464,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 1045.9480348049408,
-        "theta": 0.07860183660255844,
-        "phi": 0.5194797077178954,
+        "radius": 516.500575109985,
+        "theta": -0.5603981633974416,
+        "phi": 0.7144797077178956,
         "positionX": 367.97686767578125,
         "positionY": 14.0,
         "positionZ": 43.397613525390625

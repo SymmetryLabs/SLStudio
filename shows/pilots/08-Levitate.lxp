@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1540001043995,
+  "timestamp": 1545308928106,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 3,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -78,9 +78,9 @@
               "label": "Mirror",
               "enabled": true,
               "x": true,
-              "cx": 409.99999750699385,
+              "cx": 356.25,
               "y": true,
-              "cy": 58.0,
+              "cy": 69.88000019222497,
               "z": false,
               "cz": 14.49999824464328
             }
@@ -93,11 +93,11 @@
               "label": "BoxMask",
               "enabled": false,
               "xSize": 344.40000146627426,
-              "cx": 401.8000001832843,
+              "cx": 353.7100012581796,
               "ySize": 62.63999989628792,
-              "cy": 58.0,
+              "cy": 91.66000054463741,
               "zSize": 43.50000064820051,
-              "cz": 62.349999253973394,
+              "cz": 24.0,
               "invert": false
             }
           }
@@ -137,7 +137,7 @@
               "red": false,
               "x": 1.0,
               "y": 0.10999999940395355,
-              "z": 0.05731988325715065,
+              "z": 0.004370796959847212,
               "flips": false,
               "flipc": false
             },
@@ -182,9 +182,9 @@
               "xSize": 328.0000018328428,
               "cx": 393.60000036656857,
               "ySize": 62.63999989628792,
-              "cy": 58.0,
+              "cy": 63.94000009611248,
               "zSize": 63.800000194460154,
-              "cz": 87.0,
+              "cz": 24.0,
               "invert": true
             }
           },
@@ -196,9 +196,9 @@
               "label": "BoxMask",
               "enabled": false,
               "xSize": 213.20000439882278,
-              "cx": 623.1999965309718,
+              "cx": 643.8099960703024,
               "ySize": 87.00000507384534,
-              "cy": 58.0,
+              "cy": 69.88000019222497,
               "zSize": 94.24999951384962,
               "cz": 14.499992370605469,
               "invert": true
@@ -231,7 +231,7 @@
               "cspeed": 400.0,
               "tail": 30.0,
               "cwidth": 20.0,
-              "yellow": true,
+              "yellow": false,
               "ws": false,
               "wu": false,
               "wd": false,
@@ -277,11 +277,11 @@
               "label": "BoxMask",
               "enabled": false,
               "xSize": 336.20000164955854,
-              "cx": 410.0,
+              "cx": 375.65000076778233,
               "ySize": 70.75999971479177,
-              "cy": 58.0,
+              "cy": 84.73000043250619,
               "zSize": 69.60000006482005,
-              "cz": 87.0,
+              "cz": 24.0,
               "invert": true
             }
           }
@@ -375,15 +375,30 @@
               "label": "Mirror",
               "enabled": true,
               "x": true,
-              "cx": 410.0,
+              "cx": 355.04000122845173,
               "y": false,
               "cy": 116.0,
               "z": false,
-              "cz": 72.5
+              "cz": 24.0
             }
           }
         ],
-        "effects": [],
+        "effects": [
+          {
+            "id": 32981,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -65448,
+            "parameters": {
+              "label": "SOS_strobeNoMore",
+              "enabled": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 0,
         "patterns": [
@@ -521,7 +536,22 @@
           "autoDisable": true
         },
         "warps": [],
-        "effects": [],
+        "effects": [
+          {
+            "id": 32978,
+            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
+            "modulationColor": -65479,
+            "parameters": {
+              "label": "SOS_strobeNoMore",
+              "enabled": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 0,
         "patterns": [
@@ -767,36 +797,6 @@
     "midi": {
       "inputs": [
         {
-          "name": "CoreMIDI4J - Port 1",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 2",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 3",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 4",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Sync Port",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
           "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
@@ -807,116 +807,6 @@
           "channel": true,
           "control": false,
           "sync": false
-        }
-      ],
-      "surfaces": [
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
         }
       ],
       "mapping": []
@@ -930,12 +820,12 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 484.7262015535227,
-        "theta": 0.0060000000000000634,
-        "phi": 1.5707963705062866,
-        "positionX": 410.0,
-        "positionY": 58.0,
-        "positionZ": 72.5
+        "radius": 377.8457279781746,
+        "theta": 0.2790000000000026,
+        "phi": 0.2777963705062859,
+        "positionX": 259.5402526855469,
+        "positionY": 84.25,
+        "positionZ": 7.634080410003662
       }
     }
   }
