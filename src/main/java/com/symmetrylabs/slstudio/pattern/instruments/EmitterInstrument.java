@@ -38,7 +38,7 @@ public class EmitterInstrument implements Instrument {
         List<MarkKey> keysToDiscard = new ArrayList<>();
         int numToDiscard = keys.size() - emitter.getMaxCount();
         if (numToDiscard > 0) {
-            keysToDiscard = keys.subList(0, numToDiscard);
+            keysToDiscard.addAll(keys.subList(0, numToDiscard));
             keys = keys.subList(numToDiscard, keys.size());
         }
 
