@@ -54,7 +54,7 @@ public class Swim extends LXPattern {
 
     public void onParameterChanged(LXParameter parameter) {
         if (parameter == phaseParam) {
-            phaseLFO.setPeriod(5000 - 4500 * parameter.getValuef());
+            phaseLFO.setPeriod(10000 - 9800 * parameter.getValuef());
         }
     }
 

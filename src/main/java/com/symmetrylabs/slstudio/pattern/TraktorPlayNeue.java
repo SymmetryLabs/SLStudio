@@ -44,7 +44,7 @@ public class TraktorPlayNeue extends DPat
     private boolean rhythmOn = false;
     private boolean leapOn = false;
     PVector position = new PVector();
-    CompoundParameter gainf = new CompoundParameter("gain", .5, 0, 1);
+    CompoundParameter gainf = new CompoundParameter("gain", .5, 0, 10);
 
 //    void keyEvent(KeyEvent keyEvent) {
 //
