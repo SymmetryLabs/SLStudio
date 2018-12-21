@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545277619552,
+  "timestamp": 1545352621996,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,7 +14,7 @@
       "scene-5": false,
       "crossfader": 0.5172413792461157,
       "crossfaderBlendMode": 0,
-      "speed": 0.8166667073965073,
+      "speed": 1.0,
       "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -94,7 +94,7 @@
               "label": "ColorFilter",
               "enabled": true,
               "Hue": 44.63999894186854,
-              "Sat": 51.00000109523535
+              "Sat": 91.00000020116568
             },
             "modulation": {
               "modulators": [],
@@ -114,13 +114,13 @@
               "label": "Vortex",
               "count": 0,
               "size": 6.000000134110452,
-              "xrad": 395.149993000552,
-              "zrad": 100.5,
+              "xrad": 360.7999937683343,
+              "zrad": 50.250001123175025,
               "xc": 355.04000122845173,
-              "zc": -25.2450000224635,
-              "omega": 32.40000128746033,
-              "v": 99.0,
-              "radvar": 0.11999999843537808,
+              "zc": -34.289999820291996,
+              "omega": 43.200001046061516,
+              "v": 63.36000079661608,
+              "radvar": 0.33999999351799487,
               "smear": 0.5999999865889549,
               "reset": false
             },
@@ -238,6 +238,19 @@
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 1034,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -16252673,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -346,6 +359,12 @@
     "midi": {
       "inputs": [
         {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "Real Time Sequencer",
           "channel": true,
           "control": false,
@@ -363,9 +382,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 699.4275391786335,
-        "theta": 0.14700000000000024,
-        "phi": 0.7980000000000019,
+        "radius": 1066.3204667069926,
+        "theta": -0.04499999999999917,
+        "phi": 0.25800000000000334,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5

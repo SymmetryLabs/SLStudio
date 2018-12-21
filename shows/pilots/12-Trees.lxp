@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545270313650,
+  "timestamp": 1545354229479,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 6,
+      "focusedChannel": 4,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -30,10 +30,10 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 56.94117736816406,
+        "color/hue": 81.77222269773483,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
-        "color": -3584,
+        "color": -6095104,
         "period": 120000.0,
         "range": 0.0,
         "spread": 0.0,
@@ -169,7 +169,7 @@
             "modulationColor": -9436929,
             "parameters": {
               "label": "Noise",
-              "Hue": 240.0000286102295,
+              "Hue": 270.0,
               "Spark": 0.8199999816715717,
               "Wave": 0.0,
               "xPos": 0.5,
@@ -403,7 +403,7 @@
             "modulationColor": -57856,
             "parameters": {
               "label": "Desaturation",
-              "enabled": true,
+              "enabled": false,
               "amount": 1.0,
               "attack": 100.0,
               "decay": 100.0
@@ -503,39 +503,7 @@
             }
           }
         ],
-        "effects": [
-          {
-            "id": 4340,
-            "class": "com.symmetrylabs.slstudio.effect.Strobe",
-            "modulationColor": -327425,
-            "parameters": {
-              "label": "Strobe",
-              "enabled": false,
-              "Shape": 2,
-              "Freq": 10.0,
-              "Black": true
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            }
-          },
-          {
-            "id": 30282,
-            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
-            "modulationColor": -39424,
-            "parameters": {
-              "label": "SOS_strobeNoMore",
-              "enabled": true
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            }
-          }
-        ],
+        "effects": [],
         "clips": [],
         "patternIndex": 0,
         "patterns": [
@@ -547,20 +515,20 @@
               "label": "Noise",
               "Hue": 0.0,
               "Spark": 0.005999999586492777,
-              "Wave": 0.0169999988283962,
+              "Wave": 0.0769999974872917,
               "xPos": 0.5099999997764826,
               "yPos": 0.5199999883770943,
-              "xRot": 0.7099999934434891,
+              "xRot": 0.51999999769032,
               "yRot": 0.4500000011175871,
-              "zRot": 0.46000000089406967,
-              "Spin": 0.6099999975413084,
+              "zRot": 0.31000000424683094,
+              "Spin": 0.5077069401741028,
               "X-SYM": false,
               "Y-SYM": false,
               "R-SYM": false,
               "X-DUP": false,
               "JOG": false,
               "GREY": true,
-              "Speed": 0.9000000953674316,
+              "Speed": 0.5499999523162842,
               "Symm": 0,
               "Anim": 4,
               "Dens": 0.340000007301569,
@@ -624,7 +592,7 @@
               "label": "TwoTone",
               "enabled": true,
               "Lcut1": 1.0,
-              "Lcut2": 95.99999785423279,
+              "Lcut2": 92.00000166893005,
               "c1/hue": 0.0,
               "c1/brightness": 100.0,
               "c1/saturation": 100.0,
@@ -648,7 +616,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 167.27215751646145,
+              "rad": 0.0,
               "invert": true,
               "cx": 410.0,
               "cy": 116.0
@@ -907,6 +875,19 @@
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 1034,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -16252673,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -1015,6 +996,12 @@
     "midi": {
       "inputs": [
         {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "Real Time Sequencer",
           "channel": true,
           "control": false,
@@ -1032,12 +1019,12 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 512.9681078110466,
-        "theta": -1.1519999999999968,
-        "phi": 0.23099999999999998,
-        "positionX": 410.0,
-        "positionY": 48.0,
-        "positionZ": 72.5
+        "radius": 619.1222853981512,
+        "theta": 0.03000000000000303,
+        "phi": 0.3630000000000001,
+        "positionX": 630.2553100585938,
+        "positionY": 122.25,
+        "positionZ": -10.320568084716797
       }
     }
   }

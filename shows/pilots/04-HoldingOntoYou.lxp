@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545274826492,
+  "timestamp": 1545350128661,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 8,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -144,6 +144,21 @@
             "parameters": {
               "label": "SOS_strobeNoMore",
               "enabled": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 35635,
+            "class": "heronarts.lx.effect.BlurEffect",
+            "modulationColor": -65325,
+            "parameters": {
+              "label": "Blur",
+              "enabled": true,
+              "amount": 0.6399999894201756
             },
             "modulation": {
               "modulators": [],
@@ -298,6 +313,21 @@
               "modulations": [],
               "triggers": []
             }
+          },
+          {
+            "id": 35628,
+            "class": "heronarts.lx.effect.BlurEffect",
+            "modulationColor": -25088,
+            "parameters": {
+              "label": "Blur",
+              "enabled": true,
+              "amount": 0.5100000128149986
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
           }
         ],
         "clips": [],
@@ -422,6 +452,21 @@
             "parameters": {
               "label": "SOS_strobeNoMore",
               "enabled": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 35638,
+            "class": "heronarts.lx.effect.BlurEffect",
+            "modulationColor": -13631233,
+            "parameters": {
+              "label": "Blur",
+              "enabled": true,
+              "amount": 0.7299999874085188
             },
             "modulation": {
               "modulators": [],
@@ -971,6 +1016,19 @@
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 35751,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -65393,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -1165,7 +1223,7 @@
         "3202": true
       },
       "preview": {
-        "radius": 796.417124497486,
+        "radius": 978.665268620047,
         "theta": -0.24839816339744947,
         "phi": 0.4564797077178957,
         "positionX": 310.298828125,
