@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545346655456,
+  "timestamp": 1545358643437,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 1.0,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 8,
+      "focusedChannel": 20,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -58,7 +58,7 @@
           "enabled": true,
           "cue": false,
           "midiMonitor": true,
-          "midiChannel": 2,
+          "midiChannel": 1,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
@@ -143,9 +143,9 @@
           }
         ],
         "audioInput": {
-          "id": 12524,
+          "id": 12707,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16711711,
+          "modulationColor": -9175296,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -162,7 +162,7 @@
           "enabled": true,
           "cue": false,
           "midiMonitor": true,
-          "midiChannel": 2,
+          "midiChannel": 1,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
@@ -247,9 +247,9 @@
           }
         ],
         "audioInput": {
-          "id": 12535,
+          "id": 12718,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -43008,
+          "modulationColor": -65443,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -266,7 +266,7 @@
           "enabled": true,
           "cue": false,
           "midiMonitor": true,
-          "midiChannel": 2,
+          "midiChannel": 1,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
@@ -351,9 +351,9 @@
           }
         ],
         "audioInput": {
-          "id": 12546,
+          "id": 12729,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16711873,
+          "modulationColor": -16711767,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -370,7 +370,7 @@
           "enabled": false,
           "cue": false,
           "midiMonitor": true,
-          "midiChannel": 2,
+          "midiChannel": 1,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
@@ -455,9 +455,9 @@
           }
         ],
         "audioInput": {
-          "id": 12557,
+          "id": 12740,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16723713,
+          "modulationColor": -65451,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -474,7 +474,7 @@
           "enabled": true,
           "cue": false,
           "midiMonitor": true,
-          "midiChannel": 2,
+          "midiChannel": 1,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
@@ -559,9 +559,9 @@
           }
         ],
         "audioInput": {
-          "id": 12568,
+          "id": 12751,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16731649,
+          "modulationColor": -30208,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -578,7 +578,7 @@
           "enabled": false,
           "cue": false,
           "midiMonitor": true,
-          "midiChannel": 2,
+          "midiChannel": 1,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
@@ -663,9 +663,9 @@
           }
         ],
         "audioInput": {
-          "id": 12579,
+          "id": 12762,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -65371,
+          "modulationColor": -16718081,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -682,7 +682,7 @@
           "enabled": true,
           "cue": false,
           "midiMonitor": true,
-          "midiChannel": 2,
+          "midiChannel": 1,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
@@ -767,9 +767,9 @@
           }
         ],
         "audioInput": {
-          "id": 12590,
+          "id": 12773,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -65480,
+          "modulationColor": -16754945,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -786,7 +786,7 @@
           "enabled": true,
           "cue": false,
           "midiMonitor": true,
-          "midiChannel": 2,
+          "midiChannel": 1,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
@@ -853,9 +853,9 @@
           }
         ],
         "audioInput": {
-          "id": 12601,
+          "id": 12784,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -41472,
+          "modulationColor": -15360,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -872,7 +872,7 @@
           "enabled": true,
           "cue": false,
           "midiMonitor": true,
-          "midiChannel": 2,
+          "midiChannel": 1,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
@@ -955,9 +955,9 @@
           }
         ],
         "audioInput": {
-          "id": 12610,
+          "id": 12793,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -13106945,
+          "modulationColor": -14680320,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -971,9 +971,9 @@
         "parameters": {
           "label": "slow R",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
-          "midiMonitor": false,
+          "midiMonitor": true,
           "midiChannel": 0,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
@@ -1001,9 +1001,9 @@
               "Brt": 1.0,
               "PitchLo": 24,
               "PitchHi": 72,
-              "Shape": 3,
+              "Shape": 1,
               "Hold": false,
-              "Follow": false,
+              "Follow": true,
               "XPOS": false,
               "XNEG": false,
               "DISC": false,
@@ -1055,9 +1055,9 @@
           }
         ],
         "audioInput": {
-          "id": 12619,
+          "id": 12804,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16751873,
+          "modulationColor": -65408,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -1073,7 +1073,7 @@
           "arm": false,
           "enabled": false,
           "cue": false,
-          "midiMonitor": false,
+          "midiMonitor": true,
           "midiChannel": 0,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
@@ -1118,9 +1118,9 @@
               "Brt": 1.0,
               "PitchLo": 24,
               "PitchHi": 72,
-              "Shape": 0,
+              "Shape": 1,
               "Hold": false,
-              "Follow": false,
+              "Follow": true,
               "XPOS": false,
               "XNEG": false,
               "DISC": false,
@@ -1172,9 +1172,9 @@
           }
         ],
         "audioInput": {
-          "id": 12628,
+          "id": 12813,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -6487809,
+          "modulationColor": -65302,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -1190,7 +1190,7 @@
           "arm": false,
           "enabled": false,
           "cue": false,
-          "midiMonitor": false,
+          "midiMonitor": true,
           "midiChannel": 0,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
@@ -1235,9 +1235,9 @@
               "Brt": 1.0,
               "PitchLo": 24,
               "PitchHi": 72,
-              "Shape": 0,
+              "Shape": 1,
               "Hold": false,
-              "Follow": false,
+              "Follow": true,
               "XPOS": false,
               "XNEG": false,
               "DISC": false,
@@ -1289,9 +1289,9 @@
           }
         ],
         "audioInput": {
-          "id": 12640,
+          "id": 12825,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -2228480,
+          "modulationColor": -16711757,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -1307,7 +1307,7 @@
           "arm": false,
           "enabled": false,
           "cue": false,
-          "midiMonitor": false,
+          "midiMonitor": true,
           "midiChannel": 0,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
@@ -1335,9 +1335,9 @@
               "Brt": 1.0,
               "PitchLo": 24,
               "PitchHi": 72,
-              "Shape": 0,
+              "Shape": 1,
               "Hold": false,
-              "Follow": false,
+              "Follow": true,
               "XPOS": false,
               "XNEG": false,
               "DISC": false,
@@ -1389,9 +1389,9 @@
           }
         ],
         "audioInput": {
-          "id": 12652,
+          "id": 12837,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16752641,
+          "modulationColor": -35072,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -1407,7 +1407,7 @@
           "arm": false,
           "enabled": false,
           "cue": false,
-          "midiMonitor": false,
+          "midiMonitor": true,
           "midiChannel": 0,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
@@ -1435,9 +1435,9 @@
               "Brt": 1.0,
               "PitchLo": 24,
               "PitchHi": 72,
-              "Shape": 3,
+              "Shape": 1,
               "Hold": false,
-              "Follow": false,
+              "Follow": true,
               "XPOS": false,
               "XNEG": false,
               "DISC": false,
@@ -1489,9 +1489,9 @@
           }
         ],
         "audioInput": {
-          "id": 12661,
+          "id": 12846,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -7405313,
+          "modulationColor": -65286,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -1507,7 +1507,7 @@
           "arm": false,
           "enabled": false,
           "cue": false,
-          "midiMonitor": false,
+          "midiMonitor": true,
           "midiChannel": 0,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
@@ -1535,9 +1535,9 @@
               "Brt": 1.0,
               "PitchLo": 24,
               "PitchHi": 72,
-              "Shape": 0,
+              "Shape": 1,
               "Hold": false,
-              "Follow": false,
+              "Follow": true,
               "XPOS": false,
               "XNEG": false,
               "DISC": false,
@@ -1589,9 +1589,9 @@
           }
         ],
         "audioInput": {
-          "id": 12670,
+          "id": 12855,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -3669761,
+          "modulationColor": -65365,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -1607,7 +1607,7 @@
           "arm": false,
           "enabled": false,
           "cue": false,
-          "midiMonitor": false,
+          "midiMonitor": true,
           "midiChannel": 0,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
@@ -1635,9 +1635,9 @@
               "Brt": 1.0,
               "PitchLo": 24,
               "PitchHi": 72,
-              "Shape": 0,
+              "Shape": 1,
               "Hold": false,
-              "Follow": false,
+              "Follow": true,
               "XPOS": false,
               "XNEG": false,
               "DISC": false,
@@ -1689,9 +1689,9 @@
           }
         ],
         "audioInput": {
-          "id": 12679,
+          "id": 12864,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16776705,
+          "modulationColor": -16758017,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -1707,7 +1707,7 @@
           "arm": false,
           "enabled": false,
           "cue": false,
-          "midiMonitor": false,
+          "midiMonitor": true,
           "midiChannel": 0,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
@@ -1735,9 +1735,9 @@
               "Brt": 1.0,
               "PitchLo": 24,
               "PitchHi": 72,
-              "Shape": 0,
+              "Shape": 1,
               "Hold": false,
-              "Follow": false,
+              "Follow": true,
               "XPOS": false,
               "XNEG": false,
               "DISC": false,
@@ -1789,9 +1789,9 @@
           }
         ],
         "audioInput": {
-          "id": 12688,
+          "id": 12873,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -65463,
+          "modulationColor": -65409,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -1807,7 +1807,7 @@
           "arm": false,
           "enabled": false,
           "cue": false,
-          "midiMonitor": false,
+          "midiMonitor": true,
           "midiChannel": 0,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
@@ -1835,9 +1835,9 @@
               "Brt": 1.0,
               "PitchLo": 24,
               "PitchHi": 72,
-              "Shape": 0,
+              "Shape": 1,
               "Hold": false,
-              "Follow": false,
+              "Follow": true,
               "XPOS": false,
               "XNEG": false,
               "DISC": false,
@@ -1889,9 +1889,337 @@
           }
         ],
         "audioInput": {
-          "id": 12697,
+          "id": 12882,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16711698,
+          "modulationColor": -65327,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 12890,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16753153,
+        "parameters": {
+          "label": "blue flash",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": true,
+          "midiChannel": 2,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [
+          {
+            "id": 12898,
+            "class": "com.symmetrylabs.slstudio.effect.PaletteEffect",
+            "modulationColor": -65464,
+            "parameters": {
+              "label": "Palette",
+              "enabled": true,
+              "Amount": 1.0,
+              "Palette": 14,
+              "Bottom": 0.0,
+              "Top": 1.0,
+              "Shift": 0.0,
+              "Bias": 0.0,
+              "Cutoff": 0.0,
+              "Alpha": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "paletteName": "lake"
+          },
+          {
+            "id": 12904,
+            "class": "com.symmetrylabs.slstudio.effect.MidiTrigger",
+            "modulationColor": -1376512,
+            "parameters": {
+              "label": "MidiTrigger",
+              "enabled": true,
+              "Attack": 0.380000002682209,
+              "Decay": 0.2800000049173832,
+              "In": -2.3999999463558197,
+              "Out": -2.4799999445676804,
+              "Brt": 1.0,
+              "PitchLo": 24,
+              "PitchHi": 72,
+              "Shape": 3,
+              "Hold": false,
+              "Follow": true,
+              "XPOS": false,
+              "XNEG": false,
+              "DISC": false,
+              "HOLE": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 12896,
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
+            "modulationColor": -31488,
+            "parameters": {
+              "label": "Noise",
+              "Hue": 0.0,
+              "Spark": 0.0,
+              "Wave": 0.0,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
+              "Spin": 0.5,
+              "X-SYM": false,
+              "Y-SYM": false,
+              "R-SYM": false,
+              "X-DUP": false,
+              "JOG": false,
+              "GREY": false,
+              "Speed": 1.3499999821186064,
+              "Symm": 0,
+              "Anim": 3,
+              "Dens": 0.6,
+              "AnimResets": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 12891,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -3408128,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 12909,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -1572609,
+        "parameters": {
+          "label": "red flash",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [
+          {
+            "id": 12913,
+            "class": "com.symmetrylabs.slstudio.effect.PaletteEffect",
+            "modulationColor": -12517632,
+            "parameters": {
+              "label": "Palette",
+              "enabled": true,
+              "Amount": 1.0,
+              "Palette": 29,
+              "Bottom": 0.2199999950826168,
+              "Top": 1.0,
+              "Shift": 0.0,
+              "Bias": 0.0,
+              "Cutoff": 0.0,
+              "Alpha": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "paletteName": "sky.red"
+          },
+          {
+            "id": 12916,
+            "class": "com.symmetrylabs.slstudio.effect.MidiTrigger",
+            "modulationColor": -4849920,
+            "parameters": {
+              "label": "MidiTrigger",
+              "enabled": true,
+              "Attack": 0.30000000447034836,
+              "Decay": 0.30000000447034836,
+              "In": -2.079999953508377,
+              "Out": -2.2399999499320984,
+              "Brt": 1.0,
+              "PitchLo": 24,
+              "PitchHi": 72,
+              "Shape": 3,
+              "Hold": false,
+              "Follow": true,
+              "XPOS": false,
+              "XNEG": false,
+              "DISC": false,
+              "HOLE": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 12911,
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
+            "modulationColor": -16711785,
+            "parameters": {
+              "label": "Noise",
+              "Hue": 0.0,
+              "Spark": 0.0,
+              "Wave": 0.0,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
+              "Spin": 0.5,
+              "X-SYM": false,
+              "Y-SYM": false,
+              "R-SYM": false,
+              "X-DUP": false,
+              "JOG": false,
+              "GREY": false,
+              "Speed": 2.0,
+              "Symm": 0,
+              "Anim": 0,
+              "Dens": 0.6,
+              "AnimResets": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 12910,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -16717825,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 12921,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -65480,
+        "parameters": {
+          "label": "rain",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [
+          {
+            "id": 12925,
+            "class": "com.symmetrylabs.slstudio.effect.MidiTrigger",
+            "modulationColor": -524033,
+            "parameters": {
+              "label": "MidiTrigger",
+              "enabled": true,
+              "Attack": 0.24000000581145287,
+              "Decay": 0.36000000312924385,
+              "In": -1.9199999570846558,
+              "Out": -2.1599999517202377,
+              "Brt": 1.0,
+              "PitchLo": 24,
+              "PitchHi": 72,
+              "Shape": 3,
+              "Hold": false,
+              "Follow": true,
+              "XPOS": false,
+              "XNEG": false,
+              "DISC": false,
+              "HOLE": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 12923,
+            "class": "com.symmetrylabs.shows.hhgarden.Rain",
+            "modulationColor": -65407,
+            "parameters": {
+              "label": "Rain",
+              "rate": 0.9399999968707562,
+              "decay": 0.9790000000596046
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 12922,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -12845312,
           "parameters": {
             "label": "Audio Input",
             "device": 0
