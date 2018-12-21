@@ -32,6 +32,7 @@ import heronarts.p3lx.ui.UITimerTask;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIDoubleBox;
 import heronarts.p3lx.ui.component.UIDropMenu;
+import heronarts.p3lx.ui.component.UISlider;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 
@@ -46,8 +47,13 @@ class UIChannelDevice extends UIDevice {
         super(ui, channel, WIDTH);
         setTitle(channel.label);
 
+        new UISlider(0, 0, WIDTH, 16)
+        .setParameter(channel.speed)
+        .setShowLabel(false)
+        .addToContainer(this);
+
         this.patternList = (UIPatternList)
-        new UIPatternList(ui, 0, 0, PATTERN_LIST_WIDTH, getContentHeight() - 40, channel)
+        new UIPatternList(ui, 0, 16, PATTERN_LIST_WIDTH, getContentHeight() - 56, channel)
         .setDescription("Patterns available on this channel, click to select, double-click to activate")
         .addToContainer(this);
 
