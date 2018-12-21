@@ -4,9 +4,12 @@ package com.symmetrylabs.shows.office;
 
 import java.util.*;
 
+import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
+import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.workspaces.Workspace;
 
 import heronarts.lx.transform.LXTransform;
 
@@ -15,7 +18,7 @@ import com.symmetrylabs.shows.Show;
 /**
  * This file implements the mapping functions needed to lay out the cubes.
  */
-public class OfficeShow extends CubesShow implements Show {
+public class OfficeShow extends CubesShow implements Show, HasWorkspace {
 
     static final float globalOffsetX = 0;
     static final float globalOffsetY = 0;
@@ -27,6 +30,8 @@ public class OfficeShow extends CubesShow implements Show {
     static final float cuberotation = 135;
 
     static final float diag = (float) Math.sqrt(2) * SP;
+
+    private Workspace workspace;
 
     static final TowerConfig[] TOWER_CONFIG = {
         new TowerConfig(diag * 0,    0, 0,           0, cuberotation, 0, new String[] { "47", "141", "174", "1118" }),
@@ -79,5 +84,16 @@ public class OfficeShow extends CubesShow implements Show {
         }
 
         return new CubesModel(towers, allCubesArr);
+    }
+
+    @Override
+    public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
+        super.setupUi(lx, ui);
+        workspace = new Workspace(lx, ui, "shows/office");
+    }
+
+    @Override
+    public Workspace getWorkspace() {
+        return workspace;
     }
 }
