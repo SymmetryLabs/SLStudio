@@ -23,8 +23,10 @@ public class UIMarkerPainter extends UI3dComponent {
 
     protected synchronized void onDraw(UI ui, PGraphics pg) {
         for (MarkerSource source : sources.keySet()) {
-            for (Marker marker : source.getMarkers()) {
-                marker.draw(pg);
+            if (source.isFocused()) {
+                for (Marker marker : source.getMarkers()) {
+                    marker.draw(pg);
+                }
             }
         }
     }

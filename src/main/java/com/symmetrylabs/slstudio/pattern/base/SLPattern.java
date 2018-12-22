@@ -152,8 +152,8 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
         }
     }
 
-    public Collection<Marker> getMarkers() {
-        return new ArrayList<Marker>();
+    public boolean isFocused() {
+        return lx.engine.getFocusedChannel() == getBus();
     }
 
     public String getCaption() {

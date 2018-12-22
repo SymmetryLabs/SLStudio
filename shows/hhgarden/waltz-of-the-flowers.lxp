@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545454391309,
+  "timestamp": 1545457967616,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 9,
+      "focusedChannel": 4,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -96,9 +96,9 @@
           }
         ],
         "audioInput": {
-          "id": 14857,
+          "id": 15121,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -2816,
+          "modulationColor": -16725761,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -160,9 +160,9 @@
           }
         ],
         "audioInput": {
-          "id": 14863,
+          "id": 15127,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16736257,
+          "modulationColor": -655616,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -265,9 +265,9 @@
           }
         ],
         "audioInput": {
-          "id": 14869,
+          "id": 15133,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -3735297,
+          "modulationColor": -7470849,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -329,9 +329,9 @@
           }
         ],
         "audioInput": {
-          "id": 14877,
+          "id": 15141,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16771073,
+          "modulationColor": -4718337,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -388,7 +388,7 @@
             "modulationColor": -4653312,
             "parameters": {
               "label": "JetInstrument",
-              "Hue": 0.6599999852478504,
+              "Hue": 0.3840000033378601,
               "HueVar": 0.0,
               "Sat": 1.0,
               "SatVar": 0.0,
@@ -425,9 +425,9 @@
           }
         ],
         "audioInput": {
-          "id": 14883,
+          "id": 15147,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -14876928,
+          "modulationColor": -62464,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -474,11 +474,11 @@
               "BrtVar": 0.0,
               "X": 83.82488250732422,
               "Y": 331.562744140625,
-              "Size": -3.440000034868717,
+              "Size": -3.6200000308454037,
               "SizeVar": 0.5,
-              "Spread": -3.559999965131283,
+              "Spread": -4.039999954402447,
               "Twist": 0.7999999858438969,
-              "Rate": -1.1999999731779099,
+              "Rate": -2.4999999441206455,
               "RateVar": 0.0,
               "Decay": 2.059999965131283,
               "Source": 1,
@@ -544,9 +544,9 @@
           }
         ],
         "audioInput": {
-          "id": 14891,
+          "id": 15155,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -65342,
+          "modulationColor": -16721921,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -622,9 +622,9 @@
           }
         ],
         "audioInput": {
-          "id": 14899,
+          "id": 15163,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -13631233,
+          "modulationColor": -29440,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -700,9 +700,9 @@
           }
         ],
         "audioInput": {
-          "id": 14905,
+          "id": 15169,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16122112,
+          "modulationColor": -65389,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -778,9 +778,9 @@
           }
         ],
         "audioInput": {
-          "id": 14911,
+          "id": 15175,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -64000,
+          "modulationColor": -14679809,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -856,9 +856,9 @@
           }
         ],
         "audioInput": {
-          "id": 14917,
+          "id": 15181,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -65351,
+          "modulationColor": -65386,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -952,9 +952,9 @@
           }
         ],
         "audioInput": {
-          "id": 14923,
+          "id": 15187,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16711928,
+          "modulationColor": -16739585,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -1075,9 +1075,9 @@
           }
         ],
         "audioInput": {
-          "id": 14931,
+          "id": 15195,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -458497,
+          "modulationColor": -21760,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -1153,9 +1153,9 @@
           }
         ],
         "audioInput": {
-          "id": 14943,
+          "id": 15207,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -4194560,
+          "modulationColor": -16765953,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -1239,9 +1239,9 @@
           }
         ],
         "audioInput": {
-          "id": 14949,
+          "id": 15213,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16711890,
+          "modulationColor": -16711822,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -1321,9 +1321,9 @@
           }
         ],
         "audioInput": {
-          "id": 14958,
+          "id": 15222,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -1376512,
+          "modulationColor": -11075329,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -1428,9 +1428,9 @@
           }
         ],
         "audioInput": {
-          "id": 14967,
+          "id": 15231,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -65373,
+          "modulationColor": -16773633,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -1535,9 +1535,9 @@
           }
         ],
         "audioInput": {
-          "id": 14976,
+          "id": 15240,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -8454400,
+          "modulationColor": -7995137,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -1658,9 +1658,9 @@
           }
         ],
         "audioInput": {
-          "id": 14985,
+          "id": 15249,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -65393,
+          "modulationColor": -65445,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -2039,12 +2039,12 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 839.0563008905235,
-        "theta": 0.0,
-        "phi": 1.5707963705062866,
-        "positionX": 716.1514892578125,
-        "positionY": 665.158447265625,
-        "positionZ": 5.752815246582031
+        "radius": 929.937490767099,
+        "theta": 0.038999999999999986,
+        "phi": 1.5587963705062855,
+        "positionX": 795.0239868164062,
+        "positionY": 661.7759399414062,
+        "positionZ": -148.2471923828125
       }
     }
   }
