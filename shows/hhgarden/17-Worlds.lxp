@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545519628243,
+  "timestamp": 1545521171715,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5689655188471079,
       "crossfaderBlendMode": 0,
       "speed": 0.4666665829718113,
-      "focusedChannel": 8,
+      "focusedChannel": 14,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -83,8 +83,8 @@
               "label": "SolidColor",
               "color/hue": 226.11766052246094,
               "color/brightness": 100.0,
-              "color/saturation": 0.0,
-              "color": -1
+              "color/saturation": 100.0,
+              "color": -16761857
             },
             "modulation": {
               "modulators": [],
@@ -438,7 +438,7 @@
               "xRot": 0.5,
               "yRot": 0.5,
               "zRot": 0.5,
-              "Spin": 0.46000000834465027,
+              "Spin": 0.4399999976158142,
               "X-SYM": false,
               "Y-SYM": false,
               "R-SYM": false,
@@ -448,7 +448,7 @@
               "Speed": 0.55,
               "Symm": 0,
               "Anim": 7,
-              "Dens": 0.4699999988079071,
+              "Dens": 0.6299999952316284,
               "AnimResets": false
             },
             "modulation": {
@@ -494,7 +494,7 @@
             "parameters": {
               "label": "Diamonds",
               "release": 300.0,
-              "size": 51.96141973700924,
+              "size": 34.64094494276846,
               "shrink": 0.1,
               "reup": 0.0,
               "alpha": false,
@@ -698,7 +698,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -765,7 +765,7 @@
             "parameters": {
               "label": "Blur",
               "enabled": true,
-              "amount": 0.7115652561187744
+              "amount": 0.7400000095367432
             },
             "modulation": {
               "modulators": [],
@@ -839,6 +839,21 @@
               "Cboost": 1.0,
               "Cshift": 0.0,
               "Hshift": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 31785,
+            "class": "heronarts.lx.effect.BlurEffect",
+            "modulationColor": -36864,
+            "parameters": {
+              "label": "Blur",
+              "enabled": true,
+              "amount": 1.0
             },
             "modulation": {
               "modulators": [],
@@ -1106,6 +1121,29 @@
               "modulations": [],
               "triggers": []
             }
+          },
+          {
+            "id": 31788,
+            "class": "com.symmetrylabs.slstudio.effect.PaletteEffect",
+            "modulationColor": -49920,
+            "parameters": {
+              "label": "Palette",
+              "enabled": true,
+              "Amount": 1.0,
+              "Palette": 24,
+              "Bottom": 0.0,
+              "Top": 1.0,
+              "Shift": 0.020000021904706955,
+              "Bias": -0.35999999195337296,
+              "Cutoff": 0.0,
+              "Alpha": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "paletteName": "sky.green"
           }
         ],
         "clips": [],
