@@ -16,8 +16,7 @@ public class RippleEmitter implements Emitter {
         return new Ripple(
             new LXVector(paramSet.getPoint(pitch, MarkUtils.randomXyDisc())),
             paramSet.getSize(variation),
-            paramSet.getColor(MarkUtils.randomVariation()),
-            intensity,
+            paramSet.getColor(MarkUtils.randomVariation(), variation),
             paramSet.getTwist(),
             1/(0.05 + paramSet.getRate(variation)/4),
             paramSet.getDecaySec()
@@ -32,7 +31,6 @@ public class RippleEmitter implements Emitter {
         public LXVector center;
         public float width;
         public long color;
-        public float intensity;
         public float irregularity;
 
         protected LXModel model;
@@ -42,13 +40,12 @@ public class RippleEmitter implements Emitter {
         protected double growSec;
         protected float radius;
 
-        public Ripple(LXVector center, double width, long color, double intensity, double irregularity, double growSec, double decaySec) {
+        public Ripple(LXVector center, double width, long color, double irregularity, double growSec, double decaySec) {
             super(0, decaySec);
 
             this.center = center;
             this.width = (float) width;
             this.color = color;
-            this.intensity = (float) intensity;
             this.irregularity = (float) irregularity;
             this.growSec = growSec;
             this.radius = 0;
@@ -87,7 +84,7 @@ public class RippleEmitter implements Emitter {
                 float dr = (dist - radius)/width;
                 float brt = 1 - dr * dr;
                 if (brt > 0) {
-                    MarkUtils.addColor(colors, p.index, color, brt * intensity * amplitude);
+                    MarkUtils.addColor(colors, p.index, color, brt * amplitude);
                 }
             }
             buffer.markModified(RGB16);

@@ -17,11 +17,13 @@ import static heronarts.lx.PolyBuffer.Space.RGB16;
 public class SwimEmitter implements Emitter {
     @Override
     public Swimmer emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
+        double variation = 2 * intensity - 1;
         return new Swimmer(
             paramSet.getHue() + paramSet.getHueVar() * paramSet.getPitchFraction(pitch),
             0,
-            paramSet.getSat(),
-            paramSet.getRate(2 * intensity - 1),
+            paramSet.getSat(variation),
+            paramSet.getBrt(variation),
+            paramSet.getRate(variation),
             paramSet.getTwist(),
             paramSet.getPitchFraction(pitch),
             0.1 / (0.005 + intensity * intensity),  // intensity = 0, 0.5, 1 -> attack = 20, 0.4, 0.1
@@ -37,6 +39,7 @@ public class SwimEmitter implements Emitter {
         public double hue;
         public double hueVar;
         public double sat;
+        public double brt;
         public double rate;
         public double crazy;
 
@@ -49,12 +52,13 @@ public class SwimEmitter implements Emitter {
         private final SinLFO sineHeight = new SinLFO(1, 2.5, 13234);
         private final SawLFO phaseLFO = new SawLFO(0, 2 * Math.PI, 15000 - 13000 * 0.5);
 
-        public Swimmer(double hue, double hueVar, double sat, double rate, double crazy, double phase, double attackSec, double decaySec) {
+        public Swimmer(double hue, double hueVar, double sat, double brt, double rate, double crazy, double phase, double attackSec, double decaySec) {
             super(attackSec, decaySec);
 
             this.hue = hue;
             this.hueVar = hueVar;
             this.sat = sat;
+            this.brt = brt;
             this.rate = rate;
             this.crazy = crazy;
 
@@ -102,7 +106,7 @@ public class SwimEmitter implements Emitter {
                 float size_of_sin_wave = 0.4f;
 
                 float v1 = (Math.abs(y_in_range - sin_x) > size_of_sin_wave)
-                    ? 0 : Math.abs((y_in_range - sin_x + size_of_sin_wave) / size_of_sin_wave / 2 * 100);
+                    ? 0 : Math.abs((y_in_range - sin_x + size_of_sin_wave) / size_of_sin_wave / 2);
 
                 float pointHue = (float) hue * 360 +
                     (float) hueVar * (
@@ -110,7 +114,7 @@ public class SwimEmitter implements Emitter {
                             + Math.abs(p.y - model.yMax / 2) * .6f
                             + Math.abs(p.z - model.zMax)
                     );
-                MarkUtils.addColor(colors, p.index, Ops16.hsb(pointHue / 360, sat, (v1/100) * amplitude));
+                MarkUtils.addColor(colors, p.index, Ops16.hsb(pointHue / 360, sat, v1 * brt * amplitude));
             });
 
             buffer.markModified(RGB16);
