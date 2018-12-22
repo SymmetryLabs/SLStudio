@@ -1,0 +1,2018 @@
+{
+  "version": "0.1",
+  "timestamp": 1545450288179,
+  "engine": {
+    "id": 1,
+    "class": "heronarts.lx.LXEngine",
+    "modulationColor": -65444,
+    "parameters": {
+      "label": "Engine",
+      "scene-1": false,
+      "scene-2": false,
+      "scene-3": false,
+      "scene-4": false,
+      "scene-5": false,
+      "crossfader": 0.5,
+      "crossfaderBlendMode": 0,
+      "speed": 1.0,
+      "focusedChannel": 10,
+      "cueA": false,
+      "cueB": false,
+      "multithreaded": true,
+      "channelMultithreaded": true,
+      "networkMultithreaded": true
+    },
+    "palette": {
+      "id": 2,
+      "class": "heronarts.lx.color.LXPalette",
+      "modulationColor": -65346,
+      "parameters": {
+        "label": "",
+        "cue": false,
+        "hueMode": 0,
+        "color/hue": 0.0,
+        "color/brightness": 100.0,
+        "color/saturation": 100.0,
+        "color": -65536,
+        "period": 120000.0,
+        "range": 0.0,
+        "spread": 0.0,
+        "spreadX": 0.0,
+        "spreadY": 0.0,
+        "spreadZ": 0.0,
+        "spreadR": 0.0,
+        "offsetX": 0.0,
+        "offsetY": 0.0,
+        "offsetZ": 0.0,
+        "mirror": true
+      }
+    },
+    "channels": [
+      {
+        "id": 8108,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16715777,
+        "parameters": {
+          "label": "SweepBase",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 8114,
+            "class": "com.symmetrylabs.slstudio.pattern.Sparkle",
+            "modulationColor": -33792,
+            "parameters": {
+              "label": "HarpSparkle",
+              "Dens": 0.11000000089406967,
+              "Attack": 0.2900000024586916,
+              "Decay": 0.18999999575316906,
+              "Hue": 0.5,
+              "HueVar": 0.25,
+              "Sat": 0.2800000049173832
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 14725,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -459008,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 8112,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -10878721,
+        "parameters": {
+          "label": "SweepMult",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 1,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 8122,
+            "class": "com.symmetrylabs.shows.hhgarden.SweeperPattern",
+            "modulationColor": -7601921,
+            "parameters": {
+              "label": "HarpSweeper",
+              "A": 0.0,
+              "B": 0.0,
+              "C": 0.0,
+              "D": 0.0,
+              "X": 0.0,
+              "XU": 0.0,
+              "XL": 0.0,
+              "Z": 0.0,
+              "Hue": 0.0,
+              "HueVar": 0.0,
+              "Sat": 0.0,
+              "Attack": 0.5,
+              "Decay": 2.040000043809414
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 14731,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -9306368,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 8118,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -6357248,
+        "parameters": {
+          "label": "Mood",
+          "arm": false,
+          "enabled": false,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.15714285243302584,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 8141,
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
+            "modulationColor": -16739329,
+            "parameters": {
+              "label": "Noise",
+              "Hue": 233.99999544024467,
+              "Spark": 0.0,
+              "Wave": 0.0,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
+              "Spin": 0.5,
+              "X-SYM": false,
+              "Y-SYM": false,
+              "R-SYM": false,
+              "X-DUP": false,
+              "JOG": false,
+              "GREY": false,
+              "Speed": 0.6800000220537186,
+              "Symm": 0,
+              "Anim": 4,
+              "Dens": 0.6,
+              "AnimResets": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 8143,
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
+            "modulationColor": -16711723,
+            "parameters": {
+              "label": "Noise",
+              "Hue": 0.0,
+              "Spark": 0.0,
+              "Wave": 0.0,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
+              "Spin": 0.5,
+              "X-SYM": false,
+              "Y-SYM": false,
+              "R-SYM": false,
+              "X-DUP": false,
+              "JOG": false,
+              "GREY": false,
+              "Speed": 0.6699999973177908,
+              "Symm": 0,
+              "Anim": 5,
+              "Dens": 0.6,
+              "AnimResets": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 14737,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -65359,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 8169,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16384,
+        "parameters": {
+          "label": "Sweep",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 8171,
+            "class": "com.symmetrylabs.shows.hhgarden.SweeperPattern",
+            "modulationColor": -30464,
+            "parameters": {
+              "label": "Sweeper",
+              "A": 0.0,
+              "B": 0.0,
+              "C": 0.0,
+              "D": 0.0,
+              "X": 0.0,
+              "XU": 0.0,
+              "XL": 0.0,
+              "Z": 0.0,
+              "Hue": 0.7019999963231385,
+              "HueVar": 0.03999999910593033,
+              "Sat": 0.9300000034272671,
+              "Attack": 0.5,
+              "Decay": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 14745,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -16773377,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 9621,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16769025,
+        "parameters": {
+          "label": "Ins Jet Dn",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": true,
+          "midiChannel": 0,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 1,
+        "patterns": [
+          {
+            "id": 9619,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -65405,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 9623,
+            "class": "com.symmetrylabs.slstudio.pattern.instruments.JetInstrument",
+            "modulationColor": -4653312,
+            "parameters": {
+              "label": "JetInstrument",
+              "Hue": 0.6599999852478504,
+              "HueVar": 0.0,
+              "Sat": 1.0,
+              "Brt": 1.0,
+              "X": 83.82488250732422,
+              "Y": 331.562744140625,
+              "Size": -3.3800000362098217,
+              "SizeVar": 1.0,
+              "Spread": -4.079999975860119,
+              "Twist": -0.07999999821186066,
+              "Rate": 0.3999999910593033,
+              "RateVar": 0.0,
+              "Decay": 1.2599999830126762,
+              "Source": 1,
+              "Intensity": 13.199999704957008,
+              "PitchLo": 24,
+              "PitchHi": 47,
+              "Retrig": 0.0,
+              "Floor": 0.10000000149011612,
+              "Ceiling": 0.10000000149011612,
+              "AttackTh": 0.10000000149011612,
+              "ReleasTh": 0.30000001192092896,
+              "Gain": 0.0,
+              "Falloff": 2.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 14751,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -10682113,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 8175,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -27136,
+        "parameters": {
+          "label": "Ins Slow",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": true,
+          "midiChannel": 0,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.6285714227706194,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 8177,
+            "class": "com.symmetrylabs.slstudio.pattern.instruments.PuffInstrument",
+            "modulationColor": -16734977,
+            "parameters": {
+              "label": "BrassPuff",
+              "Hue": 0.035999970696866335,
+              "HueVar": 0.029999995175749028,
+              "Sat": 0.9800000004470348,
+              "Brt": 1.0,
+              "X": 83.82488250732422,
+              "Y": 331.562744140625,
+              "Size": -3.440000034868717,
+              "SizeVar": 0.5,
+              "Spread": -3.559999965131283,
+              "Twist": 0.7999999858438969,
+              "Rate": -1.1999999731779099,
+              "RateVar": 0.0,
+              "Decay": 2.059999965131283,
+              "Source": 1,
+              "Intensity": 0.0,
+              "PitchLo": 48,
+              "PitchHi": 71,
+              "Retrig": 0.0,
+              "Floor": 0.10000000149011612,
+              "Ceiling": 0.10000000149011612,
+              "AttackTh": 0.10000000149011612,
+              "ReleasTh": 0.30000001192092896,
+              "Gain": 0.0,
+              "Falloff": 2.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 8179,
+            "class": "com.symmetrylabs.slstudio.pattern.instruments.RippleInstrument",
+            "modulationColor": -65317,
+            "parameters": {
+              "label": "SlowRipple",
+              "Hue": 0.0,
+              "HueVar": 0.0,
+              "Sat": 0.14999999664723873,
+              "Brt": 1.0,
+              "X": 83.82488250732422,
+              "Y": 331.562744140625,
+              "Size": -3.7400000281631947,
+              "SizeVar": 0.5,
+              "Spread": -4.159999962896109,
+              "Twist": 0.25999999418854713,
+              "Rate": -4.499999918043613,
+              "RateVar": 0.0,
+              "Decay": 3.179999940097332,
+              "Source": 1,
+              "Intensity": 0.0,
+              "PitchLo": 24,
+              "PitchHi": 72,
+              "Retrig": 0.0,
+              "Floor": 0.10000000149011612,
+              "Ceiling": 0.10000000149011612,
+              "AttackTh": 0.10000000149011612,
+              "ReleasTh": 0.30000001192092896,
+              "Gain": 0.0,
+              "Falloff": 2.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 14759,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -65521,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 8520,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -8519425,
+        "parameters": {
+          "label": "Ins Jet Up",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": true,
+          "midiChannel": 0,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 8522,
+            "class": "com.symmetrylabs.slstudio.pattern.instruments.JetInstrument",
+            "modulationColor": -16711899,
+            "parameters": {
+              "label": "BrassJet",
+              "Hue": 0.019999995827674866,
+              "HueVar": 0.0,
+              "Sat": 1.0,
+              "Brt": 1.0,
+              "X": 83.82488250732422,
+              "Y": 331.562744140625,
+              "Size": -2.480000056326389,
+              "SizeVar": 1.0,
+              "Spread": -2.959999978542328,
+              "Twist": 0.3799999915063381,
+              "Rate": -0.29999999329447746,
+              "RateVar": 0.0,
+              "Decay": 0.5,
+              "Source": 1,
+              "Intensity": 14.399999678134918,
+              "PitchLo": 72,
+              "PitchHi": 83,
+              "Retrig": 0.0,
+              "Floor": 0.10000000149011612,
+              "Ceiling": 0.10000000149011612,
+              "AttackTh": 0.10000000149011612,
+              "ReleasTh": 0.30000001192092896,
+              "Gain": 0.0,
+              "Falloff": 2.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 14767,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -5963521,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 8228,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -14679809,
+        "parameters": {
+          "label": "Ins Swim",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": true,
+          "midiChannel": 9,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 8230,
+            "class": "com.symmetrylabs.slstudio.pattern.instruments.SwimInstrument",
+            "modulationColor": -65393,
+            "parameters": {
+              "label": "StringSwim",
+              "Hue": 0.677999981213361,
+              "HueVar": 0.39800000935792923,
+              "Sat": 1.0,
+              "Brt": 1.0,
+              "X": 792.1343383789062,
+              "Y": 663.562744140625,
+              "Size": -5.0,
+              "SizeVar": 0.5,
+              "Spread": -2.0,
+              "Twist": 0.5399999879300594,
+              "Rate": -1.5000000223517418,
+              "RateVar": 0.0,
+              "Decay": 0.5,
+              "Source": 1,
+              "Intensity": 0.0,
+              "PitchLo": 36,
+              "PitchHi": 51,
+              "Retrig": 0.0,
+              "Floor": 0.10000000149011612,
+              "Ceiling": 0.10000000149011612,
+              "AttackTh": 0.10000000149011612,
+              "ReleasTh": 0.30000001192092896,
+              "Gain": 0.0,
+              "Falloff": 2.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 14773,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -9895681,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 8526,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -8978177,
+        "parameters": {
+          "label": "Ins Puff",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": true,
+          "midiChannel": 1,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 8528,
+            "class": "com.symmetrylabs.slstudio.pattern.instruments.PuffInstrument",
+            "modulationColor": -16749825,
+            "parameters": {
+              "label": "ClarinetPuff",
+              "Hue": 0.31199999805539846,
+              "HueVar": 0.0,
+              "Sat": 1.0,
+              "Brt": 1.0,
+              "X": 83.82488250732422,
+              "Y": 331.562744140625,
+              "Size": -4.400000013411045,
+              "SizeVar": 0.5399999991059303,
+              "Spread": -3.4399999789893627,
+              "Twist": 0.0,
+              "Rate": 3.4999999403953552,
+              "RateVar": 0.0,
+              "Decay": 0.5,
+              "Source": 1,
+              "Intensity": 0.0,
+              "PitchLo": 24,
+              "PitchHi": 47,
+              "Retrig": 10.0,
+              "Floor": 0.10000000149011612,
+              "Ceiling": 0.10000000149011612,
+              "AttackTh": 0.10000000149011612,
+              "ReleasTh": 0.30000001192092896,
+              "Gain": 0.0,
+              "Falloff": 2.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 14779,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -65423,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 8532,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -13172481,
+        "parameters": {
+          "label": "Ins Ripple",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": true,
+          "midiChannel": 1,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 8534,
+            "class": "com.symmetrylabs.slstudio.pattern.instruments.RippleInstrument",
+            "modulationColor": -38400,
+            "parameters": {
+              "label": "StringRipple",
+              "Hue": 0.6559999827295542,
+              "HueVar": -0.0219999966211617,
+              "Sat": 1.0,
+              "Brt": 1.0,
+              "X": 83.82488250732422,
+              "Y": 331.562744140625,
+              "Size": -4.34000001475215,
+              "SizeVar": 1.0,
+              "Spread": -3.4999999664723873,
+              "Twist": 0.0,
+              "Rate": 0.0,
+              "RateVar": 0.0,
+              "Decay": 0.6599999964237213,
+              "Source": 1,
+              "Intensity": 0.0,
+              "PitchLo": 48,
+              "PitchHi": 71,
+              "Retrig": 0.0,
+              "Floor": 0.10000000149011612,
+              "Ceiling": 0.10000000149011612,
+              "AttackTh": 0.10000000149011612,
+              "ReleasTh": 0.30000001192092896,
+              "Gain": 0.0,
+              "Falloff": 2.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 14785,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -57600,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 9615,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -11665664,
+        "parameters": {
+          "label": "Ins Splat",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": true,
+          "midiChannel": 1,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 1,
+        "patterns": [
+          {
+            "id": 9613,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -23040,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 9617,
+            "class": "com.symmetrylabs.slstudio.pattern.instruments.RippleInstrument",
+            "modulationColor": -16711714,
+            "parameters": {
+              "label": "RippleInstrument",
+              "Hue": -0.19999999459832907,
+              "HueVar": 0.06799999810755253,
+              "Sat": 1.0,
+              "Brt": 1.0,
+              "X": 83.82488250732422,
+              "Y": 331.562744140625,
+              "Size": -2.9000000469386578,
+              "SizeVar": 0.5,
+              "Spread": -3.0,
+              "Twist": 1.0,
+              "Rate": 0.6999999471008778,
+              "RateVar": 2.1799999587237835,
+              "Decay": 0.2600000202655792,
+              "Source": 1,
+              "Intensity": 0.0,
+              "PitchLo": 72,
+              "PitchHi": 83,
+              "Retrig": 0.0,
+              "Floor": 0.10000000149011612,
+              "Ceiling": 0.10000000149011612,
+              "AttackTh": 0.10000000149011612,
+              "ReleasTh": 0.30000001192092896,
+              "Gain": 0.0,
+              "Falloff": 2.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 14791,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -16752385,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 8147,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -8257792,
+        "parameters": {
+          "label": "Trig Noise",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": true,
+          "midiChannel": 1,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [
+          {
+            "id": 8155,
+            "class": "com.symmetrylabs.slstudio.effect.PaletteEffect",
+            "modulationColor": -65443,
+            "parameters": {
+              "label": "Palette",
+              "enabled": true,
+              "Amount": 1.0,
+              "Palette": 10,
+              "Bottom": 0.0,
+              "Top": 0.69000000692904,
+              "Shift": 0.019999999552965164,
+              "Bias": 0.47999998927116394,
+              "Cutoff": 0.0,
+              "Alpha": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "paletteName": "hb/sunrise"
+          },
+          {
+            "id": 8554,
+            "class": "com.symmetrylabs.slstudio.effect.MidiTrigger",
+            "modulationColor": -48896,
+            "parameters": {
+              "label": "MidiTrigger",
+              "enabled": true,
+              "Attack": 0.9939999869093299,
+              "Decay": 0.9999999888241291,
+              "In": 0.0,
+              "Out": 0.0,
+              "Brt": 0.8200000040233135,
+              "PitchLo": 84,
+              "PitchHi": 84,
+              "Shape": 3,
+              "Hold": false,
+              "Follow": true,
+              "XPOS": false,
+              "XNEG": false,
+              "DISC": false,
+              "HOLE": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 8149,
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
+            "modulationColor": -65409,
+            "parameters": {
+              "label": "StringWhirl",
+              "Hue": 302.39999391138554,
+              "Spark": 0.0,
+              "Wave": 0.0,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
+              "Spin": 0.6599999964237213,
+              "X-SYM": false,
+              "Y-SYM": false,
+              "R-SYM": false,
+              "X-DUP": false,
+              "JOG": false,
+              "GREY": true,
+              "Speed": 0.12000003457069397,
+              "Symm": 0,
+              "Anim": 1,
+              "Dens": 0.4100000042468309,
+              "AnimResets": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 14799,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -16711745,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 8538,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -10813185,
+        "parameters": {
+          "label": "Ins Sparkle",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": true,
+          "midiChannel": 2,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 8540,
+            "class": "com.symmetrylabs.slstudio.pattern.instruments.SparkleInstrument",
+            "modulationColor": -16744449,
+            "parameters": {
+              "label": "FluteSparkle",
+              "Hue": -0.49799998803064227,
+              "HueVar": 0.0,
+              "Sat": 1.0,
+              "Brt": 1.0,
+              "X": 83.82488250732422,
+              "Y": 331.562744140625,
+              "Size": -2.9000000469386573,
+              "SizeVar": 0.5999999977648258,
+              "Spread": -3.319999970495701,
+              "Twist": 0.5199999883770943,
+              "Rate": 2.0999999530613422,
+              "RateVar": 0.0,
+              "Decay": 0.5,
+              "Source": 1,
+              "Intensity": 0.0,
+              "PitchLo": 48,
+              "PitchHi": 71,
+              "Retrig": 0.0,
+              "Floor": 0.10000000149011612,
+              "Ceiling": 0.10000000149011612,
+              "AttackTh": 0.10000000149011612,
+              "ReleasTh": 0.30000001192092896,
+              "Gain": 0.0,
+              "Falloff": 2.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 14811,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -721152,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 8559,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16762625,
+        "parameters": {
+          "label": "Trig Sparkle",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": true,
+          "midiChannel": 2,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [
+          {
+            "id": 8781,
+            "class": "com.symmetrylabs.slstudio.effect.MidiTrigger",
+            "modulationColor": -2686721,
+            "parameters": {
+              "label": "MidiTrigger",
+              "enabled": true,
+              "Attack": 0.380000002682209,
+              "Decay": 0.24000000581145287,
+              "In": -1.7599999755620956,
+              "Out": -3.0800000578165054,
+              "Brt": 1.0,
+              "PitchLo": 72,
+              "PitchHi": 76,
+              "Shape": 2,
+              "Hold": false,
+              "Follow": true,
+              "XPOS": false,
+              "XNEG": false,
+              "DISC": false,
+              "HOLE": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 8784,
+            "class": "com.symmetrylabs.slstudio.pattern.Sparkle",
+            "modulationColor": -16765185,
+            "parameters": {
+              "label": "Sparkle",
+              "Dens": 0.40999999418854716,
+              "Attack": 0.9600000008940697,
+              "Decay": 0.8699999928474427,
+              "Hue": 0.5009999866597354,
+              "HueVar": 0.05800000345334411,
+              "Sat": 1.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 14817,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -5898496,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 8552,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -65339,
+        "parameters": {
+          "label": "Trig Rain",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": true,
+          "midiChannel": 2,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [
+          {
+            "id": 8778,
+            "class": "com.symmetrylabs.slstudio.effect.MidiTrigger",
+            "modulationColor": -16711904,
+            "parameters": {
+              "label": "MidiTrigger",
+              "enabled": true,
+              "Attack": 0.5,
+              "Decay": 0.5,
+              "In": 0.0,
+              "Out": 0.0,
+              "Brt": 1.0,
+              "PitchLo": 77,
+              "PitchHi": 81,
+              "Shape": 3,
+              "Hold": false,
+              "Follow": true,
+              "XPOS": false,
+              "XNEG": false,
+              "DISC": false,
+              "HOLE": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 8773,
+            "class": "com.symmetrylabs.shows.hhgarden.Rain",
+            "modulationColor": -8781569,
+            "parameters": {
+              "label": "Rain",
+              "rate": 0.849999998882413,
+              "decay": 0.99
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 14826,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -58624,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 8544,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16766721,
+        "parameters": {
+          "label": "Trig Jet",
+          "arm": false,
+          "enabled": false,
+          "cue": false,
+          "midiMonitor": true,
+          "midiChannel": 2,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [
+          {
+            "id": 9079,
+            "class": "com.symmetrylabs.slstudio.effect.MidiTrigger",
+            "modulationColor": -9371393,
+            "parameters": {
+              "label": "MidiTrigger",
+              "enabled": true,
+              "Attack": 0.5,
+              "Decay": 0.5,
+              "In": -3.039999932050705,
+              "Out": 0.0,
+              "Brt": 1.0,
+              "PitchLo": 84,
+              "PitchHi": 84,
+              "Shape": 3,
+              "Hold": false,
+              "Follow": false,
+              "XPOS": false,
+              "XNEG": false,
+              "DISC": false,
+              "HOLE": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 8561,
+            "class": "com.symmetrylabs.slstudio.pattern.instruments.JetInstrument",
+            "modulationColor": -14336,
+            "parameters": {
+              "label": "JetInstrument",
+              "Hue": 0.0,
+              "HueVar": 0.41999999061226845,
+              "Sat": 1.0,
+              "Brt": 1.0,
+              "X": 182.98824683192075,
+              "Y": 915.8827616941923,
+              "Size": -3.680000029504299,
+              "SizeVar": 0.5,
+              "Spread": -3.079999975860119,
+              "Twist": 0.0,
+              "Rate": 0.19999999552965164,
+              "RateVar": 0.0,
+              "Decay": 2.0199999660253525,
+              "Source": 2,
+              "Intensity": 0.0,
+              "PitchLo": 78,
+              "PitchHi": 119,
+              "Retrig": 0.0,
+              "Floor": 0.10000000149011612,
+              "Ceiling": 0.10000000149011612,
+              "AttackTh": 0.05000000260770321,
+              "ReleasTh": 0.30000001192092896,
+              "Gain": 0.0,
+              "Falloff": 2.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 14835,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -1024,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 9077,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -52736,
+        "parameters": {
+          "label": "Trig Jet",
+          "arm": false,
+          "enabled": false,
+          "cue": false,
+          "midiMonitor": true,
+          "midiChannel": 2,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [
+          {
+            "id": 9084,
+            "class": "com.symmetrylabs.slstudio.effect.MidiTrigger",
+            "modulationColor": -54272,
+            "parameters": {
+              "label": "MidiTrigger",
+              "enabled": true,
+              "Attack": 0.5,
+              "Decay": 0.5,
+              "In": -1.7599999606609344,
+              "Out": -0.23999999463558197,
+              "Brt": 1.0,
+              "PitchLo": 84,
+              "PitchHi": 84,
+              "Shape": 2,
+              "Hold": false,
+              "Follow": false,
+              "XPOS": false,
+              "XNEG": false,
+              "DISC": false,
+              "HOLE": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 9082,
+            "class": "com.symmetrylabs.slstudio.pattern.instruments.JetInstrument",
+            "modulationColor": -9109249,
+            "parameters": {
+              "label": "JetInstrument",
+              "Hue": 0.0,
+              "HueVar": 0.41999999061226845,
+              "Sat": 1.0,
+              "Brt": 1.0,
+              "X": 1273.7846840956845,
+              "Y": 437.80275153160073,
+              "Size": -3.80000002682209,
+              "SizeVar": 0.5,
+              "Spread": -3.1799999959766865,
+              "Twist": 0.5039999904111028,
+              "Rate": 0.19999999552965164,
+              "RateVar": 0.0,
+              "Decay": 1.8599999696016312,
+              "Source": 2,
+              "Intensity": 0.0,
+              "PitchLo": 48,
+              "PitchHi": 72,
+              "Retrig": 0.0,
+              "Floor": 0.10000000149011612,
+              "Ceiling": 0.10000000149011612,
+              "AttackTh": 0.10000000149011612,
+              "ReleasTh": 0.30000001192092896,
+              "Gain": 0.0,
+              "Falloff": 2.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 14844,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -16711895,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 9199,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16711731,
+        "parameters": {
+          "label": "Finale",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": true,
+          "midiChannel": 0,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [
+          {
+            "id": 9253,
+            "class": "com.symmetrylabs.slstudio.effect.PaletteEffect",
+            "modulationColor": -65400,
+            "parameters": {
+              "label": "Palette",
+              "enabled": true,
+              "Amount": 1.0,
+              "Palette": 29,
+              "Bottom": 0.0,
+              "Top": 1.0,
+              "Shift": 0.0,
+              "Bias": 0.0,
+              "Cutoff": 0.0,
+              "Alpha": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "paletteName": "sky.red"
+          },
+          {
+            "id": 9256,
+            "class": "com.symmetrylabs.slstudio.effect.MidiTrigger",
+            "modulationColor": -65464,
+            "parameters": {
+              "label": "MidiTrigger",
+              "enabled": true,
+              "Attack": 0.5,
+              "Decay": 0.0,
+              "In": -0.5599999874830246,
+              "Out": -5.0,
+              "Brt": 1.0,
+              "PitchLo": 84,
+              "PitchHi": 84,
+              "Shape": 4,
+              "Hold": false,
+              "Follow": true,
+              "XPOS": false,
+              "XNEG": false,
+              "DISC": false,
+              "HOLE": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 9251,
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
+            "modulationColor": -10813185,
+            "parameters": {
+              "label": "Noise",
+              "Hue": 0.0,
+              "Spark": 0.0,
+              "Wave": 0.0,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
+              "Spin": 0.5,
+              "X-SYM": false,
+              "Y-SYM": false,
+              "R-SYM": false,
+              "X-DUP": false,
+              "JOG": false,
+              "GREY": false,
+              "Speed": 2.0,
+              "Symm": 0,
+              "Anim": 5,
+              "Dens": 0.6,
+              "AnimResets": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 14853,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -59904,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      }
+    ],
+    "master": {
+      "id": 18,
+      "class": "heronarts.lx.LXMasterChannel",
+      "modulationColor": -2227969,
+      "parameters": {
+        "label": "Master",
+        "arm": false
+      },
+      "warps": [],
+      "effects": [],
+      "clips": []
+    },
+    "tempo": {
+      "id": 26,
+      "class": "heronarts.lx.Tempo",
+      "modulationColor": -7864065,
+      "parameters": {
+        "label": "",
+        "period": 834.75,
+        "bpm": 71.87780772686433,
+        "tap": false,
+        "nudgeUp": false,
+        "nudgeDown": false,
+        "beatsPerMeasure": 4,
+        "trigger": false,
+        "enabled": false
+      }
+    },
+    "audio": {
+      "id": 20,
+      "class": "heronarts.lx.audio.LXAudioEngine",
+      "modulationColor": -16711762,
+      "parameters": {
+        "label": "Audio",
+        "enabled": false,
+        "mode": 0
+      },
+      "meter": {
+        "id": 23,
+        "class": "heronarts.lx.audio.GraphicMeter",
+        "modulationColor": -16729345,
+        "parameters": {
+          "label": "Meter",
+          "running": false,
+          "trigger": false,
+          "gain": 0.0,
+          "range": 48.0,
+          "attack": 10.0,
+          "release": 100.0,
+          "slope": 4.5,
+          "Band-1": 0.0,
+          "Band-2": 0.0,
+          "Band-3": 0.0,
+          "Band-4": 0.0,
+          "Band-5": 0.0,
+          "Band-6": 0.0,
+          "Band-7": 0.0,
+          "Band-8": 0.0,
+          "Band-9": 0.0,
+          "Band-10": 0.0,
+          "Band-11": 0.0,
+          "Band-12": 0.0,
+          "Band-13": 0.0,
+          "Band-14": 0.0,
+          "Band-15": 0.0,
+          "Band-16": 0.0
+        }
+      },
+      "input": {
+        "id": 21,
+        "class": "heronarts.lx.audio.LXAudioInput",
+        "modulationColor": -16711707,
+        "parameters": {
+          "label": "Audio Input",
+          "device": 1
+        }
+      },
+      "output": {
+        "id": 22,
+        "class": "heronarts.lx.audio.LXAudioOutput",
+        "modulationColor": -65305,
+        "parameters": {
+          "label": "Audio Output",
+          "file": "",
+          "trigger": false,
+          "looping": false,
+          "play": false
+        }
+      }
+    },
+    "output": {
+      "id": 19,
+      "class": "heronarts.lx.LXEngine$Output",
+      "modulationColor": -53248,
+      "parameters": {
+        "label": "Output",
+        "enabled": false,
+        "mode": 0,
+        "fps": 0.0,
+        "gamma": 0,
+        "brightness": 1.0
+      }
+    },
+    "components": {
+      "GammaExpander": {
+        "id": 38,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -10551041,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
+      "envelop": {
+        "id": 33,
+        "class": "com.symmetrylabs.slstudio.envelop.Envelop",
+        "modulationColor": -65468,
+        "parameters": {
+          "label": "Envelop",
+          "running": true,
+          "trigger": false
+        },
+        "source": {
+          "id": 34,
+          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Source",
+          "modulationColor": -16318720,
+          "parameters": {
+            "label": "Source",
+            "running": true,
+            "trigger": false,
+            "Gain": 0.0,
+            "Range": 24.0,
+            "Attack": 25.0,
+            "Release": 50.0,
+            "Source-1": 0.0,
+            "Source-2": 0.0,
+            "Source-3": 0.0,
+            "Source-4": 0.0,
+            "Source-5": 0.0,
+            "Source-6": 0.0,
+            "Source-7": 0.0,
+            "Source-8": 0.0,
+            "Source-9": 0.0,
+            "Source-10": 0.0,
+            "Source-11": 0.0,
+            "Source-12": 0.0,
+            "Source-13": 0.0,
+            "Source-14": 0.0,
+            "Source-15": 0.0,
+            "Source-16": 0.0
+          }
+        },
+        "decode": {
+          "id": 35,
+          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Decode",
+          "modulationColor": -11140865,
+          "parameters": {
+            "label": "Decode",
+            "running": true,
+            "trigger": false,
+            "Gain": 0.0,
+            "Range": 24.0,
+            "Attack": 25.0,
+            "Release": 50.0,
+            "Decode-1": 0.0,
+            "Decode-2": 0.0,
+            "Decode-3": 0.0,
+            "Decode-4": 0.0,
+            "Decode-5": 0.0,
+            "Decode-6": 0.0,
+            "Decode-7": 0.0,
+            "Decode-8": 0.0
+          }
+        }
+      },
+      "outputControl": {
+        "id": 402,
+        "class": "com.symmetrylabs.slstudio.output.OutputControl",
+        "modulationColor": -9830656,
+        "parameters": {
+          "label": "Output Control",
+          "Broadcast packet enabled": false,
+          "Test broadcast enabled": false
+        }
+      }
+    },
+    "modulation": {
+      "modulators": [],
+      "modulations": [],
+      "triggers": []
+    },
+    "osc": {
+      "id": 24,
+      "class": "heronarts.lx.osc.LXOscEngine",
+      "modulationColor": -48640,
+      "parameters": {
+        "label": "OSC",
+        "receiveHost": "0.0.0.0",
+        "receivePort": 3030,
+        "receiveActive": false,
+        "transmitHost": "localhost",
+        "transmitPort": 3131,
+        "transmitActive": false
+      }
+    },
+    "artnet": {
+      "id": 25,
+      "class": "com.symmetrylabs.util.artnet.ArtNetEngine",
+      "modulationColor": -16711831,
+      "parameters": {
+        "label": "Art-Net",
+        "subNet": 0,
+        "inputUniverse": 0,
+        "outputUniverse": 1,
+        "inputEnabled": false,
+        "outputEnabled": false
+      }
+    },
+    "midi": {
+      "inputs": [
+        {
+          "name": "CoreMIDI4J - MidiKeys",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Launchkey MIDI",
+          "channel": true,
+          "control": true,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Keyboard",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - iRig Keys",
+          "channel": true,
+          "control": true,
+          "sync": false
+        }
+      ],
+      "surfaces": [
+        {
+          "description": "APC40 mkII"
+        }
+      ],
+      "mapping": [
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 8122,
+          "parameterPath": "Z",
+          "cc": 48
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 8171,
+          "parameterPath": "A",
+          "cc": 21
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 8171,
+          "parameterPath": "B",
+          "cc": 22
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 8171,
+          "parameterPath": "C",
+          "cc": 23
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 8171,
+          "parameterPath": "D",
+          "cc": 24
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 8171,
+          "parameterPath": "A",
+          "cc": 41
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 8171,
+          "parameterPath": "B",
+          "cc": 42
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 8171,
+          "parameterPath": "C",
+          "cc": 43
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 8171,
+          "parameterPath": "D",
+          "cc": 44
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 8171,
+          "parameterPath": "X",
+          "cc": 45
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 8171,
+          "parameterPath": "XU",
+          "cc": 46
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 8171,
+          "parameterPath": "XL",
+          "cc": 47
+        },
+        {
+          "channel": 2,
+          "type": "NOTE",
+          "componentId": 8544,
+          "parameterPath": "enabled",
+          "pitch": 83
+        },
+        {
+          "channel": 2,
+          "type": "NOTE",
+          "componentId": 9077,
+          "parameterPath": "enabled",
+          "pitch": 83
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 9199,
+          "parameterPath": "enabled",
+          "cc": 59
+        }
+      ]
+    }
+  },
+  "externals": {
+    "ui": {
+      "audioExpanded": true,
+      "paletteExpanded": true,
+      "engineExpanded": true,
+      "clipViewVisible": true,
+      "modulatorExpanded": {},
+      "preview": {
+        "radius": 839.0563008905235,
+        "theta": 0.0,
+        "phi": 1.5707963705062866,
+        "positionX": 716.1514892578125,
+        "positionY": 665.158447265625,
+        "positionZ": 5.752815246582031
+      }
+    }
+  }
+}
