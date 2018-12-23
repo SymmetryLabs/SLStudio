@@ -16,10 +16,17 @@ public interface Instrument {
     String getCaption();
 
     interface ParameterSet {
-        double getHue();
+        double getHue(double variation);
+        default double getHue() { return getHue(0); }
         double getHueVar();
-        double getSat();
-        long getColor(double variation);
+        double getSat(double variation);
+        default double getSat() { return getSat(0); }
+        double getBrt(double variation);
+        default double getBrt() { return getBrt(0); }
+        long getColor(double hueVariation, double satVariation, double brtVariation);
+        default long getColor(double hueV) { return getColor(hueV, 0, 0); }
+        default long getColor(double hueV, double ampV) { return getColor(hueV, ampV, ampV); }
+
         LXVector getPosition(int pitch, LXVector variation);
         LXPoint getPoint(int pitch, LXVector variation);
         default double getSize() { return getSize(0); }

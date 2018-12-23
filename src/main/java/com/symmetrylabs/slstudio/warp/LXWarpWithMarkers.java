@@ -26,4 +26,8 @@ public abstract class LXWarpWithMarkers extends LXWarp implements MarkerSource {
         super.onDisable();
         lx.ui.removeMarkerSource(this);
     }
+
+    public boolean isFocused() {
+        return lx.engine.getFocusedChannel() == getBus();
+    }
 }

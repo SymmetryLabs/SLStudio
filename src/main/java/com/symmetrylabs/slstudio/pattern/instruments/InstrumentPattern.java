@@ -20,6 +20,7 @@ import heronarts.lx.Tempo;
 import heronarts.lx.audio.LXAudioBuffer;
 import heronarts.lx.audio.LXAudioInput;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
@@ -40,7 +41,9 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     private final CompoundParameter hueParam = new CompoundParameter("Hue", 0, -1, 1);
     private final CompoundParameter hueVarParam = new CompoundParameter("HueVar", 0, -1, 1);
     private final CompoundParameter satParam = new CompoundParameter("Sat", 0, 0, 1);
+    private final CompoundParameter satVarParam = new CompoundParameter("SatVar", 0, -1, 1);
     private final CompoundParameter brtParam = new CompoundParameter("Brt", 1, 0, 1);
+    private final CompoundParameter brtVarParam = new CompoundParameter("BrtVar", 0, -1, 1);
 
     private final DiscreteParameter instrParam = new DiscreteParameter(
         "Instr", InstrumentRegistry.getNames().toArray(new String[0]));
@@ -68,6 +71,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     private final CompoundParameter releasThParam = new CompoundParameter("ReleasTh", 0.3f, 0, 1);
     private final CompoundParameter gainParam = new CompoundParameter("Gain", 0, -30, 30);  // decibels
     private final CompoundParameter falloffParam = new CompoundParameter("Falloff", 2, 0, 12);
+    private final CompoundParameter whtKeyParam = new CompoundParameter("WhtKey", 1, 0, 1);
 
     private final ParameterSet paramSet = new ParameterSet();
     private Instrument instrument;
@@ -142,7 +146,9 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
         addParameter(hueParam);
         addParameter(hueVarParam);
         addParameter(satParam);
+        addParameter(satVarParam);
         addParameter(brtParam);
+        addParameter(brtVarParam);
 
         if (fixedInstrument != null) {
             instrument = fixedInstrument;
@@ -176,6 +182,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
         addParameter(releasThParam);
         addParameter(gainParam);
         addParameter(falloffParam);
+        addParameter(whtKeyParam);
 
         pitchLoParam.setFormatter(new MusicUtils.MidiPitchFormatter());
         pitchHiParam.setFormatter(new MusicUtils.MidiPitchFormatter());
@@ -337,14 +344,20 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     @Override public void noteOn(int pitch, double velocity) {
         midiNotes[pitch].attack = true;
         midiNotes[pitch].sustain = true;
-        midiNotes[pitch].intensity = (velocity * velocity) * getIntensityFactor();
+        if (MusicUtils.isWhiteKey(pitch)) {
+            velocity *= whtKeyParam.getValue();
+        }
+        midiNotes[pitch].intensity = velocity * getIntensityFactor();
         if (retrigParam.getValue() > 0) {
             retrigSec[pitch] = 1 / retrigParam.getValuef();
         }
     }
 
     @Override public void notePressure(int pitch, double pressure) {
-        midiNotes[pitch].intensity = (pressure * pressure) * getIntensityFactor();
+        if (MusicUtils.isWhiteKey(pitch)) {
+            pressure *= whtKeyParam.getValue();
+        }
+        midiNotes[pitch].intensity = pressure * getIntensityFactor();
     }
 
     @Override public void noteOff(int pitch) {
@@ -555,23 +568,24 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     }
 
     class ParameterSet implements Instrument.ParameterSet {
-        public double getHue() {
-            return hueParam.getValue();
+        public double getHue(double variation) {
+            return hueParam.getValue() + hueVarParam.getValue() * variation;
         }
 
         public double getHueVar() {
             return hueVarParam.getValue();
         }
 
-        public double getSat() {
-            return satParam.getValue();
+        public double getSat(double variation) {
+            return Math.max(0, Math.min(1, satParam.getValue() + satVarParam.getValue() * variation));
         }
 
-        public long getColor(double variation) {
-            double hue = hueParam.getValue() + hueVarParam.getValue() * variation;
-            double sat = satParam.getValue();
-            double brt = brtParam.getValue();
-            return Ops16.hsb(hue, sat, brt);
+        public double getBrt(double variation) {
+            return Math.max(0, Math.min(1, brtParam.getValue() + brtVarParam.getValue() * variation));
+        }
+
+        public long getColor(double hueVariation, double satVariation, double brtVariation) {
+            return Ops16.hsb(getHue(hueVariation), getSat(satVariation), getBrt(brtVariation));
         }
 
         public LXVector getPosition(int pitch, LXVector variation) {

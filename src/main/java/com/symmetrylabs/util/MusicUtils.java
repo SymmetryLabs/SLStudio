@@ -127,4 +127,18 @@ public class MusicUtils {
     public static double pitchToHertz(double pitch) {
         return tunedHertz * Math.pow(2.0, (pitch - tunedPitch) / 12.0);
     }
+
+    public static boolean isWhiteKey(int pitch) {
+        switch (pitch % 12) {
+            case CLASS_A:
+            case CLASS_B:
+            case CLASS_C:
+            case CLASS_D:
+            case CLASS_E:
+            case CLASS_F:
+            case CLASS_G:
+                return true;
+        }
+        return false;
+    }
 }
