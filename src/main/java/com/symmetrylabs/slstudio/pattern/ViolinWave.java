@@ -28,9 +28,9 @@ public class ViolinWave extends LXPattern {
     CompoundParameter edge = new CompoundParameter("Egde", 0.5);
     CompoundParameter release = new CompoundParameter("Rls", 0.5);
     CompoundParameter speed = new CompoundParameter("Speed", 0.5);
-    CompoundParameter amp = new CompoundParameter("Amp", 0.25, 0, 3);
+    CompoundParameter amp = new CompoundParameter("Amp", 0.25, 0, 5);
     CompoundParameter period = new CompoundParameter("Wave", 0.5);
-    CompoundParameter pSize = new CompoundParameter("pSize", 0.5);
+    CompoundParameter pSize = new CompoundParameter("pSize", 0.5, 0, 1.08);
     CompoundParameter pSpeed = new CompoundParameter("pSpeed", 0.5);
     CompoundParameter pDensity = new CompoundParameter("pDens", 0.25);
 
