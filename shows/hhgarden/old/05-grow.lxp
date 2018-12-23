@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545559201430,
+  "timestamp": 1544666259195,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -131,16 +131,7 @@
             },
             "autoCycleEnabled": true
           }
-        ],
-        "audioInput": {
-          "id": 925,
-          "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -65489,
-          "parameters": {
-            "label": "Audio Input",
-            "device": 0
-          }
-        }
+        ]
       },
       {
         "id": 478,
@@ -184,16 +175,7 @@
             },
             "autoCycleEnabled": true
           }
-        ],
-        "audioInput": {
-          "id": 937,
-          "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -65319,
-          "parameters": {
-            "label": "Audio Input",
-            "device": 0
-          }
-        }
+        ]
       },
       {
         "id": 507,
@@ -260,16 +242,7 @@
             },
             "autoCycleEnabled": true
           }
-        ],
-        "audioInput": {
-          "id": 953,
-          "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16747265,
-          "parameters": {
-            "label": "Audio Input",
-            "device": 0
-          }
-        }
+        ]
       }
     ],
     "master": {
@@ -377,7 +350,7 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 38,
+        "id": 37,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
         "modulationColor": -16731649,
         "parameters": {
@@ -390,7 +363,7 @@
         }
       },
       "envelop": {
-        "id": 33,
+        "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
         "modulationColor": -65489,
         "parameters": {
@@ -399,7 +372,7 @@
           "trigger": false
         },
         "source": {
-          "id": 34,
+          "id": 33,
           "class": "com.symmetrylabs.slstudio.envelop.Envelop$Source",
           "modulationColor": -65449,
           "parameters": {
@@ -429,7 +402,7 @@
           }
         },
         "decode": {
-          "id": 35,
+          "id": 34,
           "class": "com.symmetrylabs.slstudio.envelop.Envelop$Decode",
           "modulationColor": -1966336,
           "parameters": {
@@ -452,7 +425,7 @@
         }
       },
       "outputControl": {
-        "id": 402,
+        "id": 401,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -65402,
         "parameters": {

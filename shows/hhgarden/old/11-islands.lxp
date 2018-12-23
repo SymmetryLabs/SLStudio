@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545559201430,
+  "timestamp": 1544676481134,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,7 +14,7 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 0.6166666466742754,
+      "speed": 1.0833333283662796,
       "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
@@ -49,9 +49,9 @@
     },
     "channels": [
       {
-        "id": 460,
+        "id": 2332,
         "class": "heronarts.lx.LXChannel",
-        "modulationColor": -65361,
+        "modulationColor": -5632,
         "parameters": {
           "label": "Channel-1",
           "arm": false,
@@ -67,172 +67,18 @@
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0,
-          "autoDisable": false
+          "autoDisable": true
         },
         "warps": [],
         "effects": [
           {
-            "id": 467,
-            "class": "com.symmetrylabs.slstudio.effect.PaletteEffect",
-            "modulationColor": -16711725,
-            "parameters": {
-              "label": "Palette",
-              "enabled": true,
-              "Amount": 1.0,
-              "Palette": 9,
-              "Bottom": 0.0,
-              "Top": 1.0,
-              "Shift": 0.0,
-              "Bias": 0.0,
-              "Cutoff": 0.0,
-              "Alpha": false
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "paletteName": "hb/rain"
-          },
-          {
-            "id": 513,
+            "id": 2346,
             "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
-            "modulationColor": -5505280,
+            "modulationColor": -16747521,
             "parameters": {
               "label": "ColorShift",
-              "enabled": false,
-              "Shift": 194.3999956548214
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            }
-          }
-        ],
-        "clips": [],
-        "patternIndex": 0,
-        "patterns": [
-          {
-            "id": 461,
-            "class": "com.symmetrylabs.shows.hhgarden.Grow",
-            "modulationColor": -15990529,
-            "parameters": {
-              "label": "Grow",
-              "rate": 2.376999949105084,
-              "grow": 0.500000212341547,
-              "reset": false,
-              "zones": 13
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          }
-        ],
-        "audioInput": {
-          "id": 925,
-          "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -65489,
-          "parameters": {
-            "label": "Audio Input",
-            "device": 0
-          }
-        }
-      },
-      {
-        "id": 478,
-        "class": "heronarts.lx.LXChannel",
-        "modulationColor": -10944768,
-        "parameters": {
-          "label": "Channel-2",
-          "arm": false,
-          "enabled": true,
-          "cue": false,
-          "midiMonitor": false,
-          "midiChannel": 16,
-          "autoCycleEnabled": false,
-          "autoCycleTimeSecs": 60.0,
-          "fader": 0.96,
-          "crossfadeGroup": 0,
-          "blendMode": 1,
-          "transitionEnabled": false,
-          "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0,
-          "autoDisable": false
-        },
-        "warps": [],
-        "effects": [],
-        "clips": [],
-        "patternIndex": 0,
-        "patterns": [
-          {
-            "id": 479,
-            "class": "com.symmetrylabs.shows.hhgarden.FlowerTextureInOut",
-            "modulationColor": -16711874,
-            "parameters": {
-              "label": "FlowerTextureInOut",
-              "rotate": true,
-              "speed": 679.9999886751175
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          }
-        ],
-        "audioInput": {
-          "id": 937,
-          "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -65319,
-          "parameters": {
-            "label": "Audio Input",
-            "device": 0
-          }
-        }
-      },
-      {
-        "id": 507,
-        "class": "heronarts.lx.LXChannel",
-        "modulationColor": -22272,
-        "parameters": {
-          "label": "Channel-3",
-          "arm": false,
-          "enabled": true,
-          "cue": false,
-          "midiMonitor": false,
-          "midiChannel": 16,
-          "autoCycleEnabled": false,
-          "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
-          "crossfadeGroup": 0,
-          "blendMode": 0,
-          "transitionEnabled": false,
-          "transitionTimeSecs": 5.0,
-          "transitionBlendMode": 0,
-          "autoDisable": false
-        },
-        "warps": [],
-        "effects": [
-          {
-            "id": 510,
-            "class": "com.symmetrylabs.shows.hhgarden.FlowerGroupMask",
-            "modulationColor": -16711818,
-            "parameters": {
-              "label": "FlowerGroupMask",
               "enabled": true,
-              "stamen": true,
-              "petal1": false,
-              "petal2": false,
-              "stem": false,
-              "up": true,
-              "a": true,
-              "b": true,
-              "c": true
+              "Shift": 169.19999688863754
             },
             "modulation": {
               "modulators": [],
@@ -245,13 +91,20 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 508,
-            "class": "com.symmetrylabs.shows.hhgarden.Rain",
-            "modulationColor": -1442048,
+            "id": 2344,
+            "class": "com.symmetrylabs.slstudio.pattern.Metaballs",
+            "modulationColor": -51200,
             "parameters": {
-              "label": "Rain",
-              "rate": 0.8400000035762787,
-              "decay": 0.99
+              "label": "Metaballs",
+              "add": 28.000000000000036,
+              "maxhue": 59.20000426471233,
+              "falloff": 5.09499993301183,
+              "map": 0,
+              "count": 12,
+              "attract": 100.0,
+              "repel": 3.9799999557435517,
+              "poster": 0,
+              "jump": 60.0
             },
             "modulation": {
               "modulators": [],
@@ -260,16 +113,7 @@
             },
             "autoCycleEnabled": true
           }
-        ],
-        "audioInput": {
-          "id": 953,
-          "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16747265,
-          "parameters": {
-            "label": "Audio Input",
-            "device": 0
-          }
-        }
+        ]
       }
     ],
     "master": {
@@ -377,7 +221,7 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 38,
+        "id": 37,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
         "modulationColor": -16731649,
         "parameters": {
@@ -390,7 +234,7 @@
         }
       },
       "envelop": {
-        "id": 33,
+        "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
         "modulationColor": -65489,
         "parameters": {
@@ -399,7 +243,7 @@
           "trigger": false
         },
         "source": {
-          "id": 34,
+          "id": 33,
           "class": "com.symmetrylabs.slstudio.envelop.Envelop$Source",
           "modulationColor": -65449,
           "parameters": {
@@ -429,7 +273,7 @@
           }
         },
         "decode": {
-          "id": 35,
+          "id": 34,
           "class": "com.symmetrylabs.slstudio.envelop.Envelop$Decode",
           "modulationColor": -1966336,
           "parameters": {
@@ -452,7 +296,7 @@
         }
       },
       "outputControl": {
-        "id": 402,
+        "id": 401,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -65402,
         "parameters": {
@@ -508,9 +352,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 442.3354252731594,
-        "theta": 4.682999999999974,
-        "phi": 0.2657963705062903,
+        "radius": 1221.2912157699516,
+        "theta": 3.2039999999999336,
+        "phi": 1.5707963705062866,
         "positionX": 846.3702392578125,
         "positionY": 622.5409545898438,
         "positionZ": 41.7528076171875
