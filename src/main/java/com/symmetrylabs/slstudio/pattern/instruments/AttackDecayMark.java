@@ -18,7 +18,7 @@ public abstract class AttackDecayMark implements Mark {
         this.decaySec = decaySec;
     }
 
-    public void advance(double deltaSec, double intensity, boolean sustain) {
+    public void advance(double deltaSec, double intensity, boolean sustain, double bend) {
         if (sustain) {
             if (attackSec > 0) {
                 amplitude = Math.min(1, amplitude + deltaSec / attackSec);

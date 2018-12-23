@@ -47,6 +47,7 @@ public interface Instrument {
         public boolean attack;  // true if the note has just been triggered
         public boolean sustain;  // true if the note is being sustained
         public double intensity;  // velocity, pressure, or amplitude
+        public double bend;
 
         public Note(boolean attack, boolean sustain, double intensity) {
                 this.attack = attack;
@@ -58,6 +59,7 @@ public interface Instrument {
             attack = other.attack;
             sustain = other.sustain;
             intensity = other.intensity;
+            bend = other.bend;
         }
     }
 }

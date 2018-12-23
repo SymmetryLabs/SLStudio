@@ -87,6 +87,7 @@ public class ArtNetDatagram extends LXDatagram {
     }
 
     public void updatePoints(LXPoint[] points) {
+
         // FINISH - need to refactor and have datagram buffer adapt size
         int[] indices = new int[points.length];
         int i = 0;

@@ -130,7 +130,7 @@ public class JetEmitter implements Emitter {
             v = (int) Math.floor((center.y - model.yMin) / GRID_RESOLUTION);
         }
 
-        public void advance(double deltaSec, double intensity, boolean sustain) {
+        public void advance(double deltaSec, double intensity, boolean sustain, double bend) {
             float fluidSec = (float) (deltaSec * speedUp);
             if (sustain) {
                 float addQuantity = (float) (intensity * intensity * addRate * fluidSec);

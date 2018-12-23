@@ -353,6 +353,10 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
         }
     }
 
+    @Override public void noteBend(int pitch, double bend) {
+        midiNotes[pitch].bend = bend;
+    }
+
     @Override public void notePressure(int pitch, double pressure) {
         if (MusicUtils.isWhiteKey(pitch)) {
             pressure *= whtKeyParam.getValue();

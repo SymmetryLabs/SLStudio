@@ -14,6 +14,7 @@ public class RippleEmitter implements Emitter {
     public Ripple emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
         double variation = 2 * intensity - 1;
         return new Ripple(
+            paramSet,
             new LXVector(paramSet.getPoint(pitch, MarkUtils.randomXyDisc())),
             paramSet.getSize(variation),
             paramSet.getColor(MarkUtils.randomVariation(), variation),
@@ -32,7 +33,9 @@ public class RippleEmitter implements Emitter {
         public float width;
         public long color;
         public float irregularity;
+        public float bend;
 
+        protected Instrument.ParameterSet paramSet;
         protected LXModel model;
         protected float modelRadius;
         protected float[] distances;
@@ -40,9 +43,10 @@ public class RippleEmitter implements Emitter {
         protected double growSec;
         protected float radius;
 
-        public Ripple(LXVector center, double width, long color, double irregularity, double growSec, double decaySec) {
+        public Ripple(Instrument.ParameterSet paramSet, LXVector center, double width, long color, double irregularity, double growSec, double decaySec) {
             super(0, decaySec);
 
+            this.paramSet = paramSet;
             this.center = center;
             this.width = (float) width;
             this.color = color;
@@ -51,8 +55,11 @@ public class RippleEmitter implements Emitter {
             this.radius = 0;
         }
 
-        public void advance(double deltaSec, double intensity, boolean sustain) {
-            super.advance(deltaSec, intensity, sustain);
+        public void advance(double deltaSec, double intensity, boolean sustain, double bend) {
+            super.advance(deltaSec, intensity, sustain, bend);
+            double variation = 2 * intensity - 1;
+            width = (float) paramSet.getSize(variation);
+            this.bend = (float) bend;
             radius += modelRadius * deltaSec / growSec;
         }
 
@@ -78,8 +85,9 @@ public class RippleEmitter implements Emitter {
                 float dz = p.z - center.z;
                 float dist = distances[i++];
                 if (irregularity > 0) {
+                    float irreg = irregularity * (bend + 1);
                     float noise = NoiseUtils.noise(center.x + dx / radius, center.y + dy / radius, center.z + dz / radius);
-                    dist += radius * irregularity * (2 * noise - 1);
+                    dist += radius * irreg * (2 * noise - 1);
                 }
                 float dr = (dist - radius)/width;
                 float brt = 1 - dr * dr;

@@ -61,7 +61,7 @@ public class SparkleEmitter implements Emitter {
             this.decaySec = decaySec;
         }
 
-        public void advance(double deltaSec, double intensity, boolean sustain) {
+        public void advance(double deltaSec, double intensity, boolean sustain, double bend) {
             isSustaining = sustain;
 
             if (model != null) {

@@ -16,6 +16,7 @@ public class PuffEmitter implements Emitter {
     public Puff emit(Instrument.ParameterSet paramSet, int pitch, double intensity) {
         double variation = 2 * intensity - 1;
         return new Puff(
+            paramSet,
             new LXVector(paramSet.getPoint(pitch, MarkUtils.randomXyDisc())),
             paramSet.getSize(variation),
             paramSet.getColor(MarkUtils.randomVariation(), intensity),
@@ -35,6 +36,7 @@ public class PuffEmitter implements Emitter {
         public long color;
         public float irregularity;
 
+        protected Instrument.ParameterSet paramSet;
         protected LXModel model;
         protected List<LXPoint> points;
         protected float[] distances;
@@ -42,9 +44,10 @@ public class PuffEmitter implements Emitter {
         protected double growSec;
         protected float scale;
 
-        public Puff(LXVector center, double radius, long color, double irregularity, double growSec, double decaySec) {
+        public Puff(Instrument.ParameterSet paramSet, LXVector center, double radius, long color, double irregularity, double growSec, double decaySec) {
             super(0, decaySec);
 
+            this.paramSet = paramSet;
             this.center = center;
             this.radius = (float) radius;
             this.color = color;
@@ -53,8 +56,10 @@ public class PuffEmitter implements Emitter {
             this.scale = 0;
         }
 
-        public void advance(double deltaSec, double intensity, boolean sustain) {
-            super.advance(deltaSec, intensity, sustain);
+        public void advance(double deltaSec, double intensity, boolean sustain, double bend) {
+            super.advance(deltaSec, intensity, sustain, bend);
+            double variation = 2 * intensity - 1;
+            radius = (float) paramSet.getSize(variation);
             if (sustain) {
                 scale += deltaSec / growSec;
                 if (scale > 1) scale = 1;

@@ -47,9 +47,9 @@ public class EmitterInstrument implements Instrument {
             Mark mark = pitchMarks.get(key);
             mark.render(model, buffer);
             if (mark == lastAttack.get(key.pitch)) {
-                mark.advance(deltaSec, notes[key.pitch].intensity, notes[key.pitch].sustain);
+                mark.advance(deltaSec, notes[key.pitch].intensity, notes[key.pitch].sustain, notes[key.pitch].bend);
             } else {
-                mark.advance(deltaSec, 0, false);
+                mark.advance(deltaSec, 0, false, 0);
             }
             if (mark.isExpired()) {
                 keysToDiscard.add(key);
