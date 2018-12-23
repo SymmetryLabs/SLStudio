@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545552413134,
+  "timestamp": 1545567856220,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -12,10 +12,10 @@
       "scene-3": false,
       "scene-4": false,
       "scene-5": false,
-      "crossfader": 0.5,
-      "crossfaderBlendMode": 0,
+      "crossfader": 0.0,
+      "crossfaderBlendMode": 1,
       "speed": 1.0,
-      "focusedChannel": 4,
+      "focusedChannel": 22,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -62,7 +62,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 1,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -96,9 +96,9 @@
           }
         ],
         "audioInput": {
-          "id": 32165,
+          "id": 34346,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -7274241,
+          "modulationColor": -16711712,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -119,7 +119,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 1,
           "blendMode": 1,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -2128,9 +2128,503 @@
           }
         ],
         "audioInput": {
-          "id": 32171,
+          "id": 34352,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -8126720,
+          "modulationColor": -65391,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 34549,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16711767,
+        "parameters": {
+          "label": "Channel-19",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.8267716535433071,
+          "crossfadeGroup": 1,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [
+          {
+            "id": 34617,
+            "class": "heronarts.lx.effect.BlurEffect",
+            "modulationColor": -16760577,
+            "parameters": {
+              "label": "Blur",
+              "enabled": false,
+              "amount": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 34620,
+            "class": "com.symmetrylabs.slstudio.effect.PaletteEffect",
+            "modulationColor": -12582657,
+            "parameters": {
+              "label": "Palette",
+              "enabled": true,
+              "Amount": 0.3199999928474426,
+              "Palette": 6,
+              "Bottom": 0.07999999821186066,
+              "Top": 1.0,
+              "Shift": 0.0,
+              "Bias": 0.0,
+              "Cutoff": 0.0,
+              "Alpha": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "paletteName": "coral4"
+          }
+        ],
+        "clips": [],
+        "patternIndex": 5,
+        "patterns": [
+          {
+            "id": 34547,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -16766465,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34578,
+            "class": "com.symmetrylabs.slstudio.pattern.Diamonds",
+            "modulationColor": -54272,
+            "parameters": {
+              "label": "Diamonds",
+              "release": 300.0,
+              "size": 173.20473632812502,
+              "shrink": 0.1,
+              "reup": 0.0,
+              "alpha": false,
+              "trigger": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34580,
+            "class": "com.symmetrylabs.slstudio.pattern.BassPod",
+            "modulationColor": -1113857,
+            "parameters": {
+              "label": "BassPod",
+              "Clr": 0.5,
+              "Gain": 0.5,
+              "Range": 0.2,
+              "Attk": 0.4,
+              "Rls": 0.4,
+              "Slope": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34583,
+            "class": "com.symmetrylabs.slstudio.pattern.AskewPlanes",
+            "modulationColor": -16711882,
+            "parameters": {
+              "label": "AskewPlanes",
+              "Hue": 0.0,
+              "Spark": 0.0,
+              "Wave": 0.0,
+              "xPos": 1.0,
+              "yPos": 0.5,
+              "X-SYM": false,
+              "Y-SYM": false,
+              "R-SYM": false,
+              "X-DUP": false,
+              "JOG": false,
+              "GREY": false,
+              "Thick": 0.2,
+              "Number": 0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34594,
+            "class": "com.symmetrylabs.slstudio.ping.FlockWaveGalaxies",
+            "modulationColor": -10616577,
+            "parameters": {
+              "label": "FlockWaveGalaxies",
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": true,
+              "timeScale": 0.09,
+              "size": 560.0,
+              "detail": 6.6,
+              "ripple": 0.4,
+              "x": 300.0,
+              "y": 331.562744140625,
+              "z": 78.398,
+              "zScale": 6.3,
+              "palette": 8,
+              "palShift": 0.0,
+              "palBias": -1.4,
+              "palCutoff": 0.32,
+              "palStart": 0.25,
+              "palStop": 1.0,
+              "spnRad": 280.0,
+              "maxBirds": 8,
+              "spnRate": 2.0,
+              "spnVary": 0.0,
+              "scatter": 130.0,
+              "spdMult": 0.24,
+              "maxSpd": 10.0,
+              "turnSec": 1.56,
+              "fadeInSec": 1.7,
+              "fadeOutSec": 0.78
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34596,
+            "class": "com.symmetrylabs.slstudio.ping.FlockWaveMercury",
+            "modulationColor": -16716801,
+            "parameters": {
+              "label": "FlockWaveMercury",
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": true,
+              "timeScale": 1.0,
+              "size": 340.0,
+              "detail": 10.0,
+              "ripple": 0.6,
+              "x": 300.0,
+              "y": 331.562744140625,
+              "z": 78.398,
+              "zScale": 3.9,
+              "palette": 14,
+              "palShift": 0.0,
+              "palBias": 0.0,
+              "palCutoff": 0.0,
+              "palStart": 0.0,
+              "palStop": 1.0,
+              "spnRad": 280.0,
+              "maxBirds": 20,
+              "spnRate": 2.0,
+              "spnVary": 0.0,
+              "scatter": 200.0,
+              "spdMult": 0.0,
+              "maxSpd": 0.0,
+              "turnSec": 1.56,
+              "fadeInSec": 2.0,
+              "fadeOutSec": 1.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34598,
+            "class": "com.symmetrylabs.slstudio.ping.FlockWaveOoze",
+            "modulationColor": -16734977,
+            "parameters": {
+              "label": "FlockWaveOoze",
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": true,
+              "timeScale": 0.15,
+              "size": 560.0,
+              "detail": 6.6,
+              "ripple": 0.4,
+              "x": 300.0,
+              "y": 331.562744140625,
+              "z": 78.398,
+              "zScale": 6.3,
+              "palette": 25,
+              "palShift": 0.12,
+              "palBias": -2.12,
+              "palCutoff": 0.0,
+              "palStart": 0.25,
+              "palStop": 1.0,
+              "spnRad": 280.0,
+              "maxBirds": 8,
+              "spnRate": 2.0,
+              "spnVary": 0.0,
+              "scatter": 150.0,
+              "spdMult": 0.24,
+              "maxSpd": 10.0,
+              "turnSec": 1.56,
+              "fadeInSec": 1.7,
+              "fadeOutSec": 0.78
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34600,
+            "class": "com.symmetrylabs.slstudio.ping.FlockWavePlanets",
+            "modulationColor": -27392,
+            "parameters": {
+              "label": "FlockWavePlanets",
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": true,
+              "timeScale": 0.15,
+              "size": 560.0,
+              "detail": 4.4,
+              "ripple": -3.6,
+              "x": 300.0,
+              "y": 331.562744140625,
+              "z": 78.398,
+              "zScale": -0.18,
+              "palette": 28,
+              "palShift": 0.08,
+              "palBias": -1.28,
+              "palCutoff": 0.0,
+              "palStart": 0.0,
+              "palStop": 0.84,
+              "spnRad": 280.0,
+              "maxBirds": 8,
+              "spnRate": 2.0,
+              "spnVary": 0.0,
+              "scatter": 150.0,
+              "spdMult": 0.0,
+              "maxSpd": 10.0,
+              "turnSec": 1.56,
+              "fadeInSec": 1.7,
+              "fadeOutSec": 0.78
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34602,
+            "class": "com.symmetrylabs.slstudio.ping.FlockWaveTimewarp",
+            "modulationColor": -16769281,
+            "parameters": {
+              "label": "FlockWaveTimewarp",
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": true,
+              "timeScale": 0.35,
+              "size": 560.0,
+              "detail": 6.6,
+              "ripple": 0.6,
+              "x": 300.0,
+              "y": 331.562744140625,
+              "z": 78.398,
+              "zScale": 5.58,
+              "palette": 32,
+              "palShift": 0.12,
+              "palBias": -1.28,
+              "palCutoff": 0.0,
+              "palStart": 0.25,
+              "palStop": 1.0,
+              "spnRad": 280.0,
+              "maxBirds": 8,
+              "spnRate": 2.0,
+              "spnVary": 0.0,
+              "scatter": 300.0,
+              "spdMult": 0.24,
+              "maxSpd": 10.0,
+              "turnSec": 1.56,
+              "fadeInSec": 1.7,
+              "fadeOutSec": 0.78
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34604,
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
+            "modulationColor": -9728,
+            "parameters": {
+              "label": "Noise",
+              "Hue": 0.0,
+              "Spark": 0.0,
+              "Wave": 0.0,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
+              "Spin": 0.5,
+              "X-SYM": false,
+              "Y-SYM": false,
+              "R-SYM": false,
+              "X-DUP": false,
+              "JOG": false,
+              "GREY": false,
+              "Speed": 0.55,
+              "Symm": 0,
+              "Anim": 5,
+              "Dens": 0.6,
+              "AnimResets": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34606,
+            "class": "com.symmetrylabs.slstudio.pattern.Rings",
+            "modulationColor": -7405313,
+            "parameters": {
+              "label": "Rings",
+              "Hue": 0.0,
+              "Depth": 0.6,
+              "Bright": 0.75,
+              "Sat": 0.5,
+              "Speed1": 0.2,
+              "Speed2": 0.4,
+              "Scale": 0.65
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34608,
+            "class": "com.symmetrylabs.slstudio.pattern.raven.RKPattern01",
+            "modulationColor": -12713729,
+            "parameters": {
+              "label": "RKPattern01",
+              "Res": 200,
+              "Kernel": 3,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "amt": 20.0,
+              "speed": 3.1415927410125732,
+              "dsp": 1.5707963705062866,
+              "nDsp": 1.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34611,
+            "class": "com.symmetrylabs.slstudio.pattern.raven.RKPattern02",
+            "modulationColor": -65309,
+            "parameters": {
+              "label": "RKPattern02",
+              "Res": 200,
+              "Kernel": 3,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "noise": false,
+              "speed": 0.1,
+              "dsp": 1.0,
+              "show edge": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34614,
+            "class": "com.symmetrylabs.slstudio.pattern.raven.RKPattern03",
+            "modulationColor": -7798529,
+            "parameters": {
+              "label": "RKPattern03",
+              "Res": 200,
+              "Kernel": 3,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "avg split": false,
+              "show tri": true,
+              "show edge": false,
+              "speed": 0.01,
+              "fragment": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 34550,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -16762881,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -2150,8 +2644,8 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.24285713862627745,
-          "crossfadeGroup": 0,
+          "fader": 0.10236220472440945,
+          "crossfadeGroup": 1,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -2230,12 +2724,730 @@
               "triggers": []
             },
             "autoCycleEnabled": true
+          },
+          {
+            "id": 34502,
+            "class": "com.symmetrylabs.slstudio.ping.FlockWaveMercury",
+            "modulationColor": -16755201,
+            "parameters": {
+              "label": "FlockWaveMercury",
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": true,
+              "timeScale": 1.0,
+              "size": 340.0,
+              "detail": 10.0,
+              "ripple": 0.6,
+              "x": 300.0,
+              "y": 331.562744140625,
+              "z": 78.398,
+              "zScale": 3.9,
+              "palette": 14,
+              "palShift": 0.0,
+              "palBias": 0.0,
+              "palCutoff": 0.0,
+              "palStart": 0.0,
+              "palStop": 1.0,
+              "spnRad": 280.0,
+              "maxBirds": 20,
+              "spnRate": 2.0,
+              "spnVary": 0.0,
+              "scatter": 200.0,
+              "spdMult": 0.0,
+              "maxSpd": 0.0,
+              "turnSec": 1.56,
+              "fadeInSec": 2.0,
+              "fadeOutSec": 1.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34504,
+            "class": "com.symmetrylabs.slstudio.ping.FlockWaveTimewarp",
+            "modulationColor": -16747521,
+            "parameters": {
+              "label": "FlockWaveTimewarp",
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": true,
+              "timeScale": 0.35,
+              "size": 560.0,
+              "detail": 6.6,
+              "ripple": 0.6,
+              "x": 300.0,
+              "y": 331.562744140625,
+              "z": 78.398,
+              "zScale": 5.58,
+              "palette": 32,
+              "palShift": 0.12,
+              "palBias": -1.28,
+              "palCutoff": 0.0,
+              "palStart": 0.25,
+              "palStop": 1.0,
+              "spnRad": 280.0,
+              "maxBirds": 8,
+              "spnRate": 2.0,
+              "spnVary": 0.0,
+              "scatter": 300.0,
+              "spdMult": 0.24,
+              "maxSpd": 10.0,
+              "turnSec": 1.56,
+              "fadeInSec": 1.7,
+              "fadeOutSec": 0.78
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34506,
+            "class": "com.symmetrylabs.slstudio.pattern.Awaken",
+            "modulationColor": -65284,
+            "parameters": {
+              "label": "Awaken",
+              "palette": 0,
+              "speed": 12.0,
+              "width": 678.9302978515625,
+              "wipeOut": true,
+              "refill": true,
+              "trigger": false,
+              "reset": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true,
+            "paletteName": "astro1"
+          },
+          {
+            "id": 34508,
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
+            "modulationColor": -13435136,
+            "parameters": {
+              "label": "Noise",
+              "Hue": 0.0,
+              "Spark": 0.0,
+              "Wave": 0.0,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
+              "Spin": 0.5,
+              "X-SYM": false,
+              "Y-SYM": false,
+              "R-SYM": false,
+              "X-DUP": false,
+              "JOG": false,
+              "GREY": false,
+              "Speed": 0.55,
+              "Symm": 0,
+              "Anim": 5,
+              "Dens": 0.6,
+              "AnimResets": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34510,
+            "class": "com.symmetrylabs.slstudio.pattern.Rings",
+            "modulationColor": -65024,
+            "parameters": {
+              "label": "Rings",
+              "Hue": 0.0,
+              "Depth": 0.6,
+              "Bright": 0.75,
+              "Sat": 0.5,
+              "Speed1": 0.2,
+              "Speed2": 0.4,
+              "Scale": 0.65
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34512,
+            "class": "com.symmetrylabs.slstudio.pattern.raven.RKPattern01",
+            "modulationColor": -13238017,
+            "parameters": {
+              "label": "RKPattern01",
+              "Res": 200,
+              "Kernel": 3,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "amt": 20.0,
+              "speed": 3.1415927410125732,
+              "dsp": 1.5707963705062866,
+              "nDsp": 1.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34515,
+            "class": "com.symmetrylabs.slstudio.pattern.raven.RKPattern02",
+            "modulationColor": -2162944,
+            "parameters": {
+              "label": "RKPattern02",
+              "Res": 200,
+              "Kernel": 3,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "noise": false,
+              "speed": 0.1,
+              "dsp": 1.0,
+              "show edge": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34518,
+            "class": "com.symmetrylabs.slstudio.pattern.raven.RKPattern03",
+            "modulationColor": -16646400,
+            "parameters": {
+              "label": "RKPattern03",
+              "Res": 200,
+              "Kernel": 3,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "avg split": false,
+              "show tri": true,
+              "show edge": false,
+              "speed": 0.01,
+              "fragment": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34521,
+            "class": "com.symmetrylabs.slstudio.pattern.SineSphere",
+            "modulationColor": -6029568,
+            "parameters": {
+              "label": "SineSphere",
+              "HueSpread": 0.0,
+              "vib": 3000.0,
+              "Width": 2.700000047683716,
+              "rotx": 0.0,
+              "roty": 1.0,
+              "rotz": 0.0,
+              "yspeed": 5800.0,
+              "y2speed": 4500.0,
+              "y3speed": 1400.0,
+              "Vmag": 20.0,
+              "Scale": 1.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34536,
+            "class": "com.symmetrylabs.slstudio.pattern.Wasps",
+            "modulationColor": -65494,
+            "parameters": {
+              "label": "Wasps",
+              "count": 0.0,
+              "size": 15.0,
+              "edgeCut": 0.85,
+              "peakCut": 1.0,
+              "kernel": 0,
+              "flattenZ": false,
+              "drawParticles": false,
+              "hue": -1.0,
+              "saturation": 30.0,
+              "enableBlobs": true,
+              "bMaxDist": 500.0,
+              "bMaxAngle": 60.0,
+              "bPull": 100.0,
+              "bTrackingMode": 1,
+              "Speed": 1.0,
+              "Accel": 1.5,
+              "Dampen": 0.75,
+              "FocusX": 0.0,
+              "FocusY": 0.0,
+              "FocusZ": 0.0,
+              "PullX": 0.5,
+              "PullY": 0.5,
+              "PullZ": 0.5,
+              "TwistX": 0.0,
+              "TwistY": 0.0,
+              "TwistZ": 0.0,
+              "EdgeRepel": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34538,
+            "class": "com.symmetrylabs.shows.hhgarden.SweeperPattern",
+            "modulationColor": -54784,
+            "parameters": {
+              "label": "Sweeper",
+              "A": 0.0,
+              "B": 0.0,
+              "C": 0.0,
+              "D": 0.0,
+              "X": 0.0,
+              "XU": 0.0,
+              "XL": 0.0,
+              "Z": 0.0,
+              "Hue": 0.0,
+              "HueVar": 0.0,
+              "Sat": 0.0,
+              "Attack": 0.5,
+              "Decay": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34540,
+            "class": "com.symmetrylabs.slstudio.pattern.Swim",
+            "modulationColor": -16711813,
+            "parameters": {
+              "label": "Swim",
+              "HueVar": 0.1,
+              "Crazy": 0.5,
+              "Speed": 0.5,
+              "Hue": 0.0,
+              "Mono": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ],
         "audioInput": {
-          "id": 32178,
+          "id": 34359,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16711766,
+          "modulationColor": -16713217,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 34553,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16711767,
+        "parameters": {
+          "label": "Channel-20",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 34551,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -2294016,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 34554,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -48128,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 34557,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16715777,
+        "parameters": {
+          "label": "Channel-21",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 34555,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -65462,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34576,
+            "class": "com.symmetrylabs.slstudio.pattern.Diamonds",
+            "modulationColor": -16753409,
+            "parameters": {
+              "label": "Diamonds",
+              "release": 300.0,
+              "size": 173.20473632812502,
+              "shrink": 0.1,
+              "reup": 0.0,
+              "alpha": false,
+              "trigger": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 34558,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -16711923,
+          "parameters": {
+            "label": "Audio Input",
+            "device": 0
+          }
+        }
+      },
+      {
+        "id": 34561,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -65360,
+        "parameters": {
+          "label": "Channel-22",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": true
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 34559,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -28672,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34563,
+            "class": "com.symmetrylabs.slstudio.ping.FlockWaveBlues",
+            "modulationColor": -65294,
+            "parameters": {
+              "label": "FlockWaveBlues",
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": true,
+              "timeScale": 0.17,
+              "size": 620.0,
+              "detail": 2.0,
+              "ripple": 0.6,
+              "x": 300.0,
+              "y": 331.562744140625,
+              "z": 78.398,
+              "zScale": 0.54,
+              "palette": 12,
+              "palShift": 0.0,
+              "palBias": -0.8,
+              "palCutoff": 0.0,
+              "palStart": 0.0,
+              "palStop": 1.0,
+              "spnRad": 280.0,
+              "maxBirds": 8,
+              "spnRate": 2.0,
+              "spnVary": 0.0,
+              "scatter": 300.0,
+              "spdMult": 0.24,
+              "maxSpd": 10.0,
+              "turnSec": 1.56,
+              "fadeInSec": 1.7,
+              "fadeOutSec": 0.78
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34565,
+            "class": "com.symmetrylabs.slstudio.ping.FlockWaveGalaxies",
+            "modulationColor": -65379,
+            "parameters": {
+              "label": "FlockWaveGalaxies",
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": true,
+              "timeScale": 0.09,
+              "size": 560.0,
+              "detail": 6.6,
+              "ripple": 0.4,
+              "x": 300.0,
+              "y": 331.562744140625,
+              "z": 78.398,
+              "zScale": 6.3,
+              "palette": 8,
+              "palShift": 0.0,
+              "palBias": -1.4,
+              "palCutoff": 0.32,
+              "palStart": 0.25,
+              "palStop": 1.0,
+              "spnRad": 280.0,
+              "maxBirds": 8,
+              "spnRate": 2.0,
+              "spnVary": 0.0,
+              "scatter": 130.0,
+              "spdMult": 0.24,
+              "maxSpd": 10.0,
+              "turnSec": 1.56,
+              "fadeInSec": 1.7,
+              "fadeOutSec": 0.78
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34567,
+            "class": "com.symmetrylabs.slstudio.ping.FlockWaveMercury",
+            "modulationColor": -8704,
+            "parameters": {
+              "label": "FlockWaveMercury",
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": true,
+              "timeScale": 1.0,
+              "size": 340.0,
+              "detail": 10.0,
+              "ripple": 0.6,
+              "x": 300.0,
+              "y": 331.562744140625,
+              "z": 78.398,
+              "zScale": 3.9,
+              "palette": 14,
+              "palShift": 0.0,
+              "palBias": 0.0,
+              "palCutoff": 0.0,
+              "palStart": 0.0,
+              "palStop": 1.0,
+              "spnRad": 280.0,
+              "maxBirds": 20,
+              "spnRate": 2.0,
+              "spnVary": 0.0,
+              "scatter": 200.0,
+              "spdMult": 0.0,
+              "maxSpd": 0.0,
+              "turnSec": 1.56,
+              "fadeInSec": 2.0,
+              "fadeOutSec": 1.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34569,
+            "class": "com.symmetrylabs.slstudio.pattern.Crystalline",
+            "modulationColor": -7208705,
+            "parameters": {
+              "label": "Crystalline",
+              "count": 3,
+              "cx": 792.1343383789062,
+              "cy": 663.562744140625,
+              "cz": 42.75281524658203,
+              "width": 260.0,
+              "lvel": 0.02,
+              "rwidth": 60.0,
+              "rvel": 0.1,
+              "cutwhite": 0.1,
+              "symm": 2,
+              "radial": 0,
+              "alpha": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34571,
+            "class": "com.symmetrylabs.slstudio.pattern.Diamonds",
+            "modulationColor": -16711784,
+            "parameters": {
+              "label": "Diamonds",
+              "release": 300.0,
+              "size": 173.20473632812502,
+              "shrink": 0.1,
+              "reup": 0.0,
+              "alpha": false,
+              "trigger": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 34573,
+            "class": "com.symmetrylabs.slstudio.pattern.BassPod",
+            "modulationColor": -23552,
+            "parameters": {
+              "label": "BassPod",
+              "Clr": 0.5,
+              "Gain": 0.5,
+              "Range": 0.2,
+              "Attk": 0.4,
+              "Rls": 0.4,
+              "Slope": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ],
+        "audioInput": {
+          "id": 34562,
+          "class": "heronarts.lx.audio.LXAudioInput",
+          "modulationColor": -9371904,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -2256,7 +3468,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 1,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -2297,9 +3509,9 @@
           }
         ],
         "audioInput": {
-          "id": 32186,
+          "id": 34367,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -50944,
+          "modulationColor": -16711913,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -2320,7 +3532,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -7242,6 +8454,874 @@
                     "command": 128,
                     "data1": 76,
                     "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 64
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 41
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 44
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 18
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 48
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 38
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 27
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 48,
+                    "data2": 41
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 55,
+                    "data2": 23
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 33
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 64,
+                    "data2": 36
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 23
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 5
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 64,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 48,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 55,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 47,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 44
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 45
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 65,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 47,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 65,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 48,
+                    "data2": 44
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 41
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 54
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 48,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 64,
+                    "data2": 50
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 64,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 27
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 24
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 34
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 33
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 32
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 30
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 55,
+                    "data2": 23
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 31
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 31
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 55,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 27
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 41
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 64,
+                    "data2": 32
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 35
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 35
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 64,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 42
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 33
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 44
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 42
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 38
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 31
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 36
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 37
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 48,
+                    "data2": 26
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 30
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 28
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 21
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 48,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 29
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 40
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 28
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 84,
+                    "data2": 70
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 84,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 84,
+                    "data2": 58
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 84,
+                    "data2": 0
                   }
                 ]
               }
@@ -7311,9 +9391,9 @@
           }
         ],
         "audioInput": {
-          "id": 32192,
+          "id": 34373,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16711791,
+          "modulationColor": -65404,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -7334,7 +9414,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 0.6285714227706194,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -26842,6 +28922,874 @@
                     "command": 128,
                     "data1": 76,
                     "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 64
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 41
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 44
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 18
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 48
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 38
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 27
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 48,
+                    "data2": 41
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 55,
+                    "data2": 23
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 33
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 64,
+                    "data2": 36
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 23
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 5
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 64,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 48,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 55,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 47,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 44
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 45
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 65,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 47,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 65,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 48,
+                    "data2": 44
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 41
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 54
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 48,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 64,
+                    "data2": 50
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 64,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 27
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 24
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 34
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 33
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 32
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 30
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 55,
+                    "data2": 23
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 31
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 31
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 55,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 27
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 41
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 64,
+                    "data2": 32
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 35
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 35
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 64,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 42
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 33
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 44
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 42
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 38
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 31
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 36
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 37
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 48,
+                    "data2": 26
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 30
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 28
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 21
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 48,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 29
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 40
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 28
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 84,
+                    "data2": 70
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 84,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 84,
+                    "data2": 58
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 84,
+                    "data2": 0
                   }
                 ]
               }
@@ -26934,9 +29882,9 @@
           }
         ],
         "audioInput": {
-          "id": 32201,
+          "id": 34385,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16711880,
+          "modulationColor": -6356737,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -26957,7 +29905,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -26989,7 +29937,7 @@
             "modulationColor": -65401,
             "parameters": {
               "label": "Brass",
-              "running": true,
+              "running": false,
               "trigger": false,
               "length": 432947.0,
               "loop": false
@@ -40391,6 +43339,874 @@
                     "command": 128,
                     "data1": 76,
                     "data2": 0
+                  },
+                  {
+                    "cursor": 182860.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 64
+                  },
+                  {
+                    "cursor": 183329.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 183597.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 41
+                  },
+                  {
+                    "cursor": 184524.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 44
+                  },
+                  {
+                    "cursor": 184625.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 18
+                  },
+                  {
+                    "cursor": 184697.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 185064.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 185098.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 185149.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 185403.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 185833.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 48
+                  },
+                  {
+                    "cursor": 185833.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 38
+                  },
+                  {
+                    "cursor": 186300.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 186316.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 186316.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 27
+                  },
+                  {
+                    "cursor": 186349.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 187174.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 187226.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 187381.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 48,
+                    "data2": 41
+                  },
+                  {
+                    "cursor": 187397.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 55,
+                    "data2": 23
+                  },
+                  {
+                    "cursor": 187414.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 33
+                  },
+                  {
+                    "cursor": 187431.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 64,
+                    "data2": 36
+                  },
+                  {
+                    "cursor": 187431.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 23
+                  },
+                  {
+                    "cursor": 187551.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 5
+                  },
+                  {
+                    "cursor": 188048.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188048.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 64,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188064.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188064.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 48,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188081.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 55,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188081.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188253.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 47,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 188270.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 44
+                  },
+                  {
+                    "cursor": 188386.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 45
+                  },
+                  {
+                    "cursor": 188404.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 65,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 188453.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188471.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 47,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188712.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 65,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188746.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188847.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 48,
+                    "data2": 44
+                  },
+                  {
+                    "cursor": 188847.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 41
+                  },
+                  {
+                    "cursor": 189032.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 54
+                  },
+                  {
+                    "cursor": 189032.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 48,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 189032.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 189048.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 64,
+                    "data2": 50
+                  },
+                  {
+                    "cursor": 189535.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 189535.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 64,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 189655.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 189671.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 27
+                  },
+                  {
+                    "cursor": 189770.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 189788.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 24
+                  },
+                  {
+                    "cursor": 189857.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 189907.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 190220.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 190220.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 191050.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 34
+                  },
+                  {
+                    "cursor": 191463.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 192036.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 33
+                  },
+                  {
+                    "cursor": 192525.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 193100.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 32
+                  },
+                  {
+                    "cursor": 193117.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 30
+                  },
+                  {
+                    "cursor": 193654.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 193741.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 194614.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 55,
+                    "data2": 23
+                  },
+                  {
+                    "cursor": 194614.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 31
+                  },
+                  {
+                    "cursor": 194649.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 31
+                  },
+                  {
+                    "cursor": 195365.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 55,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 195417.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 195503.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 196472.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 27
+                  },
+                  {
+                    "cursor": 196472.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 41
+                  },
+                  {
+                    "cursor": 197147.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 197147.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 197351.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 64,
+                    "data2": 32
+                  },
+                  {
+                    "cursor": 197367.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 35
+                  },
+                  {
+                    "cursor": 197652.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 197669.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 35
+                  },
+                  {
+                    "cursor": 197719.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 64,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 197754.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 198139.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 198139.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 198260.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 42
+                  },
+                  {
+                    "cursor": 198277.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 33
+                  },
+                  {
+                    "cursor": 198735.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 198735.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 198887.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 198904.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 199144.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 44
+                  },
+                  {
+                    "cursor": 199144.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 42
+                  },
+                  {
+                    "cursor": 199196.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 199250.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 199369.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 199386.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 199471.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 199471.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 38
+                  },
+                  {
+                    "cursor": 199673.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 199707.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 200323.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 31
+                  },
+                  {
+                    "cursor": 200323.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 36
+                  },
+                  {
+                    "cursor": 200323.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 200323.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 37
+                  },
+                  {
+                    "cursor": 201788.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 201788.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 201837.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 201871.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 202537.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 48,
+                    "data2": 26
+                  },
+                  {
+                    "cursor": 202537.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 30
+                  },
+                  {
+                    "cursor": 202537.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 28
+                  },
+                  {
+                    "cursor": 202570.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 21
+                  },
+                  {
+                    "cursor": 203155.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 48,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 203172.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 203188.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 203238.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 203342.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 29
+                  },
+                  {
+                    "cursor": 203342.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 40
+                  },
+                  {
+                    "cursor": 203359.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 28
+                  },
+                  {
+                    "cursor": 203359.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 203817.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 203817.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 203867.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 203953.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 259076.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 84,
+                    "data2": 70
+                  },
+                  {
+                    "cursor": 260322.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 84,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 262493.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 84,
+                    "data2": 58
+                  },
+                  {
+                    "cursor": 266150.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 84,
+                    "data2": 0
                   }
                 ]
               }
@@ -40442,9 +44258,9 @@
           }
         ],
         "audioInput": {
-          "id": 32210,
+          "id": 34394,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -65454,
+          "modulationColor": -16735489,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -40465,7 +44281,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -48003,6 +51819,13 @@
                     "command": 144,
                     "data1": 127,
                     "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 9,
+                    "command": 144,
+                    "data1": 5,
+                    "data2": 13
                   }
                 ]
               }
@@ -48054,9 +51877,9 @@
           }
         ],
         "audioInput": {
-          "id": 32217,
+          "id": 34404,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -51712,
+          "modulationColor": -16752897,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -48077,7 +51900,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -69134,9 +72957,9 @@
           }
         ],
         "audioInput": {
-          "id": 32224,
+          "id": 34411,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16711795,
+          "modulationColor": -1048321,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -69157,7 +72980,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -81813,9 +85636,9 @@
           }
         ],
         "audioInput": {
-          "id": 32231,
+          "id": 34418,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -31488,
+          "modulationColor": -5177600,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -81836,7 +85659,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -84949,9 +88772,9 @@
           }
         ],
         "audioInput": {
-          "id": 32238,
+          "id": 34425,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -65363,
+          "modulationColor": -16736001,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -84972,7 +88795,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -90562,9 +94385,9 @@
           }
         ],
         "audioInput": {
-          "id": 32247,
+          "id": 34434,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -64512,
+          "modulationColor": -4391168,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -90585,7 +94408,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -101945,6 +105768,20 @@
                     "command": 144,
                     "data1": 127,
                     "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 2,
+                    "command": 144,
+                    "data1": 7,
+                    "data2": 34
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 2,
+                    "command": 144,
+                    "data1": 0,
+                    "data2": 30
                   }
                 ]
               }
@@ -101996,9 +105833,9 @@
           }
         ],
         "audioInput": {
-          "id": 32260,
+          "id": 34447,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16711925,
+          "modulationColor": -16711841,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -102019,7 +105856,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -107976,6 +111813,20 @@
                     "command": 144,
                     "data1": 127,
                     "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 2,
+                    "command": 144,
+                    "data1": 7,
+                    "data2": 34
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 2,
+                    "command": 144,
+                    "data1": 0,
+                    "data2": 30
                   }
                 ]
               }
@@ -108006,9 +111857,9 @@
           }
         ],
         "audioInput": {
-          "id": 32267,
+          "id": 34454,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16728833,
+          "modulationColor": -16711815,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -108029,7 +111880,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -113986,6 +117837,20 @@
                     "command": 144,
                     "data1": 127,
                     "data2": 0
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 2,
+                    "command": 144,
+                    "data1": 7,
+                    "data2": 34
+                  },
+                  {
+                    "cursor": 0.0,
+                    "channel": 2,
+                    "command": 144,
+                    "data1": 0,
+                    "data2": 30
                   }
                 ]
               }
@@ -114012,9 +117877,9 @@
           }
         ],
         "audioInput": {
-          "id": 32277,
+          "id": 34464,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -65465,
+          "modulationColor": -5888,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -114035,7 +117900,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -114119,9 +117984,9 @@
           }
         ],
         "audioInput": {
-          "id": 32287,
+          "id": 34474,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16711859,
+          "modulationColor": -51200,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -114142,7 +118007,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -114226,9 +118091,9 @@
           }
         ],
         "audioInput": {
-          "id": 32296,
+          "id": 34483,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -65461,
+          "modulationColor": -16711695,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -114249,7 +118114,7 @@
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -114317,7 +118182,7 @@
             "modulationColor": -17152,
             "parameters": {
               "label": "Finale",
-              "running": true,
+              "running": false,
               "trigger": false,
               "length": 424505.0,
               "loop": false
@@ -117947,6 +121812,874 @@
                     "command": 128,
                     "data1": 76,
                     "data2": 0
+                  },
+                  {
+                    "cursor": 182860.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 64
+                  },
+                  {
+                    "cursor": 183329.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 183597.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 41
+                  },
+                  {
+                    "cursor": 184524.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 44
+                  },
+                  {
+                    "cursor": 184625.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 18
+                  },
+                  {
+                    "cursor": 184697.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 185064.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 185098.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 185149.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 185403.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 185833.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 48
+                  },
+                  {
+                    "cursor": 185833.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 38
+                  },
+                  {
+                    "cursor": 186300.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 186316.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 186316.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 27
+                  },
+                  {
+                    "cursor": 186349.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 187174.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 187226.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 187381.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 48,
+                    "data2": 41
+                  },
+                  {
+                    "cursor": 187397.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 55,
+                    "data2": 23
+                  },
+                  {
+                    "cursor": 187414.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 33
+                  },
+                  {
+                    "cursor": 187431.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 64,
+                    "data2": 36
+                  },
+                  {
+                    "cursor": 187431.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 23
+                  },
+                  {
+                    "cursor": 187551.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 5
+                  },
+                  {
+                    "cursor": 188048.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188048.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 64,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188064.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188064.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 48,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188081.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 55,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188081.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188253.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 47,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 188270.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 44
+                  },
+                  {
+                    "cursor": 188386.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 45
+                  },
+                  {
+                    "cursor": 188404.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 65,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 188453.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188471.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 47,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188712.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 65,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188746.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 188847.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 48,
+                    "data2": 44
+                  },
+                  {
+                    "cursor": 188847.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 41
+                  },
+                  {
+                    "cursor": 189032.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 54
+                  },
+                  {
+                    "cursor": 189032.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 48,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 189032.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 189048.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 64,
+                    "data2": 50
+                  },
+                  {
+                    "cursor": 189535.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 189535.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 64,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 189655.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 189671.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 27
+                  },
+                  {
+                    "cursor": 189770.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 189788.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 24
+                  },
+                  {
+                    "cursor": 189857.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 189907.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 190220.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 190220.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 191050.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 34
+                  },
+                  {
+                    "cursor": 191463.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 192036.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 33
+                  },
+                  {
+                    "cursor": 192525.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 193100.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 32
+                  },
+                  {
+                    "cursor": 193117.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 30
+                  },
+                  {
+                    "cursor": 193654.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 193741.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 194614.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 55,
+                    "data2": 23
+                  },
+                  {
+                    "cursor": 194614.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 31
+                  },
+                  {
+                    "cursor": 194649.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 31
+                  },
+                  {
+                    "cursor": 195365.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 55,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 195417.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 195503.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 196472.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 27
+                  },
+                  {
+                    "cursor": 196472.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 41
+                  },
+                  {
+                    "cursor": 197147.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 197147.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 197351.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 64,
+                    "data2": 32
+                  },
+                  {
+                    "cursor": 197367.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 35
+                  },
+                  {
+                    "cursor": 197652.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 197669.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 35
+                  },
+                  {
+                    "cursor": 197719.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 64,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 197754.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 198139.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 198139.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 198260.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 42
+                  },
+                  {
+                    "cursor": 198277.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 33
+                  },
+                  {
+                    "cursor": 198735.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 198735.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 198887.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 198904.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 199144.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 44
+                  },
+                  {
+                    "cursor": 199144.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 42
+                  },
+                  {
+                    "cursor": 199196.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 199250.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 199369.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 199386.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 199471.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 43
+                  },
+                  {
+                    "cursor": 199471.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 38
+                  },
+                  {
+                    "cursor": 199673.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 199707.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 200323.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 31
+                  },
+                  {
+                    "cursor": 200323.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 36
+                  },
+                  {
+                    "cursor": 200323.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 200323.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 37
+                  },
+                  {
+                    "cursor": 201788.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 201788.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 201837.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 201871.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 202537.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 48,
+                    "data2": 26
+                  },
+                  {
+                    "cursor": 202537.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 52,
+                    "data2": 30
+                  },
+                  {
+                    "cursor": 202537.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 60,
+                    "data2": 28
+                  },
+                  {
+                    "cursor": 202570.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 57,
+                    "data2": 21
+                  },
+                  {
+                    "cursor": 203155.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 48,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 203172.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 57,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 203188.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 52,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 203238.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 60,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 203342.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 53,
+                    "data2": 29
+                  },
+                  {
+                    "cursor": 203342.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 62,
+                    "data2": 40
+                  },
+                  {
+                    "cursor": 203359.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 50,
+                    "data2": 28
+                  },
+                  {
+                    "cursor": 203359.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 59,
+                    "data2": 39
+                  },
+                  {
+                    "cursor": 203817.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 62,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 203817.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 59,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 203867.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 53,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 203953.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 50,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 259076.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 84,
+                    "data2": 70
+                  },
+                  {
+                    "cursor": 260322.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 84,
+                    "data2": 0
+                  },
+                  {
+                    "cursor": 262493.0,
+                    "channel": 0,
+                    "command": 144,
+                    "data1": 84,
+                    "data2": 58
+                  },
+                  {
+                    "cursor": 266150.0,
+                    "channel": 0,
+                    "command": 128,
+                    "data1": 84,
+                    "data2": 0
                   }
                 ]
               }
@@ -117991,9 +122724,9 @@
           }
         ],
         "audioInput": {
-          "id": 32305,
+          "id": 34492,
           "class": "heronarts.lx.audio.LXAudioInput",
-          "modulationColor": -16757249,
+          "modulationColor": -65494,
           "parameters": {
             "label": "Audio Input",
             "device": 0
@@ -118010,7 +122743,40 @@
         "arm": false
       },
       "warps": [],
-      "effects": [],
+      "effects": [
+        {
+          "id": 34623,
+          "class": "heronarts.lx.effect.BlurEffect",
+          "modulationColor": -12713729,
+          "parameters": {
+            "label": "Blur",
+            "enabled": true,
+            "amount": 0.0
+          },
+          "modulation": {
+            "modulators": [],
+            "modulations": [],
+            "triggers": []
+          }
+        },
+        {
+          "id": 34626,
+          "class": "heronarts.lx.effect.DesaturationEffect",
+          "modulationColor": -65304,
+          "parameters": {
+            "label": "Desaturation",
+            "enabled": true,
+            "amount": 1.0,
+            "attack": 100.0,
+            "decay": 100.0
+          },
+          "modulation": {
+            "modulators": [],
+            "modulations": [],
+            "triggers": []
+          }
+        }
+      ],
       "clips": []
     },
     "tempo": {
@@ -118035,7 +122801,7 @@
       "modulationColor": -16711762,
       "parameters": {
         "label": "Audio",
-        "enabled": false,
+        "enabled": true,
         "mode": 1
       },
       "meter": {
@@ -118044,7 +122810,7 @@
         "modulationColor": -16729345,
         "parameters": {
           "label": "Meter",
-          "running": false,
+          "running": true,
           "trigger": false,
           "gain": 0.0,
           "range": 48.0,
@@ -118052,16 +122818,16 @@
           "release": 100.0,
           "slope": 4.5,
           "Band-1": 0.0,
-          "Band-2": 0.09833875375990486,
-          "Band-3": 0.20882541755024464,
-          "Band-4": 0.19424452832644723,
-          "Band-5": 0.24137503412508687,
-          "Band-6": 0.36840478853392333,
-          "Band-7": 0.11713301845556934,
-          "Band-8": 0.09341159361866824,
+          "Band-2": 0.0,
+          "Band-3": 0.0,
+          "Band-4": 0.0,
+          "Band-5": 0.0,
+          "Band-6": 0.0,
+          "Band-7": 0.0,
+          "Band-8": 0.0,
           "Band-9": 0.0,
-          "Band-10": 0.09776319968854585,
-          "Band-11": 0.19412008985288898,
+          "Band-10": 0.0,
+          "Band-11": 0.0,
           "Band-12": 0.0,
           "Band-13": 0.0,
           "Band-14": 0.0,
@@ -118226,16 +122992,22 @@
     "midi": {
       "inputs": [
         {
-          "name": "CoreMIDI4J - APC40 mkII",
-          "channel": false,
-          "control": false,
-          "sync": false
-        },
-        {
           "name": "CoreMIDI4J - Launchkey MIDI",
           "channel": true,
           "control": true,
           "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Keyboard",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Seaboard BLOCK",
+          "channel": true,
+          "control": true,
+          "sync": true
         },
         {
           "name": "CoreMIDI4J - MidiKeys",
@@ -118245,12 +123017,6 @@
         },
         {
           "name": "Real Time Sequencer",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Keyboard",
           "channel": true,
           "control": false,
           "sync": false
@@ -118510,7 +123276,7 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 1342.0604090742027,
+        "radius": 1412.1070030381625,
         "theta": 0.002999999999998162,
         "phi": 1.558796370506287,
         "positionX": 792.1343383789062,
