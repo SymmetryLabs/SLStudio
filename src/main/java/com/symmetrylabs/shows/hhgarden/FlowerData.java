@@ -25,6 +25,6 @@ public class FlowerData {
     @Override
     public String toString() {
         return String.format(
-            "%s [%f %f %f]", record, location.x, location.y, location.z);
+            "%s [%.1f %.1f %.1f]", record, location.x, location.y, location.z);
     }
 }
