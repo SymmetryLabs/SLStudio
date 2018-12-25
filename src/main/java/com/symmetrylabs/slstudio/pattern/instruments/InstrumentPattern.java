@@ -20,7 +20,6 @@ import heronarts.lx.Tempo;
 import heronarts.lx.audio.LXAudioBuffer;
 import heronarts.lx.audio.LXAudioInput;
 import heronarts.lx.model.LXPoint;
-import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
@@ -87,6 +86,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     // MIDI note trigger
     private Note[] midiNotes;
     private float[] retrigSec;
+    private boolean sustainPedal;
 
     // Audio note trigger
     private LXAudioBuffer audio;
@@ -353,6 +353,20 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
         }
     }
 
+    @Override public void noteControl(int pitch, int controller, double value) {
+        if (controller == 64) { // sustain pedal
+            sustainPedal = (value > 0.5);
+            if (!sustainPedal) {
+                for (int p = 0; p < notes.length; p++) {
+                    midiNotes[p].sustain = false;
+                }
+            }
+        }
+        if (controller == 11) { // expression pedal
+            twistParam.setValue(value);
+        }
+    }
+
     @Override public void noteBend(int pitch, double bend) {
         midiNotes[pitch].bend = bend;
     }
@@ -365,8 +379,9 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     }
 
     @Override public void noteOff(int pitch) {
-        midiNotes[pitch].sustain = false;
-        midiNotes[pitch].intensity = 0;
+        if (!sustainPedal) {
+            midiNotes[pitch].sustain = false;
+        }
     }
 
     protected void putAudioNotes(double deltaSec, Note[] notes) {
