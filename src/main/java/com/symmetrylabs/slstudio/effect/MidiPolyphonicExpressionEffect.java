@@ -1,8 +1,5 @@
 package com.symmetrylabs.slstudio.effect;
 
-import com.symmetrylabs.shows.cubes.CubesModel;
-import com.symmetrylabs.slstudio.model.SLModel;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -47,6 +44,9 @@ public abstract class MidiPolyphonicExpressionEffect extends SLEffect {
 
     /** Pitch is from 0 to 127, slide is from -1.0 to 1.0. */
     public /* abstract */ void noteSlide(int pitch, double slide) { }
+
+    /** Value is from -1.0 to 1.0. */
+    public /* abstract */ void channelControl(int controller, double value) { }
 
     /** Pitch is from 0 to 127, value is from -1.0 to 1.0. */
     public /* abstract */ void noteControl(int pitch, int controller, double value) { }
@@ -116,16 +116,20 @@ public abstract class MidiPolyphonicExpressionEffect extends SLEffect {
         int channel = controlChange.getChannel() + 1;  // 1 to 16
         int controller = controlChange.getCC();
         double value = controlChange.getValue() / 127.0;
+        Set<Integer> pitches = getChannelPitches(channel);
         if (controller == SLIDE_CONTROLLER) {
-            for (int pitch : getChannelPitches(channel)) {
+            for (int pitch : pitches) {
                 slides[pitch] = value;
             }
-            for (int pitch : getChannelPitches(channel)) {
+            for (int pitch : pitches) {
                 noteSlide(pitch, value);
             }
         }
-        for (int pitch : getChannelPitches(channel)) {
+        for (int pitch : pitches) {
             noteControl(pitch, controller, value);
+        }
+        if (pitches.isEmpty()) {
+            channelControl(controller, value);  // not related to an existing note
         }
     }
 

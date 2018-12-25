@@ -85,7 +85,7 @@ public class RippleEmitter implements Emitter {
                 float dz = p.z - center.z;
                 float dist = distances[i++];
                 if (irregularity > 0) {
-                    float irreg = irregularity * (bend + 1);
+                    float irreg = irregularity * (bend + 1) * 3;
                     float noise = NoiseUtils.noise(center.x + dx / radius, center.y + dy / radius, center.z + dz / radius);
                     dist += radius * irreg * (2 * noise - 1);
                 }
