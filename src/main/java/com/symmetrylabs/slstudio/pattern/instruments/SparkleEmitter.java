@@ -24,7 +24,7 @@ public class SparkleEmitter implements Emitter {
             paramSet.getHue(),
             paramSet.getHueVar(),
             paramSet.getSat(),
-            paramSet.getTwist(),
+            paramSet.getRate() * Math.pow(2, paramSet.getTwist()),
             1/(1 + paramSet.getRate(2 * intensity - 1) * 4),
             paramSet.getDecaySec() + 0.05
         );
@@ -48,7 +48,7 @@ public class SparkleEmitter implements Emitter {
         protected LXModel model;
         protected float leftoverSec = 0;
         protected List<Spark> sparks = new LinkedList<>();
-        protected List<LXPoint> points = new ArrayList<>();
+        protected List<LXVector> vectors = new ArrayList<>();
 
         public Sparkle(LXVector center, double radius, double hue, double hueVar, double sat, double density, double attackSec, double decaySec) {
             this.center = center;
@@ -68,9 +68,9 @@ public class SparkleEmitter implements Emitter {
                 leftoverSec += deltaSec;
                 float secPerSpark = 1 / (float) ((density + .01) * (radius * 5));
                 if (sustain) {
-                    while (leftoverSec > secPerSpark) {
+                    while (leftoverSec > secPerSpark && !vectors.isEmpty()) {
                         leftoverSec -= secPerSpark;
-                        sparks.add(new Spark(MarkUtils.randomElement(points)));
+                        sparks.add(new Spark(MarkUtils.randomElement(vectors).index));
                     }
                 }
 
@@ -89,27 +89,27 @@ public class SparkleEmitter implements Emitter {
             return !isSustaining && sparks.isEmpty();
         }
 
-        public void render(LXModel model, PolyBuffer buffer) {
+        public void render(LXModel model, List<LXVector> allVectors, PolyBuffer buffer) {
             if (model != this.model) {
                 this.model = model;
-                points = MarkUtils.getAllPointsWithin(model, center, radius);
+                vectors = MarkUtils.getAllVectorsWithin(allVectors, center, radius);
             }
 
             long[] colors = (long[]) buffer.getArray(RGB16);
             for (Spark spark : sparks) {
-                MarkUtils.addColor(colors, spark.point.index, Ops16.hsb(hue + hueVar * spark.hue, sat, spark.value));
+                MarkUtils.addColor(colors, spark.index, Ops16.hsb(hue + hueVar * spark.hue, sat, spark.value));
             }
             buffer.markModified(RGB16);
         }
 
         class Spark {
-            LXPoint point;
+            int index;
             float value;
             float hue;
             boolean hasPeaked;
 
-            Spark(LXPoint point) {
-                this.point = point;
+            Spark(int index) {
+                this.index = index;
                 hue = (float) LXUtils.random(-1, 1);
                 boolean infiniteAttack = (attackSec < 0.01);
                 hasPeaked = infiniteAttack;

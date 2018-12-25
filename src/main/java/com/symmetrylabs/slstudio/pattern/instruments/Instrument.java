@@ -1,5 +1,7 @@
 package com.symmetrylabs.slstudio.pattern.instruments;
 
+import java.util.List;
+
 import heronarts.lx.LXPattern;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
@@ -12,7 +14,7 @@ import heronarts.lx.transform.LXVector;
  * control colour, position, and movement.
  */
 public interface Instrument {
-    void run(LXModel model, LXPattern pattern, ParameterSet paramSet, Note[] notes, double deltaSec, PolyBuffer buffer);
+    void run(LXModel model, List<LXVector> vectors, LXPattern pattern, ParameterSet paramSet, Note[] notes, double deltaSec, PolyBuffer buffer);
     String getCaption();
 
     interface ParameterSet {

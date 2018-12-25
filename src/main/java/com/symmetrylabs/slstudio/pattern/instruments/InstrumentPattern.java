@@ -49,11 +49,11 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
     private final CompoundParameter xParam = new CompoundParameter("X", model.xMin, model.xMin, model.xMax);
     private final CompoundParameter yParam = new CompoundParameter("Y", model.yMin, model.yMin, model.yMax);
     private final float radius = (float) Math.hypot(Math.hypot(model.xRange/2, model.yRange/2), model.zRange/2);
-    private final CompoundParameter sizeParam = new CompoundParameter("Size", -5, -6, 0);
+    private final CompoundParameter sizeParam = new CompoundParameter("Size", -4, -6, 0);
     private final CompoundParameter sizeVarParam = new CompoundParameter("SizeVar", 0.5, 0, 1);
 
-    private final CompoundParameter spreadParam = new CompoundParameter("Spread", -3, -6, 0);
-    private final CompoundParameter twistParam = new CompoundParameter("Twist", 0, -1, 1);
+    private final CompoundParameter spreadParam = new CompoundParameter("Spread", -4, -6, 0);
+    private final CompoundParameter twistParam = new CompoundParameter("Twist", 0, -5, 5);
     private final CompoundParameter rateParam = new CompoundParameter("Rate", 0, -5, 5);
     private final CompoundParameter rateVarParam = new CompoundParameter("RateVar", 0, 0, 6);
     private final CompoundParameter decayParam = new CompoundParameter("Decay", 0.5, 0, 4);
@@ -288,7 +288,7 @@ public class InstrumentPattern extends MidiPolyphonicExpressionPattern<SLModel>
         if (instrument == null) {
             instrument = InstrumentRegistry.getInstrument(instrParam.getOption());
         }
-        instrument.run(model, this, paramSet, notes, deltaMs / 1000.0, getPolyBuffer());
+        instrument.run(model, getVectorList(), this, paramSet, notes, deltaMs / 1000.0, getPolyBuffer());
     }
 
     protected void putBeatNotes(double deltaSec, Note[] notes) {

@@ -2,6 +2,8 @@ package com.symmetrylabs.slstudio.pattern.instruments;
 
 import com.symmetrylabs.color.Ops16;
 
+import java.util.List;
+
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.transform.LXVector;
@@ -70,18 +72,21 @@ public class JetEmitter implements Emitter {
         }
     }
 
-    public void render(LXModel model, PolyBuffer buffer) {
+    public void render(LXModel model, List<LXVector> vectors, PolyBuffer buffer) {
         initFluid(model);
         long[] colors = (long[]) buffer.getArray(RGB16);
-        for (int i = 0; i < model.points.length; i++) {
-            float u = (model.points[i].x - model.xMin) / GRID_RESOLUTION;
-            float v = (model.points[i].y - model.yMin) / GRID_RESOLUTION;
+        for (LXVector vector : vectors) {
+            float u = (vector.x - model.xMin) / GRID_RESOLUTION;
+            float v = (vector.y - model.yMin) / GRID_RESOLUTION;
             int uLo = (int) Math.floor(u);
             int vLo = (int) Math.floor(v);
+            if (!(uLo >= 0 && uLo < fluids[0].width && vLo >= 0 && vLo < fluids[0].height)) {
+                continue;
+            }
             float r = lerpCells(fluids[0], uLo, u - uLo, vLo, v - vLo);
             float g = lerpCells(fluids[1], uLo, u - uLo, vLo, v - vLo);
             float b = lerpCells(fluids[2], uLo, u - uLo, vLo, v - vLo);
-            colors[i] = Ops16.rgba(
+            colors[vector.index] = Ops16.rgba(
                 (int) (r * Ops16.MAX),
                 (int) (g * Ops16.MAX),
                 (int) (b * Ops16.MAX),
@@ -145,7 +150,5 @@ public class JetEmitter implements Emitter {
         public boolean isExpired() {
             return expired;
         }
-
-        public void render(LXModel model, PolyBuffer buffer) { }
     }
 }

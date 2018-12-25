@@ -77,6 +77,18 @@ public class MarkUtils {
         return points;
     }
 
+    public static List<LXVector> getAllVectorsWithin(Iterable<LXVector> allVectors, LXVector center, double radius) {
+        List<LXVector> vectors = new ArrayList<>();
+        for (LXVector v : allVectors) {
+            if (Math.abs(v.x - center.x) < radius && Math.abs(v.y - center.y) < radius) {
+                if (center.dist(v) < radius) {
+                    vectors.add(v);
+                }
+            }
+        }
+        return vectors;
+    }
+
     public static void addColor(long[] colors, int index, long color) {
         long c = colors[index];
         colors[index] = Ops16.rgba(

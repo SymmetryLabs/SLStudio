@@ -2,6 +2,8 @@ package com.symmetrylabs.slstudio.pattern.instruments;
 
 import com.symmetrylabs.util.NoiseUtils;
 
+import java.util.List;
+
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
@@ -63,36 +65,36 @@ public class RippleEmitter implements Emitter {
             radius += modelRadius * deltaSec / growSec;
         }
 
-        public void render(LXModel model, PolyBuffer buffer) {
+        public void render(LXModel model, List<LXVector> vectors, PolyBuffer buffer) {
             if (model != this.model) {
                 this.model = model;
                 modelRadius = (float) Math.hypot(Math.hypot(model.xRange, model.yRange), model.zRange)/2;
-                distances = new float[model.points.length];
+                distances = new float[vectors.size()];
                 int i = 0;
-                for (LXPoint p : model.points) {
-                    float dx = p.x - center.x;
-                    float dy = p.y - center.y;
-                    float dz = p.z - center.z;
+                for (LXVector v : vectors) {
+                    float dx = v.x - center.x;
+                    float dy = v.y - center.y;
+                    float dz = v.z - center.z;
                     distances[i++] = (float) Math.sqrt(dx*dx + dy*dy + dz*dz);
                 }
             }
 
             long[] colors = (long[]) buffer.getArray(RGB16);
             int i = 0;
-            for (LXPoint p : model.points) {
-                float dx = p.x - center.x;
-                float dy = p.y - center.y;
-                float dz = p.z - center.z;
+            for (LXVector v : vectors) {
+                float dx = v.x - center.x;
+                float dy = v.y - center.y;
+                float dz = v.z - center.z;
                 float dist = distances[i++];
                 if (irregularity > 0) {
-                    float irreg = irregularity * (bend + 1) * 3;
+                    float irreg = irregularity * (bend + 1) / 2;
                     float noise = NoiseUtils.noise(center.x + dx / radius, center.y + dy / radius, center.z + dz / radius);
                     dist += radius * irreg * (2 * noise - 1);
                 }
                 float dr = (dist - radius)/width;
                 float brt = 1 - dr * dr;
                 if (brt > 0) {
-                    MarkUtils.addColor(colors, p.index, color, brt * amplitude);
+                    MarkUtils.addColor(colors, v.index, color, brt * amplitude);
                 }
             }
             buffer.markModified(RGB16);

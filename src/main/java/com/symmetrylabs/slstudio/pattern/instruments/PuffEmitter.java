@@ -38,7 +38,7 @@ public class PuffEmitter implements Emitter {
 
         protected Instrument.ParameterSet paramSet;
         protected LXModel model;
-        protected List<LXPoint> points;
+        protected List<LXVector> vectors;
         protected float[] distances;
 
         protected double growSec;
@@ -56,7 +56,7 @@ public class PuffEmitter implements Emitter {
             this.scale = 0;
         }
 
-        public void advance(double deltaSec, double intensity, boolean sustain, double bend) {
+        @Override public void advance(double deltaSec, double intensity, boolean sustain, double bend) {
             super.advance(deltaSec, intensity, sustain, bend);
             double variation = 2 * intensity - 1;
             radius = (float) paramSet.getSize(variation);
@@ -66,16 +66,16 @@ public class PuffEmitter implements Emitter {
             }
         }
 
-        public void render(LXModel model, PolyBuffer buffer) {
+        @Override public void render(LXModel model, List<LXVector> allVectors, PolyBuffer buffer) {
             if (model != this.model) {
                 this.model = model;
-                points = MarkUtils.getAllPointsWithin(model, center, radius * 2);
-                distances = new float[points.size()];
+                vectors = MarkUtils.getAllVectorsWithin(allVectors, center, radius * 2);
+                distances = new float[vectors.size()];
                 int i = 0;
-                for (LXPoint p : points) {
-                    float dx = p.x - center.x;
-                    float dy = p.y - center.y;
-                    float dz = p.z - center.z;
+                for (LXVector v : vectors) {
+                    float dx = v.x - center.x;
+                    float dy = v.y - center.y;
+                    float dz = v.z - center.z;
                     distances[i++] = (float) Math.sqrt(dx*dx + dy*dy + dz*dz);
                 }
             }
@@ -83,17 +83,17 @@ public class PuffEmitter implements Emitter {
             long[] colors = (long[]) buffer.getArray(RGB16);
             float size = radius * scale;
             int i = 0;
-            for (LXPoint p : points) {
-                float dx = p.x - center.x;
-                float dy = p.y - center.y;
-                float dz = p.z - center.z;
+            for (LXVector v : vectors) {
+                float dx = v.x - center.x;
+                float dy = v.y - center.y;
+                float dz = v.z - center.z;
                 float dist = distances[i++]/size;
                 if (irregularity > 0) {
                     float noise = NoiseUtils.noise(center.x + dx / size, center.y + dy / size, center.z + dz / size);
                     dist += irregularity * (2 * noise - 1);
                 }
                 if (dist < 1) {
-                    MarkUtils.addColor(colors, p.index, color, amplitude);
+                    MarkUtils.addColor(colors, v.index, color, amplitude);
                 }
             }
             buffer.markModified(RGB16);

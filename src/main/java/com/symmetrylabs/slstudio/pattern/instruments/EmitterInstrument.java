@@ -27,7 +27,7 @@ public class EmitterInstrument implements Instrument {
         this.emitter = emitter;
     }
 
-    @Override public void run(LXModel model, LXPattern pattern, ParameterSet paramSet, Note[] notes, double deltaSec, PolyBuffer buffer) {
+    @Override public void run(LXModel model, List<LXVector> vectors, LXPattern pattern, ParameterSet paramSet, Note[] notes, double deltaSec, PolyBuffer buffer) {
         for (int i = paramSet.getPitchLo(); i <= paramSet.getPitchHi(); i++) {
             if (notes[i].attack) {
                 addMark(i, emitter.emit(paramSet, i, notes[i].intensity), pattern);
@@ -45,7 +45,7 @@ public class EmitterInstrument implements Instrument {
         // Advance and render each Mark.
         for (MarkKey key : keys) {
             Mark mark = pitchMarks.get(key);
-            mark.render(model, buffer);
+            mark.render(model, vectors, buffer);
             if (mark == lastAttack.get(key.pitch)) {
                 mark.advance(deltaSec, notes[key.pitch].intensity, notes[key.pitch].sustain, notes[key.pitch].bend);
             } else {
@@ -63,7 +63,7 @@ public class EmitterInstrument implements Instrument {
 
         // Global advance and render.
         emitter.run(deltaSec, paramSet);
-        emitter.render(model, buffer);
+        emitter.render(model, vectors, buffer);
     }
 
     /** An integer with its own distinct identity. */

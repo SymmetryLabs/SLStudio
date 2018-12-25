@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.pattern.instruments;
 
 import com.symmetrylabs.color.Ops16;
 
+import java.util.List;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.StreamSupport;
@@ -11,6 +12,7 @@ import heronarts.lx.model.LXModel;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.transform.LXProjection;
+import heronarts.lx.transform.LXVector;
 
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 
@@ -67,14 +69,14 @@ public class SwimEmitter implements Emitter {
             addModulator(rotationZ).trigger();
             addModulator(yPos).trigger();
             addModulator(phaseLFO).trigger();
-            phaseLFO.setPeriod(5000 - 4500 * rate);
+            phaseLFO.setPeriod(2000 / rate);
             phaseLFO.setValue(phase * 2 * Math.PI);
             yPos.setValue(phase * 2 * Math.PI);
         }
 
-        public void render(LXModel model, PolyBuffer buffer) {
+        public void render(LXModel model, List<LXVector> vectors, PolyBuffer buffer) {
             if (projection == null) {
-                projection = new LXProjection(model);
+                projection = new LXProjection(model, vectors.toArray(new LXVector[0]));
             }
 
             long[] colors = (long[]) buffer.getArray(RGB16);
@@ -83,7 +85,7 @@ public class SwimEmitter implements Emitter {
             final float upDownRange = (model.yMax - model.yMin) / 4;
 
             // Swim around the world
-            float crazyFactor = (float) crazy / 0.2f;
+            float crazyFactor = (float) crazy / 0.4f;
             projection.reset()
                 .rotate(rotationZ.getValuef() * crazyFactor, 0, 1, 0)
                 .rotate(rotationX.getValuef() * crazyFactor, 0, 0, 1)
