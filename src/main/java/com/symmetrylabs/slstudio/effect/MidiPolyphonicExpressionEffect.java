@@ -1,7 +1,4 @@
-package com.symmetrylabs.slstudio.pattern.base;
-
-import com.symmetrylabs.shows.cubes.CubesModel;
-import com.symmetrylabs.slstudio.model.SLModel;
+package com.symmetrylabs.slstudio.effect;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,11 +13,11 @@ import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.midi.MidiPitchBend;
 
 /**
- * A pattern that supports MIDI messages from instruments that follow the
+ * An effect that supports MIDI messages from instruments that follow the
  * MPE standard for polyphonic aftertouch and polyphonic pitch bend, such
  * as the ROLI Seaboard.
  */
-public abstract class MidiPolyphonicExpressionPattern<M extends SLModel> extends SLPattern<M> {
+public abstract class MidiPolyphonicExpressionEffect extends SLEffect {
     static final int MAX_PITCHES = 128;
     static final int SLIDE_CONTROLLER = 74;  // Seaboard "slide" is sent on controller number 74
 
@@ -54,7 +51,7 @@ public abstract class MidiPolyphonicExpressionPattern<M extends SLModel> extends
     /** Pitch is from 0 to 127, value is from -1.0 to 1.0. */
     public /* abstract */ void noteControl(int pitch, int controller, double value) { }
 
-    public MidiPolyphonicExpressionPattern(LX lx) {
+    public MidiPolyphonicExpressionEffect(LX lx) {
         super(lx);
     }
 
@@ -136,7 +133,6 @@ public abstract class MidiPolyphonicExpressionPattern<M extends SLModel> extends
         }
     }
 
-    @Override
     public String getCaption() {
         String result = "";
         for (int pitch = 0; pitch < MAX_PITCHES; pitch++) {
