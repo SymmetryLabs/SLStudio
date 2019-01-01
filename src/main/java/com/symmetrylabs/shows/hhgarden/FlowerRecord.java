@@ -63,4 +63,10 @@ public class FlowerRecord {
         return String.format(
             "%04d@%s:%s/%s/%s", id, panelStr, pixliteStr, harnessStr, harnessIndexStr);
     }
+
+    public boolean isAssigned() {
+        return pixliteId != UNKNOWN_PIXLITE_ID &&
+            harness != UNKNOWN_HARNESS &&
+            harnessIndex != UNKNOWN_HARNESS_INDEX;
+    }
 }

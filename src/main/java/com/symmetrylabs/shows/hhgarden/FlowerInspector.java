@@ -1,6 +1,7 @@
 package com.symmetrylabs.shows.hhgarden;
 
 import com.symmetrylabs.shows.hhgarden.FlowerModel.FlowerPoint;
+import com.symmetrylabs.util.IdFlasher;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.MarkerSource;
 import heronarts.lx.LX;
@@ -28,7 +29,7 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
         PANEL,
         PIXLITE,
         HARNESS,
-        HARNESS_INDEX,
+        HARNESS_INDEX
     };
 
     private final EnumParameter<Mode> mode = new EnumParameter<Mode>("mode", Mode.ALL);
@@ -38,25 +39,32 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
     private final CompoundParameter labelSize = new CompoundParameter("labelSize", 8, 0, 18);
 
     private final BooleanParameter prevPanel =
-        new BooleanParameter("prevPanel", false)
+        new BooleanParameter("-Panel", false)
         .setMode(BooleanParameter.Mode.MOMENTARY);
     private final BooleanParameter nextPanel =
-        new BooleanParameter("nextPanel", false)
+        new BooleanParameter("+Panel", false)
         .setMode(BooleanParameter.Mode.MOMENTARY);
     private final BooleanParameter clearPanel =
-        new BooleanParameter("clearPanel", false)
+        new BooleanParameter("clrPanel", false)
         .setMode(BooleanParameter.Mode.MOMENTARY);
     private final BooleanParameter prevPixlite =
-        new BooleanParameter("prevPixlite", false)
+        new BooleanParameter("-Pixlite", false)
         .setMode(BooleanParameter.Mode.MOMENTARY);
     private final BooleanParameter nextPixlite =
-        new BooleanParameter("nextPixlite", false)
+        new BooleanParameter("+Pixlite", false)
         .setMode(BooleanParameter.Mode.MOMENTARY);
     private final BooleanParameter clearPixlite =
-        new BooleanParameter("clearPixlite", false)
+        new BooleanParameter("clrPixlite", false)
         .setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter showUnmapped =
+        new BooleanParameter("showUnmapped", false)
+        .setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter flashId =
+        new BooleanParameter("flashId", false);
 
     private static final String OPTION_ALL = "ALL";
+
+    private final IdFlasher flasher = new IdFlasher(0.12, 0.06, 1.5, 4);
 
     private static final int[] COLORS = new int[] {
         0xFFFF0000,
@@ -94,7 +102,10 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
         addParameter(nextPixlite);
         addParameter(clearPixlite);
 
+        addParameter(showUnmapped);
         addParameter(labelSize);
+        addParameter(flashId);
+        flashId.addListener(param -> { flasher.restart(); });
     }
 
     private FlowerModel getSelected() {
@@ -129,6 +140,7 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
         }
         int activePixlite = pixlite.getOption().equals(OPTION_ALL) ?
             -1 : Integer.parseInt(pixlite.getOption());
+        flasher.advance(elapsedMs / 1000);
 
         for (FlowerModel fm : model.getFlowers()) {
             FlowerData fd = fm.getFlowerData();
@@ -150,17 +162,22 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
             if (matches) {
                 for (FlowerPoint p : fm.getFlowerPoints()) {
                     switch (p.direction) {
-                    case A:
-                        if (m == Mode.ALL || m == Mode.PANEL) colors[p.index] = panelColor;
-                        break;
-                    case B:
-                        if (m == Mode.ALL || m == Mode.HARNESS) colors[p.index] = harnessColor;
-                        break;
-                    case C:
-                        if (m == Mode.ALL || m == Mode.HARNESS_INDEX) colors[p.index] = harnessIndexColor;
-                        break;
-                    case UP:
-                        if (m == Mode.ALL || m == Mode.PIXLITE) colors[p.index] = pixliteColor;
+                        case A:
+                            if (m == Mode.ALL || m == Mode.PANEL) colors[p.index] = panelColor;
+                            break;
+                        case B:
+                            if (m == Mode.ALL || m == Mode.HARNESS) colors[p.index] = harnessColor;
+                            break;
+                        case C:
+                            if (m == Mode.ALL || m == Mode.HARNESS_INDEX) colors[p.index] = harnessIndexColor;
+                            break;
+                        case UP:
+                            if (m == Mode.ALL || m == Mode.PIXLITE) colors[p.index] = pixliteColor;
+                            break;
+                    }
+
+                    if (flashId.isOn()) {
+                        colors[p.index] = flasher.getColor(fd.record.id);
                     }
                 }
             }
@@ -179,7 +196,31 @@ public class FlowerInspector extends FlowerPattern implements UIFlowerTool.Liste
         String fstr = selected == null ? "NONE" : selected.getFlowerData().toString();
         String panstr = panel.getOption();
         String pixstr = pixlite.getOption();
-        return String.format("flower %s / panel %s / pixlite %s", fstr, panstr, pixstr);
+        String caption = String.format("flower %s / panel %s / pixlite %s", fstr, panstr, pixstr);
+
+        if (showUnmapped.isOn()) {
+            List<Integer> unassignedIds = getUnassignedIds();
+            String unassignedList = "";
+            for (int id : unassignedIds) {
+                if (!unassignedList.isEmpty()) unassignedList += ", ";
+                unassignedList += id;
+            }
+            int count = model.getFlowers().size();
+            caption += String.format("\n%d of %d flowers unassigned (%s)",
+                unassignedIds.size(), count, unassignedList);
+        }
+        return caption;
+    }
+
+    public List<Integer> getUnassignedIds() {
+        List<Integer> ids = new ArrayList<>();
+        for (FlowerModel fm : model.getFlowers()) {
+            FlowerRecord record = fm.getFlowerData().record;
+            if (!record.isAssigned()) {
+                ids.add(record.id);
+            }
+        }
+        return ids;
     }
 
     @Override
