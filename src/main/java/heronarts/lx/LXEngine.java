@@ -948,6 +948,12 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         }
     }
 
+    public void duplicateChannel(LXChannel channel) {
+        LXChannel chan = addChannel();
+        chan.load(lx, LXSerializable.Utils.toObject(lx, channel));
+        chan.label.setValue(chan.label.getString() + " copy");
+    }
+
     /**
      * Get the boolean parameter that launches a scene
      *

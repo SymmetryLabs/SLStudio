@@ -220,6 +220,9 @@ public class UIChannelStripControls extends UIMixerStripControls {
                 if (lx.engine.getChannels().size() > 1) {
                     lx.engine.removeChannel(this.channel);
                 }
+            } else if (keyCode == java.awt.event.KeyEvent.VK_C) {
+                consumeKeyEvent();
+                lx.engine.duplicateChannel(this.channel);
             } else if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
                 consumeKeyEvent();
                 if (channel.getIndex() > 0) {
