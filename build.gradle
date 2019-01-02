@@ -22,12 +22,6 @@ plugins {
 	id 'edu.sc.seis.macAppBundle' version '2.3.0'
 }
 
-configure(subprojects) {
-  apply plugin: 'java'
-  apply plugin: 'kotlin'
-  sourceCompatibility = 1.8
-}
-
 apply plugin: 'com.palantir.docker'
 
 // For building windows executable. See https://github.com/TheBoegl/gradle-launch4j
@@ -35,6 +29,7 @@ apply plugin: 'edu.sc.seis.launch4j'
 
 group = 'com.symmetrylabs'
 version = '1.0'
+sourceCompatibility = 1.8
 
 run {
 	if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
@@ -44,7 +39,7 @@ run {
 	// To select a layout from the command line, "gradlew run -Playout=cubes"
 	systemProperty 'com.symmetrylabs.layout', findProperty('layout')
 
-	systemProperty 'java.library.path', '/home/haldean/SLStudio/slimgui/build'
+	systemProperty 'java.library.path', 'slimgui/build/lib/main/release'
 	systemProperty 'awt.useSystemAAFontSettings', 'on'
 	systemProperty 'swing.aatext', true
 
@@ -55,6 +50,8 @@ run {
 			run.exec()
 		}
 	}
+
+	dependsOn ":slimgui:assembleRelease"
 }
 
 docker {
@@ -82,9 +79,6 @@ allprojects {
 			// these credentials are for the symmetry-labs account
 			credentials { username 'jp_ad5p43bkk3kiaah4slmihuagci' }
 		}
-
-		// Required since imgui uses version 1.2 of Kotlin
-		maven { url "https://dl.bintray.com/kotlin/kotlin-dev" }
 	}
 
 	tasks.withType(JavaCompile) {
@@ -190,6 +184,7 @@ compileTestKotlin {
 jar {
 	exclude('**/*.swp')
 	exclude('**/*.swo')
+	from project(":slimgui").sourceSets.main.output
 }
 
 macAppBundle {
