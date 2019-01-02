@@ -4,8 +4,8 @@
 #include "com_symmetrylabs_slstudio_ui_gdx_UI.h"
 #include "handle.hpp"
 #include "imgui.h"
-#include "examples/imgui_impl_opengl2.h"
-#include "examples/imgui_impl_glfw.h"
+#include "imgui_impl_opengl2.h"
+#include "imgui_impl_glfw.h"
 
 #define MAX_INPUT_LENGTH 511
 

@@ -1,0 +1,11 @@
+plugins {
+	id 'cpp-library'
+}
+
+group = 'com.symmetrylabs'
+version = '1.0'
+
+tasks.withType(CppCompile) {
+	systemIncludes.from "/usr/lib/jvm/default/include/"
+	systemIncludes.from "/usr/lib/jvm/default/include/linux"
+}
