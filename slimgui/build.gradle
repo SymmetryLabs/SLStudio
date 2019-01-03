@@ -32,4 +32,9 @@ tasks.withType(LinkSharedLibrary) {
 	}
 	linkerArgs.add "-lglew"
 	linkerArgs.add "-g"
+	if (System.getProperty("os.name").startsWith("Windows")) {
+		linkerArgs.add "-lglfw3"
+		linkerArgs.add "-lopengl32"
+		linkerArgs.add "-Lprebuilts-windows"
+	}
 }

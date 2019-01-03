@@ -340,7 +340,7 @@ JNIEXPORT jint JNICALL
 Java_com_symmetrylabs_slstudio_ui_gdx_UI_sliderInt(
 	JNIEnv *env, jclass, jstring jlabel, jint v, jint v0, jint v1) {
 	const char *label = env->GetStringUTFChars(jlabel, 0);
-	jint res = v;
+	int res = v;
 	ImGui::SliderInt(label, &res, v0, v1);
 	env->ReleaseStringUTFChars(jlabel, label);
 	return res;
@@ -357,7 +357,7 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_combo(
 	}
 	const char *label = env->GetStringUTFChars(jlabel, 0);
 
-	jint res = selected;
+	int res = selected;
 	ImGui::Combo(label, &res, options, optionsLen);
 
 	for (int i = 0; i < optionsLen; i++) {
