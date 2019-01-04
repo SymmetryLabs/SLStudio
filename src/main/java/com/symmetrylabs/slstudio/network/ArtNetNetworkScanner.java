@@ -23,6 +23,7 @@ import com.symmetrylabs.util.dispatch.Dispatcher;
 public class ArtNetNetworkScanner {
     protected static final int MAX_MILLIS_WITHOUT_REPLY = 10000;
     protected static final int ARTNET_DISCOVERY_TIMEOUT = 3000;
+    protected static final short ARTNET_POLLREPLY_OPCODE = 0x2100;
 
     public final ListenableSet<InetAddress> deviceList = new ListenableSet<>();
     protected Map<InetAddress, Long> lastReplyMillis = new HashMap<>();
@@ -103,7 +104,11 @@ public class ArtNetNetworkScanner {
                 final DatagramPacket reply = new DatagramPacket(new byte[65535], 65535);
                 while (true) {
                     recvSock.receive(reply);  // throws SocketTimeoutException upon a timeout
-                    updateDevice(reply.getAddress());
+
+                    byte[] respData = reply.getData();
+                    if (ArtNetDatagramUtil.isArtNetPacket(respData) && ArtNetDatagramUtil.getOpCode(respData) == ARTNET_POLLREPLY_OPCODE) {
+                        updateDevice(reply.getAddress());
+                    }
                 }
             } catch (SocketTimeoutException e) {
                 // ignore; no need to print the stack trace
