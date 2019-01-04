@@ -13,34 +13,45 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.net.InetSocketAddress;
+import java.net.SocketException;
 
 import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.util.listenable.ListenableSet;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 
 public class ArtNetNetworkScanner {
-    private static final int MAX_MILLIS_WITHOUT_REPLY = 10000;
-    private static final int ARTNET_DISCOVERY_TIMEOUT = 3000;
+    protected static final int MAX_MILLIS_WITHOUT_REPLY = 10000;
+    protected static final int ARTNET_DISCOVERY_TIMEOUT = 3000;
 
     public final ListenableSet<InetAddress> deviceList = new ListenableSet<>();
     protected Map<InetAddress, Long> lastReplyMillis = new HashMap<>();
     protected final Dispatcher dispatcher;
     protected final ExecutorService executor = Executors.newSingleThreadExecutor();
+    protected Map<InetAddress, DatagramSocket> recvSocks;
 
     public ArtNetNetworkScanner(Dispatcher dispatcher) {
         this.dispatcher = dispatcher;
+        recvSocks = new HashMap<>();
     }
 
     public void scan() {
         expireDevices();
         for (InetAddress broadcast : NetworkUtils.getBroadcastAddresses()) {
-            ArtNetPollDatagram poll = new ArtNetPollDatagram(broadcast);
-            try (DatagramSocket socket = new DatagramSocket(ArtNetDatagramUtil.ARTNET_PORT, broadcast)) {
-                socket.send(poll.getPacket());
-                executor.submit(new ListenTask(socket, ARTNET_DISCOVERY_TIMEOUT));
-            } catch (IOException e) {
-                System.err.println("unable to send ArtNet discovery packet: " + e.getMessage());
+            if (!recvSocks.containsKey(broadcast)) {
+                try {
+                    System.out.println("bind to " + broadcast);
+                    DatagramSocket recvSock = new DatagramSocket(null);
+                    recvSock.bind(new InetSocketAddress(broadcast, ArtNetDatagramUtil.ARTNET_PORT));
+                    recvSock.setSoTimeout(ARTNET_DISCOVERY_TIMEOUT);
+                    recvSock.setReuseAddress(true);
+                    recvSocks.put(broadcast, recvSock);
+                } catch (SocketException e) {
+                    System.err.println("couldn't set up discovery listener:");
+                    e.printStackTrace();
+                }
             }
+            executor.submit(new ListenTask(broadcast));
         }
     }
 
@@ -75,25 +86,24 @@ public class ArtNetNetworkScanner {
     }
 
     protected class ListenTask implements Runnable {
-        final DatagramSocket socket;
-        final int timeoutMillis;
+        final InetAddress broadcast;
 
-        ListenTask(DatagramSocket socket, int timeoutMillis) {
-            this.socket = socket;
-            this.timeoutMillis = timeoutMillis;
+        ListenTask(InetAddress broadcast) {
+            this.broadcast = broadcast;
         }
 
         public void run() {
+            ArtNetPollDatagram poll = new ArtNetPollDatagram(broadcast);
+            DatagramSocket recvSock = recvSocks.get(broadcast);
             try {
-                try {
-                    socket.setSoTimeout(timeoutMillis);
-                    final DatagramPacket reply = new DatagramPacket(new byte[65535], 65535);
-                    while (true) {
-                        socket.receive(reply);  // throws SocketTimeoutException upon a timeout
-                        updateDevice(reply.getAddress());
-                    }
-                } finally {
-                    socket.close();
+                final DatagramSocket sendSock = new DatagramSocket();
+                sendSock.setBroadcast(true);
+                sendSock.send(poll.getPacket());
+
+                final DatagramPacket reply = new DatagramPacket(new byte[65535], 65535);
+                while (true) {
+                    recvSock.receive(reply);  // throws SocketTimeoutException upon a timeout
+                    updateDevice(reply.getAddress());
                 }
             } catch (SocketTimeoutException e) {
                 // ignore; no need to print the stack trace

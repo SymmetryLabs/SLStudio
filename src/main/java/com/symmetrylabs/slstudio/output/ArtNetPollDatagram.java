@@ -11,9 +11,7 @@ public class ArtNetPollDatagram {
     public ArtNetPollDatagram(InetAddress addr) {
         byte[] buf = new byte[LENGTH];
 
-        packet = new DatagramPacket(buf, LENGTH);
-        packet.setAddress(addr);
-        packet.setPort(ArtNetDatagramUtil.ARTNET_PORT);
+        packet = new DatagramPacket(buf, LENGTH, addr, ArtNetDatagramUtil.ARTNET_PORT);
 
         ArtNetDatagramUtil.fillHeader(buf, ARTNET_POLL_OPCODE);
 
