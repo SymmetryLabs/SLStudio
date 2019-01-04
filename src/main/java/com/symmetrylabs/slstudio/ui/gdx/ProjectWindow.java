@@ -23,7 +23,9 @@ public class ProjectWindow implements Window {
 
         boolean add = UI.button("Add");
         if (add) {
-            lx.engine.addTask(() -> lx.engine.addChannel());
+            lx.engine.addTask(() -> {
+                    lx.engine.setFocusedChannel(lx.engine.addChannel());
+                });
         }
 
         List<LXChannel> chans = lx.engine.getChannels();
