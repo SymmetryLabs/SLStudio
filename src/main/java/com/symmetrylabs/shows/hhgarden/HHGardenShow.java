@@ -4,6 +4,7 @@ import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.ArtNetDmxDatagram;
 import com.symmetrylabs.slstudio.output.AssignablePixlite.Dataline;
 import com.symmetrylabs.slstudio.output.AssignablePixlite;
@@ -39,6 +40,8 @@ public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener, 
     @Override
     public void setupLx(SLStudioLX lx) {
         this.lx = lx;
+        NetworkMonitor.getInstance(lx).start();
+
         updatePixlites(lx, (FlowersModel) lx.model);
         lx.engine.addListener(this);
         for (LXChannel c : lx.engine.channels) {
