@@ -80,6 +80,9 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_init(JNIEnv *env, jclass cls, jlong win
 	colors[ImGuiCol_NavHighlight]           = ImVec4(0.60f, 0.60f, 0.60f, 1.00f);
 	colors[ImGuiCol_NavWindowingHighlight]  = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
 
+	ImGuiIO &io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
 	std::cout << "successfully initialized" << std::endl;
 	return 1;
 }
