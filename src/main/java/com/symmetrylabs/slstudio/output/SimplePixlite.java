@@ -6,14 +6,12 @@ import heronarts.lx.output.LXDatagramOutput;
 
 import java.net.SocketException;
 
-public class SimplePixlite extends LXOutputGroup {
+public class SimplePixlite extends ArtNetOutput {
     private LX lx;
-    public final String ipAddress;
 
     public SimplePixlite(LX lx, String ipAddress) {
-        super(lx);
+        super(lx, ipAddress);
         this.lx = lx;
-        this.ipAddress = ipAddress;
     }
 
     public SimplePixlite addPixliteOutput(PointsGrouping pointsGrouping) {
@@ -58,7 +56,7 @@ public class SimplePixlite extends LXOutputGroup {
                 for (int i1 = 0; i1 < numIndices; i1++) {
                     indices[i1] = pointsGrouping.getPoint(counter++).index;
                 }
-                addDatagram(new ArtNetDatagram(lx, ipAddress, indices, universe - 1));
+                addDatagram(new ArtNetDmxDatagram(lx, ipAddress, indices, universe - 1));
             }
         }
     }

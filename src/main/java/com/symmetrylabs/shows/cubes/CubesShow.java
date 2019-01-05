@@ -107,7 +107,7 @@ public abstract class CubesShow implements Show {
         lx.addOutput(local_debug);
         */
 
-        networkMonitor.deviceList.addListener(new SetListener<NetworkDevice>() {
+        networkMonitor.opcDeviceList.addListener(new SetListener<NetworkDevice>() {
             public void onItemAdded(NetworkDevice device) {
                 String physicalId = cubePhysicalIdMap.getPhysicalId(device.deviceId);
                 final CubesController controller = new CubesController(lx, device, physicalId);

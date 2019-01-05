@@ -8,12 +8,12 @@ import heronarts.lx.model.LXPoint;
 
 import java.net.UnknownHostException;
 
-public class ArtNetDatagram extends LXDatagram {
+public class ArtNetDmxDatagram extends LXDatagram {
+    private static final int ARTNET_DMX_HEADER_LENGTH = 6;
+    private static final short ARTNET_DMX_OPCODE = 0x5000;
+    private static final int SEQUENCE_INDEX = 12;
 
     private final static int DEFAULT_UNIVERSE = 0;
-    private final static int ARTNET_HEADER_LENGTH = 18;
-    private final static int ARTNET_PORT = 6454;
-    private final static int SEQUENCE_INDEX = 12;
     private final static long FLASH_NANOS = 100_000_000;
 
     private int[] pointIndices;
@@ -27,12 +27,12 @@ public class ArtNetDatagram extends LXDatagram {
 
     private GammaExpander GammaExpander;
 
-    public ArtNetDatagram(LX lx, String ipAddress, int[] indices, int universeNumber) {
+    public ArtNetDmxDatagram(LX lx, String ipAddress, int[] indices, int universeNumber) {
         this(lx, ipAddress, indices, 3 * indices.length, universeNumber);
     }
 
-    public ArtNetDatagram(LX lx, String ipAddress, int[] indices, int dataLength, int universeNumber) {
-        super(ARTNET_HEADER_LENGTH + dataLength + (dataLength % 2));
+    public ArtNetDmxDatagram(LX lx, String ipAddress, int[] indices, int dataLength, int universeNumber) {
+        super(ArtNetDatagramUtil.HEADER_LENGTH + ARTNET_DMX_HEADER_LENGTH + dataLength + (dataLength % 2));
 
         this.pointIndices = indices;
 
@@ -40,42 +40,27 @@ public class ArtNetDatagram extends LXDatagram {
 
         try {
             setAddress(ipAddress);
-            setPort(ARTNET_PORT);
+            setPort(ArtNetDatagramUtil.ARTNET_PORT);
         } catch (UnknownHostException e) {
             //System.out.println("MappingPixlite with ip address (" + ipAddress + ") is not on the network.");
         }
 
-        this.buffer[0] = 'A';
-        this.buffer[1] = 'r';
-        this.buffer[2] = 't';
-        this.buffer[3] = '-';
-        this.buffer[4] = 'N';
-        this.buffer[5] = 'e';
-        this.buffer[6] = 't';
-        this.buffer[7] = 0;
-        this.buffer[8] = 0x00; // ArtDMX opcode
-        this.buffer[9] = 0x50; // ArtDMX opcode
-        this.buffer[10] = 0; // Protcol version
-        this.buffer[11] = 14; // Protcol version
+        ArtNetDatagramUtil.fillHeader(buffer, ARTNET_DMX_OPCODE);
         this.buffer[12] = 0; // Sequence
         this.buffer[13] = 0; // Physical
         this.buffer[14] = (byte) (universeNumber & 0xff); // Universe LSB
         this.buffer[15] = (byte) ((universeNumber >>> 8) & 0xff); // Universe MSB
         this.buffer[16] = (byte) ((dataLength >>> 8) & 0xff);
         this.buffer[17] = (byte) (dataLength & 0xff);
-
-        for (int i = ARTNET_HEADER_LENGTH; i < this.buffer.length; ++i) {
-            this.buffer[i] = 0;
-        }
     }
 
-    public ArtNetDatagram setUnmappedPointColor(int c, boolean flash) {
+    public ArtNetDmxDatagram setUnmappedPointColor(int c, boolean flash) {
         unmappedPointColor = c;
         flashUnmapped = flash;
         return this;
     }
 
-    public ArtNetDatagram setSequenceEnabled(boolean sequenceEnabled) {
+    public ArtNetDmxDatagram setSequenceEnabled(boolean sequenceEnabled) {
         this.sequenceEnabled = sequenceEnabled;
         return this;
     }
@@ -101,7 +86,8 @@ public class ArtNetDatagram extends LXDatagram {
 
     @Override
     public void onSend(int[] colors) {
-        copyPointsGamma(colors, this.pointIndices, ARTNET_HEADER_LENGTH);
+        copyPointsGamma(
+            colors, this.pointIndices, ArtNetDatagramUtil.HEADER_LENGTH + ARTNET_DMX_HEADER_LENGTH);
 
         if (this.sequenceEnabled) {
             if (++this.sequence == 0) {

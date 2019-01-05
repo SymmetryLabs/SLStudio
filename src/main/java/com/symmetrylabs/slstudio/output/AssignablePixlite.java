@@ -1,7 +1,7 @@
 package com.symmetrylabs.slstudio.output;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.output.ArtNetDatagram;
+import com.symmetrylabs.slstudio.output.ArtNetDmxDatagram;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 
 import heronarts.lx.LX;
@@ -14,10 +14,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class AssignablePixlite extends LXOutputGroup {
+public class AssignablePixlite extends ArtNetOutput {
     private static final int DEFAULT_NUM_DATALINES = 16;
 
-    public final String ipAddress;
     private final List<Dataline> datalines = new ArrayList<>();
 
     public AssignablePixlite(LX lx, String ipAddress) {
@@ -29,8 +28,7 @@ public class AssignablePixlite extends LXOutputGroup {
     }
 
     public AssignablePixlite(LX lx, String ipAddress, int numDatalines, int datalineNumPoints) {
-        super(lx);
-        this.ipAddress = ipAddress;
+        super(lx, ipAddress);
 
         try {
             int portIndex = 1;
@@ -53,7 +51,7 @@ public class AssignablePixlite extends LXOutputGroup {
         private static final int DEFAULT_DATALINE_NUM_POINTS = 300; // arbitrary
         private static final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
 
-        private final List<ArtNetDatagram> artNetDatagrams = new ArrayList<>();
+        private final List<ArtNetDmxDatagram> artNetDatagrams = new ArrayList<>();
         public final String ipAddress;
         public final int index;
         private final int numUniverses;
@@ -72,7 +70,7 @@ public class AssignablePixlite extends LXOutputGroup {
             createDatagrams(lx, index*10);
         }
 
-        public List<ArtNetDatagram> getArtNetDatagrams() {
+        public List<ArtNetDmxDatagram> getArtNetDmxDatagrams() {
             return Collections.unmodifiableList(artNetDatagrams);
         }
 
@@ -105,8 +103,8 @@ public class AssignablePixlite extends LXOutputGroup {
                 for (int j = 0; j < indices.length; j++) {
                     indices[j] = -1;
                 }
-                ArtNetDatagram datagram =
-                    new ArtNetDatagram(
+                ArtNetDmxDatagram datagram =
+                    new ArtNetDmxDatagram(
                         lx, ipAddress, indices, indices.length*3, startUniverse++ - 1);
                 artNetDatagrams.add(datagram);
                 addDatagram(datagram);

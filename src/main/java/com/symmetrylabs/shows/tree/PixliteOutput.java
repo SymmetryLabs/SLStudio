@@ -15,7 +15,7 @@ import heronarts.lx.output.LXOutputGroup;
 import heronarts.lx.output.LXDatagramOutput;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.output.ArtNetDatagram;
+import com.symmetrylabs.slstudio.output.ArtNetDmxDatagram;
 import com.symmetrylabs.shows.tree.config.*;
 
 
@@ -66,11 +66,11 @@ public class PixliteOutput extends LXOutputGroup {
         private final int numPoints;
         private final int numUniverses;
 
-        public final List<ArtNetDatagram> artNetDatagrams = new ArrayList<>();
+        public final List<ArtNetDmxDatagram> artNetDatagrams = new ArrayList<>();
 
         public final StringParameter ipAddress = new StringParameter("ip", DEFAULT_IP) {
             public void onParameterChanged(LXParameter parameter) {
-                for (ArtNetDatagram datagram : artNetDatagrams) {
+                for (ArtNetDmxDatagram datagram : artNetDatagrams) {
                     try {
                         datagram.setAddress(InetAddress.getByName(ipAddress.getString()));
                     } catch (UnknownHostException e) {
@@ -84,7 +84,7 @@ public class PixliteOutput extends LXOutputGroup {
             public void onParameterChanged(LXParameter parameter) {
                 int firstUniverse = getFirstUniverse(pixlitePort.getValuei());
                 int i = 0;
-                for (ArtNetDatagram datagram : artNetDatagrams){
+                for (ArtNetDmxDatagram datagram : artNetDatagrams){
                     datagram.setUniverse(firstUniverse + i++);
                 }
             }
@@ -148,7 +148,7 @@ public class PixliteOutput extends LXOutputGroup {
                     indices[i1] = points.get(counter++).index;
                 }
 
-                ArtNetDatagram datagram = new ArtNetDatagram(lx, DEFAULT_IP, indices, DATAGRAM_NUM_POINTS*3, universe - 1);
+                ArtNetDmxDatagram datagram = new ArtNetDmxDatagram(lx, DEFAULT_IP, indices, DATAGRAM_NUM_POINTS*3, universe - 1);
                 artNetDatagrams.add(datagram);
                 addDatagram(datagram);
             }
