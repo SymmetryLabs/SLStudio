@@ -13,9 +13,7 @@ def vezerplay_py3():
 	def play_track(track_index):
 	    client.send_message("/vezer/triggercompatindex", track_index)
 
-	if len(sys.argv) < 2:
-	    print("usage: {} [composition index]".format(sys.argv[0]))
-	else:
+
 	    play_track(comp_index)
 
 def send_osc_py2(ip_address="127.0.0.1", osc_port=4040, osc_address="/vezer/triggercompatindex"):
@@ -27,7 +25,7 @@ def send_osc_py2(ip_address="127.0.0.1", osc_port=4040, osc_address="/vezer/trig
 	oscmsg.append(comp_index)
 	c.send(oscmsg)
 
-comp_index = int(sys.argv[1])
+comp_index = 1
 VEZER_OSC_INPUT_PORT=4040
 
 if sys.version_info[0] < 3:

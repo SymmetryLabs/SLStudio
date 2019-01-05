@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545274180139,
+  "timestamp": 1546321533197,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -67,7 +67,8 @@
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0,
-          "autoDisable": true
+          "autoDisable": true,
+          "speed": 1.0
         },
         "warps": [],
         "effects": [],
@@ -154,7 +155,8 @@
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0,
-          "autoDisable": true
+          "autoDisable": true,
+          "speed": 1.0
         },
         "warps": [
           {
@@ -302,7 +304,8 @@
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0,
-          "autoDisable": true
+          "autoDisable": true,
+          "speed": 1.0
         },
         "warps": [
           {
@@ -397,7 +400,8 @@
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0,
-          "autoDisable": true
+          "autoDisable": true,
+          "speed": 1.0
         },
         "warps": [],
         "effects": [],
@@ -477,7 +481,8 @@
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0,
-          "autoDisable": true
+          "autoDisable": true,
+          "speed": 1.0
         },
         "warps": [
           {
@@ -559,7 +564,8 @@
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0,
-          "autoDisable": true
+          "autoDisable": true,
+          "speed": 1.0
         },
         "warps": [],
         "effects": [],
@@ -621,7 +627,7 @@
       "modulationColor": -16711831,
       "parameters": {
         "label": "Audio",
-        "enabled": false,
+        "enabled": true,
         "mode": 0
       },
       "meter": {
@@ -630,27 +636,27 @@
         "modulationColor": -16711858,
         "parameters": {
           "label": "Meter",
-          "running": false,
+          "running": true,
           "trigger": false,
           "gain": -2.8799999999999937,
           "range": 68.7,
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.0,
-          "Band-2": 0.0,
-          "Band-3": 0.0,
-          "Band-4": 0.0,
-          "Band-5": 0.0,
-          "Band-6": 0.0,
-          "Band-7": 0.0,
-          "Band-8": 0.0,
-          "Band-9": 0.0,
-          "Band-10": 0.0,
-          "Band-11": 0.0,
-          "Band-12": 0.0,
-          "Band-13": 0.0,
-          "Band-14": 0.0,
+          "Band-1": 0.010105205355071423,
+          "Band-2": 0.10479470920761946,
+          "Band-3": 0.13826080703186938,
+          "Band-4": 0.17405742165342653,
+          "Band-5": 0.1664967052797417,
+          "Band-6": 0.16258612323613075,
+          "Band-7": 0.183903243694294,
+          "Band-8": 0.32444554765910116,
+          "Band-9": 0.3125372499279496,
+          "Band-10": 0.2125004549531283,
+          "Band-11": 0.2142872979988637,
+          "Band-12": 0.20367429431557704,
+          "Band-13": 0.17894658393076923,
+          "Band-14": 0.07513695918616137,
           "Band-15": 0.0,
           "Band-16": 0.0
         }
@@ -683,7 +689,7 @@
       "modulationColor": -65446,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -818,7 +824,6 @@
           "sync": false
         }
       ],
-      "surfaces": [],
       "mapping": []
     }
   },
