@@ -328,7 +328,7 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_sliderFloat(
 	const char *label = env->GetStringUTFChars(jlabel, 0);
 	jfloat res = v;
 	if (vert) {
-		ImGui::VSliderFloat(label, ImVec2(20, 200), &res, v0, v1);
+		ImGui::VSliderFloat(label, ImVec2(20, 120), &res, v0, v1);
 	} else {
 		ImGui::SliderFloat(label, &res, v0, v1);
 	}
