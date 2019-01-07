@@ -22,6 +22,9 @@ public class SLStudioGDX extends ApplicationAdapter {
     private ModelRenderer renderer;
     private LX lx;
 
+    private int clearRGB;
+    private float clearR, clearG, clearB;
+
     CameraInputController camController;
 
     @Override
@@ -62,12 +65,16 @@ public class SLStudioGDX extends ApplicationAdapter {
         lx.engine.start();
 
         show.setupUi(lx);
+
+        clearR = 0;
+        clearG = 0;
+        clearB = 0;
     }
 
     @Override
     public void render() {
         Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Gdx.gl20.glClearColor(0, 0, 0, 1);
+        Gdx.gl20.glClearColor(clearR, clearG, clearB, 1);
         Gdx.gl20.glClear(
             GL20.GL_COLOR_BUFFER_BIT
             | (Gdx.graphics.getBufferFormat().coverageSampling
@@ -92,6 +99,10 @@ public class SLStudioGDX extends ApplicationAdapter {
                         1e-6f * lx.engine.timer.runWorstNanos,
                         1e9f / lx.engine.timer.runWorstNanos);
         UI.text("ui frame rate:  % 3.0ffps", UI.getFrameRate());
+        clearRGB = UI.colorPicker("background", clearRGB);
+        clearR = ((clearRGB >> 16) & 0xFF) / 255.f;
+        clearG = ((clearRGB >>  8) & 0xFF) / 255.f;
+        clearB = ((clearRGB      ) & 0xFF) / 255.f;
         UI.end();
 
         WindowManager.get().draw();
