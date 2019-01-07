@@ -66,9 +66,8 @@ public class SLStudioGDX extends ApplicationAdapter {
 
         show.setupUi(lx);
 
-        clearR = 0;
-        clearG = 0;
-        clearB = 0;
+        /* clearR/clearG/clearB will be set on first frame */
+        clearRGB = 0x222222;
     }
 
     @Override
