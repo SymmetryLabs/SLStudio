@@ -5,6 +5,7 @@ import java.util.Map;
 import java.net.SocketException;
 import com.symmetrylabs.util.MarkerSource;
 import java.io.File;
+import processing.opengl.PJOGL;
 
 import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
@@ -71,6 +72,7 @@ public class SLStudio extends PApplet {
     @Override
     public void settings() {
         size(displayWidth, displayHeight, P3D);
+        PJOGL.setIcon("application.png");
 
         String hidpiprop = System.getProperty("com.symmetrylabs.hidpi");
         String osname = System.getProperty("os.name");
