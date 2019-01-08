@@ -40,6 +40,7 @@ public class ArtNetNetworkScanner {
     protected final ExecutorService executor = Executors.newSingleThreadExecutor();
     protected Map<InetAddress, DatagramChannel> recvChans;
     protected Selector recvSelector;
+    protected Set<InetAddress> errorBroadcasts = new HashSet<>();
 
     public ArtNetNetworkScanner(Dispatcher dispatcher) {
         this.dispatcher = dispatcher;
@@ -66,8 +67,12 @@ public class ArtNetNetworkScanner {
                     recvChan.register(recvSelector, SelectionKey.OP_READ, broadcast);
                     recvChans.put(broadcast, recvChan);
                 } catch (IOException e) {
-                    System.err.println("couldn't set up discovery listener:");
-                    e.printStackTrace();
+                    if (!errorBroadcasts.contains(broadcast)) {
+                        System.err.println("couldn't set up discovery listener:");
+                        e.printStackTrace();
+                        errorBroadcasts.add(broadcast);
+                        continue;
+                    }
                 }
             }
             try {
@@ -75,8 +80,16 @@ public class ArtNetNetworkScanner {
                 sendSock.setBroadcast(true);
                 sendSock.send(new ArtNetPollDatagram(broadcast).getPacket());
             } catch (IOException e) {
-                System.err.println(String.format("couldn't send artnet poll to %s:", broadcast));
-                e.printStackTrace();
+                if (!errorBroadcasts.contains(broadcast)) {
+                    System.err.println(String.format("couldn't send artnet poll to %s:", broadcast));
+                    e.printStackTrace();
+                    errorBroadcasts.add(broadcast);
+                    continue;
+                }
+            }
+            if (errorBroadcasts.contains(broadcast)) {
+                System.err.println("broadcast address " + broadcast + " is working again");
+                errorBroadcasts.remove(broadcast);
             }
         }
         try {
