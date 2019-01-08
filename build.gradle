@@ -14,6 +14,7 @@ plugins {
 	id 'com.palantir.docker' version '0.17.2'
 	id 'java'
 	id 'application'
+	id 'edu.sc.seis.macAppBundle' version '2.3.0'
 }
 
 apply plugin: 'com.palantir.docker'
@@ -155,4 +156,14 @@ compileTestKotlin {
 jar {
 	exclude('**/*.swp')
 	exclude('**/*.swo')
+}
+
+macAppBundle {
+	mainClassName = rootProject.mainClassName
+	icon = "src/main/resources/application.icns"
+	bundleJRE = true
+	javaProperties.put("apple.laf.useScreenMenuBar", "true")
+	jarTask = "shadowJar"
+	javaExtras.put("-XX:+UseParNewGC", null);
+	javaExtras.put("-XX:+UseConcMarkSweepGC", null);
 }
