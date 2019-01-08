@@ -93,18 +93,11 @@ public class SLStudio extends PApplet {
 
     /** Gets the show name from the -Pshow= argument or .show file. */
     public String getSelectedShowName() {
-        String showName = System.getProperty("com.symmetrylabs.show");
-        if (showName != null && !showName.isEmpty()) return showName;
-        String[] lines = loadStrings(SHOW_FILE_NAME);
-        if (lines != null && lines.length > 0) return lines[0].trim();
-        return null;
+        return "kalpa";
     }
 
     /** Writes out a show name as the default show on next startup. */
     public void saveSelectedShowName(String showName) {
-        if (showName != null) {
-            saveStrings(SHOW_FILE_NAME, new String[] {showName});
-        }
     }
 
     @Override
