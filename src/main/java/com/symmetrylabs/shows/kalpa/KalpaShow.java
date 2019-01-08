@@ -302,42 +302,12 @@ public class KalpaShow extends TreeShow {
 
     public void setupLx(SLStudioLX lx) {
         super.setupLx(lx);
-        //lx.engine.framesPerSecond.setValue(30);
-
         lx.engine.registerComponent("scheduleControls", ScheduleControls.getInstance(lx));
         lx.engine.addLoopTask(ScheduleControls.getInstance(lx));
-
-        final String[] ipAddresses = new String[] {
-            "10.200.1.100", "10.200.1.101", "10.200.1.102", "10.200.1.103", "10.200.1.104",
-            "10.200.1.105", "10.200.1.106", "10.200.1.107", "10.200.1.108", "10.200.1.109"
-        };
-
-//        for (int i = 0; i < ipAddresses.length; i++) {
-//            addPixlite(lx, new AssignablePixlite(lx, ipAddresses[i]));
-//        }
-
-        for (int i = 0; i < ipAddresses.length; i++) {
-            AssignablePixlite pixlite = new AssignablePixlite(lx, ipAddresses[i]);
-            pixlites.put(ipAddresses[i], pixlite);
-            pixlitePorts.addAll(pixlite.ports);
-            lx.addOutput(pixlite);
-        }
-
-        //System.out.println("------------------------------");
-        for (AssignablePixlite.Port port : pixlitePorts) {
-            for (TreeModel.Branch branch : ((TreeModel)lx.model).getBranches()) {
-                if (port.ipAddress.equals(branch.getConfig().ipAddress)
-                    && port.index == branch.getConfig().channel) {
-                    //System.out.println(port.index + " - " + branch.getConfig().channel);
-                    port.setBranch(branch);
-                }
-            }
-        }
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
-        ui.preview.addComponent(new UIRocoBuilding());
         ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
         // UITreeLeaves uiTreeLeaves = new UITreeLeaves(lx, applet, (TreeModel) lx.model);
         // ui.preview.addComponent(uiTreeLeaves);
