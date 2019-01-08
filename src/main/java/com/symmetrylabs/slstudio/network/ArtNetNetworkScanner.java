@@ -87,10 +87,6 @@ public class ArtNetNetworkScanner {
                     continue;
                 }
             }
-            if (errorBroadcasts.contains(broadcast)) {
-                System.err.println("broadcast address " + broadcast + " is working again");
-                errorBroadcasts.remove(broadcast);
-            }
         }
         try {
             recvSelector.selectNow();
