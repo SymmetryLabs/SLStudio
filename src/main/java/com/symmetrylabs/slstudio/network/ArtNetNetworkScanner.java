@@ -75,7 +75,7 @@ public class ArtNetNetworkScanner {
                 sendSock.setBroadcast(true);
                 sendSock.send(new ArtNetPollDatagram(broadcast).getPacket());
             } catch (IOException e) {
-                System.err.println("couldn't send artnet poll:");
+                System.err.println(String.format("couldn't send artnet poll to %s:", broadcast));
                 e.printStackTrace();
             }
         }
