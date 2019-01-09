@@ -79,12 +79,14 @@ public class UIPatternManager extends UICollapsibleSection {
             }
             int sortKeyCompare = Integer.compare(aSortKey, bSortKey);
             if (sortKeyCompare != 0)
-                return sortKeyCompare;
+                return -sortKeyCompare;
             return a.compareToIgnoreCase(b);
         });
 
         for (String groupName : groupNames) {
             String displayName = groupName == null ? "Uncategorized" : groupName;
+            if (groupName != null && !groupName.equals("tree"))
+                continue;
             UIPatternGroup uipg = new UIPatternGroup(ui, lx, x, y, w - 2 * UICollapsibleSection.PADDING, displayName);
             uipg.addToContainer(this);
 
