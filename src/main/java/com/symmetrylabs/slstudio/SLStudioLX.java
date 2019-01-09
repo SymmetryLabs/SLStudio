@@ -199,16 +199,6 @@ public class SLStudioLX extends P3LX {
                             case VK_G:
                                 markerPainter.toggleVisible();
                                 break;
-                            case VK_L:
-                                String showName = (String) JOptionPane.showInputDialog(
-                                    null, "Select a show and click OK to restart.", "Load a show",
-                                    JOptionPane.QUESTION_MESSAGE, null, ShowRegistry.getNames().toArray(), null);
-                                if (showName != null) {
-                                    applet.saveStrings(SLStudio.SHOW_FILE_NAME, new String[] {showName});
-                                    applet.saveStrings(SLStudio.RESTART_FILE_NAME, new String[0]);
-                                    applet.exit();
-                                }
-                                break;
                             case VK_M:
                                 LXMappingEngine.Mode mode = keyEvent.isShiftDown() ?
                                         LXMappingEngine.Mode.MIDI : LXMappingEngine.Mode.MODULATION_SOURCE;
