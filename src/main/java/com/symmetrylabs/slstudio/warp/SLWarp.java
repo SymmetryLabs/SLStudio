@@ -2,15 +2,20 @@ package com.symmetrylabs.slstudio.warp;
 
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.MarkerSource;
 
 import heronarts.lx.LX;
+import heronarts.lx.model.LXModel;
 import heronarts.lx.warp.LXWarp;
 
-public abstract class LXWarpWithMarkers extends LXWarp implements MarkerSource {
+import java.util.ArrayList;
+import java.util.Collection;
+
+public abstract class SLWarp<M extends SLModel> extends LXWarp implements MarkerSource {
     protected SLStudioLX lx;
 
-    public LXWarpWithMarkers(LX lx) {
+    public SLWarp(LX lx) {
         super(lx);
         this.lx = (SLStudioLX) lx;
     }
@@ -25,5 +30,9 @@ public abstract class LXWarpWithMarkers extends LXWarp implements MarkerSource {
     public void onDisable() {
         super.onDisable();
         lx.ui.removeMarkerSource(this);
+    }
+
+    public Collection<Marker> getMarkers() {
+        return new ArrayList<>();
     }
 }

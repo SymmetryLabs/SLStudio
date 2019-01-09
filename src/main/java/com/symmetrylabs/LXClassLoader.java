@@ -20,9 +20,10 @@ import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXModel;
 
+import com.symmetrylabs.slstudio.effect.SLEffect;
 import com.symmetrylabs.slstudio.pattern.test.SLTestPattern;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
-import com.symmetrylabs.slstudio.effect.SLEffect;
+import com.symmetrylabs.slstudio.warp.SLWarp;
 
 public class LXClassLoader {
     // Enable test patterns by passing -DloadTestPatterns=true as a VM option
@@ -107,6 +108,8 @@ public class LXClassLoader {
             supportedModelType = findModelParameterOfBaseType(componentClass, SLPattern.class);
         } else if (SLEffect.class.isAssignableFrom(componentClass)) {
             supportedModelType = findModelParameterOfBaseType(componentClass, SLEffect.class);
+        } else if (SLWarp.class.isAssignableFrom(componentClass)) {
+            supportedModelType = findModelParameterOfBaseType(componentClass, SLWarp.class);
         }
 
         if (supportedModelType == null) {

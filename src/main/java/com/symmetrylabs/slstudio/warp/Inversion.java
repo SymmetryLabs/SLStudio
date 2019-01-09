@@ -17,7 +17,7 @@ import heronarts.lx.transform.LXVector;
 import heronarts.lx.warp.LXWarp;
 import processing.core.PVector;
 
-public class Inversion extends LXWarpWithMarkers {
+public class Inversion extends SLWarp {
     private CompoundParameter radiusParam;
     private CompoundParameter cxParam = new CompoundParameter("cx", model.cx, model.xMin, model.xMax);
     private CompoundParameter cyParam = new CompoundParameter("cy", model.cy, model.yMin, model.yMax);

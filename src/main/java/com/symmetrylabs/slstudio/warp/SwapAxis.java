@@ -6,8 +6,9 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.transform.LXProjection;
 import heronarts.lx.transform.LXVector;
 import heronarts.lx.warp.LXWarp;
+import com.symmetrylabs.slstudio.model.SLModel;
 
-public class SwapAxis extends LXWarp {
+public class SwapAxis extends SLWarp<SLModel> {
     private DiscreteParameter xmap = new DiscreteParameter("x", new String[] {"X", "Y", "Z"}, 0);
     private DiscreteParameter ymap = new DiscreteParameter("y", new String[] {"X", "Y", "Z"}, 1);
     private DiscreteParameter zmap = new DiscreteParameter("z", new String[] {"X", "Y", "Z"}, 2);

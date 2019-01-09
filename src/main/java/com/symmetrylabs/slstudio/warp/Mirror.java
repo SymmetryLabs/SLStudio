@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.warp;
 
 import com.symmetrylabs.util.CubeMarker;
 import com.symmetrylabs.util.Marker;
+import com.symmetrylabs.slstudio.model.SLModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import heronarts.lx.transform.LXVector;
 import heronarts.lx.warp.LXWarp;
 import processing.core.PVector;
 
-public class Mirror extends LXWarpWithMarkers {
+public class Mirror extends SLWarp<SLModel> {
     private BooleanParameter xParam = new BooleanParameter("x", false);
     private CompoundParameter cxParam = new CompoundParameter("cx", model.cx, model.xMin, model.xMax);
     private BooleanParameter yParam = new BooleanParameter("y", false);
