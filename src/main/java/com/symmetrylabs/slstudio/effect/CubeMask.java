@@ -13,11 +13,7 @@ import heronarts.lx.parameter.BooleanParameter;
 import com.symmetrylabs.shows.cubes.CubesModel;
 
 
-public class CubeMask extends ModelSpecificEffect<CubesModel> {
-    @Override protected CubesModel createEmptyModel() {
-        return new CubesModel();
-    }
-
+public class CubeMask extends SLEffect<CubesModel> {
     private final List<Mask> masks = new ArrayList<>();
 
     final DiscreteParameter selectedMask;

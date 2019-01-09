@@ -22,6 +22,7 @@ import heronarts.lx.model.LXModel;
 
 import com.symmetrylabs.slstudio.pattern.test.SLTestPattern;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
+import com.symmetrylabs.slstudio.effect.SLEffect;
 
 public class LXClassLoader {
     // Enable test patterns by passing -DloadTestPatterns=true as a VM option
@@ -100,54 +101,73 @@ public class LXClassLoader {
         if (modelClass == null) {
             return true;
         }
-        if (SLPattern.class.isAssignableFrom(componentClass)) {
-            Type slpatternType = componentClass.getGenericSuperclass();
-            Type lastTypeVariable = null;
-            while (!slpatternType.getTypeName().startsWith("com.symmetrylabs.slstudio.pattern.base.SLPattern<")) {
-                if (slpatternType instanceof Class) {
-                    slpatternType = ((Class) slpatternType).getGenericSuperclass();
-                } else if (slpatternType instanceof ParameterizedType) {
-                    ParameterizedType pt = (ParameterizedType) slpatternType;
-                    slpatternType = ((Class) pt.getRawType()).getGenericSuperclass();
-                    lastTypeVariable = pt.getActualTypeArguments()[0];
-                }
-            }
-            Type supportedModelType = ((ParameterizedType) slpatternType).getActualTypeArguments()[0];
-            if (supportedModelType instanceof ParameterizedType) {
-                supportedModelType = ((ParameterizedType) supportedModelType).getRawType();
-            }
-            /* This is a best guess; we don't build the complete type tree, but we keep track of the last type
-                 variable instatiation as we walk up the tree. We assume that generic pattern base classes will
-                 use that type variable to store what kind of model it supports. If the instantiation of that
-                 type variable was not a subclass of LXModel, we guessed wrong and we assume this pattern
-                 supports all types.
 
-                 We could instead keep all of the information we need around to walk back up the tree and figure
-                 out what type we're instantiating the SLPattern type with, but that's much more complicated and
-                 this works for our (relatively-simple) class hierarchy for now. */
-            if (supportedModelType instanceof TypeVariable) {
-                if (lastTypeVariable instanceof ParameterizedType) {
-                    lastTypeVariable = ((ParameterizedType) lastTypeVariable).getRawType();
-                }
-                if (lastTypeVariable instanceof Class) {
-                    if (LXModel.class.isAssignableFrom((Class) lastTypeVariable)) {
-                        supportedModelType = lastTypeVariable;
-                    }
-                }
-            }
-            if (!(supportedModelType instanceof Class)) {
-                System.err.println(
-                    String.format(
-                        "warning: pattern %s has unindexable model type parameter %s of type %s (last type variable %s)",
-                        componentClass.getTypeName(),
-                        supportedModelType.getTypeName(),
-                        supportedModelType.getClass().getTypeName(),
-                        lastTypeVariable.getTypeName()));
-                return true;
-            }
-            return ((Class) supportedModelType).isAssignableFrom(modelClass);
+        Type supportedModelType = null;
+        if (SLPattern.class.isAssignableFrom(componentClass)) {
+            supportedModelType = findModelParameterOfBaseType(componentClass, SLPattern.class);
+        } else if (SLEffect.class.isAssignableFrom(componentClass)) {
+            supportedModelType = findModelParameterOfBaseType(componentClass, SLEffect.class);
         }
-        return true;
+
+        if (supportedModelType == null) {
+            return true;
+        }
+        if (!(supportedModelType instanceof Class)) {
+            System.err.println(
+                String.format(
+                    "warning: pattern %s has unindexable model type parameter %s of type %s",
+                    componentClass.getTypeName(),
+                    supportedModelType.getTypeName(),
+                    supportedModelType.getClass().getTypeName()));
+            return true;
+        }
+        return ((Class) supportedModelType).isAssignableFrom(modelClass);
+    }
+
+    private static Type findModelParameterOfBaseType(Class sub, Class base) {
+        Type st = sub.getGenericSuperclass();
+        Type lastTypeVariable = null;
+        String prefix = base.getTypeName().replaceFirst("<.*", "");
+        while (!st.getTypeName().replaceFirst("<.*", "").equals(prefix)) {
+            if (st instanceof Class) {
+                st = ((Class) st).getGenericSuperclass();
+            } else if (st instanceof ParameterizedType) {
+                ParameterizedType pt = (ParameterizedType) st;
+                st = ((Class) pt.getRawType()).getGenericSuperclass();
+                lastTypeVariable = pt.getActualTypeArguments()[0];
+            }
+        }
+
+        /* If this uses the bare type of the supertype, the type is unparameterized and it is assumed
+             to support all types of models. */
+        if (!(st instanceof ParameterizedType)) {
+            return null;
+        }
+
+        Type supportedModelType = ((ParameterizedType) st).getActualTypeArguments()[0];
+        if (supportedModelType instanceof ParameterizedType) {
+            supportedModelType = ((ParameterizedType) supportedModelType).getRawType();
+        }
+        /* This is a best guess; we don't build the complete type tree, but we keep track of the last type
+             variable instatiation as we walk up the tree. We assume that generic pattern base classes will
+             use that type variable to store what kind of model it supports. If the instantiation of that
+             type variable was not a subclass of LXModel, we guessed wrong and we assume this pattern
+             supports all types.
+
+             We could instead keep all of the information we need around to walk back up the tree and figure
+             out what type we're instantiating the SLPattern type with, but that's much more complicated and
+             this works for our (relatively-simple) class hierarchy for now. */
+        if (supportedModelType instanceof TypeVariable) {
+            if (lastTypeVariable instanceof ParameterizedType) {
+                lastTypeVariable = ((ParameterizedType) lastTypeVariable).getRawType();
+            }
+            if (lastTypeVariable instanceof Class) {
+                if (LXModel.class.isAssignableFrom((Class) lastTypeVariable)) {
+                    supportedModelType = lastTypeVariable;
+                }
+            }
+        }
+        return supportedModelType;
     }
 
     private static Class<?> classForNameOrNull(String name) {
