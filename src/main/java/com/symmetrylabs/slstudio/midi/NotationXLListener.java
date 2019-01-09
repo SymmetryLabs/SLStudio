@@ -1,6 +1,5 @@
 package com.symmetrylabs.slstudio.midi;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.*;
 import heronarts.lx.color.LXColor;
@@ -433,6 +432,3 @@ public class NotationXLListener extends LXComponent implements LXMidiListener {
     }
 
 }
-
-
-
