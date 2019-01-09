@@ -22,7 +22,7 @@ import java.util.List;
  * cubes are resting on the ground and are a couple inches from one another.
  * Each junction in this diagram labelled with a letter would be a bundle; A would have
  * one strip, B would have two and E would have 4.
- * <p><pre>
+ * <pre>
  *                          A           B           C
  *                            +-------+   +-------+
  *                            |       |   |       |
@@ -36,7 +36,7 @@ import java.util.List;
  *                            |       |   |       |
  *                            +-------+   +-------+
  *                          G           H           I
- * </pre><p>
+ * </pre>
  * Each bundle has pointers to the junction at each end of it. Ends are identified
  * by which end points towards the positive end of the axis it's aligned with; an
  * X-aligned bundle has a positive end towards X+ and a negative end towards X-. Since

@@ -20,10 +20,10 @@ public class Spaces {
      * to a linear intensity (also ranging from 0 to 1).
      *
      * Tuned to guarantee that:
-     *     f(0.0) gives 0.0 exactly
-     *     f(1.0) gives 1.0 exactly
-     *     0.0 <= f(v) <= 1.0 for all double-precision values 0.0 <= v <= 1.0
-     *     f(v2) >= f(v1) for all double-precision values v1 and v2 > v1
+     *     {@code f(0.0)} gives 0.0 exactly
+     *     {@code f(1.0)} gives 1.0 exactly
+     *     {@code 0.0 <= f(v) <= 1.0} for all double-precision values {@code 0.0 <= v <= 1.0}
+     *     {@code f(v2) >= f(v1)} for all double-precision values {@code v1} and {@code v2 > v1}
      */
     public static double srgbValueToIntensity(double v) {
         // See https://en.wikipedia.org/wiki/SRGB#The_reverse_transformation
@@ -36,10 +36,10 @@ public class Spaces {
      * to a linear intensity (also ranging from 0 to 1).
      *
      * Tuned to guarantee that:
-     *     f(0.0) gives 0.0 exactly
-     *     f(1.0) gives 1.0 exactly
-     *     0.0 <= f(i) <= 1.0 for all double-precision values 0.0 <= i <= 1.0
-     *     f(i2) > f(i1) - 1e16 for all double-precision values i1 and i2 > i1
+     *     {@code f(0.0)} gives 0.0 exactly
+     *     {@code f(1.0)} gives 1.0 exactly
+     *     {@code 0.0 <= f(i) <= 1.0} for all double-precision values {@code 0.0 <= i <= 1.0}
+     *     {@code f(i2) > f(i1) - 1e16} for all double-precision values {@code i1} and {@code i2 > i1}
      */
     public static double srgbIntensityToValue(double i) {
         // See https://en.wikipedia.org/wiki/SRGB#The_forward_transformation_(CIE_XYZ_to_sRGB)
@@ -73,10 +73,10 @@ public class Spaces {
      * to a CIEXYZ linear luminance value (Y, also ranging from 0 to 1).
      *
      * Tuned to guarantee that:
-     *     f(0.0) gives 0.0 exactly
-     *     f(1.0) gives 1.0 exactly
-     *     0.0 <= f(l) <= 1.0 for all double-precision values 0.0 <= l <= 1.0
-     *     f(l2) >= f(l1) for all double-precision values l1 and l2 > l1
+     *     {@code f(0.0)} gives 0.0 exactly
+     *     {@code f(1.0)} gives 1.0 exactly
+     *     {@code 0.0 <= f(l) <= 1.0} for all double-precision values {@code 0.0 <= l <= 1.0}
+     *     {@code f(l2) >= f(l1)} for all double-precision values {@code l1} and {@code l2 > l1}
      */
     public static double cie_lightness_to_luminance(double l) {
         // See https://en.wikipedia.org/wiki/CIELAB_color_space#Reverse_transformation

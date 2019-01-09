@@ -87,7 +87,7 @@ public class DecibelMeter extends LXModulator implements LXNormalizedParameter {
     /**
      * Default constructor, creates a meter with unity gain and 72dB dynamic range
      *
-     * @param source Audio source to meter
+     * @param buffer Audio buffer to meter
      */
     public DecibelMeter(LXAudioBuffer buffer) {
         this("Meter", buffer);
@@ -118,9 +118,7 @@ public class DecibelMeter extends LXModulator implements LXNormalizedParameter {
     }
 
     /**
-     * Return raw underlying levels, no attack/gain smoothing
-     *
-     * @return
+     * @return Raw underlying levels, no attack/gain smoothing
      */
     public float getRaw() {
         return this.rmsRaw;

@@ -87,7 +87,7 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, UIControlTarge
     /**
      * Sets the direction that this drop menu opens, up or down
      *
-     * @param openDirection Up or down
+     * @param direction Up or down
      * @return this
      */
     public UIDropMenu setDirection(Direction direction) {

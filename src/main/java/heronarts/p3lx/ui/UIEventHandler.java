@@ -112,9 +112,9 @@ public abstract class UIEventHandler {
     /**
      * Subclasses override to receive mouse events
      *
-     * @param mouseEvent Mouse event
-     * @param mx x-coordinate
-     * @param my y-coordinate
+     * @param keyEvent Key event
+     * @param keyChar Key character
+     * @param keyCode Key code value
      */
     public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
     }

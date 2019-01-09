@@ -187,7 +187,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
     /**
      * Model of a single cube, which has an orientation and position on the
      * car. The position is specified in x,y,z coordinates with rotation. The
-     * x axis is left->right, y is bottom->top, and z is front->back.
+     * x axis is left-to-right, y is bottom-to-top, and z is front-to-back.
      *
      * A cube's x,y,z position is specified as the left, bottom, front corner.
      *

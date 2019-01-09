@@ -69,7 +69,7 @@ public class GraphicMeter extends DecibelMeter {
     /**
      * Default graphic equalizer with 2 bands per octave
      *
-     * @param source Audio source
+     * @param buffer Audio source
      */
     public GraphicMeter(LXAudioBuffer buffer) {
         this(buffer, FourierTransform.DEFAULT_NUM_BANDS);
@@ -79,7 +79,7 @@ public class GraphicMeter extends DecibelMeter {
      * Default graphic equalizer with 2 bands per octave
      *
      * @param label Label
-     * @param source Audio source
+     * @param buffer Audio source
      */
     public GraphicMeter(String label, LXAudioBuffer buffer) {
         this(label, buffer, FourierTransform.DEFAULT_NUM_BANDS);
@@ -88,8 +88,8 @@ public class GraphicMeter extends DecibelMeter {
     /**
      * Makes a graphic equalizer with a default slope of 4.5 dB/octave
      *
-     * @param source Audio source to listen to
-     * @param bandsPerOctave Number of bands per octave
+     * @param buffer Audio source to listen to
+     * @param numBands Number of bands per octave
      */
     public GraphicMeter(LXAudioBuffer buffer, int numBands) {
         this("Meter", buffer, numBands);
@@ -99,8 +99,8 @@ public class GraphicMeter extends DecibelMeter {
      * Makes a graphic equalizer with a default slope of 4.5 dB/octave
      *
      * @param label Label
-     * @param source Audio source to listen to
-     * @param bandsPerOctave Number of bands per octave
+     * @param buffer Audio source to listen to
+     * @param numBands Number of bands per octave
      */
     public GraphicMeter(String label, LXAudioBuffer buffer, int numBands) {
         super(label, buffer);
