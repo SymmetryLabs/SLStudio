@@ -5,6 +5,9 @@ import java.util.Objects;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 
 
 import com.symmetrylabs.shows.Show;
@@ -15,8 +18,10 @@ import io.github.lukehutch.fastclasspathscanner.scanner.ScanResult;
 import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
+import heronarts.lx.model.LXModel;
 
 import com.symmetrylabs.slstudio.pattern.test.SLTestPattern;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 
 public class LXClassLoader {
     // Enable test patterns by passing -DloadTestPatterns=true as a VM option
@@ -26,21 +31,33 @@ public class LXClassLoader {
     private static final ScanResult classpathScanner = new FastClasspathScanner(basePackageName).scan();
 
     public static List<Class<LXPattern>> findPatterns() {
-        return getSubclassStream(LXPattern.class)
+        return findPatterns(null);
+    }
+
+    public static List<Class<LXPattern>> findPatterns(Class<? extends LXModel> modelClass) {
+        return getSubclassStream(LXPattern.class, modelClass)
             .filter(it -> LOAD_TEST_PATTERNS || !SLTestPattern.class.isAssignableFrom(it))
             .collect(Collectors.toList());
     }
 
     public static List<Class<LXEffect>> findEffects() {
-        return getSubclassStream(LXEffect.class).collect(Collectors.toList());
+        return findEffects(null);
+    }
+
+    public static List<Class<LXEffect>> findEffects(Class<? extends LXModel> modelClass) {
+        return getSubclassStream(LXEffect.class, modelClass).collect(Collectors.toList());
     }
 
     public static List<Class<LXWarp>> findWarps() {
-        return getSubclassStream(LXWarp.class).collect(Collectors.toList());
+        return findWarps(null);
+    }
+
+    public static List<Class<LXWarp>> findWarps(Class<? extends LXModel> modelClass) {
+        return getSubclassStream(LXWarp.class, modelClass).collect(Collectors.toList());
     }
 
     public static List<Class<Show>> findShows() {
-        return getSubclassStream(Show.class).collect(Collectors.toList());
+        return getSubclassStream(Show.class, null).collect(Collectors.toList());
     }
 
     public static String guessExistingPatternClassName(String className) {
@@ -70,12 +87,67 @@ public class LXClassLoader {
         throw new IllegalArgumentException("Multiple classes found with name " + simpleName + " (from " + className + "): " + names);
     }
 
-    private static <T> Stream<Class<T>> getSubclassStream(Class<T> baseClass) {
+    private static <T> Stream<Class<T>> getSubclassStream(Class<T> baseClass, Class<? extends LXModel> modelClass) {
         return classpathScanner.getNamesOfSubclassesOf(baseClass).stream()
             .map(LXClassLoader::classForNameOrNull)
             .filter(Objects::nonNull)
             .filter(LXClassLoader::isConstructable)
+            .filter(cls -> supportsModelClass(modelClass, cls))
             .map(c -> (Class<T>)c);
+    }
+
+    private static <T> boolean supportsModelClass(Class<? extends LXModel> modelClass, Class<T> componentClass) {
+        if (modelClass == null) {
+            return true;
+        }
+        if (SLPattern.class.isAssignableFrom(componentClass)) {
+            Type slpatternType = componentClass.getGenericSuperclass();
+            Type lastTypeVariable = null;
+            while (!slpatternType.getTypeName().startsWith("com.symmetrylabs.slstudio.pattern.base.SLPattern<")) {
+                if (slpatternType instanceof Class) {
+                    slpatternType = ((Class) slpatternType).getGenericSuperclass();
+                } else if (slpatternType instanceof ParameterizedType) {
+                    ParameterizedType pt = (ParameterizedType) slpatternType;
+                    slpatternType = ((Class) pt.getRawType()).getGenericSuperclass();
+                    lastTypeVariable = pt.getActualTypeArguments()[0];
+                }
+            }
+            Type supportedModelType = ((ParameterizedType) slpatternType).getActualTypeArguments()[0];
+            if (supportedModelType instanceof ParameterizedType) {
+                supportedModelType = ((ParameterizedType) supportedModelType).getRawType();
+            }
+            /* This is a best guess; we don't build the complete type tree, but we keep track of the last type
+                 variable instatiation as we walk up the tree. We assume that generic pattern base classes will
+                 use that type variable to store what kind of model it supports. If the instantiation of that
+                 type variable was not a subclass of LXModel, we guessed wrong and we assume this pattern
+                 supports all types.
+
+                 We could instead keep all of the information we need around to walk back up the tree and figure
+                 out what type we're instantiating the SLPattern type with, but that's much more complicated and
+                 this works for our (relatively-simple) class hierarchy for now. */
+            if (supportedModelType instanceof TypeVariable) {
+                if (lastTypeVariable instanceof ParameterizedType) {
+                    lastTypeVariable = ((ParameterizedType) lastTypeVariable).getRawType();
+                }
+                if (lastTypeVariable instanceof Class) {
+                    if (LXModel.class.isAssignableFrom((Class) lastTypeVariable)) {
+                        supportedModelType = lastTypeVariable;
+                    }
+                }
+            }
+            if (!(supportedModelType instanceof Class)) {
+                System.err.println(
+                    String.format(
+                        "warning: pattern %s has unindexable model type parameter %s of type %s (last type variable %s)",
+                        componentClass.getTypeName(),
+                        supportedModelType.getTypeName(),
+                        supportedModelType.getClass().getTypeName(),
+                        lastTypeVariable.getTypeName()));
+                return true;
+            }
+            return ((Class) supportedModelType).isAssignableFrom(modelClass);
+        }
+        return true;
     }
 
     private static Class<?> classForNameOrNull(String name) {

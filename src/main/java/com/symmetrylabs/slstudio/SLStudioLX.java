@@ -777,13 +777,13 @@ public class SLStudioLX extends P3LX {
 
     protected void initialize(SLStudioLX lx, SLStudioLX.UI ui) {
         // Add all warps
-        LXClassLoader.findWarps().stream().forEach(lx::registerWarp);
+        LXClassLoader.findWarps(lx.model.getClass()).stream().forEach(lx::registerWarp);
 
         // Add all effects
-        LXClassLoader.findEffects().stream().forEach(lx::registerEffect);
+        LXClassLoader.findEffects(lx.model.getClass()).stream().forEach(lx::registerEffect);
 
         // Add all patterns
-        LXClassLoader.findPatterns().stream().forEach(lx::registerPattern);
+        LXClassLoader.findPatterns(lx.model.getClass()).stream().forEach(lx::registerPattern);
 
         lx.registerPattern(heronarts.p3lx.pattern.SolidColorPattern.class);
         lx.registerPattern(IteratorTestPattern.class);
