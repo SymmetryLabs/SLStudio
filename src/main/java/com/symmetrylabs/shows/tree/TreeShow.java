@@ -29,8 +29,6 @@ public abstract class TreeShow implements Show {
     }
 
     public void setupLx(SLStudioLX lx) {
-        lx.engine.registerComponent("treeModelingTool", TreeModelingTool.getInstance(lx));
-
         //anemometer = new Anemometer();
         //lx.engine.modulation.addModulator(anemometer.speedModulator);
         //lx.engine.modulation.addModulator(anemometer.directionModulator);
@@ -41,17 +39,6 @@ public abstract class TreeShow implements Show {
 
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
-        //ui.preview.addComponent(new UITreeTrunk(SLStudio.applet));
-
-        ui.preview.addComponent(UITreeModelAxes.getInstance(lx));
-        //ui.preview.addComponent(new UITreeTrunk(SLStudio.applet));
-        UITreeModelAxes uiTreeModelAxes = UITreeModelAxes.getInstance(lx);
-        ui.preview.addComponent(uiTreeModelAxes);
-
-        new UIPixlites(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
-        UITreeModelingTool.instance = new UITreeModelingTool(
-            ui, TreeModelingTool.getInstance(lx), 0, 0, ui.rightPane.model.getContentWidth());
-        UITreeModelingTool.instance.addToContainer(ui.rightPane.model);
     }
 
 }
