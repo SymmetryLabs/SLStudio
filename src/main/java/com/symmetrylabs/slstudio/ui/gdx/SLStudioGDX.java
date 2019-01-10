@@ -2,7 +2,7 @@ package com.symmetrylabs.slstudio.ui.gdx;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import com.symmetrylabs.LXClassLoader;
@@ -72,12 +72,12 @@ public class SLStudioGDX extends ApplicationAdapter {
 
     @Override
     public void render() {
-        Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Gdx.gl20.glClearColor(clearR, clearG, clearB, 1);
-        Gdx.gl20.glClear(
-            GL20.GL_COLOR_BUFFER_BIT
+        Gdx.gl30.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Gdx.gl30.glClearColor(clearR, clearG, clearB, 1);
+        Gdx.gl30.glClear(
+            GL30.GL_COLOR_BUFFER_BIT
             | (Gdx.graphics.getBufferFormat().coverageSampling
-                 ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
+                 ? GL30.GL_COVERAGE_BUFFER_BIT_NV : 0));
         renderer.cam.viewportHeight = Gdx.graphics.getHeight();
         renderer.cam.viewportWidth = Gdx.graphics.getWidth();
         renderer.cam.update();

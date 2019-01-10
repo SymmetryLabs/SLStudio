@@ -7,7 +7,7 @@ version = '1.0'
 
 def javaHome = System.env.JAVA_HOME
 tasks.withType(CppCompile) {
-	compilerArgs.add "-std=c++14"
+	compilerArgs.addAll "-std=c++14", "-DIMGUI_IMPL_OPENGL_LOADER_GLEW", "-g"
 	systemIncludes.from (javaHome + "/include")
 	/* Only the relevant platform-specific includes are present on any
 	   given machine (e.g. /include/darwin doesn't exist in linux installs)
@@ -28,4 +28,5 @@ tasks.withType(LinkSharedLibrary) {
 		linkerArgs.addAll "-framework", "OpenGL"
 		linkerArgs.addAll "-undefined", "dynamic_lookup"
 	}
+	linkerArgs.addAll "-lglew", "-g"
 }

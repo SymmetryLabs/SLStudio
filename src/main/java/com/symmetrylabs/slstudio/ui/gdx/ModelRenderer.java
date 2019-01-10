@@ -2,7 +2,7 @@ package com.symmetrylabs.slstudio.ui.gdx;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -29,9 +29,12 @@ public class ModelRenderer {
         this.model = model;
         this.lx = lx;
 
-        String vert = Gdx.files.internal("vertex.glsl").readString();
-        String frag = Gdx.files.internal("fragment.glsl").readString();
+        String vert = Gdx.files.internal("vertex-330.glsl").readString();
+        String frag = Gdx.files.internal("fragment-330.glsl").readString();
         pointShader = new ShaderProgram(vert, frag);
+        if (!pointShader.isCompiled()) {
+            throw new RuntimeException("shader compilation failed: " + pointShader.getLog());
+        }
 
         int N = model.points.length;
         positionVbo = new VertexBufferObject(false, N, VertexAttribute.Position());
@@ -86,7 +89,7 @@ public class ModelRenderer {
         colorVbo.bind(pointShader);
         colorVbo.setVertices(glColorBuffer, 0, model.points.length * 4);
 
-        Gdx.gl.glDrawArrays(GL20.GL_POINTS, 0, model.points.length);
+        //Gdx.gl.glDrawArrays(GL30.GL_POINTS, 0, model.points.length);
 
         positionVbo.unbind(pointShader);
         colorVbo.unbind(pointShader);
@@ -95,7 +98,7 @@ public class ModelRenderer {
         pointShader.disableVertexAttribute("a_position");
         pointShader.end();
 
-        Gdx.gl.glBindBuffer(GL20.GL_ARRAY_BUFFER, 0);
+        Gdx.gl.glBindBuffer(GL30.GL_ARRAY_BUFFER, 0);
 
         GL11.glDisable(GL11.GL_POINT_SMOOTH);
     }

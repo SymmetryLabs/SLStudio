@@ -10,4 +10,4 @@ brew tap caskroom/versions
 brew cask install java8
 
 echo "Installing SLStudio dependencies"
-brew install glfw
+brew install glfw glew

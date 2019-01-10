@@ -4,7 +4,7 @@
 #include "com_symmetrylabs_slstudio_ui_gdx_UI.h"
 #include "handle.hpp"
 #include "imgui.h"
-#include "imgui_impl_opengl2.h"
+#include "imgui_impl_opengl3.h"
 #include "imgui_impl_glfw.h"
 
 #define MAX_INPUT_LENGTH 511
@@ -30,9 +30,9 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_init(JNIEnv *env, jclass cls, jlong win
 		std::cout << "failed to init glfw" << std::endl;
 		return 0;
 	}
-	ok = ImGui_ImplOpenGL2_Init();
+	ok = ImGui_ImplOpenGL3_Init();
 	if (!ok) {
-		std::cout << "failed to init opengl2" << std::endl;
+		std::cout << "failed to init opengl3" << std::endl;
 		return 0;
 	}
 
@@ -98,7 +98,7 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_init(JNIEnv *env, jclass cls, jlong win
 }
 
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_newFrame(JNIEnv *, jclass) {
-	ImGui_ImplOpenGL2_NewFrame();
+	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
@@ -128,12 +128,12 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_gdx_UI_newFrame(JNIEnv 
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_gdx_UI_render(JNIEnv *, jclass) {
 	ImGui::Render();
-	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_gdx_UI_shutdown(JNIEnv *, jclass) {
-	ImGui_ImplOpenGL2_Shutdown();
+	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 	return 1;
