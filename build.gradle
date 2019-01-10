@@ -15,7 +15,7 @@ buildscript {
 
 plugins {
 	id 'org.jetbrains.kotlin.jvm' version '1.2.60'
-	id 'com.github.johnrengelman.shadow' version '2.0.1'
+	id 'com.github.johnrengelman.shadow' version '4.0.2'
 	id 'com.palantir.docker' version '0.17.2'
 	id 'java'
 	id 'application'
@@ -35,6 +35,7 @@ run {
 	if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
 		jvmArgs '-XX:+UseParNewGC', '-XX:+UseConcMarkSweepGC'
 	}
+	jvmArgs '-XstartOnFirstThread'
 
 	// To select a layout from the command line, "gradlew run -Playout=cubes"
 	systemProperty 'com.symmetrylabs.layout', findProperty('layout')
@@ -185,6 +186,7 @@ jar {
 	exclude('**/*.swp')
 	exclude('**/*.swo')
 	from project(":slimgui").sourceSets.main.output
+	dependsOn ":slimgui:assembleRelease"
 }
 
 macAppBundle {

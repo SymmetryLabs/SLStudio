@@ -256,7 +256,7 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_endGroup(JNIEnv *, jclass) {
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_gdx_UI_text(JNIEnv *env, jclass, jstring jstr) {
 	const char *str = env->GetStringUTFChars(jstr, 0);
-	ImGui::Text(str);
+	ImGui::Text("%s", str);
 	env->ReleaseStringUTFChars(jstr, str);
 }
 
@@ -307,7 +307,7 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_colorPicker(
 	const char *label = env->GetStringUTFChars(jlabel, 0);
 
 	unsigned int c = static_cast<unsigned int>(jcolor);
-	float color[4] {
+	float color[] {
 		(float)((c >> 16) & 0xFF) / 255,
 		(float)((c >>  8) & 0xFF) / 255,
 		(float)((c      ) & 0xFF) / 255,
@@ -424,7 +424,7 @@ Java_com_symmetrylabs_slstudio_ui_gdx_UI_treeNode(
 	JNIEnv *env, jclass, jstring jid, jint flags, jstring jlabel) {
 	const char *id = env->GetStringUTFChars(jid, 0);
 	const char *label = env->GetStringUTFChars(jlabel, 0);
-	bool res = ImGui::TreeNodeEx(id, flags, label);
+	bool res = ImGui::TreeNodeEx(id, flags, "%s", label);
 	env->ReleaseStringUTFChars(jid, id);
 	env->ReleaseStringUTFChars(jlabel, label);
 	return res ? 1 : 0;

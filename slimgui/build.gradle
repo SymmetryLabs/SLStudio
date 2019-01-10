@@ -5,7 +5,27 @@ plugins {
 group = 'com.symmetrylabs'
 version = '1.0'
 
+def javaHome = System.env.JAVA_HOME
 tasks.withType(CppCompile) {
-	systemIncludes.from "/usr/lib/jvm/default/include/"
-	systemIncludes.from "/usr/lib/jvm/default/include/linux"
+	compilerArgs.add "-std=c++14"
+	systemIncludes.from (javaHome + "/include")
+	/* Only the relevant platform-specific includes are present on any
+	   given machine (e.g. /include/darwin doesn't exist in linux installs)
+	   and adding nonexistent include directories doesn't hurt anything.
+	   This is simpler than trying to do OS detection to figure out if
+	   we should add the directory. */
+	systemIncludes.from (javaHome + "/include/linux")
+	systemIncludes.from (javaHome + "/include/darwin")
+}
+
+tasks.withType(LinkSharedLibrary) {
+	/* do NOT link against GLFW; LWJGL bundles its own GLFW that it
+	 loads into the JVM process, so we just tell the linker to
+	 ignore unresolved symbols and hope for the best. If we link
+	 in our own we get bad behavior on MacOS, since we end up with
+	 two copies of GLFW linked in and that's undefined behavior */
+	if (System.getProperty("os.name").equals("Mac OS X")) {
+		linkerArgs.addAll "-framework", "OpenGL"
+		linkerArgs.addAll "-undefined", "dynamic_lookup"
+	}
 }
