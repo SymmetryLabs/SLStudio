@@ -87,10 +87,6 @@ public class TreeModelingTool extends LXComponent {
         limbManipulator.repurposeParameters();
         branchManipulator.repurposeParameters();
         twigManipulator.repurposeParameters();
-
-        if (lx instanceof SLStudioLX) {
-            ((SLStudioLX) lx).ui.addSaveHook(store);
-        }
     }
 
     public static TreeModelingTool getInstance(LX lx) {

@@ -26,6 +26,7 @@ import heronarts.p3lx.ui.component.UIDropMenu;
 
 import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.shows.tree.config.*;
+import com.symmetrylabs.slstudio.SLStudioLX;
 
 
 public class UITreeModelingTool extends UICollapsibleSection {
@@ -72,6 +73,10 @@ public class UITreeModelingTool extends UICollapsibleSection {
             updateBranchControl();
             modelingTool.setSelectedTwig(modelingTool.getSelectedBranch().getTwigs().get(0));
         });
+
+        if (ui instanceof SLStudioLX.UI) {
+            ((SLStudioLX.UI) ui).addSaveHook(modelingTool.store);
+        }
     }
 
     private void redrawWindow() {
