@@ -2,12 +2,11 @@ package com.symmetrylabs.shows.ysiadsparty;
 
 import java.util.*;
 
-import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.workspaces.Workspace;
+
 
 import heronarts.lx.transform.LXTransform;
 
@@ -16,7 +15,7 @@ import com.symmetrylabs.shows.Show;
 /**
  * This file implements the mapping functions needed to lay out the cubes.
  */
-public class YsiadsPartyShow extends CubesShow implements Show, HasWorkspace {
+public class YsiadsPartyShow extends CubesShow implements Show {
     public static final String SHOW_NAME = "ysiadsparty";
 
     static final float globalOffsetX = 0;
@@ -26,10 +25,8 @@ public class YsiadsPartyShow extends CubesShow implements Show, HasWorkspace {
     static final float globalRotationX = 0;
     static final float globalRotationY = 0;
     static final float globalRotationZ = 0;
-    static final float cuberotation = 0;
     static final float CSP = 32;
 
-    private Workspace workspace;
 
     static final TowerConfig[] TOWER_CONFIG = {
         //back middle (tallest tower)
@@ -44,8 +41,6 @@ public class YsiadsPartyShow extends CubesShow implements Show, HasWorkspace {
         //two towers in the middle going to the right
         new TowerConfig(CSP*0, 0, CSP*-1, 0, 45, 0, new String[] { "1117", "172", "211",}),
         new TowerConfig(CSP*.5f, 0, CSP*-1.5f, 0, 45, 0, new String[] { "314", "408"}),
-
-
     };
 
     public SLModel buildModel() {
@@ -60,7 +55,6 @@ public class YsiadsPartyShow extends CubesShow implements Show, HasWorkspace {
         List<CubesModel.Tower> towers = new ArrayList<>();
         List<CubesModel.Cube> allCubes = new ArrayList<>();
 
-        int stripId = 0;
         for (TowerConfig config : TOWER_CONFIG) {
             List<CubesModel.Cube> cubes = new ArrayList<>();
             float x = config.x;
@@ -85,16 +79,14 @@ public class YsiadsPartyShow extends CubesShow implements Show, HasWorkspace {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        return new CubesModel(towers, allCubesArr);
+        CubesModel m = new CubesModel(towers, allCubesArr);
+        m.setTopologyTolerances(2, 6, 8);
+        return m;
     }
 
-    @Override
-    public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
-        workspace = new Workspace(lx, ui, "shows/ysiadsparty");
-    }
+    public void setupUi(final SLStudioLX lx, SLStudioLX.UI ui) {
+        super.setupUi(lx, ui);
 
-    @Override
-    public Workspace getWorkspace() {
-        return workspace;
+    
     }
 }
