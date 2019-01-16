@@ -45,7 +45,6 @@ import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.util.CaptionSource;
 import com.symmetrylabs.util.MarkerSource;
-import com.symmetrylabs.shows.tree.TreeModelingTool;
 
 import javax.swing.*;
 
@@ -60,6 +59,10 @@ public class SLStudioLX extends P3LX {
     private static final String PROJECT_FILE_NAME = ".lxproject";
     private static final String KEY_UI = "ui";
     private static final int RESTART_EXIT_CODE = 999;
+
+    public static interface SaveHook {
+        void onSave();
+    }
 
     public class UI extends heronarts.p3lx.ui.UI implements LXSerializable {
         public final UIPreviewWindow preview;
@@ -623,12 +626,21 @@ public class SLStudioLX extends P3LX {
         private static final String KEY_CLIP_VIEW_VISIBLE = "clipViewVisible";
         private static final String KEY_PREVIEW = "preview";
 
+        private final List<SaveHook> saveHooks = new ArrayList<>();
+
+        public void addSaveHook(SaveHook hook) {
+            saveHooks.add(hook);
+        }
+
+        public void removeSaveHook(SaveHook hook) {
+            saveHooks.remove(hook);
+        }
+
         @Override
         public void save(LX lx, JsonObject object) {
-                // TODO: figure out how to get this hook out of here
-                if (TreeModelingTool.isTreeShow()) {
-                        TreeModelingTool.getInstance().store.writeConfig();
-                }
+            for (SaveHook hook : saveHooks) {
+                hook.onSave();
+            }
 
             object.addProperty(KEY_AUDIO_EXPANDED, this.leftPane.audio.isExpanded());
             object.addProperty(KEY_PALETTE_EXPANDED, this.leftPane.palette.isExpanded());

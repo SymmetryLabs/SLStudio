@@ -2,6 +2,7 @@ package com.symmetrylabs.shows.tree.config;
 
 import java.io.*;
 import java.util.*;
+import com.symmetrylabs.slstudio.SLStudioLX;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -9,10 +10,11 @@ import com.google.gson.JsonObject;
 import heronarts.lx.LX;
 
 import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.shows.tree.TreeModel;
 
 
-public class TreeConfigStore {
+public class TreeConfigStore implements SLStudioLX.SaveHook {
 
     private final TreeModel tree;
 
@@ -58,6 +60,11 @@ public class TreeConfigStore {
 
     private void reconfigureTree(TreeConfig config) {
         tree.reconfigure(config);
+    }
+
+    @Override
+    public void onSave() {
+        writeConfig();
     }
 
     public void writeConfig() {

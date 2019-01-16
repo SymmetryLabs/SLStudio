@@ -2,6 +2,7 @@ package com.symmetrylabs.shows.tree;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.symmetrylabs.slstudio.SLStudioLX;
 
 import com.google.gson.JsonObject;
 
@@ -86,6 +87,10 @@ public class TreeModelingTool extends LXComponent {
         limbManipulator.repurposeParameters();
         branchManipulator.repurposeParameters();
         twigManipulator.repurposeParameters();
+
+        if (lx instanceof SLStudioLX) {
+            ((SLStudioLX) lx).ui.addSaveHook(store);
+        }
     }
 
     public static TreeModelingTool getInstance(LX lx) {
