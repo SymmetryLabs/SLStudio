@@ -49,6 +49,7 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
 
     private boolean stopped = false;
     private boolean closed = false;
+    private boolean playable = false;
 
     private String mediaPath = ".";
 
@@ -205,6 +206,7 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
 
     private boolean setAudioInputStream(AudioInputStream inputStream) {
         AudioFormat format = inputStream.getFormat();
+        playable = false;
 
         // Decode MP3 formats or whatever-or-other we got
         if (format.getEncoding() != AudioFormat.Encoding.PCM_SIGNED) {
@@ -254,6 +256,7 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
             this.outputThread.flush = true;
         }
         open();
+        playable = true;
         return true;
     }
 
@@ -328,6 +331,10 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
             this.stopped = true;
             this.line.stop();
         }
+    }
+
+    public boolean isPlayable() {
+        return playable;
     }
 
     @Override

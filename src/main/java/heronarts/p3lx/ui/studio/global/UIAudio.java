@@ -26,6 +26,8 @@
 
 package heronarts.p3lx.ui.studio.global;
 
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.io.File;
 import java.nio.file.Path;
 
@@ -154,7 +156,20 @@ public class UIAudio extends UICollapsibleSection {
                 @Override
                 public void onToggle(boolean enabled) {
                     if (enabled) {
-                        ui.applet.selectInput("Select a WAV file:", "onOpen", null, UIOutputControls.this);
+                        FileDialog dialog = new FileDialog(
+                            (Frame) null, "Select a WAV file:", FileDialog.LOAD);
+                        dialog.setFilenameFilter((dir, name) -> name.endsWith(".wav"));
+                        dialog.setVisible(true);
+
+                        String fname = dialog.getFile();
+                        if (fname == null) {
+                            return;
+                        }
+                        Path path = new File(ui.applet.sketchPath()).toPath().relativize(new File(dialog.getDirectory(), fname).toPath());
+                        audio.output.file.setValue(path.toString());
+                        if (!audio.output.isPlayable()) {
+                            fileLabel.setLabel("Unable to play file");
+                        }
                     }
                 }
             }
@@ -168,13 +183,6 @@ public class UIAudio extends UICollapsibleSection {
                     fileLabel.setLabel(audio.output.getFileName());
                 }
             });
-        }
-
-        public void onOpen(File openFile) {
-            if (openFile != null) {
-                Path path = new File(ui.applet.sketchPath()).toPath().relativize(openFile.toPath());
-                audio.output.file.setValue(path.toString());
-            }
         }
     }
 
