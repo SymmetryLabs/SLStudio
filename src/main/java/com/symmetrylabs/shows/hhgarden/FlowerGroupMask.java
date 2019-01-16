@@ -10,8 +10,9 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXVector;
+import com.symmetrylabs.slstudio.effect.SLEffect;
 
-public class FlowerGroupMask extends LXEffect {
+public class FlowerGroupMask extends SLEffect<FlowersModel> {
     private BooleanParameter stamen = new BooleanParameter("stamen", false);
     private BooleanParameter petal1 = new BooleanParameter("petal1", false);
     private BooleanParameter petal2 = new BooleanParameter("petal2", false);
