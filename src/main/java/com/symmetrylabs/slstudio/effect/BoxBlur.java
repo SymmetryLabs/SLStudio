@@ -7,10 +7,12 @@ import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
+import com.symmetrylabs.slstudio.component.HiddenComponent;
 
 import java.util.List;
 import java.util.stream.IntStream;
 
+@HiddenComponent
 public class BoxBlur extends SLEffect {
     private int indexes[];
     private int neighbors[][];

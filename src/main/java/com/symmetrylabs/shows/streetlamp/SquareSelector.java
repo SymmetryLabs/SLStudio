@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SquareSelector extends SLPattern<SLModel> {
+public class SquareSelector extends SLPattern<StreetlampModel> {
     public static final String GROUP_NAME = StreetlampShow.SHOW_NAME;
 
     private final List<BooleanParameter> params;

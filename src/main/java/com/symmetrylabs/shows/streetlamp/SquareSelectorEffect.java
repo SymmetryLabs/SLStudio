@@ -1,8 +1,8 @@
 package com.symmetrylabs.shows.streetlamp;
 
 import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.slstudio.effect.SLEffect;
 import heronarts.lx.LX;
-import heronarts.lx.LXEffect;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SquareSelectorEffect extends LXEffect {
+public class SquareSelectorEffect extends SLEffect<StreetlampModel> {
     public static final String GROUP_NAME = StreetlampShow.SHOW_NAME;
 
     private final List<BooleanParameter> params;

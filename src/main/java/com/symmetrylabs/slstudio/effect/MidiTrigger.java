@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.effect;
 
 import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.util.MusicUtils;
+import com.symmetrylabs.slstudio.component.HiddenComponent;
 
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
@@ -14,6 +15,7 @@ import heronarts.lx.parameter.LXParameter;
 
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 
+@HiddenComponent
 public class MidiTrigger extends MidiPolyphonicExpressionEffect {
     public enum Shape {
         ALL,

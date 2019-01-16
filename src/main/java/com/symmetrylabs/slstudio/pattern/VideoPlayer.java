@@ -19,12 +19,14 @@ import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.direct.BufferFormat;
 import uk.co.caprica.vlcj.player.direct.DirectMediaPlayer;
 import uk.co.caprica.vlcj.player.direct.format.RV32BufferFormat;
+import com.symmetrylabs.slstudio.component.HiddenComponent;
 
 import javax.swing.*;
 import java.nio.IntBuffer;
 import java.util.Deque;
 import java.util.LinkedList;
 
+@HiddenComponent
 public class VideoPlayer extends SLPattern<SLModel> {
     protected CompoundParameter shrinkParam = new CompoundParameter("shrink", 1, 1.4, 3);
     protected CompoundParameter yOffsetParam = new CompoundParameter("yoff", 0, 0, 1);
