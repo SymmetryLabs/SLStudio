@@ -20,6 +20,7 @@ import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXModel;
 
+import com.symmetrylabs.slstudio.component.HiddenComponent;
 import com.symmetrylabs.slstudio.effect.SLEffect;
 import com.symmetrylabs.slstudio.pattern.test.SLTestPattern;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
@@ -94,8 +95,13 @@ public class LXClassLoader {
             .map(LXClassLoader::classForNameOrNull)
             .filter(Objects::nonNull)
             .filter(LXClassLoader::isConstructable)
+            .filter(LXClassLoader::isVisible)
             .filter(cls -> supportsModelClass(modelClass, cls))
             .map(c -> (Class<T>)c);
+    }
+
+    private static <T> boolean isVisible(Class<T> component) {
+        return !component.isAnnotationPresent(HiddenComponent.class);
     }
 
     private static <T> boolean supportsModelClass(Class<? extends LXModel> modelClass, Class<T> componentClass) {
