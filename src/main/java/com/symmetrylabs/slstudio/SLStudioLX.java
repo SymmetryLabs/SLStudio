@@ -103,7 +103,6 @@ public class SLStudioLX extends P3LX {
                 "@-M           Toggle modulation mapping mode\n" +
                 "@-Shift-M     Toggle MIDI mapping mode\n" +
                 "@-N           New channel\n" +
-                "@-P           Performance mode\n" +
                 "@-R           Rename channel or pattern\n" +
                 "@-S           Save current project\n" +
                 "@-V           Toggle preview display\n" +
@@ -216,9 +215,6 @@ public class SLStudioLX extends P3LX {
                                 lx.engine.mapping.setMode(
                                         lx.engine.mapping.getMode() == mode ?
                                         LXMappingEngine.Mode.OFF : mode);
-                                break;
-                            case VK_P:
-                                togglePerformanceMode();
                                 break;
                             case VK_T:
                                 lx.ui.preview.ortho.toggle();
