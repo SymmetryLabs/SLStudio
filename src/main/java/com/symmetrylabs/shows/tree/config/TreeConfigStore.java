@@ -19,7 +19,6 @@ public class TreeConfigStore implements SLStudioLX.SaveHook {
 
     public TreeConfigStore(LX lx) {
         this.tree = (TreeModel) lx.model;
-        loadConfig();
     }
 
     private void loadConfig() {

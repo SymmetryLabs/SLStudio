@@ -110,14 +110,14 @@ public class KalpaShow extends TreeShow {
 //                new BranchConfig(false, "0.0.0.0", 0, -21.240002f, 14.699999f, 7.1999965f, 47.159996f, 0.0f, -8.28f, BRANCH_TYPE_B),
 //                new BranchConfig(false, "10.200.1.100", 8, 3.24f, 20.0f, 11.879999f, -10.8f, 7.1999993f, -7.2f, BRANCH_TYPE_B),
 //                new BranchConfig(false, "10.200.1.103", 6, -6.479999f, 21.7999998f, 12.24f, 9.0f, 20.880001f, -7.2f, BRANCH_TYPE_A)
-                new BranchConfig(false, "0.0.0.0", 0, 66, 12, 0, 52, 0, 172, BRANCH_TYPE_A),
-                  new BranchConfig(false, "10.200.1.103", 5, 40, 21, 0, 46, 0, 171, BRANCH_TYPE_A),
-                  new BranchConfig(false, "10.200.1.100", 7, 14, 33, 0, 29, 0, 171, BRANCH_TYPE_A),
-                new BranchConfig(false, "10.200.1.106", 7, -10, 42, 0, 7.2f, 0, 172, BRANCH_TYPE_B),
-                new BranchConfig(false, "10.200.1.100", 6, -32, 27, 0, -8, 0, 176, BRANCH_TYPE_B),
-                new BranchConfig(false, "0.0.0.0", 0, -46, 14, 0, -35, 0, 172, BRANCH_TYPE_B),
-                new BranchConfig(false, "10.200.1.100", 8, 21, 20, 7, 14, 13, 176, BRANCH_TYPE_B),
-                new BranchConfig(false, "10.200.1.103", 6, -6.5f, 21.8f, 14, -5.4f, 20.88f, 176, BRANCH_TYPE_A)
+                new BranchConfig(false, "10.200.1.42", 0, 66, 12, 0, 52, 0, 172, BRANCH_TYPE_A),
+                  new BranchConfig(false, "10.200.1.42", 1, 40, 21, 0, 46, 0, 171, BRANCH_TYPE_A),
+                  new BranchConfig(false, "10.200.1.42", 2, 14, 33, 0, 29, 0, 171, BRANCH_TYPE_A),
+                new BranchConfig(false, "10.200.1.42", 3, -10, 42, 0, 7.2f, 0, 172, BRANCH_TYPE_B),
+                new BranchConfig(false, "10.200.1.42", 4, -32, 27, 0, -8, 0, 176, BRANCH_TYPE_B),
+                new BranchConfig(false, "10.200.1.42", 5, -46, 14, 0, -35, 0, 172, BRANCH_TYPE_B),
+                new BranchConfig(false, "10.200.1.42", 6, 21, 20, 7, 14, 13, 176, BRANCH_TYPE_B),
+                new BranchConfig(false, "10.200.1.42", 7, -6.5f, 21.8f, 14, -5.4f, 20.88f, 176, BRANCH_TYPE_A)
             }),
 
             new LimbConfig(false, 50, 13*FEET, -270.0f, -90, 0, new BranchConfig[] {
@@ -304,6 +304,26 @@ public class KalpaShow extends TreeShow {
         super.setupLx(lx);
         lx.engine.registerComponent("scheduleControls", ScheduleControls.getInstance(lx));
         lx.engine.addLoopTask(ScheduleControls.getInstance(lx));
+
+        final String[] ipAddresses = new String[] { "10.200.1.42" };
+
+        for (int i = 0; i < ipAddresses.length; i++) {
+            AssignablePixlite pixlite = new AssignablePixlite(lx, ipAddresses[i]);
+            pixlites.put(ipAddresses[i], pixlite);
+            pixlitePorts.addAll(pixlite.ports);
+            lx.addOutput(pixlite);
+        }
+
+        //System.out.println("------------------------------");
+        for (AssignablePixlite.Port port : pixlitePorts) {
+            for (TreeModel.Branch branch : ((TreeModel)lx.model).getBranches()) {
+                if (port.ipAddress.equals(branch.getConfig().ipAddress)
+                        && port.index == branch.getConfig().channel) {
+                    //System.out.println(port.index + " - " + branch.getConfig().channel);
+                    port.setBranch(branch);
+                }
+            }
+        }
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
