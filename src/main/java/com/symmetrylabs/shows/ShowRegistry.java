@@ -9,6 +9,7 @@ import com.symmetrylabs.shows.artbasel.ArtBaselShow;
 import com.symmetrylabs.shows.composite.CompositeShow;
 import com.symmetrylabs.shows.demo.DemoShow;
 import com.symmetrylabs.shows.exploratorium.ExploratoriumShow;
+import com.symmetrylabs.shows.hblamp.HbLampShow;
 import com.symmetrylabs.shows.hhgarden.HHFlowerShow;
 import com.symmetrylabs.shows.hhgarden.HHGardenShow;
 import com.symmetrylabs.shows.googlehq.GoogleHqShow;
@@ -75,6 +76,7 @@ public class ShowRegistry {
         map.put(Thiel18Show.SHOW_NAME, () -> new Thiel18Show());
         map.put(RelatedShow.SHOW_NAME, () -> new RelatedShow());
         map.put(YsiadsPartyShow.SHOW_NAME, () -> new YsiadsPartyShow());
+        map.put(HbLampShow.SHOW_NAME, () -> new HbLampShow());
     }
 
     static interface ShowBuilder {
