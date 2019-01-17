@@ -5,6 +5,7 @@ import com.symmetrylabs.slstudio.SLStudio;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
+import com.symmetrylabs.color.Spaces;
 
 public class AllPixelOutput extends LXOutput {
     public enum LedType {
@@ -47,6 +48,10 @@ public class AllPixelOutput extends LXOutput {
         this.dataMessage = new byte[3 * lx.model.size + 3];
         this.ledType = ledType;
         this.channelOrder = channelOrder;
+
+        /* we send brightness via setBrightness, so we don't want to pre-mix brightness values
+             and decrease our dynamic range */
+        mode.setValue(Mode.RAW);
 
         if (lx.model.size * 3 > 0xFFFF) {
             throw new RuntimeException("model data size (3 * model size) must fit in 16 bits, got " + (3 * lx.model.size));
@@ -100,7 +105,17 @@ public class AllPixelOutput extends LXOutput {
         configCmd[4] = (byte) (dataSize & 0xFF);
         configCmd[5] = (byte) ((dataSize >> 8) & 0xFF);
         configCmd[6] = 16; // SPI speed in MHz
-        sendMessage(configCmd, configCmd.length);
+        sendMessage(configCmd);
+    }
+
+    protected void sendBrightness(int brightness) {
+        brightness = brightness < 0 ? 0 : brightness > 255 ? 255 : brightness;
+        byte[] brightCmd = new byte[4];
+        brightCmd[0] = 3; // BRIGHTNESS command
+        brightCmd[1] = 1; // low byte of message length
+        brightCmd[2] = 0; // high byte of message length
+        brightCmd[3] = (byte) brightness;
+        sendMessage(brightCmd);
     }
 
     @Override
@@ -109,6 +124,14 @@ public class AllPixelOutput extends LXOutput {
             sendConfigureCommand();
             return;
         }
+        double br = brightness.getValue();
+        /* if we put master output in raw mode (desirable!) we can use non-prescaled colors and then
+             scale the global brightness by the master output level */
+        if (lx.engine.output.mode.getEnum() == Mode.RAW) {
+            br *= lx.engine.output.brightness.getValue();
+        }
+        double lum = Spaces.cie_lightness_to_luminance(br);
+        sendBrightness((int) (lum * 255));
         int dataSize = 3 * lx.model.size;
         if (dataMessage[0] == 0) {
             /* this means the message hasn't been set up yet; write in the header now */
@@ -127,13 +150,15 @@ public class AllPixelOutput extends LXOutput {
             dataMessage[3 + 3 * i + 1] = rgb[channelOrder[1]];
             dataMessage[3 + 3 * i + 2] = rgb[channelOrder[2]];
         }
-        sendMessage(dataMessage, dataSize + 3);
+        sendMessage(dataMessage);
     }
 
-    protected void sendMessage(byte[] msg, int length) {
-        int written = port.writeBytes(msg, length);
-        if (written != length) {
-            SLStudio.setWarning("AllPixelOutput", String.format("failed to write %d bytes, only wrote %d", length, written));
+    protected void sendMessage(byte[] msg) {
+        int written = port.writeBytes(msg, msg.length);
+        if (written != msg.length) {
+            SLStudio.setWarning(
+                "AllPixelOutput",
+                String.format("failed to write %d bytes, only wrote %d", msg.length, written));
         }
         byte[] buf = new byte[1];
         int read = port.readBytes(buf, 1);
@@ -178,5 +203,9 @@ public class AllPixelOutput extends LXOutput {
                 String.format("unknown error %d returned from device on message code %d", ret, msgCode));
             return;
         }
+    }
+
+    public static void configureMasterOutput(LX lx) {
+        lx.engine.output.mode.setValue(Mode.RAW);
     }
 }
