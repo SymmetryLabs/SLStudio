@@ -31,33 +31,86 @@ public class MaeShow extends CubesShow implements Show, HasWorkspace {
     static final float SP = 24;
 
     static final TowerConfig[] TOWER_CONFIG = {
+/**
+         * Middle Twins -----------------------------------------------------------------------------------*
+        */
+        // A1
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*0, 0, 0, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*0, SP*1, 0, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*0, SP*2, 0, new String[] {"520","876"}),
+        // A2
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*1, 0, 0, new String[] {"1210","1211"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*1, SP*1, 0, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*1, SP*2, 0, new String[] {"520","876"}),
 
-        /**
-         * From the Prespective of the Front Door -------------------------------------------------------*
-         */
-        //BackRight Left
-        new TowerConfig(CubesModel.Cube.Type.HD, 0, SP*4, 0, -45, 180-45, 0, new String[] {"1069","1068"}),
-        //BackRight Center
-        new TowerConfig(CubesModel.Cube.Type.HD, SP*3, SP*4, SP*-1, -45, 180-45, 0, new String[] {"143","150"}),
-        //BackRight Right
-        new TowerConfig(CubesModel.Cube.Type.HD, SP*5, SP*4, SP*0, -45, -180-45+90, 0, new String[] {"966","500"}),
-        //Center Near Door
-        new TowerConfig(CubesModel.Cube.Type.HD, SP*4.8f, SP*4, SP*-3, -45, 180-45, 0, new String[] {"614","636"}),
+        // /**
+        //  * Left Triplets --------------------------------------------------------------------------------*
+        // */
+        // // B1
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-2, SP*.5f, SP*-1, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-2, SP*1.5f, SP*-1, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-2, SP*2.5f, SP*-1, new String[] {"520","876"}),
+        // // B2
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-3, 0, SP*-1, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-3, SP*1, SP*-1, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-3, SP*2, 0, new String[] {"520","876"}),
+        // // B3
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-4, 0, SP*-1, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-4, SP*1, SP*-1, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-4, SP*2, SP*-1, new String[] {"520","876"}),
 
-        //BackLeft Facing Couch Right
-        new TowerConfig(CubesModel.Cube.Type.HD, SP*0, SP*4, SP*-6, -45, 180-45, 0, new String[] {"5410ecfd752a","1089"}),
-        //BackLeft Facing Couch Middle
-        new TowerConfig(CubesModel.Cube.Type.HD, SP*3, SP*4, SP*-6, -45, 180-45, 0, new String[] {"415hp","1050"}),
-        //BackLeft Facing Couch Left
-        new TowerConfig(CubesModel.Cube.Type.HD, SP*5, SP*4, SP*-6, -45, 180-45, 0, new String[] {"5410ecf5e2e2","5410ecf6b63e"}),
+        // /**
+        //  * Left Wing -----------------------------------------------------------------------------------*
+        // */
+        // // C1
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-5, 0, SP*-2, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-5, SP*1, SP*-2, new String[] {"520","876"}),
 
-        //Tower Cube B
-        new TowerConfig(CubesModel.Cube.Type.HD, SP*5, SP*0, SP*-6, 0, 0, 0, new String[] {"135","312"}),
-        //Tower Cube M
-        new TowerConfig(CubesModel.Cube.Type.HD, SP*5, SP*1, SP*-6, 0, 0, 0, new String[] {"5410ecfd52a4","5410ecfd7ce6"}),
-        //Tower Cube T
-        new TowerConfig(CubesModel.Cube.Type.HD, SP*5, SP*2, SP*-6, 0, 0, 0, new String[] {"683","1002"}),
+        // /**
+        //  * Left Front -----------------------------------------------------------------------------------*
+        // */
+        // // D1
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-2, 0, SP*-3, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-2, SP*1, SP*-3, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-2, SP*2, SP*-3, new String[] {"520","876"}),
 
+        // /*Right Triplets --------------------------------------------------------------------------------*
+        // */
+        // // E1
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*3, SP*.5f, SP*-1, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*3, SP*1.5f, SP*-1, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*3, SP*2.5f, SP*-1, new String[] {"520","876"}),        
+        // // E2
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*4, 0, SP*-1, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*4, SP*1, SP*-1, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*4, SP*2, 0, new String[] {"520","876"}),        // // (gap)
+        // // E3
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*5, 0, SP*-1, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*5, SP*1, SP*-1, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*5, SP*2, SP*-1, new String[] {"520","876"}),        
+
+        // /**
+        //  * Right Wing -----------------------------------------------------------------------------------*
+        // */
+        // // F1
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*6, 0, SP*-2, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*6, SP*1, SP*-2, new String[] {"520","876"}),        
+
+        // /**
+        //  * Right Front -----------------------------------------------------------------------------------*
+        // */
+        // // G1
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*3, 0, SP*-3, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*3, SP*1, SP*-3, new String[] {"520","876"}),
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*3, SP*2, SP*-3, new String[] {"520","876"}),        // // G2
+        // new TowerConfig(CubesModel.Cube.Type.HD,  SP*4+3f, TOWER_RISER*6, 0, new String[] {"1051","1058"}),
+        // // G3
+        // new TowerConfig(CubesModel.Cube.Type.HD,  SP*5+3f, TOWER_RISER*6, 0, new String[] {"1014","891"}),
+        // // (gap)
+        // // G4
+        // new    TowerConfig(CubesModel.Cube.Type.HD,  SP*6.5f+3f, TOWER_RISER*6, 0, new String[] {"1132","1133"}),
+        // // G5
+        // new    TowerConfig(CubesModel.Cube.Type.HD,  SP*7.5f, TOWER_RISER*6, 0, new String[] {"1224","1225"}),
     };
 
 
