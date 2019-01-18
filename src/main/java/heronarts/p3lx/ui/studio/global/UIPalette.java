@@ -58,7 +58,7 @@ public class UIPalette extends UICollapsibleSection {
         );
 
         addTopLevelComponent(
-            new UITopLevelPreview(getWidth() - 100, 2, 50,14)
+            new UITopLevelPreview(getWidth() - 130, 2, 80,14)
         );
 
         new UIToggleSet(0, 2, getContentWidth(), 18)
@@ -103,10 +103,21 @@ public class UIPalette extends UICollapsibleSection {
 
     }
 
+    /*
+    *
+    * Input should be between 0 and 1
+     */
+    private int getPaletteColor( double input ){
+
+        LX.hsb(input * 360, sv, x == xp ? 100 : 7
+        return
+    }
+
     class UITopLevelPreview extends UI2dComponent {
         private int xp;
         private float sv;
         private float hv;
+        private float spread;
 
         UITopLevelPreview(float x, float y, float w, float h) {
             super(x, y, w, h);
@@ -116,10 +127,12 @@ public class UIPalette extends UICollapsibleSection {
                     float svf = palette.getSaturationf();
 //                    float hvf = palette.clr.hue.getValuef();
                     float hvf = palette.getHuef();
-                    if (xp != xv || svf != sv || hvf != hv) {
+                    float spr_vf = palette.spread.getValuef();
+                    if (xp != xv || svf != sv || hvf != hv || spr_vf != spread) {
                         xp = xv;
                         sv = svf;
                         hv = hvf;
+                        spread = spr_vf;
                         redraw();
                     }
                 }
@@ -129,7 +142,11 @@ public class UIPalette extends UICollapsibleSection {
         @Override
         public void onDraw(UI ui, PGraphics pg) {
             for (int x = 1; x < this.width-1; ++x) {
-                pg.stroke(LXColor.hsb(hv, sv, 100));
+
+                // the hue value to draw for the preview at this x position.  We want the central hue val (hv) to end up at the center
+                float hue = hv + ((x-this.width/2) / (this.width-2)) * spread;
+
+                pg.stroke(LXColor.hsb(hue, sv, 100));
                 pg.line(x, 1, x, this.getHeight());
             }
         }
@@ -235,8 +252,9 @@ public class UIPalette extends UICollapsibleSection {
 
             @Override
             public void onDraw(UI ui, PGraphics pg) {
-                for (int x = 1; x < this.width - 1; ++x) {
-                    pg.stroke(LX.hsb((x-1) / (this.width-2) * 360, sv, x == xp ? 100 : 75));
+                for (int x = 0; x < this.width; ++x) {
+                    int x_palette_hue = getPaletteHueByX( (x/this.width) );
+                    pg.stroke(LX.hsb(x_palette_hue, sv, x == xp ? 100 : 75));
                     pg.line(x, 1, x, 19);
                 }
             }
