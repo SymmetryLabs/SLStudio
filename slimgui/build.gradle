@@ -5,9 +5,20 @@ plugins {
 group = 'com.symmetrylabs'
 version = '1.0'
 
-def javaHome = System.properties["java.home"]
+def isValidJavaHome(javaHome) {
+	return javaHome != null && (new File(javaHome, "include")).exists();
+}
 
 tasks.withType(CppCompile) {
+	def javaHome = System.env.JAVA_HOME
+	if (!isValidJavaHome(javaHome)) {
+		javaHome = System.properties["java.home"];
+	}
+	if (!isValidJavaHome(javaHome)) {
+		throw new GradleScriptException(
+			"JAVA_HOME is not set; on a mac, run \"export JAVA_HOME=\$(/usr/libexec/java_home)\" and try again", null)
+	}
+
 	compilerArgs.add "-std=c++14"
 	compilerArgs.add "-DIMGUI_IMPL_OPENGL_LOADER_GLEW"
 	compilerArgs.add "-g"
