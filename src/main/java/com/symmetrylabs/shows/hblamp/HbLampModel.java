@@ -14,7 +14,7 @@ public class HbLampModel extends StripsModel<Strip> {
     private static final float LED_PER_M = 60.0f;
     private static final float LED_PITCH_CM = 100.0f / LED_PER_M;
     private static final float CORE_RADIUS = 5.0f;
-    private static final int LEDS_PER_STRIP = 106;
+    private static final int LEDS_PER_STRIP = 108;
 
     public HbLampModel() {
         this(new ArrayList<Strip>());
