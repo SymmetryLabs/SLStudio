@@ -187,8 +187,6 @@ compileTestKotlin {
 jar {
 	exclude('**/*.swp')
 	exclude('**/*.swo')
-	from project(":slimgui").sourceSets.main.output
-	dependsOn ":slimgui:assembleRelease"
 }
 
 macAppBundle {
