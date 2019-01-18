@@ -4,7 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.net.SocketException;
 
+import com.symmetrylabs.shows.tree.TreeModelingTool;
+import com.symmetrylabs.shows.tree.ui.UITreeModelAxes;
+import com.symmetrylabs.shows.tree.ui.UITreeTrunk;
 import com.symmetrylabs.util.MarkerSource;
+import java.io.File;
+import processing.opengl.PJOGL;
 
 import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
@@ -13,8 +18,6 @@ import com.symmetrylabs.slstudio.output.MappingPixlite;
 import com.symmetrylabs.slstudio.ui.UIWorkspace;
 import heronarts.lx.LX;
 import com.symmetrylabs.shows.ShowRegistry;
-import com.symmetrylabs.shows.tree.TreeModelingTool;
-import com.symmetrylabs.shows.tree.ui.*;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -30,8 +33,7 @@ import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.ui.UIFramerateControl;
 import com.symmetrylabs.slstudio.envelop.Envelop;
 import com.symmetrylabs.slstudio.envelop.EnvelopOscListener;
-import com.symmetrylabs.shows.tree.ui.UITreeModelingTool;
-import com.symmetrylabs.shows.tree.ui.UITreeModelAxes;
+import com.symmetrylabs.slstudio.midi.NotationXLListener;
 import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.DrawHelper;
 import com.symmetrylabs.util.dispatch.Dispatcher;
@@ -45,6 +47,7 @@ public class SLStudio extends PApplet {
     public static final String SHOW_FILE_NAME = ".show";
     public static final String RESTART_FILE_NAME = ".restart";
     public static final int ENVELOP_OSC_PORT = 3377;
+    public static final String MUTE_FILE_NAME = "start-muted";
 
     private SLStudioLX lx;
     public Show show;
@@ -55,9 +58,6 @@ public class SLStudio extends PApplet {
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
-    public TreeModelingTool treeModelingTool;
-    public UITreeModelingTool uiTreeModelingTool = null;
-    public UITreeModelAxes uiTreeModelAxes = null;
     public Anemometer anemometer;
     public LX lx_OG;
 
@@ -76,6 +76,7 @@ public class SLStudio extends PApplet {
     @Override
     public void settings() {
         size(displayWidth, displayHeight, P3D);
+        PJOGL.setIcon("application.png");
 
         String hidpiprop = System.getProperty("com.symmetrylabs.hidpi");
         String osname = System.getProperty("os.name");
@@ -142,18 +143,6 @@ public class SLStudio extends PApplet {
 
                 show.setupLx(lx);
 
-                if (TreeModelingTool.isTreeShow()) {
-                    treeModelingTool = new TreeModelingTool(lx);
-                    lx.engine.registerComponent("treeModelingTool", treeModelingTool);
-
-                    anemometer = new Anemometer();
-                    lx.engine.modulation.addModulator(anemometer.speedModulator);
-                    lx.engine.modulation.addModulator(anemometer.directionModulator);
-                    lx.engine.registerComponent("anemomter", anemometer);
-                    lx.engine.addLoopTask(anemometer);
-                    anemometer.start();
-                }
-
                 outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
                 mappingPixlites = setupPixlites();
@@ -184,11 +173,11 @@ public class SLStudio extends PApplet {
 
 //                new UIPowerCap(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
 
-                if (TreeModelingTool.isTreeShow()) {
-                    ui.preview.addComponent(new UITreeTrunk(applet));
-                    uiTreeModelAxes = new UITreeModelAxes();
-                    ui.preview.addComponent(uiTreeModelAxes);
-                }
+//                if (TreeModelingTool.isTreeShow()) {
+//                    ui.preview.addComponent(new UITreeTrunk(applet));
+//                    uiTreeModelAxes = new UITreeModelAxes();
+//                    ui.preview.addComponent(uiTreeModelAxes);
+//                }
 
                 show.setupUi(lx, ui);
 
@@ -200,16 +189,25 @@ public class SLStudio extends PApplet {
                 if (show instanceof MarkerSource) {
                     ui.markerPainter.addSource((MarkerSource) show);
                 }
+
+                lx.engine.midi.whenReady(new Runnable() {
+                    @Override
+                    public void run() {
+                        NotationXLListener.bindMidi(lx, ui);
+                    }
+                });
             }
         };
 
         lx.engine.isChannelMultithreaded.setValue(true);
         lx.engine.isNetworkMultithreaded.setValue(true);
         lx.engine.audio.enabled.setValue(false);
-        lx.engine.output.enabled.setValue(true);
-        lx.engine.framesPerSecond.setValue(120);
 
-    //performanceManager.start(lx.ui);
+        /* don't mess with enabled if the mute file isn't there; output.enabled is
+             set to the value stored in the project file */
+        if (new File(MUTE_FILE_NAME).exists()) {
+            lx.engine.output.enabled.setValue(false);
+        }
 
         long setupFinish = System.nanoTime();
         println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms");

@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.warp;
 
 import com.symmetrylabs.util.CubeMarker;
 import com.symmetrylabs.util.Marker;
+import com.symmetrylabs.slstudio.model.SLModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,13 +14,14 @@ import heronarts.lx.transform.LXVector;
 import heronarts.lx.warp.LXWarp;
 import processing.core.PVector;
 
-public class Mirror extends LXWarpWithMarkers {
+public class Mirror extends SLWarp<SLModel> {
     private BooleanParameter xParam = new BooleanParameter("x", false);
     private CompoundParameter cxParam = new CompoundParameter("cx", model.cx, model.xMin, model.xMax);
     private BooleanParameter yParam = new BooleanParameter("y", false);
     private CompoundParameter cyParam = new CompoundParameter("cy", model.cy, model.yMin, model.yMax);
     private BooleanParameter zParam = new BooleanParameter("z", false);
     private CompoundParameter czParam = new CompoundParameter("cz", model.cz, model.zMin, model.zMax);
+    private BooleanParameter flipParam = new BooleanParameter("flip", false);
 
     public Mirror(LX lx) {
         super(lx);
@@ -29,6 +31,7 @@ public class Mirror extends LXWarpWithMarkers {
         addParameter(cyParam);
         addParameter(zParam);
         addParameter(czParam);
+        addParameter(flipParam);
     }
 
     @Override
@@ -41,6 +44,7 @@ public class Mirror extends LXWarpWithMarkers {
             float cy = cyParam.getValuef();
             boolean z = zParam.getValueb();
             float cz = czParam.getValuef();
+            float flip = flipParam.getValueb() ? -1 : 1;
 
             for (int i = 0; i < inputVectors.length; i++) {
                 LXVector iv = inputVectors[i];
@@ -48,9 +52,9 @@ public class Mirror extends LXWarpWithMarkers {
                     outputVectors[i] = null;
                 } else {
                     LXVector ov = new LXVector(iv);  // sets ov.point and ov.index
-                    if (x) ov.x = Math.abs(iv.x - cx) + cx;
-                    if (y) ov.y = Math.abs(iv.y - cy) + cy;
-                    if (z) ov.z = Math.abs(iv.z - cz) + cz;
+                    if (x) ov.x = flip * Math.abs(iv.x - cx) + cx;
+                    if (y) ov.y = flip * Math.abs(iv.y - cy) + cy;
+                    if (z) ov.z = flip * Math.abs(iv.z - cz) + cz;
                     outputVectors[i] = ov;
                 }
             }

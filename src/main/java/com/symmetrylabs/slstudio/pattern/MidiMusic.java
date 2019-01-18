@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.lang.Math;
 
 import java.util.Stack;
 
+import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
@@ -26,7 +28,7 @@ import heronarts.lx.midi.MidiNoteOn;
 import com.symmetrylabs.slstudio.model.Strip;
 import heronarts.lx.transform.LXVector;
 
-public class MidiMusic extends SLPattern<StripsModel<Strip>> {
+public class MidiMusic extends SLPattern<SLModel> {
 
     private final Stack<LXLayer> newLayers = new Stack<LXLayer>();
 
@@ -42,11 +44,13 @@ public class MidiMusic extends SLPattern<StripsModel<Strip>> {
 
     private final CompoundParameter wave = new CompoundParameter("Wave", 0);
     private final BooleanParameter triggerSweep = new BooleanParameter("Sweep", false);
+    private final CompoundParameter top = new CompoundParameter("Top", 0.72);
 
     public MidiMusic(LX lx) {
         super(lx);
         addModulator(sparkle).setValue(1);
         addParameter(lightSize);
+        addParameter(top);
         addParameter(wave);
         addParameter(triggerSweep);
 
@@ -114,7 +118,7 @@ public class MidiMusic extends SLPattern<StripsModel<Strip>> {
 
         void noteOn(MidiNote note) {
             xPos = model.xMin + ((note.getPitch() / 30.f) * model.xRange);
-            yPos.setValue(LXUtils.lerpf(20, model.yMax*0.72f, note.getVelocity() / 127.f)).stop();
+            yPos.setValue(LXUtils.lerpf(20, model.yMax*top.getValuef(), note.getVelocity() / 127.f)).stop();
             brt.setRangeFromHereTo(LXUtils.lerpf(60, 100, note.getVelocity() / 127.f), 20).start();
         }
 
@@ -228,23 +232,30 @@ public class MidiMusic extends SLPattern<StripsModel<Strip>> {
         for (int i = 0; i < wval.length; ++i) {
             wval[i] = model.cy + 0.2f * model.yMax/2.0f * (float)Math.sin(wavoff + i / 1.9f);
         }
-        for (Strip s : model.getStrips()) {
-            int length = s.points.length;
 
-            float sparklePos = (sparkleDirection ? sparkle.getValuef() : (1 - sparkle.getValuef())) * length/2f;
-            float maxBright = sparkleBright * (1 - sparkle.getValuef());
+        if (model instanceof StripsModel) {
+            StripsModel<Strip> stripsModel = (StripsModel<Strip>) model;
+            for (Strip s : stripsModel.getStrips()) {
+                int length = s.points.length;
 
-            int i = 0;
-            for (LXVector p : getVectors(s.points)) {
-                int wavi = (int) LXUtils.constrain(p.x / model.xMax * wval.length, 0, wval.length - 1);
-                float wavb = (float) Math.max(0, wave.getValuef() * 100. - 8. * Math.abs(p.y - wval[wavi]));
-                colors[p.index] = lx.hsb(
-                    palette.getHuef() + 0.2f * Math.abs(p.x - model.cx) + 0.2f * Math.abs(p.y - model.cy),
-                    100,
-                    (float) LXUtils.constrain(wavb + Math.max(0, maxBright - 40. * Math.abs(sparklePos - Math.abs(i - (length - 1) / 2.f))), 0, 100)
-                );
-              ++i;
+                float sparklePos = (sparkleDirection ? sparkle.getValuef() : (1 - sparkle.getValuef()))*length/2f;
+                float maxBright = sparkleBright*(1 - sparkle.getValuef());
+
+                int i = 0;
+                for (LXVector p : getVectors(s.points)) {
+                    int wavi = (int) LXUtils.constrain(p.x/model.xMax*wval.length, 0, wval.length - 1);
+                    float wavb = (float) Math.max(0, wave.getValuef()*100. - 8.*Math.abs(p.y - wval[wavi]));
+                    colors[p.index] = lx.hsb(
+                        palette.getHuef() + 0.2f*Math.abs(p.x - model.cx) + 0.2f*Math.abs(p.y - model.cy),
+                        100,
+                        (float) LXUtils.constrain(wavb + Math.max(0, maxBright - 40.*Math.abs(sparklePos - Math.abs(i - (length - 1)/2.f))), 0, 100)
+
+                    );
+                    ++i;
+                }
             }
+        } else {
+            Arrays.fill(colors, 0);
         }
 
         if (!newLayers.isEmpty()) {

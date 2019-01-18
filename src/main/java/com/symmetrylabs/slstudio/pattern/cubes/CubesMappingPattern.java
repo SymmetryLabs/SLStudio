@@ -8,6 +8,7 @@ import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.transform.LXVector;
+import heronarts.lx.model.LXPoint;
 
 
 public class CubesMappingPattern extends SLPattern<CubesModel> {

@@ -60,6 +60,10 @@ public class SLStudioLX extends P3LX {
     private static final String KEY_UI = "ui";
     private static final int RESTART_EXIT_CODE = 999;
 
+    public static interface SaveHook {
+        void onSave();
+    }
+
     public class UI extends heronarts.p3lx.ui.UI implements LXSerializable {
         public final UIPreviewWindow preview;
         public final UILeftPane leftPane;
@@ -99,7 +103,6 @@ public class SLStudioLX extends P3LX {
                 "@-M           Toggle modulation mapping mode\n" +
                 "@-Shift-M     Toggle MIDI mapping mode\n" +
                 "@-N           New channel\n" +
-                "@-P           Performance mode\n" +
                 "@-R           Rename channel or pattern\n" +
                 "@-S           Save current project\n" +
                 "@-V           Toggle preview display\n" +
@@ -212,9 +215,6 @@ public class SLStudioLX extends P3LX {
                                 lx.engine.mapping.setMode(
                                         lx.engine.mapping.getMode() == mode ?
                                         LXMappingEngine.Mode.OFF : mode);
-                                break;
-                            case VK_P:
-                                togglePerformanceMode();
                                 break;
                             case VK_T:
                                 lx.ui.preview.ortho.toggle();
@@ -622,10 +622,24 @@ public class SLStudioLX extends P3LX {
         private static final String KEY_CLIP_VIEW_VISIBLE = "clipViewVisible";
         private static final String KEY_PREVIEW = "preview";
 
+        private final List<SaveHook> saveHooks = new ArrayList<>();
+
+        public void addSaveHook(SaveHook hook) {
+            saveHooks.add(hook);
+        }
+
+        public void removeSaveHook(SaveHook hook) {
+            saveHooks.remove(hook);
+        }
+
         @Override
         public void save(LX lx, JsonObject object) {
+            for (SaveHook hook : saveHooks) {
+                hook.onSave();
+            }
+
             object.addProperty(KEY_AUDIO_EXPANDED, this.leftPane.audio.isExpanded());
-            object.addProperty(KEY_PALETTE_EXPANDED, this.leftPane.palette.isExpanded());
+//            object.addProperty(KEY_PALETTE_EXPANDED, this.leftPane.palette.isExpanded());
             object.addProperty(KEY_ENGINE_EXPANDED, this.leftPane.engine.isExpanded());
             //object.addProperty(KEY_CAMERA_EXPANDED, this.leftPane.camera.isExpanded());
             object.addProperty(KEY_CLIP_VIEW_VISIBLE, this.clipViewVisible);
@@ -647,9 +661,9 @@ public class SLStudioLX extends P3LX {
             if (object.has(KEY_AUDIO_EXPANDED)) {
                 this.leftPane.audio.setExpanded(object.get(KEY_AUDIO_EXPANDED).getAsBoolean());
             }
-            if (object.has(KEY_PALETTE_EXPANDED)) {
-                this.leftPane.palette.setExpanded(object.get(KEY_PALETTE_EXPANDED).getAsBoolean());
-            }
+//            if (object.has(KEY_PALETTE_EXPANDED)) {
+//                this.leftPane.palette.setExpanded(object.get(KEY_PALETTE_EXPANDED).getAsBoolean());
+//            }
             if (object.has(KEY_ENGINE_EXPANDED)) {
                 this.leftPane.engine.setExpanded(object.get(KEY_ENGINE_EXPANDED).getAsBoolean());
             }
@@ -771,13 +785,13 @@ public class SLStudioLX extends P3LX {
 
     protected void initialize(SLStudioLX lx, SLStudioLX.UI ui) {
         // Add all warps
-        LXClassLoader.findWarps().stream().forEach(lx::registerWarp);
+        LXClassLoader.findWarps(lx.model.getClass()).stream().forEach(lx::registerWarp);
 
         // Add all effects
-        LXClassLoader.findEffects().stream().forEach(lx::registerEffect);
+        LXClassLoader.findEffects(lx.model.getClass()).stream().forEach(lx::registerEffect);
 
         // Add all patterns
-        LXClassLoader.findPatterns().stream().forEach(lx::registerPattern);
+        LXClassLoader.findPatterns(lx.model.getClass()).stream().forEach(lx::registerPattern);
 
         lx.registerPattern(heronarts.p3lx.pattern.SolidColorPattern.class);
         lx.registerPattern(IteratorTestPattern.class);

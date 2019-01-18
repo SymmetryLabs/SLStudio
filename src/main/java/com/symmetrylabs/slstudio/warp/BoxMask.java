@@ -12,7 +12,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
 import processing.core.PVector;
 
-public class BoxMask extends LXWarpWithMarkers {
+public class BoxMask extends SLWarp {
     private CompoundParameter xSizeParam = new CompoundParameter("xSize", model.xRange/2, 0, model.xRange);
     private CompoundParameter cxParam = new CompoundParameter("cx", model.cx, model.xMin, model.xMax);
     private CompoundParameter ySizeParam = new CompoundParameter("ySize", model.yRange/2, 0, model.yRange);

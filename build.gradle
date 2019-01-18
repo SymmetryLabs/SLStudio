@@ -14,6 +14,7 @@ plugins {
 	id 'com.palantir.docker' version '0.17.2'
 	id 'java'
 	id 'application'
+	id 'edu.sc.seis.macAppBundle' version '2.3.0'
 }
 
 apply plugin: 'com.palantir.docker'
@@ -76,17 +77,6 @@ allprojects {
 	}
 }
 
-if (hasProperty('localp3lx')) {
-	configurations.all {
-		resolutionStrategy.dependencySubstitution {
-			// when this is runs, the build uses ../p3lx and ../LX instead of the
-			// jitpack dependency specified below
-			substitute module("com.github.SymmetryLabs.p3lx:p3lx") with project(":P3LX")
-			substitute module("com.github.SymmetryLabs.p3lx:LX") with project(":LX")
-		}
-	}
-}
-
 repositories {
 	// needed for aparapi dependency
 	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
@@ -98,6 +88,9 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/org.processing/video
 	implementation group: 'org.processing', name: 'video', version: '3.2.3'
+
+	// https://mvnrepository.com/artifact/com.google.code.gson/gson
+	implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
 
 	// https://mvnrepository.com/artifact/com.harium/kdtree
 	implementation group: 'com.harium', name: 'kdtree', version: '1.0.0'
@@ -126,6 +119,12 @@ dependencies {
 
 	implementation 'com.fazecast:jSerialComm:[2.0.0,3.0.0)'
 
+	// https://github.com/SymmetryLabs/ArtNetStack
+	implementation 'com.github.SymmetryLabs:ArtNetStack:44ddfed'
+
+	// https://mvnrepository.com/artifact/uk.co.xfactory-librarians/coremidi4j
+	implementation group: 'uk.co.xfactory-librarians', name: 'coremidi4j', version: '0.9'
+
 	// http://mvnrepository.com/artifact/uk.co.caprica/vlcj
 	// http://capricasoftware.co.uk/#/projects/vlcj
 	implementation group: 'uk.co.caprica', name: 'vlcj', version: '3.10.1'
@@ -135,8 +134,6 @@ dependencies {
 	// is declared here instead of vlcj (which is intentional!) check out
 	// https://www.slf4j.org/manual.html
 	implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
-
-	implementation 'com.github.SymmetryLabs.p3lx:P3LX:d148c2f'
 
 	implementation files('libs/minim.jar')
 	implementation files('libs/jogamp-fat.jar')
@@ -159,4 +156,14 @@ compileTestKotlin {
 jar {
 	exclude('**/*.swp')
 	exclude('**/*.swo')
+}
+
+macAppBundle {
+	mainClassName = rootProject.mainClassName
+	icon = "src/main/resources/application.icns"
+	bundleJRE = true
+	javaProperties.put("apple.laf.useScreenMenuBar", "true")
+	jarTask = "shadowJar"
+	javaExtras.put("-XX:+UseParNewGC", null);
+	javaExtras.put("-XX:+UseConcMarkSweepGC", null);
 }

@@ -1,0 +1,10 @@
+# format for double-density cubes is:
+# ID-A ID-B
+# cubes are counted left-to-right, bottom-to-top, one tower at a time,
+# so the first four lines are the first tower, bottom to top, then the
+# next three are the second tower, etc. lines that start with # or are
+# blank are ignored.
+
+10 20
+30 40
+50 60

@@ -5,6 +5,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.WeakHashMap;
 import java.lang.ref.WeakReference;
+import java.net.InetAddress;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.util.listenable.SetListener;
@@ -14,9 +15,13 @@ import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.ListenableSet;
 
 public class NetworkMonitor {
-    public final ListenableSet<NetworkDevice> deviceList;
+    private static final int SCAN_PERIOD_MS = 500;
 
-    private final NetworkScanner networkScanner;
+    public final ListenableSet<NetworkDevice> opcDeviceList;
+    public final ListenableSet<InetAddress> artNetDeviceList;
+
+    private final NetworkScanner opcNetworkScanner;
+    private final ArtNetNetworkScanner artNetNetworkScanner;
     private final Timer timer = new Timer("NetworkScanner");
 
     private boolean started = false;
@@ -34,10 +39,13 @@ public class NetworkMonitor {
 
     private NetworkMonitor(LX lx) {
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
-        networkScanner = new NetworkScanner(dispatcher);
-        deviceList = networkScanner.deviceList;
+        opcNetworkScanner = new NetworkScanner(dispatcher);
+        opcDeviceList = opcNetworkScanner.deviceList;
 
-        deviceList.addListener(new SetListener<NetworkDevice>() {
+        artNetNetworkScanner = new ArtNetNetworkScanner(dispatcher);
+        artNetDeviceList = artNetNetworkScanner.deviceList;
+
+        opcDeviceList.addListener(new SetListener<NetworkDevice>() {
             public void onItemAdded(final NetworkDevice newDevice) {
                 if (newDevice.versionId.isEmpty()) {
                     warnOldVersion();
@@ -50,7 +58,7 @@ public class NetworkMonitor {
                             int version = Byte.toUnsignedInt(reply.bytes[0]);
                             dispatcher.dispatchEngine(() -> {
                                 newDevice.version.set(version);
-                                for (NetworkDevice device : deviceList) {
+                                for (NetworkDevice device : opcDeviceList) {
                                     if (device.version.get() != -1 &&
                                         device.version.get() != version) {
                                         warnOldVersion();
@@ -80,8 +88,9 @@ public class NetworkMonitor {
     private void scheduleTask(long delay) {
         timer.schedule(new TimerTask() {
             public void run() {
-                networkScanner.scan();
-                scheduleTask(500);
+                opcNetworkScanner.scan();
+                artNetNetworkScanner.scan();
+                scheduleTask(SCAN_PERIOD_MS);
             }
         }, delay);
     }

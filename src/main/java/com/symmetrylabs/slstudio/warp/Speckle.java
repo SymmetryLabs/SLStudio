@@ -3,12 +3,12 @@ package com.symmetrylabs.slstudio.warp;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
-import heronarts.lx.warp.LXWarp;
 
+import com.symmetrylabs.slstudio.model.SLModel;
 import static com.symmetrylabs.util.MathUtils.*;
 
 
-public class Speckle extends LXWarp {
+public class Speckle extends SLWarp<SLModel> {
 
     private final float RANGE = 50;
 

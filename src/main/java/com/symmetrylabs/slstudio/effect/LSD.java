@@ -5,11 +5,12 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.transform.LXVector;
+import com.symmetrylabs.slstudio.model.SLModel;
 
 import static com.symmetrylabs.util.NoiseUtils.noise;
 
 
-public class LSD extends SLModelEffect {
+public class LSD extends SLEffect<SLModel> {
 
     public final BoundedParameter scale = new BoundedParameter("Scale", 10, 5, 40);
     public final BoundedParameter speed = new BoundedParameter("Speed", 4, 1f, 6);

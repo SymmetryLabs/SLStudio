@@ -135,14 +135,14 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             try {
                 dsocket = new DatagramSocket();
                 dsocket.connect(new InetSocketAddress(host, 7890));
-                //socket.setTcpNoDelay(true);
-                // output = socket.getOutputStream();
             }
-            catch (ConnectException e) { connectionWarning(); return; }
-            catch (IOException e) { connectionWarning(); return; }
-
-            if (dsocket == null)
-                return;
+            catch (IOException e) {}
+            finally {
+                if (dsocket == null) {
+                    SLStudio.setWarning("CubesController", "could not create datagram socket");
+                    return;
+                }
+            }
         }
 
         // Find the Cube we're outputting to
@@ -150,8 +150,10 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         // if that cube isn't modelled yet
         // Use the mac address to find the cube if we have it
         // Otherwise use the cube id
-        if (!(lx.model instanceof CubesModel))
+        if (!(lx.model instanceof CubesModel)) {
+            SLStudio.setWarning("CubesController", "model is not a cube model");
             return;
+        }
 
         PointsGrouping points = null;
         CubesModel cubesModel = (CubesModel)lx.model;
@@ -182,13 +184,6 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
                 }
             }
         }
-
-        // OLD CODE BEGIN
-        // Initialize packet data base on cube type.
-        // If we don't know the cube type, default to
-        // using the cube type with the most pixels
-//        CubesModel.Cube.Type cubeType = cube != null ? cube.type : CubesModel.Cube.CUBE_TYPE_WITH_MOST_PIXELS;
-//        int numPixels = cubeType.POINTS_PER_CUBE;
 
         // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
         // TODO: refactor here
@@ -299,10 +294,11 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 
         // Send the cube data to the cube. yay!
         try {
-            //println("packetSizeBytes: "+packetSizeBytes);
             dsocket.send(packet);
         }
-        catch (Exception e) { connectionWarning(); }
+        catch (Exception e) {
+            SLStudio.setWarning("CubesController", "failed to send packet: " + e.getMessage());
+        }
     }
 
 
@@ -335,7 +331,6 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         if (dsocket != null) {
             // System.err.println("Disconnected from OPC server");
         }
-        // System.err.println("Failed to connect to OPC server " + host);
     }
 
     private void resetSocket() {
@@ -354,5 +349,10 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     @Override
     public int compareTo(@NotNull CubesController other) {
         return idInt != other.idInt ? Integer.compare(idInt, other.idInt) : id.compareTo(other.id);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("cube id=%s ip=%s bcast=%s", id, host, isBroadcast ? "yes" : "no");
     }
 }

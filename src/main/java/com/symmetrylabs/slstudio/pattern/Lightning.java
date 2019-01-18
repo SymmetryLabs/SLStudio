@@ -76,8 +76,6 @@ public class Lightning<T extends Strip> extends SLPattern<StripsModel<T>> {
             }
             if (!c.center.isEmpty() && !c.edge.isEmpty()) {
                 components.add(c);
-            } else {
-                System.out.println(String.format("component had %d center and %d edge", c.center.size(), c.edge.size()));
             }
         }
     }

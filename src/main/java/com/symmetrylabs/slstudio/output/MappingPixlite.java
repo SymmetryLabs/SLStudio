@@ -73,7 +73,7 @@ public class MappingPixlite extends LXOutputGroup {
 
         for (int datalineIndex = 0; datalineIndex < NUM_DATALINES; datalineIndex++) {
             for (int universe = 0; universe < MAX_NUM_UNIVERSES_PER_DATALINE; universe++) {
-                mappingDatagramOutput.addDatagram(new ArtNetDatagram(lx, ipAddress, mappingBufferIndices[datalineIndex][universe],
+                mappingDatagramOutput.addDatagram(new ArtNetDmxDatagram(lx, ipAddress, mappingBufferIndices[datalineIndex][universe],
                     10 * (datalineIndex + 1) + universe - 1));
             }
         }
@@ -107,7 +107,7 @@ public class MappingPixlite extends LXOutputGroup {
             for (int i1 = 0; i1 < numIndices; i1++) {
                 indices[i1] = datalineMapping.points[counter++].index;
             }
-            datagramOutput.addDatagram(new ArtNetDatagram(lx, ipAddress, indices, universe - 1));
+            datagramOutput.addDatagram(new ArtNetDmxDatagram(lx, ipAddress, indices, universe - 1));
         }
     }
 }

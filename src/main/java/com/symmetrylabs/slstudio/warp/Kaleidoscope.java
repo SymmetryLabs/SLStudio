@@ -15,7 +15,7 @@ import heronarts.lx.transform.LXVector;
 import heronarts.lx.warp.LXWarp;
 import processing.core.PVector;
 
-public class Kaleidoscope extends LXWarpWithMarkers {
+public class Kaleidoscope extends SLWarp {
     private CompoundParameter cxParam = new CompoundParameter("cx", model.cx, model.xMin, model.xMax);
     private CompoundParameter cyParam = new CompoundParameter("cy", model.cy, model.yMin, model.yMax);
     private CompoundParameter czParam = new CompoundParameter("cz", model.cz, model.zMin, model.zMax);

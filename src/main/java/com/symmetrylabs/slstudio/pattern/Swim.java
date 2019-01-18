@@ -6,6 +6,7 @@ import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXProjection;
@@ -31,6 +32,8 @@ public class Swim extends LXPattern {
     private final CompoundParameter crazyParam = new CompoundParameter("Crazy", 0.5);
     private final CompoundParameter hueScale = new CompoundParameter("HueVar", 0.1, 0.0, 0.2);
     private final CompoundParameter phaseParam = new CompoundParameter("Speed", 0.5);
+    private final CompoundParameter hueParam = new CompoundParameter("Hue", 0, 0, 360);
+    private final BooleanParameter monochromeParam = new BooleanParameter("Mono", false);
 
     public Swim(LX lx) {
         super(lx);
@@ -39,6 +42,8 @@ public class Swim extends LXPattern {
         addParameter(hueScale);
         addParameter(crazyParam);
         addParameter(phaseParam);
+        addParameter(hueParam);
+        addParameter(monochromeParam);
 
         addModulator(rotationX).trigger();
         addModulator(rotationY).trigger();
@@ -49,7 +54,7 @@ public class Swim extends LXPattern {
 
     public void onParameterChanged(LXParameter parameter) {
         if (parameter == phaseParam) {
-            phaseLFO.setPeriod(5000 - 4500 * parameter.getValuef());
+            phaseLFO.setPeriod(10000 - 9000 * parameter.getValuef());
         }
     }
 
@@ -74,6 +79,8 @@ public class Swim extends LXPattern {
 
         final float model_height = model.yMax - model.yMin;
         final float model_width = model.xMax - model.xMin;
+        final boolean monochrome = monochromeParam.getValueb();
+        final float monohue = hueParam.getValuef();
 
         StreamSupport.stream(
             Spliterators.spliteratorUnknownSize(projection.iterator(), Spliterator.CONCURRENT),
@@ -91,7 +98,8 @@ public class Swim extends LXPattern {
                 ? 0 : (float) Math.abs((y_in_range - sin_x + size_of_sin_wave)
                 / size_of_sin_wave / 2 * 100);
 
-            float hue_color = palette.getHuef() + hueScale.getValuef()
+            float hue_color = monochrome ? monohue :
+                palette.getHuef() + hueScale.getValuef()
                 * ((float) Math.abs(p.x - model.xMax / 2.) * .01f
                 + (float) Math.abs(p.y - model.yMax / 2) * .6f
                 + (float) Math.abs(p.z - model.zMax));

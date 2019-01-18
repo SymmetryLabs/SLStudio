@@ -1,14 +1,14 @@
 package com.symmetrylabs.shows.cubes.effects;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXEffect;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 
+import com.symmetrylabs.slstudio.effect.SLEffect;
 import com.symmetrylabs.shows.cubes.CubesModel;
 
-public class CubeStripMask extends LXEffect {
+public class CubeStripMask extends SLEffect<CubesModel> {
 
     public final CompoundParameter type = new CompoundParameter("type", 0, 0, 360);
 

@@ -1,10 +1,12 @@
 package com.symmetrylabs.shows.cubes;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.WeakHashMap;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.WeakHashMap;
 
 import com.symmetrylabs.slstudio.pattern.cubes.CubesMappingPattern;
 import com.symmetrylabs.util.listenable.SetListener;
@@ -40,9 +42,9 @@ public class CubesMappingMode {
     public final DiscreteParameter selectedMappedFixture;
     public final DiscreteParameter selectedUnMappedFixture;
 
-    public final List<String> fixturesMappedAndOnTheNetwork = new ArrayList<String>();
-    public final List<String> fixturesMappedButNotOnNetwork = new ArrayList<String>();
-    public final List<String> fixturesOnNetworkButNotMapped = new ArrayList<String>();
+    public final SortedSet<String> fixturesMappedAndOnTheNetwork = new TreeSet<String>();
+    public final SortedSet<String> fixturesMappedButNotOnNetwork = new TreeSet<String>();
+    public final SortedSet<String> fixturesOnNetworkButNotMapped = new TreeSet<String>();
 
     private LX lx;
     private CubesModel cubesModel;

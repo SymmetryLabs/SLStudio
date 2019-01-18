@@ -1,6 +1,5 @@
 package com.symmetrylabs.shows.magicleap;
 
-import com.sun.org.apache.bcel.internal.classfile.Unknown;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
