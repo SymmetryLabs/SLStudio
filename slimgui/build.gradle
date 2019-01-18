@@ -5,7 +5,8 @@ plugins {
 group = 'com.symmetrylabs'
 version = '1.0'
 
-def javaHome = System.env.JAVA_HOME
+def javaHome = System.properties["java.home"]
+
 tasks.withType(CppCompile) {
 	compilerArgs.add "-std=c++14"
 	compilerArgs.add "-DIMGUI_IMPL_OPENGL_LOADER_GLEW"
@@ -21,18 +22,23 @@ tasks.withType(CppCompile) {
 }
 
 tasks.withType(LinkSharedLibrary) {
+	linkerArgs.add "-g"
 	/* do NOT link against GLFW; LWJGL bundles its own GLFW that it
 	 loads into the JVM process, so we just tell the linker to
 	 ignore unresolved symbols and hope for the best. If we link
 	 in our own we get bad behavior on MacOS, since we end up with
 	 two copies of GLFW linked in and that's undefined behavior */
 	if (System.getProperty("os.name").equals("Mac OS X")) {
-		linkerArgs.addAll "-framework", "OpenGL"
-		linkerArgs.addAll "-undefined", "dynamic_lookup"
-	}
-	linkerArgs.add "-lglew"
-	linkerArgs.add "-g"
-	if (System.getProperty("os.name").startsWith("Windows")) {
+		linkerArgs.add "-framework"
+		linkerArgs.add "OpenGL"
+		linkerArgs.add "-undefined"
+		linkerArgs.add "dynamic_lookup"
+		linkerArgs.add "-lglew"
+	} else if (System.getProperty("os.name").equals("Linux")) {
+		linkerArgs.add "-lGLEW"
+		linkerArgs.add "-lGLU"
+		linkerArgs.add "-lGL"
+	} else if (System.getProperty("os.name").startsWith("Windows")) {
 		linkerArgs.add "-lglfw3"
 		linkerArgs.add "-lopengl32"
 		linkerArgs.add "-Lprebuilts-windows"
