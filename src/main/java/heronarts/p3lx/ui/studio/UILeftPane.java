@@ -21,6 +21,7 @@
 package heronarts.p3lx.ui.studio;
 
 import heronarts.lx.LX;
+import heronarts.lx.color.LXPalette;
 import heronarts.p3lx.LXStudio;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dScrollContext;
@@ -36,12 +37,14 @@ import heronarts.p3lx.ui.studio.project.UIPatternManager;
 import heronarts.p3lx.ui.studio.project.UIProjectManager;
 import heronarts.p3lx.ui.studio.project.UIWarpManager;
 
+import java.util.ArrayList;
+
 public class UILeftPane extends UIPane {
 
     public final UI2dScrollContext browser;
     public final UI2dScrollContext global;
     public final UIAudio audio;
-    public final UIPalette palette;
+    public final ArrayList<UIPalette> palettes = new ArrayList<>();
     public final UIEngine engine;
     public final UICamera camera;
 
@@ -62,7 +65,12 @@ public class UILeftPane extends UIPane {
         // Global elements
         new UITempo(ui, lx, 0, 0, this.global.getContentWidth(), 26).addToContainer(this.global);
         this.audio = (UIAudio) new UIAudio(ui, lx.engine.audio, this.global.getContentWidth()).addToContainer(this.global);
-        this.palette = (UIPalette) new UIPalette(ui, lx.palette, 0, 0, this.global.getContentWidth()).addToContainer(this.global);
+
+        int i = 0;
+        for (LXPalette p : lx.palettes){
+            this.palettes.add( (UIPalette) new UIPalette(ui, lx.palettes.get(i++), 0, 0, this.global.getContentWidth()).addToContainer(this.global));
+        }
+
         this.engine = (UIEngine) new UIEngine(ui, lx.engine, 0, 0, this.global.getContentWidth()).addToContainer(this.global);
         this.engine.setVisible(false);
         if (ui instanceof LXStudio.UI) {

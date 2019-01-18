@@ -43,6 +43,12 @@ import heronarts.lx.transform.LXVector;
  */
 public class LXPalette extends LXModelComponent implements LXOscComponent {
 
+    /**
+     * The index of this palette in the engine.
+     */
+    // -1 is the default palette
+    private int index = -1;
+
     public enum Mode {
         FIXED,
         OSCILLATE,
@@ -138,6 +144,12 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
     private double zMult;
     private double rMult;
 
+    // index for if we make multiple palettes.
+    public LXPalette(LX lx, int index) {
+        this(lx);
+        this.index = index;
+    }
+
     public LXPalette(LX lx) {
         super(lx);
         computeMults(lx.model);
@@ -169,7 +181,12 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
     }
 
     public String getOscAddress() {
-        return "/lx/palette";
+        if (this.index == -1){
+            return "/lx/palette";
+        }
+        else {
+            return "/lx/palette/" + (this.index+1);
+        }
     }
 
     @Override
@@ -213,7 +230,7 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
     }
 
     public double getHue() {
-        return this.hue.getValue();
+        return this.clr.hue.getValue();
     }
 
     public final float getHuef() {

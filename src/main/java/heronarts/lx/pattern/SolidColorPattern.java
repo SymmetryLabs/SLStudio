@@ -36,7 +36,7 @@ public class SolidColorPattern extends LXPattern {
     public final ColorParameter color = new ColorParameter("Color");
 
     public SolidColorPattern(LX lx) {
-        this(lx, LXColor.RED);
+        this(lx, LXColor.BLACK);
     }
 
     public SolidColorPattern(LX lx, int color) {

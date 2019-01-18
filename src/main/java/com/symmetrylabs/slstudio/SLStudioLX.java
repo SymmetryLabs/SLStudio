@@ -639,7 +639,7 @@ public class SLStudioLX extends P3LX {
             }
 
             object.addProperty(KEY_AUDIO_EXPANDED, this.leftPane.audio.isExpanded());
-            object.addProperty(KEY_PALETTE_EXPANDED, this.leftPane.palette.isExpanded());
+//            object.addProperty(KEY_PALETTE_EXPANDED, this.leftPane.palette.isExpanded());
             object.addProperty(KEY_ENGINE_EXPANDED, this.leftPane.engine.isExpanded());
             //object.addProperty(KEY_CAMERA_EXPANDED, this.leftPane.camera.isExpanded());
             object.addProperty(KEY_CLIP_VIEW_VISIBLE, this.clipViewVisible);
@@ -661,9 +661,9 @@ public class SLStudioLX extends P3LX {
             if (object.has(KEY_AUDIO_EXPANDED)) {
                 this.leftPane.audio.setExpanded(object.get(KEY_AUDIO_EXPANDED).getAsBoolean());
             }
-            if (object.has(KEY_PALETTE_EXPANDED)) {
-                this.leftPane.palette.setExpanded(object.get(KEY_PALETTE_EXPANDED).getAsBoolean());
-            }
+//            if (object.has(KEY_PALETTE_EXPANDED)) {
+//                this.leftPane.palette.setExpanded(object.get(KEY_PALETTE_EXPANDED).getAsBoolean());
+//            }
             if (object.has(KEY_ENGINE_EXPANDED)) {
                 this.leftPane.engine.setExpanded(object.get(KEY_ENGINE_EXPANDED).getAsBoolean());
             }

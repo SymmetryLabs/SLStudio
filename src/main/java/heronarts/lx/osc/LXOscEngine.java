@@ -175,8 +175,12 @@ public class LXOscEngine extends LXComponent {
                         oscComponent(message, lx.engine.output, parts, 3);
                     } else if (parts[2].equals(ROUTE_AUDIO)) {
                         oscAudio(message, parts, 3);
+
                     } else if (parts[2].equals(ROUTE_PALETTE)) {
-                        oscComponent(message, lx.palette, parts, 3);
+//            oscComponent(message, lx.palette, parts, 3);
+                        if (parts[3].matches("\\d+")) {
+                            oscComponent(message, lx.palettes.get(Integer.parseInt(parts[3]) - 1), parts, 4);
+                        }
                     } else if (parts[2].equals(ROUTE_MASTER)) {
                         oscChannel(message, lx.engine.masterChannel, parts, 3);
                     } else if (parts[2].equals(ROUTE_CHANNEL)) {
