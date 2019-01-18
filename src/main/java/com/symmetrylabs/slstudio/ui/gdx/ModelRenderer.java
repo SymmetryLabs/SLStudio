@@ -92,7 +92,7 @@ public class ModelRenderer {
         colorVbo.bind(pointShader);
         colorVbo.setVertices(glColorBuffer, 0, model.points.length * 4);
 
-        //Gdx.gl.glDrawArrays(GL30.GL_POINTS, 0, model.points.length);
+        Gdx.gl.glDrawArrays(GL30.GL_POINTS, 0, model.points.length);
 
         positionVbo.unbind(pointShader);
         colorVbo.unbind(pointShader);
