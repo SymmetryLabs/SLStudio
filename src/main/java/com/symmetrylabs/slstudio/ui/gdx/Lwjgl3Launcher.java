@@ -15,7 +15,6 @@ public class Lwjgl3Launcher {
 
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
-        configuration.useOpenGL3(true, 3, 2);
         configuration.setTitle("SLStudio");
         configuration.setWindowedMode(640, 480);
         configuration.setWindowIcon("application.png");

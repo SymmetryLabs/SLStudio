@@ -11,7 +11,8 @@ import com.badlogic.gdx.math.Vector3;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
-import org.lwjgl.opengl.GL11;
+import java.util.ArrayList;
+import org.lwjgl.opengl.*;
 
 public class ModelRenderer {
     private static final PolyBuffer.Space UI_COLOR_SPACE = PolyBuffer.Space.SRGB8;
@@ -28,6 +29,8 @@ public class ModelRenderer {
     public ModelRenderer(LX lx, LXModel model) {
         this.model = model;
         this.lx = lx;
+
+        printCapabilities();
 
         String vert = Gdx.files.internal("vertex-330.glsl").readString();
         String frag = Gdx.files.internal("fragment-330.glsl").readString();
@@ -106,5 +109,29 @@ public class ModelRenderer {
     public void dispose() {
         colorVbo.dispose();
         positionVbo.dispose();
+    }
+
+    private static void printCapabilities() {
+        GLCapabilities glCaps = GL.getCapabilities();
+        ArrayList<String> supportedVersions = new ArrayList<>();
+        if (glCaps.OpenGL46) supportedVersions.add("4.6");
+        if (glCaps.OpenGL45) supportedVersions.add("4.5");
+        if (glCaps.OpenGL44) supportedVersions.add("4.4");
+        if (glCaps.OpenGL43) supportedVersions.add("4.3");
+        if (glCaps.OpenGL42) supportedVersions.add("4.2");
+        if (glCaps.OpenGL41) supportedVersions.add("4.1");
+        if (glCaps.OpenGL40) supportedVersions.add("4.0");
+        if (glCaps.OpenGL33) supportedVersions.add("3.3");
+        if (glCaps.OpenGL32) supportedVersions.add("3.2");
+        if (glCaps.OpenGL31) supportedVersions.add("3.1");
+        if (glCaps.OpenGL30) supportedVersions.add("3.0");
+        if (glCaps.OpenGL21) supportedVersions.add("2.1");
+        if (glCaps.OpenGL20) supportedVersions.add("2.0");
+        if (glCaps.OpenGL15) supportedVersions.add("1.5");
+        if (glCaps.OpenGL14) supportedVersions.add("1.4");
+        if (glCaps.OpenGL13) supportedVersions.add("1.3");
+        if (glCaps.OpenGL12) supportedVersions.add("1.2");
+        if (glCaps.OpenGL11) supportedVersions.add("1.1");
+        System.out.println("supported GL versions: " + String.join(", ", supportedVersions));
     }
 }
