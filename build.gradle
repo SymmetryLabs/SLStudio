@@ -45,6 +45,7 @@ run {
 	systemProperty 'java.library.path', 'slimgui/build/lib/main/release'
 	systemProperty 'awt.useSystemAAFontSettings', 'on'
 	systemProperty 'swing.aatext', true
+	systemProperty 'org.lwjgl.util.Debug', true
 
 	doLast {
 		while (file(".restart").exists()) {
