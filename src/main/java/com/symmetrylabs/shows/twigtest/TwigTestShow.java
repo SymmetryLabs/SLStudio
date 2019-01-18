@@ -50,48 +50,48 @@ public class TwigTestShow implements Show {
             List<TenereDatagram> datagrams = new ArrayList<>();
 
             for (TreeModel.Branch branch : tree.branches) {
-                int pointsPerPacket = TreeModel.Twig.NUM_LEDS * 2;
+                int twigsPerPacket = 3;
+                int pointsPerPacket = TreeModel.Twig.NUM_LEDS * twigsPerPacket;
 
-                int[][] channels = {
+                int[][] packets = {
                     new int[pointsPerPacket],
                     new int[pointsPerPacket],
                     new int[pointsPerPacket],
-                    new int[pointsPerPacket]
                 };
 
-                for (int i = 0; i < channels.length; ++i) {
+                for (int i = 0; i < packets.length; ++i) {
                     // Initialize to nothing
                     for (int j = 0; j < pointsPerPacket; j++) {
-                        channels[i][j] = -1;
+                        packets[i][j] = -1;
                     }
                 }
 
-                for (int i = 0; i < channels.length; i++) {
-                    TreeModel.Twig[] twigs = new TreeModel.Twig[] {
-                        branch.getTwigs().get(i * 2),
-                        branch.getTwigs().get(i * 2 + 1)
-                    };
+                int twigIndex = 0;
+                List<TreeModel.Twig> twigs = branch.getTwigs();
 
+                for (int i = 0; i < packets.length; i++) {
                     int pi = 0;
-                    for (TreeModel.Twig twig : twigs) {
-                        for (LXPoint point : twig.points) {
-                            channels[i][pi++] = point.index;
+                    for (int j = 0; j < twigsPerPacket; j++) {
+                        if (twigIndex < twigs.size()) {
+                            for (LXPoint point : twigs.get(twigIndex).points) {
+                                packets[i][pi++] = point.index;
+                            }
                         }
+                        twigIndex++;
                     }
                 }
 
                 String ip = "10.200.1.151";
                 int OPC_PORT = 1337;
-                TenereDatagram datagram1 = (TenereDatagram) new TenereDatagram(lx, channels[0], (byte) 0x00).setAddress(ip).setPort(OPC_PORT);
-                TenereDatagram datagram2 = (TenereDatagram) new TenereDatagram(lx, channels[1], (byte) 0x02).setAddress(ip).setPort(OPC_PORT);
-                TenereDatagram datagram3 = (TenereDatagram) new TenereDatagram(lx, channels[2], (byte) 0x04).setAddress(ip).setPort(OPC_PORT);
-                TenereDatagram datagram4 = (TenereDatagram) new TenereDatagram(lx, channels[3], (byte) 0x06).setAddress(ip).setPort(OPC_PORT);
-                datagrams.add(datagram1);
-                datagrams.add(datagram2);
-                datagrams.add(datagram3);
-                datagrams.add(datagram4);
+                byte channel = 0;
+                for (int[] packet : packets) {
+                    TenereDatagram datagram = new TenereDatagram(lx, packet, channel);
+                    datagram.setAddress(ip).setPort(OPC_PORT);
+                    datagrams.add(datagram);
+                    channel += twigsPerPacket;
+                }
 
-                break;
+                break; // for testing, just do one branch for now
             }
 
             // Create an LXDatagramOutput to own these packets
