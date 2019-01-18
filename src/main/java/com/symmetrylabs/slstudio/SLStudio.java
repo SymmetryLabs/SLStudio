@@ -4,11 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.net.SocketException;
 
-import com.symmetrylabs.shows.tree.TreeModelingTool;
-import com.symmetrylabs.shows.tree.ui.UITreeModelAxes;
-import com.symmetrylabs.shows.tree.ui.UITreeTrunk;
 import com.symmetrylabs.util.MarkerSource;
 import java.io.File;
+
+import heronarts.p3lx.pattern.UISolidColorPattern;
 import processing.opengl.PJOGL;
 
 import com.symmetrylabs.shows.HasWorkspace;
@@ -134,6 +133,8 @@ public class SLStudio extends PApplet {
                 Envelop envelop = Envelop.getInstance(lx);
                 lx.engine.registerComponent("envelop", envelop);
                 lx.engine.addLoopTask(envelop);
+
+                lx.registerPattern(UISolidColorPattern.class);
 
                 try {
                     lx.engine.osc.receiver(ENVELOP_OSC_PORT).addListener(new EnvelopOscListener(lx, envelop));

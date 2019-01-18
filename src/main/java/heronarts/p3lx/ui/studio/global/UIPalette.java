@@ -142,10 +142,12 @@ public class UIPalette extends UICollapsibleSection {
         public void onDraw(UI ui, PGraphics pg) {
             for (int x = 1; x < this.width-1; ++x) {
 
+                int p_color = palette.getColorByRange(x-1, this.width);
                 // the hue value to draw for the preview at this x position.  We want the central hue val (hv) to end up at the center
-                float hue = hv + ((x-this.width/2) / (this.width-2)) * spread;
-
-                pg.stroke(LXColor.hsb(hue, sv, 100));
+//                float hue = hv + ((x-this.width/2) / (this.width-2)) * spread;
+//
+//                pg.stroke(LXColor.hsb(hue, sv, 100));
+                pg.stroke(p_color);
                 pg.line(x, 1, x, this.getHeight());
             }
         }

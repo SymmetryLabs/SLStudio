@@ -35,9 +35,9 @@ import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class SolidColorPattern extends heronarts.lx.pattern.SolidColorPattern implements UIPattern {
+public class UISolidColorPattern extends heronarts.lx.pattern.SolidColorPattern implements UIPattern {
 
-    public SolidColorPattern(LX lx) {
+    public UISolidColorPattern(LX lx) {
         super(lx);
     }
 

@@ -793,8 +793,8 @@ public class SLStudioLX extends P3LX {
         // Add all patterns
         LXClassLoader.findPatterns(lx.model.getClass()).stream().forEach(lx::registerPattern);
 
-        lx.registerPattern(heronarts.p3lx.pattern.SolidColorPattern.class);
-        lx.registerPattern(IteratorTestPattern.class);
+//        lx.registerPattern(heronarts.p3lx.pattern.UISolidColorPattern.class);
+//        lx.registerPattern(IteratorTestPattern.class);
 
         lx.registerEffect(FlashEffect.class);
         lx.registerEffect(BlurEffect.class);
