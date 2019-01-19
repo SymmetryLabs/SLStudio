@@ -33,6 +33,7 @@ import heronarts.lx.midi.MidiProgramChange;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.PaletteParameter;
 import heronarts.lx.transform.LXVector;
 
 import java.util.Arrays;
@@ -72,8 +73,12 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
         public long runNanos = 0;
     }
 
+    // default palette parameter
+    protected PaletteParameter paletteParameter = new PaletteParameter();
+
     protected LXPattern(LX lx) {
         super(lx);
+        this.addParameter(paletteParameter);
         this.label.setDescription("The name of this pattern");
         this.label.setValue(getClass().getSimpleName().replaceAll("Pattern$", ""));
     }
