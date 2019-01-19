@@ -34,16 +34,14 @@ public class OfficeShow extends CubesShow implements Show, HasWorkspace {
     private Workspace workspace;
 
     static final TowerConfig[] TOWER_CONFIG = {
-        new TowerConfig(diag * 0,    0, 0,           0, cuberotation, 0, new String[] { "47", "141", "174", "1118" }),
-        new TowerConfig(diag * 1,    0, 0,           0, cuberotation, 0, new String[] { "123", "132", "11", "68" }),
-        new TowerConfig(diag * 2,    0, 0,           0, cuberotation, 0, new String[] { "172", "1117", "398", "1151" }),
-        new TowerConfig(diag * 2.5f, 0, diag * .5f,  0, cuberotation, 0, new String[] { "420", "211" }),
-        new TowerConfig(diag * 1.5f, 0, diag * .5f,  0, cuberotation, 0, new String[] { "408", "157" }),
-        new TowerConfig(diag * 0.5f, 0, diag * .5f,  0, cuberotation, 0, new String[] { "22", "192" }),
-        new TowerConfig(diag * -.5f, 0, diag * .5f,  0, cuberotation, 0, new String[] { "86", "314" }),
-        new TowerConfig(diag * 2,    0, diag * 1.5f, 0, cuberotation, 0, new String[] { "34" }),
-        new TowerConfig(diag * 1,    0, diag * 1.5f, 0, cuberotation, 0, new String[] { "32" }),
-        new TowerConfig(diag * 0,    0, diag * 1.5f, 0, cuberotation, 0, new String[] { "51" }),
+        new TowerConfig(diag * 0,    0, 0,           0, cuberotation, 0, new String[] { "33", "5410ecf67aeb", "106", "6", "14" }),
+        new TowerConfig(diag * -1,    0, 0,           0, cuberotation, 0, new String[] { "197", "362", "31", "326" }),
+        new TowerConfig(diag * 1,    0, diag * 1.5f,           0, cuberotation, 0, new String[] { "1118", "329", "391" }),
+        new TowerConfig(diag * 0.5f, 0, diag * .75f,  0, cuberotation, 0, new String[] { "351", "111", "91", "55" }),
+        new TowerConfig(diag * -0.5f, 0, diag * .75f,  0, cuberotation, 0, new String[] { "1119", "62", "38", "418" }),
+        new TowerConfig(diag * -1.5f, 0, diag * .75f,  0, cuberotation, 0, new String[] { "188", "77", "390" }),
+        new TowerConfig(diag * 0,    0, diag * 1.5f, 0, cuberotation, 0, new String[] { "61", "26", "365" }),
+        new TowerConfig(diag * -1,    0, diag * 1.5f, 0, cuberotation, 0, new String[] { "50", "69" }),
     };
 
     public SLModel buildModel() {
