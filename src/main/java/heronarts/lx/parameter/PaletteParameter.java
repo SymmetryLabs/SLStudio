@@ -31,6 +31,9 @@ import heronarts.lx.LX;
  */
 public class PaletteParameter extends DiscreteParameter {
 
+    public PaletteParameter() {
+        super("palette", LX.NUM_PALLETS);
+    }
     public PaletteParameter(String label) {
         super(label, LX.NUM_PALLETS);
     }
