@@ -1,6 +1,8 @@
 package com.symmetrylabs.shows.oslo;
 
 import com.symmetrylabs.shows.oslo.TreeModel;
+import com.symmetrylabs.util.FileUtils;
+
 import static com.symmetrylabs.util.DistanceConstants.*;
 
 import heronarts.p3lx.ui.UI3dComponent;
@@ -16,8 +18,8 @@ public class UITreeGround extends UI3dComponent {
     private static final int DUST_FILL = 0xFF005b1e;
 
     public UITreeGround(PApplet applet) {
-        this.dust = applet.loadImage("dust.png");
-        this.person = applet.loadImage("person.png");
+        this.dust = FileUtils.loadShowImage("dust.png");
+        this.person = FileUtils.loadShowImage("person.png");
     }
 
     @Override

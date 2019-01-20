@@ -17,13 +17,19 @@ import java.util.List;
 
 import de.javagl.obj.ObjReader;
 import de.javagl.obj.ReadableObj;
+import processing.core.PImage;
 
 public class FileUtils {
+    /** Gets the path to a file in the show directory for the current show. */
+    public static String getShowPath(String filename) {
+        return SLStudio.applet.sketchPath(
+            "shows/" + SLStudio.applet.showName + "/" + filename
+        );
+    }
+
     /** Gets a File in the show directory for the current show. */
     public static File getShowFile(String filename) {
-        return new File(SLStudio.applet.sketchPath(
-            "shows/" + SLStudio.applet.showName + "/" + filename
-        ));
+        return new File(getShowPath(filename));
     }
 
     /** Gets the path to a file, relative to the sketch's root directory. */
@@ -170,5 +176,10 @@ public class FileUtils {
             SLStudio.setWarning(getRelativePath(file), "Could not read text file: " + e.getMessage());
             return null;
         }
+    }
+
+    /** Loads an image from the show directory for the current show. */
+    public static PImage loadShowImage(String filename) {
+        return SLStudio.applet.loadImage(getShowPath(filename));
     }
 }

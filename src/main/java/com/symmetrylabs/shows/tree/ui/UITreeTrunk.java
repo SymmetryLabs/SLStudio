@@ -10,6 +10,8 @@
  import heronarts.p3lx.ui.UI;
 
  import com.symmetrylabs.shows.tree.TreeModel;
+ import com.symmetrylabs.util.FileUtils;
+
  import static com.symmetrylabs.util.DistanceConstants.*;
  import static com.symmetrylabs.util.MathUtils.*;
 
@@ -26,8 +28,8 @@
 
      public UITreeTrunk(PApplet applet) {
          this.cylinder = new UICylinder(TRUNK_DIAMETER/2, TRUNK_DIAMETER/4, -LIMB_HEIGHT, 6*FEET, 8);
-         this.dust = applet.loadImage("dust.png");
-         this.person = applet.loadImage("person.png");
+         this.dust = FileUtils.loadShowImage("dust.png");
+         this.person = FileUtils.loadShowImage("person.png");
          addChild(this.cylinder);
      }
 
