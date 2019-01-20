@@ -1,35 +1,28 @@
 package com.symmetrylabs.shows.tree.config;
 
 import java.io.*;
-import java.util.*;
+
 import com.symmetrylabs.slstudio.SLStudioLX;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import heronarts.lx.LX;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.shows.tree.TreeModel;
 
-
 public class TreeConfigStore implements SLStudioLX.SaveHook {
-
     private final TreeModel tree;
-
     private File file = null;
-
     private TreeConfig config = null;
 
     public TreeConfigStore(LX lx) {
-        this.tree = (TreeModel)lx.model;
+        this.tree = (TreeModel) lx.model;
         loadConfig();
     }
 
     private void loadConfig() {
-        File file = new File(getConfigFilePath());
-
+        File file = getConfigFile();
         if (!file.exists()) {
             file = createConfigFile();
         }
@@ -44,8 +37,7 @@ public class TreeConfigStore implements SLStudioLX.SaveHook {
     }
 
     private File createConfigFile() {
-        File file = new File(getConfigFilePath());
-
+        File file = getConfigFile();
         try {
             //writeConfig(file);
         } catch (Exception e) {
@@ -54,8 +46,8 @@ public class TreeConfigStore implements SLStudioLX.SaveHook {
         return file;
     }
 
-    private String getConfigFilePath() {
-        return "data/" + SLStudio.applet.getSelectedShowName() + "-tree-config.json";
+    private File getConfigFile() {
+        return SLStudio.applet.getShowFile("tree-config.json");
     }
 
     private void reconfigureTree(TreeConfig config) {
