@@ -8,8 +8,8 @@ public class TextureWebs extends TextureSlideshow {
     }
 
     public String[] getPaths() {
-        return new String[]{
-            "images/green_web.png",
+        return new String[] {
+            "images/green-web.jpg",
         };
     }
 }
