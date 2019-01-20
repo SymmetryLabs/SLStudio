@@ -2,6 +2,8 @@ package com.symmetrylabs.shows.hhgarden;
 
 import com.google.gson.GsonBuilder;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.util.FileUtils;
+
 import de.javagl.obj.ReadableObj;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.model.LXModel;
@@ -109,15 +111,7 @@ public class FlowersModel extends SLModel implements LXModel.Listener {
         for (FlowerModel fm : flowers) {
             records.add(fm.getFlowerData().record);
         }
-        try {
-            FileWriter writer = new FileWriter(FlowersModelLoader.RECORD_FILE);
-            new GsonBuilder().setPrettyPrinting().create().toJson(records, writer);
-            writer.close();
-            System.out.println("wrote records to " + FlowersModelLoader.RECORD_FILE.toString());
-        } catch (IOException e) {
-            System.err.println("couldn't write record file:");
-            e.printStackTrace();
-        }
+        FileUtils.writeShowJson(FlowersModelLoader.RECORDS_FILENAME, records);
     }
 
     public void panelize() {

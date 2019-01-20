@@ -15,23 +15,11 @@ import java.util.Set;
 public class CubePhysicalIdMap {
     protected final Map<String, String> physicalIds = new HashMap<>();
     protected final Set<String> physicalIdsNotFound = new HashSet<>();
-    protected final static String FILENAME = "data/physid_to_mac.json";
+    protected final static String FILENAME = "physid_to_mac.json";
 
     public CubePhysicalIdMap() {
-        Map<String, String> map;
-        InputStream stream = getClass().getClassLoader().getResourceAsStream(FILENAME);
-        if (stream == null) {
-            SLStudio.setWarning(FILENAME, "resource does not exist");
-            return;
-        }
-        try {
-            map = new Gson().fromJson(new InputStreamReader(stream), Map.class);
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-            String message = (e.getCause() != null ? e.getCause() : e).getMessage();
-            SLStudio.setWarning(FILENAME, "JSON syntax error: " + message);
-            return;
-        }
+        Map<String, String> map = FileUtils.readDataJson(FILENAME, Map.class);
+        if (map == null) return;
 
         String duplicatedMac = null;
         String invalidMac = null;

@@ -1,5 +1,7 @@
 package com.symmetrylabs.shows.hhgarden;
 
+import com.symmetrylabs.util.FileUtils;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -22,13 +24,9 @@ public class Panelizer {
 
     public static void panelize(List<FlowerData> data) {
         List<PanelConfig> configs = new ArrayList<>();
-        List<String> lines;
-        try {
-            lines = Files.readAllLines(FlowersModelLoader.PANEL_FILE.toPath());
-        } catch (IOException e) {
-            System.err.println(String.format("couldn't read panel file: %s", e.getMessage()));
-            return;
-        }
+        List<String> lines = FileUtils.readShowLines(FlowersModelLoader.PANEL_FILENAME);
+        if (lines == null) return;
+
         for (String line : lines) {
             String[] bits = line.trim().split(" ");
             if (bits.length != 2) {
@@ -61,13 +59,8 @@ public class Panelizer {
     }
 
     public static void harnessize(List<FlowerData> data) {
-        List<String> lines;
-        try {
-            lines = Files.readAllLines(FlowersModelLoader.PIXLITE_FILE.toPath());
-        } catch (IOException e) {
-            System.err.println(String.format("couldn't read pixlite file: %s", e.getMessage()));
-            return;
-        }
+        List<String> lines = FileUtils.readShowLines(FlowersModelLoader.PIXLITE_FILENAME);
+        if (lines == null) return;
 
         List<PixliteRecord> records = new ArrayList<>();
         HashMap<String, PixliteRecord> panelPixlites = new HashMap<>();

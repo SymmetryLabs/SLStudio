@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
+import com.symmetrylabs.util.FileUtils;
+
 import processing.data.JSONArray;
 import processing.data.JSONObject;
 
@@ -49,13 +51,7 @@ public class CartConfig {
         };
     }
 
-    public static CartConfig[] readConfigsFromFile() throws IOException {
-        Gson gson = new Gson();
-        File f = new File(PilotsShow.IP_CONFIGS_FILENAME);
-        if (!f.exists()) {
-            return null;
-        }
-        BufferedReader br = new BufferedReader(new FileReader(f));
-        return gson.fromJson(br, CartConfig[].class);
+    public static CartConfig[] readConfigsFromFile() {
+        return FileUtils.readShowJsonIfExists(PilotsShow.IP_CONFIGS_FILENAME, CartConfig[].class);
     }
 }

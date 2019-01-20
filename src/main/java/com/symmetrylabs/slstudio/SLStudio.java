@@ -1,5 +1,7 @@
 package com.symmetrylabs.slstudio;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.ShowRegistry;
@@ -23,6 +25,8 @@ import com.symmetrylabs.util.Utils;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
@@ -101,10 +105,6 @@ public class SLStudio extends PApplet {
         if (showName != null) {
             saveStrings(SHOW_FILE_NAME, new String[] {showName});
         }
-    }
-
-    public File getShowFile(String filename) {
-        return new File(sketchPath("shows/" + showName + "/" + filename));
     }
 
     @Override

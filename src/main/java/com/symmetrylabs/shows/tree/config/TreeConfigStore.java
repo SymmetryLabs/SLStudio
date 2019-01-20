@@ -10,6 +10,7 @@ import heronarts.lx.LX;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.shows.tree.TreeModel;
+import com.symmetrylabs.util.FileUtils;
 
 public class TreeConfigStore implements SLStudioLX.SaveHook {
     private final TreeModel tree;
@@ -27,13 +28,9 @@ public class TreeConfigStore implements SLStudioLX.SaveHook {
             file = createConfigFile();
         }
 
-        try {
-            this.file = file;
-            this.config = new Gson().fromJson(new FileReader(file), TreeConfig.class);
-            reconfigureTree(config);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.file = file;
+        this.config = FileUtils.readJson(file, TreeConfig.class);
+        if (config != null) reconfigureTree(config);
     }
 
     private File createConfigFile() {
@@ -47,7 +44,7 @@ public class TreeConfigStore implements SLStudioLX.SaveHook {
     }
 
     private File getConfigFile() {
-        return SLStudio.applet.getShowFile("tree-config.json");
+        return FileUtils.getShowFile("tree-config.json");
     }
 
     private void reconfigureTree(TreeConfig config) {
@@ -64,12 +61,6 @@ public class TreeConfigStore implements SLStudioLX.SaveHook {
     }
 
     private void writeConfig(File file) {
-        try {
-            FileWriter writer = new FileWriter(file);
-            writer.write(new Gson().toJson(tree.getConfig()));
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FileUtils.writeJson(getConfigFile(), tree.getConfig());
     }
 }
