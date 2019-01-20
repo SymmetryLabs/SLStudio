@@ -1,12 +1,7 @@
 package com.symmetrylabs.util;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.symmetrylabs.slstudio.SLStudio;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -18,7 +13,7 @@ public class CubePhysicalIdMap {
     protected final static String FILENAME = "physid_to_mac.json";
 
     public CubePhysicalIdMap() {
-        Map<String, String> map = FileUtils.readDataJson(FILENAME, Map.class);
+        Map<String, String> map = FileUtils.readResourceJson(FILENAME, Map.class);
         if (map == null) return;
 
         String duplicatedMac = null;

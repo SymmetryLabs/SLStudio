@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.List;
 
@@ -33,11 +34,6 @@ public class FileUtils {
             path = path.substring(sketchPath.length());
         }
         return path;
-    }
-
-    /** Reads a JSON file in the resources/data directory. */
-    public static <T> T readDataJson(String filename, Class<T> type) {
-        return readJson(new File(SLStudio.applet.dataPath(filename)), type);
     }
 
     /**
@@ -81,6 +77,30 @@ public class FileUtils {
                     reader.close();
                 } catch (IOException e) { }
             }
+        }
+    }
+
+    /** Reads a JSON file in the resources/data directory, with error handling and reporting. */
+    public static <T> T readResourceJson(String filename, Class<T> type) {
+        // createInput() will search a few places, catch exceptions, and print their stack traces.
+        InputStream stream = SLStudio.applet.createInput(filename);
+        if (stream == null) {
+            SLStudio.setWarning(filename, "Resource file not found");
+            return null;
+        }
+        try {
+            T result = new Gson().fromJson(new InputStreamReader(stream), type);
+            System.out.println("Read JSON resource: " + filename);
+            return result;
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+            String message = (e.getCause() != null ? e.getCause() : e).getMessage();
+            SLStudio.setWarning(filename, "JSON syntax error in resource: " + message);
+            return null;
+        } finally {
+            try {
+                stream.close();
+            } catch (IOException e) { }
         }
     }
 
