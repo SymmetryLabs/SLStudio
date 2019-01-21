@@ -2,7 +2,6 @@ package com.symmetrylabs.slstudio.ui.gdx;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -12,19 +11,39 @@ import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
 import java.util.ArrayList;
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL41;
+import org.lwjgl.opengl.GLCapabilities;
 
 public class ModelRenderer {
     private static final PolyBuffer.Space UI_COLOR_SPACE = PolyBuffer.Space.SRGB8;
 
     public final Camera cam;
     protected final LXModel model;
-    protected final ShaderProgram pointShader;
+    protected final ShaderProgramThatLetsMeGetTheDataIWant pointShader;
     protected final float[] glColorBuffer;
     protected final PolyBuffer lxColorBuffer;
-    protected final VertexBufferObject positionVbo;
-    protected final VertexBufferObject colorVbo;
+    protected final int vao;
+    protected final int positionVbo;
+    protected final int colorVbo;
     protected final LX lx;
+    protected final int mvpUniform;
+    protected final int colorAttr;
+    protected final int positionAttr;
+
+    private static class ShaderProgramThatLetsMeGetTheDataIWant extends ShaderProgram {
+        int handle;
+
+        public ShaderProgramThatLetsMeGetTheDataIWant(String vert, String frag) {
+            super(vert, frag);
+        }
+
+        @Override
+        protected int createProgram() {
+            handle = super.createProgram();
+            return handle;
+        }
+    }
 
     public ModelRenderer(LX lx, LXModel model) {
         this.model = model;
@@ -34,15 +53,35 @@ public class ModelRenderer {
 
         String vert = Gdx.files.internal("vertex-330.glsl").readString();
         String frag = Gdx.files.internal("fragment-330.glsl").readString();
-        pointShader = new ShaderProgram(vert, frag);
+        pointShader = new ShaderProgramThatLetsMeGetTheDataIWant(vert, frag);
         if (!pointShader.isCompiled()) {
             throw new RuntimeException("shader compilation failed: " + pointShader.getLog());
         }
+        mvpUniform = GL41.glGetUniformLocation(pointShader.handle, "u_mvp");
+        if (mvpUniform < 0) {
+            throw new RuntimeException("shader program does not have uniform u_mvp");
+        }
+        colorAttr = GL41.glGetAttribLocation(pointShader.handle, "a_color");
+        if (colorAttr < 0) {
+            throw new RuntimeException("shader program does not have attribute a_color");
+        }
+        positionAttr = GL41.glGetAttribLocation(pointShader.handle, "a_position");
+        if (positionAttr < 0) {
+            throw new RuntimeException("shader program does not have attribute a_position");
+        }
 
-        int N = model.points.length;
-        positionVbo = new VertexBufferObject(false, N, VertexAttribute.Position());
+        vao = GL41.glGenVertexArrays();
+        GL41.glBindVertexArray(vao);
+
+        positionVbo = GL41.glGenBuffers();
         updatePoints();
         model.addListener(m -> updatePoints());
+
+        glColorBuffer = new float[4 * model.size];
+        lxColorBuffer = new PolyBuffer(lx);
+        colorVbo = GL41.glGenBuffers();
+
+        GL41.glBindVertexArray(0);
 
         cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(model.cx, model.cy, model.zMin - model.rMax);
@@ -50,13 +89,13 @@ public class ModelRenderer {
         cam.near = 1f;
         cam.far = 10000f;
         cam.update();
-
-        glColorBuffer = new float[4 * N];
-        lxColorBuffer = new PolyBuffer(lx);
-        colorVbo = new VertexBufferObject(false, N, VertexAttribute.ColorUnpacked());
     }
 
+    /**
+     * Update vertex position VBO. Assumes the VAO is already bound.
+     */
     private void updatePoints() {
+        GL41.glBindBuffer(GL41.GL_ARRAY_BUFFER, positionVbo);
         int N = model.points.length;
         float[] vertdata = new float[3 * N];
         for (int i = 0; i < N; i++) {
@@ -64,15 +103,14 @@ public class ModelRenderer {
             vertdata[3 * i + 1] = model.points[i].y;
             vertdata[3 * i + 2] = model.points[i].z;
         }
-        positionVbo.setVertices(vertdata, 0, 3 * N);
+        GL41.glBufferData(GL41.GL_ARRAY_BUFFER, vertdata, GL41.GL_DYNAMIC_DRAW);
     }
 
     public void draw() {
         lx.engine.copyUIBuffer(lxColorBuffer, UI_COLOR_SPACE);
         int[] colors = (int[]) lxColorBuffer.getArray(UI_COLOR_SPACE);
 
-        GL11.glEnable(GL11.GL_POINT_SMOOTH);
-        GL11.glPointSize(2);
+        GL41.glPointSize(2);
 
         for (int i = 0; i < colors.length; i++) {
             int c = colors[i];
@@ -83,32 +121,31 @@ public class ModelRenderer {
         }
 
         pointShader.begin();
-        pointShader.setUniformMatrix("u_mvp", cam.combined);
 
-        pointShader.enableVertexAttribute("a_position");
-        positionVbo.bind(pointShader);
+        GL41.glBindVertexArray(vao);
+        GL41.glBindBuffer(GL41.GL_ARRAY_BUFFER, colorVbo);
+        GL41.glBufferData(GL41.GL_ARRAY_BUFFER, glColorBuffer, GL41.GL_DYNAMIC_DRAW);
+        GL41.glEnableVertexAttribArray(colorAttr);
+        GL41.glVertexAttribPointer(colorAttr, 4, GL41.GL_FLOAT, false, 0, 0);
 
-        pointShader.enableVertexAttribute("a_color");
-        colorVbo.bind(pointShader);
-        colorVbo.setVertices(glColorBuffer, 0, model.points.length * 4);
+        GL41.glUniformMatrix4fv(mvpUniform, false, cam.combined.val);
 
-        Gdx.gl.glDrawArrays(GL30.GL_POINTS, 0, model.points.length);
+        GL41.glBindBuffer(GL41.GL_ARRAY_BUFFER, positionVbo);
+        GL41.glEnableVertexAttribArray(positionAttr);
+        GL41.glVertexAttribPointer(positionAttr, 3, GL41.GL_FLOAT, false, 0, 0);
 
-        positionVbo.unbind(pointShader);
-        colorVbo.unbind(pointShader);
+        GL41.glDrawArrays(GL41.GL_POINTS, 0, model.points.length);
 
-        pointShader.disableVertexAttribute("a_color");
-        pointShader.disableVertexAttribute("a_position");
-        pointShader.end();
-
-        Gdx.gl.glBindBuffer(GL30.GL_ARRAY_BUFFER, 0);
-
-        GL11.glDisable(GL11.GL_POINT_SMOOTH);
+        GL41.glDisableVertexAttribArray(positionAttr);
+        GL41.glDisableVertexAttribArray(colorAttr);
+        GL41.glBindVertexArray(0);
     }
 
     public void dispose() {
-        colorVbo.dispose();
-        positionVbo.dispose();
+        GL41.glDeleteBuffers(colorVbo);
+        GL41.glDeleteBuffers(positionVbo);
+        GL41.glDeleteVertexArrays(vao);
+        pointShader.dispose();
     }
 
     private static void printCapabilities() {

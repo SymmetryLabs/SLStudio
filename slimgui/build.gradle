@@ -5,6 +5,10 @@ plugins {
 group = 'com.symmetrylabs'
 version = '1.0'
 
+def LINUX = System.getProperty("os.name").equals("Linux");
+def MAC = System.getProperty("os.name").equals("Mac OS X");
+def WINDOWS = System.getProperty("os.name").startsWith("Windows");
+
 def isValidJavaHome(javaHome) {
 	return javaHome != null && (new File(javaHome, "include")).exists();
 }
@@ -20,8 +24,10 @@ tasks.withType(CppCompile) {
 	}
 
 	compilerArgs.add "-std=c++14"
-	compilerArgs.add "-DIMGUI_IMPL_OPENGL_LOADER_GLEW"
+	compilerArgs.add "-DIMGUI_IMPL_OPENGL_LOADER_CUSTOM=\"GL/gl3w.h\""
+	compilerArgs.add "-DGLFW_INCLUDE_NONE"
 	compilerArgs.add "-g"
+	compilerArgs.add "--verbose"
 	systemIncludes.from (javaHome + "/include")
 	/* Only the relevant platform-specific includes are present on any
 	   given machine (e.g. /include/darwin doesn't exist in linux installs)
@@ -39,17 +45,18 @@ tasks.withType(LinkSharedLibrary) {
 	 ignore unresolved symbols and hope for the best. If we link
 	 in our own we get bad behavior on MacOS, since we end up with
 	 two copies of GLFW linked in and that's undefined behavior */
-	if (System.getProperty("os.name").equals("Mac OS X")) {
+	if (MAC) {
 		linkerArgs.add "-framework"
 		linkerArgs.add "OpenGL"
 		linkerArgs.add "-undefined"
 		linkerArgs.add "dynamic_lookup"
 		linkerArgs.add "-lglew"
-	} else if (System.getProperty("os.name").equals("Linux")) {
+	} else if (LINUX) {
 		linkerArgs.add "-lGLEW"
 		linkerArgs.add "-lGLU"
 		linkerArgs.add "-lGL"
-	} else if (System.getProperty("os.name").startsWith("Windows")) {
+		linkerArgs.add "-lglfw"
+	} else if (WINDOWS) {
 		linkerArgs.add "-lglfw3"
 		linkerArgs.add "-lopengl32"
 		linkerArgs.add "-Lprebuilts-windows"
