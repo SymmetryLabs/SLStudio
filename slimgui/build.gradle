@@ -24,7 +24,7 @@ tasks.withType(CppCompile) {
 	}
 
 	compilerArgs.add "-std=c++14"
-	compilerArgs.add "-DIMGUI_IMPL_OPENGL_LOADER_CUSTOM=\"GL/gl3w.h\""
+	compilerArgs.add "-DIMGUI_IMPL_OPENGL_LOADER_GL3W"
 	compilerArgs.add "-DGLFW_INCLUDE_NONE"
 	compilerArgs.add "-g"
 	compilerArgs.add "--verbose"
