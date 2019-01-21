@@ -163,11 +163,6 @@ dependencies {
 	// gdx dependencies
 	compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
 	compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-
-	// swing dependencies
-	compile "org.jogamp.jogl:jogl-all:2.3.2"
-	compile "org.jogamp.jogl:newt:2.3.2"
-	compile "com.github.kotlin-graphics:glm:0.01"
 }
 
 compileKotlin {
