@@ -1,15 +1,12 @@
 buildscript {
 	repositories {
-    mavenLocal()
 		mavenCentral()
 		jcenter()
-    google()
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
 	}
 	dependencies {
 		classpath 'edu.sc.seis.gradle:launch4j:2.4.2'
-    classpath "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+		classpath "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 	}
 }
 
@@ -31,21 +28,15 @@ group = 'com.symmetrylabs'
 version = '1.0'
 sourceCompatibility = 1.8
 
+mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
+
 run {
 	if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
 		jvmArgs '-XX:+UseParNewGC', '-XX:+UseConcMarkSweepGC'
 	}
-	if (System.properties["os.name"] == "Mac OS X") {
-		jvmArgs '-XstartOnFirstThread'
-	}
 
 	// To select a layout from the command line, "gradlew run -Playout=cubes"
 	systemProperty 'com.symmetrylabs.layout', findProperty('layout')
-
-	systemProperty 'java.library.path', 'libs'
-	systemProperty 'awt.useSystemAAFontSettings', 'on'
-	systemProperty 'swing.aatext', true
-	systemProperty 'org.lwjgl.util.Debug', true
 
 	doLast {
 		while (file(".restart").exists()) {
@@ -54,8 +45,19 @@ run {
 			run.exec()
 		}
 	}
+}
+
+task runUIv2(type: JavaExec) {
+	if (System.properties["os.name"] == "Mac OS X") {
+		jvmArgs '-XstartOnFirstThread'
+	}
 
 	dependsOn ":slimgui:assembleRelease"
+	systemProperty 'org.lwjgl.util.Debug', true
+	systemProperty 'java.library.path', 'libs'
+
+	main = 'com.symmetrylabs.slstudio.ui.gdx.Lwjgl3Launcher'
+	classpath = run.classpath
 }
 
 docker {
@@ -88,16 +90,6 @@ allprojects {
 	tasks.withType(JavaCompile) {
 		sourceCompatibility = '1.8'
 	}
-}
-
-if (hasProperty('slstudio.swing')) {
-	mainClassName = 'com.symmetrylabs.slstudio.ui.swing.SLStudioSwing'
-} else if (hasProperty('slstudio.gdx')) {
-	mainClassName = 'com.symmetrylabs.slstudio.ui.gdx.Lwjgl3Launcher'
-} else if (hasProperty('slstudio.headless')) {
-	mainClassName = 'com.symmetrylabs.slstudio.SLHeadless'
-} else {
-	mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
 }
 
 repositories {
@@ -169,8 +161,8 @@ dependencies {
 	testCompile 'junit:junit:4.12'
 
 	// gdx dependencies
-  compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
-  compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+	compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+	compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 
 	// swing dependencies
 	compile "org.jogamp.jogl:jogl-all:2.3.2"
