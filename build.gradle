@@ -42,7 +42,7 @@ run {
 	// To select a layout from the command line, "gradlew run -Playout=cubes"
 	systemProperty 'com.symmetrylabs.layout', findProperty('layout')
 
-	systemProperty 'java.library.path', 'slimgui/build/lib/main/release'
+	systemProperty 'java.library.path', 'libs'
 	systemProperty 'awt.useSystemAAFontSettings', 'on'
 	systemProperty 'swing.aatext', true
 	systemProperty 'org.lwjgl.util.Debug', true
@@ -198,4 +198,15 @@ macAppBundle {
 	jarTask = "shadowJar"
 	javaExtras.put("-XX:+UseParNewGC", null);
 	javaExtras.put("-XX:+UseConcMarkSweepGC", null);
+}
+
+task genPrebuiltSlimgui(type: Copy) {
+	dependsOn ":slimgui:assembleRelease"
+	from("slimgui/build/lib/main/release") {
+		include "*.dylib"
+		include "*.so"
+		include "*.dll"
+		include "*.lib"
+	}
+	into "libs"
 }

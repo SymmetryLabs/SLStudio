@@ -48,11 +48,8 @@ tasks.withType(LinkSharedLibrary) {
 	if (MAC) {
 		linkerArgs.add "-framework"
 		linkerArgs.add "OpenGL"
-		linkerArgs.add "-undefined"
-		linkerArgs.add "dynamic_lookup"
-		linkerArgs.add "-lglew"
+		linkerArgs.add "../libs/libglfw.dylib"
 	} else if (LINUX) {
-		linkerArgs.add "-lGLEW"
 		linkerArgs.add "-lGLU"
 		linkerArgs.add "-lGL"
 		linkerArgs.add "-lglfw"
