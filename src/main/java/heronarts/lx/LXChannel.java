@@ -279,6 +279,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
         ChannelThread() {
             super("LXChannel thread #" + channelThreadCount++);
+            setDaemon(true);
         }
 
         boolean hasStarted = false;

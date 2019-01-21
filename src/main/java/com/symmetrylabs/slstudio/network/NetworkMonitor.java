@@ -22,7 +22,7 @@ public class NetworkMonitor {
 
     private final NetworkScanner opcNetworkScanner;
     private final ArtNetNetworkScanner artNetNetworkScanner;
-    private final Timer timer = new Timer("NetworkScanner");
+    private final Timer timer = new Timer("NetworkScanner", /* run as daemon */ true);
 
     private boolean started = false;
 

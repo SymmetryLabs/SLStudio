@@ -21,7 +21,13 @@ public class OpcSocket implements Closeable {
         void receive(InetAddress src, OpcMessage reply);
     }
 
-    protected final ExecutorService executor = Executors.newSingleThreadExecutor();
+    /* Use daemon threads to send/receive, so that OpcSocket threads don't prevent the
+         app from exiting when the window closes. */
+    protected final ExecutorService executor = Executors.newSingleThreadExecutor(r -> {
+            Thread t = new Thread(r);
+            t.setDaemon(true);
+            return t;
+        });
     protected DatagramSocket socket = null;
 
     public OpcSocket(InetAddress host, int port) {

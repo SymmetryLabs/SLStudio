@@ -1376,6 +1376,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         NetworkThread(LX lx) {
             super("LXEngine Network Thread");
             this.networkBuffer = new PolyBuffer(lx);
+            setDaemon(true);
         }
 
         @Override
