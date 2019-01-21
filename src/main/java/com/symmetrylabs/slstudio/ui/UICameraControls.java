@@ -65,7 +65,7 @@ public class UICameraControls extends UI2dContext implements LXParameterListener
         y += BH + PAD;
 
         new UIButton(x, y, 2 * BW + PAD, BH)
-            .setIcon(SLStudio.applet.loadImage("ortho.png"))
+            .setIcon(SLStudio.applet.loadImage("icons/ortho.png"))
             .setParameter(parent.ortho)
             .setFont(SLStudio.MONO_FONT.getFont())
             .addToContainer(this);
@@ -75,7 +75,7 @@ public class UICameraControls extends UI2dContext implements LXParameterListener
         UIButton b = new UIButton(x, y, BW, BH);
         b.setParameter(param);
         b.setFont(SLStudio.MONO_FONT.getFont());
-        b.setIcon(SLStudio.applet.loadImage(param.getLabel() + ".png"));
+        b.setIcon(SLStudio.applet.loadImage("icons/" + param.getLabel() + ".png"));
         b.addToContainer(this);
         return b;
     }

@@ -86,7 +86,7 @@ public class FileUtils {
         }
     }
 
-    /** Reads a JSON file in the resources/data directory, with error handling and reporting. */
+    /** Reads a JSON file in the resources directory, with error handling and reporting. */
     public static <T> T readResourceJson(String filename, Class<T> type) {
         // createInput() will search a few places, catch exceptions, and print their stack traces.
         InputStream stream = SLStudio.applet.createInput(filename);

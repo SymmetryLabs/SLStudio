@@ -158,7 +158,7 @@ public class SLStudioLX extends P3LX {
 
             new UI2dComponent(0, 0, leftPane.getWidth(), 30) {}.setBackgroundColor(0).addToContainer(leftPane);
 
-            new UIImage(applet.loadImage("symmetry-labs-logo.png"), 4, 4)
+            new UIImage(applet.loadImage("icons/symmetry-labs-logo.png"), 4, 4)
             .setDescription("Symmetry Labs")
             .addToContainer(leftPane);
 

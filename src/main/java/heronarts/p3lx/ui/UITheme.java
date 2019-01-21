@@ -86,16 +86,16 @@ public class UITheme {
         this.labelFont = this.deviceFont = this.windowTitleFont = applet.loadFont("Arial-Black-9.vlw");
         LX.initTimer.log("P3LX: UI: Theme: windowTitleFont");
 
-        this.iconNote = applet.loadImage("icon-note.png");
-        this.iconTempo = applet.loadImage("icon-tempo.png");
-        this.iconControl = applet.loadImage("icon-control.png");
-        this.iconTrigger = applet.loadImage("icon-trigger.png");
-        this.iconTriggerSource = applet.loadImage("icon-trigger-source.png");
-        this.iconLoop = applet.loadImage("icon-loop.png");
-        this.iconMap = applet.loadImage("icon-map.png");
-        this.iconArm = applet.loadImage("icon-arm.png");
-        this.iconLfo = applet.loadImage("icon-lfo.png");
-        this.iconLoad = applet.loadImage("icon-load.png");
+        this.iconNote = applet.loadImage("icons/icon-note.png");
+        this.iconTempo = applet.loadImage("icons/icon-tempo.png");
+        this.iconControl = applet.loadImage("icons/icon-control.png");
+        this.iconTrigger = applet.loadImage("icons/icon-trigger.png");
+        this.iconTriggerSource = applet.loadImage("icons/icon-trigger-source.png");
+        this.iconLoop = applet.loadImage("icons/icon-loop.png");
+        this.iconMap = applet.loadImage("icons/icon-map.png");
+        this.iconArm = applet.loadImage("icons/icon-arm.png");
+        this.iconLfo = applet.loadImage("icons/icon-lfo.png");
+        this.iconLoad = applet.loadImage("icons/icon-load.png");
         LX.initTimer.log("P3LX: UI: Theme: Icons");
     }
 
