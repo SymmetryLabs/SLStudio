@@ -116,6 +116,13 @@ public class SLStudioGDX extends ApplicationAdapter {
         renderer.dispose();
         UI.shutdown();
         lx.engine.stop();
+        /* we have to call onDraw here because onDraw is the only thing that pokes the
+             engine to actually kill the engine thread. This is a byproduct of P3LX calling
+             onDraw on every frame, and P3LX needing to kill the engine thread from the
+             thread that calls onDraw. We don't have the same requirements, so we mark
+             the thread as needing shutdown (using stop() above) then immediately call
+             onDraw to get it to actually shut down the thread. */
+        lx.engine.onDraw();
         lx.dispose();
     }
 
