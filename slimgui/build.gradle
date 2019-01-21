@@ -50,9 +50,8 @@ tasks.withType(LinkSharedLibrary) {
 		linkerArgs.add "OpenGL"
 		linkerArgs.add "../libs/libglfw.dylib"
 	} else if (LINUX) {
-		linkerArgs.add "-lGLU"
 		linkerArgs.add "-lGL"
-		linkerArgs.add "-lglfw"
+		linkerArgs.add "../libs/libglfw.so"
 	} else if (WINDOWS) {
 		linkerArgs.add "-lglfw3"
 		linkerArgs.add "-lopengl32"
