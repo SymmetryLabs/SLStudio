@@ -11,24 +11,42 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class PatternGrouping {
+/**
+ * Splits warps, effects and patterns into ordered groups by their declared group name.
+ *
+ * Patterns can optionally declare membership in a group by adding a GROUP_NAME field to
+ * their class. This class groups patterns based on that field, and also determines the
+ * appropriate sort order both for the groups and the patterns. It is intended for use
+ * by UI widgets that want to display the pattern groups.
+ *
+ * At sort time, if an active group is specified, that group is sorted above all other
+ * groups. For the remaining groups, the "null group" (patterns that don't declare a
+ * group) are sorted first, followed by the remaining groups in alphabetical order.
+ */
+public class WEPGrouping {
     private final LX lx;
-    public final HashMap<String, List<Item>> groups = new HashMap<>();
+    public final HashMap<String, List<PatternItem>> groups = new HashMap<>();
     public final List<String> groupNames;
     public final List<WarpItem> warps;
     public final List<EffectItem> effects;
 
-    public PatternGrouping(LX lx, String activeGroup) {
+    /**
+     * Create a pattern grouping and sort all registered patterns into groups.
+     *
+     * After this constructor is called, all member fields are populated with the
+     * sort result.
+     */
+    public WEPGrouping(LX lx, String activeGroup) {
         this.lx = lx;
 
         List<Class<? extends LXPattern>> patterns = lx.getRegisteredPatterns();
         for (Class<? extends LXPattern> p : patterns) {
             String group = LXPattern.getGroupName(p);
             groups.putIfAbsent(group, new ArrayList<>());
-            groups.get(group).add(new Item(p));
+            groups.get(group).add(new PatternItem(p));
         }
 
-        for (List<Item> ps : groups.values()) {
+        for (List<PatternItem> ps : groups.values()) {
             Collections.sort(ps);
         }
         groupNames = new ArrayList<>(groups.keySet());
@@ -63,11 +81,12 @@ public class PatternGrouping {
         Collections.sort(warps);
     }
 
-    public static class Item implements Comparable<Item> {
+    /** Represents a pattern class registered with LX. */
+    public static class PatternItem implements Comparable<PatternItem> {
         public final Class<? extends LXPattern> pattern;
         public final String label;
 
-        Item(Class<? extends LXPattern> pattern) {
+        PatternItem(Class<? extends LXPattern> pattern) {
             this.pattern = pattern;
             String simple = pattern.getSimpleName();
             if (simple.endsWith("Pattern")) {
@@ -77,7 +96,7 @@ public class PatternGrouping {
         }
 
         @Override
-        public int compareTo(Item o) {
+        public int compareTo(PatternItem o) {
             return label.compareToIgnoreCase(o.label);
         }
 
@@ -87,6 +106,7 @@ public class PatternGrouping {
         }
     }
 
+    /** Represents a warp class registered with LX. */
     public static class WarpItem implements Comparable<WarpItem> {
         public final Class<? extends LXWarp> warp;
         public final String label;
@@ -111,6 +131,7 @@ public class PatternGrouping {
         }
     }
 
+    /** Represents an effect class registered with LX. */
     public static class EffectItem implements Comparable<EffectItem> {
         public final Class<? extends LXEffect> effect;
         public final String label;

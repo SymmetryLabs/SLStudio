@@ -65,7 +65,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         loadLxComponents();
 
         WindowManager.get().add(new MainMenu(lx));
-        WindowManager.get().add(new PatternWindow(lx, showName));
+        WindowManager.get().add(new WEPWindow(lx, showName));
         WindowManager.get().add(new ProjectWindow(lx));
 
         lx.engine.isMultithreaded.setValue(true);

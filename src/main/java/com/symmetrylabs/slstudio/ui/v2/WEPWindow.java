@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.ui.v2;
 
-import com.symmetrylabs.slstudio.ui.PatternGrouping;
+import com.symmetrylabs.slstudio.ui.WEPGrouping;
 import heronarts.lx.LX;
 import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
@@ -12,14 +12,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class PatternWindow implements Window {
+public class WEPWindow implements Window {
     private final LX lx;
-    private final PatternGrouping grouping;
+    private final WEPGrouping grouping;
     private String filterText = "";
 
-    public PatternWindow(LX lx, String activeGroup) {
+    public WEPWindow(LX lx, String activeGroup) {
         this.lx = lx;
-        this.grouping = new PatternGrouping(lx, activeGroup);
+        this.grouping = new WEPGrouping(lx, activeGroup);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class PatternWindow implements Window {
                 /* If this returns true, the tree is expanded and we should display
                      its contents */
                 if (UI.treeNode(displayName, UI.TREE_FLAG_DEFAULT_OPEN)) {
-                    for (PatternGrouping.Item pi : grouping.groups.get(groupName)) {
+                    for (WEPGrouping.PatternItem pi : grouping.groups.get(groupName)) {
                         if (match(pi.label)) {
                             UI.treeNode(
                                 String.format("%s/%s", groupName, pi.label),
@@ -52,7 +52,7 @@ public class PatternWindow implements Window {
         }
 
         if (UI.treeNode("Effects", UI.TREE_FLAG_DEFAULT_OPEN)) {
-            for (PatternGrouping.EffectItem ei : grouping.effects) {
+            for (WEPGrouping.EffectItem ei : grouping.effects) {
                 if (match(ei.label)) {
                     UI.treeNode(ei.label, UI.TREE_FLAG_LEAF, ei.label);
                     if (UI.isItemClicked()) {
@@ -65,7 +65,7 @@ public class PatternWindow implements Window {
         }
 
         if (UI.treeNode("Warps", UI.TREE_FLAG_DEFAULT_OPEN)) {
-            for (PatternGrouping.WarpItem wi : grouping.warps) {
+            for (WEPGrouping.WarpItem wi : grouping.warps) {
                 if (match(wi.label)) {
                     UI.treeNode(wi.label, UI.TREE_FLAG_LEAF, wi.label);
                     if (UI.isItemClicked()) {
@@ -85,7 +85,7 @@ public class PatternWindow implements Window {
             label.toLowerCase().contains(filterText.toLowerCase());
     }
 
-    private void activate(PatternGrouping.Item pi) {
+    private void activate(WEPGrouping.PatternItem pi) {
         LXPattern instance = null;
         try {
             instance = pi.pattern.getConstructor(LX.class).newInstance(lx);
@@ -109,7 +109,7 @@ public class PatternWindow implements Window {
         }
     }
 
-    private void activate(PatternGrouping.EffectItem pi) {
+    private void activate(WEPGrouping.EffectItem pi) {
         LXEffect instance = null;
         try {
             instance = pi.effect.getConstructor(LX.class).newInstance(lx);
@@ -128,7 +128,7 @@ public class PatternWindow implements Window {
         }
     }
 
-    private void activate(PatternGrouping.WarpItem pi) {
+    private void activate(WEPGrouping.WarpItem pi) {
         LXWarp instance = null;
         try {
             instance = pi.warp.getConstructor(LX.class).newInstance(lx);
