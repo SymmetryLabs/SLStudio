@@ -77,9 +77,9 @@ public class ModelRenderer {
 
         printCapabilities();
 
-        String vert = Gdx.files.internal("point-vertex.glsl").readString();
-        String frag = Gdx.files.internal("point-fragment.glsl").readString();
-        pointShader = new ShaderProgramWithProgramHandle(vert, frag);
+        pointShader = new ShaderProgramWithProgramHandle(
+            Gdx.files.internal("point-vertex.glsl").readString(),
+            Gdx.files.internal("point-fragment.glsl").readString());
         if (!pointShader.isCompiled()) {
             throw new RuntimeException("point shader compilation failed: " + pointShader.getLog());
         }
@@ -100,24 +100,24 @@ public class ModelRenderer {
             throw new RuntimeException("shader program does not have attribute a_position");
         }
 
-        String blurVert = Gdx.files.internal("blur-vertex.glsl").readString();
-        String blurFrag = Gdx.files.internal("blur-fragment.glsl").readString();
-        blurShader = new ShaderProgramWithProgramHandle(vert, frag);
+        blurShader = new ShaderProgramWithProgramHandle(
+            Gdx.files.internal("blur-vertex.glsl").readString(),
+            Gdx.files.internal("blur-fragment.glsl").readString());
         if (!blurShader.isCompiled()) {
             throw new RuntimeException("blur shader compilation failed: " + pointShader.getLog());
         }
         blurShader.begin();
         blurShader.setUniformi("image", 0);
 
-        String bloomBlendVert = Gdx.files.internal("bloom-blend-vertex.glsl").readString();
-        String bloomBlendFrag = Gdx.files.internal("bloom-blend-fragment.glsl").readString();
-        bloomBlendShader = new ShaderProgramWithProgramHandle(vert, frag);
+        bloomBlendShader = new ShaderProgramWithProgramHandle(
+            Gdx.files.internal("bloom-blend-vertex.glsl").readString(),
+            Gdx.files.internal("bloom-blend-fragment.glsl").readString());
         if (!bloomBlendShader.isCompiled()) {
             throw new RuntimeException("bloom blend shader compilation failed: " + pointShader.getLog());
         }
         bloomBlendShader.begin();
         bloomBlendShader.setUniformi("scene", 0);
-        bloomBlendShader.setUniformi("bloomBlur", 0);
+        //bloomBlendShader.setUniformi("bloomBlur", 1);
 
         vao = GL41.glGenVertexArrays();
         GL41.glBindVertexArray(vao);
@@ -205,7 +205,7 @@ public class ModelRenderer {
         GL41.glBindTexture(GL41.GL_TEXTURE_2D, baseTex);
         configTexture();
         GL41.glFramebufferTexture2D(
-            GL41.GL_FRAMEBUFFER, GL41.GL_COLOR_ATTACHMENT0, GL41.GL_TEXTURE_2D, bloomTex, 0);
+            GL41.GL_FRAMEBUFFER, GL41.GL_COLOR_ATTACHMENT0, GL41.GL_TEXTURE_2D, baseTex, 0);
 
         GL41.glBindTexture(GL41.GL_TEXTURE_2D, bloomTex);
         configTexture();
@@ -286,6 +286,7 @@ public class ModelRenderer {
         GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, 0);
 
         /* done rendering, so next we compute the blur on bloomTex */
+        /*
         blurShader.begin();
         GL41.glActiveTexture(GL41.GL_TEXTURE0);
         for (int i = 0; i < 5; i++) {
@@ -306,7 +307,7 @@ public class ModelRenderer {
         GL41.glActiveTexture(GL41.GL_TEXTURE0);
         GL41.glBindTexture(GL41.GL_TEXTURE_2D, baseTex);
         GL41.glActiveTexture(GL41.GL_TEXTURE1);
-        GL41.glBindTexture(GL41.GL_TEXTURE_2D, blurTex2);
+        GL41.glBindTexture(GL41.GL_TEXTURE_2D, baseTex);
         renderQuad();
     }
 
