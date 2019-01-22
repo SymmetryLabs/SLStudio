@@ -110,7 +110,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
     @Override
     public void render() {
-        Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Gdx.gl20.glViewport(0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
 
         float clearR = ((clearRGB >> 16) & 0xFF) / 255.f;
         float clearG = ((clearRGB >>  8) & 0xFF) / 255.f;
