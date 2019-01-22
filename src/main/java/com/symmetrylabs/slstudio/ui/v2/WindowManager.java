@@ -3,86 +3,161 @@ package com.symmetrylabs.slstudio.ui.v2;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+/**
+ * Manages and draws windows in the UI.
+ *
+ * There are two kinds of windows that WindowManager can manage: persistent and
+ * transient windows. Persistent windows appear in the Window toolbar at the
+ * top, and have a consistent API through which they can be displayed. Only one
+ * instance of a persistent window can be displayed at any one time. Transient
+ * windows are windows that are opened through some other action in the UI, and
+ * once they are closed they can only be re-opened by taking that action again.
+ * WindowManager does not concern itself with creating transient windows; other
+ * classes create them and add them to the set of displayed windows by calling
+ * WindowManager's {@link add(Window w)} method.
+ *
+ * Whether or not a window is closeable is not WindowManager's concern; closeable
+ * window logic is implemented by {@link CloseableWindow}, which does the drawing
+ * of the close button and removes the window from WindowManager's set of windows
+ * when the close button is pressed.
+ *
+ * It is important that nothing maintain a persistent reference to the WindowManager
+ * reference, so that the {@link reset()} method here can discard the only persistent
+ * reference to the WindowManager and cause it to be garbage collected. To that end,
+ * the public API of WindowManager is all static methods that call into the current
+ * global. This design prevents client code from being able to access a reference
+ * to WindowManager at all.
+ */
 public class WindowManager {
     private static WindowManager INSTANCE = new WindowManager();
 
-    public static WindowManager get() {
-        return INSTANCE;
-    }
-
+    /** A factory function to create Window instances. */
     public interface WindowCreator {
         Window create();
     }
 
-    static class WindowSpec {
+    /**
+     * Add a persistent window to the window manager.
+     *
+     * Once added, this window will appear in the Window menu in the main menu bar.
+     *
+     * @param name The label for the window in the Window menu
+     * @param creator A factory function to make the window when requested
+     * @param displayByDefault When true, an instance of the window is created and displayed when this function is called.
+    */
+    public static void addPersistent(String name, WindowCreator creator, boolean displayByDefault) {
+        INSTANCE.addPersistentImpl(name, creator, displayByDefault);
+    }
+
+    /**
+     * Add a transient window to the window manager
+     * @param w The window to add.
+     */
+    public static void addTransient(Window w) {
+        INSTANCE.addTransientImpl(w);
+    }
+
+    /**
+     * Close a window currently being displayed.
+     *
+     * For transient windows, this removes the window completely. For persistent windows,
+     * the window is hidden but its state is maintained. Calling closeWindow on a window
+     * that is not currently in the draw list is a no-op.
+     *
+     * @param w the window to close.
+     */
+    public static void closeWindow(Window w) {
+        INSTANCE.closeWindowImpl(w);
+    }
+
+
+    /* Package-private implementation follows */
+
+    /** @return the global WindowManager singleton instance. */
+    static WindowManager get() {
+        return INSTANCE;
+    }
+
+    /** Creates a new global WindowManager singleton, dropping its reference to the old one. */
+    static void reset() {
+        INSTANCE = new WindowManager();
+    }
+
+    static class PersistentWindow {
         String name;
         WindowCreator creator;
         Window current;
     }
 
-    static void reset() {
-        INSTANCE = new WindowManager();
-    }
+    private final List<PersistentWindow> persistentWindows;
+    private final List<Window> transientWindows;
 
-    private final List<WindowSpec> specs;
-    private final Map<Window, WindowSpec> specWindows;
+    /* these are used to allow for adding/removing of windows from draw() methods;
+         we queue up mutations to transient/persistentWindows here, so that we don't
+         mutate those collections while we're iterating over them. Access to both of
+         these collections must be synchronized on the collection being accessed. */
+    private final List<Window> transientToAdd;
+    private final Set<Window> toRemove;
 
-    private final List<Window> windows;
-    private final List<Window> toAdd;
-    private final List<Window> toRemove;
     private boolean uiEnabled;
 
     protected WindowManager() {
-        windows = new ArrayList<>();
-        toAdd = new ArrayList<>();
-        toRemove = new ArrayList<>();
-        specs = new ArrayList<>();
-        specWindows = new HashMap<>();
+        transientWindows = new ArrayList<>();
+        transientToAdd = new ArrayList<>();
+        toRemove = new HashSet<>();
+        persistentWindows = new ArrayList<>();
         uiEnabled = true;
     }
 
-    public void addSpec(String name, WindowCreator creator, boolean displayByDefault) {
-        WindowSpec ws = new WindowSpec();
+    void addPersistentImpl(String name, WindowCreator creator, boolean displayByDefault) {
+        PersistentWindow ws = new PersistentWindow();
         ws.name = name;
         ws.creator = creator;
         ws.current = displayByDefault ? creator.create() : null;
-        specs.add(ws);
-        if (ws.current != null) {
-            specWindows.put(ws.current, ws);
-        }
+        persistentWindows.add(ws);
     }
 
-    public void add(Window w) {
-        toAdd.add(w);
+    void addTransientImpl(Window w) {
+        transientToAdd.add(w);
     }
 
-    public void draw() {
+    void draw() {
         if (!uiEnabled) {
             return;
         }
-        for (Window w : windows) {
+        for (Window w : transientWindows) {
             w.draw();
         }
-        for (Window w : specWindows.keySet()) {
-            w.draw();
-        }
-        windows.removeAll(toRemove);
-        for (Window w : toRemove) {
-            if (specWindows.containsKey(w)) {
-                specWindows.get(w).current = null;
-                specWindows.remove(w);
+        for (PersistentWindow w : persistentWindows) {
+            if (w.current != null) {
+                w.current.draw();
             }
         }
-        toRemove.clear();
-        windows.addAll(toAdd);
-        toAdd.clear();
+
+        synchronized (toRemove) {
+            transientWindows.removeAll(toRemove);
+            for (PersistentWindow pw : persistentWindows) {
+                if (pw.current != null && toRemove.contains(pw.current)) {
+                    pw.current = null;
+                }
+            }
+            toRemove.clear();
+        }
+        synchronized (transientToAdd) {
+            transientWindows.addAll(transientToAdd);
+            transientToAdd.clear();
+        }
     }
 
-    void windowClosed(Window w) {
-        toRemove.add(w);
+    void closeWindowImpl(Window w) {
+        synchronized (toRemove) {
+            toRemove.add(w);
+        }
     }
 
     void enableUI() {
@@ -93,23 +168,23 @@ public class WindowManager {
         uiEnabled = false;
     }
 
-    Collection<WindowSpec> getSpecs() {
-        return specs;
+    Collection<PersistentWindow> getSpecs() {
+        return persistentWindows;
     }
 
-    void show(WindowSpec ws) {
+    void showPersistent(PersistentWindow ws) {
         if (ws.current != null) {
             return;
         }
         ws.current = ws.creator.create();
-        specWindows.put(ws.current, ws);
     }
 
-    void hide(WindowSpec ws) {
+    void hidePersistent(PersistentWindow ws) {
         if (ws.current == null) {
             return;
         }
-        specWindows.remove(ws.current);
-        ws.current = null;
+        synchronized (toRemove) {
+            toRemove.add(ws.current);
+        }
     }
 }

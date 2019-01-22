@@ -16,22 +16,25 @@ import com.symmetrylabs.slstudio.ApplicationState;
 /**
  * A window that shows a tree view of warps, effects and patterns.
  */
-public class WEPWindow implements Window {
+public class WEPWindow extends CloseableWindow {
     private final LX lx;
     private final WEPGrouping grouping;
     private String filterText = "";
 
     public WEPWindow(LX lx) {
+        super("Warps / effects / patterns");
         this.lx = lx;
         this.grouping = new WEPGrouping(lx, ApplicationState.get().showName());
     }
 
     @Override
-    public void draw() {
+    protected void windowSetup() {
         UI.setNextWindowDefaults(25, 25, UI.DEFAULT_WIDTH, 450);
-        UI.begin("Components");
-        filterText = UI.inputText("filter", filterText);
+    }
 
+    @Override
+    protected void drawContents() {
+        filterText = UI.inputText("filter", filterText);
         if (UI.treeNode("Patterns", UI.TREE_FLAG_DEFAULT_OPEN)) {
             for (String groupName : grouping.groupNames) {
                 String displayName = groupName == null ? "Uncategorized" : groupName;
@@ -80,8 +83,6 @@ public class WEPWindow implements Window {
             }
             UI.treePop();
         }
-
-        UI.end();
     }
 
     private boolean match(String label) {

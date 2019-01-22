@@ -15,7 +15,7 @@ public abstract class CloseableWindow implements Window {
         windowSetup();
         if (!UI.beginClosable(label)) {
             UI.end();
-            WindowManager.get().windowClosed(this);
+            WindowManager.closeWindow(this);
             return;
         }
         drawContents();

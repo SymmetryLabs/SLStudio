@@ -9,18 +9,21 @@ import heronarts.lx.warp.LXWarp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectWindow implements Window {
+public class ProjectWindow extends CloseableWindow {
     private final LX lx;
 
     public ProjectWindow(LX lx) {
+        super("Project");
         this.lx = lx;
     }
 
     @Override
-    public void draw() {
+    protected void windowSetup() {
         UI.setNextWindowDefaults(25, 500, UI.DEFAULT_WIDTH, 300);
-        UI.begin("Project");
+    }
 
+    @Override
+    protected void drawContents() {
         boolean add = UI.button("Add");
         if (add) {
             lx.engine.addTask(() -> {
@@ -39,8 +42,6 @@ public class ProjectWindow implements Window {
         }
         UI.columnsEnd();
         UI.endChild();
-
-        UI.end();
     }
 
     private void drawChannel(LXChannel chan, boolean isFocused) {
@@ -77,7 +78,7 @@ public class ProjectWindow implements Window {
                 if (UI.isItemClicked(0)) {
                     lx.engine.addTask(() -> warp.enabled.setValue(!warp.enabled.getValueb()));
                 } else if (UI.isItemClicked(1)) {
-                    WindowManager.get().add(new ComponentWindow(lx, id, warp));
+                    WindowManager.addTransient(new ComponentWindow(lx, id, warp));
                 }
             }
             UI.spacing();
@@ -96,7 +97,7 @@ public class ProjectWindow implements Window {
                 final int index = i;
                 lx.engine.addTask(() -> chan.goIndex(index));
             } else if (UI.isItemClicked(1)) {
-                WindowManager.get().add(new ComponentWindow(lx, id, pat));
+                WindowManager.addTransient(new ComponentWindow(lx, id, pat));
             }
         }
 
@@ -114,7 +115,7 @@ public class ProjectWindow implements Window {
                 if (UI.isItemClicked(0)) {
                     lx.engine.addTask(() -> eff.enabled.setValue(!eff.enabled.getValueb()));
                 } else if (UI.isItemClicked(1)) {
-                    WindowManager.get().add(new ComponentWindow(lx, id, eff));
+                    WindowManager.addTransient(new ComponentWindow(lx, id, eff));
                 }
             }
         }

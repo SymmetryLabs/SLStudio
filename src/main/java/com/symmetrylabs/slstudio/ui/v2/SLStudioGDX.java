@@ -26,8 +26,8 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
     private ModelRenderer renderer;
     private LX lx;
 
-    private int clearRGB;
-    private float clearR, clearG, clearB;
+    /* visible so that InternalsWindow can mutate it. */
+    int clearRGB;
 
     CameraInputController camController;
 
@@ -81,10 +81,14 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         loadLxComponents();
 
         WindowManager.reset();
-        WindowManager.get().add(new MainMenu(lx, this));
-        WindowManager.get().addSpec("Warps, effects, patterns", () -> new WEPWindow(lx), true);
-        WindowManager.get().addSpec("Project", () -> new ProjectWindow(lx), true);
-        WindowManager.get().addSpec("Slimgui demo", () -> new SlimguiDemoWindow(), false);
+        /* The main menu isn't really transient but we don't want it to appear in
+             the Window menu and it doesn't have a close button, so there's no risk of
+             it disappearing. */
+        WindowManager.addTransient(new MainMenu(lx, this));
+        WindowManager.addPersistent("Warps / effects / patterns", () -> new WEPWindow(lx), true);
+        WindowManager.addPersistent("Project", () -> new ProjectWindow(lx), true);
+        WindowManager.addPersistent("Widget demo", () -> new SlimguiDemoWindow(), false);
+        WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this), false);
 
         lx.engine.isMultithreaded.setValue(true);
         lx.engine.isChannelMultithreaded.setValue(true);
@@ -97,7 +101,12 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
     @Override
     public void render() {
         Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        float clearR = ((clearRGB >> 16) & 0xFF) / 255.f;
+        float clearG = ((clearRGB >>  8) & 0xFF) / 255.f;
+        float clearB = ((clearRGB      ) & 0xFF) / 255.f;
         Gdx.gl20.glClearColor(clearR, clearG, clearB, 1);
+
         Gdx.gl20.glClear(
             GL20.GL_COLOR_BUFFER_BIT
             | (Gdx.graphics.getBufferFormat().coverageSampling
@@ -109,27 +118,10 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         lx.engine.onDraw();
 
         camController.update();
-
         renderer.draw();
 
         UI.newFrame();
-
-        UI.begin("Internals");
-        UI.text("engine average: % 4.0fms, % 3.0ffps",
-                        1e-6f * lx.engine.timer.runAvgNanos,
-                        1e9f / lx.engine.timer.runAvgNanos);
-        UI.text("    worst-case: % 4.0fms, % 3.0ffps",
-                        1e-6f * lx.engine.timer.runWorstNanos,
-                        1e9f / lx.engine.timer.runWorstNanos);
-        UI.text("ui frame rate:  % 3.0ffps", UI.getFrameRate());
-        clearRGB = UI.colorPicker("background", clearRGB);
-        clearR = ((clearRGB >> 16) & 0xFF) / 255.f;
-        clearG = ((clearRGB >>  8) & 0xFF) / 255.f;
-        clearB = ((clearRGB      ) & 0xFF) / 255.f;
-        UI.end();
-
         WindowManager.get().draw();
-
         UI.render();
     }
 

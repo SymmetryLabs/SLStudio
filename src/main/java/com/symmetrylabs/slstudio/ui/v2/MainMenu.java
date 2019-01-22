@@ -76,11 +76,11 @@ public class MainMenu implements Window {
         if (UI.beginMenu("Window")) {
             WindowManager wm = WindowManager.get();
             /* Iterate over entries to preserve order */
-            for (WindowManager.WindowSpec ws : wm.getSpecs()) {
+            for (WindowManager.PersistentWindow ws : wm.getSpecs()) {
                 if (UI.checkbox(ws.name, ws.current != null)) {
-                    wm.show(ws);
+                    wm.showPersistent(ws);
                 } else {
-                    wm.hide(ws);
+                    wm.hidePersistent(ws);
                 }
             }
             UI.endMenu();

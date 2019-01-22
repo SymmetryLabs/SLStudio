@@ -7,7 +7,7 @@ public class SlimguiDemoWindow implements Window {
     @Override
     public final void draw() {
         if (!UI.showDemoWindow()) {
-            WindowManager.get().windowClosed(this);
+            WindowManager.get().closeWindow(this);
             return;
         }
     }
