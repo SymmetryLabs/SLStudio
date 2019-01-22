@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WindowManager {
-    private static final WindowManager INSTANCE = new WindowManager();
+    private static WindowManager INSTANCE = new WindowManager();
 
     public static WindowManager get() {
         return INSTANCE;
+    }
+
+    static void reset() {
+        INSTANCE = new WindowManager();
     }
 
     private final List<Window> windows;

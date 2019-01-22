@@ -31,6 +31,18 @@ public class LXPoint {
     static int counter = 0;
 
     /**
+     * Reset ID counter, to be called before a new LX instance is created.
+     *
+     * LXPoint maintains a static counter to assign IDs to new LXPoint objects. This counter needs
+     * to be reset before you create a new LXModel instance for a new instance of LX. It is a bad
+     * idea to reset this counter before creating a new model for an existing LX instance; if you
+     * reset this, any new models have to be for a new LX.
+     */
+    public static void resetIdCounter() {
+        counter = 0;
+    }
+
+    /**
      * x coordinate of this point
      */
     public float x;

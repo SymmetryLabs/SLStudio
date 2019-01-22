@@ -16,6 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import com.symmetrylabs.util.Utils;
 import com.symmetrylabs.slstudio.ApplicationState;
+import com.symmetrylabs.slstudio.network.NetworkMonitor;
+import heronarts.lx.model.LXPoint;
 
 public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.Provider {
     private static final String DEFAULT_SHOW = "demo";
@@ -31,15 +33,18 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
     @Override
     public void create() {
+        String sn;
         try {
-            showName = Files.readAllLines(Paths.get(SLStudio.SHOW_FILE_NAME)).get(0);
+            sn = Files.readAllLines(Paths.get(SLStudio.SHOW_FILE_NAME)).get(0);
         } catch (IOException e) {
             System.err.println(
                 "couldn't read " + SLStudio.SHOW_FILE_NAME + ": " + e.getMessage());
-            showName = DEFAULT_SHOW;
+            sn = DEFAULT_SHOW;
         }
-        ApplicationState.setProvider(this);
-        show = ShowRegistry.getShow(showName);
+        UI.init(((Lwjgl3Graphics) Gdx.graphics).getWindow().getWindowHandle());
+
+        /* clearR/clearG/clearB will be set on first frame */
+        clearRGB = 0x222222;
 
         /* TODO: we should remove any need to know what the "sketch path" is, because
              it means we can only run SLStudio from source, but for now we assume that
@@ -47,13 +52,24 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
              the sketch path to that. */
         Utils.setSketchPath(Paths.get(System.getProperty("user.dir")).toString());
 
+        ApplicationState.setProvider(this);
+
+        loadShow(showName);
+    }
+
+    void loadShow(String showName) {
+        if (lx != null) {
+            disposeLX();
+        }
+
+        this.showName = showName;
+        show = ShowRegistry.getShow(showName);
+
         LXModel model = show.buildModel();
         lx = new LX(model);
         show.setupLx(lx);
 
         renderer = new ModelRenderer(lx, model);
-
-        UI.init(((Lwjgl3Graphics) Gdx.graphics).getWindow().getWindowHandle());
 
         camController = new CameraInputController(renderer.cam);
         camController.target.set(model.cx, model.cy, model.cz);
@@ -64,8 +80,9 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
         loadLxComponents();
 
-        WindowManager.get().add(new MainMenu(lx));
-        WindowManager.get().add(new WEPWindow(lx, showName));
+        WindowManager.reset();
+        WindowManager.get().add(new MainMenu(lx, this));
+        WindowManager.get().add(new WEPWindow(lx));
         WindowManager.get().add(new ProjectWindow(lx));
 
         lx.engine.isMultithreaded.setValue(true);
@@ -74,9 +91,6 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         lx.engine.start();
 
         show.setupUi(lx);
-
-        /* clearR/clearG/clearB will be set on first frame */
-        clearRGB = 0x222222;
     }
 
     @Override
@@ -120,10 +134,9 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         UI.render();
     }
 
-    @Override
-    public void dispose() {
+    private void disposeLX() {
+        NetworkMonitor.shutdownInstance(lx);
         renderer.dispose();
-        UI.shutdown();
         lx.engine.stop();
         /* we have to call onDraw here because onDraw is the only thing that pokes the
              engine to actually kill the engine thread. This is a byproduct of P3LX calling
@@ -133,6 +146,12 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
              onDraw to get it to actually shut down the thread. */
         lx.engine.onDraw();
         lx.dispose();
+        LXPoint.resetIdCounter();
+    }
+
+    @Override
+    public void dispose() {
+        UI.shutdown();
     }
 
     private void loadLxComponents() {

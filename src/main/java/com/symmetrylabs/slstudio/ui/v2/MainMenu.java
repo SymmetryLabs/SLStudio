@@ -13,9 +13,11 @@ import java.nio.file.Paths;
 
 public class MainMenu implements Window {
     private final LX lx;
+    private final SLStudioGDX parent;
 
-    public MainMenu(LX lx) {
+    public MainMenu(LX lx, SLStudioGDX parent) {
         this.lx = lx;
+        this.parent = parent;
     }
 
     public void draw() {
@@ -61,11 +63,11 @@ public class MainMenu implements Window {
                 if (UI.menuItem(showName)) {
                     try {
                         Files.write(Paths.get(SLStudio.SHOW_FILE_NAME), showName.getBytes());
-                        Files.write(Paths.get(SLStudio.RESTART_FILE_NAME), "".getBytes());
+                        parent.loadShow(showName);
+                        break;
                     } catch (IOException e) {
                         System.err.println("couldn't write new show: " + e.getMessage());
                     }
-                    System.exit(0);
                 }
             }
             UI.endMenu();

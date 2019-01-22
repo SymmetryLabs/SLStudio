@@ -37,6 +37,17 @@ public class NetworkMonitor {
         return ref;
     }
 
+    public static synchronized void shutdownInstance(LX lx) {
+        WeakReference<NetworkMonitor> weakRef = instanceByLX.get(lx);
+        NetworkMonitor ref = weakRef == null ? null : weakRef.get();
+        if (ref != null) {
+            ref.shutdown();
+        }
+        if (weakRef != null) {
+            instanceByLX.remove(lx);
+        }
+    }
+
     private NetworkMonitor(LX lx) {
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
         opcNetworkScanner = new NetworkScanner(dispatcher);
@@ -85,12 +96,19 @@ public class NetworkMonitor {
         return this;
     }
 
+    public synchronized void shutdown() {
+        timer.cancel();
+        started = false;
+    }
+
     private void scheduleTask(long delay) {
         timer.schedule(new TimerTask() {
             public void run() {
                 opcNetworkScanner.scan();
                 artNetNetworkScanner.scan();
-                scheduleTask(SCAN_PERIOD_MS);
+                if (started) {
+                    scheduleTask(SCAN_PERIOD_MS);
+                }
             }
         }, delay);
     }

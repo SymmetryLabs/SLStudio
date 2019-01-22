@@ -11,15 +11,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import com.symmetrylabs.slstudio.ApplicationState;
 
+/**
+ * A window that shows a tree view of warps, effects and patterns.
+ */
 public class WEPWindow implements Window {
     private final LX lx;
     private final WEPGrouping grouping;
     private String filterText = "";
 
-    public WEPWindow(LX lx, String activeGroup) {
+    public WEPWindow(LX lx) {
         this.lx = lx;
-        this.grouping = new WEPGrouping(lx, activeGroup);
+        this.grouping = new WEPGrouping(lx, ApplicationState.get().showName());
     }
 
     @Override
