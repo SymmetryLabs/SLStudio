@@ -92,7 +92,7 @@ public class UI {
     static native void scrolled(float amount);
 
     /* Testing */
-    static native void showDemoWindow();
+    static native boolean showDemoWindow();
 
     static {
         System.loadLibrary("slimgui");

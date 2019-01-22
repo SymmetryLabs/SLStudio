@@ -499,7 +499,9 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_scrolled(JNIEnv *, jclass, jfloat amount
 	ImGui::GetIO().MouseWheel -= amount;
 }
 
-JNIEXPORT void JNICALL
+JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_showDemoWindow(JNIEnv *, jclass) {
-	ImGui::ShowDemoWindow();
+	bool open = true;
+	ImGui::ShowDemoWindow(&open);
+	return open ? 1 : 0;
 }

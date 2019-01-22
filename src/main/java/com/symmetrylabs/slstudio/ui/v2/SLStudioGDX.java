@@ -82,8 +82,9 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
         WindowManager.reset();
         WindowManager.get().add(new MainMenu(lx, this));
-        WindowManager.get().add(new WEPWindow(lx));
-        WindowManager.get().add(new ProjectWindow(lx));
+        WindowManager.get().addSpec("Warps, effects, patterns", () -> new WEPWindow(lx), true);
+        WindowManager.get().addSpec("Project", () -> new ProjectWindow(lx), true);
+        WindowManager.get().addSpec("Slimgui demo", () -> new SlimguiDemoWindow(), false);
 
         lx.engine.isMultithreaded.setValue(true);
         lx.engine.isChannelMultithreaded.setValue(true);
@@ -128,8 +129,6 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         UI.end();
 
         WindowManager.get().draw();
-
-        UI.showDemoWindow();
 
         UI.render();
     }

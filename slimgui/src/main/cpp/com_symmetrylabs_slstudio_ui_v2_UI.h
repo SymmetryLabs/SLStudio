@@ -386,9 +386,9 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_scrolled
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    showDemoWindow
- * Signature: ()V
+ * Signature: ()Z
  */
-JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_showDemoWindow
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_showDemoWindow
   (JNIEnv *, jclass);
 
 #ifdef __cplusplus

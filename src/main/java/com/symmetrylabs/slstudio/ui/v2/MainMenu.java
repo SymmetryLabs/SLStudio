@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Map;
 
 public class MainMenu implements Window {
     private final LX lx;
@@ -68,6 +69,18 @@ public class MainMenu implements Window {
                     } catch (IOException e) {
                         System.err.println("couldn't write new show: " + e.getMessage());
                     }
+                }
+            }
+            UI.endMenu();
+        }
+        if (UI.beginMenu("Window")) {
+            WindowManager wm = WindowManager.get();
+            /* Iterate over entries to preserve order */
+            for (WindowManager.WindowSpec ws : wm.getSpecs()) {
+                if (UI.checkbox(ws.name, ws.current != null)) {
+                    wm.show(ws);
+                } else {
+                    wm.hide(ws);
                 }
             }
             UI.endMenu();
