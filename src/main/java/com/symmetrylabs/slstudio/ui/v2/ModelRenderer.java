@@ -20,7 +20,7 @@ public class ModelRenderer {
 
     public final Camera cam;
     protected final LXModel model;
-    protected final ShaderProgramThatLetsMeGetTheDataIWant pointShader;
+    protected final ShaderProgramWithProgramHandle pointShader;
     protected final float[] glColorBuffer;
     protected final PolyBuffer lxColorBuffer;
     protected final int vao;
@@ -30,11 +30,21 @@ public class ModelRenderer {
     protected final int mvpUniform;
     protected final int colorAttr;
     protected final int positionAttr;
+    protected final int pointSizeUniform;
+    protected float basePointSize;
 
-    private static class ShaderProgramThatLetsMeGetTheDataIWant extends ShaderProgram {
+    /**
+     * An extension of ShaderProgram that allows us to access the OpenGL handle of the compiled shader.
+     *
+     * libgdx has a really nice shader compilation utility that we'd like to use, but we eventually want
+     * to make the raw GL calls ourself (so that we can use GL4 instead of GL2, which is all libgdx exposes).
+     * Here, we intercept calls to the protected method createProgram, which lets us store the OpenGL
+     * program handle for the shader program so that we can call glUseProgram ourself.
+     */
+    private static class ShaderProgramWithProgramHandle extends ShaderProgram {
         int handle;
 
-        public ShaderProgramThatLetsMeGetTheDataIWant(String vert, String frag) {
+        public ShaderProgramWithProgramHandle(String vert, String frag) {
             super(vert, frag);
         }
 
@@ -53,9 +63,13 @@ public class ModelRenderer {
 
         String vert = Gdx.files.internal("vertex-330.glsl").readString();
         String frag = Gdx.files.internal("fragment-330.glsl").readString();
-        pointShader = new ShaderProgramThatLetsMeGetTheDataIWant(vert, frag);
+        pointShader = new ShaderProgramWithProgramHandle(vert, frag);
         if (!pointShader.isCompiled()) {
             throw new RuntimeException("shader compilation failed: " + pointShader.getLog());
+        }
+        pointSizeUniform = GL41.glGetUniformLocation(pointShader.handle, "u_pointSize");
+        if (pointSizeUniform < 0) {
+            throw new RuntimeException("shader program does not have uniform u_pointSize");
         }
         mvpUniform = GL41.glGetUniformLocation(pointShader.handle, "u_mvp");
         if (mvpUniform < 0) {
@@ -106,11 +120,15 @@ public class ModelRenderer {
         GL41.glBufferData(GL41.GL_ARRAY_BUFFER, vertdata, GL41.GL_DYNAMIC_DRAW);
     }
 
+    public void setDisplayDensity(float density) {
+        basePointSize = 2.2f / density;
+    }
+
     public void draw() {
         lx.engine.copyUIBuffer(lxColorBuffer, UI_COLOR_SPACE);
         int[] colors = (int[]) lxColorBuffer.getArray(UI_COLOR_SPACE);
 
-        GL41.glPointSize(2);
+        GL41.glEnable(GL41.GL_PROGRAM_POINT_SIZE);
 
         for (int i = 0; i < colors.length; i++) {
             int c = colors[i];
@@ -129,6 +147,7 @@ public class ModelRenderer {
         GL41.glVertexAttribPointer(colorAttr, 4, GL41.GL_FLOAT, false, 0, 0);
 
         GL41.glUniformMatrix4fv(mvpUniform, false, cam.combined.val);
+        GL41.glUniform1f(pointSizeUniform, basePointSize);
 
         GL41.glBindBuffer(GL41.GL_ARRAY_BUFFER, positionVbo);
         GL41.glEnableVertexAttribArray(positionAttr);
@@ -139,6 +158,8 @@ public class ModelRenderer {
         GL41.glDisableVertexAttribArray(positionAttr);
         GL41.glDisableVertexAttribArray(colorAttr);
         GL41.glBindVertexArray(0);
+
+        GL41.glDisable(GL41.GL_PROGRAM_POINT_SIZE);
     }
 
     public void dispose() {

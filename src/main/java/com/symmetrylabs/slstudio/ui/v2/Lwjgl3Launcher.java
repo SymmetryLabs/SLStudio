@@ -31,7 +31,7 @@ public class Lwjgl3Launcher {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
         configuration.useOpenGL3(true, 4, 1);
         configuration.setTitle("SLStudio");
-        configuration.setWindowedMode(640, 480);
+        configuration.setWindowedMode(1280, 1048);
         configuration.setWindowIcon("application.png");
         /* 8 bits per color, 0 bits for depth/stencil, 3 samples per pixel */
         configuration.setBackBufferConfig(8, 8, 8, 8, 0, 0, 3);

@@ -81,6 +81,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         show.setupLx(lx);
 
         renderer = new ModelRenderer(lx, model);
+        renderer.setDisplayDensity(Gdx.graphics.getDensity());
 
         camController = new CameraInputController(renderer.cam);
         camController.target.set(model.cx, model.cy, model.cz);
