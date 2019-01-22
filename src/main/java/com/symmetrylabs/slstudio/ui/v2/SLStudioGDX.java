@@ -96,6 +96,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         WindowManager.addPersistent("Project", () -> new ProjectWindow(lx), true);
         WindowManager.addPersistent("Widget demo", () -> new SlimguiDemoWindow(), false);
         WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this), false);
+        WindowManager.addPersistent("Console", () -> new ConsoleWindow(), false);
 
         lx.engine.isMultithreaded.setValue(true);
         lx.engine.isChannelMultithreaded.setValue(true);
@@ -169,4 +170,10 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
     public OutputControl outputControl() {
         return outputControl;
     }
+
+    @Override
+    public void setWarning(String key, String message) {
+        ConsoleWindow.setWarning(key, message);
+    }
+
 }

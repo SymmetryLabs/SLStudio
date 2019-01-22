@@ -235,15 +235,15 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
         dispatcher.draw();
     }
 
-    public static void setWarning(String key, String message) {
+    @Override
+    public void setWarning(String key, String message) {
         if (message != null && !message.isEmpty()) {
-            System.err.println("WARNING: " + key + ": " + message);
             warnings.put(key, message);
         } else {
             warnings.remove(key);
         }
-        if (applet != null && applet.lx != null && applet.lx.ui != null) {
-            applet.lx.ui.updateWarningText(warnings);
+        if (lx != null && lx.ui != null) {
+            lx.ui.updateWarningText(warnings);
         }
     }
 
