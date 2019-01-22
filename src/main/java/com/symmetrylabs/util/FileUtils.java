@@ -25,7 +25,7 @@ public class FileUtils {
     /** Gets the path to a file in the show directory for the current show. */
     public static String getShowPath(String filename) {
         return Utils.sketchPath(
-            "shows/" + ApplicationState.get().showName() + "/" + filename
+            "shows/" + ApplicationState.showName() + "/" + filename
         );
     }
 
@@ -72,12 +72,12 @@ public class FileUtils {
             return result;
         } catch (IOException e) {
             e.printStackTrace();
-            SLStudio.setWarning(getRelativePath(file), "Could not read JSON file: " + e.getMessage());
+            ApplicationState.setWarning(getRelativePath(file), "Could not read JSON file: " + e.getMessage());
             return null;
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
             String message = (e.getCause() != null ? e.getCause() : e).getMessage();
-            SLStudio.setWarning(getRelativePath(file), "JSON syntax error: " + message);
+            ApplicationState.setWarning(getRelativePath(file), "JSON syntax error: " + message);
             return null;
         } finally {
             if (reader != null) {
@@ -93,7 +93,7 @@ public class FileUtils {
         // createInput() will search a few places, catch exceptions, and print their stack traces.
         InputStream stream = Utils.createInput(filename);
         if (stream == null) {
-            SLStudio.setWarning(filename, "Resource file not found");
+            ApplicationState.setWarning(filename, "Resource file not found");
             return null;
         }
         try {
@@ -103,7 +103,7 @@ public class FileUtils {
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
             String message = (e.getCause() != null ? e.getCause() : e).getMessage();
-            SLStudio.setWarning(filename, "JSON syntax error in resource: " + message);
+            ApplicationState.setWarning(filename, "JSON syntax error in resource: " + message);
             return null;
         } finally {
             try {
@@ -126,7 +126,7 @@ public class FileUtils {
             System.out.println("Wrote JSON: " + getRelativePath(file));
         } catch (IOException e) {
             e.printStackTrace();
-            SLStudio.setWarning(getRelativePath(file), "Could not read JSON file: " + e.getMessage());
+            ApplicationState.setWarning(getRelativePath(file), "Could not read JSON file: " + e.getMessage());
         } finally {
             if (writer != null) {
                 try {
@@ -151,7 +151,7 @@ public class FileUtils {
             return result;
         } catch (IOException e) {
             e.printStackTrace();
-            SLStudio.setWarning(getRelativePath(file), "Could not read OBJ file: " + e.getMessage());
+            ApplicationState.setWarning(getRelativePath(file), "Could not read OBJ file: " + e.getMessage());
             return null;
         } finally {
             if (stream != null) {
@@ -175,7 +175,7 @@ public class FileUtils {
             return result;
         } catch (IOException e) {
             e.printStackTrace();
-            SLStudio.setWarning(getRelativePath(file), "Could not read text file: " + e.getMessage());
+            ApplicationState.setWarning(getRelativePath(file), "Could not read text file: " + e.getMessage());
             return null;
         }
     }

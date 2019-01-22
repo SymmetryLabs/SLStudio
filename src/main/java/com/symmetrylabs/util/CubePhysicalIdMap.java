@@ -1,6 +1,6 @@
 package com.symmetrylabs.util;
 
-import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.ApplicationState;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,13 +33,13 @@ public class CubePhysicalIdMap {
         String warning = "";
         if (duplicatedMac != null) warning += "Duplicated MAC: " + duplicatedMac + ".  ";
         if (invalidMac != null) warning += "Invalid MAC: " + invalidMac + " (cube " + invalidMacId + ").  ";
-        SLStudio.setWarning(FILENAME, warning.trim());
+        ApplicationState.setWarning(FILENAME, warning.trim());
     }
 
     public String getPhysicalId(String deviceId) {
         if (!physicalIds.containsKey(deviceId) && !physicalIdsNotFound.contains(deviceId)) {
             physicalIdsNotFound.add(deviceId);
-            SLStudio.setWarning("CubePhysicalIdMap", "No physical ID registered for MAC: " + String.join(", ", physicalIdsNotFound));
+            ApplicationState.setWarning("CubePhysicalIdMap", "No physical ID registered for MAC: " + String.join(", ", physicalIdsNotFound));
         }
         return physicalIds.getOrDefault(deviceId, deviceId);
     }

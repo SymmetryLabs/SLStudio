@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology;
@@ -46,7 +46,7 @@ public class TopoTestPattern<T extends Strip> extends SLPattern<StripsModel<T>> 
             addParameter(bundleParam);
         } else {
             components = new ArrayList<>();
-            SLStudio.setWarning("TopoTestPattern", "no topology on model");
+            ApplicationState.setWarning("TopoTestPattern", "no topology on model");
         }
     }
 

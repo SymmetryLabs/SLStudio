@@ -3,7 +3,7 @@ package com.symmetrylabs.slstudio.pattern;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sun.jna.Memory;
-import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
@@ -100,7 +100,7 @@ public class VideoPlayer extends SLPattern<SLModel> {
         mediaUrl = null;
 
         if (!new NativeDiscovery().discover()) {
-            SLStudio.setWarning("VideoPlayer", "VLC not installed or not found");
+            ApplicationState.setWarning("VideoPlayer", "VLC not installed or not found");
             return;
         }
 

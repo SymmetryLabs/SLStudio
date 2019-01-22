@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.model;
 
-import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.ApplicationState;
 
 import java.util.Collections;
 import java.util.List;
@@ -94,7 +94,7 @@ public class StripsModel<T extends Strip> extends SLModel {
             this.bucketTolerance = bucketTolerance;
             this.endpointTolerance = endpointTolerance;
         } else {
-            SLStudio.setWarning("StripsModel", "Cannot change topology tolerances after topology is built");
+            ApplicationState.setWarning("StripsModel", "Cannot change topology tolerances after topology is built");
         }
     }
 

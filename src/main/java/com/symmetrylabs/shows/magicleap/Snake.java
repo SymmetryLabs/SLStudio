@@ -1,6 +1,6 @@
 package com.symmetrylabs.shows.magicleap;
 
-import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology.Bundle;
@@ -111,7 +111,7 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
 
         topo = model.getTopology();
         if (topo == null) {
-            SLStudio.setWarning("Snake", "no topology on model");
+            ApplicationState.setWarning("Snake", "no topology on model");
             state = GameState.NO_TOPOLOGY;
             validJunctions = null;
             return;
@@ -202,7 +202,7 @@ public class Snake<T extends Strip> extends SLPattern<StripsModel<T>> {
     @Override
     public void onInactive() {
         super.onInactive();
-        SLStudio.setWarning("Snake", null);
+        ApplicationState.setWarning("Snake", null);
     }
 
     private TailBit paintJunction(Junction j, int[] colors) {

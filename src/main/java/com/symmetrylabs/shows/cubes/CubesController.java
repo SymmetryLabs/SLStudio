@@ -126,7 +126,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 
     @Override
     protected void onSend(PolyBuffer src) {
-        if (isBroadcast != ApplicationState.get().outputControl().broadcastPacket.isOn())
+        if (isBroadcast != ApplicationState.outputControl().broadcastPacket.isOn())
             return;
 
         // Create data socket connection if needed
@@ -138,7 +138,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             catch (IOException e) {}
             finally {
                 if (dsocket == null) {
-                    SLStudio.setWarning("CubesController", "could not create datagram socket");
+                    ApplicationState.setWarning("CubesController", "could not create datagram socket");
                     return;
                 }
             }
@@ -150,14 +150,14 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         // Use the mac address to find the cube if we have it
         // Otherwise use the cube id
         if (!(lx.model instanceof CubesModel)) {
-            SLStudio.setWarning("CubesController", "model is not a cube model");
+            ApplicationState.setWarning("CubesController", "model is not a cube model");
             return;
         }
 
         PointsGrouping points = null;
         CubesModel cubesModel = (CubesModel)lx.model;
 
-        if ((ApplicationState.get().outputControl().testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
+        if ((ApplicationState.outputControl().testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
             CubesModel.Cube cube = cubesModel.getCubes().get(0);
             if (cube instanceof CubesModel.DoubleControllerCube) {
                 points = ((CubesModel.DoubleControllerCube)cube).getPointsA();
@@ -242,7 +242,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             dsocket.send(packet);
         }
         catch (Exception e) {
-            SLStudio.setWarning("CubesController", "failed to send packet: " + e.getMessage());
+            ApplicationState.setWarning("CubesController", "failed to send packet: " + e.getMessage());
         }
     }
 

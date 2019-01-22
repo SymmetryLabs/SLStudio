@@ -7,7 +7,7 @@ import java.util.WeakHashMap;
 import java.lang.ref.WeakReference;
 import java.net.InetAddress;
 
-import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.util.listenable.SetListener;
 import heronarts.lx.LX;
 
@@ -85,7 +85,7 @@ public class NetworkMonitor {
     }
 
     private void warnOldVersion() {
-        SLStudio.setWarning("NetworkMonitor", "One or more cubes have outdated firmware!");
+        ApplicationState.setWarning("NetworkMonitor", "One or more cubes have outdated firmware!");
     }
 
     public synchronized NetworkMonitor start() {

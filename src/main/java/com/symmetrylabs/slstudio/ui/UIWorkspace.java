@@ -14,7 +14,7 @@ import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
 import heronarts.p3lx.ui.component.UIItemList;
 
-import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
 import com.symmetrylabs.slstudio.workspaces.WorkspaceProject;
 import java.util.Timer;
@@ -65,10 +65,10 @@ public class UIWorkspace extends UICollapsibleSection {
                 autoSwitchEnabled.setValue(false);
                 long ms = parseSwitchPeriod(autoSwitchPeriodParam.getString());
                 if (ms > 0) {
-                    SLStudio.setWarning("WorkspaceTimer", null);
+                    ApplicationState.setWarning("WorkspaceTimer", null);
                     switchPeriodMs = ms;
                 } else {
-                    SLStudio.setWarning("WorkspaceTimer", "bad period format: should be XmYs");
+                    ApplicationState.setWarning("WorkspaceTimer", "bad period format: should be XmYs");
                 }
             });
 

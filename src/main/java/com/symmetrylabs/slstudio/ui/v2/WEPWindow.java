@@ -24,7 +24,7 @@ public class WEPWindow extends CloseableWindow {
     public WEPWindow(LX lx) {
         super("Warps / effects / patterns");
         this.lx = lx;
-        this.grouping = new WEPGrouping(lx, ApplicationState.get().showName());
+        this.grouping = new WEPGrouping(lx, ApplicationState.showName());
     }
 
     @Override

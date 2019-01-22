@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
@@ -82,7 +82,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                     img = ImageIO.read(path);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    SLStudio.setWarning(TAG, String.format("failed to load %s", path.toString()));
+                    ApplicationState.setWarning(TAG, String.format("failed to load %s", path.toString()));
                 }
             }
         }
@@ -178,7 +178,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     @Override
     public void onInactive() {
         super.onInactive();
-        SLStudio.setWarning(TAG, null);
+        ApplicationState.setWarning(TAG, null);
         stopping = true;
         if (loaderThread != null) {
             loaderThread.interrupt();
@@ -249,7 +249,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     }
 
     private void loadDirectory() {
-        SLStudio.setWarning(TAG, null);
+        ApplicationState.setWarning(TAG, null);
         String path = directory.getString();
         if (path == null) {
             return;
@@ -262,7 +262,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                 bakedImage = ImageIO.read(dir);
                 nFrames = bakedImage.getHeight();
             } catch (IOException e) {
-                SLStudio.setWarning(TAG, "couldn't load baked slideshow");
+                ApplicationState.setWarning(TAG, "couldn't load baked slideshow");
                 System.out.println("could not load baked slideshow:");
                 e.printStackTrace();
                 bakedImage = null;
@@ -271,12 +271,12 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         }
 
         if (!dir.isDirectory()) {
-            SLStudio.setWarning(TAG, "slideshow directory does not exist");
+            ApplicationState.setWarning(TAG, "slideshow directory does not exist");
             return;
         }
         File[] files = dir.listFiles(fn -> fn.getName().endsWith(".bmp"));
         if (files == null) {
-            SLStudio.setWarning(TAG, "no files in directory");
+            ApplicationState.setWarning(TAG, "no files in directory");
             return;
         }
 

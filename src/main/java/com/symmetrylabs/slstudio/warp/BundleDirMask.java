@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.warp;
 
-import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.StripsTopology;
@@ -33,10 +33,10 @@ public class BundleDirMask<T extends Strip> extends SLWarp<StripsModel<T>> {
     protected boolean run(double deltaMs, boolean inputVectorsChanged) {
         if (inputVectorsChanged || getAndClearParameterChangeDetectedFlag()) {
             if (stripModel.getTopology() == null) {
-                SLStudio.setWarning("BundleDirMask", "topology isn't present");
+                ApplicationState.setWarning("BundleDirMask", "topology isn't present");
                 return false;
             } else {
-                SLStudio.setWarning("BundleDirMask", null);
+                ApplicationState.setWarning("BundleDirMask", null);
             }
             boolean mx = maskX.getValueb();
             boolean my = maskY.getValueb();

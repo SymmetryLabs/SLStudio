@@ -15,7 +15,7 @@ public class ConsoleWindow extends CloseableWindow {
 
     @Override
     protected void windowSetup() {
-        UI.setNextWindowDefaults(25, 500, UI.DEFAULT_WIDTH, 300);
+        UI.setNextWindowDefaults(25, 500, 500, 300);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class ConsoleWindow extends CloseableWindow {
         }
     }
 
-    public void setWarning(String key, String message) {
+    public static void setWarning(String key, String message) {
         synchronized (ConsoleWindow.class) {
             if (message != null && !message.isEmpty()) {
                 warnings.put(key, message);
