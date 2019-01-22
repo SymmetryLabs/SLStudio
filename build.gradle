@@ -188,6 +188,7 @@ macAppBundle {
 }
 
 task genPrebuiltSlimgui(type: Copy) {
+	description "builds and copies slimgui library into the libs prebuilt library folder"
 	dependsOn ":slimgui:assembleRelease"
 	from("slimgui/build/lib/main/release") {
 		include "*.dylib"
