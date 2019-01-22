@@ -27,24 +27,16 @@ tasks.withType(CppCompile) {
 	compilerArgs.add "-DIMGUI_IMPL_OPENGL_LOADER_GL3W"
 	compilerArgs.add "-DGLFW_INCLUDE_NONE"
 	compilerArgs.add "-g"
-	compilerArgs.add "--verbose"
 	systemIncludes.from (javaHome + "/include")
 	/* Only the relevant platform-specific includes are present on any
 	   given machine (e.g. /include/darwin doesn't exist in linux installs)
-	   and adding nonexistent include directories doesn't hurt anything.
-	   This is simpler than trying to do OS detection to figure out if
-	   we should add the directory. */
+	   and adding nonexistent include directories doesn't hurt anything. */
 	systemIncludes.from (javaHome + "/include/linux")
 	systemIncludes.from (javaHome + "/include/darwin")
 }
 
 tasks.withType(LinkSharedLibrary) {
 	linkerArgs.add "-g"
-	/* do NOT link against GLFW; LWJGL bundles its own GLFW that it
-	 loads into the JVM process, so we just tell the linker to
-	 ignore unresolved symbols and hope for the best. If we link
-	 in our own we get bad behavior on MacOS, since we end up with
-	 two copies of GLFW linked in and that's undefined behavior */
 	if (MAC) {
 		linkerArgs.add "-framework"
 		linkerArgs.add "OpenGL"
