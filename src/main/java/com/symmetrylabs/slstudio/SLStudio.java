@@ -40,7 +40,7 @@ import processing.opengl.PJOGL;
 
 import static com.symmetrylabs.util.DistanceConstants.FEET;
 
-public class SLStudio extends PApplet {
+public class SLStudio extends PApplet implements ApplicationState.Provider {
     public static SLStudio applet;
     public static final Font MONO_FONT = new Font("Inconsolata-Bold-14.vlw", 14, 17);
     public static final String SHOW_FILE_NAME = ".show";
@@ -108,10 +108,16 @@ public class SLStudio extends PApplet {
     }
 
     @Override
+    public String showName() {
+        return showName;
+    }
+
+    @Override
     public void setup() {
         long setupStart = System.nanoTime();
         applet = this;
 
+        ApplicationState.setProvider(this);
         Utils.setSketchPath(sketchPath());
 
         showName = getSelectedShowName();

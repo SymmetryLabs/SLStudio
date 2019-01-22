@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.ui.gdx.NotImplementedInV2Exception;
+import com.symmetrylabs.slstudio.ApplicationState;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,8 +24,8 @@ import processing.core.PImage;
 public class FileUtils {
     /** Gets the path to a file in the show directory for the current show. */
     public static String getShowPath(String filename) {
-        return SLStudio.applet.sketchPath(
-            "shows/" + SLStudio.applet.showName + "/" + filename
+        return Utils.sketchPath(
+            "shows/" + ApplicationState.get().showName() + "/" + filename
         );
     }
 
@@ -34,7 +36,7 @@ public class FileUtils {
 
     /** Gets the path to a file, relative to the sketch's root directory. */
     public static String getRelativePath(File file) {
-        String sketchPath = SLStudio.applet.sketchPath();
+        String sketchPath = Utils.sketchPath();
         String path = file.getAbsolutePath();
         if (path.substring(0, sketchPath.length()).equals(sketchPath)) {
             path = path.substring(sketchPath.length());
@@ -89,7 +91,7 @@ public class FileUtils {
     /** Reads a JSON file in the resources directory, with error handling and reporting. */
     public static <T> T readResourceJson(String filename, Class<T> type) {
         // createInput() will search a few places, catch exceptions, and print their stack traces.
-        InputStream stream = SLStudio.applet.createInput(filename);
+        InputStream stream = Utils.createInput(filename);
         if (stream == null) {
             SLStudio.setWarning(filename, "Resource file not found");
             return null;
@@ -180,6 +182,9 @@ public class FileUtils {
 
     /** Loads an image from the show directory for the current show. */
     public static PImage loadShowImage(String filename) {
+        if (SLStudio.applet == null) {
+            throw new NotImplementedInV2Exception("loadShowImage can only be called in the Processing UI");
+        }
         return SLStudio.applet.loadImage(getShowPath(filename));
     }
 }

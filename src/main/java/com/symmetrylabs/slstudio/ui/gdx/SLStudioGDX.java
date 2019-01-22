@@ -14,8 +14,10 @@ import heronarts.lx.model.LXModel;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import com.symmetrylabs.util.Utils;
+import com.symmetrylabs.slstudio.ApplicationState;
 
-public class SLStudioGDX extends ApplicationAdapter {
+public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.Provider {
     private static final String DEFAULT_SHOW = "demo";
     private String showName;
     private Show show;
@@ -36,7 +38,14 @@ public class SLStudioGDX extends ApplicationAdapter {
                 "couldn't read " + SLStudio.SHOW_FILE_NAME + ": " + e.getMessage());
             showName = DEFAULT_SHOW;
         }
+        ApplicationState.setProvider(this);
         show = ShowRegistry.getShow(showName);
+
+        /* TODO: we should remove any need to know what the "sketch path" is, because
+             it means we can only run SLStudio from source, but for now we assume that
+             the process is started from the root of the SLStudio repository and set
+             the sketch path to that. */
+        Utils.setSketchPath(Paths.get(System.getProperty("user.dir")).toString());
 
         LXModel model = show.buildModel();
         lx = new LX(model);
@@ -132,5 +141,10 @@ public class SLStudioGDX extends ApplicationAdapter {
         LXClassLoader.findPatterns().stream().forEach(lx::registerPattern);
 
         lx.registerPattern(heronarts.p3lx.pattern.SolidColorPattern.class);
+    }
+
+    @Override // ApplicationState.Provider
+    public String showName() {
+        return showName;
     }
 }
