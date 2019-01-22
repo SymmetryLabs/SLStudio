@@ -18,6 +18,7 @@ import com.symmetrylabs.util.Utils;
 import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import heronarts.lx.model.LXPoint;
+import com.symmetrylabs.slstudio.output.OutputControl;
 
 public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.Provider {
     private static final String DEFAULT_SHOW = "demo";
@@ -25,6 +26,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
     private Show show;
     private ModelRenderer renderer;
     private LX lx;
+    private OutputControl outputControl;
 
     /* visible so that InternalsWindow can mutate it. */
     int clearRGB;
@@ -54,10 +56,11 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
         ApplicationState.setProvider(this);
 
-        loadShow(showName);
+        loadShow(sn);
     }
 
     void loadShow(String showName) {
+        System.out.println("opening show " + showName);
         if (lx != null) {
             disposeLX();
         }
@@ -67,6 +70,10 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
         LXModel model = show.buildModel();
         lx = new LX(model);
+
+        outputControl = new OutputControl(lx);
+
+        // make sure that ApplicationState is fully filled out before setupLx is called
         show.setupLx(lx);
 
         renderer = new ModelRenderer(lx, model);
@@ -156,5 +163,10 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
     @Override // ApplicationState.Provider
     public String showName() {
         return showName;
+    }
+
+    @Override // ApplicationState.Provider
+    public OutputControl outputControl() {
+        return outputControl;
     }
 }

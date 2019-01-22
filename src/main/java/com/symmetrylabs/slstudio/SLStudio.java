@@ -113,6 +113,11 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
     }
 
     @Override
+    public OutputControl outputControl() {
+        return outputControl;
+    }
+
+    @Override
     public void setup() {
         long setupStart = System.nanoTime();
         applet = this;

@@ -14,6 +14,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.output.OPCConstants;
 import org.jetbrains.annotations.NotNull;
+import com.symmetrylabs.slstudio.ApplicationState;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -125,7 +126,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 
     @Override
     protected void onSend(PolyBuffer src) {
-        if (isBroadcast != SLStudio.applet.outputControl.broadcastPacket.isOn())
+        if (isBroadcast != ApplicationState.get().outputControl().broadcastPacket.isOn())
             return;
 
         // Create data socket connection if needed
@@ -156,7 +157,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         PointsGrouping points = null;
         CubesModel cubesModel = (CubesModel)lx.model;
 
-        if ((SLStudio.applet.outputControl.testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
+        if ((ApplicationState.get().outputControl().testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
             CubesModel.Cube cube = cubesModel.getCubes().get(0);
             if (cube instanceof CubesModel.DoubleControllerCube) {
                 points = ((CubesModel.DoubleControllerCube)cube).getPointsA();

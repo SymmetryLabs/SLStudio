@@ -1,8 +1,11 @@
 package com.symmetrylabs.slstudio;
 
+import com.symmetrylabs.slstudio.output.OutputControl;
+
 public class ApplicationState {
     public interface Provider {
         String showName();
+        OutputControl outputControl();
     }
 
     private static Provider provider = null;
