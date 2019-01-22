@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.ui.gdx;
+package com.symmetrylabs.slstudio.ui.v2;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;

@@ -8,7 +8,7 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
-import com.symmetrylabs.slstudio.ui.gdx.WindowManager;
+import com.symmetrylabs.slstudio.ui.v2.WindowManager;
 import com.symmetrylabs.util.CubePhysicalIdMap;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.ListenableSet;

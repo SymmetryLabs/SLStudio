@@ -1,7 +1,7 @@
 package com.symmetrylabs.shows.cubes;
 
-import com.symmetrylabs.slstudio.ui.gdx.CloseableWindow;
-import com.symmetrylabs.slstudio.ui.gdx.UI;
+import com.symmetrylabs.slstudio.ui.v2.CloseableWindow;
+import com.symmetrylabs.slstudio.ui.v2.UI;
 import static com.symmetrylabs.shows.cubes.CubesModel.Cube;
 import heronarts.lx.transform.LXTransform;
 

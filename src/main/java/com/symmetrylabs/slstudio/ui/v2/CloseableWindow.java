@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.ui.gdx;
+package com.symmetrylabs.slstudio.ui.v2;
 
 public abstract class CloseableWindow implements Window {
     protected final String label;

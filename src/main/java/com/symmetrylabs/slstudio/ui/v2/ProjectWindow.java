@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.ui.gdx;
+package com.symmetrylabs.slstudio.ui.v2;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXBus;

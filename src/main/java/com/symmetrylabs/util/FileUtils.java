@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.ui.gdx.NotImplementedInV2Exception;
+import com.symmetrylabs.slstudio.ui.v2.NotImplementedInV2Exception;
 import com.symmetrylabs.slstudio.ApplicationState;
 
 import java.io.File;

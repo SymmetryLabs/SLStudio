@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.ui.gdx;
+package com.symmetrylabs.slstudio.ui.v2;
 
 import com.symmetrylabs.shows.ShowRegistry;
 import com.symmetrylabs.slstudio.SLStudio;

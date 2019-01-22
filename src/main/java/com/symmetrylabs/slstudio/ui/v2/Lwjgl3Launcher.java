@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.ui.gdx;
+package com.symmetrylabs.slstudio.ui.v2;
 
 import java.nio.file.Paths;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;

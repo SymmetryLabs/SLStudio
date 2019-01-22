@@ -52,11 +52,13 @@ task runUIv2(type: JavaExec) {
 		jvmArgs '-XstartOnFirstThread'
 	}
 
-	dependsOn ":slimgui:assembleRelease"
+	dependsOn ":genPrebuiltSlimgui"
 	systemProperty 'org.lwjgl.util.Debug', true
 	systemProperty 'java.library.path', 'libs'
 
-	main = 'com.symmetrylabs.slstudio.ui.gdx.Lwjgl3Launcher'
+	main = 'com.symmetrylabs.slstudio.ui.v2.Lwjgl3Launcher'
+	/* copy our classpath from the normal run task, which has its classpath filled in
+	   by the java application plugin. */
 	classpath = run.classpath
 }
 
@@ -160,9 +162,8 @@ dependencies {
 
 	testCompile 'junit:junit:4.12'
 
-	// gdx dependencies
-	compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
-	compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+	implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+	implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 }
 
 compileKotlin {
@@ -201,5 +202,5 @@ task genPrebuiltSlimgui(type: Copy) {
 
 task genUiHeader(type: Exec) {
 	description "generates the JNI header file for the UI class wrapper around slimgui"
-	commandLine "javac", "-h", "slimgui/src/main/cpp/", "src/main/java/com/symmetrylabs/slstudio/ui/gdx/UI.java"
+	commandLine "javac", "-h", "slimgui/src/main/cpp/", "src/main/java/com/symmetrylabs/slstudio/ui/v2/UI.java"
 }
