@@ -47,21 +47,6 @@ run {
 	}
 }
 
-task runUIv2(type: JavaExec) {
-	if (System.properties["os.name"] == "Mac OS X") {
-		jvmArgs '-XstartOnFirstThread'
-	}
-
-	dependsOn ":genPrebuiltSlimgui"
-	systemProperty 'org.lwjgl.util.Debug', true
-	systemProperty 'java.library.path', 'libs'
-
-	main = 'com.symmetrylabs.slstudio.ui.v2.Lwjgl3Launcher'
-	/* copy our classpath from the normal run task, which has its classpath filled in
-	   by the java application plugin. */
-	classpath = run.classpath
-}
-
 docker {
 	name 'symmetrylabs/' + project.name.toLowerCase() + ':latest'
 	tags version
@@ -199,6 +184,31 @@ task genPrebuiltSlimgui(type: Copy) {
 	}
 	into "libs"
 }
+
+task buildAndRunUIv2(type: JavaExec) {
+	dependsOn ":genPrebuiltSlimgui"
+	dependsOn ":runUIv2"
+}
+
+task runUIv2(type: JavaExec) {
+	if (System.properties["os.name"] == "Mac OS X") {
+		jvmArgs '-XstartOnFirstThread'
+	}
+
+	systemProperty 'org.lwjgl.util.Debug', true
+	systemProperty 'java.library.path', 'libs'
+
+	main = 'com.symmetrylabs.slstudio.ui.v2.Lwjgl3Launcher'
+	/* copy our classpath from the normal run task, which has its classpath filled in
+	   by the java application plugin. */
+	classpath = run.classpath
+}
+
+/* this doesn't add a dependency, but specifies that, in cases where both are
+   going to be run because they're both needed for whatever task we're
+   completing (like buildAndRunUIv2), building the prebuilt must happen before
+   running. */
+runUIv2.mustRunAfter genPrebuiltSlimgui
 
 task genUiHeader(type: Exec) {
 	description "generates the JNI header file for the UI class wrapper around slimgui"
