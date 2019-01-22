@@ -11,6 +11,7 @@ import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXModel;
 import java.util.ArrayList;
+import java.nio.IntBuffer;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL41;
 import org.lwjgl.opengl.GLCapabilities;
@@ -32,6 +33,21 @@ public class ModelRenderer {
     protected final int positionAttr;
     protected final int pointSizeUniform;
     protected float basePointSize;
+
+    /* bloom effect buffers and textures */
+    protected final ShaderProgramWithProgramHandle blurShader;
+    protected final ShaderProgramWithProgramHandle bloomBlendShader;
+    protected final int bloomFBO;
+    protected final int baseTex;
+    protected final int bloomTex;
+    protected final int blurFBO1;
+    protected final int blurFBO2;
+    protected final int blurTex1;
+    protected final int blurTex2;
+
+    /* renderQuad objects */
+    protected final int quadVao;
+    protected final int quadVbo;
 
     /**
      * An extension of ShaderProgram that allows us to access the OpenGL handle of the compiled shader.
@@ -61,11 +77,11 @@ public class ModelRenderer {
 
         printCapabilities();
 
-        String vert = Gdx.files.internal("vertex-330.glsl").readString();
-        String frag = Gdx.files.internal("fragment-330.glsl").readString();
+        String vert = Gdx.files.internal("point-vertex.glsl").readString();
+        String frag = Gdx.files.internal("point-fragment.glsl").readString();
         pointShader = new ShaderProgramWithProgramHandle(vert, frag);
         if (!pointShader.isCompiled()) {
-            throw new RuntimeException("shader compilation failed: " + pointShader.getLog());
+            throw new RuntimeException("point shader compilation failed: " + pointShader.getLog());
         }
         pointSizeUniform = GL41.glGetUniformLocation(pointShader.handle, "u_pointSize");
         if (pointSizeUniform < 0) {
@@ -84,6 +100,25 @@ public class ModelRenderer {
             throw new RuntimeException("shader program does not have attribute a_position");
         }
 
+        String blurVert = Gdx.files.internal("blur-vertex.glsl").readString();
+        String blurFrag = Gdx.files.internal("blur-fragment.glsl").readString();
+        blurShader = new ShaderProgramWithProgramHandle(vert, frag);
+        if (!blurShader.isCompiled()) {
+            throw new RuntimeException("blur shader compilation failed: " + pointShader.getLog());
+        }
+        blurShader.begin();
+        blurShader.setUniformi("image", 0);
+
+        String bloomBlendVert = Gdx.files.internal("bloom-blend-vertex.glsl").readString();
+        String bloomBlendFrag = Gdx.files.internal("bloom-blend-fragment.glsl").readString();
+        bloomBlendShader = new ShaderProgramWithProgramHandle(vert, frag);
+        if (!bloomBlendShader.isCompiled()) {
+            throw new RuntimeException("bloom blend shader compilation failed: " + pointShader.getLog());
+        }
+        bloomBlendShader.begin();
+        bloomBlendShader.setUniformi("scene", 0);
+        bloomBlendShader.setUniformi("bloomBlur", 0);
+
         vao = GL41.glGenVertexArrays();
         GL41.glBindVertexArray(vao);
 
@@ -97,12 +132,40 @@ public class ModelRenderer {
 
         GL41.glBindVertexArray(0);
 
+        bloomFBO = GL41.glGenFramebuffers();
+        bloomTex = GL41.glGenTextures();
+        baseTex = GL41.glGenTextures();
+        blurFBO1 = GL41.glGenFramebuffers();
+        blurFBO2 = GL41.glGenFramebuffers();
+        blurTex1 = GL41.glGenTextures();
+        blurTex2 = GL41.glGenTextures();
+
         cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(model.cx, model.cy, model.zMin - model.rMax);
         cam.lookAt(model.cx, model.cy, model.cz);
         cam.near = 1f;
         cam.far = 10000f;
         cam.update();
+
+        float quadVertices[] = {
+            // positions        // texture Coords
+            -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+             1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+             1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+        };
+        // setup plane VAO
+        quadVao = GL41.glGenVertexArrays();
+        GL41.glBindVertexArray(quadVao);
+        quadVbo = GL41.glGenBuffers();
+        GL41.glBindBuffer(GL41.GL_ARRAY_BUFFER, quadVbo);
+        GL41.glBufferData(GL41.GL_ARRAY_BUFFER, quadVertices, GL41.GL_STATIC_DRAW);
+        GL41.glEnableVertexAttribArray(0);
+        int FLOAT_SIZE = 4;
+        GL41.glVertexAttribPointer(0, 3, GL41.GL_FLOAT, false, 5 * FLOAT_SIZE, 0);
+        GL41.glEnableVertexAttribArray(1);
+        GL41.glVertexAttribPointer(1, 2, GL41.GL_FLOAT, false, 5 * FLOAT_SIZE, 3 * FLOAT_SIZE);
+        GL41.glBindVertexArray(0);
     }
 
     /**
@@ -124,11 +187,64 @@ public class ModelRenderer {
         basePointSize = 2.2f / density;
     }
 
+    private void configTexture() {
+        /* this should only be run when the viewport changes size */
+        GL41.glTexImage2D(
+            GL41.GL_TEXTURE_2D, 0, GL41.GL_RGB16F,
+            Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(),
+            0, GL41.GL_RGB, GL41.GL_FLOAT, (float[])null);
+        GL41.glTexParameteri(GL41.GL_TEXTURE_2D, GL41.GL_TEXTURE_MIN_FILTER, GL41.GL_LINEAR);
+        GL41.glTexParameteri(GL41.GL_TEXTURE_2D, GL41.GL_TEXTURE_MAG_FILTER, GL41.GL_LINEAR);
+        GL41.glTexParameteri(GL41.GL_TEXTURE_2D, GL41.GL_TEXTURE_WRAP_S, GL41.GL_CLAMP_TO_EDGE);
+        GL41.glTexParameteri(GL41.GL_TEXTURE_2D, GL41.GL_TEXTURE_WRAP_T, GL41.GL_CLAMP_TO_EDGE);
+    }
+
+    public void setBackBufferSize(float width, float height) {
+        GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, bloomFBO);
+
+        GL41.glBindTexture(GL41.GL_TEXTURE_2D, baseTex);
+        configTexture();
+        GL41.glFramebufferTexture2D(
+            GL41.GL_FRAMEBUFFER, GL41.GL_COLOR_ATTACHMENT0, GL41.GL_TEXTURE_2D, bloomTex, 0);
+
+        GL41.glBindTexture(GL41.GL_TEXTURE_2D, bloomTex);
+        configTexture();
+        GL41.glFramebufferTexture2D(
+            GL41.GL_FRAMEBUFFER, GL41.GL_COLOR_ATTACHMENT1, GL41.GL_TEXTURE_2D, bloomTex, 0);
+
+        IntBuffer drawBuffers = IntBuffer.allocate(2);
+        drawBuffers.put(GL41.GL_COLOR_ATTACHMENT0);
+        drawBuffers.put(GL41.GL_COLOR_ATTACHMENT1);
+        GL41.glDrawBuffers(drawBuffers);
+
+        if (GL41.glCheckFramebufferStatus(GL41.GL_FRAMEBUFFER) != GL41.GL_FRAMEBUFFER_COMPLETE) {
+            System.out.println("bloom framebuffer not complete!");
+        }
+
+        GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, blurFBO1);
+        GL41.glBindTexture(GL41.GL_TEXTURE_2D, blurTex1);
+        configTexture();
+        GL41.glFramebufferTexture2D(
+            GL41.GL_FRAMEBUFFER, GL41.GL_COLOR_ATTACHMENT0, GL41.GL_TEXTURE_2D, blurTex1, 0);
+        if (GL41.glCheckFramebufferStatus(GL41.GL_FRAMEBUFFER) != GL41.GL_FRAMEBUFFER_COMPLETE) {
+            System.out.println("blur framebuffer 1 not complete!");
+        }
+
+        GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, blurFBO2);
+        GL41.glBindTexture(GL41.GL_TEXTURE_2D, blurTex2);
+        configTexture();
+        GL41.glFramebufferTexture2D(
+            GL41.GL_FRAMEBUFFER, GL41.GL_COLOR_ATTACHMENT0, GL41.GL_TEXTURE_2D, blurTex2, 0);
+        if (GL41.glCheckFramebufferStatus(GL41.GL_FRAMEBUFFER) != GL41.GL_FRAMEBUFFER_COMPLETE) {
+            System.out.println("blur framebuffer 1 not complete!");
+        }
+
+        GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, 0);
+    }
+
     public void draw() {
         lx.engine.copyUIBuffer(lxColorBuffer, UI_COLOR_SPACE);
         int[] colors = (int[]) lxColorBuffer.getArray(UI_COLOR_SPACE);
-
-        GL41.glEnable(GL41.GL_PROGRAM_POINT_SIZE);
 
         for (int i = 0; i < colors.length; i++) {
             int c = colors[i];
@@ -137,6 +253,12 @@ public class ModelRenderer {
             glColorBuffer[4 * i + 2] = (float)  (0x000000FF & c) / 255.f;
             glColorBuffer[4 * i + 3] = 1.f;
         }
+
+        /* load bloom frame buffer object which draws into the two bloom textures (baseTex and bloomTex) */
+        GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, bloomFBO);
+        GL41.glClear(GL41.GL_COLOR_BUFFER_BIT);
+
+        GL41.glEnable(GL41.GL_PROGRAM_POINT_SIZE);
 
         pointShader.begin();
 
@@ -160,6 +282,38 @@ public class ModelRenderer {
         GL41.glBindVertexArray(0);
 
         GL41.glDisable(GL41.GL_PROGRAM_POINT_SIZE);
+
+        GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, 0);
+
+        /* done rendering, so next we compute the blur on bloomTex */
+        blurShader.begin();
+        GL41.glActiveTexture(GL41.GL_TEXTURE0);
+        for (int i = 0; i < 5; i++) {
+            GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, blurFBO1);
+            blurShader.setUniformi("horizontal", 1);
+            GL41.glBindTexture(GL41.GL_TEXTURE_2D, i == 0 ? bloomTex : blurTex2);
+            renderQuad();
+            GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, blurFBO2);
+            blurShader.setUniformi("horizontal", 0);
+            GL41.glBindTexture(GL41.GL_TEXTURE_2D, blurTex1);
+            renderQuad();
+        }
+        GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, 0);
+
+        /* now we have a blurred result in blurTex2, and the base scene in baseTex. Blend them and paint. */
+        GL41.glClear(GL41.GL_COLOR_BUFFER_BIT);
+        bloomBlendShader.begin();
+        GL41.glActiveTexture(GL41.GL_TEXTURE0);
+        GL41.glBindTexture(GL41.GL_TEXTURE_2D, baseTex);
+        GL41.glActiveTexture(GL41.GL_TEXTURE1);
+        GL41.glBindTexture(GL41.GL_TEXTURE_2D, blurTex2);
+        renderQuad();
+    }
+
+    private void renderQuad() {
+        GL41.glBindVertexArray(quadVao);
+        GL41.glDrawArrays(GL41.GL_TRIANGLE_STRIP, 0, 4);
+        GL41.glBindVertexArray(0);
     }
 
     public void dispose() {
