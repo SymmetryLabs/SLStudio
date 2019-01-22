@@ -41,6 +41,7 @@ public class UI {
     public static void text(String t, Object... objs) {
         text(String.format(t, objs));
     }
+    public static native void labelText(String label, String value);
     public static native boolean button(String t);
     public static native boolean checkbox(String label, boolean v);
     public static native boolean selectable(String label, boolean v);

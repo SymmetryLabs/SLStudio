@@ -75,6 +75,16 @@ public class WindowManager {
         INSTANCE.closeWindowImpl(w);
     }
 
+    /**
+     * Request that a persistent window be displayed, based on the name of the window. If
+     * the window is already being displayed, this is a no-op.
+     *
+     * @param name the name of the persistent window to show (must match the name assigned in addPersistent)
+     * @throws RuntimeException if a persistent window with the given name hasn't been added
+     */
+    public static void showPersistent(String name) {
+        INSTANCE.showPersistentImpl(name);
+    }
 
     /* Package-private implementation follows */
 
@@ -177,6 +187,16 @@ public class WindowManager {
             return;
         }
         ws.current = ws.creator.create();
+    }
+
+    void showPersistentImpl(String name) {
+        for (PersistentWindow pw : persistentWindows) {
+            if (pw.name.equals(name)) {
+                showPersistent(pw);
+                return;
+            }
+        }
+        throw new RuntimeException("no persistent window defined with name \"" + name + "\"");
     }
 
     void hidePersistent(PersistentWindow ws) {

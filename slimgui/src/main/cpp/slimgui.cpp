@@ -269,6 +269,20 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_text(JNIEnv *env, jclass, jstring jstr) 
 	env->ReleaseStringUTFChars(jstr, str);
 }
 
+
+JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_v2_UI_labelText(JNIEnv *env, jclass, jstring jlabel, jstring jtext) {
+	if (env->IsSameObject(jtext, NULL)) {
+		env->ThrowNew(env->FindClass("java/lang/NullPointerException"), "supplied text in labelText is null");
+		return;
+	}
+	const char *text = env->GetStringUTFChars(jtext, 0);
+	const char *label = env->GetStringUTFChars(jlabel, 0);
+	ImGui::LabelText(label, "%s", text);
+	env->ReleaseStringUTFChars(jtext, text);
+	env->ReleaseStringUTFChars(jlabel, label);
+}
+
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_button(JNIEnv *env, jclass, jstring jstr) {
 	const char *str = env->GetStringUTFChars(jstr, 0);

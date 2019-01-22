@@ -185,6 +185,14 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_text
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    labelText
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_labelText
+  (JNIEnv *, jclass, jstring, jstring);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    button
  * Signature: (Ljava/lang/String;)Z
  */

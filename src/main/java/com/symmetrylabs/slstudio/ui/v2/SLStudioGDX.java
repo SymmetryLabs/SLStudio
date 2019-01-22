@@ -65,6 +65,10 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
             disposeLX();
         }
 
+        WindowManager.reset();
+        ConsoleWindow.reset();
+        WindowManager.addPersistent(ConsoleWindow.WINDOW_NAME, () -> new ConsoleWindow(), false);
+
         this.showName = showName;
         show = ShowRegistry.getShow(showName);
 
@@ -87,7 +91,6 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
         loadLxComponents();
 
-        WindowManager.reset();
         /* The main menu isn't really transient but we don't want it to appear in
              the Window menu and it doesn't have a close button, so there's no risk of
              it disappearing. */
@@ -96,7 +99,6 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         WindowManager.addPersistent("Project", () -> new ProjectWindow(lx), true);
         WindowManager.addPersistent("Widget demo", () -> new SlimguiDemoWindow(), false);
         WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this), false);
-        WindowManager.addPersistent("Console", () -> new ConsoleWindow(), false);
 
         lx.engine.isMultithreaded.setValue(true);
         lx.engine.isChannelMultithreaded.setValue(true);
@@ -174,6 +176,9 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
     @Override
     public void setWarning(String key, String message) {
         ConsoleWindow.setWarning(key, message);
+        if (message != null) {
+            WindowManager.showPersistent(ConsoleWindow.WINDOW_NAME);
+        }
     }
 
 }
