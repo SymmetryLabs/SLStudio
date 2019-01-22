@@ -197,3 +197,8 @@ task genPrebuiltSlimgui(type: Copy) {
 	}
 	into "libs"
 }
+
+task genUiHeader(type: Exec) {
+	description "generates the JNI header file for the UI class wrapper around slimgui"
+	commandLine "javac", "-h", "slimgui/src/main/cpp/", "src/main/java/com/symmetrylabs/slstudio/ui/gdx/UI.java"
+}
