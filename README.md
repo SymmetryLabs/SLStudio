@@ -4,7 +4,7 @@
 
 This repo uses Git-LFS.  In order to clone it:
 
-  - `git -version` must be 2.15 or higher.
+  - Git version 2.15 or higher must be installed.  Use `git --version` to check.
 
   - Git-LFS must be installed.
 
@@ -23,16 +23,16 @@ From the root of the project, execute:
 
 ## Setting up the IntelliJ Project
 
-1. In the IntelliJ startup dialog, click *Import new project*; or if a project is already open, click *File* > *New* > *Project from Existing Sources...*
-2. Select the `build.gradle` file in the SLStudio folder and click *Open*
-3. In the "Import Project from Gradle" dialog, click *OK*
-4. Click *Run* > *Edit configurations...*
-5. In the "Run/Debug Configurations" window, click the *+* and choose *Gradle*
+1. In the IntelliJ startup dialog, click **Import new project**; or if a project is already open, click **File** > **New** > **Project from Existing Sources...**
+2. Select the `build.gradle` file in the SLStudio folder and click **Open**
+3. In the "Import Project from Gradle" dialog, click **OK**
+4. Click **Run** > **Edit configurations...**
+5. In the "Run/Debug Configurations" window, click the **+** and choose **Gradle**
 6. For "Name", replace "Untittled" with `SLStudio`
-7. For "Gradle project" choose *SLStudio*
+7. For "Gradle project" choose **SLStudio**
 8. For "Tasks" enter `run`
-9. Click *OK*
-10. Click *Run* > *Run 'SLStudio'*
+9. Click **OK**
+10. Click **Run** > **Run 'SLStudio'**
 
 Everything should now build and run; your IntelliJ project is ready to use.
 
