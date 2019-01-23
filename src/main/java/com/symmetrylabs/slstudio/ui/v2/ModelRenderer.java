@@ -154,6 +154,7 @@ public class ModelRenderer {
              1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
              1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
         };
+
         // setup plane VAO
         quadVao = GL41.glGenVertexArrays();
         GL41.glBindVertexArray(quadVao);
@@ -161,10 +162,9 @@ public class ModelRenderer {
         GL41.glBindBuffer(GL41.GL_ARRAY_BUFFER, quadVbo);
         GL41.glBufferData(GL41.GL_ARRAY_BUFFER, quadVertices, GL41.GL_STATIC_DRAW);
         GL41.glEnableVertexAttribArray(0);
-        int FLOAT_SIZE = 4;
-        GL41.glVertexAttribPointer(0, 3, GL41.GL_FLOAT, false, 5 * FLOAT_SIZE, 0);
+        GL41.glVertexAttribPointer(0, 3, GL41.GL_FLOAT, false, 5 * Float.BYTES, 0);
         GL41.glEnableVertexAttribArray(1);
-        GL41.glVertexAttribPointer(1, 2, GL41.GL_FLOAT, false, 5 * FLOAT_SIZE, 3 * FLOAT_SIZE);
+        GL41.glVertexAttribPointer(1, 2, GL41.GL_FLOAT, false, 5 * Float.BYTES, 3 * Float.BYTES);
         GL41.glBindVertexArray(0);
     }
 
@@ -187,28 +187,27 @@ public class ModelRenderer {
         basePointSize = 2.2f / density;
     }
 
-    private void configTexture() {
-        /* this should only be run when the viewport changes size */
+    private void configTexture(int width, int height) {
         GL41.glTexImage2D(
-            GL41.GL_TEXTURE_2D, 0, GL41.GL_RGB16F,
-            Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(),
-            0, GL41.GL_RGB, GL41.GL_FLOAT, (float[])null);
+            GL41.GL_TEXTURE_2D, 0, GL41.GL_RGB16F, width, height, 0, GL41.GL_RGB, GL41.GL_FLOAT, (float[])null);
         GL41.glTexParameteri(GL41.GL_TEXTURE_2D, GL41.GL_TEXTURE_MIN_FILTER, GL41.GL_LINEAR);
         GL41.glTexParameteri(GL41.GL_TEXTURE_2D, GL41.GL_TEXTURE_MAG_FILTER, GL41.GL_LINEAR);
         GL41.glTexParameteri(GL41.GL_TEXTURE_2D, GL41.GL_TEXTURE_WRAP_S, GL41.GL_CLAMP_TO_EDGE);
         GL41.glTexParameteri(GL41.GL_TEXTURE_2D, GL41.GL_TEXTURE_WRAP_T, GL41.GL_CLAMP_TO_EDGE);
     }
 
-    public void setBackBufferSize(float width, float height) {
+    /* this should only be run when the viewport changes size */
+    public void setBackBufferSize(int width, int height) {
+        GL41.glActiveTexture(GL41.GL_TEXTURE0);
         GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, bloomFBO);
 
         GL41.glBindTexture(GL41.GL_TEXTURE_2D, baseTex);
-        configTexture();
+        configTexture(width, height);
         GL41.glFramebufferTexture2D(
             GL41.GL_FRAMEBUFFER, GL41.GL_COLOR_ATTACHMENT0, GL41.GL_TEXTURE_2D, baseTex, 0);
 
         GL41.glBindTexture(GL41.GL_TEXTURE_2D, bloomTex);
-        configTexture();
+        configTexture(width, height);
         GL41.glFramebufferTexture2D(
             GL41.GL_FRAMEBUFFER, GL41.GL_COLOR_ATTACHMENT1, GL41.GL_TEXTURE_2D, bloomTex, 0);
 
@@ -223,7 +222,7 @@ public class ModelRenderer {
 
         GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, blurFBO1);
         GL41.glBindTexture(GL41.GL_TEXTURE_2D, blurTex1);
-        configTexture();
+        configTexture(width, height);
         GL41.glFramebufferTexture2D(
             GL41.GL_FRAMEBUFFER, GL41.GL_COLOR_ATTACHMENT0, GL41.GL_TEXTURE_2D, blurTex1, 0);
         if (GL41.glCheckFramebufferStatus(GL41.GL_FRAMEBUFFER) != GL41.GL_FRAMEBUFFER_COMPLETE) {
@@ -232,7 +231,7 @@ public class ModelRenderer {
 
         GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, blurFBO2);
         GL41.glBindTexture(GL41.GL_TEXTURE_2D, blurTex2);
-        configTexture();
+        configTexture(width, height);
         GL41.glFramebufferTexture2D(
             GL41.GL_FRAMEBUFFER, GL41.GL_COLOR_ATTACHMENT0, GL41.GL_TEXTURE_2D, blurTex2, 0);
         if (GL41.glCheckFramebufferStatus(GL41.GL_FRAMEBUFFER) != GL41.GL_FRAMEBUFFER_COMPLETE) {
@@ -286,7 +285,6 @@ public class ModelRenderer {
         GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, 0);
 
         /* done rendering, so next we compute the blur on bloomTex */
-        /*
         blurShader.begin();
         GL41.glActiveTexture(GL41.GL_TEXTURE0);
         for (int i = 0; i < 5; i++) {
@@ -307,7 +305,7 @@ public class ModelRenderer {
         GL41.glActiveTexture(GL41.GL_TEXTURE0);
         GL41.glBindTexture(GL41.GL_TEXTURE_2D, baseTex);
         GL41.glActiveTexture(GL41.GL_TEXTURE1);
-        GL41.glBindTexture(GL41.GL_TEXTURE_2D, baseTex);
+        GL41.glBindTexture(GL41.GL_TEXTURE_2D, blurTex2);
         renderQuad();
     }
 

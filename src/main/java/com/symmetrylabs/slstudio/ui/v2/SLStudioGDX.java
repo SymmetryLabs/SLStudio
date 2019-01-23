@@ -33,6 +33,8 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
     CameraInputController camController;
 
+    int lastBufWidth = 0, lastBufHeight;
+
     @Override
     public void create() {
         String sn;
@@ -82,7 +84,6 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
         renderer = new ModelRenderer(lx, model);
         renderer.setDisplayDensity(Gdx.graphics.getDensity());
-        renderer.setBackBufferSize(Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
 
         camController = new CameraInputController(renderer.cam);
         camController.target.set(model.cx, model.cy, model.cz);
@@ -112,7 +113,12 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
     @Override
     public void render() {
-        Gdx.gl20.glViewport(0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
+        int w = Gdx.graphics.getBackBufferWidth();
+        int h = Gdx.graphics.getBackBufferHeight();
+        Gdx.gl20.glViewport(0, 0, w, h);
+        if (w != lastBufWidth || h != lastBufHeight) {
+            renderer.setBackBufferSize(w, h);
+        }
 
         float clearR = ((clearRGB >> 16) & 0xFF) / 255.f;
         float clearG = ((clearRGB >>  8) & 0xFF) / 255.f;

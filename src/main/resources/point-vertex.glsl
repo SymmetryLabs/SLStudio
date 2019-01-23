@@ -1,4 +1,4 @@
-#version 330
+#version 330 core
 
 uniform mat4 u_mvp;
 uniform float u_pointSize;
@@ -10,7 +10,7 @@ out vec4 v_color;
 
 void main()
 {
-    gl_Position =  u_mvp * a_position;
-		gl_PointSize = u_pointSize;
-		v_color = a_color;
+        gl_Position =  u_mvp * a_position;
+        gl_PointSize = u_pointSize;
+        v_color = a_color / 255.0;
 }
