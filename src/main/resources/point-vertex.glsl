@@ -11,7 +11,8 @@ out vec4 v_color;
 void main()
 {
         gl_Position =  u_mvp * a_position;
+        /* poor-man's bloom filter: scale each point by its luminance. */
         float lum = dot(vec4(0.2126, 0.7152, 0.0722, 0), a_color) / sqrt(3);
-        gl_PointSize = u_pointSize * (1 + 3 * lum);
-        v_color = a_color / 255.0;
+        gl_PointSize = u_pointSize * (1 + 3.5 * lum);
+        v_color = a_color;
 }

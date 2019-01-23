@@ -35,6 +35,7 @@ public class ModelRenderer {
     protected float basePointSize;
 
     /* bloom effect buffers and textures */
+    private static final boolean BLOOM_ENABLED = false;
     protected final ShaderProgramWithProgramHandle blurShader;
     protected final ShaderProgramWithProgramHandle bloomBlendShader;
     protected final int bloomFBO;
@@ -253,9 +254,10 @@ public class ModelRenderer {
             glColorBuffer[4 * i + 3] = 1.f;
         }
 
-        /* load bloom frame buffer object which draws into the two bloom textures (baseTex and bloomTex) */
-        GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, bloomFBO);
-        GL41.glClear(GL41.GL_COLOR_BUFFER_BIT);
+        if (BLOOM_ENABLED) {
+            GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, bloomFBO);
+            GL41.glClear(GL41.GL_COLOR_BUFFER_BIT);
+        }
 
         GL41.glEnable(GL41.GL_PROGRAM_POINT_SIZE);
 
@@ -282,31 +284,33 @@ public class ModelRenderer {
 
         GL41.glDisable(GL41.GL_PROGRAM_POINT_SIZE);
 
-        GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, 0);
+        if (BLOOM_ENABLED) {
+            GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, 0);
 
-        /* done rendering, so next we compute the blur on bloomTex */
-        blurShader.begin();
-        GL41.glActiveTexture(GL41.GL_TEXTURE0);
-        for (int i = 0; i < 5; i++) {
-            GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, blurFBO1);
-            blurShader.setUniformi("horizontal", 1);
-            GL41.glBindTexture(GL41.GL_TEXTURE_2D, i == 0 ? bloomTex : blurTex2);
-            renderQuad();
-            GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, blurFBO2);
-            blurShader.setUniformi("horizontal", 0);
-            GL41.glBindTexture(GL41.GL_TEXTURE_2D, blurTex1);
+            /* done rendering, so next we compute the blur on bloomTex */
+            blurShader.begin();
+            GL41.glActiveTexture(GL41.GL_TEXTURE0);
+            for (int i = 0; i < 5; i++) {
+                GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, blurFBO1);
+                blurShader.setUniformi("horizontal", 1);
+                GL41.glBindTexture(GL41.GL_TEXTURE_2D, i == 0 ? bloomTex : blurTex2);
+                renderQuad();
+                GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, blurFBO2);
+                blurShader.setUniformi("horizontal", 0);
+                GL41.glBindTexture(GL41.GL_TEXTURE_2D, blurTex1);
+                renderQuad();
+            }
+            GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, 0);
+
+            /* now we have a blurred result in blurTex2, and the base scene in baseTex. Blend them and paint. */
+            GL41.glClear(GL41.GL_COLOR_BUFFER_BIT);
+            bloomBlendShader.begin();
+            GL41.glActiveTexture(GL41.GL_TEXTURE0);
+            GL41.glBindTexture(GL41.GL_TEXTURE_2D, baseTex);
+            GL41.glActiveTexture(GL41.GL_TEXTURE1);
+            GL41.glBindTexture(GL41.GL_TEXTURE_2D, blurTex2);
             renderQuad();
         }
-        GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, 0);
-
-        /* now we have a blurred result in blurTex2, and the base scene in baseTex. Blend them and paint. */
-        GL41.glClear(GL41.GL_COLOR_BUFFER_BIT);
-        bloomBlendShader.begin();
-        GL41.glActiveTexture(GL41.GL_TEXTURE0);
-        GL41.glBindTexture(GL41.GL_TEXTURE_2D, baseTex);
-        GL41.glActiveTexture(GL41.GL_TEXTURE1);
-        GL41.glBindTexture(GL41.GL_TEXTURE_2D, blurTex2);
-        renderQuad();
     }
 
     private void renderQuad() {
