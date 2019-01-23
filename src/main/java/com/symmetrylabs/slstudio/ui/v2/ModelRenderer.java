@@ -117,7 +117,7 @@ public class ModelRenderer {
         }
         bloomBlendShader.begin();
         bloomBlendShader.setUniformi("scene", 0);
-        //bloomBlendShader.setUniformi("bloomBlur", 1);
+        bloomBlendShader.setUniformi("bloomBlur", 1);
 
         vao = GL41.glGenVertexArrays();
         GL41.glBindVertexArray(vao);
@@ -235,7 +235,7 @@ public class ModelRenderer {
         GL41.glFramebufferTexture2D(
             GL41.GL_FRAMEBUFFER, GL41.GL_COLOR_ATTACHMENT0, GL41.GL_TEXTURE_2D, blurTex2, 0);
         if (GL41.glCheckFramebufferStatus(GL41.GL_FRAMEBUFFER) != GL41.GL_FRAMEBUFFER_COMPLETE) {
-            System.out.println("blur framebuffer 1 not complete!");
+            System.out.println("blur framebuffer 2 not complete!");
         }
 
         GL41.glBindFramebuffer(GL41.GL_FRAMEBUFFER, 0);
