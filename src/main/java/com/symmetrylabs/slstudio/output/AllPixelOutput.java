@@ -226,6 +226,22 @@ public class AllPixelOutput extends LXOutput {
         }
     }
 
+    /**
+     * Configures master output for pseudo-hidpi support with the AllPixel controller.
+     *
+     * The AllPixel only supports 8-bit color, but it does support an additional
+     * 8-bit global brightness value. We set that brightness value to match the
+     * master fader of the engine, so that we can have nice colors at the lower
+     * end of the global brightness scale.
+     *
+     * For that to work, though, we don't want the master channel to prescale
+     * the color values before it hands them off to us, otherwise we end up
+     * scaling by the brightness twice: once in LX and once on the controller.
+     * Show code can reconfigure the master LX output to not prescale colors by
+     * the master brightness by calling this function. The AllPixel class
+     * doesn't do this by default because it changes behavior for all LXOutputs,
+     * which would be surprising behavior for a constructor.
+     */
     public static void configureMasterOutput(LX lx) {
         lx.engine.output.mode.setValue(Mode.RAW);
     }
