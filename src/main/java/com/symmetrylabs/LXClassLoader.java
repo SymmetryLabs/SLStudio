@@ -100,8 +100,14 @@ public class LXClassLoader {
             .map(c -> (Class<T>)c);
     }
 
-    private static <T> boolean isVisible(Class<T> component) {
-        return !component.isAnnotationPresent(HiddenComponent.class);
+    private static boolean isVisible(Class component) {
+        while (component != null) {
+            if (component.isAnnotationPresent(HiddenComponent.class)) {
+                return false;
+            }
+            component = component.getSuperclass();
+        }
+        return true;
     }
 
     private static <T> boolean supportsModelClass(Class<? extends LXModel> modelClass, Class<T> componentClass) {
