@@ -1,0 +1,439 @@
+{
+  "limbs": [
+    {
+      "locked": false,
+      "length": 50.0,
+      "height": 218.4,
+      "azimuth": -180.0,
+      "elevation": -57.6,
+      "tilt": 0.0,
+      "branches": [
+        {
+          "locked": false,
+          "ipAddress": "10.200.1.70",
+          "channel": 8,
+          "x": -32.399998,
+          "y": 12.0,
+          "z": 1.5646219E-6,
+          "azimuth": -21.599997,
+          "elevation": 0.0,
+          "tilt": -172.8,
+          "twigs": [
+            {
+              "x": -15.36,
+              "y": 16.32,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1
+            },
+            {
+              "x": -12.4800005,
+              "y": 24.0,
+              "z": 0.0,
+              "azimuth": -54.4,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2
+            },
+            {
+              "x": -15.36,
+              "y": 33.6,
+              "z": 0.0,
+              "azimuth": 36.0,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3
+            },
+            {
+              "x": -8.64,
+              "y": 44.12,
+              "z": 0.0,
+              "azimuth": 39.6,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4
+            },
+            {
+              "x": 0.0,
+              "y": 48.96,
+              "z": 0.0,
+              "azimuth": 0.0,
+              "elevation": 0.0,
+              "tilt": -180.0,
+              "index": 5
+            },
+            {
+              "x": 12.48,
+              "y": 43.2,
+              "z": 0.0,
+              "azimuth": -43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6
+            },
+            {
+              "x": 13.44,
+              "y": 27.84,
+              "z": 0.0,
+              "azimuth": -32.4,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7
+            },
+            {
+              "x": 16.32,
+              "y": 20.16,
+              "z": 0.0,
+              "azimuth": -64.8,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8
+            }
+          ]
+        },
+        {
+          "locked": false,
+          "ipAddress": "10.200.1.74",
+          "channel": 8,
+          "x": 5.811453E-7,
+          "y": 35.7,
+          "z": 5.811453E-7,
+          "azimuth": -32.4,
+          "elevation": 0.0,
+          "tilt": -176.4,
+          "twigs": [
+            {
+              "x": -15.36,
+              "y": 16.128,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1
+            },
+            {
+              "x": -10.56,
+              "y": 24.0,
+              "z": 0.0,
+              "azimuth": -54.4,
+              "elevation": 0.0,
+              "tilt": -180.0,
+              "index": 2
+            },
+            {
+              "x": -15.36,
+              "y": 33.6,
+              "z": 0.0,
+              "azimuth": 36.0,
+              "elevation": 0.0,
+              "tilt": -180.0,
+              "index": 3
+            },
+            {
+              "x": -8.64,
+              "y": 44.12,
+              "z": 0.0,
+              "azimuth": 39.6,
+              "elevation": 0.0,
+              "tilt": -180.0,
+              "index": 4
+            },
+            {
+              "x": 0.0,
+              "y": 48.96,
+              "z": 0.0,
+              "azimuth": 0.0,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5
+            },
+            {
+              "x": 12.48,
+              "y": 43.2,
+              "z": 0.0,
+              "azimuth": -43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6
+            },
+            {
+              "x": 13.44,
+              "y": 27.84,
+              "z": 0.0,
+              "azimuth": -32.4,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7
+            },
+            {
+              "x": 16.32,
+              "y": 20.16,
+              "z": 0.0,
+              "azimuth": -64.8,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8
+            }
+          ]
+        },
+        {
+          "locked": false,
+          "ipAddress": "10.200.1.72",
+          "channel": 8,
+          "x": 0.0,
+          "y": 89.1,
+          "z": 0.0,
+          "azimuth": 0.0,
+          "elevation": 0.0,
+          "tilt": 180.0,
+          "twigs": [
+            {
+              "x": -15.36,
+              "y": 16.32,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1
+            },
+            {
+              "x": -10.56,
+              "y": 24.0,
+              "z": 0.0,
+              "azimuth": -54.4,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2
+            },
+            {
+              "x": -15.36,
+              "y": 33.6,
+              "z": 0.0,
+              "azimuth": 36.0,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3
+            },
+            {
+              "x": -8.64,
+              "y": 44.12,
+              "z": 0.0,
+              "azimuth": 39.6,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4
+            },
+            {
+              "x": 0.0,
+              "y": 48.96,
+              "z": 0.0,
+              "azimuth": 0.0,
+              "elevation": 0.0,
+              "tilt": -180.0,
+              "index": 5
+            },
+            {
+              "x": 12.48,
+              "y": 43.2,
+              "z": 0.0,
+              "azimuth": -43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6
+            },
+            {
+              "x": 13.44,
+              "y": 27.84,
+              "z": 0.0,
+              "azimuth": -32.4,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7
+            },
+            {
+              "x": 16.32,
+              "y": 20.16,
+              "z": 0.0,
+              "azimuth": -64.8,
+              "elevation": 0.0,
+              "tilt": -180.0,
+              "index": 8
+            }
+          ]
+        },
+        {
+          "locked": false,
+          "ipAddress": "10.200.1.117",
+          "channel": 8,
+          "x": 7.2,
+          "y": 63.0,
+          "z": 7.2,
+          "azimuth": 61.2,
+          "elevation": 0.0,
+          "tilt": 180.0,
+          "twigs": [
+            {
+              "x": -15.36,
+              "y": 16.32,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": -180.0,
+              "index": 1
+            },
+            {
+              "x": -10.56,
+              "y": 24.0,
+              "z": 0.0,
+              "azimuth": -54.4,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2
+            },
+            {
+              "x": -15.36,
+              "y": 33.6,
+              "z": 0.0,
+              "azimuth": 36.0,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3
+            },
+            {
+              "x": -8.64,
+              "y": 44.12,
+              "z": 0.0,
+              "azimuth": 39.6,
+              "elevation": 0.0,
+              "tilt": -180.0,
+              "index": 4
+            },
+            {
+              "x": 0.0,
+              "y": 48.96,
+              "z": 0.0,
+              "azimuth": 0.0,
+              "elevation": 0.0,
+              "tilt": -180.0,
+              "index": 5
+            },
+            {
+              "x": 12.48,
+              "y": 43.2,
+              "z": 0.0,
+              "azimuth": -43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6
+            },
+            {
+              "x": 13.44,
+              "y": 27.84,
+              "z": 0.0,
+              "azimuth": -32.4,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7
+            },
+            {
+              "x": 16.32,
+              "y": 20.16,
+              "z": 0.0,
+              "azimuth": -64.8,
+              "elevation": 0.0,
+              "tilt": -180.0,
+              "index": 8
+            }
+          ]
+        },
+        {
+          "locked": false,
+          "ipAddress": "10.200.1.189",
+          "channel": 8,
+          "x": 21.6,
+          "y": 12.0,
+          "z": 10.8,
+          "azimuth": 72.0,
+          "elevation": 0.0,
+          "tilt": 180.0,
+          "twigs": [
+            {
+              "x": -15.36,
+              "y": 16.32,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": -180.0,
+              "index": 1
+            },
+            {
+              "x": -10.56,
+              "y": 24.0,
+              "z": 0.0,
+              "azimuth": -54.4,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2
+            },
+            {
+              "x": -15.36,
+              "y": 33.6,
+              "z": 0.0,
+              "azimuth": 36.0,
+              "elevation": 0.0,
+              "tilt": -180.0,
+              "index": 3
+            },
+            {
+              "x": -8.64,
+              "y": 44.12,
+              "z": 0.0,
+              "azimuth": 39.6,
+              "elevation": 0.0,
+              "tilt": -180.0,
+              "index": 4
+            },
+            {
+              "x": 0.0,
+              "y": 48.96,
+              "z": 0.0,
+              "azimuth": 0.0,
+              "elevation": 0.0,
+              "tilt": -180.0,
+              "index": 5
+            },
+            {
+              "x": 12.48,
+              "y": 43.2,
+              "z": 0.0,
+              "azimuth": -43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6
+            },
+            {
+              "x": 13.44,
+              "y": 27.84,
+              "z": 0.0,
+              "azimuth": -32.4,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7
+            },
+            {
+              "x": 16.32,
+              "y": 20.16,
+              "z": 0.0,
+              "azimuth": -64.8,
+              "elevation": 0.0,
+              "tilt": -180.0,
+              "index": 8
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
