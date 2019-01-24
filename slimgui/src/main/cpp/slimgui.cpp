@@ -405,6 +405,13 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_floatBox(JNIEnv *env, jclass, jstring jl
 	return res;
 }
 
+JNIEXPORT jfloat JNICALL
+Java_com_symmetrylabs_slstudio_ui_v2_UI_knobFloat(JNIEnv *env, jclass cls, jstring jlabel, jfloat vf, jfloat v0, jfloat v1) {
+    JniString label(env, jlabel);
+    ImGui::Knob(label, &vf, v0, v1);
+    return vf;
+}
+
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_beginMainMenuBar(JNIEnv *env, jclass) {
 	return ImGui::BeginMainMenuBar() ? 1 : 0;

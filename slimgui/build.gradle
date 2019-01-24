@@ -27,6 +27,7 @@ tasks.withType(CppCompile) {
 	compilerArgs.add "-DIMGUI_IMPL_OPENGL_LOADER_GL3W"
 	compilerArgs.add "-DGLFW_INCLUDE_NONE"
 	compilerArgs.add "-g"
+	compilerArgs.add "-O0"
 	systemIncludes.from (javaHome + "/include")
 	/* Only the relevant platform-specific includes are present on any
 	   given machine (e.g. /include/darwin doesn't exist in linux installs)

@@ -54,6 +54,7 @@ public class UI {
     public static native int sliderInt(String label, int v, int v0, int v1);
     public static native int combo(String label, int selected, String[] options);
     public static native float floatBox(String label, float v);
+    public static native float knobFloat(String label, float v, float v0, float v1);
 
     /* Menus */
     public static native boolean beginMainMenuBar();

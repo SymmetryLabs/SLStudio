@@ -1479,7 +1479,7 @@ bool ImGui::Combo(const char* label, int* current_item, const char* const items[
     return value_changed;
 }
 
-// Combo box helper allowing to pass all items in a single string literal holding multiple zero-terminated items "item1\0item2\0" 
+// Combo box helper allowing to pass all items in a single string literal holding multiple zero-terminated items "item1\0item2\0"
 bool ImGui::Combo(const char* label, int* current_item, const char* items_separated_by_zeros, int height_in_items)
 {
     int items_count = 0;
@@ -3143,7 +3143,7 @@ static bool InputTextFilterCharacter(unsigned int* p_char, ImGuiInputTextFlags f
 
 // Edit a string of text
 // - buf_size account for the zero-terminator, so a buf_size of 6 can hold "Hello" but not "Hello!".
-//   This is so we can easily call InputText() on static arrays using ARRAYSIZE() and to match 
+//   This is so we can easily call InputText() on static arrays using ARRAYSIZE() and to match
 //   Note that in std::string world, capacity() would omit 1 byte used by the zero-terminator.
 // - When active, hold on a privately held copy of the text (and apply back to 'buf'). So changing 'buf' while the InputText is active has no effect.
 // - If you want to use ImGui::InputText() with std::string, see misc/cpp/imgui_stdlib.h
@@ -3169,7 +3169,7 @@ bool ImGui::InputTextEx(const char* label, char* buf, int buf_size, const ImVec2
     if (is_resizable)
         IM_ASSERT(callback != NULL); // Must provide a callback if you set the ImGuiInputTextFlags_CallbackResize flag!
 
-    if (is_multiline) // Open group before calling GetID() because groups tracks id created within their scope, 
+    if (is_multiline) // Open group before calling GetID() because groups tracks id created within their scope,
         BeginGroup();
     const ImGuiID id = window->GetID(label);
     const ImVec2 label_size = CalcTextSize(label, NULL, true);
@@ -4628,7 +4628,7 @@ void ImGui::ColorPickerOptionsPopup(const float* ref_col, ImGuiColorEditFlags fl
 // - TreeNodeV()
 // - TreeNodeEx()
 // - TreeNodeExV()
-// - TreeNodeBehavior() [Internal]  
+// - TreeNodeBehavior() [Internal]
 // - TreePush()
 // - TreePop()
 // - TreeAdvanceToLabelPos()
@@ -5890,7 +5890,7 @@ bool    ImGui::BeginTabBarEx(ImGuiTabBar* tab_bar, const ImRect& tab_bar_bb, ImG
         return true;
     }
 
-    // When toggling back from ordered to manually-reorderable, shuffle tabs to enforce the last visible order. 
+    // When toggling back from ordered to manually-reorderable, shuffle tabs to enforce the last visible order.
     // Otherwise, the most recently inserted tabs would move at the end of visible list which can be a little too confusing or magic for the user.
     if ((flags & ImGuiTabBarFlags_Reorderable) && !(tab_bar->Flags & ImGuiTabBarFlags_Reorderable) && tab_bar->Tabs.Size > 1 && tab_bar->PrevFrameVisible != -1)
         ImQsort(tab_bar->Tabs.Data, tab_bar->Tabs.Size, sizeof(ImGuiTabItem), TabItemComparerByVisibleOffset);
@@ -5905,7 +5905,7 @@ bool    ImGui::BeginTabBarEx(ImGuiTabBar* tab_bar, const ImRect& tab_bar_bb, ImG
     tab_bar->PrevFrameVisible = tab_bar->CurrFrameVisible;
     tab_bar->CurrFrameVisible = g.FrameCount;
 
-    // Layout    
+    // Layout
     ItemSize(ImVec2(tab_bar->OffsetMax, tab_bar->BarRect.GetHeight()));
     window->DC.CursorPos.x = tab_bar->BarRect.Min.x;
 
@@ -6026,7 +6026,7 @@ static void ImGui::TabBarLayout(ImGuiTabBar* tab_bar)
             found_selected_tab_id = true;
 
         // Refresh tab width immediately if we can (for manual tab bar, WidthContent will lag by one frame which is mostly noticeable when changing style.FramePadding.x)
-        // Additionally, when using TabBarAddTab() to manipulate tab bar order we occasionally insert new tabs that don't have a width yet, 
+        // Additionally, when using TabBarAddTab() to manipulate tab bar order we occasionally insert new tabs that don't have a width yet,
         // and we cannot wait for the next BeginTabItem() call. We cannot compute this width within TabBarAddTab() because font size depends on the active window.
         if (tab->Window)
             tab->WidthContents = TabItemCalcSize(tab->Window->Name, tab->Window->HasCloseButton).x;
@@ -6150,7 +6150,7 @@ ImGuiTabItem* ImGui::TabBarFindTabByID(ImGuiTabBar* tab_bar, ImGuiID tab_id)
     return NULL;
 }
 
-// The purpose of this call is to register tab in advance so we can control their order at the time they appear. 
+// The purpose of this call is to register tab in advance so we can control their order at the time they appear.
 // Otherwise calling this is unnecessary as tabs are appending as needed by the BeginTabItem() function.
 void ImGui::TabBarAddTab(ImGuiTabBar* tab_bar, ImGuiTabItemFlags tab_flags, ImGuiWindow* window)
 {
@@ -6718,4 +6718,43 @@ bool ImGui::TabItemLabelAndCloseButton(ImDrawList* draw_list, const ImRect& bb, 
     }
 
     return close_button_pressed;
+}
+
+/****************************************************************************************************
+ New symmetry-created widgets go below this line!
+ ****************************************************************************************************/
+
+static const float knob_radius = 40;
+
+bool ImGui::Knob(const char *label, float *v, float min, float max) {
+	auto window = GetCurrentWindow();
+	if (window->SkipItems)
+		return false;
+
+	auto &g = *GImGui;
+	const auto &style = g.Style;
+	auto pos = ImGui::GetCursorPos();
+	ImVec2 size{knob_radius * 2, knob_radius * 2};
+	const ImRect bb{pos, pos + size};
+	ItemSize(bb);
+	if (!ItemAdd(bb, 0))
+		return false;
+
+	window->DrawList->PathClear();
+	ImVec2 center{pos.x + 0.5f * size.x, pos.y + 0.5f * size.y};
+	window->DrawList->PathArcTo(center, knob_radius, 0, M_PI, 10);
+	/*
+	int start = static_cast<int>(abs(ImSin(static_cast<float>(g.Time * 1.8f)) * (num_segments - 5)));
+	const float a_min = IM_PI * 2.0f * ((float) start) / (float) num_segments;
+	const float a_max = IM_PI * 2.0f * ((float) num_segments - 3) / (float) num_segments;
+	const auto &&centre = pos + radius;
+	for (auto i = 0; i < num_segments; i++) {
+		const float a = a_min + ((float) i / (float) num_segments) * (a_max - a_min);
+		auto time = static_cast<float>(g.Time);
+		window->DrawList->PathLineTo({centre.x + ImCos(a + time * 8) * radius,
+																	centre.y + ImSin(a + time * 8) * radius});
+	}
+	*/
+	window->DrawList->PathStroke(GetColorU32(ImVec4{1, 0, 0, 1}), false, 5);
+	return false;
 }
