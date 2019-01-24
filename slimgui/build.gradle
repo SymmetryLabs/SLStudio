@@ -33,6 +33,7 @@ tasks.withType(CppCompile) {
 	   and adding nonexistent include directories doesn't hurt anything. */
 	systemIncludes.from (javaHome + "/include/linux")
 	systemIncludes.from (javaHome + "/include/darwin")
+	systemIncludes.from (javaHome + "/include/win32")
 }
 
 tasks.withType(LinkSharedLibrary) {
