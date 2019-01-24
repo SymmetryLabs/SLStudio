@@ -51,7 +51,7 @@ public class UILeftPane extends UIPane {
     public UILeftPane(UI ui, LX lx) {
         super(ui, lx, new String[] { "BROWSER", "GLOBAL" }, 0, WIDTH, TOP_OFFSET);
 
-        new UIImage(ui.applet.loadImage("lxstudio.png"), MARGIN, 4)
+        new UIImage(ui.applet.loadImage("icons/lxstudio.png"), MARGIN, 4)
         .setDescription(LXStudio.COPYRIGHT)
         .addToContainer(this);
 

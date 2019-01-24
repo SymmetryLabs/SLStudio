@@ -1,61 +1,50 @@
 package com.symmetrylabs.shows.tree.config;
 
 import java.io.*;
-import java.util.*;
+
 import com.symmetrylabs.slstudio.SLStudioLX;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import heronarts.lx.LX;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.shows.tree.TreeModel;
-
+import com.symmetrylabs.util.FileUtils;
 
 public class TreeConfigStore implements SLStudioLX.SaveHook {
-
     private final TreeModel tree;
-
     private File file = null;
-
     private TreeConfig config = null;
 
     public TreeConfigStore(LX lx) {
-        this.tree = (TreeModel)lx.model;
+        this.tree = (TreeModel) lx.model;
         loadConfig();
     }
 
     private void loadConfig() {
-        File file = new File(getConfigFilePath());
-
+        File file = getConfigFile();
         if (!file.exists()) {
             file = createConfigFile();
         }
 
-        try {
-            this.file = file;
-            this.config = new Gson().fromJson(new FileReader(file), TreeConfig.class);
-            reconfigureTree(config);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.file = file;
+        this.config = FileUtils.readJson(file, TreeConfig.class);
+        if (config != null) reconfigureTree(config);
     }
 
     private File createConfigFile() {
-        File file = new File(getConfigFilePath());
-
+        File file = getConfigFile();
         try {
-            //writeConfig(file);
+            writeConfig(file);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return file;
     }
 
-    private String getConfigFilePath() {
-        return "data/" + SLStudio.applet.getSelectedShowName() + "-tree-config.json";
+    private File getConfigFile() {
+        return FileUtils.getShowFile("tree-config.json");
     }
 
     private void reconfigureTree(TreeConfig config) {
@@ -72,12 +61,6 @@ public class TreeConfigStore implements SLStudioLX.SaveHook {
     }
 
     private void writeConfig(File file) {
-        try {
-            FileWriter writer = new FileWriter(file);
-            writer.write(new Gson().toJson(tree.getConfig()));
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FileUtils.writeJson(getConfigFile(), tree.getConfig());
     }
 }

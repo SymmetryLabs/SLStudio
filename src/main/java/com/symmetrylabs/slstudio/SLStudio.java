@@ -1,41 +1,44 @@
 package com.symmetrylabs.slstudio;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.net.SocketException;
-import com.symmetrylabs.util.MarkerSource;
-import java.io.File;
-import processing.opengl.PJOGL;
-
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
-import com.symmetrylabs.shows.tree.Anemometer;
-import com.symmetrylabs.slstudio.output.MappingPixlite;
-import com.symmetrylabs.slstudio.ui.UIWorkspace;
-import heronarts.lx.LX;
 import com.symmetrylabs.shows.ShowRegistry;
-import processing.core.PApplet;
-
-import heronarts.lx.model.LXModel;
-import heronarts.lx.parameter.BooleanParameter;
-import processing.core.PFont;
-
+import com.symmetrylabs.shows.tree.Anemometer;
+import com.symmetrylabs.slstudio.envelop.Envelop;
+import com.symmetrylabs.slstudio.envelop.EnvelopOscListener;
 import com.symmetrylabs.slstudio.mappings.Mappings;
+import com.symmetrylabs.slstudio.midi.NotationXLListener;
+import com.symmetrylabs.slstudio.output.MappingPixlite;
 import com.symmetrylabs.slstudio.output.OutputControl;
 import com.symmetrylabs.slstudio.performance.APC40Listener;
 import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
-import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.ui.UIFramerateControl;
-import com.symmetrylabs.slstudio.envelop.Envelop;
-import com.symmetrylabs.slstudio.envelop.EnvelopOscListener;
-import com.symmetrylabs.slstudio.midi.NotationXLListener;
+import com.symmetrylabs.slstudio.ui.UISpeed;
+import com.symmetrylabs.slstudio.ui.UIWorkspace;
 import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.DrawHelper;
-import com.symmetrylabs.util.dispatch.Dispatcher;
+import com.symmetrylabs.util.MarkerSource;
 import com.symmetrylabs.util.Utils;
+import com.symmetrylabs.util.dispatch.Dispatcher;
 
-import static com.symmetrylabs.util.DistanceConstants.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.SocketException;
+import java.util.HashMap;
+import java.util.Map;
+
+import heronarts.lx.LX;
+import heronarts.lx.model.LXModel;
+import heronarts.lx.parameter.BooleanParameter;
+import processing.core.PApplet;
+import processing.core.PFont;
+import processing.opengl.PJOGL;
+
+import static com.symmetrylabs.util.DistanceConstants.FEET;
 
 public class SLStudio extends PApplet {
     public static SLStudio applet;
@@ -47,6 +50,7 @@ public class SLStudio extends PApplet {
 
     private SLStudioLX lx;
     public Show show;
+    public String showName;
     private Dispatcher dispatcher;
     private Mappings mappings;
     public OutputControl outputControl;
@@ -110,7 +114,7 @@ public class SLStudio extends PApplet {
 
         Utils.setSketchPath(sketchPath());
 
-        String showName = getSelectedShowName();
+        showName = getSelectedShowName();
         saveSelectedShowName(showName);
         println("\n---- Show: " + showName + " ----");
 

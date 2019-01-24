@@ -1,16 +1,14 @@
 package com.symmetrylabs.shows.hhgarden;
 
-import com.google.gson.Gson;
+import com.symmetrylabs.util.FileUtils;
+
 import de.javagl.obj.FloatTuple;
-import de.javagl.obj.Obj;
 import de.javagl.obj.ObjReader;
 import de.javagl.obj.ReadableObj;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXVector;
-import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -19,21 +17,14 @@ import java.util.List;
 public class FlowersModelLoader {
     private static final float RECORD_MATCH_SQDIST_INCHES = 3.f * 3.f;
 
-    static final String GEOMETRY_FILE = "shows/hhgarden/locations.obj";
-    static final File RECORD_FILE = new File("shows/hhgarden/records.json");
-    static final File PANEL_FILE = new File("shows/hhgarden/panels.txt");
-    static final File PIXLITE_FILE = new File("shows/hhgarden/pixlites.txt");
+    static final String GEOMETRY_FILENAME = "locations.obj";
+    static final String RECORDS_FILENAME = "records.json";
+    static final String PANEL_FILENAME = "panels.txt";
+    static final String PIXLITE_FILENAME = "pixlites.txt";
 
     public static FlowersModel load() {
-        ReadableObj model;
-        try {
-            InputStream in = new FileInputStream(GEOMETRY_FILE);
-            model = ObjReader.read(in);
-        } catch (IOException e) {
-            System.err.println("could not read flowers point file:");
-            e.printStackTrace();
-            return null;
-        }
+        ReadableObj model = FileUtils.readShowObj(GEOMETRY_FILENAME);
+        if (model == null) return null;
 
         List<FlowerData> flowerData = new ArrayList<>();
         for (int vi = 0; vi < model.getNumVertices(); vi++) {
@@ -42,16 +33,8 @@ public class FlowersModelLoader {
             flowerData.add(new FlowerData(new LXVector(v.getX(), v.getZ(), v.getY())));
         }
 
-        if (RECORD_FILE.exists()) {
-            try {
-                FlowerRecord[] records = new Gson().fromJson(
-                    new BufferedReader(new FileReader(RECORD_FILE)), FlowerRecord[].class);
-                matchRecords(flowerData, records);
-            } catch (IOException e) {
-                System.err.println("could not read flower data file:");
-                e.printStackTrace();
-            }
-        }
+        FlowerRecord[] records = FileUtils.readShowJson(RECORDS_FILENAME, FlowerRecord[].class);
+        if (records != null) matchRecords(flowerData, records);
         addMissingRecords(flowerData);
         updateHeights(flowerData);
 

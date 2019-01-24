@@ -150,7 +150,7 @@ public class SLStudioLX extends P3LX {
             this.axes = new UIAxes();
             this.markerPainter = new UIMarkerPainter();
             this.cubeMapDebug = new UICubeMapDebug(lx);
-            this.cameraControls = new UICameraControls(this, preview);
+            this.cameraControls = new UICameraControls(lx, this, preview);
 
             this.preview.addComponent(this.cubeMapDebug);
             this.preview.addComponent(axes);
@@ -158,7 +158,7 @@ public class SLStudioLX extends P3LX {
 
             new UI2dComponent(0, 0, leftPane.getWidth(), 30) {}.setBackgroundColor(0).addToContainer(leftPane);
 
-            new UIImage(applet.loadImage("symmetry-labs-logo.png"), 4, 4)
+            new UIImage(applet.loadImage("icons/symmetry-labs-logo.png"), 4, 4)
             .setDescription("Symmetry Labs")
             .addToContainer(leftPane);
 

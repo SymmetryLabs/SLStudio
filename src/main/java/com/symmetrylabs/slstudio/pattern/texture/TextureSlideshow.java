@@ -74,7 +74,7 @@ public abstract class TextureSlideshow extends SLPattern<SLModel> {
             }
         }
 
-        imageLayers = new int[images.length][colors.length];
+        imageLayers = new int[images.length][model.points.length];
 
         addParameter(rate);
         addParameter(offsetX);

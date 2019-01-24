@@ -7,6 +7,8 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
+import com.symmetrylabs.util.FileUtils;
+
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEngine;
 import heronarts.lx.color.LXColor;
@@ -88,12 +90,7 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
     public void setupLx(SLStudioLX lx) {
         this.lx = lx;
 
-        initialConfigs = null;
-        try {
-            initialConfigs = CartConfig.readConfigsFromFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        initialConfigs = CartConfig.readConfigsFromFile();
         /* If we couldn't load the configs from a file, use the default */
         if (initialConfigs == null) {
             initialConfigs = CartConfig.defaultConfigs();
@@ -136,14 +133,7 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
             }
         });
 
-        try {
-            FileWriter writer = new FileWriter(IP_CONFIGS_FILENAME);
-            new Gson().toJson(configs, writer);
-            writer.close();
-        } catch (IOException e) {
-            System.err.println("couldn't write cart configs to file:");
-            e.printStackTrace();
-        }
+        FileUtils.writeShowJson(IP_CONFIGS_FILENAME, configs);
     }
 
     @Override

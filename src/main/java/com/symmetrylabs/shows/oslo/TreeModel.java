@@ -2,7 +2,10 @@ package com.symmetrylabs.shows.oslo;
 
 import static com.symmetrylabs.util.DistanceConstants.*;
 
+import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.util.FileUtils;
+
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXMatrix;
@@ -74,7 +77,7 @@ public class TreeModel extends SLModel {
             } else if (mode == ModelMode.STELLAR_IMPORT) {
 
                 // Load up the Stellar export file
-                JSONObject assemblages = applet.loadJSONObject(STELLAR_FILE);
+                JSONObject assemblages = applet.loadJSONObject(FileUtils.getShowFile(STELLAR_FILE));
                 JSONArray fixtures = assemblages.getJSONArray("Fixtures");
 
                 // Load up all of the fixtures and index them by ID
