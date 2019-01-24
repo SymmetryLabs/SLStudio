@@ -18,7 +18,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import com.symmetrylabs.slstudio.component.HiddenComponent;
 
+@HiddenComponent
 public class Vortex extends SLPattern<SLModel> {
     private final DiscreteParameter countParam = new DiscreteParameter("count", 50, 0, 200);
     private final CompoundParameter xCenterParam = new CompoundParameter("xc", model.cx, model.xMin, model.xMax);

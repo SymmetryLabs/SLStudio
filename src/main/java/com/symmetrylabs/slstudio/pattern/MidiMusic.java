@@ -27,7 +27,9 @@ import heronarts.lx.midi.MidiNoteOn;
 
 import com.symmetrylabs.slstudio.model.Strip;
 import heronarts.lx.transform.LXVector;
+import com.symmetrylabs.slstudio.component.HiddenComponent;
 
+@HiddenComponent
 public class MidiMusic extends SLPattern<SLModel> {
 
     private final Stack<LXLayer> newLayers = new Stack<LXLayer>();

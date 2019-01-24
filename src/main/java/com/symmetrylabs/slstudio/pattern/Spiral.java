@@ -17,8 +17,10 @@ import heronarts.lx.color.LXColor;
 
 import static com.symmetrylabs.util.MathUtils.*;
 import static com.symmetrylabs.util.MathConstants.*;
+import com.symmetrylabs.slstudio.component.HiddenComponent;
 
 
+@HiddenComponent
 public class Spiral extends LXPattern {
 
     final CompoundParameter speed = new CompoundParameter("speed", 4, -15, 15);

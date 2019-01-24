@@ -21,8 +21,10 @@ import heronarts.lx.parameter.LXParameterListener;
 
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 
+import com.symmetrylabs.slstudio.component.HiddenComponent;
 import static com.symmetrylabs.util.Utils.createInput;
 
+@HiddenComponent
 public abstract class TextureSlideshow extends SLPattern<SLModel> {
     public final CompoundParameter rate = new CompoundParameter("Rate", 3000, 10000, 250);
     public final CompoundParameter offsetX = new CompoundParameter("xOffset", 0, -1, 1);

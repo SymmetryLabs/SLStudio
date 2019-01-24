@@ -12,8 +12,10 @@ import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.shows.tree.ui.*;
+import com.symmetrylabs.slstudio.component.HiddenComponent;
 
 
+@HiddenComponent
 public class TreeModelingPattern extends SLPattern<TreeModel> {
 
     private final int ORANGE = 0xffff8000;

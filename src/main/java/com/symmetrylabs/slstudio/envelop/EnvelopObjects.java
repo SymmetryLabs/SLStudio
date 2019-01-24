@@ -13,7 +13,9 @@ import heronarts.lx.color.LXColor;
 
 import static com.symmetrylabs.util.DistanceConstants.FEET;
 import static com.symmetrylabs.util.MathUtils.dist;
+import com.symmetrylabs.slstudio.component.HiddenComponent;
 
+@HiddenComponent
 public class EnvelopObjects extends LXPattern {
 
     public final CompoundParameter size = new CompoundParameter("Base", 4*FEET, 0, 24*FEET);

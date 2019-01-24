@@ -9,9 +9,11 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.Accelerator;
 import heronarts.lx.modulator.TriangleLFO;
 import heronarts.lx.parameter.CompoundParameter;
+import com.symmetrylabs.slstudio.component.HiddenComponent;
 
 import static heronarts.lx.LX.TWO_PI;
 
+@HiddenComponent
 public class BouncyBalls extends LXPattern {
 
     static final int NUM_BALLS = 6;

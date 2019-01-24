@@ -6,7 +6,9 @@ import org.apache.commons.math3.util.FastMath;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.BooleanParameter;
+import com.symmetrylabs.slstudio.component.HiddenComponent;
 
+@HiddenComponent
 public class Wasps extends ParticlePattern {
     private final double SQRT_2PI = FastMath.sqrt(2 * FastMath.PI);
 

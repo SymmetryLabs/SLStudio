@@ -37,8 +37,10 @@ import com.symmetrylabs.util.MathUtils;
 
 import static processing.core.PApplet.*;
 import static java.lang.Math.*;
+import com.symmetrylabs.slstudio.component.HiddenComponent;
 
 
+@HiddenComponent
 public class TraktorPlayNeue extends DPat
 {
     private boolean rhythmOn = false;

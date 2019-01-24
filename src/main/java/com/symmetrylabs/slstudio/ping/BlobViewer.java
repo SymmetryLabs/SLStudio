@@ -9,12 +9,13 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.transform.LXVector;
 import processing.core.PVector;
+import com.symmetrylabs.slstudio.component.HiddenComponent;
 
 import java.util.List;
 
 import static processing.core.PApplet.println;
 
-
+@HiddenComponent
 public class BlobViewer extends SLPattern<SLModel> {
     DiscreteParameter mode = new DiscreteParameter("mode", new String[]{"planes", "spheres"});
     CompoundParameter tolerance = new CompoundParameter("tolerance", 2, 0, 8); // in

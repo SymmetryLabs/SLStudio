@@ -13,8 +13,10 @@ import heronarts.lx.transform.LXVector;
 
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 import static processing.core.PApplet.*;
+import com.symmetrylabs.slstudio.component.HiddenComponent;
 
 
+@HiddenComponent
 public class CubeEQ extends SLPattern<SLModel> {
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();

@@ -22,12 +22,14 @@ import heronarts.lx.transform.LXVector;
 import static com.symmetrylabs.util.Utils.*;
 import static com.symmetrylabs.util.MathUtils.random;
 import static com.symmetrylabs.util.MathUtils.randomGaussian;
+import com.symmetrylabs.slstudio.component.HiddenComponent;
 
 import static processing.core.PApplet.*;
 import static processing.core.PApplet.map;
 import static processing.core.PConstants.PI;
 
 
+@HiddenComponent
 public class SoundParticles extends LXPattern {
     private final int LIMINAL_KEY = 46;
     private final int MAX_VELOCITY = 100;

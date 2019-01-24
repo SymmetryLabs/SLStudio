@@ -1,11 +1,13 @@
 package com.symmetrylabs.shows.pilots;
 
+import com.symmetrylabs.slstudio.component.HiddenComponent;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.MidiTime;
 
+@HiddenComponent
 public class MidiClockTestPattern extends SLPattern<SLModel> {
     MidiTime mt = null;
 
