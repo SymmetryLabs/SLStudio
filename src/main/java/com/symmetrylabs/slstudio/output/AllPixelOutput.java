@@ -7,8 +7,17 @@ import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import com.symmetrylabs.color.Spaces;
 
+/**
+ * LXOutput module for controlling Maniacal Labs AllPixelMini USB-serial-to-SPI devices
+ *
+ * The AllPixel Mini is a cheap device that can control up to 750 RGB LEDs with a global
+ * brightness prescaler for HDR support.
+ *
+ * @see <a href="https://www.tindie.com/products/ManiacalLabs/allpixelmini-universal-led-controller/">Tindie page for the AllPixelMini controller</a>
+ */
 public class AllPixelOutput extends LXOutput {
     public enum LedType {
+        /* These constants are set up to match the numerical constants in the AllPixel's firmware */
         LPD8806(1),
         WS2801(2),
         WS2811(3),
@@ -36,11 +45,17 @@ public class AllPixelOutput extends LXOutput {
     private final LedType ledType;
     private final int[] channelOrder;
     private boolean isRebooting = false;
+    private String currentWarning = null;
 
     public AllPixelOutput(LX lx) {
         this(lx, LedType.APA102, new int[] {0, 1, 2});
     }
 
+    /**
+     * @param lx the lx instance to bind to
+     * @param ledType the type of LED that the AllPixelMini is controlling
+     * @param channelOrder the order in which to send color channels. {0, 1, 2} means send RGB, {2, 0, 1} means send BRG, etc
+     */
     public AllPixelOutput(LX lx, LedType ledType, int[] channelOrder) {
         super(lx);
         this.lx = lx;
@@ -56,9 +71,12 @@ public class AllPixelOutput extends LXOutput {
         if (lx.model.size * 3 > 0xFFFF) {
             throw new RuntimeException("model data size (3 * model size) must fit in 16 bits, got " + (3 * lx.model.size));
         }
+        discoverPort();
+    }
 
+    private void discoverPort() {
         /* TODO: figure out how to get serial ports by USB device
-             vendor/product ID pair */
+           vendor/product ID pair */
         for (SerialPort port : SerialPort.getCommPorts()) {
             if ("AVR USB Serial".equals(port.getPortDescription())) {
                 this.port = port;
@@ -66,14 +84,16 @@ public class AllPixelOutput extends LXOutput {
             }
         }
         if (this.port == null) {
-            SLStudio.setWarning("AllPixelOutput", "no AllPixel device found");
-            enabled.setValue(false);
+            warn("no AllPixel device found");
         } else {
             sendConfigureCommand();
         }
     }
 
     private boolean openPort() {
+        if (port == null) {
+            return false;
+        }
         port.setBaudRate(921600);
         port.setComPortTimeouts(
             SerialPort.TIMEOUT_WRITE_BLOCKING | SerialPort.TIMEOUT_READ_SEMI_BLOCKING,
@@ -82,15 +102,14 @@ public class AllPixelOutput extends LXOutput {
     }
 
     protected void sendConfigureCommand() {
-        if (!port.isOpen()) {
+        if (port == null || !port.isOpen()) {
             port.setBaudRate(921600);
             port.setComPortTimeouts(
                 SerialPort.TIMEOUT_WRITE_BLOCKING | SerialPort.TIMEOUT_READ_SEMI_BLOCKING,
                 READ_TIMEOUT_MS, WRITE_TIMEOUT_MS);
             boolean open = port.openPort();
             if (!open && !isRebooting) {
-                SLStudio.setWarning("AllPixelOutput", "could not open serial port");
-                enabled.setValue(false);
+                warn("could not open serial port");
             }
             if (!open) {
                 return;
@@ -120,13 +139,21 @@ public class AllPixelOutput extends LXOutput {
 
     @Override
     public void onSend(PolyBuffer buf) {
+        if (port == null) {
+            discoverPort();
+            if (port == null) {
+                return;
+            } else {
+                sendConfigureCommand();
+            }
+        }
         if (isRebooting) {
             sendConfigureCommand();
             return;
         }
         double br = brightness.getValue();
-        /* if we put master output in raw mode (desirable!) we can use non-prescaled colors and then
-             scale the global brightness by the master output level */
+        /* if we put master output in raw mode we can use non-prescaled colors and then
+           scale the global brightness by the master output level */
         if (lx.engine.output.mode.getEnum() == Mode.RAW) {
             br *= lx.engine.output.brightness.getValue();
         }
@@ -154,17 +181,19 @@ public class AllPixelOutput extends LXOutput {
     }
 
     protected void sendMessage(byte[] msg) {
+        if (port == null) {
+            return;
+        }
         int written = port.writeBytes(msg, msg.length);
         if (written != msg.length) {
-            SLStudio.setWarning(
-                "AllPixelOutput",
-                String.format("failed to write %d bytes, only wrote %d", msg.length, written));
+            warn("failed to write %d bytes, only wrote %d", msg.length, written);
         }
         byte[] buf = new byte[1];
         int read = port.readBytes(buf, 1);
         if (read != 1) {
             if (!isRebooting) {
-                SLStudio.setWarning("AllPixelOutput", "output is unresponsive");
+                port = null;
+                warn("output is unresponsive");
             }
             return;
         }
@@ -173,39 +202,43 @@ public class AllPixelOutput extends LXOutput {
         int msgCode = Byte.toUnsignedInt(msg[0]);
         switch (ret) {
         case 255:
-            SLStudio.setWarning("AllPixelOutput", null); // all is good
+            warn(null);
             return;
         case 42:
-            SLStudio.setWarning("AllPixelOutput", "device is rebooting, sends may fail");
+            warn("device is rebooting, sends may fail");
             isRebooting = true;
             return;
         case 1:
-            SLStudio.setWarning(
-                "AllPixelOutput",
-                String.format("message size error returned from device on message code %d", msgCode));
+            warn("message size error returned from device on message code %d", msgCode);
             return;
         case 2:
-            SLStudio.setWarning(
-                "AllPixelOutput",
-                String.format("unsupported command error returned from device on message code %d", msgCode));
+            warn("unsupported command error returned from device on message code %d", msgCode);
             return;
         case 3:
-            SLStudio.setWarning("AllPixelOutput", "too-many-pixels error returned from device");
+            warn("too-many-pixels error returned from device");
             return;
         case 0:
-            SLStudio.setWarning(
-                "AllPixelOutput",
-                String.format("generic error returned from device on message code %d", msgCode));
+            warn("generic error returned from device on message code %d", msgCode);
             return;
         default:
-            SLStudio.setWarning(
-                "AllPixelOutput",
-                String.format("unknown error %d returned from device on message code %d", ret, msgCode));
+            warn("unknown error %d returned from device on message code %d", ret, msgCode);
             return;
         }
     }
 
     public static void configureMasterOutput(LX lx) {
         lx.engine.output.mode.setValue(Mode.RAW);
+    }
+
+    /* used so that we don't spam the logs too badly when we're disconnected */
+    private void warn(String w, Object... args) {
+        if (w == null) {
+            SLStudio.setWarning("AllPixelOutput", null);
+        }
+        String v = String.format(w, args);
+        if (currentWarning == null || !v.equals(currentWarning)) {
+            SLStudio.setWarning("AllPixelOutput", v);
+            currentWarning = v;
+        }
     }
 }
