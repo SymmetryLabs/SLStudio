@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.ui;
 
 import com.symmetrylabs.slstudio.SLStudio;
+import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -21,6 +22,7 @@ public class UICameraControls extends UI2dContext implements LXParameterListener
     private static final float WIDTH = BCOLS * BW + (BCOLS + 1) * PAD;
     private static final double ISO_ELEVATION = Math.asin(1 / Math.sqrt(3));
 
+    private final LX lx;
     private final UI3dContext parent;
 
     private final BooleanParameter gotoUp = makeDirParam("up");
@@ -32,9 +34,10 @@ public class UICameraControls extends UI2dContext implements LXParameterListener
     private final BooleanParameter gotoIsoLeft = makeDirParam("iso-left");
     private final BooleanParameter gotoIsoRight = makeDirParam("iso-right");
 
-    public UICameraControls(UI ui, UI3dContext parent) {
+    public UICameraControls(LX lx, UI ui, UI3dContext parent) {
         super(ui, 0, 0, WIDTH, HEIGHT);
         this.parent = parent;
+        this.lx = lx;
         reposition(0);
 
         float x = PAD;
@@ -109,6 +112,7 @@ public class UICameraControls extends UI2dContext implements LXParameterListener
     private void gotoLatLon(double theta, double phi) {
         parent.setTheta(theta);
         parent.setPhi((float) phi);
+        parent.setCenter(lx.model.cx, lx.model.cy, lx.model.cz);
     }
 
     @Override

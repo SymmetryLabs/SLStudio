@@ -150,7 +150,7 @@ public class SLStudioLX extends P3LX {
             this.axes = new UIAxes();
             this.markerPainter = new UIMarkerPainter();
             this.cubeMapDebug = new UICubeMapDebug(lx);
-            this.cameraControls = new UICameraControls(this, preview);
+            this.cameraControls = new UICameraControls(lx, this, preview);
 
             this.preview.addComponent(this.cubeMapDebug);
             this.preview.addComponent(axes);
