@@ -10,6 +10,31 @@
 
 #define MAX_INPUT_LENGTH 511
 
+/* A struct that converts jstrings to c-style strings and uses RAII to make sure
+   that all jstrings that are converted have their references released when the
+   JniString object goes out of scope. */
+struct JniString {
+    JNIEnv *env;
+    jstring jstr;
+    const char *str;
+
+    JniString(JNIEnv *env, jstring jstr) : env(env), jstr(jstr) {
+        str = env->GetStringUTFChars(jstr, 0);
+    }
+
+    ~JniString() {
+        env->ReleaseStringUTFChars(jstr, str);
+    }
+
+    operator const char*() {
+        return str;
+    }
+
+    operator const std::string() {
+        return std::string(str);
+    }
+};
+
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong windowHandle) {
 	jfieldID fid;
@@ -169,14 +194,13 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowContentSize(JNIEnv *, jclas
 
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_begin(JNIEnv *env, jclass, jstring jstr) {
-	const char *str = env->GetStringUTFChars(jstr, 0);
+    JniString str(env, jstr);
 	ImGui::Begin(str);
-	env->ReleaseStringUTFChars(jstr, str);
 }
 
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_beginDocked(JNIEnv *env, jclass, jstring jstr) {
-	const char *str = env->GetStringUTFChars(jstr, 0);
+    JniString str(env, jstr);
 	ImGuiIO &io = ImGui::GetIO();
 	ImGui::SetNextWindowPos(ImVec2(0, io.DisplaySize.y), ImGuiCond_Always, ImVec2(1, 1));
 	ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x, 300));
@@ -188,15 +212,13 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_beginDocked(JNIEnv *env, jclass, jstring
 		ImGuiWindowFlags_NoFocusOnAppearing |
 		ImGuiWindowFlags_NoNav;
 	ImGui::Begin(str, NULL, flags);
-	env->ReleaseStringUTFChars(jstr, str);
 }
 
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_beginClosable(JNIEnv *env, jclass, jstring jstr) {
-	const char *str = env->GetStringUTFChars(jstr, 0);
+    JniString str(env, jstr);
 	bool isOpen = true;
 	ImGui::Begin(str, &isOpen);
-	env->ReleaseStringUTFChars(jstr, str);
 	return isOpen ? 1 : 0;
 }
 
@@ -212,9 +234,8 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_sameLine(JNIEnv *, jclass) {
 
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_columnsStart(JNIEnv *env, jclass, jint num, jstring jlabel) {
-	const char *label = env->GetStringUTFChars(jlabel, 0);
+    JniString label(env, jlabel);
 	ImGui::Columns(num, label);
-	env->ReleaseStringUTFChars(jlabel, label);
 }
 
 JNIEXPORT void JNICALL
@@ -240,9 +261,8 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_spacing(JNIEnv *, jclass) {
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_beginChild(
 	JNIEnv *env, jclass, jstring jid, jboolean border, jint flags) {
-	const char *id = env->GetStringUTFChars(jid, 0);
+    JniString id(env, jid);
 	bool res = ImGui::BeginChild(id, ImVec2(0, 0), border == 1, flags);
-	env->ReleaseStringUTFChars(jid, id);
 	return res ? 1 : 0;
 
 }
@@ -264,9 +284,8 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_endGroup(JNIEnv *, jclass) {
 
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_text(JNIEnv *env, jclass, jstring jstr) {
-	const char *str = env->GetStringUTFChars(jstr, 0);
-	ImGui::Text("%s", str);
-	env->ReleaseStringUTFChars(jstr, str);
+    JniString str(env, jstr);
+	ImGui::Text("%s", str.str);
 }
 
 
@@ -276,59 +295,47 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_labelText(JNIEnv *env, jclass, jstring j
 		env->ThrowNew(env->FindClass("java/lang/NullPointerException"), "supplied text in labelText is null");
 		return;
 	}
-	const char *text = env->GetStringUTFChars(jtext, 0);
-	const char *label = env->GetStringUTFChars(jlabel, 0);
+    JniString text(env, jtext);
+    JniString label(env, jlabel);
 	ImGui::LabelText(label, "%s", text);
-	env->ReleaseStringUTFChars(jtext, text);
-	env->ReleaseStringUTFChars(jlabel, label);
 }
 
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_button(JNIEnv *env, jclass, jstring jstr) {
-	const char *str = env->GetStringUTFChars(jstr, 0);
+    JniString str(env, jstr);
 	bool res = ImGui::Button(str);
-	env->ReleaseStringUTFChars(jstr, str);
 	return res ? 1 : 0;
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_checkbox(
-	JNIEnv *env, jclass, jstring jlabel, jboolean v) {
-	const char *label = env->GetStringUTFChars(jlabel, 0);
+Java_com_symmetrylabs_slstudio_ui_v2_UI_checkbox(JNIEnv *env, jclass, jstring jlabel, jboolean v) {
+    JniString label(env, jlabel);
 	bool res = v == 1 ? true : false;
 	ImGui::Checkbox(label, &res);
-	env->ReleaseStringUTFChars(jlabel, label);
 	return res ? 1 : 0;
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_selectable(
-	JNIEnv *env, jclass, jstring jlabel, jboolean v) {
-	const char *label = env->GetStringUTFChars(jlabel, 0);
+Java_com_symmetrylabs_slstudio_ui_v2_UI_selectable(JNIEnv *env, jclass, jstring jlabel, jboolean v) {
+    JniString label(env, jlabel);
 	bool res = v == 1 ? true : false;
 	ImGui::Selectable(label, &res);
-	env->ReleaseStringUTFChars(jlabel, label);
 	return res ? 1 : 0;
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_inputText(
-	JNIEnv *env, jclass, jstring jlabel, jstring jstr) {
-	const char *label = env->GetStringUTFChars(jlabel, 0);
-	const char *str = env->GetStringUTFChars(jstr, 0);
+Java_com_symmetrylabs_slstudio_ui_v2_UI_inputText(JNIEnv *env, jclass, jstring jlabel, jstring jstr) {
+    JniString label(env, jlabel);
+    JniString str(env, jstr);
 	char input_buf[MAX_INPUT_LENGTH + 1] = {0};
 	strncpy(input_buf, str, MAX_INPUT_LENGTH);
 	ImGui::InputText(label, input_buf, MAX_INPUT_LENGTH + 1);
-	env->ReleaseStringUTFChars(jstr, str);
-	env->ReleaseStringUTFChars(jlabel, label);
 	return env->NewStringUTF(input_buf);
 }
 
 JNIEXPORT jint JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_colorPicker(
-	JNIEnv *env, jclass, jstring jlabel, jint jcolor) {
-	const char *label = env->GetStringUTFChars(jlabel, 0);
-
+Java_com_symmetrylabs_slstudio_ui_v2_UI_colorPicker(JNIEnv *env, jclass, jstring jlabel, jint jcolor) {
+    JniString label(env, jlabel);
 	unsigned int c = static_cast<unsigned int>(jcolor);
 	float color[] {
 		(float)((c >> 16) & 0xFF) / 255,
@@ -341,31 +348,28 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_colorPicker(
 		(0xFF & (int)(color[0] * 255)) << 16 |
 		(0xFF & (int)(color[1] * 255)) <<  8 |
 		(0xFF & (int)(color[2] * 255));
-	env->ReleaseStringUTFChars(jlabel, label);
 	return static_cast<jint>(res);
 }
 
 JNIEXPORT jfloat JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_sliderFloat(
 	JNIEnv * env, jclass, jstring jlabel, jfloat v, jfloat v0, jfloat v1, jboolean vert) {
-	const char *label = env->GetStringUTFChars(jlabel, 0);
+    JniString label(env, jlabel);
 	jfloat res = v;
 	if (vert) {
 		ImGui::VSliderFloat(label, ImVec2(20, 120), &res, v0, v1);
 	} else {
 		ImGui::SliderFloat(label, &res, v0, v1);
 	}
-	env->ReleaseStringUTFChars(jlabel, label);
 	return res;
 }
 
 JNIEXPORT jint JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_sliderInt(
 	JNIEnv *env, jclass, jstring jlabel, jint v, jint v0, jint v1) {
-	const char *label = env->GetStringUTFChars(jlabel, 0);
+    JniString label(env, jlabel);
 	int res = v;
 	ImGui::SliderInt(label, &res, v0, v1);
-	env->ReleaseStringUTFChars(jlabel, label);
 	return res;
 }
 
@@ -395,10 +399,9 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_combo(
 
 JNIEXPORT jfloat JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_floatBox(JNIEnv *env, jclass, jstring jlabel, jfloat v) {
-	const char *label = env->GetStringUTFChars(jlabel, 0);
+    JniString label(env, jlabel);
 	jfloat res = v;
 	ImGui::DragFloat(label, &res);
-	env->ReleaseStringUTFChars(jlabel, label);
 	return res;
 }
 
@@ -414,9 +417,8 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_endMainMenuBar(JNIEnv *, jclass) {
 
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_beginMenu(JNIEnv *env, jclass, jstring jlabel) {
-	const char *label = env->GetStringUTFChars(jlabel, 0);
+    JniString label(env, jlabel);
 	bool res = ImGui::BeginMenu(label);
-	env->ReleaseStringUTFChars(jlabel, label);
 	return res ? 1 : 0;
 }
 
@@ -431,25 +433,22 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_menuItem(
 	jboolean selected, jboolean enabled) {
 	const char *shortcut =
 		jshortcut == NULL ? NULL : env->GetStringUTFChars(jshortcut, 0);
-	const char *label = env->GetStringUTFChars(jlabel, 0);
+    JniString label(env, jlabel);
 
 	bool res = ImGui::MenuItem(label, shortcut, selected == 1, enabled == 1);
 
 	if (shortcut != NULL) {
 		env->ReleaseStringUTFChars(jshortcut, shortcut);
 	}
-	env->ReleaseStringUTFChars(jlabel, label);
 	return res ? 1 : 0;
 }
 
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_treeNode(
 	JNIEnv *env, jclass, jstring jid, jint flags, jstring jlabel) {
-	const char *id = env->GetStringUTFChars(jid, 0);
-	const char *label = env->GetStringUTFChars(jlabel, 0);
+    JniString id(env, jid);
+    JniString label(env, jlabel);
 	bool res = ImGui::TreeNodeEx(id, flags, "%s", label);
-	env->ReleaseStringUTFChars(jid, id);
-	env->ReleaseStringUTFChars(jlabel, label);
 	return res ? 1 : 0;
 }
 
