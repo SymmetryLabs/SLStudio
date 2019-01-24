@@ -297,7 +297,7 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_labelText(JNIEnv *env, jclass, jstring j
 	}
     JniString text(env, jtext);
     JniString label(env, jlabel);
-	ImGui::LabelText(label, "%s", text);
+	ImGui::LabelText(label, "%s", text.str);
 }
 
 JNIEXPORT jboolean JNICALL
@@ -455,7 +455,7 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_treeNode(
 	JNIEnv *env, jclass, jstring jid, jint flags, jstring jlabel) {
     JniString id(env, jid);
     JniString label(env, jlabel);
-	bool res = ImGui::TreeNodeEx(id, flags, "%s", label);
+	bool res = ImGui::TreeNodeEx(id, flags, "%s", label.str);
 	return res ? 1 : 0;
 }
 
