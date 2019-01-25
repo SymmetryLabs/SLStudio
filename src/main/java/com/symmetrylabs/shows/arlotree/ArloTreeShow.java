@@ -74,7 +74,7 @@ public class ArloTreeShow extends TreeShow {
         //lx.engine.framesPerSecond.setValue(30);
 
         final String[] ipAddresses = new String[] {
-            "10.200.1.100",
+            "10.200.1.255",
         };
 
         for (int i = 0; i < ipAddresses.length; i++) {

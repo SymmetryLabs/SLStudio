@@ -67,7 +67,7 @@ public class LoveBurnShow extends CubesShow implements HasWorkspace {
                
             }),
 // Back Row Middle
-            new TowerConfig(SP * .75f, SP * 0, SP * -1.5f, new String[][]{
+            new TowerConfig(SP * .75f, SP * 0, SP * 1.5f, new String[][]{
             
                 new String[] {"472", "473"},
                 new String[] {"920", "1085"},
