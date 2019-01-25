@@ -6756,7 +6756,7 @@ bool ImGui::Knob(const char *label, float *v, float min, float max) {
 	ImVec2 label_size = CalcTextSize(label, NULL, true);
 	ImVec2 size{
 		(knob_pad_h + knob_radius) * 2,
-		(knob_pad_v + knob_radius) * 2 + label_size.y + knob_thick / 2 + style.ItemInnerSpacing.y};
+		(knob_pad_v + knob_radius) * 2 + label_size.y + knob_thick + style.ItemInnerSpacing.y};
 	const ImRect bb{pos, pos + size};
 
 	ItemSize(bb);
@@ -6817,10 +6817,10 @@ bool ImGui::Knob(const char *label, float *v, float min, float max) {
 
 	ImVec2 text_pos {
 		center.x - knob_radius - knob_thick / 2,
-		pos.y + 2 * knob_radius + knob_thick / 2 + knob_pad_v + style.ItemInnerSpacing.y};
+		pos.y + 2 * knob_radius + knob_thick + knob_pad_v + style.ItemInnerSpacing.y};
 	ImVec2 text_clip {
 		center.x + knob_radius + knob_thick / 2,
-		text_pos.y + label_size.y};
+		text_pos.y + label_size.y + style.ItemInnerSpacing.y};
 	if (pressed) {
 		char value_buf[64];
 		int len = TinyNumberFormatString(value_buf, IM_ARRAYSIZE(value_buf), *v);

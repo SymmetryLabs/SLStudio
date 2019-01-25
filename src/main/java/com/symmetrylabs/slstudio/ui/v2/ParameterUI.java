@@ -5,14 +5,29 @@ import heronarts.lx.color.ColorParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXParameter;
 
 public class ParameterUI {
+    enum WidgetType {
+        KNOB,
+        SLIDER,
+    };
+
     public static void draw(LX lx, BoundedParameter p) {
+        draw(lx, p, WidgetType.SLIDER);
+    }
+
+    public static void draw(LX lx, BoundedParameter p, WidgetType wt) {
         float start = p.getValuef();
-        final float res =
-            UI.sliderFloat(p.getLabel(), start, (float) p.range.v0, (float) p.range.v1);
+        float res = start;
+        if (wt == WidgetType.SLIDER) {
+            res = UI.sliderFloat(p.getLabel(), start, (float) p.range.v0, (float) p.range.v1);
+        } else if (wt == WidgetType.KNOB) {
+            res = UI.knobFloat(p.getLabel(), start, (float) p.range.v0, (float) p.range.v1);
+        }
         if (start != res) {
-            lx.engine.addTask(() -> p.setValue(res));
+            final float fres = res;
+            lx.engine.addTask(() -> p.setValue(fres));
         }
     }
 
@@ -53,6 +68,18 @@ public class ParameterUI {
         int res = UI.colorPicker(p.getLabel(), start);
         if (res != start) {
             lx.engine.addTask(() -> p.setColor(res));
+        }
+    }
+
+    public static void draw(LX lx, LXParameter param) {
+        if (param instanceof BoundedParameter) {
+            ParameterUI.draw(lx, (BoundedParameter) param);
+        } else if (param instanceof DiscreteParameter) {
+            ParameterUI.draw(lx, (DiscreteParameter) param);
+        } else if (param instanceof BooleanParameter) {
+            ParameterUI.draw(lx, (BooleanParameter) param);
+        } else if (param instanceof ColorParameter) {
+            ParameterUI.draw(lx, (ColorParameter) param);
         }
     }
 }
