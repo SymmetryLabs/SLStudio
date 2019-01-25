@@ -409,6 +409,11 @@ JNIEXPORT jfloat JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_knobFloat(JNIEnv *env, jclass cls, jstring jlabel, jfloat vf, jfloat v0, jfloat v1) {
     JniString label(env, jlabel);
     ImGui::Knob(label, &vf, v0, v1);
+	if (ImGui::BeginPopupContextItem()) {
+		ImGui::InputFloat(label, &vf, 0, 0, "%.2f", 0);
+        vf = vf < v0 ? v0 : vf > v1 ? v1 : vf;
+		ImGui::EndPopup();
+	}
     return vf;
 }
 

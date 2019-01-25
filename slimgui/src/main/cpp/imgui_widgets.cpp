@@ -6724,12 +6724,24 @@ bool ImGui::TabItemLabelAndCloseButton(ImDrawList* draw_list, const ImRect& bb, 
  New symmetry-created widgets go below this line!
  ****************************************************************************************************/
 
-#include <iostream>
+#include <string>
 
 static const float knob_radius = 18;
 static const float knob_thick = 10;
 static const float knob_pad_h = 5;
 static const float knob_pad_v = 0;
+
+int TinyNumberFormatString(char *buf, int max_len, float v) {
+	if (v < 1e4) {
+		std::string fmt = v < 100 ? "%.2f" : "%.1f";
+		return ImFormatString(buf, max_len, fmt.c_str(), v);
+	} else if (v < 1e6) {
+		v = v / 1000;
+		return ImFormatString(buf, max_len, "%.1fK", v);
+	}
+	v = v / 1000000;
+	return ImFormatString(buf, max_len, "%.1fM", v);
+}
 
 bool ImGui::Knob(const char *label, float *v, float min, float max) {
 	auto window = GetCurrentWindow();
@@ -6748,7 +6760,7 @@ bool ImGui::Knob(const char *label, float *v, float min, float max) {
 	const ImRect bb{pos, pos + size};
 
 	ItemSize(bb);
-	if (!ItemAdd(bb, 0))
+	if (!ItemAdd(bb, id))
 		return false;
 
 	FocusableItemRegister(window, id);
@@ -6770,21 +6782,22 @@ bool ImGui::Knob(const char *label, float *v, float min, float max) {
 		pressed = true;
 
 		if (g.ActiveIdSource == ImGuiInputSource_Mouse && IsMousePosValid()) {
-			float adjust_delta = -g.IO.MouseDelta.y * (g.IO.KeyShift ? 0.01f : 1.f) * (max - min) * g.DragSpeedDefaultRatio;
-			g.DragCurrentAccum += adjust_delta;
-			g.DragCurrentAccumDirty = true;
+			g.DragCurrentAccum += -g.IO.MouseDelta.y * (g.IO.KeyShift ? 0.01f : 1.f) * (max - min) * g.DragSpeedDefaultRatio;
 			changed = true;
 		}
 
-		if (g.DragCurrentAccumDirty) {
-			/* roundoff-aware drag accum */
+		if (changed) {
+			/* roundoff-aware accumulation; we'll still hold on to things that
+			   roundoff means we can't add to v. We'll get to it on the next frame,
+			   hopefully. */
 			float new_v = *v + g.DragCurrentAccum;
 			g.DragCurrentAccum -= new_v - *v;
-			g.DragCurrentAccumDirty = false;
 			*v = new_v < min ? min : new_v > max ? max : new_v;
 		}
 	}
 
+	/* we want min and max to be 45 from -Y, 0 angle in PathArcTo means +X and it goes
+		 clockwise, so we want 135 to 135 + 270. */
 	float a_lo = 135.f / 180.f * M_PI;
 	float a_hi = (135.f + 270.f) / 180.f * M_PI;
 	float a = a_lo + t * (a_hi - a_lo);
@@ -6810,8 +6823,7 @@ bool ImGui::Knob(const char *label, float *v, float min, float max) {
 		text_pos.y + label_size.y};
 	if (pressed) {
 		char value_buf[64];
-		int len = DataTypeFormatString(
-			value_buf, IM_ARRAYSIZE(value_buf), ImGuiDataType_Float, v, *v > 100 ? "%.0f" : *v > 10 ? "%.1f" : "%.2f");
+		int len = TinyNumberFormatString(value_buf, IM_ARRAYSIZE(value_buf), *v);
 		RenderTextClipped(text_pos, text_clip, value_buf, value_buf + len, NULL, ImVec2{0.5f, 0});
 	} else {
 		RenderTextClipped(text_pos, text_clip, label, NULL, NULL, ImVec2{0.5f, 0});
