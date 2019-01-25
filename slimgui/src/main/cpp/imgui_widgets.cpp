@@ -6724,6 +6724,8 @@ bool ImGui::TabItemLabelAndCloseButton(ImDrawList* draw_list, const ImRect& bb, 
  New symmetry-created widgets go below this line!
  ****************************************************************************************************/
 
+#include <iostream>
+
 static const float knob_radius = 18;
 static const float knob_thick = 10;
 static const float knob_pad_h = 5;
@@ -6734,9 +6736,10 @@ bool ImGui::Knob(const char *label, float *v, float min, float max) {
 	if (window->SkipItems)
 		return false;
 
-	auto &g = *GImGui;
-	const auto &style = g.Style;
+	ImGuiContext &g = *GImGui;
+	const ImGuiStyle &style = g.Style;
 	auto pos = window->DC.CursorPos;
+	const ImGuiID id = window->GetID(label);
 
 	ImVec2 label_size = CalcTextSize(label, NULL, true);
 	ImVec2 size{
@@ -6748,20 +6751,56 @@ bool ImGui::Knob(const char *label, float *v, float min, float max) {
 	if (!ItemAdd(bb, 0))
 		return false;
 
+	FocusableItemRegister(window, id);
+	const bool hovered = ItemHoverable(bb, id);
+
+	float t = (*v - min) / (max - min);
+	bool changed = false;
+	bool pressed = false;
+
+	if (hovered && g.IO.MouseClicked[0]) {
+		SetActiveID(id, window);
+		SetFocusID(id, window);
+		FocusWindow(window);
+		g.DragCurrentAccum = 0.f;
+		pressed = true;
+	} else if (g.ActiveId == id && !g.IO.MouseDown[0]) {
+		ClearActiveID();
+	} else if (g.ActiveId == id) {
+		pressed = true;
+
+		if (g.ActiveIdSource == ImGuiInputSource_Mouse && IsMousePosValid()) {
+			float adjust_delta = -g.IO.MouseDelta.y * (g.IO.KeyShift ? 0.01f : 1.f) * (max - min) * g.DragSpeedDefaultRatio;
+			g.DragCurrentAccum += adjust_delta;
+			g.DragCurrentAccumDirty = true;
+			changed = true;
+		}
+
+		if (g.DragCurrentAccumDirty) {
+			/* roundoff-aware drag accum */
+			float new_v = *v + g.DragCurrentAccum;
+			g.DragCurrentAccum -= new_v - *v;
+			g.DragCurrentAccumDirty = false;
+			*v = new_v < min ? min : new_v > max ? max : new_v;
+		}
+	}
+
 	float a_lo = 135.f / 180.f * M_PI;
 	float a_hi = (135.f + 270.f) / 180.f * M_PI;
-	float t = (*v - min) / (max - min);
 	float a = a_lo + t * (a_hi - a_lo);
 
 	ImVec2 center{pos.x + 0.5f * size.x + knob_pad_h, pos.y + 0.5f * size.y + knob_pad_v};
 
 	window->DrawList->PathClear();
 	window->DrawList->PathArcTo(center, knob_radius, a_lo, a_hi, 40);
-	window->DrawList->PathStroke(GetColorU32(ImGuiCol_FrameBg), false, knob_thick);
+	window->DrawList->PathStroke(
+		GetColorU32(g.ActiveId == id ? ImGuiCol_FrameBgActive : g.HoveredId == id ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg),
+		false, knob_thick);
 
 	window->DrawList->PathClear();
 	window->DrawList->PathArcTo(center, knob_radius, a - 0.15, a + 0.15, 10);
-	window->DrawList->PathStroke(GetColorU32(ImGuiCol_SliderGrab), false, 13);
+	window->DrawList->PathStroke(
+		GetColorU32(g.ActiveId == id ? ImGuiCol_SliderGrabActive : ImGuiCol_SliderGrab), false, 13);
 
 	ImVec2 text_pos {
 		center.x - knob_radius - knob_thick / 2,
@@ -6769,6 +6808,13 @@ bool ImGui::Knob(const char *label, float *v, float min, float max) {
 	ImVec2 text_clip {
 		center.x + knob_radius + knob_thick / 2,
 		text_pos.y + label_size.y};
-	RenderTextClipped(text_pos, text_clip, label, NULL, NULL, ImVec2{0.5f, 0});
-	return false;
+	if (pressed) {
+		char value_buf[64];
+		int len = DataTypeFormatString(
+			value_buf, IM_ARRAYSIZE(value_buf), ImGuiDataType_Float, v, *v > 100 ? "%.0f" : *v > 10 ? "%.1f" : "%.2f");
+		RenderTextClipped(text_pos, text_clip, value_buf, value_buf + len, NULL, ImVec2{0.5f, 0});
+	} else {
+		RenderTextClipped(text_pos, text_clip, label, NULL, NULL, ImVec2{0.5f, 0});
+	}
+	return changed;
 }

@@ -111,6 +111,9 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         show.setupUi(lx);
     }
 
+    float p1 = 3;
+    float p2 = 1;
+
     @Override
     public void render() {
         int w = Gdx.graphics.getBackBufferWidth();
@@ -140,10 +143,12 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
         UI.newFrame();
         UI.begin("knob");
-        float v = UI.knobFloat("P1", 3, 0.1f, 10);
+        p1 = UI.knobFloat("P1", p1, 0.1f, 20);
         UI.sameLine();
-        UI.knobFloat("P2-abcd", v, 0.1f, 10);
+        p2 = UI.knobFloat("P2-abcd", p2, 0.1f, 10000);
+        UI.sameLine();
         UI.knobFloat("P3", 3, 0.1f, 10);
+        UI.sameLine();
         UI.knobFloat("P4", 3, 0.1f, 10);
         UI.end();
         WindowManager.get().draw();
