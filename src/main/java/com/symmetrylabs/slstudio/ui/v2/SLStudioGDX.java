@@ -140,7 +140,11 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
         UI.newFrame();
         UI.begin("knob");
-        UI.knobFloat("test", 3, 0.1f, 10);
+        float v = UI.knobFloat("P1", 3, 0.1f, 10);
+        UI.sameLine();
+        UI.knobFloat("P2-abcd", v, 0.1f, 10);
+        UI.knobFloat("P3", 3, 0.1f, 10);
+        UI.knobFloat("P4", 3, 0.1f, 10);
         UI.end();
         WindowManager.get().draw();
         UI.render();

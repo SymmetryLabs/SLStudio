@@ -6724,7 +6724,10 @@ bool ImGui::TabItemLabelAndCloseButton(ImDrawList* draw_list, const ImRect& bb, 
  New symmetry-created widgets go below this line!
  ****************************************************************************************************/
 
-static const float knob_radius = 40;
+static const float knob_radius = 18;
+static const float knob_thick = 10;
+static const float knob_pad_h = 5;
+static const float knob_pad_v = 0;
 
 bool ImGui::Knob(const char *label, float *v, float min, float max) {
 	auto window = GetCurrentWindow();
@@ -6733,28 +6736,39 @@ bool ImGui::Knob(const char *label, float *v, float min, float max) {
 
 	auto &g = *GImGui;
 	const auto &style = g.Style;
-	auto pos = ImGui::GetCursorPos();
-	ImVec2 size{knob_radius * 2, knob_radius * 2};
+	auto pos = window->DC.CursorPos;
+
+	ImVec2 label_size = CalcTextSize(label, NULL, true);
+	ImVec2 size{
+		(knob_pad_h + knob_radius) * 2,
+		(knob_pad_v + knob_radius) * 2 + label_size.y + knob_thick / 2 + style.ItemInnerSpacing.y};
 	const ImRect bb{pos, pos + size};
+
 	ItemSize(bb);
 	if (!ItemAdd(bb, 0))
 		return false;
 
+	float a_lo = 135.f / 180.f * M_PI;
+	float a_hi = (135.f + 270.f) / 180.f * M_PI;
+	float t = (*v - min) / (max - min);
+	float a = a_lo + t * (a_hi - a_lo);
+
+	ImVec2 center{pos.x + 0.5f * size.x + knob_pad_h, pos.y + 0.5f * size.y + knob_pad_v};
+
 	window->DrawList->PathClear();
-	ImVec2 center{pos.x + 0.5f * size.x, pos.y + 0.5f * size.y};
-	window->DrawList->PathArcTo(center, knob_radius, 0, M_PI, 10);
-	/*
-	int start = static_cast<int>(abs(ImSin(static_cast<float>(g.Time * 1.8f)) * (num_segments - 5)));
-	const float a_min = IM_PI * 2.0f * ((float) start) / (float) num_segments;
-	const float a_max = IM_PI * 2.0f * ((float) num_segments - 3) / (float) num_segments;
-	const auto &&centre = pos + radius;
-	for (auto i = 0; i < num_segments; i++) {
-		const float a = a_min + ((float) i / (float) num_segments) * (a_max - a_min);
-		auto time = static_cast<float>(g.Time);
-		window->DrawList->PathLineTo({centre.x + ImCos(a + time * 8) * radius,
-																	centre.y + ImSin(a + time * 8) * radius});
-	}
-	*/
-	window->DrawList->PathStroke(GetColorU32(ImVec4{1, 0, 0, 1}), false, 5);
+	window->DrawList->PathArcTo(center, knob_radius, a_lo, a_hi, 40);
+	window->DrawList->PathStroke(GetColorU32(ImGuiCol_FrameBg), false, knob_thick);
+
+	window->DrawList->PathClear();
+	window->DrawList->PathArcTo(center, knob_radius, a - 0.15, a + 0.15, 10);
+	window->DrawList->PathStroke(GetColorU32(ImGuiCol_SliderGrab), false, 13);
+
+	ImVec2 text_pos {
+		center.x - knob_radius - knob_thick / 2,
+		pos.y + 2 * knob_radius + knob_thick / 2 + knob_pad_v + style.ItemInnerSpacing.y};
+	ImVec2 text_clip {
+		center.x + knob_radius + knob_thick / 2,
+		text_pos.y + label_size.y};
+	RenderTextClipped(text_pos, text_clip, label, NULL, NULL, ImVec2{0.5f, 0});
 	return false;
 }
