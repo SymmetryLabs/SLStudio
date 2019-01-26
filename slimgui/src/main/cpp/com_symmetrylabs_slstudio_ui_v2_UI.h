@@ -273,6 +273,14 @@ JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobFloat
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    collapsibleSection
+ * Signature: (Ljava/lang/String;Z)Lcom/symmetrylabs/slstudio/ui/v2/UI/CollapseResult;
+ */
+JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_collapsibleSection
+  (JNIEnv *, jclass, jstring, jboolean);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    beginMainMenuBar
  * Signature: ()Z
  */

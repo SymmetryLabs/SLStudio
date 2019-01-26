@@ -417,6 +417,22 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_knobFloat(JNIEnv *env, jclass cls, jstri
     return vf;
 }
 
+JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_collapsibleSection(JNIEnv *env, jclass, jstring jlabel, jboolean allowClose) {
+    JniString label(env, jlabel);
+    bool display = true;
+    bool isOpen = false;
+    if (allowClose) {
+        isOpen = ImGui::CollapsingHeader(label, &display);
+    } else {
+        isOpen = ImGui::CollapsingHeader(label);
+    }
+    jclass resCls = env->FindClass("com/symmetrylabs/slstudio/ui/v2/UI$CollapseResult");
+    jobject res = env->NewObject(resCls, env->GetMethodID(resCls, "<init>", "()V"));
+    env->SetBooleanField(res, env->GetFieldID(resCls, "isOpen", "Z"), isOpen ? 1 : 0);
+    env->SetBooleanField(res, env->GetFieldID(resCls, "shouldRemove", "Z"), display ? 0 : 1);
+    return res;
+}
+
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_beginMainMenuBar(JNIEnv *env, jclass) {
 	return ImGui::BeginMainMenuBar() ? 1 : 0;

@@ -9,6 +9,13 @@ public class UI {
 
     public static int DEFAULT_WIDTH = 250;
 
+    public static class CollapseResult {
+        /** true if the collapsable section should be open (i.e., client should draw the contents of the section) */
+        public boolean isOpen;
+        /** true if the collapsable section should be removed (the user pressed the close button) */
+        public boolean shouldRemove;
+    }
+
     public static native boolean init(long windowPointer);
     public static native void newFrame();
     public static native void render();
@@ -55,6 +62,7 @@ public class UI {
     public static native int combo(String label, int selected, String[] options);
     public static native float floatBox(String label, float v);
     public static native float knobFloat(String label, float v, float v0, float v1);
+    public static native CollapseResult collapsibleSection(String label, boolean allowClose);
 
     /* Menus */
     public static native boolean beginMainMenuBar();

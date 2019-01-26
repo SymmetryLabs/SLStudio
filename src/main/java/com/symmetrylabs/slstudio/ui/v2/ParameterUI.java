@@ -6,12 +6,21 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.LXComponent;
 
 public class ParameterUI {
     enum WidgetType {
         KNOB,
         SLIDER,
     };
+
+    private static String getID(LXParameter p) {
+        LXComponent parent = p.getComponent();
+        if (parent == null) {
+            return p.getLabel();
+        }
+        return String.format("%s##%d/%s", p.getLabel(), parent.getId(), p.getLabel());
+    }
 
     public static void draw(LX lx, BoundedParameter p) {
         draw(lx, p, WidgetType.SLIDER);
@@ -21,9 +30,9 @@ public class ParameterUI {
         float start = p.getValuef();
         float res = start;
         if (wt == WidgetType.SLIDER) {
-            res = UI.sliderFloat(p.getLabel(), start, (float) p.range.v0, (float) p.range.v1);
+            res = UI.sliderFloat(getID(p), start, (float) p.range.v0, (float) p.range.v1);
         } else if (wt == WidgetType.KNOB) {
-            res = UI.knobFloat(p.getLabel(), start, (float) p.range.v0, (float) p.range.v1);
+            res = UI.knobFloat(getID(p), start, (float) p.range.v0, (float) p.range.v1);
         }
         if (start != res) {
             final float fres = res;
@@ -36,13 +45,13 @@ public class ParameterUI {
         if (options == null) {
             int start = p.getValuei();
             final int res = UI.sliderInt(
-                p.getLabel(), start, p.getMinValue(), p.getMaxValue() - 1);
+                getID(p), start, p.getMinValue(), p.getMaxValue() - 1);
             if (start != res) {
                 lx.engine.addTask(() -> p.setValue(res));
             }
         } else {
             int start = p.getValuei();
-            int res = UI.combo(p.getLabel(), start, options);
+            int res = UI.combo(getID(p), start, options);
             if (start != res) {
                 lx.engine.addTask(() -> p.setValue(res));
             }
@@ -53,9 +62,9 @@ public class ParameterUI {
         boolean start = p.getValueb();
         boolean res;
         if (p.getMode() == BooleanParameter.Mode.TOGGLE) {
-            res = UI.checkbox(p.getLabel(), start);
+            res = UI.checkbox(getID(p), start);
         } else {
-            UI.button(p.getLabel());
+            UI.button(getID(p));
             res = UI.isItemActive();
         }
         if (res != start) {
@@ -65,7 +74,7 @@ public class ParameterUI {
 
     public static void draw(LX lx, ColorParameter p) {
         int start = p.getColor();
-        int res = UI.colorPicker(p.getLabel(), start);
+        int res = UI.colorPicker(getID(p), start);
         if (res != start) {
             lx.engine.addTask(() -> p.setColor(res));
         }
