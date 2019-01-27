@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -177,7 +177,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -291,6 +291,24 @@
               "triggers": []
             },
             "autoCycleEnabled": true
+          },
+          {
+            "id": 442,
+            "class": "com.symmetrylabs.slstudio.pattern.Voronoi",
+            "modulationColor": -39680,
+            "parameters": {
+              "label": "Voronoi",
+              "palette": 0,
+              "SPEED": 8.299999947845935,
+              "WIDTH": 0.8830000026151538,
+              "NUM": 5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ]
       },
@@ -307,9 +325,9 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
-          "blendMode": 0,
+          "blendMode": 3,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0,
@@ -683,12 +701,6 @@
         },
         {
           "name": "CoreMIDI4J - IAC Bus 2",
-          "channel": false,
-          "control": true,
-          "sync": false
-        },
-        {
-          "name": "** Internal Error getting Device Name!",
           "channel": false,
           "control": true,
           "sync": false

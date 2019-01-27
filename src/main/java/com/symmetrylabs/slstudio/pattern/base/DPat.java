@@ -47,7 +47,15 @@ public abstract class DPat extends SLPattern<SLModel> {
     public BooleanParameter pXsym, pYsym, pRsym, pXdup, pXtrip, pJog, pGrey;
 
     public float lxh() {
-        return pHue.getValuef();
+        // In order to not break existing shows...
+        // If palette parameter is the default use the local hue var.
+        if (paletteParameter.getValuei() == 0){
+            return pHue.getValuef();
+        }
+        // otherwise reference the palette
+        else {
+            return lx.palettes.get(paletteParameter.getValuei()).getHuef();
+        }
     }
 
     public int c1c(float a) {
