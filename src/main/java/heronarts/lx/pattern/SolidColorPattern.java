@@ -47,21 +47,21 @@ public class SolidColorPattern extends LXPattern {
         super(lx);
         this.color.setColor(color);
         addParameter("color", this.color);
-		addParameter("bool_palette", this.usePalette);
+        addParameter("bool_palette", this.usePalette);
         render();
     }
 
     public void render() {
-		LXPalette activePalette = getActivePalette();
-//		LXPalette activePalette  = lx.palettes.get(paletteParameter.getValuei());
+//      LXPalette activePalette = getActivePalette();
+//      LXPalette activePalette  = lx.palettes.get(paletteParameter.getValuei());
 
-		int c; // local color var
-		if (this.usePalette.getValueb()){
-			c = activePalette.getColor();
-		}
-		else {
-			c = color.getColor();
-		}
+        int c; // local color var
+        if (this.usePalette.getValueb()){
+            c = palette.getColor();
+        }
+        else {
+            c = color.getColor();
+        }
 
 
 

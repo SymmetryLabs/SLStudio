@@ -20,6 +20,7 @@ public class StripStarfield<T extends Strip> extends SLPattern<StripsModel<T>> {
     private final CompoundParameter period = new CompoundParameter("period", 100, 1, 1000);
     private final CompoundParameter release = new CompoundParameter("release", 250, 0, 5000);
     private final BooleanParameter sync = new BooleanParameter("sync", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter oneshot = new BooleanParameter("oneshot", false);
 
     private List<List<Integer>> stripKeys;
     private float t = 0;
@@ -32,6 +33,7 @@ public class StripStarfield<T extends Strip> extends SLPattern<StripsModel<T>> {
         addParameter(period);
         addParameter(release);
         addParameter(sync);
+        addParameter(oneshot);
 
         N = model.getStrips().size();
         L = N == 0 ? 0 : model.getStripByIndex(0).size;
@@ -58,7 +60,7 @@ public class StripStarfield<T extends Strip> extends SLPattern<StripsModel<T>> {
         t += elapsedMs;
         float p = period.getValuef();
         boolean firstFrame = false;
-        if (t > p) {
+        if (t > p && !oneshot.getValueb()) {
             stage = (stage + (int) (t / p)) % L;
             t = t % p;
             firstFrame = true;

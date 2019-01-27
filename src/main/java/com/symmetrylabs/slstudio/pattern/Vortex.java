@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Random;
 
 public class Vortex extends SLPattern<SLModel> {
-	private final PaletteParameter paletteParameter = new PaletteParameter();
-
     private final DiscreteParameter countParam = new DiscreteParameter("count", 50, 0, 200);
     private final CompoundParameter xCenterParam = new CompoundParameter("xc", model.cx, model.xMin, model.xMax);
     private final CompoundParameter zCenterParam = new CompoundParameter("zc", model.cz, model.zMin, model.zMax);
@@ -75,7 +73,6 @@ public class Vortex extends SLPattern<SLModel> {
 
     public Vortex(LX lx) {
         super(lx);
-		addParameter(paletteParameter);
         addParameter(countParam);
         addParameter(sizeParam);
         addParameter(xRadiusParam);

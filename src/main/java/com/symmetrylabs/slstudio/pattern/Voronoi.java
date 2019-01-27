@@ -17,7 +17,10 @@ import static com.symmetrylabs.util.MathConstants.*;
 public class Voronoi extends LXPattern {
     final CompoundParameter speed = new CompoundParameter("SPEED", 1.8, 0, 10);
     final CompoundParameter width = new CompoundParameter("WIDTH", 0.2, 0.1, 1);
-    final DiscreteParameter num = new DiscreteParameter("NUM", 14, 5, 28);
+//  final DiscreteParameter num = new DiscreteParameter("NUM", 14, 0, 28);
+
+    // Just because I couldn't map the DiscreteParameter.. need to fix this since they are LXNormalizedParameter should just work..
+    final CompoundParameter num = new CompoundParameter("NUM", 14, 0, 28);
     private final List<Site> sites = new ArrayList<Site>();
     private float xMaxDist = model.xMax - model.xMin;
     private float yMaxDist = model.yMax - model.yMin;
@@ -61,7 +64,7 @@ public class Voronoi extends LXPattern {
 
     public void run(double deltaMs) {
         for (LXVector p : getVectors()) {
-            float numSites = num.getValuef();
+      float numSites = (int)num.getValuef();
             float lineWidth = width.getValuef();
 
             while(sites.size()>numSites){

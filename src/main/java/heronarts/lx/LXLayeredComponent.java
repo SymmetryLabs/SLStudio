@@ -83,7 +83,8 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     private final List<LXLayer> mutableLayers = new ArrayList<LXLayer>();
     protected final List<LXLayer> layers = Collections.unmodifiableList(mutableLayers);
 
-    protected final LXPalette palette;
+//  protected final LXPalette palette;
+    protected LXPalette palette;
 
     protected LXLayeredComponent(LX lx) {
         super(lx);

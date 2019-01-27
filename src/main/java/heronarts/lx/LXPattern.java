@@ -74,17 +74,18 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
         public long runNanos = 0;
     }
 
-	// default palette parameter
-	protected PaletteParameter paletteParameter = new PaletteParameter();
+    // default palette parameter
+    protected PaletteParameter paletteParameter = new PaletteParameter();
 
   protected LXPalette getActivePalette (){
-		LXPalette activePalette = this.lx.palettes.get(this.paletteParameter.getValuei());
-		return activePalette;
-	}
+        LXPalette activePalette = this.lx.palettes.get(this.paletteParameter.getValuei());
+        return activePalette;
+    }
 
     protected LXPattern(LX lx) {
         super(lx);
     this.addParameter(paletteParameter);
+    palette = getActivePalette();
         this.label.setDescription("The name of this pattern");
         this.label.setValue(getClass().getSimpleName().replaceAll("Pattern$", ""));
     }
@@ -214,6 +215,7 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
 
     @Override
     protected final void onLoop(double deltaMs) {
+        palette = getActivePalette();
         long runStart = System.nanoTime();
         this.runMs += deltaMs;
         this.run(deltaMs, preferredSpace);
@@ -239,6 +241,9 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
      *     is free to use any space, though doing so may sacrifice quality or efficiency)
      */
     protected /* abstract */ void run(double deltaMs, PolyBuffer.Space preferredSpace) {
+    // nate: update the palette with the active selection for this pattern
+        palette = getActivePalette();
+
         // For compatibility, this invokes the method that previous subclasses
         // were supposed to implement.  Implementations of run(deltaMs) are
         // assumed to operate only on the "colors" array, and are not expected

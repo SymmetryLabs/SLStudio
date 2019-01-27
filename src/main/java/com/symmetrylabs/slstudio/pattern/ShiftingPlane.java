@@ -31,6 +31,7 @@ public class ShiftingPlane extends LXPattern {
     }
 
     public void run(double deltaMs, PolyBuffer.Space space) {
+        palette = getActivePalette();
         int[] colors = (int[]) getArray(SRGB8);
 
         float hv = palette.getHuef();
