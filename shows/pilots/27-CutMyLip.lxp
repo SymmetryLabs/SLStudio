@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1548400803938,
+  "timestamp": 1548602981557,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 0.3166666775941849,
-      "focusedChannel": 0,
+      "focusedChannel": 9,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -30,13 +30,13 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 69.61383540928364,
+        "color/hue": 77.89473724365234,
         "color/brightness": 100.0,
         "color/saturation": 89.01960754394531,
-        "color": -2359524,
+        "color": -4456676,
         "period": 89000.0,
         "range": 0.0,
-        "spread": 251.9999983906746,
+        "spread": 165.60000032186508,
         "spreadX": -0.9200000017881393,
         "spreadY": 0.0,
         "spreadZ": 0.0,
@@ -56,7 +56,7 @@
           "label": "TimPlanes",
           "arm": false,
           "enabled": true,
-          "cue": true,
+          "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
@@ -188,7 +188,7 @@
             "modulationColor": -9728,
             "parameters": {
               "label": "TimPlanes",
-              "palette": 0,
+              "palette": 1,
               "Wob": 0.03999999910593033,
               "WSpr": 0.0,
               "WSpd": 0.019999999552965164,
@@ -561,7 +561,7 @@
             "modulationColor": -5963521,
             "parameters": {
               "label": "StripStarfield",
-              "palette": 0,
+              "palette": 1,
               "period": 169.9299984369427,
               "release": 1199.9999787658453,
               "sync": false,
@@ -1057,7 +1057,7 @@
             "autoCycleEnabled": true
           },
           {
-            "id": 442,
+            "id": 1819,
             "class": "com.symmetrylabs.slstudio.pattern.Voronoi",
             "modulationColor": -39680,
             "parameters": {
@@ -1065,7 +1065,7 @@
               "palette": 0,
               "SPEED": 8.299999947845935,
               "WIDTH": 0.8830000026151538,
-              "NUM": 5
+              "NUM": 5.0
             },
             "modulation": {
               "modulators": [],
@@ -1107,7 +1107,7 @@
             "parameters": {
               "label": "Blur",
               "enabled": true,
-              "amount": 0.3499999921768904
+              "amount": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -1334,6 +1334,7 @@
         "nudgeDown": false,
         "beatsPerMeasure": 4,
         "trigger": false,
+        "measureTrigger": false,
         "enabled": true
       }
     },
@@ -1594,6 +1595,30 @@
               "shape": 1.0
             }
           ]
+        },
+        {
+          "id": 1871,
+          "class": "heronarts.lx.modulator.MultiStageEnvelope",
+          "modulationColor": -16711870,
+          "parameters": {
+            "label": "Env 1",
+            "running": true,
+            "trigger": false,
+            "loop": false,
+            "period": 630.6152835873287
+          },
+          "stages": [
+            {
+              "basis": 0.0,
+              "value": 1.0,
+              "shape": 1.0
+            },
+            {
+              "basis": 1.0,
+              "value": 0.0,
+              "shape": 0.357169543668029
+            }
+          ]
         }
       ],
       "modulations": [
@@ -1602,7 +1627,7 @@
             "id": 503
           },
           "target": {
-            "componentId": 442,
+            "componentId": 1819,
             "parameterPath": "NUM"
           },
           "id": 504,
@@ -1688,6 +1713,24 @@
             "Polarity": 0,
             "Range": 0.5084745744243264
           }
+        },
+        {
+          "source": {
+            "id": 1871
+          },
+          "target": {
+            "componentId": 1303,
+            "parameterPath": "amount"
+          },
+          "id": 1872,
+          "class": "heronarts.lx.parameter.LXCompoundModulation",
+          "modulationColor": -37632,
+          "parameters": {
+            "label": "",
+            "enabled": true,
+            "Polarity": 0,
+            "Range": 1.0
+          }
         }
       ],
       "triggers": [
@@ -1703,6 +1746,23 @@
           "id": 1690,
           "class": "heronarts.lx.parameter.LXTriggerModulation",
           "modulationColor": -16762625,
+          "parameters": {
+            "label": "",
+            "enabled": true
+          }
+        },
+        {
+          "source": {
+            "componentId": 38,
+            "parameterPath": "measureTrigger"
+          },
+          "target": {
+            "componentId": 1871,
+            "parameterPath": "trigger"
+          },
+          "id": 1875,
+          "class": "heronarts.lx.parameter.LXTriggerModulation",
+          "modulationColor": -16711908,
           "parameters": {
             "label": "",
             "enabled": true
@@ -1813,12 +1873,13 @@
         "446": true,
         "503": true,
         "511": true,
-        "1689": true
+        "1689": true,
+        "1871": true
       },
       "preview": {
-        "radius": 873.6159809655521,
-        "theta": -0.2069999999999682,
-        "phi": 0.42000000000000104,
+        "radius": 845.6586504771187,
+        "theta": -0.029999999999967955,
+        "phi": 0.195000000000001,
         "positionX": 355.94036865234375,
         "positionY": 47.25,
         "positionZ": 254.3376007080078
