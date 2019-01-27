@@ -8,6 +8,7 @@ import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.transform.LXVector;
+import heronarts.lx.model.LXPoint;
 
 
 public class CubesMappingPattern extends SLPattern<CubesModel> {
@@ -96,14 +97,12 @@ public class CubesMappingPattern extends SLPattern<CubesModel> {
                 continue;
 
             int i = 0;
-            for (LXVector v : (c.getVectorArray())) {
+            for (LXPoint v : c.points) {
                 if (dotted) {
                     col = (i++ % 2 == 0) ? LXColor.scaleBrightness(LXColor.GREEN, 0.2f) : LXColor.BLACK;
                 }
-                setColor(v.index, col);
+                colors[v.index] = col;
             }
         }
-
-        // Do something with all the unmapped fixtures on the network
     }
 }

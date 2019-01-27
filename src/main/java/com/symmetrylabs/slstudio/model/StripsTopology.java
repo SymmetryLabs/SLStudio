@@ -22,7 +22,7 @@ import java.util.List;
  * cubes are resting on the ground and are a couple inches from one another.
  * Each junction in this diagram labelled with a letter would be a bundle; A would have
  * one strip, B would have two and E would have 4.
- * <p><pre>
+ * <pre>
  *                          A           B           C
  *                            +-------+   +-------+
  *                            |       |   |       |
@@ -36,7 +36,7 @@ import java.util.List;
  *                            |       |   |       |
  *                            +-------+   +-------+
  *                          G           H           I
- * </pre><p>
+ * </pre>
  * Each bundle has pointers to the junction at each end of it. Ends are identified
  * by which end points towards the positive end of the axis it's aligned with; an
  * X-aligned bundle has a positive end towards X+ and a negative end towards X-. Since
@@ -333,6 +333,19 @@ public class StripsTopology {
 
         private void addStrip(int strip) {
             Preconditions.checkState(!finished, "cannot add to finished bundle");
+
+            if (dir == null) {
+                for (int i = 0; i < strips.length; i++) {
+                    if (strips[i] == NO_STRIP) {
+                        strips[i] = strip;
+                        stripSign[i] = Sign.POS;
+                        return;
+                    }
+                }
+                throw new IllegalStateException(
+                    String.format("tried to add more than %d strips to a Bundle", strips.length));
+            }
+
             Sign sign = null;
             Strip s = model.getStripByIndex(strip);
             if (s.size >= 2) {
@@ -421,6 +434,9 @@ public class StripsTopology {
             if (finished) {
                 return endpoints;
             }
+            if (dir == null) {
+                return null;
+            }
 
             float min = minProjection();
             float max = maxProjection();
@@ -467,6 +483,9 @@ public class StripsTopology {
         }
 
         public PlanarLocation planarLocation() {
+            if (dir == null) {
+                return null;
+            }
             PlanarLocation pl[] = new PlanarLocation[MAX_STRIPS];
             for (int i = 0; i < strips.length; i++) {
                 if (strips[i] == NO_STRIP) {
@@ -494,6 +513,9 @@ public class StripsTopology {
         public float projection() {
             if (finished) {
                 return projection;
+            }
+            if (dir == null) {
+                return 0;
             }
             float proj = 0;
             int count = 0;
@@ -525,6 +547,9 @@ public class StripsTopology {
             if (finished) {
                 return minProjection;
             }
+            if (dir == null) {
+                return 0;
+            }
             float min = Float.MAX_VALUE;
             for (int strip : strips) {
                 if (strip == NO_STRIP) {
@@ -552,6 +577,9 @@ public class StripsTopology {
         public float maxProjection() {
             if (finished) {
                 return maxProjection;
+            }
+            if (dir == null) {
+                return 0;
             }
             float max = -Float.MAX_VALUE;
             for (int strip : strips) {
@@ -651,7 +679,7 @@ public class StripsTopology {
     StripsTopology(StripsModel model, float orderTolerance, float bucketTolerance, float endpointTolerance) {
         this.model = model;
         int N = model.getStrips().size();
-        bundles = new ArrayList<>(N);
+        bundles = new ArrayList<>();
         junctions = new ArrayList<>();
 
         /* Create TopoEdges for each bundle */
@@ -666,25 +694,32 @@ public class StripsTopology {
             } else if (s.yRange < 1e-3 && s.zRange < 1e-3) {
                 e.dir = Dir.X;
             } else {
-                e.dir = null;
+                /* Don't keep bundles that aren't axis-aligned */
+                continue;
             }
             e.addStrip(i);
 
             boolean matchesExisting = false;
             PlanarLocation pl = e.planarLocation();
-            float proj = e.projection();
-            for (Bundle testEdge : bundles) {
-                float testProj = testEdge.projection();
-                float projDist = Math.abs(proj - testProj);
-                if (pl.equivalent(testEdge.planarLocation(), bucketTolerance) && projDist < orderTolerance) {
-                    testEdge.addStrip(i);
-                    matchesExisting = true;
-                    break;
+            if (pl != null) {
+                float proj = e.projection();
+                for (Bundle testEdge : bundles) {
+                    float testProj = testEdge.projection();
+                    float projDist = Math.abs(proj - testProj);
+                    PlanarLocation testPl = testEdge.planarLocation();
+                    if (testPl != null && pl.equivalent(testPl, bucketTolerance) && projDist < orderTolerance) {
+                        testEdge.addStrip(i);
+                        matchesExisting = true;
+                        break;
+                    }
                 }
             }
             if (!matchesExisting) {
                 bundles.add(e);
             }
+        }
+        if (bundles.isEmpty()) {
+            throw new IllegalStateException("model has no axis-aligned bundles");
         }
         for (Bundle e : bundles) {
             e.finishedAddingStrips();
@@ -703,6 +738,9 @@ public class StripsTopology {
         /* This makes the junctions and populates connectivity all at once. */
         for (Bundle b : bundles) {
             BundleEndpoints be = b.endpoints();
+            if (be == null) {
+                continue;
+            }
 
             List<Junction> js = junctionTree.withinDistance(
                 be.positive.x, be.positive.y, be.positive.z, endpointTolerance);

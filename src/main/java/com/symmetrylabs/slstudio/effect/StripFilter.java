@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.effect;
 
 import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.color.Spaces;
+import com.symmetrylabs.slstudio.effect.SLEffect;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
 
@@ -11,16 +12,11 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 
-public class StripFilter extends ModelSpecificEffect<StripsModel<? extends Strip>> {
+public class StripFilter extends SLEffect<StripsModel<? extends Strip>> {
     public final BooleanParameter xParam = new BooleanParameter("X", true);
     public final BooleanParameter yParam = new BooleanParameter("Y", true);
     public final BooleanParameter zParam = new BooleanParameter("Z", true);
     public final BooleanParameter soloParam = new BooleanParameter("Solo", false);
-
-    @Override
-    protected StripsModel createEmptyModel() {
-        return new StripsModel();
-    }
 
     public StripFilter(LX lx) {
         super(lx);

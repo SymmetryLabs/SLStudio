@@ -84,7 +84,7 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
     /** Casts the given model to the M type if possible, otherwise returns null. */
     private M asSpecializedModel(LXModel model) {
         try {
-            if (getEmptyModel().getClass().isAssignableFrom(model.getClass())) {
+            if (getModelClass().isAssignableFrom(model.getClass())) {
                 return (M) model;
             }
         } catch (ClassCastException e) { }

@@ -1,6 +1,8 @@
 package com.symmetrylabs.shows.oslo;
 
 import com.symmetrylabs.shows.oslo.TreeModel;
+import com.symmetrylabs.util.FileUtils;
+
 import heronarts.p3lx.P3LX;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
@@ -26,7 +28,7 @@ public class UITreeLeaves extends UI3dComponent {
     public UITreeLeaves(P3LX lx, PApplet applet, TreeModel tree) {
         this.lx = lx;
         this.tree = tree;
-        this.texImage = applet.loadImage("leaf.png");
+        this.texImage = FileUtils.loadShowImage("leaf.png");
     }
 
     // Uses PShape functionality to render with a faster shader using VBOs.

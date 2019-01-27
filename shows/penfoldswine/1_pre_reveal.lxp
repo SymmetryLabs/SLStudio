@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1539205932329,
+  "timestamp": 1539711754783,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.0,
       "crossfaderBlendMode": 0,
-      "speed": 0.8499999921768904,
-      "focusedChannel": 1,
+      "speed": 0.31666663475334644,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -94,7 +94,7 @@
             "parameters": {
               "label": "Blur",
               "enabled": true,
-              "amount": 0.8100000042468309
+              "amount": 0.8700000029057264
             },
             "modulation": {
               "modulators": [],
@@ -113,7 +113,7 @@
             "parameters": {
               "label": "Swim",
               "HueVar": 0.1,
-              "Crazy": 0.18000000715255737,
+              "Crazy": 0.2700000051409006,
               "Speed": 0.030000006780028343
             },
             "modulation": {
@@ -146,7 +146,23 @@
           "transitionBlendMode": 0,
           "autoDisable": false
         },
-        "warps": [],
+        "warps": [
+          {
+            "id": 2548,
+            "class": "com.symmetrylabs.slstudio.warp.Mirror",
+            "modulationColor": -65331,
+            "parameters": {
+              "label": "Mirror",
+              "enabled": true,
+              "x": true,
+              "cx": 327.0,
+              "y": false,
+              "cy": 72.0,
+              "z": false,
+              "cz": -60.000003814697266
+            }
+          }
+        ],
         "effects": [
           {
             "id": 2512,
@@ -175,8 +191,57 @@
             "parameters": {
               "label": "Swim",
               "HueVar": 0.1,
-              "Crazy": 0.20000000670552254,
-              "Speed": 0.09000000916421413
+              "Crazy": 0.06999999843537807,
+              "Speed": 0.035000010626390576
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 3683,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -6160640,
+        "parameters": {
+          "label": "Rings",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": false
+        },
+        "warps": [],
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 3684,
+            "class": "com.symmetrylabs.slstudio.pattern.Rings",
+            "modulationColor": -10092289,
+            "parameters": {
+              "label": "Rings",
+              "Hue": 0.0,
+              "Depth": 0.480000002682209,
+              "Bright": 0.75,
+              "Sat": 0.0,
+              "Speed1": 0.12000000178813935,
+              "Speed2": 0.06000000759959223,
+              "Scale": 0.3900000058114529
             },
             "modulation": {
               "modulators": [],
@@ -412,11 +477,11 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 248.43143785388028,
-        "theta": -0.05099999999999999,
+        "theta": -0.02999999999999999,
         "phi": 0.051000000000000004,
-        "positionX": 39.88426208496094,
-        "positionY": 69.0,
-        "positionZ": -131.19944763183594
+        "positionX": 144.5113067626953,
+        "positionY": 71.0,
+        "positionZ": -17.655254364013672
       }
     }
   }

@@ -4,6 +4,8 @@ import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.DampedParameter;
 import heronarts.lx.modulator.LXModulator;
+import heronarts.lx.modulator.SinLFO;
+import heronarts.lx.modulator.TriangleLFO;
 import heronarts.lx.parameter.CompoundParameter;
 
 import com.symmetrylabs.shows.tree.TreeModel;
@@ -20,6 +22,7 @@ public class TreeWave extends TreeBuffer {
             .setDescription("Mode of the wave motion");
 
     private final LXModulator modeDamped = startModulator(new DampedParameter(this.mode, 1, 8));
+    private LXModulator autoLevel = startModulator(new TriangleLFO(-0.5f, 1, startModulator(new SinLFO(3000, 7000, 19000))));
 
     public TreeWave(LX lx) {
         super(lx);
@@ -44,5 +47,13 @@ public class TreeWave extends TreeBuffer {
             int c2 = this.history[(this.cursor + offset2) % this.history.length];
             setColor(leaf, LXColor.lerp(c1, c2, lerp));
         }
+    }
+
+    protected float getLevel() {
+        float autoLevel = this.autoLevel.getValuef();
+        if (autoLevel > 0) {
+            return pow(autoLevel, 0.5f);
+        }
+        return 0;
     }
 }

@@ -9,7 +9,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.warp.LXWarp;
 
-public class BundleDirMask<T extends Strip> extends LXWarp {
+public class BundleDirMask<T extends Strip> extends SLWarp<StripsModel<T>> {
     BooleanParameter maskX = new BooleanParameter("x", false);
     BooleanParameter maskY = new BooleanParameter("y", false);
     BooleanParameter maskZ = new BooleanParameter("z", false);

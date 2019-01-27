@@ -322,7 +322,7 @@ public class Crystalline extends SLPattern<SLModel> {
 
     @Override
     public void run(double elapsedMs, PolyBuffer.Space preferredSpace) {
-                long[] colors = (long[]) getArray(PolyBuffer.Space.RGB16);
+        long[] colors = (long[]) getArray(PolyBuffer.Space.RGB16);
 
         for (Modulus m : moduli) {
             m.step(elapsedMs);
@@ -354,12 +354,12 @@ public class Crystalline extends SLPattern<SLModel> {
                     colors[v.index] = on;
                 } else {
                     float g = 1f - (x - cw) / (1 - cw);
-                                        int gi = (int) (g * 0xFFFF);
+                    int gi = (int) (g * 0xFFFF);
                     colors[v.index] = Ops16.rgba(gi, gi, gi, 0xFFFF);
                 }
             }
         }
 
-                markModified(PolyBuffer.Space.RGB16);
+        markModified(PolyBuffer.Space.RGB16);
     }
 }

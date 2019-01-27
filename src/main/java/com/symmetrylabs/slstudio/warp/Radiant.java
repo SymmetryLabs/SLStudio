@@ -13,7 +13,7 @@ import heronarts.lx.transform.LXVector;
 import heronarts.lx.warp.LXWarp;
 import processing.core.PVector;
 
-public class Radiant extends LXWarpWithMarkers {
+public class Radiant extends SLWarp {
     private CompoundParameter radiusParam;
     private CompoundParameter widthParam;
     private CompoundParameter cxParam = new CompoundParameter("cx", model.cx, model.xMin, model.xMax);

@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 
 public class OutputMappingItemRef {
 
-        @Expose
-        public String outputId;
+    @Expose
+    public String outputId;
 
 }

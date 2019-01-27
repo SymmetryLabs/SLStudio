@@ -10,7 +10,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXVector;
 import heronarts.lx.warp.LXWarp;
 
-public class TreeStructure extends LXWarp {
+public class TreeStructure extends SLWarp<TreeModel> {
     public TreeStructure(LX lx) {
         super(lx);
     }

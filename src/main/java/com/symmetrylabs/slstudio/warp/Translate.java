@@ -1,23 +1,24 @@
 package com.symmetrylabs.slstudio.warp;
 
-    import com.symmetrylabs.util.CubeMarker;
-    import com.symmetrylabs.util.Marker;
-    import com.symmetrylabs.util.SphereMarker;
+import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.util.CubeMarker;
+import com.symmetrylabs.util.Marker;
+import com.symmetrylabs.util.SphereMarker;
 
-    import java.util.ArrayList;
-    import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 
-    import javax.swing.border.CompoundBorder;
+import javax.swing.border.CompoundBorder;
 
-    import heronarts.lx.LX;
-    import heronarts.lx.model.LXModel;
-    import heronarts.lx.model.LXPoint;
-    import heronarts.lx.parameter.CompoundParameter;
-    import heronarts.lx.transform.LXVector;
-    import heronarts.lx.warp.LXWarp;
-    import processing.core.PVector;
+import heronarts.lx.LX;
+import heronarts.lx.model.LXModel;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.transform.LXVector;
+import heronarts.lx.warp.LXWarp;
+import processing.core.PVector;
 
-public class Translate extends LXWarpWithMarkers {
+public class Translate extends SLWarp<SLModel> {
     private CompoundParameter cxParam = new CompoundParameter("cx", model.cx, model.xMin, model.xMax);
     private CompoundParameter cyParam = new CompoundParameter("cy", model.cy, model.yMin, model.yMax);
     private CompoundParameter czParam = new CompoundParameter("cz", model.cz, model.zMin, model.zMax);
