@@ -155,6 +155,13 @@ public class LX {
      */
     public final LXPalette palette;
 
+		// arbitrarily set now
+  public static final int NUM_PALLETS = 4;
+	/**
+	 * multiple palettes
+	 */
+	public final ArrayList<LXPalette> palettes;
+
     /**
      * The animation engine.
      */
@@ -230,8 +237,15 @@ public class LX {
         LX.initTimer.log("Model");
 
         // Color palette
-        this.palette = new LXPalette(this);
-        LX.initTimer.log("Palette");
+//    this.palette = new LXPalette(this);
+//    LX.initTimer.log("Palette");
+
+		this.palettes = new ArrayList<>();
+		LX.initTimer.log("Auxiliary Macro Palettes");
+		for (int i = 0; i < NUM_PALLETS; i++){
+			this.palettes.add(new LXPalette(this, i));
+		}
+		this.palette = this.palettes.get(0);
 
         // Construct the engine
         this.engine = new LXEngine(this);

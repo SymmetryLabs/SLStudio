@@ -47,7 +47,7 @@ public class UIPalette extends UICollapsibleSection {
 
     public UIPalette(UI ui, final LXPalette palette, float x, float y, float w) {
         super(ui, x, y, w, HEIGHT);
-        setTitle("COLOR PALETTE");
+    setTitle("PALETTE");
         this.palette = palette;
 
         addTopLevelComponent(
@@ -56,6 +56,10 @@ public class UIPalette extends UICollapsibleSection {
             .setActiveColor(ui.theme.getAttentionColor())
             .setParameter(palette.cue)
         );
+
+    addTopLevelComponent(
+    	new UITopLevelPreview(getWidth() - 100, 2, 50,14)
+		);
 
         new UIToggleSet(0, 2, getContentWidth(), 18)
         .setEvenSpacing()
@@ -99,6 +103,38 @@ public class UIPalette extends UICollapsibleSection {
 
     }
 
+	class UITopLevelPreview extends UI2dComponent {
+		private int xp;
+		private float sv;
+		private float hv;
+
+		UITopLevelPreview(float x, float y, float w, float h) {
+			super(x, y, w, h);
+			addLoopTask(new LXLoopTask() {
+				public void loop(double deltaMs) {
+					int xv = (int) LXUtils.constrainf(palette.getHuef() / 360 * width, 1, width-1);
+					float svf = palette.getSaturationf();
+//					float hvf = palette.clr.hue.getValuef();
+					float hvf = palette.getHuef();
+					if (xp != xv || svf != sv || hvf != hv) {
+						xp = xv;
+						sv = svf;
+						hv = hvf;
+						redraw();
+					}
+				}
+			});
+		}
+
+		@Override
+		public void onDraw(UI ui, PGraphics pg) {
+			for (int x = 1; x < this.width-1; ++x) {
+				pg.stroke(LXColor.hsb(hv, sv, 100));
+				pg.line(x, 1, x, this.getHeight());
+			}
+		}
+	}
+
     class UIColorFixed extends UI2dContainer {
 
         UIColorFixed(UI ui, float x, float y, float w, float   h) {
@@ -137,6 +173,7 @@ public class UIPalette extends UICollapsibleSection {
 
             private void updateHue(float mx, float my) {
                 palette.clr.hue.setValue(mx / (this.width-1) * 360);
+//				palette.color.hue.setValue(mx / (this.width-1) * 360);
             }
 
             @Override
