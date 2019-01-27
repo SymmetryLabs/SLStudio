@@ -20,6 +20,7 @@
 
 package heronarts.p3lx.ui.studio.global;
 
+import com.symmetrylabs.slstudio.pattern.Palette;
 import heronarts.lx.LX;
 import heronarts.lx.Tempo;
 import heronarts.lx.parameter.BooleanParameter;
@@ -46,38 +47,64 @@ public class UITempo extends UI2dContainer {
         setBorderRounding(4);
 
         new UIButton(PADDING, PADDING, 36, 18)
-        .setParameter(lx.tempo.tap)
-        .setLabel("TAP")
-        .setMomentary(true)
-        .addToContainer(this);
+            .setParameter(lx.tempo.tap)
+            .setLabel("TAP")
+            .setMomentary(true)
+            .addToContainer(this);
 
-        new UIDoubleBox(42, PADDING, 72, 18)
-        .setParameter(lx.tempo.bpm)
-        .setShiftMultiplier(.1f)
-        .addToContainer(this);
+        new UIDoubleBox(42, PADDING, 40, 18)
+            .setParameter(lx.tempo.bpm)
+            .setShiftMultiplier(.1f)
+            .addToContainer(this);
 
-        new UIButton(116, PADDING, 20, 18)
-        .setParameter(lx.tempo.nudgeDown)
-        .setLabel("◄")
-        .setMomentary(true)
-        .addToContainer(this);
+        new UIButton(116-30, PADDING, 20, 18)
+            .setParameter(lx.tempo.nudgeDown)
+            .setLabel("◄")
+            .setMomentary(true)
+            .addToContainer(this);
 
-         new UIButton(138, PADDING, 20, 18)
-        .setParameter(lx.tempo.nudgeUp)
-        .setLabel("►")
-        .setMomentary(true)
-        .addToContainer(this);
+        new UIButton(138-30, PADDING, 20, 18)
+            .setParameter(lx.tempo.nudgeUp)
+            .setLabel("►")
+            .setMomentary(true)
+            .addToContainer(this);
 
-        new Blinker(lx.tempo, 160, PADDING, 18, 18).addToContainer(this);
+        new Blinker(lx.tempo, 160, PADDING, 18, 18, false).addToContainer(this);
+        new Blinker(lx.tempo, 140, PADDING, 18, 18, true).addToContainer(this);
     }
 
     private class Blinker extends UI2dComponent implements UITriggerSource {
 
         private final Tempo tempo;
+    private boolean measure;
 
-        Blinker(final Tempo tempo, float x, float y, float w, float h) {
+        private Tempo.AbstractListener beatListener;
+
+        private int beat = -1;
+
+        class MeasureListen extends Tempo.AbstractListener {
+            @Override
+            public void onBeat(Tempo tempo, int inbeat){
+                beat = inbeat;
+            }
+
+            @Override
+            public void onMeasure(Tempo tempo) {
+            }
+        }
+
+        private MeasureListen measureListen = new MeasureListen();
+
+
+
+    Blinker(final Tempo tempo, float x, float y, float w, float h, boolean measure_not_beat) {
             super(x, y, w, h);
             this.tempo = tempo;
+
+      // add a listener for beat and measure callbacks
+            this.tempo.addListener(this.measureListen);
+
+            this.measure = measure_not_beat;
             addLoopTask(new UITimerTask(14, UITimerTask.Mode.FPS) {
                 @Override
                 public void run() {
@@ -107,7 +134,24 @@ public class UITempo extends UI2dContainer {
             pg.noStroke();
             if (this.tempo.enabled.isOn()) {
                 int fill = ui.theme.getPrimaryColor();
-                fill = (fill & 0xffffff) | (((int) ((1 - this.tempo.ramp()) * 0xff)) << 24);
+                if (measure){
+                    fill = ui.theme.getAttentionColor();
+                }
+                int alpha_shift = 24;
+                // remove the alpha from the fill color
+                fill = (fill & 0x00ffffff);
+
+                // logic for the measure indicator
+                if (measure){
+                    if(this.beat == 0){
+                        fill = (fill) | (((int) ((1 - this.tempo.ramp()) * 0xff)) << alpha_shift);
+                    }
+                }
+                else {
+                    if(this.beat > 0){
+                        fill = (fill) | (((int) ((1 - this.tempo.ramp()) * 0xff)) << alpha_shift);
+                    }
+                }
                 pg.fill(fill);
             } else {
                 pg.fill(ui.theme.getControlDisabledColor());
@@ -118,7 +162,12 @@ public class UITempo extends UI2dContainer {
 
         @Override
         public BooleanParameter getTriggerSource() {
-            return this.tempo.trigger;
+        if (measure){
+            return this.tempo.measureTrigger;
+            }
+            else{
+                return this.tempo.trigger;
+            }
         }
     }
 }
