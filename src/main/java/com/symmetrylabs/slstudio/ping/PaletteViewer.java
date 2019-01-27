@@ -15,7 +15,7 @@ public class PaletteViewer extends SLPattern<SLModel> {
 
     private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
 
-    DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());
+	DiscreteParameter palette = new DiscreteParameter("palSelectah", paletteLibrary.getNames());
         // selected colour palette
     CompoundParameter palStart = new CompoundParameter("palStart", 0, 0, 1);  // palette start point (fraction 0 - 1)
     CompoundParameter palStop = new CompoundParameter("palStop", 1, 0, 1);  // palette stop point (fraction 0 - 1)

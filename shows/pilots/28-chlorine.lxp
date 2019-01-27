@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1548290204138,
+  "timestamp": 1548302551549,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.1333332974463701,
-      "focusedChannel": 4,
+      "focusedChannel": 5,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -30,10 +30,10 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 71.80000106990337,
+        "color/hue": 180.0,
         "color/brightness": 100.0,
-        "color/saturation": 89.01960754394531,
-        "color": -2949348,
+        "color/saturation": 100.0,
+        "color": -16711681,
         "period": 89000.0,
         "range": 0.0,
         "spread": 1.341104507446289E-6,
@@ -231,7 +231,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -249,7 +249,7 @@
               "label": "Translate",
               "enabled": true,
               "cx": 41.21995301172137,
-              "cy": -297.0,
+              "cy": 71.27999619394541,
               "cz": 0.0
             }
           },
@@ -260,7 +260,7 @@
             "parameters": {
               "label": "Rotate",
               "enabled": true,
-              "cx": 445.55999800376594,
+              "cx": 548.6099969800562,
               "cy": 110.12999920688571,
               "cz": -19.215000157244503,
               "angle": -9.801769140993814
@@ -418,7 +418,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -661,7 +661,7 @@
             "modulationColor": -57856,
             "parameters": {
               "label": "Noise",
-              "palette": 2,
+              "palette": 1,
               "Hue": 0.0,
               "Spark": 0.0,
               "Wave": 0.0,
@@ -682,6 +682,98 @@
               "Anim": 3,
               "Dens": 0.24000000804662702,
               "AnimResets": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 26493,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -11272448,
+        "parameters": {
+          "label": "Channel-6",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 4,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0,
+          "autoDisable": false,
+          "speed": 1.0
+        },
+        "warps": [],
+        "effects": [
+          {
+            "id": 26607,
+            "class": "heronarts.lx.effect.BlurEffect",
+            "modulationColor": -16711753,
+            "parameters": {
+              "label": "Blur",
+              "enabled": true,
+              "amount": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 1,
+        "patterns": [
+          {
+            "id": 26491,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -2228480,
+            "parameters": {
+              "label": "SolidColor",
+              "palette": 0,
+              "color/hue": 0.0,
+              "color/brightness": 0.0,
+              "color/saturation": 0.0,
+              "color": -16777216,
+              "bool_palette": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 26494,
+            "class": "com.symmetrylabs.slstudio.pattern.Crystalline",
+            "modulationColor": -13500672,
+            "parameters": {
+              "label": "Crystalline",
+              "palette": 0,
+              "count": 0,
+              "cx": 479.9099972359836,
+              "cy": 103.20000008009373,
+              "cz": -26.25,
+              "width": 291.9999977946281,
+              "lvel": -8.940696716308594E-8,
+              "rwidth": 1.0,
+              "rvel": 1.2199999749660488,
+              "cutwhite": 1.0,
+              "symm": 4,
+              "radial": 1,
+              "alpha": true
             },
             "modulation": {
               "modulators": [],
@@ -797,19 +889,6 @@
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 26385,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -12189441,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 44,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -992,12 +1071,12 @@
         "26375": true
       },
       "preview": {
-        "radius": 781.3365121296681,
-        "theta": 0.7500000000000194,
-        "phi": 0.13200000000000134,
-        "positionX": 517.2285766601562,
-        "positionY": 59.25,
-        "positionZ": 253.73104858398438
+        "radius": 344.55788833253416,
+        "theta": 0.35400000000001874,
+        "phi": 0.27600000000000124,
+        "positionX": 401.3025207519531,
+        "positionY": 56.25,
+        "positionZ": -60.60546875
       }
     }
   }

@@ -20,6 +20,8 @@
 
 package heronarts.lx.color;
 
+import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.color.Ops8;
 import heronarts.lx.LX;
 import heronarts.lx.LXModelComponent;
 import heronarts.lx.model.LXModel;
@@ -294,6 +296,10 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
     public int getColor() {
         return LXColor.hsb(getHue(), getSaturation(), 100);
     }
+
+	public long getColor16() {
+		return Ops16.hsb(getHue()/360, getSaturation()/100.0, 1.0);
+	}
 
     public int getColor(double brightness) {
         if (brightness > 0) {
