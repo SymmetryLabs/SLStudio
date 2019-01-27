@@ -129,8 +129,9 @@ public class UIPalette extends UICollapsibleSection {
 		@Override
 		public void onDraw(UI ui, PGraphics pg) {
 			for (int x = 1; x < this.width-1; ++x) {
-				pg.stroke(LXColor.hsb(hv, sv, 100));
-				pg.line(x, 1, x, this.getHeight());
+                int p_color = palette.getColorByRange(x-1, this.width);
+                pg.stroke(p_color);
+                pg.line(x, 1, x, this.getHeight());
 			}
 		}
 	}

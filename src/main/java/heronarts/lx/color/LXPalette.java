@@ -49,7 +49,8 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
 	// -1 is the default palette
 	private int index = -1;
 
-    public enum Mode {
+
+	public enum Mode {
         FIXED,
         OSCILLATE,
         CYCLE
@@ -188,6 +189,11 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
 			return "/lx/palette/" + (this.index+1);
 		}
     }
+
+	public int getColorByRange(int x, float width) {
+		double hue = getHue() + ((x-width/2) / (width-2)) * spread.getValuef();
+		return LXColor.hsb(hue, getSaturation(), 100); // color at x coordinate
+	}
 
     @Override
     public String getLabel() {
