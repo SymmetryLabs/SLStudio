@@ -16,7 +16,7 @@ public class BoxMask extends SLWarp {
     private CompoundParameter xSizeParam = new CompoundParameter("xSize", model.xRange/2, 0, model.xRange);
     private CompoundParameter cxParam = new CompoundParameter("cx", model.cx, model.xMin, model.xMax);
     private CompoundParameter ySizeParam = new CompoundParameter("ySize", model.yRange/2, 0, model.yRange);
-    private CompoundParameter cyParam = new CompoundParameter("cy", model.cy, model.yMin, model.yMax);
+	private CompoundParameter cyParam = new CompoundParameter("cy", model.cy, model.yMin - model.yRange, model.yMax + model.yRange);
     private CompoundParameter zSizeParam = new CompoundParameter("zSize", model.zRange/2, 0, model.zRange);
     private CompoundParameter czParam = new CompoundParameter("cz", model.cz, model.zMin, model.zMax);
     private BooleanParameter invertParam = new BooleanParameter("invert", false);
