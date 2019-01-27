@@ -50,9 +50,11 @@ import java.util.Arrays;
 public class UIPalettePattern extends SLPattern<SLModel> implements UIPattern {
 
 	public final ColorParameter color = new ColorParameter("Color");
+	private DiscreteParameter d;
 
   public UIPalettePattern(LX lx) {
     super(lx);
+    addParameter(d = new DiscreteParameter("disc", 20));
   }
 
   private static final int SLIDER_WIDTH = 16;

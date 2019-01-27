@@ -31,23 +31,15 @@ import java.util.List;
 
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXDeviceComponent;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.BoundedParameter;
-import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.lx.parameter.LXListenableNormalizedParameter;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
-import heronarts.lx.parameter.StringParameter;
+import heronarts.lx.parameter.*;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UIContainer;
 import heronarts.p3lx.ui.UIKeyFocus;
 import heronarts.p3lx.ui.UIMouseFocus;
-import heronarts.p3lx.ui.component.UIButton;
-import heronarts.p3lx.ui.component.UIKnob;
-import heronarts.p3lx.ui.component.UISwitch;
-import heronarts.p3lx.ui.component.UITextBox;
+import heronarts.p3lx.ui.component.*;
+import heronarts.p3lx.ui.studio.global.UIPalette;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
@@ -239,9 +231,16 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
             float x = (ki % perRow) * (UIKnob.WIDTH + 4);
             float y = 7 + (ki / perRow) * (UIKnob.HEIGHT + 10);
             if (param instanceof BoundedParameter || param instanceof DiscreteParameter) {
-                new UIKnob(x, y)
-                        .setParameter(param)
-                        .addToContainer(this);
+      	if(param instanceof PaletteParameter){
+      		new UIPaletteSelectah(component.getLX(),(PaletteParameter)param,x,y)
+						.setParameter(param)
+						.addToContainer(this);
+				}
+				else {
+					new UIKnob(x, y)
+						.setParameter(param)
+						.addToContainer(this);
+				}
             } else if (param instanceof BooleanParameter) {
                 new UISwitch(x, y)
                         .setParameter(param)
