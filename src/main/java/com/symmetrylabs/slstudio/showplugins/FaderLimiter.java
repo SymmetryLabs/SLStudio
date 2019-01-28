@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.plugins;
+package com.symmetrylabs.slstudio.showplugins;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;

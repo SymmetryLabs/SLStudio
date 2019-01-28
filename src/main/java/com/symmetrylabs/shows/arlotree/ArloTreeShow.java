@@ -13,7 +13,7 @@ import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.plugins.XfadeTimer;
+import com.symmetrylabs.slstudio.showplugins.XfadeTimer;
 import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.shows.tree.config.*;
 import com.symmetrylabs.shows.tree.ui.*;

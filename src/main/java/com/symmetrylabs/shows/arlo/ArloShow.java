@@ -8,8 +8,8 @@ import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.plugins.FaderLimiter;
-import com.symmetrylabs.slstudio.plugins.XfadeTimer;
+import com.symmetrylabs.slstudio.showplugins.FaderLimiter;
+import com.symmetrylabs.slstudio.showplugins.XfadeTimer;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
 import heronarts.lx.transform.LXTransform;
 

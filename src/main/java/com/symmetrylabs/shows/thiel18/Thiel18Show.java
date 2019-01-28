@@ -7,7 +7,7 @@ import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.shows.cubes.UICubesMappingPanel;
 import com.symmetrylabs.shows.cubes.UICubesOutputs;
 import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.plugins.FaderLimiter;
+import com.symmetrylabs.slstudio.showplugins.FaderLimiter;
 import heronarts.lx.transform.LXTransform;
 import heronarts.p3lx.ui.UI2dScrollContext;
 

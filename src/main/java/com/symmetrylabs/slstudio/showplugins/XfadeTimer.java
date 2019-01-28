@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.plugins;
+package com.symmetrylabs.slstudio.showplugins;
 
 import com.symmetrylabs.util.CaptionSource;
 import com.symmetrylabs.slstudio.SLStudioLX;
