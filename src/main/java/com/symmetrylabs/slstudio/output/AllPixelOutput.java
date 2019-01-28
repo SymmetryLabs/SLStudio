@@ -250,6 +250,7 @@ public class AllPixelOutput extends LXOutput {
     private void warn(String w, Object... args) {
         if (w == null) {
             SLStudio.setWarning("AllPixelOutput", null);
+            return;
         }
         String v = String.format(w, args);
         if (currentWarning == null || !v.equals(currentWarning)) {
