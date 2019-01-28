@@ -2,13 +2,12 @@ package com.symmetrylabs.shows.thiel18;
 
 import java.util.*;
 
-import com.symmetrylabs.shows.arlo.ArloFaderLimiter;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.shows.cubes.UICubesMappingPanel;
 import com.symmetrylabs.shows.cubes.UICubesOutputs;
 import com.symmetrylabs.slstudio.model.SLModel;
-
+import com.symmetrylabs.slstudio.plugins.FaderLimiter;
 import heronarts.lx.transform.LXTransform;
 import heronarts.p3lx.ui.UI2dScrollContext;
 
@@ -316,6 +315,6 @@ public class Thiel18Show extends CubesShow {
         UI2dScrollContext utility = ui.rightPane.utility;
         new UICubesOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UICubesMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
-        ArloFaderLimiter.attach(lx, 0.72f);
+        FaderLimiter.attach(lx, 0.72f);
     }
 }

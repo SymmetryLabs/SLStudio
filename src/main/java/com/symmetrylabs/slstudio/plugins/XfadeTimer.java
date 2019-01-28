@@ -1,4 +1,4 @@
-package com.symmetrylabs.shows.arlo;
+package com.symmetrylabs.slstudio.plugins;
 
 import com.symmetrylabs.util.CaptionSource;
 import com.symmetrylabs.slstudio.SLStudioLX;
@@ -6,7 +6,7 @@ import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
 import heronarts.lx.modulator.LinearEnvelope;
 
-public class ArloXfadeTimer implements LXLoopTask, CaptionSource {
+public class XfadeTimer implements LXLoopTask, CaptionSource {
     private static final double LIGHT_SHOW_MS = 1000 * 60 * 10; // 10min
     private static final double SOLID_COLOR_MS = 1000 * 60 * 30; // 30min
     private static final double CROSSFADE_MS = 5_000;
@@ -18,7 +18,7 @@ public class ArloXfadeTimer implements LXLoopTask, CaptionSource {
     private double lastXfadeValue = 0;
     private long xfadeStartNanos;
 
-    public ArloXfadeTimer(LX lx, SLStudioLX.UI ui) {
+    public XfadeTimer(LX lx, SLStudioLX.UI ui) {
         this.lx = lx;
         lastXfadeValue = lx.engine.crossfader.getValue();
     }
@@ -64,7 +64,7 @@ public class ArloXfadeTimer implements LXLoopTask, CaptionSource {
     }
 
     public static void attach(LX lx, SLStudioLX.UI ui) {
-        ArloXfadeTimer axt = new ArloXfadeTimer(lx, ui);
+        XfadeTimer axt = new XfadeTimer(lx, ui);
         lx.engine.addLoopTask(axt);
         ui.captionText.addSource(axt);
     }

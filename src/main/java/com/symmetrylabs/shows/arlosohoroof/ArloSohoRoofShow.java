@@ -5,12 +5,11 @@ import java.util.*;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
-import com.symmetrylabs.shows.arlo.ArloFaderLimiter;
-import com.symmetrylabs.shows.arlo.ArloXfadeTimer;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.slstudio.model.SLModel;
-
+import com.symmetrylabs.slstudio.plugins.FaderLimiter;
+import com.symmetrylabs.slstudio.plugins.XfadeTimer;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
 import heronarts.lx.transform.LXTransform;
 
@@ -108,8 +107,8 @@ public class ArloSohoRoofShow extends CubesShow implements Show, HasWorkspace {
         workspace = new Workspace(lx, ui, "shows/arlo");
         workspace.setRequestsBeforeSwitch(2);
 
-        ArloXfadeTimer.attach(lx, ui);
-        ArloFaderLimiter.attach(lx);
+        XfadeTimer.attach(lx, ui);
+        FaderLimiter.attach(lx);
     }
 
     @Override
