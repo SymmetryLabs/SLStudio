@@ -73,6 +73,7 @@ public abstract class UdpBroadcastNetworkScanner {
                     prepareChannel(recvChan, broadcast);
                     recvChan.register(recvSelector, SelectionKey.OP_READ, broadcast);
                     chans.put(broadcast, recvChan);
+                    System.out.println("bound to new interface " + broadcast + " for " + protoName);
                 } catch (IOException e) {
                     if (!errorBroadcasts.contains(broadcast)) {
                         System.err.println("couldn't set up " + protoName + " discovery listener:");
@@ -140,12 +141,24 @@ public abstract class UdpBroadcastNetworkScanner {
         Set<InetAddress> toRemove = new HashSet<InetAddress>(chans.keySet());
         toRemove.removeAll(NetworkUtils.getBroadcastAddresses());
         for (InetAddress a : toRemove) {
+            System.err.println("lost interface " + a);
             DatagramChannel chan = chans.get(a);
             /* closing the channel removes it from the selector set */
             try {
                 chan.close();
             } catch (IOException e) {}
             chans.remove(a);
+        }
+    }
+
+    public void close() {
+        for (DatagramChannel chan : chans.values()) {
+            try {
+                chan.close();
+            } catch (IOException e) {
+                System.err.println("unable to close " + protoName + " channel:");
+                e.printStackTrace();
+            }
         }
     }
 }

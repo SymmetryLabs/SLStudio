@@ -85,12 +85,21 @@ public class NetworkMonitor {
         return this;
     }
 
+    public synchronized void stop() {
+        started = false;
+    }
+
     private void scheduleTask(long delay) {
         timer.schedule(new TimerTask() {
             public void run() {
-                opcNetworkScanner.scan();
-                artNetNetworkScanner.scan();
-                scheduleTask(SCAN_PERIOD_MS);
+                if (started) {
+                    opcNetworkScanner.scan();
+                    artNetNetworkScanner.scan();
+                    scheduleTask(SCAN_PERIOD_MS);
+                } else {
+                    opcNetworkScanner.close();
+                    artNetNetworkScanner.close();
+                }
             }
         }, delay);
     }
