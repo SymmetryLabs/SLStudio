@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1548763744840,
+  "timestamp": 1548770947889,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,7 +14,7 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 0.2662135362625122,
+      "speed": 0.6047753095626831,
       "focusedChannel": 9,
       "cueA": false,
       "cueB": false,
@@ -30,7 +30,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 53.92070388793945,
+        "color/hue": 53.85000213980675,
         "color/brightness": 100.0,
         "color/saturation": 89.01960754394531,
         "color": -6116,
@@ -528,7 +528,7 @@
               "label": "OneBigAngledPlane",
               "palette": 2,
               "thick": 43.135849865916725,
-              "x": -1.0,
+              "x": 0.1903975009918213,
               "y": 0.7599999897181988,
               "z": -0.5800000093877316,
               "cx": 12.75,
@@ -674,7 +674,7 @@
               "xSize": 377.84999923221767,
               "cx": 356.25,
               "ySize": 39.60000132769346,
-              "cy": 0.595589083828088,
+              "cy": -18.436854900100315,
               "zSize": 62.309999730437994,
               "cz": -36.30000089854002,
               "invert": false
@@ -771,7 +771,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 2.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -819,7 +819,7 @@
             "parameters": {
               "label": "Desaturation",
               "enabled": true,
-              "amount": 0.6707682609558105,
+              "amount": 0.9987296462059021,
               "attack": 100.0,
               "decay": 100.0
             },
@@ -831,7 +831,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 1,
+        "patternIndex": 0,
         "patterns": [
           {
             "id": 1502,
@@ -844,7 +844,7 @@
               "WSpr": 0.18999999575316906,
               "WSpd": 0.3800000138580799,
               "Drez": 0.8624000026285649,
-              "Thick": 0.26020121574401855,
+              "Thick": 0.26197946071624756,
               "ySpr": 0.8100000042468309,
               "Hue": 0.7700000051409006,
               "HSpr": 0.7700000051409006
@@ -935,7 +935,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 4.7651026397943497E-4,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -1124,7 +1124,7 @@
             "parameters": {
               "label": "Speckle",
               "enabled": true,
-              "amt": 0.2917674779891968
+              "amt": 0.1499890685081482
             }
           }
         ],
@@ -1480,6 +1480,19 @@
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 35751,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -65393,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
       "envelop": {
         "id": 44,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -2472,6 +2485,36 @@
           "name": "CoreMIDI4J - IAC Bus 2",
           "channel": false,
           "control": true,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 2",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 3",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 4",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Sync Port",
+          "channel": true,
+          "control": false,
           "sync": false
         },
         {
