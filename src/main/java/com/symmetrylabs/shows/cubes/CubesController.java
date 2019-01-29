@@ -20,7 +20,27 @@ import java.io.OutputStream;
 import java.net.*;
 
 public class CubesController extends LXOutput implements Comparable<CubesController>, OPCConstants {
-    private static final double MAX_POWER_CAP = 0.6;
+    /*
+    * @macro MAX_POWER_CAP ==> a value from 0.0 to 1.0 which dictates the max power of data that can be sent to a cube.
+    *
+    * This is a very important macro.
+    * It was implemented by Nate during Twenty One Pilots cubes install which uses the new UBNT managed switches.
+    * These switches are awesome but they have one horrible failure mode - the cubes epilepsy flash uncontrollably
+    * if the cubes tries to drive too much power instantaneously (i.e. from blackout to Full white in an instant)
+    * In this state they become unresponsive to the network, and obviously a total show killer.  I literally ran on stage
+    * to manually unplug things the first time it happened.
+    *
+    * The macro is used by the following method to decrease the intensity of data going to any individual cube:
+    * private boolean power_level_has_fault_condition (PointsGrouping points, boolean is16BitColorEnabled, long[] poly) {}
+    *
+    * Luckily the same switches that cause this problem also provide relief in this worst case scenario
+    * because they can cut power to individual ports via network command.  I have scripted this.
+    * Currently this exists at
+    * Please go look at the `abstract class ManagedPoEswitch()` and `class ubnt ()`
+     */
+
+    private static final double MAX_POWER_CAP = 0.62;
+
     public final String id;
     public final int idInt;
     public final InetAddress host;

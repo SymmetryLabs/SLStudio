@@ -37,7 +37,7 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
     /** Period of the waveform, in ms */
     public final CompoundParameter period;
 
-  public final DiscreteParameter tempoPeriod = new DiscreteParameter("tempo", 8);
+  public final DiscreteParameter tempoPeriod = new DiscreteParameter("tempo", -4, 4);
 
     public final CompoundParameter skew = (CompoundParameter)
         new CompoundParameter("Skew", 0, -1, 1)
@@ -114,7 +114,8 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
 
     public void onParameterChanged(LXParameter p) {
         if (p == this.tempoPeriod) {
-            int beats_per_period = this.tempoPeriod.getValuei();
+            double beats_per_period = (int) Math.pow(2.0, this.tempoPeriod.getValue());
+
             double periodMs = getLX().tempo.period.getValuef() / beats_per_period;
             setPeriod(periodMs);
         }

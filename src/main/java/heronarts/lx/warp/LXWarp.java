@@ -69,7 +69,8 @@ public abstract class LXWarp extends LXModelComponent implements LXComponent.Ren
     protected boolean getAndClearParameterChangeDetectedFlag() {
         boolean result = parameterChangeDetected;
         parameterChangeDetected = false;
-        return result;
+//        return result;
+        return true;  // Temporary hack so that I can apply modulators to warps... this needs to be updated so that warps are efficient.
     }
 
     public final void setIndex(int index) {

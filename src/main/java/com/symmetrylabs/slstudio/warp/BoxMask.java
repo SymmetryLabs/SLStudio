@@ -35,7 +35,7 @@ public class BoxMask extends SLWarp {
     @Override
     public boolean run(double deltaMs, boolean inputVectorsChanged) {
         if (inputVectorsChanged || getAndClearParameterChangeDetectedFlag()) {
-            System.out.println("Recomputing BoxMask warp (" + inputVectors.length + " vectors)...");
+//            System.out.println("Recomputing BoxMask warp (" + inputVectors.length + " vectors)...");
 
             float xSize = xSizeParam.getValuef();
             float cx = cxParam.getValuef();

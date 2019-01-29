@@ -38,6 +38,7 @@ import heronarts.lx.blend.MultiplyBlend;
 import heronarts.lx.blend.NormalBlend;
 import heronarts.lx.blend.SubtractBlend;
 import heronarts.lx.clip.LXClip;
+import heronarts.lx.color.LXPalette;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.osc.LXOscComponent;
@@ -1089,7 +1090,10 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         deltaMs *= this.speed.getValue();
 
         this.modulation.loop(deltaMs);
-        this.lx.palette.loop(deltaMs);
+
+        for (LXPalette palette : this.lx.palettes){
+            palette.loop(deltaMs);
+        }
 
         // Run top-level loop tasks
         for (LXLoopTask loopTask : this.loopTasks) {
