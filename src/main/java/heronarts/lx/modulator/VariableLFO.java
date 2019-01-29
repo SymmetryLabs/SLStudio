@@ -114,7 +114,7 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
 
     public void onParameterChanged(LXParameter p) {
         if (p == this.tempoPeriod) {
-            double beats_per_period = (int) Math.pow(2.0, this.tempoPeriod.getValue());
+            double beats_per_period = Math.pow(2.0, this.tempoPeriod.getValue());
 
             double periodMs = getLX().tempo.period.getValuef() / beats_per_period;
             setPeriod(periodMs);

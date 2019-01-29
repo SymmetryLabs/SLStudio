@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1548723725769,
+  "timestamp": 1548763753907,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -30,7 +30,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 53.85000213980675,
+        "color/hue": 53.92070388793945,
         "color/brightness": 100.0,
         "color/saturation": 89.01960754394531,
         "color": -6116,
@@ -654,7 +654,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.41317591071128845,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -771,7 +771,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 2.0,
-          "fader": 0.40933844447135925,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -935,7 +935,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.9673181176185608,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -1107,7 +1107,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -1480,19 +1480,6 @@
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 26953,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -59136,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 44,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
