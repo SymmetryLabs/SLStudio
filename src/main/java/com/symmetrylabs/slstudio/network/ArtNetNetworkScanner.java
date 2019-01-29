@@ -50,9 +50,6 @@ public class ArtNetNetworkScanner extends UdpBroadcastNetworkScanner {
         }
     }
 
-    protected void updateDevice(final InetAddress addr) {
-    }
-
     @Override
     protected void expireDevices() {
         dispatcher.dispatchEngine(new Runnable() {
