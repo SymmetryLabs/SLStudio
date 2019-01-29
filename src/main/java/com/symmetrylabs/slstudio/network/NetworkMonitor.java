@@ -20,7 +20,7 @@ public class NetworkMonitor {
     public final ListenableSet<NetworkDevice> opcDeviceList;
     public final ListenableSet<InetAddress> artNetDeviceList;
 
-    private final NetworkScanner opcNetworkScanner;
+    private final OpcNetworkScanner opcNetworkScanner;
     private final ArtNetNetworkScanner artNetNetworkScanner;
     private final Timer timer = new Timer("NetworkScanner");
 
@@ -39,7 +39,7 @@ public class NetworkMonitor {
 
     private NetworkMonitor(LX lx) {
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
-        opcNetworkScanner = new NetworkScanner(dispatcher);
+        opcNetworkScanner = new OpcNetworkScanner(dispatcher);
         opcDeviceList = opcNetworkScanner.deviceList;
 
         artNetNetworkScanner = new ArtNetNetworkScanner(dispatcher);
