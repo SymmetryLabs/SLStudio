@@ -1,35 +1,26 @@
 package com.symmetrylabs.slstudio.network;
 
-import com.symmetrylabs.slstudio.output.ArtNetDatagramUtil;
-import com.symmetrylabs.slstudio.output.ArtNetPollDatagram;
+import com.symmetrylabs.util.NetworkUtils;
+import com.symmetrylabs.util.dispatch.Dispatcher;
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketTimeoutException;
-import java.util.ArrayList;
+import java.net.SocketAddress;
+import java.net.SocketOption;
+import java.net.StandardSocketOptions;
+import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.spi.SelectorProvider;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.net.InetSocketAddress;
-import java.net.SocketException;
-import java.nio.channels.DatagramChannel;
-import java.nio.channels.spi.SelectorProvider;
-import java.nio.channels.Selector;
-import java.nio.channels.SelectionKey;
-import java.util.Iterator;
-import java.nio.ByteBuffer;
-import java.net.SocketAddress;
-import java.net.SocketOption;
-import java.net.StandardSocketOptions;
 
-import com.symmetrylabs.util.NetworkUtils;
-import com.symmetrylabs.util.listenable.ListenableSet;
-import com.symmetrylabs.util.dispatch.Dispatcher;
 
 public abstract class UdpBroadcastNetworkScanner {
     protected final Dispatcher dispatcher;
@@ -44,8 +35,8 @@ public abstract class UdpBroadcastNetworkScanner {
     protected final ByteBuffer[] discoveryPackets;
 
     public UdpBroadcastNetworkScanner(
-        Dispatcher dispatcher, String protoName, int broadcastPort, int responseBufferSize,
-        long maxMillisWithoutReply, ByteBuffer[] discoveryPackets) {
+        Dispatcher dispatcher, String protoName, int broadcastPort,
+        int responseBufferSize, long maxMillisWithoutReply, ByteBuffer[] discoveryPackets) {
         this.dispatcher = dispatcher;
         this.broadcastPort = broadcastPort;
         this.responseBufferSize = responseBufferSize;
@@ -63,6 +54,8 @@ public abstract class UdpBroadcastNetworkScanner {
         }
     }
 
+    protected void prepareChannel(DatagramChannel chan, InetAddress iface) throws IOException {}
+    protected abstract void sendPacket(InetAddress broadcast, DatagramChannel chan, ByteBuffer data) throws IOException;
     protected abstract void onReply(SocketAddress addr, ByteBuffer response);
     protected abstract void expireDevices();
 
@@ -77,7 +70,7 @@ public abstract class UdpBroadcastNetworkScanner {
                     DatagramChannel recvChan = SelectorProvider.provider().openDatagramChannel();
                     recvChan.setOption(StandardSocketOptions.SO_BROADCAST, true);
                     recvChan.configureBlocking(false);
-                    //recvChan.bind(new InetSocketAddress(broadcast, broadcastPort));
+                    prepareChannel(recvChan, broadcast);
                     recvChan.register(recvSelector, SelectionKey.OP_READ, broadcast);
                     chans.put(broadcast, recvChan);
                 } catch (IOException e) {
@@ -94,14 +87,13 @@ public abstract class UdpBroadcastNetworkScanner {
             try {
                 DatagramChannel chan = chans.get(broadcast);
                 for (int i = 0; i < discoveryPackets.length; i++) {
-                    chan.send(discoveryPackets[i].rewind(), new InetSocketAddress(broadcast, broadcastPort));
+                    sendPacket(broadcast, chan, discoveryPackets[i].rewind());
                 }
             } catch (IOException e) {
-                if (true || !errorBroadcasts.contains(broadcast)) {
+                if (!errorBroadcasts.contains(broadcast)) {
                     System.err.println(String.format("couldn't send %s poll to %s:", protoName, broadcast));
                     e.printStackTrace();
                     errorBroadcasts.add(broadcast);
-                    continue;
                 }
             }
         }

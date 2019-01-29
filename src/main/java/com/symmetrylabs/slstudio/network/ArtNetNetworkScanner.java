@@ -2,13 +2,16 @@ package com.symmetrylabs.slstudio.network;
 
 import com.symmetrylabs.slstudio.output.ArtNetDatagramUtil;
 import com.symmetrylabs.slstudio.output.ArtNetPollDatagram;
-import com.symmetrylabs.util.listenable.ListenableSet;
 import com.symmetrylabs.util.dispatch.Dispatcher;
+import com.symmetrylabs.util.listenable.ListenableSet;
+import java.io.IOException;
 import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +34,24 @@ public class ArtNetNetworkScanner extends UdpBroadcastNetworkScanner {
               ArtNetDatagramUtil.HEADER_LENGTH,
               MAX_MILLIS_WITHOUT_REPLY,
               new ByteBuffer[] { ByteBuffer.wrap(new ArtNetPollDatagram(null).getBytes()) });
+    }
+
+    @Override
+    protected void prepareChannel(DatagramChannel chan, InetAddress iface) throws IOException {
+        chan.bind(new InetSocketAddress(iface, ArtNetDatagramUtil.ARTNET_PORT));
+    }
+
+    @Override
+    protected void sendPacket(InetAddress broadcast, DatagramChannel chan, ByteBuffer data) throws IOException {
+        /* because the channel is bound and listening to broadcasts, we can't send broadcasts from it;
+           unlike with OPC, where devices respond to the port that sent the broadcast, ArtNet devices
+           broadcast their poll reply back to the whole network. We make an ephemeral socket here just
+           to send the data, and then throw the socket away. */
+        final DatagramPacket packet = new DatagramPacket(
+            data.array(), data.array().length, broadcast, ArtNetDatagramUtil.ARTNET_PORT);
+        final DatagramSocket sendSock = new DatagramSocket();
+        sendSock.setBroadcast(true);
+        sendSock.send(packet);
     }
 
     @Override

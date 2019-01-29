@@ -1,18 +1,19 @@
 package com.symmetrylabs.slstudio.network;
 
+import com.symmetrylabs.util.NetworkUtils;
+import com.symmetrylabs.util.dispatch.Dispatcher;
+import com.symmetrylabs.util.listenable.ListenableSet;
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.net.SocketAddress;
-import java.net.InetSocketAddress;
-
-import com.symmetrylabs.util.NetworkUtils;
-import com.symmetrylabs.util.listenable.ListenableSet;
-import com.symmetrylabs.util.dispatch.Dispatcher;
 
 import static com.symmetrylabs.slstudio.network.OpcMessage.SYMMETRY_LABS;
 import static com.symmetrylabs.slstudio.network.OpcMessage.SYMMETRY_LABS_IDENTIFY;
@@ -35,6 +36,11 @@ public class OpcNetworkScanner extends UdpBroadcastNetworkScanner {
             ByteBuffer.wrap(new OpcMessage(0x88, 4).bytes),
             ByteBuffer.wrap(new OpcMessage(0, SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY).bytes),
         };
+    }
+
+    @Override
+    protected void sendPacket(InetAddress broadcast, DatagramChannel chan, ByteBuffer data) throws IOException {
+        chan.send(data, new InetSocketAddress(broadcast, OpcSocket.DEFAULT_PORT));
     }
 
     @Override
