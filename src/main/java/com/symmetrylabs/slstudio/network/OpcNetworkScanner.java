@@ -10,6 +10,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.nio.channels.Selector;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,17 +26,15 @@ public class OpcNetworkScanner extends UdpBroadcastNetworkScanner {
     public final ListenableSet<NetworkDevice> deviceList = new ListenableSet<NetworkDevice>();
     protected Map<String, NetworkDevice> deviceMap = new HashMap<>();
     protected Map<String, Long> lastReplyMillis = new HashMap<>();
+    protected Dispatcher dispatcher;
 
-    public OpcNetworkScanner(Dispatcher dispatcher) {
-        super(dispatcher, "OPC", OpcSocket.DEFAULT_PORT, 65536, MAX_MILLIS_WITHOUT_REPLY, buildDiscoveryPackets());
-    }
-
-    private static ByteBuffer[] buildDiscoveryPackets() {
-        return new ByteBuffer[] {
-            /* this is a legacy "poll" message that is needed for cubes with very old firmware */
-            ByteBuffer.wrap(new OpcMessage(0x88, 4).bytes),
-            ByteBuffer.wrap(new OpcMessage(0, SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY).bytes),
-        };
+    public OpcNetworkScanner(Dispatcher dispatcher, Selector selector) {
+        super(selector, "OPC", 65536, new ByteBuffer[] {
+                /* this is a legacy "poll" message that is needed for cubes with very old firmware */
+                ByteBuffer.wrap(new OpcMessage(0x88, 4).bytes),
+                ByteBuffer.wrap(new OpcMessage(0, SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY).bytes),
+            });
+        this.dispatcher = dispatcher;
     }
 
     @Override

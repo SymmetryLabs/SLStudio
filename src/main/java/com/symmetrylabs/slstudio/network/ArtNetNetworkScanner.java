@@ -12,6 +12,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.nio.channels.Selector;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,17 +24,15 @@ public class ArtNetNetworkScanner extends UdpBroadcastNetworkScanner {
     protected static final short ARTNET_POLLREPLY_OPCODE = 0x2100;
 
     public final ListenableSet<InetAddress> deviceList = new ListenableSet<>();
-    protected Map<InetAddress, Long> lastReplyNanos = new HashMap<>();
+    protected final Map<InetAddress, Long> lastReplyNanos = new HashMap<>();
+    protected final Dispatcher dispatcher;
 
-    public ArtNetNetworkScanner(Dispatcher dispatcher) {
+    public ArtNetNetworkScanner(Dispatcher dispatcher, Selector selector) {
         /* we only allocate a large enough response buffer to pull in the header of the packet, since
            all we're interested in is whether the response packet is an ArtNet POLLREPLY header. */
-        super(dispatcher,
-              "ArtNet",
-              ArtNetDatagramUtil.ARTNET_PORT,
-              ArtNetDatagramUtil.HEADER_LENGTH,
-              MAX_MILLIS_WITHOUT_REPLY,
+        super(selector, "ArtNet", ArtNetDatagramUtil.HEADER_LENGTH,
               new ByteBuffer[] { ByteBuffer.wrap(new ArtNetPollDatagram(null).getBytes()) });
+        this.dispatcher = dispatcher;
     }
 
     @Override
@@ -79,7 +78,7 @@ public class ArtNetNetworkScanner extends UdpBroadcastNetworkScanner {
                 List<InetAddress> addrs = new ArrayList<>(deviceList);
                 for (InetAddress addr : addrs) {
                     long last = lastReplyNanos.get(addr);
-                    if (now - last > maxMillisWithoutReply * 1e6) {
+                    if (now - last > MAX_MILLIS_WITHOUT_REPLY * 1e6) {
                         if (deviceList.contains(addr)) {
                             System.out.println(
                                 String.format(
