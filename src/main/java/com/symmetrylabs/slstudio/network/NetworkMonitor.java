@@ -110,6 +110,7 @@ public class NetworkMonitor {
         while (started) {
             opcNetworkScanner.scan();
             artNetNetworkScanner.scan();
+
             long start = System.nanoTime();
             long remaining;
 

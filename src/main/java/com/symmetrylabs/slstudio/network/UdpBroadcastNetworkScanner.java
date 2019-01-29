@@ -23,16 +23,25 @@ import java.util.concurrent.Executors;
 
 /**
  * Base class for implementing UDP-based network discovery protocols.
- *
- * This class manages a set of {@link DatagramChannel}s configured to listen on each network interface
- * with a broadcast address. Users of a UdpBroadcastNetworkScanner should call {@code scan()} regularly;
- * on each invocation of scan, UdpBroadcastNetworkScanner will groom its list of DatagramChannels (removing
- * ones for interfaces that have gone away, making new ones for new interfaces), it will send discovery
- * packets on each available interface, and then it will check to see if any of the channels have
- * received discovery responses.
+ * <p>
+ * This class manages a set of {@link DatagramChannel}s configured to listen on
+ * each network interface with a broadcast address. Users of a
+ * UdpBroadcastNetworkScanner should call {@code scan()} with some regularity;
+ * on each invocation of scan, UdpBroadcastNetworkScanner will groom its list of
+ * DatagramChannels (removing ones for interfaces that have gone away, making
+ * new ones for new interfaces), it will send discovery packets on each
+ * available interface, and it will expire devices that haven't been seen for a
+ * while (or, more precisely, subclasses of it will).
+ * <p>
+ * While UdpBroadcastNetworkScanner gets everything ready for listening, it
+ * never actually goes through the motions of checking to see if any of its
+ * channels are ready to receive. Instead, each of the channels is registered on
+ * a {@link Selector} given to it in its constructor. {@link NetworkMonitor}
+ * manages this selector, and selects on it with the appropriate frequency. When
+ * one of our channels is selected, NetworkMonitor calls back in to the
+ * UdpBroadcastNetworkScanner and asks it to read from the selected chanenl.
  */
 public abstract class UdpBroadcastNetworkScanner {
-    protected final ExecutorService executor = Executors.newSingleThreadExecutor();
     protected Map<InetAddress, DatagramChannel> chans;
     protected Set<InetAddress> errorBroadcasts = new HashSet<>();
     protected final String protoName;
@@ -42,8 +51,9 @@ public abstract class UdpBroadcastNetworkScanner {
 
     /**
      * Create a new UdpBroadcastNetworkScanner.
+     * @param recvSelector the selector with which all of our channels will be registered
      * @param protoName the name of the protocol we're using to scan, used for logging messages only
-     * @param responseBufferSize the size of the buffer used to receive response packets. Response packets longer than this size will be truncated when passed to {@link #onReply()}
+     * @param responseBufferSize the size of the buffer used to receive response packets. Response packets longer than this size will be truncated when passed to {@link #onReply(SocketAddress, ByteBuffer) onReply}
      * @param discoveryPackets a list of byte buffers containing the contents of the discovery packets that should be sent to each interface on each scan.
      */
     public UdpBroadcastNetworkScanner(Selector recvSelector, String protoName, int responseBufferSize, ByteBuffer[] discoveryPackets) {
@@ -112,11 +122,8 @@ public abstract class UdpBroadcastNetworkScanner {
      * Run a single iteration of the scan loop.
      *
      * This grooms the set of channels we're listening on based on available
-     * interfaces, sends a discovery packet, and then listens for responses.
-     * This method is 100% non-blocking, which means that clients should call
-     * this with some frequency; it is expected that a single invocation of scan
-     * would do nothing, as the responses to your discovery packet will probably
-     * not make it back to you until the next time you run a scan.
+     * interfaces, expires devices we haven't seen for a while, and sends a
+     * discovery packet. This method is 100% non-blocking.
      */
     public void scan() {
         expireInterfaces();
@@ -199,6 +206,7 @@ public abstract class UdpBroadcastNetworkScanner {
         }
     }
 
+    /** Close all channels associated with this network scanner */
     public void close() {
         for (DatagramChannel chan : chans.values()) {
             try {
