@@ -76,14 +76,13 @@ public class ChannelWindow extends CloseableWindow {
                 LXEffect eff = effects.get(i);
                 String effName = eff.getClass().getSimpleName();
                 String id = String.format("%s / %s", chanName, effName);
-                int flags = UI.TREE_FLAG_LEAF |
-                    (eff.enabled.getValueb() ? UI.TREE_FLAG_SELECTED : 0);
 
-                UI.selectable(effName, eff.enabled.getValueb());
-                if (UI.isItemClicked(0)) {
-                    lx.engine.addTask(() -> eff.enabled.setValue(!eff.enabled.getValueb()));
-                } else if (UI.isItemClicked(1)) {
-                    WindowManager.addTransient(new ComponentWindow(lx, id, eff));
+                UI.spacing();
+                UI.CollapseResult section = UI.collapsibleSection(effName, true);
+                if (section.shouldRemove) {
+                    lx.engine.addTask(() -> chan.removeEffect(eff));
+                } else if (section.isOpen) {
+                    new ComponentUI(lx, eff).draw();
                 }
             }
         }
