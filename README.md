@@ -1,6 +1,6 @@
 # SLStudio
 
-## Running
+## Running UIv1
 
 From the root of the project, execute
 
@@ -32,6 +32,33 @@ You may need to set the default JDK home for intelliJ products: https://stackove
 - Select the project home is the outer SLStudio folder
 - For tasks, type “run” - should autocomplete - you want to call the “run” task
 - Apply changes, compile and run 
+
+## Running UIv2
+
+If you're on a Mac, you probably need to set your `JAVA_HOME` variable.
+You can do that by adding this to your `.bashrc` or by just running it
+in whichever terminal you run gradle in:
+
+    export JAVA_HOME=$(/usr/libexec/java_home)
+
+If you forget to run this, gradle will prompt you to.
+
+Once you've set `JAVA_HOME`, you can run UIv2 using:
+
+    ./gradlew runUIv2
+
+If you edit `slimgui`, the native code library used for drawing the GUI
+in UIv2, you will need to rebuild the prebuilt slimgui shared library in
+the libs folder. You can do that by running:
+
+    ./gradlew genPrebuiltSlimgui
+
+If you have a C++ development environment on your machine, you can just
+always safely run:
+
+    ./gradlew buildAndRunUIv2
+
+Which will rebuild the prebuilts if needed, and then run UIv2.
 
 
 ## Directories
