@@ -26,19 +26,14 @@ public class OpcNetworkScanner extends UdpBroadcastNetworkScanner {
     protected Map<String, Long> lastReplyMillis = new HashMap<>();
 
     public OpcNetworkScanner(Dispatcher dispatcher) {
-        super(dispatcher, "OPC", OpcSocket.DEFAULT_PORT, 65536, MAX_MILLIS_WITHOUT_REPLY);
+        super(dispatcher, "OPC", OpcSocket.DEFAULT_PORT, 65536, MAX_MILLIS_WITHOUT_REPLY, buildDiscoveryPackets());
     }
 
-    private DatagramPacket messageToPacket(OpcMessage msg, SocketAddress addr) {
-        return new DatagramPacket(msg.bytes, msg.bytes.length, addr);
-    }
-
-    @Override
-    protected DatagramPacket[] getDiscoverPackets(InetAddress addr) {
-        return new DatagramPacket[] {
+    private static ByteBuffer[] buildDiscoveryPackets() {
+        return new ByteBuffer[] {
             /* this is a legacy "poll" message that is needed for cubes with very old firmware */
-            messageToPacket(new OpcMessage(0x88, 4), new InetSocketAddress(addr, OpcSocket.DEFAULT_PORT)),
-            messageToPacket(new OpcMessage(0, SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY), new InetSocketAddress(addr, OpcSocket.DEFAULT_PORT)),
+            ByteBuffer.wrap(new OpcMessage(0x88, 4).bytes),
+            ByteBuffer.wrap(new OpcMessage(0, SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY).bytes),
         };
     }
 
@@ -72,7 +67,6 @@ public class OpcNetworkScanner extends UdpBroadcastNetworkScanner {
     }
 
     public void updateDevice(final NetworkDevice newDevice) {
-        System.out.println("updating device " + newDevice);
         dispatcher.dispatchEngine(new Runnable() {
             public void run() {
                 String addr = newDevice.ipAddress.toString();

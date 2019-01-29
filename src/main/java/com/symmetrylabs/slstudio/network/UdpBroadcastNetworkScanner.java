@@ -24,6 +24,8 @@ import java.nio.channels.SelectionKey;
 import java.util.Iterator;
 import java.nio.ByteBuffer;
 import java.net.SocketAddress;
+import java.net.SocketOption;
+import java.net.StandardSocketOptions;
 
 import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.util.listenable.ListenableSet;
@@ -32,23 +34,26 @@ import com.symmetrylabs.util.dispatch.Dispatcher;
 public abstract class UdpBroadcastNetworkScanner {
     protected final Dispatcher dispatcher;
     protected final ExecutorService executor = Executors.newSingleThreadExecutor();
-    protected Map<InetAddress, DatagramChannel> recvChans;
+    protected Map<InetAddress, DatagramChannel> chans;
     protected Selector recvSelector;
     protected Set<InetAddress> errorBroadcasts = new HashSet<>();
     protected final int broadcastPort;
     protected final int responseBufferSize;
     protected final long maxMillisWithoutReply;
     protected final String protoName;
+    protected final ByteBuffer[] discoveryPackets;
 
     public UdpBroadcastNetworkScanner(
-        Dispatcher dispatcher, String protoName, int broadcastPort, int responseBufferSize, long maxMillisWithoutReply) {
+        Dispatcher dispatcher, String protoName, int broadcastPort, int responseBufferSize,
+        long maxMillisWithoutReply, ByteBuffer[] discoveryPackets) {
         this.dispatcher = dispatcher;
         this.broadcastPort = broadcastPort;
         this.responseBufferSize = responseBufferSize;
         this.maxMillisWithoutReply = maxMillisWithoutReply;
         this.protoName = protoName;
+        this.discoveryPackets = discoveryPackets;
 
-        recvChans = new HashMap<>();
+        chans = new HashMap<>();
         try {
             recvSelector = SelectorProvider.provider().openSelector();
         } catch (IOException e) {
@@ -58,7 +63,6 @@ public abstract class UdpBroadcastNetworkScanner {
         }
     }
 
-    protected abstract DatagramPacket[] getDiscoverPackets(InetAddress addr);
     protected abstract void onReply(SocketAddress addr, ByteBuffer response);
     protected abstract void expireDevices();
 
@@ -68,13 +72,14 @@ public abstract class UdpBroadcastNetworkScanner {
         for (InetAddress broadcast : NetworkUtils.getBroadcastAddresses()) {
             /* Create the channel that we'll receive return broadcasts on, if we haven't made
                one already. */
-            if (!recvChans.containsKey(broadcast)) {
+            if (!chans.containsKey(broadcast)) {
                 try {
                     DatagramChannel recvChan = SelectorProvider.provider().openDatagramChannel();
+                    recvChan.setOption(StandardSocketOptions.SO_BROADCAST, true);
                     recvChan.configureBlocking(false);
-                    recvChan.bind(new InetSocketAddress(broadcast, broadcastPort));
+                    //recvChan.bind(new InetSocketAddress(broadcast, broadcastPort));
                     recvChan.register(recvSelector, SelectionKey.OP_READ, broadcast);
-                    recvChans.put(broadcast, recvChan);
+                    chans.put(broadcast, recvChan);
                 } catch (IOException e) {
                     if (!errorBroadcasts.contains(broadcast)) {
                         System.err.println("couldn't set up " + protoName + " discovery listener:");
@@ -87,15 +92,12 @@ public abstract class UdpBroadcastNetworkScanner {
 
             /* Then send the discovery packet */
             try {
-                System.out.println("send discovery to " + broadcast);
-                final DatagramSocket sendSock = new DatagramSocket();
-                sendSock.setBroadcast(true);
-                DatagramPacket[] packets = getDiscoverPackets(broadcast);
-                for (int i = 0; i < packets.length; i++) {
-                    sendSock.send(packets[i]);
+                DatagramChannel chan = chans.get(broadcast);
+                for (int i = 0; i < discoveryPackets.length; i++) {
+                    chan.send(discoveryPackets[i].rewind(), new InetSocketAddress(broadcast, broadcastPort));
                 }
             } catch (IOException e) {
-                if (!errorBroadcasts.contains(broadcast)) {
+                if (true || !errorBroadcasts.contains(broadcast)) {
                     System.err.println(String.format("couldn't send %s poll to %s:", protoName, broadcast));
                     e.printStackTrace();
                     errorBroadcasts.add(broadcast);
@@ -117,13 +119,23 @@ public abstract class UdpBroadcastNetworkScanner {
             DatagramChannel chan = (DatagramChannel) sel.channel();
 
             ByteBuffer recvBuf = ByteBuffer.allocate(responseBufferSize);
-            try {
-                SocketAddress recvAddr = chan.receive(recvBuf);
-                System.out.println("received response from " + recvAddr);
-                onReply(recvAddr, recvBuf);
-            } catch (IOException e) {
-                System.err.println("unable to receive on datagram channel:");
-                e.printStackTrace();
+
+            while (true) {
+                try {
+                    recvBuf.rewind();
+                    /* We're in non-blocking mode, so chan.receive always
+                       returns immediately. If it returns null, there's no more
+                       packets waiting to be received. */
+                    SocketAddress recvAddr = chan.receive(recvBuf);
+                    if (recvAddr == null) {
+                        break;
+                    }
+                    onReply(recvAddr, recvBuf);
+                } catch (IOException e) {
+                    System.err.println("unable to receive on datagram channel:");
+                    e.printStackTrace();
+                    break;
+                }
             }
 
             /* It's our responsibility to remove things from the selected set once we've
@@ -133,15 +145,15 @@ public abstract class UdpBroadcastNetworkScanner {
     }
 
     private void expireInterfaces() {
-        Set<InetAddress> toRemove = new HashSet<InetAddress>(recvChans.keySet());
+        Set<InetAddress> toRemove = new HashSet<InetAddress>(chans.keySet());
         toRemove.removeAll(NetworkUtils.getBroadcastAddresses());
         for (InetAddress a : toRemove) {
-            DatagramChannel chan = recvChans.get(a);
+            DatagramChannel chan = chans.get(a);
             /* closing the channel removes it from the selector set */
             try {
                 chan.close();
             } catch (IOException e) {}
-            recvChans.remove(a);
+            chans.remove(a);
         }
     }
 }

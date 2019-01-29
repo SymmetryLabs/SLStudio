@@ -25,14 +25,12 @@ public class ArtNetNetworkScanner extends UdpBroadcastNetworkScanner {
     public ArtNetNetworkScanner(Dispatcher dispatcher) {
         /* we only allocate a large enough response buffer to pull in the header of the packet, since
            all we're interested in is whether the response packet is an ArtNet POLLREPLY header. */
-        super(dispatcher, "ArtNet", ArtNetDatagramUtil.ARTNET_PORT, ArtNetDatagramUtil.HEADER_LENGTH, MAX_MILLIS_WITHOUT_REPLY);
-    }
-
-    @Override
-    protected DatagramPacket[] getDiscoverPackets(InetAddress addr) {
-        return new DatagramPacket[] {
-            new ArtNetPollDatagram(addr).getPacket(),
-        };
+        super(dispatcher,
+              "ArtNet",
+              ArtNetDatagramUtil.ARTNET_PORT,
+              ArtNetDatagramUtil.HEADER_LENGTH,
+              MAX_MILLIS_WITHOUT_REPLY,
+              new ByteBuffer[] { ByteBuffer.wrap(new ArtNetPollDatagram(null).getBytes()) });
     }
 
     @Override
