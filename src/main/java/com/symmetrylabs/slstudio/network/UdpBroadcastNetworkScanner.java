@@ -87,6 +87,7 @@ public abstract class UdpBroadcastNetworkScanner {
 
             /* Then send the discovery packet */
             try {
+                System.out.println("send discovery to " + broadcast);
                 final DatagramSocket sendSock = new DatagramSocket();
                 sendSock.setBroadcast(true);
                 DatagramPacket[] packets = getDiscoverPackets(broadcast);
@@ -118,6 +119,7 @@ public abstract class UdpBroadcastNetworkScanner {
             ByteBuffer recvBuf = ByteBuffer.allocate(responseBufferSize);
             try {
                 SocketAddress recvAddr = chan.receive(recvBuf);
+                System.out.println("received response from " + recvAddr);
                 onReply(recvAddr, recvBuf);
             } catch (IOException e) {
                 System.err.println("unable to receive on datagram channel:");

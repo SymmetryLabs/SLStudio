@@ -72,6 +72,7 @@ public class OpcNetworkScanner extends UdpBroadcastNetworkScanner {
     }
 
     public void updateDevice(final NetworkDevice newDevice) {
+        System.out.println("updating device " + newDevice);
         dispatcher.dispatchEngine(new Runnable() {
             public void run() {
                 String addr = newDevice.ipAddress.toString();

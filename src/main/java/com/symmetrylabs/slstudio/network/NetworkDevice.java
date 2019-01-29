@@ -45,6 +45,26 @@ public class NetworkDevice {
         return false;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("NetworkDevice {");
+        sb.append("ip=");
+        sb.append(ipAddress);
+        sb.append(", pid=");
+        sb.append(productId);
+        sb.append(", did=");
+        sb.append(deviceId);
+        sb.append(", vid=");
+        sb.append(versionId);
+        sb.append(", features=[ ");
+        for (String fid : featureIds) {
+            sb.append(fid);
+            sb.append(" ");
+        }
+        sb.append("]}");
+        return sb.toString();
+    }
+
     @Deprecated // Remove this after all controllers are updated to Aura.
     public static NetworkDevice fromMacAddress(InetAddress ipAddress, byte[] mac) {
         String deviceId = String.format(
