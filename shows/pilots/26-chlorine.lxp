@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1548780169808,
+  "timestamp": 1548851683780,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,7 +14,7 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 1.1333332974463701,
+      "speed": 0.940012514591217,
       "focusedChannel": 3,
       "cueA": false,
       "cueB": false,
@@ -102,7 +102,7 @@
             "parameters": {
               "label": "Sparkle",
               "palette": 0,
-              "Dens": 1.0,
+              "Dens": 0.0,
               "Attack": 0.4,
               "Decay": 0.3,
               "Hue": 0.5,
@@ -341,7 +341,7 @@
               "label": "Translate",
               "enabled": true,
               "cx": -247.32004053890705,
-              "cy": -65.45087975263596,
+              "cy": -47.57408916950226,
               "cz": 0.0
             }
           },
@@ -528,7 +528,7 @@
               "label": "Translate",
               "enabled": true,
               "cx": 247.3199484050274,
-              "cy": 54.315160632133484,
+              "cy": 88.161501288414,
               "cz": 0.0
             }
           },
@@ -799,7 +799,7 @@
             "parameters": {
               "label": "Blur",
               "enabled": true,
-              "amount": 0.9928337335586548
+              "amount": 0.03005121275782585
             },
             "modulation": {
               "modulators": [],
@@ -970,7 +970,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.0
+        "brightness": 1.0
       }
     },
     "components": {
@@ -1164,18 +1164,6 @@
       "inputs": [
         {
           "name": "CoreMIDI4J - ShowSession",
-          "channel": false,
-          "control": true,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - SyncLiveSL",
-          "channel": false,
-          "control": true,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - IAC Bus 2",
           "channel": false,
           "control": true,
           "sync": false
