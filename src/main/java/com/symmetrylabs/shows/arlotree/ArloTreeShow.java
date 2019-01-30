@@ -13,7 +13,7 @@ import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.shows.arlo.ArloXfadeTimer;
+import com.symmetrylabs.slstudio.showplugins.XfadeTimer;
 import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.shows.tree.config.*;
 import com.symmetrylabs.shows.tree.ui.*;
@@ -75,7 +75,7 @@ public class ArloTreeShow extends TreeShow {
         //lx.engine.framesPerSecond.setValue(30);
 
         final String[] ipAddresses = new String[] {
-            "10.200.1.100",
+            "10.200.1.255",
         };
 
         for (int i = 0; i < ipAddresses.length; i++) {
@@ -100,6 +100,6 @@ public class ArloTreeShow extends TreeShow {
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
-        ArloXfadeTimer.attach(lx, ui);
+        XfadeTimer.attach(lx, ui);
     }
 }

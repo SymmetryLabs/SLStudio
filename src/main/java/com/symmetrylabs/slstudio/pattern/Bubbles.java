@@ -82,8 +82,10 @@ public class Bubbles extends LXPattern {
         Iterator<Bubble> i = bubbles.iterator();
         while (i.hasNext()) {
             Bubble bubble = i.next();
-            if (bubble.isDead)
+            if (bubble.isDead) {
+                bubble.destroy();
                 i.remove();
+            }
         }
         markModified(SRGB8);
     }
@@ -115,6 +117,11 @@ public class Bubbles extends LXPattern {
             pop.setEase(QuadraticEnvelope.Ease.OUT);
             addModulator(yMod).start();
             addModulator(pop);
+        }
+
+        public void destroy() {
+            removeModulator(yMod);
+            removeModulator(pop);
         }
 
         public void run(double deltaMs) {

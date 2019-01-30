@@ -20,74 +20,74 @@ import java.util.stream.Stream;
 
 public class Mappings extends MappingGroup {
 
-        private static final Gson gson;
+    private static final Gson gson;
 
-        static {
-                gson = new GsonBuilder()
-                        .setPrettyPrinting()
-                        .excludeFieldsWithoutExposeAnnotation()
+    static {
+        gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .excludeFieldsWithoutExposeAnnotation()
 
-                        .registerTypeAdapterFactory(
-                                RuntimeTypeAdapterFactory.of(MappingItem.class)
-                                        .registerSubtype(StripMapping.class)
-                        )
+            .registerTypeAdapterFactory(
+                RuntimeTypeAdapterFactory.of(MappingItem.class)
+                    .registerSubtype(StripMapping.class)
+            )
 
-                        .registerTypeAdapterFactory(
-                                RuntimeTypeAdapterFactory.of(OutputMapping.class)
-                                        .registerSubtype(PixliteMapping.class)
-                        )
+            .registerTypeAdapterFactory(
+                RuntimeTypeAdapterFactory.of(OutputMapping.class)
+                    .registerSubtype(PixliteMapping.class)
+            )
 
-                        .registerTypeAdapterFactory(
-                                RuntimeTypeAdapterFactory.of(OutputMappingItemRef.class)
-                                        .registerSubtype(PixliteDatalineRef.class)
-                        )
+            .registerTypeAdapterFactory(
+                RuntimeTypeAdapterFactory.of(OutputMappingItemRef.class)
+                    .registerSubtype(PixliteDatalineRef.class)
+            )
 
-                        .create();
+            .create();
+    }
+
+    public static Mappings loadMappingData(Environment environment) {
+        try (FileReader reader = new FileReader(Utils.sketchFile(environment.getMappingsFilename()))) {
+            return gson.fromJson(reader, Mappings.class);
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (java.io.IOException e) {
+            PApplet.println("Failed to load mapping data");
+            e.printStackTrace();
+            return null;
         }
+    }
 
-        public static Mappings loadMappingData(Environment environment) {
-                try (FileReader reader = new FileReader(Utils.sketchFile(environment.getMappingsFilename()))) {
-                        return gson.fromJson(reader, Mappings.class);
-                } catch (FileNotFoundException e) {
-                        return null;
-                } catch (java.io.IOException e) {
-                        PApplet.println("Failed to load mapping data");
-                        e.printStackTrace();
-                        return null;
-                }
+    public void saveMappingData(Environment environment) {
+        try (FileWriter writer = new FileWriter(Utils.sketchFile(environment.getMappingsFilename()))) {
+            gson.toJson(this, writer);
+        } catch (java.io.IOException e) {
+            PApplet.println("Failed to save mapping data");
+            e.printStackTrace();
         }
+    }
 
-        public void saveMappingData(Environment environment) {
-                try (FileWriter writer = new FileWriter(Utils.sketchFile(environment.getMappingsFilename()))) {
-                        gson.toJson(this, writer);
-                } catch (java.io.IOException e) {
-                        PApplet.println("Failed to save mapping data");
-                        e.printStackTrace();
-                }
+    @Expose private Map<String, OutputMapping> outputs;
+
+    public <OutputMappingType extends OutputMapping> OutputMappingType getOutputById(String id, Class<OutputMappingType> type) {
+        if (outputs == null) {
+            outputs = new TreeMap<>();
         }
-
-        @Expose private Map<String, OutputMapping> outputs;
-
-        public <OutputMappingType extends OutputMapping> OutputMappingType getOutputById(String id, Class<OutputMappingType> type) {
-                if (outputs == null) {
-                        outputs = new TreeMap<>();
-                }
-                OutputMapping output = outputs.get(id);
-                if (output == null) {
-                        output = ClassUtils.tryCreateObject(type);
-                        if (output == null) return null;
-                        outputs.put(id, output);
-                }
-                Supplier<Stream<MappingItem>> mappingItems = () -> getAllDescendantItems()
-                        .filter(item -> {
-                                OutputMappingItemRef ref = item.getOutput();
-                                return ref != null && id.equals(ref.outputId);
-                        });
-                output.collectRefs(mappingItems);
-                return ClassUtils.tryCast(output, type);
+        OutputMapping output = outputs.get(id);
+        if (output == null) {
+            output = ClassUtils.tryCreateObject(type);
+            if (output == null) return null;
+            outputs.put(id, output);
         }
+        Supplier<Stream<MappingItem>> mappingItems = () -> getAllDescendantItems()
+            .filter(item -> {
+                OutputMappingItemRef ref = item.getOutput();
+                return ref != null && id.equals(ref.outputId);
+            });
+        output.collectRefs(mappingItems);
+        return ClassUtils.tryCast(output, type);
+    }
 
-        public Collection<String> getOutputIds() {
-                return outputs.keySet();
-        }
+    public Collection<String> getOutputIds() {
+        return outputs.keySet();
+    }
 }

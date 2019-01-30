@@ -150,7 +150,7 @@ public class SLStudioLX extends P3LX {
             this.axes = new UIAxes();
             this.markerPainter = new UIMarkerPainter();
             this.cubeMapDebug = new UICubeMapDebug(lx);
-            this.cameraControls = new UICameraControls(this, preview);
+            this.cameraControls = new UICameraControls(lx, this, preview);
 
             this.preview.addComponent(this.cubeMapDebug);
             this.preview.addComponent(axes);
@@ -205,8 +205,7 @@ public class SLStudioLX extends P3LX {
                                     JOptionPane.QUESTION_MESSAGE, null, ShowRegistry.getNames().toArray(), null);
                                 if (showName != null) {
                                     applet.saveStrings(SLStudio.SHOW_FILE_NAME, new String[] {showName});
-                                    applet.saveStrings(SLStudio.RESTART_FILE_NAME, new String[0]);
-                                    applet.exit();
+                                    SLStudio.applet.restart();
                                 }
                                 break;
                             case VK_M:

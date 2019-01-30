@@ -36,7 +36,7 @@ public class TreeConfigStore implements SLStudioLX.SaveHook {
     private File createConfigFile() {
         File file = getConfigFile();
         try {
-            //writeConfig(file);
+            writeConfig(file);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -5,9 +5,10 @@ import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.shows.cubes.UICubesMappingPanel;
 import com.symmetrylabs.shows.cubes.UICubesOutputs;
-import com.symmetrylabs.slstudio.workspaces.Workspace;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.showplugins.FrameTimeCrasher;
+import com.symmetrylabs.slstudio.workspaces.Workspace;
 import heronarts.lx.transform.LXTransform;
 import heronarts.p3lx.ui.UI2dScrollContext;
 import java.io.File;
@@ -46,15 +47,129 @@ public class RelatedShow extends CubesShow implements HasWorkspace {
 
 //Back Row
 
-//TOWER 1 
+//TOWER 1
 
-            new TowerConfig(SP * 4, SP * 1, SP * 0, new String[][]{
+            new TowerConfig(SP * 0, SP * 0, SP * 0, new String[][]{
                 new String[] {"757", "756"},
                 new String[] {"1096", "1095"},
                 new String[] {"727", "726"},
-                new String[] {"945", "901"},                
+                new String[] {"945", "901"},
             }),
-};
+
+            new TowerConfig(SP * 1.25f, SP * 0, SP * 0, new String[][]{
+                new String[] {"944", "947"},
+                new String[] {"641", "978"},
+                new String[] {"604", "1087"},
+                new String[] {"960", "974"},
+            }),
+
+            new TowerConfig(SP * 2.5f, SP * 0, SP * 0, new String[][]{
+                new String[] {"713", "712"},
+                new String[] {"919", "910"},
+                new String[] {"637", "1057"},
+                new String[] {"771", "770"},
+            }),
+
+            new TowerConfig(SP * 3.75f, SP * 0, SP * 0, new String[][]{
+                new String[] {"654", "1083"},
+                new String[] {"529", "528"},
+                new String[] {"516", "1101"},
+                new String[] {"455", "454"},
+            }),
+
+                new TowerConfig(SP * 5, SP * 0, SP * 0, new String[][]{
+                new String[] {"741", "740"},
+                new String[] {"1041", "1042"},
+                new String[] {"1027", "612"},
+                new String[] {"773", "772"},
+            }),
+
+
+////////////////////////// ROW 2
+                new TowerConfig(-SP * .5f, SP * 0, -SP * 1, new String[][]{
+                new String[] {"876", "520"},
+                new String[] {"916", "917"},
+                new String[] {"905", "955"},
+            }),
+
+                new TowerConfig(SP * .75f, SP * 0, -SP * 1, new String[][]{
+                new String[] {"1039", "1098"},
+                new String[] {"924", "923"},
+                new String[] {"595", "804"},
+            }),
+
+                new TowerConfig(SP * 2, SP * 0, -SP * 1, new String[][]{
+                new String[] {"957", "956"},
+                new String[] {"1067", "1066"},
+                new String[] {"481", "480"},
+            }),
+
+                new TowerConfig(SP * 3.25f, SP * 0, -SP * 1, new String[][]{
+                new String[] {"926", "998"},
+                new String[] {"906", "912"},
+                new String[] {"221", "222"},    ////NO NUMBER CUBES NEED ID's
+            }),
+
+                new TowerConfig(SP * 4.5f, SP * 0, -SP * 1, new String[][]{
+                new String[] {"1009", "1008"},
+                new String[] {"935", "999"},
+                new String[] {"997", "996"},
+            }),
+
+                new TowerConfig(SP * 5.75f, SP * 0, -SP * 1, new String[][]{
+                new String[] {"929", "995"},
+                new String[] {"923", "918"},
+                new String[] {"1004", "1018"},
+            }),
+
+
+
+//////////////////// ROW 3 ////////////////////////////////
+
+                new TowerConfig(SP * 0, SP * 0, -SP * 2, new String[][]{
+                new String[] {"1111", "1012"},
+                new String[] {"949", "946"},
+            }),
+
+                new TowerConfig(SP * 1.25f, SP * 0, -SP * 2, new String[][]{
+                new String[] {"495", "494"},
+                new String[] {"441", "440"},
+            }),
+
+                new TowerConfig(SP * 2.5f, SP * 0, -SP * 2, new String[][]{
+                new String[] {"896", "898"},
+                new String[] {"1104", "1103"},
+            }),
+
+                new TowerConfig(SP * 3.75f, SP * 0, -SP * 2, new String[][]{
+                new String[] {"679", "678"},
+                new String[] {"707", "706"},
+            }),
+
+                new TowerConfig(SP * 5, SP * 0, -SP * 2, new String[][]{
+                new String[] {"914", "847"},
+                new String[] {"818", "464"},
+            }),
+
+
+
+///////////////////// ROW 4 /////////////////////////////////////////
+
+                new TowerConfig(SP * .5f, SP * 0, -SP * 3, new String[][]{
+                new String[] {"691", "960"},
+            }),
+
+                new TowerConfig(SP * 1.75f, SP * 0, -SP * 3, new String[][]{
+                new String[] {"825", "821"},
+            }),
+
+                new TowerConfig(SP * 3, SP * 0, -SP * 3, new String[][]{
+                new String[] {"940", "948"},
+            }),
+                new TowerConfig(SP * 4.25f, SP * 0, -SP * 3, new String[][]{
+                new String[] {"1206", "1207"},
+            }),
+    };
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -78,7 +193,7 @@ public class RelatedShow extends CubesShow implements HasWorkspace {
 //                 new String[] {"919", "910"},
 //                 new String[] {"637", "1057"},
 //                 new String[] {"529", "528"},
-//                 new String[] {"516", "1101"},                
+//                 new String[] {"516", "1101"},
 //             }),
 
 // //TOWER 3 ROW 1
@@ -92,7 +207,7 @@ public class RelatedShow extends CubesShow implements HasWorkspace {
 //                 new String[] {"477", "476"},
 //             }),
 // //TOWER 4 ROW 1
-//             //tower of five 
+//             //tower of five
 //             new TowerConfig(SP * 1.5f,  0, SP * 0, new String[][]{
 //                 new String[] {"727", "726"},
 //                 new String[] {"945", "901"},
@@ -106,7 +221,7 @@ public class RelatedShow extends CubesShow implements HasWorkspace {
 //                 new String[] {"1091", "1090"},
 //                 new String[] {"771", "770"},
 //                 new String[] {"1111", "1112"},
-//                 new String[] {"949", "946"},                
+//                 new String[] {"949", "946"},
 //             }),
 
 
@@ -116,7 +231,7 @@ public class RelatedShow extends CubesShow implements HasWorkspace {
 //                 new String[] {"741", "740"},
 //                 new String[] {"1099", "1098"},
 //                 new String[] {"924", "923"},
-//                 new String[] {"595", "804"},                
+//                 new String[] {"595", "804"},
 //             }),
 
 //                 //tower of four
@@ -124,15 +239,15 @@ public class RelatedShow extends CubesShow implements HasWorkspace {
 //                 new String[] {"757", "756"},
 //                 new String[] {"1096", "1095"},
 //                 new String[] {"867", "866"},
-//                 new String[] {"936", "921"},                
+//                 new String[] {"936", "921"},
 //             }),
-    
+
 //             //tower of four
 //             new TowerConfig(-SP*.7f, SP * 0, -SP * 1, new String[][]{
 //                 new String[] {"1075", "593"},
 //                 new String[] {"783", "782"},
 //                 new String[] {"495", "494"},
-//                 new String[] {"441", "440"},                
+//                 new String[] {"441", "440"},
 //             }),
 
 //             new TowerConfig(SP * .7f, 0, -SP * 1,  new String[][] {
@@ -145,14 +260,14 @@ public class RelatedShow extends CubesShow implements HasWorkspace {
 
 // //ROW 3
 
-//                 //tower of three 
+//                 //tower of three
 //             new TowerConfig(SP * -4, 0, -SP * 2, new String[][]{
 //                 new String[] {"957", "998"},
 //                 new String[] {"1067", "1066"},
 //                 new String[] {"481", "480"},
 //             }),
 
-//                 //tower of three 
+//                 //tower of three
 //             new TowerConfig(SP * -1.5f, SP * 0, -SP * 2, new String[][]{
 //                 new String[] {"1009", "1008"},
 //                 new String[] {"935", "999"},
@@ -164,19 +279,19 @@ public class RelatedShow extends CubesShow implements HasWorkspace {
 //                 new String[] {"876", "520"},
 //                 new String[] {"944", "947"},
 //                 new String[] {"914", "847"},
-//                 new String[] {"818", "464"},                
+//                 new String[] {"818", "464"},
 //             }),
 
 
 
-//                 //tower of three 
+//                 //tower of three
 //             new TowerConfig(SP * 3.5f, 0, -SP * 2, new String[][]{
 //                 new String[] {"1028", "1029"},//UNLABLED CUBES
 //                 new String[] {"926", "998"},
 //                 new String[] {"906", "912"},
 //             }),
 
-//                 //tower of two 
+//                 //tower of two
 //             new TowerConfig(SP * 5f, SP * 0, -SP * 2, new String[][]{
 //                 new String[] {"896", "898"},
 //                 new String[] {"1104", "1103"},
@@ -185,13 +300,13 @@ public class RelatedShow extends CubesShow implements HasWorkspace {
 // //ROW 4
 
 
-//                     //tower of two 
+//                     //tower of two
 //             new TowerConfig(SP * -4.5f, SP * 0, -SP * 3, new String[][]{
 //                 new String[] {"719", "718"},
 //                 new String[] {"817", "682"},
 //             }),
 
-//                     //tower of two 
+//                     //tower of two
 //             new TowerConfig(-SP * 2, SP * 0, -SP * 3, new String[][]{
 //                 new String[] {"679", "678"},
 //                 new String[] {"707", "706"},
@@ -201,10 +316,10 @@ public class RelatedShow extends CubesShow implements HasWorkspace {
 //                 new String[] {"1052", "830"},
 //                 new String[] {"1085", "920"},
 //                 new String[] {"473", "472"},
-//                 new String[] {"455", "454"},                
+//                 new String[] {"455", "454"},
 //             }),
 
-//                         //tower of two 
+//                         //tower of two
 //             new TowerConfig(SP * 4, SP * 0, -SP * 3, new String[][]{
 //                 new String[] {"713", "712"},
 //                 new String[] {"940", "948"},
@@ -307,6 +422,7 @@ public class RelatedShow extends CubesShow implements HasWorkspace {
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
+        FrameTimeCrasher.attach(lx, 500);
         workspace = new Workspace(lx, ui, "shows/related");
     }
 
