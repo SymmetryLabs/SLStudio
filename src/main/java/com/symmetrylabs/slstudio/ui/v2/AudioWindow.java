@@ -8,7 +8,6 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.warp.LXWarp;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.FileDialog;
 import java.awt.Frame;
 import java.io.File;
 import java.awt.EventQueue;
@@ -74,19 +73,11 @@ public class AudioWindow extends CloseableWindow {
             ParameterUI.draw(lx, lx.engine.audio.output.trigger);
 
             if (UI.button("Pick")) {
-                EventQueue.invokeLater(() -> {
-                        FileDialog dialog = new FileDialog(
-                            (Frame) null, "Open WAV file", FileDialog.LOAD);
-                        dialog.setVisible(true);
-                        String fname = dialog.getFile();
-                        if (fname == null) {
-                            return;
-                        }
-                        final File file = new File(dialog.getDirectory(), fname);
-                        Path path = new File(Utils.sketchPath()).toPath().relativize(file.toPath());
-                        lx.engine.addTask(() -> {
-                                lx.engine.audio.output.file.setValue(path.toString());
-                            });
+                FileDialog.open(
+                    lx, "Open WAV file", file -> {
+                        Path path = new File(Utils.sketchPath()).toPath()
+                            .relativize(file.toPath());
+                        lx.engine.audio.output.file.setValue(path.toString());
                     });
             }
             UI.sameLine();

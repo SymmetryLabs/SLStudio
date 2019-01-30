@@ -3,8 +3,6 @@ package com.symmetrylabs.slstudio.ui.v2;
 import com.symmetrylabs.shows.ShowRegistry;
 import com.symmetrylabs.slstudio.SLStudio;
 import heronarts.lx.LX;
-import java.awt.EventQueue;
-import java.awt.FileDialog;
 import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
@@ -30,21 +28,10 @@ public class MainMenu implements Window {
                 lx.engine.addTask(() -> lx.newProject());
             }
             if (UI.menuItem("Open...")) {
-                EventQueue.invokeLater(() -> {
-                        FileDialog dialog = new FileDialog(
-                            (Frame) null, "Open project", FileDialog.LOAD);
-                        dialog.setVisible(true);
-                        String fname = dialog.getFile();
-                        if (fname == null) {
-                            return;
-                        }
-
-                        final File project = new File(dialog.getDirectory(), fname);
-                        WindowManager.get().disableUI();
-                        lx.engine.addTask(() -> {
-                                lx.openProject(project);
-                                WindowManager.get().enableUI();
-                            });
+                FileDialog.open(
+                    lx, "Open project", project -> {
+                        lx.openProject(project);
+                        WindowManager.get().enableUI();
                     });
             }
             if (UI.menuItem("Save")) {
@@ -89,17 +76,6 @@ public class MainMenu implements Window {
     }
 
     private void runSaveAs() {
-        EventQueue.invokeLater(() -> {
-                FileDialog dialog = new FileDialog(
-                    (Frame) null, "Save project", FileDialog.SAVE);
-                dialog.setVisible(true);
-                String fname = dialog.getFile();
-                if (fname == null) {
-                    return;
-                }
-
-                final File project = new File(dialog.getDirectory(), fname);
-                lx.engine.addTask(() -> lx.saveProject(project));
-            });
+        FileDialog.save(lx, "Save project", project -> lx.saveProject(project));
     }
 }
