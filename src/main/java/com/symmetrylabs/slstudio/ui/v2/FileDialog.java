@@ -4,7 +4,6 @@ import com.symmetrylabs.slstudio.ApplicationState;
 import heronarts.lx.LX;
 import java.awt.EventQueue;
 import java.io.File;
-import javafx.stage.FileChooser;
 
 public class FileDialog {
     public enum Type {
