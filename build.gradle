@@ -192,9 +192,9 @@ task buildAndRunUIv2(type: JavaExec) {
 
 task runUIv2(type: JavaExec) {
 	if (System.properties["os.name"] == "Mac OS X") {
-		jvmArgs '-XstartOnFirstThread'
+        jvmArgs '-XstartOnFirstThread'
         systemProperty 'java.awt.headless', true
-	}
+    }
 
 	systemProperty 'org.lwjgl.util.Debug', true
 	systemProperty 'java.library.path', 'libs'
