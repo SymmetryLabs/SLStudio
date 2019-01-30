@@ -61,6 +61,7 @@ public class FileDialog {
         java.awt.FileDialog fd = new java.awt.FileDialog(
             (java.awt.Frame) null, title,
             type == Type.SAVE ? java.awt.FileDialog.SAVE : java.awt.FileDialog.LOAD);
+        fd.show();
         String f = fd.getFile();
         if (f == null) {
             return;
