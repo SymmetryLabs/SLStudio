@@ -7,6 +7,7 @@
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_glfw.h"
+#include "widgets_symmetry.h"
 
 #define MAX_INPUT_LENGTH 511
 
@@ -408,7 +409,7 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_floatBox(JNIEnv *env, jclass, jstring jl
 JNIEXPORT jfloat JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_knobFloat(JNIEnv *env, jclass cls, jstring jlabel, jfloat vf, jfloat v0, jfloat v1) {
     JniString label(env, jlabel);
-    ImGui::Knob(label, &vf, v0, v1);
+    Knob(label, &vf, v0, v1);
 	if (ImGui::BeginPopupContextItem()) {
 		ImGui::InputFloat(label, &vf, 0, 0, "%.2f", 0);
         vf = vf < v0 ? v0 : vf > v1 ? v1 : vf;
