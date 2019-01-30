@@ -63,6 +63,8 @@ public class UI {
     public static native float floatBox(String label, float v);
     public static native float knobFloat(String label, float v, float v0, float v1);
     public static native CollapseResult collapsibleSection(String label, boolean allowClose);
+    public static native void histogram(String label, float[] values, float min, float max, int size);
+    public static native void plot(String label, float[] values, float min, float max, int size);
 
     /* Menus */
     public static native boolean beginMainMenuBar();

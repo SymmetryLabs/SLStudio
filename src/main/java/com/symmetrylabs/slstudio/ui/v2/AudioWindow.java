@@ -14,6 +14,8 @@ import java.io.File;
 import java.awt.EventQueue;
 import com.symmetrylabs.util.Utils;
 import java.nio.file.Path;
+import heronarts.lx.audio.GraphicMeter;
+import heronarts.lx.audio.LXAudioEngine;
 
 public class AudioWindow extends CloseableWindow {
     private final LX lx;
@@ -28,10 +30,37 @@ public class AudioWindow extends CloseableWindow {
         UI.setNextWindowDefaults(25, 500, UI.DEFAULT_WIDTH, 300);
     }
 
+    private boolean line = false;
+
     @Override
     protected void drawContents() {
-        ParameterUI.draw(lx, lx.engine.audio.enabled);
         UI.CollapseResult section;
+        LXAudioEngine audio = lx.engine.audio;
+        ParameterUI.draw(lx, audio.enabled);
+
+        UI.sameLine();
+        if (UI.checkbox("InputMode", audio.mode.getEnum() == LXAudioEngine.Mode.INPUT)) {
+            audio.mode.setValue(LXAudioEngine.Mode.INPUT);
+        }
+        UI.sameLine();
+        if (UI.checkbox("OutputMode", audio.mode.getEnum() == LXAudioEngine.Mode.OUTPUT)) {
+            audio.mode.setValue(LXAudioEngine.Mode.OUTPUT);
+        }
+
+        float[] hist = new float[audio.meter.bands.length];
+        for (int i = 0; i < hist.length; i++) {
+            hist[i] = audio.meter.bands[i].getNormalizedf();
+        }
+        UI.histogram("EQ", hist, 0, 1, 80);
+
+        section = UI.collapsibleSection("EQ options", false);
+        if (section.isOpen) {
+            ParameterUI.draw(lx, audio.meter.gain);
+            ParameterUI.draw(lx, audio.meter.slope);
+            ParameterUI.draw(lx, audio.meter.range);
+            ParameterUI.draw(lx, audio.meter.attack);
+            ParameterUI.draw(lx, audio.meter.release);
+        }
 
         section = UI.collapsibleSection("Input", false);
         if (section.isOpen) {

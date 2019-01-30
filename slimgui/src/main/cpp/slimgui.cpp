@@ -433,6 +433,24 @@ JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_collapsibleSec
     return res;
 }
 
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_histogram(
+    JNIEnv *env, jclass, jstring jlabel, jfloatArray jvals, jfloat min, jfloat max, jint size) {
+    JniString label(env, jlabel);
+    jsize histSize = env->GetArrayLength(jvals);
+    float *hist = env->GetFloatArrayElements(jvals, NULL);
+    ImGui::PlotHistogram(label, hist, histSize, 0, NULL, min, max, ImVec2(0, size));
+    env->ReleaseFloatArrayElements(jvals, hist, JNI_ABORT);
+}
+
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_plot(
+    JNIEnv *env, jclass, jstring jlabel, jfloatArray jvals, jfloat min, jfloat max, jint size) {
+    JniString label(env, jlabel);
+    jsize histSize = env->GetArrayLength(jvals);
+    float *hist = env->GetFloatArrayElements(jvals, NULL);
+    ImGui::PlotLines(label, hist, histSize, 0, NULL, min, max, ImVec2(0, size));
+    env->ReleaseFloatArrayElements(jvals, hist, JNI_ABORT);
+}
+
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_beginMainMenuBar(JNIEnv *env, jclass) {
 	return ImGui::BeginMainMenuBar() ? 1 : 0;

@@ -281,6 +281,22 @@ JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_collapsibleSec
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    histogram
+ * Signature: (Ljava/lang/String;[FFFI)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_histogram
+  (JNIEnv *, jclass, jstring, jfloatArray, jfloat, jfloat, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    plot
+ * Signature: (Ljava/lang/String;[FFFI)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_plot
+  (JNIEnv *, jclass, jstring, jfloatArray, jfloat, jfloat, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    beginMainMenuBar
  * Signature: ()Z
  */
