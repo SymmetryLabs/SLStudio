@@ -192,7 +192,15 @@ task buildAndRunUIv2(type: JavaExec) {
 
 task runUIv2(type: JavaExec) {
 	if (System.properties["os.name"] == "Mac OS X") {
+        /* GLFW needs to run on the main thread of the process on MacOS,
+           because MacOS only lets you make windows from the main thread. */
         jvmArgs '-XstartOnFirstThread'
+        /* but! AWT wants to run its main loop on the main thread, and it
+           installs weird hooks into the classloader that causes the entire
+           JVM to hang forever because of a concurrency bug if you try to
+           load a native library from off the main thread. Also, it just
+           straight up doesn't work. Setting headless mode causes calls to AWT
+           to just crash instead of deadlocking the whole system. */
         systemProperty 'java.awt.headless', true
     }
 
