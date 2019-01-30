@@ -191,7 +191,7 @@ task buildAndRunUIv2(type: JavaExec) {
 }
 
 task runUIv2(type: JavaExec) {
-	if (System.properties["os.name"] == "Mac OS X") {
+    if (System.properties["os.name"] == "Mac OS X") {
         /* GLFW needs to run on the main thread of the process on MacOS,
            because MacOS only lets you make windows from the main thread. */
         jvmArgs '-XstartOnFirstThread'
@@ -204,13 +204,13 @@ task runUIv2(type: JavaExec) {
         systemProperty 'java.awt.headless', true
     }
 
-	systemProperty 'org.lwjgl.util.Debug', true
-	systemProperty 'java.library.path', 'libs'
+    systemProperty 'org.lwjgl.util.Debug', true
+    systemProperty 'java.library.path', 'libs'
 
-	main = 'com.symmetrylabs.slstudio.ui.v2.Lwjgl3Launcher'
-	/* copy our classpath from the normal run task, which has its classpath filled in
-	   by the java application plugin. */
-	classpath = run.classpath
+    main = 'com.symmetrylabs.slstudio.ui.v2.Lwjgl3Launcher'
+    /* copy our classpath from the normal run task, which has its classpath filled in
+       by the java application plugin. */
+    classpath = run.classpath
 }
 
 /* this doesn't add a dependency, but specifies that, in cases where both are
@@ -220,6 +220,6 @@ task runUIv2(type: JavaExec) {
 runUIv2.mustRunAfter genPrebuiltSlimgui
 
 task genUiHeader(type: Exec) {
-	description "generates the JNI header file for the UI class wrapper around slimgui"
-	commandLine "javac", "-h", "slimgui/src/main/cpp/", "src/main/java/com/symmetrylabs/slstudio/ui/v2/UI.java"
+    description "generates the JNI header file for the UI class wrapper around slimgui"
+    commandLine "javac", "-h", "slimgui/src/main/cpp/", "src/main/java/com/symmetrylabs/slstudio/ui/v2/UI.java"
 }
