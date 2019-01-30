@@ -48,7 +48,8 @@ public class UI {
 
     /* Popup model windows */
     public static native void openPopup(String name);
-    public static native boolean beginPopup(String name);
+    public static native void closePopup();
+    public static native boolean beginPopup(String name, boolean modal);
     public static native void endPopup();
 
     /* Widgets */

@@ -104,7 +104,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         WindowManager.addPersistent("Warps / effects / patterns", () -> new WEPWindow(lx), true);
         WindowManager.addPersistent("Widget demo", () -> new SlimguiDemoWindow(), false);
 
-        WindowManager.addPersistent("Channel 1", () -> new ChannelWindow(lx, lx.engine.getChannel(0)), false);
+        WindowManager.addPersistent("Channels", () -> new ChannelWindow(lx), false);
 
         lx.engine.isMultithreaded.setValue(true);
         lx.engine.isChannelMultithreaded.setValue(true);

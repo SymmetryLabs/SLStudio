@@ -575,9 +575,15 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_openPopup(JNIEnv 
  * Method:    beginPopup
  * Signature: (Ljava/lang/String;)V
  */
-JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginPopup(JNIEnv *env, jclass, jstring jlabel) {
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginPopup(JNIEnv *env, jclass, jstring jlabel, jboolean modal) {
     JniString label(env, jlabel);
-    return ImGui::BeginPopupModal(label) ? 1 : 0;
+    bool res;
+    if (modal) {
+        res = ImGui::BeginPopupModal(label);
+    } else {
+        res = ImGui::BeginPopup(label);
+    }
+    return res ? 1 : 0;
 }
 
 /*
@@ -587,4 +593,13 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginPopup(JN
  */
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endPopup(JNIEnv *env, jclass) {
     ImGui::EndPopup();
+}
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    endPopup
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_closePopup(JNIEnv *env, jclass) {
+    ImGui::CloseCurrentPopup();
 }

@@ -11,22 +11,36 @@ import java.util.List;
 
 public class ChannelWindow extends CloseableWindow {
     private final LX lx;
-    private final LXChannel chan;
 
-    public ChannelWindow(LX lx, LXChannel chan) {
-        super(chan.label.getString());
+    public ChannelWindow(LX lx) {
+        super("Channels");
         this.lx = lx;
-        this.chan = chan;
     }
 
     @Override
     protected void windowSetup() {
-        UI.setNextWindowDefaults(25, 500, UI.DEFAULT_WIDTH, 300);
     }
 
     @Override
     protected void drawContents() {
-        String chanName = chan.label.getString();
+        for (LXChannel chan : lx.engine.getChannels()) {
+            UI.beginChild(chan.getLabel(), true, 0, 230, 0);
+            drawChannel(chan);
+            UI.endChild();
+            UI.sameLine();
+        }
+    }
+
+    protected void drawChannel(LXChannel chan) {
+        String chanName = chan.getLabel();
+        boolean isFocused = lx.engine.getFocusedChannel() == chan;
+
+        int chanFlags = UI.TREE_FLAG_DEFAULT_OPEN |
+            (isFocused ? UI.TREE_FLAG_SELECTED : 0);
+        UI.selectable(chanName, isFocused);
+        if (UI.isItemClicked()) {
+            lx.engine.addTask(() -> lx.engine.setFocusedChannel(chan));
+        }
 
         ParameterUI.draw(lx, chan.fader);
         ParameterUI.draw(lx, chan.speed);

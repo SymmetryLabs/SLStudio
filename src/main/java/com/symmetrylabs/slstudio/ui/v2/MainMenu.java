@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
+import heronarts.lx.LXChannel;
 
 public class MainMenu implements Window {
     private final LX lx;
@@ -22,7 +23,7 @@ public class MainMenu implements Window {
         if (!UI.beginMainMenuBar()) {
             return;
         }
-        if (UI.beginMenu("Project")) {
+        if (UI.beginMenu("File")) {
             if (UI.menuItem("New")) {
                 lx.engine.addTask(() -> lx.newProject());
             }

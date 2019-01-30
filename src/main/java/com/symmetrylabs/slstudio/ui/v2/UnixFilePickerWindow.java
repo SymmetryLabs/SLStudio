@@ -12,11 +12,8 @@ import java.nio.file.Files;
 import java.io.IOException;
 
 
-public class UnixFilePickerWindow implements Window {
-    private static int windowId = 0;
-
+public class UnixFilePickerWindow extends Popup {
     private final LX lx;
-    private final String title;
     private final FileDialog.Type type;
     private final FileDialog.FilePickedCallback fpc;
 
@@ -26,8 +23,8 @@ public class UnixFilePickerWindow implements Window {
     private boolean opened = false;
 
     public UnixFilePickerWindow(LX lx, String title, FileDialog.Type type, FileDialog.FilePickedCallback fpc) {
+        super(title);
         this.lx = lx;
-        this.title = title;
         this.type = type;
         this.fpc = fpc;
 
@@ -37,35 +34,25 @@ public class UnixFilePickerWindow implements Window {
     }
 
     @Override
-    public void draw() {
-        if (!opened) {
-            UI.openPopup(title);
-        }
-        if (!UI.beginPopup(title)) {
-            WindowManager.closeWindow(this);
-            return;
-        }
+    public void drawContents() {
         currentPathString = UI.inputText("##file", currentPathString);
         currentPath = Paths.get(currentPathString);
 
         UI.sameLine();
         if (UI.button(type == FileDialog.Type.OPEN ? "Open" : "Save")) {
             lx.engine.addTask(() -> fpc.onFilePicked(currentPath.toFile()));
-            WindowManager.closeWindow(this);
-            UI.endPopup();
+            close();
             return;
         }
         UI.sameLine();
         if (UI.button("Cancel")) {
-            WindowManager.closeWindow(this);
-            UI.endPopup();
+            close();
             return;
         }
 
         UI.beginChild("dir-tree", true, 0, 400, 600);
         showDir(Paths.get("/"));
         UI.endChild();
-        UI.endPopup();
     }
 
     private void showDir(Path path) {
