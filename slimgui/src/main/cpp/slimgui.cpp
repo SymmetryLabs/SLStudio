@@ -261,11 +261,10 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_spacing(JNIEnv *, jclass) {
 
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_beginChild(
-	JNIEnv *env, jclass, jstring jid, jboolean border, jint flags) {
+	JNIEnv *env, jclass, jstring jid, jboolean border, jint flags, jint w, jint h) {
     JniString id(env, jid);
-	bool res = ImGui::BeginChild(id, ImVec2(0, 0), border == 1, flags);
+	bool res = ImGui::BeginChild(id, ImVec2(w, h), border == 1, flags);
 	return res ? 1 : 0;
-
 }
 
 JNIEXPORT void JNICALL
@@ -564,4 +563,28 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_showDemoWindow(JNIEnv *, jclass) {
 	bool open = true;
 	ImGui::ShowDemoWindow(&open);
 	return open ? 1 : 0;
+}
+
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_openPopup(JNIEnv *env, jclass, jstring jlabel) {
+    JniString label(env, jlabel);
+    ImGui::OpenPopup(label);
+}
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    beginPopup
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginPopup(JNIEnv *env, jclass, jstring jlabel) {
+    JniString label(env, jlabel);
+    return ImGui::BeginPopupModal(label) ? 1 : 0;
+}
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    endPopup
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endPopup(JNIEnv *env, jclass) {
+    ImGui::EndPopup();
 }

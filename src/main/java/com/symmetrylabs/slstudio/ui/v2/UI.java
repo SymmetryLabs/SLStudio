@@ -38,10 +38,18 @@ public class UI {
     public static native void separator();
     public static native void spacing();
 
-    public static native boolean beginChild(String id, boolean border, int flags);
+    public static boolean beginChild(String id, boolean border, int flags) {
+        return beginChild(id, border, flags, 0, 0);
+    }
+    public static native boolean beginChild(String id, boolean border, int flags, int w, int h);
     public static native void endChild();
     public static native void beginGroup();
     public static native void endGroup();
+
+    /* Popup model windows */
+    public static native void openPopup(String name);
+    public static native boolean beginPopup(String name);
+    public static native void endPopup();
 
     /* Widgets */
     public static native void text(String t);

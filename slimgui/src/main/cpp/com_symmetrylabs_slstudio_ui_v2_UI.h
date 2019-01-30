@@ -146,10 +146,10 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_spacing
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    beginChild
- * Signature: (Ljava/lang/String;ZI)Z
+ * Signature: (Ljava/lang/String;ZIII)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginChild
-  (JNIEnv *, jclass, jstring, jboolean, jint);
+  (JNIEnv *, jclass, jstring, jboolean, jint, jint, jint);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
@@ -173,6 +173,30 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginGroup
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endGroup
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    openPopup
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_openPopup
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    beginPopup
+ * Signature: (Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginPopup
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    endPopup
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endPopup
   (JNIEnv *, jclass);
 
 /*
