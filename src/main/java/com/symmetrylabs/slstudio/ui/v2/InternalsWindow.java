@@ -1,15 +1,22 @@
 package com.symmetrylabs.slstudio.ui.v2;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXEngine;
+import java.util.LinkedList;
 
 public class InternalsWindow extends CloseableWindow {
+    private static final int FRAMES_TO_KEEP = 300; // 5 seconds at 60fps
     private final LX lx;
     private final SLStudioGDX parent;
+    private final LinkedList<Float> frameTimes = new LinkedList<>();
 
     InternalsWindow(LX lx, SLStudioGDX parent) {
         super("Internals");
         this.lx = lx;
         this.parent = parent;
+        for (int i = 0; i < FRAMES_TO_KEEP; i++) {
+            frameTimes.push(0.f);
+        }
     }
 
     @Override
@@ -27,5 +34,21 @@ public class InternalsWindow extends CloseableWindow {
                         1e9f / lx.engine.timer.runWorstNanos);
         UI.text("ui frame rate:  % 3.0ffps", UI.getFrameRate());
         parent.clearRGB = UI.colorPicker("background", parent.clearRGB);
+
+        frameTimes.addLast(lx.engine.timer.runCurrentNanos * 1e-6f);
+        while (frameTimes.size() > FRAMES_TO_KEEP) {
+            frameTimes.removeFirst();
+        }
+        float[] frameTimeArr = new float[frameTimes.size()];
+        float max = 0;
+        int i = 0;
+        for (Float ft : frameTimes) {
+            frameTimeArr[i] = ft;
+            if (ft > max) {
+                max = ft;
+            }
+            i++;
+        }
+        UI.plot("ms per f", frameTimeArr, 0, Float.max(1.2f * max, 1), 100);
     }
 }
