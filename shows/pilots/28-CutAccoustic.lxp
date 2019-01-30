@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1548856006006,
+  "timestamp": 1548864711374,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -30,7 +30,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 53.85000213980675,
+        "color/hue": 53.92070388793945,
         "color/brightness": 100.0,
         "color/saturation": 89.01960754394531,
         "color": -6116,
@@ -1322,7 +1322,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -1700,7 +1700,7 @@
           "modulationColor": -65427,
           "parameters": {
             "label": "TimBlur",
-            "running": true,
+            "running": false,
             "trigger": false,
             "loop": false,
             "period": 585.7660380314667

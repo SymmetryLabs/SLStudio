@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1548857366638,
+  "timestamp": 1548863892979,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 1.0197867155075073,
-      "focusedChannel": 12,
+      "speed": 0.8773541450500488,
+      "focusedChannel": 11,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -528,7 +528,7 @@
               "label": "OneBigAngledPlane",
               "palette": 2,
               "thick": 43.135849865916725,
-              "x": -0.3340754508972168,
+              "x": -1.0,
               "y": 0.7599999897181988,
               "z": -0.5800000093877316,
               "cx": 12.75,
@@ -630,7 +630,7 @@
               "Worms": 0.640000008046627,
               "Conf": 0.1,
               "Spawn": 0.46999998949468136,
-              "Color": 0.1
+              "Color": 0.08000000044703484
             },
             "modulation": {
               "modulators": [],
@@ -674,7 +674,7 @@
               "xSize": 377.84999923221767,
               "cx": 356.25,
               "ySize": 39.60000132769346,
-              "cy": -50.14897740502536,
+              "cy": 26.06560495168651,
               "zSize": 62.309999730437994,
               "cz": -36.30000089854002,
               "invert": false
@@ -845,7 +845,7 @@
               "WSpr": 0.18999999575316906,
               "WSpd": 0.3800000138580799,
               "Drez": 0.8624000026285649,
-              "Thick": 0.47987785935401917,
+              "Thick": 0.38771042227745056,
               "ySpr": 0.8100000042468309,
               "Hue": 0.7700000051409006,
               "HSpr": 0.7700000051409006
@@ -1125,7 +1125,7 @@
             "parameters": {
               "label": "Speckle",
               "enabled": true,
-              "amt": 0.9997912645339966
+              "amt": 0.8423559069633484
             }
           }
         ],
@@ -1390,7 +1390,7 @@
               "label": "BoxMask",
               "enabled": true,
               "xSize": 343.5,
-              "cx": 699.75,
+              "cx": 12.75,
               "ySize": 52.46999993361533,
               "cy": 98.25,
               "zSize": 50.25,
@@ -1430,10 +1430,10 @@
             "parameters": {
               "label": "WarpCompatibleSolidColor",
               "palette": 0,
-              "Color/hue": 46.66999895684421,
+              "Color/hue": 46.58823776245117,
               "Color/brightness": 100.0,
-              "Color/saturation": 100.0,
-              "Color": -14848
+              "Color/saturation": 0.0,
+              "Color": -1
             },
             "modulation": {
               "modulators": [],
@@ -1827,7 +1827,7 @@
           "modulationColor": -65427,
           "parameters": {
             "label": "TimBlur",
-            "running": false,
+            "running": true,
             "trigger": false,
             "loop": false,
             "period": 585.7660380314667
@@ -2863,7 +2863,7 @@
         "31149": true
       },
       "preview": {
-        "radius": 594.2392878649157,
+        "radius": 300.5328347092317,
         "theta": -0.011999999999964768,
         "phi": 0.18300000000000183,
         "positionX": 336.9455261230469,
