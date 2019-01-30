@@ -64,6 +64,7 @@ public class AudioWindow extends CloseableWindow {
 
         section = UI.collapsibleSection("Input", false);
         if (section.isOpen) {
+            ParameterUI.draw(lx, audio.input.device);
         }
 
         section = UI.collapsibleSection("Output", false);
