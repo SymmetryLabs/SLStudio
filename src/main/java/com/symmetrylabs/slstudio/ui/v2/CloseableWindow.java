@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.ui.v2;
 
 public abstract class CloseableWindow implements Window {
     protected final String label;
+    private boolean closeAfterEnd = false;
 
     public CloseableWindow(String label) {
         this.label = label;
@@ -20,5 +21,12 @@ public abstract class CloseableWindow implements Window {
         }
         drawContents();
         UI.end();
+        if (closeAfterEnd) {
+            WindowManager.closeWindow(this);
+        }
+    }
+
+    protected void markToClose() {
+        closeAfterEnd = true;
     }
 }

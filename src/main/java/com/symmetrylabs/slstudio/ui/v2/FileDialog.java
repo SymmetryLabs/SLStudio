@@ -6,12 +6,14 @@ import java.awt.EventQueue;
 import java.io.File;
 
 public class FileDialog {
+    public static boolean PREFER_NATIVE_DIALOGS = false;
+
     public enum Type {
         SAVE, OPEN;
     }
 
     private enum Impl {
-        AWT, NONE;
+        AWT, UNIX_FILE_PICKER_WINDOW, NONE;
     }
 
     public interface FilePickedCallback {
@@ -30,18 +32,26 @@ public class FileDialog {
         this.type = type;
         this.fpc = fpc;
 
-        String headlessProp = System.getProperty("java.awt.headless");
-        if (headlessProp != null && !headlessProp.equals("")) {
-            impl = Impl.NONE;
-        } else {
-            impl = Impl.AWT;
+        Impl sysImpl = Impl.NONE;
+        if (PREFER_NATIVE_DIALOGS) {
+            String headlessProp = System.getProperty("java.awt.headless");
+            if (headlessProp == null || headlessProp.equals("")) {
+                sysImpl = Impl.AWT;
+            }
         }
+        if (sysImpl == Impl.NONE && !System.getProperty("os.name").startsWith("Windows")) {
+            sysImpl = Impl.UNIX_FILE_PICKER_WINDOW;
+        }
+        impl = sysImpl;
     }
 
     public void show() {
         switch (impl) {
         case AWT:
             EventQueue.invokeLater(this::showImplAwt);
+            return;
+        case UNIX_FILE_PICKER_WINDOW:
+            WindowManager.addTransient(new UnixFilePickerWindow(lx, title, type, fpc));
             return;
         case NONE:
             ApplicationState.setWarning("FileDialog", "this platform does not support file dialogs");
