@@ -1,7 +1,7 @@
 package com.symmetrylabs.slstudio.output;
 
 import com.fazecast.jSerialComm.SerialPort;
-import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.ApplicationState;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
@@ -244,12 +244,12 @@ public class AllPixelOutput extends LXOutput {
     /* used so that we don't spam the logs too badly when we're disconnected */
     private void warn(String w, Object... args) {
         if (w == null) {
-            SLStudio.setWarning("AllPixelOutput", null);
+            ApplicationState.setWarning("AllPixelOutput", null);
             return;
         }
         String v = String.format(w, args);
         if (currentWarning == null || !v.equals(currentWarning)) {
-            SLStudio.setWarning("AllPixelOutput", v);
+            ApplicationState.setWarning("AllPixelOutput", v);
             currentWarning = v;
         }
     }
