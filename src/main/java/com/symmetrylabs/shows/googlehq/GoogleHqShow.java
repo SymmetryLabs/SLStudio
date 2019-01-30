@@ -10,7 +10,6 @@ import com.symmetrylabs.slstudio.workspaces.Workspace;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.MarkerSource;
 
-import java.awt.*;
 import java.util.Collection;
 import java.util.Arrays;
 import heronarts.lx.LX;
@@ -29,21 +28,20 @@ public class GoogleHqShow implements Show, MarkerSource {
 
     @Override
     public void setupLx(LX lx) {
-
+        lx.addOutput(
+            new SimplePixlite(lx, "10.200.1.16")
+            .addPixliteOutput(
+                new PointsGrouping("1")
+                .addPoints(Arrays.copyOfRange(model.points, 348, 548), PointsGrouping.REVERSE_ORDERING))
+            .addPixliteOutput(
+                new PointsGrouping("2")
+                .addPoints(Arrays.copyOfRange(model.points, 0, 349), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(Arrays.copyOfRange(model.points, 549, 799), PointsGrouping.REVERSE_ORDERING))
+            );
     }
 
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
-        lx.addOutput(new SimplePixlite(lx, "10.200.1.16")
-            .addPixliteOutput(new PointsGrouping("1")
-                .addPoints(Arrays.copyOfRange(model.points, 348, 548), PointsGrouping.REVERSE_ORDERING))
-                //.addPoints(Arrays.copyOfRange(model.points, 0, 600)))
-
-            .addPixliteOutput(new PointsGrouping("2")
-                .addPoints(Arrays.copyOfRange(model.points, 0, 349), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(Arrays.copyOfRange(model.points, 549, 799), PointsGrouping.REVERSE_ORDERING))
-                //.addPoints(Arrays.copyOfRange(model.points, 0, 600)))
-        );
     }
 
     @Override
