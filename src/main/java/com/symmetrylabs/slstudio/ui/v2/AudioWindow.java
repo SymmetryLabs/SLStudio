@@ -1,20 +1,18 @@
 package com.symmetrylabs.slstudio.ui.v2;
 
+import com.symmetrylabs.util.Utils;
 import heronarts.lx.LX;
 import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
-import heronarts.lx.warp.LXWarp;
-import java.util.ArrayList;
-import java.util.List;
-import java.awt.Frame;
-import java.io.File;
-import java.awt.EventQueue;
-import com.symmetrylabs.util.Utils;
-import java.nio.file.Path;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioEngine;
+import heronarts.lx.warp.LXWarp;
+import java.io.File;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AudioWindow extends CloseableWindow {
     private final LX lx;

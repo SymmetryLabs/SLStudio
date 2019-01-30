@@ -3,7 +3,6 @@ package com.symmetrylabs.slstudio.ui.v2;
 import com.symmetrylabs.shows.ShowRegistry;
 import com.symmetrylabs.slstudio.SLStudio;
 import heronarts.lx.LX;
-import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
