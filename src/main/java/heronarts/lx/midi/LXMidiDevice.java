@@ -68,7 +68,26 @@ public abstract class LXMidiDevice {
      * @return Device description
      */
     public String getDescription() {
-        return this.device.getDeviceInfo().getDescription();
+        String description = device.getDeviceInfo().getDescription();
+        /**
+           Windows sticks this in description and puts the actual name of the
+           MIDI device in the name field instead of the description field. This
+           is in contrast to Linux and MacOS which put the useful bits in the
+           description field. If the description matches this, we know that we
+           need to use the name instead.
+
+           I know that you have probably arrived at this line of code and you're
+           irritated because of course this isn't the right way to make this
+           work generally, and some version of Windows probably changed the
+           description it returns and now things are spookily broken again. I'm
+           sorry to have put you in this position. I only wish that, when it had
+           no information, Windows just returned null instead of the eerie
+           "No details available" message.
+        */
+        if (!description.equals("No details available")) {
+            return description;
+        }
+        return getName();
     }
 
     protected abstract void onEnabled(boolean enabled);
