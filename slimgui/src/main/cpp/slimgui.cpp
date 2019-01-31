@@ -48,6 +48,14 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
 	env->SetStaticIntField(cls, fid, ImGuiTreeNodeFlags_Selected);
 	fid = env->GetStaticFieldID(cls, "WINDOW_HORIZ_SCROLL", "I");
 	env->SetStaticIntField(cls, fid, ImGuiWindowFlags_HorizontalScrollbar);
+	fid = env->GetStaticFieldID(cls, "COLOR_WIDGET", "I");
+	env->SetStaticIntField(cls, fid, ImGuiCol_FrameBg);
+	fid = env->GetStaticFieldID(cls, "COLOR_HEADER", "I");
+	env->SetStaticIntField(cls, fid, ImGuiCol_Header);
+	fid = env->GetStaticFieldID(cls, "COLOR_HEADER_ACTIVE", "I");
+	env->SetStaticIntField(cls, fid, ImGuiCol_HeaderActive);
+	fid = env->GetStaticFieldID(cls, "COLOR_HEADER_HOVERED", "I");
+	env->SetStaticIntField(cls, fid, ImGuiCol_HeaderHovered);
 
 	if (gl3wInit()) {
 		std::cout << "failed to init gl3w" << std::endl;
@@ -172,6 +180,24 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_shutdown(JNIEnv *, jclass) {
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 	return 1;
+}
+
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_pushColor(
+    JNIEnv *, jclass, jint key, jint jcolor) {
+    /* imgui uses ABGR, SLStudio uses ARGB. */
+    ImU32 color =
+        ((0xFF00FF00 & jcolor)) |
+        ((0x00FF0000 & jcolor) >> 16) |
+        ((0x000000FF & jcolor) << 16);
+    /* if no alpha was specified, they probably meant full-opaque. */
+    if ((color & 0xFF000000) == 0) {
+        color |= 0xFF000000;
+    }
+    ImGui::PushStyleColor(key, color);
+}
+
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_popColor(JNIEnv *, jclass, jint count) {
+    ImGui::PopStyleColor(count);
 }
 
 JNIEXPORT void JNICALL

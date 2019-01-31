@@ -16,25 +16,31 @@ import com.symmetrylabs.slstudio.ApplicationState;
 /**
  * A window that shows a tree view of warps, effects and patterns.
  */
-public class WEPWindow extends CloseableWindow {
+public class WepUi {
+    public interface OnWepSelected {
+        void onWepAdded();
+    }
+
     private final LX lx;
     private final WEPGrouping grouping;
     private String filterText = "";
+    private OnWepSelected cb;
+    private int maxHeight = 0;
 
-    public WEPWindow(LX lx) {
-        super("Warps / effects / patterns");
+    public WepUi(LX lx, OnWepSelected cb) {
         this.lx = lx;
         this.grouping = new WEPGrouping(lx, ApplicationState.showName());
+        this.cb = cb;
     }
 
-    @Override
-    protected void windowSetup() {
-        UI.setNextWindowDefaults(25, 25, UI.DEFAULT_WIDTH, 450);
+    public void setMaxHeight(int maxHeight) {
+        this.maxHeight = maxHeight;
     }
 
-    @Override
-    protected void drawContents() {
+    public void draw() {
         filterText = UI.inputText("filter", filterText);
+
+        UI.beginChild("wep-tree", false, 0, 300, maxHeight);
         if (UI.treeNode("Patterns", UI.TREE_FLAG_DEFAULT_OPEN)) {
             for (String groupName : grouping.groupNames) {
                 String displayName = groupName == null ? "Uncategorized" : groupName;
@@ -83,6 +89,7 @@ public class WEPWindow extends CloseableWindow {
             }
             UI.treePop();
         }
+        UI.endChild();
     }
 
     private boolean match(String label) {
@@ -111,6 +118,9 @@ public class WEPWindow extends CloseableWindow {
             } else {
                 lx.engine.addChannel(new LXPattern[] { instance });
             }
+            if (cb != null) {
+                cb.onWepAdded();
+            }
         }
     }
 
@@ -130,6 +140,9 @@ public class WEPWindow extends CloseableWindow {
 
         if (instance != null) {
             lx.engine.getFocusedChannel().addEffect(instance);
+            if (cb != null) {
+                cb.onWepAdded();
+            }
         }
     }
 
@@ -149,6 +162,9 @@ public class WEPWindow extends CloseableWindow {
 
         if (instance != null) {
             lx.engine.getFocusedChannel().addWarp(instance);
+            if (cb != null) {
+                cb.onWepAdded();
+            }
         }
     }
 }

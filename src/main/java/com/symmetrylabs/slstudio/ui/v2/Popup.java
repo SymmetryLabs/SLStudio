@@ -14,10 +14,16 @@ import java.io.IOException;
 
 public abstract class Popup implements Window {
     protected final String title;
+    protected final boolean modal;
     private boolean opened = false;
 
-    public Popup(String title) {
+    protected Popup(String title) {
+        this(title, true);
+    }
+
+    protected Popup(String title, boolean modal) {
         this.title = title;
+        this.modal = modal;
     }
 
     protected abstract void drawContents();

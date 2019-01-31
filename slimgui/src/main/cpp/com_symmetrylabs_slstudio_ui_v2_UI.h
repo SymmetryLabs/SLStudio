@@ -41,6 +41,22 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_shutdown
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    pushColor
+ * Signature: (II)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_pushColor
+  (JNIEnv *, jclass, jint, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    popColor
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_popColor
+  (JNIEnv *, jclass, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    setNextWindowDefaults
  * Signature: (IIII)V
  */

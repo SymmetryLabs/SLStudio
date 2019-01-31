@@ -98,13 +98,10 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
              the Window menu and it doesn't have a close button, so there's no risk of
              it disappearing. */
         WindowManager.addTransient(new MainMenu(lx, this));
-        WindowManager.addPersistent("Audio", () -> new AudioWindow(lx), true);
+        WindowManager.addPersistent("Audio", () -> new AudioWindow(lx), false);
+        WindowManager.addPersistent("Channels", () -> new ChannelWindow(lx), true);
         WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this), false);
-        WindowManager.addPersistent("Project", () -> new ProjectWindow(lx), true);
-        WindowManager.addPersistent("Warps / effects / patterns", () -> new WEPWindow(lx), true);
         WindowManager.addPersistent("Widget demo", () -> new SlimguiDemoWindow(), false);
-
-        WindowManager.addPersistent("Channels", () -> new ChannelWindow(lx), false);
 
         lx.engine.isMultithreaded.setValue(true);
         lx.engine.isChannelMultithreaded.setValue(true);

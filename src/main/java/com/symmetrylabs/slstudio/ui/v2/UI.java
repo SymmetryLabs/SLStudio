@@ -9,6 +9,11 @@ public class UI {
 
     public static int DEFAULT_WIDTH = 250;
 
+    public static int COLOR_WIDGET;
+    public static int COLOR_HEADER;
+    public static int COLOR_HEADER_ACTIVE;
+    public static int COLOR_HEADER_HOVERED;
+
     public static class CollapseResult {
         /** true if the collapsable section should be open (i.e., client should draw the contents of the section) */
         public boolean isOpen;
@@ -20,6 +25,13 @@ public class UI {
     public static native void newFrame();
     public static native void render();
     public static native boolean shutdown();
+
+    /* Styling */
+    public static native void pushColor(int key, int color);
+    public static void popColor() {
+        popColor(1);
+    }
+    public static native void popColor(int count);
 
     /* Layout */
     public static native void setNextWindowDefaults(int x, int y, int w, int h);

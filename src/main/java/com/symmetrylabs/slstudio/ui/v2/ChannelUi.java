@@ -1,0 +1,116 @@
+package com.symmetrylabs.slstudio.ui.v2;
+
+import heronarts.lx.LX;
+import heronarts.lx.LXBus;
+import heronarts.lx.LXChannel;
+import heronarts.lx.LXEffect;
+import heronarts.lx.LXPattern;
+import heronarts.lx.warp.LXWarp;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ChannelUi {
+    private static final int ACTIVE_PATTERN_COLOR = 0x641D9C;
+    private static final int ACTIVE_PATTERN_HOVER_COLOR = 0x8F28DE;
+
+    private final LX lx;
+    private final LXChannel chan;
+    private WepUi wepUi;
+
+    public ChannelUi(LX lx, LXChannel chan, WepUi wepUi) {
+        this.lx = lx;
+        this.chan = chan;
+        this.wepUi = wepUi;
+    }
+
+    public void draw() {
+        String chanName = chan.getLabel();
+        boolean isFocused = lx.engine.getFocusedChannel() == chan;
+
+        int chanFlags = UI.TREE_FLAG_DEFAULT_OPEN |
+            (isFocused ? UI.TREE_FLAG_SELECTED : 0);
+        UI.selectable(chanName, isFocused);
+        if (UI.isItemClicked()) {
+            lx.engine.addTask(() -> lx.engine.setFocusedChannel(chan));
+        }
+
+        ParameterUI.draw(lx, chan.fader);
+        ParameterUI.draw(lx, chan.speed);
+
+        ParameterUI.draw(lx, chan.enabled);
+        UI.sameLine();
+        ParameterUI.draw(lx, chan.cueActive);
+
+        List<LXWarp> warps = chan.getWarps();
+        if (!warps.isEmpty()) {
+            for (int i = 0; i < warps.size(); i++) {
+                LXWarp warp = warps.get(i);
+                String warpName = String.format(
+                    "%s##%d/warp/%d", warp.getClass().getSimpleName(), chan.getIndex(), i);
+                String id = String.format("%s / %s", chanName, warpName);
+
+                UI.selectable(warpName, warp.enabled.getValueb());
+                if (UI.isItemClicked(0)) {
+                    lx.engine.addTask(() -> warp.enabled.setValue(!warp.enabled.getValueb()));
+                } else if (UI.isItemClicked(1)) {
+                    WindowManager.addTransient(new ComponentWindow(lx, id, warp));
+                }
+            }
+            UI.spacing();
+        }
+
+        int active = chan.getActivePatternIndex();
+        List<LXPattern> patterns = chan.getPatterns();
+        for (int i = 0; i < patterns.size(); i++) {
+            final LXPattern pat = patterns.get(i);
+            String patName = pat.getClass().getSimpleName();
+            String id = String.format("%s / %s", chanName, patName);
+
+            UI.spacing();
+
+            if (active == i) {
+                UI.pushColor(UI.COLOR_HEADER, ACTIVE_PATTERN_COLOR);
+                UI.pushColor(UI.COLOR_HEADER_ACTIVE, ACTIVE_PATTERN_COLOR);
+                UI.pushColor(UI.COLOR_HEADER_HOVERED, ACTIVE_PATTERN_HOVER_COLOR);
+            }
+            UI.CollapseResult section = UI.collapsibleSection(patName, patterns.size() > 1);
+            if (active == i) {
+                UI.popColor(3);
+            }
+
+            if (section.shouldRemove) {
+                lx.engine.addTask(() -> chan.removePattern(pat));
+            } else if (section.isOpen) {
+                new ComponentUI(lx, pat).draw();
+            }
+        }
+
+        List<LXEffect> effects = chan.getEffects();
+        if (!effects.isEmpty()) {
+            UI.spacing();
+            for (int i = 0; i < effects.size(); i++) {
+                LXEffect eff = effects.get(i);
+                String effName = eff.getClass().getSimpleName();
+                String id = String.format("%s / %s", chanName, effName);
+
+                UI.spacing();
+                UI.CollapseResult section = UI.collapsibleSection(effName, true);
+                if (section.shouldRemove) {
+                    lx.engine.addTask(() -> chan.removeEffect(eff));
+                } else if (section.isOpen) {
+                    new ComponentUI(lx, eff).draw();
+                }
+            }
+        }
+
+        if (UI.button("+")) {
+            lx.engine.setFocusedChannel(chan);
+            UI.setNextWindowContentSize(300, 600);
+            UI.openPopup("Warps / effects / patterns");
+        }
+        if (UI.beginPopup("Warps / effects / patterns", false)) {
+            wepUi.draw();
+            UI.endPopup();
+        }
+    }
+}
