@@ -1,3 +1,6 @@
+#define _USE_MATH_DEFINES // necessary to get M_PI on Windows
+#include <math.h>
+
 #include "imgui.h"
 
 #define IMGUI_DEFINE_MATH_OPERATORS

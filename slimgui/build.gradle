@@ -38,17 +38,16 @@ tasks.withType(CppCompile) {
 }
 
 tasks.withType(LinkSharedLibrary) {
-	linkerArgs.add "-g"
 	if (MAC) {
-		linkerArgs.add "-framework"
+  linkerArgs.add "-g"
+    linkerArgs.add "-framework"
 		linkerArgs.add "OpenGL"
 		linkerArgs.add "../libs/libglfw.dylib"
 	} else if (LINUX) {
+	linkerArgs.add "-g"
 		linkerArgs.add "-lGL"
 		linkerArgs.add "../libs/libglfw.so"
 	} else if (WINDOWS) {
-		linkerArgs.add "-lglfw3"
-		linkerArgs.add "-lopengl32"
-		linkerArgs.add "-Lprebuilts-windows"
+		linkerArgs.add "../libs/glfw.lib"
 	}
 }
