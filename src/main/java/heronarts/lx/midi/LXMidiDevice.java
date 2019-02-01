@@ -84,7 +84,7 @@ public abstract class LXMidiDevice {
            no information, Windows just returned null instead of the eerie
            "No details available" message.
         */
-        if (!description.equals("No details available")) {
+        if (!description.equals("No details available") && !description.equals("External MIDI Port")) {
             return description;
         }
         return getName();
