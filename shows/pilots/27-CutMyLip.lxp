@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1548863892979,
+  "timestamp": 1548870300405,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 0.8773541450500488,
-      "focusedChannel": 11,
+      "speed": 0.22000858187675476,
+      "focusedChannel": 4,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -152,7 +152,7 @@
         ],
         "effects": [],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 1,
         "patterns": [
           {
             "id": 638,
@@ -674,7 +674,7 @@
               "xSize": 377.84999923221767,
               "cx": 356.25,
               "ySize": 39.60000132769346,
-              "cy": 26.06560495168651,
+              "cy": -50.21634958775824,
               "zSize": 62.309999730437994,
               "cz": -36.30000089854002,
               "invert": false
@@ -819,7 +819,7 @@
             "parameters": {
               "label": "Desaturation",
               "enabled": true,
-              "amount": 0.9987296462059021,
+              "amount": 0.24000172317028046,
               "attack": 100.0,
               "decay": 100.0
             },
@@ -840,12 +840,12 @@
             "parameters": {
               "label": "TimPlanes",
               "palette": 0,
-              "splitHue": false,
+              "splitHue": true,
               "Wob": 0.8600000031292439,
               "WSpr": 0.18999999575316906,
               "WSpd": 0.3800000138580799,
               "Drez": 0.8624000026285649,
-              "Thick": 0.38771042227745056,
+              "Thick": 0.24000172317028046,
               "ySpr": 0.8100000042468309,
               "Hue": 0.7700000051409006,
               "HSpr": 0.7700000051409006
@@ -1125,7 +1125,7 @@
             "parameters": {
               "label": "Speckle",
               "enabled": true,
-              "amt": 0.8423559069633484
+              "amt": 1.7066518012143206E-6
             }
           }
         ],
@@ -1173,7 +1173,7 @@
               "palette": 1,
               "Number": 0.0,
               "Bright": 80.0,
-              "Rate": 5172.50006319955,
+              "Rate": 5970.000045374036,
               "Blur": 0.40000000648200507
             },
             "modulation": {
@@ -1650,19 +1650,6 @@
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 35751,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -65393,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 44,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -2863,9 +2850,9 @@
         "31149": true
       },
       "preview": {
-        "radius": 300.5328347092317,
-        "theta": -0.011999999999964768,
-        "phi": 0.18300000000000183,
+        "radius": 579.0045850455133,
+        "theta": 0.23700000000003685,
+        "phi": 0.06000000000000172,
         "positionX": 336.9455261230469,
         "positionY": 93.25,
         "positionZ": 71.17598724365234
