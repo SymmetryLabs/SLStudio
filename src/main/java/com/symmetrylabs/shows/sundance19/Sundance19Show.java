@@ -425,13 +425,7 @@ public class Sundance19Show extends CubesShow implements HasWorkspace {
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
-<<<<<<< HEAD
-        //FrameTimeCrasher.attach(lx, 500);
-        workspace = new Workspace(lx, ui, "shows/related");
-=======
-        FrameTimeCrasher.attach(lx, 500);
         workspace = new Workspace(lx, ui, "shows/sundance19");
->>>>>>> 9b18cfce6dcc753f4ecb267502486fe7abdef98e
     }
 
     @Override
