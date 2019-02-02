@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1548850565052,
+  "timestamp": 1549101088124,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.116666715592146,
-      "focusedChannel": 2,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -121,7 +121,7 @@
         "parameters": {
           "label": "Palette",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -148,7 +148,7 @@
             "parameters": {
               "label": "PaletteViewer",
               "palette": 1,
-              "palSelectah": 0,
+              "palSelectah": 16,
               "palStart": 0.3399999924004078,
               "palStop": 0.7200000062584877,
               "palShift": 1.0,
@@ -194,7 +194,7 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 343.5,
+              "xSize": 378.7045601606369,
               "cx": 355.04000122845173,
               "ySize": 73.07999966293573,
               "cy": 97.6000006407499,
@@ -291,7 +291,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -308,7 +308,7 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 343.5,
+              "xSize": 398.3618761897087,
               "cx": 355.04000122845173,
               "ySize": 70.75999971479177,
               "cy": 97.6000006407499,
@@ -324,7 +324,7 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 343.5,
+              "xSize": 446.4736148715019,
               "cx": 355.04000122845173,
               "ySize": 73.58999965153635,
               "cy": 98.59000065676865,
@@ -440,9 +440,9 @@
             "parameters": {
               "label": "BundleDirMask",
               "enabled": true,
-              "x": false,
+              "x": true,
               "y": false,
-              "z": false
+              "z": true
             }
           }
         ],
@@ -480,7 +480,7 @@
               "cropR": 0.11999999731779099,
               "cropT": 0.5799999874830246,
               "cropB": 0.0,
-              "tcStart": 999424.0,
+              "tcStart": 973577.0,
               "bake": false,
               "run": false,
               "runReset": false
@@ -842,19 +842,6 @@
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 31257,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -7470849,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 44,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
