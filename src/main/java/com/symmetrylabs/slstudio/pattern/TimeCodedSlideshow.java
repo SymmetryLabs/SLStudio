@@ -51,19 +51,19 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     private final BooleanParameter freewheelReset = new BooleanParameter("runReset", false).setMode(BooleanParameter.Mode.MOMENTARY);
 
     private MidiTime mt;
-    private int currentFrame;
+    int currentFrame;
     private int lastFrameReceived;
-    private boolean stopping = false;
-    private long lastLoadLoop = 0;
+    protected boolean stopping = false;
+    long lastLoadLoop = 0;
     private boolean currentFrameLoaded;
 
-    private boolean baked = false;
+    protected boolean baked = false;
     private BufferedImage bakedImage = null;
 
-    private int nFrames = 0;
+    int nFrames = 0;
     private double freewheelTime = 0;
 
-    private static class Slide {
+    static class Slide {
         File path;
         BufferedImage img;
 
@@ -92,9 +92,9 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         }
     }
 
-    private Slide[] allFrames;
-    private Thread loaderThread;
-    private Semaphore loaderSemaphore;
+    Slide[] allFrames;
+    Thread loaderThread;
+    Semaphore loaderSemaphore;
 
     public TimeCodedSlideshow(LX lx) {
         super(lx);
@@ -248,7 +248,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         }
     }
 
-    private void loadDirectory() {
+    void loadDirectory() {
         SLStudio.setWarning(TAG, null);
         String path = directory.getString();
         if (path == null) {
