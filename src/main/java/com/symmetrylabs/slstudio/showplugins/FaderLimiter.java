@@ -1,17 +1,17 @@
-package com.symmetrylabs.shows.arlo;
+package com.symmetrylabs.slstudio.showplugins;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
 
-public class ArloFaderLimiter implements LXLoopTask {
+public class FaderLimiter implements LXLoopTask {
     private final LX lx;
     private final float max;
 
-    public ArloFaderLimiter(LX lx) {
+    public FaderLimiter(LX lx) {
         this(lx, 0.65f);
     }
 
-    public ArloFaderLimiter(LX lx, float max) {
+    public FaderLimiter(LX lx, float max) {
         this.lx = lx;
         this.max = max;
     }
@@ -24,12 +24,12 @@ public class ArloFaderLimiter implements LXLoopTask {
     }
 
     public static void attach(LX lx) {
-        ArloFaderLimiter afl = new ArloFaderLimiter(lx);
+        FaderLimiter afl = new FaderLimiter(lx);
         lx.engine.addLoopTask(afl);
     }
 
     public static void attach(LX lx, float max) {
-        ArloFaderLimiter afl = new ArloFaderLimiter(lx, max);
+        FaderLimiter afl = new FaderLimiter(lx, max);
         lx.engine.addLoopTask(afl);
     }
 }

@@ -123,7 +123,7 @@ public class AllPixelOutput extends LXOutput {
         configCmd[3] = (byte) ledType.index;
         configCmd[4] = (byte) (dataSize & 0xFF);
         configCmd[5] = (byte) ((dataSize >> 8) & 0xFF);
-        configCmd[6] = 16; // SPI speed in MHz
+        configCmd[6] = 4; // SPI speed in MHz
         sendMessage(configCmd);
     }
 
@@ -250,6 +250,7 @@ public class AllPixelOutput extends LXOutput {
     private void warn(String w, Object... args) {
         if (w == null) {
             SLStudio.setWarning("AllPixelOutput", null);
+            return;
         }
         String v = String.format(w, args);
         if (currentWarning == null || !v.equals(currentWarning)) {

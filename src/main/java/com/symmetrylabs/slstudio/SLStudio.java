@@ -242,6 +242,11 @@ public class SLStudio extends PApplet {
         }
     }
 
+    public void restart() {
+        saveStrings(SLStudio.RESTART_FILE_NAME, new String[0]);
+        exit();
+    }
+
     private MappingPixlite[] setupPixlites() {
         return new MappingPixlite[0]; // todo
     }
