@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1549101557900,
+  "timestamp": 1549128777270,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -143,7 +143,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -688,6 +688,42 @@
           "name": "CoreMIDI4J - NateBus",
           "channel": true,
           "control": true,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 2",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 3",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 4",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Sync Port",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Lockstep",
+          "channel": true,
+          "control": false,
           "sync": false
         },
         {

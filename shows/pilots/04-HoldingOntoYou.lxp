@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1549099982383,
+  "timestamp": 1549124728671,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -326,7 +326,7 @@
         "patterns": [
           {
             "id": 21657,
-            "class": "com.symmetrylabs.slstudio.pattern.TimeCodedSlideshow.TimeCodedSlideshow",
+            "class": "com.symmetrylabs.slstudio.pattern.TimeCodedSlideshow",
             "modulationColor": -16711808,
             "parameters": {
               "label": "TimeCodedSlideshow",
@@ -1188,6 +1188,18 @@
       "inputs": [
         {
           "name": "CoreMIDI4J - ShowSession",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - NateBus",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Lockstep",
           "channel": true,
           "control": false,
           "sync": false
