@@ -44,24 +44,23 @@ public class ArtNetNetworkScanner extends UdpBroadcastNetworkScanner {
            deliver us only broadcast packets received on that interface. Windows
            is a little more stubborn and only lets you bind to the local IP
            address, so we have to do some digging to figure out which IP address
-           corresponds to the interface with the given broadcast address.
-           Theoretically we could only run this on Windows, but in the interest
-           of making all platforms as similar as possible and because MacOS and
-           Linux also receive broadcasts on sockets bound to a local address, we
-           do this for everyone. */
-        InetAddress addr = null;
-        outer: for (NetworkInterface ni : Collections.list(NetworkInterface.getNetworkInterfaces())) {
-            for (InterfaceAddress iaddr : ni.getInterfaceAddresses()) {
-                if (iaddr.getBroadcast() != null && iaddr.getBroadcast().equals(iface)) {
-                    addr = iaddr.getAddress();
-                    break outer;
+           corresponds to the interface with the given broadcast address. */
+        if (System.getProperty("os.name").contains("Windows")) {
+            InetAddress addr = null;
+            outer: for (NetworkInterface ni : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                for (InterfaceAddress iaddr : ni.getInterfaceAddresses()) {
+                    if (iaddr.getBroadcast() != null && iaddr.getBroadcast().equals(iface)) {
+                        addr = iaddr.getAddress();
+                        break outer;
+                    }
                 }
             }
+            if (addr == null) {
+                throw new IOException("no usable bind address found for broadcast address " + iface);
+            }
+            iface = addr;
         }
-        if (addr == null) {
-            throw new IOException("no usable bind address found for broadcast address " + iface);
-        }
-        chan.bind(new InetSocketAddress(addr, ArtNetDatagramUtil.ARTNET_PORT));
+        chan.bind(new InetSocketAddress(iface, ArtNetDatagramUtil.ARTNET_PORT));
     }
 
     @Override
