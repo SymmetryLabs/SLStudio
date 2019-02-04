@@ -37,7 +37,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
      * that these frames count towards the BUFFER_COUNT limit. */
     private static final int KEEP_TRAILING_FRAMES = 15; // 500ms at 30FPS
 
-    private final StringParameter directory = new StringParameter("dir", null);
+    final StringParameter directory = new StringParameter("dir", null);
     private final BooleanParameter chooseDir = new BooleanParameter("pick", false).setMode(BooleanParameter.Mode.MOMENTARY);
     private final BooleanParameter bake = new BooleanParameter("bake", false).setMode(BooleanParameter.Mode.MOMENTARY);
     private final CompoundParameter shrinkParam = new CompoundParameter("shrink", 1, 1.4, 3);
@@ -58,7 +58,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     private boolean currentFrameLoaded;
 
     protected boolean baked = false;
-    private BufferedImage bakedImage = null;
+    BufferedImage bakedImage = null;
 
     int nFrames = 0;
     private double freewheelTime = 0;
@@ -271,7 +271,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         }
 
         if (!dir.isDirectory()) {
-            SLStudio.setWarning(TAG, "slideshow directory does not exist");
+            SLStudio.setWarning(TAG, "slideshow directory does not exist or no *.png hunk");
             return;
         }
         File[] files = dir.listFiles(fn -> fn.getName().endsWith(".bmp"));
