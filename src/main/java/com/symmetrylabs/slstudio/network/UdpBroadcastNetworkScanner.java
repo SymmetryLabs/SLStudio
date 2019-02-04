@@ -156,7 +156,8 @@ public abstract class UdpBroadcastNetworkScanner {
             try {
                 DatagramChannel chan = chans.get(broadcast);
                 for (int i = 0; i < discoveryPackets.length; i++) {
-                    sendPacket(broadcast, chan, discoveryPackets[i].rewind());
+                    discoveryPackets[i].rewind();
+                    sendPacket(broadcast, chan, discoveryPackets[i]);
                 }
             } catch (IOException e) {
                 if (!errorBroadcasts.contains(broadcast)) {
