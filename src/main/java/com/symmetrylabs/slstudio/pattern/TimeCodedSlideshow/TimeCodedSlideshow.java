@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.slstudio.pattern.TimeCodedSlideshow;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.SLModel;
