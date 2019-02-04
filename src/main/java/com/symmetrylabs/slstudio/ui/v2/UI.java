@@ -6,6 +6,8 @@ public class UI {
     public static int TREE_FLAG_SELECTED;
 
     public static int WINDOW_HORIZ_SCROLL;
+    public static int WINDOW_NO_RESIZE;
+    public static int WINDOW_NO_MOVE;
 
     public static int DEFAULT_WIDTH = 250;
 
@@ -61,7 +63,10 @@ public class UI {
     /* Popup model windows */
     public static native void openPopup(String name);
     public static native void closePopup();
-    public static native boolean beginPopup(String name, boolean modal);
+    public static boolean beginPopup(String name, boolean modal) {
+        return beginPopup(name, modal, 0);
+    }
+    public static native boolean beginPopup(String name, boolean modal, int flags);
     public static native void endPopup();
 
     /* Widgets */
@@ -97,6 +102,11 @@ public class UI {
     public static boolean menuItem(String label) {
         return menuItem(label, null, false, true);
     }
+
+    /* Context menus */
+    public static native boolean beginContextMenu(String id);
+    public static native boolean contextMenuItem(String label);
+    public static native void endContextMenu();
 
     /* Trees */
     public static boolean treeNode(String label) {

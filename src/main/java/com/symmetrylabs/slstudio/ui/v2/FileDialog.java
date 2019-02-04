@@ -6,7 +6,7 @@ import java.awt.EventQueue;
 import java.io.File;
 
 public class FileDialog {
-    public static boolean PREFER_NATIVE_DIALOGS = false;
+    public static boolean PREFER_NATIVE_DIALOGS = true;
 
     public enum Type {
         SAVE, OPEN;

@@ -48,6 +48,10 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
 	env->SetStaticIntField(cls, fid, ImGuiTreeNodeFlags_Selected);
 	fid = env->GetStaticFieldID(cls, "WINDOW_HORIZ_SCROLL", "I");
 	env->SetStaticIntField(cls, fid, ImGuiWindowFlags_HorizontalScrollbar);
+	fid = env->GetStaticFieldID(cls, "WINDOW_NO_RESIZE", "I");
+	env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoResize);
+	fid = env->GetStaticFieldID(cls, "WINDOW_NO_MOVE", "I");
+	env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoMove);
 	fid = env->GetStaticFieldID(cls, "COLOR_WIDGET", "I");
 	env->SetStaticIntField(cls, fid, ImGuiCol_FrameBg);
 	fid = env->GetStaticFieldID(cls, "COLOR_HEADER", "I");
@@ -596,36 +600,35 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_openPopup(JNIEnv 
     ImGui::OpenPopup(label);
 }
 
-/*
- * Class:     com_symmetrylabs_slstudio_ui_v2_UI
- * Method:    beginPopup
- * Signature: (Ljava/lang/String;)V
- */
-JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginPopup(JNIEnv *env, jclass, jstring jlabel, jboolean modal) {
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginPopup(JNIEnv *env, jclass, jstring jlabel, jboolean modal, jint flags) {
     JniString label(env, jlabel);
     bool res;
     if (modal) {
-        res = ImGui::BeginPopupModal(label);
+        res = ImGui::BeginPopupModal(label, nullptr, flags);
     } else {
-        res = ImGui::BeginPopup(label);
+        res = ImGui::BeginPopup(label, flags);
     }
     return res ? 1 : 0;
 }
 
-/*
- * Class:     com_symmetrylabs_slstudio_ui_v2_UI
- * Method:    endPopup
- * Signature: ()V
- */
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endPopup(JNIEnv *env, jclass) {
     ImGui::EndPopup();
 }
 
-/*
- * Class:     com_symmetrylabs_slstudio_ui_v2_UI
- * Method:    endPopup
- * Signature: ()V
- */
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_closePopup(JNIEnv *env, jclass) {
     ImGui::CloseCurrentPopup();
+}
+
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginContextMenu(JNIEnv *env, jclass, jstring jlabel) {
+    JniString label(env, jlabel);
+    return ImGui::BeginPopupContextItem(label) ? 1 : 0;
+}
+
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_contextMenuItem(JNIEnv *env, jclass, jstring jlabel) {
+    JniString label(env, jlabel);
+    return ImGui::Selectable(label) ? 1 : 0;
+}
+
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endContextMenu(JNIEnv *, jclass) {
+    ImGui::EndPopup();
 }

@@ -37,6 +37,10 @@ public class WepUi {
         this.maxHeight = maxHeight;
     }
 
+    public void resetFilter() {
+        filterText = "";
+    }
+
     public void draw() {
         filterText = UI.inputText("filter", filterText);
 

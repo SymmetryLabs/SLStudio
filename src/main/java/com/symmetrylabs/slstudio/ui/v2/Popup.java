@@ -27,14 +27,16 @@ public abstract class Popup implements Window {
     }
 
     protected abstract void drawContents();
+    protected void windowSetup() {}
 
     @Override
     public final void draw() {
+        windowSetup();
         if (!opened) {
             UI.openPopup(title);
             opened = true;
         }
-        if (!UI.beginPopup(title, true)) {
+        if (!UI.beginPopup(title, true, UI.WINDOW_NO_MOVE | UI.WINDOW_NO_RESIZE)) {
             WindowManager.closeWindow(this);
             return;
         }

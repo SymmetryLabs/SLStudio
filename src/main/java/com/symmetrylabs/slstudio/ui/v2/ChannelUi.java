@@ -77,6 +77,16 @@ public class ChannelUi {
             if (active == i) {
                 UI.popColor(3);
             }
+            if (UI.beginContextMenu(patName)) {
+                if (UI.contextMenuItem("Activate")) {
+                    final int patternIndex = i;
+                    lx.engine.addTask(() -> chan.goIndex(patternIndex));
+                }
+                if (UI.contextMenuItem("Pop out")) {
+                    WindowManager.addTransient(new ComponentWindow(lx, id, pat));
+                }
+                UI.endContextMenu();
+            }
 
             if (section.shouldRemove) {
                 lx.engine.addTask(() -> chan.removePattern(pat));
@@ -106,6 +116,7 @@ public class ChannelUi {
         if (UI.button("+")) {
             lx.engine.setFocusedChannel(chan);
             UI.setNextWindowContentSize(300, 600);
+            wepUi.resetFilter();
             UI.openPopup("Warps / effects / patterns");
         }
         if (UI.beginPopup("Warps / effects / patterns", false)) {
