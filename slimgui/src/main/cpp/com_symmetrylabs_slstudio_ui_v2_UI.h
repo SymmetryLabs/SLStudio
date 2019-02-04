@@ -82,26 +82,18 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowCont
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    begin
- * Signature: (Ljava/lang/String;)V
+ * Signature: (Ljava/lang/String;I)V
  */
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_begin
-  (JNIEnv *, jclass, jstring);
-
-/*
- * Class:     com_symmetrylabs_slstudio_ui_v2_UI
- * Method:    beginDocked
- * Signature: (Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginDocked
-  (JNIEnv *, jclass, jstring);
+  (JNIEnv *, jclass, jstring, jint);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    beginClosable
- * Signature: (Ljava/lang/String;)Z
+ * Signature: (Ljava/lang/String;I)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginClosable
-  (JNIEnv *, jclass, jstring);
+  (JNIEnv *, jclass, jstring, jint);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
@@ -318,6 +310,14 @@ JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_floatBox
  */
 JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobFloat
   (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    knobModulatedFloat
+ * Signature: (Ljava/lang/String;FFFF)F
+ */
+JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobModulatedFloat
+  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat, jfloat);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI

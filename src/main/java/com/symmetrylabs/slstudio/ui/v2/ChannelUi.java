@@ -10,8 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChannelUi {
-    private static final int ACTIVE_PATTERN_COLOR = 0x641D9C;
-    private static final int ACTIVE_PATTERN_HOVER_COLOR = 0x8F28DE;
+    private static final int ACTIVE_PATTERN_COLOR = 0x0096C8;
+    private static final int ACTIVE_PATTERN_HOVER_COLOR = 0x2EB5E1;
+    private static final int CUE_ACTIVE_COLOR = 0xF95951;
 
     private final LX lx;
     private final LXChannel chan;
@@ -39,7 +40,13 @@ public class ChannelUi {
 
         ParameterUI.draw(lx, chan.enabled);
         UI.sameLine();
+        if (chan.cueActive.getValueb()) {
+            UI.pushColor(UI.COLOR_WIDGET, CUE_ACTIVE_COLOR);
+        }
         ParameterUI.draw(lx, chan.cueActive);
+        if (chan.cueActive.getValueb()) {
+            UI.popColor();
+        }
 
         List<LXWarp> warps = chan.getWarps();
         if (!warps.isEmpty()) {

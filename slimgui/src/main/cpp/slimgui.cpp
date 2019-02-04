@@ -85,54 +85,54 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
 	}
 
 	ImVec4* colors = ImGui::GetStyle().Colors;
-	colors[ImGuiCol_Text]                   = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+	colors[ImGuiCol_Text]                   = RGB(0xD0D5E0);
 	colors[ImGuiCol_TextDisabled]           = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
-	colors[ImGuiCol_WindowBg]               = ImVec4(0.06f, 0.06f, 0.06f, 0.94f);
+	colors[ImGuiCol_WindowBg]               = RGB(0xDD101521);
 	colors[ImGuiCol_ChildBg]                = ImVec4(1.00f, 1.00f, 1.00f, 0.00f);
-	colors[ImGuiCol_PopupBg]                = ImVec4(0.08f, 0.08f, 0.08f, 0.94f);
-	colors[ImGuiCol_Border]                 = ImVec4(0.43f, 0.43f, 0.50f, 0.50f);
-	colors[ImGuiCol_BorderShadow]           = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-	colors[ImGuiCol_FrameBg]                = ImVec4(0.20f, 0.21f, 0.22f, 0.54f);
-	colors[ImGuiCol_FrameBgHovered]         = ImVec4(0.40f, 0.40f, 0.40f, 0.40f);
-	colors[ImGuiCol_FrameBgActive]          = ImVec4(0.18f, 0.18f, 0.18f, 0.67f);
-	colors[ImGuiCol_TitleBg]                = ImVec4(0.04f, 0.04f, 0.04f, 1.00f);
-	colors[ImGuiCol_TitleBgActive]          = ImVec4(0.29f, 0.29f, 0.29f, 1.00f);
-	colors[ImGuiCol_TitleBgCollapsed]       = ImVec4(0.00f, 0.00f, 0.00f, 0.51f);
-	colors[ImGuiCol_MenuBarBg]              = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
-	colors[ImGuiCol_ScrollbarBg]            = ImVec4(0.02f, 0.02f, 0.02f, 0.53f);
-	colors[ImGuiCol_ScrollbarGrab]          = ImVec4(0.31f, 0.31f, 0.31f, 1.00f);
-	colors[ImGuiCol_ScrollbarGrabHovered]   = ImVec4(0.41f, 0.41f, 0.41f, 1.00f);
-	colors[ImGuiCol_ScrollbarGrabActive]    = ImVec4(0.51f, 0.51f, 0.51f, 1.00f);
-	colors[ImGuiCol_CheckMark]              = ImVec4(0.94f, 0.94f, 0.94f, 1.00f);
-	colors[ImGuiCol_SliderGrab]             = ImVec4(0.51f, 0.51f, 0.51f, 1.00f);
-	colors[ImGuiCol_SliderGrabActive]       = ImVec4(0.86f, 0.86f, 0.86f, 1.00f);
-	colors[ImGuiCol_Button]                 = ImVec4(0.44f, 0.44f, 0.44f, 0.40f);
-	colors[ImGuiCol_ButtonHovered]          = ImVec4(0.46f, 0.47f, 0.48f, 1.00f);
-	colors[ImGuiCol_ButtonActive]           = ImVec4(0.42f, 0.42f, 0.42f, 1.00f);
-	colors[ImGuiCol_Header]                 = ImVec4(0.70f, 0.70f, 0.70f, 0.31f);
-	colors[ImGuiCol_HeaderHovered]          = ImVec4(0.70f, 0.70f, 0.70f, 0.80f);
-	colors[ImGuiCol_HeaderActive]           = ImVec4(0.48f, 0.50f, 0.52f, 1.00f);
-	colors[ImGuiCol_Separator]              = ImVec4(0.43f, 0.43f, 0.50f, 0.50f);
-	colors[ImGuiCol_SeparatorHovered]       = ImVec4(0.72f, 0.72f, 0.72f, 0.78f);
-	colors[ImGuiCol_SeparatorActive]        = ImVec4(0.51f, 0.51f, 0.51f, 1.00f);
-	colors[ImGuiCol_ResizeGrip]             = ImVec4(0.91f, 0.91f, 0.91f, 0.25f);
-	colors[ImGuiCol_ResizeGripHovered]      = ImVec4(0.81f, 0.81f, 0.81f, 0.67f);
-	colors[ImGuiCol_ResizeGripActive]       = ImVec4(0.46f, 0.46f, 0.46f, 0.95f);
-	colors[ImGuiCol_PlotLines]              = ImVec4(0.61f, 0.61f, 0.61f, 1.00f);
-	colors[ImGuiCol_PlotLinesHovered]       = ImVec4(1.00f, 0.43f, 0.35f, 1.00f);
-	colors[ImGuiCol_PlotHistogram]          = ImVec4(0.73f, 0.60f, 0.15f, 1.00f);
-	colors[ImGuiCol_PlotHistogramHovered]   = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
+	colors[ImGuiCol_PopupBg]                = RGB(0x0C1019);
+	colors[ImGuiCol_Border]                 = RGB(0x252A35);
+	colors[ImGuiCol_BorderShadow]           = RGB(0x0B0E15);
+	colors[ImGuiCol_FrameBg]                = RGB(0x252A35);
+	colors[ImGuiCol_FrameBgHovered]         = RGB(0x51545D);
+	colors[ImGuiCol_FrameBgActive]          = RGB(0x3B3F49);
+	colors[ImGuiCol_TitleBg]                = RGB(0x101521);
+	colors[ImGuiCol_TitleBgActive]          = RGB(0x252A35);
+	colors[ImGuiCol_TitleBgCollapsed]       = RGB(0x101521);
+	colors[ImGuiCol_MenuBarBg]              = RGB(0x101521);
+	colors[ImGuiCol_ScrollbarBg]            = RGB(0x252A35);
+	colors[ImGuiCol_ScrollbarGrab]          = RGB(0x7C7F85);
+	colors[ImGuiCol_ScrollbarGrabHovered]   = RGB(0xBDBFC2);
+	colors[ImGuiCol_ScrollbarGrabActive]    = RGB(0xA8A9AE);
+	colors[ImGuiCol_CheckMark]              = RGB(0xD0D5E0);
+	colors[ImGuiCol_SliderGrab]             = RGB(0xD0D5E0);
+	colors[ImGuiCol_SliderGrabActive]       = RGB(0xD0D5E0);
+	colors[ImGuiCol_Button]                 = RGB(0x252A35);
+    colors[ImGuiCol_ButtonHovered]          = RGB(0x666A71);
+    colors[ImGuiCol_ButtonActive]           = RGB(0x92949A);
+	colors[ImGuiCol_Header]                 = RGB(0x252A35);
+	colors[ImGuiCol_HeaderHovered]          = RGB(0x666A71);
+	colors[ImGuiCol_HeaderActive]           = RGB(0x7C7F85);
+	colors[ImGuiCol_Separator]              = RGB(0x252A35);
+	colors[ImGuiCol_SeparatorHovered]       = RGB(0x51545D);
+	colors[ImGuiCol_SeparatorActive]        = RGB(0x8BD6EE);
+	colors[ImGuiCol_ResizeGrip]             = RGB(0x252A35);
+	colors[ImGuiCol_ResizeGripHovered]      = RGB(0x51545D);
+	colors[ImGuiCol_ResizeGripActive]       = RGB(0x88D6EE);
+	colors[ImGuiCol_PlotLines]              = RGB(0x00A5DB);
+	colors[ImGuiCol_PlotLinesHovered]       = RGB(0x45BDE4);
+	colors[ImGuiCol_PlotHistogram]          = RGB(0x00A5DB);
+	colors[ImGuiCol_PlotHistogramHovered]   = RGB(0x45BDE4);
 	colors[ImGuiCol_TextSelectedBg]         = ImVec4(0.87f, 0.87f, 0.87f, 0.35f);
-	colors[ImGuiCol_ModalWindowDarkening]   = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
+	colors[ImGuiCol_ModalWindowDarkening]   = RGB(0xA19DA3);
 	colors[ImGuiCol_DragDropTarget]         = ImVec4(1.00f, 1.00f, 0.00f, 0.90f);
 	colors[ImGuiCol_NavHighlight]           = ImVec4(0.60f, 0.60f, 0.60f, 1.00f);
 	colors[ImGuiCol_NavWindowingHighlight]  = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
-	colors[ImGuiCol_Tab]                    = ImVec4(0.44f, 0.44f, 0.44f, 0.40f);
-	colors[ImGuiCol_TabHovered]             = ImVec4(0.46f, 0.47f, 0.48f, 1.00f);
-	colors[ImGuiCol_TabActive]              = ImVec4(0.42f, 0.42f, 0.42f, 1.00f);
-	colors[ImGuiCol_TabUnfocused]           = ImVec4(0.24f, 0.24f, 0.24f, 0.40f);
-	colors[ImGuiCol_TabUnfocusedActive]     = ImVec4(0.22f, 0.22f, 0.22f, 1.00f);
-	colors[ImGuiCol_DockingPreview]         = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+	colors[ImGuiCol_Tab]                    = RGB(0x252A35);
+	colors[ImGuiCol_TabHovered]             = RGB(0x3B3F49);
+	colors[ImGuiCol_TabActive]              = RGB(0x51545D);
+	colors[ImGuiCol_TabUnfocused]           = RGB(0x252A35);
+	colors[ImGuiCol_TabUnfocusedActive]     = RGB(0x3B3F49);
+	colors[ImGuiCol_DockingPreview]         = RGB(0x00A5DB);
 
 	ImGuiIO &io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
@@ -224,32 +224,16 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowContentSize(JNIEnv *, jclas
 }
 
 JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_begin(JNIEnv *env, jclass, jstring jstr) {
+Java_com_symmetrylabs_slstudio_ui_v2_UI_begin(JNIEnv *env, jclass, jstring jstr, jint flags) {
     JniString str(env, jstr);
-	ImGui::Begin(str);
-}
-
-JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_beginDocked(JNIEnv *env, jclass, jstring jstr) {
-    JniString str(env, jstr);
-	ImGuiIO &io = ImGui::GetIO();
-	ImGui::SetNextWindowPos(ImVec2(0, io.DisplaySize.y), ImGuiCond_Always, ImVec2(1, 1));
-	ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x, 300));
-	int flags = ImGuiWindowFlags_NoMove |
-		ImGuiWindowFlags_NoTitleBar |
-		ImGuiWindowFlags_NoResize |
-		ImGuiWindowFlags_AlwaysAutoResize |
-		ImGuiWindowFlags_NoSavedSettings |
-		ImGuiWindowFlags_NoFocusOnAppearing |
-		ImGuiWindowFlags_NoNav;
-	ImGui::Begin(str, NULL, flags);
+	ImGui::Begin(str, nullptr, flags);
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_beginClosable(JNIEnv *env, jclass, jstring jstr) {
+Java_com_symmetrylabs_slstudio_ui_v2_UI_beginClosable(JNIEnv *env, jclass, jstring jstr, jint flags) {
     JniString str(env, jstr);
 	bool isOpen = true;
-	ImGui::Begin(str, &isOpen);
+	ImGui::Begin(str, &isOpen, flags);
 	return isOpen ? 1 : 0;
 }
 
@@ -438,7 +422,19 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_floatBox(JNIEnv *env, jclass, jstring jl
 JNIEXPORT jfloat JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_knobFloat(JNIEnv *env, jclass cls, jstring jlabel, jfloat vf, jfloat v0, jfloat v1) {
     JniString label(env, jlabel);
-    Knob(label, &vf, v0, v1);
+    Knob(label, &vf, v0, v1, false, 0);
+	if (ImGui::BeginPopupContextItem()) {
+		ImGui::InputFloat(label, &vf, 0, 0, "%.2f", 0);
+        vf = vf < v0 ? v0 : vf > v1 ? v1 : vf;
+		ImGui::EndPopup();
+	}
+    return vf;
+}
+
+JNIEXPORT jfloat JNICALL
+Java_com_symmetrylabs_slstudio_ui_v2_UI_knobModulatedFloat(JNIEnv *env, jclass cls, jstring jlabel, jfloat vf, jfloat v0, jfloat v1, jfloat modulated) {
+    JniString label(env, jlabel);
+    Knob(label, &vf, v0, v1, true, modulated);
 	if (ImGui::BeginPopupContextItem()) {
 		ImGui::InputFloat(label, &vf, 0, 0, "%.2f", 0);
         vf = vf < v0 ? v0 : vf > v1 ? v1 : vf;

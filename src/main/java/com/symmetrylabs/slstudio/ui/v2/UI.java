@@ -39,9 +39,14 @@ public class UI {
     public static native void setNextWindowDefaults(int x, int y, int w, int h);
     public static native void setNextWindowDefaultToCursor(int w, int h);
     public static native void setNextWindowContentSize(int w, int h);
-    public static native void begin(String label);
-    public static native void beginDocked(String label);
-    public static native boolean beginClosable(String label);
+    public static void begin(String label) {
+        begin(label, 0);
+    }
+    public static native void begin(String label, int flags);
+    public static boolean beginClosable(String label) {
+        return beginClosable(label, 0);
+    }
+    public static native boolean beginClosable(String label, int flags);
     public static native void end();
     public static native void sameLine();
 
@@ -88,6 +93,7 @@ public class UI {
     public static native int combo(String label, int selected, String[] options);
     public static native float floatBox(String label, float v);
     public static native float knobFloat(String label, float v, float v0, float v1);
+    public static native float knobModulatedFloat(String label, float base, float v0, float v1, float modulated);
     public static native CollapseResult collapsibleSection(String label, boolean allowClose);
     public static native void histogram(String label, float[] values, float min, float max, int size);
     public static native void plot(String label, float[] values, float min, float max, int size);

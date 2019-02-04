@@ -29,7 +29,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
     private OutputControl outputControl;
 
     /* visible so that InternalsWindow can mutate it. */
-    int clearRGB;
+    int clearRGB = 0x000000;
 
     CameraInputController camController;
 
@@ -46,9 +46,6 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
             sn = DEFAULT_SHOW;
         }
         UI.init(((Lwjgl3Graphics) Gdx.graphics).getWindow().getWindowHandle());
-
-        /* clearR/clearG/clearB will be set on first frame */
-        clearRGB = 0x222222;
 
         /* TODO: we should remove any need to know what the "sketch path" is, because
              it means we can only run SLStudio from source, but for now we assume that

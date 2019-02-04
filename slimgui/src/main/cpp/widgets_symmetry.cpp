@@ -6,6 +6,8 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "imgui_internal.h"
 
+#include "widgets_symmetry.h"
+
 #include <string>
 
 static const float knob_radius = 18;
@@ -27,7 +29,27 @@ int TinyNumberFormatString(char *buf, int max_len, float v) {
 	return ImFormatString(buf, max_len, "%.1fM", v);
 }
 
-bool Knob(const char *label, float *v, float min, float max) {
+ImVec4 RGB(int v) {
+    int a = (v >> 24) & 0xFF;
+    if (a == 0) {
+        a = 255;
+    }
+    return RGBA((double) ((v >> 16) & 0xFF), (double) ((v >> 8) & 0xFF), (double) (v & 0xFF), (double) a);
+}
+
+ImVec4 RGB(double r, double g, double b) {
+    return RGBA(r, g, b, 1.0);
+}
+
+ImVec4 RGBA(double r, double g, double b, double a) {
+    return ImVec4((float) r / 255.f, (float) g / 255.f, (float) b / 255.f, (float) a / 255.f);
+}
+
+ImVec4 KnobValueColor        = RGB(0x2EB5E1);
+ImVec4 KnobValueHoveredColor = RGB(0x73CDEB);
+ImVec4 KnobValueActiveColor  = RGB(0x00A5DB);
+
+bool Knob(const char *label, float *v, float min, float max, bool is_modulated, float modulated) {
 	auto window = GetCurrentWindow();
 	if (window->SkipItems)
 		return false;
@@ -51,6 +73,7 @@ bool Knob(const char *label, float *v, float min, float max) {
 	const bool hovered = ItemHoverable(bb, id);
 
 	float t = (*v - min) / (max - min);
+	float tmod = (modulated - min) / (max - min);
 	bool changed = false;
 	bool pressed = false;
 
@@ -85,11 +108,17 @@ bool Knob(const char *label, float *v, float min, float max) {
 	float a_lo = 135.f / 180.f * M_PI;
 	float a_hi = (135.f + 270.f) / 180.f * M_PI;
 	float a = a_lo + t * (a_hi - a_lo);
+    float a_mod = is_modulated ? a_lo + tmod * (a_hi - a_lo) : a;
 
 	ImVec2 center{pos.x + 0.5f * size.x + knob_pad_h, pos.y + 0.5f * size.y + knob_pad_v};
 
 	window->DrawList->PathClear();
-	window->DrawList->PathArcTo(center, knob_radius, a_lo, a_hi, 40);
+	window->DrawList->PathArcTo(center, knob_radius, a_lo, a_mod, 40);
+	window->DrawList->PathStroke(
+		GetColorU32(g.ActiveId == id ? KnobValueActiveColor : g.HoveredId == id ? KnobValueHoveredColor : KnobValueColor), false, knob_thick);
+
+	window->DrawList->PathClear();
+	window->DrawList->PathArcTo(center, knob_radius, a_mod, a_hi, 40);
 	window->DrawList->PathStroke(
 		GetColorU32(g.ActiveId == id ? ImGuiCol_FrameBgActive : g.HoveredId == id ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg),
 		false, knob_thick);

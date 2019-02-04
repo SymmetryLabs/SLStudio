@@ -7,6 +7,7 @@ import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.LXComponent;
+import heronarts.lx.parameter.CompoundParameter;
 
 public class ParameterUI {
     enum WidgetType {
@@ -32,12 +33,22 @@ public class ParameterUI {
         if (wt == WidgetType.SLIDER) {
             res = UI.sliderFloat(getID(p), start, (float) p.range.v0, (float) p.range.v1);
         } else if (wt == WidgetType.KNOB) {
-            res = UI.knobFloat(getID(p), start, (float) p.range.v0, (float) p.range.v1);
+            if (p instanceof CompoundParameter) {
+                res = compoundKnob(lx, (CompoundParameter) p);
+            } else {
+                res = UI.knobFloat(getID(p), start, (float) p.range.v0, (float) p.range.v1);
+            }
         }
         if (start != res) {
             final float fres = res;
             lx.engine.addTask(() -> p.setValue(fres));
         }
+    }
+
+    private static float compoundKnob(LX lx, CompoundParameter cp) {
+        float base = (float) cp.getBaseValue();
+        float mod = (float) cp.getValue();
+        return UI.knobModulatedFloat(getID(cp), base, (float) cp.range.v0, (float) cp.range.v1, mod);
     }
 
     public static void draw(LX lx, DiscreteParameter p) {
