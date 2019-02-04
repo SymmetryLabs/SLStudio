@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1548851683780,
+  "timestamp": 1549127918233,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,7 +14,7 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 0.940012514591217,
+      "speed": 0.9401503801345825,
       "focusedChannel": 3,
       "cueA": false,
       "cueB": false,
@@ -30,10 +30,10 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 71.80000106990337,
+        "color/hue": 52.63157653808594,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
-        "color": -3277056,
+        "color": -8192,
         "period": 89000.0,
         "range": 0.0,
         "spread": 1.341104507446289E-6,
@@ -107,7 +107,7 @@
               "Decay": 0.3,
               "Hue": 0.5,
               "HueVar": 0.25,
-              "Sat": 0.5
+              "Sat": 1.0
             },
             "modulation": {
               "modulators": [],
@@ -341,7 +341,7 @@
               "label": "Translate",
               "enabled": true,
               "cx": -247.32004053890705,
-              "cy": -47.57408916950226,
+              "cy": -59.07844680547714,
               "cz": 0.0
             }
           },
@@ -528,7 +528,7 @@
               "label": "Translate",
               "enabled": true,
               "cx": 247.3199484050274,
-              "cy": 88.161501288414,
+              "cy": 87.37501108646393,
               "cz": 0.0
             }
           },
@@ -799,7 +799,7 @@
             "parameters": {
               "label": "Blur",
               "enabled": true,
-              "amount": 0.03005121275782585
+              "amount": 0.3610721230506897
             },
             "modulation": {
               "modulators": [],
@@ -974,19 +974,6 @@
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 36987,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -5308161,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 44,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -1166,6 +1153,48 @@
           "name": "CoreMIDI4J - ShowSession",
           "channel": false,
           "control": true,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - NateBus",
+          "channel": true,
+          "control": true,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 2",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 3",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 4",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Sync Port",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Lockstep",
+          "channel": true,
+          "control": false,
           "sync": false
         },
         {
