@@ -5,6 +5,7 @@ import heronarts.lx.color.ColorParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXCompoundModulation;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.LXComponent;
 import heronarts.lx.parameter.CompoundParameter;
@@ -48,7 +49,33 @@ public class ParameterUI {
     private static float compoundKnob(LX lx, CompoundParameter cp) {
         float base = (float) cp.getBaseValue();
         float mod = (float) cp.getValue();
-        return UI.knobModulatedFloat(getID(cp), base, (float) cp.range.v0, (float) cp.range.v1, mod);
+        int N = cp.modulations.size();
+        float[] mins = new float[N];
+        float[] maxs = new float[N];
+        int[] colors = new int[N];
+        for (int i = 0; i < N; i++) {
+            LXCompoundModulation modulation = cp.modulations.get(i);
+
+            float modStart, modEnd;
+            switch (modulation.getPolarity()) {
+            case BIPOLAR:
+                modStart = -modulation.range.getValuef();
+                modEnd = modulation.range.getValuef();
+                break;
+            default:
+            case UNIPOLAR:
+                modStart = 0;
+                modEnd = modStart + modulation.range.getValuef();
+                break;
+            }
+            modStart = (float) (cp.range.v0 + modStart * (cp.range.v1 - cp.range.v0) + base);
+            modEnd = (float) (cp.range.v0 + modEnd * (cp.range.v1 - cp.range.v0) + base);
+            mins[i] = Float.min(modStart, modEnd);
+            maxs[i] = Float.max(modStart, modEnd);
+            colors[i] = modulation.color.getColor();
+        }
+        return UI.knobModulatedFloat(
+            getID(cp), base, (float) cp.range.v0, (float) cp.range.v1, mod, N, mins, maxs, colors);
     }
 
     public static void draw(LX lx, DiscreteParameter p) {

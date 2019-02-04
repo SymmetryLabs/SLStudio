@@ -7,34 +7,10 @@
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_glfw.h"
+#include "jniutils.hpp"
 #include "widgets_symmetry.h"
 
 #define MAX_INPUT_LENGTH 511
-
-/* A struct that converts jstrings to c-style strings and uses RAII to make sure
-   that all jstrings that are converted have their references released when the
-   JniString object goes out of scope. */
-struct JniString {
-    JNIEnv *env;
-    jstring jstr;
-    const char *str;
-
-    JniString(JNIEnv *env, jstring jstr) : env(env), jstr(jstr) {
-        str = env->GetStringUTFChars(jstr, 0);
-    }
-
-    ~JniString() {
-        env->ReleaseStringUTFChars(jstr, str);
-    }
-
-    operator const char*() {
-        return str;
-    }
-
-    operator const std::string() {
-        return std::string(str);
-    }
-};
 
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong windowHandle) {
@@ -188,16 +164,7 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_shutdown(JNIEnv *, jclass) {
 
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_pushColor(
     JNIEnv *, jclass, jint key, jint jcolor) {
-    /* imgui uses ABGR, SLStudio uses ARGB. */
-    ImU32 color =
-        ((0xFF00FF00 & jcolor)) |
-        ((0x00FF0000 & jcolor) >> 16) |
-        ((0x000000FF & jcolor) << 16);
-    /* if no alpha was specified, they probably meant full-opaque. */
-    if ((color & 0xFF000000) == 0) {
-        color |= 0xFF000000;
-    }
-    ImGui::PushStyleColor(key, color);
+    ImGui::PushStyleColor(key, RGB(jcolor));
 }
 
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_popColor(JNIEnv *, jclass, jint count) {
@@ -422,7 +389,7 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_floatBox(JNIEnv *env, jclass, jstring jl
 JNIEXPORT jfloat JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_knobFloat(JNIEnv *env, jclass cls, jstring jlabel, jfloat vf, jfloat v0, jfloat v1) {
     JniString label(env, jlabel);
-    Knob(label, &vf, v0, v1, false, 0);
+    Knob(label, &vf, v0, v1, 0, vf, nullptr, nullptr, nullptr);
 	if (ImGui::BeginPopupContextItem()) {
 		ImGui::InputFloat(label, &vf, 0, 0, "%.2f", 0);
         vf = vf < v0 ? v0 : vf > v1 ? v1 : vf;
@@ -432,9 +399,14 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_knobFloat(JNIEnv *env, jclass cls, jstri
 }
 
 JNIEXPORT jfloat JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_knobModulatedFloat(JNIEnv *env, jclass cls, jstring jlabel, jfloat vf, jfloat v0, jfloat v1, jfloat modulated) {
+Java_com_symmetrylabs_slstudio_ui_v2_UI_knobModulatedFloat(
+    JNIEnv *env, jclass cls, jstring jlabel, jfloat vf, jfloat v0, jfloat v1,
+    jfloat modulated, jint modCount, jfloatArray jmins, jfloatArray jmaxs, jintArray jcolors) {
     JniString label(env, jlabel);
-    Knob(label, &vf, v0, v1, true, modulated);
+    JniFloatArray mins(env, jmins);
+    JniFloatArray maxs(env, jmaxs);
+    JniIntArray colors(env, jcolors);
+    Knob(label, &vf, v0, v1, modCount, modulated, mins, maxs, colors);
 	if (ImGui::BeginPopupContextItem()) {
 		ImGui::InputFloat(label, &vf, 0, 0, "%.2f", 0);
         vf = vf < v0 ? v0 : vf > v1 ? v1 : vf;
@@ -461,20 +433,16 @@ JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_collapsibleSec
 
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_histogram(
     JNIEnv *env, jclass, jstring jlabel, jfloatArray jvals, jfloat min, jfloat max, jint size) {
+    JniFloatArray hist(env, jvals);
     JniString label(env, jlabel);
-    jsize histSize = env->GetArrayLength(jvals);
-    float *hist = env->GetFloatArrayElements(jvals, NULL);
-    ImGui::PlotHistogram(label, hist, histSize, 0, NULL, min, max, ImVec2(0, size));
-    env->ReleaseFloatArrayElements(jvals, hist, JNI_ABORT);
+    ImGui::PlotHistogram(label, hist, hist.size(), 0, NULL, min, max, ImVec2(0, size));
 }
 
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_plot(
     JNIEnv *env, jclass, jstring jlabel, jfloatArray jvals, jfloat min, jfloat max, jint size) {
+    JniFloatArray hist(env, jvals);
     JniString label(env, jlabel);
-    jsize histSize = env->GetArrayLength(jvals);
-    float *hist = env->GetFloatArrayElements(jvals, NULL);
-    ImGui::PlotLines(label, hist, histSize, 0, NULL, min, max, ImVec2(0, size));
-    env->ReleaseFloatArrayElements(jvals, hist, JNI_ABORT);
+    ImGui::PlotLines(label, hist, hist.size(), 0, NULL, min, max, ImVec2(0, size));
 }
 
 JNIEXPORT jboolean JNICALL

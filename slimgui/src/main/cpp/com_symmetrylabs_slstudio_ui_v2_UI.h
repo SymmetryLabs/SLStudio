@@ -314,10 +314,10 @@ JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobFloat
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    knobModulatedFloat
- * Signature: (Ljava/lang/String;FFFF)F
+ * Signature: (Ljava/lang/String;FFFFI[F[F[I)F
  */
 JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobModulatedFloat
-  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat, jfloat);
+  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat, jfloat, jint, jfloatArray, jfloatArray, jintArray);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI

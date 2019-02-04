@@ -93,7 +93,9 @@ public class UI {
     public static native int combo(String label, int selected, String[] options);
     public static native float floatBox(String label, float v);
     public static native float knobFloat(String label, float v, float v0, float v1);
-    public static native float knobModulatedFloat(String label, float base, float v0, float v1, float modulated);
+    public static native float knobModulatedFloat(
+        String label, float base, float v0, float v1, float modulatedValue,
+        int modulatorCount, float[] modulatorMins, float[] modulatorMaxs, int[] modulatorColors);
     public static native CollapseResult collapsibleSection(String label, boolean allowClose);
     public static native void histogram(String label, float[] values, float min, float max, int size);
     public static native void plot(String label, float[] values, float min, float max, int size);
