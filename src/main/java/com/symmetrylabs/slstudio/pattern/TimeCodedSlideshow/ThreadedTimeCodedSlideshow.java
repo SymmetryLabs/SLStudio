@@ -64,7 +64,7 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
     protected boolean baked = false;
 
     private int pending_circular_buffer_index = 0;
-    List<BufferedImage> bakedImage = new ArrayList<>(NUM_BUFFER);
+    List<BufferedImage> bakedImage = new ArrayList<>();
 
     int nFrames = 0;
     private double freewheelTime = 0;
@@ -141,7 +141,6 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
             System.out.println("attached time code listener to " + input.getName());
         }
 
-
         /* start the semaphore with no permits; we fill it up once we've loaded
          * the directory into the allFrames array. */
         loaderSemaphore = new Semaphore(0, false);
@@ -152,12 +151,15 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
     public void onActive() {
         super.onActive();
         stopping = false;
-//        loaderSemaphore.release(NUM_BUFFER);
+
+        if(directory != null){
+            loaderSemaphore.release(NUM_BUFFER);
+        }
 
         loaderThread = new Thread(() -> {
             while (!stopping) {
                 try {
-                    SLStudio.setWarning("TCSS loaderThread - ", "waiting");
+                    SLStudio.setWarning("TCSS loaderThread - ", "waiting... last loaded:" + get_current_hunk_index());
                     loaderSemaphore.acquire();
                 } catch (InterruptedException e) {
                     return;
@@ -171,7 +173,7 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
 //                        break;
 //                    }
 //                }
-                stopping = !loadNextHunk(); // load next hunk returns true on success.  Do not stop if success.
+                loadNextHunk(); // load next hunk returns true on success.  Do not stop if success.
             }
         });
         try {
@@ -256,15 +258,24 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
     }
 
     boolean loadNextHunk() {
-        SLStudio.setWarning("TCSS loaderThread - ", "loading hunk " + pending_circular_buffer_index);
         String directoryPath = directory.getString();
-        String hunkPath = directoryPath + "/" + (tc_modulo() + pending_circular_buffer_index) + ".png";
+        String hunkPath = directoryPath + "/" + (get_current_hunk_index() + pending_circular_buffer_index) + ".png";
 
         File hunkFile = new File(hunkPath);
+        SLStudio.setWarning("TCSS loaderThread - ", "loading hunk " + get_current_hunk_index() + "" + pending_circular_buffer_index);
         if (hunkFile.isFile() && hunkFile.getName().endsWith(".png")) {
             try{
-                bakedImage.set(pending_circular_buffer_index++, ImageIO.read(hunkFile));
+                // if there's nothing in there initialize it
+                if (bakedImage.size() == 0){
+                    for (int i = 0; i < NUM_BUFFER; i++){
+                        // using the same image it's a hack..
+                        bakedImage.add(ImageIO.read(hunkFile));
+                    }
+                }
+                BufferedImage thisImage = ImageIO.read(hunkFile);
+                bakedImage.set(pending_circular_buffer_index++, thisImage);
                 pending_circular_buffer_index %= NUM_BUFFER;
+                nFrames += thisImage.getHeight();
             } catch (IOException e) {
                 String error_msg = "couldn't load next cache in sequence";
                 SLStudio.setWarning(TAG, error_msg);
@@ -330,35 +341,30 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
             frame = -1;
         }
 
-        if (baked) {
-            currentFrame = frame;
-        }
-        if (allFrames == null) {
-            return;
-        }
+        currentFrame = frame;
 
-        /* if we're going backward in time out of our buffer, we clear the
-         * buffer and start again. */
-        if (frame == -1 || frame < currentFrame - KEEP_TRAILING_FRAMES) {
-            System.out.println(String.format("backwards: %d to %d", currentFrame, frame));
-            loaderSemaphore.drainPermits();
-            currentFrame = frame;
-            for (int i = 0; i < nFrames; i++) {
-                allFrames[i].unload();
-            }
-            loaderSemaphore.release(BUFFER_COUNT);
-        } else {
-            /* otherwise, we release the frames that we've buffered before our
-             * new current (minus our padding) and then queue up that many
-             * frames to be loaded. */
-            currentFrame = frame;
-            for (int i = 0; i < currentFrame - KEEP_TRAILING_FRAMES; i++) {
-                if (allFrames[i].loaded()) {
-                    allFrames[i].unload();
-                    loaderSemaphore.release();
-                }
-            }
-        }
+//        /* if we're going backward in time out of our buffer, we clear the
+//         * buffer and start again. */
+//        if (frame == -1 || frame < currentFrame - KEEP_TRAILING_FRAMES) {
+//            System.out.println(String.format("backwards: %d to %d", currentFrame, frame));
+//            loaderSemaphore.drainPermits();
+//            currentFrame = frame;
+//            for (int i = 0; i < nFrames; i++) {
+//                allFrames[i].unload();
+//            }
+//            loaderSemaphore.release(BUFFER_COUNT);
+//        } else {
+//            /* otherwise, we release the frames that we've buffered before our
+//             * new current (minus our padding) and then queue up that many
+//             * frames to be loaded. */
+//            currentFrame = frame;
+//            for (int i = 0; i < currentFrame - KEEP_TRAILING_FRAMES; i++) {
+//                if (allFrames[i].loaded()) {
+//                    allFrames[i].unload();
+//                    loaderSemaphore.release();
+//                }
+//            }
+//        }
     }
 
     private void copyFrameToColors(BufferedImage img, int[] ccs) {
@@ -402,7 +408,7 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
 
         int[] ccs = (int[]) getArray(PolyBuffer.Space.SRGB8);
         if (currentFrame >= nFrames || currentFrame < 0) {
-            Arrays.fill(ccs, 0);
+            Arrays.fill(ccs, LXColor.RED);
             // always baked.
         } else {
             if (bakedImage != null) {
@@ -430,6 +436,7 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
         return currentFrame%hunkLengthInFrames;
     }
     private int get_current_hunk_index() {
+        System.out.println(currentFrame/hunkLengthInFrames);
         return currentFrame/hunkLengthInFrames;
     }
 
@@ -439,6 +446,7 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
         if (hunk_buffer_index != last_circular_buffer_index){
             loaderSemaphore.release(); // we've depleted this buffer, tell the loader to get the next one.
         }
+        last_circular_buffer_index = hunk_buffer_index;
         return hunk_buffer_index;
     }
 }
