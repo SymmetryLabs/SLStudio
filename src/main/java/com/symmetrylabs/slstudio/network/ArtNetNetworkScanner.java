@@ -9,11 +9,14 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.Selector;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +40,26 @@ public class ArtNetNetworkScanner extends UdpBroadcastNetworkScanner {
 
     @Override
     protected void prepareChannel(DatagramChannel chan, InetAddress iface) throws IOException {
+        /* MacOS and Linux let us bind directly to broadcast addresses, and just
+           deliver us only broadcast packets received on that interface. Windows
+           is a little more stubborn and only lets you bind to the local IP
+           address, so we have to do some digging to figure out which IP address
+           corresponds to the interface with the given broadcast address. */
+        if (System.getProperty("os.name").contains("Windows")) {
+            InetAddress addr = null;
+            outer: for (NetworkInterface ni : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                for (InterfaceAddress iaddr : ni.getInterfaceAddresses()) {
+                    if (iaddr.getBroadcast() != null && iaddr.getBroadcast().equals(iface)) {
+                        addr = iaddr.getAddress();
+                        break outer;
+                    }
+                }
+            }
+            if (addr == null) {
+                throw new IOException("no usable bind address found for broadcast address " + iface);
+            }
+            iface = addr;
+        }
         chan.bind(new InetSocketAddress(iface, ArtNetDatagramUtil.ARTNET_PORT));
     }
 
