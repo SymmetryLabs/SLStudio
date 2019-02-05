@@ -145,6 +145,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
         UI.width = Gdx.graphics.getWidth();
         UI.height = Gdx.graphics.getHeight();
+        UI.density = Gdx.graphics.getDensity();
         UI.newFrame();
         WindowManager.get().draw();
 

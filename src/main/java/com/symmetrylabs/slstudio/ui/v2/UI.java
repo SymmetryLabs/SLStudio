@@ -34,6 +34,7 @@ public class UI {
     /* set on every frame by SLStudioGDX for reading by UI clients that want to anchor themselves somewhere */
     public static float width;
     public static float height;
+    public static float density = 0; // this one is also used from native code in init()
 
     public static native boolean init(long windowPointer);
     public static native void newFrame();
