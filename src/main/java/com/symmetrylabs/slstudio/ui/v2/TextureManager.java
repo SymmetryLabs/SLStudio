@@ -18,12 +18,8 @@ import com.symmetrylabs.slstudio.ApplicationState;
 public class TextureManager {
     private static TextureManager INSTANCE = new TextureManager();
 
-    public static void load(String key, BufferedImage img) {
-        INSTANCE.loadImpl(key, img);
-    }
-
-    public static void load(String key, String resourcePath) {
-        INSTANCE.loadImpl(key, resourcePath);
+    public static void load(String resourcePath) {
+        INSTANCE.loadImpl(resourcePath);
     }
 
     public static void draw(String key) {
@@ -68,17 +64,17 @@ public class TextureManager {
         textures = new HashMap<>();
     }
 
-    protected void loadImpl(String key, String resourcePath) {
+    protected void loadImpl(String resourcePath) {
         /* early-exit so that we don't read the image unnecessarily; this should
            be cheap enough to call on every frame. */
-        if (textures.containsKey(key)) {
+        if (textures.containsKey(resourcePath)) {
             return;
         }
         try {
-            load(key, ImageIO.read(getClass().getClassLoader().getResource(resourcePath)));
+            loadImpl(resourcePath, ImageIO.read(getClass().getClassLoader().getResource(resourcePath)));
         } catch (IOException e) {
             e.printStackTrace();
-            ApplicationState.setWarning("TextureManager/" + key, "texture failed to load from disk");
+            ApplicationState.setWarning("TextureManager/" + resourcePath, "texture failed to load from disk");
         }
     }
 

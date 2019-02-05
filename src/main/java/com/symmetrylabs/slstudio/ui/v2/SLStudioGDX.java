@@ -37,7 +37,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
     @Override
     public void create() {
-        TextureManager.load("SLStudioGDX/logo-small", "application.png");
+        TextureManager.load("logo-overlay.png");
 
         String sn;
         try {
@@ -142,8 +142,8 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         camController.update();
         renderer.draw();
 
-        UI.width = w;
-        UI.height = h;
+        UI.width = Gdx.graphics.getWidth();
+        UI.height = Gdx.graphics.getHeight();
         UI.newFrame();
         WindowManager.get().draw();
 
@@ -151,7 +151,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         UI.begin("Logo overlay",
                  UI.WINDOW_NO_RESIZE | UI.WINDOW_NO_MOVE | UI.WINDOW_NO_TITLE_BAR |
                  UI.WINDOW_NO_DOCKING | UI.WINDOW_NO_BACKGROUND | UI.WINDOW_ALWAYS_AUTO_RESIZE);
-        TextureManager.draw("SLStudioGDX/logo-small");
+        TextureManager.draw("logo-overlay.png");
         UI.end();
 
         UI.render();
