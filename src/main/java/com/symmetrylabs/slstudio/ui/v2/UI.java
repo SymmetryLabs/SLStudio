@@ -1,5 +1,8 @@
 package com.symmetrylabs.slstudio.ui.v2;
 
+import java.nio.ByteBuffer;
+
+
 public class UI {
     public static int TREE_FLAG_LEAF;
     public static int TREE_FLAG_DEFAULT_OPEN;
@@ -38,6 +41,7 @@ public class UI {
     public static native boolean shutdown();
 
     /* Styling */
+    public static native void addFont(String name, ByteBuffer ttfData, float fontSize);
     public static native void pushColor(int key, int color);
     public static void popColor() {
         popColor(1);

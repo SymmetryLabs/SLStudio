@@ -41,6 +41,14 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_shutdown
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    addFont
+ * Signature: (Ljava/lang/String;Ljava/nio/ByteBuffer;F)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_addFont
+  (JNIEnv *, jclass, jstring, jobject, jfloat);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    pushColor
  * Signature: (II)V
  */

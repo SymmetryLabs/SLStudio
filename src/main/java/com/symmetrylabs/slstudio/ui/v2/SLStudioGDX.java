@@ -48,6 +48,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
             sn = DEFAULT_SHOW;
         }
         UI.init(((Lwjgl3Graphics) Gdx.graphics).getWindow().getWindowHandle());
+        FontLoader.loadAll();
 
         /* TODO: we should remove any need to know what the "sketch path" is, because
              it means we can only run SLStudio from source, but for now we assume that

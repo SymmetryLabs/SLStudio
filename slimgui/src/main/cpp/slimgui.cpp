@@ -131,16 +131,19 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
 	io.ConfigWindowsResizeFromEdges = true;
 	io.ConfigDockingTabBarOnSingleWindows = true;
 
-    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/B612-Regular.ttf", 14);
-    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/B612-Bold.ttf", 14);
-    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/bell-gothic.ttf", 16);
-    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/bell-gothic-bold.ttf", 16);
-    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/BentonSans-Medium.ttf", 14);
-    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/BentonSans-Bold.ttf", 14);
-    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/antenna-regular.ttf", 16);
-    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/scout-regular-webfont.ttf", 16);
-
 	return 1;
+}
+
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_addFont(JNIEnv *env, jclass, jstring jname, jobject jbuf, jfloat fsize) {
+    JniString name(env, jname);
+    ImFontConfig fc;
+    strncpy(fc.Name, name, sizeof(fc.Name) - 1);
+    /* Need to make a copy, because ImGui wants to own the data (it frees it at the end of the run) */
+    void *jdata = env->GetDirectBufferAddress(jbuf);
+    jlong size = env->GetDirectBufferCapacity(jbuf);
+    void *data = malloc(size);
+    memcpy(data, jdata, size);
+    ImGui::GetIO().Fonts->AddFontFromMemoryTTF(data, size, fsize, &fc);
 }
 
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_newFrame(JNIEnv *, jclass) {
