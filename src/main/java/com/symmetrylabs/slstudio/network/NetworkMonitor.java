@@ -1,18 +1,22 @@
 package com.symmetrylabs.slstudio.network;
 
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.WeakHashMap;
-import java.lang.ref.WeakReference;
-import java.net.InetAddress;
-
-import com.symmetrylabs.slstudio.ApplicationState;
-import com.symmetrylabs.util.listenable.SetListener;
-import heronarts.lx.LX;
-
+import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.ListenableSet;
+import com.symmetrylabs.util.listenable.SetListener;
+import heronarts.lx.LX;
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.net.InetAddress;
+import java.net.SocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.spi.SelectorProvider;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 public class NetworkMonitor {
     private static final int SCAN_PERIOD_MS = 500;
@@ -20,9 +24,9 @@ public class NetworkMonitor {
     public final ListenableSet<NetworkDevice> opcDeviceList;
     public final ListenableSet<InetAddress> artNetDeviceList;
 
-    private final NetworkScanner opcNetworkScanner;
+    private final OpcNetworkScanner opcNetworkScanner;
     private final ArtNetNetworkScanner artNetNetworkScanner;
-    private final Timer timer = new Timer("NetworkScanner", /* run as daemon */ true);
+    private final Selector recvSelector;
 
     private boolean started = false;
 
@@ -50,10 +54,18 @@ public class NetworkMonitor {
 
     private NetworkMonitor(LX lx) {
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
-        opcNetworkScanner = new NetworkScanner(dispatcher);
+        try {
+            recvSelector = SelectorProvider.provider().openSelector();
+        } catch (IOException e) {
+            /* if we can't set up a selector, we aren't going to be able to discover anything,
+               and we aren't going to be able to run the show, so let's crash SLStudio. */
+            throw new RuntimeException(e);
+        }
+
+        opcNetworkScanner = new OpcNetworkScanner(dispatcher, recvSelector);
         opcDeviceList = opcNetworkScanner.deviceList;
 
-        artNetNetworkScanner = new ArtNetNetworkScanner(dispatcher);
+        artNetNetworkScanner = new ArtNetNetworkScanner(dispatcher, recvSelector);
         artNetDeviceList = artNetNetworkScanner.deviceList;
 
         opcDeviceList.addListener(new SetListener<NetworkDevice>() {
@@ -90,26 +102,56 @@ public class NetworkMonitor {
 
     public synchronized NetworkMonitor start() {
         if (!started) {
-            scheduleTask(0);
+            Thread t = new Thread(this::loop);
+            t.setDaemon(true);
+            t.start();
             started = true;
         }
         return this;
     }
 
-    public synchronized void shutdown() {
-        timer.cancel();
+    public synchronized void stop() {
         started = false;
     }
 
-    private void scheduleTask(long delay) {
-        timer.schedule(new TimerTask() {
-            public void run() {
-                opcNetworkScanner.scan();
-                artNetNetworkScanner.scan();
-                if (started) {
-                    scheduleTask(SCAN_PERIOD_MS);
+    private void loop() {
+        while (started) {
+            opcNetworkScanner.scan();
+            artNetNetworkScanner.scan();
+
+            long start = System.nanoTime();
+            long remaining;
+
+            do {
+                /* wait for at most SCAN_PERIOD_MS for a response on any of our channels */
+                try {
+                    recvSelector.select(SCAN_PERIOD_MS);
+                } catch (IOException e) {
+                    System.err.println("unable to select on network discovery selector:");
+                    e.printStackTrace();
                 }
-            }
-        }, delay);
+
+                /* go through each ready channel and notify the associated network scanner that
+                   it's got mail. */
+                Iterator<SelectionKey> iter = recvSelector.selectedKeys().iterator();
+                while (iter.hasNext()) {
+                    SelectionKey sel = iter.next();
+
+                    /* UdpBroadcastNetworkScanner is the only thing that gets to stick stuff to our
+                       Selector, and it promises the attachment is always a poitner to a
+                       UdpBroadcastNetworkScanner. */
+                    UdpBroadcastNetworkScanner sc = (UdpBroadcastNetworkScanner) sel.attachment();
+                    sc.onSelected(sel);
+
+                    /* It's our responsibility to remove things from the selected set once we've
+                       acted on them. */
+                    iter.remove();
+                }
+                /* it's possible that our selector could wait way less time than SCAN_PERIOD_MS.
+                   we keep looping on our select until our scan period has elapsed, then we go to
+                   the start of the outer loop and send discovery packets again. */
+                remaining = 1_000_000L * SCAN_PERIOD_MS - (System.nanoTime() - start);
+            } while (remaining > 0);
+        }
     }
 }

@@ -30,6 +30,7 @@ import com.symmetrylabs.shows.thiel18.Thiel18Show;
 import com.symmetrylabs.shows.ysiadsparty.YsiadsPartyShow;
 import com.symmetrylabs.shows.absinthedemo.AbsintheDemoShow;
 import com.symmetrylabs.shows.loveburn.LoveBurnShow;
+import com.symmetrylabs.shows.sundance19.Sundance19Show;
 import processing.core.PApplet;
 
 public class ShowRegistry {
@@ -94,6 +95,7 @@ public class ShowRegistry {
         map.put(AbsintheDemoShow.SHOW_NAME, () -> new AbsintheDemoShow());
         map.put(HbLampShow.SHOW_NAME, () -> new HbLampShow());
         map.put(LoveBurnShow.SHOW_NAME, () -> new LoveBurnShow());
+        map.put(Sundance19Show.SHOW_NAME, () -> new Sundance19Show());
     }
 
     static interface ShowBuilder {
