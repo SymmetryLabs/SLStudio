@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.network;
 
-import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.ListenableSet;
 import com.symmetrylabs.util.listenable.SetListener;
@@ -45,7 +45,7 @@ public class NetworkMonitor {
         WeakReference<NetworkMonitor> weakRef = instanceByLX.get(lx);
         NetworkMonitor ref = weakRef == null ? null : weakRef.get();
         if (ref != null) {
-            ref.shutdown();
+            ref.stop();
         }
         if (weakRef != null) {
             instanceByLX.remove(lx);
@@ -151,7 +151,7 @@ public class NetworkMonitor {
                    we keep looping on our select until our scan period has elapsed, then we go to
                    the start of the outer loop and send discovery packets again. */
                 remaining = 1_000_000L * SCAN_PERIOD_MS - (System.nanoTime() - start);
-            } while (remaining > 0);
+            } while (remaining > 0 && started);
         }
     }
 }

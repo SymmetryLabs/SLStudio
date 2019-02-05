@@ -157,6 +157,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
     @Override
     public void dispose() {
+        disposeLX();
         UI.shutdown();
     }
 
