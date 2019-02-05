@@ -56,7 +56,9 @@ static inline float prop(float v, float min, float max) {
     return (v - min) / (max - min);
 }
 
-bool Knob(const char *label, float *v, float min, float max, int mod_count, float modulated, const float *mod_min, const float *mod_max, const int *mod_colors) {
+bool Knob(const char *label, float *v, float min, float max,
+          int mod_count, float modulated,
+          const float *mod_min, const float *mod_max, const jint *mod_colors) {
 	auto window = GetCurrentWindow();
 	if (window->SkipItems)
 		return false;

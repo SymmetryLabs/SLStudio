@@ -52,7 +52,7 @@ struct JniFloatArray {
 struct JniIntArray {
     JNIEnv *env;
     jintArray jarr;
-    int *arr;
+    jint *arr;
 
     JniIntArray(JNIEnv *env, jintArray jarr) : env(env), jarr(jarr) {
         arr = env->GetIntArrayElements(jarr, nullptr);
@@ -62,7 +62,7 @@ struct JniIntArray {
         env->ReleaseIntArrayElements(jarr, arr, JNI_ABORT);
     }
 
-    operator int*() {
+    operator jint*() {
         return arr;
     }
 
