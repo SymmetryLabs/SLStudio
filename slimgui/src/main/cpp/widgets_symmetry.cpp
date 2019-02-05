@@ -47,10 +47,10 @@ static const ImVec4 KnobValueHoveredColor = RGB(0x73CDEB);
 static const ImVec4 KnobValueActiveColor  = RGB(0x00A5DB);
 static const ImVec4 KnobModulatorColor    = RGB(0x930FA5);
 static const float KnobRadius = 18;
-static const float KnobThick = 10;
+static const float KnobThick = 11;
 static const float KnobPadH = 5;
 static const float KnobPadV = 0;
-static const float KnobModThick = 2;
+static const float KnobModThick = 3;
 
 static inline float prop(float v, float min, float max) {
     return (v - min) / (max - min);
@@ -121,27 +121,41 @@ bool Knob(const char *label, float *v, float min, float max, int mod_count, floa
 	ImVec2 center{pos.x + 0.5f * size.x + KnobPadH, pos.y + 0.5f * size.y + KnobPadV};
 
     float thick = KnobThick;
+    float rad = KnobRadius;
 
     for (int i = 0; i < mod_count; i++) {
         float lo = mod_min[i];
         float hi = mod_max[i];
+
         float tlo = prop(lo, min, max);
+        tlo = tlo < 0.f ? 0.f : tlo > 1.f ? 1.f : tlo;
+
         float thi = prop(hi, min, max);
+        thi = thi < 0.f ? 0.f : thi > 1.f ? 1.f : thi;
+
         float start = a_lo + tlo * (a_hi - a_lo);
         float end = a_lo + thi * (a_hi - a_lo);
+
         window->DrawList->PathClear();
-        window->DrawList->PathArcTo(center, KnobRadius + thick / 2, start, end, 40);
+        window->DrawList->PathArcTo(center, KnobRadius + KnobThick / 2 - KnobModThick * i, start, end, 40);
         window->DrawList->PathStroke(GetColorU32(RGB(mod_colors[i])), false, KnobModThick);
-        thick -= KnobModThick * 1.5;
+        if (i == 0) {
+            thick -= KnobModThick;
+        } else if (i == 1) {
+            thick -= KnobModThick / 2;
+            rad -= KnobModThick / 2;
+        } else {
+            rad -= KnobModThick;
+        }
     }
 
 	window->DrawList->PathClear();
-	window->DrawList->PathArcTo(center, KnobRadius, a_lo, a_mod, 40);
+	window->DrawList->PathArcTo(center, rad, a_lo, a_mod, 40);
 	window->DrawList->PathStroke(
 		GetColorU32(g.ActiveId == id ? KnobValueActiveColor : g.HoveredId == id ? KnobValueHoveredColor : KnobValueColor), false, thick);
 
 	window->DrawList->PathClear();
-	window->DrawList->PathArcTo(center, KnobRadius, a_mod, a_hi, 40);
+	window->DrawList->PathArcTo(center, rad, a_mod, a_hi, 40);
 	window->DrawList->PathStroke(
 		GetColorU32(g.ActiveId == id ? ImGuiCol_FrameBgActive : g.HoveredId == id ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg),
 		false, thick);
