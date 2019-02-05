@@ -92,9 +92,11 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         loadLxComponents();
 
         /* The main menu isn't really transient but we don't want it to appear in
-             the Window menu and it doesn't have a close button, so there's no risk of
-             it disappearing. */
+           the Window menu and it doesn't have a close button, so there's no risk of
+           it disappearing. */
         WindowManager.addTransient(new MainMenu(lx, this));
+        /* Same with camera controls, too */
+        WindowManager.addTransient(new CameraControlWindow(lx, camController));
         WindowManager.addPersistent("Audio", () -> new AudioWindow(lx), false);
         WindowManager.addPersistent("Channels", () -> new ChannelWindow(lx), true);
         WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this), false);
