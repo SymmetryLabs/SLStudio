@@ -12,54 +12,7 @@
 
 #define MAX_INPUT_LENGTH 511
 
-JNIEXPORT jboolean JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong windowHandle) {
-	jfieldID fid;
-
-	fid = env->GetStaticFieldID(cls, "TREE_FLAG_LEAF", "I");
-	env->SetStaticIntField(cls, fid, ImGuiTreeNodeFlags_Leaf);
-	fid = env->GetStaticFieldID(cls, "TREE_FLAG_DEFAULT_OPEN", "I");
-	env->SetStaticIntField(cls, fid, ImGuiTreeNodeFlags_DefaultOpen);
-	fid = env->GetStaticFieldID(cls, "TREE_FLAG_SELECTED", "I");
-	env->SetStaticIntField(cls, fid, ImGuiTreeNodeFlags_Selected);
-	fid = env->GetStaticFieldID(cls, "WINDOW_HORIZ_SCROLL", "I");
-	env->SetStaticIntField(cls, fid, ImGuiWindowFlags_HorizontalScrollbar);
-	fid = env->GetStaticFieldID(cls, "WINDOW_NO_RESIZE", "I");
-	env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoResize);
-	fid = env->GetStaticFieldID(cls, "WINDOW_NO_MOVE", "I");
-	env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoMove);
-	fid = env->GetStaticFieldID(cls, "COLOR_WIDGET", "I");
-	env->SetStaticIntField(cls, fid, ImGuiCol_FrameBg);
-	fid = env->GetStaticFieldID(cls, "COLOR_HEADER", "I");
-	env->SetStaticIntField(cls, fid, ImGuiCol_Header);
-	fid = env->GetStaticFieldID(cls, "COLOR_HEADER_ACTIVE", "I");
-	env->SetStaticIntField(cls, fid, ImGuiCol_HeaderActive);
-	fid = env->GetStaticFieldID(cls, "COLOR_HEADER_HOVERED", "I");
-	env->SetStaticIntField(cls, fid, ImGuiCol_HeaderHovered);
-
-	if (gl3wInit()) {
-		std::cout << "failed to init gl3w" << std::endl;
-		return 0;
-	}
-	if (!gl3wIsSupported(4, 1)) {
-		std::cout << "OpenGL 4.1 is not supported" << std::endl;
-		return 0;
-	}
-
-	glfwInit();
-	GLFWwindow* window = reinterpret_cast<GLFWwindow*>(windowHandle);
-	ImGui::CreateContext();
-	bool ok = ImGui_ImplGlfw_InitForOpenGL(window, false);
-	if (!ok) {
-		std::cout << "failed to init glfw" << std::endl;
-		return 0;
-	}
-	ok = ImGui_ImplOpenGL3_Init("#version 150");
-	if (!ok) {
-		std::cout << "failed to init opengl3" << std::endl;
-		return 0;
-	}
-
+void LoadSlimguiStyle() {
 	ImVec4* colors = ImGui::GetStyle().Colors;
 	colors[ImGuiCol_Text]                   = RGB(0xD0D5E0);
 	colors[ImGuiCol_TextDisabled]           = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
@@ -110,12 +63,71 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
 	colors[ImGuiCol_TabUnfocusedActive]     = RGB(0x3B3F49);
 	colors[ImGuiCol_DockingPreview]         = RGB(0x00A5DB);
 
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+}
+
+JNIEXPORT jboolean JNICALL
+Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong windowHandle) {
+	jfieldID fid;
+
+	fid = env->GetStaticFieldID(cls, "TREE_FLAG_LEAF", "I");
+	env->SetStaticIntField(cls, fid, ImGuiTreeNodeFlags_Leaf);
+	fid = env->GetStaticFieldID(cls, "TREE_FLAG_DEFAULT_OPEN", "I");
+	env->SetStaticIntField(cls, fid, ImGuiTreeNodeFlags_DefaultOpen);
+	fid = env->GetStaticFieldID(cls, "TREE_FLAG_SELECTED", "I");
+	env->SetStaticIntField(cls, fid, ImGuiTreeNodeFlags_Selected);
+	fid = env->GetStaticFieldID(cls, "WINDOW_HORIZ_SCROLL", "I");
+	env->SetStaticIntField(cls, fid, ImGuiWindowFlags_HorizontalScrollbar);
+	fid = env->GetStaticFieldID(cls, "WINDOW_NO_RESIZE", "I");
+	env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoResize);
+	fid = env->GetStaticFieldID(cls, "WINDOW_NO_MOVE", "I");
+	env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoMove);
+	fid = env->GetStaticFieldID(cls, "WINDOW_NO_TITLE_BAR", "I");
+	env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoTitleBar);
+	fid = env->GetStaticFieldID(cls, "WINDOW_NO_DOCKING", "I");
+	env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoDocking);
+	fid = env->GetStaticFieldID(cls, "WINDOW_ALWAYS_AUTO_RESIZE", "I");
+	env->SetStaticIntField(cls, fid, ImGuiWindowFlags_AlwaysAutoResize);
+	fid = env->GetStaticFieldID(cls, "COLOR_WIDGET", "I");
+	env->SetStaticIntField(cls, fid, ImGuiCol_FrameBg);
+	fid = env->GetStaticFieldID(cls, "COLOR_HEADER", "I");
+	env->SetStaticIntField(cls, fid, ImGuiCol_Header);
+	fid = env->GetStaticFieldID(cls, "COLOR_HEADER_ACTIVE", "I");
+	env->SetStaticIntField(cls, fid, ImGuiCol_HeaderActive);
+	fid = env->GetStaticFieldID(cls, "COLOR_HEADER_HOVERED", "I");
+	env->SetStaticIntField(cls, fid, ImGuiCol_HeaderHovered);
+	fid = env->GetStaticFieldID(cls, "COLOR_WINDOW_BORDER", "I");
+	env->SetStaticIntField(cls, fid, ImGuiCol_Border);
+
+	if (gl3wInit()) {
+		std::cout << "failed to init gl3w" << std::endl;
+		return 0;
+	}
+	if (!gl3wIsSupported(4, 1)) {
+		std::cout << "OpenGL 4.1 is not supported" << std::endl;
+		return 0;
+	}
+
+	glfwInit();
+	GLFWwindow* window = reinterpret_cast<GLFWwindow*>(windowHandle);
+	ImGui::CreateContext();
+	bool ok = ImGui_ImplGlfw_InitForOpenGL(window, false);
+	if (!ok) {
+		std::cout << "failed to init glfw" << std::endl;
+		return 0;
+	}
+	ok = ImGui_ImplOpenGL3_Init("#version 150");
+	if (!ok) {
+		std::cout << "failed to init opengl3" << std::endl;
+		return 0;
+	}
+
+    LoadSlimguiStyle();
+
 	ImGuiIO &io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigWindowsResizeFromEdges = true;
 	io.ConfigDockingTabBarOnSingleWindows = true;
-
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 
 	return 1;
 }
@@ -172,21 +184,26 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_popColor(JNIEnv *
 }
 
 JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowPosition(JNIEnv *env, jclass, jfloat x, jfloat y, jfloat pivotX, jfloat pivotY) {
+	ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_Always, ImVec2(pivotX, pivotY));
+}
+
+JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowDefaults(
-	JNIEnv *env, jclass, jint x, jint y, jint w, jint h) {
+	JNIEnv *env, jclass, jfloat x, jfloat y, jfloat w, jfloat h) {
 	ImGui::SetNextWindowSize(ImVec2(w, h), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_FirstUseEver);
 }
 
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowDefaultToCursor(
-	JNIEnv *env, jclass, jint w, jint h) {
+	JNIEnv *env, jclass, jfloat w, jfloat h) {
 	ImGui::SetNextWindowSize(ImVec2(w, h), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowPos(ImGui::GetCursorScreenPos(), ImGuiCond_FirstUseEver);
 }
 
 JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowContentSize(JNIEnv *, jclass, jint w, jint h) {
+Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowContentSize(JNIEnv *, jclass, jfloat w, jfloat h) {
 	ImGui::SetNextWindowContentSize(ImVec2(w, h));
 }
 
@@ -595,4 +612,27 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_contextMenuIt
 
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endContextMenu(JNIEnv *, jclass) {
     ImGui::EndPopup();
+}
+
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_showMetricsWindow(JNIEnv *, jclass) {
+    bool open = true;
+    ImGui::ShowMetricsWindow(&open);
+    return open ? 1 : 0;
+}
+
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_showStyleEditor(JNIEnv *, jclass) {
+    bool open = true;
+    ImGui::Begin("Style editor", &open);
+    ImGui::ShowStyleEditor();
+    if (ImGui::Button("Restore default slimgui style")) {
+        LoadSlimguiStyle();
+    }
+    ImGui::End();
+    return open ? 1 : 0;
+}
+
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_showAboutWindow(JNIEnv *, jclass) {
+    bool open = true;
+    ImGui::ShowAboutWindow(&open);
+    return open ? 1 : 0;
 }

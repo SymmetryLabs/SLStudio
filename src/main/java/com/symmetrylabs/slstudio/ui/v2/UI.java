@@ -8,6 +8,9 @@ public class UI {
     public static int WINDOW_HORIZ_SCROLL;
     public static int WINDOW_NO_RESIZE;
     public static int WINDOW_NO_MOVE;
+    public static int WINDOW_NO_TITLE_BAR;
+    public static int WINDOW_NO_DOCKING;
+    public static int WINDOW_ALWAYS_AUTO_RESIZE;
 
     public static int DEFAULT_WIDTH = 250;
 
@@ -15,6 +18,7 @@ public class UI {
     public static int COLOR_HEADER;
     public static int COLOR_HEADER_ACTIVE;
     public static int COLOR_HEADER_HOVERED;
+    public static int COLOR_WINDOW_BORDER;
 
     public static class CollapseResult {
         /** true if the collapsable section should be open (i.e., client should draw the contents of the section) */
@@ -22,6 +26,10 @@ public class UI {
         /** true if the collapsable section should be removed (the user pressed the close button) */
         public boolean shouldRemove;
     }
+
+    /* set on every frame by SLStudioGDX for reading by UI clients that want to anchor themselves somewhere */
+    public static float width;
+    public static float height;
 
     public static native boolean init(long windowPointer);
     public static native void newFrame();
@@ -36,9 +44,10 @@ public class UI {
     public static native void popColor(int count);
 
     /* Layout */
-    public static native void setNextWindowDefaults(int x, int y, int w, int h);
-    public static native void setNextWindowDefaultToCursor(int w, int h);
-    public static native void setNextWindowContentSize(int w, int h);
+    public static native void setNextWindowPosition(float x, float y, float pivotX, float pivotY);
+    public static native void setNextWindowDefaults(float x, float y, float w, float h);
+    public static native void setNextWindowDefaultToCursor(float w, float h);
+    public static native void setNextWindowContentSize(float w, float h);
     public static void begin(String label) {
         begin(label, 0);
     }
@@ -144,6 +153,9 @@ public class UI {
 
     /* Testing */
     static native boolean showDemoWindow();
+    static native boolean showMetricsWindow();
+    static native boolean showStyleEditor();
+    static native boolean showAboutWindow();
 
     static {
         System.loadLibrary("slimgui");

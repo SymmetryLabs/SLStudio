@@ -100,7 +100,10 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         WindowManager.addPersistent("Audio", () -> new AudioWindow(lx), false);
         WindowManager.addPersistent("Channels", () -> new ChannelWindow(lx), true);
         WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this), false);
-        WindowManager.addPersistent("Widget demo", () -> new SlimguiDemoWindow(), false);
+        WindowManager.addPersistent("Imgui demo", () -> new SlimguiDemoWindow(), false);
+        WindowManager.addPersistent("Imgui style editor", () -> new SlimguiStyleEditor(), false);
+        WindowManager.addPersistent("Imgui metrics", () -> new SlimguiMetricsWindow(), false);
+        WindowManager.addPersistent("About imgui", () -> new SlimguiAboutWindow(), false);
 
         lx.engine.isMultithreaded.setValue(true);
         lx.engine.isChannelMultithreaded.setValue(true);
@@ -137,6 +140,8 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         camController.update();
         renderer.draw();
 
+        UI.width = w;
+        UI.height = h;
         UI.newFrame();
         WindowManager.get().draw();
         UI.render();

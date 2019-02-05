@@ -17,7 +17,12 @@ public class CameraControlWindow implements Window {
 
     @Override
     public void draw() {
-        UI.begin("Camera controls");
+        UI.setNextWindowPosition(UI.width / 2.f, 30, 0.5f, 0);
+        UI.pushColor(UI.COLOR_WINDOW_BORDER, 0x01000000);
+        UI.begin("Camera controls",
+                 UI.WINDOW_NO_RESIZE | UI.WINDOW_NO_MOVE | UI.WINDOW_NO_TITLE_BAR |
+                 UI.WINDOW_NO_DOCKING | UI.WINDOW_ALWAYS_AUTO_RESIZE);
+        UI.popColor();
         if (UI.button("front")) {
             go(0, 0, -1, 0, 1, 0);
         }

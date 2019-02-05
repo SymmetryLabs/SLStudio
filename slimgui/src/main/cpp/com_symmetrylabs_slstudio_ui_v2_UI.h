@@ -57,27 +57,35 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_popColor
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    setNextWindowPosition
+ * Signature: (FFFF)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowPosition
+  (JNIEnv *, jclass, jfloat, jfloat, jfloat, jfloat);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    setNextWindowDefaults
- * Signature: (IIII)V
+ * Signature: (FFFF)V
  */
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowDefaults
-  (JNIEnv *, jclass, jint, jint, jint, jint);
+  (JNIEnv *, jclass, jfloat, jfloat, jfloat, jfloat);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    setNextWindowDefaultToCursor
- * Signature: (II)V
+ * Signature: (FF)V
  */
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowDefaultToCursor
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jfloat, jfloat);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    setNextWindowContentSize
- * Signature: (II)V
+ * Signature: (FF)V
  */
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowContentSize
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jfloat, jfloat);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
@@ -501,6 +509,30 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_scrolled
  * Signature: ()Z
  */
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_showDemoWindow
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    showMetricsWindow
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_showMetricsWindow
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    showStyleEditor
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_showStyleEditor
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    showAboutWindow
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_showAboutWindow
   (JNIEnv *, jclass);
 
 #ifdef __cplusplus
