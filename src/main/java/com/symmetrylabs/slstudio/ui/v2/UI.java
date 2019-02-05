@@ -10,6 +10,7 @@ public class UI {
     public static int WINDOW_NO_MOVE;
     public static int WINDOW_NO_TITLE_BAR;
     public static int WINDOW_NO_DOCKING;
+    public static int WINDOW_NO_BACKGROUND;
     public static int WINDOW_ALWAYS_AUTO_RESIZE;
 
     public static int DEFAULT_WIDTH = 250;
@@ -108,6 +109,11 @@ public class UI {
     public static native CollapseResult collapsibleSection(String label, boolean allowClose);
     public static native void histogram(String label, float[] values, float min, float max, int size);
     public static native void plot(String label, float[] values, float min, float max, int size);
+
+    /* Images. These are package-private; code should interact with TextureManager, which
+       actually handles the complexity of texture loading/unloading for you. */
+    static native void image(int texId, float w, float h, float u0, float v0, float u1, float v1);
+    static native boolean imageButton(int texId, float w, float h, float u0, float v0, float u1, float v1);
 
     /* Menus */
     public static native boolean beginMainMenuBar();

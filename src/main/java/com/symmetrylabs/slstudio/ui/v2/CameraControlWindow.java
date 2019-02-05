@@ -23,16 +23,9 @@ public class CameraControlWindow implements Window {
                  UI.WINDOW_NO_RESIZE | UI.WINDOW_NO_MOVE | UI.WINDOW_NO_TITLE_BAR |
                  UI.WINDOW_NO_DOCKING | UI.WINDOW_ALWAYS_AUTO_RESIZE);
         UI.popColor();
+
         if (UI.button("front")) {
             go(0, 0, -1, 0, 1, 0);
-        }
-        UI.sameLine();
-        if (UI.button("back")) {
-            go(0, 0, 1, 0, 1, 0);
-        }
-        UI.sameLine();
-        if (UI.button("bottom")) {
-            go(0, -1, 0, 0, 0, -1);
         }
         UI.sameLine();
         if (UI.button("top")) {
@@ -41,6 +34,14 @@ public class CameraControlWindow implements Window {
         UI.sameLine();
         if (UI.button("left")) {
             go(1, 0, 0, 0, 1, 0);
+        }
+        UI.sameLine();
+        if (UI.button("back")) {
+            go(0, 0, 1, 0, 1, 0);
+        }
+        UI.sameLine();
+        if (UI.button("bottom")) {
+            go(0, -1, 0, 0, 0, -1);
         }
         UI.sameLine();
         if (UI.button("right")) {

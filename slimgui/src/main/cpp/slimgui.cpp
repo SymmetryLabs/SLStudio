@@ -86,6 +86,8 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
 	env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoTitleBar);
 	fid = env->GetStaticFieldID(cls, "WINDOW_NO_DOCKING", "I");
 	env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoDocking);
+	fid = env->GetStaticFieldID(cls, "WINDOW_NO_BACKGROUND", "I");
+	env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoBackground);
 	fid = env->GetStaticFieldID(cls, "WINDOW_ALWAYS_AUTO_RESIZE", "I");
 	env->SetStaticIntField(cls, fid, ImGuiWindowFlags_AlwaysAutoResize);
 	fid = env->GetStaticFieldID(cls, "COLOR_WIDGET", "I");
@@ -460,6 +462,14 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_plot(
     JniFloatArray hist(env, jvals);
     JniString label(env, jlabel);
     ImGui::PlotLines(label, hist, hist.size(), 0, NULL, min, max, ImVec2(0, size));
+}
+
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_image(JNIEnv *, jclass, jint texId, jfloat w, jfloat h, jfloat u0, jfloat v0, jfloat u1, jfloat v1) {
+    ImGui::Image((ImTextureID)(intptr_t)texId, ImVec2(w, h), ImVec2(u0, v0), ImVec2(u1, v1));
+}
+
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_imageButton(JNIEnv *, jclass, jint texId, jfloat w, jfloat h, jfloat u0, jfloat v0, jfloat u1, jfloat v1) {
+    return ImGui::ImageButton((ImTextureID)(intptr_t)texId, ImVec2(w, h), ImVec2(u0, v0), ImVec2(u1, v1)) ? 1 : 0;
 }
 
 JNIEXPORT jboolean JNICALL
