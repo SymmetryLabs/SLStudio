@@ -71,12 +71,13 @@ public class FileDialog {
         java.awt.FileDialog fd = new java.awt.FileDialog(
             (java.awt.Frame) null, title,
             type == Type.SAVE ? java.awt.FileDialog.SAVE : java.awt.FileDialog.LOAD);
-        fd.show();
+        fd.setVisible(true);
         String f = fd.getFile();
         if (f == null) {
             return;
         }
         final File res = new File(fd.getDirectory(), f);
         lx.engine.addTask(() -> fpc.onFilePicked(res));
+        fd.dispose();
     }
 }
