@@ -131,10 +131,14 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
 	io.ConfigWindowsResizeFromEdges = true;
 	io.ConfigDockingTabBarOnSingleWindows = true;
 
-    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/B612-Regular.ttf", 12);
-    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/B612-Bold.ttf", 12);
-    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/B612 Mono-Regular.ttf", 12);
-    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/B612 Mono-Bold.ttf", 12);
+    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/B612-Regular.ttf", 14);
+    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/B612-Bold.ttf", 14);
+    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/bell-gothic.ttf", 16);
+    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/bell-gothic-bold.ttf", 16);
+    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/BentonSans-Medium.ttf", 14);
+    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/BentonSans-Bold.ttf", 14);
+    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/antenna-regular.ttf", 16);
+    io.Fonts->AddFontFromFileTTF("src/main/resources/fonts/scout-regular-webfont.ttf", 16);
 
 	return 1;
 }
