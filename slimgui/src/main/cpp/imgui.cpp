@@ -1137,6 +1137,10 @@ ImGuiStyle::ImGuiStyle()
     AntiAliasedLines        = true;             // Enable anti-aliasing on lines/borders. Disable if you are really short on CPU/GPU.
     AntiAliasedFill         = true;             // Enable anti-aliasing on filled shapes (rounded rectangles, circles, etc.)
     CurveTessellationTol    = 1.25f;            // Tessellation tolerance when using PathBezierCurveTo() without a specific number of segments. Decrease for highly tessellated curves (higher quality, more polygons), increase to reduce quality.
+    KnobRadius = 18.f;
+    KnobHandleThick = 10.f;
+    KnobThick = 11.f;
+    KnobModThick = 3.f;
 
     // Default theme
     ImGui::StyleColorsDark(this);
@@ -1166,6 +1170,10 @@ void ImGuiStyle::ScaleAllSizes(float scale_factor)
     DisplayWindowPadding = ImFloor(DisplayWindowPadding * scale_factor);
     DisplaySafeAreaPadding = ImFloor(DisplaySafeAreaPadding * scale_factor);
     MouseCursorScale = ImFloor(MouseCursorScale * scale_factor);
+    KnobRadius = ImFloor(KnobRadius * scale_factor);
+    KnobHandleThick = ImFloor(KnobHandleThick * scale_factor);
+    KnobThick = ImFloor(KnobThick * scale_factor);
+    KnobModThick = ImFloor(KnobModThick * scale_factor);
 }
 
 ImGuiIO::ImGuiIO()

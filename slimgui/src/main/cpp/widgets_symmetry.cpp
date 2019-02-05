@@ -46,11 +46,6 @@ static const ImVec4 KnobValueColor        = RGB(0x2EB5E1);
 static const ImVec4 KnobValueHoveredColor = RGB(0x73CDEB);
 static const ImVec4 KnobValueActiveColor  = RGB(0x00A5DB);
 static const ImVec4 KnobModulatorColor    = RGB(0x930FA5);
-static const float KnobRadius = 18;
-static const float KnobThick = 11;
-static const float KnobPadH = 5;
-static const float KnobPadV = 0;
-static const float KnobModThick = 3;
 
 static inline float prop(float v, float min, float max) {
     return (v - min) / (max - min);
@@ -70,8 +65,8 @@ bool Knob(const char *label, float *v, float min, float max,
 
 	ImVec2 label_size = CalcTextSize(label, NULL, true);
 	ImVec2 size{
-		(KnobPadH + KnobRadius) * 2,
-		(KnobPadV + KnobRadius) * 2 + label_size.y + KnobThick + style.ItemInnerSpacing.y};
+		(style.ItemInnerSpacing.x + style.KnobRadius) * 2,
+		(style.ItemInnerSpacing.y + style.KnobRadius) * 2 + label_size.y + style.KnobThick + style.ItemInnerSpacing.y};
 	const ImRect bb{pos, pos + size};
 
 	ItemSize(bb);
@@ -120,10 +115,10 @@ bool Knob(const char *label, float *v, float min, float max,
 	float a = a_lo + t * (a_hi - a_lo);
     float a_mod = mod_count > 0 ? a_lo + tmod * (a_hi - a_lo) : a;
 
-	ImVec2 center{pos.x + 0.5f * size.x + KnobPadH, pos.y + 0.5f * size.y + KnobPadV};
+	ImVec2 center{pos.x + 0.5f * size.x + style.ItemInnerSpacing.x, pos.y + 0.5f * size.y};
 
-    float thick = KnobThick;
-    float rad = KnobRadius;
+    float thick = style.KnobThick;
+    float rad = style.KnobRadius;
 
     for (int i = 0; i < mod_count; i++) {
         float lo = mod_min[i];
@@ -139,15 +134,17 @@ bool Knob(const char *label, float *v, float min, float max,
         float end = a_lo + thi * (a_hi - a_lo);
 
         window->DrawList->PathClear();
-        window->DrawList->PathArcTo(center, KnobRadius + KnobThick / 2 - KnobModThick * i, start, end, 40);
-        window->DrawList->PathStroke(GetColorU32(RGB(mod_colors[i])), false, KnobModThick);
+        window->DrawList->PathArcTo(
+            center, style.KnobRadius + style.KnobThick / 2 - style.KnobModThick * i,
+            start, end, 40);
+        window->DrawList->PathStroke(GetColorU32(RGB(mod_colors[i])), false, style.KnobModThick);
         if (i == 0) {
-            thick -= KnobModThick;
+            thick -= style.KnobModThick;
         } else if (i == 1) {
-            thick -= KnobModThick / 2;
-            rad -= KnobModThick / 2;
+            thick -= style.KnobModThick / 2;
+            rad -= style.KnobModThick / 2;
         } else {
-            rad -= KnobModThick;
+            rad -= style.KnobModThick;
         }
     }
 
@@ -163,15 +160,15 @@ bool Knob(const char *label, float *v, float min, float max,
 		false, thick);
 
 	window->DrawList->PathClear();
-	window->DrawList->PathArcTo(center, KnobRadius, a - 0.15, a + 0.15, 10);
+	window->DrawList->PathArcTo(center, style.KnobRadius, a - 0.15, a + 0.15, 10);
 	window->DrawList->PathStroke(
-		GetColorU32(g.ActiveId == id ? ImGuiCol_SliderGrabActive : ImGuiCol_SliderGrab), false, 13);
+		GetColorU32(g.ActiveId == id ? ImGuiCol_SliderGrabActive : ImGuiCol_SliderGrab), false, style.KnobHandleThick);
 
 	ImVec2 text_pos {
-		center.x - KnobRadius - KnobThick / 2,
-		pos.y + 2 * KnobRadius + KnobThick + KnobPadV + style.ItemInnerSpacing.y};
+		center.x - style.KnobRadius - style.KnobThick / 2,
+		pos.y + 2 * style.KnobRadius + 1.5f * style.KnobThick + style.ItemInnerSpacing.y};
 	ImVec2 text_clip {
-		center.x + KnobRadius + KnobThick / 2,
+		center.x + style.KnobRadius + style.KnobThick / 2,
 		text_pos.y + label_size.y + style.ItemInnerSpacing.y};
 	if (pressed) {
 		char value_buf[64];
