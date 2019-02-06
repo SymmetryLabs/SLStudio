@@ -21,6 +21,7 @@ public class FontLoader {
 
     public static void loadAll() {
         FontLoader fl = new FontLoader();
+        fl.load("Inter Medium", "fonts/Inter-Medium.ttf", 16);
         fl.load("Scout Regular", "fonts/scout-regular-webfont.ttf", 16);
         fl.load("B612 Regular", "fonts/B612-Regular.ttf", 14);
         fl.load("B612 Bold", "fonts/B612-Bold.ttf", 14);
@@ -29,5 +30,8 @@ public class FontLoader {
         fl.load("Benton Sans Medium", "fonts/BentonSans-Medium.ttf", 14);
         fl.load("Benton Sans Bold", "fonts/BentonSans-Bold.ttf", 14);
         fl.load("Antenna Regular", "fonts/antenna-regular.ttf", 16);
+        fl.load("Inter Regular", "fonts/Inter-Regular.ttf", 16);
+        fl.load("Inter SemiBold", "fonts/Inter-SemiBold.ttf", 16);
+        fl.load("Inter Bold", "fonts/Inter-Bold.ttf", 16);
     }
 }
