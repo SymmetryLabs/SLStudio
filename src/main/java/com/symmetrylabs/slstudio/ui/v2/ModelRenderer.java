@@ -99,7 +99,7 @@ public class ModelRenderer implements RenderManager.Renderable {
     }
 
     @Override
-    public void draw(Matrix4 mvpMat) {
+    public void draw(OrthoPerspCamera cam) {
         lx.engine.copyUIBuffer(lxColorBuffer, UI_COLOR_SPACE);
         int[] colors = (int[]) lxColorBuffer.getArray(UI_COLOR_SPACE);
 
@@ -121,7 +121,7 @@ public class ModelRenderer implements RenderManager.Renderable {
         GL41.glEnableVertexAttribArray(colorAttr);
         GL41.glVertexAttribPointer(colorAttr, 4, GL41.GL_FLOAT, false, 0, 0);
 
-        GL41.glUniformMatrix4fv(mvpUniform, false, mvpMat.val);
+        GL41.glUniformMatrix4fv(mvpUniform, false, cam.combined.val);
         GL41.glUniform1f(pointSizeUniform, scalePointSize * basePointSize);
 
         GL41.glBindBuffer(GL41.GL_ARRAY_BUFFER, positionVbo);

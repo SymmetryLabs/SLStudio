@@ -7,18 +7,20 @@ import com.badlogic.gdx.graphics.Camera;
 
 
 public class CameraControlWindow implements Window {
-    private CameraInputController cic;
-    private OrthoPerspCamera camera;
-    private LX lx;
+    private final CameraInputController cic;
+    private final OrthoPerspCamera camera;
+    private final GnomonRenderable gnomon;
+    private final LX lx;
 
     private static final Vector3 ISO_VEC = new Vector3(0, 0, -1).rotateRad((float) Math.asin(1 / Math.sqrt(3)), 1, 0, 0);
     private static final Vector3 ISO_L = new Vector3(ISO_VEC).rotate(-45, 0, 1, 0);
     private static final Vector3 ISO_R = new Vector3(ISO_VEC).rotate(45, 0, 1, 0);
 
-    public CameraControlWindow(LX lx, CameraInputController cic, OrthoPerspCamera camera) {
+    public CameraControlWindow(LX lx, CameraInputController cic, OrthoPerspCamera camera, GnomonRenderable gnomon) {
         this.lx = lx;
         this.cic = cic;
         this.camera = camera;
+        this.gnomon = gnomon;
         TextureManager.load("icons/back.png");
         TextureManager.load("icons/down.png");
         TextureManager.load("icons/front.png");
@@ -73,6 +75,8 @@ public class CameraControlWindow implements Window {
         }
         UI.sameLine();
         camera.ortho = UI.checkbox("ORTHO", camera.ortho);
+        UI.sameLine();
+        gnomon.visible = UI.checkbox("GNOMON", gnomon.visible);
         UI.end();
     }
 

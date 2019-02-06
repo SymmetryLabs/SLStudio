@@ -87,6 +87,8 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         renderer = new RenderManager(lx);
         ModelRenderer mr = new ModelRenderer(lx, model);
         renderer.add(mr);
+        GnomonRenderable gnomon = new GnomonRenderable(model);
+        renderer.add(gnomon);
 
         camController = new OrthoPerspCamera.InputController(renderer.cam);
         camController.target.set(model.cx, model.cy, model.cz);
@@ -104,7 +106,8 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         WindowManager.addPersistent("Audio", () -> new AudioWindow(lx), false);
         WindowManager.addPersistent("Channels", () -> new ChannelWindow(lx), true);
         WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this, mr), false);
-        WindowManager.addPersistent("View", () -> new CameraControlWindow(lx, camController, renderer.cam), true);
+        WindowManager.addPersistent(
+            "View", () -> new CameraControlWindow(lx, camController, renderer.cam, gnomon), true);
 
         WindowManager.addPersistent("Imgui demo", () -> new SlimguiDemoWindow(), false);
         WindowManager.addPersistent("Imgui style editor", () -> new SlimguiStyleEditor(), false);
@@ -137,7 +140,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         Gdx.gl20.glClearColor(clearR, clearG, clearB, 1);
 
         Gdx.gl20.glClear(
-            GL20.GL_COLOR_BUFFER_BIT
+            GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT
             | (Gdx.graphics.getBufferFormat().coverageSampling
                  ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
         renderer.cam.viewportHeight = Gdx.graphics.getHeight();

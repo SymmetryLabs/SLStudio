@@ -6,7 +6,11 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 
 
-/** OrthoPerspCamera is a camera that can flip between orthographic and perspective projection */
+/**
+ * OrthoPerspCamera is a camera that can flip between orthographic and
+ * perspective projection that flips screen-X to make it look like we're in a
+ * left-handed coordinate system.
+ */
 public class OrthoPerspCamera extends Camera {
     private float perspectiveFov;
     private float orthoZoom;

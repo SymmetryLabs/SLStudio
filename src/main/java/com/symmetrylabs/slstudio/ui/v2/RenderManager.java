@@ -19,8 +19,8 @@ import com.badlogic.gdx.math.Matrix4;
 
 public class RenderManager {
     public interface Renderable {
-        void setDisplayProperties(int width, int height, float density);
-        void draw(Matrix4 mvpMat);
+        default void setDisplayProperties(int width, int height, float density) {}
+        void draw(OrthoPerspCamera camera);
         void dispose();
     }
 
@@ -59,9 +59,12 @@ public class RenderManager {
     }
 
     public void draw() {
+        GL41.glEnable(GL41.GL_DEPTH_TEST);
+        GL41.glDepthFunc(GL41.GL_LESS);
         for (Renderable r : renderables) {
-            r.draw(cam.combined);
+            r.draw(cam);
         }
+        GL41.glDisable(GL41.GL_DEPTH_TEST);
     }
 
     public void dispose() {
