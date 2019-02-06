@@ -12,7 +12,7 @@ public class FontLoader {
             ByteBuffer buf = ByteBuffer.allocateDirect(data.length);
             buf.put(data);
             buf.flip();
-            UI.addFont(name, buf, size / UI.density);
+            UI.addFont(name, buf, size);
         } catch (IOException e) {
             ApplicationState.setWarning("FontLoader/" + resourcePath, "couldn't load font");
             e.printStackTrace();

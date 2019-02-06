@@ -34,7 +34,7 @@ public class UI {
     /* set on every frame by SLStudioGDX for reading by UI clients that want to anchor themselves somewhere */
     public static float width;
     public static float height;
-    public static float density = 0; // this one is also used from native code in init()
+    public static float density = 1; // this one is also used from native code in init()
 
     static void setDensity(float d) {
         /* we would really prefer to not scale, so if we're close to 1 we don't scale at all */

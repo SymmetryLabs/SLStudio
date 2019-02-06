@@ -12,7 +12,7 @@
 
 #define MAX_INPUT_LENGTH 511
 
-static float loaded_density = 0;
+static float LoadedDensity = 0;
 
 void LoadSlimguiStyle(float density) {
     ImGuiStyle style;
@@ -72,7 +72,7 @@ void LoadSlimguiStyle(float density) {
         style.ScaleAllSizes(density);
         ImGui::GetIO().FontGlobalScale = density;
     }
-    loaded_density = density;
+    LoadedDensity = density;
 
     ImGui::GetStyle() = style;
 }
@@ -157,7 +157,7 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_addFont(JNIEnv *e
 
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_newFrame(JNIEnv *env, jclass cls) {
     jfloat dens = env->GetStaticFloatField(cls, env->GetStaticFieldID(cls, "density", "F"));
-    if (dens != loaded_density) {
+    if (dens != LoadedDensity) {
         LoadSlimguiStyle(dens);
     }
 
@@ -219,20 +219,20 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowPosition(JNIEnv *env, jclas
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowDefaults(
     JNIEnv *env, jclass, jfloat x, jfloat y, jfloat w, jfloat h) {
-    ImGui::SetNextWindowSize(ImVec2(loaded_density * w, loaded_density * h), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(LoadedDensity * w, LoadedDensity * h), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_FirstUseEver);
 }
 
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowDefaultToCursor(
     JNIEnv *env, jclass, jfloat w, jfloat h) {
-    ImGui::SetNextWindowSize(ImVec2(loaded_density * w, loaded_density * h), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(LoadedDensity * w, LoadedDensity * h), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowPos(ImGui::GetCursorScreenPos(), ImGuiCond_FirstUseEver);
 }
 
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowContentSize(JNIEnv *, jclass, jfloat w, jfloat h) {
-    ImGui::SetNextWindowContentSize(ImVec2(loaded_density * w, loaded_density * h));
+    ImGui::SetNextWindowContentSize(ImVec2(LoadedDensity * w, LoadedDensity * h));
 }
 
 JNIEXPORT void JNICALL
@@ -289,7 +289,7 @@ JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_beginChild(
     JNIEnv *env, jclass, jstring jid, jboolean border, jint flags, jint w, jint h) {
     JniString id(env, jid);
-    bool res = ImGui::BeginChild(id, ImVec2(loaded_density * w, loaded_density * h), border == 1, flags);
+    bool res = ImGui::BeginChild(id, ImVec2(LoadedDensity * w, LoadedDensity * h), border == 1, flags);
     return res ? 1 : 0;
 }
 
@@ -661,7 +661,7 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_showStyleEdit
     ImGui::Begin("Style editor", &open);
     ImGui::ShowStyleEditor();
     if (ImGui::Button("Restore default slimgui style")) {
-        LoadSlimguiStyle(loaded_density);
+        LoadSlimguiStyle(LoadedDensity);
     }
     ImGui::End();
     return open ? 1 : 0;

@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.ui.v2;
 
+import com.badlogic.gdx.Gdx;
 import heronarts.lx.LX;
 import heronarts.lx.LXEngine;
 import java.util.LinkedList;
@@ -32,10 +33,6 @@ public class InternalsWindow extends CloseableWindow {
         UI.text("worst-case: % 4.0fms, % 3.0ffps",
                         1e-6f * lx.engine.timer.runWorstNanos,
                         1e9f / lx.engine.timer.runWorstNanos);
-        UI.text("ui frame rate:  % 3.0ffps", UI.getFrameRate());
-
-        parent.clearRGB = UI.colorPicker("background", parent.clearRGB);
-        parent.allowUiScale = UI.checkbox("scale UI", parent.allowUiScale);
 
         frameTimes.addLast(lx.engine.timer.runCurrentNanos * 1e-6f);
         while (frameTimes.size() > FRAMES_TO_KEEP) {
@@ -52,5 +49,13 @@ public class InternalsWindow extends CloseableWindow {
             i++;
         }
         UI.plot("ms per f", frameTimeArr, 0, Float.max(1.2f * max, 1), 100);
+
+        UI.separator();
+
+        UI.text("ui frame rate: %3.0ffps", UI.getFrameRate());
+        UI.text("ui density: %3.2f", Gdx.graphics.getDensity());
+        parent.allowUiScale = UI.checkbox("scale UI", parent.allowUiScale);
+
+        parent.clearRGB = UI.colorPicker("background", parent.clearRGB);
     }
 }
