@@ -39,7 +39,6 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
      * frames before the current frame in the buffer just in case. Note
      * that these frames count towards the BUFFER_COUNT limit. */
     private static final int KEEP_TRAILING_FRAMES = 15; // 500ms at 30FPS
-    private static final int NUM_BUFFER = 2;
 
     final StringParameter directory = new StringParameter("dir", null);
     private final BooleanParameter chooseDir = new BooleanParameter("pick", false).setMode(BooleanParameter.Mode.MOMENTARY);
@@ -63,45 +62,60 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
 
     protected boolean baked = false;
 
-    private int pending_circular_buffer_index = 0;
-    List<BufferedImage> bakedImage = new ArrayList<>();
 
     int nFrames = 0;
     private double freewheelTime = 0;
-    private int hunkLengthInFrames = 60;
+    private int hunkLengthInFrames = -1; // we don't know untill we read
+    private int masterHunkIndex = 0;
 
-    static class Slide {
-        File path;
-        BufferedImage img;
+    /*
+    * DoubleBuffer
+    * If DoubleBuffer is valid then it..
+    * Always has one buffer loaded which the main thread can use.
+    * Always has one buffer ready to be loaded by it's own thread so that the main thread is not interrupted.
+     */
+    class DoubleBuffer {
+        public boolean valid = false;
+        private static final int NUM_BUFFER = 2;
+        public boolean initialized = false;
+        List<BufferedImage> twoBuffers = new ArrayList<>();
+        private int pending_circular_buffer_index = 0;
 
-        Slide(File p) {
-            path = p;
-            img = null;
-        }
+        private int nextToLoad = 0;
 
-        boolean loaded() {
-            return img != null;
-        }
+        public BufferedImage activeBuffer;
+        public BufferedImage inactiveBuffer;
 
-        void load() {
-            if (img == null) {
-                try {
-                    img = ImageIO.read(path);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    SLStudio.setWarning(TAG, String.format("failed to load %s", path.toString()));
-                }
+        public DoubleBuffer(){}
+
+        public void initializeBuffers(BufferedImage initialBuffer){
+            for (int i = 0; i < NUM_BUFFER; i++){
+                twoBuffers.add(initialBuffer);
             }
+            activeBuffer = twoBuffers.get(0);
+            inactiveBuffer = twoBuffers.get(1);
+            nextToLoad = 1;
+            valid = true;
+            initialized = true;
         }
 
-        void unload() {
-            img = null;
+        public void load(BufferedImage bufIn) {
+            twoBuffers.set(nextToLoad, bufIn);
+            inactiveBuffer = bufIn;
+            nextToLoad = (nextToLoad==1?0:1); // toggle nextToLoad
+            System.out.println("Next IDX: " + nextToLoad);
+        }
+
+        public void swapActive() {
+            activeBuffer = inactiveBuffer;
         }
     }
 
-    Slide[] allFrames;
+
     Thread loaderThread;
     Semaphore loaderSemaphore;
+
+    DoubleBuffer doubleBuffer = new DoubleBuffer();
 
     public ThreadedTimeCodedSlideshow(LX lx) {
         super(lx);
@@ -152,28 +166,23 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
         super.onActive();
         stopping = false;
 
-        if(directory != null){
-            loaderSemaphore.release(NUM_BUFFER);
-        }
+//        if(directory != null){
+//            loaderSemaphore.release(DoubleBuffer.NUM_BUFFER);
+//        }
 
         loaderThread = new Thread(() -> {
             while (!stopping) {
                 try {
-                    SLStudio.setWarning("TCSS loaderThread - ", "waiting... last loaded:" + get_current_hunk_index());
+                    SLStudio.setWarning("TCSS loaderThread - ", "waiting... next to load: " + masterHunkIndex + ".png");
                     loaderSemaphore.acquire();
+                    doubleBuffer.swapActive();
                 } catch (InterruptedException e) {
                     return;
                 }
                 lastLoadLoop = System.nanoTime();
-                /* Find the first frame after/including the current frame that
-                 * hasn't been loaded, and load it. */
-//                for (int i = currentFrame < 0 ? 0 : currentFrame; i < nFrames; i++) {
-//                    if (!allFrames[i].loaded()) {
-//                        allFrames[i].load();
-//                        break;
-//                    }
-//                }
+
                 loadNextHunk(); // load next hunk returns true on success.  Do not stop if success.
+                nFrames += doubleBuffer.activeBuffer.getHeight();
             }
         });
         try {
@@ -199,29 +208,6 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
         }
     }
 
-    @Override
-    public String getCaption() {
-        int offset = lastFrameReceived - tcStartFrame.getValuei();
-        if (baked) {
-            return String.format(
-                "time %s / %d frames / frame %d / offset %d / baked image %s",
-                mt == null ? "unknown" : mt.toString(),
-                nFrames,
-                currentFrame,
-                offset,
-                directory.getString());
-        }
-        return String.format(
-            "time %s / %d frames / frame %d %s / offset %d / waiting %d / since last load %ds / dir %s",
-            mt == null ? "unknown" : mt.toString(),
-            nFrames,
-            currentFrame,
-            currentFrameLoaded ? "ok" : "skip",
-            offset,
-            loaderSemaphore.availablePermits(),
-            (int) ((System.nanoTime() - lastLoadLoop) / 1e9),
-            directory.getString());
-    }
 
     @Override
     public void onParameterChanged(LXParameter p) {
@@ -244,7 +230,7 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
 
             System.out.println("Directory is: " + directory.getString());
 //            Tell the loaderThread load the first buffers
-            loaderSemaphore.release(NUM_BUFFER);
+            loaderSemaphore.release(DoubleBuffer.NUM_BUFFER);
 
         } else if (p == freewheelReset && freewheelReset.getValueb()) {
             currentFrame = -1;
@@ -259,23 +245,22 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
 
     boolean loadNextHunk() {
         String directoryPath = directory.getString();
-        String hunkPath = directoryPath + "/" + (get_current_hunk_index() + pending_circular_buffer_index) + ".png";
+        String hunkPath = directoryPath + "/" + masterHunkIndex + ".png";
 
         File hunkFile = new File(hunkPath);
-        SLStudio.setWarning("TCSS loaderThread - ", "loading hunk " + get_current_hunk_index() + "" + pending_circular_buffer_index);
         if (hunkFile.isFile() && hunkFile.getName().endsWith(".png")) {
             try{
+                BufferedImage curBuffer = ImageIO.read(hunkFile);
                 // if there's nothing in there initialize it
-                if (bakedImage.size() == 0){
-                    for (int i = 0; i < NUM_BUFFER; i++){
-                        // using the same image it's a hack..
-                        bakedImage.add(ImageIO.read(hunkFile));
-                    }
+                if (!doubleBuffer.initialized) {
+                    doubleBuffer.initializeBuffers(curBuffer);
+                    hunkLengthInFrames = doubleBuffer.activeBuffer.getHeight();
+                    masterHunkIndex++;
                 }
-                BufferedImage thisImage = ImageIO.read(hunkFile);
-                bakedImage.set(pending_circular_buffer_index++, thisImage);
-                pending_circular_buffer_index %= NUM_BUFFER;
-                nFrames += thisImage.getHeight();
+                else{
+                    doubleBuffer.load(curBuffer);
+                    masterHunkIndex++;
+                }
             } catch (IOException e) {
                 String error_msg = "couldn't load next cache in sequence";
                 SLStudio.setWarning(TAG, error_msg);
@@ -293,41 +278,41 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
         return false;
     }
 
-    void loadDirectory() {
-        SLStudio.setWarning(TAG, null);
-        String path = directory.getString();
-        if (path == null) {
-            return;
-        }
-        File dir = new File(path);
-
-        if (dir.isFile() && dir.getName().endsWith(".png")) {
-            baked = true;
-            try {
-                bakedImage.set(pending_circular_buffer_index, ImageIO.read(dir));
-                nFrames = bakedImage.get(pending_circular_buffer_index).getHeight();
-            } catch (IOException e) {
-                SLStudio.setWarning(TAG, "couldn't load baked slideshow");
-                System.out.println("could not load baked slideshow:");
-                e.printStackTrace();
-                bakedImage = null;
-            }
-            return;
-        }
-
-        if (!dir.isDirectory()) {
-            SLStudio.setWarning(TAG, "slideshow directory does not exist or no *.png hunk");
-            return;
-        }
-        File[] files = dir.listFiles(fn -> fn.getName().endsWith(".png"));
-        if (files == null) {
-            SLStudio.setWarning(TAG, "no files in directory");
-            return;
-        }
-
-
-        loaderSemaphore.release(NUM_BUFFER);
-    }
+//    void loadDirectory() {
+//        SLStudio.setWarning(TAG, null);
+//        String path = directory.getString();
+//        if (path == null) {
+//            return;
+//        }
+//        File dir = new File(path);
+//
+//        if (dir.isFile() && dir.getName().endsWith(".png")) {
+//            baked = true;
+//            try {
+//                doubleBuffer.set(pending_circular_buffer_index, ImageIO.read(dir));
+//                nFrames = doubleBuffer.get(pending_circular_buffer_index).getHeight();
+//            } catch (IOException e) {
+//                SLStudio.setWarning(TAG, "couldn't load baked slideshow");
+//                System.out.println("could not load baked slideshow:");
+//                e.printStackTrace();
+//                doubleBuffer = null;
+//            }
+//            return;
+//        }
+//
+//        if (!dir.isDirectory()) {
+//            SLStudio.setWarning(TAG, "slideshow directory does not exist or no *.png hunk");
+//            return;
+//        }
+//        File[] files = dir.listFiles(fn -> fn.getName().endsWith(".png"));
+//        if (files == null) {
+//            SLStudio.setWarning(TAG, "no files in directory");
+//            return;
+//        }
+//
+//
+//        loaderSemaphore.release(NUM_BUFFER);
+//    }
 
     private void goToFrame(int frame) {
         frame -= tcStartFrame.getValuei();
@@ -367,35 +352,6 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
 //        }
     }
 
-    private void copyFrameToColors(BufferedImage img, int[] ccs) {
-        int cropLeft = Math.round(cropLeftParam.getValuef() * img.getWidth());
-        int cropRight = Math.round(cropRightParam.getValuef() * img.getWidth());
-        int cropTop = Math.round(cropTopParam.getValuef() * img.getHeight());
-        int cropBottom = Math.round(cropBottomParam.getValuef() * img.getHeight());
-
-        float shrink = shrinkParam.getValuef();
-        int croppedWidth = img.getWidth() - cropLeft - cropRight;
-        int croppedHeight = img.getHeight() - cropTop - cropBottom;
-
-        Arrays.fill(ccs, 0);
-
-        for (LXVector v : getVectors()) {
-            int i = (int) ((shrink * (model.yMax - v.y)) + yOffsetParam.getValue() * img.getHeight());
-            int j = (int) (shrink * (v.x - model.xMin));
-            int color;
-            if (i >= croppedHeight || j >= croppedWidth || i < 0 || j < 0) {
-                color = 0;
-            } else {
-                int vcolor = img.getRGB(j + cropLeft, i + cropTop);
-                color = LXColor.rgb(
-                    (vcolor >> 16) & 0xFF,
-                    (vcolor >> 8) & 0xFF,
-                    vcolor & 0xFF);
-            }
-            ccs[v.index] = color;
-        }
-    }
-
     @Override
     public void run(double elapsedMs, PolyBuffer.Space preferredSpace) {
         if (freewheel.getValueb()) {
@@ -407,11 +363,17 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
         }
 
         int[] ccs = (int[]) getArray(PolyBuffer.Space.SRGB8);
-        if (currentFrame >= nFrames || currentFrame < 0) {
+        if (currentFrame < 0) {
             Arrays.fill(ccs, LXColor.RED);
+        }
+        if (currentFrame >= nFrames) {
+            // ok we've depleted the current buffer in double buffer.
+            // switch to the other buffer
+            // current buffer is now available to load next needed.
+            loaderSemaphore.release();
             // always baked.
         } else {
-            if (bakedImage != null) {
+            if (doubleBuffer != null) {
                 /* we can't just pull the colors straight out of the image as
                  * a single array copy because we want to honor warps that turn
                  * off pixels. */
@@ -419,8 +381,8 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
 
                 try {
                     for (LXVector v : getVectors()) {
-                        // this must be guaranteed to be good index
-                        ccs[v.index] = bakedImage.get(get_current_hunk_buffer()).getRGB(v.index, currentFrame % hunkLengthInFrames);
+//                        ccs[v.index] = doubleBuffer.get(get_current_hunk_buffer()).getRGB(v.index, currentFrame % hunkLengthInFrames);
+                        ccs[v.index] = doubleBuffer.activeBuffer.getRGB(v.index, currentFrame % hunkLengthInFrames);
                     }
                 } catch (Exception e) {
                     System.out.println("bad index");
@@ -432,15 +394,24 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
         markModified(PolyBuffer.Space.SRGB8);
     }
 
+    // the index of the file we want.
+    private int get_current_hunk_index() {
+//        return get_current_batch_index()*NUM_BUFFER + pending_circular_buffer_index;
+        return masterHunkIndex;
+    }
     private int get_current_hunk_offset() {
         return currentFrame%hunkLengthInFrames;
     }
-    private int get_current_hunk_index() {
-        System.out.println(currentFrame/hunkLengthInFrames);
-        return currentFrame/hunkLengthInFrames;
+    private int get_current_batch_index() {
+        if (hunkLengthInFrames == -1){
+            return 0;
+        }
+        int batch_index = currentFrame/(hunkLengthInFrames*DoubleBuffer.NUM_BUFFER);
+        System.out.println(batch_index);
+        return batch_index;
     }
 
-    int last_circular_buffer_index = 0;  // the first one is zero
+    int last_circular_buffer_index = 0;
     private int get_current_hunk_buffer() {
         int hunk_buffer_index = (currentFrame/hunkLengthInFrames)%2;
         if (hunk_buffer_index != last_circular_buffer_index){
@@ -448,5 +419,29 @@ public class ThreadedTimeCodedSlideshow extends SLPattern<SLModel> {
         }
         last_circular_buffer_index = hunk_buffer_index;
         return hunk_buffer_index;
+    }
+
+    @Override
+    public String getCaption() {
+        int offset = lastFrameReceived - tcStartFrame.getValuei();
+        if (baked) {
+            return String.format(
+                "time %s / %d frames / frame %d / offset %d / baked image %s",
+                mt == null ? "unknown" : mt.toString(),
+                nFrames,
+                currentFrame,
+                offset,
+                directory.getString());
+        }
+        return String.format(
+            "time %s / %d frames / frame %d %s / offset %d / waiting %d / since last load %ds / dir %s",
+            mt == null ? "unknown" : mt.toString(),
+            nFrames,
+            currentFrame,
+            currentFrameLoaded ? "ok" : "skip",
+            offset,
+            loaderSemaphore.availablePermits(),
+            (int) ((System.nanoTime() - lastLoadLoop) / 1e9),
+            directory.getString());
     }
 }
