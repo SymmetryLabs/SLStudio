@@ -1,15 +1,10 @@
 package com.symmetrylabs.slstudio.ui;
 
-import com.symmetrylabs.slstudio.output.ContinuousOfflineRenderOutput;
+import com.symmetrylabs.slstudio.output.DoubleBufferedOfflineRenderOutput;
 import com.symmetrylabs.slstudio.output.ModelCsvWriter;
-import com.symmetrylabs.slstudio.output.OfflineRenderOutput;
 import heronarts.lx.LX;
-import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.StringParameter;
-import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIDoubleBox;
@@ -37,7 +32,7 @@ public class UIOfflineRender extends UICollapsibleSection {
     private final BooleanParameter useContinuous = new BooleanParameter("useContinuous", false);
 
 //    private OfflineRenderOutput output;
-    private ContinuousOfflineRenderOutput output;
+    private DoubleBufferedOfflineRenderOutput output;
 
     public UIOfflineRender(UI ui, LX lx, float x, float y, float w) {
         super(ui, x, y, w, HEIGHT);
@@ -45,7 +40,7 @@ public class UIOfflineRender extends UICollapsibleSection {
 
         useContinuous.setValue(true);
         if (useContinuous.getValueb()){
-           output = new ContinuousOfflineRenderOutput(lx);
+           output = new DoubleBufferedOfflineRenderOutput(lx);
            lx.addOutput(output);
            setTitle("CONTINUOUS OFFLINE RENDER");
         }

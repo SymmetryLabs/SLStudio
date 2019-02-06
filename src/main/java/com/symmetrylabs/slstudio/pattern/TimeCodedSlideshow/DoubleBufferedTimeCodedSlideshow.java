@@ -9,11 +9,7 @@ import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.MidiTime;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.MutableParameter;
-import heronarts.lx.parameter.StringParameter;
+import heronarts.lx.parameter.*;
 import heronarts.lx.transform.LXVector;
 
 import javax.imageio.ImageIO;
@@ -50,6 +46,8 @@ public class DoubleBufferedTimeCodedSlideshow extends SLPattern<SLModel> {
     private final MutableParameter tcStartFrame = new MutableParameter("tcStart", 0);
     private final BooleanParameter freewheel = new BooleanParameter("run", false);
     private final BooleanParameter freewheelReset = new BooleanParameter("runReset", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter sweep = new BooleanParameter("sweepFrame", false);
+    private final DiscreteParameter sweepSelectFrame = new DiscreteParameter("sweepSelectFrame", 0, 0, 120);
 
     private MidiTime mt;
     int currentFrame;
@@ -201,6 +199,8 @@ public class DoubleBufferedTimeCodedSlideshow extends SLPattern<SLModel> {
         addParameter(bake);
         addParameter(freewheel);
         addParameter(freewheelReset);
+        addParameter(sweep);
+        addParameter(sweepSelectFrame);
 
         for (LXMidiInput input : lx.engine.midi.inputs) {
             input.addTimeListener(new LXMidiInput.MidiTimeListener() {
@@ -374,6 +374,10 @@ public class DoubleBufferedTimeCodedSlideshow extends SLPattern<SLModel> {
                 freewheelTime = 0;
                 currentFrame++;
             }
+        }
+
+        if (sweep.getValueb()){
+            currentFrame = (int)sweepSelectFrame.getValuef();
         }
 
         int[] ccs = (int[]) getArray(PolyBuffer.Space.SRGB8);
