@@ -60,10 +60,14 @@ public class RenderManager {
 
     public void draw() {
         GL41.glEnable(GL41.GL_DEPTH_TEST);
+        /* set winding order to match left-handed-coordinates */
+        GL41.glFrontFace(GL41.GL_CW);
         GL41.glDepthFunc(GL41.GL_LESS);
         for (Renderable r : renderables) {
             r.draw(cam);
         }
+        /* restore CCW winding to leave the render in a reasonable (cough cough) state */
+        GL41.glFrontFace(GL41.GL_CCW);
         GL41.glDisable(GL41.GL_DEPTH_TEST);
     }
 
