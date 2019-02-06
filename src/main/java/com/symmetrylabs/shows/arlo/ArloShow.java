@@ -8,7 +8,8 @@ import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.slstudio.model.SLModel;
-
+import com.symmetrylabs.slstudio.showplugins.FaderLimiter;
+import com.symmetrylabs.slstudio.showplugins.XfadeTimer;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
 import heronarts.lx.transform.LXTransform;
 
@@ -38,7 +39,7 @@ public static final String SHOW_NAME = "arlo";
 
         // Middle Cubes Left To Right
         new TowerConfig(CubesModel.Cube.Type.HD, SP*-4, SP * 1, 0, 0, -45+90, 0, new String[] {"797","459"}),
-        new TowerConfig(CubesModel.Cube.Type.HD, SP*-2, SP*1, SP*0, 0, -45+90, 0, new String[] {"900","907"}),        
+        new TowerConfig(CubesModel.Cube.Type.HD, SP*-2, SP*1, SP*0, 0, -45+90, 0, new String[] {"900","907"}),
         new TowerConfig(CubesModel.Cube.Type.HD, SP*0, SP*1, SP*0, 0, -45+90, 0, new String[] {"1133","1139"}),
         new TowerConfig(CubesModel.Cube.Type.HD, SP*2, SP*1, SP*0, 0, -45+90, 0, new String[] {"1135","1132"}),
         new TowerConfig(CubesModel.Cube.Type.HD, SP*4, SP*1, SP*0, 0, -45+90, 0, new String[] {"1128","1130"}),
@@ -48,7 +49,7 @@ public static final String SHOW_NAME = "arlo";
                 new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*1, SP*-2, 0, 0+90, 0, new String[] {"1134","1121"}),
 
                 new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*2, SP*-3, 0, 45+90, 0, new String[] {"1138","1149"}),
-        
+
                 new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*0, SP*-4.1f, 0, 45+90, 0, new String[] {"1127","1147"}),
                 new TowerConfig(CubesModel.Cube.Type.HD, SP*5.5f, SP*1, SP*-4.1f, 0, 0+90, 0, new String[] {"1136","1123"}),
 
@@ -90,7 +91,7 @@ public static final String SHOW_NAME = "arlo";
  5410ecfd5554
  5410ecfd58fb
  5410ecfd5d77
- 
+
 
 */
 
@@ -276,8 +277,8 @@ public static final String SHOW_NAME = "arlo";
         workspace = new Workspace(lx, ui, "shows/arlo");
         workspace.setRequestsBeforeSwitch(2);
 
-        ArloXfadeTimer.attach(lx, ui);
-        ArloFaderLimiter.attach(lx);
+        XfadeTimer.attach(lx, ui);
+        FaderLimiter.attach(lx);
     }
 
     @Override

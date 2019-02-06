@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pattern.utility;
+package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
@@ -10,22 +10,19 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.transform.LXVector;
 
-import static heronarts.lx.PolyBuffer.Space.SRGB8;
-
-public class StripperSelectah extends SLPattern<StripsModel> {
+public class StripSelector extends SLPattern<StripsModel> {
     private DiscreteParameter selectedstrip;
 
-    public StripperSelectah(LX lx){
+    public StripSelector(LX lx){
         super(lx);
         int N = model.getStrips().size();
-        addParameter(selectedstrip = new DiscreteParameter("StripIndex", N));
+        addParameter(selectedstrip = new DiscreteParameter("strip", N));
     }
 
     public void run(double deltaMs){
         setColors(LXColor.BLACK);
-        for(LXVector v: model.getStripByIndex(selectedstrip.getValuei()).getVectorArray()){
+        for (LXPoint v : model.getStripByIndex(selectedstrip.getValuei()).getPoints()) {
             colors[v.index] = LXColor.BLUE;
         }
     }
-
 }

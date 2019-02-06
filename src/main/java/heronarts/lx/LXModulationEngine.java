@@ -201,6 +201,28 @@ public class LXModulationEngine extends LXModulatorComponent implements LXOscCom
         return "Mod";
     }
 
+    /** Run the loop, then notify all changed parameters */
+    @Override
+    public void loop(double deltaMs) {
+        /* CompoundParameters sum the values of their attached modulations every
+           time getValue is called on them; because of that, they don't really
+           have a sense that their value has "changed" when the modulator is
+           running. However, a number of different components all assume that a
+           parameter changing its value (which modulation technically doesn't
+           do, but the LXParameter API makes it seem like the value is changing)
+           will notify parameter listeners. Here, we update all of the
+           modulators, and then we go through each of the modulations and bang
+           any parameters that have enabled modulations attached, to make sure
+           that their listeners get an update about the new perceived value of
+           the parameter. */
+        super.loop(deltaMs);
+        for (LXCompoundModulation modulation : mutableModulations) {
+            if (modulation.enabled.isOn()) {
+                modulation.target.bang();
+            }
+        }
+    }
+
     protected LXModulator instantiateModulator(String className) {
         try {
             Class<? extends LXModulator> cls = Class.forName(className).asSubclass(LXModulator.class);

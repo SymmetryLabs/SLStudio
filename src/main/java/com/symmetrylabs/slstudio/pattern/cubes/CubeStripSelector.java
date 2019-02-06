@@ -9,12 +9,12 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.DiscreteParameter;
 
 
-public class StripSelector extends SLPattern<CubesModel> {
+public class CubeStripSelector extends SLPattern<CubesModel> {
     public static final String GROUP_NAME = CubesShow.SHOW_NAME;
 
     public final DiscreteParameter selectedStrip = new DiscreteParameter("strip", 1, 1, 13);
 
-    public StripSelector(LX lx) {
+    public CubeStripSelector(LX lx) {
         super(lx);
         this.model = (CubesModel) lx.model;
         addParameter(selectedStrip);
@@ -32,8 +32,4 @@ public class StripSelector extends SLPattern<CubesModel> {
             }
         }
     }
-
-    }
-
-
-
+}

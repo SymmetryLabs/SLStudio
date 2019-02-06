@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1548870300405,
+  "timestamp": 1549465054964,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,7 +14,7 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 0.22000858187675476,
+      "speed": 0.2201550304889679,
       "focusedChannel": 4,
       "cueA": false,
       "cueB": false,
@@ -602,6 +602,32 @@
         "patternIndex": 0,
         "patterns": [
           {
+            "id": 46646,
+            "class": "com.symmetrylabs.slstudio.pattern.SineSphere",
+            "modulationColor": -16711854,
+            "parameters": {
+              "label": "SineSphere",
+              "palette": 0,
+              "HueSpread": 0.0,
+              "vib": 3000.0,
+              "Width": 8.199999989941716,
+              "rotx": 0.18999999575316906,
+              "roty": 0.7699999827891588,
+              "rotz": 0.23999999463558197,
+              "yspeed": 5800.0,
+              "y2speed": 4649.989996647462,
+              "y3speed": 1400.0,
+              "Vmag": 108.94762354383154,
+              "Scale": 1.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
             "id": 1294,
             "class": "com.symmetrylabs.slstudio.pattern.ShiftingPlane",
             "modulationColor": -786177,
@@ -665,7 +691,7 @@
         },
         "warps": [
           {
-            "id": 374,
+            "id": 46490,
             "class": "com.symmetrylabs.slstudio.warp.BoxMask",
             "modulationColor": -21504,
             "parameters": {
@@ -674,7 +700,7 @@
               "xSize": 377.84999923221767,
               "cx": 356.25,
               "ySize": 39.60000132769346,
-              "cy": -50.21634958775824,
+              "cy": -49.64421240859235,
               "zSize": 62.309999730437994,
               "cz": -36.30000089854002,
               "invert": false
@@ -683,7 +709,7 @@
         ],
         "effects": [
           {
-            "id": 379,
+            "id": 46491,
             "class": "heronarts.lx.effect.BlurEffect",
             "modulationColor": -65497,
             "parameters": {
@@ -737,7 +763,7 @@
             "autoCycleEnabled": true
           },
           {
-            "id": 183,
+            "id": 46488,
             "class": "heronarts.lx.pattern.SolidColorPattern",
             "modulationColor": -65365,
             "parameters": {
@@ -845,7 +871,7 @@
               "WSpr": 0.18999999575316906,
               "WSpd": 0.3800000138580799,
               "Drez": 0.8624000026285649,
-              "Thick": 0.24000172317028046,
+              "Thick": 0.24037238955497742,
               "ySpr": 0.8100000042468309,
               "Hue": 0.7700000051409006,
               "HSpr": 0.7700000051409006
@@ -1032,7 +1058,20 @@
           "autoDisable": false,
           "speed": 1.0
         },
-        "warps": [],
+        "warps": [
+          {
+            "id": 46676,
+            "class": "com.symmetrylabs.slstudio.warp.Translate",
+            "modulationColor": -16711826,
+            "parameters": {
+              "label": "Translate",
+              "enabled": true,
+              "cx": 4.606693983078003E-5,
+              "cy": 0.0,
+              "cz": 0.0
+            }
+          }
+        ],
         "effects": [
           {
             "id": 6598,
@@ -1055,6 +1094,32 @@
         "clips": [],
         "patternIndex": 0,
         "patterns": [
+          {
+            "id": 46661,
+            "class": "com.symmetrylabs.slstudio.pattern.SineSphere",
+            "modulationColor": -65403,
+            "parameters": {
+              "label": "SineSphere",
+              "palette": 0,
+              "HueSpread": 0.0,
+              "vib": 2500.050048423932,
+              "Width": 5.229999938979745,
+              "rotx": 0.3199999928474426,
+              "roty": 1.0,
+              "rotz": 0.0,
+              "yspeed": 5800.0,
+              "y2speed": 4500.0,
+              "y3speed": 1400.0,
+              "Vmag": 20.0,
+              "Scale": 2.3229999700263146
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
           {
             "id": 1134,
             "class": "com.symmetrylabs.slstudio.pattern.ShiftingPlane",
@@ -1125,7 +1190,7 @@
             "parameters": {
               "label": "Speckle",
               "enabled": true,
-              "amt": 1.7066518012143206E-6
+              "amt": 2.673141352715902E-5
             }
           }
         ],
@@ -1646,10 +1711,23 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.0
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 26810,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -7340288,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
       "envelop": {
         "id": 44,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -1758,8 +1836,13 @@
               "shape": 1.0
             },
             {
-              "basis": 0.016877636313438416,
-              "value": 0.508474588394165,
+              "basis": 0.0,
+              "value": 0.610169529914856,
+              "shape": 1.0
+            },
+            {
+              "basis": 0.13924050331115723,
+              "value": 0.6271186470985413,
               "shape": 1.0
             },
             {
@@ -1792,8 +1875,13 @@
               "shape": 1.0
             },
             {
-              "basis": 0.05907173082232475,
-              "value": 0.7457627058029175,
+              "basis": 0.0,
+              "value": 0.610169529914856,
+              "shape": 1.0
+            },
+            {
+              "basis": 0.1265822798013687,
+              "value": 0.5932203531265259,
               "shape": 1.0
             },
             {
@@ -2068,7 +2156,7 @@
             "running": false,
             "trigger": false,
             "loop": false,
-            "period": 884.5615100389441
+            "period": 1000.0
           },
           "stages": [
             {
@@ -2077,8 +2165,8 @@
               "shape": 1.0
             },
             {
-              "basis": 0.29535865783691406,
-              "value": 0.9830508232116699,
+              "basis": 0.17299577593803406,
+              "value": 1.0,
               "shape": 1.0
             },
             {
@@ -2186,6 +2274,21 @@
               "shape": 1.0
             }
           ]
+        },
+        {
+          "id": 46678,
+          "class": "heronarts.lx.modulator.MacroKnobs",
+          "modulationColor": -65412,
+          "parameters": {
+            "label": "Macro 1",
+            "running": true,
+            "trigger": false,
+            "macro1": 0.0,
+            "macro2": 0.0,
+            "macro3": 0.0,
+            "macro4": 0.0,
+            "macro5": 0.0
+          }
         }
       ],
       "modulations": [
@@ -2413,7 +2516,7 @@
             "parameterPath": "macro4"
           },
           "target": {
-            "componentId": 374,
+            "componentId": 46490,
             "parameterPath": "cy"
           },
           "id": 2081,
@@ -2605,6 +2708,25 @@
             "Polarity": 0,
             "Range": 1.0
           }
+        },
+        {
+          "source": {
+            "componentId": 46678,
+            "parameterPath": "macro1"
+          },
+          "target": {
+            "componentId": 46676,
+            "parameterPath": "cx"
+          },
+          "id": 46679,
+          "class": "heronarts.lx.parameter.LXCompoundModulation",
+          "modulationColor": -65472,
+          "parameters": {
+            "label": "",
+            "enabled": true,
+            "Polarity": 0,
+            "Range": 0.39830508921295404
+          }
         }
       ],
       "triggers": [
@@ -2664,12 +2786,6 @@
         },
         {
           "name": "CoreMIDI4J - NateBus",
-          "channel": false,
-          "control": true,
-          "sync": false
-        },
-        {
-          "name": "** Internal Error getting Device Name!",
           "channel": false,
           "control": true,
           "sync": false
@@ -2847,12 +2963,13 @@
         "4792": true,
         "4795": true,
         "6337": true,
-        "31149": true
+        "31149": true,
+        "46678": true
       },
       "preview": {
-        "radius": 579.0045850455133,
-        "theta": 0.23700000000003685,
-        "phi": 0.06000000000000172,
+        "radius": 773.4458489747414,
+        "theta": 0.18300000000003686,
+        "phi": 0.057000000000001716,
         "positionX": 336.9455261230469,
         "positionY": 93.25,
         "positionZ": 71.17598724365234
