@@ -86,7 +86,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
         renderer = new ModelRenderer(lx, model);
 
-        camController = new CameraInputController(renderer.cam);
+        camController = new OrthoPerspCamera.InputController(renderer.cam);
         camController.target.set(model.cx, model.cy, model.cz);
         camController.translateUnits = model.xRange;
         camController.scrollFactor *= -0.2f;
@@ -99,11 +99,11 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
            the Window menu and it doesn't have a close button, so there's no risk of
            it disappearing. */
         WindowManager.addTransient(new MainMenu(lx, this));
-        /* Same with camera controls, too */
-        WindowManager.addTransient(new CameraControlWindow(lx, camController));
         WindowManager.addPersistent("Audio", () -> new AudioWindow(lx), false);
         WindowManager.addPersistent("Channels", () -> new ChannelWindow(lx), true);
         WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this, renderer), false);
+        WindowManager.addPersistent("View", () -> new CameraControlWindow(lx, camController, renderer.cam), true);
+
         WindowManager.addPersistent("Imgui demo", () -> new SlimguiDemoWindow(), false);
         WindowManager.addPersistent("Imgui style editor", () -> new SlimguiStyleEditor(), false);
         WindowManager.addPersistent("Imgui metrics", () -> new SlimguiMetricsWindow(), false);

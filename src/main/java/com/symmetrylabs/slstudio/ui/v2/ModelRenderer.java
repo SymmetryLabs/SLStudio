@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GLCapabilities;
 public class ModelRenderer {
     private static final PolyBuffer.Space UI_COLOR_SPACE = PolyBuffer.Space.SRGB8;
 
-    public final Camera cam;
+    public final OrthoPerspCamera cam;
     protected final LXModel model;
     protected final ShaderProgramWithProgramHandle pointShader;
     protected final float[] glColorBuffer;
@@ -101,7 +101,7 @@ public class ModelRenderer {
 
         GL41.glBindVertexArray(0);
 
-        cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        cam = new OrthoPerspCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 67);
         cam.position.set(model.cx, model.cy, model.zMin - model.rMax);
         cam.lookAt(model.cx, model.cy, model.cz);
         cam.near = 1f;
