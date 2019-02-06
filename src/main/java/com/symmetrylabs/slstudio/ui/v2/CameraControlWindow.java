@@ -19,6 +19,14 @@ public class CameraControlWindow implements Window {
         this.lx = lx;
         this.cic = cic;
         this.camera = camera;
+        TextureManager.load("icons/back.png");
+        TextureManager.load("icons/down.png");
+        TextureManager.load("icons/front.png");
+        TextureManager.load("icons/iso-left.png");
+        TextureManager.load("icons/iso-right.png");
+        TextureManager.load("icons/left.png");
+        TextureManager.load("icons/right.png");
+        TextureManager.load("icons/up.png");
     }
 
     @Override
@@ -30,39 +38,41 @@ public class CameraControlWindow implements Window {
                  UI.WINDOW_NO_DOCKING | UI.WINDOW_ALWAYS_AUTO_RESIZE);
         UI.popColor();
 
-        if (UI.button("FRONT")) {
+        final float size = 16;
+
+        if (TextureManager.button("icons/front.png", size, size)) {
             go(0, 0, -1, 0, 1, 0);
         }
         UI.sameLine();
-        if (UI.button("BACK")) {
+        if (TextureManager.button("icons/back.png", size, size)) {
             go(0, 0, 1, 0, 1, 0);
         }
         UI.sameLine();
-        if (UI.button("TOP")) {
+        if (TextureManager.button("icons/down.png", size, size)) {
             go(0, 1, 0, 0, 0, 1);
         }
         UI.sameLine();
-        if (UI.button("BOTTOM")) {
+        if (TextureManager.button("icons/up.png", size, size)) {
             go(0, -1, 0, 0, 0, -1);
         }
         UI.sameLine();
-        if (UI.button("LEFT")) {
+        if (TextureManager.button("icons/left.png", size, size)) {
             go(1, 0, 0, 0, 1, 0);
         }
         UI.sameLine();
-        if (UI.button("RIGHT")) {
+        if (TextureManager.button("icons/right.png", size, size)) {
             go(-1, 0, 0, 0, 1, 0);
         }
         UI.sameLine();
-        if (UI.button("ISO-L")) {
+        if (TextureManager.button("icons/iso-left.png", size, size)) {
             go(ISO_L.x, ISO_L.y, ISO_L.z, 0, 1, 0);
         }
         UI.sameLine();
-        if (UI.button("ISO-R")) {
+        if (TextureManager.button("icons/iso-right.png", size, size)) {
             go(ISO_R.x, ISO_R.y, ISO_R.z, 0, 1, 0);
         }
         UI.sameLine();
-        camera.ortho = UI.checkbox("ortho", camera.ortho);
+        camera.ortho = UI.checkbox("ORTHO", camera.ortho);
         UI.end();
     }
 

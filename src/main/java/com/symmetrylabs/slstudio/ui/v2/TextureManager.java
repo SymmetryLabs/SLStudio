@@ -22,36 +22,36 @@ public class TextureManager {
         INSTANCE.loadImpl(resourcePath);
     }
 
-    public static void draw(String key) {
-        INSTANCE.drawImpl(key, -1, -1, 0, 0, 1, 1);
+    public static void draw(String resourcePath) {
+        INSTANCE.drawImpl(resourcePath, -1, -1, 0, 0, 1, 1);
     }
 
-    public static void draw(String key, float w, float h) {
-        INSTANCE.drawImpl(key, w, h, 0, 0, 1, 1);
+    public static void draw(String resourcePath, float w, float h) {
+        INSTANCE.drawImpl(resourcePath, w, h, 0, 0, 1, 1);
     }
 
-    public static void draw(String key, float u0, float v0, float u1, float v1) {
-        INSTANCE.drawImpl(key, -1, -1, u0, v0, u1, v1);
+    public static void draw(String resourcePath, float u0, float v0, float u1, float v1) {
+        INSTANCE.drawImpl(resourcePath, -1, -1, u0, v0, u1, v1);
     }
 
-    public static void draw(String key, float w, float h, float u0, float v0, float u1, float v1) {
-        INSTANCE.drawImpl(key, w, h, u0, v0, u1, v1);
+    public static void draw(String resourcePath, float w, float h, float u0, float v0, float u1, float v1) {
+        INSTANCE.drawImpl(resourcePath, w, h, u0, v0, u1, v1);
     }
 
-    public static boolean button(String key) {
-        return INSTANCE.buttonImpl(key, -1, -1, 0, 0, 1, 1);
+    public static boolean button(String resourcePath) {
+        return INSTANCE.buttonImpl(resourcePath, -1, -1, 0, 0, 1, 1);
     }
 
-    public static boolean button(String key, float w, float h) {
-        return INSTANCE.buttonImpl(key, w, h, 0, 0, 1, 1);
+    public static boolean button(String resourcePath, float w, float h) {
+        return INSTANCE.buttonImpl(resourcePath, w, h, 0, 0, 1, 1);
     }
 
-    public static boolean button(String key, float u0, float v0, float u1, float v1) {
-        return INSTANCE.buttonImpl(key, -1, -1, u0, v0, u1, v1);
+    public static boolean button(String resourcePath, float u0, float v0, float u1, float v1) {
+        return INSTANCE.buttonImpl(resourcePath, -1, -1, u0, v0, u1, v1);
     }
 
-    public static boolean button(String key, float w, float h, float u0, float v0, float u1, float v1) {
-        return INSTANCE.buttonImpl(key, w, h, u0, v0, u1, v1);
+    public static boolean button(String resourcePath, float w, float h, float u0, float v0, float u1, float v1) {
+        return INSTANCE.buttonImpl(resourcePath, w, h, u0, v0, u1, v1);
     }
 
     private static class Texture {
@@ -64,22 +64,18 @@ public class TextureManager {
         textures = new HashMap<>();
     }
 
-    protected void loadImpl(String resourcePath) {
+    protected synchronized void loadImpl(String resourcePath) {
         /* early-exit so that we don't read the image unnecessarily; this should
            be cheap enough to call on every frame. */
         if (textures.containsKey(resourcePath)) {
             return;
         }
+        BufferedImage img;
         try {
-            loadImpl(resourcePath, ImageIO.read(getClass().getClassLoader().getResource(resourcePath)));
+            img = ImageIO.read(getClass().getClassLoader().getResource(resourcePath));
         } catch (IOException e) {
             e.printStackTrace();
             ApplicationState.setWarning("TextureManager/" + resourcePath, "texture failed to load from disk");
-        }
-    }
-
-    protected synchronized void loadImpl(String key, BufferedImage img) {
-        if (textures.containsKey(key)) {
             return;
         }
 
@@ -108,27 +104,27 @@ public class TextureManager {
         GL41.glTexParameteri(GL41.GL_TEXTURE_2D, GL41.GL_TEXTURE_MAG_FILTER, GL41.GL_LINEAR);
         GL41.glPixelStorei(GL41.GL_UNPACK_ROW_LENGTH, 0);
         GL41.glTexImage2D(GL41.GL_TEXTURE_2D, 0, GL41.GL_RGBA8, t.w, t.h, 0, GL41.GL_RGBA, GL41.GL_UNSIGNED_BYTE, buf);
-        textures.put(key, t);
+        textures.put(resourcePath, t);
     }
 
-    protected synchronized void drawImpl(String key, float w, float h, float u0, float v0, float u1, float v1) {
-        if (!textures.containsKey(key)) {
-            ApplicationState.setWarning("TextureManager/" + key, "texture not loaded");
+    protected synchronized void drawImpl(String resourcePath, float w, float h, float u0, float v0, float u1, float v1) {
+        if (!textures.containsKey(resourcePath)) {
+            ApplicationState.setWarning("TextureManager/" + resourcePath, "texture not loaded");
             return;
         }
-        Texture t = textures.get(key);
+        Texture t = textures.get(resourcePath);
         w = w == -1 ? t.w : w;
         h = h == -1 ? t.h : h;
         UI.image(t.id, w, h, u0, v0, u1, v1);
     }
 
-    protected synchronized boolean buttonImpl(String key, float w, float h, float u0, float v0, float u1, float v1) {
-        if (!textures.containsKey(key)) {
-            ApplicationState.setWarning("TextureManager/" + key, "texture not loaded");
-            /* best-effort: stick the key on a text button and show that instead */
-            return UI.button(key);
+    protected synchronized boolean buttonImpl(String resourcePath, float w, float h, float u0, float v0, float u1, float v1) {
+        if (!textures.containsKey(resourcePath)) {
+            ApplicationState.setWarning("TextureManager/" + resourcePath, "texture not loaded");
+            /* our best-effort is pretty low-effort: stick the resourcePath on a text button and show that instead */
+            return UI.button(resourcePath);
         }
-        Texture t = textures.get(key);
+        Texture t = textures.get(resourcePath);
         w = w == -1 ? t.w : w;
         h = h == -1 ? t.h : h;
         return UI.imageButton(t.id, w, h, u0, v0, u1, v1);
