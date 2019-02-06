@@ -33,8 +33,8 @@ public class RenderManager {
         printCapabilities();
 
         cam = new OrthoPerspCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 67);
-        cam.position.set(lx.model.cx, lx.model.cy, lx.model.zMin - lx.model.rMax);
-        cam.lookAt(lx.model.cx, lx.model.cy, lx.model.cz);
+        cam.setPositionLH(lx.model.cx, lx.model.cy, lx.model.zMin - lx.model.rMax);
+        cam.lookAtLH(lx.model.cx, lx.model.cy, lx.model.cz);
         cam.near = 1f;
         cam.far = 10000f;
         cam.update();

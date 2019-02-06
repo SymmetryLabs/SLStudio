@@ -32,7 +32,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
     int clearRGB = 0x000000;
     boolean allowUiScale = true;
 
-    CameraInputController camController;
+    OrthoPerspCamera.InputController camController;
 
     int lastBufWidth = 0, lastBufHeight;
 
@@ -91,7 +91,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         renderer.add(gnomon);
 
         camController = new OrthoPerspCamera.InputController(renderer.cam);
-        camController.target.set(model.cx, model.cy, model.cz);
+        camController.setTargetLH(model.cx, model.cy, model.cz);
         camController.translateUnits = model.xRange;
         camController.scrollFactor *= -0.2f;
 

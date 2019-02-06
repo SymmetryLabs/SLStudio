@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Camera;
 
 
 public class CameraControlWindow implements Window {
-    private final CameraInputController cic;
+    private final OrthoPerspCamera.InputController cameraCtrl;
     private final OrthoPerspCamera camera;
     private final GnomonRenderable gnomon;
     private final LX lx;
@@ -16,9 +16,9 @@ public class CameraControlWindow implements Window {
     private static final Vector3 ISO_L = new Vector3(ISO_VEC).rotate(-45, 0, 1, 0);
     private static final Vector3 ISO_R = new Vector3(ISO_VEC).rotate(45, 0, 1, 0);
 
-    public CameraControlWindow(LX lx, CameraInputController cic, OrthoPerspCamera camera, GnomonRenderable gnomon) {
+    public CameraControlWindow(LX lx, OrthoPerspCamera.InputController cameraCtrl, OrthoPerspCamera camera, GnomonRenderable gnomon) {
         this.lx = lx;
-        this.cic = cic;
+        this.cameraCtrl = cameraCtrl;
         this.camera = camera;
         this.gnomon = gnomon;
         TextureManager.load("icons/back.png");
@@ -81,10 +81,10 @@ public class CameraControlWindow implements Window {
     }
 
     private void go(float x, float y, float z, float ux, float uy, float uz) {
-        float rad = camera.position.dst(cic.target);
-        cic.target.set(lx.model.cx, lx.model.cy, lx.model.cz);
+        float rad = camera.position.dst(cameraCtrl.target);
+        cameraCtrl.setTargetLH(lx.model.cx, lx.model.cy, lx.model.cz);
         camera.direction.set(-x, -y, -z).nor();
-        camera.position.set(x, y, z).nor().scl(rad).add(cic.target);
+        camera.position.set(x, y, z).nor().scl(rad).add(cameraCtrl.target);
         camera.up.set(ux, uy, uz).nor();
         camera.update();
     }

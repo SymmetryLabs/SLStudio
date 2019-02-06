@@ -12,10 +12,13 @@ import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
  * left-handed coordinate system.
  */
 public class OrthoPerspCamera extends Camera {
+    /* swaps RH coordinates to LH coordinates by inverting the X axis */
+    private static final Matrix4 RH_TO_LH = new Matrix4().scl(-1, 1, 1);
+
     private float perspectiveFov;
     private float orthoZoom;
-    boolean ortho = false;
     private final Vector3 tmp = new Vector3();
+    boolean ortho = false;
 
     public OrthoPerspCamera(float width, float height, float perspectiveFov) {
         this.viewportWidth = width;
@@ -48,11 +51,20 @@ public class OrthoPerspCamera extends Camera {
             combined.set(projection);
             Matrix4.mul(combined.val, view.val);
         }
+        combined.mul(RH_TO_LH);
         if (updateFrustum) {
             invProjectionView.set(combined);
             Matrix4.inv(invProjectionView.val);
             frustum.update(invProjectionView);
         }
+    }
+
+    public Vector3 setPositionLH(float x, float y, float z) {
+        return position.set(-x, y, z);
+    }
+
+    public void lookAtLH(float x, float y, float z) {
+        super.lookAt(-x, y, z);
     }
 
     public static class InputController extends CameraInputController {
@@ -61,6 +73,11 @@ public class OrthoPerspCamera extends Camera {
 
         public InputController(OrthoPerspCamera camera) {
             super(camera);
+        }
+
+        /** Sets the target in left-handed coordinates */
+        public Vector3 setTargetLH(float x, float y, float z) {
+            return target.set(-x, y, z);
         }
 
         @Override
