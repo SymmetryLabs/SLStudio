@@ -28,6 +28,7 @@ public class MainMenu implements Window {
                 lx.engine.addTask(() -> lx.newProject());
             }
             if (UI.menuItem("Open...")) {
+                WindowManager.get().disableUI();
                 FileDialog.open(
                     lx, "Open project", project -> {
                         lx.openProject(project);
