@@ -29,11 +29,13 @@ public class InternalsWindow extends CloseableWindow {
         UI.text("engine average: % 4.0fms, % 3.0ffps",
                         1e-6f * lx.engine.timer.runAvgNanos,
                         1e9f / lx.engine.timer.runAvgNanos);
-        UI.text("    worst-case: % 4.0fms, % 3.0ffps",
+        UI.text("worst-case: % 4.0fms, % 3.0ffps",
                         1e-6f * lx.engine.timer.runWorstNanos,
                         1e9f / lx.engine.timer.runWorstNanos);
         UI.text("ui frame rate:  % 3.0ffps", UI.getFrameRate());
+
         parent.clearRGB = UI.colorPicker("background", parent.clearRGB);
+        parent.allowUiScale = UI.checkbox("scale UI", parent.allowUiScale);
 
         frameTimes.addLast(lx.engine.timer.runCurrentNanos * 1e-6f);
         while (frameTimes.size() > FRAMES_TO_KEEP) {

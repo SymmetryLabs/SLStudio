@@ -36,6 +36,11 @@ public class UI {
     public static float height;
     public static float density = 0; // this one is also used from native code in init()
 
+    static void setDensity(float d) {
+        /* we would really prefer to not scale, so if we're close to 1 we don't scale at all */
+        density = Math.abs(d - 1.f) > 0.1 ? d : 1.f;
+    }
+
     public static native boolean init(long windowPointer);
     public static native void newFrame();
     public static native void render();

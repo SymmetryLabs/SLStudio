@@ -122,7 +122,7 @@ public class ModelRenderer {
     }
 
     public void setDisplayDensity(float density) {
-        basePointSize = 6.f * density;
+        basePointSize = 4.f * density;
     }
 
     /* this should only be run when the viewport changes size */

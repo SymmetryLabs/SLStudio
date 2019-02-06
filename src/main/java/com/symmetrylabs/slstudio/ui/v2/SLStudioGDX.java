@@ -30,6 +30,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
     /* visible so that InternalsWindow can mutate it. */
     int clearRGB = 0x000000;
+    boolean allowUiScale = true;
 
     CameraInputController camController;
 
@@ -48,6 +49,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
             sn = DEFAULT_SHOW;
         }
         UI.init(((Lwjgl3Graphics) Gdx.graphics).getWindow().getWindowHandle());
+        UI.setDensity(Gdx.graphics.getDensity());
         FontLoader.loadAll();
 
         /* TODO: we should remove any need to know what the "sketch path" is, because
@@ -83,7 +85,6 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         show.setupLx(lx);
 
         renderer = new ModelRenderer(lx, model);
-        renderer.setDisplayDensity(Gdx.graphics.getDensity());
 
         camController = new CameraInputController(renderer.cam);
         camController.target.set(model.cx, model.cy, model.cz);
@@ -124,6 +125,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         if (w != lastBufWidth || h != lastBufHeight) {
             renderer.setBackBufferSize(w, h);
         }
+        renderer.setDisplayDensity(UI.density);
 
         float clearR = ((clearRGB >> 16) & 0xFF) / 255.f;
         float clearG = ((clearRGB >>  8) & 0xFF) / 255.f;
@@ -145,7 +147,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
         UI.width = Gdx.graphics.getWidth();
         UI.height = Gdx.graphics.getHeight();
-        UI.density = Gdx.graphics.getDensity();
+        UI.setDensity(allowUiScale ? Gdx.graphics.getDensity() : 1.f);
         UI.newFrame();
         WindowManager.get().draw();
 
