@@ -3,6 +3,8 @@ package com.symmetrylabs.slstudio.output;
 import heronarts.lx.Buffer;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
+import heronarts.lx.midi.LXMidiInput;
+import heronarts.lx.midi.MidiTime;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.*;
@@ -36,11 +38,16 @@ public class DoubleBufferedOfflineRenderOutput extends OfflineRenderOutput {
     public final StringParameter pOutputFile = new StringParameter("output", "");
     public final StringParameter pStatus = new StringParameter("status", "IDLE");
     public final MutableParameter hunkSize = new MutableParameter("hunkSizeFrames", 30);
+    public final BooleanParameter externalSync = new BooleanParameter("ext", false);
 
     WriterThread writerThread;
     private int currentFrameLimit;
     private int hunkIndex;
 
+    private MidiTime mt;
+
+
+    private int lastFrameMTC = -1;
     public DoubleBufferedOfflineRenderOutput(LX lx) {
         super(lx);
         this.model = lx.model;
@@ -61,6 +68,29 @@ public class DoubleBufferedOfflineRenderOutput extends OfflineRenderOutput {
         hunkIndex = 0;
 
         writerThread = new WriterThread("writer");
+
+        for (LXMidiInput input : lx.engine.midi.inputs) {
+            input.addTimeListener(new LXMidiInput.MidiTimeListener() {
+                @Override
+                public void onBeatClockUpdate(int i, double v) {
+                }
+
+                @Override
+                public void onMTCUpdate(MidiTime midiTime) {
+                    mt = midiTime.clone();
+                    int frame = mt.getHour();
+                    frame = 60 * frame + mt.getMinute();
+                    frame = 60 * frame + mt.getSecond();
+                    frame = mt.getRate().fps() * frame + mt.getFrame();
+                    updateFrame(frame);
+                }
+            });
+            System.out.println("attached time code listener to " + input.getName());
+        }
+    }
+
+    private void updateFrame(int frame) {
+        lastFrameMTC = frame;
     }
 
     class WriterThread extends Thread {
@@ -157,10 +187,17 @@ public class DoubleBufferedOfflineRenderOutput extends OfflineRenderOutput {
         if (imgs[img_index] == null) {
             return;
         }
-        pStatus.setValue("REC");
 
-        double elapsedSec = 1e-9 * (double) (System.nanoTime() - startFrameNanos);
-        int inFrame = (int) Math.floor(frameRate * elapsedSec);
+        int inFrame;
+        if (externalSync.getValueb()){
+            pStatus.setValue("WAIT_SYNC");
+            inFrame = lastFrameMTC;
+        }
+        else{
+            pStatus.setValue("REC");
+            double elapsedSec = 1e-9 * (double) (System.nanoTime() - startFrameNanos);
+            inFrame = (int) Math.floor(frameRate * elapsedSec);
+        }
         if (inFrame <= lastFrameWritten) {
             return;
         }

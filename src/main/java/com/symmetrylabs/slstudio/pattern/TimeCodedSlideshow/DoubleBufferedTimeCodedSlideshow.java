@@ -59,7 +59,8 @@ public class DoubleBufferedTimeCodedSlideshow extends SLPattern<SLModel> {
     protected boolean baked = false;
 
 
-    int nFrames = 0;
+//    int nFrames = 0;
+    int nFrames = Integer.MAX_VALUE;
     private double freewheelTime = 0;
     private int hunkLengthInFrames = -1; // we don't know untill we read
     private int masterHunkIndex = 0;
