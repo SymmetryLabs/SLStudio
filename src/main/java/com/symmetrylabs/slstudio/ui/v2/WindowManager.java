@@ -137,15 +137,29 @@ public class WindowManager {
     }
 
     void draw() {
+        /* Some windows have the power to enable and disable the UI; the moment
+           we are disabled, we want to stop drawing, so we check at the start
+           and then at the end of every window draw whether we are disabled and
+           should stop drawing. This is important because the window that
+           requested the UI be disabled may have started some kind of
+           asynchronous job that would cause other windows to not see a
+           consistent view of the engine if the job were to complete in the
+           middle of drawing the other window. */
         if (!uiEnabled) {
             return;
         }
         for (Window w : transientWindows) {
             w.draw();
+            if (!uiEnabled) {
+                return;
+            }
         }
         for (PersistentWindow w : persistentWindows) {
             if (w.current != null) {
                 w.current.draw();
+                if (!uiEnabled) {
+                    return;
+                }
             }
         }
 

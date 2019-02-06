@@ -28,6 +28,10 @@ public class MainMenu implements Window {
                 lx.engine.addTask(() -> lx.newProject());
             }
             if (UI.menuItem("Open...")) {
+                /* since this changes pretty much everything in LXEngine, we
+                   just disable the UI while the project loads. Without this, we
+                   almost always get a concurrent modification exception while
+                   rendering the UI. */
                 WindowManager.get().disableUI();
                 FileDialog.open(
                     lx, "Open project", project -> {
