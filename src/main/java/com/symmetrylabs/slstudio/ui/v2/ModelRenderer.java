@@ -15,13 +15,13 @@ import java.nio.IntBuffer;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL41;
 import org.lwjgl.opengl.GLCapabilities;
+import com.badlogic.gdx.math.Matrix4;
 
-public class ModelRenderer {
+public class ModelRenderer implements RenderManager.Renderable {
     private static final PolyBuffer.Space UI_COLOR_SPACE = PolyBuffer.Space.SRGB8;
 
-    public final OrthoPerspCamera cam;
     protected final LXModel model;
-    protected final ShaderProgramWithProgramHandle pointShader;
+    protected final ShaderHandleProgram pointShader;
     protected final float[] glColorBuffer;
     protected final PolyBuffer lxColorBuffer;
     protected final int vao;
@@ -37,35 +37,11 @@ public class ModelRenderer {
     /* Visible so it can be modified in Internals window */
     float scalePointSize = 1;
 
-    /**
-     * An extension of ShaderProgram that allows us to access the OpenGL handle of the compiled shader.
-     *
-     * libgdx has a really nice shader compilation utility that we'd like to use, but we eventually want
-     * to make the raw GL calls ourself (so that we can use GL4 instead of GL2, which is all libgdx exposes).
-     * Here, we intercept calls to the protected method createProgram, which lets us store the OpenGL
-     * program handle for the shader program so that we can call glUseProgram ourself.
-     */
-    private static class ShaderProgramWithProgramHandle extends ShaderProgram {
-        int handle;
-
-        public ShaderProgramWithProgramHandle(String vert, String frag) {
-            super(vert, frag);
-        }
-
-        @Override
-        protected int createProgram() {
-            handle = super.createProgram();
-            return handle;
-        }
-    }
-
     public ModelRenderer(LX lx, LXModel model) {
         this.model = model;
         this.lx = lx;
 
-        printCapabilities();
-
-        pointShader = new ShaderProgramWithProgramHandle(
+        pointShader = new ShaderHandleProgram(
             Gdx.files.internal("point-vertex.glsl").readString(),
             Gdx.files.internal("point-fragment.glsl").readString());
         if (!pointShader.isCompiled()) {
@@ -100,13 +76,6 @@ public class ModelRenderer {
         colorVbo = GL41.glGenBuffers();
 
         GL41.glBindVertexArray(0);
-
-        cam = new OrthoPerspCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 67);
-        cam.position.set(model.cx, model.cy, model.zMin - model.rMax);
-        cam.lookAt(model.cx, model.cy, model.cz);
-        cam.near = 1f;
-        cam.far = 10000f;
-        cam.update();
     }
 
     /**
@@ -124,15 +93,13 @@ public class ModelRenderer {
         GL41.glBufferData(GL41.GL_ARRAY_BUFFER, vertdata, GL41.GL_DYNAMIC_DRAW);
     }
 
-    public void setDisplayDensity(float density) {
+    @Override
+    public void setDisplayProperties(int width, int height, float density) {
         basePointSize = 4.f * density;
     }
 
-    /* this should only be run when the viewport changes size */
-    public void setBackBufferSize(int width, int height) {
-    }
-
-    public void draw() {
+    @Override
+    public void draw(Matrix4 mvpMat) {
         lx.engine.copyUIBuffer(lxColorBuffer, UI_COLOR_SPACE);
         int[] colors = (int[]) lxColorBuffer.getArray(UI_COLOR_SPACE);
 
@@ -154,7 +121,7 @@ public class ModelRenderer {
         GL41.glEnableVertexAttribArray(colorAttr);
         GL41.glVertexAttribPointer(colorAttr, 4, GL41.GL_FLOAT, false, 0, 0);
 
-        GL41.glUniformMatrix4fv(mvpUniform, false, cam.combined.val);
+        GL41.glUniformMatrix4fv(mvpUniform, false, mvpMat.val);
         GL41.glUniform1f(pointSizeUniform, scalePointSize * basePointSize);
 
         GL41.glBindBuffer(GL41.GL_ARRAY_BUFFER, positionVbo);
@@ -170,34 +137,11 @@ public class ModelRenderer {
         GL41.glDisable(GL41.GL_PROGRAM_POINT_SIZE);
     }
 
+    @Override
     public void dispose() {
         GL41.glDeleteBuffers(colorVbo);
         GL41.glDeleteBuffers(positionVbo);
         GL41.glDeleteVertexArrays(vao);
         pointShader.dispose();
-    }
-
-    private static void printCapabilities() {
-        GLCapabilities glCaps = GL.getCapabilities();
-        ArrayList<String> supportedVersions = new ArrayList<>();
-        if (glCaps.OpenGL46) supportedVersions.add("4.6");
-        if (glCaps.OpenGL45) supportedVersions.add("4.5");
-        if (glCaps.OpenGL44) supportedVersions.add("4.4");
-        if (glCaps.OpenGL43) supportedVersions.add("4.3");
-        if (glCaps.OpenGL42) supportedVersions.add("4.2");
-        if (glCaps.OpenGL41) supportedVersions.add("4.1");
-        if (glCaps.OpenGL40) supportedVersions.add("4.0");
-        if (glCaps.OpenGL33) supportedVersions.add("3.3");
-        if (glCaps.OpenGL32) supportedVersions.add("3.2");
-        if (glCaps.OpenGL31) supportedVersions.add("3.1");
-        if (glCaps.OpenGL30) supportedVersions.add("3.0");
-        if (glCaps.OpenGL21) supportedVersions.add("2.1");
-        if (glCaps.OpenGL20) supportedVersions.add("2.0");
-        if (glCaps.OpenGL15) supportedVersions.add("1.5");
-        if (glCaps.OpenGL14) supportedVersions.add("1.4");
-        if (glCaps.OpenGL13) supportedVersions.add("1.3");
-        if (glCaps.OpenGL12) supportedVersions.add("1.2");
-        if (glCaps.OpenGL11) supportedVersions.add("1.1");
-        System.out.println("supported GL versions: " + String.join(", ", supportedVersions));
     }
 }

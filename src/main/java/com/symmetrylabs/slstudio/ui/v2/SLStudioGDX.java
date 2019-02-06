@@ -24,7 +24,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
     private static final String DEFAULT_SHOW = "demo";
     private String showName;
     private Show show;
-    private ModelRenderer renderer;
+    private RenderManager renderer;
     private LX lx;
     private OutputControl outputControl;
 
@@ -84,7 +84,9 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         // make sure that ApplicationState is fully filled out before setupLx is called
         show.setupLx(lx);
 
-        renderer = new ModelRenderer(lx, model);
+        renderer = new RenderManager(lx);
+        ModelRenderer mr = new ModelRenderer(lx, model);
+        renderer.add(mr);
 
         camController = new OrthoPerspCamera.InputController(renderer.cam);
         camController.target.set(model.cx, model.cy, model.cz);
@@ -101,7 +103,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         WindowManager.addTransient(new MainMenu(lx, this));
         WindowManager.addPersistent("Audio", () -> new AudioWindow(lx), false);
         WindowManager.addPersistent("Channels", () -> new ChannelWindow(lx), true);
-        WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this, renderer), false);
+        WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this, mr), false);
         WindowManager.addPersistent("View", () -> new CameraControlWindow(lx, camController, renderer.cam), true);
 
         WindowManager.addPersistent("Imgui demo", () -> new SlimguiDemoWindow(), false);
@@ -121,11 +123,13 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
     public void render() {
         int w = Gdx.graphics.getBackBufferWidth();
         int h = Gdx.graphics.getBackBufferHeight();
+
+        UI.width = Gdx.graphics.getWidth();
+        UI.height = Gdx.graphics.getHeight();
+        UI.setDensity(allowUiScale ? Gdx.graphics.getDensity() : 1.f);
+
         Gdx.gl20.glViewport(0, 0, w, h);
-        if (w != lastBufWidth || h != lastBufHeight) {
-            renderer.setBackBufferSize(w, h);
-        }
-        renderer.setDisplayDensity(UI.density);
+        renderer.setDisplayProperties(w, h, UI.density);
 
         float clearR = ((clearRGB >> 16) & 0xFF) / 255.f;
         float clearG = ((clearRGB >>  8) & 0xFF) / 255.f;
@@ -144,10 +148,6 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
         camController.update();
         renderer.draw();
-
-        UI.width = Gdx.graphics.getWidth();
-        UI.height = Gdx.graphics.getHeight();
-        UI.setDensity(allowUiScale ? Gdx.graphics.getDensity() : 1.f);
         UI.newFrame();
         WindowManager.get().draw();
 
