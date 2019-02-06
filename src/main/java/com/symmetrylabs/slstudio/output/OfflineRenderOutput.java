@@ -33,6 +33,9 @@ public class OfflineRenderOutput extends LXOutput {
     public final StringParameter pOutputFile = new StringParameter("output", "");
     public final StringParameter pStatus = new StringParameter("status", "IDLE");
 
+    // only used in continuous offline output
+    public StringParameter pOutputDir = new StringParameter("HunkDataDir", "");
+
     public OfflineRenderOutput(LX lx) {
         super(lx);
         this.model = lx.model;
