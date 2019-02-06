@@ -9,12 +9,14 @@ public class InternalsWindow extends CloseableWindow {
     private static final int FRAMES_TO_KEEP = 300; // 5 seconds at 60fps
     private final LX lx;
     private final SLStudioGDX parent;
+    private final ModelRenderer renderer;
     private final LinkedList<Float> frameTimes = new LinkedList<>();
 
-    InternalsWindow(LX lx, SLStudioGDX parent) {
+    InternalsWindow(LX lx, SLStudioGDX parent, ModelRenderer renderer) {
         super("Internals");
         this.lx = lx;
         this.parent = parent;
+        this.renderer = renderer;
         for (int i = 0; i < FRAMES_TO_KEEP; i++) {
             frameTimes.push(0.f);
         }
@@ -56,6 +58,7 @@ public class InternalsWindow extends CloseableWindow {
         UI.text("ui density: %3.2f", Gdx.graphics.getDensity());
         parent.allowUiScale = UI.checkbox("scale UI", parent.allowUiScale);
 
+        renderer.scalePointSize = UI.sliderFloat("point size", renderer.scalePointSize, 0.01f, 5);
         parent.clearRGB = UI.colorPicker("background", parent.clearRGB);
     }
 }

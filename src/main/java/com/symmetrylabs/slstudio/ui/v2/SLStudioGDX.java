@@ -103,7 +103,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         WindowManager.addTransient(new CameraControlWindow(lx, camController));
         WindowManager.addPersistent("Audio", () -> new AudioWindow(lx), false);
         WindowManager.addPersistent("Channels", () -> new ChannelWindow(lx), true);
-        WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this), false);
+        WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this, renderer), false);
         WindowManager.addPersistent("Imgui demo", () -> new SlimguiDemoWindow(), false);
         WindowManager.addPersistent("Imgui style editor", () -> new SlimguiStyleEditor(), false);
         WindowManager.addPersistent("Imgui metrics", () -> new SlimguiMetricsWindow(), false);

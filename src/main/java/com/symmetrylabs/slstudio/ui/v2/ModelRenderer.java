@@ -34,6 +34,9 @@ public class ModelRenderer {
     protected final int pointSizeUniform;
     protected float basePointSize;
 
+    /* Visible so it can be modified in Internals window */
+    float scalePointSize = 1;
+
     /**
      * An extension of ShaderProgram that allows us to access the OpenGL handle of the compiled shader.
      *
@@ -152,7 +155,7 @@ public class ModelRenderer {
         GL41.glVertexAttribPointer(colorAttr, 4, GL41.GL_FLOAT, false, 0, 0);
 
         GL41.glUniformMatrix4fv(mvpUniform, false, cam.combined.val);
-        GL41.glUniform1f(pointSizeUniform, basePointSize);
+        GL41.glUniform1f(pointSizeUniform, scalePointSize * basePointSize);
 
         GL41.glBindBuffer(GL41.GL_ARRAY_BUFFER, positionVbo);
         GL41.glEnableVertexAttribArray(positionAttr);
