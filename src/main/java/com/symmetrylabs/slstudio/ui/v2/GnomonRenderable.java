@@ -61,7 +61,7 @@ public class GnomonRenderable implements RenderManager.Renderable {
     }
 
     @Override
-    public void draw(OrthoPerspCamera cam) {
+    public void draw(SLCamera cam) {
         if (!visible) {
             return;
         }

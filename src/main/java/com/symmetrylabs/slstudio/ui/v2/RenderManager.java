@@ -20,11 +20,11 @@ import com.badlogic.gdx.math.Matrix4;
 public class RenderManager {
     public interface Renderable {
         default void setDisplayProperties(int width, int height, float density) {}
-        void draw(OrthoPerspCamera camera);
+        void draw(SLCamera camera);
         void dispose();
     }
 
-    public final OrthoPerspCamera cam;
+    public final SLCamera cam;
     protected final List<Renderable> renderables;
 
     public RenderManager(LX lx) {
@@ -32,7 +32,7 @@ public class RenderManager {
 
         printCapabilities();
 
-        cam = new OrthoPerspCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 67);
+        cam = new SLCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 67);
         cam.setPositionLH(lx.model.cx, lx.model.cy, lx.model.zMin - lx.model.rMax);
         cam.lookAtLH(lx.model.cx, lx.model.cy, lx.model.cz);
         cam.near = 1f;

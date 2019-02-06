@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.Camera;
 
 
 public class CameraControlWindow implements Window {
-    private final OrthoPerspCamera.InputController cameraCtrl;
-    private final OrthoPerspCamera camera;
+    private final SLCamera.InputController cameraCtrl;
+    private final SLCamera camera;
     private final GnomonRenderable gnomon;
     private final LX lx;
 
@@ -16,7 +16,7 @@ public class CameraControlWindow implements Window {
     private static final Vector3 ISO_L = new Vector3(ISO_VEC).rotate(-45, 0, 1, 0);
     private static final Vector3 ISO_R = new Vector3(ISO_VEC).rotate(45, 0, 1, 0);
 
-    public CameraControlWindow(LX lx, OrthoPerspCamera.InputController cameraCtrl, OrthoPerspCamera camera, GnomonRenderable gnomon) {
+    public CameraControlWindow(LX lx, SLCamera.InputController cameraCtrl, SLCamera camera, GnomonRenderable gnomon) {
         this.lx = lx;
         this.cameraCtrl = cameraCtrl;
         this.camera = camera;

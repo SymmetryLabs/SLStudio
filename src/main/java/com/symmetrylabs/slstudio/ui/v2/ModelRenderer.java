@@ -99,7 +99,7 @@ public class ModelRenderer implements RenderManager.Renderable {
     }
 
     @Override
-    public void draw(OrthoPerspCamera cam) {
+    public void draw(SLCamera cam) {
         lx.engine.copyUIBuffer(lxColorBuffer, UI_COLOR_SPACE);
         int[] colors = (int[]) lxColorBuffer.getArray(UI_COLOR_SPACE);
 

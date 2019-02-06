@@ -7,11 +7,11 @@ import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 
 
 /**
- * OrthoPerspCamera is a camera that can flip between orthographic and
+ * SLCamera is a camera that can flip between orthographic and
  * perspective projection that flips screen-X to make it look like we're in a
  * left-handed coordinate system.
  */
-public class OrthoPerspCamera extends Camera {
+public class SLCamera extends Camera {
     /* swaps RH coordinates to LH coordinates by inverting the X axis */
     private static final Matrix4 RH_TO_LH = new Matrix4().scl(-1, 1, 1);
 
@@ -20,7 +20,7 @@ public class OrthoPerspCamera extends Camera {
     private final Vector3 tmp = new Vector3();
     boolean ortho = false;
 
-    public OrthoPerspCamera(float width, float height, float perspectiveFov) {
+    public SLCamera(float width, float height, float perspectiveFov) {
         this.viewportWidth = width;
         this.viewportHeight = height;
         this.perspectiveFov = perspectiveFov;
@@ -71,7 +71,7 @@ public class OrthoPerspCamera extends Camera {
         private final float orthoZoomScale = 0.0008f;
         private final float orthoZoomMin = 0.1f;
 
-        public InputController(OrthoPerspCamera camera) {
+        public InputController(SLCamera camera) {
             super(camera);
         }
 
@@ -83,7 +83,7 @@ public class OrthoPerspCamera extends Camera {
         @Override
         public boolean zoom(float amount) {
             if (super.zoom(amount)) {
-                OrthoPerspCamera cam = (OrthoPerspCamera) camera;
+                SLCamera cam = (SLCamera) camera;
                 cam.orthoZoom = Float.max(orthoZoomMin, cam.orthoZoom - orthoZoomScale * amount);
                 return true;
             }
