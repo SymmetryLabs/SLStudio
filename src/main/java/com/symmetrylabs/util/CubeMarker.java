@@ -2,6 +2,7 @@ package com.symmetrylabs.util;
 
 import processing.core.PGraphics;
 import processing.core.PVector;
+import com.symmetrylabs.slstudio.ui.GraphicsAdapter;
 
 public class CubeMarker implements Marker {
     PVector pos;
@@ -18,7 +19,8 @@ public class CubeMarker implements Marker {
         this(pos, new PVector(size, size, size), rgb);
     }
 
-    public void draw(PGraphics pg) {
+    @Override
+    public void draw(GraphicsAdapter pg) {
         float x = pos.x;
         float y = pos.y;
         float z = pos.z;

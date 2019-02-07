@@ -19,7 +19,7 @@ import java.util.Set;
  * once they are closed they can only be re-opened by taking that action again.
  * WindowManager does not concern itself with creating transient windows; other
  * classes create them and add them to the set of displayed windows by calling
- * WindowManager's {@link add(Window w)} method.
+ * WindowManager's {@link addTransient(Window w)} method.
  *
  * Whether or not a window is closeable is not WindowManager's concern; closeable
  * window logic is implemented by {@link CloseableWindow}, which does the drawing

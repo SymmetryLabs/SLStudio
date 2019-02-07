@@ -65,18 +65,6 @@ public class CubeIterator extends SLPattern<CubesModel> implements MarkerSource 
         markModified(SRGB8);
     }
 
-    @Override
-    public void onActive() {
-        super.onActive();
-        ((SLStudioLX) lx).ui.addMarkerSource(this);
-    }
-
-    @Override
-    public void onInactive() {
-        super.onInactive();
-        ((SLStudioLX) lx).ui.removeMarkerSource(this);
-    }
-
     @Override public Collection<Marker> getMarkers() {
         List<Marker> markers = new ArrayList<>();
         List<CubesModel.Cube> cubes = model.getCubes();

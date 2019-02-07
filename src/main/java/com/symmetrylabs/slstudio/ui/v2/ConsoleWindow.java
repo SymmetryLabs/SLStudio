@@ -34,6 +34,9 @@ public class ConsoleWindow extends CloseableWindow {
     public static void setWarning(String key, String message) {
         synchronized (GLOBAL_WARNING_LOCK) {
             if (message != null && !message.isEmpty()) {
+                if (!message.equals(warnings.get(key))) {
+                    System.err.println("WARNING: " + key + ": " + message);
+                }
                 warnings.put(key, message);
             } else {
                 warnings.remove(key);

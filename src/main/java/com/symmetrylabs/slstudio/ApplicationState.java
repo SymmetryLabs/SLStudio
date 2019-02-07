@@ -31,9 +31,6 @@ public class ApplicationState {
     }
 
     public static void setWarning(String key, String message) {
-        if (message != null && !message.isEmpty()) {
-            System.err.println("WARNING: " + key + ": " + message);
-        }
         get().setWarning(key, message);
     }
 }

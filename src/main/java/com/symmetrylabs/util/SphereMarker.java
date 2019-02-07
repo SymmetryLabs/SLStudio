@@ -2,6 +2,7 @@ package com.symmetrylabs.util;
 
 import processing.core.PGraphics;
 import processing.core.PVector;
+import com.symmetrylabs.slstudio.ui.GraphicsAdapter;
 
 public class SphereMarker implements Marker {
     PVector pos;
@@ -15,7 +16,8 @@ public class SphereMarker implements Marker {
         this.rgb = rgb;
     }
 
-    public void draw(PGraphics pg) {
+    @Override
+    public void draw(GraphicsAdapter pg) {
         double TAU = Math.PI * 2;
         float x = pos.x;
         float y = pos.y;

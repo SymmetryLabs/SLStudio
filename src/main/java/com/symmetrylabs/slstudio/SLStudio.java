@@ -238,6 +238,9 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
     @Override
     public void setWarning(String key, String message) {
         if (message != null && !message.isEmpty()) {
+            if (!message.equals(warnings.get(key))) {
+                System.err.println("WARNING: " + key + ": " + message);
+            }
             warnings.put(key, message);
         } else {
             warnings.remove(key);

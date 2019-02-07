@@ -89,6 +89,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         renderer.add(mr);
         GnomonRenderable gnomon = new GnomonRenderable(model);
         renderer.add(gnomon);
+        renderer.add(new MarkerRenderable(lx));
 
         camController = new SLCamera.InputController(renderer.cam);
         camController.setTargetLH(model.cx, model.cy, model.cz);

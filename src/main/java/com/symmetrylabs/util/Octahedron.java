@@ -2,6 +2,7 @@ package com.symmetrylabs.util;
 
 import processing.core.PGraphics;
 import processing.core.PVector;
+import com.symmetrylabs.slstudio.ui.GraphicsAdapter;
 
 public class Octahedron implements Marker {
     PVector pos;
@@ -14,7 +15,7 @@ public class Octahedron implements Marker {
         this.rgb = rgb;
     }
 
-    public void draw(PGraphics pg) {
+    public void draw(GraphicsAdapter pg) {
         float x = pos.x;
         float y = pos.y;
         float z = pos.z;

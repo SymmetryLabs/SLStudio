@@ -29,7 +29,7 @@ public class TextMarker implements Marker {
         this.rgb = rgb;
         this.text = text;
         this.flip = flip;
-        if (font == null) {
+        if (font == null && SLStudio.applet != null) {
             font = SLStudio.applet.loadFont("Inconsolata-Bold-14.vlw");
         }
     }
