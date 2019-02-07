@@ -2,6 +2,7 @@ package com.symmetrylabs.util;
 
 import processing.core.PGraphics;
 import processing.core.PVector;
+import com.symmetrylabs.slstudio.ui.GraphicsAdapter;
 
 public class Reticle implements Marker {
     PVector pos;
@@ -12,7 +13,7 @@ public class Reticle implements Marker {
         this.size = size;
     }
 
-    public void draw(PGraphics pg) {
+    public void draw(GraphicsAdapter pg) {
         float x = pos.x;
         float y = pos.y;
         float z = pos.z;
