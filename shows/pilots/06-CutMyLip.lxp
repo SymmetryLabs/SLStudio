@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1549465054964,
+  "timestamp": 1549477962361,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -30,7 +30,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 53.85000213980675,
+        "color/hue": 53.92070388793945,
         "color/brightness": 100.0,
         "color/saturation": 89.01960754394531,
         "color": -6116,
@@ -1711,23 +1711,10 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.0
+        "brightness": 1.0
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 26810,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -7340288,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 44,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",

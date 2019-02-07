@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1549124728671,
+  "timestamp": 1549484048445,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 1.0,
-      "focusedChannel": 3,
+      "speed": 2.0,
+      "focusedChannel": 6,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -383,7 +383,7 @@
             "parameters": {
               "label": "Kaleidoscope",
               "enabled": true,
-              "cx": 410.0,
+              "cx": 355.03999999999996,
               "cy": 58.0,
               "cz": 24.0,
               "lat": 0.0,
@@ -427,7 +427,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 718.9308471679688,
+              "rad": 0.0,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
@@ -636,7 +636,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -653,7 +653,7 @@
             "parameters": {
               "label": "Kaleidoscope",
               "enabled": true,
-              "cx": 410.0,
+              "cx": 368.78,
               "cy": 58.0,
               "cz": 24.0,
               "lat": 0.0,
@@ -697,7 +697,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 718.9308471679688,
+              "rad": 0.0,
               "invert": false,
               "cx": 410.0,
               "cy": 58.0
@@ -807,12 +807,12 @@
             "parameters": {
               "label": "Sparkle",
               "palette": 0,
-              "Dens": 0.05999999865889549,
+              "Dens": 0.7099999785423279,
               "Attack": 0.2899999935179949,
-              "Decay": 0.3100000023841858,
+              "Decay": 1.0,
               "Hue": 0.5,
               "HueVar": 0.25,
-              "Sat": 0.5
+              "Sat": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -852,7 +852,7 @@
             "modulationColor": -16711918,
             "parameters": {
               "label": "BundleDirMask",
-              "enabled": true,
+              "enabled": false,
               "x": false,
               "y": false,
               "z": true
@@ -1023,6 +1023,19 @@
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 26236,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -65484,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
       "envelop": {
         "id": 44,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -1200,12 +1213,6 @@
         },
         {
           "name": "CoreMIDI4J - Lockstep",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
           "sync": false
