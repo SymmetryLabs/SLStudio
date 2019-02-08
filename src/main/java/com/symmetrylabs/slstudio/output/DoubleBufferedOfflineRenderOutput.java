@@ -1,36 +1,27 @@
 package com.symmetrylabs.slstudio.output;
 
-import heronarts.lx.Buffer;
+import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.util.BufferWithIndex;
+import com.symmetrylabs.util.DoubleBuffer;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.MidiTime;
 import heronarts.lx.model.LXModel;
-import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.*;
-import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
+import java.util.concurrent.Semaphore;
+import java.util.function.Supplier;
 
 public class DoubleBufferedOfflineRenderOutput extends OfflineRenderOutput {
     public static final String HEADER = "SLOutput";
     public static final int VERSION = 3;
-
-    private File output = null;
-    private LXModel model;
-    private long startFrameNanos;
-    private int lastFrameWritten;
-    private int framesToCapture;
-    private double frameRate;
-
-    private BufferedImage[] imgs = new BufferedImage[2];
-    private int img_index = 0;
+    private static final int HUNK_SIZE = 30;
 
     public final BooleanParameter pStart = new BooleanParameter("pStart", false).setMode(BooleanParameter.Mode.MOMENTARY);
     public final DiscreteParameter pFramesToCapture = new DiscreteParameter("frames", 30, 0, 30000);
@@ -40,34 +31,97 @@ public class DoubleBufferedOfflineRenderOutput extends OfflineRenderOutput {
     public final MutableParameter hunkSize = new MutableParameter("hunkSizeFrames", 30);
     public final BooleanParameter externalSync = new BooleanParameter("ext", false);
 
+    private LXModel model;
+    private long startFrameNanos;
+    private int lastFrameWritten;
+    private int framesToCapture;
+    private double frameRate;
+
+    private DoubleBuffer<BufferWithIndex> doubleBuffer;
+
     WriterThread writerThread;
-    private int currentFrameLimit;
-    private int hunkIndex;
+    Semaphore writerSemaphore;
 
+    // the currently writing hunk index
+    private int hunkIndex = 0;
     private MidiTime mt;
-
-
     private int lastFrameMTC = -1;
+    private int nextHunkLimit = -1;
+    private boolean running = false;
+
+
+    // this supplier allocates buffers with the appropriate MTC-correlated index
+    // we want a buffer flagged with the currently pending index but also want
+    // the next one needed so our writer never blocks
+    class IndexedBufferSupplier implements Supplier<BufferWithIndex> {
+        private int last_hunk_index_leased = -1;
+
+        public void reset(){
+            last_hunk_index_leased = -1;
+        }
+
+        @Override
+        public BufferWithIndex get() {
+            last_hunk_index_leased = hunkIndex;
+            SLStudio.setWarning("TCSS bufferSupply - ", "supplied " + last_hunk_index_leased);
+            return new BufferWithIndex(createImage(), hunkIndex);
+//            if (pOutputDir.getString() == ""){
+//                SLStudio.setWarning("TCSS bufferSupply - ", "select output dir to start");
+//                return null;
+//            }
+//            if ((last_hunk_index_leased == -1) || (last_hunk_index_leased < hunkIndex)){
+//                last_hunk_index_leased = hunkIndex;
+//                SLStudio.setWarning("TCSS bufferSupply - ", "supplied " + last_hunk_index_leased);
+//                return new BufferWithIndex(createImage(lastFrameMTC), hunkIndex);
+//            }
+//            if (last_hunk_index_leased == hunkIndex){
+//                last_hunk_index_leased = hunkIndex + 1;
+//                SLStudio.setWarning("TCSS bufferSupply - ", "supplied " + last_hunk_index_leased);
+//                return new BufferWithIndex(createImage(lastFrameMTC), hunkIndex + 1);
+//            }
+//            if (last_hunk_index_leased >= hunkIndex + 1){
+//                // client should never ask for a new buffer this soon
+//                reset();
+//                return get();
+//            }
+//            return null;
+        }
+    }
+
+    IndexedBufferSupplier bufferSupply = new IndexedBufferSupplier();
+
     public DoubleBufferedOfflineRenderOutput(LX lx) {
         super(lx);
+        this.externalSync.setDescription("Sync output to an external MTC source");
         this.model = lx.model;
         pOutputDir.addListener(p -> {
             dispose();
             if (!pOutputDir.getString().equals("")) {
-//                    output = new File(pOutputFile.getString());
-                output = new File(getCurrentOutputPath());
+                // reset
+                doubleBuffer.dispose();
+                doubleBuffer = new DoubleBuffer<>(new IndexedBufferSupplier());
+                hunkIndex = 0;
             }
         });
         pStart.addListener(p -> {
             if (pStart.getValueb()) {
                 createImage();
+                if (externalSync.getValueb()){
+                    pStatus.setValue("WAIT");
+                }
             }
         });
 
-        currentFrameLimit = hunkSize.getValuei(); // initialize our first write trigger
+        doubleBuffer = new DoubleBuffer<>(bufferSupply);
+
+//        currentFrameLimit = hunkSize.getValuei(); // initialize our first write trigger
         hunkIndex = 0;
 
+        nextHunkLimit = (hunkIndex + 1)*hunkSize.getValuei();
+
+        writerSemaphore = new Semaphore(0);
         writerThread = new WriterThread("writer");
+        writerThread.start();
 
         for (LXMidiInput input : lx.engine.midi.inputs) {
             input.addTimeListener(new LXMidiInput.MidiTimeListener() {
@@ -83,6 +137,9 @@ public class DoubleBufferedOfflineRenderOutput extends OfflineRenderOutput {
                     frame = 60 * frame + mt.getSecond();
                     frame = mt.getRate().fps() * frame + mt.getFrame();
                     updateFrame(frame);
+                    if (externalSync.getValueb()){
+                        pStatus.setValue("" + hunkIndex);
+                    }
                 }
             });
             System.out.println("attached time code listener to " + input.getName());
@@ -90,107 +147,93 @@ public class DoubleBufferedOfflineRenderOutput extends OfflineRenderOutput {
     }
 
     private void updateFrame(int frame) {
+        if (frame < lastFrameMTC){
+            hunkIndex = frame/hunkSize.getValuei();
+        }
         lastFrameMTC = frame;
+        // update hunk index as needed.
+        running = true;
     }
 
     class WriterThread extends Thread {
-
-        boolean renderPending = false;
-        boolean workDone = false;
-
         WriterThread(String name) {
             super(name);
         }
 
         public void run() {
             while (!isInterrupted()) {
-                // Wait until we have work to do...
-                synchronized (this) {
-                    try {
-                        while (!this.renderPending) {
-                            wait();
-                        }
-                    } catch (InterruptedException ix) {
-                        // Channel is finished
-                        break;
-                    }
-                    this.renderPending = false;
+                try {
+                    writerSemaphore.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-
-                // Do our work
-//                runThread(this.branches, deltaMs);
-                writeHunk();
-
-                // Signal to the main thread that we are done
-                synchronized (this) {
-                    this.workDone = true;
-                    notify();
-                }
+                writeHunk(doubleBuffer.getClean());
             }
         }
 
-        public void writeHunk() {
-            final BufferedImage imgToWrite = imgs[img_index];
-//            final BufferedImage imgToWrite = getCurrentBufferedImage();
-            final File outputToWrite = output;
+        public void writeHunk(BufferWithIndex data) {
+            final File outputToWrite = new File(outputPathFromHunk(data.hunkIndex));
             EventQueue.invokeLater(() -> {
                 try {
-                    ImageIO.write(imgToWrite, "png", outputToWrite);
+                    ImageIO.write(data.img, "png", outputToWrite);
                 } catch (IOException e) {
                     System.err.println("couldn't save output image:");
                     e.printStackTrace();
                 }
             });
-            updateOutputTargetToNextHunk();
         }
     }
 
-    private void updateOutputTargetToNextHunk() {
-        output = new File(getCurrentOutputPath());
-        hunkIndex++;
-        System.out.println(output.getAbsoluteFile());
+    private String outputPathFromHunk(int hunk) {
+        if (lastFrameMTC == -1){
+            lastFrameMTC = 0;
+        }
+        return pOutputDir.getString() + "/" + hunk + ".png";
     }
 
-//    private BufferedImage getCurrentBufferedImage() {
-//        return img;
-//    }
-
-
-    @NotNull
-    private String getCurrentOutputPath() {
+    private String outputPathFromFrame() {
+        if (lastFrameMTC == -1){
+            lastFrameMTC = 0;
+        }
         return pOutputDir.getString() + "/" + hunkIndex + ".png";
     }
+//    private String outputPathFromMTC(MidiTime mt) {
+//        return pOutputDir.getString() + "/" + mt.getFrame()/HUNK_SIZE + ".png";
+//    }
 
     public void dispose() {
-        imgs[img_index] = null;
+        doubleBuffer.dispose();
         pStatus.setValue("IDLE");
     }
 
-    private void createImage() {
-        createImage(-1);
+    private BufferedImage createImage() {
+//        return createImage(-1);
+        return new BufferedImage(model.points.length, hunkSize.getValuei(), BufferedImage.TYPE_INT_ARGB);
     }
 
-    private void createImage(int lastFrame) {
+    private BufferedImage createImage(int lastFrame) {
         startFrameNanos = System.nanoTime();
         lastFrameWritten = lastFrame;
-        framesToCapture = pFramesToCapture.getValuei();
+        framesToCapture = hunkSize.getValuei();
         frameRate = pFrameRate.getValue();
-        for (int i = 0; i < 2; i++){
-            imgs[i] = new BufferedImage(model.points.length, pFramesToCapture.getValuei(), BufferedImage.TYPE_INT_ARGB);
-        }
+        return new BufferedImage(model.points.length, hunkSize.getValuei(), BufferedImage.TYPE_INT_ARGB);
     }
 
     int last_hunk_frame = 0;
 
     @Override
     protected void onSend(PolyBuffer colors) {
-        if (imgs[img_index] == null) {
+        if (doubleBuffer.getClean() == null) {
+            // we're not locked and loaded yet..
             return;
         }
 
         int inFrame;
         if (externalSync.getValueb()){
-            pStatus.setValue("WAIT_SYNC");
+            if (!running){
+                pStatus.setValue("WAIT_SYNC");
+                return;
+            }
             inFrame = lastFrameMTC;
         }
         else{
@@ -202,17 +245,25 @@ public class DoubleBufferedOfflineRenderOutput extends OfflineRenderOutput {
             return;
         }
         lastFrameWritten = inFrame;
-        if (lastFrameWritten >= currentFrameLimit) {
+        // if our current frame is part of the next hunk we need to write..
+        if (inFrame >= nextHunkLimit) {
+//        if (lastFrameWritten >= currentFrameLimit) {
 
-            writerThread.writeHunk();
-            img_index++;
-            img_index %= 2;
-            currentFrameLimit += hunkSize.getValuei();
-            last_hunk_frame = lastFrameWritten;
+            // pass the back buffer forward to be written out by the writerThread
+            doubleBuffer.flip();
+            writerSemaphore.release();
 
-//            dispose();
+            //start  work on the next hunk
+            hunkIndex++;
+            doubleBuffer.setBack(bufferSupply.get());
+
+            nextHunkLimit = hunkIndex*hunkSize.getValuei();
+            last_hunk_frame = inFrame;
+            // write our next value into the image buffer
         }
         int[] carr = (int[]) colors.getArray(PolyBuffer.Space.RGB8);
-        imgs[img_index].setRGB(0, lastFrameWritten - last_hunk_frame, model.points.length, 1, carr, 0, model.points.length);
+
+        // write to the back buffer
+        doubleBuffer.getDirty().img.setRGB(0, inFrame - last_hunk_frame, model.points.length, 1, carr, 0, model.points.length);
     }
 }

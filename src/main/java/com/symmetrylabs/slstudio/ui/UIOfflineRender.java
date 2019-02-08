@@ -100,7 +100,7 @@ public class UIOfflineRender extends UICollapsibleSection {
             .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
             .addToContainer(this);
 
-        new UIButton(w - 18 - 52 - 80 - 52, cy, 80, 18)
+        new UIButton(w - 18 - 52 - 80 - 80, cy, 60, 18)
             .setParameter(output.externalSync)
             .setLabel("EXT")
             .addToContainer(this);
