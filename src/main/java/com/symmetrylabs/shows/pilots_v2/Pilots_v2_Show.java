@@ -98,7 +98,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
             }),
             new TowerConfig(SP * 2, SP * 0, SP * 0, new String[][]{
                 new String[]{"561","560"},
-                new String[]{"843","842"},
+                new String[]{"5410ecf48db7","842"},
                 new String[]{"851","5410ecf48cc9"},
 //                new String[]{"5410ecf5efb5","5410ecf4fd2d"},
                 new String[]{"697","628"},
