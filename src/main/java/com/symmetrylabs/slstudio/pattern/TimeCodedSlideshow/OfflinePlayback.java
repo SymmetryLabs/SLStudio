@@ -1,11 +1,10 @@
 package com.symmetrylabs.slstudio.pattern.TimeCodedSlideshow;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.Hunk;
 import com.symmetrylabs.util.DoubleBuffer;
 import heronarts.lx.LX;
+import heronarts.lx.LXPattern;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.LXMidiInput;
@@ -14,7 +13,6 @@ import heronarts.lx.parameter.*;
 import heronarts.lx.transform.LXVector;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.io.File;
@@ -27,10 +25,10 @@ import java.util.function.Supplier;
 
 
 // Modification of TCSS to host continuous loading...
-public class OfflinePlayback extends SLPattern<SLModel> {
+public class OfflinePlayback extends LXPattern {
     private static final String TAG = "TimeCodedSlideshow";
 
-    private final StringParameter directory = new StringParameter("dir", null);
+    protected final StringParameter directory = new StringParameter("dir", null);
     private final BooleanParameter chooseDir = new BooleanParameter("pick", false).setMode(BooleanParameter.Mode.MOMENTARY);
     private final MutableParameter tcStartFrame = new MutableParameter("tcStart", 0);
     private final BooleanParameter freewheel = new BooleanParameter("run", false);
@@ -39,7 +37,7 @@ public class OfflinePlayback extends SLPattern<SLModel> {
     private final DiscreteParameter sweepSelectFrame = new DiscreteParameter("sweepSelectFrame", 0, 0, 120);
 
     private MidiTime mt;
-    private int currentFrame;
+    protected int currentFrame;
     private int lastFrameReceived;
     private boolean stopping = false;
     private long lastLoadLoop = 0;
@@ -51,7 +49,7 @@ public class OfflinePlayback extends SLPattern<SLModel> {
     private double freewheelTime = 0;
     private int hunkLengthInFrames = 30; // we don't know untill we read
 
-    private DoubleBuffer<Hunk> doubleBuffer;
+    DoubleBuffer<Hunk> doubleBuffer;
     private Thread loaderThread = new Thread();
     private Semaphore loaderSemaphore;
     private int currentHunk;
@@ -60,7 +58,49 @@ public class OfflinePlayback extends SLPattern<SLModel> {
         return currentFrame/hunkLengthInFrames;
     }
 
+    // catchall update the contents of our buffers based on the current frame, and the current contents.
+    public void updateBuffers() {
+        currentHunk = currentFrame/hunkLengthInFrames;
+        if (currentHunk == doubleBuffer.getFront().hunkIndex){
+           // we're already where we need to be.
+            return;
+        }
+        // standard transition forward (this should be called once per hunkcycle (i.e. 1Hz if we have 30 frames)
+        if (currentHunk() == doubleBuffer.getFront().hunkIndex + 1){
+            // ok we need to cycle the double buffer.
+            // we're done using the current front buffer.
+            // "flip the page"; make current (now exhausted) front buffer, new back buffer,
+            // and flip (now clean) back buffer to be new front buffer
+            doubleBuffer.flip();
+            // reload the expired back buffer
+
+            boolean concurrent = false;
+            if (concurrent){
+                loaderSemaphore.release();
+            }
+            else{
+                doubleBuffer.supplyBack();
+            }
+        }
+        // jump forward
+        else if (currentHunk() > doubleBuffer.getFront().hunkIndex + 1){
+            SLStudio.setWarning("PlayerInfo: ", "Jump forward.");
+            // reset
+            doubleBuffer.dispose();
+            doubleBuffer.initialize();
+            return;
+        }
+        // "jump backwards"
+        else if(currentHunk() < doubleBuffer.getFront().hunkIndex){
+            // need to reset
+            doubleBuffer.dispose();
+            doubleBuffer.initialize();
+            return;
+        }
+    }
+
     // this supplier always loads in the next buffer needed
+    // how to test this?
     private class MTCBufferFetcher implements Supplier<Hunk>{
         int most_recent_hunk_in_memory = -1;
         private boolean strict = true;
@@ -103,6 +143,8 @@ public class OfflinePlayback extends SLPattern<SLModel> {
 
             String directoryPath = directory.getString();
             String hunkPath = directoryPath + "/" + get_this_index + ".png";
+
+            hunkPath = hunkPath.replaceFirst("^~", System.getProperty("user.home"));
 
             File hunkFile = new File(hunkPath);
 
@@ -157,6 +199,7 @@ public class OfflinePlayback extends SLPattern<SLModel> {
         currentHunk = currentFrame/hunkLengthInFrames;
     }
 
+    public MTCBufferFetcher buffSupply;
     public OfflinePlayback(LX lx) {
         super(lx);
         addParameter(directory);
@@ -169,8 +212,7 @@ public class OfflinePlayback extends SLPattern<SLModel> {
 
         arm_MTC_listeners();
 
-        MTCBufferFetcher buffSupply = new MTCBufferFetcher();
-
+        buffSupply = new MTCBufferFetcher();
         doubleBuffer = new DoubleBuffer<>(buffSupply);
 
         loaderSemaphore = new Semaphore(0);
@@ -254,18 +296,17 @@ public class OfflinePlayback extends SLPattern<SLModel> {
 
     @Override
     public void run(double elapsedMs, PolyBuffer.Space preferredSpace) {
+        //update frame
         if (freewheel.getValueb()) {
             freewheelTime += elapsedMs;
             if (freewheelTime > 1000 / 30) {
                 freewheelTime = 0;
                 currentFrame++;
-                currentHunk = currentFrame/hunkLengthInFrames;
             }
         }
 
         if (sweep.getValueb()){
             currentFrame = (int)sweepSelectFrame.getValuef();
-            currentHunk = currentFrame/hunkLengthInFrames;
         }
 
         int[] ccs = (int[]) getArray(PolyBuffer.Space.SRGB8);
@@ -279,37 +320,13 @@ public class OfflinePlayback extends SLPattern<SLModel> {
             // current buffer is now available to load next needed.
             // always baked.
         }
+
+        // update hunk based on frame
+        currentHunk = currentFrame/hunkLengthInFrames;
+
         if (doubleBuffer.initialized){
             // "standard" transition
-            if (currentHunk() == doubleBuffer.getClean().hunkIndex + 1){
-                // ok we need to cycle the double buffer.
-                // we're done using the current front buffer.
-                // "flip the page"; make current (now exhausted) front buffer, new back buffer,
-                // and flip (now clean) back buffer to be new front buffer
-                doubleBuffer.flip();
-                // reload the expired back buffer
-
-                boolean concurrent = true;
-                if (concurrent){
-                    loaderSemaphore.release();
-                }
-                else{
-                    doubleBuffer.supplyBack();
-                }
-            }
-            // "jump backwards"
-            else if(currentHunk() < doubleBuffer.getClean().hunkIndex){
-                // need to reset
-                doubleBuffer.dispose();
-                doubleBuffer.initialize();
-                return;
-            }
-            // "jump forward"
-            else if (currentHunk() >= doubleBuffer.getClean().hunkIndex + 1){
-                doubleBuffer.dispose();
-                doubleBuffer.initialize();
-                return;
-            }
+            updateBuffers();
             /* we can't just pull the colors straight out of the image as
              * a single array copy because we want to honor warps that turn
              * off pixels. */
@@ -317,7 +334,7 @@ public class OfflinePlayback extends SLPattern<SLModel> {
 
             try {
                 for (LXVector v : getVectors()) {
-                    ccs[v.index] = doubleBuffer.getClean().img.getRGB(v.index, currentFrame%hunkLengthInFrames);
+                    ccs[v.index] = doubleBuffer.getFront().img.getRGB(v.index, currentFrame%hunkLengthInFrames);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -327,15 +344,15 @@ public class OfflinePlayback extends SLPattern<SLModel> {
         markModified(PolyBuffer.Space.SRGB8);
     }
 
-    @Override
-    public String getCaption() {
-        int offset = lastFrameReceived - tcStartFrame.getValuei();
-            return String.format(
-                "time %s / hunksize %d / frame %d / directory %s / current %d",
-                mt == null ? "unknown" : mt.toString(),
-                hunkLengthInFrames,
-                currentFrame,
-                directory.getString(),
-                currentHunk);
-    }
+//    @Override
+//    public String getCaption() {
+//        int offset = lastFrameReceived - tcStartFrame.getValuei();
+//            return String.format(
+//                "time %s / hunksize %d / frame %d / directory %s / current %d",
+//                mt == null ? "unknown" : mt.toString(),
+//                hunkLengthInFrames,
+//                currentFrame,
+//                directory.getString(),
+//                currentHunk);
+//    }
 }

@@ -40,11 +40,11 @@ public class DoubleBuffer<T>{
         initialized = false;
     }
 
-    public T getClean() {
+    public T getFront() {
         return frontBuffer;
     }
 
-    public T getDirty() {
+    public T getBack() {
         return backBuffer;
     }
 

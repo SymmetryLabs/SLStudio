@@ -167,7 +167,7 @@ public class DoubleBufferedOfflineRenderOutput extends OfflineRenderOutput {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                writeHunk(doubleBuffer.getClean());
+                writeHunk(doubleBuffer.getFront());
             }
         }
 
@@ -223,7 +223,7 @@ public class DoubleBufferedOfflineRenderOutput extends OfflineRenderOutput {
 
     @Override
     protected void onSend(PolyBuffer colors) {
-        if (doubleBuffer.getClean() == null) {
+        if (doubleBuffer.getFront() == null) {
             // we're not locked and loaded yet..
             return;
         }
@@ -264,6 +264,6 @@ public class DoubleBufferedOfflineRenderOutput extends OfflineRenderOutput {
         int[] carr = (int[]) colors.getArray(PolyBuffer.Space.RGB8);
 
         // write to the back buffer
-        doubleBuffer.getDirty().img.setRGB(0, inFrame - last_hunk_frame, model.points.length, 1, carr, 0, model.points.length);
+        doubleBuffer.getBack().img.setRGB(0, inFrame - last_hunk_frame, model.points.length, 1, carr, 0, model.points.length);
     }
 }
