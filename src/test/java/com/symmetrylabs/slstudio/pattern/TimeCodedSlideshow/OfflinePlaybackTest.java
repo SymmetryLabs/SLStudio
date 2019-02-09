@@ -47,6 +47,15 @@ public class OfflinePlaybackTest {
             player.currentFrame++;
             player.updateBuffers();
         }
+
+//        synchronized (player.doubleBuffer){
+//            try {
+//                wait();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+
         assertEquals("DoubleBuffer hunk", 5, player.doubleBuffer.getFront().hunkIndex);
         assertEquals("DoubleBuffer hunk", 6, player.doubleBuffer.getBack().hunkIndex);
     }

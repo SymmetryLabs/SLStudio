@@ -26,6 +26,7 @@ import java.util.function.Supplier;
 
 // Modification of TCSS to host continuous loading...
 public class OfflinePlayback extends LXPattern {
+
     private static final String TAG = "TimeCodedSlideshow";
 
     protected final StringParameter directory = new StringParameter("dir", null);
@@ -36,10 +37,12 @@ public class OfflinePlayback extends LXPattern {
     private final BooleanParameter sweep = new BooleanParameter("sweepFrame", false);
     private final DiscreteParameter sweepSelectFrame = new DiscreteParameter("sweepSelectFrame", 0, 0, 120);
 
+    protected final BooleanParameter concurrent = new BooleanParameter("UseConcurrent", false);
+
     private MidiTime mt;
     protected int currentFrame;
     private int lastFrameReceived;
-    private boolean stopping = false;
+    protected boolean stopping = false;
     private long lastLoadLoop = 0;
     private boolean currentFrameLoaded;
 
@@ -50,7 +53,7 @@ public class OfflinePlayback extends LXPattern {
     private int hunkLengthInFrames = 30; // we don't know untill we read
 
     DoubleBuffer<Hunk> doubleBuffer;
-    private Thread loaderThread = new Thread();
+    protected Thread loaderThread = new Thread();
     private Semaphore loaderSemaphore;
     private int currentHunk;
 
@@ -74,8 +77,7 @@ public class OfflinePlayback extends LXPattern {
             doubleBuffer.flip();
             // reload the expired back buffer
 
-            boolean concurrent = false;
-            if (concurrent){
+            if (concurrent.getValueb()){
                 loaderSemaphore.release();
             }
             else{
@@ -202,6 +204,7 @@ public class OfflinePlayback extends LXPattern {
     public MTCBufferFetcher buffSupply;
     public OfflinePlayback(LX lx) {
         super(lx);
+        addParameter(concurrent);
         addParameter(directory);
         addParameter(chooseDir);
         addParameter(tcStartFrame);
@@ -219,30 +222,31 @@ public class OfflinePlayback extends LXPattern {
 
         lastLoadLoop = System.nanoTime();
 
+        loaderThread = new Thread( () -> {
+            synchronized (this.doubleBuffer){
+                while(!stopping){
+                    try {
+                        loaderSemaphore.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (!doubleBuffer.initialized){
+                        doubleBuffer.initialize();
+                    }
+                    else {
+                        doubleBuffer.supplyBack();
+                    }
+                    notify();
+                }
+            }
+        });
+        loaderThread.start();
     }
 
     @Override
     public void onActive() {
         super.onActive();
         stopping = false;
-
-        loaderThread = new Thread( () -> {
-            while(!stopping){
-                try {
-                    loaderSemaphore.acquire();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if (!doubleBuffer.initialized){
-                    doubleBuffer.initialize();
-                }
-                else {
-                    doubleBuffer.supplyBack();
-                }
-            }
-        });
-
-
     }
 
     @Override

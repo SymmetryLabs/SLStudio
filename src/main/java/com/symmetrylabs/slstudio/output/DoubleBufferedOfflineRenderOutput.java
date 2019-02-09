@@ -208,7 +208,17 @@ public class DoubleBufferedOfflineRenderOutput extends OfflineRenderOutput {
 
     private BufferedImage createImage() {
 //        return createImage(-1);
-        return new BufferedImage(model.points.length, hunkSize.getValuei(), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage create = new BufferedImage(model.points.length, hunkSize.getValuei(), BufferedImage.TYPE_INT_ARGB);
+        int w = create.getWidth(null);
+        int h = create.getHeight(null);
+        int[] rgbs = new int[w * h];
+//        int[] rgbs = new int[w];
+        int rgb = 0xFF00FF00; // green
+        for (int val : rgbs){
+            val = rgb;
+        }
+        create.setRGB(0, 0, create.getWidth(), create.getHeight(), rgbs, 0,w*h);
+        return create;
     }
 
     private BufferedImage createImage(int lastFrame) {
@@ -264,6 +274,6 @@ public class DoubleBufferedOfflineRenderOutput extends OfflineRenderOutput {
         int[] carr = (int[]) colors.getArray(PolyBuffer.Space.RGB8);
 
         // write to the back buffer
-        doubleBuffer.getBack().img.setRGB(0, inFrame - last_hunk_frame, model.points.length, 1, carr, 0, model.points.length);
+//        doubleBuffer.getBack().img.setRGB(0, inFrame - last_hunk_frame, model.points.length, 1, carr, 0, model.points.length);
     }
 }
