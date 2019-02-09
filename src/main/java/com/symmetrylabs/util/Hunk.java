@@ -4,13 +4,12 @@ import heronarts.lx.midi.MidiTime;
 
 import java.awt.image.BufferedImage;
 
-public class BufferWithIndex {
+public class Hunk {
     public BufferedImage img;
-//    public MidiTime mt;
     public int hunkIndex;
 
-   public BufferWithIndex(BufferedImage buffer_in, int mt_in){
-       img = buffer_in;
-       hunkIndex = mt_in;
+   public Hunk(BufferedImage buffer_in, int hunkIndex){
+       this.img = buffer_in;
+       this.hunkIndex = hunkIndex;
    }
 }

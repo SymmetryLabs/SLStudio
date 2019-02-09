@@ -1,7 +1,7 @@
 package com.symmetrylabs.slstudio.output;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.util.BufferWithIndex;
+import com.symmetrylabs.util.Hunk;
 import com.symmetrylabs.util.DoubleBuffer;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
@@ -37,7 +37,7 @@ public class DoubleBufferedOfflineRenderOutput extends OfflineRenderOutput {
     private int framesToCapture;
     private double frameRate;
 
-    private DoubleBuffer<BufferWithIndex> doubleBuffer;
+    private DoubleBuffer<Hunk> doubleBuffer;
 
     WriterThread writerThread;
     Semaphore writerSemaphore;
@@ -53,7 +53,7 @@ public class DoubleBufferedOfflineRenderOutput extends OfflineRenderOutput {
     // this supplier allocates buffers with the appropriate MTC-correlated index
     // we want a buffer flagged with the currently pending index but also want
     // the next one needed so our writer never blocks
-    class IndexedBufferSupplier implements Supplier<BufferWithIndex> {
+    class IndexedBufferSupplier implements Supplier<Hunk> {
         private int last_hunk_index_leased = -1;
 
         public void reset(){
@@ -61,10 +61,10 @@ public class DoubleBufferedOfflineRenderOutput extends OfflineRenderOutput {
         }
 
         @Override
-        public BufferWithIndex get() {
+        public Hunk get() {
             last_hunk_index_leased = hunkIndex;
             SLStudio.setWarning("TCSS bufferSupply - ", "supplied " + last_hunk_index_leased);
-            return new BufferWithIndex(createImage(), hunkIndex);
+            return new Hunk(createImage(), hunkIndex);
 //            if (pOutputDir.getString() == ""){
 //                SLStudio.setWarning("TCSS bufferSupply - ", "select output dir to start");
 //                return null;
@@ -72,12 +72,12 @@ public class DoubleBufferedOfflineRenderOutput extends OfflineRenderOutput {
 //            if ((last_hunk_index_leased == -1) || (last_hunk_index_leased < hunkIndex)){
 //                last_hunk_index_leased = hunkIndex;
 //                SLStudio.setWarning("TCSS bufferSupply - ", "supplied " + last_hunk_index_leased);
-//                return new BufferWithIndex(createImage(lastFrameMTC), hunkIndex);
+//                return new Hunk(createImage(lastFrameMTC), hunkIndex);
 //            }
 //            if (last_hunk_index_leased == hunkIndex){
 //                last_hunk_index_leased = hunkIndex + 1;
 //                SLStudio.setWarning("TCSS bufferSupply - ", "supplied " + last_hunk_index_leased);
-//                return new BufferWithIndex(createImage(lastFrameMTC), hunkIndex + 1);
+//                return new Hunk(createImage(lastFrameMTC), hunkIndex + 1);
 //            }
 //            if (last_hunk_index_leased >= hunkIndex + 1){
 //                // client should never ask for a new buffer this soon
@@ -171,7 +171,7 @@ public class DoubleBufferedOfflineRenderOutput extends OfflineRenderOutput {
             }
         }
 
-        public void writeHunk(BufferWithIndex data) {
+        public void writeHunk(Hunk data) {
             final File outputToWrite = new File(outputPathFromHunk(data.hunkIndex));
             EventQueue.invokeLater(() -> {
                 try {
