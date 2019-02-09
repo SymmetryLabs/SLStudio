@@ -27,7 +27,7 @@ import java.util.function.Supplier;
 
 
 // Modification of TCSS to host continuous loading...
-public class OfflineRenderer extends SLPattern<SLModel> {
+public class OfflinePlayback extends SLPattern<SLModel> {
     private static final String TAG = "TimeCodedSlideshow";
 
     private final StringParameter directory = new StringParameter("dir", null);
@@ -157,7 +157,7 @@ public class OfflineRenderer extends SLPattern<SLModel> {
         currentHunk = currentFrame/hunkLengthInFrames;
     }
 
-    public OfflineRenderer(LX lx) {
+    public OfflinePlayback(LX lx) {
         super(lx);
         addParameter(directory);
         addParameter(chooseDir);
