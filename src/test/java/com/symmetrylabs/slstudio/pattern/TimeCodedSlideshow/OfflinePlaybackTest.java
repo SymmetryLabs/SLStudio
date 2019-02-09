@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.pattern.TimeCodedSlideshow;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import heronarts.lx.LX;
+import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXModel;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,16 +14,13 @@ public class OfflinePlaybackTest {
 
     OfflinePlayback player;
 
+    LXModel model = new GridModel(10, 10);
     LX lx;
 
     @Before
     public void setUp() {
         SLStudio sl = new SLStudio();
-
-//        Pilots_v2_Show show = new Pilots_v2_Show();
-//        SLModel m = show.buildModel();
-        LXModel m = new LXModel();
-        lx = new LX(m);
+        lx = new LX(model);
     }
 
     @Test

@@ -115,6 +115,11 @@ public class UIOfflineRender extends UICollapsibleSection {
             .setLabel("Start")
             .addToContainer(this);
 
+        new UIButton(w - 12 - 52 - 80, cy, 60, 18)
+            .setParameter(output.concurrent)
+            .setLabel("Concurrent")
+            .addToContainer(this);
+
         writeModel.addListener((p) -> {
                 if (!writeModel.getValueb()) {
                     return;
