@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1549286796361,
+  "timestamp": 1549725387019,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -108,7 +108,7 @@
               "enabled": true,
               "xSize": 410.0,
               "cx": 355.04000122845173,
-              "ySize": 28.163791984319687,
+              "ySize": 52.65855324268341,
               "cy": 73.49999658577141,
               "zSize": 64.32000080868602,
               "cz": -31.274998764507473,
@@ -553,7 +553,7 @@
               "Speed": 0.55,
               "Symm": 0,
               "Anim": 3,
-              "Dens": 0.8799999952316284,
+              "Dens": 0.6600000262260437,
               "AnimResets": false
             },
             "modulation": {
@@ -709,7 +709,7 @@
               "palette": 0,
               "x": 0.0,
               "y": 1.0,
-              "z": 0.0012856721878051758,
+              "z": 0.0031713247299194336,
               "cx": 410.0,
               "cy": 116.0,
               "cz": 24.0,
@@ -975,19 +975,6 @@
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 26566,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -65407,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 44,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -1096,21 +1083,9 @@
     "midi": {
       "inputs": [
         {
-          "name": "CoreMIDI4J - ShowSession",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
           "name": "CoreMIDI4J - NateBus",
           "channel": true,
           "control": true,
-          "sync": false
-        },
-        {
-          "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
           "sync": false
         },
         {
@@ -1130,7 +1105,7 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 441.91766623746076,
+        "radius": 728.8383972713405,
         "theta": -0.09899999999999362,
         "phi": 0.27299999999999075,
         "positionX": 357.24761962890625,
