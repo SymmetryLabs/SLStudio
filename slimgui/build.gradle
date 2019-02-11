@@ -18,10 +18,15 @@ tasks.withType(CppCompile) {
 	if (!isValidJavaHome(javaHome)) {
 		javaHome = System.properties["java.home"];
 	}
-	if (!isValidJavaHome(javaHome)) {
-		throw new GradleScriptException(
-			"JAVA_HOME is not set; on a mac, run \"export JAVA_HOME=\$(/usr/libexec/java_home)\" and try again", null)
-	}
+
+    /* We don't want to create an error here unless we're actually trying to run the task.
+       It doesn't matter if we misconfigure the task if we never actually run it. */
+    doFirst {
+        if (!isValidJavaHome(javaHome)) {
+            throw new GradleScriptException(
+                "JAVA_HOME is not set; on a mac, run \"export JAVA_HOME=\$(/usr/libexec/java_home)\" and try again", null)
+	    }
+    }
 
 	compilerArgs.add "-std=c++14"
 	compilerArgs.add "-DIMGUI_IMPL_OPENGL_LOADER_GL3W"

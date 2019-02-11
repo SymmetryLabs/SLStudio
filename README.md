@@ -56,6 +56,19 @@ You may need to set the default JDK home for intelliJ products: https://stackove
 
 ## Running UIv2
 
+Running UIv2 is as easy as running:
+
+    ./gradlew runUIv2
+
+If you get linker errors when you run it, it is probably the case that
+the prebuilts for your platform need to be rebuilt. You can request a
+rebuild from the #software channel on Slack, or rebuild them yourself if
+you have a C++ compiler installed.
+
+## Building the UIv2 native code
+
+**You do not need to do this unless you changed C++ code, which is only necessary when making new UI widgets.**
+
 If you're on a Mac, you probably need to set your `JAVA_HOME` variable.
 You can do that by adding this to your `.bashrc` or by just running it
 in whichever terminal you run gradle in:
@@ -64,13 +77,8 @@ in whichever terminal you run gradle in:
 
 If you forget to run this, gradle will prompt you to.
 
-Once you've set `JAVA_HOME`, you can run UIv2 using:
-
-    ./gradlew runUIv2
-
-If you edit `slimgui`, the native code library used for drawing the GUI
-in UIv2, you will need to rebuild the prebuilt slimgui shared library in
-the libs folder. You can do that by running:
+Once you've done that, you can rebuild the UI library (which is saved to
+libs/libslimgui.{so,dylib,dll}) by running:
 
     ./gradlew genPrebuiltSlimgui
 
