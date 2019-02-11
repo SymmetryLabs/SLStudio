@@ -8,6 +8,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import org.lwjgl.system.CallbackI.D;
 
 
 import com.symmetrylabs.shows.Show;
@@ -25,6 +26,8 @@ import com.symmetrylabs.slstudio.effect.SLEffect;
 import com.symmetrylabs.slstudio.pattern.test.SLTestPattern;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.slstudio.warp.SLWarp;
+import com.symmetrylabs.slstudio.component.RequiresProcessing;
+import com.symmetrylabs.slstudio.SLStudio;
 
 public class LXClassLoader {
     // Enable test patterns by passing -DloadTestPatterns=true as a VM option
@@ -103,6 +106,9 @@ public class LXClassLoader {
     private static boolean isVisible(Class component) {
         while (component != null) {
             if (component.isAnnotationPresent(HiddenComponent.class)) {
+                return false;
+            }
+            if (SLStudio.applet == null && component.isAnnotationPresent(RequiresProcessing.class)) {
                 return false;
             }
             component = component.getSuperclass();
