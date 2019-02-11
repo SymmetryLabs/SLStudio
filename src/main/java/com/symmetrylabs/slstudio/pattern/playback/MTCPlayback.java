@@ -28,6 +28,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
     private final StringParameter renderFile = new StringParameter("renderFile", "");
     private final BooleanParameter filePickerDialogue = new BooleanParameter("choose render", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    private final MutableParameter MTCOffset = new MutableParameter("MTC_OFFSET", 0);
 
     public final MutableParameter hunkSize = new MutableParameter("hunkSize", 150);
 
@@ -44,6 +45,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
     private int lastFrameRendered = -1;
 
     File currentSong;
+    String currentSongName;
 
     // this thread keeps the circular buffer stocked at the current MTC offset with some "lookahead"
     class CirclularBufferWriterThread extends Thread{
@@ -86,14 +88,6 @@ public class MTCPlayback extends SLPattern<SLModel> {
         itter = colorBufRing.iterator();
 
         writerThread = new CirclularBufferWriterThread();
-
-        if (renderFile.getString() != ""){
-            loadSong();
-            SLStudio.setWarning("FILE", "file: " + currentSong.getAbsolutePath());
-        }
-        else {
-            SLStudio.setWarning("FILE", "nofile");
-        }
 
 //        writerThread.start();
 
@@ -147,12 +141,60 @@ public class MTCPlayback extends SLPattern<SLModel> {
             Path rel = repoRoot.relativize(loadPath);
             renderFile.setValue(rel.toString());
             loadSong();
-            SLStudio.setWarning("FILE", currentSong.getAbsolutePath());
+//            SLStudio.setWarning("FILE", currentSong.getAbsolutePath());
         }
     }
 
     private void goToFrame(int frame) {
         lastFrameReceived = frame;
+        decodeSongOffset(frame);
+    }
+
+    private void decodeSongOffset(int frame) {
+        final int BIN_SIZE = 9000;
+        int songIndex = frame/BIN_SIZE;
+
+
+        final int LEVITATE = 12;
+        final String sLEVITATE = "1h_0m";
+        final int FAIRLY_LOCAL_1 = 18;
+        final String sFAIRLY_LOCAL_1 = "1h_30m";
+        final int FAIRLY_LOCAL_2 = 21;
+        final String sFAIRLY_LOCAL_2 = "1h_45m";
+
+        final int HEATHENS = 36;
+        final String sHEATHENS = "3h_0m";
+
+        switch(songIndex){
+            case LEVITATE: // levitate
+                if (currentSongName == sLEVITATE){ break; }
+                currentSongName = sLEVITATE;
+                renderFile.setValue("/Users/symmetry/symmetrylabs/software/SLStudio/shows/pilots/render/" + currentSongName + ".png");
+                MTCOffset.setValue(songIndex*BIN_SIZE);
+                loadSong();
+                break;
+            case FAIRLY_LOCAL_1:
+                if (currentSongName == sFAIRLY_LOCAL_1){ break; }
+                currentSongName = sFAIRLY_LOCAL_1;
+                renderFile.setValue("/Users/symmetry/symmetrylabs/software/SLStudio/shows/pilots/render/" + currentSongName + ".png");
+                MTCOffset.setValue(songIndex*BIN_SIZE);
+                loadSong();
+                break;
+            case FAIRLY_LOCAL_2:
+                if (currentSongName == sFAIRLY_LOCAL_2){ break; }
+                currentSongName = sFAIRLY_LOCAL_2;
+                renderFile.setValue("/Users/symmetry/symmetrylabs/software/SLStudio/shows/pilots/render/" + currentSongName + ".png");
+                MTCOffset.setValue(songIndex*BIN_SIZE);
+                loadSong();
+                break;
+            case HEATHENS:
+                if (currentSongName == sHEATHENS){ break; }
+                currentSongName = sHEATHENS;
+                renderFile.setValue("/Users/symmetry/symmetrylabs/software/SLStudio/shows/pilots/render/" + currentSongName + ".png");
+                MTCOffset.setValue(songIndex*BIN_SIZE);
+                loadSong();
+                break;
+        }
     }
 
     public File loadSong() {
@@ -188,7 +230,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
     public void run(double deltaMs, PolyBuffer.Space preferredSpace) {
         super.run(deltaMs, preferredSpace);
 
-        int frameIn = lastFrameReceived;
+        int frameIn = lastFrameReceived - MTCOffset.getValuei();
         if (pngr == null){
             if (renderFile.getString() != ""){
                 loadSong();
@@ -212,7 +254,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
             int[] fourValArray = ((ImageLineInt) l1).getScanline();
 
             for (int i = 0; i < fourValArray.length; i += 4){
-                ccs[i/4] = ((fourValArray[i+3] & 0xff) << 24) | ((fourValArray[i+2] & 0xff) << 16) | ((fourValArray[i+1] & 0xff) << 8) | (fourValArray[i] & 0xff);
+                ccs[i/4] = ((fourValArray[i+3] & 0xff) << 24) | ((fourValArray[i] & 0xff) << 16) | ((fourValArray[i+1] & 0xff) << 8) | (fourValArray[i + 2] & 0xff);
             }
         } catch (ar.com.hjg.pngj.PngjInputException e){
             System.err.println(e);
@@ -230,15 +272,16 @@ public class MTCPlayback extends SLPattern<SLModel> {
     @Override
     public String getCaption() {
         return String.format(
-            "time %s / frame %d / file %s / current song: %s",
+            "time %s / frame %d / current song: %s / file %s ",
             mt == null ? "unknown" : mt.toString(),
             lastFrameRendered,
-            renderFile.getString(),
-            getCurrentSongName());
+            getCurrentSongName(),
+            renderFile.getString()
+        );
     }
 
     private String getCurrentSongName() {
-        return "nico";
+        return currentSongName;
     }
 }
 

@@ -17,3 +17,4 @@
 *.a filter=lfs diff=lfs merge=lfs -text
 src/main/resources/icons/** !filter !merge !diff
 shows/pilots/*d_*m_*y_master.vzr filter=lfs diff=lfs merge=lfs -text
+shows/pilots/render filter=lfs diff=lfs merge=lfs -text
