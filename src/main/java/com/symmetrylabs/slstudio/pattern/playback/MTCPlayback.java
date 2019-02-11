@@ -3,35 +3,31 @@ package com.symmetrylabs.slstudio.pattern.playback;
 import ar.com.hjg.pngj.IImageLine;
 import ar.com.hjg.pngj.ImageLineInt;
 import ar.com.hjg.pngj.PngReader;
-import com.jogamp.common.util.Ringbuffer;
+import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.MidiTime;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.lx.parameter.MutableParameter;
-import heronarts.lx.parameter.StringParameter;
-import heronarts.lx.transform.LXVector;
+import heronarts.lx.parameter.*;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReadParam;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.NumberFormat;
+import java.util.Arrays;
 import java.util.Iterator;
 
-public class MTCPlayback extends LXPattern {
+public class MTCPlayback extends SLPattern<SLModel> {
+    private static final String TAG = "MTC";
+
     private static final int CIRCULAR_BUFFER_SIZE = 16;
-    public final StringParameter renderFile = new StringParameter("renderFile");
-    public final BooleanParameter filePickerDialogue = new BooleanParameter("choose render").setMode(BooleanParameter.Mode.MOMENTARY);
+
+    private final StringParameter renderFile = new StringParameter("renderFile", "");
+    private final BooleanParameter filePickerDialogue = new BooleanParameter("choose render", false).setMode(BooleanParameter.Mode.MOMENTARY);
 
     public final MutableParameter hunkSize = new MutableParameter("hunkSize", 150);
 
@@ -44,8 +40,36 @@ public class MTCPlayback extends LXPattern {
 
     CirclularBufferWriterThread writerThread;
     private MidiTime mt;
-    private int lastFrameReceived = -1;
+    protected int lastFrameReceived = -1;
     private int lastFrameRendered = -1;
+
+    File currentSong;
+
+    // this thread keeps the circular buffer stocked at the current MTC offset with some "lookahead"
+    class CirclularBufferWriterThread extends Thread{
+
+
+        @Override
+        public void run() {
+
+//            File file = new File(renderFile.getString());
+
+            DebugTimer timer = new DebugTimer("hi");
+
+            while(!ready()){}
+
+            int frame_index = 0;
+            while(pngr.hasMoreRows()){
+//                timer.start();
+                while ( !colorBufRing.isAtFullCapacity() ){
+                    IImageLine l1 = pngr.readRow(frame_index++);
+                    colorBufRing.add(((ImageLineInt) l1).getScanline());
+                }
+//                timer.stop("row");
+            }
+
+        }
+    }
 
     public MTCPlayback(LX lx){
         super(lx);
@@ -62,6 +86,19 @@ public class MTCPlayback extends LXPattern {
         itter = colorBufRing.iterator();
 
         writerThread = new CirclularBufferWriterThread();
+
+        if (renderFile.getString() != ""){
+            loadSong();
+            SLStudio.setWarning("FILE", "file: " + currentSong.getAbsolutePath());
+        }
+        else {
+            SLStudio.setWarning("FILE", "nofile");
+        }
+
+//        writerThread.start();
+
+        // turns out the PNG reader can retrieve lines from the PNG faster than 30Hz..
+        // do it all in the main thread i guess..
     }
 
     private void setupMTCListeners() {
@@ -91,62 +128,117 @@ public class MTCPlayback extends LXPattern {
     @Override
     public void onActive() {
         super.onActive();
-        loadDirectory();
-        writerThread.start();
     }
 
-    private void loadDirectory() {
-        renderFile.setValue("/Users/symmetry/symmetrylabs/software/000_RENDERER/0_2min_30fps_sss.png");
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        if (p == filePickerDialogue && filePickerDialogue.getValueb()) {
+            FileDialog dialog = new FileDialog(
+                (Frame) null, "Choose frame directory or baked image:", FileDialog.LOAD);
+            dialog.setVisible(true);
+            String fname = dialog.getFile();
+            if (fname == null) {
+                return;
+            }
+
+            File load = new File(dialog.getDirectory(), fname);
+            Path loadPath = load.toPath().toAbsolutePath();
+            Path repoRoot = Paths.get("").toAbsolutePath();
+            Path rel = repoRoot.relativize(loadPath);
+            renderFile.setValue(rel.toString());
+            loadSong();
+            SLStudio.setWarning("FILE", currentSong.getAbsolutePath());
+        }
     }
 
     private void goToFrame(int frame) {
         lastFrameReceived = frame;
     }
 
-    class CirclularBufferWriterThread extends Thread{
+    public File loadSong() {
+        String path = renderFile.getString();
+        if (path == null) {
+            System.err.println("invalid path");
+            return null;
+        }
+        File dir = new File(path);
+        if (dir.isFile() && dir.getName().endsWith(".png")) {
+            currentSong = dir;
+            pngr = new PngReader(currentSong);
+            return dir;
+        }
+        else{
+            System.err.println("must be png");
+            return null;
+        }
+    }
 
-
-        @Override
-        public void run() {
-            File file = new File(renderFile.getString());
-
-            DebugTimer timer = new DebugTimer("hi");
-
-            PngReader pngr = new PngReader(file);
-
-            // ok this could read in all the rows that we need here in another thread that tries to keep the ring buffer full.
-//            for (int row = 0; row < hunkSize.getValuei(); row++) { // also: while(pngr.hasMoreRows())
-            while(pngr.hasMoreRows()){
-//                timer.start();
-                while ( !colorBufRing.isAtFullCapacity() ){
-                    IImageLine l1 = pngr.readRow();
-                    colorBufRing.add(((ImageLineInt) l1).getScanline());
-                }
-//                timer.stop("row");
-            }
-
+    public boolean ready() {
+        if (pngr == null){
+            return false;
+        }
+        else{
+            return true;
         }
     }
 
 
+
     @Override
-    protected void run(double deltaMs, PolyBuffer.Space preferredSpace) {
+    public void run(double deltaMs, PolyBuffer.Space preferredSpace) {
         super.run(deltaMs, preferredSpace);
 
-        if (lastFrameReceived == lastFrameRendered){
+        int frameIn = lastFrameReceived;
+        if (pngr == null){
+            if (renderFile.getString() != ""){
+                loadSong();
+            }
             return;
+        }
+        if (frameIn == lastFrameRendered){
+            return;
+        }
+        if (frameIn < lastFrameRendered){
+            recyclePNGReader();
+            lastFrameReceived = -1;
+            lastFrameRendered = -1;
         }
 
         int[] ccs = (int[]) getArray(PolyBuffer.Space.SRGB8);
+        Arrays.fill(ccs, 0x80);
 
-        if (itter.hasNext()){
-            ccs = itter.next();
-            lastFrameRendered = lastFrameReceived;
+        try {
+            IImageLine l1 = pngr.readRow(frameIn);
+            int[] fourValArray = ((ImageLineInt) l1).getScanline();
+
+            for (int i = 0; i < fourValArray.length; i += 4){
+                ccs[i/4] = ((fourValArray[i+3] & 0xff) << 24) | ((fourValArray[i+2] & 0xff) << 16) | ((fourValArray[i+1] & 0xff) << 8) | (fourValArray[i] & 0xff);
+            }
+        } catch (ar.com.hjg.pngj.PngjInputException e){
+            System.err.println(e);
         }
-        else{
-            System.err.println("out of frames");
-        }
+
+        lastFrameRendered = frameIn;
         markModified(PolyBuffer.Space.SRGB8);
+    }
+
+    private void recyclePNGReader() {
+        pngr = null;
+        loadSong();
+    }
+
+    @Override
+    public String getCaption() {
+        return String.format(
+            "time %s / frame %d / file %s / current song: %s",
+            mt == null ? "unknown" : mt.toString(),
+            lastFrameRendered,
+            renderFile.getString(),
+            getCurrentSongName());
+    }
+
+    private String getCurrentSongName() {
+        return "nico";
     }
 }
 
