@@ -41,7 +41,7 @@ public class UI {
         density = Math.abs(d - 1.f) > 0.1 ? d : 1.f;
     }
 
-    public static native boolean init(long windowPointer);
+    public static native boolean init(long windowPointer, boolean useMacBehaviors);
     public static native void newFrame();
     public static native void render();
     public static native boolean shutdown();

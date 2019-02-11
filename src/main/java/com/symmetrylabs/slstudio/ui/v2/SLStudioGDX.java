@@ -49,7 +49,8 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
                 "couldn't read " + SLStudio.SHOW_FILE_NAME + ": " + e.getMessage());
             sn = DEFAULT_SHOW;
         }
-        UI.init(((Lwjgl3Graphics) Gdx.graphics).getWindow().getWindowHandle());
+        UI.init(((Lwjgl3Graphics) Gdx.graphics).getWindow().getWindowHandle(),
+                "Mac OS X".equals(System.getProperty("os.name")));
         osDensity = Gdx.graphics.getDensity();
         UI.setDensity(osDensity);
         FontLoader.loadAll();

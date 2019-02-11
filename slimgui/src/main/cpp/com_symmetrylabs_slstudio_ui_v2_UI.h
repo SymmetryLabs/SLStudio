@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    init
- * Signature: (J)Z
+ * Signature: (JZ)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_init
-  (JNIEnv *, jclass, jlong);
+  (JNIEnv *, jclass, jlong, jboolean);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI

@@ -78,7 +78,7 @@ void LoadSlimguiStyle(float density) {
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong windowHandle) {
+Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong windowHandle, jboolean useMacBehaviors) {
     jfieldID fid;
 
     fid = env->GetStaticFieldID(cls, "TREE_FLAG_LEAF", "I");
@@ -139,6 +139,7 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigWindowsResizeFromEdges = true;
     io.ConfigDockingTabBarOnSingleWindows = true;
+    io.ConfigMacOSXBehaviors = useMacBehaviors != 0;
 
     return 1;
 }
