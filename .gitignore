@@ -295,7 +295,9 @@ $RECYCLE.BIN/
 .project
 .classpath
 bin
+
+# nate
 .vscode
 shows/pilots/files
 scratch
-shows/pilots/30d_1m_2019y_master.vzr.bak
+*.bak

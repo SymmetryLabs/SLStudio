@@ -7,11 +7,10 @@ public class ArtNetPollDatagram {
     private static final short ARTNET_POLL_OPCODE = 0x2000;
     private static final int LENGTH = ArtNetDatagramUtil.HEADER_LENGTH + 2;
     private final DatagramPacket packet;
+    private final byte[] buf = new byte[LENGTH];
 
     public ArtNetPollDatagram(InetAddress addr) {
-        byte[] buf = new byte[LENGTH];
-
-        packet = new DatagramPacket(buf, LENGTH, addr, ArtNetDatagramUtil.ARTNET_PORT);
+        packet = addr == null ? null : new DatagramPacket(buf, LENGTH, addr, ArtNetDatagramUtil.ARTNET_PORT);
 
         ArtNetDatagramUtil.fillHeader(buf, ARTNET_POLL_OPCODE);
 
@@ -27,5 +26,9 @@ public class ArtNetPollDatagram {
 
     public DatagramPacket getPacket() {
         return packet;
+    }
+
+    public byte[] getBytes() {
+        return buf;
     }
 }
