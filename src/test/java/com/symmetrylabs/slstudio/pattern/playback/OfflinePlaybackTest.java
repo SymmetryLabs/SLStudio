@@ -38,7 +38,7 @@ public class OfflinePlaybackTest {
 //        player.renderFile.setValue("/Users/symmetry/symmetrylabs/software/000_RENDERER/0_continuous_30_1min.png");
         player.renderFile.setValue("/Users/symmetry/symmetrylabs/software/000_RENDERER/0_2min_30fps_sss.png");
 
-        player.fillBuffers();
+//        player.fillBuffers();
 
 
 

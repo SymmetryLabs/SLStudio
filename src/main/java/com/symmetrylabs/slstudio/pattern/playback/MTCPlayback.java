@@ -1,14 +1,19 @@
 package com.symmetrylabs.slstudio.pattern.playback;
 
 import ar.com.hjg.pngj.IImageLine;
+import ar.com.hjg.pngj.ImageLineInt;
 import ar.com.hjg.pngj.PngReader;
 import com.jogamp.common.util.Ringbuffer;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.midi.LXMidiInput;
+import heronarts.lx.midi.MidiTime;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.parameter.StringParameter;
+import heronarts.lx.transform.LXVector;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
 import javax.imageio.ImageIO;
@@ -21,9 +26,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.text.NumberFormat;
+import java.util.Iterator;
 
 public class MTCPlayback extends LXPattern {
-    private static final int CIRCULAR_BUFFER_SIZE = 4;
+    private static final int CIRCULAR_BUFFER_SIZE = 16;
     public final StringParameter renderFile = new StringParameter("renderFile");
     public final BooleanParameter filePickerDialogue = new BooleanParameter("choose render").setMode(BooleanParameter.Mode.MOMENTARY);
 
@@ -34,85 +40,113 @@ public class MTCPlayback extends LXPattern {
     CircularFifoQueue<int[]> colorBufRing;
 
     PngReader pngr;
+    private Iterator<int[]> itter;
+
+    CirclularBufferWriterThread writerThread;
+    private MidiTime mt;
+    private int lastFrameReceived = -1;
+    private int lastFrameRendered = -1;
 
     public MTCPlayback(LX lx){
         super(lx);
         addParameter(filePickerDialogue);
         addParameter(renderFile);
 
+
+        setupMTCListeners();
+
+
         hunkRingbuffer = new CircularFifoQueue<>(CIRCULAR_BUFFER_SIZE);
+        colorBufRing = new CircularFifoQueue<>(CIRCULAR_BUFFER_SIZE);
+
+        itter = colorBufRing.iterator();
+
+        writerThread = new CirclularBufferWriterThread();
     }
 
-    public void fillBuffers(){
+    private void setupMTCListeners() {
+        for (LXMidiInput input : lx.engine.midi.inputs) {
+            input.addTimeListener(new LXMidiInput.MidiTimeListener() {
+                @Override
+                public void onBeatClockUpdate(int i, double v) {
+                }
 
-
-        File file = new File(renderFile.getString());
-        ImageInputStream iis = null;
-
-        DebugTimer timer = new DebugTimer("hi");
-
-        /*
-        READ ROI ONLY FOR EFFICIENCY WITH LARGE PNG HUNK
-         */
-
-
-        PngReader pngr = new PngReader(file);
-
-
-        byte[] tmpReadIn = new byte[pngr.imgInfo.cols];
-
-
-        int channels = pngr.imgInfo.channels;
-        int imgRows = pngr.imgInfo.rows;
-        int imgCols = pngr.imgInfo.cols;
-        System.out.println(pngr.toString() + " --- numChannel: " + channels + " --- rows: " + imgRows);
-
-
-        // ok this could read in all the rows that we need here in another thread that tries to keep the ring buffer full.
-        for (int row = 0; row < hunkSize.getValuei(); row++) { // also: while(pngr.hasMoreRows())
-            timer.start();
-            IImageLine l1 = pngr.readRow();
-            timer.stop("row");
+                @Override
+                public void onMTCUpdate(MidiTime midiTime) {
+                    mt = midiTime.clone();
+//                    if (freewheel.getValueb()) {
+//                        return;
+//                    }
+                    int frame = mt.getHour();
+                    frame = 60 * frame + mt.getMinute();
+                    frame = 60 * frame + mt.getSecond();
+                    frame = mt.getRate().fps() * frame + mt.getFrame();
+                    goToFrame(frame);
+                }
+            });
+            System.out.println("attached time code listener to " + input.getName());
         }
+    }
+
+    @Override
+    public void onActive() {
+        super.onActive();
+        loadDirectory();
+        writerThread.start();
+    }
+
+    private void loadDirectory() {
+        renderFile.setValue("/Users/symmetry/symmetrylabs/software/000_RENDERER/0_2min_30fps_sss.png");
+    }
+
+    private void goToFrame(int frame) {
+        lastFrameReceived = frame;
+    }
+
+    class CirclularBufferWriterThread extends Thread{
 
 
-        try {
-            iis = ImageIO.createImageInputStream(file);
-            ImageReader reader = ImageIO.getImageReaders(iis).next();
-            reader.setInput(iis);
+        @Override
+        public void run() {
+            File file = new File(renderFile.getString());
 
-            ImageReadParam param = reader.getDefaultReadParam();
+            DebugTimer timer = new DebugTimer("hi");
 
-            int roiW = reader.getWidth(0);
-            int roiH = hunkSize.getValuei();
-//            int roiH = reader.getHeight(0);
+            PngReader pngr = new PngReader(file);
 
-            int offset = 0;
-
-            System.out.println("Capacity: " + hunkRingbuffer.maxSize());
-            while (! hunkRingbuffer.isFull()){
-
-                Rectangle srcROI = new Rectangle(0, offset, roiW, offset + roiH);
-                offset += roiH;
-
-                param.setSourceRegion(srcROI);
-
-                System.out.println('\n');
-                timer.start();
-                BufferedImage dataBufIn = reader.read(0, param);
-                timer.stop("read");
-
-
-                System.out.println("dataBufIn: w" + dataBufIn.getWidth() + " h" + dataBufIn.getHeight());
-
-                timer.start();
-                hunkRingbuffer.add(new Hunk(dataBufIn, offset));
-                timer.stop("add");
+            // ok this could read in all the rows that we need here in another thread that tries to keep the ring buffer full.
+//            for (int row = 0; row < hunkSize.getValuei(); row++) { // also: while(pngr.hasMoreRows())
+            while(pngr.hasMoreRows()){
+//                timer.start();
+                while ( !colorBufRing.isAtFullCapacity() ){
+                    IImageLine l1 = pngr.readRow();
+                    colorBufRing.add(((ImageLineInt) l1).getScanline());
+                }
+//                timer.stop("row");
             }
-            iis.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+
         }
+    }
+
+
+    @Override
+    protected void run(double deltaMs, PolyBuffer.Space preferredSpace) {
+        super.run(deltaMs, preferredSpace);
+
+        if (lastFrameReceived == lastFrameRendered){
+            return;
+        }
+
+        int[] ccs = (int[]) getArray(PolyBuffer.Space.SRGB8);
+
+        if (itter.hasNext()){
+            ccs = itter.next();
+            lastFrameRendered = lastFrameReceived;
+        }
+        else{
+            System.err.println("out of frames");
+        }
+        markModified(PolyBuffer.Space.SRGB8);
     }
 }
 
@@ -130,8 +164,8 @@ class DebugTimer {
     }
 
     public void stop(String tag){
-        this.tag = tag;
         loadEnd = System.nanoTime();
+        this.tag = tag;
         long deltaNanos = loadEnd - loadStart;
         double elapsedSec = 1e-9 * (double) (deltaNanos);
         System.out.println( tag + " - " + elapsedSec);
