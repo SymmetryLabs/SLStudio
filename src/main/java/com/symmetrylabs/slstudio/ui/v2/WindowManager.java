@@ -1,12 +1,7 @@
 package com.symmetrylabs.slstudio.ui.v2;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Manages and draws windows in the UI.
@@ -86,6 +81,13 @@ public class WindowManager {
         INSTANCE.showPersistentImpl(name);
     }
 
+    /**
+     * Request that an action be taken while the UI is not being displayed.
+     */
+    public static void runBeforeUi(Runnable r) {
+        INSTANCE.runBeforeUiImpl(r);
+    }
+
     /* Package-private implementation follows */
 
     /** @return the global WindowManager singleton instance. */
@@ -114,6 +116,8 @@ public class WindowManager {
     private final List<Window> transientToAdd;
     private final Set<Window> toRemove;
 
+    private final ConcurrentLinkedQueue<Runnable> preUiTasks;
+
     private boolean uiEnabled;
 
     protected WindowManager() {
@@ -121,6 +125,7 @@ public class WindowManager {
         transientToAdd = new ArrayList<>();
         toRemove = new HashSet<>();
         persistentWindows = new ArrayList<>();
+        preUiTasks = new ConcurrentLinkedQueue<>();
         uiEnabled = true;
     }
 
@@ -137,6 +142,12 @@ public class WindowManager {
     }
 
     void draw() {
+        Iterator<Runnable> taskIter = preUiTasks.iterator();
+        while (taskIter.hasNext()) {
+            taskIter.next().run();
+            taskIter.remove();
+        }
+
         /* Some windows have the power to enable and disable the UI; the moment
            we are disabled, we want to stop drawing, so we check at the start
            and then at the end of every window draw whether we are disabled and
@@ -211,6 +222,10 @@ public class WindowManager {
             }
         }
         throw new RuntimeException("no persistent window defined with name \"" + name + "\"");
+    }
+
+    void runBeforeUiImpl(Runnable r) {
+        preUiTasks.add(r);
     }
 
     void hidePersistent(PersistentWindow ws) {
