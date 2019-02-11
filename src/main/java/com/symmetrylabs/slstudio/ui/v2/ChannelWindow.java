@@ -27,7 +27,7 @@ public class ChannelWindow extends CloseableWindow {
     protected void drawContents() {
         for (LXChannel chan : lx.engine.getChannels()) {
             UI.beginChild(chan.getLabel(), false, 0, 230, 0);
-            new ChannelUi(lx, chan, wepUi).draw();
+            ChannelUi.draw(lx, chan, wepUi);
             UI.endChild();
             UI.sameLine();
         }

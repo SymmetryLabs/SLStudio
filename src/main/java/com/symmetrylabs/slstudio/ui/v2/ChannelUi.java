@@ -14,17 +14,7 @@ public class ChannelUi {
     private static final int ACTIVE_PATTERN_HOVER_COLOR = 0x2EB5E1;
     private static final int CUE_ACTIVE_COLOR = 0xF95951;
 
-    private final LX lx;
-    private final LXChannel chan;
-    private WepUi wepUi;
-
-    public ChannelUi(LX lx, LXChannel chan, WepUi wepUi) {
-        this.lx = lx;
-        this.chan = chan;
-        this.wepUi = wepUi;
-    }
-
-    public void draw() {
+    public static void draw(LX lx, LXChannel chan, WepUi wepUi) {
         String chanName = chan.getLabel();
         boolean isFocused = lx.engine.getFocusedChannel() == chan;
 
