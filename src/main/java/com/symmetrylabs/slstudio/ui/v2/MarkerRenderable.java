@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.ui.v2;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.MarkerSource;
@@ -24,18 +26,25 @@ import heronarts.lx.warp.LXWarp;
 import heronarts.lx.LXEffect;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.symmetrylabs.slstudio.ApplicationState;
+import org.lwjgl.opengl.GL41;
 
 
 public class MarkerRenderable implements RenderManager.Renderable {
     private final LX lx;
+    private final GdxGraphicsAdapter pg;
+    boolean visible;
 
     public MarkerRenderable(LX lx) {
         this.lx = lx;
+        pg = new GdxGraphicsAdapter(new GL4ShapeRenderer());
     }
 
     @Override
     public void draw(SLCamera cam) {
-        GdxGraphicsAdapter pg = new GdxGraphicsAdapter(new ShapeRenderer());
+        if (!visible) {
+            return;
+        }
+        GL41.glEnable(GL41.GL_LINE_SMOOTH);
         pg.renderer.setProjectionMatrix(cam.combined);
         pg.renderer.begin(ShapeRenderer.ShapeType.Line);
 
@@ -52,6 +61,7 @@ public class MarkerRenderable implements RenderManager.Renderable {
         }
 
         pg.renderer.end();
+        GL41.glDisable(GL41.GL_LINE_SMOOTH);
     }
 
     @Override
@@ -70,5 +80,47 @@ public class MarkerRenderable implements RenderManager.Renderable {
                 }
             }
         }
+    }
+
+    public static class GL4ShapeRenderer extends ShapeRenderer {
+        public GL4ShapeRenderer() {
+            super(10000, createDefaultShader());
+        }
+    }
+
+    static private String createVertexShader() {
+        String shader = "#version 330 core\n";
+
+        shader += "in vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
+            + "in vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n";
+
+        shader += "uniform mat4 u_projModelView;\n";
+        shader += "out vec4 v_col;\n";
+
+        shader += "void main() {\n" + "   gl_Position = u_projModelView * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
+            + "   v_col = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n";
+        shader += "   gl_PointSize = 1.0;\n";
+        shader += "}\n";
+        return shader;
+    }
+
+    static private String createFragmentShader() {
+        String shader = "#version 330 core";
+        shader += "#ifdef GL_ES\nprecision mediump float;\n#endif\n";
+        shader += "in vec4 v_col;\n";
+        shader += "out vec4 FragColor;\n";
+        shader += "void main() {\n   FragColor = v_col;\n}";
+        return shader;
+    }
+
+    /** Returns a new instance of the default shader used by SpriteBatch for GL2 when no shader is specified. */
+    static public ShaderProgram createDefaultShader() {
+        String vertexShader = createVertexShader();
+        String fragmentShader = createFragmentShader();
+        ShaderProgram program = new ShaderProgram(vertexShader, fragmentShader);
+        if (!program.isCompiled()) {
+            throw new RuntimeException("marker shader compilation failed: " + program.getLog());
+        }
+        return program;
     }
 }

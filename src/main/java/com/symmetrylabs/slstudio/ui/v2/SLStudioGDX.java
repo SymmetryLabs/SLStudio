@@ -89,7 +89,8 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         renderer.add(mr);
         GnomonRenderable gnomon = new GnomonRenderable(model, renderer.shaderProvider);
         renderer.add(gnomon);
-        renderer.add(new MarkerRenderable(lx));
+        MarkerRenderable markers = new MarkerRenderable(lx);
+        renderer.add(markers);
 
         camController = new SLCamera.InputController(renderer.cam);
         camController.setTargetLH(model.cx, model.cy, model.cz);
@@ -108,7 +109,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         WindowManager.addPersistent("Channels", () -> new ChannelWindow(lx), true);
         WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this, mr), false);
         WindowManager.addPersistent(
-            "View", () -> new CameraControlWindow(lx, camController, renderer.cam, gnomon), true);
+            "View", () -> new CameraControlWindow(lx, camController, renderer.cam, gnomon, markers), true);
 
         WindowManager.addPersistent("Imgui demo", () -> new SlimguiDemoWindow(), false);
         WindowManager.addPersistent("Imgui style editor", () -> new SlimguiStyleEditor(), false);
