@@ -1495,6 +1495,10 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     @Override
     public void load(LX lx, JsonObject obj) {
+        if (engineThread != null && engineThread.isAlive() && Thread.currentThread() != engineThread) {
+            throw new RuntimeException("When engine thread is running, LXEngine.load must be called from engine thread");
+        }
+
         // TODO(mcslee): remove loop tasks that other things might have added? maybe
         // need to separate application-owned loop tasks from project-specific ones...
 
