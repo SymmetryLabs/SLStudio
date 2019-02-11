@@ -37,7 +37,6 @@ public class AllPixelOutput extends LXOutput {
     }
 
     private static final int READ_TIMEOUT_MS = 100;
-    private static final int WRITE_TIMEOUT_MS = 500;
 
     protected final LX lx;
     protected SerialPort port;
@@ -95,18 +94,14 @@ public class AllPixelOutput extends LXOutput {
             return false;
         }
         port.setBaudRate(921600);
-        port.setComPortTimeouts(
-            SerialPort.TIMEOUT_WRITE_BLOCKING | SerialPort.TIMEOUT_READ_SEMI_BLOCKING,
-            READ_TIMEOUT_MS, WRITE_TIMEOUT_MS);
+        port.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, READ_TIMEOUT_MS, 0);
         return port.openPort();
     }
 
     protected void sendConfigureCommand() {
         if (port == null || !port.isOpen()) {
             port.setBaudRate(921600);
-            port.setComPortTimeouts(
-                SerialPort.TIMEOUT_WRITE_BLOCKING | SerialPort.TIMEOUT_READ_SEMI_BLOCKING,
-                READ_TIMEOUT_MS, WRITE_TIMEOUT_MS);
+            port.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, READ_TIMEOUT_MS, 0);
             boolean open = port.openPort();
             if (!open && !isRebooting) {
                 warn("could not open serial port");

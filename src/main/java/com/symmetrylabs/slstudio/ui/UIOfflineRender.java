@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.ui;
 
 import com.symmetrylabs.slstudio.output.DoubleBufferedOfflineRenderOutput;
 import com.symmetrylabs.slstudio.output.ModelCsvWriter;
+import com.symmetrylabs.slstudio.output.OfflineRenderOutput;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.StringParameter;
@@ -31,19 +32,23 @@ public class UIOfflineRender extends UICollapsibleSection {
 
     private final BooleanParameter useContinuous = new BooleanParameter("useContinuous", false);
 
-//    private OfflineRenderOutput output;
-    private DoubleBufferedOfflineRenderOutput output;
+    private OfflineRenderOutput output;
+//    private DoubleBufferedOfflineRenderOutput output;
 
     public UIOfflineRender(UI ui, LX lx, float x, float y, float w) {
         super(ui, x, y, w, HEIGHT);
 
 
-        useContinuous.setValue(true);
+        useContinuous.setValue(false);
         if (useContinuous.getValueb()){
            output = new DoubleBufferedOfflineRenderOutput(lx);
-           lx.addOutput(output);
            setTitle("CONTINUOUS OFFLINE RENDER");
         }
+        else{
+            output = new OfflineRenderOutput(lx);
+            setTitle("OFFLINE RENDER");
+        }
+        lx.addOutput(output);
 
 
         final int pad = 6;
@@ -115,10 +120,10 @@ public class UIOfflineRender extends UICollapsibleSection {
             .setLabel("Start")
             .addToContainer(this);
 
-        new UIButton(w - 12 - 52 - 80, cy, 60, 18)
-            .setParameter(output.concurrent)
-            .setLabel("Concurrent")
-            .addToContainer(this);
+//        new UIButton(w - 12 - 52 - 80, cy, 60, 18)
+//            .setParameter(output.concurrent)
+//            .setLabel("Concurrent")
+//            .addToContainer(this);
 
         writeModel.addListener((p) -> {
                 if (!writeModel.getValueb()) {

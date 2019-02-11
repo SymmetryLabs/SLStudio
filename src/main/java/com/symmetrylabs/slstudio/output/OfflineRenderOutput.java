@@ -2,6 +2,8 @@ package com.symmetrylabs.slstudio.output;
 
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
+import heronarts.lx.midi.LXMidiInput;
+import heronarts.lx.midi.MidiTime;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.output.LXOutput;
@@ -27,14 +29,19 @@ public class OfflineRenderOutput extends LXOutput {
     private int framesToCapture;
     private double frameRate;
 
+    private int currentFrame = -1;
+
     public final BooleanParameter pStart = new BooleanParameter("pStart", false).setMode(BooleanParameter.Mode.MOMENTARY);
     public final DiscreteParameter pFramesToCapture = new DiscreteParameter("frames", 1200, 0, 30000);
     public final CompoundParameter pFrameRate = new CompoundParameter("rate", 30, 1, 60);
     public final StringParameter pOutputFile = new StringParameter("output", "");
     public final StringParameter pStatus = new StringParameter("status", "IDLE");
 
+    public final BooleanParameter externalSync = new BooleanParameter("ext", false);
+
     // only used in continuous offline output
     public StringParameter pOutputDir = new StringParameter("HunkDataDir", "");
+    private MidiTime mt;
 
     public OfflineRenderOutput(LX lx) {
         super(lx);
@@ -50,8 +57,34 @@ public class OfflineRenderOutput extends LXOutput {
                     createImage();
                 }
             });
+
+        addMTCListeners(lx);
     }
 
+    private void addMTCListeners(LX lx){
+        for (LXMidiInput input : lx.engine.midi.inputs) {
+            input.addTimeListener(new LXMidiInput.MidiTimeListener() {
+                @Override
+                public void onBeatClockUpdate(int i, double v) {
+                }
+
+                @Override
+                public void onMTCUpdate(MidiTime midiTime) {
+                    mt = midiTime.clone();
+                    int frame = mt.getHour();
+                    frame = 60 * frame + mt.getMinute();
+                    frame = 60 * frame + mt.getSecond();
+                    frame = mt.getRate().fps() * frame + mt.getFrame();
+//                    updateFrame(frame);
+                    currentFrame = frame;
+                    if (externalSync.getValueb()){
+                        pStatus.setValue("" + frame/(int)pFrameRate.getValuef());
+                    }
+                }
+            });
+            System.out.println("attached time code listener to " + input.getName());
+        }
+    }
     public void dispose() {
         img = null;
         pStatus.setValue("IDLE");
@@ -70,13 +103,23 @@ public class OfflineRenderOutput extends LXOutput {
         if (img == null) {
             return;
         }
-        pStatus.setValue("REC");
-
-        double elapsedSec = 1e-9 * (double) (System.nanoTime() - startFrameNanos);
-        int inFrame = (int) Math.floor(frameRate * elapsedSec);
-        if (inFrame <= lastFrameWritten) {
-            return;
+        int inFrame;
+        if (externalSync.getValueb()){
+            if (currentFrame <= 0){
+                pStatus.setValue("WAIT");
+                return;
+            }
+            inFrame = currentFrame;
         }
+        else {
+            pStatus.setValue("REC");
+            double elapsedSec = 1e-9 * (double) (System.nanoTime() - startFrameNanos);
+            inFrame = (int) Math.floor(frameRate * elapsedSec);
+            if (inFrame <= lastFrameWritten) {
+                return;
+            }
+        }
+
         lastFrameWritten = inFrame;
         if (lastFrameWritten >= framesToCapture) {
             final BufferedImage imgToWrite = img;

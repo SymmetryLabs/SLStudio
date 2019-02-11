@@ -295,7 +295,9 @@ $RECYCLE.BIN/
 .project
 .classpath
 bin
+
+
 .vscode
 shows/pilots/files
-*.bak
 scratch
+*.bak

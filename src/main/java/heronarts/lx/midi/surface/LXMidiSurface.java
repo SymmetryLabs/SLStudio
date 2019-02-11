@@ -46,7 +46,8 @@ public abstract class LXMidiSurface implements LXMidiListener {
     }
 
     public static LXMidiSurface get(LX lx, LXMidiEngine engine, LXMidiInput input) {
-        if (input.getDescription().equals(APC40_MK2) || (input.getName() != null && input.getName().equals(APC40_MK2))) {
+        String description = input.getDescription();
+        if (description.equals(APC40_MK2)) {
             return new APC40Mk2(lx, input, findOutput(engine, APC40_MK2));
         }
         return null;
