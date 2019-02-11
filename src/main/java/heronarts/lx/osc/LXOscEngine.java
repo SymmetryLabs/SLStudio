@@ -599,6 +599,7 @@ public class LXOscEngine extends LXComponent {
             this.buffer = new byte[bufferSize];
             this.packet = new DatagramPacket(this.buffer, bufferSize);
             this.thread = new ReceiverThread();
+            this.thread.setDaemon(true);
             this.thread.start();
         }
 
