@@ -33,7 +33,14 @@ public class MainMenu implements Window {
                            the project is loading. Without this, we almost
                            always get a concurrent modification exception while
                            rendering the UI. */
-                        WindowManager.runBeforeUi(() -> lx.openProject(project));
+                        WindowManager.get().disableUI();
+                        /* runBeforeUi is a good way to make sure that the UI
+                         * is fully disabled before we add the task. */
+                        WindowManager.runBeforeUi(
+                            () -> lx.engine.addTask(() -> {
+                                lx.openProject(project);
+                                WindowManager.get().enableUI();
+                            }));
                     });
             }
             if (UI.menuItem("Save")) {
