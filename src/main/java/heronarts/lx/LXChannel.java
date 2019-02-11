@@ -842,13 +842,19 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
     @Override
     public void dispose() {
+        /* Kill the channel thread before mutating any internal state to
+         * prevent the thread from accessing dead data. */
+        if (this.thread.hasStarted) {
+            this.thread.interrupt();
+            /* block on dispose until the channel thread has been shut down */
+            try {
+                this.thread.join();
+            } catch (InterruptedException e) {}
+        }
         for (LXPattern pattern : this.mutablePatterns) {
             pattern.dispose();
         }
         this.mutablePatterns.clear();
-        if (this.thread.hasStarted) {
-            this.thread.interrupt();
-        }
         super.dispose();
     }
 
