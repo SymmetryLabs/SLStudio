@@ -19,7 +19,6 @@ public class OfflinePlaybackTest {
 
     @Before
     public void setUp() {
-        SLStudio sl = new SLStudio();
         lx = new LX(model);
     }
 
