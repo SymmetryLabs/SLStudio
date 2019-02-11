@@ -21,6 +21,7 @@ public class ChannelWindow extends CloseableWindow {
 
     @Override
     protected void windowSetup() {
+        UI.setNextWindowDefaults(25, 500, 500, 800);
     }
 
     @Override
