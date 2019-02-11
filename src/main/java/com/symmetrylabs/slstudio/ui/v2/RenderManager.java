@@ -4,6 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.g3d.Renderable;
+import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
+import com.badlogic.gdx.graphics.g3d.utils.BaseShaderProvider;
+import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
 import com.badlogic.gdx.graphics.glutils.VertexBufferObject;
 import com.badlogic.gdx.math.Vector3;
 import heronarts.lx.LX;
@@ -25,10 +30,12 @@ public class RenderManager {
     }
 
     public final SLCamera cam;
+    public final ShaderProvider shaderProvider;
     protected final List<Renderable> renderables;
 
     public RenderManager(LX lx) {
         renderables = new ArrayList<>();
+        shaderProvider = new ShaderProvider();
 
         printCapabilities();
 
@@ -100,5 +107,22 @@ public class RenderManager {
         if (glCaps.OpenGL12) supportedVersions.add("1.2");
         if (glCaps.OpenGL11) supportedVersions.add("1.1");
         System.out.println("supported GL versions: " + String.join(", ", supportedVersions));
+    }
+
+    public static class ShaderProvider extends BaseShaderProvider {
+        public final DefaultShader.Config config;
+
+        public ShaderProvider() {
+            config = new DefaultShader.Config(
+                Gdx.files.internal("gdx-vertex.glsl").readString(),
+                Gdx.files.internal("gdx-fragment.glsl").readString());
+        }
+
+        @Override
+        protected Shader createShader (final com.badlogic.gdx.graphics.g3d.Renderable renderable) {
+            String prefix = DefaultShader.createPrefix(renderable, config);
+            prefix = "#version 330 core\n\n" + prefix;
+            return new DefaultShader(renderable, config, prefix, config.vertexShader, config.fragmentShader);
+        }
     }
 }

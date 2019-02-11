@@ -26,7 +26,7 @@ public class GnomonRenderable implements RenderManager.Renderable {
     private Environment environment;
     boolean visible;
 
-    public GnomonRenderable(LXModel m) {
+    public GnomonRenderable(LXModel m, RenderManager.ShaderProvider shaderProvider) {
         ModelBuilder modelBuilder = new ModelBuilder();
 
         float d = 100f;
@@ -54,7 +54,7 @@ public class GnomonRenderable implements RenderManager.Renderable {
         instances.add(new ModelInstance(arrowY));
         instances.add(new ModelInstance(arrowZ));
 
-        batch = new ModelBatch();
+        batch = new ModelBatch(shaderProvider);
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
