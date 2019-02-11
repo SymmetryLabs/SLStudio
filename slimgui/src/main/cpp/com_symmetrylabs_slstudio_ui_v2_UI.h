@@ -465,6 +465,14 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isItemClicked
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    isItemDoubleClicked
+ * Signature: (I)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isItemDoubleClicked
+  (JNIEnv *, jclass, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    isItemActive
  * Signature: ()Z
  */

@@ -156,6 +156,10 @@ public class UI {
         return isItemClicked(0);
     }
     public static native boolean isItemClicked(int mouseButton);
+    public static boolean isItemDoubleClicked() {
+        return isItemDoubleClicked(0);
+    }
+    public static native boolean isItemDoubleClicked(int mouseButton);
     public static native boolean isItemActive();
 
     /* IO */

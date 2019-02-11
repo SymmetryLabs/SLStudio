@@ -74,6 +74,10 @@ public class ChannelUi {
             if (active == i) {
                 UI.popColor(3);
             }
+            if (UI.isItemDoubleClicked()) {
+                final int patternIndex = i;
+                lx.engine.addTask(() -> chan.goIndex(patternIndex));
+            }
             if (UI.beginContextMenu(patName)) {
                 if (UI.contextMenuItem("Activate")) {
                     final int patternIndex = i;

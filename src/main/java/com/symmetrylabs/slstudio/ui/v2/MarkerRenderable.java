@@ -105,7 +105,7 @@ public class MarkerRenderable implements RenderManager.Renderable {
     }
 
     static private String createFragmentShader() {
-        String shader = "#version 330 core";
+        String shader = "#version 330 core\n";
         shader += "#ifdef GL_ES\nprecision mediump float;\n#endif\n";
         shader += "in vec4 v_col;\n";
         shader += "out vec4 FragColor;\n";
@@ -119,6 +119,10 @@ public class MarkerRenderable implements RenderManager.Renderable {
         String fragmentShader = createFragmentShader();
         ShaderProgram program = new ShaderProgram(vertexShader, fragmentShader);
         if (!program.isCompiled()) {
+            System.out.println("VERTEX:");
+            System.out.println(vertexShader);
+            System.out.println("FRAGMENT:");
+            System.out.println(fragmentShader);
             throw new RuntimeException("marker shader compilation failed: " + program.getLog());
         }
         return program;
