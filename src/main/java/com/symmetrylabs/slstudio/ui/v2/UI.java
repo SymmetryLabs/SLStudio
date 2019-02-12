@@ -24,6 +24,11 @@ public class UI {
     public static int COLOR_HEADER_HOVERED;
     public static int COLOR_WINDOW_BORDER;
 
+    public static int COND_ALWAYS;
+    public static int COND_ONCE;
+    public static int COND_FIRST_USE_EVER;
+    public static int COND_APPEARING;
+
     public static class CollapseResult {
         /** true if the collapsable section should be open (i.e., client should draw the contents of the section) */
         public boolean isOpen;
@@ -184,7 +189,10 @@ public class UI {
     public static native float knobModulatedFloat(
         String label, float base, float v0, float v1, float modulatedValue,
         int modulatorCount, float[] modulatorMins, float[] modulatorMaxs, int[] modulatorColors);
-    public static native CollapseResult collapsibleSection(String label, boolean allowClose);
+    public static CollapseResult collapsibleSection(String label, boolean allowClose) {
+        return collapsibleSection(label, allowClose, 0);
+    }
+    public static native CollapseResult collapsibleSection(String label, boolean allowClose, int flags);
     public static native void histogram(String label, float[] values, float min, float max, int size);
     public static native void plot(String label, float[] values, float min, float max, int size);
 
@@ -218,6 +226,11 @@ public class UI {
     }
     public static native boolean treeNode(String id, int flags, String label);
     public static native void treePop();
+
+    public static void setNextTreeNodeOpen(boolean isOpen) {
+        setNextTreeNodeOpen(isOpen, COND_ALWAYS);
+    }
+    public static native void setNextTreeNodeOpen(boolean isOpen, int when);
 
     /* Interaction */
     public static boolean isItemClicked() {

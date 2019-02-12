@@ -111,6 +111,14 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
     env->SetStaticIntField(cls, fid, ImGuiCol_HeaderHovered);
     fid = env->GetStaticFieldID(cls, "COLOR_WINDOW_BORDER", "I");
     env->SetStaticIntField(cls, fid, ImGuiCol_Border);
+    fid = env->GetStaticFieldID(cls, "COND_ALWAYS", "I");
+    env->SetStaticIntField(cls, fid, ImGuiCond_Always);
+    fid = env->GetStaticFieldID(cls, "COND_ONCE", "I");
+    env->SetStaticIntField(cls, fid, ImGuiCond_Once);
+    fid = env->GetStaticFieldID(cls, "COND_FIRST_USE_EVER", "I");
+    env->SetStaticIntField(cls, fid, ImGuiCond_FirstUseEver);
+    fid = env->GetStaticFieldID(cls, "COND_APPEARING", "I");
+    env->SetStaticIntField(cls, fid, ImGuiCond_Appearing);
 
     if (gl3wInit()) {
         std::cout << "failed to init gl3w" << std::endl;
@@ -461,14 +469,14 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_knobModulatedFloat(
     return vf;
 }
 
-JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_collapsibleSection(JNIEnv *env, jclass, jstring jlabel, jboolean allowClose) {
+JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_collapsibleSection(JNIEnv *env, jclass, jstring jlabel, jboolean allowClose, jint flags) {
     JniString label(env, jlabel);
     bool display = true;
     bool isOpen = false;
     if (allowClose) {
-        isOpen = ImGui::CollapsingHeader(label, &display, 0);
+        isOpen = ImGui::CollapsingHeader(label, &display, flags);
     } else {
-        isOpen = ImGui::CollapsingHeader(label, 0);
+        isOpen = ImGui::CollapsingHeader(label, flags);
     }
     jclass resCls = env->FindClass("com/symmetrylabs/slstudio/ui/v2/UI$CollapseResult");
     jobject res = env->NewObject(resCls, env->GetMethodID(resCls, "<init>", "()V"));
@@ -549,6 +557,10 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_treeNode(
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_treePop(JNIEnv *, jclass) {
     ImGui::TreePop();
+}
+
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextTreeNodeOpen(JNIEnv *, jclass, jboolean open, jint when) {
+    ImGui::SetNextTreeNodeOpen(open != 0, when);
 }
 
 JNIEXPORT jboolean JNICALL

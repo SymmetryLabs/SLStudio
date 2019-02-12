@@ -29,8 +29,16 @@ public class CubeOutputWindow extends CloseableWindow {
 
         Collection<CubesController> ccs = show.getSortedControllers();
         UI.text("%d controllers", ccs.size());
+        boolean expand = UI.button("expand all");
+        UI.sameLine();
+        boolean collapse = UI.button("collapse all");
 
         for (CubesController cc : ccs) {
+            if (expand) {
+                UI.setNextTreeNodeOpen(true);
+            } else if (collapse) {
+                UI.setNextTreeNodeOpen(false);
+            }
             UI.CollapseResult cr = UI.collapsibleSection(cc.id, false);
             if (cr.isOpen) {
                 ParameterUI.draw(lx, cc.enabled);

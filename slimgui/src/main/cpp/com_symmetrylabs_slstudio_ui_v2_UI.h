@@ -338,10 +338,10 @@ JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobModulatedFl
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    collapsibleSection
- * Signature: (Ljava/lang/String;Z)Lcom/symmetrylabs/slstudio/ui/v2/UI/CollapseResult;
+ * Signature: (Ljava/lang/String;ZI)Lcom/symmetrylabs/slstudio/ui/v2/UI/CollapseResult;
  */
 JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_collapsibleSection
-  (JNIEnv *, jclass, jstring, jboolean);
+  (JNIEnv *, jclass, jstring, jboolean, jint);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
@@ -454,6 +454,14 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_treeNode
  */
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_treePop
   (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    setNextTreeNodeOpen
+ * Signature: (ZI)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextTreeNodeOpen
+  (JNIEnv *, jclass, jboolean, jint);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
