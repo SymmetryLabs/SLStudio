@@ -125,7 +125,7 @@ public abstract class UdpBroadcastNetworkScanner {
      * interfaces, expires devices we haven't seen for a while, and sends a
      * discovery packet. This method is 100% non-blocking.
      */
-    public void scan() {
+    public synchronized void scan() {
         expireInterfaces();
         expireDevices();
         for (InetAddress broadcast : NetworkUtils.getBroadcastAddresses()) {
@@ -144,7 +144,7 @@ public abstract class UdpBroadcastNetworkScanner {
                     System.out.println("bound to new interface " + broadcast + " for " + protoName);
                 } catch (IOException e) {
                     if (!errorBroadcasts.contains(broadcast)) {
-                        System.err.println("couldn't set up " + protoName + " discovery listener:");
+                        System.err.println("couldn't set up " + protoName + " discovery listener on " + broadcast + ":");
                         e.printStackTrace();
                         errorBroadcasts.add(broadcast);
                         continue;

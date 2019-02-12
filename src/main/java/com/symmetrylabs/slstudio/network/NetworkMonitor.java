@@ -29,6 +29,7 @@ public class NetworkMonitor {
     private final Selector recvSelector;
 
     private boolean started = false;
+    private Thread runner;
 
     private static Map<LX, WeakReference<NetworkMonitor>> instanceByLX = new WeakHashMap<>();
 
@@ -102,9 +103,9 @@ public class NetworkMonitor {
 
     public synchronized NetworkMonitor start() {
         if (!started) {
-            Thread t = new Thread(this::loop);
-            t.setDaemon(true);
-            t.start();
+            runner = new Thread(this::loop);
+            runner.setDaemon(true);
+            runner.start();
             started = true;
         }
         return this;
@@ -112,6 +113,9 @@ public class NetworkMonitor {
 
     public synchronized void stop() {
         started = false;
+        try {
+            runner.join();
+        } catch (InterruptedException e) {}
     }
 
     private void loop() {
@@ -153,5 +157,7 @@ public class NetworkMonitor {
                 remaining = 1_000_000L * SCAN_PERIOD_MS - (System.nanoTime() - start);
             } while (remaining > 0 && started);
         }
+        opcNetworkScanner.close();
+        artNetNetworkScanner.close();
     }
 }
