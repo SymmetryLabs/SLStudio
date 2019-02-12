@@ -29,10 +29,10 @@ public class OfflineRenderOutput extends LXOutput {
     private int framesToCapture;
     private double frameRate;
 
-    private int currentFrame = -1;
+    protected int currentFrame = -1;
 
-    public final BooleanParameter pStart = new BooleanParameter("pStart", false);
-    public final DiscreteParameter pFramesToCapture = new DiscreteParameter("frames", 1200, 0, 30000);
+    public final BooleanParameter pStart = new BooleanParameter("pStart", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    public final DiscreteParameter pFramesToCapture = new DiscreteParameter("frames", 60, 0, 30000);
     public final CompoundParameter pFrameRate = new CompoundParameter("rate", 30, 1, 60);
     public final StringParameter pOutputFile = new StringParameter("output", "");
     public final StringParameter pStatus = new StringParameter("status", "IDLE");
@@ -54,13 +54,17 @@ public class OfflineRenderOutput extends LXOutput {
             });
         pStart.addListener(p -> {
                 if (pStart.getValueb()) {
-                    pStatus.setValue("Stop");
                     createImage();
                 }
-                else if (pStart.getValueb() == false){
-                    dispose();
-                }
             });
+        externalSync.addListener(p -> {
+            if (externalSync.getValueb()) {
+                createImage();
+            }
+            else{
+                dispose();
+            }
+        });
 
         addMTCListeners(lx);
     }
@@ -88,6 +92,9 @@ public class OfflineRenderOutput extends LXOutput {
     }
     public void dispose() {
         img = null;
+        currentFrame = -1;
+        offset_frame = -1;
+        debounce_frames = 20;
         pStatus.setValue("IDLE");
     }
 
@@ -99,6 +106,9 @@ public class OfflineRenderOutput extends LXOutput {
         img = new BufferedImage(model.points.length, pFramesToCapture.getValuei(), BufferedImage.TYPE_INT_ARGB);
     }
 
+
+    static int debounce_frames = 4;
+    int offset_frame = -1;
     @Override
     protected void onSend(PolyBuffer colors) {
         if (img == null) {
@@ -106,11 +116,18 @@ public class OfflineRenderOutput extends LXOutput {
         }
         int inFrame;
         if (externalSync.getValueb()){
-            if (currentFrame <= 0){
+            if (debounce_frames > 0){
+                debounce_frames--;
+                return;
+            }
+            if (offset_frame == -1){
+                offset_frame = currentFrame;
+            }
+            inFrame = currentFrame - offset_frame;
+            if (inFrame <= 0){
                 pStatus.setValue("WAIT_EXT");
                 return;
             }
-            inFrame = currentFrame;
             pStatus.setValue("REC:" + inFrame);
         }
         else {
@@ -122,8 +139,7 @@ public class OfflineRenderOutput extends LXOutput {
             }
         }
 
-        lastFrameWritten = inFrame;
-        if (lastFrameWritten >= framesToCapture) {
+        if (inFrame >= framesToCapture) {
             final BufferedImage imgToWrite = img;
             final File outputToWrite = output;
             EventQueue.invokeLater(() -> {
@@ -137,7 +153,8 @@ public class OfflineRenderOutput extends LXOutput {
             dispose();
         } else {
             int[] carr = (int[]) colors.getArray(PolyBuffer.Space.RGB8);
-            img.setRGB(0, lastFrameWritten, model.points.length, 1, carr, 0, model.points.length);
+            img.setRGB(0, inFrame, model.points.length, 1, carr, 0, model.points.length);
+            lastFrameWritten = inFrame;
         }
     }
 }
