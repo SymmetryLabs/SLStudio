@@ -86,8 +86,8 @@ public class AssignablePixlite extends LXOutputGroup {
             this.ipAddress = datalineA.ipAddress;
             this.index = index;
 
+            // disabled by default until setBranch is called
             enabled.setValue(false);
-            //enabled.setValue(true);
         }
 
         public void setBranch(TreeModel.Branch branch) {
@@ -123,7 +123,6 @@ public class AssignablePixlite extends LXOutputGroup {
             }
             datalineB.setPoints(pointsB);
 
-            //enabled.setValue(false);
             enabled.setValue(true);
         }
     }
