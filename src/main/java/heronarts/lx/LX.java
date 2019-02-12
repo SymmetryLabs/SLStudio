@@ -20,6 +20,9 @@
 
 package heronarts.lx;
 
+import com.symmetrylabs.shows.pilots.CartConfig;
+import com.symmetrylabs.shows.pilots.PilotsPixlite;
+import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXPalette;
 import heronarts.lx.model.GridModel;
@@ -168,6 +171,11 @@ public class LX {
     public final LXEngine engine;
 
     /**
+     * Non-GUI UI
+     */
+    public final LXTxtUI txt_ui;
+
+    /**
      * The global tempo object.
      */
     public final Tempo tempo;
@@ -262,6 +270,10 @@ public class LX {
         this.engine.addChannel(new LXPattern[] { new IteratorTestPattern(this) }).fader.setValue(1);
         LX.initTimer.log("Default Channel");
 
+
+        this.txt_ui = new LXTxtUI(this);
+        this.engine.addLoopTask(this.txt_ui);
+        // Add output for caption source
     }
 
     public LX addListener(Listener listener) {

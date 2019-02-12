@@ -31,7 +31,7 @@ public class OfflineRenderOutput extends LXOutput {
 
     private int currentFrame = -1;
 
-    public final BooleanParameter pStart = new BooleanParameter("pStart", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    public final BooleanParameter pStart = new BooleanParameter("pStart", false);
     public final DiscreteParameter pFramesToCapture = new DiscreteParameter("frames", 1200, 0, 30000);
     public final CompoundParameter pFrameRate = new CompoundParameter("rate", 30, 1, 60);
     public final StringParameter pOutputFile = new StringParameter("output", "");
@@ -54,7 +54,11 @@ public class OfflineRenderOutput extends LXOutput {
             });
         pStart.addListener(p -> {
                 if (pStart.getValueb()) {
+                    pStatus.setValue("Stop");
                     createImage();
+                }
+                else if (pStart.getValueb() == false){
+                    dispose();
                 }
             });
 
@@ -77,9 +81,6 @@ public class OfflineRenderOutput extends LXOutput {
                     frame = mt.getRate().fps() * frame + mt.getFrame();
 //                    updateFrame(frame);
                     currentFrame = frame;
-                    if (externalSync.getValueb()){
-                        pStatus.setValue("" + frame/(int)pFrameRate.getValuef());
-                    }
                 }
             });
             System.out.println("attached time code listener to " + input.getName());
@@ -106,10 +107,11 @@ public class OfflineRenderOutput extends LXOutput {
         int inFrame;
         if (externalSync.getValueb()){
             if (currentFrame <= 0){
-                pStatus.setValue("WAIT");
+                pStatus.setValue("WAIT_EXT");
                 return;
             }
             inFrame = currentFrame;
+            pStatus.setValue("REC:" + inFrame);
         }
         else {
             pStatus.setValue("REC");
