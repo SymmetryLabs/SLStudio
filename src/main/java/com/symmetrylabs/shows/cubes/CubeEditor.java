@@ -2,8 +2,10 @@ package com.symmetrylabs.shows.cubes;
 
 import com.symmetrylabs.slstudio.ui.v2.CloseableWindow;
 import com.symmetrylabs.slstudio.ui.v2.UI;
-import static com.symmetrylabs.shows.cubes.CubesModel.Cube;
 import heronarts.lx.transform.LXTransform;
+import java.util.List;
+import static com.symmetrylabs.shows.cubes.CubesModel.Cube;
+import static com.symmetrylabs.shows.cubes.CubesModel.DoubleControllerCube;
 
 public class CubeEditor extends CloseableWindow {
     protected final CubesModel model;
@@ -20,19 +22,44 @@ public class CubeEditor extends CloseableWindow {
 
     @Override
     protected void drawContents() {
-        int i = 0;
+        List<Cube> cubes = model.getCubes();
+        UI.text("%d cubes", cubes.size());
+        boolean expand = UI.button("expand all");
+        UI.sameLine();
+        boolean collapse = UI.button("collapse all");
+
         boolean anyUpdated = false;
-        for (Cube c : model.getCubes()) {
-            if (i != 0) {
-                UI.separator();
+        for (int i = 0; i < cubes.size(); i++) {
+            Cube c = cubes.get(i);
+            if (expand) {
+                UI.setNextTreeNodeOpen(true);
+            } else if (collapse) {
+                UI.setNextTreeNodeOpen(false);
             }
-            i++;
+            UI.CollapseResult cr = UI.collapsibleSection(String.format("Cube %d", i), false);
+            if (!cr.isOpen) {
+                continue;
+            }
+            UI.labelText("type", c.type.toString());
 
             boolean updated = false;
-            String id = UI.inputText("id", c.id);
-            if (!id.equals(c.id)) {
-                c.id = id;
-                updated = true;
+            if (c instanceof DoubleControllerCube) {
+                DoubleControllerCube dcc = (DoubleControllerCube) c;
+                UI.columnsStart(2, "cubeIds");
+                String idA = UI.inputText("A", dcc.idA);
+                UI.nextColumn();
+                String idB = UI.inputText("B", dcc.idB);
+                if (!idA.equals(dcc.idA) || !idB.equals(dcc.idB)) {
+                    dcc.idA = idA;
+                    dcc.idB = idB;
+                    updated = true;
+                }
+            } else {
+                String id = UI.inputText("id", c.id);
+                if (!id.equals(c.id)) {
+                    c.id = id;
+                    updated = true;
+                }
             }
             UI.columnsStart(3, "cubeEditor");
             float x = UI.floatBox(String.format("x##%d", i), c.x);

@@ -10,6 +10,7 @@ import java.util.Collection;
 
 public class CubeOutputWindow extends CloseableWindow {
     private final LX lx;
+    private final CubesModel model;
     private final CubesShow show;
     private final String[] featureIdBuffer = new String[32];
 
@@ -17,6 +18,7 @@ public class CubeOutputWindow extends CloseableWindow {
         super("Cube output");
         this.lx = lx;
         this.show = show;
+        this.model = (CubesModel) lx.model;
     }
 
     @Override
@@ -40,22 +42,23 @@ public class CubeOutputWindow extends CloseableWindow {
                 UI.setNextTreeNodeOpen(false);
             }
             UI.CollapseResult cr = UI.collapsibleSection(cc.id, false);
-            if (cr.isOpen) {
-                ParameterUI.draw(lx, cc.enabled);
-                NetworkDevice nd = cc.networkDevice;
-                if (nd == null) {
-                    UI.text("(no network device)");
-                } else {
-                    String version = nd.versionId;
-                    if (version.isEmpty()) {
-                        version = String.format("%d*", nd.version.get());
-                    }
-                    UI.labelText("version", version);
-                    UI.labelText("ip", nd.ipAddress.toString());
-                    UI.labelText("product", nd.productId);
-                    UI.labelText("device", nd.deviceId);
-                    UI.labelText("features", String.join(",", nd.featureIds));
+            if (!cr.isOpen) {
+                continue;
+            }
+            ParameterUI.draw(lx, cc.enabled);
+            NetworkDevice nd = cc.networkDevice;
+            if (nd == null) {
+                UI.text("(no network device)");
+            } else {
+                String version = nd.versionId;
+                if (version.isEmpty()) {
+                    version = String.format("%d*", nd.version.get());
                 }
+                UI.labelText("version", version);
+                UI.labelText("ip", nd.ipAddress.toString());
+                UI.labelText("product", nd.productId);
+                UI.labelText("device", nd.deviceId);
+                UI.labelText("features", String.join(",", nd.featureIds));
             }
         }
     }
