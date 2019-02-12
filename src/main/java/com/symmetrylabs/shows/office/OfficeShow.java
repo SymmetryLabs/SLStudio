@@ -124,8 +124,8 @@ public class OfficeShow extends CubesShow implements HasWorkspace {
 
                 new TowerConfig(SP * 1, SP * 0, -SP * 2, new String[][]{
                 new String[] {"931", "938"},
-                new String[] {"438", "1094"},
-                new String[] {"442", "723"},
+                new String[] {"437", "1094"},
+                new String[] {"442", "722"},
             }),
 
                 new TowerConfig(SP * 2, SP * 0, -SP * 2, new String[][]{

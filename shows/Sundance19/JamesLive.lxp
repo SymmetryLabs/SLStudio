@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1549936526694,
+  "timestamp": 1549938536729,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -270,19 +270,6 @@
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 229,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -6225665,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 32,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
