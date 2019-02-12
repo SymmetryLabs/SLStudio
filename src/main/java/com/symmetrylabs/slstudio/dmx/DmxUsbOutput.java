@@ -3,8 +3,6 @@ package com.symmetrylabs.slstudio.dmx;
 import java.util.List;
 import java.util.ArrayList;
 
-import com.symmetrylabs.color.Ops8;
-import com.symmetrylabs.slstudio.component.GammaExpander;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.output.LXOutput;
@@ -13,6 +11,8 @@ import heronarts.lx.color.LXColor;
 
 import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.color.Ops16;
+
+import com.symmetrylabs.slstudio.component.GammaExpander;
 
 public class DmxUsbOutput extends LXOutput {
     public enum RGBWMode {
@@ -266,7 +266,7 @@ public class DmxUsbOutput extends LXOutput {
                     break;
                 }
 
-                if (false) {
+                if (bitMode) {
                     int channel = 2 * (i * colorChannels.length + j);
                     dmxWriter.setChannelData(channel, (value & 0xff00) >>> 8);
                     dmxWriter.setChannelData(channel + 1, value & 0x00ff);
