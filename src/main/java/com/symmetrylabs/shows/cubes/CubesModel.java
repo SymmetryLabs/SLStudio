@@ -55,6 +55,9 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
     }
 
     private void updateCubeTables() {
+        cubeTable.clear();
+        cubeTableA.clear();
+        cubeTableB.clear();
         for (Cube c : cubes) {
             cubeTable.put(c.id, c);
             if (c instanceof DoubleControllerCube) {
@@ -97,7 +100,15 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
     }
 
     public Cube getCubeById(String id) {
-        return this.cubeTable.get(id);
+        Cube c = cubeTable.get(id);
+        if (c != null) {
+            return c;
+        }
+        c = cubeTableA.get(id);
+        if (c != null) {
+            return c;
+        }
+        return cubeTableB.get(id);
     }
 
     public PointsGrouping getDoubleCubePoints(String controllerId) {

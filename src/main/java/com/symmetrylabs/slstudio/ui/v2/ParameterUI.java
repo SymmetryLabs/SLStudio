@@ -11,7 +11,7 @@ import heronarts.lx.LXComponent;
 import heronarts.lx.parameter.CompoundParameter;
 
 public class ParameterUI {
-    enum WidgetType {
+    public enum WidgetType {
         KNOB,
         SLIDER,
     };

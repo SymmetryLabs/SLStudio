@@ -10,10 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChannelUi {
-    private static final int ACTIVE_PATTERN_COLOR = 0x0096C8;
-    private static final int ACTIVE_PATTERN_HOVER_COLOR = 0x2EB5E1;
-    private static final int CUE_ACTIVE_COLOR = 0xF95951;
-
     public static void draw(LX lx, LXChannel chan, WepUi wepUi) {
         String chanName = chan.getLabel();
         boolean isFocused = lx.engine.getFocusedChannel() == chan;
@@ -31,7 +27,7 @@ public class ChannelUi {
         ParameterUI.draw(lx, chan.enabled);
         UI.sameLine();
         if (chan.cueActive.getValueb()) {
-            UI.pushColor(UI.COLOR_WIDGET, CUE_ACTIVE_COLOR);
+            UI.pushColor(UI.COLOR_WIDGET, UI.RED);
         }
         ParameterUI.draw(lx, chan.cueActive);
         if (chan.cueActive.getValueb()) {
@@ -66,9 +62,9 @@ public class ChannelUi {
             UI.spacing();
 
             if (active == i) {
-                UI.pushColor(UI.COLOR_HEADER, ACTIVE_PATTERN_COLOR);
-                UI.pushColor(UI.COLOR_HEADER_ACTIVE, ACTIVE_PATTERN_COLOR);
-                UI.pushColor(UI.COLOR_HEADER_HOVERED, ACTIVE_PATTERN_HOVER_COLOR);
+                UI.pushColor(UI.COLOR_HEADER, UI.BLUE);
+                UI.pushColor(UI.COLOR_HEADER_ACTIVE, UI.BLUE);
+                UI.pushColor(UI.COLOR_HEADER_HOVERED, UI.BLUE_HOVER);
             }
             UI.CollapseResult section = UI.collapsibleSection(patName, patterns.size() > 1);
             if (active == i) {

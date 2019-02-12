@@ -50,6 +50,7 @@ public class CubeEditor extends CloseableWindow {
                 UI.nextColumn();
                 String idB = UI.inputText("B", dcc.idB);
                 if (!idA.equals(dcc.idA) || !idB.equals(dcc.idB)) {
+                    dcc.id = idA;
                     dcc.idA = idA;
                     dcc.idB = idB;
                     updated = true;
