@@ -196,10 +196,15 @@ public class UI {
     public static native float knobModulatedFloat(
         String label, float base, float v0, float v1, float modulatedValue,
         int modulatorCount, float[] modulatorMins, float[] modulatorMaxs, int[] modulatorColors);
+
+    public static boolean collapsibleSection(String label) {
+        return collapsibleSection(label, false, 0).isOpen;
+    }
     public static CollapseResult collapsibleSection(String label, boolean allowClose) {
         return collapsibleSection(label, allowClose, 0);
     }
     public static native CollapseResult collapsibleSection(String label, boolean allowClose, int flags);
+
     public static native void histogram(String label, float[] values, float min, float max, int size);
     public static native void plot(String label, float[] values, float min, float max, int size);
 

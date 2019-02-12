@@ -15,6 +15,8 @@ public class CubeOutputWindow extends CloseableWindow {
     private final CubesShow show;
     private final String[] featureIdBuffer = new String[32];
 
+    private float editBrightness = 1.f;
+
     public CubeOutputWindow(LX lx, CubesShow show) {
         super("Cube output");
         this.lx = lx;
@@ -32,6 +34,16 @@ public class CubeOutputWindow extends CloseableWindow {
 
         Collection<CubesController> ccs = show.getSortedControllers();
         UI.text("%d controllers", ccs.size());
+
+        if (UI.collapsibleSection("Edit all")) {
+            editBrightness = UI.sliderFloat("Brightness", editBrightness, 0, 1);
+            if (UI.button("Set")) {
+                for (CubesController cc : ccs) {
+                    cc.brightness.setValue(editBrightness);
+                }
+            }
+        }
+
         boolean expand = UI.button("expand all");
         UI.sameLine();
         boolean collapse = UI.button("collapse all");
