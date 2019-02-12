@@ -9,7 +9,10 @@ public abstract class CloseableWindow implements Window {
     }
 
     protected abstract void drawContents();
-    protected void windowSetup() {}
+
+    protected void windowSetup() {
+        UI.setNextWindowDefaults(300, 50, UI.DEFAULT_WIDTH, 500);
+    }
 
     @Override
     public final void draw() {
