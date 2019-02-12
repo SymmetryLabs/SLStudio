@@ -246,14 +246,24 @@ public class UI {
 
     /* Interaction */
     public static boolean isItemClicked() {
-        return isItemClicked(0);
+        return isItemClicked(0, false);
     }
-    public static native boolean isItemClicked(int mouseButton);
+    public static boolean isItemClicked(int mouseButton) {
+        return isItemClicked(mouseButton, false);
+    }
+    public static boolean isItemClicked(boolean allowMouseHold) {
+        return isItemClicked(0, allowMouseHold);
+    }
+    public static native boolean isItemClicked(int mouseButton, boolean allowMouseHold);
+
     public static boolean isItemDoubleClicked() {
         return isItemDoubleClicked(0);
     }
     public static native boolean isItemDoubleClicked(int mouseButton);
     public static native boolean isItemActive();
+    public static native boolean isAltDown();
+    public static native boolean isCtrlDown();
+    public static native boolean isShiftDown();
 
     /* IO */
     static native float getFrameRate();

@@ -44,6 +44,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     int contentSizeBytes;
     int packetSizeBytes;
     byte[] packetData;
+    boolean sendTestPattern = false;
 
     private final LX lx;
     private CubesMappingMode mappingMode;
@@ -209,6 +210,18 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
                 for (int i = 0; i < numPixels; i++) {
                     setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
                 }
+            }
+        } else if (sendTestPattern) {
+            int col = (int) ((System.nanoTime() / 1_000_000_000L) % 4L);
+            int c = 0;
+            switch (col) {
+            case 0: c = LXColor.RED; break;
+            case 1: c = LXColor.GREEN; break;
+            case 2: c = LXColor.BLUE; break;
+            case 3: c = LXColor.WHITE; break;
+            }
+            for (int i = 0; i < numPixels; i++) {
+                setPixel(i, c);
             }
         } else if (points != null) {
             int numPixels = points.size();

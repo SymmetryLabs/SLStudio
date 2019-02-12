@@ -7,6 +7,18 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#undef com_symmetrylabs_slstudio_ui_v2_UI_BLUE
+#define com_symmetrylabs_slstudio_ui_v2_UI_BLUE -16738616L
+#undef com_symmetrylabs_slstudio_ui_v2_UI_BLUE_HOVER
+#define com_symmetrylabs_slstudio_ui_v2_UI_BLUE_HOVER -13715999L
+#undef com_symmetrylabs_slstudio_ui_v2_UI_RED
+#define com_symmetrylabs_slstudio_ui_v2_UI_RED -435887L
+#undef com_symmetrylabs_slstudio_ui_v2_UI_RED_HOVER
+#define com_symmetrylabs_slstudio_ui_v2_UI_RED_HOVER -362640L
+#undef com_symmetrylabs_slstudio_ui_v2_UI_PURPLE
+#define com_symmetrylabs_slstudio_ui_v2_UI_PURPLE -7139419L
+#undef com_symmetrylabs_slstudio_ui_v2_UI_PURPLE_HOVER
+#define com_symmetrylabs_slstudio_ui_v2_UI_PURPLE_HOVER -5883211L
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    init
@@ -466,10 +478,10 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextTreeNodeOp
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    isItemClicked
- * Signature: (I)Z
+ * Signature: (IZ)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isItemClicked
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jint, jboolean);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
@@ -485,6 +497,30 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isItemDoubleC
  * Signature: ()Z
  */
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isItemActive
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    isAltDown
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isAltDown
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    isCtrlDown
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isCtrlDown
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    isShiftDown
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isShiftDown
   (JNIEnv *, jclass);
 
 /*

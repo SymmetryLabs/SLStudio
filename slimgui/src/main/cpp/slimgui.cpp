@@ -564,7 +564,10 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextTreeNodeOp
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_isItemClicked(JNIEnv *, jclass, jint button) {
+Java_com_symmetrylabs_slstudio_ui_v2_UI_isItemClicked(JNIEnv *, jclass, jint button, jboolean allowMouseHold) {
+    if (allowMouseHold) {
+        return ImGui::IsItemHovered() && ImGui::IsMouseDown(button);
+    }
     return ImGui::IsItemClicked(button) ? 1 : 0;
 }
 
@@ -575,6 +578,18 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isItemDoubleC
 JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_isItemActive(JNIEnv *, jclass) {
     return ImGui::IsItemActive() ? 1 : 0;
+}
+
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isAltDown(JNIEnv *, jclass) {
+    return ImGui::GetIO().KeyAlt ? 1 : 0;
+}
+
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isCtrlDown(JNIEnv *, jclass) {
+    return ImGui::GetIO().KeyCtrl ? 1 : 0;
+}
+
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isShiftDown(JNIEnv *, jclass) {
+    return ImGui::GetIO().KeyShift ? 1 : 0;
 }
 
 JNIEXPORT jfloat JNICALL

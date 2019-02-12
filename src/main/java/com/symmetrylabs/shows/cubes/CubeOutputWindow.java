@@ -47,6 +47,7 @@ public class CubeOutputWindow extends CloseableWindow {
         boolean expand = UI.button("expand all");
         UI.sameLine();
         boolean collapse = UI.button("collapse all");
+        UI.text("alt-click any controller to send test pattern");
 
         for (CubesController cc : ccs) {
             if (expand) {
@@ -67,6 +68,8 @@ public class CubeOutputWindow extends CloseableWindow {
             }
             UI.CollapseResult cr = UI.collapsibleSection(cc.id, false);
             UI.popColor(3);
+            cc.sendTestPattern = UI.isItemClicked(true) && UI.isAltDown();
+
             if (!cr.isOpen) {
                 continue;
             }
