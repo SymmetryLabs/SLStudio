@@ -466,9 +466,9 @@ JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_collapsibleSec
     bool display = true;
     bool isOpen = false;
     if (allowClose) {
-        isOpen = ImGui::CollapsingHeader(label, &display, ImGuiTreeNodeFlags_OpenOnArrow);
+        isOpen = ImGui::CollapsingHeader(label, &display, 0);
     } else {
-        isOpen = ImGui::CollapsingHeader(label, ImGuiTreeNodeFlags_OpenOnArrow);
+        isOpen = ImGui::CollapsingHeader(label, 0);
     }
     jclass resCls = env->FindClass("com/symmetrylabs/slstudio/ui/v2/UI$CollapseResult");
     jobject res = env->NewObject(resCls, env->GetMethodID(resCls, "<init>", "()V"));
