@@ -6,6 +6,7 @@ import com.symmetrylabs.slstudio.ui.v2.ParameterUI;
 import com.symmetrylabs.slstudio.ui.v2.UI;
 import heronarts.lx.LX;
 import com.symmetrylabs.slstudio.ApplicationState;
+import java.util.Collection;
 
 public class CubeOutputWindow extends CloseableWindow {
     private final LX lx;
@@ -24,7 +25,12 @@ public class CubeOutputWindow extends CloseableWindow {
         ParameterUI.draw(lx, ApplicationState.outputControl().testBroadcast);
         ParameterUI.draw(lx, ApplicationState.outputControl().controllerResetModule.enabled);
 
-        for (CubesController cc : show.getSortedControllers()) {
+        UI.separator();
+
+        Collection<CubesController> ccs = show.getSortedControllers();
+        UI.text("%d controllers", ccs.size());
+
+        for (CubesController cc : ccs) {
             UI.CollapseResult cr = UI.collapsibleSection(cc.id, false);
             if (cr.isOpen) {
                 ParameterUI.draw(lx, cc.enabled);
