@@ -25,12 +25,5 @@ public final class OutputControl extends LXComponent {
         enabled = lx.engine.output.enabled;
         addParameter(broadcastPacket);
         addParameter(testBroadcast);
-
-        enabled.addListener(param -> {
-            boolean isEnabled = ((BooleanParameter) param).isOn();
-            for (MappingPixlite mappingPixlite : SLStudio.applet.mappingPixlites) {
-                mappingPixlite.enabled.setValue(isEnabled);
-            }
-        });
     }
 }
