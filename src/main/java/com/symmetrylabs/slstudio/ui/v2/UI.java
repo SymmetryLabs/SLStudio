@@ -31,9 +31,21 @@ public class UI {
         public boolean shouldRemove;
     }
 
-    /* set on every frame by SLStudioGDX for reading by UI clients that want to anchor themselves somewhere */
+    /**
+     * The width, in pixels, of the current SLStudio window
+     *
+     * Set on every frame by SLStudioGDX for reading by UI clients that want to anchor themselves somewhere.
+     */
     public static float width;
+    /**
+     * The height, in pixels, of the current SLStudio window
+     *
+     * Set on every frame by SLStudioGDX for reading by UI clients that want to anchor themselves somewhere.
+     */
     public static float height;
+    /**
+     * The density scaling of the display; lower numbers mean higher density
+     */
     public static float density = 1; // this one is also used from native code in init()
 
     static void setDensity(float d) {
@@ -41,17 +53,73 @@ public class UI {
         density = Math.abs(d - 1.f) > 0.1 ? d : 1.f;
     }
 
+    /**
+     * Initialize ImGui
+     * @param windowPointer the native pointer to our GLFW window encoded as a long
+     * @param useMacBehaviors when true, we use Mac style input behaviors (ctrl-click right clicks, shortcuts use Cmd instead of Ctrl, etc)
+     */
     public static native boolean init(long windowPointer, boolean useMacBehaviors);
+
+    /**
+     * Begin processing the UI for a new frame.
+     *
+     * This absorbs mouse and keyboard input data, synthesizes it, and prepares buffers for drawing.
+     */
     public static native void newFrame();
+
+    /**
+     * Draw buffered draw data to the screen.
+     */
     public static native void render();
+
+    /**
+     * Deallocate all resources and drop all UI state.
+     *
+     * After a call to shutdown(), UI should be considered unusable.
+     */
     public static native boolean shutdown();
 
-    /* Styling */
+    /**
+     * Add a font using a byte buffer of TTF or OTF data.
+     *
+     * This compiles the font into a font texture and prepares it for display
+     * through ImGui. Fonts can be viewed and changed in the style editor. If
+     * this function is never called, the ImGui default font is used. If addFont
+     * is called, the default UI font is the font given in the first call to
+     * addFont.
+     *
+     * @param name the font name
+     * @param ttfData the font data in TTF or OTF format
+     * @param fontSize the font size, in pixels, that we want to compile the font at
+     */
     public static native void addFont(String name, ByteBuffer ttfData, float fontSize);
+
+    /**
+     * Temporarily change a color in the UI style.
+     *
+     * This changes the UI style until a corresponding call to {@link popColor()}
+     *
+     * @param key the style color to change; use one of the COLOR_ constants on the UI class
+     * @param color the color in LX format (0xAARRGGBB). If no alpha is given the color is assumed to be full-opaque.
+     */
     public static native void pushColor(int key, int color);
+
+    /**
+     * Undo one call to {@link pushColor(int, int)}.
+     *
+     * This restores the colors in the UI style to whatever they before the last pushColor call.
+     */
     public static void popColor() {
         popColor(1);
     }
+
+    /**
+     * Undo multiple calls to {@link pushColor(int, int)} at once.
+     *
+     * This restores the colors in the UI style to whatever they before the last {@code count} pushColor calls.
+     *
+     * @param count the number of pushColor calls to undo
+     */
     public static native void popColor(int count);
 
     /* Layout */
