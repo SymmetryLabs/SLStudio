@@ -948,6 +948,21 @@ static void ShowDemoWindowWidgets()
             }
             ImGui::TreePop();
         }
+        if (ImGui::TreeNode("Alignment"))
+        {
+            static bool selected[3*3] = { true, false, true, false, true, false, true, false, true };
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    ImGui::PushID(3*i+j);
+                    ImGui::Selectable("Hello", &selected[3*i+j], 0, ImVec2(70,70), ImVec2((float) i / 2.f, (float) j / 2.f));
+                    ImGui::PopID();
+                    if (j != 2) ImGui::SameLine();
+                }
+            }
+            ImGui::TreePop();
+        }
         ImGui::TreePop();
     }
 
