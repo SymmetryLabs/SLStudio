@@ -103,6 +103,8 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
     env->SetStaticIntField(cls, fid, ImGuiWindowFlags_AlwaysAutoResize);
     fid = env->GetStaticFieldID(cls, "COLOR_WIDGET", "I");
     env->SetStaticIntField(cls, fid, ImGuiCol_FrameBg);
+    fid = env->GetStaticFieldID(cls, "COLOR_WIDGET_HOVERED", "I");
+    env->SetStaticIntField(cls, fid, ImGuiCol_FrameBgHovered);
     fid = env->GetStaticFieldID(cls, "COLOR_HEADER", "I");
     env->SetStaticIntField(cls, fid, ImGuiCol_Header);
     fid = env->GetStaticFieldID(cls, "COLOR_HEADER_ACTIVE", "I");

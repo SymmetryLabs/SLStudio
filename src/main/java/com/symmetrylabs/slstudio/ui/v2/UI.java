@@ -19,6 +19,7 @@ public class UI {
     public static int DEFAULT_WIDTH = 250;
 
     public static int COLOR_WIDGET;
+    public static int COLOR_WIDGET_HOVERED;
     public static int COLOR_HEADER;
     public static int COLOR_HEADER_ACTIVE;
     public static int COLOR_HEADER_HOVERED;
