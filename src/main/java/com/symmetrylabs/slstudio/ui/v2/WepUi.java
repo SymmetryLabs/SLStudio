@@ -23,14 +23,20 @@ public class WepUi {
 
     private final LX lx;
     private final WEPGrouping grouping;
+    private final boolean allowPatterns;
     private String filterText = "";
     private OnWepSelected cb;
     private int maxHeight = 0;
 
     public WepUi(LX lx, OnWepSelected cb) {
+        this(lx, true, cb);
+    }
+
+    public WepUi(LX lx, boolean allowPatterns, OnWepSelected cb) {
         this.lx = lx;
         this.grouping = new WEPGrouping(lx, ApplicationState.showName());
         this.cb = cb;
+        this.allowPatterns = allowPatterns;
     }
 
     public void setMaxHeight(int maxHeight) {
@@ -45,7 +51,7 @@ public class WepUi {
         filterText = UI.inputText("filter", filterText);
 
         UI.beginChild("wep-tree", false, 0, 300, maxHeight);
-        if (UI.treeNode("Patterns", UI.TREE_FLAG_DEFAULT_OPEN)) {
+        if (allowPatterns && UI.treeNode("Patterns", UI.TREE_FLAG_DEFAULT_OPEN)) {
             for (String groupName : grouping.groupNames) {
                 String displayName = groupName == null ? "Uncategorized" : groupName;
                 /* If this returns true, the tree is expanded and we should display
