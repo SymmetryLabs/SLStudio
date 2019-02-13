@@ -98,13 +98,7 @@ public class ChannelUi {
 
         ParameterUI.draw(lx, chan.enabled);
         UI.sameLine();
-        if (chan.cueActive.getValueb()) {
-            UI.pushColor(UI.COLOR_WIDGET, UI.RED);
-        }
-        ParameterUI.draw(lx, chan.cueActive);
-        if (chan.cueActive.getValueb()) {
-            UI.popColor();
-        }
+        ParameterUI.draw(lx, chan.cueActive, true);
         UI.sameLine();
 
         CrossfadeGroup group = chan.crossfadeGroup.getEnum();

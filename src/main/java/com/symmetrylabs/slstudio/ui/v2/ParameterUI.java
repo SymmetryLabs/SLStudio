@@ -16,7 +16,7 @@ public class ParameterUI {
         SLIDER,
     };
 
-    private static String getID(LXParameter p) {
+    public static String getID(LXParameter p) {
         LXComponent parent = p.getComponent();
         if (parent == null) {
             return p.getLabel();
@@ -97,10 +97,21 @@ public class ParameterUI {
     }
 
     public static void draw(LX lx, BooleanParameter p) {
+        draw(lx, p, false);
+    }
+
+    public static void draw(LX lx, BooleanParameter p, boolean important) {
         boolean start = p.getValueb();
         boolean res;
         if (p.getMode() == BooleanParameter.Mode.TOGGLE) {
+            if (important && p.getValueb()) {
+                UI.pushColor(UI.COLOR_WIDGET, UI.RED);
+                UI.pushColor(UI.COLOR_WIDGET_HOVERED, UI.RED_HOVER);
+            }
             res = UI.checkbox(getID(p), start);
+            if (important && p.getValueb()) {
+                UI.popColor(2);
+            }
         } else {
             UI.button(getID(p));
             res = UI.isItemActive();
