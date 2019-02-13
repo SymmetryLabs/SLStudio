@@ -19,8 +19,18 @@ public class ChannelUi {
                 String warpName = String.format("%s##%s/warp/%d", warp.getClass().getSimpleName(), chanName, i);
 
                 UI.spacing();
+                if (warp.enabled.getValueb()) {
+                    UI.pushColor(UI.COLOR_HEADER, UI.BLUE);
+                    UI.pushColor(UI.COLOR_HEADER_ACTIVE, UI.BLUE);
+                    UI.pushColor(UI.COLOR_HEADER_HOVERED, UI.BLUE_HOVER);
+                }
                 UI.CollapseResult section = UI.collapsibleSection(warpName, true);
-                if (section.shouldRemove) {
+                if (warp.enabled.getValueb()) {
+                    UI.popColor(3);
+                }
+                if (UI.isItemClicked() && UI.isAltDown()) {
+                    warp.enabled.toggle();
+                } else if (section.shouldRemove) {
                     lx.engine.addTask(() -> chan.removeWarp(warp));
                 } else if (section.isOpen) {
                     new ComponentUI(lx, warp).draw();
@@ -39,8 +49,18 @@ public class ChannelUi {
                 String effName = String.format("%s##%s/effect/%d", eff.getClass().getSimpleName(), chanName, i);
 
                 UI.spacing();
+                if (eff.enabled.getValueb()) {
+                    UI.pushColor(UI.COLOR_HEADER, UI.BLUE);
+                    UI.pushColor(UI.COLOR_HEADER_ACTIVE, UI.BLUE);
+                    UI.pushColor(UI.COLOR_HEADER_HOVERED, UI.BLUE_HOVER);
+                }
                 UI.CollapseResult section = UI.collapsibleSection(effName, true);
-                if (section.shouldRemove) {
+                if (eff.enabled.getValueb()) {
+                    UI.popColor(3);
+                }
+                if (UI.isItemClicked() && UI.isAltDown()) {
+                    eff.enabled.toggle();
+                } else if (section.shouldRemove) {
                     lx.engine.addTask(() -> chan.removeEffect(eff));
                 } else if (section.isOpen) {
                     new ComponentUI(lx, eff).draw();

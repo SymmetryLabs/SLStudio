@@ -10,6 +10,7 @@ import heronarts.lx.warp.LXWarp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import com.symmetrylabs.slstudio.ApplicationState;
 
@@ -24,6 +25,9 @@ public class WepUi {
     private final LX lx;
     private final WEPGrouping grouping;
     private final boolean allowPatterns;
+    private final HashSet<String> visibleGroups = new HashSet<>();
+    private boolean effectsVisible;
+    private boolean warpsVisible;
     private String filterText = "";
     private OnWepSelected cb;
     private int maxHeight = 0;
@@ -37,6 +41,7 @@ public class WepUi {
         this.grouping = new WEPGrouping(lx, ApplicationState.showName());
         this.cb = cb;
         this.allowPatterns = allowPatterns;
+        resetFilter();
     }
 
     public void setMaxHeight(int maxHeight) {
@@ -45,20 +50,49 @@ public class WepUi {
 
     public void resetFilter() {
         filterText = "";
+        visibleGroups.clear();
+        visibleGroups.addAll(grouping.groupNames);
+        effectsVisible = true;
+        warpsVisible = true;
     }
 
     public void draw() {
-        filterText = UI.inputText("filter", filterText);
+        String newFilterText = UI.inputText("filter", filterText);
+        if (!newFilterText.equals(filterText)) {
+            filterText = newFilterText;
+            visibleGroups.clear();
+            for (String groupName : grouping.groupNames) {
+                for (WEPGrouping.PatternItem pi : grouping.groups.get(groupName)) {
+                    pi.visible = match(pi.label) || match(groupName) || match("patterns");
+                    if (pi.visible) {
+                        visibleGroups.add(groupName);
+                    }
+                }
+            }
+            effectsVisible = false;
+            for (WEPGrouping.EffectItem ei : grouping.effects) {
+                ei.visible = match(ei.label) || match("effects");
+                effectsVisible = effectsVisible || ei.visible;
+            }
+            warpsVisible = false;
+            for (WEPGrouping.WarpItem wi : grouping.warps) {
+                wi.visible = match(wi.label) || match("warps");
+                warpsVisible = warpsVisible || wi.visible;
+            }
+        }
 
         UI.beginChild("wep-tree", false, 0, 300, maxHeight);
-        if (allowPatterns && UI.treeNode("Patterns", UI.TREE_FLAG_DEFAULT_OPEN)) {
+        if (allowPatterns && !visibleGroups.isEmpty() && UI.treeNode("Patterns", UI.TREE_FLAG_DEFAULT_OPEN)) {
             for (String groupName : grouping.groupNames) {
+                if (!visibleGroups.contains(groupName)) {
+                    continue;
+                }
                 String displayName = groupName == null ? "Uncategorized" : groupName;
                 /* If this returns true, the tree is expanded and we should display
                      its contents */
                 if (UI.treeNode(displayName, UI.TREE_FLAG_DEFAULT_OPEN)) {
                     for (WEPGrouping.PatternItem pi : grouping.groups.get(groupName)) {
-                        if (match(pi.label)) {
+                        if (pi.visible) {
                             UI.treeNode(
                                 String.format("%s/%s", groupName, pi.label),
                                 UI.TREE_FLAG_LEAF, pi.label);
@@ -74,9 +108,9 @@ public class WepUi {
             UI.treePop();
         }
 
-        if (UI.treeNode("Effects", UI.TREE_FLAG_DEFAULT_OPEN)) {
+        if (effectsVisible && UI.treeNode("Effects", UI.TREE_FLAG_DEFAULT_OPEN)) {
             for (WEPGrouping.EffectItem ei : grouping.effects) {
-                if (match(ei.label)) {
+                if (ei.visible) {
                     UI.treeNode(ei.label, UI.TREE_FLAG_LEAF, ei.label);
                     if (UI.isItemClicked()) {
                         activate(ei);
@@ -87,9 +121,9 @@ public class WepUi {
             UI.treePop();
         }
 
-        if (UI.treeNode("Warps", UI.TREE_FLAG_DEFAULT_OPEN)) {
+        if (warpsVisible && UI.treeNode("Warps", UI.TREE_FLAG_DEFAULT_OPEN)) {
             for (WEPGrouping.WarpItem wi : grouping.warps) {
-                if (match(wi.label)) {
+                if (wi.visible) {
                     UI.treeNode(wi.label, UI.TREE_FLAG_LEAF, wi.label);
                     if (UI.isItemClicked()) {
                         activate(wi);
@@ -104,7 +138,7 @@ public class WepUi {
 
     private boolean match(String label) {
         return filterText.length() == 0 ||
-            label.toLowerCase().contains(filterText.toLowerCase());
+            (label != null && label.toLowerCase().contains(filterText.toLowerCase()));
     }
 
     private void activate(WEPGrouping.PatternItem pi) {

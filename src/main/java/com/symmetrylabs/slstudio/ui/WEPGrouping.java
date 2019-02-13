@@ -85,6 +85,8 @@ public class WEPGrouping {
     public static class PatternItem implements Comparable<PatternItem> {
         public final Class<? extends LXPattern> pattern;
         public final String label;
+        /* Here so that UIs can keep track of visibility; defaults to true */
+        public boolean visible = true;
 
         PatternItem(Class<? extends LXPattern> pattern) {
             this.pattern = pattern;
@@ -110,6 +112,8 @@ public class WEPGrouping {
     public static class WarpItem implements Comparable<WarpItem> {
         public final Class<? extends LXWarp> warp;
         public final String label;
+        /* Here so that UIs can keep track of visibility; defaults to true */
+        public boolean visible = true;
 
         WarpItem(Class<? extends LXWarp> warp) {
             this.warp = warp;
@@ -135,6 +139,8 @@ public class WEPGrouping {
     public static class EffectItem implements Comparable<EffectItem> {
         public final Class<? extends LXEffect> effect;
         public final String label;
+        /* Here so that UIs can keep track of visibility; defaults to true */
+        public boolean visible = true;
 
         EffectItem(Class<? extends LXEffect> effect) {
             this.effect = effect;
