@@ -212,14 +212,14 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
                 }
             }
         } else if (sendTestPattern) {
-            int col = (int) ((System.nanoTime() / 1_000_000_000L) % 4L);
+            int col = (int) ((System.nanoTime() / 1_000_000_000L) % 3L);
             int c = 0;
             switch (col) {
-            case 0: c = LXColor.RED; break;
-            case 1: c = LXColor.GREEN; break;
-            case 2: c = LXColor.BLUE; break;
-            case 3: c = LXColor.WHITE; break;
+            case 0: c = 0xFFFF0000; break;
+            case 1: c = 0xFF00FF00; break;
+            case 2: c = 0xFF0000FF; break;
             }
+            initPacketData(numPixels, false);
             for (int i = 0; i < numPixels; i++) {
                 setPixel(i, c);
             }

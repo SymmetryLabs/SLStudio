@@ -1,17 +1,22 @@
 package com.symmetrylabs.shows.cubes;
 
-import com.symmetrylabs.slstudio.ui.v2.CloseableWindow;
-import com.symmetrylabs.slstudio.ui.v2.UI;
-import heronarts.lx.transform.LXTransform;
-import java.util.List;
 import static com.symmetrylabs.shows.cubes.CubesModel.Cube;
 import static com.symmetrylabs.shows.cubes.CubesModel.DoubleControllerCube;
 
+import com.symmetrylabs.slstudio.ui.v2.CloseableWindow;
+import com.symmetrylabs.slstudio.ui.v2.UI;
+import heronarts.lx.LX;
+import heronarts.lx.transform.LXTransform;
+import java.util.List;
+
+
 public class CubeEditor extends CloseableWindow {
+    protected final LX lx;
     protected final CubesModel model;
 
-    public CubeEditor(CubesModel model) {
+    public CubeEditor(LX lx, CubesModel model) {
         super("Cube editor");
+        this.lx = lx;
         this.model = model;
     }
 
@@ -24,9 +29,10 @@ public class CubeEditor extends CloseableWindow {
     protected void drawContents() {
         List<Cube> cubes = model.getCubes();
         UI.text("%d cubes", cubes.size());
-        boolean expand = UI.button("expand all");
+
+        boolean expand = UI.button("Expand all");
         UI.sameLine();
-        boolean collapse = UI.button("collapse all");
+        boolean collapse = UI.button("Collapse all");
 
         boolean anyUpdated = false;
         for (int i = 0; i < cubes.size(); i++) {

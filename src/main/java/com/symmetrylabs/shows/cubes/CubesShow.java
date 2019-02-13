@@ -163,7 +163,7 @@ public abstract class CubesShow implements Show {
     }
 
     public void setupUi(LX lx) {
-        WindowManager.addPersistent("Cube editor", () -> new CubeEditor((CubesModel) lx.model), false);
+        WindowManager.addPersistent("Cube editor", () -> new CubeEditor(lx, (CubesModel) lx.model), false);
         WindowManager.addPersistent("Cube output", () -> new CubeOutputWindow(lx, this), false);
     }
 }
