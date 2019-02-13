@@ -951,13 +951,12 @@ static void ShowDemoWindowWidgets()
         if (ImGui::TreeNode("Alignment"))
         {
             static bool selected[3*3] = { true, false, true, false, true, false, true, false, true };
+            static char* names[3*3] = { "(0,0)", "(0,0.5)", "(0,1)", "(0.5,0)", "(0.5,0.5)", "(0.5,1)", "(1,0)", "(1,0.5)", "(1,1)" };
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    ImGui::PushID(3*i+j);
-                    ImGui::Selectable("Hello", &selected[3*i+j], 0, ImVec2(70,70), ImVec2((float) i / 2.f, (float) j / 2.f));
-                    ImGui::PopID();
+                    ImGui::Selectable(names[3*i+j], &selected[3*i+j], 0, ImVec2(70,70), ImVec2((float) i / 2.f, (float) j / 2.f));
                     if (j != 2) ImGui::SameLine();
                 }
             }
