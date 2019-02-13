@@ -54,6 +54,8 @@ public class OfficeShow extends CubesShow implements HasWorkspace {
                 new String[] {"968", "976"},
                 new String[] {"446", "596"},
                 new String[] {"669", "668"},
+                new String[] {"551", "550"},
+                new String[] {"467", "466"},
             }),    
 
             new TowerConfig(SP * 1, SP * 0, SP * 0, new String[][]{
@@ -73,7 +75,6 @@ public class OfficeShow extends CubesShow implements HasWorkspace {
             new TowerConfig(SP * 3, SP * 0, SP * 0, new String[][]{
                 new String[] {"1012", "1039"},
                 new String[] {"977", "1024"},
-                new String[] {"647", "646"},
             }),    
 
 
@@ -83,12 +84,14 @@ public class OfficeShow extends CubesShow implements HasWorkspace {
                 new String[] {"1107", "1106"},
                 new String[] {"1078", "902"},
                 new String[] {"546", "913"},
+                new String[] {"1030", "1040"},
             }),
 
                 new TowerConfig(SP * 1, SP * 0, -SP * 1, new String[][]{
                 new String[] {"893", "894"},
                 new String[] {"897", "885"},
                 new String[] {"443", "821"},
+                new String[] {"761", "760"},
             }),
 
                 new TowerConfig(SP * 2, SP * 0, -SP * 1, new String[][]{
@@ -138,6 +141,21 @@ public class OfficeShow extends CubesShow implements HasWorkspace {
             new TowerConfig(SP * 3, SP * 0, -SP * 2, new String[][]{
                 new String[] {"739", "738"},
                 new String[] {"553", "552"}, 
+  
+            }),
+
+// //////////////////// ROW 4 ////////////////////////////////
+
+            new TowerConfig(SP * 0, SP * 0, -SP * 3, new String[][]{
+                new String[] {"644", "820"},
+                new String[] {"737", "736"},
+                new String[] {"859", "858"}, 
+  
+            }),
+
+            new TowerConfig(SP * 1, SP * 0, -SP * 3, new String[][]{
+                new String[] {"751", "750"},
+                new String[] {"527", "526"}, 
   
             }),
 
