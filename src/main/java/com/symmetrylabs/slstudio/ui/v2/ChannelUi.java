@@ -114,6 +114,10 @@ public class ChannelUi {
         }
         chan.crossfadeGroup.setValue(group);
 
+        ParameterUI.draw(lx, chan.blendMode);
+
+        UI.separator();
+
         drawWarps(lx, chanName, chan);
 
         int active = chan.getActivePatternIndex();
