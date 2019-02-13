@@ -88,10 +88,15 @@ public class ChannelUi {
 
         int chanFlags = UI.TREE_FLAG_DEFAULT_OPEN |
             (isFocused ? UI.TREE_FLAG_SELECTED : 0);
-        UI.selectable(chanName, isFocused);
+        UI.pushColor(UI.COLOR_HEADER, UI.PURPLE);
+        UI.pushColor(UI.COLOR_HEADER_ACTIVE, UI.PURPLE);
+        UI.pushColor(UI.COLOR_HEADER_HOVERED, UI.PURPLE_HOVER);
+        UI.selectable(" " + chanName, isFocused, 18);
+        UI.popColor(3);
         if (UI.isItemClicked()) {
             lx.engine.addTask(() -> lx.engine.setFocusedChannel(chan));
         }
+        UI.spacing();
 
         ParameterUI.draw(lx, chan.fader);
         ParameterUI.draw(lx, chan.speed);
