@@ -30,7 +30,9 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
     /* visible so that InternalsWindow can mutate it. */
     int clearRGB = 0x000000;
-    boolean allowUiScale = true;
+    /* disabled by default because on some platforms scaling makes things look much worse,
+       and it's not obvious that scaling should be the default anyway. */
+    boolean allowUiScale = false;
     float osDensity;
 
     SLCamera.InputController camController;
