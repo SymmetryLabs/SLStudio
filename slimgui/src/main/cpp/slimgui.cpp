@@ -67,6 +67,7 @@ void LoadSlimguiStyle(float density) {
     colors[ImGuiCol_DockingPreview]         = RGB(0x00A5DB);
 
     style.WindowRounding = 0.f;
+    style.SelectableTextAlign = ImVec2(0, 0.5f);
 
     if (density != 0) {
         style.ScaleAllSizes(density);
@@ -356,7 +357,7 @@ JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_selectable(JNIEnv *env, jclass, jstring jlabel, jboolean v, jfloat height) {
     JniString label(env, jlabel);
     bool res = v == 1 ? true : false;
-    ImGui::Selectable(label, &res, 0, ImVec2(0, height), ImVec2(0, 0.5f));
+    ImGui::Selectable(label, &res, 0, ImVec2(0, height));
     return res ? 1 : 0;
 }
 
