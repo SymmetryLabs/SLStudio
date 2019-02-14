@@ -560,6 +560,23 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_menuItem(
 }
 
 JNIEXPORT jboolean JNICALL
+Java_com_symmetrylabs_slstudio_ui_v2_UI_menuItemToggle(
+    JNIEnv *env, jclass, jstring jlabel, jstring jshortcut,
+    jboolean selected, jboolean enabled) {
+    const char *shortcut =
+        jshortcut == NULL ? NULL : env->GetStringUTFChars(jshortcut, 0);
+    JniString label(env, jlabel);
+
+    bool sel = selected == 1;
+    ImGui::MenuItem(label, shortcut, &sel, enabled == 1);
+
+    if (shortcut != NULL) {
+        env->ReleaseStringUTFChars(jshortcut, shortcut);
+    }
+    return sel ? 1 : 0;
+}
+
+JNIEXPORT jboolean JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_treeNode(
     JNIEnv *env, jclass, jstring jid, jint flags, jstring jlabel) {
     JniString id(env, jid);

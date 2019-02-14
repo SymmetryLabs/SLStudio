@@ -66,7 +66,7 @@ public class MainMenu implements Window {
             WindowManager wm = WindowManager.get();
             /* Iterate over entries to preserve order */
             for (WindowManager.PersistentWindow ws : wm.getSpecs()) {
-                if (UI.checkbox(ws.name, ws.current != null)) {
+                if (UI.menuItemToggle(ws.name, null, ws.current != null, true)) {
                     wm.showPersistent(ws);
                 } else {
                     wm.hidePersistent(ws);

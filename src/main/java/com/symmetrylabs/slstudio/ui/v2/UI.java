@@ -220,11 +220,11 @@ public class UI {
     public static native void endMainMenuBar();
     public static native boolean beginMenu(String label);
     public static native void endMenu();
-    public static native boolean menuItem(
-        String label, String shortcut, boolean selected, boolean enabled);
+    public static native boolean menuItem(String label, String shortcut, boolean selected, boolean enabled);
     public static boolean menuItem(String label) {
         return menuItem(label, null, false, true);
     }
+    public static native boolean menuItemToggle(String label, String shortcut, boolean selected, boolean enabled);
 
     /* Context menus */
     public static native boolean beginContextMenu(String id);
