@@ -214,6 +214,7 @@ public class MTCPlayback extends LXPattern {
 
         if (thisSong.isNew()){
             String dataPath = "/Users/symmetry/symmetrylabs/software/SLStudio/shows/pilots/render/";
+            currentSongName = thisSong.song_name;
             renderFile.setValue( dataPath + thisSong.name_png + ".png");
             MTCOffset.setValue(songIndex*BIN_SIZE);
             loadSong();
