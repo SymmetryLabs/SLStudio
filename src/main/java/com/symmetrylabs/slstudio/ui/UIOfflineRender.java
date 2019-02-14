@@ -1,28 +1,21 @@
 package com.symmetrylabs.slstudio.ui;
 
-import com.symmetrylabs.slstudio.output.DoubleBufferedOfflineRenderOutput;
 import com.symmetrylabs.slstudio.output.ModelCsvWriter;
 import com.symmetrylabs.slstudio.output.OfflineRenderOutput;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.component.UIButton;
-import heronarts.p3lx.ui.component.UIDoubleBox;
-import heronarts.p3lx.ui.component.UIIntegerBox;
-import heronarts.p3lx.ui.component.UILabel;
-import heronarts.p3lx.ui.component.UITextBox;
+import heronarts.p3lx.ui.component.*;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
-import java.awt.EventQueue;
-import java.awt.FileDialog;
-import java.awt.Frame;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import processing.core.PConstants;
 import processing.event.MouseEvent;
 
 import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class UIOfflineRender extends UICollapsibleSection {
     private static final int HEIGHT = 110;
@@ -39,15 +32,15 @@ public class UIOfflineRender extends UICollapsibleSection {
         super(ui, x, y, w, HEIGHT);
 
 
-        useContinuous.setValue(false);
-        if (useContinuous.getValueb()){
-           output = new DoubleBufferedOfflineRenderOutput(lx);
-           setTitle("CONTINUOUS OFFLINE RENDER");
-        }
-        else{
+//        useContinuous.setValue(false);
+//        if (useContinuous.getValueb()){
+//           output = new DoubleBufferedOfflineRenderOutput(lx);
+//           setTitle("CONTINUOUS OFFLINE RENDER");
+//        }
+//        else{
             output = new OfflineRenderOutput(lx);
             setTitle("OFFLINE RENDER");
-        }
+//        }
         lx.addOutput(output);
 
 
@@ -66,17 +59,17 @@ public class UIOfflineRender extends UICollapsibleSection {
                 .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
                 .addToContainer(this);
         }
-        if (useContinuous.getValueb()){
-            new ContinuousUIFileBox(52, cy, w - 64, height)
-                .setParameter(output.pOutputDir)
-                .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
-                .addToContainer(this);
-        } else{
+//        if (useContinuous.getValueb()){
+//            new ContinuousUIFileBox(52, cy, w - 64, height)
+//                .setParameter(output.pOutputDir)
+//                .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
+//                .addToContainer(this);
+//        } else{
             new UIFileBox(52, cy, w - 64, height)
                 .setParameter(output.pOutputFile)
                 .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
                 .addToContainer(this);
-        }
+//        }
         cy += height + pad;
 
         new UILabel(6, cy, 46, height)
