@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.output;
 
+import com.symmetrylabs.util.CaptionSource;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.midi.LXMidiInput;
@@ -17,7 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class OfflineRenderOutput extends LXOutput {
+public class OfflineRenderOutput extends LXOutput implements CaptionSource {
     public static final String HEADER = "SLOutput";
     public static final int VERSION = 3;
 
@@ -62,6 +63,9 @@ public class OfflineRenderOutput extends LXOutput {
                 createImage();
             }
             else{
+                if (img != null){
+                    writeAndDispose();
+                }
                 dispose();
             }
         });
@@ -107,7 +111,7 @@ public class OfflineRenderOutput extends LXOutput {
     }
 
 
-    static int debounce_frames = 4;
+    static int debounce_frames = 10;
     int offset_frame = -1;
     @Override
     protected void onSend(PolyBuffer colors) {
@@ -140,6 +144,16 @@ public class OfflineRenderOutput extends LXOutput {
         }
 
         if (inFrame >= framesToCapture) {
+            // this is where we save the file.
+            writeAndDispose();
+        } else {
+            int[] carr = (int[]) colors.getArray(PolyBuffer.Space.RGB8);
+            img.setRGB(0, inFrame, model.points.length, 1, carr, 0, model.points.length);
+            lastFrameWritten = inFrame;
+        }
+    }
+
+    private void writeAndDispose() {
             final BufferedImage imgToWrite = img;
             final File outputToWrite = output;
             EventQueue.invokeLater(() -> {
@@ -151,10 +165,10 @@ public class OfflineRenderOutput extends LXOutput {
                 }
             });
             dispose();
-        } else {
-            int[] carr = (int[]) colors.getArray(PolyBuffer.Space.RGB8);
-            img.setRGB(0, inFrame, model.points.length, 1, carr, 0, model.points.length);
-            lastFrameWritten = inFrame;
-        }
+    }
+
+    @Override
+    public String getCaption() {
+        return "test caption";
     }
 }

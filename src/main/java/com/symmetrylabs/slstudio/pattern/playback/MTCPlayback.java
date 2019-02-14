@@ -3,6 +3,8 @@ package com.symmetrylabs.slstudio.pattern.playback;
 import ar.com.hjg.pngj.IImageLine;
 import ar.com.hjg.pngj.ImageLineInt;
 import ar.com.hjg.pngj.PngReader;
+import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.PolyBuffer;
@@ -18,11 +20,12 @@ import java.nio.file.Paths;
 import java.text.NumberFormat;
 import java.util.*;
 
-//public class MTCPlayback extends SLPattern<SLModel> {
-public class MTCPlayback extends LXPattern {
+public class MTCPlayback extends SLPattern<SLModel> {
+//public class MTCPlayback extends LXPattern {
     private static final String TAG = "MTC";
 
     private static final int CIRCULAR_BUFFER_SIZE = 16;
+    private static final int JUMP_FRAME_SENSITIVITY = 150; // 3 sec should be good
 
     protected final StringParameter renderFile = new StringParameter("renderFile", "");
     protected final BooleanParameter filePickerDialogue = new BooleanParameter("choose render", false).setMode(BooleanParameter.Mode.MOMENTARY);
@@ -167,12 +170,12 @@ public class MTCPlayback extends LXPattern {
         final int LANE_BOY1 = 54;
         final int LANE_BOY2 = 54;
         final int NICO = 60;
-        final int CHEETAH = 174;
+        final int CHEETAH = (int)((14 + 31.0/60 + 3.0/(60*60) )*BIN_PER_HOUR);
         final int HOLDING = 126;
         final int RIDE = (int)(9*BIN_PER_HOUR);
         final int MY_BLOOD = (int)(8.5*BIN_PER_HOUR);
         final int MORPH1 = (int)(8*BIN_PER_HOUR);
-        final int MORPH2 = (int)((8 + 3/60 + 36/(60*60) )*BIN_PER_HOUR);
+        final int MORPH2 = (int)((8 + 3.0/60 + 36.0/(60*60) )*BIN_PER_HOUR);
         final int CAR_RADIO = (int) (7*BIN_PER_HOUR);
         final int CHLORINE = (int) (18*BIN_PER_HOUR);
         final int LEAVE_THE_CITY = (int) (11*BIN_PER_HOUR);
@@ -265,15 +268,26 @@ public class MTCPlayback extends LXPattern {
         if (frameIn == lastFrameRendered){
             return;
         }
+
+
+
+
+        // if either of the following two are true then we need a reset.
         if (frameIn < lastFrameRendered){
             recyclePNGReader();
             lastFrameReceived = -1;
             lastFrameRendered = -1;
+            return;
+        }
+
+        if ( (lastFrameRendered != -1) && (frameIn > lastFrameRendered + JUMP_FRAME_SENSITIVITY)){
+            recyclePNGReader();
+            lastFrameReceived = -1;
+            lastFrameRendered = -1;
+            return;
         }
 
         int[] ccs = (int[]) getArray(PolyBuffer.Space.SRGB8);
-        Arrays.fill(ccs, 0x80);
-
         try {
             IImageLine l1 = pngr.readRow(frameIn);
             int[] fourValArray = ((ImageLineInt) l1).getScanline();

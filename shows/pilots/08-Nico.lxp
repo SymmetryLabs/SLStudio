@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1548768840613,
+  "timestamp": 1550145205620,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.0016049834666773677,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -99,7 +99,7 @@
               "palette": 0,
               "count": 11,
               "height": 63.999998569488525,
-              "omega": -56.709938049316406,
+              "omega": 20.000038146972656,
               "radius": 17.99999995529652,
               "high": 100.0,
               "mid": 57.00000051409007,
@@ -181,10 +181,10 @@
               "X-DUP": false,
               "JOG": false,
               "GREY": false,
-              "Speed": 1.5799999237060547,
+              "Speed": 0.5399999618530273,
               "Symm": 0,
               "Anim": 6,
-              "Dens": 0.6499999761581421,
+              "Dens": 0.8999999761581421,
               "AnimResets": false
             },
             "modulation": {
@@ -209,7 +209,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -243,7 +243,7 @@
             "modulationColor": -16742401,
             "parameters": {
               "label": "ColorFilter",
-              "enabled": true,
+              "enabled": false,
               "Hue": 51.47999896667898,
               "Sat": 100.0,
               "Alpha": false
@@ -317,7 +317,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 3.079416637774557E-4,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -465,21 +465,8 @@
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 31663,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -4915456,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
-        "id": 44,
+        "id": 45,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
         "modulationColor": -3408128,
         "parameters": {
@@ -488,7 +475,7 @@
           "trigger": false
         },
         "source": {
-          "id": 45,
+          "id": 46,
           "class": "com.symmetrylabs.slstudio.envelop.Envelop$Source",
           "modulationColor": -11730689,
           "parameters": {
@@ -518,7 +505,7 @@
           }
         },
         "decode": {
-          "id": 46,
+          "id": 47,
           "class": "com.symmetrylabs.slstudio.envelop.Envelop$Decode",
           "modulationColor": -16711746,
           "parameters": {
@@ -541,7 +528,7 @@
         }
       },
       "outputControl": {
-        "id": 47,
+        "id": 48,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -16740097,
         "parameters": {
@@ -718,6 +705,12 @@
     },
     "midi": {
       "inputs": [
+        {
+          "name": "CoreMIDI4J - Lockstep",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
         {
           "name": "** Internal Error getting Device Name!",
           "channel": true,
