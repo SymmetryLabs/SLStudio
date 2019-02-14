@@ -34,6 +34,7 @@ run {
 	if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
 		jvmArgs '-XX:+UseParNewGC', '-XX:+UseConcMarkSweepGC'
 	}
+	jvmArgs '-Xmx1024M'
 
 	// To select a layout from the command line, "gradlew run -Playout=cubes"
 	systemProperty 'com.symmetrylabs.layout', findProperty('layout')
