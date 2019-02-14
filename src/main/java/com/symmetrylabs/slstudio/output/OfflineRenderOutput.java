@@ -23,7 +23,7 @@ public class OfflineRenderOutput extends LXOutput {
 
     private File output = null;
     private LXModel model;
-    private long startFrameNanos;
+    private long startFrameNanos = -1;
     private int lastFrameWritten;
     private BufferedImage img = null;
     private int framesToCapture;
@@ -53,6 +53,14 @@ public class OfflineRenderOutput extends LXOutput {
                 }
             });
 
+        externalSync.addListener(p -> {
+            if (!externalSync.getValueb()) {
+                if (img != null && extTrigger.isOn()){
+                    dispose();
+                }
+            }
+        });
+
         arm_MTC_listeners(lx);
     }
 
@@ -70,24 +78,36 @@ public class OfflineRenderOutput extends LXOutput {
                     frame = 60 * frame + mt.getMinute();
                     frame = 60 * frame + mt.getSecond();
                     frame = mt.getRate().fps() * frame + mt.getFrame();
-                    goToFrame(frame);
+                    triggerRecord(frame);
                 }
             });
             System.out.println("attached time code listener to " + input.getName());
         }
     }
 
-    private void goToFrame(int frame) {
-        extTrigger.setValue(true);
+    private void triggerRecord(int frame) {
+        // vezer sends frame zero when jump to start of project, ignore this.
+        if (externalSync.isOn()){
+            if (frame == 0){ return; }
+            extTrigger.setValue(true);
+        }
     }
 
     public void dispose() {
         img = null;
+        // reset the trigger.
+        extTrigger.setValue(false);
         pStatus.setValue("IDLE");
+        startFrameNanos = -1;
     }
 
     private void createImage() {
-        startFrameNanos = System.nanoTime();
+        if (externalSync.isOn()){
+            startFrameNanos = -1;
+        }
+        else{
+            startFrameNanos = System.nanoTime();
+        }
         lastFrameWritten = -1;
         framesToCapture = pFramesToCapture.getValuei();
         frameRate = pFrameRate.getValue();
@@ -104,8 +124,10 @@ public class OfflineRenderOutput extends LXOutput {
                 pStatus.setValue("WAIT");
                 return;
             }
+            if (startFrameNanos == -1){
+                startFrameNanos = System.nanoTime();
+            }
         }
-        pStatus.setValue("REC");
 
         double elapsedSec = 1e-9 * (double) (System.nanoTime() - startFrameNanos);
         int inFrame = (int) Math.floor(frameRate * elapsedSec);
@@ -113,6 +135,7 @@ public class OfflineRenderOutput extends LXOutput {
             return;
         }
         lastFrameWritten = inFrame;
+        pStatus.setValue("REC:"+ lastFrameWritten);
         if (lastFrameWritten >= framesToCapture) {
             final BufferedImage imgToWrite = img;
             final File outputToWrite = output;
