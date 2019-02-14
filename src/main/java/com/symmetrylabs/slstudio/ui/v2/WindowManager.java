@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.ui.v2;
 
+import heronarts.lx.LX;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -82,10 +83,15 @@ public class WindowManager {
     }
 
     /**
-     * Request that an action be taken while the UI is not being displayed.
+     * Request that an action be taken while the UI is not being displayed at a safe place in the LXEngine run loop.
+     *
+     * This schedules the task to run at the next point at which the UI is not
+     * being displayed and the engine is in its loop tasks phase; this is the
+     * correct way to run blocks where running the block could cause a
+     * modification exception in both the UI and the engine.
      */
-    public static void runBeforeUi(Runnable r) {
-        INSTANCE.runBeforeUiImpl(r);
+    public static void runSafelyWithEngine(LX lx, Runnable r) {
+        INSTANCE.runSafelyWithEngineImpl(lx, r);
     }
 
     /* Package-private implementation follows */
@@ -226,6 +232,18 @@ public class WindowManager {
 
     void runBeforeUiImpl(Runnable r) {
         preUiTasks.add(r);
+    }
+
+    void runSafelyWithEngineImpl(final LX lx, Runnable r) {
+        disableUI();
+        /* putting this on preUiTasks makes sure that the UI * is fully disabled
+        before we add the task. */
+        preUiTasks.add(() -> {
+                lx.engine.addTask(() -> {
+                        r.run();
+                        enableUI();
+                    });
+            });
     }
 
     void hidePersistent(PersistentWindow ws) {

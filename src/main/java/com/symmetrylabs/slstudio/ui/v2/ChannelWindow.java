@@ -33,7 +33,9 @@ public class ChannelWindow extends CloseableWindow {
             UI.sameLine();
         }
         if (UI.button("+")) {
-            lx.engine.addTask(() -> lx.engine.setFocusedChannel(lx.engine.addChannel()));
+            /* running this has the potential to cause CME issues in both the UI
+               and the engine, so we have to sync the world to do it. */
+            WindowManager.runSafelyWithEngine(lx, () -> lx.engine.setFocusedChannel(lx.engine.addChannel()));
         }
     }
 }
