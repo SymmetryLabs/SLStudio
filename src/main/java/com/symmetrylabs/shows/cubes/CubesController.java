@@ -118,7 +118,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             packetData = new byte[packetSizeBytes];
             packet = new DatagramPacket(packetData, packetSizeBytes);
         }
-        packetData[0] = 8; // Channel
+        packetData[0] = 14; // Channel
         packetData[1] = use16 ? COMMAND_SET_16BIT_PIXEL_COLORS : COMMAND_SET_PIXEL_COLORS;
         packetData[2] = (byte) ((contentSizeBytes >> 8) & 0xFF);
         packetData[3] = (byte) (contentSizeBytes & 0xFF);
