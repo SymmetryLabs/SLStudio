@@ -353,10 +353,10 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_checkbox(JNIEnv *env, jclass, jstring jl
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_selectable(JNIEnv *env, jclass, jstring jlabel, jboolean v, jfloat height) {
+Java_com_symmetrylabs_slstudio_ui_v2_UI_selectable(JNIEnv *env, jclass, jstring jlabel, jboolean v) {
     JniString label(env, jlabel);
     bool res = v == 1 ? true : false;
-    ImGui::Selectable(label, &res, 0, ImVec2(0, height), ImVec2(0, 0.5f));
+    ImGui::Selectable(label, &res);
     return res ? 1 : 0;
 }
 

@@ -183,10 +183,7 @@ public class UI {
     public static native void labelText(String label, String value);
     public static native boolean button(String t);
     public static native boolean checkbox(String label, boolean v);
-    public static boolean selectable(String label, boolean v) {
-        return selectable(label, v, 0);
-    }
-    public static native boolean selectable(String label, boolean v, float height);
+    public static native boolean selectable(String label, boolean v);
     public static native String inputText(String label, String text);
     public static native int colorPicker(String label, int color);
     public static float sliderFloat(String label, float v, float v0, float v1) {

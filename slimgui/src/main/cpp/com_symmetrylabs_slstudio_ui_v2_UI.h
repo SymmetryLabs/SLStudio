@@ -278,10 +278,10 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_checkbox
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    selectable
- * Signature: (Ljava/lang/String;ZF)Z
+ * Signature: (Ljava/lang/String;Z)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_selectable
-  (JNIEnv *, jclass, jstring, jboolean, jfloat);
+  (JNIEnv *, jclass, jstring, jboolean);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
