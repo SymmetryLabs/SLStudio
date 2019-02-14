@@ -43,7 +43,6 @@ public class ChannelUi {
     public static void drawEffects(LX lx, String chanName, LXBus chan) {
         List<LXEffect> effects = chan.getEffects();
         if (!effects.isEmpty()) {
-            UI.spacing();
             for (int i = 0; i < effects.size(); i++) {
                 LXEffect eff = effects.get(i);
                 String effName = String.format("%s##%s/effect/%d", eff.getClass().getSimpleName(), chanName, i);
@@ -70,6 +69,7 @@ public class ChannelUi {
     }
 
     public static void drawWepPopup(LX lx, LXBus bus, WepUi wepUi) {
+        UI.spacing();
         if (UI.button("+")) {
             lx.engine.setFocusedChannel(bus);
             UI.setNextWindowContentSize(300, 600);
@@ -98,18 +98,29 @@ public class ChannelUi {
         }
         UI.spacing();
 
-        ParameterUI.draw(lx, chan.fader);
-        ParameterUI.draw(lx, chan.speed);
-
-        ParameterUI.draw(lx, chan.enabled);
+        float fader = UI.vertSliderFloat("##fader", chan.fader.getValuef(), 0, 1, "LVL", 30, 100);
+        if (fader != chan.fader.getValuef()) {
+            lx.engine.addTask(() -> chan.fader.setValue(fader));
+        }
         UI.sameLine();
-        ParameterUI.draw(lx, chan.cueActive, true);
+        float speed = UI.vertSliderFloat("##speed", chan.speed.getValuef(), 0, 2, "SPD", 30, 100);
+        if (speed != chan.speed.getValuef()) {
+            lx.engine.addTask(() -> chan.speed.setValue(speed));
+        }
         UI.sameLine();
 
         CrossfadeGroup group = chan.crossfadeGroup.getEnum();
+
+        UI.beginGroup();
+        UI.beginColumns(2, "cued-enabled-" + chanName);
+        ParameterUI.draw(lx, chan.enabled);
+        UI.nextColumn();
         boolean A = UI.checkbox("A", group == CrossfadeGroup.A);
-        UI.sameLine();
+        UI.nextColumn();
+        ParameterUI.draw(lx, chan.cueActive, true);
+        UI.nextColumn();
         boolean B = UI.checkbox("B", group == CrossfadeGroup.B);
+
         if (A && group != CrossfadeGroup.A) {
             group = CrossfadeGroup.A;
         } else if (B && group != CrossfadeGroup.B) {
@@ -118,8 +129,9 @@ public class ChannelUi {
             group = CrossfadeGroup.BYPASS;
         }
         chan.crossfadeGroup.setValue(group);
-
+        UI.endColumns();
         ParameterUI.draw(lx, chan.blendMode);
+        UI.endGroup();
 
         UI.separator();
 
@@ -165,6 +177,7 @@ public class ChannelUi {
             }
         }
 
+        UI.spacing();
         drawEffects(lx, chanName, chan);
         drawWepPopup(lx, chan, wepUi);
     }

@@ -141,10 +141,10 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_sameLine
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
- * Method:    columnsStart
+ * Method:    beginColumns
  * Signature: (ILjava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_columnsStart
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginColumns
   (JNIEnv *, jclass, jint, jstring);
 
 /*
@@ -157,10 +157,10 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_nextColumn
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
- * Method:    columnsEnd
+ * Method:    endColumns
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_columnsEnd
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endColumns
   (JNIEnv *, jclass);
 
 /*
@@ -302,10 +302,18 @@ JNIEXPORT jint JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_colorPicker
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    sliderFloat
- * Signature: (Ljava/lang/String;FFFZ)F
+ * Signature: (Ljava/lang/String;FFF)F
  */
 JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_sliderFloat
-  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat, jboolean);
+  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    vertSliderFloat
+ * Signature: (Ljava/lang/String;FFFLjava/lang/String;FF)F
+ */
+JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_vertSliderFloat
+  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat, jstring, jfloat, jfloat);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI

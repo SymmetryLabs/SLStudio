@@ -34,13 +34,13 @@ public class ProjectWindow extends CloseableWindow {
         List<LXChannel> chans = lx.engine.getChannels();
         UI.setNextWindowContentSize(180 * chans.size(), 0);
         UI.beginChild("channels", false, UI.WINDOW_HORIZ_SCROLL);
-        UI.columnsStart(chans.isEmpty() ? 1 : chans.size(), "channels");
+        UI.beginColumns(chans.isEmpty() ? 1 : chans.size(), "channels");
         LXBus focused = lx.engine.getFocusedChannel();
         for (LXChannel chan : chans) {
             drawChannel(chan, chan == focused);
             UI.nextColumn();
         }
-        UI.columnsEnd();
+        UI.endColumns();
         UI.endChild();
     }
 
@@ -55,9 +55,9 @@ public class ProjectWindow extends CloseableWindow {
         }
 
         UI.beginGroup();
-        float fader = UI.sliderFloat(
+        float fader = UI.vertSliderFloat(
             String.format("##fader-%d", chan.getIndex()),
-            chan.fader.getValuef(), 0, 1, true);
+            chan.fader.getValuef(), 0, 1, "", 20, 200);
         if (fader != chan.fader.getValuef()) {
             lx.engine.addTask(() -> chan.fader.setValue(fader));
         }

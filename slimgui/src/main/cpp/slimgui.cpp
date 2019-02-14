@@ -151,6 +151,9 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
     io.ConfigDockingTabBarOnSingleWindows = true;
     io.ConfigMacOSXBehaviors = useMacBehaviors != 0;
 
+    /* Disable auto load/save of window positions for now */
+    io.IniFilename = nullptr;
+
     return 1;
 }
 
@@ -271,7 +274,7 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_sameLine(JNIEnv *, jclass) {
 }
 
 JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_columnsStart(JNIEnv *env, jclass, jint num, jstring jlabel) {
+Java_com_symmetrylabs_slstudio_ui_v2_UI_beginColumns(JNIEnv *env, jclass, jint num, jstring jlabel) {
     JniString label(env, jlabel);
     ImGui::Columns(num, label);
 }
@@ -282,7 +285,7 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_nextColumn(JNIEnv *, jclass) {
 }
 
 JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_columnsEnd(JNIEnv *, jclass) {
+Java_com_symmetrylabs_slstudio_ui_v2_UI_endColumns(JNIEnv *, jclass) {
     ImGui::Columns(1);
 }
 
@@ -392,15 +395,19 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_colorPicker(JNIEnv *env, jclass, jstring
 
 JNIEXPORT jfloat JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_sliderFloat(
-    JNIEnv * env, jclass, jstring jlabel, jfloat v, jfloat v0, jfloat v1, jboolean vert) {
+    JNIEnv * env, jclass, jstring jlabel, jfloat v, jfloat v0, jfloat v1) {
     JniString label(env, jlabel);
-    jfloat res = v;
-    if (vert) {
-        ImGui::VSliderFloat(label, ImVec2(20, 120), &res, v0, v1);
-    } else {
-        ImGui::SliderFloat(label, &res, v0, v1);
-    }
-    return res;
+    ImGui::SliderFloat(label, &v, v0, v1);
+    return v;
+}
+
+JNIEXPORT jfloat JNICALL
+Java_com_symmetrylabs_slstudio_ui_v2_UI_vertSliderFloat(
+    JNIEnv * env, jclass, jstring jlabel, jfloat v, jfloat v0, jfloat v1, jstring jfmtstr, jfloat width, jfloat height) {
+    JniString label(env, jlabel);
+    JniString fmtstr(env, jfmtstr);
+    ImGui::VSliderFloat(label, ImVec2(width, height), &v, v0, v1, fmtstr);
+    return v;
 }
 
 JNIEXPORT jint JNICALL

@@ -151,9 +151,9 @@ public class UI {
     public static native void end();
     public static native void sameLine();
 
-    public static native void columnsStart(int num, String id);
+    public static native void beginColumns(int num, String id);
     public static native void nextColumn();
-    public static native void columnsEnd();
+    public static native void endColumns();
 
     public static native void separator();
     public static native void spacing();
@@ -189,10 +189,8 @@ public class UI {
     public static native boolean selectable(String label, boolean v, float height);
     public static native String inputText(String label, String text);
     public static native int colorPicker(String label, int color);
-    public static float sliderFloat(String label, float v, float v0, float v1) {
-        return sliderFloat(label, v, v0, v1, false);
-    }
-    public static native float sliderFloat(String label, float v, float v0, float v1, boolean vert);
+    public static native float sliderFloat(String label, float v, float v0, float v1);
+    public static native float vertSliderFloat(String label, float v, float v0, float v1, String valFmt, float width, float height);
     public static native int sliderInt(String label, int v, int v0, int v1);
     public static native int combo(String label, int selected, String[] options);
     public static native float floatBox(String label, float v);

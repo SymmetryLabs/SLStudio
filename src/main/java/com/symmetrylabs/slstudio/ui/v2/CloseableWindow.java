@@ -2,10 +2,16 @@ package com.symmetrylabs.slstudio.ui.v2;
 
 public abstract class CloseableWindow implements Window {
     protected final String label;
+    private final int windowFlags;
     private boolean closeAfterEnd = false;
 
-    public CloseableWindow(String label) {
+    protected CloseableWindow(String label) {
+        this(label, 0);
+    }
+
+    protected CloseableWindow(String label, int flags) {
         this.label = label;
+        this.windowFlags = flags;
     }
 
     protected abstract void drawContents();
@@ -17,7 +23,7 @@ public abstract class CloseableWindow implements Window {
     @Override
     public final void draw() {
         windowSetup();
-        if (!UI.beginClosable(label)) {
+        if (!UI.beginClosable(label, windowFlags)) {
             UI.end();
             WindowManager.closeWindow(this);
             return;

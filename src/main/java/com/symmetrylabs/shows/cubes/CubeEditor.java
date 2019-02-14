@@ -51,7 +51,7 @@ public class CubeEditor extends CloseableWindow {
             boolean updated = false;
             if (c instanceof DoubleControllerCube) {
                 DoubleControllerCube dcc = (DoubleControllerCube) c;
-                UI.columnsStart(2, "cubeIds");
+                UI.beginColumns(2, "cubeIds");
                 String idA = UI.inputText(String.format("A##%d", i), dcc.idA);
                 UI.nextColumn();
                 String idB = UI.inputText(String.format("B##%d", i), dcc.idB);
@@ -61,6 +61,7 @@ public class CubeEditor extends CloseableWindow {
                     dcc.idB = idB;
                     updated = true;
                 }
+                UI.endColumns();
             } else {
                 String id = UI.inputText(String.format("id##%d", i), c.id);
                 if (!id.equals(c.id)) {
@@ -68,7 +69,7 @@ public class CubeEditor extends CloseableWindow {
                     updated = true;
                 }
             }
-            UI.columnsStart(3, "cubeEditor");
+            UI.beginColumns(3, "cubeEditor");
             float x = UI.floatBox(String.format("x##%d", i), c.x);
             if (x != c.x) {
                 c.x = x;
@@ -87,7 +88,7 @@ public class CubeEditor extends CloseableWindow {
                 updated = true;
             }
             UI.nextColumn();
-            UI.columnsEnd();
+            UI.endColumns();
 
             if (updated) {
                 c.updatePoints(new LXTransform());

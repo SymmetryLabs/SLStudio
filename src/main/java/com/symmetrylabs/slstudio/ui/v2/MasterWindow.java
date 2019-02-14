@@ -15,14 +15,14 @@ public class MasterWindow extends CloseableWindow {
     private WepUi wepUi;
 
     public MasterWindow(LX lx) {
-        super("Master");
+        super("Master", UI.WINDOW_ALWAYS_AUTO_RESIZE | UI.WINDOW_NO_RESIZE | UI.WINDOW_NO_TITLE_BAR);
         this.lx = lx;
         this.wepUi = new WepUi(lx, false, () -> UI.closePopup());
     }
 
     @Override
     protected void windowSetup() {
-        UI.setNextWindowDefaults(25, 500, 500, 800);
+        UI.setNextWindowPosition(UI.width - 20, 40, 1.0f, 0.0f);
     }
 
     @Override
@@ -38,7 +38,6 @@ public class MasterWindow extends CloseableWindow {
             lx.engine.addTask(() -> lx.engine.output.brightness.setValue(level));
         }
 
-        ParameterUI.draw(lx, lx.engine.output.brightness);
         UI.separator();
         ParameterUI.draw(lx, lx.engine.crossfader);
         ParameterUI.draw(lx, lx.engine.crossfaderBlendMode);
