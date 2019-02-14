@@ -2,18 +2,20 @@ package com.symmetrylabs.slstudio.output;
 
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
+import heronarts.lx.midi.LXMidiInput;
+import heronarts.lx.midi.MidiTime;
 import heronarts.lx.model.LXModel;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.StringParameter;
-import java.awt.EventQueue;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 
 public class OfflineRenderOutput extends LXOutput {
     public static final String HEADER = "SLOutput";
@@ -32,6 +34,9 @@ public class OfflineRenderOutput extends LXOutput {
     public final CompoundParameter pFrameRate = new CompoundParameter("rate", 30, 1, 60);
     public final StringParameter pOutputFile = new StringParameter("output", "");
     public final StringParameter pStatus = new StringParameter("status", "IDLE");
+    public final BooleanParameter externalSync = new BooleanParameter("extern");
+    private final BooleanParameter extTrigger = new BooleanParameter("trigger");
+    private MidiTime mt;
 
     public OfflineRenderOutput(LX lx) {
         super(lx);
@@ -47,6 +52,33 @@ public class OfflineRenderOutput extends LXOutput {
                     createImage();
                 }
             });
+
+        arm_MTC_listeners(lx);
+    }
+
+    private void arm_MTC_listeners(LX lx){
+        for (LXMidiInput input : lx.engine.midi.inputs) {
+            input.addTimeListener(new LXMidiInput.MidiTimeListener() {
+                @Override
+                public void onBeatClockUpdate(int i, double v) {
+                }
+
+                @Override
+                public void onMTCUpdate(MidiTime midiTime) {
+                    mt = midiTime.clone();
+                    int frame = mt.getHour();
+                    frame = 60 * frame + mt.getMinute();
+                    frame = 60 * frame + mt.getSecond();
+                    frame = mt.getRate().fps() * frame + mt.getFrame();
+                    goToFrame(frame);
+                }
+            });
+            System.out.println("attached time code listener to " + input.getName());
+        }
+    }
+
+    private void goToFrame(int frame) {
+        extTrigger.setValue(true);
     }
 
     public void dispose() {
@@ -66,6 +98,12 @@ public class OfflineRenderOutput extends LXOutput {
     protected void onSend(PolyBuffer colors) {
         if (img == null) {
             return;
+        }
+        else if (externalSync.isOn()){
+            if (!extTrigger.isOn()){
+                pStatus.setValue("WAIT");
+                return;
+            }
         }
         pStatus.setValue("REC");
 
