@@ -54,6 +54,17 @@ public class WepUi {
         visibleGroups.addAll(grouping.groupNames);
         effectsVisible = true;
         warpsVisible = true;
+        for (String groupName : grouping.groupNames) {
+            for (WEPGrouping.PatternItem pi : grouping.groups.get(groupName)) {
+                pi.visible = true;
+            }
+        }
+        for (WEPGrouping.EffectItem ei : grouping.effects) {
+            ei.visible = true;
+        }
+        for (WEPGrouping.WarpItem wi : grouping.warps) {
+            wi.visible = true;
+        }
     }
 
     public void draw() {

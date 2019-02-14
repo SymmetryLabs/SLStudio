@@ -179,3 +179,24 @@ bool Knob(const char *label, float *v, float min, float max,
     }
     return changed;
 }
+
+ImGuiID dockspace_id;
+static ImGuiID dockspace_channels;
+static bool dockspaces_initialized = false;
+
+void InitChannelWindowDockSpace() {
+    if (dockspaces_initialized) {
+        return;
+    }
+    dockspaces_initialized = true;
+    dockspace_id = ImGui::GetID("MainDockSpace");
+
+    DockBuilderRemoveNode(dockspace_id);
+    ImGuiViewport *viewport = ImGui::GetMainViewport();
+    DockBuilderAddNode(dockspace_id, viewport->Size);
+
+    ImGuiID dock_main_id = dockspace_id;
+    dockspace_channels = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.25f, NULL, &dock_main_id);
+
+    ImGui::DockBuilderDockWindow("Channels", dockspace_channels);
+}

@@ -36,8 +36,8 @@ void LoadSlimguiStyle(float density) {
     colors[ImGuiCol_ScrollbarGrabHovered]   = RGB(0xBDBFC2);
     colors[ImGuiCol_ScrollbarGrabActive]    = RGB(0xA8A9AE);
     colors[ImGuiCol_CheckMark]              = RGB(0xD0D5E0);
-    colors[ImGuiCol_SliderGrab]             = RGB(0xD0D5E0);
-    colors[ImGuiCol_SliderGrabActive]       = RGB(0xD0D5E0);
+    colors[ImGuiCol_SliderGrab]             = RGB(0x72757B);
+    colors[ImGuiCol_SliderGrabActive]       = RGB(0x72757B);
     colors[ImGuiCol_Button]                 = RGB(0x252A35);
     colors[ImGuiCol_ButtonHovered]          = RGB(0x666A71);
     colors[ImGuiCol_ButtonActive]           = RGB(0x92949A);
@@ -67,6 +67,8 @@ void LoadSlimguiStyle(float density) {
     colors[ImGuiCol_DockingPreview]         = RGB(0x00A5DB);
 
     style.WindowRounding = 0.f;
+    style.FrameRounding = 2.f;
+    style.GrabRounding = 2.f;
 
     if (density != 0) {
         style.ScaleAllSizes(density);
@@ -196,7 +198,8 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_newFrame(JNIEnv *
     ImGui::Begin("MainDockSpaceWindow", NULL, window_flags);
     ImGui::PopStyleVar(2);
 
-    ImGuiID dockspace_id = ImGui::GetID("MainDockSpace");
+    InitChannelWindowDockSpace();
+
     ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruDockspace;
     ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
     ImGui::End();
