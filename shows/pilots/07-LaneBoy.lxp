@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1549727961026,
+  "timestamp": 1550165283831,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -709,7 +709,7 @@
               "palette": 0,
               "x": 0.0,
               "y": 1.0,
-              "z": 0.010885357856750488,
+              "z": 0.03951311111450195,
               "cx": 410.0,
               "cy": 116.0,
               "cz": 24.0,
@@ -1283,7 +1283,7 @@
     },
     "components": {
       "envelop": {
-        "id": 44,
+        "id": 45,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
         "modulationColor": -16716545,
         "parameters": {
@@ -1292,7 +1292,7 @@
           "trigger": false
         },
         "source": {
-          "id": 45,
+          "id": 46,
           "class": "com.symmetrylabs.slstudio.envelop.Envelop$Source",
           "modulationColor": -65393,
           "parameters": {
@@ -1322,7 +1322,7 @@
           }
         },
         "decode": {
-          "id": 46,
+          "id": 47,
           "class": "com.symmetrylabs.slstudio.envelop.Envelop$Decode",
           "modulationColor": -29184,
           "parameters": {
@@ -1390,9 +1390,27 @@
     "midi": {
       "inputs": [
         {
+          "name": "CoreMIDI4J - Session 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "CoreMIDI4J - NateBus",
           "channel": true,
           "control": true,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Lockstep",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
           "sync": false
         },
         {
