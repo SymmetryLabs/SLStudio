@@ -958,7 +958,7 @@ static void ShowDemoWindowWidgets()
                 {
                     float x = (float) i / 2.f;
                     float y = (float) j / 2.f;
-                    snprintf(name, IM_ARRAYSIZE(name), "(%.1f,%.1f)", x, y);
+                    sprintf(name, "(%.1f,%.1f)", x, y);
                     ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2(x, y));
                     ImGui::Selectable(name, &selected[3*i+j], 0, ImVec2(70,70));
                     ImGui::PopStyleVar();
@@ -4112,7 +4112,7 @@ void ShowExampleAppDockSpace(bool* p_open)
     {
         if (ImGui::BeginMenu("Docking"))
         {
-            // Disabling fullscreen would allow the window to be moved to the front of other windows, 
+            // Disabling fullscreen would allow the window to be moved to the front of other windows,
             // which we can't undo at the moment without finer window depth/z control.
             //ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
 
@@ -4358,7 +4358,7 @@ void ShowExampleAppDocuments(bool* p_open)
         if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DockingEnable)
         {
             NotifyOfDocumentsClosedElsewhere(app);
-            
+
             // Create a DockSpace node where any window can be docked
             ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
             ImGui::DockSpace(dockspace_id);
