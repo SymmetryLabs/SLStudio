@@ -192,7 +192,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
         new SongIndex("CutMyLip", CUT);
         new SongIndex("LaneBoy1", LANE_BOY1);
         new SongIndex("LaneBoy2", LANE_BOY2);
-        new SongIndex("Nico", NICO);
+        new SongIndex("nico", NICO);
         new SongIndex("PetCheetah", CHEETAH);
         new SongIndex("HoldingOntoYou", HOLDING);
         new SongIndex("Ride", RIDE);
@@ -216,30 +216,46 @@ public class MTCPlayback extends SLPattern<SLModel> {
         }
 
         if (thisSong.isNew()){
-            String dataPath = "/Users/symmetry/symmetrylabs/software/SLStudio/shows/pilots/render/";
-            currentSongName = thisSong.song_name;
-            renderFile.setValue( dataPath + thisSong.name_png + ".png");
-            MTCOffset.setValue(songIndex*BIN_SIZE);
-            loadSong();
+            if (loadByName(thisSong)){
+                return;
+            }
+            else{
+                String dataPath = "/Users/symmetry/symmetrylabs/software/SLStudio/shows/pilots/render/";
+                currentSongName = thisSong.song_name;
+                renderFile.setValue( dataPath + thisSong.name_png + ".png");
+                MTCOffset.setValue(songIndex*BIN_SIZE);
+                loadSong();
+            }
         }
     }
 
+    private boolean loadByName(SongIndex thisSong) {
+        String dataPath = "/Users/symmetry/symmetrylabs/software/SLStudio/shows/pilots/render/";
+        renderFile.setValue( dataPath + thisSong.song_name + ".png");
+        String path = renderFile.getString();
+        File dir = new File(path);
+        if (dir.isFile() && dir.getName().endsWith(".png")) {
+            currentSong = dir;
+            pngr = new PngReader(currentSong);
+            return true;
+        }
+        return false;
+    }
 
-    public File loadSong() {
+
+    public void loadSong() {
         String path = renderFile.getString();
         if (path == null) {
             System.err.println("invalid path");
-            return null;
+            // trying the song name
         }
         File dir = new File(path);
         if (dir.isFile() && dir.getName().endsWith(".png")) {
             currentSong = dir;
             pngr = new PngReader(currentSong);
-            return dir;
         }
         else{
             System.err.println("must be png");
-            return null;
         }
     }
 
