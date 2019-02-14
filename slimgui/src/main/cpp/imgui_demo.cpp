@@ -951,13 +951,16 @@ static void ShowDemoWindowWidgets()
         if (ImGui::TreeNode("Alignment"))
         {
             static bool selected[3*3] = { true, false, true, false, true, false, true, false, true };
-            static char* names[3*3] = { "(0,0)", "(0,0.5)", "(0,1)", "(0.5,0)", "(0.5,0.5)", "(0.5,1)", "(1,0)", "(1,0.5)", "(1,1)" };
+            static char name[16];
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2((float) i / 2.f, (float) j / 2.f));
-                    ImGui::Selectable(names[3*i+j], &selected[3*i+j], 0, ImVec2(70,70));
+                    float x = (float) i / 2.f;
+                    float y = (float) j / 2.f;
+                    snprintf(name, IM_ARRAYSIZE(name), "(%.1f,%.1f)", x, y);
+                    ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2(x, y));
+                    ImGui::Selectable(name, &selected[3*i+j], 0, ImVec2(70,70));
                     ImGui::PopStyleVar();
                     if (j != 2) ImGui::SameLine();
                 }
