@@ -97,7 +97,7 @@ public class MultiStageEnvelope extends LXRangeModulator implements LXWaveshape 
 
         @Override
         public String toString() {
-            return String.format("Basis: %.2f Value: %.2f", this.basis, this.value);
+            return String.format("Basis: %.2f Value: %.2f Shape: %.2f", this.basis, this.value, this.shape);
         }
 
         private static final String KEY_BASIS = "basis";
@@ -149,6 +149,16 @@ public class MultiStageEnvelope extends LXRangeModulator implements LXWaveshape 
         mutableStages.add(new Stage(0, 0, 1, true, false));
         mutableStages.add(new Stage(1, 1, 1, false, true));
         updateStages();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder(super.toString());
+        for (Stage stage : stages) {
+            sb.append("\n    ");
+            sb.append(stage);
+        }
+        return sb.toString();
     }
 
     private void updateStages() {
