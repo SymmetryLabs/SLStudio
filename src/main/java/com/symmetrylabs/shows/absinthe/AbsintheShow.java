@@ -39,16 +39,33 @@ public class AbsintheShow extends TreeShow {
     public final List<AssignablePixlite.Port> pixlitePorts = new ArrayList<>();
 
     private static BranchConfig branchFromPointPair(
-        float x1, float y1, float z1, float x2, float y2, float z2, TwigConfig[] twigs) {
-        Vector3D v1 = new Vector3D(x1, y1, z1);
-        Vector3D v2 = new Vector3D(x2, y2, z2);
-        Rotation rot = new Rotation(new Vector3D(1, 0, 0), v2.subtract(v1));
-        double[] angles = rot.getAngles(RotationOrder.YXZ, RotationConvention.VECTOR_OPERATOR);
-        for (int i = 0; i < 2; i++) {
-            angles[i] = 180 * angles[i] / Math.PI;
+        double x1, double y1, double z1, double dx, double dy, double dz, TwigConfig[] twigs) {
+        Vector3D d = new Vector3D(dx, dz, dy);
+        d.normalize();
+        System.out.println("d=" + d.toString());
+
+        Rotation rot = new Rotation(new Vector3D(0, 1, 0), d);
+        double[] angles = rot.getAngles(RotationOrder.ZXY, RotationConvention.VECTOR_OPERATOR);
+
+        double az = 0, elev = 0, tilt = 0;
+        az = Math.atan2(-d.getX(), d.getY());
+
+        if (Math.abs(angles[0] - az) > 0.01) {
+            throw new RuntimeException(
+                String.format(
+                    "bad angle def: az %f el %f ti %f a0 %f a1 %f a2 %f",
+                    az, elev, tilt, angles[0], angles[1], angles[2]));
         }
-        float az = (float) angles[1], elev = (float) angles[0], tilt = (float) angles[2];
-        return new BranchConfig(false, x1, y1, z1, az, elev, tilt, twigs);
+        az = 180 * angles[0] / Math.PI;
+        elev = 180 * angles[2] / Math.PI;
+        tilt = 180 * angles[1] / Math.PI;
+        System.out.println(String.format("%f %f %f", angles[0], angles[1], angles[2]));
+
+        return new BranchConfig(
+            false,
+            (float) x1, (float) z1, (float) y1,
+            (float) az, (float) elev, (float) tilt,
+            twigs);
     }
 
 
@@ -77,11 +94,18 @@ public class AbsintheShow extends TreeShow {
     };
 
     final BranchConfig[] LIMB_TYPE_A = new BranchConfig[] {
+        branchFromPointPair(-13.177, 8.079, 45.477, -11, 4.622, 6.35, BRANCH_TYPE_A),
+        branchFromPointPair(-31.761, 8.38, 89.426, -10.748, 1.895, 6.301, BRANCH_TYPE_A),
+        branchFromPointPair(35.117, 0, 71.654, 10.342, 0, 5.971, BRANCH_TYPE_A),
+        branchFromPointPair(27.428, 0, 102.280, 9.261, 0, 9.261, BRANCH_TYPE_A),
+        branchFromPointPair(0.405, 0, 108.301, -6.426, 0, 11.130, BRANCH_TYPE_A),
+        /*
         branchFromPointPair(120.48f, 139.12f, 40.55f, 122.46f, 138.8f, 43.62f, BRANCH_TYPE_A),
         branchFromPointPair(150.29f, 149.348f, 32.465f, 152.963f, 149.371f, 34.965f, BRANCH_TYPE_A),
         branchFromPointPair(154.58f, 159.012f, 1.772f, 157.52f, 160.29f, 0.004f, BRANCH_TYPE_A),
         branchFromPointPair(134.951f, 153.771f, -32.962f, 136.648f, 154.512f, -36.121f, BRANCH_TYPE_A),
         branchFromPointPair(93.754f, 137.258f, -14.98f, 95.529f, 137.28f, -18.182f, BRANCH_TYPE_A),
+        */
     };
 
     public SLModel buildModel() {
@@ -94,7 +118,7 @@ public class AbsintheShow extends TreeShow {
         TreeConfig.createBranchType("Type B", BRANCH_TYPE_B);
 
         TreeConfig config = new TreeConfig(new LimbConfig[] {
-                new LimbConfig(false, 50f, 130f, 0, 0, 0, LIMB_TYPE_A),
+                new LimbConfig(false, 0, 0, 0, 0, 0, LIMB_TYPE_A),
             });
         return new TreeModel(config);
     }
@@ -132,20 +156,10 @@ public class AbsintheShow extends TreeShow {
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
-        ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
+        //ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
         // UITreeLeaves uiTreeLeaves = new UITreeLeaves(lx, applet, (TreeModel) lx.model);
         // ui.preview.addComponent(uiTreeLeaves);
         // new UITreeControls(ui, uiTreeStructure, uiTreeLeaves).setExpanded(false).addToContainer(ui.leftPane.global);
         new UIScheduler(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.utility);
-    }
-}
-
-class UIRocoBuilding extends UI3dComponent {
-    protected void onDraw(UI ui, PGraphics pg) {
-        pg.fill(0xff8c5431);
-        pg.pushMatrix();
-        pg.translate(0, 18*FEET, 34*FEET);
-        pg.box(100*FEET, 34*FEET,33*FEET);
-        pg.popMatrix();
     }
 }
