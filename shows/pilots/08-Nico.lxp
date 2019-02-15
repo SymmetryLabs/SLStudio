@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1550145205620,
+  "timestamp": 1550244232780,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0016049834666773677,
+          "fader": 0.009197007864713669,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -209,7 +209,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.8714285995811224,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -317,7 +317,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 3.079416637774557E-4,
+          "fader": 5.510534974746406E-4,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -706,13 +706,37 @@
     "midi": {
       "inputs": [
         {
-          "name": "CoreMIDI4J - Lockstep",
+          "name": "CoreMIDI4J - Session 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - NateBus",
+          "channel": false,
+          "control": true,
+          "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
           "sync": false
         },
         {
           "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Lockstep",
           "channel": true,
           "control": false,
           "sync": false
