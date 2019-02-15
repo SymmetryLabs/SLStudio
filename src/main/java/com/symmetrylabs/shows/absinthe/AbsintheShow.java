@@ -40,26 +40,16 @@ public class AbsintheShow extends TreeShow {
 
     private static BranchConfig branchFromPointPair(
         double x1, double y1, double z1, double dx, double dy, double dz, TwigConfig[] twigs) {
+
         Vector3D d = new Vector3D(dx, dz, dy);
         d.normalize();
-        System.out.println("d=" + d.toString());
 
         Rotation rot = new Rotation(new Vector3D(0, 1, 0), d);
         double[] angles = rot.getAngles(RotationOrder.ZXY, RotationConvention.VECTOR_OPERATOR);
 
-        double az = 0, elev = 0, tilt = 0;
-        az = Math.atan2(-d.getX(), d.getY());
-
-        if (Math.abs(angles[0] - az) > 0.01) {
-            throw new RuntimeException(
-                String.format(
-                    "bad angle def: az %f el %f ti %f a0 %f a1 %f a2 %f",
-                    az, elev, tilt, angles[0], angles[1], angles[2]));
-        }
-        az = 180 * angles[0] / Math.PI;
-        elev = 180 * angles[2] / Math.PI;
-        tilt = 180 * angles[1] / Math.PI;
-        System.out.println(String.format("%f %f %f", angles[0], angles[1], angles[2]));
+        double az = 180 * angles[0] / Math.PI;
+        double elev = 180 * angles[2] / Math.PI;
+        double tilt = 180 * angles[1] / Math.PI;
 
         return new BranchConfig(
             false,
