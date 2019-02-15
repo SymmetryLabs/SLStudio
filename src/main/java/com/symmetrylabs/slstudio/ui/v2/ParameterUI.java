@@ -140,4 +140,15 @@ public class ParameterUI {
             ParameterUI.draw(lx, (ColorParameter) param);
         }
     }
+
+    public static void menuItem(LX lx, BooleanParameter p) {
+        menuItem(lx, p, getID(p));
+    }
+
+    public static void menuItem(LX lx, BooleanParameter p, String label) {
+        boolean res = UI.menuItemToggle(label, null, p.getValueb(), true);
+        if (res != p.getValueb()) {
+            lx.engine.addTask(() -> p.setValue(res));
+        }
+    }
 }

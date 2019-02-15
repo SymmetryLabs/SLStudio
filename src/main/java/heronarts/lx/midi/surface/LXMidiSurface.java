@@ -38,16 +38,21 @@ public abstract class LXMidiSurface implements LXMidiListener {
 
     private static LXMidiOutput findOutput(LXMidiEngine engine, String description) {
         for (LXMidiOutput output : engine.outputs) {
-            if (output.getDescription().equals(description)) {
+            if (output.getDescription().contains(description)) {
                 return output;
             }
+        }
+        System.out.println(String.format("warning: could not find output with description \"%s\"", description));
+        System.out.println("Candidate outputs:");
+        for (LXMidiOutput output : engine.outputs) {
+            System.out.println(String.format("name=\"%s\" description=\"%s\"", output.getName(), output.getDescription()));
         }
         return null;
     }
 
     public static LXMidiSurface get(LX lx, LXMidiEngine engine, LXMidiInput input) {
         String description = input.getDescription();
-        if (description.equals(APC40_MK2)) {
+        if (description.contains(APC40_MK2)) {
             return new APC40Mk2(lx, input, findOutput(engine, APC40_MK2));
         }
         return null;

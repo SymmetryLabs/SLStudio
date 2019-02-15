@@ -224,6 +224,9 @@ public class UI {
     public static boolean menuItem(String label) {
         return menuItem(label, null, false, true);
     }
+    public static boolean menuText(String label) {
+        return menuItem(label, null, false, false);
+    }
     public static native boolean menuItemToggle(String label, String shortcut, boolean selected, boolean enabled);
 
     /* Context menus */
