@@ -26,6 +26,9 @@ public class ModulationWindow extends CloseableWindow {
 
     @Override
     protected void drawContents() {
+        if (UI.button("+Env")) {
+            WindowManager.runSafelyWithEngine(lx, () -> lx.engine.modulation.addModulator(new MultiStageEnvelope()));
+        }
         for (LXModulator modulator : lx.engine.modulation.getModulators()) {
             if (modulator instanceof MultiStageEnvelope) {
                 envelope((MultiStageEnvelope) modulator);
@@ -47,7 +50,7 @@ public class ModulationWindow extends CloseableWindow {
             WindowManager.runSafelyWithEngine(lx, () -> lx.engine.modulation.removeModulator(env));
         }
         if (UI.isItemClicked() && UI.isAltDown()) {
-            lx.engine.addTask(() -> env.running.toggle());
+            lx.engine.addTask(() -> env.trigger.setValue(true));
         }
         if (!cr.isOpen) {
             return;
