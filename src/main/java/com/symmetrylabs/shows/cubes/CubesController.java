@@ -3,10 +3,9 @@ package com.symmetrylabs.shows.cubes;
 import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.component.GammaExpander;
-import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
+import com.symmetrylabs.util.NetworkUtils;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
@@ -17,7 +16,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 
 public class CubesController extends LXOutput implements Comparable<CubesController>, OPCConstants {
     /*
@@ -118,7 +120,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             packetData = new byte[packetSizeBytes];
             packet = new DatagramPacket(packetData, packetSizeBytes);
         }
-        packetData[0] = 8; // Channel
+        packetData[0] = 17; // Channel
         packetData[1] = use16 ? COMMAND_SET_16BIT_PIXEL_COLORS : COMMAND_SET_PIXEL_COLORS;
         packetData[2] = (byte) ((contentSizeBytes >> 8) & 0xFF);
         packetData[3] = (byte) (contentSizeBytes & 0xFF);

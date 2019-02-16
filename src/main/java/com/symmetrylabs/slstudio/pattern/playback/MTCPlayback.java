@@ -6,11 +6,13 @@ import ar.com.hjg.pngj.PngReader;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.MidiTime;
-import heronarts.lx.parameter.*;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.MutableParameter;
+import heronarts.lx.parameter.StringParameter;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
 import java.awt.*;
@@ -18,7 +20,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class MTCPlayback extends SLPattern<SLModel> {
 //public class MTCPlayback extends LXPattern {
@@ -192,8 +195,8 @@ public class MTCPlayback extends SLPattern<SLModel> {
         new SongIndex("CutMyLip", CUT);
         new SongIndex("LaneBoy1", LANE_BOY1);
         new SongIndex("LaneBoy2", LANE_BOY2);
-        new SongIndex("nico", NICO);
-        new SongIndex("PetCheetah", CHEETAH);
+        new SongIndex("nico", NICO).addOffset(0, 1, 4);
+        new SongIndex("PetCheetah", CHEETAH).addOffset(1,3,7);
         new SongIndex("HoldingOntoYou", HOLDING);
         new SongIndex("Ride", RIDE);
         new SongIndex("MyBlood", MY_BLOOD);
@@ -223,7 +226,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
                 String dataPath = "/Users/symmetry/symmetrylabs/software/SLStudio/shows/pilots/render/";
                 currentSongName = thisSong.song_name;
                 renderFile.setValue( dataPath + thisSong.name_png + ".png");
-                MTCOffset.setValue(songIndex*BIN_SIZE);
+                MTCOffset.setValue(songIndex*BIN_SIZE + thisSong.extra_MTC_offset);
                 loadSong();
             }
         }
@@ -331,7 +334,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
             mt == null ? "unknown" : mt.toString(),
             lastFrameRendered,
             getCurrentSongName(),
-            renderFile.getString()
+            currentSong == null ? "null" : currentSong.getName()
         );
     }
 
@@ -387,6 +390,8 @@ class SongIndex {
     final String name_png;
     final String song_name;
 
+    int extra_MTC_offset = 0;
+
     static SongIndex currentSong;
     public boolean isNew() {
         if (this == currentSong){
@@ -403,6 +408,11 @@ class SongIndex {
             hours,
             min
         );
+    }
+
+    // add an additional offset
+    void addOffset(int m, int s, int f){
+        extra_MTC_offset = (m*60 + s) * 30 + f;
     }
 
     SongIndex(String song_name, int i){

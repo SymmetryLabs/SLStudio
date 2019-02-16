@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1549477962361,
+  "timestamp": 1550256678641,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 0.2201550304889679,
-      "focusedChannel": 4,
+      "speed": 0.22002628445625305,
+      "focusedChannel": 6,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -30,7 +30,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 53.92070388793945,
+        "color/hue": 53.85000213980675,
         "color/brightness": 100.0,
         "color/saturation": 89.01960754394531,
         "color": -6116,
@@ -528,7 +528,7 @@
               "label": "OneBigAngledPlane",
               "palette": 2,
               "thick": 43.135849865916725,
-              "x": -0.39991384744644165,
+              "x": -0.3999415636062622,
               "y": 0.7599999897181988,
               "z": -0.5800000093877316,
               "cx": 12.75,
@@ -700,7 +700,7 @@
               "xSize": 377.84999923221767,
               "cx": 356.25,
               "ySize": 39.60000132769346,
-              "cy": -49.64421240859235,
+              "cy": -50.14698060070903,
               "zSize": 62.309999730437994,
               "cz": -36.30000089854002,
               "invert": false
@@ -854,6 +854,23 @@
               "modulations": [],
               "triggers": []
             }
+          },
+          {
+            "id": 46961,
+            "class": "com.symmetrylabs.slstudio.effect.ColorFilter",
+            "modulationColor": -16711763,
+            "parameters": {
+              "label": "ColorFilter",
+              "enabled": true,
+              "Hue": 287.99999356269836,
+              "Sat": 100.0,
+              "Alpha": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
           }
         ],
         "clips": [],
@@ -871,7 +888,7 @@
               "WSpr": 0.18999999575316906,
               "WSpd": 0.3800000138580799,
               "Drez": 0.8624000026285649,
-              "Thick": 0.24037238955497742,
+              "Thick": 0.24015332758426666,
               "ySpr": 0.8100000042468309,
               "Hue": 0.7700000051409006,
               "HSpr": 0.7700000051409006
@@ -1190,7 +1207,7 @@
             "parameters": {
               "label": "Speckle",
               "enabled": true,
-              "amt": 2.673141352715902E-5
+              "amt": 4.532315415417543E-6
             }
           }
         ],
@@ -1716,7 +1733,7 @@
     },
     "components": {
       "envelop": {
-        "id": 44,
+        "id": 45,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
         "modulationColor": -16711691,
         "parameters": {
@@ -1725,7 +1742,7 @@
           "trigger": false
         },
         "source": {
-          "id": 45,
+          "id": 46,
           "class": "com.symmetrylabs.slstudio.envelop.Envelop$Source",
           "modulationColor": -65297,
           "parameters": {
@@ -1755,7 +1772,7 @@
           }
         },
         "decode": {
-          "id": 46,
+          "id": 47,
           "class": "com.symmetrylabs.slstudio.envelop.Envelop$Decode",
           "modulationColor": -13762816,
           "parameters": {
@@ -1778,7 +1795,7 @@
         }
       },
       "outputControl": {
-        "id": 47,
+        "id": 48,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -16711837,
         "parameters": {
@@ -2766,15 +2783,15 @@
     "midi": {
       "inputs": [
         {
-          "name": "CoreMIDI4J - ShowSession",
+          "name": "CoreMIDI4J - IAC Bus 1",
           "channel": false,
           "control": true,
           "sync": false
         },
         {
-          "name": "CoreMIDI4J - NateBus",
-          "channel": false,
-          "control": true,
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
           "sync": false
         },
         {
