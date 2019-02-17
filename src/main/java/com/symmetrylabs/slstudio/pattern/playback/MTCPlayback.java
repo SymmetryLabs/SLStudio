@@ -6,20 +6,22 @@ import ar.com.hjg.pngj.PngReader;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.MidiTime;
-import heronarts.lx.parameter.*;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.MutableParameter;
+import heronarts.lx.parameter.StringParameter;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class MTCPlayback extends SLPattern<SLModel> {
 //public class MTCPlayback extends LXPattern {
@@ -31,6 +33,8 @@ public class MTCPlayback extends SLPattern<SLModel> {
     protected final StringParameter renderFile = new StringParameter("renderFile", "");
     protected final BooleanParameter filePickerDialogue = new BooleanParameter("choose render", false).setMode(BooleanParameter.Mode.MOMENTARY);
     private final MutableParameter MTCOffset = new MutableParameter("MTC_OFFSET", 0);
+    private final BooleanParameter freewheel = new BooleanParameter("run", false);
+
 
     public final MutableParameter hunkSize = new MutableParameter("hunkSize", 150);
 
@@ -48,6 +52,8 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
     File currentSong;
     String currentSongName;
+    private long startFrameNanos = -1;
+    private double frameRate = 30;
 
     // this thread keeps the circular buffer stocked at the current MTC offset with some "lookahead"
     class CirclularBufferWriterThread extends Thread{
@@ -79,6 +85,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
         super(lx);
         addParameter(filePickerDialogue);
         addParameter(renderFile);
+        addParameter(freewheel);
 
 
         setupMTCListeners();
@@ -275,7 +282,19 @@ public class MTCPlayback extends SLPattern<SLModel> {
     public void run(double deltaMs, PolyBuffer.Space preferredSpace) {
         super.run(deltaMs, preferredSpace);
 
-        int frameIn = lastFrameReceived - MTCOffset.getValuei();
+        int frameIn = -1;
+        if (freewheel.getValueb()) {
+            if (startFrameNanos == -1) {
+                startFrameNanos = System.nanoTime();
+            }
+            double elapsedSec = 1e-9 * (double) (System.nanoTime() - startFrameNanos);
+            int inFrame = (int) Math.floor(frameRate * elapsedSec);
+            frameIn = inFrame;
+        }
+        else {
+            startFrameNanos = -1; // reset for freewheel
+            frameIn = lastFrameReceived - MTCOffset.getValuei();
+        }
         if (pngr == null){
             if (renderFile.getString() != ""){
                 loadSong();
