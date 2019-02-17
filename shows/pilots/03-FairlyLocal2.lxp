@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1550002733419,
+  "timestamp": 1549906636798,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 2,
+      "focusedChannel": 3,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -219,7 +219,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.7428571414202452,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -237,7 +237,7 @@
               "label": "Mirror",
               "enabled": true,
               "x": true,
-              "cx": 355.03999999999996,
+              "cx": 355.04000122845173,
               "y": false,
               "cy": 58.0,
               "z": true,
@@ -358,7 +358,25 @@
           "speed": 1.0
         },
         "warps": [],
-        "effects": [],
+        "effects": [
+          {
+            "id": 33020,
+            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
+            "modulationColor": -16748801,
+            "parameters": {
+              "label": "BrightnessShift",
+              "enabled": true,
+              "Bscale": 0.8400000017881394,
+              "Bshift": 0.0,
+              "Bexp": 1.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 0,
         "patterns": [
@@ -505,19 +523,6 @@
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 43,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -1769728,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 44,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -581,7 +586,7 @@
         }
       },
       "outputControl": {
-        "id": 149,
+        "id": 47,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -8651008,
         "parameters": {
@@ -671,42 +676,24 @@
       "inputs": [
         {
           "name": "CoreMIDI4J - NateBus",
-          "channel": false,
-          "control": true,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 1",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 2",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 3",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 4",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Sync Port",
           "channel": true,
           "control": false,
           "sync": false
         },
         {
           "name": "CoreMIDI4J - Session 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Session 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
           "sync": false
@@ -730,9 +717,9 @@
         "26737": true
       },
       "preview": {
-        "radius": 696.6836035133849,
-        "theta": -0.07800000000000665,
-        "phi": 0.14171667385100747,
+        "radius": 1567.6007432779672,
+        "theta": -0.1590000000000067,
+        "phi": 0.22271667385100752,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5

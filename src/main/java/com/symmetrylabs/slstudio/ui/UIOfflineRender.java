@@ -5,22 +5,17 @@ import com.symmetrylabs.slstudio.output.OfflineRenderOutput;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.StringParameter;
-import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.component.UIButton;
-import heronarts.p3lx.ui.component.UIDoubleBox;
-import heronarts.p3lx.ui.component.UIIntegerBox;
-import heronarts.p3lx.ui.component.UILabel;
-import heronarts.p3lx.ui.component.UITextBox;
+import heronarts.p3lx.ui.component.*;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
-import java.awt.EventQueue;
-import java.awt.FileDialog;
-import java.awt.Frame;
+import processing.core.PConstants;
+import processing.event.MouseEvent;
+
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import processing.core.PConstants;
-import processing.event.MouseEvent;
 
 public class UIOfflineRender extends UICollapsibleSection {
     private static final int HEIGHT = 110;
@@ -28,28 +23,53 @@ public class UIOfflineRender extends UICollapsibleSection {
     private final StringParameter renderTarget = new StringParameter("target", "scene.lxo");
     private final BooleanParameter writeModel = new BooleanParameter("writeModel", false).setMode(BooleanParameter.Mode.MOMENTARY);
 
+    private final BooleanParameter useContinuous = new BooleanParameter("useContinuous", false);
+
     private OfflineRenderOutput output;
+//    private DoubleBufferedOfflineRenderOutput output;
 
     public UIOfflineRender(UI ui, LX lx, float x, float y, float w) {
         super(ui, x, y, w, HEIGHT);
 
-        output = new OfflineRenderOutput(lx);
+
+//        useContinuous.setValue(false);
+//        if (useContinuous.getValueb()){
+//           output = new DoubleBufferedOfflineRenderOutput(lx);
+//           setTitle("CONTINUOUS OFFLINE RENDER");
+//        }
+//        else{
+            output = new OfflineRenderOutput(lx);
+            setTitle("OFFLINE RENDER");
+//        }
         lx.addOutput(output);
 
-        setTitle("OFFLINE RENDER");
 
         final int pad = 6;
         final int height = 14;
         int cy = pad;
 
-        new UILabel(6, cy, 46, height)
-            .setLabel("File")
-            .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
-            .addToContainer(this);
-        new UIFileBox(52, cy, w - 64, height)
-            .setParameter(output.pOutputFile)
-            .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
-            .addToContainer(this);
+        if (useContinuous.getValueb()){
+            new UILabel(6, cy, 46, height)
+                .setLabel("Directory")
+                .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
+                .addToContainer(this);
+        }else{
+            new UILabel(6, cy, 46, height)
+                .setLabel("File")
+                .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
+                .addToContainer(this);
+        }
+//        if (useContinuous.getValueb()){
+//            new ContinuousUIFileBox(52, cy, w - 64, height)
+//                .setParameter(output.pOutputDir)
+//                .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
+//                .addToContainer(this);
+//        } else{
+            new UIFileBox(52, cy, w - 64, height)
+                .setParameter(output.pOutputFile)
+                .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
+                .addToContainer(this);
+//        }
         cy += height + pad;
 
         new UILabel(6, cy, 46, height)
@@ -72,10 +92,15 @@ public class UIOfflineRender extends UICollapsibleSection {
             .addToContainer(this);
         cy += height + pad;
 
-        new UITextBox(6, cy, 46, 18)
+        new UITextBox(6, cy, 80, 18)
             .setParameter(output.pStatus)
             .setCanEdit(false)
             .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+            .addToContainer(this);
+
+        new UIButton(w - 18 - 52 - 80 - 45, cy, 40, 18)
+            .setParameter(output.externalSync)
+            .setLabel("EXT")
             .addToContainer(this);
 
         new UIButton(w - 18 - 52 - 80, cy, 80, 18)
@@ -87,6 +112,11 @@ public class UIOfflineRender extends UICollapsibleSection {
             .setParameter(output.pStart)
             .setLabel("Start")
             .addToContainer(this);
+
+//        new UIButton(w - 12 - 52 - 80, cy, 60, 18)
+//            .setParameter(output.concurrent)
+//            .setLabel("Concurrent")
+//            .addToContainer(this);
 
         writeModel.addListener((p) -> {
                 if (!writeModel.getValueb()) {
@@ -111,6 +141,42 @@ public class UIOfflineRender extends UICollapsibleSection {
             });
     }
 
+
+    private static class ContinuousUIFileBox extends UITextBox {
+        public ContinuousUIFileBox(float x, float y, float w, float h) {
+            super(x, y, w, h);
+            setCanEdit(false);
+        }
+
+//        public void setValue(File f) {
+//            setValue(f.getAbsoluteFile().getPath());
+//        }
+
+        @Override
+        public void onMousePressed(MouseEvent event, float mx, float my) {
+            setValue("");
+
+            EventQueue.invokeLater(() -> {
+                JFileChooser f = new JFileChooser();
+                f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                f.showSaveDialog(null);
+
+//                System.out.println(f.getCurrentDirectory());
+//                System.out.println(f.getSelectedFile());
+
+//                String selectedDir = f.getCurrentDirectory().getPath();
+                String selectedDir = f.getSelectedFile().getPath();
+                System.out.println("Set value to: " + selectedDir);
+                setValue(selectedDir);
+
+//                if (fname == null) {
+//                    return;
+//                }
+//                setValue(new File(f.getCurrentDirectory(), ""));
+            });
+        }
+    }
+
     private static class UIFileBox extends UITextBox {
         public UIFileBox(float x, float y, float w, float h) {
             super(x, y, w, h);
@@ -124,6 +190,7 @@ public class UIOfflineRender extends UICollapsibleSection {
         @Override
         public void onMousePressed(MouseEvent event, float mx, float my) {
             setValue("");
+
             EventQueue.invokeLater(() -> {
                     FileDialog dialog = new FileDialog(
                         (Frame) null, "Save output data as:", FileDialog.SAVE);

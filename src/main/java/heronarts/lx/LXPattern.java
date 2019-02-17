@@ -20,6 +20,7 @@
 
 package heronarts.lx;
 
+import com.symmetrylabs.util.CaptionSource;
 import heronarts.lx.color.LXPalette;
 import heronarts.lx.midi.MidiAftertouch;
 import heronarts.lx.midi.MidiControlChange;
@@ -47,7 +48,7 @@ import static heronarts.lx.PolyBuffer.Space.SRGB8;
  * A pattern is the core object that the animation engine uses to generate
  * colors for all the points.
  */
-public abstract class LXPattern extends LXBusComponent implements LXComponent.Renamable, LXLayeredComponent.Buffered, LXMidiListener, LXOscComponent, LXUtils.IndexedElement {
+public abstract class LXPattern extends LXBusComponent implements LXComponent.Renamable, LXLayeredComponent.Buffered, LXMidiListener, LXOscComponent, LXUtils.IndexedElement, CaptionSource {
     private int index = -1;
     private int intervalBegin = -1;
     private int intervalEnd = -1;
@@ -263,6 +264,7 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
      * or reset parameters if desired.
      */
     public /* abstract */ void onActive() {
+        lx.txt_ui.addSource(this);
     }
 
     /**
@@ -270,6 +272,7 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
      * no longer active. Resources may be freed if desired.
      */
     public /* abstract */ void onInactive() {
+        lx.txt_ui.removeSource(this);
     }
 
     /**
@@ -355,6 +358,13 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
             return (String) pClass.getField("GROUP_NAME").get(null);
         } catch (NoSuchFieldException | IllegalAccessException | ClassCastException e) {
         }
+        return null;
+    }
+
+    /* override this to submit info to the debug section in TTY stream
+    *
+     */
+    public String getCaption() {
         return null;
     }
 }

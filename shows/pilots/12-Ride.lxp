@@ -467,7 +467,7 @@
         "patterns": [
           {
             "id": 26582,
-            "class": "com.symmetrylabs.slstudio.pattern.TimeCodedSlideshow",
+            "class": "com.symmetrylabs.slstudio.pattern.TimeCodedSlideshow.TimeCodedSlideshow",
             "modulationColor": -26368,
             "parameters": {
               "label": "TimeCodedSlideshow",

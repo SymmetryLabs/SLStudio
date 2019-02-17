@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1549467704401,
+  "timestamp": 1550340677193,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 0.9999426007270813,
-      "focusedChannel": 5,
+      "speed": 0.9798673391342163,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -88,16 +88,16 @@
             }
           },
           {
-            "id": 1596,
-            "class": "com.symmetrylabs.slstudio.effect.LABShift",
-            "modulationColor": -16711910,
+            "id": 1406,
+            "class": "com.symmetrylabs.slstudio.effect.CircleWipe",
+            "modulationColor": -16749569,
             "parameters": {
-              "label": "LABShift",
+              "label": "CircleWipe",
               "enabled": true,
-              "Lboost": 1.0799999982118607,
-              "Lshift": -27.99999937415123,
-              "Ashift": 26.000001654028893,
-              "Bshift": -33.9999970048666
+              "rad": 718.9308471679688,
+              "invert": false,
+              "cx": 410.0,
+              "cy": 58.0
             },
             "modulation": {
               "modulators": [],
@@ -106,16 +106,31 @@
             }
           },
           {
-            "id": 1406,
-            "class": "com.symmetrylabs.slstudio.effect.CircleWipe",
-            "modulationColor": -16749569,
+            "id": 31949,
+            "class": "com.symmetrylabs.slstudio.effect.DropHue",
+            "modulationColor": -4390657,
             "parameters": {
-              "label": "CircleWipe",
+              "label": "DropHue",
               "enabled": true,
-              "rad": 0.0,
-              "invert": false,
-              "cx": 410.0,
-              "cy": 58.0
+              "hue": 327.60000072419643,
+              "width": 32.399999275803566,
+              "ramp": 129.59999710321426,
+              "mode": 0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 31952,
+            "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
+            "modulationColor": -2555649,
+            "parameters": {
+              "label": "ColorShift",
+              "enabled": true,
+              "Shift": 25.20000211894512
             },
             "modulation": {
               "modulators": [],
@@ -134,7 +149,7 @@
             "parameters": {
               "label": "PilotsPinwheels",
               "palette": 0,
-              "HSpr": 0.8499999977648258,
+              "HSpr": 0.869999997317791,
               "VOff": 1.0,
               "ZSlp": 0.5600000098347664,
               "Shrp": 0.17999999597668648,
@@ -269,7 +284,7 @@
         "parameters": {
           "label": "SwarmMult",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -868,7 +883,7 @@
               "bMaxAngle": 62.6999999396503,
               "bPull": 200.0,
               "bTrackingMode": 1,
-              "Speed": 0.20977161079645157,
+              "Speed": 0.18336156383156776,
               "Accel": 3.0,
               "Dampen": 0.75,
               "FocusX": 0.0,
@@ -998,7 +1013,7 @@
     },
     "components": {
       "envelop": {
-        "id": 44,
+        "id": 45,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
         "modulationColor": -16713729,
         "parameters": {
@@ -1007,7 +1022,7 @@
           "trigger": false
         },
         "source": {
-          "id": 45,
+          "id": 46,
           "class": "com.symmetrylabs.slstudio.envelop.Envelop$Source",
           "modulationColor": -16711893,
           "parameters": {
@@ -1037,7 +1052,7 @@
           }
         },
         "decode": {
-          "id": 46,
+          "id": 47,
           "class": "com.symmetrylabs.slstudio.envelop.Envelop$Decode",
           "modulationColor": -41728,
           "parameters": {
@@ -1105,12 +1120,6 @@
     "midi": {
       "inputs": [
         {
-          "name": "CoreMIDI4J - ShowSession",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
           "name": "CoreMIDI4J - NateBus",
           "channel": true,
           "control": true,
@@ -1139,7 +1148,7 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 734.8907332001609,
+        "radius": 314.4077793195788,
         "theta": 0.003000000000007084,
         "phi": 0.10979637050628621,
         "positionX": 371.2433166503906,
