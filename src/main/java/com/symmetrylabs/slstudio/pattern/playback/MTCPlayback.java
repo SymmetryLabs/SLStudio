@@ -329,7 +329,9 @@ public class MTCPlayback extends SLPattern<SLModel> {
             int[] fourValArray = ((ImageLineInt) l1).getScanline();
 
             for (int i = 0; i < fourValArray.length; i += 4){
-                ccs[i/4] = ((fourValArray[i+3] & 0xff) << 24) | ((fourValArray[i] & 0xff) << 16) | ((fourValArray[i+1] & 0xff) << 8) | (fourValArray[i + 2] & 0xff);
+//                ccs[i/4] = ((fourValArray[i+3] & 0xff) << 24) | ((fourValArray[i] & 0xff) << 16) | ((fourValArray[i+1] & 0xff) << 8) | (fourValArray[i + 2] & 0xff);
+                //hmm... seems like alpha was fucked above.  Let's just always make it fully opaque.
+                ccs[i/4] = ((0xff) << 24) | ((fourValArray[i] & 0xff) << 16) | ((fourValArray[i+1] & 0xff) << 8) | (fourValArray[i + 2] & 0xff);
             }
         } catch (ar.com.hjg.pngj.PngjInputException e){
             System.err.println(e);
