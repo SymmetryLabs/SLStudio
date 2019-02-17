@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1550249135136,
+  "timestamp": 1550335592558,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -71,7 +71,40 @@
           "speed": 1.0
         },
         "warps": [],
-        "effects": [],
+        "effects": [
+          {
+            "id": 36991,
+            "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
+            "modulationColor": -65294,
+            "parameters": {
+              "label": "ColorShift",
+              "enabled": true,
+              "Shift": 10.799999758601189
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 36994,
+            "class": "com.symmetrylabs.slstudio.effect.BrightnessShift",
+            "modulationColor": -6749953,
+            "parameters": {
+              "label": "BrightnessShift",
+              "enabled": true,
+              "Bscale": 1.7599999830126762,
+              "Bshift": 0.0,
+              "Bexp": 1.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 1,
         "patterns": [
@@ -340,13 +373,13 @@
           "sync": false
         },
         {
-          "name": "CoreMIDI4J - Lockstep",
+          "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
           "sync": false
         },
         {
-          "name": "** Internal Error getting Device Name!",
+          "name": "CoreMIDI4J - Lockstep",
           "channel": true,
           "control": false,
           "sync": false
