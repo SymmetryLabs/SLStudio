@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.output;
 
+import com.symmetrylabs.slstudio.SLStudio;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.midi.LXMidiInput;
@@ -134,6 +135,19 @@ public class OfflineRenderOutput extends LXOutput {
         if (inFrame <= lastFrameWritten) {
             return;
         }
+
+        // if we have skipped any frames keep track of how many.
+        // this will happen if the engine framerate falls below the framerate
+        // specified in the header of the file we are writing to.
+        // There is not a "real" header however I usually "pseudo-encode" this as follows
+        // i.e. "chlorine.fps30.png"
+        int framesSkipped = -1;
+        if (inFrame > (lastFrameWritten + 1)){
+            framesSkipped = inFrame - (lastFrameWritten + 1);
+            SLStudio.setWarning("OFFLINERENDER", "Skipped Frames: " + framesSkipped);
+        }
+
+
         lastFrameWritten = inFrame;
         pStatus.setValue("REC:"+ lastFrameWritten);
         if (lastFrameWritten >= framesToCapture) {
@@ -150,7 +164,17 @@ public class OfflineRenderOutput extends LXOutput {
             dispose();
         } else {
             int[] carr = (int[]) colors.getArray(PolyBuffer.Space.RGB8);
-            img.setRGB(0, lastFrameWritten, model.points.length, 1, carr, 0, model.points.length);
+
+
+            // we have missed some frames copy this frame in to those frames so that we don't have any blackout frames.
+            if (framesSkipped != -1){
+                for (int i = 1; i <= framesSkipped; i++){
+                    assert inFrame - i >= 0;
+                    img.setRGB(0, inFrame - i, model.points.length, 1, carr, 0, model.points.length);
+                }
+            }
+
+            img.setRGB(0, inFrame, model.points.length, 1, carr, 0, model.points.length);
         }
     }
 }
