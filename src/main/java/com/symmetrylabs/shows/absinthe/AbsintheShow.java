@@ -88,6 +88,12 @@ public class AbsintheShow extends TreeShow {
         new BranchConfig(false, 0.25f,   49.67f,  -10.52f, 0,  29,  15,  BRANCH),
     };
 
+    final BranchConfig[] LIMB_TYPE_L3 = new BranchConfig[] {
+        new BranchConfig(false, 16.84f, 92.66f, 2.95f,  15,  -7, -10, BRANCH),
+        new BranchConfig(false, -6.93f, 67.40f, -0.49f, 50,  5,  -5,  BRANCH),
+        new BranchConfig(false, 31.99f, 88.76f, 0.56f,  -59, 10,  0,  BRANCH),
+    };
+
     public SLModel buildModel() {
         TwigConfig.setZEnabled(false);
         TwigConfig.setElevationEnabled(false);
@@ -95,10 +101,11 @@ public class AbsintheShow extends TreeShow {
 
         TreeConfig.createLimbType("Type L1", LIMB_TYPE_L1);
         TreeConfig.createLimbType("Type L2", LIMB_TYPE_L2);
+        TreeConfig.createLimbType("Type L3", LIMB_TYPE_L3);
         TreeConfig.createBranchType("Type A", BRANCH);
 
         TreeConfig config = new TreeConfig(new LimbConfig[] {
-                new LimbConfig(false, 0, 0, 0, 0, 0, LIMB_TYPE_L2),
+                new LimbConfig(false, 0, 0, 0, 0, 0, LIMB_TYPE_L3),
             });
         return new TreeModel(config);
     }
