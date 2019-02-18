@@ -111,6 +111,12 @@ public class AbsintheShow extends TreeShow {
                 new LimbConfig(false, 9.5f, 250, 135,  90 - 23.5f, 0, LIMB_TYPE_L2),
                 new LimbConfig(false, 9.5f, 250, -135, 90 - 23.5f, 0, LIMB_TYPE_L2),
                 new LimbConfig(false, 9.5f, 250, -45,  90 - 23.5f, 0, LIMB_TYPE_L2),
+
+                // L3
+                new LimbConfig(false, 7.5f, 290, 0,   90 - 17f, 0, LIMB_TYPE_L3),
+                new LimbConfig(false, 7.5f, 290, 90,  90 - 17f, 0, LIMB_TYPE_L3),
+                new LimbConfig(false, 7.5f, 290, 180, 90 - 17f, 0, LIMB_TYPE_L3),
+                new LimbConfig(false, 7.5f, 290, -90, 90 - 17f, 0, LIMB_TYPE_L3),
             });
         return new TreeModel(config);
     }
