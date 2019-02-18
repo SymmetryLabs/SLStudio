@@ -38,28 +38,6 @@ public class AbsintheShow extends TreeShow {
     public final Map<String, AssignablePixlite> pixlites = new HashMap<>();
     public final List<AssignablePixlite.Port> pixlitePorts = new ArrayList<>();
 
-    private static BranchConfig branchFromPointPair(
-        double x1, double y1, double z1, double dx, double dy, double dz, TwigConfig[] twigs) {
-
-        Vector3D d = new Vector3D(dx, dz, dy);
-        d.normalize();
-
-        Rotation rot = new Rotation(new Vector3D(0, 1, 0), d);
-        double[] angles = rot.getAngles(RotationOrder.ZXY, RotationConvention.VECTOR_OPERATOR);
-
-        double az = 180 * angles[0] / Math.PI;
-        double elev = 180 * angles[2] / Math.PI;
-        double tilt = 180 * angles[1] / Math.PI;
-
-        return new BranchConfig(
-            false,
-            (float) x1, (float) z1, (float) y1,
-            (float) az, (float) elev, (float) tilt,
-            twigs);
-    }
-
-
-    // female
     final TwigConfig[] BRANCH = new TwigConfig[]{
         new TwigConfig( -15.36f,  16.32f, 0.0f,  43.20f, 0.0f, 0.0f, 1),
         new TwigConfig( -13.56f,  24.00f, 0.0f, -54.40f, 0.0f, 0.0f, 2),
@@ -94,6 +72,10 @@ public class AbsintheShow extends TreeShow {
         new BranchConfig(false, 31.99f, 88.76f, 0.56f,  -59, 10,  0,  BRANCH),
     };
 
+    final BranchConfig[] LIMB_TYPE_L4 = new BranchConfig[] {
+        new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+    };
+
     public SLModel buildModel() {
         TwigConfig.setZEnabled(false);
         TwigConfig.setElevationEnabled(false);
@@ -102,10 +84,27 @@ public class AbsintheShow extends TreeShow {
         TreeConfig.createLimbType("Type L1", LIMB_TYPE_L1);
         TreeConfig.createLimbType("Type L2", LIMB_TYPE_L2);
         TreeConfig.createLimbType("Type L3", LIMB_TYPE_L3);
+        TreeConfig.createLimbType("Type L4", LIMB_TYPE_L4);
         TreeConfig.createBranchType("Type A", BRANCH);
 
         TreeConfig config = new TreeConfig(new LimbConfig[] {
-                new LimbConfig(false, 0, 0, 0, 0, 0, LIMB_TYPE_L3),
+                // L7
+                new LimbConfig(false, 15, 130, 0,   -90 + 13.5f, 0, LIMB_TYPE_L1),
+                new LimbConfig(false, 15, 130, 90,  -90 + 13.5f, 0, LIMB_TYPE_L1),
+                new LimbConfig(false, 15, 130, 180, -90 + 13.5f, 0, LIMB_TYPE_L1),
+                new LimbConfig(false, 15, 130, -90, -90 + 13.5f, 0, LIMB_TYPE_L1),
+
+                // L6
+                new LimbConfig(false, 13.5f, 170, 45,   -90 + 18.5f, 0, LIMB_TYPE_L1),
+                new LimbConfig(false, 13.5f, 170, 135,  -90 + 18.5f, 0, LIMB_TYPE_L1),
+                new LimbConfig(false, 13.5f, 170, -135, -90 + 18.5f, 0, LIMB_TYPE_L1),
+                new LimbConfig(false, 13.5f, 170, -45,  -90 + 18.5f, 0, LIMB_TYPE_L1),
+
+                // L5
+                new LimbConfig(false, 11.5f, 210, 0,   90 - 23.5f, 0, LIMB_TYPE_L2),
+                new LimbConfig(false, 11.5f, 210, 90,  90 - 23.5f, 0, LIMB_TYPE_L2),
+                new LimbConfig(false, 11.5f, 210, 180, 90 - 23.5f, 0, LIMB_TYPE_L2),
+                new LimbConfig(false, 11.5f, 210, -90, 90 - 23.5f, 0, LIMB_TYPE_L2),
             });
         return new TreeModel(config);
     }
