@@ -60,7 +60,7 @@ public class AbsintheShow extends TreeShow {
 
 
     // female
-    final TwigConfig[] BRANCH_TYPE_A = new TwigConfig[]{
+    final TwigConfig[] BRANCH = new TwigConfig[]{
         new TwigConfig( -15.36f,  16.32f, 0.0f,  43.20f, 0.0f, 0.0f, 1),
         new TwigConfig( -13.56f,  24.00f, 0.0f, -54.40f, 0.0f, 0.0f, 2),
         new TwigConfig( -15.36f,  33.60f, 0.0f,  36.00f, 0.0f, 0.0f, 3),
@@ -71,12 +71,21 @@ public class AbsintheShow extends TreeShow {
         new TwigConfig(  16.32f,  20.16f, 0.0f, -64.80f, 0.0f, 0.0f, 8),
     };
 
-    final BranchConfig[] LIMB_TYPE_A = new BranchConfig[] {
-        new BranchConfig(false, 30.61f,  87.01f,  -0.44f,  -60.0f, 0, 1.0f, BRANCH_TYPE_A),
-        new BranchConfig(false, -29.11f, 105.08f,  3.72f,  61.1f,  0, 7.0f, BRANCH_TYPE_A),
-        new BranchConfig(false, 5.86f,   125.31f,  0.44f,  30.0f,  0, 3.0f, BRANCH_TYPE_A),
-        new BranchConfig(false, -8.6f,   59.68f,   -3.37f, 60.0f,  0, 8.5f, BRANCH_TYPE_A),
-        new BranchConfig(false, 20.52f,  120.40f,  3.15f,  -47.5f, 0, 20f,  BRANCH_TYPE_A),
+    final BranchConfig[] LIMB_TYPE_L1 = new BranchConfig[] {
+        new BranchConfig(false, 30.61f,  87.01f,  -0.44f,  -60.0f, 0, 1.0f, BRANCH),
+        new BranchConfig(false, -29.11f, 105.08f,  3.72f,  61.1f,  0, 7.0f, BRANCH),
+        new BranchConfig(false, 5.86f,   125.31f,  0.44f,  30.0f,  0, 3.0f, BRANCH),
+        new BranchConfig(false, -8.6f,   59.68f,   -3.37f, 60.0f,  0, 8.5f, BRANCH),
+        new BranchConfig(false, 20.52f,  120.40f,  3.15f,  -47.5f, 0, 20f,  BRANCH),
+    };
+
+    final BranchConfig[] LIMB_TYPE_L2 = new BranchConfig[] {
+        new BranchConfig(false, 29.94f,  87.55f,  -1.34f, -60, 10,  20,  BRANCH),
+        new BranchConfig(false, -30.71f, 103.38f, 3.41f,  61,  -3,  -6,  BRANCH),
+        new BranchConfig(false, 4.03f,   118.11f, 0.20f,  30,  0,   3,   BRANCH),
+        new BranchConfig(false, -8.62f,  61.81f,  -3.37f, 61,  5,   15,  BRANCH),
+        new BranchConfig(false, 20.44f,  121.61f, 0.76f,  -45, 10,  20,  BRANCH),
+        new BranchConfig(false, 0.25f,   49.67f,  -10.52f, 0,  29,  15,  BRANCH),
     };
 
     public SLModel buildModel() {
@@ -84,11 +93,12 @@ public class AbsintheShow extends TreeShow {
         TwigConfig.setElevationEnabled(false);
         TwigConfig.setTiltEnabled(false);
 
-        TreeConfig.createLimbType("Type A", LIMB_TYPE_A);
-        TreeConfig.createBranchType("Type A", BRANCH_TYPE_A);
+        TreeConfig.createLimbType("Type L1", LIMB_TYPE_L1);
+        TreeConfig.createLimbType("Type L2", LIMB_TYPE_L2);
+        TreeConfig.createBranchType("Type A", BRANCH);
 
         TreeConfig config = new TreeConfig(new LimbConfig[] {
-                new LimbConfig(false, 0, 0, 0, 0, 0, LIMB_TYPE_A),
+                new LimbConfig(false, 0, 0, 0, 0, 0, LIMB_TYPE_L2),
             });
         return new TreeModel(config);
     }
