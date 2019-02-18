@@ -72,7 +72,7 @@ public class AbsintheShow extends TreeShow {
         new BranchConfig(false, 31.99f, 88.76f, 0.56f,  -59, 10,  0,  BRANCH),
     };
 
-    final BranchConfig[] LIMB_TYPE_L4 = new BranchConfig[] {
+    final BranchConfig[] LIMB_TYPE_SINGLE_BRANCH = new BranchConfig[] {
         new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
     };
 
@@ -81,11 +81,11 @@ public class AbsintheShow extends TreeShow {
         TwigConfig.setElevationEnabled(false);
         TwigConfig.setTiltEnabled(false);
 
-        TreeConfig.createLimbType("Type L1", LIMB_TYPE_L1);
-        TreeConfig.createLimbType("Type L2", LIMB_TYPE_L2);
-        TreeConfig.createLimbType("Type L3", LIMB_TYPE_L3);
-        TreeConfig.createLimbType("Type L4", LIMB_TYPE_L4);
-        TreeConfig.createBranchType("Type A", BRANCH);
+        TreeConfig.createLimbType("Limb/L1", LIMB_TYPE_L1);
+        TreeConfig.createLimbType("Limb/L2", LIMB_TYPE_L2);
+        TreeConfig.createLimbType("Limb/L3", LIMB_TYPE_L3);
+        TreeConfig.createLimbType("Limb/Single Branch", LIMB_TYPE_SINGLE_BRANCH);
+        TreeConfig.createBranchType("Branch", BRANCH);
 
         TreeConfig config = new TreeConfig(new LimbConfig[] {
                 // L7
@@ -117,6 +117,18 @@ public class AbsintheShow extends TreeShow {
                 new LimbConfig(false, 7.5f, 290, 90,  90 - 17f, 0, LIMB_TYPE_L3),
                 new LimbConfig(false, 7.5f, 290, 180, 90 - 17f, 0, LIMB_TYPE_L3),
                 new LimbConfig(false, 7.5f, 290, -90, 90 - 17f, 0, LIMB_TYPE_L3),
+
+                // L2
+                new LimbConfig(false, 24, 320, 45,   90 - 25,  0, LIMB_TYPE_SINGLE_BRANCH),
+                new LimbConfig(false, 24, 320, 135,  90 - 25,  0, LIMB_TYPE_SINGLE_BRANCH),
+                new LimbConfig(false, 24, 320, -135, 90 - 25,  0, LIMB_TYPE_SINGLE_BRANCH),
+                new LimbConfig(false, 24, 320, -45,  90 - 25,  0, LIMB_TYPE_SINGLE_BRANCH),
+
+                // L1
+                new LimbConfig(false, 14, 345, 0,    90 - 15,  0, LIMB_TYPE_SINGLE_BRANCH),
+                new LimbConfig(false, 14, 345, 90,   90 - 15,  0, LIMB_TYPE_SINGLE_BRANCH),
+                new LimbConfig(false, 14, 345, 180,  90 - 15,  0, LIMB_TYPE_SINGLE_BRANCH),
+                new LimbConfig(false, 14, 345, -90,  90 - 15,  0, LIMB_TYPE_SINGLE_BRANCH),
             });
         return new TreeModel(config);
     }
