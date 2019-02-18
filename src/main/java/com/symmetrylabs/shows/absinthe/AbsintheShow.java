@@ -61,41 +61,22 @@ public class AbsintheShow extends TreeShow {
 
     // female
     final TwigConfig[] BRANCH_TYPE_A = new TwigConfig[]{
-        new TwigConfig( 0.0f,  37.4f, 0.0f, -32.4f, 0.0f, 0.0f, 1), // 8
-        new TwigConfig(-16.3f, 36.5f, 0.0f,   6.8f, 0.0f, 0.0f, 2), // 7
-        new TwigConfig(-29.8f, 25.9f, 0.0f,  28.8f, 0.0f, 0.0f, 3), // 6
-        new TwigConfig(-37.4f, 10.5f, 0.0f,  28.8f, 0.0f, 0.0f, 4), // 5
-        new TwigConfig( -5.7f,  9.5f, 0.0f,  14.4f, 0.0f, 0.0f, 5), // 4
-        new TwigConfig( 14.4f, 19.2f, 0.0f,  18.0f, 0.0f, 0.0f, 6), // 3
-        new TwigConfig( 24.5f, 16.3f, 0.0f, -36.0f, 0.0f, 0.0f, 7), // 2
-        new TwigConfig( 16.3f,  0.0f, 0.0f, -61.2f, 0.0f, 0.0f, 8), // 1
-    };
-
-    // male
-    final TwigConfig[] BRANCH_TYPE_B = new TwigConfig[] {
-        new TwigConfig( 14.2f,  3.8f, 0.0f, -57.0f, 0.0f, 0.0f, 1), // 8
-        new TwigConfig(  4.0f, 15.4f, 0.0f,  50.4f, 0.0f, 0.0f, 2), // 7
-        new TwigConfig( 20.2f, 19.3f, 0.0f, -28.8f, 0.0f, 0.0f, 3), // 6
-        new TwigConfig( 11.5f, 24.0f, 0.0f, -28.8f, 0.0f, 0.0f, 4), // 5
-        new TwigConfig(-32.0f,  9.5f, 0.0f,  34.5f, 0.0f, 0.0f, 5), // 1
-        new TwigConfig(-25.0f, 13.4f, 0.0f,   7.2f, 0.0f, 0.0f, 6), // 2
-        new TwigConfig(-18.4f, 34.5f, 0.0f,  39.5f, 0.0f, 0.0f, 7), // 3
-        new TwigConfig(  0.0f, 37.5f, 0.0f,   0.0f, 0.0f, 0.0f, 8)  // 4
+        new TwigConfig( -15.36f,  16.32f, 0.0f,  43.20f, 0.0f, 0.0f, 1),
+        new TwigConfig( -13.56f,  24.00f, 0.0f, -54.40f, 0.0f, 0.0f, 2),
+        new TwigConfig( -15.36f,  33.60f, 0.0f,  36.00f, 0.0f, 0.0f, 3),
+        new TwigConfig(  -8.64f,  44.12f, 0.0f,  39.60f, 0.0f, 0.0f, 4),
+        new TwigConfig(    0.0f,  48.96f, 0.0f,    0.0f, 0.0f, 0.0f, 5),
+        new TwigConfig(  12.48f,  43.20f, 0.0f, -43.20f, 0.0f, 0.0f, 6),
+        new TwigConfig(  13.44f,  27.84f, 0.0f, -32.40f, 0.0f, 0.0f, 7),
+        new TwigConfig(  16.32f,  20.16f, 0.0f, -64.80f, 0.0f, 0.0f, 8),
     };
 
     final BranchConfig[] LIMB_TYPE_A = new BranchConfig[] {
-        branchFromPointPair(-13.177, 8.079, 45.477, -11, 4.622, 6.35, BRANCH_TYPE_A),
-        branchFromPointPair(-31.761, 8.38, 89.426, -10.748, 1.895, 6.301, BRANCH_TYPE_A),
-        branchFromPointPair(35.117, 0, 71.654, 10.342, 0, 5.971, BRANCH_TYPE_A),
-        branchFromPointPair(27.428, 0, 102.280, 9.261, 0, 9.261, BRANCH_TYPE_A),
-        branchFromPointPair(0.405, 0, 108.301, -6.426, 0, 11.130, BRANCH_TYPE_A),
-        /*
-        branchFromPointPair(120.48f, 139.12f, 40.55f, 122.46f, 138.8f, 43.62f, BRANCH_TYPE_A),
-        branchFromPointPair(150.29f, 149.348f, 32.465f, 152.963f, 149.371f, 34.965f, BRANCH_TYPE_A),
-        branchFromPointPair(154.58f, 159.012f, 1.772f, 157.52f, 160.29f, 0.004f, BRANCH_TYPE_A),
-        branchFromPointPair(134.951f, 153.771f, -32.962f, 136.648f, 154.512f, -36.121f, BRANCH_TYPE_A),
-        branchFromPointPair(93.754f, 137.258f, -14.98f, 95.529f, 137.28f, -18.182f, BRANCH_TYPE_A),
-        */
+        new BranchConfig(false, 30.61f,  87.01f,  -0.44f,  -60.0f, 0, 1.0f, BRANCH_TYPE_A),
+        new BranchConfig(false, -29.11f, 105.08f,  3.72f,  61.1f,  0, 7.0f, BRANCH_TYPE_A),
+        new BranchConfig(false, 5.86f,   125.31f,  0.44f,  30.0f,  0, 3.0f, BRANCH_TYPE_A),
+        new BranchConfig(false, -8.6f,   59.68f,   -3.37f, 60.0f,  0, 8.5f, BRANCH_TYPE_A),
+        new BranchConfig(false, 20.52f,  120.40f,  3.15f,  -47.5f, 0, 20f,  BRANCH_TYPE_A),
     };
 
     public SLModel buildModel() {
@@ -105,7 +86,6 @@ public class AbsintheShow extends TreeShow {
 
         TreeConfig.createLimbType("Type A", LIMB_TYPE_A);
         TreeConfig.createBranchType("Type A", BRANCH_TYPE_A);
-        TreeConfig.createBranchType("Type B", BRANCH_TYPE_B);
 
         TreeConfig config = new TreeConfig(new LimbConfig[] {
                 new LimbConfig(false, 0, 0, 0, 0, 0, LIMB_TYPE_A),
