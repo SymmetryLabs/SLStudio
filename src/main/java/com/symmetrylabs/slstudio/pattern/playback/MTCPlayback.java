@@ -169,6 +169,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
         // these "keys" for each song are the LTC time for the song integer divide by 5 minutes.
         // 5 minutes because no songs are greater than 5 minutes, and because each falls on 5 min interval.
         // i.e. for a song from 0h_30m_0s_0f - 0h_33m_10s_0f the index is 6
+        final int JUMPSUIT = 6;
         final int LEVITATE = 12;
         final int FAIRLY_LOCAL_1 = 18;
         final int FAIRLY_LOCAL_2 = 21;
@@ -181,9 +182,10 @@ public class MTCPlayback extends SLPattern<SLModel> {
         final int CHEETAH = (int)((14 + 31.0/60 + 3.0/(60*60) )*BIN_PER_HOUR);
         final int HOLDING = 126;
         final int RIDE = (int)(9*BIN_PER_HOUR);
+        final int RIDE2 = (int)(9.25*BIN_PER_HOUR);
         final int MY_BLOOD = (int)(8.5*BIN_PER_HOUR);
         final int MORPH1 = (int)(8*BIN_PER_HOUR);
-        final int MORPH2 = (int)((8 + 3.0/60 + 36.0/(60*60) )*BIN_PER_HOUR);
+        final int MORPH2 = (int)(8*BIN_PER_HOUR) + 1; // a hack
         final int CAR_RADIO = (int) (7*BIN_PER_HOUR);
         final int CHLORINE = (int) (18*BIN_PER_HOUR);
         final int LEAVE_THE_CITY = (int) (11*BIN_PER_HOUR);
@@ -192,6 +194,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
         // we don't need to assign these to any local variables. The SongIndex constructor
         // stores them in 'allSongIndicesByBin' HashMap
+        new SongIndex("Jumpsuit", JUMPSUIT);
         new SongIndex("Levitate", LEVITATE);
         new SongIndex("FairlyLocal1", FAIRLY_LOCAL_1);
         new SongIndex("FairlyLocal2", FAIRLY_LOCAL_2);
@@ -203,10 +206,11 @@ public class MTCPlayback extends SLPattern<SLModel> {
         new SongIndex("nico", NICO).addOffset(0, 1, 4);
         new SongIndex("PetCheetah", CHEETAH).addOffset(1,3,7);
         new SongIndex("HoldingOntoYou", HOLDING);
-        new SongIndex("Ride", RIDE);
+        new SongIndex("Ride1", RIDE);
+        new SongIndex("Ride2", RIDE2);
         new SongIndex("MyBlood", MY_BLOOD);
         new SongIndex("Morph1", MORPH1);
-        new SongIndex("Morph2", MORPH2);
+        new SongIndex("Morph2", MORPH2).addOffset(3,36,0);
         new SongIndex("CarRadio", CAR_RADIO);
         new SongIndex("Chlorine", CHLORINE);
         new SongIndex("LeaveTheCity", LEAVE_THE_CITY);
@@ -278,6 +282,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
 
 
+    long last_frame_rendered_time = 0;
     @Override
     public void run(double deltaMs, PolyBuffer.Space preferredSpace) {
         super.run(deltaMs, preferredSpace);
