@@ -6,20 +6,22 @@ import ar.com.hjg.pngj.PngReader;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.MidiTime;
-import heronarts.lx.parameter.*;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.MutableParameter;
+import heronarts.lx.parameter.StringParameter;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class MTCPlayback extends SLPattern<SLModel> {
 //public class MTCPlayback extends LXPattern {
@@ -31,6 +33,8 @@ public class MTCPlayback extends SLPattern<SLModel> {
     protected final StringParameter renderFile = new StringParameter("renderFile", "");
     protected final BooleanParameter filePickerDialogue = new BooleanParameter("choose render", false).setMode(BooleanParameter.Mode.MOMENTARY);
     private final MutableParameter MTCOffset = new MutableParameter("MTC_OFFSET", 0);
+    private final BooleanParameter freewheel = new BooleanParameter("run", false);
+
 
     public final MutableParameter hunkSize = new MutableParameter("hunkSize", 150);
 
@@ -48,6 +52,8 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
     File currentSong;
     String currentSongName;
+    private long startFrameNanos = -1;
+    private double frameRate = 30;
 
     // this thread keeps the circular buffer stocked at the current MTC offset with some "lookahead"
     class CirclularBufferWriterThread extends Thread{
@@ -79,6 +85,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
         super(lx);
         addParameter(filePickerDialogue);
         addParameter(renderFile);
+        addParameter(freewheel);
 
 
         setupMTCListeners();
@@ -162,6 +169,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
         // these "keys" for each song are the LTC time for the song integer divide by 5 minutes.
         // 5 minutes because no songs are greater than 5 minutes, and because each falls on 5 min interval.
         // i.e. for a song from 0h_30m_0s_0f - 0h_33m_10s_0f the index is 6
+        final int JUMPSUIT = 6;
         final int LEVITATE = 12;
         final int FAIRLY_LOCAL_1 = 18;
         final int FAIRLY_LOCAL_2 = 21;
@@ -174,9 +182,10 @@ public class MTCPlayback extends SLPattern<SLModel> {
         final int CHEETAH = (int)((14 + 31.0/60 + 3.0/(60*60) )*BIN_PER_HOUR);
         final int HOLDING = 126;
         final int RIDE = (int)(9*BIN_PER_HOUR);
+        final int RIDE2 = (int)(9.25*BIN_PER_HOUR);
         final int MY_BLOOD = (int)(8.5*BIN_PER_HOUR);
         final int MORPH1 = (int)(8*BIN_PER_HOUR);
-        final int MORPH2 = (int)((8 + 3.0/60 + 36.0/(60*60) )*BIN_PER_HOUR);
+        final int MORPH2 = (int)(8*BIN_PER_HOUR) + 1; // a hack
         final int CAR_RADIO = (int) (7*BIN_PER_HOUR);
         final int CHLORINE = (int) (18*BIN_PER_HOUR);
         final int LEAVE_THE_CITY = (int) (11*BIN_PER_HOUR);
@@ -185,6 +194,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
         // we don't need to assign these to any local variables. The SongIndex constructor
         // stores them in 'allSongIndicesByBin' HashMap
+        new SongIndex("Jumpsuit", JUMPSUIT);
         new SongIndex("Levitate", LEVITATE);
         new SongIndex("FairlyLocal1", FAIRLY_LOCAL_1);
         new SongIndex("FairlyLocal2", FAIRLY_LOCAL_2);
@@ -196,10 +206,11 @@ public class MTCPlayback extends SLPattern<SLModel> {
         new SongIndex("nico", NICO).addOffset(0, 1, 4);
         new SongIndex("PetCheetah", CHEETAH).addOffset(1,3,7);
         new SongIndex("HoldingOntoYou", HOLDING);
-        new SongIndex("Ride", RIDE);
+        new SongIndex("Ride1", RIDE);
+        new SongIndex("Ride2", RIDE2);
         new SongIndex("MyBlood", MY_BLOOD);
         new SongIndex("Morph1", MORPH1);
-        new SongIndex("Morph2", MORPH2);
+        new SongIndex("Morph2", MORPH2).addOffset(3,36,0);
         new SongIndex("CarRadio", CAR_RADIO);
         new SongIndex("Chlorine", CHLORINE);
         new SongIndex("LeaveTheCity", LEAVE_THE_CITY);
@@ -271,11 +282,24 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
 
 
+    long last_frame_rendered_time = 0;
     @Override
     public void run(double deltaMs, PolyBuffer.Space preferredSpace) {
         super.run(deltaMs, preferredSpace);
 
-        int frameIn = lastFrameReceived - MTCOffset.getValuei();
+        int frameIn = -1;
+        if (freewheel.getValueb()) {
+            if (startFrameNanos == -1) {
+                startFrameNanos = System.nanoTime();
+            }
+            double elapsedSec = 1e-9 * (double) (System.nanoTime() - startFrameNanos);
+            int inFrame = (int) Math.floor(frameRate * elapsedSec);
+            frameIn = inFrame;
+        }
+        else {
+            startFrameNanos = -1; // reset for freewheel
+            frameIn = lastFrameReceived - MTCOffset.getValuei();
+        }
         if (pngr == null){
             if (renderFile.getString() != ""){
                 loadSong();
@@ -310,7 +334,9 @@ public class MTCPlayback extends SLPattern<SLModel> {
             int[] fourValArray = ((ImageLineInt) l1).getScanline();
 
             for (int i = 0; i < fourValArray.length; i += 4){
-                ccs[i/4] = ((fourValArray[i+3] & 0xff) << 24) | ((fourValArray[i] & 0xff) << 16) | ((fourValArray[i+1] & 0xff) << 8) | (fourValArray[i + 2] & 0xff);
+//                ccs[i/4] = ((fourValArray[i+3] & 0xff) << 24) | ((fourValArray[i] & 0xff) << 16) | ((fourValArray[i+1] & 0xff) << 8) | (fourValArray[i + 2] & 0xff);
+                //hmm... seems like alpha was fucked above.  Let's just always make it fully opaque.
+                ccs[i/4] = ((0xff) << 24) | ((fourValArray[i] & 0xff) << 16) | ((fourValArray[i+1] & 0xff) << 8) | (fourValArray[i + 2] & 0xff);
             }
         } catch (ar.com.hjg.pngj.PngjInputException e){
             System.err.println(e);
