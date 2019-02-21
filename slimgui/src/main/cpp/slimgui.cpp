@@ -378,22 +378,13 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_inputText(JNIEnv *env, jclass, jstring j
     return env->NewStringUTF(input_buf);
 }
 
-JNIEXPORT jint JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_colorPicker(JNIEnv *env, jclass, jstring jlabel, jint jcolor) {
+JNIEXPORT jfloatArray JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_colorPicker(JNIEnv *env, jclass, jstring jlabel, jfloat h, jfloat s, jfloat v) {
     JniString label(env, jlabel);
-    unsigned int c = static_cast<unsigned int>(jcolor);
-    float color[] {
-        (float)((c >> 16) & 0xFF) / 255,
-        (float)((c >>  8) & 0xFF) / 255,
-        (float)((c      ) & 0xFF) / 255,
-        255.f};
-    ImGui::ColorEdit3(label, color, ImGuiColorEditFlags_HSV | ImGuiColorEditFlags_Float);
-    unsigned int res =
-        0xFF000000 |
-        (0xFF & (int)(color[0] * 255)) << 16 |
-        (0xFF & (int)(color[1] * 255)) <<  8 |
-        (0xFF & (int)(color[2] * 255));
-    return static_cast<jint>(res);
+    float color[] { h, s, v };
+    ImGui::ColorEdit3(label, color, ImGuiColorEditFlags_HSV | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoOptions);
+    jfloatArray res = env->NewFloatArray(3);
+    env->SetFloatArrayRegion(res, 0, 3, color);
+    return res;
 }
 
 JNIEXPORT jfloat JNICALL

@@ -123,9 +123,16 @@ public class ParameterUI {
 
     public static void draw(LX lx, ColorParameter p) {
         int start = p.getColor();
-        int res = UI.colorPicker(getID(p), start);
-        if (res != start) {
-            lx.engine.addTask(() -> p.setColor(res));
+        float h = p.hue.getValuef();
+        float s = p.saturation.getValuef();
+        float b = p.brightness.getValuef();
+        float[] res = UI.colorPicker(getID(p), h, s, b);
+        if (h != res[0] || s != res[1] || b != res[2]) {
+            lx.engine.addTask(() -> {
+                    p.hue.setValue(res[0]);
+                    p.saturation.setValue(res[1]);
+                    p.brightness.setValue(res[2]);
+                });
         }
     }
 

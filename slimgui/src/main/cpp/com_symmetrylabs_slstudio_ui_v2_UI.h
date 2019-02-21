@@ -294,10 +294,10 @@ JNIEXPORT jstring JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_inputText
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    colorPicker
- * Signature: (Ljava/lang/String;I)I
+ * Signature: (Ljava/lang/String;FFF)[F
  */
-JNIEXPORT jint JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_colorPicker
-  (JNIEnv *, jclass, jstring, jint);
+JNIEXPORT jfloatArray JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_colorPicker
+  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
@@ -378,6 +378,14 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_histogram
  */
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_plot
   (JNIEnv *, jclass, jstring, jfloatArray, jfloat, jfloat, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    envelopeEditor
+ * Signature: (Ljava/lang/String;[D[D[D)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_envelopeEditor
+  (JNIEnv *, jclass, jstring, jdoubleArray, jdoubleArray, jdoubleArray);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI

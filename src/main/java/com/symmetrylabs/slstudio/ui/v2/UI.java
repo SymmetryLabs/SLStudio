@@ -188,7 +188,7 @@ public class UI {
     }
     public static native boolean selectable(String label, boolean v, float height);
     public static native String inputText(String label, String text);
-    public static native int colorPicker(String label, int color);
+    public static native float[] colorPicker(String label, float h, float s, float v);
     public static native float sliderFloat(String label, float v, float v0, float v1);
     public static native float vertSliderFloat(String label, float v, float v0, float v1, String valFmt, float width, float height);
     public static native int sliderInt(String label, int v, int v0, int v1);
@@ -209,6 +209,8 @@ public class UI {
 
     public static native void histogram(String label, float[] values, float min, float max, int size);
     public static native void plot(String label, float[] values, float min, float max, int size);
+
+    public static native void envelopeEditor(String label, double[] basis, double[] value, double[] shape);
 
     /* Images. These are package-private; code should interact with TextureManager, which
        actually handles the complexity of texture loading/unloading for you. */
