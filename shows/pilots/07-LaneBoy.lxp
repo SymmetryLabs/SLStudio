@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1550333040189,
+  "timestamp": 1550423479563,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -108,7 +108,7 @@
               "enabled": true,
               "xSize": 410.0,
               "cx": 355.04000122845173,
-              "ySize": 44.714311212301254,
+              "ySize": 47.36238992214203,
               "cy": 73.49999658577141,
               "zSize": 64.32000080868602,
               "cz": -31.274998764507473,
@@ -411,7 +411,7 @@
               "cx": 361.91000107489526,
               "ySize": 81.19999818503857,
               "cy": 52.709999682903344,
-              "zSize": 0.0,
+              "zSize": 7.0349998427554965,
               "cz": -7.035001875334956,
               "invert": false
             }
@@ -439,7 +439,7 @@
               "cx": 356.25,
               "ySize": 99.0,
               "cy": 63.599996044114235,
-              "zSize": 57.28499871958047,
+              "zSize": 71.35499840509146,
               "cz": -9.164998509921134,
               "invert": false
             }
@@ -459,7 +459,7 @@
               "c1/brightness": 100.0,
               "c1/saturation": 100.0,
               "c1": -65536,
-              "c2/hue": 236.9399947039783,
+              "c2/hue": 236.94117736816406,
               "c2/brightness": 100.0,
               "c2/saturation": 100.0,
               "c2": -16773633,
@@ -907,7 +907,7 @@
               "palette": 0,
               "x": 0.0,
               "y": 1.0,
-              "z": 0.002142786979675293,
+              "z": 0.00248563289642334,
               "cx": 410.0,
               "cy": 116.0,
               "cz": 24.0,
@@ -1480,19 +1480,6 @@
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 31257,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -7470849,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 45,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -1607,6 +1594,12 @@
           "sync": false
         },
         {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "Real Time Sequencer",
           "channel": true,
           "control": false,
@@ -1623,9 +1616,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 588.0190060050796,
-        "theta": -0.03899999999999266,
-        "phi": 0.6707963705062864,
+        "radius": 462.39861588187654,
+        "theta": -1.5719999999999916,
+        "phi": 0.4427963705062862,
         "positionX": 357.24761962890625,
         "positionY": 76.25,
         "positionZ": -26.318944931030273
