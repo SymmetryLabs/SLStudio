@@ -9,10 +9,7 @@ import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.MidiTime;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.MutableParameter;
-import heronarts.lx.parameter.StringParameter;
+import heronarts.lx.parameter.*;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
 import java.awt.*;
@@ -34,6 +31,8 @@ public class MTCPlayback extends SLPattern<SLModel> {
     protected final BooleanParameter filePickerDialogue = new BooleanParameter("choose render", false).setMode(BooleanParameter.Mode.MOMENTARY);
     private final MutableParameter MTCOffset = new MutableParameter("MTC_OFFSET", 0);
     private final BooleanParameter freewheel = new BooleanParameter("run", false);
+
+    private final DiscreteParameter phaseAdjust = new DiscreteParameter("phase", 0, -10, 10);
 
 
     public final MutableParameter hunkSize = new MutableParameter("hunkSize", 150);
@@ -83,10 +82,11 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
     public MTCPlayback(LX lx){
         super(lx);
-        addParameter(filePickerDialogue);
-        addParameter(renderFile);
-        addParameter(freewheel);
-
+//        addParameter(filePickerDialogue);
+//        addParameter(renderFile);
+//        addParameter(freewheel);
+        phaseAdjust.setPolarity(LXParameter.Polarity.BIPOLAR);
+        addParameter(phaseAdjust);
 
         setupMTCListeners();
 
@@ -298,7 +298,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
         }
         else {
             startFrameNanos = -1; // reset for freewheel
-            frameIn = lastFrameReceived - MTCOffset.getValuei();
+            frameIn = lastFrameReceived - MTCOffset.getValuei() + phaseAdjust.getValuei();
         }
         if (pngr == null){
             if (renderFile.getString() != ""){
