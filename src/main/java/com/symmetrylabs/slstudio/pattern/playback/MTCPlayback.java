@@ -35,6 +35,8 @@ public class MTCPlayback extends SLPattern<SLModel> {
     private final MutableParameter MTCOffset = new MutableParameter("MTC_OFFSET", 0);
     private final BooleanParameter freewheel = new BooleanParameter("run", false);
 
+    private final DiscreteParameter phaseAdjust = new DiscreteParameter("phase", 0, -10, 10);
+
 
     public final MutableParameter hunkSize = new MutableParameter("hunkSize", 150);
 
@@ -83,6 +85,11 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
     public MTCPlayback(LX lx){
         super(lx);
+//        addParameter(filePickerDialogue);
+//        addParameter(renderFile);
+//        addParameter(freewheel);
+        phaseAdjust.setPolarity(LXParameter.Polarity.BIPOLAR);
+        addParameter(phaseAdjust);
         addParameter(filePickerDialogue);
         addParameter(renderFile);
         addParameter(freewheel);
@@ -298,7 +305,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
         }
         else {
             startFrameNanos = -1; // reset for freewheel
-            frameIn = lastFrameReceived - MTCOffset.getValuei();
+            frameIn = lastFrameReceived - MTCOffset.getValuei() + phaseAdjust.getValuei();
         }
         if (pngr == null){
             if (renderFile.getString() != ""){

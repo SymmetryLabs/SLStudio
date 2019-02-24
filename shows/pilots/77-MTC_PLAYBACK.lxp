@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1550335592558,
+  "timestamp": 1550778132727,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -135,8 +135,7 @@
             "parameters": {
               "label": "MTCPlayback",
               "palette": 0,
-              "choose render": false,
-              "renderFile": ""
+              "phase": 4
             },
             "modulation": {
               "modulators": [],
@@ -367,19 +366,13 @@
           "sync": false
         },
         {
-          "name": "CoreMIDI4J - NateBus",
-          "channel": false,
-          "control": true,
-          "sync": false
-        },
-        {
-          "name": "** Internal Error getting Device Name!",
+          "name": "CoreMIDI4J - Lockstep",
           "channel": true,
           "control": false,
           "sync": false
         },
         {
-          "name": "CoreMIDI4J - Lockstep",
+          "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
           "sync": false
