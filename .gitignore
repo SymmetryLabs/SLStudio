@@ -301,3 +301,4 @@ bin
 shows/pilots/files
 scratch
 *.bak
+.lxproject.render
