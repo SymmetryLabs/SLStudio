@@ -181,7 +181,6 @@ public class MTCPlayback extends SLPattern<SLModel> {
         final int JUDGE = 48;
         final int CUT = 222;
         final int LANE_BOY1 = 54;
-        final int LANE_BOY2 = 54;
         final int NICO = 60;
         final int CHEETAH = (int)((14 + 31.0/60 + 3.0/(60*60) )*BIN_PER_HOUR);
         final int HOLDING = 126;
@@ -206,7 +205,6 @@ public class MTCPlayback extends SLPattern<SLModel> {
         new SongIndex("Judge", JUDGE);
         new SongIndex("CutMyLip", CUT);
         new SongIndex("LaneBoy1", LANE_BOY1);
-        new SongIndex("LaneBoy2", LANE_BOY2);
         new SongIndex("nico", NICO).addOffset(0, 1, 4);
         new SongIndex("PetCheetah", CHEETAH).addOffset(1,3,7);
         new SongIndex("HoldingOntoYou", HOLDING);

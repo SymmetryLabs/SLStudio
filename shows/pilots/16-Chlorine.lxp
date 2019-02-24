@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1549127918233,
+  "timestamp": 1551024034090,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -30,7 +30,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 52.63157653808594,
+        "color/hue": 52.70588302612305,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
         "color": -8192,
@@ -975,7 +975,7 @@
     },
     "components": {
       "envelop": {
-        "id": 44,
+        "id": 45,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
         "modulationColor": -16711691,
         "parameters": {
@@ -984,7 +984,7 @@
           "trigger": false
         },
         "source": {
-          "id": 45,
+          "id": 46,
           "class": "com.symmetrylabs.slstudio.envelop.Envelop$Source",
           "modulationColor": -65297,
           "parameters": {
@@ -1014,7 +1014,7 @@
           }
         },
         "decode": {
-          "id": 46,
+          "id": 47,
           "class": "com.symmetrylabs.slstudio.envelop.Envelop$Decode",
           "modulationColor": -13762816,
           "parameters": {
@@ -1037,7 +1037,7 @@
         }
       },
       "outputControl": {
-        "id": 47,
+        "id": 48,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -16711837,
         "parameters": {
@@ -1150,56 +1150,14 @@
     "midi": {
       "inputs": [
         {
-          "name": "CoreMIDI4J - ShowSession",
+          "name": "CoreMIDI4J - NateBus",
           "channel": false,
           "control": true,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - NateBus",
-          "channel": true,
-          "control": true,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 1",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 2",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 3",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Port 4",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Sync Port",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Lockstep",
-          "channel": true,
-          "control": false,
           "sync": false
         },
         {
           "name": "** Internal Error getting Device Name!",
-          "channel": false,
+          "channel": true,
           "control": true,
           "sync": false
         },

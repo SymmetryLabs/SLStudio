@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1550769476611,
+  "timestamp": 1551019686800,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,7 +14,7 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 0.22237233817577362,
+      "speed": 0.4205714762210846,
       "focusedChannel": 5,
       "cueA": false,
       "cueB": false,
@@ -111,7 +111,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -577,7 +577,7 @@
               "xSize": 377.84999923221767,
               "cx": 356.25,
               "ySize": 39.60000132769346,
-              "cy": -41.45335960265558,
+              "cy": -17.618975801372414,
               "zSize": 62.309999730437994,
               "cz": -36.30000089854002,
               "invert": false
@@ -674,9 +674,9 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 2.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
-          "blendMode": 0,
+          "blendMode": 1,
           "transitionEnabled": false,
           "transitionTimeSecs": 3.0,
           "transitionBlendMode": 1,
@@ -765,7 +765,7 @@
               "WSpr": 0.18999999575316906,
               "WSpd": 0.3800000138580799,
               "Drez": 0.8624000026285649,
-              "Thick": 0.24145673215389252,
+              "Thick": 0.2605038285255432,
               "ySpr": 0.8100000042468309,
               "Hue": 0.7700000051409006,
               "HSpr": 0.7700000051409006
@@ -1190,7 +1190,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -1207,7 +1207,7 @@
             "parameters": {
               "label": "Speckle",
               "enabled": true,
-              "amt": 4.0904153138399124E-4
+              "amt": 0.08103559166193008
             }
           }
         ],
@@ -1728,10 +1728,23 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.0
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 26236,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -65484,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
       "envelop": {
         "id": 45,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -2845,6 +2858,25 @@
             "Polarity": 0,
             "Range": -1.0
           }
+        },
+        {
+          "source": {
+            "componentId": 46678,
+            "parameterPath": "macro2"
+          },
+          "target": {
+            "componentId": 4942,
+            "parameterPath": "fader"
+          },
+          "id": 49932,
+          "class": "heronarts.lx.parameter.LXCompoundModulation",
+          "modulationColor": -11009793,
+          "parameters": {
+            "label": "",
+            "enabled": true,
+            "Polarity": 0,
+            "Range": -1.0
+          }
         }
       ],
       "triggers": [
@@ -2900,6 +2932,12 @@
           "name": "CoreMIDI4J - NateBus",
           "channel": false,
           "control": true,
+          "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
           "sync": false
         },
         {

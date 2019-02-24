@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.net.SocketException;
 
+import com.symmetrylabs.slstudio.ui.UILayer;
 import com.symmetrylabs.util.MarkerSource;
 
 import com.google.gson.Gson;
@@ -176,6 +177,7 @@ public class SLStudio extends PApplet {
                 ui.preview.setPhi(0).setMinRadius(0 * FEET).setMaxRadius(150 * FEET).setRadius(25 * FEET);
                 new UIFramerateControl(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
                 new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 2);
+                new UILayer(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
 
                 show.setupUi(lx, ui);
 

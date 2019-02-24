@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1550163664257,
+  "timestamp": 1551019018261,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 5,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -210,7 +210,7 @@
         "parameters": {
           "label": "GreenWipe",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -249,7 +249,7 @@
               "enabled": true,
               "rad": 718.9308471679688,
               "invert": false,
-              "cx": 410.0,
+              "cx": 355.03999999999996,
               "cy": 116.0
             },
             "modulation": {
@@ -267,7 +267,7 @@
               "enabled": true,
               "rad": 718.9308471679688,
               "invert": true,
-              "cx": 410.0,
+              "cx": 355.03999999999996,
               "cy": 116.0
             },
             "modulation": {
@@ -338,7 +338,7 @@
         "parameters": {
           "label": "YellowWipe",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -375,9 +375,9 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 718.9308471679688,
+              "rad": 0.0,
               "invert": false,
-              "cx": 410.0,
+              "cx": 355.03999999999996,
               "cy": 116.0
             },
             "modulation": {
@@ -393,9 +393,9 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 718.9308471679688,
+              "rad": 0.0,
               "invert": true,
-              "cx": 410.0,
+              "cx": 355.03999999999996,
               "cy": 116.0
             },
             "modulation": {
@@ -531,7 +531,7 @@
               "xRot": 0.51999999769032,
               "yRot": 0.4500000011175871,
               "zRot": 0.31000000424683094,
-              "Spin": 0.5077069401741028,
+              "Spin": 0.5389668345451355,
               "X-SYM": false,
               "Y-SYM": false,
               "R-SYM": false,
@@ -887,10 +887,23 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.0
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 26236,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -65484,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
       "envelop": {
         "id": 45,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -999,6 +1012,12 @@
     "midi": {
       "inputs": [
         {
+          "name": "CoreMIDI4J - NateBus",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
@@ -1022,8 +1041,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 860.6048722586495,
-        "theta": 0.03000000000000303,
-        "phi": 0.3630000000000001,
+        "theta": 0.06300000000000308,
+        "phi": -1.8648277366750676E-16,
         "positionX": 630.2553100585938,
         "positionY": 122.25,
         "positionZ": -10.320568084716797

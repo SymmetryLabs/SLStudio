@@ -158,6 +158,10 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         new BoundedParameter("Speed", 1, 0, 2)
         .setDescription("Overall speed adjustement to the entire engine (does not apply to master tempo and audio)");
 
+    public final DiscreteParameter layer =
+        new DiscreteParameter("Layer", 7, 6, 32)
+            .setDescription("Just like photoshop.  Higher layer is displayed.");
+
     /** The color space that the engine renders to. */
     public final EnumParameter<PolyBuffer.Space> colorSpace =
             new EnumParameter<>("Color Space", RGB16)
