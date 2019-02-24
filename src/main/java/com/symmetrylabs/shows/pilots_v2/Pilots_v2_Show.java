@@ -1,10 +1,7 @@
 package com.symmetrylabs.shows.pilots_v2;
 
 import com.symmetrylabs.shows.HasWorkspace;
-import com.symmetrylabs.shows.cubes.CubesModel;
-import com.symmetrylabs.shows.cubes.CubesShow;
-import com.symmetrylabs.shows.cubes.UICubesMappingPanel;
-import com.symmetrylabs.shows.cubes.UICubesOutputs;
+import com.symmetrylabs.shows.cubes.*;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
@@ -220,7 +217,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
                 new String[]{"663","662"},
                 new String[]{"617","616"},
                 new String[]{"?13","?14"},
-                new String[]{"471","5410ecf4e6d5"},
+                new String[]{"471","1300"},
             }),
             new TowerConfig(SP * 3, SP * 0, SP * 0, new String[][]{
                 new String[]{"1092","951"},
@@ -408,6 +405,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
 
         UI2dScrollContext utility = ui.rightPane.utility;
         new UICubesOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
+        new UIBlackList(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UICubesMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
     }
 

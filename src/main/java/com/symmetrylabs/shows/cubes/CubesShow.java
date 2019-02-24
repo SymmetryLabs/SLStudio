@@ -160,5 +160,6 @@ public abstract class CubesShow implements Show {
         UI2dScrollContext utility = ui.rightPane.utility;
         new UICubesOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UICubesMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
+        new UIBlackList(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
     }
 }

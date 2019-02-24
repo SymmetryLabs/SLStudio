@@ -239,7 +239,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
                 for (int i = 0; i < numPixels; i++)
                     setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
             }
-        } else if (points != null) {
+        } else if (points != null && !blacklist.getValueb()) {
             int numPixels = points.size();
 
             // Fill the datagram with pixel data
@@ -312,7 +312,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 
             }
         } else {
-            // Fill with all black if we don't have cube data
+            // Fill with all black if we don't have cube data or if blacklisted
             initPacketData(numPixels, false);
             for (int i = 0; i < numPixels; i++) {
                 setPixel(i, LXColor.BLACK);
