@@ -9,7 +9,10 @@ import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.MidiTime;
-import heronarts.lx.parameter.*;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.MutableParameter;
+import heronarts.lx.parameter.StringParameter;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
 import java.awt.*;
@@ -25,7 +28,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
     private static final String TAG = "MTC";
 
     private static final int CIRCULAR_BUFFER_SIZE = 16;
-    private static final int JUMP_FRAME_SENSITIVITY = 150; // 3 sec should be good
+    private static final int JUMP_FRAME_SENSITIVITY = 300; // 10 sec should be good
 
     protected final StringParameter renderFile = new StringParameter("renderFile", "");
     protected final BooleanParameter filePickerDialogue = new BooleanParameter("choose render", false).setMode(BooleanParameter.Mode.MOMENTARY);
@@ -87,6 +90,10 @@ public class MTCPlayback extends SLPattern<SLModel> {
 //        addParameter(freewheel);
         phaseAdjust.setPolarity(LXParameter.Polarity.BIPOLAR);
         addParameter(phaseAdjust);
+        addParameter(filePickerDialogue);
+        addParameter(renderFile);
+        addParameter(freewheel);
+
 
         setupMTCListeners();
 
@@ -185,7 +192,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
         final int RIDE2 = (int)(9.25*BIN_PER_HOUR);
         final int MY_BLOOD = (int)(8.5*BIN_PER_HOUR);
         final int MORPH1 = (int)(8*BIN_PER_HOUR);
-        final int MORPH2 = (int)(8*BIN_PER_HOUR) + 1; // a hack
+//        final int MORPH2 = (int)((8 + 3.0/60 + 36.0/(60*60) )*BIN_PER_HOUR);
         final int CAR_RADIO = (int) (7*BIN_PER_HOUR);
         final int CHLORINE = (int) (18*BIN_PER_HOUR);
         final int LEAVE_THE_CITY = (int) (11*BIN_PER_HOUR);
@@ -210,7 +217,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
         new SongIndex("Ride2", RIDE2);
         new SongIndex("MyBlood", MY_BLOOD);
         new SongIndex("Morph1", MORPH1);
-        new SongIndex("Morph2", MORPH2).addOffset(3,36,0);
+//        new SongIndex("Morph2", MORPH2);
         new SongIndex("CarRadio", CAR_RADIO);
         new SongIndex("Chlorine", CHLORINE);
         new SongIndex("LeaveTheCity", LEAVE_THE_CITY);
