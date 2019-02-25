@@ -399,7 +399,8 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
-        workspace = new Workspace(lx, ui, "shows/pilots");
+//        workspace = new Workspace(lx, ui, "shows/pilots");
+        workspace = new Workspace(lx, ui, "/Users/symmetry/symmetrylabs/software/SLStudio/shows/pilots");
         workspace.setRequestsBeforeSwitch(2);
 
 

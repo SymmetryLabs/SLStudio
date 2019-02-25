@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1550778132727,
+  "timestamp": 1551105481531,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -135,7 +135,7 @@
             "parameters": {
               "label": "MTCPlayback",
               "palette": 0,
-              "phase": 4
+              "phase": 0
             },
             "modulation": {
               "modulators": [],
@@ -252,6 +252,19 @@
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 37009,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -16580864,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
       "envelop": {
         "id": 45,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -360,25 +373,7 @@
     "midi": {
       "inputs": [
         {
-          "name": "CoreMIDI4J - Session 1",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Lockstep",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "Real Time Sequencer",
+          "name": "CoreMIDI4J - NateBus",
           "channel": true,
           "control": false,
           "sync": false
@@ -395,8 +390,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 583.8371585757919,
-        "theta": -6.404999999999993,
-        "phi": 0.16499999999999987,
+        "theta": -5.933999999999991,
+        "phi": 0.36600000000000005,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 14.499992370605469
