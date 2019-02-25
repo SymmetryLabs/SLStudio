@@ -17,11 +17,17 @@ public class ParameterUI {
     };
 
     public static String getID(LXParameter p) {
+        return getID(p, false);
+    }
+
+    public static String getID(LXParameter p, boolean invis) {
         LXComponent parent = p.getComponent();
         if (parent == null) {
-            return p.getLabel();
+            return (invis ? "##" : "") + p.getLabel();
         }
-        return String.format("%s##%d/%s", p.getLabel(), parent.getId(), p.getLabel());
+        return String.format(
+            invis ? "##%s/%d/%s" : "%s##%d/%s",
+            p.getLabel(), parent.getId(), p.getLabel());
     }
 
     public static void draw(LX lx, BoundedParameter p) {
@@ -126,12 +132,22 @@ public class ParameterUI {
         float h = p.hue.getValuef();
         float s = p.saturation.getValuef();
         float b = p.brightness.getValuef();
-        float[] res = UI.colorPicker(getID(p), h, s, b);
-        if (h != res[0] || s != res[1] || b != res[2]) {
+        UI.pushWidth(UI.calcWidth() / 4);
+        float nh = UI.floatBox(getID(p.hue, true), h, 1, 0, 360, "H:%0.0f");
+        UI.sameLine();
+        float ns = UI.floatBox(getID(p.saturation, true), s, 1, 0, 100, "S:%0.0f");
+        UI.sameLine();
+        float nb = UI.floatBox(getID(p.brightness, true), b, 1, 0, 100, "B:%0.0f");
+        UI.popWidth();
+        UI.sameLine();
+        UI.colorButton(p.getLabel(), nh, ns, nb);
+        UI.sameLine();
+        UI.text(p.getLabel());
+        if (h != nh || s != ns || b != nb) {
             lx.engine.addTask(() -> {
-                    p.hue.setValue(res[0]);
-                    p.saturation.setValue(res[1]);
-                    p.brightness.setValue(res[2]);
+                    p.hue.setValue(nh);
+                    p.saturation.setValue(ns);
+                    p.brightness.setValue(nb);
                 });
         }
     }

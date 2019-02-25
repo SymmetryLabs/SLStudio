@@ -228,6 +228,18 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_popColor(JNIEnv *
     ImGui::PopStyleColor(count);
 }
 
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_pushWidth(JNIEnv *, jclass, jfloat width) {
+    ImGui::PushItemWidth(width);
+}
+
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_popWidth(JNIEnv *, jclass) {
+    ImGui::PopItemWidth();
+}
+
+JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_calcWidth(JNIEnv *, jclass) {
+    return ImGui::CalcItemWidth();
+}
+
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowPosition(JNIEnv *env, jclass, jfloat x, jfloat y, jfloat pivotX, jfloat pivotY) {
     ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_Always, ImVec2(pivotX, pivotY));
@@ -378,13 +390,19 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_inputText(JNIEnv *env, jclass, jstring j
     return env->NewStringUTF(input_buf);
 }
 
-JNIEXPORT jfloatArray JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_colorPicker(JNIEnv *env, jclass, jstring jlabel, jfloat h, jfloat s, jfloat v) {
+JNIEXPORT jint JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_colorPicker(JNIEnv *env, jclass, jstring jlabel, jint rgb) {
     JniString label(env, jlabel);
-    float color[] { h, s, v };
-    ImGui::ColorEdit3(label, color, ImGuiColorEditFlags_HSV | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoOptions);
-    jfloatArray res = env->NewFloatArray(3);
-    env->SetFloatArrayRegion(res, 0, 3, color);
-    return res;
+    float rgbchans[] = {
+        ((float) ((rgb >> 16) & 0xFF)) / 255.f,
+        ((float) ((rgb >>  8) & 0xFF)) / 255.f,
+        ((float) ((rgb >>  0) & 0xFF)) / 255.f,
+    };
+    ImGui::ColorEdit3(label, rgbchans, ImGuiColorEditFlags_NoOptions);
+    return
+        0xFF000000 |
+        (((int) (rgbchans[0] * 255.f)) << 16) |
+        (((int) (rgbchans[1] * 255.f)) <<  8) |
+        (((int) (rgbchans[2] * 255.f)) <<  0);
 }
 
 JNIEXPORT jfloat JNICALL
@@ -437,11 +455,11 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_combo(
     return res;
 }
 
-JNIEXPORT jfloat JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_floatBox(JNIEnv *env, jclass, jstring jlabel, jfloat v) {
+JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_floatBox(JNIEnv *env, jclass, jstring jlabel, jfloat v, jfloat speed, jfloat min, jfloat max, jstring jfmtstr) {
     JniString label(env, jlabel);
+    JniString fmtstr(env, jfmtstr);
     jfloat res = v;
-    ImGui::DragFloat(label, &res);
+    ImGui::DragFloat(label, &res, speed, min, max, fmtstr);
     return res;
 }
 
@@ -495,6 +513,14 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_histogram(
     JniFloatArray hist(env, jvals);
     JniString label(env, jlabel);
     ImGui::PlotHistogram(label, hist, hist.size(), 0, NULL, min, max, ImVec2(0, size));
+}
+
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_colorButton(JNIEnv *env, jclass, jstring jlabel, jfloat h, jfloat s, jfloat v) {
+    JniString label(env, jlabel);
+    ImVec4 rgb;
+    ImGui::ColorConvertHSVtoRGB(h / 360, s / 100, v / 100, rgb.x, rgb.y, rgb.z);
+    rgb.w = 1;
+    return ImGui::ColorButton(label, rgb) ? 1 : 0;
 }
 
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_plot(

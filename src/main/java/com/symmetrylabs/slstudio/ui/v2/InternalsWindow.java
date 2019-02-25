@@ -59,6 +59,6 @@ public class InternalsWindow extends CloseableWindow {
         parent.allowUiScale = UI.checkbox("scale UI", parent.allowUiScale);
 
         modelRenderer.scalePointSize = UI.sliderFloat("point size", modelRenderer.scalePointSize, 0.01f, 5);
-        //parent.clearRGB = UI.colorPicker("background", parent.clearRGB);
+        parent.clearRGB = UI.colorPicker("background", parent.clearRGB);
     }
 }
