@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1550778132727,
+  "timestamp": 1551106987630,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -106,28 +106,8 @@
           }
         ],
         "clips": [],
-        "patternIndex": 1,
+        "patternIndex": 0,
         "patterns": [
-          {
-            "id": 31668,
-            "class": "heronarts.lx.pattern.SolidColorPattern",
-            "modulationColor": -16711906,
-            "parameters": {
-              "label": "SolidColor",
-              "palette": 0,
-              "color/hue": 0.0,
-              "color/brightness": 0.0,
-              "color/saturation": 0.0,
-              "color": -16777216,
-              "bool_palette": false
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
           {
             "id": 31671,
             "class": "com.symmetrylabs.slstudio.pattern.playback.MTCPlayback",
@@ -135,7 +115,7 @@
             "parameters": {
               "label": "MTCPlayback",
               "palette": 0,
-              "phase": 4
+              "phase": 0
             },
             "modulation": {
               "modulators": [],
@@ -248,7 +228,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.0
       }
     },
     "components": {
@@ -358,32 +338,7 @@
       }
     },
     "midi": {
-      "inputs": [
-        {
-          "name": "CoreMIDI4J - Session 1",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Lockstep",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "** Internal Error getting Device Name!",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "Real Time Sequencer",
-          "channel": true,
-          "control": false,
-          "sync": false
-        }
-      ],
+      "inputs": [],
       "mapping": []
     }
   },
