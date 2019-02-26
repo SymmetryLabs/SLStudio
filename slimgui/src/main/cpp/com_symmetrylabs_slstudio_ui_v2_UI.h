@@ -325,6 +325,14 @@ JNIEXPORT jint JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_colorPicker
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    colorPickerHSV
+ * Signature: (Ljava/lang/String;FFF)[F
+ */
+JNIEXPORT jfloatArray JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_colorPickerHSV
+  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    sliderFloat
  * Signature: (Ljava/lang/String;FFF)F
  */

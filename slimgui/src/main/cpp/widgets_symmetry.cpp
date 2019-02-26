@@ -190,13 +190,4 @@ void InitChannelWindowDockSpace() {
     }
     dockspaces_initialized = true;
     dockspace_id = ImGui::GetID("MainDockSpace");
-
-    DockBuilderRemoveNode(dockspace_id);
-    ImGuiViewport *viewport = ImGui::GetMainViewport();
-    DockBuilderAddNode(dockspace_id, viewport->Size);
-
-    ImGuiID dock_main_id = dockspace_id;
-    dockspace_channels = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.25f, NULL, &dock_main_id);
-
-    ImGui::DockBuilderDockWindow("Channels", dockspace_channels);
 }

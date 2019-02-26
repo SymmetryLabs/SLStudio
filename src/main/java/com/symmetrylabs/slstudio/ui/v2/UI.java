@@ -193,6 +193,7 @@ public class UI {
     public static native boolean selectable(String label, boolean v, float height);
     public static native String inputText(String label, String text);
     public static native int colorPicker(String label, int rgb);
+    public static native float[] colorPickerHSV(String label, float h, float s, float v);
     public static native float sliderFloat(String label, float v, float v0, float v1);
     public static native float vertSliderFloat(String label, float v, float v0, float v1, String valFmt, float width, float height);
     public static native int sliderInt(String label, int v, int v0, int v1);

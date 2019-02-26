@@ -150,7 +150,9 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
     ImGuiIO &io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigWindowsResizeFromEdges = true;
+    /* Keep this off for now, it causes a window sizing bug (#2386)
     io.ConfigDockingTabBarOnSingleWindows = true;
+    */
     io.ConfigMacOSXBehaviors = useMacBehaviors != 0;
 
     /* Disable auto load/save of window positions for now */
@@ -403,6 +405,18 @@ JNIEXPORT jint JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_colorPicker(JNIEn
         (((int) (rgbchans[0] * 255.f)) << 16) |
         (((int) (rgbchans[1] * 255.f)) <<  8) |
         (((int) (rgbchans[2] * 255.f)) <<  0);
+}
+
+JNIEXPORT jfloatArray JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_colorPickerHSV(JNIEnv *env, jclass, jstring jlabel, jfloat h, jfloat s, jfloat v) {
+    JniString label(env, jlabel);
+    float hsv[] = {h / 360.f, s / 100.f, v / 100.f};
+    ImGui::ColorEdit3(label, hsv, ImGuiColorEditFlags_InputHSV | ImGuiColorEditFlags_ShowHSV | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoOptions);
+    hsv[0] *= 360.f;
+    hsv[1] *= 100.f;
+    hsv[2] *= 100.f;
+    jfloatArray res = env->NewFloatArray(3);
+    env->SetFloatArrayRegion(res, 0, 3, hsv);
+    return res;
 }
 
 JNIEXPORT jfloat JNICALL
