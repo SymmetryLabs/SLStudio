@@ -46,11 +46,6 @@ public class UIPixlites extends UICollapsibleSection {
             for (AssignablePixlite.Port port : pixlite.ports) {
                 portItems.add(new PortItem(port));
             }
-
-//            int port = 0;
-//            for (int i = 1; i < 14; i += 2) {
-//                datalineItems.add(new DatalineItem(pixlite.datalines.get(i), pixlite.datalines.get(i+1), port++));
-//            }
         }
         pixlitePorts.setItems(portItems);
     }
@@ -99,35 +94,4 @@ public class UIPixlites extends UICollapsibleSection {
             port.enabled.toggle();
         }
     }
-
-//    private class ChannelItem extends UIItemList.AbstractItem {
-//        final PixliteOutput.ReceiverChannel channel;
-//
-//        ChannelItem(PixliteOutput.ReceiverChannel channel) {
-//            this.channel = channel;
-//        }
-//
-//        public String getLabel() {
-//            return "(ip: " + channel.ipAddress.getString() + ")   [port: " + channel.pixlitePort.getValuei() + "]   {ch: " + channel.type.toString() + "}";
-//        }
-//
-//        public boolean isSelected() {
-//            return channel.enabled.isOn();
-//        }
-//
-//        @Override
-//        public boolean isActive() {
-//            return isSelected();
-//        }
-//
-//        @Override
-//        public int getActiveColor(UI ui) {
-//            return isSelected() ? ui.theme.getPrimaryColor() : ui.theme.getSecondaryColor();
-//        }
-//
-//        @Override
-//        public void onActivate() {
-//            //...
-//        }
-//    }
 }

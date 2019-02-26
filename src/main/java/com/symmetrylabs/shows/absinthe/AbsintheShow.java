@@ -10,7 +10,7 @@ import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 
-
+import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 
 import com.symmetrylabs.shows.Show;
@@ -20,7 +20,7 @@ import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.shows.tree.config.*;
 import com.symmetrylabs.shows.tree.ui.*;
-import com.symmetrylabs.shows.tree.ui.UIScheduler;
+import com.symmetrylabs.shows.tree.ui.UITenereControllers;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
 
@@ -29,14 +29,12 @@ import static com.symmetrylabs.util.DistanceConstants.*;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
 import processing.core.PGraphics;
-import static com.symmetrylabs.util.DistanceConstants.*;
 
 
 public class AbsintheShow extends TreeShow {
     public static final String SHOW_NAME = "absinthe";
 
-    public final Map<String, AssignablePixlite> pixlites = new HashMap<>();
-    public final List<AssignablePixlite.Port> pixlitePorts = new ArrayList<>();
+    public final Map<TreeModel.Branch, AssignableTenereController> controllers = new HashMap<>();
 
     final TwigConfig[] BRANCH = new TwigConfig[]{
         new TwigConfig( -15.36f,  16.32f, 0.0f,  43.20f, 0.0f, 0.0f, 1),
@@ -133,43 +131,31 @@ public class AbsintheShow extends TreeShow {
         return new TreeModel(config);
     }
 
-    public void setupLx(SLStudioLX lx) {
+    public void setupLx(LX lx) {
         super.setupLx(lx);
-        //lx.engine.framesPerSecond.setValue(30);
+        TreeModel tree = (TreeModel) (lx.model);
+        TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
 
-        lx.engine.registerComponent("scheduleControls", ScheduleControls.getInstance(lx));
-        lx.engine.addLoopTask(ScheduleControls.getInstance(lx));
+        System.out.println("Number of branches: " + tree.getBranches().size());
 
-        final String[] ipAddresses = new String[] {
-            "10.200.1.100", "10.200.1.101", "10.200.1.102", "10.200.1.103", "10.200.1.104",
-            "10.200.1.105", "10.200.1.106", "10.200.1.107", "10.200.1.108", "10.200.1.109"
-        };
-
-        for (int i = 0; i < ipAddresses.length; i++) {
-            AssignablePixlite pixlite = new AssignablePixlite(lx, ipAddresses[i]);
-            pixlites.put(ipAddresses[i], pixlite);
-            pixlitePorts.addAll(pixlite.ports);
-            lx.addOutput(pixlite);
-        }
-
-        //System.out.println("------------------------------");
-        for (AssignablePixlite.Port port : pixlitePorts) {
-            for (TreeModel.Branch branch : ((TreeModel)lx.model).getBranches()) {
-                if (port.ipAddress.equals(branch.getConfig().ipAddress)
-                    && port.index == branch.getConfig().channel) {
-                    //System.out.println(port.index + " - " + branch.getConfig().channel);
-                    port.setBranch(branch);
-                }
+        try {
+            for (TreeModel.Branch branch : tree.getBranches()) {
+                AssignableTenereController controller = new AssignableTenereController(lx, branch);
+                controllers.put(branch, controller);
+                lx.addOutput(controller);
             }
-        }
+        } catch (SocketException e) { }
+
+        modeler.branchManipulator.ipAddress.addListener(param -> {
+            AssignableTenereController controller = controllers.get(modeler.getSelectedBranch());
+            controller.setIpAddress(modeler.branchManipulator.ipAddress.getString());
+        });
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
         //ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
-        // UITreeLeaves uiTreeLeaves = new UITreeLeaves(lx, applet, (TreeModel) lx.model);
-        // ui.preview.addComponent(uiTreeLeaves);
-        // new UITreeControls(ui, uiTreeStructure, uiTreeLeaves).setExpanded(false).addToContainer(ui.leftPane.global);
-        new UIScheduler(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.utility);
+
+        new UITenereControllers(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
     }
 }

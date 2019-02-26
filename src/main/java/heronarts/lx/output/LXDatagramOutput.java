@@ -84,6 +84,10 @@ public class LXDatagramOutput extends LXOutput {
         return this;
     }
 
+    public List<LXDatagram> getDatagrams() {
+        return datagrams;
+    }
+
     /**
      * Old-style subclasses override this method if they want to do
      * something before datagrams are sent.  New-style subclasses should
