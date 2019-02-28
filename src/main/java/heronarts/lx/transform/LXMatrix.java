@@ -80,6 +80,14 @@ public class LXMatrix {
         this.m44 = m44;
     }
 
+    public static LXMatrix identity() {
+        return new LXMatrix(
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1);
+    }
+
     /**
      * Copies the existing matrix
      *
@@ -240,5 +248,16 @@ public class LXMatrix {
                 0,    0,  1,  0,
                 0,    0,  0,  1
         );
+    }
+
+    public LXVector apply(float x, float y, float z) {
+        return new LXVector(
+            m11 * x + m12 * y + m13 * z + m14,
+            m21 * x + m22 * y + m23 * z + m24,
+            m31 * x + m32 * y + m33 * z + m34);
+    }
+
+    public LXVector apply(LXVector v) {
+        return apply(v.x, v.y, v.z);
     }
 }
