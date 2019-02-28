@@ -100,6 +100,16 @@ public final class MathUtils {
         return outgoing;
     }
 
+    public static final float mapPeriodic(float value, float start1, float stop1, float start2, float stop2) {
+        double t = (value - start1) / (stop1 - start1);
+        if (t < 0) {
+            t = 1 + t - Math.ceil(t);
+        } else if (t > 1) {
+            t = t - Math.floor(t);
+        }
+        return start2 + (float) t * (stop2 - start2);
+    }
+
     public static byte byteSubtract(int a, int b) {
         byte res = (byte)(a - b);
         return (byte)(res & (byte)((b&0xFF) <= (a&0xFF) ? -1 : 0));
