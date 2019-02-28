@@ -17,7 +17,7 @@ public class UITreeStructure extends UI3dComponent {
     public UITreeStructure(TreeModel tree) {
         this.tree = tree;
         addChild(new UICylinder(
-            1.25f*FEET, 0.5f*FEET,
-            0, 20*FEET, 8, WOOD_FILL));
+            2.25f*FEET, 0.5f*FEET,
+            0, 31*FEET, 15, WOOD_FILL));
     }
 }
