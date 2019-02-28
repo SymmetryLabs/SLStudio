@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544134124516,
+  "timestamp": 1550047497908,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -67,7 +67,8 @@
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0,
-          "autoDisable": false
+          "autoDisable": false,
+          "speed": 1.0
         },
         "warps": [],
         "effects": [],
@@ -129,7 +130,8 @@
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0,
-          "autoDisable": false
+          "autoDisable": false,
+          "speed": 1.0
         },
         "warps": [],
         "effects": [
@@ -141,7 +143,7 @@
               "label": "Palette",
               "enabled": true,
               "Amount": 1.0,
-              "Palette": 9,
+              "Palette": 10,
               "Bottom": 0.019999999552965164,
               "Top": 0.6800000071525574,
               "Shift": 0.0,
@@ -287,7 +289,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.44285713974386454
       }
     },
     "components": {
@@ -411,7 +413,6 @@
     },
     "midi": {
       "inputs": [],
-      "surfaces": [],
       "mapping": []
     }
   },

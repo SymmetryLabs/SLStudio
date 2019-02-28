@@ -17,11 +17,17 @@ public class ParameterUI {
     };
 
     public static String getID(LXParameter p) {
+        return getID(p, false);
+    }
+
+    public static String getID(LXParameter p, boolean invis) {
         LXComponent parent = p.getComponent();
         if (parent == null) {
-            return p.getLabel();
+            return (invis ? "##" : "") + p.getLabel();
         }
-        return String.format("%s##%d/%s", p.getLabel(), parent.getId(), p.getLabel());
+        return String.format(
+            invis ? "##%s/%d/%s" : "%s##%d/%s",
+            p.getLabel(), parent.getId(), p.getLabel());
     }
 
     public static void draw(LX lx, BoundedParameter p) {
@@ -123,9 +129,16 @@ public class ParameterUI {
 
     public static void draw(LX lx, ColorParameter p) {
         int start = p.getColor();
-        int res = UI.colorPicker(getID(p), start);
-        if (res != start) {
-            lx.engine.addTask(() -> p.setColor(res));
+        float h = p.hue.getValuef();
+        float s = p.saturation.getValuef();
+        float b = p.brightness.getValuef();
+        float[] res = UI.colorPickerHSV(getID(p), h, s, b);
+        if (h != res[0] || s != res[1] || b != res[2]) {
+            lx.engine.addTask(() -> {
+                    p.hue.setValue(res[0]);
+                    p.saturation.setValue(res[1]);
+                    p.brightness.setValue(res[2]);
+                });
         }
     }
 

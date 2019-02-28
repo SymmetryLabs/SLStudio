@@ -9,11 +9,13 @@ struct JniString {
     const char *str;
 
     JniString(JNIEnv *env, jstring jstr) : env(env), jstr(jstr) {
-        str = env->GetStringUTFChars(jstr, 0);
+        str = jstr == nullptr ? nullptr : env->GetStringUTFChars(jstr, 0);
     }
 
     ~JniString() {
-        env->ReleaseStringUTFChars(jstr, str);
+        if (jstr != nullptr) {
+            env->ReleaseStringUTFChars(jstr, str);
+        }
     }
 
     operator const char*() {

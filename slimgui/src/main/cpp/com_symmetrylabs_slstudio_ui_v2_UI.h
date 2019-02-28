@@ -77,6 +77,30 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_popColor
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    pushWidth
+ * Signature: (F)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_pushWidth
+  (JNIEnv *, jclass, jfloat);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    popWidth
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_popWidth
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    calcWidth
+ * Signature: ()F
+ */
+JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_calcWidth
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    setNextWindowPosition
  * Signature: (FFFF)V
  */
@@ -301,6 +325,14 @@ JNIEXPORT jint JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_colorPicker
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    colorPickerHSV
+ * Signature: (Ljava/lang/String;FFF)[F
+ */
+JNIEXPORT jfloatArray JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_colorPickerHSV
+  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    sliderFloat
  * Signature: (Ljava/lang/String;FFF)F
  */
@@ -334,10 +366,10 @@ JNIEXPORT jint JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_combo
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    floatBox
- * Signature: (Ljava/lang/String;F)F
+ * Signature: (Ljava/lang/String;FFFFLjava/lang/String;)F
  */
 JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_floatBox
-  (JNIEnv *, jclass, jstring, jfloat);
+  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat, jfloat, jstring);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
@@ -378,6 +410,22 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_histogram
  */
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_plot
   (JNIEnv *, jclass, jstring, jfloatArray, jfloat, jfloat, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    colorButton
+ * Signature: (Ljava/lang/String;FFF)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_colorButton
+  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    envelopeEditor
+ * Signature: (Ljava/lang/String;[D[D[D)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_envelopeEditor
+  (JNIEnv *, jclass, jstring, jdoubleArray, jdoubleArray, jdoubleArray);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI

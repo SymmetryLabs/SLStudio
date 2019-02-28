@@ -27,8 +27,6 @@ public class AudioWindow extends CloseableWindow {
         UI.setNextWindowDefaults(25, 500, UI.DEFAULT_WIDTH, 300);
     }
 
-    private boolean line = false;
-
     @Override
     protected void drawContents() {
         UI.CollapseResult section;

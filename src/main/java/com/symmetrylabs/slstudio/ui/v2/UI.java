@@ -135,6 +135,10 @@ public class UI {
      */
     public static native void popColor(int count);
 
+    public static native void pushWidth(float width);
+    public static native void popWidth();
+    public static native float calcWidth();
+
     /* Layout */
     public static native void setNextWindowPosition(float x, float y, float pivotX, float pivotY);
     public static native void setNextWindowDefaults(float x, float y, float w, float h);
@@ -188,12 +192,16 @@ public class UI {
     }
     public static native boolean selectable(String label, boolean v, float height);
     public static native String inputText(String label, String text);
-    public static native int colorPicker(String label, int color);
+    public static native int colorPicker(String label, int rgb);
+    public static native float[] colorPickerHSV(String label, float h, float s, float v);
     public static native float sliderFloat(String label, float v, float v0, float v1);
     public static native float vertSliderFloat(String label, float v, float v0, float v1, String valFmt, float width, float height);
     public static native int sliderInt(String label, int v, int v0, int v1);
     public static native int combo(String label, int selected, String[] options);
-    public static native float floatBox(String label, float v);
+    public static float floatBox(String label, float v) {
+        return floatBox(label, v, 1, 0, 0, null);
+    }
+    public static native float floatBox(String label, float v, float speed, float min, float max, String valFmt);
     public static native float knobFloat(String label, float v, float v0, float v1);
     public static native float knobModulatedFloat(
         String label, float base, float v0, float v1, float modulatedValue,
@@ -209,6 +217,9 @@ public class UI {
 
     public static native void histogram(String label, float[] values, float min, float max, int size);
     public static native void plot(String label, float[] values, float min, float max, int size);
+    public static native boolean colorButton(String id, float h, float s, float b);
+
+    public static native void envelopeEditor(String label, double[] basis, double[] value, double[] shape);
 
     /* Images. These are package-private; code should interact with TextureManager, which
        actually handles the complexity of texture loading/unloading for you. */
