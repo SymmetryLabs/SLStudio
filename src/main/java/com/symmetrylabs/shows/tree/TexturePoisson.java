@@ -20,6 +20,8 @@ import static com.symmetrylabs.util.MathUtils.*;
 
 
 public class TexturePoisson extends SLPattern<TreeModel> {
+    public static final String GROUP_NAME = "tree";
+
     public String getAuthor() {
         // why does this method even exist
         return "Haldean Danger Brown";
