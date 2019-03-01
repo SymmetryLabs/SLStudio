@@ -101,13 +101,22 @@ public final class MathUtils {
     }
 
     public static final float mapPeriodic(float value, float start1, float stop1, float start2, float stop2) {
-        double t = (value - start1) / (stop1 - start1);
+        return start2 + (float) wrap((value - start1) / (stop1 - start1)) * (stop2 - start2);
+    }
+
+    public static final double wrap(double t) {
         if (t < 0) {
             t = 1 + t - Math.ceil(t);
         } else if (t > 1) {
             t = t - Math.floor(t);
         }
-        return start2 + (float) t * (stop2 - start2);
+        return t;
+    }
+
+    public static final float wrap(float v, float lo, float hi) {
+        float range = hi - lo;
+        double t = (v - lo) / range;
+        return lo + (float) wrap(t) * range;
     }
 
     public static byte byteSubtract(int a, int b) {

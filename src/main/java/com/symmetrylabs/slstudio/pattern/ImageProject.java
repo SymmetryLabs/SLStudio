@@ -27,20 +27,27 @@ import javax.imageio.ImageIO;
 public class ImageProject extends SLPattern<SLModel> {
     private static final String TAG = "ImageProject";
 
+    private static final float PI = (float) Math.PI;
+    private static final float HALF_PI = PI / 2;
+    private static final float TWO_PI = PI * 2;
+
     public enum Projection {
         PLANAR,
         MERCATOR,
+        S4,
+        S8,
     };
 
     private final StringParameter file = new StringParameter("file", null);
     private final BooleanParameter chooseFile = new BooleanParameter("pick", false).setMode(BooleanParameter.Mode.MOMENTARY);
     private final CompoundParameter thetaParam = new CompoundParameter("theta", 0, -180, 180);
-    private final CompoundParameter phiParam = new CompoundParameter("phi", 0, -90, 90);
+    private final CompoundParameter phiParam = new CompoundParameter("phi", 0, -180, 180);
     private final EnumParameter<Projection> projectionParam = new EnumParameter<>("proj", Projection.PLANAR);
+    private final BooleanParameter flipI = new BooleanParameter("flipi", false);
+    private final BooleanParameter flipJ = new BooleanParameter("flipj", false);
 
     private final float pointu[];
     private final float pointv[];
-    float umin, umax, vmin, vmax;
     boolean cacheok = false;
 
     private BufferedImage image = null;
@@ -52,6 +59,8 @@ public class ImageProject extends SLPattern<SLModel> {
         addParameter(thetaParam);
         addParameter(phiParam);
         addParameter(projectionParam);
+        addParameter(flipI);
+        addParameter(flipJ);
 
         pointu = new float[model.size];
         pointv = new float[model.size];
@@ -87,12 +96,8 @@ public class ImageProject extends SLPattern<SLModel> {
     }
 
     private void project() {
-        umin = Float.POSITIVE_INFINITY;
-        umax = Float.NEGATIVE_INFINITY;
-        vmin = Float.POSITIVE_INFINITY;
-        vmax = Float.NEGATIVE_INFINITY;
-        float theta = (float) Math.PI / 180 * thetaParam.getValuef();
-        float phi = (float) Math.PI / 180 * phiParam.getValuef();
+        float theta = PI / 180 * thetaParam.getValuef();
+        float phi = PI / 180 * phiParam.getValuef();
         Projection proj = projectionParam.getEnum();
 
         switch (proj) {
@@ -100,6 +105,10 @@ public class ImageProject extends SLPattern<SLModel> {
             LXMatrix xf = LXMatrix.identity().rotateX(phi).rotateY(theta);
             LXVector u = xf.apply(1, 0, 0);
             LXVector v = xf.apply(0, 1, 0);
+            float umin = Float.POSITIVE_INFINITY;
+            float umax = Float.NEGATIVE_INFINITY;
+            float vmin = Float.POSITIVE_INFINITY;
+            float vmax = Float.NEGATIVE_INFINITY;
 
             for (LXVector vec : getVectors()) {
                 float uval = u.dot(vec);
@@ -118,22 +127,50 @@ public class ImageProject extends SLPattern<SLModel> {
                 }
             }
             for (LXVector vec : getVectors()) {
-                pointu[vec.index] = u.dot(vec);
-                pointv[vec.index] = v.dot(vec);
+                pointu[vec.index] = (u.dot(vec) - umin) / (umax - umin);
+                pointv[vec.index] = (v.dot(vec) - vmin) / (vmax - vmin);
             }
             break;
         }
         case MERCATOR: {
-            umin = (float) -Math.PI;
-            umax = (float) Math.PI;
-            vmin = 0;
-            vmax = (float) Math.PI;
             LXVector center = new LXVector(model.cx, model.cy, model.cz);
             for (LXVector vec : getVectors()) {
                 LXVector x = center.copy().mult(-1).add(vec);
                 x.normalize();
-                pointu[vec.index] = (float) Math.atan2(x.x, -x.z) + theta;
-                pointv[vec.index] = (float) Math.acos(x.y) + phi;
+                pointu[vec.index] = (float) ((Math.PI + Math.atan2(x.x, -x.z) + theta) / (2 * Math.PI));
+                pointv[vec.index] = (float) ((Math.PI - Math.acos(x.y) + phi) / Math.PI);
+            }
+            break;
+        }
+        case S4: {
+            LXVector center = new LXVector(model.cx, model.cy, model.cz);
+            for (LXVector vec : getVectors()) {
+                LXVector x = center.copy().mult(-1).add(vec);
+                x.normalize();
+                double uu = wrap((float) Math.atan2(x.x, -x.z) + theta, -PI, PI) / PI;
+                if (uu < 0) {
+                    uu = -uu;
+                }
+                double vv = wrap((float) Math.acos(x.y) + phi - HALF_PI, -HALF_PI, HALF_PI) / HALF_PI;
+                if (vv < 0) {
+                    vv = -vv;
+                }
+                pointu[vec.index] = (float) uu;
+                pointv[vec.index] = (float) vv;
+            }
+            break;
+        }
+        case S8: {
+            LXVector center = new LXVector(model.cx, model.cy, model.cz);
+            for (LXVector vec : getVectors()) {
+                LXVector x = center.copy().mult(-1).add(vec);
+                x.normalize();
+                double uu = wrap((float) Math.atan2(x.x, -x.z) + theta + PI, 0, TWO_PI) / HALF_PI;
+                double vv = wrap((float) Math.acos(x.y) + phi, 0, PI) / HALF_PI;
+                uu = ((int) uu) % 2 == 0 ? uu - Math.floor(uu) : Math.ceil(uu) - uu;
+                vv = ((int) vv) % 2 == 0 ? vv - Math.floor(vv) : Math.ceil(vv) - vv;
+                pointu[vec.index] = (float) uu;
+                pointv[vec.index] = (float) vv;
             }
             break;
         }
@@ -164,9 +201,13 @@ public class ImageProject extends SLPattern<SLModel> {
             if (!cacheok) {
                 project();
             }
+            int wlo = flipI.getValueb() ? image.getWidth() - 1 : 0;
+            int whi = flipI.getValueb() ? 0 : image.getWidth() - 1;
+            int hlo = flipJ.getValueb() ? 0 : image.getHeight() - 1;
+            int hhi = flipJ.getValueb() ? image.getHeight() - 1 : 0;
             for (LXVector vec : getVectors()) {
-                int i = Math.round(mapPeriodic(pointu[vec.index], umin, umax, 0, image.getWidth() - 1));
-                int j = Math.round(mapPeriodic(pointv[vec.index], vmin, vmax, image.getHeight() - 1, 0));
+                int i = Math.round(mapPeriodic(pointu[vec.index], 0, 1, wlo, whi));
+                int j = Math.round(mapPeriodic(pointv[vec.index], 0, 1, hlo, hhi));
                 ccs[vec.index] = image.getRGB(i, j);
             }
         }
