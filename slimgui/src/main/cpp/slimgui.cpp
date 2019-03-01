@@ -478,32 +478,22 @@ JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_floatBox(JNIEnv
 }
 
 JNIEXPORT jfloat JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_knobFloat(JNIEnv *env, jclass cls, jstring jlabel, jfloat vf, jfloat v0, jfloat v1) {
+Java_com_symmetrylabs_slstudio_ui_v2_UI_knobFloat(JNIEnv *env, jclass cls, jstring jlabel, jfloat vf, jfloat vn) {
     JniString label(env, jlabel);
-    Knob(label, &vf, v0, v1, 0, vf, nullptr, nullptr, nullptr);
-    if (ImGui::BeginPopupContextItem()) {
-        ImGui::InputFloat(label, &vf, 0, 0, "%.2f", 0);
-        vf = vf < v0 ? v0 : vf > v1 ? v1 : vf;
-        ImGui::EndPopup();
-    }
-    return vf;
+    Knob(label, &vn, vf, vn, 0, nullptr, nullptr, nullptr);
+    return vn;
 }
 
 JNIEXPORT jfloat JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_knobModulatedFloat(
-    JNIEnv *env, jclass cls, jstring jlabel, jfloat vf, jfloat v0, jfloat v1,
+    JNIEnv *env, jclass cls, jstring jlabel, jfloat vf, jfloat vn,
     jfloat modulated, jint modCount, jfloatArray jmins, jfloatArray jmaxs, jintArray jcolors) {
     JniString label(env, jlabel);
     JniFloatArray mins(env, jmins);
     JniFloatArray maxs(env, jmaxs);
     JniIntArray colors(env, jcolors);
-    Knob(label, &vf, v0, v1, modCount, modulated, mins, maxs, colors);
-    if (ImGui::BeginPopupContextItem()) {
-        ImGui::InputFloat(label, &vf, 0, 0, "%.2f", 0);
-        vf = vf < v0 ? v0 : vf > v1 ? v1 : vf;
-        ImGui::EndPopup();
-    }
-    return vf;
+    Knob(label, &vn, vf, modulated, modCount, mins, maxs, colors);
+    return vn;
 }
 
 JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_collapsibleSection(JNIEnv *env, jclass, jstring jlabel, jboolean allowClose, jint flags) {

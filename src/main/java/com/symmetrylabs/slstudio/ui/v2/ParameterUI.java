@@ -35,26 +35,26 @@ public class ParameterUI {
     }
 
     public static void draw(LX lx, BoundedParameter p, WidgetType wt) {
-        float start = p.getValuef();
-        float res = start;
         if (wt == WidgetType.SLIDER) {
-            res = UI.sliderFloat(getID(p), start, (float) p.range.v0, (float) p.range.v1);
-        } else if (wt == WidgetType.KNOB) {
-            if (p instanceof CompoundParameter) {
-                res = compoundKnob(lx, (CompoundParameter) p);
-            } else {
-                res = UI.knobFloat(getID(p), start, (float) p.range.v0, (float) p.range.v1);
+            float start = p.getNormalizedf();
+            final float res = UI.sliderFloat(getID(p), start, (float) p.range.v0, (float) p.range.v1);
+            if (start != res) {
+                lx.engine.addTask(() -> p.setValue(res));
             }
+            return;
         }
+        final float start = p.getNormalizedf();
+        final float res =
+            p instanceof CompoundParameter
+            ? compoundKnob(lx, (CompoundParameter) p)
+            : UI.knobFloat(getID(p), p.getValuef(), start);
         if (start != res) {
             final float fres = res;
-            lx.engine.addTask(() -> p.setValue(fres));
+            lx.engine.addTask(() -> p.setNormalized(fres));
         }
     }
 
     private static float compoundKnob(LX lx, CompoundParameter cp) {
-        float base = (float) cp.getBaseValue();
-        float mod = (float) cp.getValue();
         int N = cp.modulations.size();
         float[] mins = new float[N];
         float[] maxs = new float[N];
@@ -74,14 +74,12 @@ public class ParameterUI {
                 modEnd = modStart + modulation.range.getValuef();
                 break;
             }
-            modStart = (float) (cp.range.v0 + modStart * (cp.range.v1 - cp.range.v0) + base);
-            modEnd = (float) (cp.range.v0 + modEnd * (cp.range.v1 - cp.range.v0) + base);
             mins[i] = Float.min(modStart, modEnd);
             maxs[i] = Float.max(modStart, modEnd);
             colors[i] = modulation.color.getColor();
         }
         return UI.knobModulatedFloat(
-            getID(cp), base, (float) cp.range.v0, (float) cp.range.v1, mod, N, mins, maxs, colors);
+            getID(cp), (float) cp.getBaseValue(), (float) cp.getBaseNormalized(), cp.getNormalizedf(), N, mins, maxs, colors);
     }
 
     public static void draw(LX lx, DiscreteParameter p) {

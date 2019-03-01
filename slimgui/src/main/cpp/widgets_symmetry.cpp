@@ -47,12 +47,7 @@ static const ImVec4 KnobValueHoveredColor = RGB(0x73CDEB);
 static const ImVec4 KnobValueActiveColor  = RGB(0x00A5DB);
 static const ImVec4 KnobModulatorColor    = RGB(0x930FA5);
 
-static inline float prop(float v, float min, float max) {
-    return (v - min) / (max - min);
-}
-
-bool Knob(const char *label, float *v, float min, float max,
-          int mod_count, float modulated,
+bool Knob(const char *label, float *v, float vdisplay, float tmod, int mod_count,
           const float *mod_min, const float *mod_max, const jint *mod_colors) {
     auto window = GetCurrentWindow();
     if (window->SkipItems)
@@ -91,7 +86,7 @@ bool Knob(const char *label, float *v, float min, float max,
         pressed = true;
 
         if (g.ActiveIdSource == ImGuiInputSource_Mouse && IsMousePosValid()) {
-            g.DragCurrentAccum += -g.IO.MouseDelta.y * (g.IO.KeyShift ? 0.01f : 1.f) * (max - min) * g.DragSpeedDefaultRatio;
+            g.DragCurrentAccum += -g.IO.MouseDelta.y * (g.IO.KeyShift ? 0.01f : 1.f) * g.DragSpeedDefaultRatio;
             changed = true;
         }
 
@@ -101,12 +96,11 @@ bool Knob(const char *label, float *v, float min, float max,
                hopefully. */
             float new_v = *v + g.DragCurrentAccum;
             g.DragCurrentAccum -= new_v - *v;
-            *v = new_v < min ? min : new_v > max ? max : new_v;
+            *v = new_v < 0 ? 0 : new_v > 1 ? 1 : new_v;
         }
     }
 
-    float t = prop(*v, min, max);
-    float tmod = prop(modulated, min, max);
+    float t = *v;
 
     /* we want min and max to be 45 from -Y, 0 angle in PathArcTo means +X and it goes
          clockwise, so we want 135 to 135 + 270. */
@@ -121,13 +115,10 @@ bool Knob(const char *label, float *v, float min, float max,
     float rad = style.KnobRadius;
 
     for (int i = 0; i < mod_count; i++) {
-        float lo = mod_min[i];
-        float hi = mod_max[i];
+        float tlo = mod_min[i];
+        float thi = mod_max[i];
 
-        float tlo = prop(lo, min, max);
         tlo = tlo < 0.f ? 0.f : tlo > 1.f ? 1.f : tlo;
-
-        float thi = prop(hi, min, max);
         thi = thi < 0.f ? 0.f : thi > 1.f ? 1.f : thi;
 
         float start = a_lo + tlo * (a_hi - a_lo);
@@ -172,7 +163,7 @@ bool Knob(const char *label, float *v, float min, float max,
         text_pos.y + label_size.y + style.ItemInnerSpacing.y};
     if (pressed) {
         char value_buf[64];
-        int len = TinyNumberFormatString(value_buf, IM_ARRAYSIZE(value_buf), *v);
+        int len = TinyNumberFormatString(value_buf, IM_ARRAYSIZE(value_buf), vdisplay);
         RenderTextClipped(text_pos, text_clip, value_buf, value_buf + len, NULL, ImVec2{0.5f, 0});
     } else {
         RenderTextClipped(text_pos, text_clip, label, NULL, NULL, ImVec2{0.5f, 0});

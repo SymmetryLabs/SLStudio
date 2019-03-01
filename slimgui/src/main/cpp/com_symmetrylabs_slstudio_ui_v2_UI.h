@@ -374,18 +374,18 @@ JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_floatBox
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    knobFloat
- * Signature: (Ljava/lang/String;FFF)F
+ * Signature: (Ljava/lang/String;FF)F
  */
 JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobFloat
-  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat);
+  (JNIEnv *, jclass, jstring, jfloat, jfloat);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    knobModulatedFloat
- * Signature: (Ljava/lang/String;FFFFI[F[F[I)F
+ * Signature: (Ljava/lang/String;FFFI[F[F[I)F
  */
 JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobModulatedFloat
-  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat, jfloat, jint, jfloatArray, jfloatArray, jintArray);
+  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat, jint, jfloatArray, jfloatArray, jintArray);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
