@@ -106,28 +106,8 @@
           }
         ],
         "clips": [],
-        "patternIndex": 1,
+        "patternIndex": 0,
         "patterns": [
-          {
-            "id": 31668,
-            "class": "heronarts.lx.pattern.SolidColorPattern",
-            "modulationColor": -16711906,
-            "parameters": {
-              "label": "SolidColor",
-              "palette": 0,
-              "color/hue": 0.0,
-              "color/brightness": 0.0,
-              "color/saturation": 0.0,
-              "color": -16777216,
-              "bool_palette": false
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
           {
             "id": 31671,
             "class": "com.symmetrylabs.slstudio.pattern.playback.MTCPlayback",
