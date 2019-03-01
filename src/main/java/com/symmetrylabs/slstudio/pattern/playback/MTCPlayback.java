@@ -56,6 +56,8 @@ public class MTCPlayback extends SLPattern<SLModel> {
     String currentSongName = "";
     private long startFrameNanos = -1;
     private double frameRate = 30;
+    private static int SONG_CHANGE_DEBOUNCE = 6; // need to get 6 frames of timecode to actually switch song.
+    private static int songChangeDebounce = -1;
 
     // this thread keeps the circular buffer stocked at the current MTC offset with some "lookahead"
     class CirclularBufferWriterThread extends Thread{
@@ -231,23 +233,31 @@ public class MTCPlayback extends SLPattern<SLModel> {
         SongIndex thisSong = SongIndex.allSongIndicesByBin.get(songIndex);
 
         if (thisSong == null){
-            // how to automate/standardize all this protection...?
-            currentSongPng = null;
-            currentSongName = null;
-            renderFile.setValue("");
-
+            clearSong();
             return;
         }
 
 
         if (currentSongPng == null || !currentSongPng.getName().equals(thisSong.name_png + ".png")){ // if the current file is not the one loaded...
-//        if (thisSong.isNew()){
+            if (songChangeDebounce > 0){
+                songChangeDebounce--;
+                return;
+            }
             String dataPath = RENDER_ROOT;
             currentSongName = thisSong.song_name;
             renderFile.setValue( dataPath + thisSong.name_png + ".png");
             MTCOffset.setValue(songIndex*BIN_SIZE + thisSong.extra_MTC_offset);
             loadSong();
+            // reset the debounce.
+            songChangeDebounce = SONG_CHANGE_DEBOUNCE;
         }
+    }
+
+    private void clearSong() {
+        // how to automate/standardize all this protection...?
+        currentSongPng = null;
+        currentSongName = null;
+        renderFile.setValue("");
     }
 
     public void loadSong() {
@@ -308,8 +318,14 @@ public class MTCPlayback extends SLPattern<SLModel> {
         }
         if (frameIn == lastFrameRendered){
             double elapsedSec = 1e-9 * (double) (System.nanoTime() - last_frame_rendered_time);
-            if (elapsedSec > FADE_THRESH_SEC){
+//            if (endOfSet()){
+//               freewheel.setValue(true);
+//               startFrameNanos = System.nanoTime() - (long)1e9 * ((3*60)+10)*30;
+//               return;
+//            }
+            if (elapsedSec > FADE_THRESH_SEC && !endOfSet()){
                 clear();
+                clearSong();
                 markModified(PolyBuffer.Space.SRGB8);
             }
             return;
@@ -350,6 +366,15 @@ public class MTCPlayback extends SLPattern<SLModel> {
         lastFrameRendered = frameIn;
         last_frame_rendered_time = System.nanoTime();
         markModified(PolyBuffer.Space.SRGB8);
+    }
+
+    private boolean endOfSet() {
+        int end_begin = ((11*60+34)*60)*30;
+        int end_end = ((11*60+34)*60)*30 + 5*60*30;
+        if (lastFrameReceived > end_begin && lastFrameReceived < end_end){
+            return true;
+        }
+        return false;
     }
 
     private void recyclePNGReader() {
