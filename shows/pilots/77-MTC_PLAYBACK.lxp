@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1551105481531,
+  "timestamp": 1551123639564,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -248,7 +248,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.0
       }
     },
     "components": {
@@ -374,6 +374,12 @@
       "inputs": [
         {
           "name": "CoreMIDI4J - NateBus",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
           "channel": true,
           "control": false,
           "sync": false

@@ -124,6 +124,10 @@ dependencies {
 
 	implementation 'com.fazecast:jSerialComm:[2.0.0,3.0.0)'
 
+    implementation 'commons-net:commons-net:3.4'
+
+    implementation 'net.sf.expectit:expectit-core:0.9.0'
+
 	// https://github.com/SymmetryLabs/ArtNetStack
 	implementation 'com.github.SymmetryLabs:ArtNetStack:44ddfed'
 
