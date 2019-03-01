@@ -16,7 +16,7 @@ public class SimplexNoisePattern extends SLPattern<SLModel> {
     private final CompoundParameter rate = (CompoundParameter)
         new CompoundParameter("rate", 1, 0, 10).setExponent(3);
     private final CompoundParameter exp = (CompoundParameter)
-        new CompoundParameter("exp", 1.5, 0.01, 3).setExponent(0.5);
+        new CompoundParameter("exp", 1.5, 0.01, 8).setExponent(2);
 
     private double w = 0;
 
