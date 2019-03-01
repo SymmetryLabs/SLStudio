@@ -4,11 +4,7 @@ import java.io.IOException;
 
 public class UbntSwitch {
 
-    private static class PortPowerSample {
-        double samples[] = new double[24];
-    }
-
-    PortPowerSample sample = new PortPowerSample();
+    PortPowerSample sample = new PortPowerSample(24);
 
     // connect
     UbntTelnetConnection conn;
@@ -19,5 +15,18 @@ public class UbntSwitch {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void sample() throws IOException {
+        sample = conn.pollPowerSamples();
+
+        System.out.println();
+        for (double s : sample.samples){
+            System.out.println(s);
+        }
+    }
+
+    public void powerCycleAllPorts() throws IOException {
+        conn.powerCycle();
     }
 }

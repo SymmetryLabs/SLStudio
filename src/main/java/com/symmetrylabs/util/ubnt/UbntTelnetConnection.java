@@ -35,8 +35,6 @@ public class UbntTelnetConnection {
         connect();
 
         navigateAdmin();
-
-        pollPowerSamples();
     }//main
 
     public void connect() throws IOException {
@@ -46,27 +44,25 @@ public class UbntTelnetConnection {
 
     public void powerCycle() throws IOException {
 
+
+        // navigate to power cycle
+        expect.sendLine("configure");
+        expect.expect(contains("(UBNT EdgeSwitch) (Config)#"));
+
+        expect.sendLine("interface 0/1-0/24");
+        expect.expect(contains("(UBNT EdgeSwitch) (Interface 0/1-0/24)#"));
+
         // the command to turn off power to all ports, and then to turn back on.
         String[] SHUTDOWN_REBOOTAUTO_CMDS = {"poe opmode shutdown", "poe opmode auto"};
-
         for (String SHUTDOWN_REBOOTAUTO_CMD : SHUTDOWN_REBOOTAUTO_CMDS){
-
-            // navigate to power cycle
-            expect.sendLine("configure");
-            expect.expect(contains("(UBNT EdgeSwitch) (Config)#"));
-
-            expect.sendLine("interface 0/1-0/24");
-            expect.expect(contains("(UBNT EdgeSwitch) (Interface 0/1-0/24)#"));
-
             expect.sendLine(SHUTDOWN_REBOOTAUTO_CMD);
-
-
-            expect.close();
         }//ip loop
     }
 
 
-    private void pollPowerSamples() throws IOException {
+    protected PortPowerSample pollPowerSamples() throws IOException {
+        PortPowerSample sample = new PortPowerSample(24);
+
         String poe_power_command1 = "show poe status 0/1-0/12";
         String poe_power_command13 = "show poe status 0/13-0/24";
         String commands[] = { poe_power_command1, poe_power_command13};
@@ -78,7 +74,7 @@ public class UbntTelnetConnection {
             List<String> items;
             for (int i = -3; i < 13; i++){
                 String list = expect.expect(regexp("\n")).getBefore();
-                items = Arrays.asList(list.split("\\s* \\s*"));
+                items = Arrays.asList(list.split("\\s*  \\s*"));
 
                 System.out.println("Items: " + items);
 
@@ -86,17 +82,28 @@ public class UbntTelnetConnection {
                 Pattern p = Pattern.compile(pattern);
                 Matcher m = p.matcher(list);
 
-                if (m.find()){
+                if (m.find() && i >= 1){
                     System.out.println("gotem" + list);
+
+                    int idx = Integer.parseInt(items.get(0).split("/")[1]) - 1;
+                    assert idx%12 == i - 1 : "did not get right item at right time: " + idx + "::" + i;
+
+                    System.out.println("i: " + i + "  idx: " + idx);
+
                     System.out.println("Found value: " + m.group(0) );
                     System.out.println("Found value: " + m.group(1) ); // the
                     System.out.println("Found value: " + m.group(2) );
+
+                    double wattage = Double.parseDouble(items.get(3));
+                    sample.put(idx, wattage);
+                    System.out.println("wattage: " + wattage);
                 }
-                System.out.println("wattage: " + items.get(3));
             }
 
             expect.expect(contains("(UBNT EdgeSwitch) #"));
         }
+
+        return sample;
     }
 
     private void navigateAdmin() throws IOException {
