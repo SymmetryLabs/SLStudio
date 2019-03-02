@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1551123639564,
+  "timestamp": 1551534851486,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -232,19 +232,6 @@
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 37009,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16580864,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 45,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -354,12 +341,6 @@
       "inputs": [
         {
           "name": "CoreMIDI4J - NateBus",
-          "channel": true,
-          "control": false,
-          "sync": false
-        },
-        {
-          "name": "Real Time Sequencer",
           "channel": true,
           "control": false,
           "sync": false
