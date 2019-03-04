@@ -19,7 +19,7 @@ void LoadSlimguiStyle(float density) {
     ImVec4* colors = style.Colors;
     colors[ImGuiCol_Text]                   = RGB(0xD0D5E0);
     colors[ImGuiCol_TextDisabled]           = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
-    colors[ImGuiCol_WindowBg]               = RGB(0xDD101521);
+    colors[ImGuiCol_WindowBg]               = ImVec4(0, 0, 0, 0.8f);
     colors[ImGuiCol_ChildBg]                = ImVec4(1.00f, 1.00f, 1.00f, 0.00f);
     colors[ImGuiCol_PopupBg]                = RGB(0x0C1019);
     colors[ImGuiCol_Border]                 = RGB(0x252A35);
@@ -66,7 +66,8 @@ void LoadSlimguiStyle(float density) {
     colors[ImGuiCol_TabUnfocusedActive]     = RGB(0x3B3F49);
     colors[ImGuiCol_DockingPreview]         = RGB(0x00A5DB);
 
-    style.WindowRounding = 0.f;
+    style.WindowRounding = 2.f;
+    style.WindowBorderSize = 0.f;
     style.FrameRounding = 2.f;
     style.GrabRounding = 2.f;
 

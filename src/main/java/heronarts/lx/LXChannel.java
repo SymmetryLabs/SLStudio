@@ -23,6 +23,7 @@ package heronarts.lx;
 import heronarts.lx.blend.LXBlend;
 import heronarts.lx.clip.LXChannelClip;
 import heronarts.lx.clip.LXClip;
+import heronarts.lx.color.ColorParameter;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXShortMessage;
 import heronarts.lx.model.LXModel;
@@ -33,8 +34,8 @@ import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.parameter.ObjectParameter;
-import heronarts.lx.pattern.SolidColorPattern;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.pattern.SolidColorPattern;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -255,6 +256,14 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             new BoundedParameter("Speed", 1, 0, 2)
                     .setDescription("Overall speed adjustement to all components in this channel");
 
+    public final BooleanParameter editorVisible =
+            new BooleanParameter("EditorVisible", false)
+                    .setDescription("Sets whether this channel is visible for editing in the look editor");
+
+    public final ColorParameter editorColor =
+            new ColorParameter("EditorColor", 0xFFFF0000)
+                    .setDescription("Sets the color associated with this channel in the look editor");
+
     private final List<LXPattern> mutablePatterns = new ArrayList<LXPattern>();
     public final List<LXPattern> patterns = Collections.unmodifiableList(mutablePatterns);
 
@@ -352,6 +361,8 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         addParameter("transitionBlendMode", this.transitionBlendMode);
         addParameter("autoDisable", this.autoDisable);
         addParameter("speed", this.speed);
+        addParameter("editorVisible", this.editorVisible);
+        addParameter("editorColor", this.editorColor);
     }
 
     boolean shouldRun() {

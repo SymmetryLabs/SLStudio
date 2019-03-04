@@ -85,9 +85,9 @@ public class ChannelUi {
     public static void draw(LX lx, LXChannel chan, WepUi wepUi) {
         String chanName = chan.getLabel();
 
-        UI.pushColor(UI.COLOR_HEADER, UI.PURPLE);
-        UI.pushColor(UI.COLOR_HEADER_ACTIVE, UI.PURPLE);
-        UI.pushColor(UI.COLOR_HEADER_HOVERED, UI.PURPLE_HOVER);
+        UI.pushColor(UI.COLOR_HEADER, chan.editorColor.getColor());
+        UI.pushColor(UI.COLOR_HEADER_ACTIVE, chan.editorColor.getColor());
+        UI.pushColor(UI.COLOR_HEADER_HOVERED, chan.editorColor.getColor());
         UI.selectable(" " + chanName, lx.engine.getFocusedChannel() == chan, 18);
         UI.popColor(3);
         if (UI.isItemClicked()) {

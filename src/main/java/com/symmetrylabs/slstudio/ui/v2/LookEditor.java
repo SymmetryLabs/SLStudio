@@ -5,11 +5,13 @@ import heronarts.lx.LXChannel;
 import heronarts.lx.LXChannel.CrossfadeGroup;
 
 public class LookEditor {
-    private LX lx;
+    private final LX lx;
     private final int HEIGHT = 270;
+    private final WepUi wepUi;
 
     public LookEditor(LX lx) {
         this.lx = lx;
+        this.wepUi = new WepUi(lx, () -> UI.closePopup());
     }
 
     public void draw() {
@@ -42,7 +44,15 @@ public class LookEditor {
             UI.beginChild(chanName, false, 0, 90, HEIGHT);
 
             UI.pushFont(FontLoader.DEFAULT_FONT_L);
-            UI.selectable(chanName, false);
+            UI.pushColor(UI.COLOR_HEADER, chan.editorColor.getColor());
+            UI.pushColor(UI.COLOR_HEADER_ACTIVE, chan.editorColor.getColor());
+            UI.pushColor(UI.COLOR_HEADER_HOVERED, chan.editorColor.getColor());
+            boolean isVisible = chan.editorVisible.getValueb();
+            boolean newVisible = UI.selectable(chanName, isVisible);
+            if (isVisible != newVisible) {
+                lx.engine.addTask(() -> chan.editorVisible.setValue(newVisible));
+            }
+            UI.popColor(3);
             UI.popFont();
 
             float fader = UI.vertSliderFloat("##fader-" + chanName, chan.fader.getValuef(), 0, 1, "", 30, 180);
@@ -86,5 +96,17 @@ public class LookEditor {
         UI.popFont();
 
         UI.end();
+
+        for (LXChannel chan : lx.engine.getChannels()) {
+            if (chan.editorVisible.getValueb()) {
+                boolean open = UI.beginClosable(chan.getLabel());
+                if (!open) {
+                    chan.editorVisible.setValue(false);
+                } else {
+                    ChannelUi.draw(lx, chan, wepUi);
+                }
+                UI.end();
+            }
+        }
     }
 }
