@@ -15,6 +15,8 @@ public class UI {
     public static int WINDOW_NO_DOCKING;
     public static int WINDOW_NO_BACKGROUND;
     public static int WINDOW_ALWAYS_AUTO_RESIZE;
+    public static int WINDOW_NO_DECORATION;
+    public static int WINDOW_NO_SCROLL_WITH_MOUSE;
 
     public static int DEFAULT_WIDTH = 250;
 
@@ -23,6 +25,9 @@ public class UI {
     public static int COLOR_HEADER;
     public static int COLOR_HEADER_ACTIVE;
     public static int COLOR_HEADER_HOVERED;
+    public static int COLOR_BUTTON;
+    public static int COLOR_BUTTON_ACTIVE;
+    public static int COLOR_BUTTON_HOVERED;
     public static int COLOR_WINDOW_BORDER;
 
     public static int COND_ALWAYS;
@@ -104,8 +109,12 @@ public class UI {
      * @param name the font name
      * @param ttfData the font data in TTF or OTF format
      * @param fontSize the font size, in pixels, that we want to compile the font at
+     * @returns an opaque handle that can be used to refer to the font
      */
-    public static native void addFont(String name, ByteBuffer ttfData, float fontSize);
+    public static native long addFont(String name, ByteBuffer ttfData, float fontSize);
+
+    public static native void pushFont(long fontHandle);
+    public static native void popFont();
 
     /**
      * Temporarily change a color in the UI style.
@@ -144,6 +153,7 @@ public class UI {
     public static native void setNextWindowDefaults(float x, float y, float w, float h);
     public static native void setNextWindowDefaultToCursor(float w, float h);
     public static native void setNextWindowContentSize(float w, float h);
+    public static native void setNextWindowSize(float w, float h);
     public static void begin(String label) {
         begin(label, 0);
     }
@@ -185,7 +195,13 @@ public class UI {
         text(String.format(t, objs));
     }
     public static native void labelText(String label, String value);
-    public static native boolean button(String t);
+    public static boolean button(String t) {
+        return button(t, 0, 0);
+    }
+    public static boolean button(String t, float w) {
+        return button(t, w, 0);
+    }
+    public static native boolean button(String t, float w, float h);
     public static native boolean checkbox(String label, boolean v);
     public static boolean selectable(String label, boolean v) {
         return selectable(label, v, 0);

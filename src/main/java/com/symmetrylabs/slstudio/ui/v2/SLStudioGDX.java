@@ -27,6 +27,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
     private RenderManager renderer;
     private LX lx;
     private OutputControl outputControl;
+    private LookEditor lookEditor;
 
     /* visible so that InternalsWindow can mutate it. */
     int clearRGB = 0x000000;
@@ -111,7 +112,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
            it disappearing. */
         WindowManager.addTransient(new MainMenu(lx, this));
         WindowManager.addPersistent("Audio", () -> new AudioWindow(lx), false);
-        WindowManager.addPersistent("Channels", () -> new ChannelWindow(lx), true);
+        WindowManager.addPersistent("Channels", () -> new ChannelWindow(lx), false);
         WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this, mr), false);
         WindowManager.addPersistent("Master", () -> new MasterWindow(lx), true);
         WindowManager.addPersistent("Modulation", () -> new ModulationWindow(lx), false);
@@ -122,6 +123,8 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         WindowManager.addPersistent("Imgui style editor", () -> new SlimguiStyleEditor(), false);
         WindowManager.addPersistent("Imgui metrics", () -> new SlimguiMetricsWindow(), false);
         WindowManager.addPersistent("About imgui", () -> new SlimguiAboutWindow(), false);
+
+        lookEditor = new LookEditor(lx);
 
         lx.engine.isMultithreaded.setValue(true);
         lx.engine.isChannelMultithreaded.setValue(true);
@@ -162,6 +165,8 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         renderer.draw();
         UI.newFrame();
         WindowManager.get().draw();
+
+        lookEditor.draw();
 
         UI.setNextWindowPosition(UI.width - 30, UI.height - 30, 1, 1);
         UI.begin("Logo overlay",

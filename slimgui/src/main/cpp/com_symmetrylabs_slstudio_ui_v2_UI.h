@@ -54,10 +54,26 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_shutdown
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    addFont
- * Signature: (Ljava/lang/String;Ljava/nio/ByteBuffer;F)V
+ * Signature: (Ljava/lang/String;Ljava/nio/ByteBuffer;F)J
  */
-JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_addFont
+JNIEXPORT jlong JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_addFont
   (JNIEnv *, jclass, jstring, jobject, jfloat);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    pushFont
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_pushFont
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    popFont
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_popFont
+  (JNIEnv *, jclass);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
@@ -129,6 +145,14 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowDefa
  * Signature: (FF)V
  */
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowContentSize
+  (JNIEnv *, jclass, jfloat, jfloat);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    setNextWindowSize
+ * Signature: (FF)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowSize
   (JNIEnv *, jclass, jfloat, jfloat);
 
 /*
@@ -286,10 +310,10 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_labelText
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    button
- * Signature: (Ljava/lang/String;)Z
+ * Signature: (Ljava/lang/String;FF)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_button
-  (JNIEnv *, jclass, jstring);
+  (JNIEnv *, jclass, jstring, jfloat, jfloat);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI

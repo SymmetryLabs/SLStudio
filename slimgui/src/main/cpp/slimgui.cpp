@@ -103,6 +103,10 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
     env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoBackground);
     fid = env->GetStaticFieldID(cls, "WINDOW_ALWAYS_AUTO_RESIZE", "I");
     env->SetStaticIntField(cls, fid, ImGuiWindowFlags_AlwaysAutoResize);
+    fid = env->GetStaticFieldID(cls, "WINDOW_NO_DECORATION", "I");
+    env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoDecoration);
+    fid = env->GetStaticFieldID(cls, "WINDOW_NO_SCROLL_WITH_MOUSE", "I");
+    env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoScrollWithMouse);
     fid = env->GetStaticFieldID(cls, "COLOR_WIDGET", "I");
     env->SetStaticIntField(cls, fid, ImGuiCol_FrameBg);
     fid = env->GetStaticFieldID(cls, "COLOR_WIDGET_HOVERED", "I");
@@ -113,6 +117,12 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
     env->SetStaticIntField(cls, fid, ImGuiCol_HeaderActive);
     fid = env->GetStaticFieldID(cls, "COLOR_HEADER_HOVERED", "I");
     env->SetStaticIntField(cls, fid, ImGuiCol_HeaderHovered);
+    fid = env->GetStaticFieldID(cls, "COLOR_BUTTON", "I");
+    env->SetStaticIntField(cls, fid, ImGuiCol_Button);
+    fid = env->GetStaticFieldID(cls, "COLOR_BUTTON_ACTIVE", "I");
+    env->SetStaticIntField(cls, fid, ImGuiCol_ButtonActive);
+    fid = env->GetStaticFieldID(cls, "COLOR_BUTTON_HOVERED", "I");
+    env->SetStaticIntField(cls, fid, ImGuiCol_ButtonHovered);
     fid = env->GetStaticFieldID(cls, "COLOR_WINDOW_BORDER", "I");
     env->SetStaticIntField(cls, fid, ImGuiCol_Border);
     fid = env->GetStaticFieldID(cls, "COND_ALWAYS", "I");
@@ -161,7 +171,7 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
     return 1;
 }
 
-JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_addFont(JNIEnv *env, jclass, jstring jname, jobject jbuf, jfloat fsize) {
+JNIEXPORT jlong JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_addFont(JNIEnv *env, jclass, jstring jname, jobject jbuf, jfloat fsize) {
     JniString name(env, jname);
     ImFontConfig fc;
     strncpy(fc.Name, name, sizeof(fc.Name) - 1);
@@ -170,7 +180,17 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_addFont(JNIEnv *e
     jlong size = env->GetDirectBufferCapacity(jbuf);
     void *data = malloc(size);
     memcpy(data, jdata, size);
-    ImGui::GetIO().Fonts->AddFontFromMemoryTTF(data, size, fsize, &fc);
+    return static_cast<jlong>(
+        reinterpret_cast<intptr_t>(
+            ImGui::GetIO().Fonts->AddFontFromMemoryTTF(data, size, fsize, &fc)));
+}
+
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_pushFont(JNIEnv *, jclass, jlong fontHandle) {
+    ImGui::PushFont(reinterpret_cast<ImFont*>(static_cast<intptr_t>(fontHandle)));
+}
+
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_popFont(JNIEnv *, jclass) {
+    ImGui::PopFont();
 }
 
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_newFrame(JNIEnv *env, jclass cls) {
@@ -259,6 +279,11 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowDefaultToCursor(
     JNIEnv *env, jclass, jfloat w, jfloat h) {
     ImGui::SetNextWindowSize(ImVec2(LoadedDensity * w, LoadedDensity * h), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowPos(ImGui::GetCursorScreenPos(), ImGuiCond_FirstUseEver);
+}
+
+JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowSize(JNIEnv *, jclass, jfloat w, jfloat h) {
+    ImGui::SetNextWindowSize(ImVec2(LoadedDensity * w, LoadedDensity * h));
 }
 
 JNIEXPORT void JNICALL
@@ -358,9 +383,9 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_labelText(JNIEnv *env, jclass, jstring j
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_button(JNIEnv *env, jclass, jstring jstr) {
+Java_com_symmetrylabs_slstudio_ui_v2_UI_button(JNIEnv *env, jclass, jstring jstr, jfloat w, jfloat h) {
     JniString str(env, jstr);
-    bool res = ImGui::Button(str);
+    bool res = ImGui::Button(str, ImVec2{w, h});
     return res ? 1 : 0;
 }
 

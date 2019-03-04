@@ -61,7 +61,7 @@ bool Knob(const char *label, float *v, float vdisplay, float tmod, int mod_count
     ImVec2 label_size = CalcTextSize(label, NULL, true);
     ImVec2 size{
         (style.ItemInnerSpacing.x + style.KnobRadius) * 2,
-        (style.ItemInnerSpacing.y + style.KnobRadius) * 2 + label_size.y + style.KnobThick + style.ItemInnerSpacing.y};
+        (style.ItemInnerSpacing.y + style.KnobRadius) * 2 + label_size.y + style.KnobThick};
     const ImRect bb{pos, pos + size};
 
     ItemSize(bb);
