@@ -251,9 +251,9 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             new MutableParameter("SurfaceFocusLength", 0)
                     .setDescription("Control surface focus length");
 
-        public final BoundedParameter speed =
-                new BoundedParameter("Speed", 1, 0, 2)
-                .setDescription("Overall speed adjustement to all components in this channel");
+    public final BoundedParameter speed =
+            new BoundedParameter("Speed", 1, 0, 2)
+                    .setDescription("Overall speed adjustement to all components in this channel");
 
     private final List<LXPattern> mutablePatterns = new ArrayList<LXPattern>();
     public final List<LXPattern> patterns = Collections.unmodifiableList(mutablePatterns);
