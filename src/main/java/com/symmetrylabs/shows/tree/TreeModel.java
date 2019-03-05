@@ -286,6 +286,8 @@ public class TreeModel extends SLModel {
             t.rotateY(config.tilt * PI / 180.);
             t.rotateZ(config.azimuth * PI / 180.);
 
+            t.push();
+            t.rotateY(PI);
             this.x = t.x();
             this.y = t.y();
             this.z = t.z();
@@ -294,6 +296,7 @@ public class TreeModel extends SLModel {
             for (Twig twig : twigs) {
                 twig.reconfigure(t, config.getTwigs().get(i++));
             }
+            t.pop();
             t.pop();
         }
 
