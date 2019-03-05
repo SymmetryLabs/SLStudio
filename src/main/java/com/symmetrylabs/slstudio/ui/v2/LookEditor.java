@@ -3,15 +3,19 @@ package com.symmetrylabs.slstudio.ui.v2;
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXChannel.CrossfadeGroup;
+import heronarts.lx.LXMasterChannel;
 import heronarts.lx.color.LXColor;
 
-public class LookEditor {
+
+public class LookEditor implements Window {
     private final LX lx;
-    private final int HEIGHT = 270;
+    private final int HEIGHT = 300;
     private final int PIPELINE_WIDTH = 230;
     private final int PIPELINE_PAD = 8;
     private final int MENU_HEIGHT = 22;
     private final WepUi wepUi;
+    private final WepUi transformWepUi;
+    private boolean showLookTransform = false;
 
     static final int[] MAP_COLORS = {
         LXColor.rgb(112, 65, 65),
@@ -24,14 +28,19 @@ public class LookEditor {
     public LookEditor(LX lx) {
         this.lx = lx;
         this.wepUi = new WepUi(lx, () -> UI.closePopup());
+        this.transformWepUi = new WepUi(lx, false, () -> UI.closePopup());
     }
 
+    @Override
     public void draw() {
         UI.setNextWindowPosition(0, UI.height, 0, 1);
-        UI.setNextWindowSize(260 + 100 * lx.engine.getChannels().size(), HEIGHT);
+        float desiredWidth = 260 + 100 * lx.engine.getChannels().size();
+        UI.setNextWindowSize(Float.min(desiredWidth + 22, UI.width), HEIGHT);
+        UI.setNextWindowContentSize(desiredWidth, HEIGHT - 22);
         UI.begin(
             "Look Editor Bottom Pane",
-            UI.WINDOW_NO_MOVE | UI.WINDOW_NO_RESIZE | UI.WINDOW_NO_DECORATION | UI.WINDOW_NO_DOCKING | UI.WINDOW_NO_SCROLL_WITH_MOUSE);
+            UI.WINDOW_NO_MOVE | UI.WINDOW_NO_RESIZE | UI.WINDOW_NO_TITLE_BAR | UI.WINDOW_NO_DOCKING
+            | UI.WINDOW_NO_SCROLLBAR | (desiredWidth > UI.width ? UI.WINDOW_FORCE_HORIZ_SCROLL : 0));
 
         UI.beginGroup();
         UI.pushFont(FontLoader.DEFAULT_FONT_XL);
@@ -48,6 +57,8 @@ public class LookEditor {
             UI.button(String.format("-##shelf-trig/%d", col), 45, 45);
             if (col != 3) UI.sameLine();
         }
+
+        showLookTransform = UI.checkbox("Edit look transform", showLookTransform);
         UI.endGroup();
 
         int visibleWindowCount = 0;
@@ -107,6 +118,10 @@ public class LookEditor {
 
         UI.end();
 
+        if (showLookTransform) {
+            visibleWindowCount++;
+        }
+
         if (visibleWindowCount == 0) {
             return;
         }
@@ -118,12 +133,26 @@ public class LookEditor {
         int pipelineIndex = 0;
         for (LXChannel chan : lx.engine.getChannels()) {
             if (chan.editorVisible.getValueb()) {
-                UI.beginChild(chan.getLabel(), false, 0, PIPELINE_WIDTH, (int)UI.height);
+                UI.beginChild(chan.getLabel() + "##channel-child", false, 0, PIPELINE_WIDTH, (int) UI.height);
                 pipelineIndex = channelHeader(chan, chan.getLabel(), pipelineIndex);
                 ChannelUI.draw(lx, chan, wepUi);
                 UI.endChild();
                 UI.sameLine();
             }
+        }
+        if (showLookTransform) {
+            UI.beginChild("Look Transform##look-transform", false, 0, PIPELINE_WIDTH, (int) UI.height);
+
+            UI.pushFont(FontLoader.DEFAULT_FONT_L);
+            showLookTransform = UI.selectable("Look Transform##look-transform-header", true);
+            UI.popFont();
+
+            LXMasterChannel mc = lx.engine.masterChannel;
+            ChannelUI.drawEffects(lx, "Look", mc);
+            ChannelUI.drawWarps(lx, "Look", mc);
+            ChannelUI.drawWepPopup(lx, mc, transformWepUi);
+
+            UI.endChild();
         }
         UI.end();
     }

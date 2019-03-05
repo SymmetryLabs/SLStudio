@@ -108,6 +108,10 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
     env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoDecoration);
     fid = env->GetStaticFieldID(cls, "WINDOW_NO_SCROLL_WITH_MOUSE", "I");
     env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoScrollWithMouse);
+    fid = env->GetStaticFieldID(cls, "WINDOW_FORCE_HORIZ_SCROLL", "I");
+    env->SetStaticIntField(cls, fid, ImGuiWindowFlags_AlwaysHorizontalScrollbar);
+    fid = env->GetStaticFieldID(cls, "WINDOW_NO_SCROLLBAR", "I");
+    env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoScrollbar);
     fid = env->GetStaticFieldID(cls, "COLOR_WIDGET", "I");
     env->SetStaticIntField(cls, fid, ImGuiCol_FrameBg);
     fid = env->GetStaticFieldID(cls, "COLOR_WIDGET_HOVERED", "I");

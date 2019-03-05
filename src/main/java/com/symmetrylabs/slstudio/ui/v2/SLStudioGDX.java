@@ -124,6 +124,9 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         WindowManager.addPersistent("About imgui", () -> new SlimguiAboutWindow(), false);
 
         lookEditor = new LookEditor(lx);
+        /* we want WindowManager to handle all of the drawing so it can manage the interaction between
+           the UI running and the engine running, so we put it in charge of drawing the look editor */
+        WindowManager.addTransient(lookEditor);
 
         lx.engine.isMultithreaded.setValue(true);
         lx.engine.isChannelMultithreaded.setValue(true);
@@ -164,8 +167,6 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         renderer.draw();
         UI.newFrame();
         WindowManager.get().draw();
-
-        lookEditor.draw();
 
         UI.setNextWindowPosition(UI.width - 30, UI.height - 30, 1, 1);
         UI.begin("Logo overlay",

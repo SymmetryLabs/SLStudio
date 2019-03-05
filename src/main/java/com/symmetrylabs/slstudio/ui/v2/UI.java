@@ -17,6 +17,8 @@ public class UI {
     public static int WINDOW_ALWAYS_AUTO_RESIZE;
     public static int WINDOW_NO_DECORATION;
     public static int WINDOW_NO_SCROLL_WITH_MOUSE;
+    public static int WINDOW_FORCE_HORIZ_SCROLL;
+    public static int WINDOW_NO_SCROLLBAR;
 
     public static int DEFAULT_WIDTH = 250;
 
