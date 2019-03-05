@@ -331,7 +331,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         this.polyBuffer = new PolyBuffer(lx);
 
         this.focusedPattern =
-                new DiscreteParameter("Focused Pattern", 0, patterns.length)
+                new DiscreteParameter("Focused Pattern", 0, Integer.max(patterns.length, 1))
                         .setDescription("Which pattern has focus in the UI");
 
         this.blendMode = new ObjectParameter<LXBlend>("Blend", lx.engine.channelBlends)
@@ -483,7 +483,10 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         _updatePatterns(patterns);
         this.activePatternIndex = this.nextPatternIndex = 0;
         this.transition = null;
-        getActivePattern().onActive();
+        LXPattern active = getActivePattern();
+        if (active != null) {
+            active.onActive();
+        }
         return this;
     }
 
@@ -505,13 +508,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     }
 
     public final LXChannel removePattern(LXPattern pattern) {
-        return removePattern(pattern, true);
-    }
-
-    private final LXChannel removePattern(LXPattern pattern, boolean checkLast) {
-        if (checkLast && (this.mutablePatterns.size() <= 1)) {
-            throw new UnsupportedOperationException("LXChannel must have at least one pattern");
-        }
         int index = this.mutablePatterns.indexOf(pattern);
         if (index >= 0) {
             boolean wasActive = (this.activePatternIndex == index);
@@ -559,7 +555,9 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             }
             if (wasActive && (this.mutablePatterns.size() > 0)) {
                 LXPattern newActive = getActivePattern();
-                newActive.onActive();
+                if (newActive != null) {
+                    newActive.onActive();
+                }
                 for (Listener listener : this.listeners) {
                     listener.patternDidChange(this, newActive);
                 }
@@ -572,9 +570,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     private void _updatePatterns(LXPattern[] patterns) {
         if (patterns == null) {
             throw new IllegalArgumentException("May not set null pattern array");
-        }
-        if (patterns.length == 0) {
-            throw new IllegalArgumentException("LXChannel must have at least one pattern");
         }
         for (LXPattern pattern : this.mutablePatterns) {
             pattern.dispose();
@@ -612,6 +607,9 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     }
 
     public final LXPattern getFocusedPattern() {
+        if (mutablePatterns.isEmpty()) {
+            return null;
+        }
         return this.mutablePatterns.get(this.focusedPattern.getValuei());
     }
 
@@ -620,6 +618,9 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     }
 
     public final LXPattern getActivePattern() {
+        if (mutablePatterns.isEmpty()) {
+            return null;
+        }
         return this.mutablePatterns.get(this.activePatternIndex);
     }
 
@@ -628,11 +629,14 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     }
 
     public final LXPattern getNextPattern() {
+        if (mutablePatterns.isEmpty()) {
+            return null;
+        }
         return this.mutablePatterns.get(this.nextPatternIndex);
     }
 
     public final LXBus goPrev() {
-        if (this.transition != null) {
+        if (this.transition != null || mutablePatterns.isEmpty()) {
             return this;
         }
         this.nextPatternIndex = this.activePatternIndex - 1;
@@ -644,7 +648,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     }
 
     public final LXBus goNext() {
-        if (this.transition != null) {
+        if (this.transition != null || mutablePatterns.isEmpty()) {
             return this;
         }
         this.nextPatternIndex = this.activePatternIndex;
@@ -720,7 +724,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     private void startTransition() {
         LXPattern activePattern = getActivePattern();
         LXPattern nextPattern = getNextPattern();
-        if (activePattern == nextPattern) {
+        if (activePattern == nextPattern || activePattern == null || nextPattern == null) {
             return;
         }
         nextPattern.onActive();
@@ -803,8 +807,11 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
         // Run active pattern
         PolyBuffer.Space space = colorSpace.getEnum();
-        getActivePattern().setPreferredSpace(space);
-        getActivePattern().loop(deltaMs);
+        LXPattern active = getActivePattern();
+        if (active != null) {
+            getActivePattern().setPreferredSpace(space);
+            getActivePattern().loop(deltaMs);
+        }
 
         // Run transition!
         if (this.transition != null) {
@@ -823,9 +830,11 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
                 transition.blend(getNextPattern(), getActivePattern(),
                         (1 - transitionProgress) * 2, polyBuffer, space);
             }
-        } else {
+        } else if (active != null) {
             this.transitionProgress = 0;
-            polyBuffer.copyFrom(getActivePattern(), space);
+            polyBuffer.copyFrom(active, space);
+        } else {
+            polyBuffer.setZero();
         }
 
         // Apply effects
@@ -878,7 +887,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     public void load(LX lx, JsonObject obj) {
         // Remove patterns
         for (int i = this.mutablePatterns.size() - 1; i >= 0; --i) {
-            removePattern(this.mutablePatterns.get(i), false);
+            removePattern(this.mutablePatterns.get(i));
         }
 
         // Add patterns
@@ -891,9 +900,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
                 addPattern(pattern);
             }
         }
-        if (this.patterns.size() == 0) {
-            addPattern(new SolidColorPattern(lx));
-        }
 
         // Set the active index instantly, do not transition!
         this.activePatternIndex = this.nextPatternIndex = 0;
@@ -904,9 +910,11 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             }
         }
         LXPattern activePattern = getActivePattern();
-        activePattern.onActive();
-        for (Listener listener : listeners) {
-            listener.patternDidChange(this, activePattern);
+        if (activePattern != null) {
+            activePattern.onActive();
+            for (Listener listener : listeners) {
+                listener.patternDidChange(this, activePattern);
+            }
         }
 
         // Set the focused pattern to the active one

@@ -111,7 +111,7 @@ public class ChannelUi {
                 UI.pushColor(UI.COLOR_HEADER_ACTIVE, UI.BLUE);
                 UI.pushColor(UI.COLOR_HEADER_HOVERED, UI.BLUE_HOVER);
             }
-            UI.CollapseResult section = UI.collapsibleSection(patName + "##pattern-" + i, patterns.size() > 1, UI.TREE_FLAG_DEFAULT_OPEN);
+            UI.CollapseResult section = UI.collapsibleSection(patName + "##pattern-" + i, true, UI.TREE_FLAG_DEFAULT_OPEN);
             if (isActive || isMidiFocused) {
                 UI.popColor(3);
             }
