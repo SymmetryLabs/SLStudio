@@ -281,6 +281,9 @@ public class UI {
     public static native void setNextTreeNodeOpen(boolean isOpen, int when);
 
     /* Drag and drop. Package-private; use DragDrop class for memory-safe versions of these functions */
+    static boolean beginDragDropSource() {
+        return beginDragDropSource(0);
+    }
     static native boolean beginDragDropSource(int flags);
     static native void endDragDropSource();
     static native boolean setDragDropPayload(String type, Object data);

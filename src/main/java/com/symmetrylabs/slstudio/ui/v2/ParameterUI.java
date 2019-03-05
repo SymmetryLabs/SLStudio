@@ -55,7 +55,7 @@ public class ParameterUI {
             ? compoundKnob(lx, (CompoundParameter) p)
             : UI.knobFloat(getID(p), p.getValuef(), start);
 
-        if (UI.beginDragDropSource(0)) {
+        if (UI.beginDragDropSource()) {
             UI.setDragDropPayload("SL.BoundedParameter", p);
             UI.endDragDropSource();
         }
