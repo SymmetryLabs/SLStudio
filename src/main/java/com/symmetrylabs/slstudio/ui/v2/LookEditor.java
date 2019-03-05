@@ -120,7 +120,7 @@ public class LookEditor {
             if (chan.editorVisible.getValueb()) {
                 UI.beginChild(chan.getLabel(), false, 0, PIPELINE_WIDTH, (int)UI.height);
                 pipelineIndex = channelHeader(chan, chan.getLabel(), pipelineIndex);
-                ChannelUi.draw(lx, chan, wepUi);
+                ChannelUI.draw(lx, chan, wepUi);
                 UI.endChild();
                 UI.sameLine();
             }

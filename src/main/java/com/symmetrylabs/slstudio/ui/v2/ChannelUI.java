@@ -10,7 +10,7 @@ import heronarts.lx.warp.LXWarp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChannelUi {
+public class ChannelUI {
     public static void drawWarps(LX lx, String chanName, LXBus chan) {
         List<LXWarp> warps = chan.getWarps();
         if (!warps.isEmpty()) {
