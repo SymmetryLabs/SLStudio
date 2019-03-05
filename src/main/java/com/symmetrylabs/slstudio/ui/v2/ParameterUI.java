@@ -118,12 +118,13 @@ public class ParameterUI {
         return flip ? !active : active;
     }
 
-    public static void toggle(LX lx, BooleanParameter p, boolean important, float w) {
+    public static boolean toggle(LX lx, BooleanParameter p, boolean important, float w) {
         final boolean start = p.getValueb();
         final boolean res = toggle(getID(p), start, important, w);
         if (res != start) {
             lx.engine.addTask(() -> p.setValue(res));
         }
+        return res;
     }
 
     public static void draw(LX lx, BooleanParameter p) {

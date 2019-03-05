@@ -3,11 +3,23 @@ package com.symmetrylabs.slstudio.ui.v2;
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXChannel.CrossfadeGroup;
+import heronarts.lx.color.LXColor;
 
 public class LookEditor {
     private final LX lx;
     private final int HEIGHT = 270;
+    private final int PIPELINE_WIDTH = 230;
+    private final int PIPELINE_PAD = 8;
+    private final int MENU_HEIGHT = 22;
     private final WepUi wepUi;
+
+    static final int[] MAP_COLORS = {
+        LXColor.rgb(112, 65, 65),
+        LXColor.rgb(112, 97, 66),
+        LXColor.rgb(76, 107, 67),
+        LXColor.rgb(61, 96, 114),
+        LXColor.rgb(91, 67, 107),
+    };
 
     public LookEditor(LX lx) {
         this.lx = lx;
@@ -38,22 +50,13 @@ public class LookEditor {
         }
         UI.endGroup();
 
+        int visibleWindowCount = 0;
         for (LXChannel chan : lx.engine.getChannels()) {
             String chanName = chan.getLabel();
             UI.sameLine();
             UI.beginChild(chanName, false, 0, 90, HEIGHT);
 
-            UI.pushFont(FontLoader.DEFAULT_FONT_L);
-            UI.pushColor(UI.COLOR_HEADER, chan.editorColor.getColor());
-            UI.pushColor(UI.COLOR_HEADER_ACTIVE, chan.editorColor.getColor());
-            UI.pushColor(UI.COLOR_HEADER_HOVERED, chan.editorColor.getColor());
-            boolean isVisible = chan.editorVisible.getValueb();
-            boolean newVisible = UI.selectable(chanName, isVisible);
-            if (isVisible != newVisible) {
-                lx.engine.addTask(() -> chan.editorVisible.setValue(newVisible));
-            }
-            UI.popColor(3);
-            UI.popFont();
+            visibleWindowCount = channelHeader(chan, chanName, visibleWindowCount);
 
             float fader = UI.vertSliderFloat("##fader-" + chanName, chan.fader.getValuef(), 0, 1, "", 30, 180);
             if (fader != chan.fader.getValuef()) {
@@ -65,7 +68,14 @@ public class LookEditor {
             CrossfadeGroup group = chan.crossfadeGroup.getEnum();
 
             ParameterUI.toggle(lx, chan.enabled, false, 40);
-            ParameterUI.toggle(lx, chan.cueActive, true, 40);
+            boolean cueStart = chan.cueActive.getValueb();
+            if (ParameterUI.toggle(lx, chan.cueActive, true, 40) && !cueStart) {
+                for (LXChannel cc : lx.engine.getChannels()) {
+                    if (cc != chan) {
+                        cc.cueActive.setValue(false);
+                    }
+                }
+            }
             boolean A = ParameterUI.toggle("A##" + chanName, group == CrossfadeGroup.A, false, 40);
             boolean B = ParameterUI.toggle("B##" + chanName, group == CrossfadeGroup.B, false, 40);
 
@@ -97,16 +107,45 @@ public class LookEditor {
 
         UI.end();
 
+        if (visibleWindowCount == 0) {
+            return;
+        }
+
+        UI.setNextWindowPosition(0, MENU_HEIGHT, 0, 0);
+        UI.setNextWindowSize(visibleWindowCount * (PIPELINE_WIDTH + PIPELINE_PAD), UI.height - HEIGHT - MENU_HEIGHT);
+        UI.begin("Pipeline Windows",
+                 UI.WINDOW_NO_MOVE | UI.WINDOW_NO_RESIZE | UI.WINDOW_NO_DECORATION | UI.WINDOW_NO_DOCKING | UI.WINDOW_NO_SCROLL_WITH_MOUSE);
+        int pipelineIndex = 0;
         for (LXChannel chan : lx.engine.getChannels()) {
             if (chan.editorVisible.getValueb()) {
-                boolean open = UI.beginClosable(chan.getLabel());
-                if (!open) {
-                    chan.editorVisible.setValue(false);
-                } else {
-                    ChannelUi.draw(lx, chan, wepUi);
-                }
-                UI.end();
+                UI.beginChild(chan.getLabel(), false, 0, PIPELINE_WIDTH, (int)UI.height);
+                pipelineIndex = channelHeader(chan, chan.getLabel(), pipelineIndex);
+                ChannelUi.draw(lx, chan, wepUi);
+                UI.endChild();
+                UI.sameLine();
             }
         }
+        UI.end();
+    }
+
+    private final int channelHeader(LXChannel chan, String chanName, int visibleWindowCount) {
+        UI.pushFont(FontLoader.DEFAULT_FONT_L);
+        boolean isVisible = chan.editorVisible.getValueb();
+        if (isVisible) {
+            int c = MAP_COLORS[visibleWindowCount % MAP_COLORS.length];
+            visibleWindowCount++;
+            UI.pushColor(UI.COLOR_HEADER, c);
+            UI.pushColor(UI.COLOR_HEADER_ACTIVE, c);
+            UI.pushColor(UI.COLOR_HEADER_HOVERED, c);
+        }
+        boolean newVisible = UI.selectable(chanName + "##header", isVisible);
+        if (isVisible != newVisible) {
+            lx.engine.addTask(() -> chan.editorVisible.setValue(newVisible));
+        }
+        if (isVisible) {
+            UI.popColor(3);
+        }
+        UI.popFont();
+        return visibleWindowCount;
     }
 }

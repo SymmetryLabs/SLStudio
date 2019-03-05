@@ -260,10 +260,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             new BooleanParameter("EditorVisible", false)
                     .setDescription("Sets whether this channel is visible for editing in the look editor");
 
-    public final ColorParameter editorColor =
-            new ColorParameter("EditorColor", 0xFFFF0000)
-                    .setDescription("Sets the color associated with this channel in the look editor");
-
     private final List<LXPattern> mutablePatterns = new ArrayList<LXPattern>();
     public final List<LXPattern> patterns = Collections.unmodifiableList(mutablePatterns);
 
@@ -362,7 +358,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         addParameter("autoDisable", this.autoDisable);
         addParameter("speed", this.speed);
         addParameter("editorVisible", this.editorVisible);
-        addParameter("editorColor", this.editorColor);
     }
 
     boolean shouldRun() {
