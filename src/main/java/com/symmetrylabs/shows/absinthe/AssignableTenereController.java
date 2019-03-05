@@ -39,12 +39,12 @@ public class AssignableTenereController extends LXDatagramOutput {
 		    }
 		}
 
-		int twigIndex = 0;
+		int twigIndex = 1;
 		for (int i = 0; i < packets.length; i++) {
 		    int pi = 0;
 		    for (int j = 0; j < TWIGS_PER_PACKET; j++) {
-		        if (twigIndex < branch.getTwigs().size()) {
-		        	TreeModel.Twig twig = branch.getTwigs().get(twigIndex);
+		        if (twigIndex < branch.getTwigs().size()+1) {
+		        	TreeModel.Twig twig = branch.getTwigByWiringIndex(twigIndex);
 		            for (LXPoint point : twig.points) {
 		                packets[i][pi++] = point.index;
 		            }
