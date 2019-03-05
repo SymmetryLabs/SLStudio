@@ -245,7 +245,7 @@ public class LX {
         LX.initTimer.log("Tempo");
 
         // Add a default channel
-        this.engine.addChannel(new LXPattern[] { new IteratorTestPattern(this) }).fader.setValue(1);
+        this.engine.addChannel(new LXPattern[0]).fader.setValue(1);
         LX.initTimer.log("Default Channel");
 
     }
@@ -788,4 +788,3 @@ public class LX {
         return instantiateComponent(className, LXWarp.class);
     }
 }
-
