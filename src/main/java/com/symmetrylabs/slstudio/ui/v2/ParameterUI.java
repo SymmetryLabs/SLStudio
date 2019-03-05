@@ -54,6 +54,20 @@ public class ParameterUI {
             p instanceof CompoundParameter
             ? compoundKnob(lx, (CompoundParameter) p)
             : UI.knobFloat(getID(p), p.getValuef(), start);
+
+        if (UI.beginDragDropSource(0)) {
+            UI.setDragDropPayload("SL.BoundedParameter", p);
+            UI.endDragDropSource();
+        }
+        if (UI.beginDragDropTarget()) {
+            BoundedParameter dragged = UI.acceptDragDropPayload("SL.BoundedParameter", BoundedParameter.class);
+            if (dragged != null) {
+                // TODO: use this to create links/modulations
+                System.out.println(String.format("drag %s onto %s", dragged.getLabel(), p.getLabel()));
+            }
+            UI.endDragDropTarget();
+        }
+
         if (start != res) {
             final float fres = res;
             lx.engine.addTask(() -> p.setNormalized(fres));

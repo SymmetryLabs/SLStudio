@@ -280,6 +280,21 @@ public class UI {
     }
     public static native void setNextTreeNodeOpen(boolean isOpen, int when);
 
+    /* Drag and drop. Package-private; use DragDrop class for memory-safe versions of these functions */
+    static native boolean beginDragDropSource(int flags);
+    static native void endDragDropSource();
+    static native boolean setDragDropPayload(String type, Object data);
+    static native boolean beginDragDropTarget();
+    static native void endDragDropTarget();
+    static native Object acceptDragDropPayload(String type, int flags);
+    public static <T> T acceptDragDropPayload(String type, Class<T> cls) {
+        Object res = acceptDragDropPayload(type, 0);
+        if (res == null || !cls.isAssignableFrom(res.getClass())) {
+            return null;
+        }
+        return (T) res;
+    }
+
     /* Interaction */
     public static boolean isItemClicked() {
         return isItemClicked(0, false);
