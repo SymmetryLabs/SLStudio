@@ -17,12 +17,11 @@ public class LookEditor implements Window {
     private final WepUi transformWepUi;
     private boolean showLookTransform = false;
 
-    static final int[] MAP_COLORS = {
-        LXColor.rgb(112, 65, 65),
-        LXColor.rgb(112, 97, 66),
-        LXColor.rgb(76, 107, 67),
-        LXColor.rgb(61, 96, 114),
-        LXColor.rgb(91, 67, 107),
+    static final int[] MAP_COLORS = new int[10];
+    static {
+        for (int i = 0; i < MAP_COLORS.length; i++) {
+            MAP_COLORS[i] = LXColor.hsb(i * 360.f / MAP_COLORS.length, 50, 50);
+        }
     };
 
     public LookEditor(LX lx) {
@@ -112,7 +111,11 @@ public class LookEditor implements Window {
         if (UI.button("+", 30, 230)) {
             /* running this has the potential to cause CME issues in both the UI
                and the engine, so we have to sync the world to do it. */
-            WindowManager.runSafelyWithEngine(lx, () -> lx.engine.setFocusedChannel(lx.engine.addChannel()));
+            WindowManager.runSafelyWithEngine(lx, () -> {
+                    LXChannel chan = lx.engine.addChannel();
+                    lx.engine.setFocusedChannel(chan);
+                    chan.editorVisible.setValue(true);
+                });
         }
         UI.popFont();
 
