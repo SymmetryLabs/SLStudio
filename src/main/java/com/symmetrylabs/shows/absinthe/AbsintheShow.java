@@ -12,6 +12,7 @@ import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.LXLoopTask;
 
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudio;
@@ -50,31 +51,31 @@ public class AbsintheShow extends TreeShow {
     };
 
     final BranchConfig[] LIMB_TYPE_L1 = new BranchConfig[] {
-        new BranchConfig(false, -30.61f,  87.01f,  -0.44f,  60.0f, 0, 1.0f, BRANCH),
-        new BranchConfig(false, -20.52f,  120.40f,  3.15f,  47.5f, 0, 20f,  BRANCH),
-        new BranchConfig(false, -5.86f,   125.31f,  0.44f,  -30.0f,  0, 3.0f, BRANCH),
-        new BranchConfig(false, 29.11f, 105.08f,  3.72f,  -61.1f,  0, 7.0f, BRANCH),
-        new BranchConfig(false, 8.6f,   59.68f,   -3.37f, -60.0f,  0, 8.5f, BRANCH),
+        new BranchConfig(false, -30.61f,  87.01f,  -0.44f,  60.0f, 0, 1.0f, BRANCH, false),
+        new BranchConfig(false, -20.52f,  120.40f,  3.15f,  47.5f, 0, 20f,  BRANCH, false),
+        new BranchConfig(false, -5.86f,   125.31f,  0.44f,  -30.0f,  0, 3.0f, BRANCH, false),
+        new BranchConfig(false, 29.11f, 105.08f,  3.72f,  -61.1f,  0, 7.0f, BRANCH, false),
+        new BranchConfig(false, 8.6f,   59.68f,   -3.37f, -60.0f,  0, 8.5f, BRANCH, false),
     };
 
     final BranchConfig[] LIMB_TYPE_L2 = new BranchConfig[] {
-        new BranchConfig(false, 0.25f,   49.67f,  -10.52f, 0,  29,  15,  BRANCH),
-        new BranchConfig(false, -8.62f,  61.81f,  -3.37f, 61,  5,   15,  BRANCH),
-        new BranchConfig(false, -30.71f, 103.38f, 3.41f,  61,  -3,  -6,  BRANCH),
-        new BranchConfig(false, 4.03f,   118.11f, 0.20f,  30,  0,   3,   BRANCH),
-        new BranchConfig(false, 20.44f,  121.61f, 0.76f,  -45, 10,  20,  BRANCH),
-        new BranchConfig(false, 29.94f,  87.55f,  -1.34f, -60, 10,  20,  BRANCH),
+        new BranchConfig(false, 0.25f,   49.67f,  -10.52f, 0,  29,  15,  BRANCH, true),
+        new BranchConfig(false, -8.62f,  61.81f,  -3.37f, 61,  5,   15,  BRANCH, true),
+        new BranchConfig(false, -30.71f, 103.38f, 3.41f,  61,  -3,  -6,  BRANCH, true),
+        new BranchConfig(false, 4.03f,   118.11f, 0.20f,  30,  0,   3,   BRANCH, true),
+        new BranchConfig(false, 20.44f,  121.61f, 0.76f,  -45, 10,  20,  BRANCH, true),
+        new BranchConfig(false, 29.94f,  87.55f,  -1.34f, -60, 10,  20,  BRANCH, true),
         
     };
 
     final BranchConfig[] LIMB_TYPE_L3 = new BranchConfig[] {
-        new BranchConfig(false, -6.93f, 67.40f, -0.49f, 50,  5,  -5,  BRANCH),
-        new BranchConfig(false, 16.84f, 92.66f, 2.95f,  15,  -7, -10, BRANCH),
-        new BranchConfig(false, 31.99f, 88.76f, 0.56f,  -59, 10,  0,  BRANCH),
+        new BranchConfig(false, -6.93f, 67.40f, -0.49f, 50,  5,  -5,  BRANCH, true),
+        new BranchConfig(false, 16.84f, 92.66f, 2.95f,  15,  -7, -10, BRANCH, true),
+        new BranchConfig(false, 31.99f, 88.76f, 0.56f,  -59, 10,  0,  BRANCH, true),
     };
 
     final BranchConfig[] LIMB_TYPE_SINGLE_BRANCH = new BranchConfig[] {
-        new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH, true),
     };
 
     public SLModel buildModel() {
@@ -138,12 +139,24 @@ public class AbsintheShow extends TreeShow {
         return tree;
     }
 
-    public void setupLx(LX lx) {
+    public void setupLx(final LX lx) {
         super.setupLx(lx);
         TreeModel tree = (TreeModel) (lx.model);
         TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
 
         System.out.println("Number of branches: " + tree.getBranches().size());
+
+        lx.engine.addLoopTask(new LXLoopTask() {
+            @Override
+            public void loop(double v) {
+                if (lx.engine.output.brightness.getValuef() > 0.8f) {
+                    lx.engine.output.brightness.setValue(0.8f);
+                }
+                if (lx.engine.framesPerSecond.getValuef() != 60) {
+                    lx.engine.framesPerSecond.setValue(60);
+                }
+            }
+        });
 
         try {
             for (TreeModel.Branch branch : tree.getBranches()) {

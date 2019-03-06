@@ -47,9 +47,6 @@ public class UITenereControllers extends UICollapsibleSection {
         final AssignableTenereController controller;
 
         ControllerItem(AssignableTenereController controller) {
-            System.out.println("-------");
-            System.out.println(controller);
-            System.out.println("-------");
             this.controller = controller;
         }
 
