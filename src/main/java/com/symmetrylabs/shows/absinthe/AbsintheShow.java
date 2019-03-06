@@ -39,14 +39,14 @@ public class AbsintheShow extends TreeShow {
     public final Map<TreeModel.Branch, AssignableTenereController> controllers = new HashMap<>();
 
     final TwigConfig[] BRANCH = new TwigConfig[]{
-        new TwigConfig( -15.36f,  16.32f, 0.0f,  57.20f, 0.0f, 0.0f, 5),
-        new TwigConfig(  -9.56f,  24.00f, 0.0f, -54.40f, 0.0f, 0.0f, 4),
-        new TwigConfig( -15.36f,  33.60f, 0.0f,  36.00f, 0.0f, 0.0f, 3),
-        new TwigConfig(  -8.64f,  44.12f, 0.0f,  39.60f, 0.0f, 0.0f, 2),
-        new TwigConfig(    0.0f,  48.96f, 0.0f,    0.0f, 0.0f, 0.0f, 1),
-        new TwigConfig(  12.48f,  43.20f, 0.0f, -43.20f, 0.0f, 0.0f, 8),
-        new TwigConfig(  13.44f,  27.84f, 0.0f, -26.40f, 0.0f, 0.0f, 7),
-        new TwigConfig(  16.32f,  20.16f, 0.0f, -64.80f, 0.0f, 0.0f, 6),
+        new TwigConfig( -15.36f,  16.32f, 0.0f,  57.20f, 180.0f, 0.0f, 5),
+        new TwigConfig(  -9.56f,  24.00f, 0.0f, -54.40f, 180.0f, 0.0f, 4),
+        new TwigConfig( -15.36f,  33.60f, 0.0f,  36.00f, 180.0f, 0.0f, 3),
+        new TwigConfig(  -8.64f,  44.12f, 0.0f,  39.60f, 180.0f, 0.0f, 2),
+        new TwigConfig(    0.0f,  48.96f, 0.0f,    0.0f, 180.0f, 0.0f, 1),
+        new TwigConfig(  12.48f,  43.20f, 0.0f, -43.20f, 180.0f, 0.0f, 8),
+        new TwigConfig(  13.44f,  27.84f, 0.0f, -26.40f, 180.0f, 0.0f, 7),
+        new TwigConfig(  16.32f,  20.16f, 0.0f, -64.80f, 180.0f, 0.0f, 6),
     };
 
     final BranchConfig[] LIMB_TYPE_L1 = new BranchConfig[] {
@@ -185,7 +185,8 @@ class UITent extends UI3dComponent {
         float angle = 360 / NUM_SIDES;
 
         pg.beginShape();
-        pg.fill(0xffff0000);
+        pg.stroke(0xffff0000);
+        pg.fill(0xff222222);
 
         for (int i = 0; i < NUM_SIDES; i++) {
             float x = cos(radians(i * angle)) * RADIUS;
