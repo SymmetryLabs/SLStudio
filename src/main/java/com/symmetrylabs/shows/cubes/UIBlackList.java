@@ -26,7 +26,7 @@ public class UIBlackList extends UICollapsibleSection {
 
         dispatcher = Dispatcher.getInstance(lx);
 
-        outputList = new UIItemList.ScrollList(ui, 0, 10, w-8, 20);
+        outputList = new UIItemList.ScrollList(ui, 0, 0, w-8, 100);
 
         updateItems(show);
         outputList.setSingleClickActivate(true);
@@ -59,8 +59,10 @@ public class UIBlackList extends UICollapsibleSection {
         final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
 
         String blacklist[] = {
-            "1300",
-            "1301"
+            "397",
+            "?14",
+            "530",
+            "1071"
         };
 
         for (CubesController c : show.getSortedControllers()) {
