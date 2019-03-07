@@ -1,13 +1,18 @@
 package com.symmetrylabs.shows.pilots_v2;
 
 import com.symmetrylabs.shows.HasWorkspace;
-import com.symmetrylabs.shows.cubes.*;
+import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.shows.cubes.CubesShow;
+import com.symmetrylabs.shows.cubes.UICubesMappingPanel;
+import com.symmetrylabs.shows.cubes.UICubesOutputs;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
+import com.symmetrylabs.util.EdgeSwitch.EdgeSwitch;
 import heronarts.lx.transform.LXTransform;
 import heronarts.p3lx.ui.UI2dScrollContext;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +47,8 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
     static final float FLANK_SPACING = -0.5f;
 
     static final float INCHES_PER_METER = 39.3701f;
+
+    static EdgeSwitch[] brains;
 
     static final ClusterConfig[] clusters = new ClusterConfig[] {
 
@@ -404,6 +411,18 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
         workspace = new Workspace(lx, ui, "/Users/symmetry/symmetrylabs/software/SLStudio/shows/pilots");
         workspace.setRequestsBeforeSwitch(2);
 
+        brains = new EdgeSwitch[14];
+
+        try {
+            brains[0] = new EdgeSwitch("10.200.1.242");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            brains[0].retrieve_port_power_output();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         UI2dScrollContext utility = ui.rightPane.utility;
         new UICubesOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
