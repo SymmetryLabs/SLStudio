@@ -13,6 +13,7 @@ import com.symmetrylabs.shows.hblamp.HbLampShow;
 import com.symmetrylabs.shows.hhgarden.HHFlowerShow;
 import com.symmetrylabs.shows.hhgarden.HHGardenShow;
 import com.symmetrylabs.shows.googlehq.GoogleHqShow;
+import com.symmetrylabs.shows.japantree.JapanTreeShow;
 import com.symmetrylabs.shows.kalpa.KalpaShow;
 import com.symmetrylabs.shows.magicleap.MagicLeapShow;
 import com.symmetrylabs.shows.mikey.MikeyShow;
@@ -98,6 +99,7 @@ public class ShowRegistry {
         map.put(LoveBurnShow.SHOW_NAME, () -> new LoveBurnShow());
         map.put(Sundance19Show.SHOW_NAME, () -> new Sundance19Show());
         map.put(AbsintheShow.SHOW_NAME, () -> new AbsintheShow());
+        map.put(JapanTreeShow.SHOW_NAME, () -> new JapanTreeShow());
     }
 
     static interface ShowBuilder {
