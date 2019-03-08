@@ -10,6 +10,7 @@ import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 import java.io.IOException;
+import com.symmetrylabs.slstudio.ApplicationState;
 
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
@@ -44,10 +45,41 @@ public class JapanTreeShow extends TreeShow {
     public final Map<TreeModel.Branch, AssignableTenereController> controllers = new HashMap<>();
 
     final TwigConfig[] branch;
+    final TwigConfig[] twigBranch;
     final BranchConfig[] limbType1;
     final BranchConfig[] limbType2;
     final BranchConfig[] limbType3;
-    final BranchConfig[] limbTypeSingleBranch;
+
+    private static BranchConfig[] loadFromPly(String fileName, int limb, HashMap<Integer, TwigConfig[]> branchTypes) {
+        List<BranchConfig> configs = new ArrayList<>();
+        try {
+            PlyReaderFile ply = new PlyReaderFile(fileName);
+            ElementReader plyReader = ply.nextElementReader();
+            for (Element elem = plyReader.readElement(); elem != null; elem = plyReader.readElement()) {
+                if (elem.getInt("limb") != limb) {
+                    continue;
+                }
+                Integer branchType = elem.getInt("branchtype");
+                if (!branchTypes.containsKey(branchType)) {
+                    ApplicationState.setWarning("JapanTree", "bad branch type " + branchType + " in limb " + limb);
+                    continue;
+                }
+                configs.add(
+                    new BranchConfig(
+                        false,
+                        (float) elem.getDouble("x"), (float) elem.getDouble("y"), (float) elem.getDouble("z"),
+                        (float) elem.getDouble("azimuth"), (float) elem.getDouble("elevation"), (float) elem.getDouble("tilt"),
+                        branchTypes.get(branchType)));
+            }
+            ply.close();
+        } catch (IOException e) {
+            System.out.println("unable to load point cloud for limb, exiting");
+            throw new RuntimeException(e);
+        }
+        BranchConfig res[] = new BranchConfig[configs.size()];
+        configs.toArray(res);
+        return res;
+    }
 
     public JapanTreeShow() {
         List<TwigConfig> branchTwigs = new ArrayList<>();
@@ -70,86 +102,28 @@ public class JapanTreeShow extends TreeShow {
         branch = new TwigConfig[branchTwigs.size()];
         branchTwigs.toArray(branch);
 
-        List<BranchConfig> limbABranches = new ArrayList<>();
-        try {
-            PlyReaderFile ply = new PlyReaderFile("shows/japantree/limb-A.ply");
-            ElementReader plyReader = ply.nextElementReader();
-            int i = 1;
-            for (Element elem = plyReader.readElement(); elem != null; elem = plyReader.readElement()) {
-                limbABranches.add(
-                    new BranchConfig(
-                        false,
-                        (float) elem.getDouble("x"), (float) elem.getDouble("y"), (float) elem.getDouble("z"),
-                        (float) elem.getDouble("azimuth"), (float) elem.getDouble("elevation"), (float) elem.getDouble("tilt"),
-                        branch));
-            }
-            ply.close();
-        } catch (IOException e) {
-            System.out.println("unable to load point cloud for limb A, exiting");
-            throw new RuntimeException(e);
-        }
-        limbType1 = new BranchConfig[limbABranches.size()];
-        limbABranches.toArray(limbType1);
-
-        List<BranchConfig> limbBBranches = new ArrayList<>();
-        try {
-            PlyReaderFile ply = new PlyReaderFile("shows/japantree/limb-B.ply");
-            ElementReader plyReader = ply.nextElementReader();
-            int i = 1;
-            for (Element elem = plyReader.readElement(); elem != null; elem = plyReader.readElement()) {
-                limbBBranches.add(
-                    new BranchConfig(
-                        false,
-                        (float) elem.getDouble("x"), (float) elem.getDouble("y"), (float) elem.getDouble("z"),
-                        (float) elem.getDouble("azimuth"), (float) elem.getDouble("elevation"), (float) elem.getDouble("tilt"),
-                        branch));
-            }
-            ply.close();
-        } catch (IOException e) {
-            System.out.println("unable to load point cloud for limb A, exiting");
-            throw new RuntimeException(e);
-        }
-        limbType2 = new BranchConfig[limbBBranches.size()];
-        limbBBranches.toArray(limbType2);
-
-        List<BranchConfig> limbCBranches = new ArrayList<>();
-        try {
-            PlyReaderFile ply = new PlyReaderFile("shows/japantree/limb-C.ply");
-            ElementReader plyReader = ply.nextElementReader();
-            int i = 1;
-            for (Element elem = plyReader.readElement(); elem != null; elem = plyReader.readElement()) {
-                limbCBranches.add(
-                    new BranchConfig(
-                        false,
-                        (float) elem.getDouble("x"), (float) elem.getDouble("y"), (float) elem.getDouble("z"),
-                        (float) elem.getDouble("azimuth"), (float) elem.getDouble("elevation"), (float) elem.getDouble("tilt"),
-                        branch));
-            }
-            ply.close();
-        } catch (IOException e) {
-            System.out.println("unable to load point cloud for limb A, exiting");
-            throw new RuntimeException(e);
-        }
-        limbType3 = new BranchConfig[limbCBranches.size()];
-        limbCBranches.toArray(limbType3);
-
-        limbTypeSingleBranch = new BranchConfig[] {
-            new BranchConfig(false, 0, 0, 0, 0, 0, 0, branch),
+        twigBranch = new TwigConfig[] {
+            new TwigConfig(0, 0, 0, 0, 0, 0, 1),
         };
+
+        HashMap<Integer, TwigConfig[]> branchTypes = new HashMap<>();
+        branchTypes.put(0, branch);
+        branchTypes.put(1, twigBranch);
+        limbType1 = loadFromPly("shows/japantree/limbs.ply", 0, branchTypes);
+        limbType2 = loadFromPly("shows/japantree/limbs.ply", 1, branchTypes);
+        limbType3 = loadFromPly("shows/japantree/limbs.ply", 2, branchTypes);
     }
 
     public SLModel buildModel() {
         TreeConfig.createLimbType("Limb/L1", limbType1);
         TreeConfig.createLimbType("Limb/L2", limbType2);
         TreeConfig.createLimbType("Limb/L3", limbType3);
-        TreeConfig.createLimbType("Limb/Single Branch", limbTypeSingleBranch);
         TreeConfig.createBranchType("Branch", branch);
 
         TreeConfig config = new TreeConfig(new LimbConfig[] {
                 new LimbConfig(false, 0, 0, 0, 0, 0, limbType1),
                 new LimbConfig(false, 0, 0, 0, 0, 0, limbType2),
                 new LimbConfig(false, 0, 0, 0, 0, 0, limbType3),
-                //new LimbConfig(false, 0, 0, 0, 0, 0, limbTypeSingleBranch),
             });
 
         TreeModel tree = new TreeModel(config);

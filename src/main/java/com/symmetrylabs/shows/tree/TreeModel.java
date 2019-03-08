@@ -287,7 +287,7 @@ public class TreeModel extends SLModel {
             t.rotateZ(config.azimuth * PI / 180.);
 
             t.push();
-            t.rotateY(PI);
+            //t.rotateY(PI);
             this.x = t.x();
             this.y = t.y();
             this.z = t.z();
