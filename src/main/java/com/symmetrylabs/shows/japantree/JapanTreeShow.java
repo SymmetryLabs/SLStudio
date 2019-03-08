@@ -156,13 +156,8 @@ public class JapanTreeShow extends TreeShow {
         return tree;
     }
 
-    public void setupLx(LX lx) {
-        super.setupLx(lx);
-        TreeModel tree = (TreeModel) (lx.model);
-        TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
-    }
-
-    public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
-        super.setupUi(lx, ui);
+    @Override
+    protected boolean readConfigFromDisk() {
+        return false;
     }
 }

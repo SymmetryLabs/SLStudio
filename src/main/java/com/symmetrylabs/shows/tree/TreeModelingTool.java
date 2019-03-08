@@ -44,10 +44,10 @@ public class TreeModelingTool extends LXComponent {
     public final BranchManipulator branchManipulator;
     public final TwigManipulator twigManipulator;
 
-    private TreeModelingTool(LX lx) {
+    private TreeModelingTool(LX lx, boolean readConfigFromDisk) {
         super(lx, "TreeModelingTool");
         this.tree = (TreeModel) lx.model;
-        this.store = new TreeConfigStore(lx);
+        this.store = new TreeConfigStore(lx, readConfigFromDisk);
 
         this.limbManipulator = new LimbManipulator(lx);
         addSubcomponent(limbManipulator);
@@ -90,9 +90,13 @@ public class TreeModelingTool extends LXComponent {
     }
 
     public static TreeModelingTool getInstance(LX lx) {
-        if (instance == null)
-            instance = new TreeModelingTool(lx);
+        return getInstance(lx, true);
+    }
 
+    public static TreeModelingTool getInstance(LX lx, boolean readConfigFromDisk) {
+        if (instance == null) {
+            instance = new TreeModelingTool(lx, readConfigFromDisk);
+        }
         return instance;
     }
 
