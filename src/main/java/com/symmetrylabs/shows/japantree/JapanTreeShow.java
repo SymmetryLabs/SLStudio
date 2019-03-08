@@ -11,6 +11,8 @@ import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 import java.io.IOException;
 import com.symmetrylabs.slstudio.ApplicationState;
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
 
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
@@ -49,6 +51,7 @@ public class JapanTreeShow extends TreeShow {
     final BranchConfig[] limbType1;
     final BranchConfig[] limbType2;
     final BranchConfig[] limbType3;
+    TreeConfig config;
 
     private static BranchConfig[] loadFromPly(String fileName, int limb, HashMap<Integer, TwigConfig[]> branchTypes) {
         List<BranchConfig> configs = new ArrayList<>();
@@ -114,24 +117,31 @@ public class JapanTreeShow extends TreeShow {
         limbType3 = loadFromPly("shows/japantree/limbs.ply", 2, branchTypes);
     }
 
+    @Override
     public SLModel buildModel() {
         TreeConfig.createLimbType("Limb/L1", limbType1);
         TreeConfig.createLimbType("Limb/L2", limbType2);
         TreeConfig.createLimbType("Limb/L3", limbType3);
         TreeConfig.createBranchType("Branch", branch);
 
-        TreeConfig config = new TreeConfig(new LimbConfig[] {
+        config = new TreeConfig(new LimbConfig[] {
                 new LimbConfig(false, 0, 0, 0, 0, 0, limbType1),
                 new LimbConfig(false, 0, 0, 0, 0, 0, limbType2),
                 new LimbConfig(false, 0, 0, 0, 0, 0, limbType3),
             });
-
         TreeModel tree = new TreeModel(config);
         return tree;
     }
 
     @Override
-    protected boolean readConfigFromDisk() {
-        return false;
+    public void setupLx(LX lx) {
+        super.setupLx(lx);
+
+        try (FileOutputStream out = new FileOutputStream("src/main/java/com/symmetrylabs/shows/japantree/CompiledTreeData.java")) {
+            OutputStreamWriter w = new OutputStreamWriter(out);
+            new TreeCompiler(config, "com.symmetrylabs.shows.japantree", false).emit(w);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
