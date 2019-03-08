@@ -1,0 +1,24 @@
+ply
+format ascii 1.0
+comment created by gply, a Houdini tool.
+comment converted from .[b]geo
+comment for more information about Houdini, try:
+comment www.sidefx.com
+element vertex 8
+property float x
+property float y
+property float z
+property float elevation
+property float tilt
+property float azimuth
+element face 0
+property list uchar int vertex_indices
+end_header
+-15.6089554 28.2822876 1.61013816e-15 -7.56280397e-15 15.000659 63.9998131 
+-10.8303795 31.8032322 0.94959414 -7.15803957 9.2117815 24.8732281 
+-8.28713799 52.3085365 1.202012e-14 -2.35016931e-14 8.00008869 50.4817886 
+0 53.1496048 3.25447486e-15 -3.50836875e-15 22 0 
+7.69148445 52.4549065 8.60520253e-15 -1.10113504e-14 17.2517033 -32.0241661 
+12.2882414 35.8948402 -0.424242318 27.5464802 44.1867599 55.4630013 
+16.9844036 40.8843689 2.53759382e-15 -2.92243075e-15 29.0003681 -31.2004604 
+14.733882 27.4124985 7.01203816e-15 2.42461189e-13 19.9994526 -74.9995117 

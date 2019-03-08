@@ -48,7 +48,7 @@ public class TreeConfigStore implements SLStudioLX.SaveHook {
     }
 
     private void reconfigureTree(TreeConfig config) {
-        tree.reconfigure(config);
+        //tree.reconfigure(config);
     }
 
     @Override

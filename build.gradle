@@ -147,6 +147,8 @@ dependencies {
 
 	implementation group: 'de.javagl', name: 'obj', version: '0.3.0'
 
+    implementation group: 'org.smurn', name: 'jply', version: '0.2.0'
+
 	testCompile 'junit:junit:4.12'
 
 	implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
