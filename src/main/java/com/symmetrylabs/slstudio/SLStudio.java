@@ -93,7 +93,7 @@ public class SLStudio extends PApplet {
 
     /** Gets the show name from the -Pshow= argument or .show file. */
     public String getSelectedShowName() {
-        return "kalpa";
+        return "japantree";
     }
 
     /** Writes out a show name as the default show on next startup. */
