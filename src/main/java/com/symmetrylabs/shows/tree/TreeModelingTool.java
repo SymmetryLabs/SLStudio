@@ -62,7 +62,11 @@ public class TreeModelingTool extends LXComponent {
         this.selectedBranch = new ObjectParameter<TreeModel.Branch>("selectedBranch", getSelectedLimb().getBranchesArray());
         this.selectedTwig   = new ObjectParameter<TreeModel.Twig>("selectedTwig", getSelectedBranch().getTwigsArray());
 
-        selectedTwig.setOptions(new String[] {"1", "2", "3", "4", "5", "6", "7", "8"});
+        String[] optionNames = new String[getSelectedBranch().getTwigsArray().length];
+        for (int i = 0; i < optionNames.length; i++) {
+            optionNames[i] = Integer.toString(i);
+        }
+        selectedTwig.setOptions(optionNames);
 
         selectedLimb.addListener(parameter -> {
             mode.setValue(Mode.LIMB);
