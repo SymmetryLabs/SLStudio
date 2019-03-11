@@ -44,11 +44,5 @@ public class MasterWindow extends CloseableWindow {
         ParameterUI.draw(lx, lx.engine.cueA, true);
         UI.sameLine();
         ParameterUI.draw(lx, lx.engine.cueB, true);
-        UI.separator();
-        UI.text("Master Bus");
-        LXMasterChannel mc = lx.engine.masterChannel;
-        ChannelUi.drawEffects(lx, "Master", mc);
-        ChannelUi.drawWarps(lx, "Master", mc);
-        ChannelUi.drawWepPopup(lx, mc, wepUi);
     }
 }

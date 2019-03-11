@@ -1,6 +1,7 @@
 package heronarts.lx;
 
 import com.symmetrylabs.color.Spaces;
+import java.util.Arrays;
 
 import java.lang.reflect.Array;
 import java.util.EnumMap;
@@ -116,6 +117,28 @@ public class PolyBuffer implements PolyBufferProvider {
             System.arraycopy(srcArray, 0, destArray, 0, Array.getLength(destArray));
             markModified(space);
         }
+    }
+
+    public void setZero() {
+        for (Space bufSpace : buffers.keySet()) {
+            Buffer buf = buffers.get(bufSpace);
+            if (bufSpace == Space.RGB8 || bufSpace == Space.SRGB8) {
+                int[] array = (int[]) buf.getArray();
+                Arrays.fill(array, 0);
+            } else if (bufSpace == Space.RGB16) {
+                long[] array = (long[]) buf.getArray();
+                Arrays.fill(array, 0L);
+            }
+        }
+        if (!buffers.isEmpty()) {
+            freshSpaces = EnumSet.copyOf(buffers.keySet());
+        }
+    }
+
+    public void fill(Space space, long value) {
+        long[] destArray = (long[]) getArray(space);
+        Arrays.fill(destArray, value);
+        markModified(space);
     }
 
     // The methods below provide support for old-style use of the PolyBuffer

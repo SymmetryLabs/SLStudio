@@ -11,6 +11,7 @@ import com.symmetrylabs.shows.tree.ui.UITreeModelingTool;
 import com.symmetrylabs.shows.tree.ui.UITreeTrunk;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
+import com.symmetrylabs.slstudio.ApplicationState;
 import heronarts.lx.LX;
 
 import com.symmetrylabs.shows.Show;
@@ -29,7 +30,11 @@ public abstract class TreeShow implements Show {
     }
 
     public void setupLx(LX lx) {
-        lx.engine.registerComponent("treeModelingTool", TreeModelingTool.getInstance(lx));
+        boolean readConfig = readConfigFromDisk();
+        if (!readConfig) {
+            ApplicationState.setWarning("TreeShow", "show is set to not read tree model from disk, model changes will be saved but not loaded on restart");
+        }
+        lx.engine.registerComponent("treeModelingTool", TreeModelingTool.getInstance(lx, readConfig));
     }
 
     @Override
@@ -46,4 +51,7 @@ public abstract class TreeShow implements Show {
         UITreeModelingTool.instance.addToContainer(ui.rightPane.model);
     }
 
+    protected boolean readConfigFromDisk() {
+        return true;
+    }
 }

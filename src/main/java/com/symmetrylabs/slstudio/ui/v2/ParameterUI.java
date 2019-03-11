@@ -54,6 +54,20 @@ public class ParameterUI {
             p instanceof CompoundParameter
             ? compoundKnob(lx, (CompoundParameter) p)
             : UI.knobFloat(getID(p), p.getValuef(), start);
+
+        if (UI.beginDragDropSource()) {
+            UI.setDragDropPayload("SL.BoundedParameter", p);
+            UI.endDragDropSource();
+        }
+        if (UI.beginDragDropTarget()) {
+            BoundedParameter dragged = UI.acceptDragDropPayload("SL.BoundedParameter", BoundedParameter.class);
+            if (dragged != null) {
+                // TODO: use this to create links/modulations
+                System.out.println(String.format("drag %s onto %s", dragged.getLabel(), p.getLabel()));
+            }
+            UI.endDragDropTarget();
+        }
+
         if (start != res) {
             final float fres = res;
             lx.engine.addTask(() -> p.setNormalized(fres));
@@ -118,12 +132,13 @@ public class ParameterUI {
         return flip ? !active : active;
     }
 
-    public static void toggle(LX lx, BooleanParameter p, boolean important, float w) {
+    public static boolean toggle(LX lx, BooleanParameter p, boolean important, float w) {
         final boolean start = p.getValueb();
         final boolean res = toggle(getID(p), start, important, w);
         if (res != start) {
             lx.engine.addTask(() -> p.setValue(res));
         }
+        return res;
     }
 
     public static void draw(LX lx, BooleanParameter p) {

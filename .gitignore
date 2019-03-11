@@ -291,6 +291,7 @@ $RECYCLE.BIN/
 # Emacs
 .dir-locals.el
 .meghanada
+TAGS
 
 # Eclipse
 .settings

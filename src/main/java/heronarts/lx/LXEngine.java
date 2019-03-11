@@ -888,7 +888,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     }
 
     public LXChannel addChannel() {
-        return addChannel(new LXPattern[] { new SolidColorPattern(lx) });
+        return addChannel(new LXPattern[0]);
     }
 
     public LXChannel addChannel(LXPattern[] patterns) {

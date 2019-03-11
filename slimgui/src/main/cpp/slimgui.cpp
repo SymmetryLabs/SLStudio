@@ -5,6 +5,7 @@
 #include "com_symmetrylabs_slstudio_ui_v2_UI.h"
 #include "handle.hpp"
 #include "imgui.h"
+#include "imgui_internal.h"
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_glfw.h"
 #include "jniutils.hpp"
@@ -13,6 +14,7 @@
 #define MAX_INPUT_LENGTH 511
 
 static float LoadedDensity = 0;
+static jobject DragObjectReference = nullptr;
 
 void LoadSlimguiStyle(float density) {
     ImGuiStyle style;
@@ -108,6 +110,10 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
     env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoDecoration);
     fid = env->GetStaticFieldID(cls, "WINDOW_NO_SCROLL_WITH_MOUSE", "I");
     env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoScrollWithMouse);
+    fid = env->GetStaticFieldID(cls, "WINDOW_FORCE_HORIZ_SCROLL", "I");
+    env->SetStaticIntField(cls, fid, ImGuiWindowFlags_AlwaysHorizontalScrollbar);
+    fid = env->GetStaticFieldID(cls, "WINDOW_NO_SCROLLBAR", "I");
+    env->SetStaticIntField(cls, fid, ImGuiWindowFlags_NoScrollbar);
     fid = env->GetStaticFieldID(cls, "COLOR_WIDGET", "I");
     env->SetStaticIntField(cls, fid, ImGuiCol_FrameBg);
     fid = env->GetStaticFieldID(cls, "COLOR_WIDGET_HOVERED", "I");
@@ -198,6 +204,14 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_newFrame(JNIEnv *
     jfloat dens = env->GetStaticFloatField(cls, env->GetStaticFieldID(cls, "density", "F"));
     if (dens != LoadedDensity) {
         LoadSlimguiStyle(dens);
+    }
+
+    ImGuiContext &g = *ImGui::GetCurrentContext();
+    if (DragObjectReference != nullptr) {
+        if (!g.DragDropActive || *((jobject*) g.DragDropPayload.Data) != DragObjectReference) {
+            env->DeleteGlobalRef(DragObjectReference);
+            DragObjectReference = nullptr;
+        }
     }
 
     ImGui_ImplOpenGL3_NewFrame();
@@ -639,6 +653,40 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_treePop(JNIEnv *, jclass) {
 
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextTreeNodeOpen(JNIEnv *, jclass, jboolean open, jint when) {
     ImGui::SetNextTreeNodeOpen(open != 0, when);
+}
+
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginDragDropSource(JNIEnv *, jclass, jint flags) {
+    return ImGui::BeginDragDropSource(flags) ? 1 : 0;
+}
+
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endDragDropSource(JNIEnv *, jclass) {
+    ImGui::EndDragDropSource();
+}
+
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setDragDropPayload(JNIEnv *env, jclass, jstring jtype, jobject obj) {
+    JniString type(env, jtype);
+    jobject ref = env->NewGlobalRef(obj);
+    /* this reference is deleted in newFrame when the drag event is over */
+    DragObjectReference = ref;
+    return ImGui::SetDragDropPayload(type, &ref, sizeof ref) ? 1 : 0;
+}
+
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginDragDropTarget(JNIEnv *, jclass) {
+    return ImGui::BeginDragDropTarget() ? 1 : 0;
+}
+
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endDragDropTarget(JNIEnv *, jclass) {
+    ImGui::EndDragDropTarget();
+}
+
+JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_acceptDragDropPayload(JNIEnv *env, jclass, jstring jtype, jint flags) {
+    JniString type(env, jtype);
+    const ImGuiPayload *payload = ImGui::AcceptDragDropPayload(type, flags);
+    if (payload == nullptr) {
+        return nullptr;
+    }
+    jobject res = *((jobject*) payload->Data);
+    return res;
 }
 
 JNIEXPORT jboolean JNICALL

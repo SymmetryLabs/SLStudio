@@ -44,10 +44,10 @@ public class TreeModelingTool extends LXComponent {
     public final BranchManipulator branchManipulator;
     public final TwigManipulator twigManipulator;
 
-    private TreeModelingTool(LX lx) {
+    private TreeModelingTool(LX lx, boolean readConfigFromDisk) {
         super(lx, "TreeModelingTool");
         this.tree = (TreeModel) lx.model;
-        this.store = new TreeConfigStore(lx);
+        this.store = new TreeConfigStore(lx, readConfigFromDisk);
 
         this.limbManipulator = new LimbManipulator(lx);
         addSubcomponent(limbManipulator);
@@ -62,7 +62,11 @@ public class TreeModelingTool extends LXComponent {
         this.selectedBranch = new ObjectParameter<TreeModel.Branch>("selectedBranch", getSelectedLimb().getBranchesArray());
         this.selectedTwig   = new ObjectParameter<TreeModel.Twig>("selectedTwig", getSelectedBranch().getTwigsArray());
 
-        selectedTwig.setOptions(new String[] {"1", "2", "3", "4", "5", "6", "7", "8"});
+        String[] optionNames = new String[getSelectedBranch().getTwigsArray().length];
+        for (int i = 0; i < optionNames.length; i++) {
+            optionNames[i] = Integer.toString(i);
+        }
+        selectedTwig.setOptions(optionNames);
 
         selectedLimb.addListener(parameter -> {
             mode.setValue(Mode.LIMB);
@@ -90,9 +94,13 @@ public class TreeModelingTool extends LXComponent {
     }
 
     public static TreeModelingTool getInstance(LX lx) {
-        if (instance == null)
-            instance = new TreeModelingTool(lx);
+        return getInstance(lx, true);
+    }
 
+    public static TreeModelingTool getInstance(LX lx, boolean readConfigFromDisk) {
+        if (instance == null) {
+            instance = new TreeModelingTool(lx, readConfigFromDisk);
+        }
         return instance;
     }
 

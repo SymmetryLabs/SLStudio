@@ -17,6 +17,8 @@ public class UI {
     public static int WINDOW_ALWAYS_AUTO_RESIZE;
     public static int WINDOW_NO_DECORATION;
     public static int WINDOW_NO_SCROLL_WITH_MOUSE;
+    public static int WINDOW_FORCE_HORIZ_SCROLL;
+    public static int WINDOW_NO_SCROLLBAR;
 
     public static int DEFAULT_WIDTH = 250;
 
@@ -277,6 +279,24 @@ public class UI {
         setNextTreeNodeOpen(isOpen, COND_ALWAYS);
     }
     public static native void setNextTreeNodeOpen(boolean isOpen, int when);
+
+    /* Drag and drop. Package-private; use DragDrop class for memory-safe versions of these functions */
+    static boolean beginDragDropSource() {
+        return beginDragDropSource(0);
+    }
+    static native boolean beginDragDropSource(int flags);
+    static native void endDragDropSource();
+    static native boolean setDragDropPayload(String type, Object data);
+    static native boolean beginDragDropTarget();
+    static native void endDragDropTarget();
+    static native Object acceptDragDropPayload(String type, int flags);
+    public static <T> T acceptDragDropPayload(String type, Class<T> cls) {
+        Object res = acceptDragDropPayload(type, 0);
+        if (res == null || !cls.isAssignableFrom(res.getClass())) {
+            return null;
+        }
+        return (T) res;
+    }
 
     /* Interaction */
     public static boolean isItemClicked() {

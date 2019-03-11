@@ -113,9 +113,11 @@ public class NetworkMonitor {
 
     public synchronized void stop() {
         started = false;
-        try {
-            runner.join();
-        } catch (InterruptedException e) {}
+        if (runner != null) {
+            try {
+                runner.join();
+            } catch (InterruptedException e) {}
+        }
     }
 
     private void loop() {
