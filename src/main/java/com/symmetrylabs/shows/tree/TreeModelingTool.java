@@ -280,7 +280,7 @@ public class TreeModelingTool extends LXComponent {
             channel.setValue(config.channel);
             xPosition.setValue(config.x);
             yPosition.setValue(config.y);
-            zPosition.setValue(config.x);
+            zPosition.setValue(config.z);
             azimuth.setValue(config.azimuth);
             elevation.setValue(config.elevation);
             tilt.setValue(config.tilt);
