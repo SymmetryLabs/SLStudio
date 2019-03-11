@@ -89,13 +89,12 @@ public class JapanTreeShow extends TreeShow {
         try {
             PlyReaderFile ply = new PlyReaderFile("shows/japantree/branch.ply");
             ElementReader plyReader = ply.nextElementReader();
-            int i = 1;
             for (Element elem = plyReader.readElement(); elem != null; elem = plyReader.readElement()) {
                 branchTwigs.add(
                     new TwigConfig(
                         (float) elem.getDouble("x"), (float) elem.getDouble("y"), (float) elem.getDouble("z"),
                         (float) elem.getDouble("azimuth"), (float) elem.getDouble("elevation"), (float) elem.getDouble("tilt"),
-                        i++));
+                        elem.getInt("channel")));
             }
             ply.close();
         } catch (IOException e) {
