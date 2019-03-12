@@ -28,26 +28,33 @@ public class UITenereControllers extends UICollapsibleSection {
     public final UIItemList.ScrollList controllers;
     private final BooleanParameter enableAll = new BooleanParameter("enableAll").setMode(BooleanParameter.Mode.MOMENTARY);
     private final BooleanParameter disableAll = new BooleanParameter("disableAll").setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter refresh = new BooleanParameter("refresh").setMode(BooleanParameter.Mode.MOMENTARY);
+    private final TreeModel tree;
+    private final TreeShow show;
 
     public UITenereControllers(LX lx, UI ui, float x, float y, float w) {
         super(ui, x, y, w, 260);
         setTitle("Tenere Controllers");
         setPadding(5);
-        TreeModel tree = (TreeModel) lx.model;
-        TreeShow show = (TreeShow) SLStudio.applet.show;
+        tree = (TreeModel) lx.model;
+        show = (TreeShow) SLStudio.applet.show;
 
-        this.controllers = new UIItemList.ScrollList(ui, 0, 25, w, 200);
+        controllers = new UIItemList.ScrollList(ui, 0, 25, w, 200);
         controllers.setSingleClickActivate(true);
         controllers.setShowCheckboxes(true);
         controllers.addToContainer(this);
 
-        new UIButton(0, 0, w / 2 - 10, 20)
+        new UIButton(0, 0, w / 3 - 10, 20)
             .setLabel("Enable All")
             .setParameter(enableAll)
             .addToContainer(this);
-        new UIButton(w / 2, 0, w / 2 - 10, 20)
+        new UIButton(w / 3, 0, w / 3 - 10, 20)
             .setLabel("Disable All")
             .setParameter(disableAll)
+            .addToContainer(this);
+        new UIButton(2 * w / 3, 0, w / 3 - 10, 20)
+            .setLabel("Refresh")
+            .setParameter(refresh)
             .addToContainer(this);
         enableAll.addListener(p -> {
                 if (enableAll.getValueb()) {
@@ -65,14 +72,17 @@ public class UITenereControllers extends UICollapsibleSection {
                 }
                 controllers.redraw();
             });
+        refresh.addListener(p -> refreshControllers());
 
+        refreshControllers();
+    }
+
+    private void refreshControllers() {
         List<ControllerItem> items = new ArrayList<>();
         Map<TreeModel.Branch, AssignableTenereController> controllerMap = show.getTenereControllers();
         for (TreeModel.Branch branch : tree.getBranches()) {
             AssignableTenereController atc = controllerMap.get(branch);
-            if (atc != null) {
-                items.add(new ControllerItem(atc));
-            }
+            items.add(new ControllerItem(atc));
         }
         controllers.setItems(items);
     }
