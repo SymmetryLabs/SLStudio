@@ -8,7 +8,6 @@ import com.symmetrylabs.shows.tree.config.TreeConfig;
 import com.symmetrylabs.shows.tree.config.TwigConfig;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.output.TenereDatagram;
 
 import java.io.IOException;
 import java.util.ArrayList;
