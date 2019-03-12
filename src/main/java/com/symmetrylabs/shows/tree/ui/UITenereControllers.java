@@ -1,7 +1,10 @@
 package com.symmetrylabs.shows.tree.ui;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.p3lx.ui.component.UIButton;
 
 import heronarts.lx.LX;
 import heronarts.lx.parameter.LXParameter;
@@ -23,22 +26,53 @@ import com.symmetrylabs.shows.absinthe.AbsintheShow;
 public class UITenereControllers extends UICollapsibleSection {
 
     public final UIItemList.ScrollList controllers;
+    private final BooleanParameter enableAll = new BooleanParameter("enableAll").setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter disableAll = new BooleanParameter("disableAll").setMode(BooleanParameter.Mode.MOMENTARY);
 
     public UITenereControllers(LX lx, UI ui, float x, float y, float w) {
-        super(ui, x, y, w, 230);
+        super(ui, x, y, w, 260);
         setTitle("Tenere Controllers");
         setPadding(5);
         TreeModel tree = (TreeModel) lx.model;
-        AbsintheShow layout = (AbsintheShow) SLStudio.applet.show; // genericize this
+        TreeShow show = (TreeShow) SLStudio.applet.show;
 
-        this.controllers = new UIItemList.ScrollList(ui, 0, 0, w, 200);
+        this.controllers = new UIItemList.ScrollList(ui, 0, 25, w, 200);
         controllers.setSingleClickActivate(true);
         controllers.setShowCheckboxes(true);
         controllers.addToContainer(this);
 
+        new UIButton(0, 0, w / 2 - 10, 20)
+            .setLabel("Enable All")
+            .setParameter(enableAll)
+            .addToContainer(this);
+        new UIButton(w / 2, 0, w / 2 - 10, 20)
+            .setLabel("Disable All")
+            .setParameter(disableAll)
+            .addToContainer(this);
+        enableAll.addListener(p -> {
+                if (enableAll.getValueb()) {
+                    for (AssignableTenereController atc : show.getTenereControllers().values()) {
+                        atc.enabled.setValue(true);
+                    }
+                }
+                controllers.redraw();
+            });
+        disableAll.addListener(p -> {
+                if (disableAll.getValueb()) {
+                    for (AssignableTenereController atc : show.getTenereControllers().values()) {
+                        atc.enabled.setValue(false);
+                    }
+                }
+                controllers.redraw();
+            });
+
         List<ControllerItem> items = new ArrayList<>();
+        Map<TreeModel.Branch, AssignableTenereController> controllerMap = show.getTenereControllers();
         for (TreeModel.Branch branch : tree.getBranches()) {
-            items.add(new ControllerItem(layout.controllers.get(branch)));
+            AssignableTenereController atc = controllerMap.get(branch);
+            if (atc != null) {
+                items.add(new ControllerItem(atc));
+            }
         }
         controllers.setItems(items);
     }

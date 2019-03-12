@@ -37,8 +37,6 @@ import processing.core.PGraphics;
 public class AbsintheShow extends TreeShow {
     public static final String SHOW_NAME = "absinthe";
 
-    public final Map<TreeModel.Branch, AssignableTenereController> controllers = new HashMap<>();
-
     final TwigConfig[] BRANCH = new TwigConfig[]{
         new TwigConfig( -15.36f,  16.32f, 0.0f,  57.20f, 180.0f, 0.0f, 5),
         new TwigConfig(  -9.56f,  24.00f, 0.0f, -54.40f, 180.0f, 0.0f, 4),
@@ -65,7 +63,7 @@ public class AbsintheShow extends TreeShow {
         new BranchConfig(false, 4.03f,   118.11f, 0.20f,  30,  0,   3,   BRANCH, false),
         new BranchConfig(false, 20.44f,  121.61f, 0.76f,  -45, 10,  20,  BRANCH, false),
         new BranchConfig(false, 29.94f,  87.55f,  -1.34f, -60, 10,  20,  BRANCH, false),
-        
+
     };
 
     final BranchConfig[] LIMB_TYPE_L3 = new BranchConfig[] {
