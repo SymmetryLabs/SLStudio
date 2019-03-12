@@ -13,6 +13,7 @@ import java.io.IOException;
 import com.symmetrylabs.slstudio.ApplicationState;
 import java.io.OutputStreamWriter;
 import java.io.FileOutputStream;
+import heronarts.lx.LXLoopTask;
 
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
@@ -43,8 +44,6 @@ import processing.core.PGraphics;
 
 public class JapanTreeShow extends TreeShow {
     public static final String SHOW_NAME = "japantree";
-
-    public final Map<TreeModel.Branch, AssignableTenereController> controllers = new HashMap<>();
 
     final TwigConfig[] branch;
     final TwigConfig[] twigBranch;
@@ -142,13 +141,44 @@ public class JapanTreeShow extends TreeShow {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
+        TreeModel tree = (TreeModel) (lx.model);
+        TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
+
+        System.out.println("Number of branches: " + tree.getBranches().size());
+
+        lx.engine.addLoopTask(new LXLoopTask() {
+            @Override
+            public void loop(double v) {
+                if (lx.engine.output.brightness.getValuef() > 0.9f) {
+                    lx.engine.output.brightness.setValue(0.9f);
+                }
+                if (lx.engine.framesPerSecond.getValuef() != 60) {
+                    lx.engine.framesPerSecond.setValue(60);
+                }
+            }
+        });
+
+        int branchId = 0;
+        for (TreeModel.Branch branch : tree.getBranches()) {
+            try {
+                AssignableTenereController controller = new AssignableTenereController(lx, branch);
+                controllers.put(branch, controller);
+                lx.addOutput(controller);
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
+        }
+
+        modeler.branchManipulator.ipAddress.addListener(param -> {
+            AssignableTenereController controller = controllers.get(modeler.getSelectedBranch());
+            controller.setIpAddress(modeler.branchManipulator.ipAddress.getString());
+        });
     }
 
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
         new UITenereControllers(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
-        new UIPixlites(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
     }
 }
