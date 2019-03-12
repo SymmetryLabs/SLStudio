@@ -2,6 +2,8 @@ package com.symmetrylabs.shows.tree.ui;
 
 import java.util.List;
 import java.util.ArrayList;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.p3lx.ui.component.UIButton;
 
 import heronarts.lx.LX;
 import heronarts.lx.parameter.LXParameter;
@@ -22,26 +24,50 @@ import static com.symmetrylabs.util.MathUtils.*;
 public class UIPixlites extends UICollapsibleSection {
 
     public final UIItemList.ScrollList pixlitePorts;
+    private final BooleanParameter enableAll = new BooleanParameter("enableAll").setMode(BooleanParameter.Mode.MOMENTARY);
+    private final BooleanParameter disableAll = new BooleanParameter("disableAll").setMode(BooleanParameter.Mode.MOMENTARY);
 
     public UIPixlites(LX lx, UI ui, float x, float y, float w) {
-        super(ui, x, y, w, 230);
+        super(ui, x, y, w, 260);
         setTitle("PIXLITE DATALINES");
         setPadding(5);
         TreeModel tree = (TreeModel)lx.model;
+        TreeShow show = (TreeShow)SLStudio.applet.show;
 
-        this.pixlitePorts = new UIItemList.ScrollList(ui, 0, 0, w, 200);
+        this.pixlitePorts = new UIItemList.ScrollList(ui, 0, 25, w, 200);
         pixlitePorts.setSingleClickActivate(true);
         pixlitePorts.setShowCheckboxes(true);
         pixlitePorts.addToContainer(this);
 
-
-
-        TreeShow layout = (TreeShow)SLStudio.applet.show;
+        new UIButton(0, 0, w / 2 - 10, 20)
+            .setLabel("Enable All")
+            .setParameter(enableAll)
+            .addToContainer(this);
+        new UIButton(w / 2, 0, w / 2 - 10, 20)
+            .setLabel("Disable All")
+            .setParameter(disableAll)
+            .addToContainer(this);
+        enableAll.addListener(p -> {
+                if (enableAll.getValueb()) {
+                    for (AssignablePixlite ap : show.pixlites.values()) {
+                        ap.enabled.setValue(true);
+                    }
+                    pixlitePorts.redraw();
+                }
+            });
+        disableAll.addListener(p -> {
+                if (disableAll.getValueb()) {
+                    for (AssignablePixlite ap : show.pixlites.values()) {
+                        ap.enabled.setValue(false);
+                    }
+                    pixlitePorts.redraw();
+                }
+            });
 
         List<PortItem> portItems = new ArrayList<>();
 
-        for (String ipAddress : layout.pixlites.keySet()) {
-            AssignablePixlite pixlite = layout.pixlites.get(ipAddress);
+        for (String ipAddress : show.pixlites.keySet()) {
+            AssignablePixlite pixlite = show.pixlites.get(ipAddress);
 
             for (AssignablePixlite.Port port : pixlite.ports) {
                 portItems.add(new PortItem(port));
