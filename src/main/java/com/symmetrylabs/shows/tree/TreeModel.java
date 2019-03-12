@@ -22,6 +22,8 @@ public class TreeModel extends SLModel {
     public final List<Twig> twigs;
     public final List<Leaf> leaves;
 
+    private float yRotation = 0;
+
     public TreeModel() {
         this(new TreeConfig());
     }
@@ -68,6 +70,10 @@ public class TreeModel extends SLModel {
         }
     }
 
+    public void rotateY(float degrees) {
+        this.yRotation = degrees;
+    }
+
     public void reconfigure() {
         reconfigure(config);
     }
@@ -76,11 +82,14 @@ public class TreeModel extends SLModel {
         this.config = config;
 
         LXTransform t = new LXTransform();
+        t.rotateY(yRotation * Math.PI / 180.);
+        t.push();
         int i = 0;
         for (Limb limb : limbs) {
             limb.reconfigure(t, config.getLimbs().get(i++));
         }
         update(true, true);
+        t.pop();
     }
 
     public TreeConfig getConfig() {
@@ -277,6 +286,10 @@ public class TreeModel extends SLModel {
             t.rotateY(config.tilt * PI / 180.);
             t.rotateZ(config.azimuth * PI / 180.);
 
+            t.push();
+            if (getConfig().flipped) {
+                t.rotateY(PI);
+            }
             this.x = t.x();
             this.y = t.y();
             this.z = t.z();
@@ -285,6 +298,7 @@ public class TreeModel extends SLModel {
             for (Twig twig : twigs) {
                 twig.reconfigure(t, config.getTwigs().get(i++));
             }
+            t.pop();
             t.pop();
         }
 

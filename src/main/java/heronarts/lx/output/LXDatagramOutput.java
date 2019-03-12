@@ -58,6 +58,10 @@ public class LXDatagramOutput extends LXOutput {
         this.socket = socket;
     }
 
+    public List<LXDatagram> getDatagrams() {
+        return datagrams;
+    }
+
     /* If set to true, logConnections will print a message every time a
      * packet fails to be sent, and every time communication with the
      * output is reestablished after failure. By default, logConnections

@@ -21,6 +21,7 @@ public abstract class TreeShow implements Show {
 
     public final Map<String, AssignablePixlite> pixlites = new HashMap<>();
     public final List<AssignablePixlite.Port> pixlitePorts = new ArrayList<>();
+    public final Map<TreeModel.Branch, AssignableTenereController> controllers = new HashMap<>();
 
     protected void addPixlite(LX lx, AssignablePixlite pixlite) {
         pixlites.put(pixlite.ipAddress, pixlite);
@@ -28,17 +29,11 @@ public abstract class TreeShow implements Show {
         lx.addOutput(pixlite);
     }
 
-    public void setupLx(SLStudioLX lx) {
-        //anemometer = new Anemometer();
-        //lx.engine.modulation.addModulator(anemometer.speedModulator);
-        //lx.engine.modulation.addModulator(anemometer.directionModulator);
-        //lx.engine.registerComponent("anemomter", anemometer);
-        //lx.engine.addLoopTask(anemometer);
-        //anemometer.start();
+    public Map<TreeModel.Branch, AssignableTenereController> getTenereControllers() {
+        return controllers;
     }
 
-    @Override
-    public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
+    protected boolean readConfigFromDisk() {
+        return true;
     }
-
 }

@@ -52,12 +52,21 @@ public class BranchConfig {
     public float elevation;
     public float tilt;
     private TwigConfig[] twigs;
+    public boolean flipped;
 
     public BranchConfig(boolean locked, float x, float y, float z, float azimuth, float elevation, float tilt, TwigConfig[] twigs) {
-        this(locked, DEFAULT_IP_ADDRESS, DEFAULT_CHANNEL, x, y, z, azimuth, elevation, tilt, twigs);
+        this(locked, DEFAULT_IP_ADDRESS, DEFAULT_CHANNEL, x, y, z, azimuth, elevation, tilt, twigs, false);
+    }
+
+    public BranchConfig(boolean locked, float x, float y, float z, float azimuth, float elevation, float tilt, TwigConfig[] twigs, boolean flipped) {
+        this(locked, DEFAULT_IP_ADDRESS, DEFAULT_CHANNEL, x, y, z, azimuth, elevation, tilt, twigs, flipped);
     }
 
     public BranchConfig(boolean locked, String ipAddress, int channel, float x, float y, float z, float azimuth, float elevation, float tilt, TwigConfig[] twigs) {
+        this(locked, ipAddress, channel, x, y, z, azimuth, elevation, tilt, twigs, false);
+    }
+
+    public BranchConfig(boolean locked, String ipAddress, int channel, float x, float y, float z, float azimuth, float elevation, float tilt, TwigConfig[] twigs, boolean flipped) {
         this.locked = locked;
         this.ipAddress = ipAddress;
         this.channel = channel;
@@ -68,6 +77,7 @@ public class BranchConfig {
         this.elevation = elevation;
         this.tilt = tilt;
         this.twigs = twigs;
+        this.flipped = flipped;
     }
 
     public List<TwigConfig> getTwigs() {

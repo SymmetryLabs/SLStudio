@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.net.SocketException;
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
-import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
-import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
+import heronarts.lx.LXLoopTask;
 
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
@@ -40,7 +39,52 @@ import processing.core.PGraphics;
 public class JapanTreeShow extends TreeShow {
     public static final String SHOW_NAME = "japantree";
 
+    TreeConfig config;
+
+    @Override
     public SLModel buildModel() {
-        return new TreeModel(CompiledTreeData.CONFIG);
+        config = CompiledTreeData.CONFIG;
+        TreeModel tree = new TreeModel(config);
+        return tree;
+    }
+
+    @Override
+    public void setupLx(SLStudioLX lx) {
+        super.setupLx(lx);
+
+        TreeModel tree = (TreeModel) (lx.model);
+
+        lx.engine.addLoopTask(new LXLoopTask() {
+            @Override
+            public void loop(double v) {
+                if (lx.engine.output.brightness.getValuef() > 0.9f) {
+                    lx.engine.output.brightness.setValue(0.9f);
+                }
+                if (lx.engine.framesPerSecond.getValuef() != 60) {
+                    lx.engine.framesPerSecond.setValue(60);
+                }
+            }
+        });
+
+        int branchId = 0;
+        for (TreeModel.Branch branch : tree.getBranches()) {
+            try {
+                AssignableTenereController controller = new AssignableTenereController(lx, branch);
+                controllers.put(branch, controller);
+                lx.addOutput(controller);
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
+        super.setupUi(lx, ui);
+    }
+
+    @Override
+    public boolean readConfigFromDisk() {
+        return false;
     }
 }
