@@ -25,7 +25,6 @@ public class AssignableTenereController extends LXDatagramOutput {
 	public AssignableTenereController(LX lx, TreeModel.Branch branch) throws SocketException {
 		super(lx);
 		this.ipAddress = branch.getConfig().ipAddress;
-        gammaCorrection.setValue(0);
 
 		int[][] packets = {
 		    new int[POINTS_PER_PACKET],
@@ -40,21 +39,13 @@ public class AssignableTenereController extends LXDatagramOutput {
 		    }
 		}
 
-		int twigIndex = 1;
-		for (int i = 0; i < packets.length; i++) {
-		    int pi = 0;
-            for (int j = 0; j < TWIGS_PER_PACKET; j++) {
-                TreeModel.Twig twig = branch.getTwigByWiringIndex(twigIndex);
-                if (twig != null) {
-                    for (LXPoint point : twig.points) {
-                        packets[i][pi++] = point.index;
-                    }
-                } else {
-                    for (int k = 0; k < TreeModel.Twig.NUM_LEDS; k++) {
-                        packets[i][pi++] = -1;
-                    }
-                }
-                twigIndex++;
+        for (TreeModel.Twig twig : branch.getTwigs()) {
+            int index = twig.index;
+            int packet = index / TWIGS_PER_PACKET; // truncates to floor
+            int pindex = TreeModel.Twig.NUM_LEDS * (index - (TWIGS_PER_PACKET * packet));
+            System.out.println(String.format("controller %s: %d -> %d / %d", ipAddress, index, packet, pindex));
+            for (LXPoint point : twig.points) {
+                packets[packet][pindex++] = point.index;
             }
         }
 
