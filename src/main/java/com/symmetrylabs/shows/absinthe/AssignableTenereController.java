@@ -45,9 +45,15 @@ public class AssignableTenereController extends LXDatagramOutput {
 		    for (int j = 0; j < TWIGS_PER_PACKET; j++) {
 		        if (twigIndex < branch.getTwigs().size()+1) {
 		        	TreeModel.Twig twig = branch.getTwigByWiringIndex(twigIndex);
-		            for (LXPoint point : twig.points) {
-		                packets[i][pi++] = point.index;
-		            }
+                    if (twig != null) {
+                        for (LXPoint point : twig.points) {
+                            packets[i][pi++] = point.index;
+                        }
+                    } else {
+                        for (int k = 0; k < TreeModel.Twig.NUM_LEDS; k++) {
+                            packets[i][pi++] = -1;
+                        }
+                    }
 		        }
 		        twigIndex++;
 		    }
@@ -75,7 +81,7 @@ public class AssignableTenereController extends LXDatagramOutput {
 			if (!InetAddress.getByName(ipAddress).isReachable(200)) {
 				enabled.setValue(false);
 			}
-	
+
 			for (LXDatagram datagram : getDatagrams()) {
 				datagram.setAddress(ipAddress);
 			}
