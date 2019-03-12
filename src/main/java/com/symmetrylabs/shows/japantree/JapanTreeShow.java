@@ -142,6 +142,7 @@ public class JapanTreeShow extends TreeShow {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
     }
 
     @Override
