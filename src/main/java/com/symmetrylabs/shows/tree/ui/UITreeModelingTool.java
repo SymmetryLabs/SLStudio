@@ -48,7 +48,7 @@ public class UITreeModelingTool extends UICollapsibleSection {
     private final TwigControls twigControls;
 
     public UITreeModelingTool(UI ui, TreeModelingTool modelingTool, float x, float y, float w) {
-        super(ui, x, y, w, 700);
+        super(ui, x, y, w, 800);
         this.ui = ui;
         this.modelingTool = modelingTool;
         setTitle("TREE MODEL           (Use 'TreeModelingPattern')");
@@ -60,7 +60,7 @@ public class UITreeModelingTool extends UICollapsibleSection {
         this.branchControls = new BranchControls(ui,4, 200, getContentWidth(), 305, modelingTool.branchManipulator);
         addTopLevelComponent(branchControls);
 
-        this.twigControls = new TwigControls(ui,4, 505, getContentWidth(), 200, modelingTool.twigManipulator);
+        this.twigControls = new TwigControls(ui,4, 505, getContentWidth(), 240, modelingTool.twigManipulator);
         addTopLevelComponent(twigControls);
 
         modelingTool.selectedLimb.addListener(parameter -> {
@@ -218,6 +218,11 @@ public class UITreeModelingTool extends UICollapsibleSection {
 
             new UIDropMenu(130, 207, 110, 18, manipulator.type).addToContainer(this);
 
+            final UIButton flip = (UIButton) new UIButton(5, 285, getContentWidth()/4, 15)
+                .setLabel("flip")
+                .setParameter(modelingTool.branchManipulator.flipped)
+                .addToContainer(this);
+
             manipulator.locked.addListener(parameter -> {
                 boolean locked = ((BooleanParameter)parameter).isOn();
                 knobsPanel.xPosition.setEnabled(!locked);
@@ -226,14 +231,10 @@ public class UITreeModelingTool extends UICollapsibleSection {
                 knobsPanel.azimuth.setEnabled(!locked);
                 knobsPanel.elevation.setEnabled(!locked);
                 knobsPanel.tilt.setEnabled(!locked);
+                flip.setEnabled(locked);
                 modelingTool.twigManipulator.locked.setValue(locked);
                 redrawWindow();
             });
-
-            new UIButton(5, 285, getContentWidth()/4, 15)
-                .setLabel("flip")
-                .setParameter(modelingTool.branchManipulator.flipped)
-                .addToContainer(this);
         }
 
         private class UINetworkPanel extends UI2dContainer {
@@ -385,6 +386,14 @@ public class UITreeModelingTool extends UICollapsibleSection {
                 .setParameter(displayTwigIndices)
                 .setLabel("display indices")
                 .setBorderRounding(8)
+                .addToContainer(this);
+
+            new UILabel(0, 130+KNOB_HEIGHT+30, 80, 20)
+                .setLabel("Disabled pixels:")
+                .setTextAlignment(LEFT, CENTER)
+                .addToContainer(this);
+            new UITextBox(85, 130+KNOB_HEIGHT+30, getContentWidth() - 90, 20)
+                .setParameter(manipulator.disabledPixels)
                 .addToContainer(this);
 
             manipulator.locked.addListener(parameter -> {

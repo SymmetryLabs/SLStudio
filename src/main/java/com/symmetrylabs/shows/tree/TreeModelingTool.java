@@ -312,6 +312,7 @@ public class TreeModelingTool extends LXComponent {
         public final CompoundParameter tilt = new CompoundParameter("tilt", TwigConfig.DEFAULT_TILT, TwigConfig.MIN_TILT, TwigConfig.MAX_TILT);
         public final DiscreteParameter index = new DiscreteParameter("index", new String[] {"1", "2", "3", "4", "5", "6", "7", "8"});
         public final BooleanParameter locked = new BooleanParameter("locked", false);
+        public final StringParameter disabledPixels = new StringParameter("disabledPixels", "");
 
         private TwigManipulator(LX lx) {
             super(lx);
@@ -322,6 +323,32 @@ public class TreeModelingTool extends LXComponent {
             addParameter(elevation);
             addParameter(tilt);
             addParameter(index);
+            addParameter(disabledPixels);
+        }
+
+        public int[] getDisabledPixels() {
+            String[] bits = disabledPixels.getString().split(",");
+            int[] res = new int[bits.length];
+            for (int i = 0; i < res.length; i++) {
+                try {
+                    res[i] = Integer.parseInt(bits[i].trim());
+                } catch (NumberFormatException e) {
+                    res[i] = -1;
+                }
+            }
+            return res;
+        }
+
+        private void setDisabledPixels(int[] array) {
+            if (array == null) {
+                disabledPixels.setValue("");
+                return;
+            }
+            String[] bits = new String[array.length];
+            for (int i = 0; i < array.length; i++) {
+                bits[i] = Integer.toString(array[i]);
+            }
+            disabledPixels.setValue(String.join(",", bits));
         }
 
         public void onParameterChanged(LXParameter parameter) {
@@ -334,6 +361,7 @@ public class TreeModelingTool extends LXComponent {
                 config.elevation = elevation.getValuef();
                 config.tilt = tilt.getValuef();
                 config.index = index.getValuei()+1;
+                config.disabledPixels = getDisabledPixels();
                 tree.reconfigure();
                 branchManipulator.type.setValue(0); // Custom
             }
@@ -352,6 +380,7 @@ public class TreeModelingTool extends LXComponent {
             elevation.setValue(config.elevation);
             tilt.setValue(config.tilt);
             index.setValue(config.index-1);
+            setDisabledPixels(config.disabledPixels);
 
             //System.out.println("config: " + config.index + ", param: " + index.getValuei());
             disableParameters = false;

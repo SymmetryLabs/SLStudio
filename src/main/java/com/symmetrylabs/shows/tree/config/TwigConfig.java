@@ -41,8 +41,13 @@ public class TwigConfig {
     public float elevation;
     public float tilt;
     public int index;
+    public int[] disabledPixels;
 
     public TwigConfig(float x, float y, float z, float azimuth, float elevation, float tilt, int index) {
+        this(x, y, z, azimuth, elevation, tilt, index, new int[] { -1 });
+    }
+
+    public TwigConfig(float x, float y, float z, float azimuth, float elevation, float tilt, int index, int[] disabledPixels) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -50,6 +55,7 @@ public class TwigConfig {
         this.elevation = elevation;
         this.tilt = tilt;
         this.index = index;
+        this.disabledPixels = disabledPixels;
     }
 
     public static void setXEnabled(boolean enabled) {
