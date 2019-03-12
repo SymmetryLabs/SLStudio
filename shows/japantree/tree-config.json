@@ -9,14 +9,14 @@
       "tilt": 0.0,
       "branches": [
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.149",
           "channel": 1,
           "x": 45.1091,
           "y": 43.332657,
           "z": -7.59641,
-          "azimuth": -53.64375,
-          "elevation": -80.256966,
+          "azimuth": -82.44375,
+          "elevation": -101.856964,
           "tilt": -13.4896345,
           "twigs": [
             {
@@ -24,8 +24,8 @@
               "y": 28.282288,
               "z": 1.6101382E-15,
               "azimuth": 63.999813,
-              "elevation": -7.562804E-15,
-              "tilt": 15.000659,
+              "elevation": -72.0,
+              "tilt": 15.000629,
               "index": 1
             },
             {
@@ -68,8 +68,8 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.182",
           "channel": 1,
           "x": 50.76592,
           "y": 51.533264,
@@ -127,15 +127,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.69",
           "channel": 1,
           "x": 40.11403,
           "y": 57.057373,
           "z": -13.201409,
           "azimuth": -0.2720723,
           "elevation": -73.58519,
-          "tilt": -0.08015231,
+          "tilt": -21.680153,
           "twigs": [
             {
               "x": -15.608955,
@@ -245,15 +245,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.26",
           "channel": 1,
           "x": 30.086689,
           "y": 94.04577,
           "z": -46.23473,
           "azimuth": -0.27207404,
           "elevation": -82.87567,
-          "tilt": -0.03400623,
+          "tilt": 7.1659937,
           "twigs": [
             {
               "x": -15.608955,
@@ -304,15 +304,15 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 5.770999,
           "y": 112.67116,
           "z": -81.3911,
           "azimuth": 20.036184,
-          "elevation": -83.30906,
-          "tilt": 2.4519925,
+          "elevation": -68.90906,
+          "tilt": -26.348007,
           "twigs": [
             {
               "x": -15.608955,
@@ -369,9 +369,9 @@
           "x": 49.894203,
           "y": 98.56845,
           "z": -34.96317,
-          "azimuth": -3.8334577,
-          "elevation": -74.865616,
-          "tilt": -1.038422,
+          "azimuth": -68.63346,
+          "elevation": -82.06561,
+          "tilt": -8.238422,
           "twigs": [
             {
               "x": -15.608955,
@@ -481,14 +481,14 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.137",
           "channel": 1,
           "x": 63.302223,
           "y": 163.25552,
           "z": -46.107697,
-          "azimuth": -77.606575,
-          "elevation": -84.457855,
+          "azimuth": -99.20657,
+          "elevation": -98.85786,
           "tilt": -26.203875,
           "twigs": [
             {
@@ -540,15 +540,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.159",
           "channel": 1,
           "x": 57.343174,
           "y": 168.3698,
           "z": -58.745487,
-          "azimuth": -12.371068,
-          "elevation": -73.97525,
-          "tilt": -3.6117885,
+          "azimuth": -48.371067,
+          "elevation": -81.17525,
+          "tilt": -18.01179,
           "twigs": [
             {
               "x": -15.608955,
@@ -599,15 +599,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.67",
           "channel": 1,
           "x": 67.8707,
           "y": 92.27142,
           "z": -6.0076394,
-          "azimuth": -63.680412,
+          "azimuth": -78.080414,
           "elevation": -86.79314,
-          "tilt": -6.5037594,
+          "tilt": -13.703759,
           "twigs": [
             {
               "x": -15.608955,
@@ -658,15 +658,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.70",
           "channel": 1,
           "x": 71.92968,
           "y": 98.607796,
           "z": 0.47429255,
-          "azimuth": -91.93406,
+          "azimuth": -99.134056,
           "elevation": -90.23804,
-          "tilt": -7.0667577,
+          "tilt": -14.266758,
           "twigs": [
             {
               "x": -15.608955,
@@ -717,13 +717,13 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.58",
           "channel": 1,
           "x": 75.867455,
           "y": 111.34321,
           "z": 0.0816934,
-          "azimuth": -90.295586,
+          "azimuth": -97.49558,
           "elevation": -90.08354,
           "tilt": -16.416143,
           "twigs": [
@@ -776,13 +776,13 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.19",
           "channel": 1,
           "x": 72.49812,
           "y": 119.875595,
           "z": -9.880113,
-          "azimuth": -33.293053,
+          "azimuth": -47.693054,
           "elevation": -67.76098,
           "tilt": -15.576085,
           "twigs": [
@@ -835,15 +835,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.86",
           "channel": 1,
           "x": 49.901234,
           "y": 72.67141,
           "z": 23.25259,
           "azimuth": -121.21275,
-          "elevation": -89.70208,
-          "tilt": 0.4917052,
+          "elevation": -82.50208,
+          "tilt": -13.908295,
           "twigs": [
             {
               "x": -15.608955,
@@ -894,8 +894,8 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.180",
           "channel": 1,
           "x": 49.154102,
           "y": 90.378265,
@@ -953,15 +953,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.134",
           "channel": 1,
           "x": 39.7505,
           "y": 99.081406,
           "z": 40.938755,
-          "azimuth": -163.00438,
-          "elevation": -105.68049,
-          "tilt": -4.922102,
+          "azimuth": -151.2,
+          "elevation": -91.28049,
+          "tilt": -33.722103,
           "twigs": [
             {
               "x": -15.608955,
@@ -1013,7 +1013,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.37",
           "channel": 1,
           "x": 45.831425,
           "y": 121.22029,
@@ -1072,7 +1072,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.49",
           "channel": 1,
           "x": 53.42957,
           "y": 137.0948,
@@ -1131,7 +1131,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.201",
           "channel": 1,
           "x": 49.996815,
           "y": 151.5681,
@@ -1190,7 +1190,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.28",
           "channel": 1,
           "x": 39.863308,
           "y": 162.46133,
@@ -1281,15 +1281,15 @@
       "tilt": 0.0,
       "branches": [
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.174",
           "channel": 1,
           "x": -19.54279,
           "y": 53.752975,
           "z": 32.449375,
           "azimuth": 134.5833,
-          "elevation": -89.351944,
-          "tilt": -0.65760577,
+          "elevation": -53.351944,
+          "tilt": 13.742394,
           "twigs": [
             {
               "x": -15.608955,
@@ -1340,15 +1340,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.70",
           "channel": 1,
           "x": -9.851048,
           "y": 62.53039,
           "z": 48.793552,
-          "azimuth": -177.27132,
+          "azimuth": -170.07132,
           "elevation": -93.37762,
-          "tilt": -0.16116618,
+          "tilt": -7.361166,
           "twigs": [
             {
               "x": -15.608955,
@@ -1399,15 +1399,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.154",
           "channel": 1,
           "x": -1.0238246,
           "y": 71.87723,
           "z": 58.018394,
-          "azimuth": -128.89314,
-          "elevation": -88.84148,
-          "tilt": 1.4364854,
+          "azimuth": -136.8,
+          "elevation": -67.24148,
+          "tilt": -46.800003,
           "twigs": [
             {
               "x": -15.608955,
@@ -1458,15 +1458,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.117",
           "channel": 1,
           "x": -9.722539,
           "y": 82.66281,
           "z": 72.277176,
-          "azimuth": -164.51494,
-          "elevation": -89.38799,
-          "tilt": 0.16956247,
+          "azimuth": -178.91493,
+          "elevation": -82.187996,
+          "tilt": -14.230437,
           "twigs": [
             {
               "x": -15.608955,
@@ -1517,15 +1517,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.203",
           "channel": 1,
           "x": -9.419443,
           "y": 109.986946,
           "z": 86.840485,
           "azimuth": -151.8734,
           "elevation": -103.20026,
-          "tilt": -7.202667,
+          "tilt": -21.602667,
           "twigs": [
             {
               "x": -15.608955,
@@ -1576,15 +1576,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.25",
           "channel": 1,
           "x": -17.552477,
           "y": 129.74652,
           "z": 100.611176,
           "azimuth": 179.72795,
-          "elevation": -106.41617,
-          "tilt": 0.08015869,
+          "elevation": -99.21617,
+          "tilt": -14.319841,
           "twigs": [
             {
               "x": -15.608955,
@@ -1635,15 +1635,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.174",
           "channel": 1,
           "x": -24.853806,
           "y": 146.9995,
           "z": 79.954994,
-          "azimuth": 145.12915,
+          "azimuth": 166.72916,
           "elevation": -103.40708,
-          "tilt": 9.561432,
+          "tilt": 2.3614318,
           "twigs": [
             {
               "x": -15.608955,
@@ -1694,14 +1694,14 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.67",
           "channel": 1,
           "x": -11.627777,
           "y": 158.6815,
           "z": 78.42568,
           "azimuth": -157.78651,
-          "elevation": -106.40293,
+          "elevation": -113.60293,
           "tilt": -6.904315,
           "twigs": [
             {
@@ -1753,15 +1753,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.10",
           "channel": 1,
           "x": -22.071451,
           "y": 170.19057,
           "z": 75.857765,
-          "azimuth": 161.89468,
-          "elevation": -115.317535,
-          "tilt": 8.897805,
+          "azimuth": 172.8,
+          "elevation": -108.11754,
+          "tilt": 16.097805,
           "twigs": [
             {
               "x": -15.608955,
@@ -1813,13 +1813,13 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.166",
           "channel": 1,
           "x": -10.084335,
           "y": 80.95858,
           "z": -21.27149,
           "azimuth": -3.3795846,
-          "elevation": -80.23676,
+          "elevation": -73.036766,
           "tilt": -0.58220816,
           "twigs": [
             {
@@ -1872,7 +1872,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.99",
           "channel": 1,
           "x": -5.784283,
           "y": 125.41263,
@@ -1931,7 +1931,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.72",
           "channel": 1,
           "x": -14.304136,
           "y": 134.06346,
@@ -2049,7 +2049,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.208",
           "channel": 1,
           "x": -58.63363,
           "y": 166.39883,
@@ -2108,7 +2108,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.72",
           "channel": 1,
           "x": -47.5524,
           "y": 174.96625,
@@ -2226,7 +2226,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.95",
           "channel": 1,
           "x": -1.9008548,
           "y": 171.06787,
@@ -2285,7 +2285,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.170",
           "channel": 1,
           "x": -24.74625,
           "y": 191.11209,
@@ -2344,7 +2344,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.128",
           "channel": 1,
           "x": -49.069202,
           "y": 202.22368,
@@ -2403,7 +2403,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.146",
           "channel": 1,
           "x": -48.493084,
           "y": 216.48112,
@@ -2462,7 +2462,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.196",
           "channel": 1,
           "x": -39.289246,
           "y": 231.77655,
@@ -2521,7 +2521,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.136",
           "channel": 1,
           "x": -55.47744,
           "y": 239.26588,
@@ -2639,7 +2639,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.55",
           "channel": 1,
           "x": -46.497456,
           "y": 155.43536,
@@ -2698,7 +2698,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.165",
           "channel": 1,
           "x": -50.99438,
           "y": 173.6942,
@@ -2757,7 +2757,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.173",
           "channel": 1,
           "x": -31.272392,
           "y": 193.01353,
@@ -2816,7 +2816,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.34",
           "channel": 1,
           "x": -16.2445,
           "y": 216.02362,
@@ -2875,7 +2875,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.110",
           "channel": 1,
           "x": 19.125877,
           "y": 206.46397,
@@ -2934,7 +2934,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.144",
           "channel": 1,
           "x": 24.138048,
           "y": 206.92813,
@@ -3052,7 +3052,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.171",
           "channel": 1,
           "x": 28.011662,
           "y": 226.51642,
@@ -3111,7 +3111,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.60",
           "channel": 1,
           "x": 9.68755,
           "y": 242.73839,
@@ -3170,7 +3170,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.83",
           "channel": 1,
           "x": 28.342482,
           "y": 244.12425,
@@ -3261,15 +3261,15 @@
       "tilt": 0.0,
       "branches": [
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.200",
           "channel": 1,
           "x": -72.20705,
           "y": 64.18133,
           "z": 5.1040483,
-          "azimuth": 89.96609,
-          "elevation": -89.99965,
-          "tilt": 0.6071106,
+          "azimuth": 75.56609,
+          "elevation": -68.39965,
+          "tilt": -6.5928893,
           "twigs": [
             {
               "x": -15.608955,
@@ -3320,15 +3320,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.125",
           "channel": 1,
           "x": -77.14242,
           "y": 74.60399,
           "z": 10.933088,
-          "azimuth": 91.404816,
-          "elevation": -90.17415,
-          "tilt": 7.1194234,
+          "azimuth": 84.20482,
+          "elevation": -82.974144,
+          "tilt": -7.2805767,
           "twigs": [
             {
               "x": -15.608955,
@@ -3379,14 +3379,14 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.40",
           "channel": 1,
           "x": -75.24799,
           "y": 77.810455,
           "z": 23.967278,
-          "azimuth": 138.98022,
-          "elevation": -90.37151,
+          "azimuth": 117.380226,
+          "elevation": -97.57151,
           "tilt": 0.32317597,
           "twigs": [
             {
@@ -3438,13 +3438,13 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.79",
           "channel": 1,
           "x": -84.004395,
           "y": 85.67129,
           "z": 21.977478,
-          "azimuth": 104.84893,
+          "azimuth": 83.24893,
           "elevation": -90.11687,
           "tilt": 0.44078133,
           "twigs": [
@@ -3497,14 +3497,14 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.175",
           "channel": 1,
           "x": -77.130974,
           "y": 92.852486,
           "z": 36.37275,
-          "azimuth": 169.83324,
-          "elevation": -90.996895,
+          "azimuth": 112.23324,
+          "elevation": -112.59689,
           "tilt": 0.1787908,
           "twigs": [
             {
@@ -3556,15 +3556,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.21",
           "channel": 1,
           "x": -82.89199,
           "y": 111.211754,
           "z": 44.736233,
-          "azimuth": 179.72864,
-          "elevation": -106.41617,
-          "tilt": 0.07995263,
+          "azimuth": 129.32864,
+          "elevation": -120.81617,
+          "tilt": 7.2799525,
           "twigs": [
             {
               "x": -15.608955,
@@ -3615,15 +3615,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.74",
           "channel": 1,
-          "x": -107.423096,
+          "x": -143.4231,
           "y": 124.99076,
-          "z": 42.60272,
-          "azimuth": 89.72446,
-          "elevation": -89.96609,
-          "tilt": 7.070724,
+          "z": 28.202719,
+          "azimuth": 68.12446,
+          "elevation": -61.16609,
+          "tilt": 21.470724,
           "twigs": [
             {
               "x": -15.608955,
@@ -3733,15 +3733,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.77",
           "channel": 1,
           "x": -106.407005,
           "y": 147.3161,
           "z": 69.27575,
-          "azimuth": 176.01605,
-          "elevation": -116.66817,
-          "tilt": 2.0045907,
+          "azimuth": 125.61605,
+          "elevation": -109.46817,
+          "tilt": 23.604591,
           "twigs": [
             {
               "x": -15.608955,
@@ -3792,15 +3792,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.29",
           "channel": 1,
           "x": -98.49549,
           "y": 112.66343,
           "z": 11.144954,
-          "azimuth": 66.016266,
-          "elevation": -87.03414,
-          "tilt": 6.6876674,
+          "azimuth": 51.616264,
+          "elevation": -108.63414,
+          "tilt": 21.087667,
           "twigs": [
             {
               "x": -15.608955,
@@ -3852,7 +3852,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "0.0.0.0",
+          "ipAddress": "10.200.1.20",
           "channel": 1,
           "x": -108.14253,
           "y": 133.25629,
@@ -3910,14 +3910,14 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.11",
           "channel": 1,
           "x": -50.277397,
           "y": 47.19411,
           "z": -26.50458,
           "azimuth": 69.57458,
-          "elevation": -91.1932,
+          "elevation": -83.9932,
           "tilt": -3.2062006,
           "twigs": [
             {
@@ -4028,15 +4028,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.54",
           "channel": 1,
           "x": -67.26053,
           "y": 67.74242,
           "z": -40.487408,
-          "azimuth": 96.243065,
-          "elevation": -91.72709,
-          "tilt": 15.999511,
+          "azimuth": 103.44306,
+          "elevation": -55.72709,
+          "tilt": 8.799511,
           "twigs": [
             {
               "x": -15.608955,
@@ -4087,15 +4087,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.3",
           "channel": 1,
           "x": -50.079544,
           "y": 64.32693,
           "z": -50.425934,
-          "azimuth": -0.9218822,
-          "elevation": -72.65454,
-          "tilt": -0.28796315,
+          "azimuth": 27.878119,
+          "elevation": -87.05454,
+          "tilt": 35.712036,
           "twigs": [
             {
               "x": -15.608955,
@@ -4205,15 +4205,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.195",
           "channel": 1,
           "x": -76.76731,
           "y": 89.39409,
           "z": -78.99874,
-          "azimuth": 16.083967,
+          "azimuth": 30.483967,
           "elevation": -74.24573,
-          "tilt": 4.665668,
+          "tilt": 40.66567,
           "twigs": [
             {
               "x": -15.608955,
@@ -4264,15 +4264,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.57",
           "channel": 1,
           "x": -88.817764,
           "y": 95.263275,
           "z": -71.27725,
-          "azimuth": 89.75213,
-          "elevation": -89.92981,
-          "tilt": 16.450834,
+          "azimuth": 60.95213,
+          "elevation": -61.12981,
+          "tilt": 23.650835,
           "twigs": [
             {
               "x": -15.608955,
@@ -4323,15 +4323,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.30",
           "channel": 1,
           "x": -46.370247,
           "y": 80.16113,
           "z": -39.60874,
           "azimuth": -6.196109,
           "elevation": -64.560684,
-          "tilt": -2.9602005,
+          "tilt": 18.6398,
           "twigs": [
             {
               "x": -15.608955,
@@ -4382,15 +4382,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.24",
           "channel": 1,
           "x": -66.781876,
           "y": 96.18659,
           "z": -29.6954,
           "azimuth": 101.96911,
           "elevation": -91.473854,
-          "tilt": 6.9710712,
+          "tilt": -0.22892876,
           "twigs": [
             {
               "x": -15.608955,
@@ -4441,7 +4441,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": -54.296993,
@@ -4449,7 +4449,7 @@
           "z": -47.40181,
           "azimuth": -0.27137303,
           "elevation": -63.25981,
-          "tilt": -0.13672619,
+          "tilt": 14.263274,
           "twigs": [
             {
               "x": -15.608955,
@@ -4500,15 +4500,15 @@
           "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.106",
           "channel": 1,
           "x": -65.92549,
           "y": 120.543,
           "z": -46.232674,
           "azimuth": 48.192837,
-          "elevation": -72.52013,
-          "tilt": 20.61717,
+          "elevation": -65.32013,
+          "tilt": 27.817171,
           "twigs": [
             {
               "x": -15.608955,
