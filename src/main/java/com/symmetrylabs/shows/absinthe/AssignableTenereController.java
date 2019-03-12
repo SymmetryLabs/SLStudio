@@ -48,19 +48,21 @@ public class AssignableTenereController extends LXDatagramOutput {
             }
         }
 
-        try {
-            byte channel = 0;
-			for (int[] packet : packets) {
-		    	TenereDatagram datagram = new TenereDatagram(lx, packet, channel);
-		    	datagram.setAddress(branch.getConfig().ipAddress).setPort(OPC_PORT);
-		    	addDatagram(datagram);
-		    	channel += TWIGS_PER_PACKET;
-			}
+        byte channel = 0;
+        for (int[] packet : packets) {
+            TenereDatagram datagram = new TenereDatagram(lx, packet, channel);
+            try {
+                datagram.setAddress(branch.getConfig().ipAddress).setPort(OPC_PORT);
+                addDatagram(datagram);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            channel += TWIGS_PER_PACKET;
+        }
 
-			if (ipAddress.equals("0.0.0.0")) {
-				enabled.setValue(false);
-			}
-		} catch (Exception e) { }
+        if (ipAddress.equals("0.0.0.0")) {
+            enabled.setValue(false);
+        }
 	}
 
 	public void setIpAddress(String ipAddress) {
