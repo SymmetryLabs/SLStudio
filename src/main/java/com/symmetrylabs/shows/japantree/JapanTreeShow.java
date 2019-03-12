@@ -135,13 +135,6 @@ public class JapanTreeShow extends TreeShow {
     public void setupLx(LX lx) {
         super.setupLx(lx);
 
-        try (FileOutputStream out = new FileOutputStream("src/main/java/com/symmetrylabs/shows/japantree/CompiledTreeData.java")) {
-            OutputStreamWriter w = new OutputStreamWriter(out);
-            new TreeCompiler(config, "com.symmetrylabs.shows.japantree", false).emit(w);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         TreeModel tree = (TreeModel) (lx.model);
         TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
 
@@ -180,5 +173,15 @@ public class JapanTreeShow extends TreeShow {
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
         new UITenereControllers(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
+
+        ui.addSaveHook(() -> {
+                try (FileOutputStream out = new FileOutputStream(
+                         "src/main/java/com/symmetrylabs/shows/japantree/CompiledTreeData.java")) {
+                    OutputStreamWriter w = new OutputStreamWriter(out);
+                    new TreeCompiler((TreeModel) lx.model, "com.symmetrylabs.shows.japantree", false).emit(w);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
     }
 }

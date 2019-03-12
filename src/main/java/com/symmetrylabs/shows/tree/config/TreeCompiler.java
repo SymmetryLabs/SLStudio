@@ -14,14 +14,12 @@ import java.util.List;
  * @author definitely not Haldean
  */
 public class TreeCompiler {
-    protected final TreeConfig config;
+    protected final TreeModel model;
     protected final String pkg;
-    protected final boolean writeTypes;
 
-    public TreeCompiler(TreeConfig config, String pkg, boolean writeTypes) {
-        this.config = config;
+    public TreeCompiler(TreeModel model, String pkg, boolean writeTypes) {
+        this.model = model;
         this.pkg = pkg;
-        this.writeTypes = writeTypes;
     }
 
     public void emit(Writer w) throws IOException {
@@ -29,25 +27,13 @@ public class TreeCompiler {
         w.write(pkg);
         w.write(";\n\nimport com.symmetrylabs.shows.tree.config.*;\n\n");
         w.write("public class CompiledTreeData {\n");
-        if (writeTypes) {
-            for (String branchTypeName : TreeConfig.getBranchTypes()) {
-                TwigConfig[] branchType = TreeConfig.getBranchType(branchTypeName);
-                emit(w, branchTypeName, branchType);
-                w.write("\n");
-            }
-            for (String limbTypeName : TreeConfig.getLimbTypes()) {
-                BranchConfig[] limbType = TreeConfig.getLimbType(limbTypeName);
-                emit(w, limbTypeName, limbType);
-                w.write("\n");
-            }
-        }
         w.write("\tpublic static final TreeConfig CONFIG = new TreeConfig(new LimbConfig[] {\n");
-        for (LimbConfig lc : config.getLimbs()) {
+        for (TreeModel.Limb lc : model.limbs) {
             w.write(
                 String.format(
                     "\t\tnew LimbConfig(%s, %ff, %ff, %ff, %ff, %ff, new BranchConfig[] {\n",
-                    lc.locked, lc.length, lc.height, lc.azimuth, lc.elevation, lc.tilt));
-            for (BranchConfig bc : lc.getBranches()) {
+                    lc.getConfig().locked, lc.length, lc.height, lc.azimuth, lc.elevation, lc.tilt));
+            for (TreeModel.Branch bc : lc.getBranches()) {
                 w.write("\t\t\t");
                 emit(w, bc);
                 w.write(",\n");
@@ -59,44 +45,20 @@ public class TreeCompiler {
         w.flush();
     }
 
-    protected void emit(Writer w, String name, TwigConfig[] btype) throws IOException {
-        w.write("\tpublic static final TwigConfig[] BRANCH_TYPE_");
-        w.write(ident(name));
-        w.write(" = {\n");
-        for (int i = 0; i < btype.length; i++) {
-            TwigConfig tc = btype[i];
-            w.write("\t\t");
-            emit(w, tc);
-            w.write(",\n");
-        }
-        w.write("\t};\n");
-    }
-
-    protected void emit(Writer w, TwigConfig tc) throws IOException {
+    protected void emit(Writer w, TreeModel.Twig tc) throws IOException {
         w.write(
             String.format(
                 "new TwigConfig(%ff, %ff, %ff, %ff, %ff, %ff, %d)",
                 tc.x, tc.y, tc.z, tc.azimuth, tc.elevation, tc.tilt, tc.index));
     }
 
-    protected void emit(Writer w, String name, BranchConfig[] ltype) throws IOException {
-        w.write("\tpublic static final BranchConfig[] LIMB_TYPE_");
-        w.write(ident(name));
-        w.write(" = {\n");
-        for (int i = 0; i < ltype.length; i++) {
-            w.write("\t\t");
-            emit(w, ltype[i]);
-            w.write(",\n");
-        }
-        w.write("\t};\n");
-    }
-
-    protected void emit(Writer w, BranchConfig bc) throws IOException {
+    protected void emit(Writer w, TreeModel.Branch bc) throws IOException {
         w.write(
             String.format(
                 "new BranchConfig(%s, \"%s\", %d, %ff, %ff, %ff, %ff, %ff, %ff, new TwigConfig[] {\n",
-                bc.locked, bc.ipAddress, bc.channel, bc.x, bc.y, bc.z, bc.azimuth, bc.elevation, bc.tilt));
-        for (TwigConfig tc : bc.getTwigs()) {
+                bc.getConfig().locked, bc.getConfig().ipAddress, bc.getConfig().channel,
+                bc.x, bc.y, bc.z, bc.azimuth, bc.elevation, bc.tilt));
+        for (TreeModel.Twig tc : bc.getTwigs()) {
             w.write("\t\t\t\t");
             emit(w, tc);
             w.write(",\n");
