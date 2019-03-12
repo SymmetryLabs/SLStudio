@@ -33,7 +33,7 @@ public class TenereDatagram extends OPCDatagram {
         final byte[] gamma = GAMMA_LUT[Math.round(255 * this.brightness.getValuef())];
         int i = offset;
         for (int index : pointIndices) {
-            int c = (index >= 0) ? colors[index] : 0x000000;
+            int c = (index >= 0) ? colors[index] : 0x0000FF;
             this.buffer[i    ] = gamma[0xff & (c >> 16)]; // R
             this.buffer[i + 1] = gamma[0xff & (c >> 8)]; // G
             this.buffer[i + 2] = gamma[0xff & c]; // B
