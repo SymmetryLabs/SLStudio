@@ -225,6 +225,7 @@ public class TreeModelingTool extends LXComponent {
         public final CompoundParameter azimuth = new CompoundParameter("azim", BranchConfig.DEFAULT_AZIMUTH, BranchConfig.MIN_AZIMUTH, BranchConfig.MAX_AZIMUTH);
         public final CompoundParameter elevation = new CompoundParameter("elev", BranchConfig.DEFAULT_ELEVATION, BranchConfig.MIN_ELEVATION, BranchConfig.MAX_ELEVATION);
         public final CompoundParameter tilt = new CompoundParameter("tilt", BranchConfig.DEFAULT_TILT, BranchConfig.MIN_TILT, BranchConfig.MAX_TILT);
+        public final BooleanParameter flipped = new BooleanParameter("flipped", false);
         public final BooleanParameter locked = new BooleanParameter("locked", false);
 
         private BranchManipulator(LX lx) {
@@ -237,6 +238,7 @@ public class TreeModelingTool extends LXComponent {
             addParameter(azimuth);
             addParameter(elevation);
             addParameter(tilt);
+            addParameter(flipped);
             addParameter(locked);
 
             locked.addListener(parameter -> {
@@ -274,6 +276,7 @@ public class TreeModelingTool extends LXComponent {
                 config.elevation = elevation.getValuef();
                 config.tilt = tilt.getValuef();
                 config.locked = locked.isOn();
+                config.flipped = flipped.getValueb();
                 tree.reconfigure();
             }
             if (mode.getEnum() != Mode.BRANCH) {
@@ -293,6 +296,7 @@ public class TreeModelingTool extends LXComponent {
             elevation.setValue(config.elevation);
             tilt.setValue(config.tilt);
             locked.setValue(config.locked);
+            flipped.setValue(config.flipped);
             disableParameters = false;
         }
     }

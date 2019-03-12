@@ -57,10 +57,10 @@ public class UITreeModelingTool extends UICollapsibleSection {
         this.limbControls = new LimbControls(ui,4, 20, getContentWidth(), 180, modelingTool.limbManipulator);
         addTopLevelComponent(limbControls);
 
-        this.branchControls = new BranchControls(ui,4, 200, getContentWidth(), 285, modelingTool.branchManipulator);
+        this.branchControls = new BranchControls(ui,4, 200, getContentWidth(), 305, modelingTool.branchManipulator);
         addTopLevelComponent(branchControls);
 
-        this.twigControls = new TwigControls(ui,4, 485, getContentWidth(), 200, modelingTool.twigManipulator);
+        this.twigControls = new TwigControls(ui,4, 505, getContentWidth(), 200, modelingTool.twigManipulator);
         addTopLevelComponent(twigControls);
 
         modelingTool.selectedLimb.addListener(parameter -> {
@@ -229,6 +229,11 @@ public class UITreeModelingTool extends UICollapsibleSection {
                 modelingTool.twigManipulator.locked.setValue(locked);
                 redrawWindow();
             });
+
+            new UIButton(5, 285, getContentWidth()/4, 15)
+                .setLabel("flip")
+                .setParameter(modelingTool.branchManipulator.flipped)
+                .addToContainer(this);
         }
 
         private class UINetworkPanel extends UI2dContainer {
