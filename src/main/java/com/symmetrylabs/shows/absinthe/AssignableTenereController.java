@@ -42,25 +42,23 @@ public class AssignableTenereController extends LXDatagramOutput {
 		int twigIndex = 1;
 		for (int i = 0; i < packets.length; i++) {
 		    int pi = 0;
-		    for (int j = 0; j < TWIGS_PER_PACKET; j++) {
-		        if (twigIndex < branch.getTwigs().size()+1) {
-		        	TreeModel.Twig twig = branch.getTwigByWiringIndex(twigIndex);
-                    if (twig != null) {
-                        for (LXPoint point : twig.points) {
-                            packets[i][pi++] = point.index;
-                        }
-                    } else {
-                        for (int k = 0; k < TreeModel.Twig.NUM_LEDS; k++) {
-                            packets[i][pi++] = -1;
-                        }
+            for (int j = 0; j < TWIGS_PER_PACKET; j++) {
+                TreeModel.Twig twig = branch.getTwigByWiringIndex(twigIndex);
+                if (twig != null) {
+                    for (LXPoint point : twig.points) {
+                        packets[i][pi++] = point.index;
                     }
-		        }
-		        twigIndex++;
-		    }
-		}
+                } else {
+                    for (int k = 0; k < TreeModel.Twig.NUM_LEDS; k++) {
+                        packets[i][pi++] = -1;
+                    }
+                }
+                twigIndex++;
+            }
+        }
 
-		try {
-			byte channel = 0;
+        try {
+            byte channel = 0;
 			for (int[] packet : packets) {
 		    	TenereDatagram datagram = new TenereDatagram(lx, packet, channel);
 		    	datagram.setAddress(branch.getConfig().ipAddress).setPort(OPC_PORT);
