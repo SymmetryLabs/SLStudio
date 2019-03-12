@@ -43,7 +43,6 @@ public class AssignableTenereController extends LXDatagramOutput {
             int index = twig.index;
             int packet = index / TWIGS_PER_PACKET; // truncates to floor
             int pindex = TreeModel.Twig.NUM_LEDS * (index - (TWIGS_PER_PACKET * packet));
-            System.out.println(String.format("controller %s: %d -> %d / %d", ipAddress, index, packet, pindex));
             for (LXPoint point : twig.points) {
                 packets[packet][pindex++] = point.index;
             }
