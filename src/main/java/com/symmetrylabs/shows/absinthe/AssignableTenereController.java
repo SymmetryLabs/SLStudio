@@ -25,6 +25,7 @@ public class AssignableTenereController extends LXDatagramOutput {
 	public AssignableTenereController(LX lx, TreeModel.Branch branch) throws SocketException {
 		super(lx);
 		this.ipAddress = branch.getConfig().ipAddress;
+        gammaCorrection.setValue(0);
 
 		int[][] packets = {
 		    new int[POINTS_PER_PACKET],
