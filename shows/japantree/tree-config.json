@@ -26,7 +26,7 @@
               "azimuth": 63.999813,
               "elevation": -72.0,
               "tilt": 15.000629,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -35,7 +35,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -44,7 +44,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -53,7 +53,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -62,7 +62,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -85,7 +85,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -94,7 +94,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -103,7 +103,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -112,7 +112,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -121,7 +121,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -144,7 +144,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -153,7 +153,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -162,7 +162,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -171,7 +171,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -180,7 +180,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -203,7 +203,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -212,7 +212,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -221,7 +221,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -230,7 +230,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -239,7 +239,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -262,7 +262,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -271,7 +271,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -280,7 +280,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -289,7 +289,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -298,7 +298,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -321,7 +321,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -330,7 +330,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -339,7 +339,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -348,7 +348,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -357,7 +357,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -380,7 +380,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -389,7 +389,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -398,7 +398,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -407,7 +407,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -416,7 +416,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -439,7 +439,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -448,7 +448,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -457,7 +457,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -466,7 +466,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -475,7 +475,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -498,7 +498,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -507,7 +507,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -516,7 +516,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -525,7 +525,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -534,7 +534,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -557,7 +557,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -566,7 +566,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -575,7 +575,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -584,7 +584,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -593,7 +593,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -616,7 +616,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -625,7 +625,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -634,7 +634,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -643,7 +643,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -652,7 +652,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -675,7 +675,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -684,7 +684,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -693,7 +693,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -702,7 +702,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -711,7 +711,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -734,7 +734,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -743,7 +743,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -752,7 +752,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -761,7 +761,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -770,7 +770,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -793,7 +793,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -802,7 +802,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -811,7 +811,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -820,7 +820,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -829,7 +829,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -852,7 +852,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -861,7 +861,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -870,7 +870,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -879,7 +879,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -888,7 +888,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -911,7 +911,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -920,7 +920,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -929,7 +929,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -938,7 +938,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -947,7 +947,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -970,7 +970,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -979,7 +979,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -988,7 +988,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -997,7 +997,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -1006,7 +1006,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -1029,7 +1029,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -1038,7 +1038,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -1047,7 +1047,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -1056,7 +1056,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -1065,7 +1065,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -1088,7 +1088,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -1097,7 +1097,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -1106,7 +1106,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -1115,7 +1115,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -1124,7 +1124,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -1147,7 +1147,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -1156,7 +1156,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -1165,7 +1165,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -1174,7 +1174,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -1183,7 +1183,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -1206,7 +1206,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -1215,7 +1215,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -1224,7 +1224,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -1233,7 +1233,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -1242,7 +1242,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -1265,7 +1265,7 @@
               "azimuth": 0.0,
               "elevation": 0.0,
               "tilt": 0.0,
-              "index": 1
+              "index": 8
             }
           ],
           "flipped": false
@@ -1298,7 +1298,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -1307,7 +1307,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -1316,7 +1316,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -1325,7 +1325,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -1334,7 +1334,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -1357,7 +1357,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -1366,7 +1366,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -1375,7 +1375,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -1384,7 +1384,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -1393,7 +1393,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -1416,7 +1416,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -1425,7 +1425,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -1434,7 +1434,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -1443,7 +1443,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -1452,7 +1452,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -1475,7 +1475,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -1484,7 +1484,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -1493,7 +1493,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -1502,7 +1502,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -1511,7 +1511,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -1534,7 +1534,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -1543,7 +1543,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -1552,7 +1552,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -1561,7 +1561,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -1570,7 +1570,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -1593,7 +1593,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -1602,7 +1602,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -1611,7 +1611,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -1620,7 +1620,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -1629,7 +1629,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -1652,7 +1652,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -1661,7 +1661,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -1670,7 +1670,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -1679,7 +1679,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -1688,7 +1688,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -1711,7 +1711,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -1720,7 +1720,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -1729,7 +1729,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -1738,7 +1738,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -1747,7 +1747,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -1770,7 +1770,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -1779,7 +1779,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -1788,7 +1788,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -1797,7 +1797,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -1806,7 +1806,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -1829,7 +1829,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -1838,7 +1838,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -1847,7 +1847,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -1856,7 +1856,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -1865,7 +1865,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -1888,7 +1888,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -1897,7 +1897,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -1906,7 +1906,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -1915,7 +1915,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -1924,7 +1924,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -1947,7 +1947,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -1956,7 +1956,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -1965,7 +1965,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -1974,7 +1974,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -1983,7 +1983,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -2006,7 +2006,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -2015,7 +2015,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -2024,7 +2024,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -2033,7 +2033,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -2042,7 +2042,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -2065,7 +2065,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -2074,7 +2074,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -2083,7 +2083,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -2092,7 +2092,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -2101,7 +2101,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -2124,7 +2124,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -2133,7 +2133,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -2142,7 +2142,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -2151,7 +2151,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -2160,7 +2160,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -2183,7 +2183,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -2192,7 +2192,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -2201,7 +2201,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -2210,7 +2210,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -2219,7 +2219,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -2242,7 +2242,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -2251,7 +2251,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -2260,7 +2260,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -2269,7 +2269,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -2278,7 +2278,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -2301,7 +2301,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -2310,7 +2310,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -2319,7 +2319,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -2328,7 +2328,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -2337,7 +2337,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -2360,7 +2360,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -2369,7 +2369,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -2378,7 +2378,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -2387,7 +2387,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -2396,7 +2396,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -2419,7 +2419,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -2428,7 +2428,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -2437,7 +2437,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -2446,7 +2446,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -2455,7 +2455,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -2478,7 +2478,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -2487,7 +2487,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -2496,7 +2496,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -2505,7 +2505,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -2514,7 +2514,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -2537,7 +2537,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -2546,7 +2546,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -2555,7 +2555,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -2564,7 +2564,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -2573,7 +2573,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -2596,7 +2596,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -2605,7 +2605,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -2614,7 +2614,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -2623,7 +2623,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -2632,7 +2632,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -2655,7 +2655,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -2664,7 +2664,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -2673,7 +2673,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -2682,7 +2682,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -2691,7 +2691,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -2714,7 +2714,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -2723,7 +2723,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -2732,7 +2732,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -2741,7 +2741,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -2750,7 +2750,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -2773,7 +2773,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -2782,7 +2782,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -2791,7 +2791,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -2800,7 +2800,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -2809,7 +2809,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -2832,7 +2832,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -2841,7 +2841,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -2850,7 +2850,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -2859,7 +2859,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -2868,7 +2868,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -2891,7 +2891,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -2900,7 +2900,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -2909,7 +2909,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -2918,7 +2918,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -2927,7 +2927,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -2950,7 +2950,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -2959,7 +2959,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -2968,7 +2968,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -2977,7 +2977,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -2986,7 +2986,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -3009,7 +3009,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -3018,7 +3018,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -3027,7 +3027,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -3036,7 +3036,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -3045,7 +3045,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -3068,7 +3068,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -3077,7 +3077,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -3086,7 +3086,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -3095,7 +3095,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -3104,7 +3104,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -3127,7 +3127,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -3136,7 +3136,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -3145,7 +3145,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -3154,7 +3154,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -3163,7 +3163,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -3186,7 +3186,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -3195,7 +3195,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -3204,7 +3204,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -3213,7 +3213,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -3222,7 +3222,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -3245,7 +3245,7 @@
               "azimuth": 0.0,
               "elevation": 0.0,
               "tilt": 0.0,
-              "index": 1
+              "index": 8
             }
           ],
           "flipped": false
@@ -3278,7 +3278,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -3287,7 +3287,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -3296,7 +3296,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -3305,7 +3305,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -3314,7 +3314,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -3337,7 +3337,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -3346,7 +3346,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -3355,7 +3355,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -3364,7 +3364,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -3373,7 +3373,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -3396,7 +3396,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -3405,7 +3405,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -3414,7 +3414,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -3423,7 +3423,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -3432,7 +3432,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -3455,7 +3455,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -3464,7 +3464,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -3473,7 +3473,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -3482,7 +3482,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -3491,7 +3491,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -3514,7 +3514,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -3523,7 +3523,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -3532,7 +3532,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -3541,7 +3541,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -3550,7 +3550,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -3573,7 +3573,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -3582,7 +3582,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -3591,7 +3591,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -3600,7 +3600,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -3609,7 +3609,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -3632,7 +3632,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -3641,7 +3641,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -3650,7 +3650,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -3659,7 +3659,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -3668,7 +3668,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -3691,7 +3691,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -3700,7 +3700,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -3709,7 +3709,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -3718,7 +3718,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -3727,7 +3727,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -3750,7 +3750,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -3759,7 +3759,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -3768,7 +3768,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -3777,7 +3777,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -3786,7 +3786,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -3809,7 +3809,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -3818,7 +3818,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -3827,7 +3827,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -3836,7 +3836,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -3845,7 +3845,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -3868,7 +3868,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -3877,7 +3877,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -3886,7 +3886,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -3895,7 +3895,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -3904,7 +3904,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -3927,7 +3927,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -3936,7 +3936,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -3945,7 +3945,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -3954,7 +3954,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -3963,7 +3963,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -3986,7 +3986,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -3995,7 +3995,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -4004,7 +4004,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -4013,7 +4013,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -4022,7 +4022,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -4045,7 +4045,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -4054,7 +4054,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -4063,7 +4063,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -4072,7 +4072,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -4081,7 +4081,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -4104,7 +4104,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -4113,7 +4113,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -4122,7 +4122,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -4131,7 +4131,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -4140,7 +4140,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -4163,7 +4163,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -4172,7 +4172,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -4181,7 +4181,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -4190,7 +4190,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -4199,7 +4199,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -4222,7 +4222,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -4231,7 +4231,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -4240,7 +4240,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -4249,7 +4249,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -4258,7 +4258,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -4281,7 +4281,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -4290,7 +4290,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -4299,7 +4299,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -4308,7 +4308,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -4317,7 +4317,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -4340,7 +4340,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -4349,7 +4349,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -4358,7 +4358,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -4367,7 +4367,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -4376,7 +4376,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -4399,7 +4399,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -4408,7 +4408,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -4417,7 +4417,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -4426,7 +4426,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -4435,7 +4435,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -4458,7 +4458,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -4467,7 +4467,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -4476,7 +4476,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -4485,7 +4485,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -4494,7 +4494,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -4517,7 +4517,7 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 1
+              "index": 8
             },
             {
               "x": -8.287138,
@@ -4526,7 +4526,7 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 3
+              "index": 7
             },
             {
               "x": 0.0,
@@ -4535,7 +4535,7 @@
               "azimuth": 0.0,
               "elevation": -3.5083688E-15,
               "tilt": 22.0,
-              "index": 4
+              "index": 6
             },
             {
               "x": 7.6914845,
@@ -4544,7 +4544,7 @@
               "azimuth": -32.024166,
               "elevation": -1.101135E-14,
               "tilt": 17.251703,
-              "index": 5
+              "index": 2
             },
             {
               "x": 14.733882,
@@ -4553,7 +4553,7 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 8
+              "index": 1
             }
           ],
           "flipped": false
@@ -4576,7 +4576,7 @@
               "azimuth": 0.0,
               "elevation": 0.0,
               "tilt": 0.0,
-              "index": 1
+              "index": 8
             }
           ],
           "flipped": false
@@ -4599,7 +4599,7 @@
               "azimuth": 0.0,
               "elevation": 0.0,
               "tilt": 0.0,
-              "index": 1
+              "index": 8
             }
           ],
           "flipped": false
@@ -4622,7 +4622,7 @@
               "azimuth": 0.0,
               "elevation": 0.0,
               "tilt": 0.0,
-              "index": 1
+              "index": 8
             }
           ],
           "flipped": false
