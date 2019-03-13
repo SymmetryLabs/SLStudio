@@ -103,10 +103,6 @@ public class AssignableTenereController extends LXDatagramOutput {
 		this.ipAddress = ipAddress;
 
 		try {
-			if (!InetAddress.getByName(ipAddress).isReachable(200)) {
-				enabled.setValue(false);
-			}
-
 			for (LXDatagram datagram : getDatagrams()) {
 				datagram.setAddress(ipAddress);
 			}
