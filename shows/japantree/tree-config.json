@@ -65,7 +65,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -124,7 +124,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -183,7 +183,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": false,
@@ -301,7 +301,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -360,10 +360,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.26",
           "channel": 1,
           "x": 49.894203,
@@ -419,10 +419,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 56.992706,
@@ -537,7 +537,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -596,7 +596,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -655,7 +655,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -714,7 +714,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -773,7 +773,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -832,7 +832,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -891,7 +891,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -950,7 +950,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -1009,10 +1009,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.37",
           "channel": 1,
           "x": 45.831425,
@@ -1068,10 +1068,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.49",
           "channel": 1,
           "x": 53.42957,
@@ -1127,10 +1127,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.201",
           "channel": 1,
           "x": 49.996815,
@@ -1186,10 +1186,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.28",
           "channel": 1,
           "x": 39.863308,
@@ -1245,11 +1245,11 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": false,
-          "ipAddress": "10.200.1.255",
+          "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 44.652637,
           "y": 182.71823,
@@ -1337,7 +1337,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -1396,7 +1396,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -1455,7 +1455,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -1514,7 +1514,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -1573,7 +1573,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -1632,7 +1632,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -1691,7 +1691,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -1750,7 +1750,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -1809,10 +1809,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.166",
           "channel": 1,
           "x": -10.084335,
@@ -1868,10 +1868,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.99",
           "channel": 1,
           "x": -5.784283,
@@ -1927,11 +1927,11 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
-          "ipAddress": "10.200.1.69",
+          "locked": true,
+          "ipAddress": "10.200.1.36",
           "channel": 1,
           "x": -14.304136,
           "y": 134.06346,
@@ -2104,10 +2104,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.72",
           "channel": 1,
           "x": -47.5524,
@@ -2163,10 +2163,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.17",
           "channel": 1,
           "x": -55.685833,
@@ -2222,10 +2222,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.189",
           "channel": 1,
           "x": -1.9008548,
@@ -2281,10 +2281,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.95",
           "channel": 1,
           "x": -24.74625,
@@ -2340,10 +2340,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.128",
           "channel": 1,
           "x": -49.069202,
@@ -2399,10 +2399,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.146",
           "channel": 1,
           "x": -48.493084,
@@ -2458,7 +2458,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": false,
@@ -2517,7 +2517,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": false,
@@ -2576,7 +2576,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": false,
@@ -2635,7 +2635,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": false,
@@ -2694,7 +2694,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": false,
@@ -2753,10 +2753,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.173",
           "channel": 1,
           "x": -31.272392,
@@ -2812,10 +2812,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.34",
           "channel": 1,
           "x": -16.2445,
@@ -2871,10 +2871,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.110",
           "channel": 1,
           "x": 19.125877,
@@ -2930,10 +2930,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.171",
           "channel": 1,
           "x": 24.138048,
@@ -2989,10 +2989,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.144",
           "channel": 1,
           "x": 4.1046,
@@ -3048,10 +3048,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.60",
           "channel": 1,
           "x": 28.011662,
@@ -3107,10 +3107,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.136",
           "channel": 1,
           "x": 9.68755,
@@ -3166,10 +3166,10 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "10.200.1.83",
           "channel": 1,
           "x": 28.342482,
@@ -3225,7 +3225,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": false,
@@ -3317,7 +3317,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -3327,7 +3327,7 @@
           "y": 74.60399,
           "z": 10.933088,
           "azimuth": 84.20482,
-          "elevation": -82.974144,
+          "elevation": -75.77415,
           "tilt": -7.2805767,
           "twigs": [
             {
@@ -3376,7 +3376,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -3435,11 +3435,11 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
-          "ipAddress": "10.200.1.79",
+          "ipAddress": "10.200.1.75",
           "channel": 1,
           "x": -84.004395,
           "y": 85.67129,
@@ -3553,7 +3553,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -3564,7 +3564,7 @@
           "z": 44.736233,
           "azimuth": 129.32864,
           "elevation": -120.81617,
-          "tilt": 7.2799525,
+          "tilt": 0.07995252,
           "twigs": [
             {
               "x": -15.608955,
@@ -3573,7 +3573,10 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 5
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
             },
             {
               "x": -8.287138,
@@ -3612,7 +3615,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -3671,7 +3674,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": false,
@@ -3739,8 +3742,8 @@
           "x": -106.407005,
           "y": 147.3161,
           "z": 69.27575,
-          "azimuth": 125.61605,
-          "elevation": -109.46817,
+          "azimuth": 132.81606,
+          "elevation": -123.86817,
           "tilt": 23.604591,
           "twigs": [
             {
@@ -3789,7 +3792,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -3848,7 +3851,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": false,
@@ -3907,7 +3910,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -3966,7 +3969,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": false,
@@ -4084,7 +4087,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -4143,7 +4146,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": false,
@@ -4261,7 +4264,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -4320,7 +4323,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -4379,7 +4382,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -4438,7 +4441,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -4497,7 +4500,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": true,
@@ -4556,7 +4559,7 @@
               "index": 4
             }
           ],
-          "flipped": false
+          "flipped": true
         },
         {
           "locked": false,
