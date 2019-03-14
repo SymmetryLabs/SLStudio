@@ -2737,7 +2737,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "10.200.1.232",
+          "ipAddress": "10.200,1.224",
           "channel": 1,
           "x": -20.52,
           "y": 120.4,
@@ -3177,7 +3177,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "10.200.1.243",
+          "ipAddress": "10.200.1.232",
           "channel": 1,
           "x": -20.52,
           "y": 120.4,
