@@ -190,7 +190,7 @@
         },
         {
           "locked": false,
-          "ipAddress": "10.200.1.255",
+          "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 44.897144,
           "y": 66.3607,
