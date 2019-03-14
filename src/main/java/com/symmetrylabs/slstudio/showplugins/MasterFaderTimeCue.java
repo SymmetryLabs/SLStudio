@@ -16,29 +16,54 @@ import org.joda.time.Days;
 import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
+import heronarts.lx.parameter.StringParameter;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.LXParameter;
 
 
 public class MasterFaderTimeCue implements LXLoopTask, CaptionSource {
     private final LX lx;
 
     public static class Cue {
-        public DateTime startAt;
-        public double durationSeconds;
-        public double fadeTo;
+        public final StringParameter startAtStr;
+        public final CompoundParameter durationMs;
+        public final CompoundParameter fadeTo;
 
+        private DateTime startAt;
         private DateTime lastStartedAt;
         private double faderWhenStarted;
 
-        public Cue(DateTime startAt, double durationSeconds, double fadeTo) {
-            this.startAt = startAt;
-            this.durationSeconds = durationSeconds;
-            this.fadeTo = fadeTo;
+        public Cue() {
+            startAtStr = new StringParameter("startAt", "00:00");
+            startAt = DateTime.now().withTime(0, 0, 0, 0);
+            durationMs = (CompoundParameter) new CompoundParameter("duration", 1000, 50, 30 * 60 * 1000)
+                .setExponent(4)
+                .setUnits(LXParameter.Units.MILLISECONDS);
+            fadeTo = new CompoundParameter("fadeTo", 100, 0, 100);
+
+            startAtStr.addListener(p -> {
+                    String[] timebits = startAtStr.getString().split(":");
+                    if (timebits.length != 2 && timebits.length != 3) {
+                        return;
+                    }
+                    int h, m, s;
+                    try {
+                        h = Integer.parseInt(timebits[0]);
+                        m = Integer.parseInt(timebits[1]);
+                        s = timebits.length > 2 ? Integer.parseInt(timebits[2]) : 0;
+                    } catch (NumberFormatException e) {
+                        return;
+                    }
+                    startAt = DateTime.now().withTime(h, m, s, 0);
+                });
         }
 
         @Override
         public String toString() {
             return String.format("%.3f second fade to %.0f%% starting at %02d:%02d",
-                                 durationSeconds, 100 * fadeTo, startAt.getHourOfDay(), startAt.getMinuteOfHour());
+                                 durationMs.getValue() / 1000.0,
+                                 fadeTo.getValue(),
+                                 startAt.getHourOfDay(), startAt.getMinuteOfHour());
         }
     }
 
@@ -64,7 +89,7 @@ public class MasterFaderTimeCue implements LXLoopTask, CaptionSource {
     }
 
     public List<Cue> getCues() {
-        return Collections.unmodifiableList(cues);
+        return cues;
     }
 
     public void addCue(Cue cue) {
@@ -79,17 +104,17 @@ public class MasterFaderTimeCue implements LXLoopTask, CaptionSource {
     public void loop(double deltaMs) {
         DateTime now = DateTime.now();
         current = null;
-        double elapsedSec = 0;
+        double elapsedMs = 0;
 
         for (Cue cue : cues) {
             if (cue.lastStartedAt != null) {
                 Duration elapsed = new Duration(cue.lastStartedAt, now);
-                double seconds = elapsed.getMillis() / 1000.0;
-                if (seconds <= cue.durationSeconds) {
+                double ms = elapsed.getMillis();
+                if (ms <= cue.durationMs.getValue()) {
                     current = cue;
-                    elapsedSec = seconds;
+                    elapsedMs = ms;
                     break;
-                } else if (seconds < 60) {
+                } else if (ms < 60_000) {
                     /* we prevent cues from triggering twice in the same minute
                        (since cues are given with accuracy only to the minute in
                        the UI). */
@@ -100,7 +125,7 @@ public class MasterFaderTimeCue implements LXLoopTask, CaptionSource {
                 cue.lastStartedAt = now;
                 cue.faderWhenStarted = lx.engine.output.brightness.getValue();
                 current = cue;
-                elapsedSec = 0;
+                elapsedMs = 0;
                 break;
             }
         }
@@ -108,8 +133,8 @@ public class MasterFaderTimeCue implements LXLoopTask, CaptionSource {
             return;
         }
 
-        t = constrain(elapsedSec / current.durationSeconds, 0, 1);
-        double newFader = current.faderWhenStarted + (current.fadeTo - current.faderWhenStarted) * t;
+        t = constrain(elapsedMs / current.durationMs.getValue(), 0, 1);
+        double newFader = current.faderWhenStarted + (current.fadeTo.getValue() - current.faderWhenStarted) * t;
         lx.engine.output.brightness.setValue(newFader);
     }
 
