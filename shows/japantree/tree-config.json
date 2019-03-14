@@ -25,8 +25,11 @@
               "z": 1.6101382E-15,
               "azimuth": 63.999813,
               "elevation": -72.0,
-              "tilt": 15.000629,
-              "index": 5
+              "tilt": 7.8006296,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
             },
             {
               "x": -8.287138,
@@ -128,7 +131,7 @@
         },
         {
           "locked": true,
-          "ipAddress": "10.200.1.69",
+          "ipAddress": "10.200.1.247",
           "channel": 1,
           "x": 40.11403,
           "y": 57.057373,
@@ -600,7 +603,7 @@
         },
         {
           "locked": true,
-          "ipAddress": "10.200.1.67",
+          "ipAddress": "10.200.1.95",
           "channel": 1,
           "x": 67.8707,
           "y": 92.27142,
@@ -1695,7 +1698,7 @@
         },
         {
           "locked": true,
-          "ipAddress": "10.200.1.67",
+          "ipAddress": "10.200.1.69",
           "channel": 1,
           "x": -11.627777,
           "y": 158.6815,
@@ -1813,7 +1816,7 @@
         },
         {
           "locked": true,
-          "ipAddress": "10.200.1.166",
+          "ipAddress": "10.200.1.253",
           "channel": 1,
           "x": -10.084335,
           "y": 80.95858,
@@ -2285,7 +2288,7 @@
         },
         {
           "locked": true,
-          "ipAddress": "10.200.1.95",
+          "ipAddress": "10.200.1.60",
           "channel": 1,
           "x": -24.74625,
           "y": 191.11209,
@@ -2537,7 +2540,10 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 5
+              "index": 1,
+              "disabledPixels": [
+                0
+              ]
             },
             {
               "x": -8.287138,
@@ -2545,8 +2551,18 @@
               "z": 1.202012E-14,
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
-              "tilt": 8.000089,
-              "index": 6
+              "tilt": 8.000107,
+              "index": 1,
+              "disabledPixels": [
+                140,
+                141,
+                142,
+                143,
+                144,
+                145,
+                146,
+                147
+              ]
             },
             {
               "x": 0.0,
@@ -2875,7 +2891,7 @@
         },
         {
           "locked": true,
-          "ipAddress": "10.200.1.110",
+          "ipAddress": "10.200.1.251",
           "channel": 1,
           "x": 19.125877,
           "y": 206.46397,
@@ -2993,7 +3009,7 @@
         },
         {
           "locked": true,
-          "ipAddress": "10.200.1.144",
+          "ipAddress": "10.200.1.248",
           "channel": 1,
           "x": 4.1046,
           "y": 218.69812,
@@ -3052,7 +3068,7 @@
         },
         {
           "locked": true,
-          "ipAddress": "10.200.1.60",
+          "ipAddress": "10.200.1.250",
           "channel": 1,
           "x": 28.011662,
           "y": 226.51642,
@@ -3278,7 +3294,10 @@
               "azimuth": 63.999813,
               "elevation": -7.562804E-15,
               "tilt": 15.000659,
-              "index": 5
+              "index": 5,
+              "disabledPixels": [
+                1
+              ]
             },
             {
               "x": -8.287138,
@@ -3314,7 +3333,11 @@
               "azimuth": -74.99951,
               "elevation": 2.424612E-13,
               "tilt": 19.999453,
-              "index": 4
+              "index": 4,
+              "disabledPixels": [
+                50,
+                55
+              ]
             }
           ],
           "flipped": true
@@ -3464,7 +3487,10 @@
               "azimuth": 50.48179,
               "elevation": -2.3501693E-14,
               "tilt": 8.000089,
-              "index": 6
+              "index": 6,
+              "disabledPixels": [
+                8
+              ]
             },
             {
               "x": 0.0,

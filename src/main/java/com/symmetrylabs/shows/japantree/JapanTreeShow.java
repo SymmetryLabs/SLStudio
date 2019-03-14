@@ -143,9 +143,9 @@ public class JapanTreeShow extends TreeShow {
         lx.engine.addLoopTask(new LXLoopTask() {
             @Override
             public void loop(double v) {
-                if (lx.engine.output.brightness.getValuef() > 0.9f) {
-                    lx.engine.output.brightness.setValue(0.9f);
-                }
+                // if (lx.engine.output.brightness.getValuef() > 0.9f) {
+                //     lx.engine.output.brightness.setValue(0.9f);
+                // }
                 if (lx.engine.framesPerSecond.getValuef() != 60) {
                     lx.engine.framesPerSecond.setValue(60);
                 }
