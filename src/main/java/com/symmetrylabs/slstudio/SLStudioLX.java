@@ -419,6 +419,8 @@ public class SLStudioLX extends P3LX {
 
             runPostDraw = new ArrayList<>();
             eventHandlers = new ArrayList<>();
+
+            addCaptionSource(SLStudio.applet.cueManager);
         }
 
         protected SLPattern getFocusedSLPattern() {

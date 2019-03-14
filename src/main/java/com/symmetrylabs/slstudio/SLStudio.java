@@ -23,6 +23,7 @@ import com.symmetrylabs.util.DrawHelper;
 import com.symmetrylabs.util.MarkerSource;
 import com.symmetrylabs.util.Utils;
 import com.symmetrylabs.util.dispatch.Dispatcher;
+import com.symmetrylabs.slstudio.cue.CueManager;
 
 import java.io.File;
 import java.io.FileReader;
@@ -57,6 +58,7 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
     public MappingPixlite[] mappingPixlites;
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
+    public CueManager cueManager;
     private BlobTracker blobTracker;
     public Anemometer anemometer;
     public LX lx_OG;
@@ -172,6 +174,8 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
                 ui.theme.setFocusColor(0xff0094aa);
                 ui.theme.setControlBorderColor(0xff292929);
                 ui.theme.setDeviceFocusedBackgroundColor(0xff3E585A);
+
+                cueManager = CueManager.attach(lx);
             }
 
             @Override

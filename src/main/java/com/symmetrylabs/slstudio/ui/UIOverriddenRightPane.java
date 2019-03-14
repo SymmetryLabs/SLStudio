@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.ui;
 
 import processing.core.PGraphics;
+import com.symmetrylabs.slstudio.cue.UICuePanel;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
@@ -86,6 +87,8 @@ public class UIOverriddenRightPane extends UIPane {
         backgroundLightParam.addListener(p -> {
             ui.setBackgroundColor(LXColor.gray(p.getValue() * 100));
         });
+
+        new UICuePanel(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(utility);
     }
 
     private void buildPerformanceUI() {
