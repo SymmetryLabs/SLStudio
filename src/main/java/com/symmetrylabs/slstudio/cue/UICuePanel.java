@@ -40,9 +40,15 @@ public class UICuePanel extends UICollapsibleSection implements CueManager.CueLi
         float y = 0;
         final BooleanParameter addP = new BooleanParameter("add").setMode(BooleanParameter.Mode.MOMENTARY);
         addP.addListener(p -> { if (addP.getValueb()) addCue(); });
-        new UIButton(0, 0, getContentWidth(), 20)
+        new UIButton(0, 0, getContentWidth() / 2 - 5, 20)
             .setLabel("Add new cue")
             .setParameter(addP)
+            .addToContainer(this);
+        final BooleanParameter saveP = new BooleanParameter("add").setMode(BooleanParameter.Mode.MOMENTARY);
+        saveP.addListener(p -> { if (saveP.getValueb()) mgr.onSave(); });
+        new UIButton(getContentWidth() / 2, 0, getContentWidth() / 2 - 5, 20)
+            .setLabel("Save cue file")
+            .setParameter(saveP)
             .addToContainer(this);
         y += 22;
 
