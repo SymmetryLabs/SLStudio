@@ -1,15 +1,28 @@
 package com.symmetrylabs.slstudio.cue;
 
-import com.google.common.base.Preconditions;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonWriter;
+import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.util.CaptionSource;
+import com.symmetrylabs.util.FileUtils;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXLoopTask;
+import heronarts.lx.LXSerializable;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.StringParameter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -18,12 +31,11 @@ import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
-import java.util.Iterator;
 
 import static com.symmetrylabs.util.MathUtils.*;
 
 
-public class CueManager extends LXComponent implements LXLoopTask, CaptionSource {
+public class CueManager implements LXLoopTask, CaptionSource, SLStudioLX.SaveHook {
     private class CueData {
         Cue cue;
         DateTime lastStartedAt;
@@ -38,6 +50,7 @@ public class CueManager extends LXComponent implements LXLoopTask, CaptionSource
         void cueListChanged();
     }
 
+    protected LX lx;
     private final List<CueData> cues = new ArrayList<>();
     private final List<CueListListener> listListeners = new ArrayList<>();
 
@@ -47,7 +60,7 @@ public class CueManager extends LXComponent implements LXLoopTask, CaptionSource
     private PeriodFormatter periodFormatter;
 
     public CueManager(LX lx) {
-        super(lx);
+        this.lx = lx;
         periodFormatter = new PeriodFormatterBuilder()
             .minimumPrintedDigits(2)
             .appendHours()
@@ -70,7 +83,6 @@ public class CueManager extends LXComponent implements LXLoopTask, CaptionSource
 
     public void addCue(Cue cue) {
         cues.add(new CueData(cue));
-        addSubcomponent(cue);
         for (CueListListener cll : listListeners) {
             cll.cueListChanged();
         }
@@ -79,11 +91,9 @@ public class CueManager extends LXComponent implements LXLoopTask, CaptionSource
     public void removeCue(Cue cue) {
         Iterator<CueData> cds = cues.iterator();
         boolean changed = false;
-        System.out.println("remove " + cue);
         while (cds.hasNext()) {
             CueData cd = cds.next();
             if (cd.cue == cue) {
-                cd.cue.dispose();
                 cds.remove();
                 changed = true;
             }
@@ -174,5 +184,60 @@ public class CueManager extends LXComponent implements LXLoopTask, CaptionSource
         CueManager mgr = new CueManager(lx);
         lx.engine.addLoopTask(mgr);
         return mgr;
+    }
+
+    private static File getCueFile() {
+        return FileUtils.getShowFile("cues.json");
+    }
+
+    private static final String KEY_CUES = "cues";
+
+    public void save(JsonObject obj) {
+        JsonArray cueArr = new JsonArray();
+        for (CueData cd : cues) {
+            JsonObject cueObj = new JsonObject();
+            cd.cue.save(cueObj);
+            cueArr.add(cueObj);
+        }
+        obj.add(KEY_CUES, cueArr);
+    }
+
+    public void load(JsonObject obj) {
+        cues.clear();
+        if (obj.has(KEY_CUES)) {
+            JsonArray cueArr = obj.getAsJsonArray(KEY_CUES);
+            for (JsonElement cueElem : cueArr) {
+                JsonObject cueObj = cueElem.getAsJsonObject();
+                Cue c = new Cue(lx, lx.engine.output.brightness);
+                c.load(cueObj);
+                addCue(c);
+            }
+        }
+    }
+
+    public void loadFromCueFile() {
+        File inf = getCueFile();
+        if (inf.exists()) {
+            try (FileReader fr = new FileReader(inf)) {
+                JsonObject obj = new Gson().fromJson(fr, JsonObject.class);
+                load(obj);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onSave() {
+        File outf = getCueFile();
+        JsonObject obj = new JsonObject();
+        this.save(obj);
+        try {
+            JsonWriter writer = new JsonWriter(new FileWriter(outf));
+            new GsonBuilder().create().toJson(obj, writer);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

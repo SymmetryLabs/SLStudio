@@ -176,6 +176,7 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
                 ui.theme.setDeviceFocusedBackgroundColor(0xff3E585A);
 
                 cueManager = CueManager.attach(lx);
+                ui.addSaveHook(cueManager);
             }
 
             @Override
@@ -203,6 +204,8 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
                         NotationXLListener.bindMidi(lx, ui);
                     }
                 });
+
+                cueManager.loadFromCueFile();
             }
         };
 

@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.cue;
 
+import com.google.gson.JsonObject;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.parameter.CompoundParameter;
@@ -9,7 +10,7 @@ import org.joda.time.DateTime;
 import heronarts.lx.parameter.BoundedParameter;
 
 
-public class Cue extends LXComponent {
+public class Cue {
     public final StringParameter startAtStr;
     public final CompoundParameter durationMs;
     public final CompoundParameter fadeTo;
@@ -17,7 +18,6 @@ public class Cue extends LXComponent {
     private DateTime startAt;
 
     public Cue(LX lx, BoundedParameter cuedParameter) {
-        super(lx);
         this.cuedParameter = cuedParameter;
 
         startAtStr = new StringParameter("startAt", "00:00");
@@ -42,10 +42,6 @@ public class Cue extends LXComponent {
                 }
                 startAt = DateTime.now().withTime(h, m, s, 0);
             });
-
-        addParameter(startAtStr);
-        addParameter(durationMs);
-        addParameter(fadeTo);
     }
 
     @Override
@@ -55,6 +51,19 @@ public class Cue extends LXComponent {
                              cuedParameter.getLabel(),
                              fadeTo.getValue(),
                              startAt.getHourOfDay(), startAt.getMinuteOfHour());
+    }
+
+    public void save(JsonObject obj) {
+        obj.addProperty("startAt", startAtStr.getString());
+        obj.addProperty("duration", durationMs.getValue());
+        obj.addProperty("fadeTo", fadeTo.getValue());
+        /* TODO: store cued parameter path */
+    }
+
+    public void load(JsonObject obj) {
+        startAtStr.setValue(obj.get("startAt").getAsString());
+        durationMs.setValue(obj.get("duration").getAsDouble());
+        fadeTo.setValue(obj.get("fadeTo").getAsDouble());
     }
 
     public DateTime getStartTime() {
