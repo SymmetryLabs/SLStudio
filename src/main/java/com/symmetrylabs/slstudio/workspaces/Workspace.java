@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.workspaces;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
+import heronarts.lx.data.Project;
 import heronarts.lx.osc.LXOscListener;
 import heronarts.lx.osc.OscMessage;
 import java.io.File;
@@ -49,9 +50,9 @@ public class Workspace extends LXComponent {
         loadProjectFiles();
         Collections.sort(projects, Comparator.comparing(WorkspaceProject::getLabel));
 
-        lx.addProjectListener((f, s) -> {
+        lx.addProjectListener((p, s) -> {
             if (s == LX.ProjectListener.Change.OPEN) {
-                setCurrentProject(f);
+                setCurrentProject(p);
             }
         });
         setCurrentProject(lx.getProject());
@@ -76,10 +77,10 @@ public class Workspace extends LXComponent {
         requestsBeforeSwitch = r;
     }
 
-    private void setCurrentProject(File f) {
-        if (f != null) {
+    private void setCurrentProject(Project project) {
+        if (project != null) {
             try {
-                String path = f.getCanonicalPath();
+                String path = project.getRoot().toFile().getCanonicalPath();
                 for (int i = 0; i < projects.size(); i++) {
                     WorkspaceProject p = projects.get(i);
                     if (p.getFile().getCanonicalPath().equals(path)) {
@@ -173,7 +174,7 @@ public class Workspace extends LXComponent {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            lx.openProject(workspace.getFile());
+            lx.openProject(Project.createLegacyProject(workspace.getFile()));
         });
 
         /* We set up this task to run after the next frame of the UI is rendered. It

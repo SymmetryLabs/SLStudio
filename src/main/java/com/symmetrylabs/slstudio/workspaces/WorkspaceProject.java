@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.workspaces;
 
 import java.io.File;
+import heronarts.lx.data.Project;
 
 public class WorkspaceProject {
     private File file = null;
@@ -37,6 +38,13 @@ public class WorkspaceProject {
             return false;
         }
         return getFileName().equals(file.getName());
+    }
+
+    public boolean matches(Project project) {
+        if (!hasLoaded()) {
+            return false;
+        }
+        return getFileName().equals(project.getRoot().toString());
     }
 
     public boolean hasLoaded() {

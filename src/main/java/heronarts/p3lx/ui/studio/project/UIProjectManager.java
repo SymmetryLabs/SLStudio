@@ -27,6 +27,7 @@
 package heronarts.p3lx.ui.studio.project;
 
 import java.io.File;
+import heronarts.lx.data.Project;
 
 import heronarts.lx.LX;
 import heronarts.lx.LX.ProjectListener;
@@ -40,7 +41,7 @@ public class UIProjectManager extends UICollapsibleSection {
 
     private final LX lx;
     private final UILabel fileLabel;
-    private File file;
+    private Project project;
     private final UIButton saveButton;
     private final UIButton saveAsButton;
     private final UIButton openButton;
@@ -51,21 +52,21 @@ public class UIProjectManager extends UICollapsibleSection {
     public UIProjectManager(final UI ui, final LX lx, float x, float y, float w) {
         super(ui, x, y, w, HEIGHT);
         this.lx = lx;
-        this.file = lx.getProject();
+        this.project = lx.getProject();
         setTitle("PROJECT");
 
         this.fileLabel = new UILabel(0, 0, getContentWidth(), 16);
         this.fileLabel
-        .setLabel(file != null ? file.getName() : "<New Project>")
+        .setLabel(project != null ? project.getName() : "<New Project>")
         .setBackgroundColor(UI.BLACK)
         .setBorderRounding(4)
         .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
         .addToContainer(this);
 
         lx.addProjectListener(new LX.ProjectListener() {
-            public void projectChanged(File file, ProjectListener.Change change) {
-                UIProjectManager.this.file = file;
-                fileLabel.setLabel(file != null ? file.getName() : "<New Project>");
+            public void projectChanged(Project project, ProjectListener.Change change) {
+                UIProjectManager.this.project = project;
+                fileLabel.setLabel(project != null ? project.getName() : "<New Project>");
             }
         });
 
@@ -73,8 +74,8 @@ public class UIProjectManager extends UICollapsibleSection {
             @Override
             public void onToggle(boolean on) {
                 if (on) {
-                    if (file != null) {
-                        lx.saveProject(file);
+                    if (project != null) {
+                        lx.saveProject(project);
                     } else {
                         ui.applet.selectOutput("Select a file to save to:", "onSave", ui.applet.saveFile(DEFAULT_PROJECT_NAME), UIProjectManager.this);
                     }
@@ -89,7 +90,7 @@ public class UIProjectManager extends UICollapsibleSection {
             @Override
             public void onToggle(boolean on) {
                 if (on) {
-                    ui.applet.selectOutput("Select a file to save to:", "onSave", ui.applet.saveFile(file != null ? file.getName() : DEFAULT_PROJECT_NAME), UIProjectManager.this);
+                    ui.applet.selectOutput("Select a file to save to:", "onSave", ui.applet.saveFile(project != null ? project.getRoot().toString() : DEFAULT_PROJECT_NAME), UIProjectManager.this);
                 }
             }
         }
@@ -128,7 +129,7 @@ public class UIProjectManager extends UICollapsibleSection {
         if (saveFile != null) {
             lx.engine.addTask(new Runnable() {
                 public void run() {
-                    lx.saveProject(saveFile);
+                    lx.saveProject(Project.createLegacyProject(saveFile));
                 }
             });
         }
@@ -139,7 +140,7 @@ public class UIProjectManager extends UICollapsibleSection {
         if (openFile != null) {
             lx.engine.addTask(new Runnable() {
                 public void run() {
-                    lx.openProject(openFile);
+                    lx.openProject(Project.createLegacyProject(openFile));
                 }
             });
         }

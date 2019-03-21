@@ -8,6 +8,7 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXSerializable;
 import heronarts.lx.LXMappingEngine;
+import heronarts.lx.data.Project;
 import heronarts.lx.effect.BlurEffect;
 import heronarts.lx.effect.DesaturationEffect;
 import heronarts.lx.effect.FlashEffect;
@@ -44,26 +45,26 @@ public class SLHeadless {
                 if (lines != null && lines.length > 0) {
                     File file = Utils.saveFile(lines[0]);
                     if (file.exists()) {
-                        lx.openProject(file);
+                        lx.openProject(Project.createLegacyProject(file));
                     }
                 }
             } else {
                 File defaultProject = Utils.saveFile(DEFAULT_PROJECT_FILE);
                 if (defaultProject.exists()) {
-                    lx.openProject(defaultProject);
+                    lx.openProject(Project.createLegacyProject(defaultProject));
                 }
             }
         } catch (Exception x) {
             // ignored
         }
 
-        lx.addProjectListener((file, change) -> {
-            if (file != null) {
+        lx.addProjectListener((project, change) -> {
+            if (project != null) {
                 Utils.saveStrings(
                     PROJECT_FILE_NAME,
                     new String[]{
                         // Relative path of the project file WRT the default save file location for the sketch
-                        Utils.saveFile(PROJECT_FILE_NAME).toPath().getParent().relativize(file.toPath()).toString()
+                        Utils.saveFile(PROJECT_FILE_NAME).toPath().getParent().relativize(project.getRoot()).toString()
                     }
                 );
             }

@@ -2,7 +2,9 @@ package com.symmetrylabs.slstudio.ui.v2;
 
 import com.symmetrylabs.shows.ShowRegistry;
 import com.symmetrylabs.slstudio.SLStudio;
+
 import heronarts.lx.LX;
+import heronarts.lx.data.Project;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.surface.LXMidiSurface;
@@ -30,13 +32,13 @@ public class MainMenu implements Window {
             }
             if (UI.menuItem("Open...")) {
                 FileDialog.open(
-                    lx, "Open project", project -> {
+                    lx, "Open project", projectFile -> {
                         /* since this changes pretty much everything in
                            LXEngine, we make sure the UI isn't displayed while
                            the project is loading. Without this, we almost
                            always get a concurrent modification exception while
                            rendering the UI. */
-                        WindowManager.runSafelyWithEngine(lx, () -> lx.openProject(project));
+                        WindowManager.runSafelyWithEngine(lx, () -> lx.openProject(Project.createLegacyProject(projectFile)));
                     });
             }
             if (UI.menuItem("Save")) {
@@ -111,6 +113,6 @@ public class MainMenu implements Window {
     }
 
     private void runSaveAs() {
-        FileDialog.save(lx, "Save project", project -> lx.saveProject(project));
+        FileDialog.save(lx, "Save project", projectFile -> lx.saveProject(Project.createLegacyProject(projectFile)));
     }
 }

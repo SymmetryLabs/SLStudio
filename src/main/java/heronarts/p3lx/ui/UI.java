@@ -41,6 +41,7 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.p3lx.P3LX;
+import heronarts.lx.data.Project;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -374,16 +375,16 @@ public class UI implements LXEngine.Dispatch {
         if (lx != null) {
             lx.addProjectListener(new LX.ProjectListener() {
                 @Override
-                public void projectChanged(File file, Change change) {
+                public void projectChanged(Project project, Change change) {
                     switch (change) {
                     case NEW:
                         contextualHelpText.setValue("Created new project");
                         break;
                     case SAVE:
-                        contextualHelpText.setValue("Saved project file: " + file.getName());
+                        contextualHelpText.setValue("Saved project file: " + project.getName());
                         break;
                     case OPEN:
-                        contextualHelpText.setValue("Opened project file: " + file.getName());
+                        contextualHelpText.setValue("Opened project file: " + project.getName());
                         break;
 
                     }
@@ -869,7 +870,7 @@ public class UI implements LXEngine.Dispatch {
         if (file != null) {
             this.lx.engine.addTask(new Runnable() {
                 public void run() {
-                    lx.saveProject(file);
+                    lx.saveProject(Project.createLegacyProject(file));
                 }
             });
         }
@@ -879,7 +880,7 @@ public class UI implements LXEngine.Dispatch {
         if (file != null) {
             this.lx.engine.addTask(new Runnable() {
                 public void run() {
-                    lx.openProject(file);
+                    lx.openProject(Project.createLegacyProject(file));
                 }
             });
         }

@@ -303,36 +303,7 @@ public class LXStudio extends P3LX {
         this.ui = (UI) super.ui;
         onUIReady(this, this.ui);
         registerExternal(KEY_UI, this.ui);
-
-        try {
-            File projectFile = this.applet.saveFile(PROJECT_FILE_NAME);
-            if (projectFile.exists()) {
-                String[] lines = this.applet.loadStrings(PROJECT_FILE_NAME);
-                if (lines != null && lines.length > 0) {
-                    File file = this.applet.saveFile(lines[0]);
-                    if (file.exists()) {
-                        openProject(file);
-                    }
-                }
-            } else {
-                File defaultProject = this.applet.saveFile(DEFAULT_PROJECT_FILE);
-                if (defaultProject.exists()) {
-                    openProject(defaultProject);
-                }
-            }
-        } catch (Exception x) {
-            // ignored
-        }
-
         this.engine.setThreaded(multiThreaded);
-    }
-
-    @Override
-    protected void setProject(File file, ProjectListener.Change change) {
-        super.setProject(file, change);
-        if (file != null) {
-            this.applet.saveStrings(PROJECT_FILE_NAME, new String[] { file.getName() });
-        }
     }
 
     @Override

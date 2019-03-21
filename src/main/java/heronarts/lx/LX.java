@@ -22,25 +22,29 @@ package heronarts.lx;
 
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXPalette;
+import heronarts.lx.data.Project;
 import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.pattern.IteratorTestPattern;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import heronarts.lx.warp.LXWarp;
+import heronarts.lx.data.LegacyProjectLoader;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
-import heronarts.lx.warp.LXWarp;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Map;
 
 /**
  * Core controller for a LX instance. Each instance drives a grid of nodes with
@@ -113,12 +117,12 @@ public class LX {
             OPEN
         };
 
-        public void projectChanged(File file, Change change);
+        public void projectChanged(Project project, Change change);
     }
 
     private final List<ProjectListener> projectListeners = new ArrayList<ProjectListener>();
 
-    final LXComponent.Registry componentRegistry = new LXComponent.Registry();
+    public final LXComponent.Registry componentRegistry = new LXComponent.Registry();
 
     /**
      * The width of the grid, immutable.
@@ -655,46 +659,27 @@ public class LX {
     private final static String KEY_ENGINE = "engine";
     private final static String KEY_EXTERNALS = "externals";
 
-    private File file;
+    private Project project;
 
-    protected void setProject(File file, ProjectListener.Change change) {
-        this.file = file;
+    public void setProject(Project project, ProjectListener.Change change) {
+        this.project = project;
         for (ProjectListener projectListener : this.projectListeners) {
-            projectListener.projectChanged(file, change);
+            projectListener.projectChanged(project, change);
         }
     }
 
-    public File getProject() {
-        return this.file;
+    public Project getProject() {
+        return project;
     }
 
     public void saveProject() {
-        if (this.file != null) {
-            saveProject(this.file);
+        if (project != null) {
+            saveProject(project);
         }
     }
 
-    public void saveProject(File file) {
-        JsonObject obj = new JsonObject();
-        obj.addProperty(KEY_VERSION, "0.1");
-        obj.addProperty(KEY_TIMESTAMP, System.currentTimeMillis());
-        obj.add(KEY_ENGINE, LXSerializable.Utils.toObject(this, this.engine));
-        JsonObject externalsObj = new JsonObject();
-        for (String key : this.externals.keySet()) {
-            externalsObj.add(key, LXSerializable.Utils.toObject(this, this.externals.get(key)));
-        }
-        obj.add(KEY_EXTERNALS, externalsObj);
-        try {
-            JsonWriter writer = new JsonWriter(new FileWriter(file));
-            writer.setIndent("  ");
-            new GsonBuilder().create().toJson(obj, writer);
-            writer.close();
-            System.out.println("Project saved successfully to " + file.toString());
-            this.componentRegistry.resetProject();
-            setProject(file, ProjectListener.Change.SAVE);
-        } catch (IOException iox) {
-            System.err.println(iox.getLocalizedMessage());
-        }
+    public void saveProject(Project pd) {
+        LegacyProjectLoader.save(pd, this);
     }
 
     public void newProject() {
@@ -711,58 +696,12 @@ public class LX {
         return this;
     }
 
-    private int getMaxId(JsonObject obj, int max) {
-        for (Entry<String, JsonElement> entry : obj.entrySet()) {
-            if (entry.getKey().equals(LXComponent.KEY_ID)) {
-                int id = entry.getValue().getAsInt();
-                if (id > max) {
-                    max = id;
-                }
-            } else if (entry.getValue().isJsonArray()) {
-                for (JsonElement arrElement : entry.getValue().getAsJsonArray()) {
-                    if (arrElement.isJsonObject()) {
-                        max = getMaxId(arrElement.getAsJsonObject(), max);
-                    }
-                }
-            } else if (entry.getValue().isJsonObject()) {
-                max = getMaxId(entry.getValue().getAsJsonObject(), max);
-            }
-        }
-        return max;
+    public Map<String, LXSerializable> getExternals() {
+        return Collections.unmodifiableMap(externals);
     }
 
-    public void openProject(File file) {
-        try {
-            FileReader fr = null;
-            try {
-                fr = new FileReader(file);
-                JsonObject obj = new Gson().fromJson(fr, JsonObject.class);
-                this.componentRegistry.resetProject();
-                this.componentRegistry.setIdCounter(getMaxId(obj, this.componentRegistry.getIdCounter()) + 1);
-                this.engine.load(this, obj.getAsJsonObject(KEY_ENGINE));
-                if (obj.has(KEY_EXTERNALS)) {
-                    JsonObject externalsObj = obj.getAsJsonObject(KEY_EXTERNALS);
-                    for (String key : this.externals.keySet()) {
-                        if (externalsObj.has(key)) {
-                            this.externals.get(key).load(this, externalsObj.getAsJsonObject(key));
-                        }
-                    }
-                }
-                setProject(file, ProjectListener.Change.OPEN);
-                System.out.println("Project loaded successfully from " + file.toString());
-            } catch (IOException iox) {
-                System.err.println("Could not load project file: " + iox.getLocalizedMessage());
-            } finally {
-                if (fr != null) {
-                    try {
-                        fr.close();
-                    } catch (IOException ignored) {}
-                }
-            }
-        } catch (Exception x) {
-            System.err.println("Exception in loadProject: " + x.getLocalizedMessage());
-            x.printStackTrace(System.err);
-        }
+    public void openProject(Project project) {
+        LegacyProjectLoader.load(project, this);
     }
 
     private <T extends LXComponent> T instantiateComponent(String className, Class<T> type) {

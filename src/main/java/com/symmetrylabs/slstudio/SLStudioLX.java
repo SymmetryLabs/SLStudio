@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import heronarts.lx.data.Project;
+import heronarts.lx.LX.ProjectListener;
 
 import com.google.gson.JsonObject;
 
@@ -750,13 +752,13 @@ public class SLStudioLX extends P3LX {
                 if (lines != null && lines.length > 0) {
                     File file = this.applet.saveFile(lines[0]);
                     if (file.exists()) {
-                        openProject(file);
+                        openProject(Project.createLegacyProject(file));
                     }
                 }
             } else {
                 File defaultProject = this.applet.saveFile(DEFAULT_PROJECT_FILE);
                 if (defaultProject.exists()) {
-                    openProject(defaultProject);
+                    openProject(Project.createLegacyProject(defaultProject));
                 }
             }
         } catch (Exception x) {
@@ -767,13 +769,13 @@ public class SLStudioLX extends P3LX {
     }
 
     @Override
-    protected void setProject(File file, ProjectListener.Change change) {
-        super.setProject(file, change);
-        if (file != null) {
+    public void setProject(Project project, ProjectListener.Change change) {
+        super.setProject(project, change);
+        if (project != null) {
             /* We have to turn the paths into absolute paths here to satisfy the
              * Windows Path implementation. */
             Path projectDir = applet.saveFile(PROJECT_FILE_NAME).getParentFile().toPath().toAbsolutePath();
-            Path absPath = file.toPath().toAbsolutePath();
+            Path absPath = project.getRoot().toAbsolutePath();
             Path relPath = projectDir.relativize(absPath);
             this.applet.saveStrings(PROJECT_FILE_NAME, new String[]{relPath.toString()});
         }

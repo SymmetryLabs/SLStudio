@@ -66,12 +66,12 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
     private static final int ID_UNASSIGNED = -1;
     static final int ID_ENGINE = 1;
 
-    static class Registry {
+    public static class Registry {
         private int idCounter = ID_ENGINE+1;
         private final Map<Integer, LXComponent> components = new HashMap<Integer, LXComponent>();
         private final Map<Integer, LXComponent> projectIdMap = new HashMap<Integer, LXComponent>();
 
-        LXComponent getProjectComponent(int projectId) {
+        public LXComponent getProjectComponent(int projectId) {
             // Check first in the project ID map, there may be another layer of
             // indirection if the engine components have changed underneath us
             LXComponent component = this.projectIdMap.get(projectId);
@@ -81,11 +81,11 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
             return component;
         }
 
-        void resetProject() {
+        public void resetProject() {
             this.projectIdMap.clear();
         }
 
-        void register(LXComponent component) {
+        public void register(LXComponent component) {
             if (component.id == ID_UNASSIGNED) {
                 component.id = this.idCounter++;
             } else if (component.id <= 0) {
@@ -97,15 +97,15 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
             this.components.put(component.id, component);
         }
 
-        int getIdCounter() {
+        public int getIdCounter() {
             return this.idCounter;
         }
 
-        void setIdCounter(int idCounter) {
+        public void setIdCounter(int idCounter) {
             this.idCounter = idCounter;
         }
 
-        void registerId(LXComponent component, int id) {
+        public void registerId(LXComponent component, int id) {
             if (id <= 0) {
                 throw new IllegalArgumentException("Cannot setId to non-positive value: " + id + " " + component);
             }
@@ -126,7 +126,7 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
             }
         }
 
-        void dispose(LXComponent component) {
+        public void dispose(LXComponent component) {
             this.components.remove(component.id);
         }
     }
@@ -320,7 +320,7 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
      */
     public void onParameterChanged(LXParameter parameter) {}
 
-    protected final static String KEY_ID = "id";
+    public final static String KEY_ID = "id";
     protected final static String KEY_CLASS = "class";
     protected final static String KEY_MODULATION_COLOR = "modulationColor";
     private final static String KEY_PARAMETERS = "parameters";

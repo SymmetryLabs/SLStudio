@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.StringParameter;
+import heronarts.lx.data.Project;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UITextBox;
 import heronarts.p3lx.ui.component.UILabel;
@@ -117,8 +118,8 @@ public class UIWorkspace extends UICollapsibleSection {
 
             @Override
             public boolean isActive() {
-                File currentProject = lx.getProject();
-                if (currentProject == null || !currentProject.exists()) {
+                Project currentProject = lx.getProject();
+                if (currentProject == null) {
                     return false;
                 }
                 return project.matches(currentProject);
