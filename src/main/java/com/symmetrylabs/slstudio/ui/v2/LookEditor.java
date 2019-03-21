@@ -5,6 +5,7 @@ import heronarts.lx.LXChannel;
 import heronarts.lx.LXChannel.CrossfadeGroup;
 import heronarts.lx.LXMasterChannel;
 import heronarts.lx.color.LXColor;
+import com.symmetrylabs.util.IterationUtils;
 
 
 public class LookEditor implements Window {
@@ -60,58 +61,56 @@ public class LookEditor implements Window {
         showLookTransform = UI.checkbox("Edit look transform", showLookTransform);
         UI.endGroup();
 
-        int visibleWindowCount = 0;
-        for (LXChannel chan : lx.engine.getChannels()) {
-            String chanName = chan.getLabel();
-            UI.sameLine();
-            UI.beginChild(chanName, false, 0, 90, HEIGHT);
+        int visibleWindowCount = IterationUtils.reduceIgnoreModification(lx.engine.getChannels(), 0, (vwc, chan) -> {
+                String chanName = chan.getLabel();
+                UI.sameLine();
+                UI.beginChild(chanName, false, 0, 90, HEIGHT);
 
-            visibleWindowCount = channelHeader(chan, chanName, visibleWindowCount);
+                vwc = channelHeader(chan, chanName, vwc);
 
-            float fader = UI.vertSliderFloat("##fader-" + chanName, chan.fader.getValuef(), 0, 1, "", 30, 180);
-            if (fader != chan.fader.getValuef()) {
-                lx.engine.addTask(() -> chan.fader.setValue(fader));
-            }
-            UI.sameLine();
+                float fader = UI.vertSliderFloat("##fader-" + chanName, chan.fader.getValuef(), 0, 1, "", 30, 180);
+                if (fader != chan.fader.getValuef()) {
+                    lx.engine.addTask(() -> chan.fader.setValue(fader));
+                }
+                UI.sameLine();
 
-            UI.beginGroup();
-            CrossfadeGroup group = chan.crossfadeGroup.getEnum();
+                UI.beginGroup();
+                CrossfadeGroup group = chan.crossfadeGroup.getEnum();
 
-            ParameterUI.toggle(lx, chan.enabled, false, 40);
-            boolean cueStart = chan.cueActive.getValueb();
-            if (ParameterUI.toggle(lx, chan.cueActive, true, 40) && !cueStart) {
-                for (LXChannel cc : lx.engine.getChannels()) {
-                    if (cc != chan) {
-                        cc.cueActive.setValue(false);
+                ParameterUI.toggle(lx, chan.enabled, false, 40);
+                boolean cueStart = chan.cueActive.getValueb();
+                if (ParameterUI.toggle(lx, chan.cueActive, true, 40) && !cueStart) {
+                    for (LXChannel cc : lx.engine.getChannels()) {
+                        if (cc != chan) {
+                            cc.cueActive.setValue(false);
+                        }
                     }
                 }
-            }
-            boolean A = ParameterUI.toggle("A##" + chanName, group == CrossfadeGroup.A, false, 40);
-            boolean B = ParameterUI.toggle("B##" + chanName, group == CrossfadeGroup.B, false, 40);
+                boolean A = ParameterUI.toggle("A##" + chanName, group == CrossfadeGroup.A, false, 40);
+                boolean B = ParameterUI.toggle("B##" + chanName, group == CrossfadeGroup.B, false, 40);
 
-            if (A && group != CrossfadeGroup.A) {
-                group = CrossfadeGroup.A;
-            } else if (B && group != CrossfadeGroup.B) {
-                group = CrossfadeGroup.B;
-            } else if (!A && !B) {
-                group = CrossfadeGroup.BYPASS;
-            }
-            chan.crossfadeGroup.setValue(group);
-            UI.endGroup();
+                if (A && group != CrossfadeGroup.A) {
+                    group = CrossfadeGroup.A;
+                } else if (B && group != CrossfadeGroup.B) {
+                    group = CrossfadeGroup.B;
+                } else if (!A && !B) {
+                    group = CrossfadeGroup.BYPASS;
+                }
+                chan.crossfadeGroup.setValue(group);
+                UI.endGroup();
 
-            UI.pushWidth(80);
-            ParameterUI.draw(lx, chan.blendMode, ParameterUI.ShowLabel.NO);
-            UI.popWidth();
+                UI.pushWidth(80);
+                ParameterUI.draw(lx, chan.blendMode, ParameterUI.ShowLabel.NO);
+                UI.popWidth();
 
-            UI.endChild();
-        }
+                UI.endChild();
+                return vwc;
+            });
 
         UI.sameLine();
         UI.pushFont(FontLoader.DEFAULT_FONT_XL);
         if (UI.button("+", 30, 230)) {
-            /* running this has the potential to cause CME issues in both the UI
-               and the engine, so we have to sync the world to do it. */
-            WindowManager.runSafelyWithEngine(lx, () -> {
+            lx.engine.addTask(() -> {
                     LXChannel chan = lx.engine.addChannel();
                     lx.engine.setFocusedChannel(chan);
                     chan.editorVisible.setValue(true);
@@ -133,16 +132,18 @@ public class LookEditor implements Window {
         UI.setNextWindowSize(visibleWindowCount * (PIPELINE_WIDTH + PIPELINE_PAD), UI.height - HEIGHT - MENU_HEIGHT);
         UI.begin("Pipeline Windows",
                  UI.WINDOW_NO_MOVE | UI.WINDOW_NO_RESIZE | UI.WINDOW_NO_DECORATION | UI.WINDOW_NO_DOCKING | UI.WINDOW_NO_SCROLL_WITH_MOUSE);
-        int pipelineIndex = 0;
-        for (LXChannel chan : lx.engine.getChannels()) {
-            if (chan.editorVisible.getValueb()) {
-                UI.beginChild(chan.getLabel() + "##channel-child", false, 0, PIPELINE_WIDTH, (int) UI.height);
-                pipelineIndex = channelHeader(chan, chan.getLabel(), pipelineIndex);
-                ChannelUI.draw(lx, chan, wepUi);
-                UI.endChild();
-                UI.sameLine();
-            }
-        }
+
+        IterationUtils.reduceIgnoreModification(lx.engine.getChannels(), 0, (pipelineIndex, chan) -> {
+                if (chan.editorVisible.getValueb()) {
+                    UI.beginChild(chan.getLabel() + "##channel-child", false, 0, PIPELINE_WIDTH, (int) UI.height);
+                    pipelineIndex = channelHeader(chan, chan.getLabel(), pipelineIndex);
+                    ChannelUI.draw(lx, chan, wepUi);
+                    UI.endChild();
+                    UI.sameLine();
+                }
+                return pipelineIndex;
+            });
+
         if (showLookTransform) {
             UI.beginChild("Look Transform##look-transform", false, 0, PIPELINE_WIDTH, (int) UI.height);
 

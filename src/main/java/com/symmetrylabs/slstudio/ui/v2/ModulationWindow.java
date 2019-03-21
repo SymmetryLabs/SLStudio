@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.MultiStageEnvelope;
+import com.symmetrylabs.util.IterationUtils;
 
 public class ModulationWindow extends CloseableWindow {
     private final LX lx;
@@ -27,13 +28,13 @@ public class ModulationWindow extends CloseableWindow {
     @Override
     protected void drawContents() {
         if (UI.button("+Env")) {
-            WindowManager.runSafelyWithEngine(lx, () -> lx.engine.modulation.addModulator(new MultiStageEnvelope()));
+            lx.engine.addTask(() -> lx.engine.modulation.addModulator(new MultiStageEnvelope()));
         }
-        for (LXModulator modulator : lx.engine.modulation.getModulators()) {
-            if (modulator instanceof MultiStageEnvelope) {
-                envelope((MultiStageEnvelope) modulator);
-            }
-        }
+        IterationUtils.forEachIgnoreModification(lx.engine.modulation.getModulators(), modulator -> {
+                if (modulator instanceof MultiStageEnvelope) {
+                    envelope((MultiStageEnvelope) modulator);
+                }
+            });
     }
 
     protected void envelope(MultiStageEnvelope env) {
