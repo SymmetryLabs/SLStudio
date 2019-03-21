@@ -661,7 +661,7 @@ public class LX {
 
     private Project project;
 
-    public void setProject(Project project, ProjectListener.Change change) {
+    protected void setProject(Project project, ProjectListener.Change change) {
         this.project = project;
         for (ProjectListener projectListener : this.projectListeners) {
             projectListener.projectChanged(project, change);
@@ -674,12 +674,13 @@ public class LX {
 
     public void saveProject() {
         if (project != null) {
-            saveProject(project);
+            this.saveProject(project);
         }
     }
 
-    public void saveProject(Project pd) {
-        LegacyProjectLoader.save(pd, this);
+    public void saveProject(Project newProject) {
+        newProject.save(this);
+        setProject(newProject, ProjectListener.Change.SAVE);
     }
 
     public void newProject() {
@@ -701,7 +702,8 @@ public class LX {
     }
 
     public void openProject(Project project) {
-        LegacyProjectLoader.load(project, this);
+        project.load(this);
+        setProject(project, ProjectListener.Change.OPEN);
     }
 
     private <T extends LXComponent> T instantiateComponent(String className, Class<T> type) {

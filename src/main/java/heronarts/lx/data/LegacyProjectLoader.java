@@ -59,7 +59,6 @@ public class LegacyProjectLoader {
                         }
                     }
                 }
-                lx.setProject(project, ProjectListener.Change.OPEN);
                 System.out.println("Project loaded successfully from " + file.toString());
             } catch (IOException iox) {
                 System.err.println("Could not load project file: " + iox.getLocalizedMessage());
@@ -98,7 +97,6 @@ public class LegacyProjectLoader {
             writer.close();
             System.out.println("Project saved successfully to " + file.toString());
             lx.componentRegistry.resetProject();
-            lx.setProject(project, ProjectListener.Change.SAVE);
         } catch (IOException iox) {
             System.err.println(iox.getLocalizedMessage());
         }

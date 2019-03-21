@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import heronarts.lx.LX;
 
 
 public class Project {
@@ -88,6 +89,19 @@ public class Project {
             return projectFilesByType.get(ft);
         }
         return new ArrayList<>();
+    }
+
+    public void save(LX lx) {
+        LegacyProjectLoader.save(this, lx);
+    }
+
+    public void load(LX lx) {
+        LegacyProjectLoader.load(this, lx);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("project @ %s (legacy=%s)", directory, isLegacyProject);
     }
 
     private static String getExtension(String fname) {
