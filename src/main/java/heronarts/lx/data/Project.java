@@ -15,18 +15,18 @@ import heronarts.lx.LX;
 
 
 public class Project {
-    protected final Path directory;
+    protected final Path root;
     protected final boolean forceLegacyProject;
     protected boolean isLegacyProject;
 
     protected final Map<ProjectFileType, List<Path>> projectFilesByType;
 
-    public Project(Path directory) {
-        this(directory, false);
+    public Project(Path root) {
+        this(root, false);
     }
 
-    public Project(Path directory, boolean forceLegacy) {
-        this.directory = directory;
+    public Project(Path root, boolean forceLegacy) {
+        this.root = root;
         this.forceLegacyProject = forceLegacy;
 
         projectFilesByType = new HashMap<>();
@@ -34,7 +34,7 @@ public class Project {
         try {
             loadContents();
         } catch (IOException e) {
-            System.err.println("couldn't load project directory " + directory + ":");
+            System.err.println("couldn't load project root " + root + ":");
             e.printStackTrace();
         }
     }
@@ -43,15 +43,15 @@ public class Project {
         projectFilesByType.clear();
 
         /* Check for legacy projects */
-        File df = directory.toFile();
-        if (forceLegacyProject || (df.isFile() && ProjectFileType.LegacyProjectFile.extension.equals(getExtension(directory.toString())))) {
-            addFile(directory, ProjectFileType.LegacyProjectFile);
+        File df = root.toFile();
+        if (forceLegacyProject || (df.isFile() && ProjectFileType.LegacyProjectFile.extension.equals(getExtension(root.toString())))) {
+            addFile(root, ProjectFileType.LegacyProjectFile);
             isLegacyProject = true;
             return;
         }
 
         isLegacyProject = false;
-        Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
+        Files.walkFileTree(root, new SimpleFileVisitor<Path>() {
             @Override
             public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
                 ProjectFileType ft = ProjectFileType.fromExtension(getExtension(path.toString()));
@@ -73,11 +73,11 @@ public class Project {
     }
 
     public String getName() {
-        return directory.toFile().getName();
+        return root.toFile().getName();
     }
 
     public Path getRoot() {
-        return directory;
+        return root;
     }
 
     public boolean isLegacyProject() {
@@ -101,7 +101,7 @@ public class Project {
 
     @Override
     public String toString() {
-        return String.format("project @ %s (legacy=%s)", directory, isLegacyProject);
+        return String.format("project @ %s (legacy=%s)", root, isLegacyProject);
     }
 
     private static String getExtension(String fname) {
