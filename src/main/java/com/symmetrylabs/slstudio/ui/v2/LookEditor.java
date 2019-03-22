@@ -44,7 +44,7 @@ public class LookEditor implements Window {
 
         UI.beginGroup();
         UI.pushFont(FontLoader.DEFAULT_FONT_XL);
-        UI.text("SLStudio Two");
+        UI.text("Volume");
         UI.popFont();
         for (int row = 0; row < 2; row++) {
             for (int col = 0; col < 4; col++) {
