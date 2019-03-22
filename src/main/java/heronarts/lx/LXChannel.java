@@ -243,6 +243,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
                                     .setDescription("If true, disables the channel when the fader goes to zero");
 
     public final ObjectParameter<LXBlend> blendMode;
+    public final ObjectParameter<LXBlend> patternBlendMode;
 
     public final MutableParameter controlSurfaceFocusIndex = (MutableParameter)
             new MutableParameter("SurfaceFocusIndex", 0)
@@ -259,6 +260,10 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     public final BooleanParameter editorVisible =
             new BooleanParameter("EditorVisible", false)
                     .setDescription("Sets whether this channel is visible for editing in the look editor");
+
+    public final BooleanParameter blendPatterns =
+        new BooleanParameter("BlendPatterns", false) // defaults to false for compatibility with old project files
+            .setDescription("If true, all patterns in the channel are run and blended together. If false, only the active pattern is run.");
 
     private final List<LXPattern> mutablePatterns = new ArrayList<LXPattern>();
     public final List<LXPattern> patterns = Collections.unmodifiableList(mutablePatterns);
@@ -336,6 +341,8 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
         this.blendMode = new ObjectParameter<LXBlend>("Blend", lx.engine.channelBlends)
                 .setDescription("Specifies the blending function used for the channel fader");
+        this.patternBlendMode = new ObjectParameter<LXBlend>("PatternBlend", lx.engine.channelBlends)
+            .setDescription("Specifies the blending function used for blending patterns together when blendPatterns is set");
 
         this.transitionBlendMode = new ObjectParameter<LXBlend>("Transition Blend", lx.engine.crossfaderBlends)
                 .setDescription("Specifies the blending function used for transitions between patterns on the channel");
@@ -358,6 +365,8 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         addParameter("autoDisable", this.autoDisable);
         addParameter("speed", this.speed);
         addParameter("editorVisible", this.editorVisible);
+        addParameter("patternBlendMode", this.patternBlendMode);
+        addParameter("blendPatterns", this.blendPatterns);
     }
 
     boolean shouldRun() {
@@ -769,6 +778,59 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         // Run modulators and components
         super.loop(deltaMs);
 
+        // Apply warps
+        LXWarp nextInputSource = null;
+        LXVector[] nextInputVectors = model.getVectorArray();
+        boolean nextInputChanged = false;
+        for (LXWarp warp : warps) {
+            if (warp.isEnabled()) {
+                warp.setInputVectors(nextInputSource, nextInputVectors, nextInputChanged);
+                nextInputChanged = warp.applyWarp(deltaMs);
+                nextInputSource = warp;
+                nextInputVectors = warp.getOutputVectors();
+            }
+        }
+        if (nextInputVectors != vectorArray || nextInputSource != vectorSource || nextInputChanged) {
+            setVectorArray(nextInputVectors, nextInputSource);
+        }
+
+        if (!blendPatterns.isOn()) {
+            loopNoPatternBlend(deltaMs);
+        } else {
+            loopWithPatternBlend(deltaMs);
+        }
+
+        // Apply effects
+        for (LXEffect effect : effects) {
+            effect.setPolyBuffer(polyBuffer);
+            effect.loop(deltaMs);
+        }
+
+        this.timer.loopNanos = System.nanoTime() - loopStart;
+    }
+
+    public void loopWithPatternBlend(double deltaMs) {
+        PolyBuffer.Space space = colorSpace.getEnum();
+        LXBlend blend = patternBlendMode.getObject();
+
+        polyBuffer.setZero();
+        for (int i = 0; i < patterns.size(); i++) {
+            LXPattern pat = patterns.get(i);
+            pat.setPreferredSpace(space);
+            pat.loop(deltaMs);
+
+            if (i == 0) {
+                polyBuffer.copyFrom(pat, space);
+            } else {
+                blend.blend(polyBuffer, pat, 1, polyBuffer, space);
+            }
+        }
+    }
+
+    /**
+     * Implements the old one-pattern-per-channel behavior of LXChannel, called only if blendPatterns is off.
+     */
+    public void loopNoPatternBlend(double deltaMs) {
         // Check for transition completion
         if (this.transition != null) {
             double transitionMs = this.lx.engine.nowMillis - this.transitionMillis;
@@ -787,22 +849,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
                     goNext();
                 }
             }
-        }
-
-        // Apply warps
-        LXWarp nextInputSource = null;
-        LXVector[] nextInputVectors = model.getVectorArray();
-        boolean nextInputChanged = false;
-        for (LXWarp warp : warps) {
-            if (warp.isEnabled()) {
-                warp.setInputVectors(nextInputSource, nextInputVectors, nextInputChanged);
-                nextInputChanged = warp.applyWarp(deltaMs);
-                nextInputSource = warp;
-                nextInputVectors = warp.getOutputVectors();
-            }
-        }
-        if (nextInputVectors != vectorArray || nextInputSource != vectorSource || nextInputChanged) {
-            setVectorArray(nextInputVectors, nextInputSource);
         }
 
         // Run active pattern
@@ -836,14 +882,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         } else {
             polyBuffer.setZero();
         }
-
-        // Apply effects
-        for (LXEffect effect : effects) {
-            effect.setPolyBuffer(polyBuffer);
-            effect.loop(deltaMs);
-        }
-
-        this.timer.loopNanos = System.nanoTime() - loopStart;
     }
 
     public PolyBuffer getPolyBuffer() {

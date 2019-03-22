@@ -85,6 +85,9 @@ public class ChannelUI {
     public static void draw(LX lx, LXChannel chan, WepUi wepUi) {
         String chanName = chan.getLabel();
 
+        ParameterUI.draw(lx, chan.blendPatterns);
+        ParameterUI.draw(lx, chan.patternBlendMode);
+
         drawWarps(lx, chanName, chan);
 
         int active = chan.getActivePatternIndex();
