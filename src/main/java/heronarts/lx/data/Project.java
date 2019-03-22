@@ -18,16 +18,18 @@ public class Project {
     protected final Path root;
     protected final boolean forceLegacyProject;
     protected boolean isLegacyProject;
+    protected final int runtimeVersion;
 
     protected final Map<ProjectFileType, List<Path>> projectFilesByType;
 
-    public Project(Path root) {
-        this(root, false);
+    public Project(Path root, int runtimeVersion) {
+        this(root, runtimeVersion, false);
     }
 
-    public Project(Path root, boolean forceLegacy) {
+    public Project(Path root, int runtimeVersion, boolean forceLegacy) {
         this.root = root;
         this.forceLegacyProject = forceLegacy;
+        this.runtimeVersion = runtimeVersion;
 
         projectFilesByType = new HashMap<>();
 
@@ -72,6 +74,10 @@ public class Project {
         }
     }
 
+    public int getRuntimeVersion() {
+        return runtimeVersion;
+    }
+
     public String getName() {
         return root.toFile().getName();
     }
@@ -109,7 +115,7 @@ public class Project {
         return extensionBits[extensionBits.length - 1];
     }
 
-    public static Project createLegacyProject(File file) {
-        return new Project(file.toPath(), true);
+    public static Project createLegacyProject(File file, int runtimeVersion) {
+        return new Project(file.toPath(), runtimeVersion, true);
     }
 }

@@ -53,6 +53,9 @@ public class P3LX extends LX {
 
     public static boolean isProcessing2X = false;
 
+    /** The runtime version number for all p3lx-derived frontends (LXStudio, SLStudio), stored in project files. */
+    public static int RUNTIME_VERSION = 0;
+
     /**
      * Returns the version of the library.
      *

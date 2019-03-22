@@ -870,7 +870,7 @@ public class UI implements LXEngine.Dispatch {
         if (file != null) {
             this.lx.engine.addTask(new Runnable() {
                 public void run() {
-                    lx.saveProject(Project.createLegacyProject(file));
+                    lx.saveProject(Project.createLegacyProject(file, P3LX.RUNTIME_VERSION));
                 }
             });
         }
@@ -880,7 +880,7 @@ public class UI implements LXEngine.Dispatch {
         if (file != null) {
             this.lx.engine.addTask(new Runnable() {
                 public void run() {
-                    lx.openProject(Project.createLegacyProject(file));
+                    lx.openProject(Project.createLegacyProject(file, P3LX.RUNTIME_VERSION));
                 }
             });
         }

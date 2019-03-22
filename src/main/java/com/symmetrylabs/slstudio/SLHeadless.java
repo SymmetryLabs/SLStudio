@@ -45,13 +45,13 @@ public class SLHeadless {
                 if (lines != null && lines.length > 0) {
                     File file = Utils.saveFile(lines[0]);
                     if (file.exists()) {
-                        lx.openProject(Project.createLegacyProject(file));
+                        lx.openProject(Project.createLegacyProject(file, 0));
                     }
                 }
             } else {
                 File defaultProject = Utils.saveFile(DEFAULT_PROJECT_FILE);
                 if (defaultProject.exists()) {
-                    lx.openProject(Project.createLegacyProject(defaultProject));
+                    lx.openProject(Project.createLegacyProject(defaultProject, 0));
                 }
             }
         } catch (Exception x) {

@@ -82,7 +82,7 @@ public class UIFramerate extends UITextOverlay {
                 if (((int) (channel.timer.loopNanos / 1000000)) != 0) {
                     sb.append("    " + channel.getLabel() + "  " + ((int) (channel.timer.loopNanos / 1000000)) + "ms\n");
                     LXPattern pattern = channel.getActivePattern();
-                    if (((int) (pattern.timer.runNanos / 1000000)) != 0) {
+                    if (pattern != null && ((int) (pattern.timer.runNanos / 1000000)) != 0) {
                         sb.append("      " + pattern.getLabel() + "  " + ((int) (pattern.timer.runNanos / 1000000)) + "ms\n");
                     }
                     for (LXEffect effect : channel.getEffects()) {

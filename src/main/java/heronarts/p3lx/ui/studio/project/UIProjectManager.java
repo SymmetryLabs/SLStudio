@@ -26,15 +26,15 @@
 
 package heronarts.p3lx.ui.studio.project;
 
-import java.io.File;
-import heronarts.lx.data.Project;
-
-import heronarts.lx.LX;
 import heronarts.lx.LX.ProjectListener;
+import heronarts.lx.LX;
+import heronarts.lx.data.Project;
+import heronarts.p3lx.P3LX;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
+import java.io.File;
 import processing.core.PConstants;
 
 public class UIProjectManager extends UICollapsibleSection {
@@ -129,7 +129,7 @@ public class UIProjectManager extends UICollapsibleSection {
         if (saveFile != null) {
             lx.engine.addTask(new Runnable() {
                 public void run() {
-                    lx.saveProject(Project.createLegacyProject(saveFile));
+                    lx.saveProject(Project.createLegacyProject(saveFile, P3LX.RUNTIME_VERSION));
                 }
             });
         }
@@ -140,7 +140,7 @@ public class UIProjectManager extends UICollapsibleSection {
         if (openFile != null) {
             lx.engine.addTask(new Runnable() {
                 public void run() {
-                    lx.openProject(Project.createLegacyProject(openFile));
+                    lx.openProject(Project.createLegacyProject(openFile, P3LX.RUNTIME_VERSION));
                 }
             });
         }

@@ -22,6 +22,8 @@ import com.symmetrylabs.slstudio.output.OutputControl;
 
 public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.Provider {
     private static final String DEFAULT_SHOW = "demo";
+    public static final int RUNTIME_VERSION = 1;
+
     private String showName;
     private Show show;
     private RenderManager renderer;

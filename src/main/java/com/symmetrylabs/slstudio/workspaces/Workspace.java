@@ -6,6 +6,7 @@ import heronarts.lx.LXComponent;
 import heronarts.lx.data.Project;
 import heronarts.lx.osc.LXOscListener;
 import heronarts.lx.osc.OscMessage;
+import heronarts.p3lx.P3LX;
 import java.io.File;
 import java.io.IOException;
 import java.net.SocketException;
@@ -174,7 +175,7 @@ public class Workspace extends LXComponent {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            lx.openProject(Project.createLegacyProject(workspace.getFile()));
+            lx.openProject(Project.createLegacyProject(workspace.getFile(), P3LX.RUNTIME_VERSION));
         });
 
         /* We set up this task to run after the next frame of the UI is rendered. It

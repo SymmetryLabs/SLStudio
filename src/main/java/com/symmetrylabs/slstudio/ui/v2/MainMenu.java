@@ -38,7 +38,8 @@ public class MainMenu implements Window {
                            the project is loading. Without this, we almost
                            always get a concurrent modification exception while
                            rendering the UI. */
-                        WindowManager.runSafelyWithEngine(lx, () -> lx.openProject(Project.createLegacyProject(projectFile)));
+                        WindowManager.runSafelyWithEngine(
+                            lx, () -> lx.openProject(Project.createLegacyProject(projectFile, SLStudioGDX.RUNTIME_VERSION)));
                     });
             }
             if (UI.menuItem("Save")) {
@@ -113,6 +114,7 @@ public class MainMenu implements Window {
     }
 
     private void runSaveAs() {
-        FileDialog.save(lx, "Save project", projectFile -> lx.saveProject(Project.createLegacyProject(projectFile)));
+        FileDialog.save(
+            lx, "Save project", projectFile -> lx.saveProject(Project.createLegacyProject(projectFile, SLStudioGDX.RUNTIME_VERSION)));
     }
 }

@@ -4,6 +4,9 @@ import heronarts.lx.LX.ProjectListener;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXSerializable;
+import com.google.gson.JsonPrimitive;
+import java.util.IllegalFormatException;
+import com.symmetrylabs.slstudio.ApplicationState;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
@@ -20,18 +23,54 @@ import java.util.Map;
 
 
 public class LegacyProjectLoader {
+    public static class IllegalVersionException extends RuntimeException {
+        public IllegalVersionException(String version) {
+            super(String.format("unknown version \"%s\"", version));
+        }
+    }
+
     /* file version numbers used to be stored as non-integer strings, we treat this string like version 0. */
     private static final String INITIAL_LEGACY_PROJECT_VERSION_STRING = "0.1";
-
-    public static final int CURRENT_VERSION = 1;
 
     private final static String KEY_VERSION = "version";
     private final static String KEY_TIMESTAMP = "timestamp";
     private final static String KEY_ENGINE = "engine";
     private final static String KEY_EXTERNALS = "externals";
 
-    private static JsonObject upgradeVersion(JsonObject obj) {
-        // TODO
+    private static JsonObject upgradeVersion(int fileVersion, int runtimeVersion, JsonObject obj) {
+        /* for now, LXPs are forwards-compatible */
+        return obj;
+    }
+
+    private static JsonObject checkAndUpgradeVersion(int runtimeVersion, JsonObject obj) {
+        ApplicationState.setWarning("ProjectLoader", null);
+        JsonPrimitive versionElem = obj.getAsJsonPrimitive(KEY_VERSION);
+        int fileVersion;
+
+        if (versionElem.isString()) {
+            if (versionElem.getAsString().equals(INITIAL_LEGACY_PROJECT_VERSION_STRING)) {
+                fileVersion = 0;
+            } else {
+                throw new IllegalVersionException(versionElem.getAsString());
+            }
+        } else if (versionElem.isNumber()) {
+            fileVersion = versionElem.getAsInt();
+        } else {
+            throw new IllegalVersionException(versionElem.toString());
+        }
+
+        /* if we have the same version, no problem */
+        if (fileVersion == runtimeVersion) {
+            return obj;
+        }
+        /* if it's an old file, we can bring it up to speed */
+        if (fileVersion < runtimeVersion) {
+            return upgradeVersion(fileVersion, runtimeVersion, obj);
+        }
+        /* if it's a newer file than our runtime, put up a warning and just hope for the best. */
+        ApplicationState.setWarning(
+            "ProjectLoader",
+            "Project file was made for a newer version of Symmetry software, not all features may work as expected");
         return obj;
     }
 
@@ -45,7 +84,7 @@ public class LegacyProjectLoader {
             try {
                 fr = new FileReader(file);
                 JsonObject obj = new Gson().fromJson(fr, JsonObject.class);
-                obj = upgradeVersion(obj);
+                obj = checkAndUpgradeVersion(project.getRuntimeVersion(), obj);
 
                 lx.componentRegistry.resetProject();
                 lx.componentRegistry.setIdCounter(getMaxId(obj, lx.componentRegistry.getIdCounter()) + 1);
@@ -81,7 +120,7 @@ public class LegacyProjectLoader {
         File file = projectFilePath.toFile();
 
         JsonObject obj = new JsonObject();
-        obj.addProperty(KEY_VERSION, "0.1");
+        obj.addProperty(KEY_VERSION, project.getRuntimeVersion());
         obj.addProperty(KEY_TIMESTAMP, System.currentTimeMillis());
         obj.add(KEY_ENGINE, LXSerializable.Utils.toObject(lx, lx.engine));
         JsonObject externalsObj = new JsonObject();
