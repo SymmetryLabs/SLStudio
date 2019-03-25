@@ -3,10 +3,16 @@ package com.symmetrylabs.slstudio;
 import com.symmetrylabs.slstudio.output.OutputControl;
 
 public class ApplicationState {
+    public enum Mode {
+        SLSTUDIO,
+        VOLUME,
+    };
+
     public interface Provider {
         String showName();
         OutputControl outputControl();
         void setWarning(String key, String message);
+        Mode interfaceMode();
     }
 
     private static Provider provider = null;
@@ -32,5 +38,17 @@ public class ApplicationState {
 
     public static void setWarning(String key, String message) {
         get().setWarning(key, message);
+    }
+
+    public static Mode interfaceMode() {
+        return get().interfaceMode();
+    }
+
+    public static boolean inVolumeMode() {
+        return get().interfaceMode() == Mode.VOLUME;
+    }
+
+    public static boolean inSLStudioMode() {
+        return get().interfaceMode() == Mode.SLSTUDIO;
     }
 }

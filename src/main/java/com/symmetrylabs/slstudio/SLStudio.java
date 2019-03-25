@@ -118,6 +118,11 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
         return outputControl;
     }
 
+    @Override // ApplicationState.Provider
+    public ApplicationState.Mode interfaceMode() {
+        return ApplicationState.Mode.SLSTUDIO;
+    }
+
     @Override
     public void setup() {
         long setupStart = System.nanoTime();

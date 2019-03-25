@@ -39,6 +39,7 @@ import heronarts.lx.pattern.SolidColorPattern;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import com.symmetrylabs.slstudio.ApplicationState;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -262,7 +263,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
                     .setDescription("Sets whether this channel is visible for editing in the look editor");
 
     public final BooleanParameter blendPatterns =
-        new BooleanParameter("BlendPatterns", false) // defaults to false for compatibility with old project files
+        new BooleanParameter("BlendPatterns", ApplicationState.inVolumeMode()) // defaults to true for Volume, false for SLStudio
             .setDescription("If true, all patterns in the channel are run and blended together. If false, only the active pattern is run.");
 
     private final List<LXPattern> mutablePatterns = new ArrayList<LXPattern>();

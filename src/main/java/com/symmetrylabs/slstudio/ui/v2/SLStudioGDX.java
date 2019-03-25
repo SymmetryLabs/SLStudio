@@ -219,7 +219,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         return outputControl;
     }
 
-    @Override
+    @Override // ApplicationState.Provider
     public void setWarning(String key, String message) {
         ConsoleWindow.setWarning(key, message);
         if (message != null) {
@@ -227,4 +227,8 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         }
     }
 
+    @Override // ApplicationState.Provider
+    public ApplicationState.Mode interfaceMode() {
+        return ApplicationState.Mode.VOLUME;
+    }
 }
