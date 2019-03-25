@@ -61,7 +61,6 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
     public CueManager cueManager;
     private BlobTracker blobTracker;
     public Anemometer anemometer;
-    public LX lx_OG;
 
     public final BooleanParameter mappingModeEnabled = new BooleanParameter("Mappings");
     public Map<String, int[]> mappingColorsPerPixlite;
