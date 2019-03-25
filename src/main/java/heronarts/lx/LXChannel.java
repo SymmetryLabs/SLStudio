@@ -387,8 +387,11 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             }
         } else if (p == this.cueActive) {
             if (this.cueActive.isOn()) {
-                this.lx.engine.cueA.setValue(false);
-                this.lx.engine.cueB.setValue(false);
+                LXLook parent = getParentLook();
+                if (parent != null) {
+                    parent.cueA.setValue(false);
+                    parent.cueB.setValue(false);
+                }
             }
         }
     }
@@ -687,6 +690,14 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         this.nextPatternIndex = i;
         startTransition();
         return this;
+    }
+
+    public LXLook getParentLook() {
+        LXComponent parent = getParent();
+        if (parent != null && parent instanceof LXLook) {
+            return (LXLook) parent;
+        }
+        return null;
     }
 
     public LXBus disableAutoTransition() {

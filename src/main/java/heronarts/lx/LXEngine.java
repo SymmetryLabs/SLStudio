@@ -54,6 +54,8 @@ import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.parameter.ObjectParameter;
 import heronarts.lx.pattern.SolidColorPattern;
 import heronarts.lx.script.LXScriptEngine;
+import org.apache.commons.collections4.iterators.IteratorChain;
+import org.apache.commons.collections4.iterators.IteratorIterable;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -116,8 +118,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     private final List<Runnable> engineThreadTaskQueue = new ArrayList<Runnable>();
     private final Map<String, LXComponent> components = new HashMap<String, LXComponent>();
 
-    private final List<LXChannel> mutableChannels = new ArrayList<LXChannel>();
-    public final List<LXChannel> channels = Collections.unmodifiableList(this.mutableChannels);
+    private final List<LXLook> mutableLooks = new ArrayList<>();
+    public final List<LXLook> looks = Collections.unmodifiableList(this.mutableLooks);
 
     public final LXMasterChannel masterChannel;
 
@@ -134,21 +136,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     LXBlend[] channelBlends;
     private final AddBlend addBlend;
 
-    public final CompoundParameter crossfader = (CompoundParameter)
-        new CompoundParameter("Crossfader", 0.5)
-        .setDescription("Applies blending between output groups A and B")
-        .setPolarity(LXParameter.Polarity.BIPOLAR);
-
     final LXBlend[] crossfaderBlends;
-    public final ObjectParameter<LXBlend> crossfaderBlendMode;
-
-    public final BooleanParameter cueA =
-        new BooleanParameter("Cue-A", false)
-        .setDescription("Enables cue preview of crossfade group A");
-
-    public final BooleanParameter cueB =
-        new BooleanParameter("Cue-B", false)
-        .setDescription("Enables cue preview of crossfade group B");
 
     public final BoundedParameter speed =
         new BoundedParameter("Speed", 1, 0, 2)
@@ -355,8 +343,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     }
 
     private final PolyBuffer black;  // always black, read-only
-    private final BlendTarget groupA;  // working area for blending group A
-    private final BlendTarget groupB;  // working area for blending group B
     private final EngineBuffer buffer;  // destination buffers for final output
 
     public final BooleanParameter isMultithreaded = new BooleanParameter("Threaded", false)
@@ -393,8 +379,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         black = new PolyBuffer(lx);
 
         // Blending buffers
-        groupA = new BlendTarget(lx);
-        groupB = new BlendTarget(lx);
         buffer = new EngineBuffer(lx);
 
         // Initialize network thread (don't start it yet)
@@ -419,9 +403,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             new DarkestBlend(lx),
             new DifferenceBlend(lx)
         };
-        this.crossfaderBlendMode =
-            new ObjectParameter<LXBlend>("Crossfader Blend", this.crossfaderBlends)
-            .setDescription("Sets the blend mode used for the master crossfader");
         LX.initTimer.log("Engine: Blends");
 
         // Modulation matrix
@@ -431,42 +412,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         // Master channel
         this.masterChannel = new LXMasterChannel(lx);
         LX.initTimer.log("Engine: Master Channel");
-
-        // Cue setup
-        this.cueA.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter p) {
-                if (cueA.isOn()) {
-                    cueB.setValue(false);
-                    lx.palette.cue.setValue(false);
-                    for (LXChannel channel : mutableChannels) {
-                        channel.cueActive.setValue(false);
-                    }
-                }
-            }
-        });
-        this.cueB.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter p) {
-                if (cueB.isOn()) {
-                    cueA.setValue(false);
-                    lx.palette.cue.setValue(false);
-                    for (LXChannel channel : mutableChannels) {
-                        channel.cueActive.setValue(false);
-                    }
-                }
-            }
-        });
-        lx.palette.cue.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter p) {
-                if (lx.palette.cue.isOn()) {
-                    cueA.setValue(false);
-                    cueB.setValue(false);
-                    for (LXChannel channel : mutableChannels) {
-                        channel.cueActive.setValue(false);
-                    }
-                }
-            }
-        });
-        LX.initTimer.log("Engine: Cue");
 
         // Master output
         this.output = new Output(lx);
@@ -493,12 +438,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         LX.initTimer.log("Engine: Script");
 
         // Parameters
-        addParameter("crossfader", this.crossfader);
-        addParameter("crossfaderBlendMode", this.crossfaderBlendMode);
         addParameter("speed", this.speed);
         addParameter("focusedChannel", this.focusedChannel);
-        addParameter("cueA", this.cueA);
-        addParameter("cueB", this.cueB);
         addParameter("multithreaded", this.isMultithreaded);
         addParameter("channelMultithreaded", this.isChannelMultithreaded);
         addParameter("networkMultithreaded", this.isNetworkMultithreaded);
@@ -545,7 +486,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             throw new UnsupportedOperationException("setChannelBlends() may only be invoked before engine has started");
         }
         this.channelBlends = channelBlends;
-        for (LXChannel channel : this.mutableChannels) {
+        for (LXChannel channel : allChannels()) {
             channel.blendMode.setObjects(channelBlends);
         }
         return this;
@@ -794,20 +735,52 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         return this;
     }
 
+    public LXLook addLook() {
+        LXLook look = new LXLook(lx);
+        look.setParent(this);
+        mutableLooks.add(look);
+        return look;
+    }
+
+    public void removeLook(LXLook look) {
+        removeLook(look, true);
+    }
+
+    private void removeLook(LXLook look, boolean checkLast) {
+        if (checkLast && (this.mutableLooks.size() == 1)) {
+            throw new UnsupportedOperationException("Cannot remove last look from LXEngine");
+        }
+        if (mutableLooks.remove(look)) {
+            look.dispose();
+        }
+    }
+
+    @Deprecated
     public List<LXChannel> getChannels() {
-        return this.channels;
+        return getDefaultLook().channels;
     }
 
+    protected Iterable<LXChannel> allChannels() {
+        IteratorChain<LXChannel> chained = new IteratorChain<>();
+        for (LXLook look : mutableLooks) {
+            chained.addIterator(look.channels.iterator());
+        }
+        return new IteratorIterable<LXChannel>(chained);
+    }
+
+    @Deprecated
     public LXChannel getDefaultChannel() {
-        return this.mutableChannels.get(0);
+        return getDefaultLook().channels.get(0);
     }
 
+    @Deprecated
     public LXChannel getChannel(int channelIndex) {
-        return this.mutableChannels.get(channelIndex);
+        return getDefaultLook().channels.get(channelIndex);
     }
 
+    @Deprecated
     public LXChannel getChannel(String label) {
-        for (LXChannel channel : this.mutableChannels) {
+        for (LXChannel channel : getDefaultLook().channels) {
             if (channel.getLabel().equals(label)) {
                 return channel;
             }
@@ -815,87 +788,59 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         return null;
     }
 
+    @Deprecated
     public LXBus getFocusedChannel() {
-        if (this.focusedChannel.getValuei() == this.mutableChannels.size()) {
+        if (this.focusedChannel.getValuei() == getDefaultLook().channels.size()) {
             return this.masterChannel;
         }
         return getChannel(this.focusedChannel.getValuei());
     }
 
+    @Deprecated
     public LXEngine setFocusedChannel(LXBus channel) {
         if (channel == this.masterChannel) {
-            this.focusedChannel.setValue(this.mutableChannels.size());
+            this.focusedChannel.setValue(getDefaultLook().channels.size());
         } else {
-            this.focusedChannel.setValue(this.mutableChannels.indexOf(channel));
+            this.focusedChannel.setValue(getDefaultLook().channels.indexOf(channel));
         }
         return this;
     }
 
+    @Deprecated
     public LXChannel addChannel() {
         return addChannel(new LXPattern[0]);
     }
 
+    @Deprecated
     public LXChannel addChannel(LXPattern[] patterns) {
-        LXChannel channel = new LXChannel(lx, this.mutableChannels.size(), patterns);
-        channel.setParent(this);
-        this.mutableChannels.add(channel);
-        this.focusedChannel.setRange(this.mutableChannels.size() + 1);
+        LXChannel channel = getDefaultLook().addChannel();
+        channel.setPatterns(patterns);
         for (Listener listener : this.listeners) {
             listener.channelAdded(this, channel);
         }
         return channel;
     }
 
+    @Deprecated
     public void removeChannel(LXChannel channel) {
-        removeChannel(channel, true);
-    }
-
-    private void removeChannel(LXChannel channel, boolean checkLast) {
-        if (checkLast && (this.mutableChannels.size() == 1)) {
-            throw new UnsupportedOperationException("Cannot remove last channel from LXEngine");
-        }
-        if (this.mutableChannels.remove(channel)) {
-            int i = 0;
-            for (LXChannel c : this.mutableChannels) {
-                c.setIndex(i++);
-            }
-            boolean notified = false;
-            if (this.focusedChannel.getValuei() > this.mutableChannels.size()) {
-                notified = true;
-                this.focusedChannel.decrement();
-            }
-            this.focusedChannel.setRange(this.mutableChannels.size() + 1);
-            if (!notified) {
-                this.focusedChannel.bang();
-            }
+        if (getDefaultLook().removeChannel(channel)) {
             for (Listener listener : this.listeners) {
                 listener.channelRemoved(this, channel);
             }
-
-            channel.dispose();
         }
     }
 
+    @Deprecated
     public void moveChannel(LXChannel channel, int index) {
-        boolean focused = channel.getIndex() == this.focusedChannel.getValuei();
-        this.mutableChannels.remove(channel);
-        this.mutableChannels.add(index, channel);
-        int i = 0;
-        for (LXChannel c: this.mutableChannels) {
-            c.setIndex(i++);
-        }
-        if (focused) {
-            this.focusedChannel.setValue(index);
-        }
+        getDefaultLook().moveChannel(channel, index);
         for (Listener listener : this.listeners) {
             listener.channelMoved(this, channel);
         }
     }
 
+    @Deprecated
     public void duplicateChannel(LXChannel channel) {
-        LXChannel chan = addChannel();
-        chan.load(lx, LXSerializable.Utils.toObject(lx, channel));
-        chan.label.setValue(chan.label.getString() + " copy");
+        getDefaultLook().duplicateChannel(channel);
     }
 
     public void setPatterns(LXPattern[] patterns) {
@@ -936,6 +881,15 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     protected void enableAutoTransition(int autoTransitionThreshold) {
         getDefaultChannel().enableAutoTransition(autoTransitionThreshold);
+    }
+
+    public LXLook getDefaultLook() {
+        return mutableLooks.get(0);
+    }
+
+    public LXLook getFocusedLook() {
+        // TODO: support more than one look
+        return mutableLooks.get(0);
     }
 
     public void run() {
@@ -1013,8 +967,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
         // The main work: run patterns, blend channels, send to outputs.
         long channelStart = System.nanoTime();
-        loopAllChannels(deltaMs);
-        blendChannels(deltaMs, channelStart, colorSpace.getEnum());
+        loopAllLooks(deltaMs);
+        blendLooks(deltaMs, channelStart, colorSpace.getEnum());
         this.artNet.processOutput();
         sendToOutputs(runStart);
         long nowNanos = System.nanoTime();
@@ -1024,7 +978,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             StringBuilder sb = new StringBuilder();
             sb.append("LXEngine::run() " + ((int) (this.timer.runNanos / 1000000)) + "ms\n");
             sb.append("LXEngine::run()::channels " + ((int) (this.timer.channelNanos / 1000000)) + "ms\n");
-            for (LXChannel channel : this.channels) {
+            for (LXChannel channel : this.allChannels()) {
                 sb.append("LXEngine::" + channel.getLabel() + "::loop() " + ((int) (channel.timer.loopNanos / 1000000)) + "ms\n");
                 LXPattern pattern = channel.getActivePattern();
                 sb.append("LXEngine::" + channel.getLabel() + "::" + pattern.getLabel() + "::run() " + ((int) (pattern.timer.runNanos / 1000000)) + "ms\n");
@@ -1037,48 +991,9 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     }
 
     /** Runs loop() on all enabled or cue-enabled channels. */
-    void loopAllChannels(double deltaMs) {
-        // If we are in super-threaded mode, run the channels on their own threads!
-        if (isChannelMultithreaded.isOn()) {
-            // Kick off threads per channel
-            for (LXChannel channel : this.mutableChannels) {
-                if (channel.shouldRun() || channel.cueActive.isOn()) {
-                    synchronized (channel.thread) {
-                        channel.thread.signal.workDone = false;
-                        channel.thread.deltaMs = deltaMs;
-                        channel.thread.workReady = true;
-                        channel.thread.notify();
-                        if (!channel.thread.hasStarted) {
-                            channel.thread.hasStarted = true;
-                            channel.thread.start();
-                        }
-                    }
-                }
-            }
-
-            // Wait for all the channel threads to finish
-            for (LXChannel channel : this.mutableChannels) {
-                if (channel.shouldRun() || channel.cueActive.isOn()) {
-                    synchronized (channel.thread.signal) {
-                        while (!channel.thread.signal.workDone) {
-                            try {
-                                channel.thread.signal.wait();
-                            } catch (InterruptedException ix) {
-                                Thread.currentThread().interrupt();
-                                break;
-                            }
-                        }
-                        channel.thread.signal.workDone = false;
-                    }
-                }
-            }
-        } else {
-            for (LXChannel channel : this.mutableChannels) {
-                if (channel.shouldRun() || channel.cueActive.isOn()) {
-                    // TODO(mcslee): should clips still run even if channel is disabled??
-                    channel.loop(deltaMs);
-                }
-            }
+    void loopAllLooks(double deltaMs) {
+        for (LXLook look : this.mutableLooks) {
+            look.loop(deltaMs, colorSpace.getEnum());
         }
     }
 
@@ -1130,64 +1045,18 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         }
     }
 
-    void blendChannels(double deltaMs, long channelStart, PolyBuffer.Space space) {
-        groupA.reset();
-        groupB.reset();
+    void blendLooks(double deltaMs, long channelStart, PolyBuffer.Space space) {
         BlendTarget main = new BlendTarget(buffer.main.render);
         BlendTarget cue = new BlendTarget(buffer.cue.render);
         boolean cueOn = false;
 
-        for (LXChannel channel : mutableChannels) {
-            long blendStart = System.nanoTime();
-            double alpha = Spaces.cie_lightness_to_luminance(channel.fader.getValue());
-
-            if (channel.shouldRun() && alpha > 0) {
-                LXChannel.CrossfadeGroup group = channel.crossfadeGroup.getEnum();
-                LXBlend blend = channel.blendMode.getObject();
-                (group == A ? groupA : group == B ? groupB : main).blendFrom(channel, alpha, blend, space);
-            }
-            if (channel.cueActive.isOn()) {
-                cue.copyFrom(channel, space);
-                cueOn = true;
-            }
-            if (channel.shouldRun() || channel.cueActive.isOn()) {
-                ((LXChannel.Timer) channel.timer).blendNanos = System.nanoTime() - blendStart;
-            }
+        // TODO: this is where scenes would plug in
+        for (LXLook look : mutableLooks) {
+            main.blendFrom(look, 1, addBlend, space);
         }
 
         // Run the master channel (may have clips)
         this.masterChannel.loop(deltaMs);
-
-        if (cueA.isOn()) {
-            cue.copyFrom(groupA, space);
-            cueOn = true;
-        } else if (cueB.isOn()) {
-            cue.copyFrom(groupB, space);
-            cueOn = true;
-        }
-
-        // Crossfade between the A and B groups, and add that to the main buffer
-        double crossfadeValue = crossfader.getValue();
-        boolean useGroupA = crossfadeValue < 1 && !groupA.isBlack();
-        boolean useGroupB = crossfadeValue > 0 && !groupB.isBlack();
-        double fadeTowardB = Math.min(1, 2 * crossfadeValue);
-        double fadeTowardA = Math.min(1, 2 * (1 - crossfadeValue));
-
-        if (useGroupA && useGroupB) {
-            LXBlend blend = crossfaderBlendMode.getObject();
-            if (crossfadeValue <= 0.5) {
-                groupA.blendFrom(groupB, fadeTowardB, blend, space);
-                main.blendFrom(groupA, 1, addBlend, space);
-            } else {
-                groupB.blendFrom(groupA, fadeTowardA, blend, space);
-                main.blendFrom(groupB, 1, addBlend, space);
-            }
-        } else if (useGroupA) {
-            main.blendFrom(groupA, fadeTowardA, addBlend, space);
-        } else if (useGroupB) {
-            main.blendFrom(groupB, fadeTowardB, addBlend, space);
-        }
-        this.timer.channelNanos = System.nanoTime() - channelStart;
 
         // Ensure the main buffer is written even if nothing was blended up to this point
         main.finish(space);
@@ -1250,7 +1119,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             StringBuilder sb = new StringBuilder();
             sb.append("LXEngine::run() " + ((int) (this.timer.runNanos / 1000000)) + "ms\n");
             sb.append("LXEngine::run()::channels " + ((int) (this.timer.channelNanos / 1000000)) + "ms\n");
-            for (LXChannel channel : this.channels) {
+            for (LXChannel channel : allChannels()) {
                 sb.append("LXEngine::" + channel.getLabel() + "::loop() " + ((int) (channel.timer.loopNanos / 1000000)) + "ms\n");
                 LXPattern pattern = channel.getActivePattern();
                 sb.append("LXEngine::" + channel.getLabel() + "::" + pattern.getLabel() + "::run() " + ((int) (pattern.timer.runNanos / 1000000)) + "ms\n");
@@ -1368,7 +1237,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     }
 
     private static final String KEY_PALETTE = "palette";
-    private static final String KEY_CHANNELS = "channels";
+    private static final String KEY_LOOKS = "looks";
     private static final String KEY_MASTER = "master";
     private static final String KEY_TEMPO = "tempo";
     private static final String KEY_AUDIO = "audio";
@@ -1384,7 +1253,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     public void save(LX lx, JsonObject obj) {
         super.save(lx, obj);
         obj.add(KEY_PALETTE, LXSerializable.Utils.toObject(lx, this.lx.palette));
-        obj.add(KEY_CHANNELS, LXSerializable.Utils.toArray(lx, this.mutableChannels));
+        obj.add(KEY_LOOKS, LXSerializable.Utils.toArray(lx, this.mutableLooks));
         obj.add(KEY_MASTER, LXSerializable.Utils.toObject(lx, this.masterChannel));
         obj.add(KEY_TEMPO, LXSerializable.Utils.toObject(lx, this.lx.tempo));
         obj.add(KEY_AUDIO, LXSerializable.Utils.toObject(lx, this.audio));
@@ -1409,16 +1278,15 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         this.modulation.clear();
 
         // Remove all channels
-        for (int i = this.mutableChannels.size() - 1; i >= 0; --i) {
-            removeChannel(this.mutableChannels.get(i), false);
+        for (int i = this.mutableLooks.size() - 1; i >= 0; --i) {
+            removeLook(this.mutableLooks.get(i), false);
         }
         // Add the new channels
-        if (obj.has(KEY_CHANNELS)) {
-            JsonArray channelsArray = obj.getAsJsonArray(KEY_CHANNELS);
-            for (JsonElement channelElement : channelsArray) {
-                // TODO(mcslee): improve efficiency, allow no-patterns in a channel?
-                LXChannel channel = addChannel();
-                channel.load(lx, (JsonObject) channelElement);
+        if (obj.has(KEY_LOOKS)) {
+            JsonArray looksArray = obj.getAsJsonArray(KEY_LOOKS);
+            for (JsonElement lookElement : looksArray) {
+                LXLook look = addLook();
+                look.load(lx, (JsonObject) lookElement);
             }
         } else {
             addChannel().fader.setValue(1);
