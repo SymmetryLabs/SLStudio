@@ -99,7 +99,7 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
         onConfigChanged(initialConfigs);
 
         lx.engine.addListener(this);
-        for (LXChannel c : lx.engine.channels) {
+        for (LXChannel c : lx.engine.getAllSubChannels()) {
             c.autoDisable.setValue(true);
         }
 

@@ -102,6 +102,8 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
                 }
             }
         });
+
+        addChannel();
     }
 
     @Override
@@ -170,6 +172,15 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
             return lx.engine.masterChannel;
         }
         return channels.get(focusedChannel.getValuei());
+    }
+
+    public LXLook setFocusedChannel(LXBus channel) {
+        if (channel == lx.engine.masterChannel) {
+            focusedChannel.setValue(channels.size());
+        } else {
+            focusedChannel.setValue(channels.indexOf(channel));
+        }
+        return this;
     }
 
     public void loop(double deltaMs, PolyBuffer.Space preferredSpace) {

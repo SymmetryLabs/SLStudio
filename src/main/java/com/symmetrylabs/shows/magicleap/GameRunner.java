@@ -47,7 +47,7 @@ public class GameRunner {
                             pong.enabled.setValue(true);
                             snake.enabled.setValue(false);
                             cycle.enabled.setValue(false);
-                            lx.engine.focusedChannel.setValue(1);
+                            lx.engine.getFocusedLook().focusedChannel.setValue(1);
                         }
                         pongIsPressed.setValue(true);
                         break;
@@ -57,7 +57,7 @@ public class GameRunner {
                             snake.enabled.setValue(true);
                             cycle.enabled.setValue(false);
                             pong.enabled.setValue(false);
-                            lx.engine.focusedChannel.setValue(0);
+                            lx.engine.getFocusedLook().focusedChannel.setValue(0);
                         }
                         snakeIsPressed.setValue(true);
                         break;
@@ -77,7 +77,7 @@ public class GameRunner {
                     snake.enabled.setValue(false);
                     pong.enabled.setValue(false);
                     cycle.enabled.setValue(true);
-                    lx.engine.focusedChannel.setValue(2);
+                    lx.engine.getFocusedLook().focusedChannel.setValue(2);
                 }
 
                 switch (keyChar) {

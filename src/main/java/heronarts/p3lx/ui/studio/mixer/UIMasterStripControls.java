@@ -64,22 +64,22 @@ public class UIMasterStripControls extends UIMixerStripControls {
         float yp = 108;
         new UIButton(4, yp, 16, 16)
             .setLabel("A")
-            .setParameter(lx.engine.getDefaultLook().cueA)
+            .setParameter(lx.engine.getFocusedLook().cueA)
             .setActiveColor(ui.theme.getAttentionColor())
             .addToContainer(this);
         new UILabel(26, yp + 4, 28, 13).setLabel("CUE").setTextAlignment(PConstants.LEFT, PConstants.TOP).setFont(ui.theme.getControlFont()).addToContainer(this);
         new UIButton(52, yp, 16, 16)
             .setLabel("B")
-            .setParameter(lx.engine.getDefaultLook().cueB)
+            .setParameter(lx.engine.getFocusedLook().cueB)
             .setActiveColor(ui.theme.getAttentionColor())
             .addToContainer(this);
 
-        new UIDropMenu(4, height - 40, width-8, 16, lx.engine.getDefaultLook().crossfaderBlendMode)
+        new UIDropMenu(4, height - 40, width-8, 16, lx.engine.getFocusedLook().crossfaderBlendMode)
             .setDirection(UIDropMenu.Direction.UP)
             .addToContainer(this);
 
         new UISlider(PADDING, height - 20 - PADDING, width-2*PADDING, 20)
-            .setParameter(lx.engine.getDefaultLook().crossfader)
+            .setParameter(lx.engine.getFocusedLook().crossfader)
             .setShowLabel(false)
             .addToContainer(this);
     }

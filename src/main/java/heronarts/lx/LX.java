@@ -249,7 +249,7 @@ public class LX {
         LX.initTimer.log("Tempo");
 
         // Add a default channel
-        this.engine.addChannel(new LXPattern[0]).fader.setValue(1);
+        this.engine.addLook().channels.get(0).fader.setValue(1);
         LX.initTimer.log("Default Channel");
 
     }

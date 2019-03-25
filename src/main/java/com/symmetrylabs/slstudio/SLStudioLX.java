@@ -232,7 +232,7 @@ public class SLStudioLX extends P3LX {
                                     case '\\':
                                         PolyBuffer.Space space = lx.engine.colorSpace.getEnum() == RGB16 ? RGB8 : RGB16;
                                         lx.engine.colorSpace.setValue(space);
-                                        for (LXChannel channel : lx.engine.channels) {
+                                        for (LXChannel channel : lx.engine.getAllSubChannels()) {
                                             channel.colorSpace.setValue(space);
                                         }
                                         break;

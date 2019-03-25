@@ -516,7 +516,7 @@ public class APC40Mk2 extends LXMidiSurface {
     }
 
     private void sendChannelFocus() {
-        int focusedChannel = this.lx.engine.focusedChannel.getValuei();
+        int focusedChannel = this.lx.engine.getFocusedLook().focusedChannel.getValuei();
         boolean masterFocused = (focusedChannel == getVisibleChannelList().size());
         for (int i = 0; i < NUM_CHANNELS; ++i) {
             sendNoteOn(i, CHANNEL_FOCUS, (!masterFocused && (i == focusedChannel)) ? LED_ON : LED_OFF);
@@ -555,7 +555,7 @@ public class APC40Mk2 extends LXMidiSurface {
             }
         });
 
-        this.lx.engine.focusedChannel.addListener(new LXParameterListener() {
+        this.lx.engine.getFocusedLook().focusedChannel.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
                 sendChannelFocus();
                 deviceListener.registerChannel(lx.engine.getFocusedChannel());
@@ -733,7 +733,7 @@ public class APC40Mk2 extends LXMidiSurface {
                 if (this.shiftOn) {
                     channel.autoCycleEnabled.toggle();
                 } else {
-                    this.lx.engine.focusedChannel.setValue(channel.getIndex());
+                    this.lx.engine.getFocusedLook().focusedChannel.setValue(channel.getIndex());
                 }
                 return;
             case DEVICE_ON_OFF:

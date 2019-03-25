@@ -97,7 +97,7 @@ public class UIBottomTray extends UI2dContext {
             }
         });
 
-     lx.engine.focusedChannel.addListener(new LXParameterListener() {
+        lx.engine.getFocusedLook().focusedChannel.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
                 onChannelFocus();
             }
@@ -147,7 +147,7 @@ public class UIBottomTray extends UI2dContext {
     @Override
     public void onDraw(UI ui, PGraphics pg) {
         pg.stroke(ui.theme.getPrimaryColor());
-        float channelX = PADDING + UIMixer.PADDING + UIMixer.STRIP_SPACING * lx.engine.focusedChannel.getValuei() + UIMixerStripControls.WIDTH/2;
+        float channelX = PADDING + UIMixer.PADDING + UIMixer.STRIP_SPACING * lx.engine.getFocusedLook().focusedChannel.getValuei() + UIMixerStripControls.WIDTH/2;
         float binX = this.mixer.getX() + this.mixer.getWidth() + SEPARATOR + 12;
         float b = 4;
         pg.strokeWeight(2);
@@ -161,7 +161,7 @@ public class UIBottomTray extends UI2dContext {
     public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         if (keyCode == java.awt.event.KeyEvent.VK_N && (keyEvent.isControlDown() || keyEvent.isMetaDown())) {
             lx.engine.addChannel();
-            lx.engine.focusedChannel.setValue(lx.engine.getChannels().size()-1);
+            lx.engine.getFocusedLook().focusedChannel.setValue(lx.engine.getChannels().size()-1);
         }
     }
 

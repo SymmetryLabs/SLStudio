@@ -76,7 +76,7 @@ public class UIMixer extends UI2dContainer {
             public void onToggle(boolean on) {
                 if (!on) {
                     lx.engine.addChannel();
-                    lx.engine.focusedChannel.setValue(lx.engine.getChannels().size()-1);
+                    lx.engine.getFocusedLook().focusedChannel.setValue(lx.engine.getChannels().size()-1);
                 }
             }
         };

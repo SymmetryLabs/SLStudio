@@ -10,6 +10,7 @@ import heronarts.p3lx.ui.UI3dComponent;
 import org.apache.commons.math3.util.FastMath;
 import processing.core.PGraphics;
 import processing.core.PVector;
+import java.util.stream.StreamSupport;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -25,7 +26,7 @@ public class UICubeMapDebug extends UI3dComponent {
     }
 
     protected void onDraw(final UI ui, final PGraphics pg) {
-        lx.engine.channels.stream()
+        StreamSupport.stream(lx.engine.getAllSubChannels().spliterator(), false)
             .filter(new Predicate<LXChannel>() {
                 @Override
                 public boolean test(final LXChannel channel) {

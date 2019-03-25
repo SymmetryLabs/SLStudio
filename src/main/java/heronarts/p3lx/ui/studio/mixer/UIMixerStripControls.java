@@ -36,6 +36,7 @@ import heronarts.p3lx.ui.UI2dContainer;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
+import heronarts.lx.LXLook;
 
 public abstract class UIMixerStripControls extends UI2dContainer {
 
@@ -60,7 +61,7 @@ public abstract class UIMixerStripControls extends UI2dContainer {
         this.bus = bus;
 
         setBackground();
-        this.lx.engine.focusedChannel.addListener(new LXParameterListener() {
+        this.lx.engine.getFocusedLook().focusedChannel.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
                 setBackground();
             }
@@ -99,18 +100,19 @@ public abstract class UIMixerStripControls extends UI2dContainer {
 
     @Override
     public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+        LXLook look = lx.engine.getFocusedLook();
         if (!(keyEvent.isMetaDown() || keyEvent.isControlDown())) {
             if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
-                if (lx.engine.focusedChannel.getValuei() > 0) {
+                if (look.focusedChannel.getValuei() > 0) {
                     consumeKeyEvent();
-                    this.lx.engine.focusedChannel.decrement();
-                    getMixer().focusStrip(this.lx.engine.getFocusedChannel());
+                    look.focusedChannel.decrement();
+                    getMixer().focusStrip(look.getFocusedChannel());
                 }
             } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
-                if (lx.engine.focusedChannel.getValuei() < lx.engine.focusedChannel.getRange() - 1) {
+                if (look.focusedChannel.getValuei() < look.focusedChannel.getRange() - 1) {
                     consumeKeyEvent();
-                    this.lx.engine.focusedChannel.increment();
-                    getMixer().focusStrip(this.lx.engine.getFocusedChannel());
+                    look.focusedChannel.increment();
+                    getMixer().focusStrip(look.getFocusedChannel());
                 }
             }
         }

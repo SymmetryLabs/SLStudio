@@ -128,8 +128,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     private final List<Listener> listeners = new ArrayList<Listener>();
     private final List<MessageListener> messageListeners = new ArrayList<MessageListener>();
 
-    public final DiscreteParameter focusedChannel = new DiscreteParameter("Channel", 1);
-
     public final BoundedParameter framesPerSecond = new BoundedParameter("FPS", 60, 0, 300);
     public int conversionsPerFrame = 0;
 
@@ -439,7 +437,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
         // Parameters
         addParameter("speed", this.speed);
-        addParameter("focusedChannel", this.focusedChannel);
         addParameter("multithreaded", this.isMultithreaded);
         addParameter("channelMultithreaded", this.isChannelMultithreaded);
         addParameter("networkMultithreaded", this.isNetworkMultithreaded);
@@ -486,7 +483,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             throw new UnsupportedOperationException("setChannelBlends() may only be invoked before engine has started");
         }
         this.channelBlends = channelBlends;
-        for (LXChannel channel : allChannels()) {
+        for (LXChannel channel : getAllSubChannels()) {
             channel.blendMode.setObjects(channelBlends);
         }
         return this;
@@ -757,10 +754,10 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     @Deprecated
     public List<LXChannel> getChannels() {
-        return getDefaultLook().channels;
+        return getFocusedLook().channels;
     }
 
-    protected Iterable<LXChannel> allChannels() {
+    public Iterable<LXChannel> getAllSubChannels() {
         IteratorChain<LXChannel> chained = new IteratorChain<>();
         for (LXLook look : mutableLooks) {
             chained.addIterator(look.channels.iterator());
@@ -770,17 +767,17 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     @Deprecated
     public LXChannel getDefaultChannel() {
-        return getDefaultLook().channels.get(0);
+        return getFocusedLook().channels.get(0);
     }
 
     @Deprecated
     public LXChannel getChannel(int channelIndex) {
-        return getDefaultLook().channels.get(channelIndex);
+        return getFocusedLook().channels.get(channelIndex);
     }
 
     @Deprecated
     public LXChannel getChannel(String label) {
-        for (LXChannel channel : getDefaultLook().channels) {
+        for (LXChannel channel : getFocusedLook().channels) {
             if (channel.getLabel().equals(label)) {
                 return channel;
             }
@@ -790,19 +787,12 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     @Deprecated
     public LXBus getFocusedChannel() {
-        if (this.focusedChannel.getValuei() == getDefaultLook().channels.size()) {
-            return this.masterChannel;
-        }
-        return getChannel(this.focusedChannel.getValuei());
+        return getFocusedLook().getFocusedChannel();
     }
 
     @Deprecated
     public LXEngine setFocusedChannel(LXBus channel) {
-        if (channel == this.masterChannel) {
-            this.focusedChannel.setValue(getDefaultLook().channels.size());
-        } else {
-            this.focusedChannel.setValue(getDefaultLook().channels.indexOf(channel));
-        }
+        getFocusedLook().setFocusedChannel(channel);
         return this;
     }
 
@@ -813,7 +803,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     @Deprecated
     public LXChannel addChannel(LXPattern[] patterns) {
-        LXChannel channel = getDefaultLook().addChannel();
+        LXChannel channel = getFocusedLook().addChannel();
         channel.setPatterns(patterns);
         for (Listener listener : this.listeners) {
             listener.channelAdded(this, channel);
@@ -823,7 +813,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     @Deprecated
     public void removeChannel(LXChannel channel) {
-        if (getDefaultLook().removeChannel(channel)) {
+        if (getFocusedLook().removeChannel(channel)) {
             for (Listener listener : this.listeners) {
                 listener.channelRemoved(this, channel);
             }
@@ -832,7 +822,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     @Deprecated
     public void moveChannel(LXChannel channel, int index) {
-        getDefaultLook().moveChannel(channel, index);
+        getFocusedLook().moveChannel(channel, index);
         for (Listener listener : this.listeners) {
             listener.channelMoved(this, channel);
         }
@@ -840,7 +830,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     @Deprecated
     public void duplicateChannel(LXChannel channel) {
-        getDefaultLook().duplicateChannel(channel);
+        getFocusedLook().duplicateChannel(channel);
     }
 
     public void setPatterns(LXPattern[] patterns) {
@@ -881,10 +871,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     protected void enableAutoTransition(int autoTransitionThreshold) {
         getDefaultChannel().enableAutoTransition(autoTransitionThreshold);
-    }
-
-    public LXLook getDefaultLook() {
-        return mutableLooks.get(0);
     }
 
     public LXLook getFocusedLook() {
@@ -978,7 +964,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             StringBuilder sb = new StringBuilder();
             sb.append("LXEngine::run() " + ((int) (this.timer.runNanos / 1000000)) + "ms\n");
             sb.append("LXEngine::run()::channels " + ((int) (this.timer.channelNanos / 1000000)) + "ms\n");
-            for (LXChannel channel : this.allChannels()) {
+            for (LXChannel channel : this.getAllSubChannels()) {
                 sb.append("LXEngine::" + channel.getLabel() + "::loop() " + ((int) (channel.timer.loopNanos / 1000000)) + "ms\n");
                 LXPattern pattern = channel.getActivePattern();
                 sb.append("LXEngine::" + channel.getLabel() + "::" + pattern.getLabel() + "::run() " + ((int) (pattern.timer.runNanos / 1000000)) + "ms\n");
@@ -1119,7 +1105,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             StringBuilder sb = new StringBuilder();
             sb.append("LXEngine::run() " + ((int) (this.timer.runNanos / 1000000)) + "ms\n");
             sb.append("LXEngine::run()::channels " + ((int) (this.timer.channelNanos / 1000000)) + "ms\n");
-            for (LXChannel channel : allChannels()) {
+            for (LXChannel channel : getAllSubChannels()) {
                 sb.append("LXEngine::" + channel.getLabel() + "::loop() " + ((int) (channel.timer.loopNanos / 1000000)) + "ms\n");
                 LXPattern pattern = channel.getActivePattern();
                 sb.append("LXEngine::" + channel.getLabel() + "::" + pattern.getLabel() + "::run() " + ((int) (pattern.timer.runNanos / 1000000)) + "ms\n");
@@ -1289,7 +1275,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
                 look.load(lx, (JsonObject) lookElement);
             }
         } else {
-            addChannel().fader.setValue(1);
+            addLook();
+            //addChannel().fader.setValue(1);
         }
 
         // Master channel settings

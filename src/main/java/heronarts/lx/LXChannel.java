@@ -483,7 +483,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     public final LXChannel setPatterns(LXPattern[] patterns) {
         if (this.transition != null) {
             finishTransition();
-        } else {
+        } else if (getActivePattern() != null) {
             getActivePattern().onInactive();
         }
         _updatePatterns(patterns);

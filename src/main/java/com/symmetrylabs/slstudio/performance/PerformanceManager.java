@@ -226,7 +226,7 @@ public class PerformanceManager extends LXComponent {
         ui.addLayer(fR);
         fR.setVisible(false);
 
-        FaderWindow fC = new FaderWindow(lx.engine.crossfader, ui, "", ui.getWidth() / 2 - (w / 2), y, w, h);
+        FaderWindow fC = new FaderWindow(lx.engine.getFocusedLook().crossfader, ui, "", ui.getWidth() / 2 - (w / 2), y, w, h);
         ui.addLayer(fC);
         fC.setVisible(false);
 
@@ -247,7 +247,7 @@ public class PerformanceManager extends LXComponent {
 
         lFader.addListener(parameter -> swapDecks(lFader, DeckSide.LEFT));
         rFader.addListener(parameter -> swapDecks(rFader, DeckSide.RIGHT));
-        getLX().engine.crossfader.addListener(parameter -> {
+        getLX().engine.getFocusedLook().crossfader.addListener(parameter -> {
             swapDecks(rFader, DeckSide.RIGHT);
             swapDecks(rFader, DeckSide.LEFT);
         });
@@ -272,7 +272,7 @@ public class PerformanceManager extends LXComponent {
     }
 
     private void updateDeckColors() {
-        double crossfade = getLX().engine.crossfader.getValue();
+        double crossfade = getLX().engine.getFocusedLook().crossfader.getValue();
 
         deckWindows[0].setBackgroundColor(computeDeckColor(lFader.getValue() < .5f, crossfade < .5f));
         deckWindows[1].setBackgroundColor(computeDeckColor(lFader.getValue() >= .5f, crossfade < .5f));
@@ -291,7 +291,8 @@ public class PerformanceManager extends LXComponent {
     void swapDecks(CompoundParameter fader, DeckSide side) {
         int newDeck = focusedDeskIndexForSide(side);
         int oldDeck = side == DeckSide.LEFT ? oldDeckL : oldDeckR;
-        LXChannel.CrossfadeGroup newAB = getLX().engine.crossfader.getValue() < .5 ? LXChannel.CrossfadeGroup.A : LXChannel.CrossfadeGroup.B;
+        LXChannel.CrossfadeGroup newAB = getLX().engine.getFocusedLook().crossfader.getValue() < .5
+            ? LXChannel.CrossfadeGroup.A : LXChannel.CrossfadeGroup.B;
         if (newDeck != oldDeck || newAB != oldAB)
             updateDeckColors();
 
@@ -338,14 +339,14 @@ public class PerformanceManager extends LXComponent {
         LEFT {
             @Override
             public boolean isActive(final LX lx) {
-                return lx.engine.crossfader.getValue() < .5;
+                return lx.engine.getFocusedLook().crossfader.getValue() < .5;
             }
         },
 
         RIGHT {
             @Override
             public boolean isActive(final LX lx) {
-                return lx.engine.crossfader.getValue() >= .5;
+                return lx.engine.getFocusedLook().crossfader.getValue() >= .5;
             }
         };
 

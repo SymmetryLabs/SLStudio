@@ -166,11 +166,12 @@ public class CubesMappingMode {
 
     private void addChannel() {
         mappingPattern = new CubesMappingPattern(lx);
-        mappingChannel = lx.engine.addChannel(new LXPattern[] {mappingPattern});
+        mappingChannel = lx.engine.getFocusedLook().addChannel();
+        mappingChannel.addPattern(mappingPattern);
 
-        for (LXChannel channel : lx.engine.channels)
+        for (LXChannel channel : lx.engine.getFocusedLook().channels) {
             channel.cueActive.setValue(false);
-
+        }
         mappingChannel.fader.setValue(1);
         mappingChannel.label.setValue("Mapping");
         mappingChannel.cueActive.setValue(true);
