@@ -55,12 +55,6 @@ public class UIMasterStripControls extends UIMixerStripControls {
         .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
         .addToContainer(this);
 
-        new UIButton(bxp, 80, 28, 16)
-        .setIcon(ui.theme.iconArm)
-        .setActiveColor(ui.theme.getRecordingColor())
-        .setParameter(this.bus.arm)
-        .addToContainer(this);
-
         float syp = 22;
         new UISlider(UISlider.Direction.VERTICAL, this.width-PADDING-FADER_WIDTH, syp, FADER_WIDTH, FADER_HEIGHT)
         .setShowLabel(false)

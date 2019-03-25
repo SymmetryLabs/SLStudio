@@ -42,8 +42,6 @@ import heronarts.p3lx.ui.studio.UIBottomTray;
 import heronarts.p3lx.ui.studio.UIContextualHelpBar;
 import heronarts.p3lx.ui.studio.UILeftPane;
 import heronarts.p3lx.ui.studio.UIRightPane;
-import heronarts.p3lx.ui.studio.clip.UIClipLauncher;
-import heronarts.p3lx.ui.studio.clip.UIClipView;
 import heronarts.p3lx.ui.studio.device.UIDeviceBin;
 import heronarts.p3lx.ui.studio.mixer.UIMixer;
 import heronarts.p3lx.ui.studio.mixer.UIMixerStrip;
@@ -67,7 +65,7 @@ public class LXStudio extends P3LX {
         private boolean toggleHelpBar = false;
         private boolean toggleClipView = false;
 
-        private boolean clipViewVisible = true;
+        private boolean clipViewVisible = false;
 
         public class PreviewWindow extends UI3dContext {
 
@@ -146,7 +144,7 @@ public class LXStudio extends P3LX {
         }
 
         public boolean isClipViewVisible() {
-            return this.clipViewVisible;
+            return false;
         }
 
         private void setClipViewVisible(boolean visible) {
@@ -171,35 +169,30 @@ public class LXStudio extends P3LX {
         }
 
         private void _toggleClipView() {
+            clipViewVisible = false;
             // Mixer section
-            float controlsY = this.clipViewVisible ? UIMixer.PADDING + UIClipLauncher.HEIGHT : 0;
-            float stripHeight = this.clipViewVisible ? UIMixerStrip.HEIGHT : UIMixerStripControls.HEIGHT;
+            float controlsY = 0;
+            float stripHeight = UIMixerStripControls.HEIGHT;
 
             UIMixer mixer = this.bottomTray.mixer;
             for (UIMixerStrip strip : mixer.channelStrips.values()) {
-                strip.clipLauncher.setVisible(this.clipViewVisible);
                 strip.controls.setY(controlsY);
                 strip.setHeight(stripHeight);
             }
             mixer.addChannelButton.setY(controlsY + UIMixer.PADDING);
-            mixer.masterStrip.clipLauncher.setVisible(this.clipViewVisible);
             mixer.masterStrip.controls.setY(controlsY);
             mixer.masterStrip.setHeight(stripHeight);
-            mixer.sceneStrip.sceneLauncher.setVisible(this.clipViewVisible);
-            mixer.sceneStrip.clipViewToggle.setY(controlsY);
-            mixer.sceneStrip.setHeight(stripHeight);
             mixer.setContentHeight(stripHeight + 2*UIMixer.PADDING);
 
-            // Clip/device section
-            this.bottomTray.clipView.setVisible(this.clipViewVisible);
-            float binY = this.clipViewVisible ? UIClipView.HEIGHT + UIBottomTray.PADDING + UIMixerStrip.SPACING - 1 : UIMixerStrip.SPACING;
+            // Device section
+            float binY = UIMixerStrip.SPACING;
             for (UIDeviceBin bin : this.bottomTray.deviceBins.values()) {
                 bin.setY(binY);
             }
             this.bottomTray.rightSection.setHeight(stripHeight + 2*UIMixer.PADDING);
 
             // Overall height
-            this.bottomTray.setHeight(this.clipViewVisible ? UIBottomTray.HEIGHT : UIBottomTray.CLOSED_HEIGHT);
+            this.bottomTray.setHeight(UIBottomTray.CLOSED_HEIGHT);
 
             // Reflow the UI
             reflow();

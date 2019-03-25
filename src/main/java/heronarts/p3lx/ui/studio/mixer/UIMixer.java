@@ -38,7 +38,6 @@ import heronarts.lx.LXMasterChannel;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.component.UIButton;
-import heronarts.p3lx.ui.studio.clip.UIClipLauncher;
 import processing.core.PConstants;
 
 public class UIMixer extends UI2dContainer {
@@ -53,7 +52,6 @@ public class UIMixer extends UI2dContainer {
 
     public final UIButton addChannelButton;
     public final UIMasterStrip masterStrip;
-    public final UISceneStrip sceneStrip;
 
     final LX lx;
 
@@ -73,7 +71,7 @@ public class UIMixer extends UI2dContainer {
             strip.addToContainer(this);
         }
 
-        this.addChannelButton = new UIButton(0, PADDING + UIClipLauncher.HEIGHT + UIMixerStrip.SPACING, 20, UIMixerStripControls.HEIGHT) {
+        this.addChannelButton = new UIButton(0, PADDING + UIMixerStrip.SPACING, 20, UIMixerStripControls.HEIGHT) {
             @Override
             public void onToggle(boolean on) {
                 if (!on) {
@@ -92,7 +90,6 @@ public class UIMixer extends UI2dContainer {
         .addToContainer(this);
 
         this.masterStrip = (UIMasterStrip) new UIMasterStrip(ui, this, lx).addToContainer(this);
-        this.sceneStrip = (UISceneStrip) new UISceneStrip(ui, this, lx).addToContainer(this);
 
         lx.engine.addListener(new LXEngine.Listener() {
             public void channelAdded(LXEngine engine, LXChannel channel) {

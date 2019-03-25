@@ -23,7 +23,6 @@ package heronarts.lx;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import heronarts.lx.clip.LXClip;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.ModelMetrics;
@@ -58,20 +57,8 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
         public void effectMoved(LXBus channel, LXEffect effect);
     }
 
-    public interface ClipListener {
-        public void clipAdded(LXBus bus, LXClip clip);
-        public void clipRemoved(LXBus bus, LXClip clip);
-    }
-
 
     public final Timer timer = constructTimer();
-
-    /**
-     * Arms the channel for clip recording.
-     */
-    public final BooleanParameter arm =
-        new BooleanParameter("Arm")
-        .setDescription("Arms the channel for clip recording");
 
     protected final LX lx;
 
@@ -81,11 +68,7 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
     protected final List<LXEffect> mutableEffects = new ArrayList<>();
     public final List<LXEffect> effects = Collections.unmodifiableList(mutableEffects);
 
-    private final List<LXClip> mutableClips = new ArrayList<>();
-    public final List<LXClip> clips = Collections.unmodifiableList(this.mutableClips);
-
     private final List<Listener> listeners = new ArrayList<>();
-    private final List<ClipListener> clipListeners = new ArrayList<>();
 
     /** The (possibly warped) coordinates of the model points, for use by patterns and effects */
     protected LXVector[] vectorArray = null;
@@ -103,7 +86,6 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
     LXBus(LX lx, String label) {
         super(lx, label);
         this.lx = lx;
-        addParameter("arm", this.arm);
     }
 
     @Override
@@ -119,16 +101,6 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
 
     public final void removeListener(Listener listener) {
         this.listeners.remove(listener);
-    }
-
-    public LXBus addClipListener(ClipListener listener) {
-        this.clipListeners.add(listener);
-        return this;
-    }
-
-    public LXBus removeClipListener(ClipListener listener) {
-        this.clipListeners.remove(listener);
-        return this;
     }
 
     public final void addWarp(LXWarp warp) {
@@ -233,65 +205,6 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
         return null;
     }
 
-    public LXClip getClip(int index) {
-        return getClip(index, false);
-    }
-
-    public LXClip getClip(int index, boolean create) {
-        if (index < this.clips.size()) {
-            return this.clips.get(index);
-        }
-        if (create) {
-            return addClip(index);
-        }
-        return null;
-    }
-
-    public LXClip addClip() {
-        return addClip(this.mutableClips.size());
-    }
-
-    public LXClip addClip(int index) {
-        while (this.mutableClips.size() <= index) {
-            this.mutableClips.add(null);
-        }
-        LXClip clip = constructClip(index);
-        clip.label.setValue("Clip-" + (index+1));
-        this.mutableClips.set(index, clip);
-        for (ClipListener listener : this.clipListeners) {
-            listener.clipAdded(this, clip);
-        }
-        return clip;
-    }
-
-    public LXBus stopClips() {
-        for (LXClip clip : this.clips) {
-            if (clip != null) {
-                clip.stop();
-            }
-        }
-        return this;
-    }
-
-    protected abstract LXClip constructClip(int index);
-
-    public void removeClip(LXClip clip) {
-        int index = this.mutableClips.indexOf(clip);
-        if (index < 0) {
-            throw new IllegalArgumentException("Clip is not owned by channel: " + clip + " " + this);
-        }
-        removeClip(index);
-    }
-
-    public void removeClip(int index) {
-        LXClip clip = this.mutableClips.get(index);
-        this.mutableClips.set(index, null);
-        for (ClipListener listener : this.clipListeners) {
-            listener.clipRemoved(this, clip);
-        }
-        clip.dispose();
-    }
-
     protected static LXVector[] getVectorArray(LXBus bus, LXModel model) {
         if (bus == null) {
             return model.getVectorArray();
@@ -337,7 +250,7 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
         final int stopIndex;
         int index = -1;
         int nextIndex = -1;
-        
+
         public VectorIterator(int stopIndex) {
             this.stopIndex = stopIndex;
         }
@@ -420,14 +333,6 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
     public void loop(double deltaMs) {
         long loopStart = System.nanoTime();
 
-        // Run the active clip...
-        // TODO(mcslee): keep tabs of which is active?
-        for (LXClip clip : this.clips) {
-            if (clip != null) {
-                clip.loop(deltaMs);
-            }
-        }
-
         // Run modulators and components
         super.loop(deltaMs);
 
@@ -444,11 +349,6 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
             warp.dispose();
         }
         this.mutableWarps.clear();
-        for (LXClip clip : this.mutableClips) {
-            if (clip != null) {
-                clip.dispose();
-            }
-        }
         super.dispose();
     }
 
@@ -461,23 +361,10 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
         super.save(lx, obj);;
         obj.add(KEY_WARPS, LXSerializable.Utils.toArray(lx, warps));
         obj.add(KEY_EFFECTS, LXSerializable.Utils.toArray(lx, effects));
-        JsonArray clipsArr = new JsonArray();
-        for (LXClip clip : this.clips) {
-            if (clip != null) {
-                clipsArr.add(LXSerializable.Utils.toObject(lx, clip));
-            }
-        }
-        obj.add(KEY_CLIPS, clipsArr);
     }
 
     @Override
     public void load(LX lx, JsonObject obj) {
-        // Remove clips
-        for (LXClip clip : this.clips) {
-            if (clip != null) {
-                removeClip(clip);
-            }
-        }
         // Clear warps
         while (warps.size() > 0) {
             removeWarp(warps.get(0));
@@ -505,16 +392,6 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
                 LXEffect effect = this.lx.instantiateEffect(effectObj.get("class").getAsString());
                 effect.load(lx, effectObj);
                 addEffect(effect);
-            }
-        }
-        // Add the new clips
-        if (obj.has(KEY_CLIPS)) {
-            JsonArray clipsArr = obj.get(KEY_CLIPS).getAsJsonArray();
-            for (JsonElement clipElem : clipsArr) {
-                JsonObject clipObj = clipElem.getAsJsonObject();
-                int clipIndex = clipObj.get(LXClip.KEY_INDEX).getAsInt();
-                LXClip clip = addClip(clipIndex);
-                clip.load(lx, clipObj);
             }
         }
 

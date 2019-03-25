@@ -20,9 +20,6 @@
 
 package heronarts.lx;
 
-import heronarts.lx.clip.LXClip;
-import heronarts.lx.clip.LXMasterClip;
-
 /**
  * Represents the master channel. Doesn't do anything special
  * that a normal bus does not.
@@ -34,10 +31,5 @@ public class LXMasterChannel extends LXBus {
 
     public String getOscAddress() {
         return "/lx/master";
-    }
-
-    @Override
-    protected LXClip constructClip(int index) {
-        return new LXMasterClip(this.lx, index);
     }
 }

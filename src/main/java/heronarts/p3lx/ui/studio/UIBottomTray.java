@@ -39,7 +39,6 @@ import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI2dContext;
-import heronarts.p3lx.ui.studio.clip.UIClipView;
 import heronarts.p3lx.ui.studio.device.UIDeviceBin;
 import heronarts.p3lx.ui.studio.mixer.UIMixer;
 import heronarts.p3lx.ui.studio.mixer.UIMixerStripControls;
@@ -60,7 +59,6 @@ public class UIBottomTray extends UI2dContext {
 
     private final Map<LXBus, UIDeviceBin> mutableDeviceBins = new HashMap<LXBus, UIDeviceBin>();
     public final Map<LXBus, UIDeviceBin> deviceBins = Collections.unmodifiableMap(this.mutableDeviceBins);
-    public final UIClipView clipView;
 
     public UIBottomTray(UI ui, LX lx) {
         super(ui, 0, ui.getHeight() - HEIGHT - UIContextualHelpBar.VISIBLE_HEIGHT, ui.getWidth(), HEIGHT);
@@ -77,9 +75,6 @@ public class UIBottomTray extends UI2dContext {
             .setBackgroundColor(ui.theme.getPaneInsetColor())
             .setBorderRounding(4)
             .addToContainer(this);
-
-        this.clipView = new UIClipView(ui, lx, UIDeviceBin.PADDING, UIDeviceBin.PADDING, this.rightSection.getContentWidth() - 2*UIDeviceBin.PADDING);
-        this.clipView.addToContainer(this.rightSection);
 
         for (LXChannel channel : lx.engine.getChannels()) {
             addChannel(channel);
@@ -143,9 +138,6 @@ public class UIBottomTray extends UI2dContext {
         if (this.rightSection != null) {
             this.rightSection.setX(deviceX);
             this.rightSection.setWidth(getContentWidth() - deviceX - PADDING);
-            if (this.clipView != null) {
-                this.clipView.setWidth(this.rightSection.getWidth() - 2*UIDeviceBin.PADDING);
-            }
             for (UIDeviceBin deviceBin : this.mutableDeviceBins.values()) {
                 deviceBin.setWidth(this.rightSection.getContentWidth() - 2*UIDeviceBin.PADDING);
             }

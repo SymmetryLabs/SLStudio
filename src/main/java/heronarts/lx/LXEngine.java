@@ -37,7 +37,6 @@ import heronarts.lx.blend.LightestBlend;
 import heronarts.lx.blend.MultiplyBlend;
 import heronarts.lx.blend.NormalBlend;
 import heronarts.lx.blend.SubtractBlend;
-import heronarts.lx.clip.LXClip;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.osc.LXOscComponent;
@@ -93,8 +92,6 @@ import static heronarts.lx.PolyBuffer.Space.SRGB8;
  * The result of all this generates a display buffer of node values.
  */
 public class LXEngine extends LXComponent implements LXOscComponent, LXModulationComponent {
-
-    private static final int MAX_SCENES = 5;
 
     private final LX lx;
 
@@ -162,35 +159,9 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             new EnumParameter<>("Color Space", RGB16)
                     .setDescription("Selects the color space for the engine");
 
-    private final BooleanParameter[] scenes = new BooleanParameter[MAX_SCENES];
-
     public final LXModulationEngine modulation;
 
     private boolean logTimers = false;
-
-    public class FocusedClipParameter extends MutableParameter {
-
-        private LXClip clip = null;
-
-        private FocusedClipParameter() {
-            super("Focused Clip");
-            setDescription("Parameter which indicate the globally focused clip");
-        }
-
-        public FocusedClipParameter setClip(LXClip clip) {
-            if (this.clip != clip) {
-                this.clip = clip;
-                bang();
-            }
-            return this;
-        }
-
-        public LXClip getClip() {
-            return this.clip;
-        }
-    };
-
-    public final FocusedClipParameter focusedClip = new FocusedClipParameter();
 
     private float frameRate = 0;
 
@@ -497,22 +468,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         });
         LX.initTimer.log("Engine: Cue");
 
-        // Scenes
-        for (int i = 0; i < this.scenes.length; ++i) {
-            final int sceneIndex = i;
-            this.scenes[i] = new BooleanParameter("Scene-" + (i+1));
-            addParameter("scene-" + (i+1), this.scenes[i]);
-            this.scenes[i].addListener(new LXParameterListener() {
-                public void onParameterChanged(LXParameter p) {
-                    BooleanParameter scene = (BooleanParameter) p;
-                    if (scene.isOn()) {
-                        launchScene(sceneIndex);
-                        scene.setValue(false);
-                    }
-                }
-            });
-        }
-
         // Master output
         this.output = new Output(lx);
         LX.initTimer.log("Engine: Output");
@@ -536,17 +491,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         // Script engine
         this.script = new LXScriptEngine(lx);
         LX.initTimer.log("Engine: Script");
-
-        // Listener
-        this.focusedChannel.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter p) {
-                LXClip clip = focusedClip.getClip();
-                if (clip != null && clip.bus != getFocusedChannel()) {
-                    focusedClip.setClip(null);
-                }
-            }
-        });
-        LX.initTimer.log("Engine: Focus Listener");
 
         // Parameters
         addParameter("crossfader", this.crossfader);
@@ -952,47 +896,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         LXChannel chan = addChannel();
         chan.load(lx, LXSerializable.Utils.toObject(lx, channel));
         chan.label.setValue(chan.label.getString() + " copy");
-    }
-
-    /**
-     * Get the boolean parameter that launches a scene
-     *
-     * @param index
-     * @return
-     */
-    public BooleanParameter getScene(int index) {
-        return this.scenes[index];
-    }
-
-    public LXEngine launchScene(int index) {
-        LXClip clip;
-        for (LXChannel channel : this.lx.engine.channels) {
-            clip = channel.getClip(index);
-            if (clip != null) {
-                clip.trigger();
-            }
-        }
-        clip = this.masterChannel.getClip(index);
-        if (clip != null) {
-            clip.trigger();
-        }
-        return this;
-    }
-
-    public LXEngine stopClips() {
-        for (LXChannel channel : this.lx.engine.channels) {
-            for (LXClip clip : channel.clips) {
-                if (clip != null) {
-                    clip.stop();
-                }
-            }
-        }
-        for (LXClip clip : this.masterChannel.clips) {
-            if (clip != null) {
-                clip.stop();
-            }
-        }
-        return this;
     }
 
     public void setPatterns(LXPattern[] patterns) {

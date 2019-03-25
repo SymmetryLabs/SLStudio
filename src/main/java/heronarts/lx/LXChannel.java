@@ -21,8 +21,6 @@
 package heronarts.lx;
 
 import heronarts.lx.blend.LXBlend;
-import heronarts.lx.clip.LXChannelClip;
-import heronarts.lx.clip.LXClip;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXShortMessage;
@@ -451,11 +449,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
     public final int getIndex() {
         return this.index;
-    }
-
-    @Override
-    protected LXClip constructClip(int index) {
-        return new LXChannelClip(this.lx, this, index);
     }
 
     public final List<LXPattern> getPatterns() {

@@ -139,11 +139,6 @@ public class UIChannelStripControls extends UIMixerStripControls {
             .setActiveColor(ui.theme.getAttentionColor())
             .setParameter(channel.cueActive);
 
-        final UIButton armButton = new UIButton(bxp, yp + 20, 28, 16)
-        .setIcon(ui.theme.iconArm)
-        .setActiveColor(ui.theme.getRecordingColor())
-        .setParameter(channel.arm);
-
         // MIDI
         yp = 108;
         final UIButton midiButton =
@@ -177,7 +172,6 @@ public class UIChannelStripControls extends UIMixerStripControls {
         // Add them all
         activeButton.addToContainer(this);
         cueButton.addToContainer(this);
-        armButton.addToContainer(this);
         fader.addToContainer(this);
         midiButton.addToContainer(this);
         midiChannel.addToContainer(this);
