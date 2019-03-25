@@ -16,7 +16,6 @@ import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.shows.tree.config.*;
 import com.symmetrylabs.shows.tree.ui.*;
-import com.symmetrylabs.shows.tree.ui.UIScheduler;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
 
@@ -303,9 +302,6 @@ public class KalpaShow extends TreeShow {
     public void setupLx(SLStudioLX lx) {
         super.setupLx(lx);
         //lx.engine.framesPerSecond.setValue(30);
-
-        lx.engine.registerComponent("scheduleControls", ScheduleControls.getInstance(lx));
-        lx.engine.addLoopTask(ScheduleControls.getInstance(lx));
 
         final String[] ipAddresses = new String[] {
             "10.200.1.100", "10.200.1.101", "10.200.1.102", "10.200.1.103", "10.200.1.104",

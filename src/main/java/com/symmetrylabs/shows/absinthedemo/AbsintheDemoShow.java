@@ -16,7 +16,6 @@ import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.shows.tree.config.*;
 import com.symmetrylabs.shows.tree.ui.*;
-import com.symmetrylabs.shows.tree.ui.UIScheduler;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
 
@@ -146,7 +145,7 @@ public class AbsintheDemoShow extends TreeShow {
           }
 
           // Create an LXDatagramOutput to own these packets
-          LXDatagramOutput datagramOutput = new LXDatagramOutput(lx); 
+          LXDatagramOutput datagramOutput = new LXDatagramOutput(lx);
           for (OPCDatagram datagram : datagrams) {
             datagramOutput.addDatagram(datagram);
           }
@@ -166,6 +165,5 @@ public class AbsintheDemoShow extends TreeShow {
         // UITreeLeaves uiTreeLeaves = new UITreeLeaves(lx, applet, (TreeModel) lx.model);
         // ui.preview.addComponent(uiTreeLeaves);
         // new UITreeControls(ui, uiTreeStructure, uiTreeLeaves).setExpanded(false).addToContainer(ui.leftPane.global);
-        // new UIScheduler(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.utility);
     }
 }

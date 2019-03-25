@@ -17,7 +17,6 @@ import com.symmetrylabs.slstudio.showplugins.XfadeTimer;
 import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.shows.tree.config.*;
 import com.symmetrylabs.shows.tree.ui.*;
-import com.symmetrylabs.shows.tree.ui.UIScheduler;
 import heronarts.lx.LX;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
