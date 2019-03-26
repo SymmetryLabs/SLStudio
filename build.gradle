@@ -25,7 +25,7 @@ apply plugin: 'com.palantir.docker'
 apply plugin: 'edu.sc.seis.launch4j'
 
 group = 'com.symmetrylabs'
-version = '1.0'
+version = '1.0.1'
 sourceCompatibility = 1.8
 
 mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
@@ -192,4 +192,22 @@ runUIv2.mustRunAfter genPrebuiltSlimgui
 task genUiHeader(type: Exec) {
     description "generates the JNI header file for the UI class wrapper around slimgui"
     commandLine "javac", "-h", "slimgui/src/main/cpp/", "src/main/java/com/symmetrylabs/slstudio/ui/v2/UI.java"
+}
+
+task dist(type: Zip) {
+  dependsOn ":shadowJar"
+  from(".") {
+    include 'libs/**'
+    include 'shows/**'
+    include 'src/main/resources/**'
+  }
+  from("scripts") {
+    include 'SLStudio.bat'
+    include 'SLStudio.sh'
+    filter { line -> line.replace('$VERSION', project.version) }
+  }
+  from(shadowJar) {
+    include "*"
+  }
+  into "SLStudio-" + project.version
 }
