@@ -147,9 +147,6 @@ public class AbsintheShow extends TreeShow {
         lx.engine.addLoopTask(new LXLoopTask() {
             @Override
             public void loop(double v) {
-                if (lx.engine.output.brightness.getValuef() > 0.9f) {
-                    lx.engine.output.brightness.setValue(0.9f);
-                }
                 if (lx.engine.framesPerSecond.getValuef() != 60) {
                     lx.engine.framesPerSecond.setValue(60);
                 }
@@ -159,6 +156,7 @@ public class AbsintheShow extends TreeShow {
         try {
             for (TreeModel.Branch branch : tree.getBranches()) {
                 AssignableTenereController controller = new AssignableTenereController(lx, branch);
+                controller.brightness.setValue(0.7);
                 controllers.put(branch, controller);
                 lx.addOutput(controller);
             }
