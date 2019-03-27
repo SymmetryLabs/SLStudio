@@ -1263,20 +1263,35 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         // Clear all the modulation
         this.modulation.clear();
 
-        // Remove all channels
-        for (int i = this.mutableLooks.size() - 1; i >= 0; --i) {
-            removeLook(this.mutableLooks.get(i), false);
-        }
         // Add the new channels
         if (obj.has(KEY_LOOKS)) {
             JsonArray looksArray = obj.getAsJsonArray(KEY_LOOKS);
-            for (JsonElement lookElement : looksArray) {
-                LXLook look = addLook();
-                look.load(lx, (JsonObject) lookElement);
+            /* avoid creating new look objects if we only have the one, as SLStudio does
+               not deal well at all with the look list changing. */
+            if (looksArray.size() == 1 && looks.size() == 1) {
+                getFocusedLook().load(lx, (JsonObject) looksArray.get(0));
+            } else {
+                for (int i = this.mutableLooks.size() - 1; i >= 0; --i) {
+                    removeLook(this.mutableLooks.get(i), false);
+                }
+                for (JsonElement lookElement : looksArray) {
+                    LXLook look = addLook();
+                    look.load(lx, (JsonObject) lookElement);
+                }
             }
         } else {
-            addLook();
-            //addChannel().fader.setValue(1);
+            /* reuse look object to not confuse SLStudio */
+            if (looks.size() == 1) {
+                looks.get(0).load(lx, new JsonObject());
+            } else {
+                /* but if we have more than one, just delete all of them
+                   and add a fresh one, SLStudio already wasn't doing well
+                   with what was open. */
+                for (int i = this.mutableLooks.size() - 1; i >= 0; --i) {
+                    removeLook(this.mutableLooks.get(i), false);
+                }
+                addLook();
+            }
         }
 
         // Master channel settings
