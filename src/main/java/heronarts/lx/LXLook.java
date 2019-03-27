@@ -71,36 +71,30 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
             new ObjectParameter<LXBlend>("Crossfader Blend", lx.engine.crossfaderBlends)
             .setDescription("Sets the blend mode used for the master crossfader");
 
-        cueA.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter p) {
-                if (cueA.isOn()) {
-                    cueB.setValue(false);
-                    lx.palette.cue.setValue(false);
-                    for (LXChannel channel : mutableChannels) {
-                        channel.cueActive.setValue(false);
-                    }
+        cueA.addListener(p -> {
+            if (cueA.isOn()) {
+                cueB.setValue(false);
+                lx.palette.cue.setValue(false);
+                for (LXChannel channel : mutableChannels) {
+                    channel.cueActive.setValue(false);
                 }
             }
         });
-        cueB.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter p) {
-                if (cueB.isOn()) {
-                    cueA.setValue(false);
-                    lx.palette.cue.setValue(false);
-                    for (LXChannel channel : mutableChannels) {
-                        channel.cueActive.setValue(false);
-                    }
+        cueB.addListener(p -> {
+            if (cueB.isOn()) {
+                cueA.setValue(false);
+                lx.palette.cue.setValue(false);
+                for (LXChannel channel : mutableChannels) {
+                    channel.cueActive.setValue(false);
                 }
             }
         });
-        lx.palette.cue.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter p) {
-                if (lx.palette.cue.isOn()) {
-                    cueA.setValue(false);
-                    cueB.setValue(false);
-                    for (LXChannel channel : mutableChannels) {
-                        channel.cueActive.setValue(false);
-                    }
+        lx.palette.cue.addListener(p -> {
+            if (lx.palette.cue.isOn()) {
+                cueA.setValue(false);
+                cueB.setValue(false);
+                for (LXChannel channel : mutableChannels) {
+                    channel.cueActive.setValue(false);
                 }
             }
         });
