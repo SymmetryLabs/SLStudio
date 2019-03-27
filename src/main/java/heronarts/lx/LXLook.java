@@ -54,6 +54,8 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
         super(lx, label);
         this.lx = lx;
 
+        addParameter("focusedChannel", focusedChannel);
+
         addBlend = new AddBlend(lx);
 
         // An all-black buffer is used as the initial base for blending.
