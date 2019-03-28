@@ -202,10 +202,10 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_separator
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    spacing
- * Signature: ()V
+ * Signature: (FF)V
  */
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_spacing
-  (JNIEnv *, jclass);
+  (JNIEnv *, jclass, jfloat, jfloat);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI

@@ -350,8 +350,8 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_separator(JNIEnv *, jclass) {
 }
 
 JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_spacing(JNIEnv *, jclass) {
-    ImGui::Dummy(ImVec2(5, 5));
+Java_com_symmetrylabs_slstudio_ui_v2_UI_spacing(JNIEnv *, jclass, jfloat w, jfloat h) {
+    ImGui::Dummy(ImVec2(w, h));
 }
 
 JNIEXPORT jboolean JNICALL

@@ -536,7 +536,14 @@ public class UI {
      * and moves to the next row.
      */
     public static native void separator();
-    public static native void spacing();
+
+    /**
+     * Inserts an invisible spacer.
+     *
+     * @param w the width of the spacer, in pixels
+     * @param h the height of the spacer, in pixels
+     */
+    public static native void spacing(float w, float h);
 
     public static boolean beginChild(String id, boolean border, int flags) {
         return beginChild(id, border, flags, 0, 0);

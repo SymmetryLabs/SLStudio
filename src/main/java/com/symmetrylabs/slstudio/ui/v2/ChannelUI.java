@@ -18,7 +18,7 @@ public class ChannelUI {
                 LXWarp warp = warps.get(i);
                 String warpName = String.format("%s##%s/warp/%d", warp.getClass().getSimpleName(), chanName, i);
 
-                UI.spacing();
+                UI.spacing(5, 5);
                 if (warp.enabled.getValueb()) {
                     UI.pushColor(UI.COLOR_HEADER, UIConstants.BLUE);
                     UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.BLUE);
@@ -36,7 +36,7 @@ public class ChannelUI {
                     new ComponentUI(lx, warp).draw();
                 }
             }
-            UI.spacing();
+            UI.spacing(5, 5);
         }
     }
 
@@ -47,7 +47,7 @@ public class ChannelUI {
                 LXEffect eff = effects.get(i);
                 String effName = String.format("%s##%s/effect/%d", eff.getClass().getSimpleName(), chanName, i);
 
-                UI.spacing();
+                UI.spacing(5, 5);
                 if (eff.enabled.getValueb()) {
                     UI.pushColor(UI.COLOR_HEADER, UIConstants.BLUE);
                     UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.BLUE);
@@ -69,7 +69,7 @@ public class ChannelUI {
     }
 
     public static void drawWepPopup(LX lx, LXBus bus, WepUi wepUi) {
-        UI.spacing();
+        UI.spacing(5, 5);
         if (UI.button("+")) {
             lx.engine.setFocusedChannel(bus);
             UI.setNextWindowContentSize(300, 600);
@@ -97,7 +97,7 @@ public class ChannelUI {
             String patName = pat.getClass().getSimpleName();
             String id = String.format("%s / %s", chanName, patName);
 
-            UI.spacing();
+            UI.spacing(5, 5);
 
             boolean isActive = active == i;
             boolean isMidiFocused = pat.controlSurfaceSemaphore.getValue() > 0;
@@ -140,7 +140,7 @@ public class ChannelUI {
             }
         }
 
-        UI.spacing();
+        UI.spacing(5, 5);
         drawEffects(lx, chanName, chan);
         drawWepPopup(lx, chan, wepUi);
     }
