@@ -529,6 +529,12 @@ public class UI {
      */
     public static native void endTable();
 
+    /**
+     * Draw a horizontal separator.
+     *
+     * If a table widget is active, this draws a line below the current row
+     * and moves to the next row.
+     */
     public static native void separator();
     public static native void spacing();
 
