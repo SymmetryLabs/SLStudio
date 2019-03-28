@@ -20,9 +20,9 @@ public class ChannelUI {
 
                 UI.spacing();
                 if (warp.enabled.getValueb()) {
-                    UI.pushColor(UI.COLOR_HEADER, UI.BLUE);
-                    UI.pushColor(UI.COLOR_HEADER_ACTIVE, UI.BLUE);
-                    UI.pushColor(UI.COLOR_HEADER_HOVERED, UI.BLUE_HOVER);
+                    UI.pushColor(UI.COLOR_HEADER, UIConstants.BLUE);
+                    UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.BLUE);
+                    UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.BLUE_HOVER);
                 }
                 UI.CollapseResult section = UI.collapsibleSection(warpName, true, UI.TREE_FLAG_DEFAULT_OPEN);
                 if (warp.enabled.getValueb()) {
@@ -49,9 +49,9 @@ public class ChannelUI {
 
                 UI.spacing();
                 if (eff.enabled.getValueb()) {
-                    UI.pushColor(UI.COLOR_HEADER, UI.BLUE);
-                    UI.pushColor(UI.COLOR_HEADER_ACTIVE, UI.BLUE);
-                    UI.pushColor(UI.COLOR_HEADER_HOVERED, UI.BLUE_HOVER);
+                    UI.pushColor(UI.COLOR_HEADER, UIConstants.BLUE);
+                    UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.BLUE);
+                    UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.BLUE_HOVER);
                 }
                 UI.CollapseResult section = UI.collapsibleSection(effName, true, UI.TREE_FLAG_DEFAULT_OPEN);
                 if (eff.enabled.getValueb()) {
@@ -102,17 +102,17 @@ public class ChannelUI {
             boolean isActive = active == i;
             boolean isMidiFocused = pat.controlSurfaceSemaphore.getValue() > 0;
             if (isActive && isMidiFocused) {
-                UI.pushColor(UI.COLOR_HEADER, UI.PURPLE);
-                UI.pushColor(UI.COLOR_HEADER_ACTIVE, UI.PURPLE);
-                UI.pushColor(UI.COLOR_HEADER_HOVERED, UI.PURPLE_HOVER);
+                UI.pushColor(UI.COLOR_HEADER, UIConstants.PURPLE);
+                UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.PURPLE);
+                UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.PURPLE_HOVER);
             } else if (isMidiFocused) {
-                UI.pushColor(UI.COLOR_HEADER, UI.RED);
-                UI.pushColor(UI.COLOR_HEADER_ACTIVE, UI.RED);
-                UI.pushColor(UI.COLOR_HEADER_HOVERED, UI.RED_HOVER);
+                UI.pushColor(UI.COLOR_HEADER, UIConstants.RED);
+                UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.RED);
+                UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.RED_HOVER);
             } else if (isActive) {
-                UI.pushColor(UI.COLOR_HEADER, UI.BLUE);
-                UI.pushColor(UI.COLOR_HEADER_ACTIVE, UI.BLUE);
-                UI.pushColor(UI.COLOR_HEADER_HOVERED, UI.BLUE_HOVER);
+                UI.pushColor(UI.COLOR_HEADER, UIConstants.BLUE);
+                UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.BLUE);
+                UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.BLUE_HOVER);
             }
             UI.CollapseResult section = UI.collapsibleSection(patName + "##pattern-" + i, true, UI.TREE_FLAG_DEFAULT_OPEN);
             if (isActive || isMidiFocused) {

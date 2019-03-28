@@ -3,46 +3,104 @@ package com.symmetrylabs.slstudio.ui.v2;
 import java.nio.ByteBuffer;
 
 
+/**
+ * The Java half of "slimgui", the Symmetry Labs wrapper around Dear Imgui, an immediate-mode GUI library
+ *
+ * Dear Imgui is the industry-standard implementation of the immediate-mode GUI
+ * (IMGUI) UI paradigm. IMGUI is probably not the UI style that you're used to,
+ * but once you're used to it it feels pretty good: fewer memory leaks, fewer
+ * logic errors, no listeners at all. For more information about IMGUI and Dear
+ * Imgui, <a href="https://github.com/ocornut/imgui/blob/master/docs/README.md">the readme
+ * of Dear Imgui</a> has a good introduction to immediate-mode GUIs and Dear
+ * Imgui.
+ */
 public class UI {
+    /** Marks a tree node as a leaf node (a node that can be clicked but not expanded) */
     public static int TREE_FLAG_LEAF;
+    /**
+     * If this tree flag is set, the subtree rooted at the given tree node will default to being expanded.
+     * Without this flag, the default is for all tree nodes to start collapsed.
+     */
     public static int TREE_FLAG_DEFAULT_OPEN;
+    /**
+     * If set, the given tree node is displayed with a background showing it as selected.
+     * This is most useful on collapsable headers, which are technically also tree nodes.
+     */
     public static int TREE_FLAG_SELECTED;
 
+    /** Allow horizontal scrolling in a window */
     public static int WINDOW_HORIZ_SCROLL;
+    /** Prevent the resize handle from displaying, and prevents resizing from window edge */
     public static int WINDOW_NO_RESIZE;
+    /** Locks a window in place (although it can still be moved using {@link setNextWindowPosition}) */
     public static int WINDOW_NO_MOVE;
+    /** Removes the title bar from the window */
     public static int WINDOW_NO_TITLE_BAR;
+    /** Prevents the window from both being a dock target and from being docked to another target */
     public static int WINDOW_NO_DOCKING;
+    /** Skips drawing the background of the window, which has the effect of giving it a transparent background */
     public static int WINDOW_NO_BACKGROUND;
+    /** If set, the window is resized to perfectly fit its contents on every frame. Should be used with {@link WINDOW_NO_RESIZE}. */
     public static int WINDOW_ALWAYS_AUTO_RESIZE;
+    /** If set, removes all decoration from the window (borders, title bar, scroll bars, resize handle) */
     public static int WINDOW_NO_DECORATION;
+    /** Prevents mouse wheel scrolling on a window. Does not prevent scrollbar from showing up, nor does it prevent scrolling using the scrollbar. */
     public static int WINDOW_NO_SCROLL_WITH_MOUSE;
+    /** If set, the horizontal scrollbar is always shown, even when not needed. */
     public static int WINDOW_FORCE_HORIZ_SCROLL;
+    /** Hides all scrollbars. */
     public static int WINDOW_NO_SCROLLBAR;
 
-    public static int DEFAULT_WIDTH = 250;
-
+    /**
+     * Used to set the background of standard widgets (sliders, input boxes, etc)
+     * @see pushColor(int, int)
+     */
     public static int COLOR_WIDGET;
+    /**
+     * Used to set the background of standard widgets (sliders, input boxes, etc) when being mouse-overed
+     * @see pushColor(int, int)
+     */
     public static int COLOR_WIDGET_HOVERED;
+    /**
+     * Sets the background color of collapsible header widgets when not being mouse-overed or mouse-downed
+     * @see pushColor(int, int)
+     */
     public static int COLOR_HEADER;
+    /**
+     * Sets the background color of collapsible header widgets when mouse-downed
+     * @see pushColor(int, int)
+     */
     public static int COLOR_HEADER_ACTIVE;
+    /**
+     * Sets the background color of collapsible header widgets when mouse-overed
+     * @see pushColor(int, int)
+     */
     public static int COLOR_HEADER_HOVERED;
+    /**
+     * Sets the background color of buttons when not being mouse-overed or mouse-downed
+     * @see pushColor(int, int)
+     */
     public static int COLOR_BUTTON;
+    /**
+     * Sets the background color of buttons when mouse-downed
+     * @see pushColor(int, int)
+     */
     public static int COLOR_BUTTON_ACTIVE;
+    /**
+     * Sets the background color of buttons when mouse-overed
+     * @see pushColor(int, int)
+     */
     public static int COLOR_BUTTON_HOVERED;
+    /**
+     * Sets the color of window borders
+     * @see pushColor(int, int)
+     */
     public static int COLOR_WINDOW_BORDER;
 
     public static int COND_ALWAYS;
     public static int COND_ONCE;
     public static int COND_FIRST_USE_EVER;
     public static int COND_APPEARING;
-
-    public static final int BLUE = 0xFF0096C8;
-    public static final int BLUE_HOVER = 0xFF2EB5E1;
-    public static final int RED = 0xFFF95951;
-    public static final int RED_HOVER = 0xFFFA7770;
-    public static final int PURPLE = 0xFF930FA5;
-    public static final int PURPLE_HOVER = 0xFFA63AB5;
 
     public static class CollapseResult {
         /** true if the collapsable section should be open (i.e., client should draw the contents of the section) */
@@ -111,7 +169,7 @@ public class UI {
      * @param name the font name
      * @param ttfData the font data in TTF or OTF format
      * @param fontSize the font size, in pixels, that we want to compile the font at
-     * @returns an opaque handle that can be used to refer to the font
+     * @return an opaque handle that can be used to refer to the font
      */
     public static native long addFont(String name, ByteBuffer ttfData, float fontSize);
 

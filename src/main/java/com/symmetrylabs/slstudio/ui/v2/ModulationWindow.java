@@ -39,9 +39,9 @@ public class ModulationWindow extends CloseableWindow {
 
     protected void envelope(MultiStageEnvelope env) {
         if (env.running.isOn()) {
-            UI.pushColor(UI.COLOR_HEADER, UI.BLUE);
-            UI.pushColor(UI.COLOR_HEADER_ACTIVE, UI.BLUE);
-            UI.pushColor(UI.COLOR_HEADER_HOVERED, UI.BLUE_HOVER);
+            UI.pushColor(UI.COLOR_HEADER, UIConstants.BLUE);
+            UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.BLUE);
+            UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.BLUE_HOVER);
         }
         UI.CollapseResult cr = UI.collapsibleSection(env.getLabel(), true);
         if (env.running.isOn()) {

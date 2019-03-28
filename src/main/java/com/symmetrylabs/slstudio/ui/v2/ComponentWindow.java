@@ -22,7 +22,7 @@ public class ComponentWindow extends CloseableWindow {
 
     @Override
     protected void windowSetup() {
-        UI.setNextWindowDefaultToCursor(UI.DEFAULT_WIDTH, 350);
+        UI.setNextWindowDefaultToCursor(UIConstants.DEFAULT_WINDOW_WIDTH, 350);
     }
 
     @Override

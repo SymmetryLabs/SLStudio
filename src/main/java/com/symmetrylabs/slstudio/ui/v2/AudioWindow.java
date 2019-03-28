@@ -24,7 +24,7 @@ public class AudioWindow extends CloseableWindow {
 
     @Override
     protected void windowSetup() {
-        UI.setNextWindowDefaults(25, 500, UI.DEFAULT_WIDTH, 300);
+        UI.setNextWindowDefaults(25, 500, UIConstants.DEFAULT_WINDOW_WIDTH, 300);
     }
 
     @Override

@@ -1,13 +1,14 @@
 package com.symmetrylabs.shows.cubes;
 
+import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.ui.v2.CloseableWindow;
+import com.symmetrylabs.slstudio.ui.v2.ComponentUI;
 import com.symmetrylabs.slstudio.ui.v2.ParameterUI;
 import com.symmetrylabs.slstudio.ui.v2.UI;
+import com.symmetrylabs.slstudio.ui.v2.UIConstants;
 import heronarts.lx.LX;
-import com.symmetrylabs.slstudio.ApplicationState;
 import java.util.Collection;
-import com.symmetrylabs.slstudio.ui.v2.ComponentUI;
 
 public class CubeOutputWindow extends CloseableWindow {
     private final LX lx;
@@ -58,13 +59,13 @@ public class CubeOutputWindow extends CloseableWindow {
 
             boolean mapped = model.getCubeById(cc.id) != null;
             if (mapped) {
-                UI.pushColor(UI.COLOR_HEADER, UI.BLUE);
-                UI.pushColor(UI.COLOR_HEADER_ACTIVE, UI.BLUE);
-                UI.pushColor(UI.COLOR_HEADER_HOVERED, UI.BLUE_HOVER);
+                UI.pushColor(UI.COLOR_HEADER, UIConstants.BLUE);
+                UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.BLUE);
+                UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.BLUE_HOVER);
             } else {
-                UI.pushColor(UI.COLOR_HEADER, UI.RED);
-                UI.pushColor(UI.COLOR_HEADER_ACTIVE, UI.RED);
-                UI.pushColor(UI.COLOR_HEADER_HOVERED, UI.RED_HOVER);
+                UI.pushColor(UI.COLOR_HEADER, UIConstants.RED);
+                UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.RED);
+                UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.RED_HOVER);
             }
             UI.CollapseResult cr = UI.collapsibleSection(cc.id, false);
             UI.popColor(3);

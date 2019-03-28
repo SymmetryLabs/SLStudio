@@ -26,7 +26,7 @@ public class WepWindow extends CloseableWindow {
 
     @Override
     protected void windowSetup() {
-        UI.setNextWindowDefaults(25, 25, UI.DEFAULT_WIDTH, 450);
+        UI.setNextWindowDefaults(25, 25, UIConstants.DEFAULT_WINDOW_WIDTH, 450);
     }
 
     @Override

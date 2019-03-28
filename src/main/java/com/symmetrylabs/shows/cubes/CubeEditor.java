@@ -5,6 +5,7 @@ import static com.symmetrylabs.shows.cubes.CubesModel.DoubleControllerCube;
 
 import com.symmetrylabs.slstudio.ui.v2.CloseableWindow;
 import com.symmetrylabs.slstudio.ui.v2.UI;
+import com.symmetrylabs.slstudio.ui.v2.UIConstants;
 import heronarts.lx.LX;
 import heronarts.lx.transform.LXTransform;
 import java.util.List;
@@ -22,7 +23,7 @@ public class CubeEditor extends CloseableWindow {
 
     @Override
     protected void windowSetup() {
-        UI.setNextWindowDefaults(300, 50, UI.DEFAULT_WIDTH, 500);
+        UI.setNextWindowDefaults(300, 50, UIConstants.DEFAULT_WINDOW_WIDTH, 500);
     }
 
     @Override

@@ -122,8 +122,8 @@ public class ParameterUI {
 
     public static boolean toggle(String label, boolean active, boolean important, float w) {
         if (active) {
-            UI.pushColor(UI.COLOR_BUTTON, important ? UI.RED : UI.BLUE);
-            UI.pushColor(UI.COLOR_BUTTON_HOVERED, important ? UI.RED_HOVER : UI.BLUE_HOVER);
+            UI.pushColor(UI.COLOR_BUTTON, important ? UIConstants.RED : UIConstants.BLUE);
+            UI.pushColor(UI.COLOR_BUTTON_HOVERED, important ? UIConstants.RED_HOVER : UIConstants.BLUE_HOVER);
         }
         boolean flip = UI.button(label, w, 0);
         if (active) {
@@ -150,8 +150,8 @@ public class ParameterUI {
         boolean res;
         if (p.getMode() == BooleanParameter.Mode.TOGGLE) {
             if (important && start) {
-                UI.pushColor(UI.COLOR_WIDGET, UI.RED);
-                UI.pushColor(UI.COLOR_WIDGET_HOVERED, UI.RED_HOVER);
+                UI.pushColor(UI.COLOR_WIDGET, UIConstants.RED);
+                UI.pushColor(UI.COLOR_WIDGET_HOVERED, UIConstants.RED_HOVER);
             }
             res = UI.checkbox(getID(p), start);
             if (important && start) {
