@@ -136,8 +136,6 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
     env->SetStaticIntField(cls, fid, ImGuiCond_Always);
     fid = env->GetStaticFieldID(cls, "COND_ONCE", "I");
     env->SetStaticIntField(cls, fid, ImGuiCond_Once);
-    fid = env->GetStaticFieldID(cls, "COND_FIRST_USE_EVER", "I");
-    env->SetStaticIntField(cls, fid, ImGuiCond_FirstUseEver);
     fid = env->GetStaticFieldID(cls, "COND_APPEARING", "I");
     env->SetStaticIntField(cls, fid, ImGuiCond_Appearing);
 
@@ -331,18 +329,18 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_sameLine(JNIEnv *, jclass) {
 }
 
 JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_beginColumns(JNIEnv *env, jclass, jint num, jstring jlabel) {
+Java_com_symmetrylabs_slstudio_ui_v2_UI_beginTable(JNIEnv *env, jclass, jint num, jstring jlabel) {
     JniString label(env, jlabel);
     ImGui::Columns(num, label);
 }
 
 JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_nextColumn(JNIEnv *, jclass) {
+Java_com_symmetrylabs_slstudio_ui_v2_UI_nextCell(JNIEnv *, jclass) {
     ImGui::NextColumn();
 }
 
 JNIEXPORT void JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_endColumns(JNIEnv *, jclass) {
+Java_com_symmetrylabs_slstudio_ui_v2_UI_endTable(JNIEnv *, jclass) {
     ImGui::Columns(1);
 }
 

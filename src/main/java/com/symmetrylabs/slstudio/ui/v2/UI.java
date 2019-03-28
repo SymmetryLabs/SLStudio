@@ -445,24 +445,89 @@ public class UI {
     public static native void setNextWindowSize(float w, float h);
 
     /**
-     * Open a new window
+     * Open a new window with the default flag set
      *
-     * @param label the title of the window. Should be constant frame-to-frame and be unique amongst visible windows.
+     * Must be paired with a call to {@link end()} when done drawing the
+     * contents of the window.
+     *
+     * @param label the title and ID of the window (see note on IDs in class javadoc).
      */
     public static void begin(String label) {
         begin(label, 0);
     }
+
+    /**
+     * Open a new window
+     *
+     * Must be paired with a call to {@link end()} when done drawing the
+     * contents of the window.
+     *
+     * @param label the title and ID of the window (see note on IDs in class javadoc).
+     * @param flags a bitset combination of the {@code WINDOW_} flags on this class
+     */
     public static native void begin(String label, int flags);
+
+    /**
+     * Open a new window that can be closed.
+     *
+     * Must be paired with a call to {@link end()} when done drawing the
+     * contents of the window.
+     *
+     * @param label the title and ID of the window (see note on IDs in class javadoc).
+     * @return true if the window is still open, false if the user requested to close the window
+     */
     public static boolean beginClosable(String label) {
         return beginClosable(label, 0);
     }
+
+    /**
+     * Open a new window that can be closed.
+     *
+     * Must be paired with a call to {@link end()} when done drawing the
+     * contents of the window.
+     *
+     * @param label the title and ID of the window (see note on IDs in class javadoc).
+     * @param flags a bitset combination of the {@code WINDOW_} flags on this class
+     * @return true if the window is still open, false if the user requested to close the window
+     */
     public static native boolean beginClosable(String label, int flags);
+
+    /**
+     * Finish drawing a window.
+     */
     public static native void end();
+
+    /**
+     * Requests that the next widget be drawn on the same line as the previous widget.
+     *
+     * The default behavior is for widgets to each be drawn on their own line.
+     */
     public static native void sameLine();
 
-    public static native void beginColumns(int num, String id);
-    public static native void nextColumn();
-    public static native void endColumns();
+    /**
+     * Starts a table with the given number of columns.
+     *
+     * Columns are user-resizable and default to all being equal width.
+     * Must be paired with a corresponding call to {@link endTable()}.
+     * Note that this wraps what Dear ImGui calls "columns", but the widget
+     * is truly a table widget and the columns name is confusing, given the
+     * behavior of {@code NextColumn()} (what we call {@link nextCell()}).
+     *
+     * @param num the number of columns
+     * @param id a unique ID for the column view
+     */
+    public static native void beginTable(int num, String id);
+    /**
+     * Moves to the next cell in the table.
+     *
+     * Cells run left-to-right then top-to-bottom. If we're currently in the
+     * last column of a row, this creates a new row.
+     */
+    public static native void nextCell();
+    /**
+     * Finish drawing the current table widget.
+     */
+    public static native void endTable();
 
     public static native void separator();
     public static native void spacing();

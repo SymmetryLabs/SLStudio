@@ -52,9 +52,9 @@ public class CubeEditor extends CloseableWindow {
             boolean updated = false;
             if (c instanceof DoubleControllerCube) {
                 DoubleControllerCube dcc = (DoubleControllerCube) c;
-                UI.beginColumns(2, "cubeIds");
+                UI.beginTable(2, "cubeIds");
                 String idA = UI.inputText(String.format("A##%d", i), dcc.idA);
-                UI.nextColumn();
+                UI.nextCell();
                 String idB = UI.inputText(String.format("B##%d", i), dcc.idB);
                 if (!idA.equals(dcc.idA) || !idB.equals(dcc.idB)) {
                     dcc.id = idA;
@@ -62,7 +62,7 @@ public class CubeEditor extends CloseableWindow {
                     dcc.idB = idB;
                     updated = true;
                 }
-                UI.endColumns();
+                UI.endTable();
             } else {
                 String id = UI.inputText(String.format("id##%d", i), c.id);
                 if (!id.equals(c.id)) {
@@ -70,26 +70,26 @@ public class CubeEditor extends CloseableWindow {
                     updated = true;
                 }
             }
-            UI.beginColumns(3, "cubeEditor");
+            UI.beginTable(3, "cubeEditor");
             float x = UI.floatBox(String.format("x##%d", i), c.x);
             if (x != c.x) {
                 c.x = x;
                 updated = true;
             }
-            UI.nextColumn();
+            UI.nextCell();
             float y = UI.floatBox(String.format("y##%d", i), c.y);
             if (y != c.y) {
                 c.y = y;
                 updated = true;
             }
-            UI.nextColumn();
+            UI.nextCell();
             float z = UI.floatBox(String.format("z##%d", i), c.z);
             if (z != c.z) {
                 c.z = z;
                 updated = true;
             }
-            UI.nextColumn();
-            UI.endColumns();
+            UI.nextCell();
+            UI.endTable();
 
             if (updated) {
                 c.updatePoints(new LXTransform());

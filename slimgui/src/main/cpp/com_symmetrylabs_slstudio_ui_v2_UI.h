@@ -7,18 +7,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#undef com_symmetrylabs_slstudio_ui_v2_UI_BLUE
-#define com_symmetrylabs_slstudio_ui_v2_UI_BLUE -16738616L
-#undef com_symmetrylabs_slstudio_ui_v2_UI_BLUE_HOVER
-#define com_symmetrylabs_slstudio_ui_v2_UI_BLUE_HOVER -13715999L
-#undef com_symmetrylabs_slstudio_ui_v2_UI_RED
-#define com_symmetrylabs_slstudio_ui_v2_UI_RED -435887L
-#undef com_symmetrylabs_slstudio_ui_v2_UI_RED_HOVER
-#define com_symmetrylabs_slstudio_ui_v2_UI_RED_HOVER -362640L
-#undef com_symmetrylabs_slstudio_ui_v2_UI_PURPLE
-#define com_symmetrylabs_slstudio_ui_v2_UI_PURPLE -7139419L
-#undef com_symmetrylabs_slstudio_ui_v2_UI_PURPLE_HOVER
-#define com_symmetrylabs_slstudio_ui_v2_UI_PURPLE_HOVER -5883211L
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    init
@@ -109,14 +97,6 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_popWidth
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
- * Method:    calcWidth
- * Signature: ()F
- */
-JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_calcWidth
-  (JNIEnv *, jclass);
-
-/*
- * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    setNextWindowPosition
  * Signature: (FFFF)V
  */
@@ -189,26 +169,26 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_sameLine
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
- * Method:    beginColumns
+ * Method:    beginTable
  * Signature: (ILjava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginColumns
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginTable
   (JNIEnv *, jclass, jint, jstring);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
- * Method:    nextColumn
+ * Method:    nextCell
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_nextColumn
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_nextCell
   (JNIEnv *, jclass);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
- * Method:    endColumns
+ * Method:    endTable
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endColumns
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endTable
   (JNIEnv *, jclass);
 
 /*
@@ -610,14 +590,6 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endDragDropTarget
  */
 JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_acceptDragDropPayload
   (JNIEnv *, jclass, jstring, jint);
-
-/*
- * Class:     com_symmetrylabs_slstudio_ui_v2_UI
- * Method:    peekDragDropPayload
- * Signature: ()Ljava/lang/Object;
- */
-JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_peekDragDropPayload
-  (JNIEnv *, jclass);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
