@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 /**
  * The Java half of "slimgui", the Symmetry Labs wrapper around Dear Imgui, an immediate-mode GUI library
  *
+ * <p>
  * Dear Imgui is the industry-standard implementation of the immediate-mode GUI
  * (IMGUI) UI paradigm. IMGUI is probably not the UI style that you're used to,
  * but once you're used to it it feels pretty good: fewer memory leaks, fewer
@@ -13,8 +14,49 @@ import java.nio.ByteBuffer;
  * Imgui, <a href="https://github.com/ocornut/imgui/blob/master/docs/README.md">the readme
  * of Dear Imgui</a> has a good introduction to immediate-mode GUIs and Dear
  * Imgui.
+ *
+ * <h2>IDs and labels for windows and widgets</h2>
+ *
+ * <p>
+ * The API of ImGui is stateless, but the library itself is not. The library
+ * tracks UI state for us from frame-to-frame, but to do that it needs stable,
+ * unique IDs for widgets and windows that don't change between frames. Whenever
+ * there's a label or ID parameter to a function, that parameter is also acting
+ * as an ID for the widget or window being drawn.
+ *
+ * <p>
+ * You might want for multiple widgets to have the same label, but just passing the
+ * same label to both would cause ImGui to see them as the same widget. You can
+ * disambiguate the two by appending a unique suffix to both after the string {@code "##"}.
+ * That string tells ImGui that everything after it is part of the identifier but
+ * not part of the label. For example, if you had two patterns you wanted to draw
+ * size parameters for, you could do:
+ *
+ * <pre>
+ *     UI.text("Pattern 1");
+ *     pattern1.size = UI.floatBox("size##pattern1", pattern1.size);
+ *     UI.text("Pattern 2");
+ *     pattern2.size = UI.floatBox("size##pattern2", pattern2.size);
+ * </pre>
+ *
+ * Which would draw two float boxes with the label "size". If you ever see two widgets
+ * whose behavior seem to be strangely linked, it is almost certainly because their
+ * IDs are colliding and you need to disambiguate them. The "##" facility also
+ * lets you make widgets with empty labels, by passing in something like "##actual-id".
+ * IDs are scoped to windows and sometimes to containing widgets; notably, child windows
+ * and trees add new scopes. That means that you can have two buttons with the
+ * ID "Add" as long as they're in different windows.
+ *
+ * <p>
+ * There is also {@code pushId} and {@code popId}, and "###" when lets you change the
+ * label of a widget without changing the ID. For more information about these, please
+ * read the <a href="https://github.com/ocornut/imgui/blob/9a0e71a6ecef4402d0504e3a2c9a05ca705ed5db/imgui.cpp#L658">
+ * primer on the ID stack in the ImGui codebase</a>.
  */
 public class UI {
+    /** This class is static because our UI is stateless! */
+    private UI() {}
+
     /** Marks a tree node as a leaf node (a node that can be clicked but not expanded) */
     public static int TREE_FLAG_LEAF;
     /**
@@ -28,27 +70,93 @@ public class UI {
      */
     public static int TREE_FLAG_SELECTED;
 
-    /** Allow horizontal scrolling in a window */
+    /**
+     * Allow horizontal scrolling in a window.
+     * @see begin(String, int)
+     * @see beginClosable(String, int)
+     * @see beginChild(String, boolean, int)
+     * @see beginPopup(String, boolean, int)
+     */
     public static int WINDOW_HORIZ_SCROLL;
-    /** Prevent the resize handle from displaying, and prevents resizing from window edge */
+    /**
+     * Prevent the resize handle from displaying, and prevents resizing from window edge.
+     * @see begin(String, int)
+     * @see beginClosable(String, int)
+     * @see beginChild(String, boolean, int)
+     * @see beginPopup(String, boolean, int)
+     */
     public static int WINDOW_NO_RESIZE;
-    /** Locks a window in place (although it can still be moved using {@link setNextWindowPosition}) */
+    /**
+     * Locks a window in place (although it can still be moved using {@link setNextWindowPosition}).
+     * @see begin(String, int)
+     * @see beginClosable(String, int)
+     * @see beginChild(String, boolean, int)
+     * @see beginPopup(String, boolean, int)
+     */
     public static int WINDOW_NO_MOVE;
-    /** Removes the title bar from the window */
+    /**
+     * Removes the title bar from the window.
+     * @see begin(String, int)
+     * @see beginClosable(String, int)
+     * @see beginChild(String, boolean, int)
+     * @see beginPopup(String, boolean, int)
+     */
     public static int WINDOW_NO_TITLE_BAR;
-    /** Prevents the window from both being a dock target and from being docked to another target */
+    /**
+     * Prevents the window from both being a dock target and from being docked to another target.
+     * @see begin(String, int)
+     * @see beginClosable(String, int)
+     * @see beginChild(String, boolean, int)
+     * @see beginPopup(String, boolean, int)
+     */
     public static int WINDOW_NO_DOCKING;
-    /** Skips drawing the background of the window, which has the effect of giving it a transparent background */
+    /**
+     * Skips drawing the background of the window, which has the effect of giving it a transparent background.
+     * @see begin(String, int)
+     * @see beginClosable(String, int)
+     * @see beginChild(String, boolean, int)
+     * @see beginPopup(String, boolean, int)
+     */
     public static int WINDOW_NO_BACKGROUND;
-    /** If set, the window is resized to perfectly fit its contents on every frame. Should be used with {@link WINDOW_NO_RESIZE}. */
+    /**
+     * If set, the window is resized to perfectly fit its contents on every frame. Should be used with {@link WINDOW_NO_RESIZE}.
+     * @see begin(String, int)
+     * @see beginClosable(String, int)
+     * @see beginChild(String, boolean, int)
+     * @see beginPopup(String, boolean, int)
+     */
     public static int WINDOW_ALWAYS_AUTO_RESIZE;
-    /** If set, removes all decoration from the window (borders, title bar, scroll bars, resize handle) */
+    /**
+     * If set, removes all decoration from the window (borders, title bar, scroll bars, resize handle).
+     * @see begin(String, int)
+     * @see beginClosable(String, int)
+     * @see beginChild(String, boolean, int)
+     * @see beginPopup(String, boolean, int)
+     */
     public static int WINDOW_NO_DECORATION;
-    /** Prevents mouse wheel scrolling on a window. Does not prevent scrollbar from showing up, nor does it prevent scrolling using the scrollbar. */
+    /**
+     * Prevents mouse wheel scrolling on a window. Does not prevent scrollbar from showing up, nor does it prevent scrolling using the scrollbar.
+     * @see begin(String, int)
+     * @see beginClosable(String, int)
+     * @see beginChild(String, boolean, int)
+     * @see beginPopup(String, boolean, int)
+     */
     public static int WINDOW_NO_SCROLL_WITH_MOUSE;
-    /** If set, the horizontal scrollbar is always shown, even when not needed. */
+    /**
+     * If set, the horizontal scrollbar is always shown, even when not needed.
+     * @see begin(String, int)
+     * @see beginClosable(String, int)
+     * @see beginChild(String, boolean, int)
+     * @see beginPopup(String, boolean, int)
+     */
     public static int WINDOW_FORCE_HORIZ_SCROLL;
-    /** Hides all scrollbars. */
+    /**
+     * Hides all scrollbars.
+     * @see begin(String, int)
+     * @see beginClosable(String, int)
+     * @see beginChild(String, boolean, int)
+     * @see beginPopup(String, boolean, int)
+     */
     public static int WINDOW_NO_SCROLLBAR;
 
     /**
@@ -97,11 +205,46 @@ public class UI {
      */
     public static int COLOR_WINDOW_BORDER;
 
+    /**
+     * Flag specifying that the given action should always be taken.
+     *
+     * Some functions take a "condition" parameter that tells the function when
+     * the given action should be applied. If this when flag is passed, the
+     * given action is always taken.
+     *
+     * @see setNextTreeNodeOpen(boolean, int)
+     */
     public static int COND_ALWAYS;
+
+    /**
+     * Flag specifying that the given action should be taken the first time it's requested in a session, then never again.
+     *
+     * Some functions take a "condition" parameter that tells the function when
+     * the given action should be applied. If this when flag is passed, the
+     * given action is taken once for the duration of the runtime; future
+     * requests to take the action will have no effect.
+     *
+     * @see setNextTreeNodeOpen(boolean, int)
+     */
     public static int COND_ONCE;
-    public static int COND_FIRST_USE_EVER;
+
+    /**
+     * Flag specifying that the given action should be taken when a widget or window first appears.
+     *
+     * Some functions take a "condition" parameter that tells the function when
+     * the given action should be applied. If this when flag is passed, the
+     * given action is taken the first time the widget appears after being
+     * hidden, or the first time the window is opened after being closed.
+     * Further requests to take the action will have no effect until the widget
+     * is hidden (or the window closed) and re-shown (or re-opened).
+     *
+     * @see setNextTreeNodeOpen(boolean, int)
+     */
     public static int COND_APPEARING;
 
+    /**
+     * A class representing the state of a collapsable section that is removeable.
+     */
     public static class CollapseResult {
         /** true if the collapsable section should be open (i.e., client should draw the contents of the section) */
         public boolean isOpen;
@@ -166,6 +309,9 @@ public class UI {
      * is called, the default UI font is the font given in the first call to
      * addFont.
      *
+     * If you're creating a UI, you're probably looking for {@link FontLoader},
+     * not this function.
+     *
      * @param name the font name
      * @param ttfData the font data in TTF or OTF format
      * @param fontSize the font size, in pixels, that we want to compile the font at
@@ -173,7 +319,23 @@ public class UI {
      */
     public static native long addFont(String name, ByteBuffer ttfData, float fontSize);
 
+    /**
+     * Temporarily change the font that widgets are drawn with.
+     *
+     * The given font will be used until a corresponding call to {@link popFont()}.
+     * Every call to {@code pushFont} must be paired with a corresponding
+     * {@code popFont} on every frame, or an assertion will be raised. The font
+     * handles for default UI fonts are stored as static fields on
+     * {@link FontLoader}.
+     *
+     * @param fontHandle the font handle as returned by {@link addFont(String, ByteBuffer, float)}
+     * @see FontLoader
+     */
     public static native void pushFont(long fontHandle);
+
+    /**
+     * Pop the current font off of the font stack, and go back to using whatever font was before it.
+     */
     public static native void popFont();
 
     /**
@@ -204,16 +366,89 @@ public class UI {
      */
     public static native void popColor(int count);
 
+    /**
+     * Temporarily changes the width of any widgets drawn after this call.
+     *
+     * All calls to {@code pushWidth} must be eventually followed by a corresponding call to {@link popWidth}.
+     *
+     * @param width if 0, widgets are automatically sized. If {@code width} is greater than
+     * zero, widgets are drawn at this size in pixels. If {@code width} is less than
+     * zero, sizes the widget so there are {@code width} pixels between the
+     * right edge of the widget and the right edge of the window.
+     */
     public static native void pushWidth(float width);
-    public static native void popWidth();
-    public static native float calcWidth();
 
-    /* Layout */
+    /**
+     * Restores the item sizing rules that were in effect before the last call to {@link pushWidth(float)}
+     */
+    public static native void popWidth();
+
+    /**
+     * Sets the position of the next window.
+     *
+     * @param x the position of the pivot along X, in pixels
+     * @param y the position of the pivot along Y, in pixels
+     * @param pivotX the relative location within the window that we're
+     * positioning, along X. If 0, then the X-position is relative to the left
+     * edge of the window; if 1, the X-position locates the right edge, if 0.5
+     * it locates the horizontal center of the window, etc.
+     * @param pivotY the relative location within the window that we're
+     * positioning, along Y. If 0, then the Y-position is relative to the top
+     * edge of the window; if 1, the Y-position locates the bottom edge, if 0.5
+     * it locates the vertical center of the window, etc.
+     */
     public static native void setNextWindowPosition(float x, float y, float pivotX, float pivotY);
+
+    /**
+     * Sets the default position and size of the next window.
+     *
+     * This only has an effect on the frame in which the window appears for the
+     * first time; future calls to this function are no-ops.
+     *
+     * @param x the X-position of the left edge of the window
+     * @param y the Y-position of the top edge of the window
+     * @param w the width of the window, in pixels
+     * @param h the height of the window, in pixels
+     */
     public static native void setNextWindowDefaults(float x, float y, float w, float h);
+
+    /**
+     * Sets the default size of the next window, and requests that it appear at the current mouse cursor location.
+     *
+     * This only has an effect on the frame in which the window appears for the
+     * first time; future calls to this function are no-ops.
+     *
+     * @param w the width of the window, in pixels
+     * @param h the height of the window, in pixels
+     */
     public static native void setNextWindowDefaultToCursor(float w, float h);
+
+    /**
+     * Sets the size of the contents of the next window.
+     *
+     * This only has an effect on the frame in which the window appears for the
+     * first time; future calls to this function are no-ops. If the content size
+     * of a window exceeds the window's size, the window will scroll to allow for
+     * the contents of the window to be visible.
+     *
+     * @param w the width of the window, in pixels
+     * @param h the height of the window, in pixels
+     */
     public static native void setNextWindowContentSize(float w, float h);
+
+    /**
+     * Sets the size of the next window.
+     *
+     * @param w the width of the window, in pixels
+     * @param h the height of the window, in pixels
+     */
     public static native void setNextWindowSize(float w, float h);
+
+    /**
+     * Open a new window
+     *
+     * @param label the title of the window. Should be constant frame-to-frame and be unique amongst visible windows.
+     */
     public static void begin(String label) {
         begin(label, 0);
     }
