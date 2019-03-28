@@ -213,6 +213,7 @@ task dist(type: Zip) {
 }
 
 tasks.withType(Javadoc) {
+    /* configure javadoc tool to link to the official Java 8 javadoc for JDK classes */
     options.with {
         links "https://docs.oracle.com/javase/8/docs/api/"
     }
