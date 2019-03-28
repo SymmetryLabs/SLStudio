@@ -208,6 +208,7 @@ public class UI {
     /**
      * Flag specifying that the given action should always be taken.
      *
+     * <p>
      * Some functions take a "condition" parameter that tells the function when
      * the given action should be applied. If this when flag is passed, the
      * given action is always taken.
@@ -219,6 +220,7 @@ public class UI {
     /**
      * Flag specifying that the given action should be taken the first time it's requested in a session, then never again.
      *
+     * <p>
      * Some functions take a "condition" parameter that tells the function when
      * the given action should be applied. If this when flag is passed, the
      * given action is taken once for the duration of the runtime; future
@@ -231,6 +233,7 @@ public class UI {
     /**
      * Flag specifying that the given action should be taken when a widget or window first appears.
      *
+     * <p>
      * Some functions take a "condition" parameter that tells the function when
      * the given action should be applied. If this when flag is passed, the
      * given action is taken the first time the widget appears after being
@@ -255,12 +258,14 @@ public class UI {
     /**
      * The width, in pixels, of the current SLStudio window
      *
+     * <p>
      * Set on every frame by SLStudioGDX for reading by UI clients that want to anchor themselves somewhere.
      */
     public static float width;
     /**
      * The height, in pixels, of the current SLStudio window
      *
+     * <p>
      * Set on every frame by SLStudioGDX for reading by UI clients that want to anchor themselves somewhere.
      */
     public static float height;
@@ -284,6 +289,7 @@ public class UI {
     /**
      * Begin processing the UI for a new frame.
      *
+     * <p>
      * This absorbs mouse and keyboard input data, synthesizes it, and prepares buffers for drawing.
      */
     public static native void newFrame();
@@ -295,7 +301,6 @@ public class UI {
 
     /**
      * Deallocate all resources and drop all UI state.
-     *
      * After a call to shutdown(), UI should be considered unusable.
      */
     public static native boolean shutdown();
@@ -303,6 +308,7 @@ public class UI {
     /**
      * Add a font using a byte buffer of TTF or OTF data.
      *
+     * <p>
      * This compiles the font into a font texture and prepares it for display
      * through ImGui. Fonts can be viewed and changed in the style editor. If
      * this function is never called, the ImGui default font is used. If addFont
@@ -322,6 +328,7 @@ public class UI {
     /**
      * Temporarily change the font that widgets are drawn with.
      *
+     * <p>
      * The given font will be used until a corresponding call to {@link popFont()}.
      * Every call to {@code pushFont} must be paired with a corresponding
      * {@code popFont} on every frame, or an assertion will be raised. The font
@@ -341,6 +348,7 @@ public class UI {
     /**
      * Temporarily change a color in the UI style.
      *
+     * <p>
      * This changes the UI style until a corresponding call to {@link popColor()}
      *
      * @param key the style color to change; use one of the COLOR_ constants on the UI class
@@ -351,6 +359,7 @@ public class UI {
     /**
      * Undo one call to {@link pushColor(int, int)}.
      *
+     * <p>
      * This restores the colors in the UI style to whatever they before the last pushColor call.
      */
     public static void popColor() {
@@ -360,6 +369,7 @@ public class UI {
     /**
      * Undo multiple calls to {@link pushColor(int, int)} at once.
      *
+     * <p>
      * This restores the colors in the UI style to whatever they before the last {@code count} pushColor calls.
      *
      * @param count the number of pushColor calls to undo
@@ -369,6 +379,7 @@ public class UI {
     /**
      * Temporarily changes the width of any widgets drawn after this call.
      *
+     * <p>
      * All calls to {@code pushWidth} must be eventually followed by a corresponding call to {@link popWidth}.
      *
      * @param width if 0, widgets are automatically sized. If {@code width} is greater than
@@ -402,6 +413,7 @@ public class UI {
     /**
      * Sets the default position and size of the next window.
      *
+     * <p>
      * This only has an effect on the frame in which the window appears for the
      * first time; future calls to this function are no-ops.
      *
@@ -415,6 +427,7 @@ public class UI {
     /**
      * Sets the default size of the next window, and requests that it appear at the current mouse cursor location.
      *
+     * <p>
      * This only has an effect on the frame in which the window appears for the
      * first time; future calls to this function are no-ops.
      *
@@ -426,6 +439,7 @@ public class UI {
     /**
      * Sets the size of the contents of the next window.
      *
+     * <p>
      * This only has an effect on the frame in which the window appears for the
      * first time; future calls to this function are no-ops. If the content size
      * of a window exceeds the window's size, the window will scroll to allow for
@@ -447,6 +461,7 @@ public class UI {
     /**
      * Open a new window with the default flag set
      *
+     * <p>
      * Must be paired with a call to {@link end()} when done drawing the
      * contents of the window.
      *
@@ -457,8 +472,9 @@ public class UI {
     }
 
     /**
-     * Open a new window
+     * Open a new window.
      *
+     * <p>
      * Must be paired with a call to {@link end()} when done drawing the
      * contents of the window.
      *
@@ -470,6 +486,7 @@ public class UI {
     /**
      * Open a new window that can be closed.
      *
+     * <p>
      * Must be paired with a call to {@link end()} when done drawing the
      * contents of the window.
      *
@@ -483,6 +500,7 @@ public class UI {
     /**
      * Open a new window that can be closed.
      *
+     * <p>
      * Must be paired with a call to {@link end()} when done drawing the
      * contents of the window.
      *
@@ -500,6 +518,7 @@ public class UI {
     /**
      * Requests that the next widget be drawn on the same line as the previous widget.
      *
+     * <p>
      * The default behavior is for widgets to each be drawn on their own line.
      */
     public static native void sameLine();
@@ -507,6 +526,7 @@ public class UI {
     /**
      * Starts a table with the given number of columns.
      *
+     * <p>
      * Columns are user-resizable and default to all being equal width.
      * Must be paired with a corresponding call to {@link endTable()}.
      * Note that this wraps what Dear ImGui calls "columns", but the widget
@@ -520,6 +540,7 @@ public class UI {
     /**
      * Moves to the next cell in the table.
      *
+     * <p>
      * Cells run left-to-right then top-to-bottom. If we're currently in the
      * last column of a row, this creates a new row.
      */
@@ -532,6 +553,7 @@ public class UI {
     /**
      * Draw a horizontal separator.
      *
+     * <p>
      * If a table widget is active, this draws a line below the current row
      * and moves to the next row.
      */
@@ -545,12 +567,89 @@ public class UI {
      */
     public static native void spacing(float w, float h);
 
+    /**
+     * Start drawing into a child window that uses all of the remaining size left in the current window.
+     *
+     * <p>
+     * Child windows are a good way to get a smaller scrollable area within a
+     * window, or to draw a border around a set of widgets.
+     * Every call to {@code beginChild} must be matched with a corresponding
+     * call to {@link endChild()}.
+     *
+     * @param id the ID of the child window. Child windows have no labels, this is just an ID.
+     * @param border if true, a border is drawn around the child window
+     * @param flags the set of {@code WINDOW_} flags to apply to the child window
+     * @return true if the child window is visible. If false is returned, you
+     * can still draw into it, but you could choose to skip drawing the child
+     * window's content to save some time.
+     */
     public static boolean beginChild(String id, boolean border, int flags) {
         return beginChild(id, border, flags, 0, 0);
     }
+
+    /**
+     * Start drawing into a child window with a specified size.
+     *
+     * <p>
+     * Child windows are a good way to get a smaller scrollable area within a
+     * window, or to draw a border around a set of widgets.
+     * Every call to {@code beginChild} must be matched with a corresponding call to {@link endChild()}.
+     *
+     * @param id the ID of the child window. Child windows have no labels, this is just an ID.
+     * @param border if true, a border is drawn around the child window
+     * @param flags the set of {@code WINDOW_} flags to apply to the child window
+     * @param w the width of the child window. If 0 is passed, the child takes
+     * up all remaining width in its parent. If greater than zero, the child
+     * exactly the width given, in pixels. If less than zero, uses the remaining
+     * size of the window minus {@code w} pixels.
+     * @param h the height of the child window. If 0 is passed, the child takes
+     * up all remaining space in the content-size of its parent. If greater than
+     * zero, the child exactly the height given, in pixels. If less than zero,
+     * uses the remaining height of the window's content-size minus {@code h} pixels.
+     * @return true if the child window is visible. If false is returned, you
+     * can still draw into it, but you could choose to skip drawing the child
+     * window's content to save some time.
+     */
     public static native boolean beginChild(String id, boolean border, int flags, int w, int h);
+
+    /**
+     * Finish drawing into a child window.
+     */
     public static native void endChild();
+
+    /**
+     * Begins a new group of widgets.
+     *
+     * <p>
+     * Groups are widgets that are laid out into a rectangle as a unit, which can then be
+     * laid out at a higher level with other widgets. Mostly they are useful for making stacks
+     * of widgets laid out next to one another, sort of like float-left in CSS; you can do things
+     * like
+     *
+     * <pre>
+     *     UI.beginGroup();
+     *     UI.text("first");
+     *     UI.text("--second--");
+     *     UI.endGroup();
+     *     UI.sameLine();
+     *     UI.beginGroup();
+     *     UI.text("third");
+     *     UI.text("fourth");
+     *     UI.endGroup();
+     * </pre>
+     *
+     * to get something that looks like
+     *
+     * <pre>
+     *     first       third
+     *     --second--  fourth
+     * </pre>
+     *
+     * <p>
+     * Calls to {@code beginGroup} must be paired with a corresponding call to {@link endGroup()}.
+     */
     public static native void beginGroup();
+    /** Closes out a group. */
     public static native void endGroup();
 
     /* Popup model windows */
