@@ -230,6 +230,10 @@ public class CueManager implements LXLoopTask, CaptionSource, SLStudioLX.SaveHoo
     @Override
     public void onSave() {
         File outf = getCueFile();
+        /* Don't write the file if we have nothing to write */
+        if (cues.isEmpty() && !outf.exists()) {
+            return;
+        }
         JsonObject obj = new JsonObject();
         this.save(obj);
         try {
