@@ -70,6 +70,14 @@ public class LegacyProjectLoader {
             obj.addProperty(KEY_VERSION, newVersion);
             System.out.println(String.format("upgraded project file from v%d to v%d", fileVersion, newVersion));
         }
+        try {
+            JsonWriter writer = new JsonWriter(new FileWriter("upgraded.lxp"));
+            writer.setIndent("  ");
+            new GsonBuilder().create().toJson(obj, writer);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return obj;
     }
 
