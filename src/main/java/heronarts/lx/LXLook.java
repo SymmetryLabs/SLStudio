@@ -62,7 +62,7 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
         .setDescription("Enables cue preview of crossfade group B");
 
     public LXLook(LX lx) {
-        this(lx, null);
+        this(lx, String.format("Look-%d", lx.engine.looks.size() + 1));
     }
 
     public LXLook(LX lx, String label) {

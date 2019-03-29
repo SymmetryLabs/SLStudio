@@ -77,6 +77,8 @@ public class LookEditor implements Window {
 
         showLookTransform = UI.checkbox("Edit look transform", showLookTransform);
         UI.endGroup();
+        UI.sameLine();
+        UI.spacing(10, 10);
 
         int visibleWindowCount = IterationUtils.reduceIgnoreModification(look.channels, 0, (vwc, chan) -> {
                 String chanName = chan.getLabel();
