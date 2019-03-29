@@ -19,10 +19,11 @@ import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import heronarts.lx.model.LXPoint;
 import com.symmetrylabs.slstudio.output.OutputControl;
+import heronarts.lx.data.LXVersions;
 
 public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.Provider {
     private static final String DEFAULT_SHOW = "demo";
-    public static final int RUNTIME_VERSION = 1;
+    public static final int RUNTIME_VERSION = LXVersions.VOLUME_WITH_LOOKS;
 
     private String showName;
     private Show show;

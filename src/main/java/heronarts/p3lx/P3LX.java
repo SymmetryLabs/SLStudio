@@ -38,6 +38,7 @@ import heronarts.p3lx.ui.UI;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
+import heronarts.lx.data.LXVersions;
 
 import java.lang.reflect.Modifier;
 
@@ -54,7 +55,7 @@ public class P3LX extends LX {
     public static boolean isProcessing2X = false;
 
     /** The runtime version number for all p3lx-derived frontends (LXStudio, SLStudio), stored in project files. */
-    public static int RUNTIME_VERSION = 0;
+    public static int RUNTIME_VERSION = LXVersions.SLSTUDIO_WITH_LOOKS;
 
     /**
      * Returns the version of the library.
