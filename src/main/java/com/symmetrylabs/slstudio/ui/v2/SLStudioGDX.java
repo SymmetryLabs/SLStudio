@@ -169,6 +169,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         camController.update();
         renderer.draw();
         UI.newFrame();
+        lookEditor.setLook(lx.engine.getFocusedLook());
         WindowManager.get().draw();
 
         UI.setNextWindowPosition(UI.width - 30, UI.height - 30, 1, 1);

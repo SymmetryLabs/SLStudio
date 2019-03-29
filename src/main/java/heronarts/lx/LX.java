@@ -30,6 +30,7 @@ import heronarts.lx.output.LXOutput;
 import heronarts.lx.pattern.IteratorTestPattern;
 import heronarts.lx.warp.LXWarp;
 import heronarts.lx.data.LegacyProjectLoader;
+import heronarts.lx.modulator.APC40Mk2Shelf;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -250,8 +251,10 @@ public class LX {
         LX.initTimer.log("Tempo");
 
         // Add a default channel
-        this.engine.addLook().addChannel().fader.setValue(1);
-        LX.initTimer.log("Default Channel");
+        LXLook look = this.engine.addLook();
+        look.addChannel().fader.setValue(1);
+        look.setShelf(new APC40Mk2Shelf());
+        LX.initTimer.log("Default Look");
 
     }
 

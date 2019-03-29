@@ -4,21 +4,22 @@ import com.google.common.base.Preconditions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import heronarts.lx.osc.LXOscComponent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Collections;
-import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.ObjectParameter;
-import heronarts.lx.LXEngine.BlendTarget;
 import com.symmetrylabs.color.Spaces;
+import heronarts.lx.LXEngine.BlendTarget;
 import heronarts.lx.LXEngine.EngineBuffer;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.blend.LXBlend;
-import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.blend.AddBlend;
+import heronarts.lx.blend.LXBlend;
+import heronarts.lx.modulator.Shelf;
+import heronarts.lx.osc.LXOscComponent;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.parameter.ObjectParameter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 public class LXLook extends LXModelComponent implements PolyBufferProvider {
@@ -33,6 +34,8 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
     protected final List<LXChannel> mutableChannels = new ArrayList<>();
     public final List<LXChannel> channels = Collections.unmodifiableList(mutableChannels);
     public final DiscreteParameter focusedChannel = new DiscreteParameter("Channel", 1);
+
+    public Shelf shelf;
 
     private final List<Listener> listeners = new ArrayList<Listener>();
 
@@ -125,6 +128,14 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
     public LXLook removeListener(Listener listener) {
         this.listeners.remove(listener);
         return this;
+    }
+
+    public void setShelf(Shelf newShelf) {
+        if (shelf != null) {
+            shelf.dispose();
+        }
+        shelf = newShelf;
+        shelf.setParent(this);
     }
 
     public LXChannel addChannel() {
@@ -394,6 +405,7 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
     }
 
     private static final String KEY_CHANNELS = "channels";
+    private static final String KEY_SHELF = "shelf";
 
     @Override
     public void load(LX lx, JsonObject obj) {
@@ -412,6 +424,15 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
             addChannel().fader.setValue(1);
         }
 
+        if (obj.has(KEY_SHELF)) {
+            JsonObject shelfObj = obj.getAsJsonObject(KEY_SHELF);
+            Shelf newShelf = Shelf.instantiateShelf(shelfObj.get(KEY_CLASS).getAsString());
+            if (newShelf != null) {
+                newShelf.load(lx, shelfObj);
+                setShelf(newShelf);
+            }
+        }
+
         super.load(lx, obj);
     }
 
@@ -419,5 +440,6 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
     public void save(LX lx, JsonObject obj) {
         super.save(lx, obj);
         obj.add(KEY_CHANNELS, LXSerializable.Utils.toArray(lx, channels));
+        obj.add(KEY_SHELF, LXSerializable.Utils.toObject(lx, shelf));
     }
 }

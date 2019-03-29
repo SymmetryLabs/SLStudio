@@ -6,14 +6,20 @@ import heronarts.lx.LXChannel.CrossfadeGroup;
 import heronarts.lx.LXMasterChannel;
 import heronarts.lx.color.LXColor;
 import com.symmetrylabs.util.IterationUtils;
+import org.lwjgl.system.CallbackI.B;
+import heronarts.lx.LXLook;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.BoundedParameter;
 
 
 public class LookEditor implements Window {
+    private static final int HEIGHT = 300;
+    private static final int PIPELINE_WIDTH = 230;
+    private static final int PIPELINE_PAD = 8;
+    private static final int MENU_HEIGHT = 22;
+
     private final LX lx;
-    private final int HEIGHT = 300;
-    private final int PIPELINE_WIDTH = 230;
-    private final int PIPELINE_PAD = 8;
-    private final int MENU_HEIGHT = 22;
+    private LXLook look;
     private final WepUi wepUi;
     private final WepUi transformWepUi;
     private boolean showLookTransform = false;
@@ -31,10 +37,14 @@ public class LookEditor implements Window {
         this.transformWepUi = new WepUi(lx, false, () -> UI.closePopup());
     }
 
+    public void setLook(LXLook l) {
+        look = l;
+    }
+
     @Override
     public void draw() {
         UI.setNextWindowPosition(0, UI.height, 0, 1);
-        float desiredWidth = 260 + 100 * lx.engine.getChannels().size();
+        float desiredWidth = 260 + 100 * look.channels.size();
         UI.setNextWindowSize(Float.min(desiredWidth + 22, UI.width), HEIGHT);
         UI.setNextWindowContentSize(desiredWidth, HEIGHT - 22);
         UI.begin(
@@ -44,24 +54,31 @@ public class LookEditor implements Window {
 
         UI.beginGroup();
         UI.pushFont(FontLoader.DEFAULT_FONT_XL);
-        UI.text("Volume");
+        UI.text(look.getLabel());
         UI.popFont();
-        for (int row = 0; row < 2; row++) {
-            for (int col = 0; col < 4; col++) {
-                UI.knobFloat(String.format("-##shelf-knob/%d/%d", row, col), 0, 0);
-                if (col != 3) UI.sameLine();
-            }
-        }
 
-        for (int col = 0; col < 4; col++) {
-            UI.button(String.format("-##shelf-trig/%d", col), 45, 45);
-            if (col != 3) UI.sameLine();
+        if (look.shelf != null) {
+            int rows = look.shelf.rows();
+            int cols = look.shelf.cols();
+            for (int row = 0; row < rows; row++) {
+                for (int col = 0; col < cols; col++) {
+                    LXParameter param = look.shelf.getParameter(row, col);
+                    if (param instanceof BoundedParameter) {
+                        ParameterUI.draw(lx, (BoundedParameter) param, ParameterUI.WidgetType.KNOB);
+                    } else {
+                        ParameterUI.draw(lx, param);
+                    }
+                    if (col < cols - 1) {
+                        UI.sameLine();
+                    }
+                }
+            }
         }
 
         showLookTransform = UI.checkbox("Edit look transform", showLookTransform);
         UI.endGroup();
 
-        int visibleWindowCount = IterationUtils.reduceIgnoreModification(lx.engine.getChannels(), 0, (vwc, chan) -> {
+        int visibleWindowCount = IterationUtils.reduceIgnoreModification(look.channels, 0, (vwc, chan) -> {
                 String chanName = chan.getLabel();
                 UI.sameLine();
                 UI.beginChild(chanName, false, 0, 90, HEIGHT);
@@ -80,7 +97,7 @@ public class LookEditor implements Window {
                 ParameterUI.toggle(lx, chan.enabled, false, 40);
                 boolean cueStart = chan.cueActive.getValueb();
                 if (ParameterUI.toggle(lx, chan.cueActive, true, 40) && !cueStart) {
-                    for (LXChannel cc : lx.engine.getChannels()) {
+                    for (LXChannel cc : look.channels) {
                         if (cc != chan) {
                             cc.cueActive.setValue(false);
                         }
@@ -111,8 +128,8 @@ public class LookEditor implements Window {
         UI.pushFont(FontLoader.DEFAULT_FONT_XL);
         if (UI.button("+", 30, 230)) {
             lx.engine.addTask(() -> {
-                    LXChannel chan = lx.engine.addChannel();
-                    lx.engine.setFocusedChannel(chan);
+                    LXChannel chan = look.addChannel();
+                    look.setFocusedChannel(chan);
                     chan.editorVisible.setValue(true);
                 });
         }
@@ -133,7 +150,7 @@ public class LookEditor implements Window {
         UI.begin("Pipeline Windows",
                  UI.WINDOW_NO_MOVE | UI.WINDOW_NO_RESIZE | UI.WINDOW_NO_DECORATION | UI.WINDOW_NO_DOCKING | UI.WINDOW_NO_SCROLL_WITH_MOUSE);
 
-        IterationUtils.reduceIgnoreModification(lx.engine.getChannels(), 0, (pipelineIndex, chan) -> {
+        IterationUtils.reduceIgnoreModification(look.channels, 0, (pipelineIndex, chan) -> {
                 if (chan.editorVisible.getValueb()) {
                     UI.beginChild(chan.getLabel() + "##channel-child", false, 0, PIPELINE_WIDTH, (int) UI.height);
                     pipelineIndex = channelHeader(chan, chan.getLabel(), pipelineIndex);
