@@ -268,6 +268,7 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
         groupB.reset();
         BlendTarget main = new BlendTarget(buffer.main);
         BlendTarget cue = new BlendTarget(buffer.cue);
+        buffer.cueOn = false;
 
         for (LXChannel channel : mutableChannels) {
             long blendStart = System.nanoTime();
