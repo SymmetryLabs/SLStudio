@@ -194,6 +194,19 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
         chan.label.setValue(chan.label.getString() + " copy");
     }
 
+    public LXChannel getChannel(int channelIndex) {
+        return channels.get(channelIndex);
+    }
+
+    public LXChannel getChannel(String label) {
+        for (LXChannel channel : channels) {
+            if (channel.getLabel().equals(label)) {
+                return channel;
+            }
+        }
+        return null;
+    }
+
     public LXBus getFocusedChannel() {
         /* rework this to make master channel not focusable, currently needed for APC40Mk2 */
         if (focusedChannel.getValuei() == channels.size()) {

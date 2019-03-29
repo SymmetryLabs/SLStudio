@@ -755,17 +755,12 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     @Deprecated
     public LXChannel getChannel(int channelIndex) {
-        return getFocusedLook().channels.get(channelIndex);
+        return getFocusedLook().getChannel(channelIndex);
     }
 
     @Deprecated
     public LXChannel getChannel(String label) {
-        for (LXChannel channel : getFocusedLook().channels) {
-            if (channel.getLabel().equals(label)) {
-                return channel;
-            }
-        }
-        return null;
+        return getFocusedLook().getChannel(label);
     }
 
     @Deprecated
@@ -849,6 +844,19 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     public LXLook getFocusedLook() {
         // TODO: support more than one look
         return mutableLooks.get(0);
+    }
+
+    public LXLook getLook(int i) {
+        return mutableLooks.get(i);
+    }
+
+    public LXLook getLook(String name) {
+        for (LXLook look : mutableLooks) {
+            if (name.equals(look.getLabel())) {
+                return look;
+            }
+        }
+        return null;
     }
 
     public void run() {

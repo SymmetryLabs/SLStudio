@@ -69,6 +69,7 @@ public class LXOscEngine extends LXComponent {
     private static final String ROUTE_PITCHBEND = "pitchbend";
     private static final String ROUTE_MASTER = "master";
     private static final String ROUTE_CHANNEL = "channel";
+    private static final String ROUTE_LOOK = "look";
     private static final String ROUTE_ACTIVE_PATTERN = "activePattern";
     private static final String ROUTE_NEXT_PATTERN = "nextPattern";
     private static final String ROUTE_PATTERN = "pattern";
@@ -173,12 +174,21 @@ public class LXOscEngine extends LXComponent {
                     } else if (parts[2].equals(ROUTE_MASTER)) {
                         oscChannel(message, lx.engine.masterChannel, parts, 3);
                     } else if (parts[2].equals(ROUTE_CHANNEL)) {
+                        LXLook look = lx.engine.getFocusedLook();
                         if (parts[3].equals(ROUTE_FOCUSED)) {
-                            oscChannel(message, lx.engine.getFocusedChannel(), parts, 4);
+                            oscChannel(message, look.getFocusedChannel(), parts, 4);
                         } else if (parts[3].matches("\\d+")) {
-                            oscChannel(message, lx.engine.getChannel(Integer.parseInt(parts[3]) - 1), parts, 4);
+                            oscChannel(message, look.getChannel(Integer.parseInt(parts[3]) - 1), parts, 4);
                         } else {
-                            oscChannel(message, lx.engine.getChannel(parts[3]), parts, 4);
+                            oscChannel(message, look.getChannel(parts[3]), parts, 4);
+                        }
+                    } else if (parts[2].equals(ROUTE_LOOK)) {
+                        if (parts[3].equals(ROUTE_FOCUSED)) {
+                            oscLook(message, lx.engine.getFocusedLook(), parts, 4);
+                        } else if (parts[3].matches("\\d+")) {
+                            oscLook(message, lx.engine.getLook(Integer.parseInt(parts[3]) - 1), parts, 4);
+                        } else {
+                            oscLook(message, lx.engine.getLook(parts[3]), parts, 4);
                         }
                     }
                 }
@@ -229,6 +239,20 @@ public class LXOscEngine extends LXComponent {
             } catch (InvalidMidiDataException imdx) {
                 System.err.println("[OSC] Invalid MIDI message: " + imdx.getLocalizedMessage());
             }
+        }
+
+        private void oscLook(OscMessage message, LXLook look, String[] parts, int index) {
+            if (parts[index].equals(ROUTE_CHANNEL)) {
+                if (parts[index+1].equals(ROUTE_FOCUSED)) {
+                    oscChannel(message, look.getFocusedChannel(), parts, index+2);
+                } else if (parts[index+1].matches("\\d+")) {
+                    oscChannel(message, look.getChannel(Integer.parseInt(parts[index+1]) - 1), parts, index+2);
+                } else {
+                    oscChannel(message, look.getChannel(parts[index+1]), parts, index+2);
+                }
+                return;
+            }
+            oscComponent(message, look, parts, index);
         }
 
         private void oscChannel(OscMessage message, LXBus channel, String[] parts, int index) {
