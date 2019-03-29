@@ -1,5 +1,8 @@
 package heronarts.lx;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import heronarts.lx.osc.LXOscComponent;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +71,7 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
         buffer = new CuedBuffer(lx);
 
         crossfaderBlendMode =
-            new ObjectParameter<LXBlend>("Crossfader Blend", lx.engine.crossfaderBlends)
+            new ObjectParameter<>("Crossfader Blend", lx.engine.crossfaderBlends)
             .setDescription("Sets the blend mode used for the master crossfader");
 
         cueA.addListener(p -> {
@@ -343,5 +346,33 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
         PolyBuffer get() {
             return cueOn ? cue : main;
         }
+    }
+
+    private static final String KEY_CHANNELS = "channels";
+
+    @Override
+    public void load(LX lx, JsonObject obj) {
+        // Remove all channels
+        for (int i = this.mutableChannels.size() - 1; i >= 0; --i) {
+            removeChannel(this.mutableChannels.get(i), false);
+        }
+        // Add the new channels
+        if (obj.has(KEY_CHANNELS)) {
+            JsonArray channelsArray = obj.getAsJsonArray(KEY_CHANNELS);
+            for (JsonElement channelElement : channelsArray) {
+                LXChannel channel = addChannel();
+                channel.load(lx, (JsonObject) channelElement);
+            }
+        } else {
+            addChannel().fader.setValue(1);
+        }
+
+        super.load(lx, obj);
+    }
+
+    @Override
+    public void save(LX lx, JsonObject obj) {
+        super.save(lx, obj);
+        obj.add(KEY_CHANNELS, LXSerializable.Utils.toArray(lx, channels));
     }
 }

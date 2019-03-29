@@ -20,6 +20,7 @@
 
 package heronarts.lx;
 
+import com.google.common.base.Preconditions;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXPalette;
 import heronarts.lx.data.Project;
