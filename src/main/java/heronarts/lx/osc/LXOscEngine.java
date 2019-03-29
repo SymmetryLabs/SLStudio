@@ -33,15 +33,8 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.sound.midi.InvalidMidiDataException;
-import heronarts.lx.LX;
-import heronarts.lx.LXBus;
-import heronarts.lx.LXChannel;
-import heronarts.lx.LXComponent;
-import heronarts.lx.LXEffect;
-import heronarts.lx.LXEngine;
-import heronarts.lx.LXModulationComponent;
-import heronarts.lx.LXModulationEngine;
-import heronarts.lx.LXPattern;
+
+import heronarts.lx.*;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.midi.MidiControlChange;
 import heronarts.lx.midi.MidiNoteOn;
@@ -357,7 +350,7 @@ public class LXOscEngine extends LXComponent {
         }
     }
 
-    private class EngineTransmitter extends Transmitter implements LXParameterListener, LXChannel.Listener, LXEngine.Listener, LXModulationEngine.Listener {
+    private class EngineTransmitter extends Transmitter implements LXParameterListener, LXChannel.Listener, LXLook.Listener, LXModulationEngine.Listener {
         private EngineTransmitter(String host, int port, int bufferSize) throws SocketException, UnknownHostException {
             super(InetAddress.getByName(host), port, bufferSize);
             registerComponent(lx.engine);
@@ -375,7 +368,7 @@ public class LXOscEngine extends LXComponent {
             for (LXChannel channel : lx.engine.getChannels()) {
                 registerChannel(channel);
             }
-            lx.engine.addListener(this);
+            lx.engine.getFocusedLook().addListener(this);
         }
 
         private void registerChannel(LXChannel channel) {
@@ -521,17 +514,17 @@ public class LXOscEngine extends LXComponent {
         }
 
         @Override
-        public void channelAdded(LXEngine engine, LXChannel channel) {
+        public void channelAdded(LXLook look, LXChannel channel) {
             registerChannel(channel);
         }
 
         @Override
-        public void channelRemoved(LXEngine engine, LXChannel channel) {
+        public void channelRemoved(LXLook look, LXChannel channel) {
             unregisterChannel(channel);
         }
 
         @Override
-        public void channelMoved(LXEngine engine, LXChannel channel) {}
+        public void channelMoved(LXLook look, LXChannel channel) {}
 
         @Override
         public void modulatorAdded(LXModulationEngine engine, LXModulator modulator) {

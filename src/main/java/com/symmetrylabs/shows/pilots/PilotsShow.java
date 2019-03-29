@@ -12,6 +12,7 @@ import com.symmetrylabs.util.FileUtils;
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEngine;
+import heronarts.lx.LXLook;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.transform.LXVector;
@@ -27,7 +28,7 @@ import java.util.List;
 /**
  * This file creates and positions "carts" and creates one pixlite for each of them
  */
-public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigChangedListener, LXEngine.Listener {
+public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigChangedListener, LXLook.Listener {
     static final String SHOW_NAME = "pilots";
 
     static final String IP_CONFIGS_FILENAME = "cart_IP_configs.txt";
@@ -98,7 +99,7 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
         }
         onConfigChanged(initialConfigs);
 
-        lx.engine.addListener(this);
+        lx.engine.getFocusedLook().addListener(this);
         for (LXChannel c : lx.engine.getAllSubChannels()) {
             c.autoDisable.setValue(true);
         }
@@ -143,15 +144,15 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
     }
 
     @Override
-    public void channelAdded(LXEngine lxEngine, LXChannel lxChannel) {
+    public void channelAdded(LXLook look, LXChannel lxChannel) {
         lxChannel.autoDisable.setValue(true);
     }
 
     @Override
-    public void channelRemoved(LXEngine lxEngine, LXChannel lxChannel) {
+    public void channelRemoved(LXLook look, LXChannel lxChannel) {
     }
 
     @Override
-    public void channelMoved(LXEngine lxEngine, LXChannel lxChannel) {
+    public void channelMoved(LXLook look, LXChannel lxChannel) {
     }
 }

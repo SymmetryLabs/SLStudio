@@ -250,7 +250,7 @@ public class LX {
         LX.initTimer.log("Tempo");
 
         // Add a default channel
-        this.engine.addLook().channels.get(0).fader.setValue(1);
+        this.engine.addLook().addChannel().fader.setValue(1);
         LX.initTimer.log("Default Channel");
 
     }

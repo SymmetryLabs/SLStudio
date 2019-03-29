@@ -1,5 +1,6 @@
 package heronarts.lx;
 
+import com.google.common.base.Preconditions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -23,9 +24,17 @@ import heronarts.lx.blend.AddBlend;
 public class LXLook extends LXModelComponent implements PolyBufferProvider {
     protected final LX lx;
 
+    public interface Listener {
+        public void channelAdded(LXLook look, LXChannel channel);
+        public void channelRemoved(LXLook look, LXChannel channel);
+        public void channelMoved(LXLook look, LXChannel channel);
+    }
+
     protected final List<LXChannel> mutableChannels = new ArrayList<>();
     public final List<LXChannel> channels = Collections.unmodifiableList(mutableChannels);
     public final DiscreteParameter focusedChannel = new DiscreteParameter("Channel", 1);
+
+    private final List<Listener> listeners = new ArrayList<Listener>();
 
     protected final PolyBuffer black;  // always black, read-only
     protected final BlendTarget groupA;  // working area for blending group A
@@ -101,8 +110,6 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
                 }
             }
         });
-
-        addChannel();
     }
 
     @Override
@@ -110,19 +117,37 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
         return buffer.get();
     }
 
+    public LXLook addListener(Listener listener) {
+        this.listeners.add(listener);
+        return this;
+    }
+
+    public LXLook removeListener(Listener listener) {
+        this.listeners.remove(listener);
+        return this;
+    }
+
     public LXChannel addChannel() {
         LXChannel channel = new LXChannel(lx, this.mutableChannels.size(), new LXPattern[] {});
         channel.setParent(this);
-        this.mutableChannels.add(channel);
-        this.focusedChannel.setRange(this.mutableChannels.size() + 1);
+
+        int oldSize = mutableChannels.size();
+        mutableChannels.add(channel);
+        focusedChannel.setRange(this.mutableChannels.size() + 1);
+        if (focusedChannel.getValuei() == oldSize) {
+            focusedChannel.bang();
+        }
+        for (Listener listener : this.listeners) {
+            listener.channelAdded(this, channel);
+        }
         return channel;
     }
 
-    public boolean removeChannel(LXChannel channel) {
-        return removeChannel(channel, true);
+    public void removeChannel(LXChannel channel) {
+        removeChannel(channel, true);
     }
 
-    private boolean removeChannel(LXChannel channel, boolean checkLast) {
+    private void removeChannel(LXChannel channel, boolean checkLast) {
         if (checkLast && (this.mutableChannels.size() == 1)) {
             throw new UnsupportedOperationException("Cannot remove last channel from LXEngine");
         }
@@ -140,10 +165,11 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
             if (!notified) {
                 this.focusedChannel.bang();
             }
+            for (Listener listener : this.listeners) {
+                listener.channelRemoved(this, channel);
+            }
             channel.dispose();
-            return true;
         }
-        return false;
     }
 
     public void moveChannel(LXChannel channel, int index) {
@@ -156,6 +182,9 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
         }
         if (focused) {
             this.focusedChannel.setValue(index);
+        }
+        for (Listener listener : this.listeners) {
+            listener.channelMoved(this, channel);
         }
     }
 
@@ -177,6 +206,8 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
         if (channel == lx.engine.masterChannel) {
             focusedChannel.setValue(channels.size());
         } else {
+            int chanIndex = channels.indexOf(channel);
+            Preconditions.checkArgument(chanIndex >= 0, "channel %s is not in look", channel.toString());
             focusedChannel.setValue(channels.indexOf(channel));
         }
         return this;
@@ -353,8 +384,8 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
     @Override
     public void load(LX lx, JsonObject obj) {
         // Remove all channels
-        for (int i = this.mutableChannels.size() - 1; i >= 0; --i) {
-            removeChannel(this.mutableChannels.get(i), false);
+        for (int i = mutableChannels.size() - 1; i >= 0; --i) {
+            removeChannel(mutableChannels.get(i), false);
         }
         // Add the new channels
         if (obj.has(KEY_CHANNELS)) {

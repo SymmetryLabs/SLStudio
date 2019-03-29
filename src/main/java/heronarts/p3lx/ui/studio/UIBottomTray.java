@@ -30,10 +30,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import heronarts.lx.LX;
-import heronarts.lx.LXBus;
-import heronarts.lx.LXChannel;
-import heronarts.lx.LXEngine;
+import heronarts.lx.*;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
@@ -81,18 +78,18 @@ public class UIBottomTray extends UI2dContext {
         }
         addChannel(lx.engine.masterChannel);
 
-        lx.engine.addListener(new LXEngine.Listener() {
-            public void channelAdded(LXEngine engine, LXChannel channel) {
+        lx.engine.getFocusedLook().addListener(new LXLook.Listener() {
+            public void channelAdded(LXLook look, LXChannel channel) {
                 addChannel(channel);
                 onChannelFocus();
             }
 
-            public void channelRemoved(LXEngine engine, LXChannel channel) {
+            public void channelRemoved(LXLook look, LXChannel channel) {
                 removeChannel(channel);
                 onChannelFocus();
             }
 
-            public void channelMoved(LXEngine engine, LXChannel channel) {
+            public void channelMoved(LXLook look, LXChannel channel) {
                 onChannelFocus();
             }
         });

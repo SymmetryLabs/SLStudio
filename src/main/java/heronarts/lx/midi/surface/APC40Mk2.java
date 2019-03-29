@@ -24,13 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
-import heronarts.lx.LX;
-import heronarts.lx.LXBus;
-import heronarts.lx.LXChannel;
-import heronarts.lx.LXComponent;
-import heronarts.lx.LXEffect;
-import heronarts.lx.LXEngine;
-import heronarts.lx.LXPattern;
+import heronarts.lx.*;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.LXMidiOutput;
 import heronarts.lx.midi.LXShortMessage;
@@ -536,20 +530,20 @@ public class APC40Mk2 extends LXMidiSurface {
         for (LXChannel channel : getVisibleChannelList()) {
             registerChannel(channel);
         }
-        this.lx.engine.addListener(new LXEngine.Listener() {
+        this.lx.engine.getFocusedLook().addListener(new LXLook.Listener() {
 
             @Override
-            public void channelRemoved(LXEngine engine, LXChannel channel) {
+            public void channelRemoved(LXLook look, LXChannel channel) {
                 unregisterChannel(channel);
             }
 
             @Override
-            public void channelMoved(LXEngine engine, LXChannel channel) {
+            public void channelMoved(LXLook look, LXChannel channel) {
                 sendChannels();
             }
 
             @Override
-            public void channelAdded(LXEngine engine, LXChannel channel) {
+            public void channelAdded(LXLook look, LXChannel channel) {
                 sendChannels();
                 registerChannel(channel);
             }

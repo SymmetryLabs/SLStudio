@@ -2,11 +2,7 @@ package com.symmetrylabs.slstudio.performance;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
-import heronarts.lx.LX;
-import heronarts.lx.LXChannel;
-import heronarts.lx.LXComponent;
-import heronarts.lx.LXEffect;
-import heronarts.lx.LXEngine;
+import heronarts.lx.*;
 import heronarts.lx.midi.remote.LXMidiRemote;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -61,20 +57,20 @@ public class PerformanceManager extends LXComponent {
 
     private final LX lx;
 
-    class Listener implements LXEngine.Listener {
+    class Listener implements LXLook.Listener {
         @Override
-        public void channelAdded(LXEngine engine, LXChannel channel) {
+        public void channelAdded(LXLook look, LXChannel channel) {
             println("CHANNEL ADDED");
             setChannelOptions();
         }
 
         @Override
-        public void channelMoved(LXEngine engine, LXChannel channel) {
+        public void channelMoved(LXLook look, LXChannel channel) {
             setChannelOptions();
         }
 
         @Override
-        public void channelRemoved(LXEngine engine, LXChannel channel) {
+        public void channelRemoved(LXLook look, LXChannel channel) {
             setChannelOptions();
         }
     }
@@ -238,7 +234,7 @@ public class PerformanceManager extends LXComponent {
     public void start(SLStudioLX.UI ui) {
         this.ui = ui;
 
-        lx.engine.addListener(new Listener());
+        lx.engine.getFocusedLook().addListener(new Listener());
         addUI();
         setChannelOptions();
         for (DeckWindow w : deckWindows) {

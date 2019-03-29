@@ -125,7 +125,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     public final Output output;
 
-    private final List<Listener> listeners = new ArrayList<Listener>();
     private final List<MessageListener> messageListeners = new ArrayList<MessageListener>();
 
     public final BoundedParameter framesPerSecond = new BoundedParameter("FPS", 60, 0, 300);
@@ -167,25 +166,9 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         public void dispatch();
     }
 
-    public interface Listener {
-        public void channelAdded(LXEngine engine, LXChannel channel);
-        public void channelRemoved(LXEngine engine, LXChannel channel);
-        public void channelMoved(LXEngine engine, LXChannel channel);
-    }
-
     @Deprecated
     public interface MessageListener {
         public void onMessage(LXEngine engine, String message);
-    }
-
-    public final LXEngine addListener(Listener listener) {
-        this.listeners.add(listener);
-        return this;
-    }
-
-    public final LXEngine removeListener(Listener listener) {
-        this.listeners.remove(listener);
-        return this;
     }
 
     @Deprecated
@@ -805,27 +788,17 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     public LXChannel addChannel(LXPattern[] patterns) {
         LXChannel channel = getFocusedLook().addChannel();
         channel.setPatterns(patterns);
-        for (Listener listener : this.listeners) {
-            listener.channelAdded(this, channel);
-        }
         return channel;
     }
 
     @Deprecated
     public void removeChannel(LXChannel channel) {
-        if (getFocusedLook().removeChannel(channel)) {
-            for (Listener listener : this.listeners) {
-                listener.channelRemoved(this, channel);
-            }
-        }
+        getFocusedLook().removeChannel(channel);
     }
 
     @Deprecated
     public void moveChannel(LXChannel channel, int index) {
         getFocusedLook().moveChannel(channel, index);
-        for (Listener listener : this.listeners) {
-            listener.channelMoved(this, channel);
-        }
     }
 
     @Deprecated
