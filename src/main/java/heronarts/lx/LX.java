@@ -20,6 +20,7 @@
 
 package heronarts.lx;
 
+import com.google.common.base.Preconditions;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXPalette;
 import heronarts.lx.data.Project;
@@ -249,7 +250,7 @@ public class LX {
         LX.initTimer.log("Tempo");
 
         // Add a default channel
-        this.engine.addChannel(new LXPattern[0]).fader.setValue(1);
+        this.engine.addLook().addChannel().fader.setValue(1);
         LX.initTimer.log("Default Channel");
 
     }

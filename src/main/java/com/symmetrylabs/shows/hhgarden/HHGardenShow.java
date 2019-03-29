@@ -14,6 +14,7 @@ import com.symmetrylabs.slstudio.workspaces.Workspace;
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEngine;
+import heronarts.lx.LXLook;
 import heronarts.lx.model.LXPoint;
 import heronarts.p3lx.ui.UI3dContext;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener, LXEngine.Listener {
+public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener, LXLook.Listener {
     public static final String SHOW_NAME = "hhgarden";
     private static final boolean DEBUG_UNMAPPED = false;
 
@@ -43,8 +44,8 @@ public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener, 
         NetworkMonitor.getInstance(lx).start();
 
         updatePixlites(lx, (FlowersModel) lx.model);
-        lx.engine.addListener(this);
-        for (LXChannel c : lx.engine.channels) {
+        lx.engine.getFocusedLook().addListener(this);
+        for (LXChannel c : lx.engine.getAllSubChannels()) {
             c.autoDisable.setValue(true);
         }
     }
@@ -136,15 +137,15 @@ public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener, 
     }
 
     @Override
-    public void channelAdded(LXEngine lxEngine, LXChannel lxChannel) {
+    public void channelAdded(LXLook look, LXChannel lxChannel) {
         lxChannel.autoDisable.setValue(true);
     }
 
     @Override
-    public void channelRemoved(LXEngine lxEngine, LXChannel lxChannel) {
+    public void channelRemoved(LXLook look, LXChannel lxChannel) {
     }
 
     @Override
-    public void channelMoved(LXEngine lxEngine, LXChannel lxChannel) {
+    public void channelMoved(LXLook look, LXChannel lxChannel) {
     }
 }

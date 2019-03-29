@@ -30,15 +30,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import heronarts.lx.LX;
-import heronarts.lx.LXBus;
-import heronarts.lx.LXChannel;
-import heronarts.lx.LXEngine;
-import heronarts.lx.LXMasterChannel;
+import heronarts.lx.*;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.component.UIButton;
-import heronarts.p3lx.ui.studio.clip.UIClipLauncher;
 import processing.core.PConstants;
 
 public class UIMixer extends UI2dContainer {
@@ -53,7 +48,6 @@ public class UIMixer extends UI2dContainer {
 
     public final UIButton addChannelButton;
     public final UIMasterStrip masterStrip;
-    public final UISceneStrip sceneStrip;
 
     final LX lx;
 
@@ -73,12 +67,12 @@ public class UIMixer extends UI2dContainer {
             strip.addToContainer(this);
         }
 
-        this.addChannelButton = new UIButton(0, PADDING + UIClipLauncher.HEIGHT + UIMixerStrip.SPACING, 20, UIMixerStripControls.HEIGHT) {
+        this.addChannelButton = new UIButton(0, PADDING + UIMixerStrip.SPACING, 20, UIMixerStripControls.HEIGHT) {
             @Override
             public void onToggle(boolean on) {
                 if (!on) {
                     lx.engine.addChannel();
-                    lx.engine.focusedChannel.setValue(lx.engine.getChannels().size()-1);
+                    lx.engine.getFocusedLook().focusedChannel.setValue(lx.engine.getChannels().size()-1);
                 }
             }
         };
@@ -92,20 +86,19 @@ public class UIMixer extends UI2dContainer {
         .addToContainer(this);
 
         this.masterStrip = (UIMasterStrip) new UIMasterStrip(ui, this, lx).addToContainer(this);
-        this.sceneStrip = (UISceneStrip) new UISceneStrip(ui, this, lx).addToContainer(this);
 
-        lx.engine.addListener(new LXEngine.Listener() {
-            public void channelAdded(LXEngine engine, LXChannel channel) {
+        lx.engine.getFocusedLook().addListener(new LXLook.Listener() {
+            public void channelAdded(LXLook look, LXChannel channel) {
                 UIChannelStrip strip = new UIChannelStrip(ui, UIMixer.this, lx, channel);
                 mutableChannelStrips.put(channel, strip);
                 strip.addToContainer(UIMixer.this, channel.getIndex());
             }
 
-            public void channelRemoved(LXEngine engine, LXChannel channel) {
+            public void channelRemoved(LXLook look, LXChannel channel) {
                 mutableChannelStrips.remove(channel).removeFromContainer();
             }
 
-            public void channelMoved(LXEngine engine, LXChannel channel) {
+            public void channelMoved(LXLook look, LXChannel channel) {
                 mutableChannelStrips.get(channel).setContainerIndex(channel.getIndex());
             }
         });

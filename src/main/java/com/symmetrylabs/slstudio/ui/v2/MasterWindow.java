@@ -1,14 +1,8 @@
 package com.symmetrylabs.slstudio.ui.v2;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXBus;
-import heronarts.lx.LXChannel;
-import heronarts.lx.LXEffect;
-import heronarts.lx.LXMasterChannel;
-import heronarts.lx.LXPattern;
-import heronarts.lx.warp.LXWarp;
-import java.util.ArrayList;
-import java.util.List;
+import heronarts.lx.LXLook;
+
 
 public class MasterWindow extends CloseableWindow {
     private final LX lx;
@@ -38,11 +32,12 @@ public class MasterWindow extends CloseableWindow {
             lx.engine.addTask(() -> lx.engine.output.brightness.setValue(level));
         }
 
+        LXLook look = lx.engine.getFocusedLook();
         UI.separator();
-        ParameterUI.draw(lx, lx.engine.crossfader);
-        ParameterUI.draw(lx, lx.engine.crossfaderBlendMode);
-        ParameterUI.draw(lx, lx.engine.cueA, true);
+        ParameterUI.draw(lx, look.crossfader);
+        ParameterUI.draw(lx, look.crossfaderBlendMode);
+        ParameterUI.draw(lx, look.cueA, true);
         UI.sameLine();
-        ParameterUI.draw(lx, lx.engine.cueB, true);
+        ParameterUI.draw(lx, look.cueB, true);
     }
 }

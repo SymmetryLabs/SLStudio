@@ -33,15 +33,8 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.sound.midi.InvalidMidiDataException;
-import heronarts.lx.LX;
-import heronarts.lx.LXBus;
-import heronarts.lx.LXChannel;
-import heronarts.lx.LXComponent;
-import heronarts.lx.LXEffect;
-import heronarts.lx.LXEngine;
-import heronarts.lx.LXModulationComponent;
-import heronarts.lx.LXModulationEngine;
-import heronarts.lx.LXPattern;
+
+import heronarts.lx.*;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.midi.MidiControlChange;
 import heronarts.lx.midi.MidiNoteOn;
@@ -76,6 +69,7 @@ public class LXOscEngine extends LXComponent {
     private static final String ROUTE_PITCHBEND = "pitchbend";
     private static final String ROUTE_MASTER = "master";
     private static final String ROUTE_CHANNEL = "channel";
+    private static final String ROUTE_LOOK = "look";
     private static final String ROUTE_ACTIVE_PATTERN = "activePattern";
     private static final String ROUTE_NEXT_PATTERN = "nextPattern";
     private static final String ROUTE_PATTERN = "pattern";
@@ -180,12 +174,21 @@ public class LXOscEngine extends LXComponent {
                     } else if (parts[2].equals(ROUTE_MASTER)) {
                         oscChannel(message, lx.engine.masterChannel, parts, 3);
                     } else if (parts[2].equals(ROUTE_CHANNEL)) {
+                        LXLook look = lx.engine.getFocusedLook();
                         if (parts[3].equals(ROUTE_FOCUSED)) {
-                            oscChannel(message, lx.engine.getFocusedChannel(), parts, 4);
+                            oscChannel(message, look.getFocusedChannel(), parts, 4);
                         } else if (parts[3].matches("\\d+")) {
-                            oscChannel(message, lx.engine.getChannel(Integer.parseInt(parts[3]) - 1), parts, 4);
+                            oscChannel(message, look.getChannel(Integer.parseInt(parts[3]) - 1), parts, 4);
                         } else {
-                            oscChannel(message, lx.engine.getChannel(parts[3]), parts, 4);
+                            oscChannel(message, look.getChannel(parts[3]), parts, 4);
+                        }
+                    } else if (parts[2].equals(ROUTE_LOOK)) {
+                        if (parts[3].equals(ROUTE_FOCUSED)) {
+                            oscLook(message, lx.engine.getFocusedLook(), parts, 4);
+                        } else if (parts[3].matches("\\d+")) {
+                            oscLook(message, lx.engine.getLook(Integer.parseInt(parts[3]) - 1), parts, 4);
+                        } else {
+                            oscLook(message, lx.engine.getLook(parts[3]), parts, 4);
                         }
                     }
                 }
@@ -236,6 +239,20 @@ public class LXOscEngine extends LXComponent {
             } catch (InvalidMidiDataException imdx) {
                 System.err.println("[OSC] Invalid MIDI message: " + imdx.getLocalizedMessage());
             }
+        }
+
+        private void oscLook(OscMessage message, LXLook look, String[] parts, int index) {
+            if (parts[index].equals(ROUTE_CHANNEL)) {
+                if (parts[index+1].equals(ROUTE_FOCUSED)) {
+                    oscChannel(message, look.getFocusedChannel(), parts, index+2);
+                } else if (parts[index+1].matches("\\d+")) {
+                    oscChannel(message, look.getChannel(Integer.parseInt(parts[index+1]) - 1), parts, index+2);
+                } else {
+                    oscChannel(message, look.getChannel(parts[index+1]), parts, index+2);
+                }
+                return;
+            }
+            oscComponent(message, look, parts, index);
         }
 
         private void oscChannel(OscMessage message, LXBus channel, String[] parts, int index) {
@@ -357,7 +374,7 @@ public class LXOscEngine extends LXComponent {
         }
     }
 
-    private class EngineTransmitter extends Transmitter implements LXParameterListener, LXChannel.Listener, LXEngine.Listener, LXModulationEngine.Listener {
+    private class EngineTransmitter extends Transmitter implements LXParameterListener, LXChannel.Listener, LXLook.Listener, LXModulationEngine.Listener {
         private EngineTransmitter(String host, int port, int bufferSize) throws SocketException, UnknownHostException {
             super(InetAddress.getByName(host), port, bufferSize);
             registerComponent(lx.engine);
@@ -375,7 +392,7 @@ public class LXOscEngine extends LXComponent {
             for (LXChannel channel : lx.engine.getChannels()) {
                 registerChannel(channel);
             }
-            lx.engine.addListener(this);
+            lx.engine.getFocusedLook().addListener(this);
         }
 
         private void registerChannel(LXChannel channel) {
@@ -521,17 +538,17 @@ public class LXOscEngine extends LXComponent {
         }
 
         @Override
-        public void channelAdded(LXEngine engine, LXChannel channel) {
+        public void channelAdded(LXLook look, LXChannel channel) {
             registerChannel(channel);
         }
 
         @Override
-        public void channelRemoved(LXEngine engine, LXChannel channel) {
+        public void channelRemoved(LXLook look, LXChannel channel) {
             unregisterChannel(channel);
         }
 
         @Override
-        public void channelMoved(LXEngine engine, LXChannel channel) {}
+        public void channelMoved(LXLook look, LXChannel channel) {}
 
         @Override
         public void modulatorAdded(LXModulationEngine engine, LXModulator modulator) {

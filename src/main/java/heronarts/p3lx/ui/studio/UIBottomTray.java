@@ -30,16 +30,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import heronarts.lx.LX;
-import heronarts.lx.LXBus;
-import heronarts.lx.LXChannel;
-import heronarts.lx.LXEngine;
+import heronarts.lx.*;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI2dContext;
-import heronarts.p3lx.ui.studio.clip.UIClipView;
 import heronarts.p3lx.ui.studio.device.UIDeviceBin;
 import heronarts.p3lx.ui.studio.mixer.UIMixer;
 import heronarts.p3lx.ui.studio.mixer.UIMixerStripControls;
@@ -60,7 +56,6 @@ public class UIBottomTray extends UI2dContext {
 
     private final Map<LXBus, UIDeviceBin> mutableDeviceBins = new HashMap<LXBus, UIDeviceBin>();
     public final Map<LXBus, UIDeviceBin> deviceBins = Collections.unmodifiableMap(this.mutableDeviceBins);
-    public final UIClipView clipView;
 
     public UIBottomTray(UI ui, LX lx) {
         super(ui, 0, ui.getHeight() - HEIGHT - UIContextualHelpBar.VISIBLE_HEIGHT, ui.getWidth(), HEIGHT);
@@ -78,31 +73,28 @@ public class UIBottomTray extends UI2dContext {
             .setBorderRounding(4)
             .addToContainer(this);
 
-        this.clipView = new UIClipView(ui, lx, UIDeviceBin.PADDING, UIDeviceBin.PADDING, this.rightSection.getContentWidth() - 2*UIDeviceBin.PADDING);
-        this.clipView.addToContainer(this.rightSection);
-
         for (LXChannel channel : lx.engine.getChannels()) {
             addChannel(channel);
         }
         addChannel(lx.engine.masterChannel);
 
-        lx.engine.addListener(new LXEngine.Listener() {
-            public void channelAdded(LXEngine engine, LXChannel channel) {
+        lx.engine.getFocusedLook().addListener(new LXLook.Listener() {
+            public void channelAdded(LXLook look, LXChannel channel) {
                 addChannel(channel);
                 onChannelFocus();
             }
 
-            public void channelRemoved(LXEngine engine, LXChannel channel) {
+            public void channelRemoved(LXLook look, LXChannel channel) {
                 removeChannel(channel);
                 onChannelFocus();
             }
 
-            public void channelMoved(LXEngine engine, LXChannel channel) {
+            public void channelMoved(LXLook look, LXChannel channel) {
                 onChannelFocus();
             }
         });
 
-     lx.engine.focusedChannel.addListener(new LXParameterListener() {
+        lx.engine.getFocusedLook().focusedChannel.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
                 onChannelFocus();
             }
@@ -143,9 +135,6 @@ public class UIBottomTray extends UI2dContext {
         if (this.rightSection != null) {
             this.rightSection.setX(deviceX);
             this.rightSection.setWidth(getContentWidth() - deviceX - PADDING);
-            if (this.clipView != null) {
-                this.clipView.setWidth(this.rightSection.getWidth() - 2*UIDeviceBin.PADDING);
-            }
             for (UIDeviceBin deviceBin : this.mutableDeviceBins.values()) {
                 deviceBin.setWidth(this.rightSection.getContentWidth() - 2*UIDeviceBin.PADDING);
             }
@@ -155,7 +144,7 @@ public class UIBottomTray extends UI2dContext {
     @Override
     public void onDraw(UI ui, PGraphics pg) {
         pg.stroke(ui.theme.getPrimaryColor());
-        float channelX = PADDING + UIMixer.PADDING + UIMixer.STRIP_SPACING * lx.engine.focusedChannel.getValuei() + UIMixerStripControls.WIDTH/2;
+        float channelX = PADDING + UIMixer.PADDING + UIMixer.STRIP_SPACING * lx.engine.getFocusedLook().focusedChannel.getValuei() + UIMixerStripControls.WIDTH/2;
         float binX = this.mixer.getX() + this.mixer.getWidth() + SEPARATOR + 12;
         float b = 4;
         pg.strokeWeight(2);
@@ -169,7 +158,7 @@ public class UIBottomTray extends UI2dContext {
     public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         if (keyCode == java.awt.event.KeyEvent.VK_N && (keyEvent.isControlDown() || keyEvent.isMetaDown())) {
             lx.engine.addChannel();
-            lx.engine.focusedChannel.setValue(lx.engine.getChannels().size()-1);
+            lx.engine.getFocusedLook().focusedChannel.setValue(lx.engine.getChannels().size()-1);
         }
     }
 

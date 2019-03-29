@@ -12,6 +12,7 @@ import heronarts.p3lx.ui.UI3dContext;
 import heronarts.p3lx.ui.UIObject;
 import processing.core.PFont;
 import processing.core.PGraphics;
+import heronarts.lx.LXLook;
 
 import static com.symmetrylabs.util.Utils.millis;
 import static processing.core.PConstants.LEFT;
@@ -56,8 +57,9 @@ public class UIFramerate extends UITextOverlay {
 
     protected String getUsing16BitFlags() {
         String flags = "";
-        for (int i = 0; i < 8 && i < lx.engine.getChannels().size(); i++) {
-            if (lx.engine.getChannel(i).colorSpace.getEnum() == PolyBuffer.Space.RGB16) {
+        LXLook look = lx.engine.getFocusedLook();
+        for (int i = 0; i < 8 && i < look.channels.size(); i++) {
+            if (look.channels.get(i).colorSpace.getEnum() == PolyBuffer.Space.RGB16) {
                 flags += (i + 1);
             }
         }
@@ -78,7 +80,7 @@ public class UIFramerate extends UITextOverlay {
         }
         if (((int) (lx.engine.timer.channelNanos / 1000000)) != 0) {
             sb.append("  channels  " + ((int) (lx.engine.timer.channelNanos / 1000000)) + "ms\n");
-            for (LXChannel channel : lx.engine.channels) {
+            for (LXChannel channel : lx.engine.getAllSubChannels()) {
                 if (((int) (channel.timer.loopNanos / 1000000)) != 0) {
                     sb.append("    " + channel.getLabel() + "  " + ((int) (channel.timer.loopNanos / 1000000)) + "ms\n");
                     LXPattern pattern = channel.getActivePattern();

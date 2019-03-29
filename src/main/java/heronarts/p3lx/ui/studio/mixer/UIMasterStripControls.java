@@ -41,45 +41,47 @@ public class UIMasterStripControls extends UIMixerStripControls {
 
         // Strip name
         new UILabel(PADDING, PADDING-1, this.width-2*PADDING, 16)
-        .setLabel("Master")
-        .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
-        .setTextOffset(0, 1)
-        .setFontColor(ui.theme.getControlTextColor())
-        .addToContainer(this);
+            .setLabel("Master")
+            .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+            .setTextOffset(0, 1)
+            .setFontColor(ui.theme.getControlTextColor())
+            .addToContainer(this);
 
         float bxp = 6*PADDING;
 
         new UIButton(bxp, ACTIVE_BUTTON_Y, 28, 28)
-        .setLabel("Live")
-        .setParameter(lx.engine.output.enabled)
-        .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
-        .addToContainer(this);
-
-        new UIButton(bxp, 80, 28, 16)
-        .setIcon(ui.theme.iconArm)
-        .setActiveColor(ui.theme.getRecordingColor())
-        .setParameter(this.bus.arm)
-        .addToContainer(this);
+            .setLabel("Live")
+            .setParameter(lx.engine.output.enabled)
+            .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+            .addToContainer(this);
 
         float syp = 22;
         new UISlider(UISlider.Direction.VERTICAL, this.width-PADDING-FADER_WIDTH, syp, FADER_WIDTH, FADER_HEIGHT)
-        .setShowLabel(false)
-        .setParameter(lx.engine.output.brightness)
-        .addToContainer(this);
+            .setShowLabel(false)
+            .setParameter(lx.engine.output.brightness)
+            .addToContainer(this);
 
         float yp = 108;
-        new UIButton(4, yp, 16, 16).setLabel("A").setParameter(lx.engine.cueA).setActiveColor(ui.theme.getAttentionColor()).addToContainer(this);
+        new UIButton(4, yp, 16, 16)
+            .setLabel("A")
+            .setParameter(lx.engine.getFocusedLook().cueA)
+            .setActiveColor(ui.theme.getAttentionColor())
+            .addToContainer(this);
         new UILabel(26, yp + 4, 28, 13).setLabel("CUE").setTextAlignment(PConstants.LEFT, PConstants.TOP).setFont(ui.theme.getControlFont()).addToContainer(this);
-        new UIButton(52, yp, 16, 16).setLabel("B").setParameter(lx.engine.cueB).setActiveColor(ui.theme.getAttentionColor()).addToContainer(this);
+        new UIButton(52, yp, 16, 16)
+            .setLabel("B")
+            .setParameter(lx.engine.getFocusedLook().cueB)
+            .setActiveColor(ui.theme.getAttentionColor())
+            .addToContainer(this);
 
-        new UIDropMenu(4, height - 40, width-8, 16, lx.engine.crossfaderBlendMode)
-        .setDirection(UIDropMenu.Direction.UP)
-        .addToContainer(this);
+        new UIDropMenu(4, height - 40, width-8, 16, lx.engine.getFocusedLook().crossfaderBlendMode)
+            .setDirection(UIDropMenu.Direction.UP)
+            .addToContainer(this);
 
         new UISlider(PADDING, height - 20 - PADDING, width-2*PADDING, 20)
-        .setParameter(lx.engine.crossfader)
-        .setShowLabel(false)
-        .addToContainer(this);
+            .setParameter(lx.engine.getFocusedLook().crossfader)
+            .setShowLabel(false)
+            .addToContainer(this);
     }
 
 }

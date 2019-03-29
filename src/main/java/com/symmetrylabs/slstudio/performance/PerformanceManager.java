@@ -2,11 +2,7 @@ package com.symmetrylabs.slstudio.performance;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
-import heronarts.lx.LX;
-import heronarts.lx.LXChannel;
-import heronarts.lx.LXComponent;
-import heronarts.lx.LXEffect;
-import heronarts.lx.LXEngine;
+import heronarts.lx.*;
 import heronarts.lx.midi.remote.LXMidiRemote;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -61,20 +57,20 @@ public class PerformanceManager extends LXComponent {
 
     private final LX lx;
 
-    class Listener implements LXEngine.Listener {
+    class Listener implements LXLook.Listener {
         @Override
-        public void channelAdded(LXEngine engine, LXChannel channel) {
+        public void channelAdded(LXLook look, LXChannel channel) {
             println("CHANNEL ADDED");
             setChannelOptions();
         }
 
         @Override
-        public void channelMoved(LXEngine engine, LXChannel channel) {
+        public void channelMoved(LXLook look, LXChannel channel) {
             setChannelOptions();
         }
 
         @Override
-        public void channelRemoved(LXEngine engine, LXChannel channel) {
+        public void channelRemoved(LXLook look, LXChannel channel) {
             setChannelOptions();
         }
     }
@@ -226,7 +222,7 @@ public class PerformanceManager extends LXComponent {
         ui.addLayer(fR);
         fR.setVisible(false);
 
-        FaderWindow fC = new FaderWindow(lx.engine.crossfader, ui, "", ui.getWidth() / 2 - (w / 2), y, w, h);
+        FaderWindow fC = new FaderWindow(lx.engine.getFocusedLook().crossfader, ui, "", ui.getWidth() / 2 - (w / 2), y, w, h);
         ui.addLayer(fC);
         fC.setVisible(false);
 
@@ -238,7 +234,7 @@ public class PerformanceManager extends LXComponent {
     public void start(SLStudioLX.UI ui) {
         this.ui = ui;
 
-        lx.engine.addListener(new Listener());
+        lx.engine.getFocusedLook().addListener(new Listener());
         addUI();
         setChannelOptions();
         for (DeckWindow w : deckWindows) {
@@ -247,7 +243,7 @@ public class PerformanceManager extends LXComponent {
 
         lFader.addListener(parameter -> swapDecks(lFader, DeckSide.LEFT));
         rFader.addListener(parameter -> swapDecks(rFader, DeckSide.RIGHT));
-        getLX().engine.crossfader.addListener(parameter -> {
+        getLX().engine.getFocusedLook().crossfader.addListener(parameter -> {
             swapDecks(rFader, DeckSide.RIGHT);
             swapDecks(rFader, DeckSide.LEFT);
         });
@@ -272,7 +268,7 @@ public class PerformanceManager extends LXComponent {
     }
 
     private void updateDeckColors() {
-        double crossfade = getLX().engine.crossfader.getValue();
+        double crossfade = getLX().engine.getFocusedLook().crossfader.getValue();
 
         deckWindows[0].setBackgroundColor(computeDeckColor(lFader.getValue() < .5f, crossfade < .5f));
         deckWindows[1].setBackgroundColor(computeDeckColor(lFader.getValue() >= .5f, crossfade < .5f));
@@ -291,7 +287,8 @@ public class PerformanceManager extends LXComponent {
     void swapDecks(CompoundParameter fader, DeckSide side) {
         int newDeck = focusedDeskIndexForSide(side);
         int oldDeck = side == DeckSide.LEFT ? oldDeckL : oldDeckR;
-        LXChannel.CrossfadeGroup newAB = getLX().engine.crossfader.getValue() < .5 ? LXChannel.CrossfadeGroup.A : LXChannel.CrossfadeGroup.B;
+        LXChannel.CrossfadeGroup newAB = getLX().engine.getFocusedLook().crossfader.getValue() < .5
+            ? LXChannel.CrossfadeGroup.A : LXChannel.CrossfadeGroup.B;
         if (newDeck != oldDeck || newAB != oldAB)
             updateDeckColors();
 
@@ -338,14 +335,14 @@ public class PerformanceManager extends LXComponent {
         LEFT {
             @Override
             public boolean isActive(final LX lx) {
-                return lx.engine.crossfader.getValue() < .5;
+                return lx.engine.getFocusedLook().crossfader.getValue() < .5;
             }
         },
 
         RIGHT {
             @Override
             public boolean isActive(final LX lx) {
-                return lx.engine.crossfader.getValue() >= .5;
+                return lx.engine.getFocusedLook().crossfader.getValue() >= .5;
             }
         };
 

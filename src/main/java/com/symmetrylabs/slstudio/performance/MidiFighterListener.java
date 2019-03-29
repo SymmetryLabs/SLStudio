@@ -168,9 +168,9 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
             if (v == 1.0f && cc >= 8 && cc <= 13) {
                 boolean left = cc <= 10;
                 if (left) {
-                    lx.engine.focusedChannel.decrement();
+                    lx.engine.getFocusedLook().focusedChannel.decrement();
                 } else {
-                    lx.engine.focusedChannel.increment();
+                    lx.engine.getFocusedLook().focusedChannel.increment();
                 }
             }
         }
@@ -211,7 +211,7 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
             };
         }
 
-        lx.engine.focusedChannel.addListener(new LXParameterListener() {
+        lx.engine.getFocusedLook().focusedChannel.addListener(new LXParameterListener() {
             @Override
             public void onParameterChanged(LXParameter lxParameter) {
                 getAndWriteParams();
@@ -270,6 +270,3 @@ public class MidiFighterListener extends LXComponent implements LXMidiListener {
     }
 
 }
-
-
-

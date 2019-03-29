@@ -5,6 +5,7 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
 import heronarts.lx.modulator.LinearEnvelope;
+import heronarts.lx.LXLook;
 
 public class XfadeTimer implements LXLoopTask, CaptionSource {
     private static final double LIGHT_SHOW_MS = 1000 * 60 * 10; // 10min
@@ -12,6 +13,7 @@ public class XfadeTimer implements LXLoopTask, CaptionSource {
     private static final double CROSSFADE_MS = 5_000;
 
     private final LX lx;
+    private final LXLook look;
     private boolean inLightShow = true;
     private double timeSinceLastXfade = 0;
     private long lastRunNanos;
@@ -20,7 +22,8 @@ public class XfadeTimer implements LXLoopTask, CaptionSource {
 
     public XfadeTimer(LX lx, SLStudioLX.UI ui) {
         this.lx = lx;
-        lastXfadeValue = lx.engine.crossfader.getValue();
+        this.look = lx.engine.getFocusedLook();
+        lastXfadeValue = look.crossfader.getValue();
     }
 
     @Override
@@ -31,7 +34,7 @@ public class XfadeTimer implements LXLoopTask, CaptionSource {
         timeSinceLastXfade += 1e-6 * (runNanos - lastRunNanos);
         lastRunNanos = runNanos;
 
-        double xfadeValue = lx.engine.crossfader.getValue();
+        double xfadeValue = look.crossfader.getValue();
         if (Math.abs(xfadeValue - lastXfadeValue) > 0.1) {
             timeSinceLastXfade = 0;
             inLightShow = xfadeValue < 0.5;
@@ -51,7 +54,7 @@ public class XfadeTimer implements LXLoopTask, CaptionSource {
         if (inLightShow) {
             xfade = 1 - xfade;
         }
-        lx.engine.crossfader.setValue(xfade);
+        look.crossfader.setValue(xfade);
     }
 
     @Override

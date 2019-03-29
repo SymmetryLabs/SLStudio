@@ -1,18 +1,15 @@
 package heronarts.lx.data;
 
+import com.google.gson.*;
 import heronarts.lx.LX.ProjectListener;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXSerializable;
-import com.google.gson.JsonPrimitive;
+
 import java.util.IllegalFormatException;
 import com.symmetrylabs.slstudio.ApplicationState;
 
 import com.google.common.base.Preconditions;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
 import java.io.File;
 import java.io.FileReader;
@@ -32,13 +29,55 @@ public class LegacyProjectLoader {
     /* file version numbers used to be stored as non-integer strings, we treat this string like version 0. */
     private static final String INITIAL_LEGACY_PROJECT_VERSION_STRING = "0.1";
 
-    private final static String KEY_VERSION = "version";
-    private final static String KEY_TIMESTAMP = "timestamp";
-    private final static String KEY_ENGINE = "engine";
-    private final static String KEY_EXTERNALS = "externals";
+    private static final String KEY_VERSION = "version";
+    private static final String KEY_TIMESTAMP = "timestamp";
+    private static final String KEY_ENGINE = "engine";
+    private static final String KEY_EXTERNALS = "externals";
+
+    private static final String[] KEYS_MOVED_FROM_ENGINE_TO_LOOK = new String[] {
+        "crossfader", "crossfaderBlendMode", "focusedChannel", "cueA", "cueB" };
+
+    private static void moveJsonSubtree(JsonObject origRoot, JsonObject newRoot, String key) {
+        if (!origRoot.has(key)) {
+            return;
+        }
+        JsonElement subtree = origRoot.get(key);
+        origRoot.remove(key);
+        newRoot.add(key, subtree);
+    }
 
     private static JsonObject upgradeVersion(int fileVersion, int runtimeVersion, JsonObject obj) {
-        /* for now, LXPs are forwards-compatible */
+        /* move LXEngine parameters (and all channels) onto a single LXLook when upgrading from pre-look to post-look */
+        if (fileVersion < LXVersions.SLSTUDIO_WITH_LOOKS && runtimeVersion >= LXVersions.SLSTUDIO_WITH_LOOKS) {
+            JsonObject engine = obj.getAsJsonObject("engine");
+            JsonObject engineParams = engine.getAsJsonObject("parameters");
+
+            JsonObject look = new JsonObject();
+            moveJsonSubtree(engine, look, "channels");
+
+            JsonObject lookParams = new JsonObject();
+            look.add("parameters", lookParams);
+            for (String param : KEYS_MOVED_FROM_ENGINE_TO_LOOK) {
+                moveJsonSubtree(engineParams, lookParams, param);
+            }
+
+            JsonArray looks = new JsonArray();
+            looks.add(look);
+            engine.add("looks", looks);
+
+            int newVersion = fileVersion == LXVersions.SLSTUDIO_ORIG
+                ? LXVersions.SLSTUDIO_WITH_LOOKS : LXVersions.VOLUME_WITH_LOOKS;
+            obj.addProperty(KEY_VERSION, newVersion);
+            System.out.println(String.format("upgraded project file from v%d to v%d", fileVersion, newVersion));
+        }
+        try {
+            JsonWriter writer = new JsonWriter(new FileWriter("upgraded.lxp"));
+            writer.setIndent("  ");
+            new GsonBuilder().create().toJson(obj, writer);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return obj;
     }
 

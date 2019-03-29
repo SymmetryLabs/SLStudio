@@ -99,6 +99,7 @@ dependencies {
 	implementation group: 'de.javagl', name: 'obj', version: '0.3.0'
 	implementation group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: '2.9.3'
 	implementation group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+	implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.3'
 	implementation group: 'org.javassist', name: 'javassist', version: '3.22.0-GA'
 	implementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: '1.2.60'
 	implementation group: 'org.processing', name: 'core', version: '3.3.6'

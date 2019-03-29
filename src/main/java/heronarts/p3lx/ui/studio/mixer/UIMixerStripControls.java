@@ -33,10 +33,10 @@ import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.LXStudio;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
-import heronarts.p3lx.ui.studio.clip.UIClipLauncher;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
+import heronarts.lx.LXLook;
 
 public abstract class UIMixerStripControls extends UI2dContainer {
 
@@ -54,22 +54,14 @@ public abstract class UIMixerStripControls extends UI2dContainer {
     protected final LX lx;
     protected final LXBus bus;
 
-    private static float yPosition(UI ui) {
-        float y = UIClipLauncher.HEIGHT + UIMixerStrip.SPACING;
-        if (ui instanceof LXStudio.UI) {
-            y = ((LXStudio.UI) ui).isClipViewVisible() ? y : 0;
-        }
-        return y;
-    }
-
     UIMixerStripControls(final UI ui, final LX lx, final LXBus bus) {
-        super(0, yPosition(ui), WIDTH, HEIGHT);
+        super(0, 0, WIDTH, HEIGHT);
         this.ui = ui;
         this.lx = lx;
         this.bus = bus;
 
         setBackground();
-        this.lx.engine.focusedChannel.addListener(new LXParameterListener() {
+        this.lx.engine.getFocusedLook().focusedChannel.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
                 setBackground();
             }
@@ -108,18 +100,19 @@ public abstract class UIMixerStripControls extends UI2dContainer {
 
     @Override
     public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+        LXLook look = lx.engine.getFocusedLook();
         if (!(keyEvent.isMetaDown() || keyEvent.isControlDown())) {
             if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
-                if (lx.engine.focusedChannel.getValuei() > 0) {
+                if (look.focusedChannel.getValuei() > 0) {
                     consumeKeyEvent();
-                    this.lx.engine.focusedChannel.decrement();
-                    getMixer().focusStrip(this.lx.engine.getFocusedChannel());
+                    look.focusedChannel.decrement();
+                    getMixer().focusStrip(look.getFocusedChannel());
                 }
             } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
-                if (lx.engine.focusedChannel.getValuei() < lx.engine.focusedChannel.getRange() - 1) {
+                if (look.focusedChannel.getValuei() < look.focusedChannel.getRange() - 1) {
                     consumeKeyEvent();
-                    this.lx.engine.focusedChannel.increment();
-                    getMixer().focusStrip(this.lx.engine.getFocusedChannel());
+                    look.focusedChannel.increment();
+                    getMixer().focusStrip(look.getFocusedChannel());
                 }
             }
         }

@@ -21,8 +21,6 @@
 package heronarts.lx;
 
 import heronarts.lx.blend.LXBlend;
-import heronarts.lx.clip.LXChannelClip;
-import heronarts.lx.clip.LXClip;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXShortMessage;
@@ -389,8 +387,11 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             }
         } else if (p == this.cueActive) {
             if (this.cueActive.isOn()) {
-                this.lx.engine.cueA.setValue(false);
-                this.lx.engine.cueB.setValue(false);
+                LXLook parent = getParentLook();
+                if (parent != null) {
+                    parent.cueA.setValue(false);
+                    parent.cueB.setValue(false);
+                }
             }
         }
     }
@@ -453,11 +454,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         return this.index;
     }
 
-    @Override
-    protected LXClip constructClip(int index) {
-        return new LXChannelClip(this.lx, this, index);
-    }
-
     public final List<LXPattern> getPatterns() {
         return this.patterns;
     }
@@ -487,7 +483,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     public final LXChannel setPatterns(LXPattern[] patterns) {
         if (this.transition != null) {
             finishTransition();
-        } else {
+        } else if (getActivePattern() != null) {
             getActivePattern().onInactive();
         }
         _updatePatterns(patterns);
@@ -694,6 +690,14 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         this.nextPatternIndex = i;
         startTransition();
         return this;
+    }
+
+    public LXLook getParentLook() {
+        LXComponent parent = getParent();
+        if (parent != null && parent instanceof LXLook) {
+            return (LXLook) parent;
+        }
+        return null;
     }
 
     public LXBus disableAutoTransition() {
