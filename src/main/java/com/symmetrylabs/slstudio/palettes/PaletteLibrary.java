@@ -365,5 +365,14 @@ public class PaletteLibrary {
                     new NonuniformGradientPalette.Point(0xE6D690, 0.85),
                     new NonuniformGradientPalette.Point(0xEAE6CA, 1.00),
                 }));
+        pl.put("rainbow", new NonuniformGradientPalette(new NonuniformGradientPalette.Point[] {
+                    new NonuniformGradientPalette.Point(0xFF0000, 0.00),
+                    new NonuniformGradientPalette.Point(0xFFFF00, 0.40),
+                    new NonuniformGradientPalette.Point(0x00FF00, 0.50),
+                    new NonuniformGradientPalette.Point(0x00FFFF, 0.60),
+                    new NonuniformGradientPalette.Point(0x0000FF, 0.70),
+                    new NonuniformGradientPalette.Point(0xFF00FF, 0.90),
+                    new NonuniformGradientPalette.Point(0xFF0000, 1.00),
+                }));
     }
 }
