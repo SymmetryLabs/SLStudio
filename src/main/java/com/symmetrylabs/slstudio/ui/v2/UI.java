@@ -7,10 +7,11 @@ import java.nio.ByteBuffer;
  * The Java half of "slimgui", the Symmetry Labs wrapper around Dear Imgui, an immediate-mode GUI library
  *
  * <p>
- * Dear Imgui is the industry-standard implementation of the immediate-mode GUI
- * (IMGUI) UI paradigm. IMGUI is probably not the UI style that you're used to,
- * but once you're used to it it feels pretty good: fewer memory leaks, fewer
- * logic errors, no listeners at all. For more information about IMGUI and Dear
+ * <a href="https://github.com/ocornut/imgui">Dear Imgui</a> is the
+ * industry-standard implementation of the immediate-mode GUI (IMGUI) UI
+ * paradigm. IMGUI is probably not the UI style that you're used to, but once
+ * you're used to it it feels pretty good: fewer memory leaks, fewer logic
+ * errors, no listeners at all. For more information about IMGUI and Dear
  * Imgui, <a href="https://github.com/ocornut/imgui/blob/master/docs/README.md">the readme
  * of Dear Imgui</a> has a good introduction to immediate-mode GUIs and Dear
  * Imgui.
@@ -652,14 +653,92 @@ public class UI {
     /** Closes out a group. */
     public static native void endGroup();
 
-    /* Popup model windows */
-    public static native void openPopup(String name);
-    public static native void closePopup();
-    public static boolean beginPopup(String name, boolean modal) {
-        return beginPopup(name, modal, 0);
+    /**
+     * Starts drawing a popup window.
+     *
+     * <p>
+     * Popups are unlike normal windows in that you call {@code beginPopup} on each frame,
+     * even when you don't intend to display it. ImGui handles the visibility tracking of
+     * the window instead. When you want to show the popup, call {@link openPopup(String)}
+     * with the corresponding popup ID, and if you want to close it use {@link closePopup()},
+     * which will close whatever popup is currently open.
+     *
+     * <p>
+     * This function returns true when the popup is visible, and false otherwise. You should
+     * only draw the contents of the popup if this returns true. You also must call {@link endPopup()}
+     * when you're done drawing the contents of the popup, but you should only call {@link endPopup()}
+     * if this returns true. So the correct usage of this is:
+     *
+     * <pre>
+     *     if (UI.beginPopup("mypopup", false)) {
+     *         UI.button("do it");
+     *         UI.endPopup();
+     *     }
+     *     if (UI.button("show my popup")) {
+     *         UI.openPopup("mypopup");
+     *     }
+     * </pre>
+     *
+     * @param id the ID of this popup
+     * @param modal if true, the popup cannot be dismissed by clicking outside
+     * of it, and will stay visible until a call to {@link closePopup()}.
+     * @return whether the popup is currently visible
+     */
+    public static boolean beginPopup(String id, boolean modal) {
+        return beginPopup(id, modal, 0);
     }
-    public static native boolean beginPopup(String name, boolean modal, int flags);
+
+    /**
+     * Starts drawing a popup window.
+     *
+     * <p>
+     * Popups are unlike normal windows in that you call {@code beginPopup} on each frame,
+     * even when you don't intend to display it. ImGui handles the visibility tracking of
+     * the window instead. When you want to show the popup, call {@link openPopup(String)}
+     * with the corresponding popup ID, and if you want to close it use {@link closePopup()},
+     * which will close whatever popup is currently open.
+     *
+     * <p>
+     * This function returns true when the popup is visible, and false otherwise. You should
+     * only draw the contents of the popup if this returns true. You also must call {@link endPopup()}
+     * when you're done drawing the contents of the popup, but you should only call {@link endPopup()}
+     * if this returns true. So the correct usage of this is:
+     *
+     * <pre>
+     *     if (UI.beginPopup("mypopup", false)) {
+     *         UI.button("do it");
+     *         UI.endPopup();
+     *     }
+     *     if (UI.button("show my popup")) {
+     *         UI.openPopup("mypopup");
+     *     }
+     * </pre>
+     *
+     * @param id the ID of this popup
+     * @param modal if true, the popup cannot be dismissed by clicking outside
+     * of it, and will stay visible until a call to {@link closePopup()}.
+     * @param flags a bitset of the {@code WINDOW_} flags
+     * @return whether the popup is currently visible
+     */
+    public static native boolean beginPopup(String id, boolean modal, int flags);
+
+    /**
+     * Finishes drawing a popup.
+     * @see beginPopup(String, boolean, int)
+     */
     public static native void endPopup();
+
+    /**
+     * Requests that the popup with the given ID is displayed. Does nothing if popup is already visible.
+     * @see beginPopup(String, boolean, int)
+     */
+    public static native void openPopup(String id);
+
+    /**
+     * Requests that the popup with the given ID be hidden. Does nothing is popup is already hidden.
+     * @see beginPopup(String, boolean, int)
+     */
+    public static native void closePopup();
 
     /* Widgets */
     public static native void text(String t);
@@ -750,16 +829,15 @@ public class UI {
     }
     public static native void setNextTreeNodeOpen(boolean isOpen, int when);
 
-    /* Drag and drop. Package-private; use DragDrop class for memory-safe versions of these functions */
-    static boolean beginDragDropSource() {
+    public static boolean beginDragDropSource() {
         return beginDragDropSource(0);
     }
-    static native boolean beginDragDropSource(int flags);
-    static native void endDragDropSource();
-    static native boolean setDragDropPayload(String type, Object data);
-    static native boolean beginDragDropTarget();
-    static native void endDragDropTarget();
-    static native Object acceptDragDropPayload(String type, int flags);
+    public static native boolean beginDragDropSource(int flags);
+    public static native void endDragDropSource();
+    public static native boolean setDragDropPayload(String type, Object data);
+    public static native boolean beginDragDropTarget();
+    public static native void endDragDropTarget();
+    public static native Object acceptDragDropPayload(String type, int flags);
     public static <T> T acceptDragDropPayload(String type, Class<T> cls) {
         Object res = acceptDragDropPayload(type, 0);
         if (res == null || !cls.isAssignableFrom(res.getClass())) {
