@@ -200,7 +200,6 @@ task dist(type: Zip) {
   from(".") {
     include 'libs/**'
     include 'shows/**'
-    include 'src/main/resources/**'
   }
   from("scripts") {
     include 'SLStudio.bat'
