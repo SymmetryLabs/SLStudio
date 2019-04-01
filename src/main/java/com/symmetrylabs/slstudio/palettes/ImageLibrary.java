@@ -21,13 +21,28 @@ public class ImageLibrary {
     }
 
     public BufferedImage get(String filename) {
-        String filepath = new File(baseDir, filename).toString();
+        File f = new File(baseDir, filename);
+        String filepath = f.toString();
         try {
             InputStream s = getClass().getClassLoader().getResourceAsStream(filepath);
             if (s != null)
                 return ImageIO.read(s);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        /* HACK: our sourceless windows build isn't loading image files from
+           resources for some reason. This is a stopgap until I can fix
+           resource loading. */
+        f = new File("src/main/resources/" + baseDir, filename);
+        if (f.exists()) {
+            try {
+                BufferedImage img = ImageIO.read(f);
+                System.err.println("using windows resource hack to load image without resources");
+                return img;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         System.err.println("Could not load image '" + filepath + "'.");
