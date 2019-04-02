@@ -25,7 +25,7 @@ apply plugin: 'com.palantir.docker'
 apply plugin: 'edu.sc.seis.launch4j'
 
 group = 'com.symmetrylabs'
-version = '1.0.4'
+version = '1.0.5'
 sourceCompatibility = 1.8
 
 mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
