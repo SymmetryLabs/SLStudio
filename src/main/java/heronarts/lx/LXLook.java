@@ -42,7 +42,7 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
     protected final PolyBuffer black;  // always black, read-only
     protected final BlendTarget groupA;  // working area for blending group A
     protected final BlendTarget groupB;  // working area for blending group B
-    protected final CuedBuffer buffer;
+    public final CuedBuffer buffer;
 
     protected final AddBlend addBlend;
 

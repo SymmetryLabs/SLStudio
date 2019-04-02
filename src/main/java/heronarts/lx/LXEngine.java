@@ -1019,7 +1019,9 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
         // TODO: this is where scenes would plug in
         for (LXLook look : mutableLooks) {
-            main.blendFrom(look, 1, addBlend, space);
+            main.blendFrom(look.buffer.main, 1, addBlend, space);
+            cue.blendFrom(look.buffer.cue, 1, addBlend, space);
+            cueOn = cueOn || look.buffer.cueOn;
         }
 
         // Run the master channel (may have clips)
