@@ -15,6 +15,10 @@ To install Git-LFS on a Mac, run these two commands:
 
 For other platforms, see [these installation instructions](https://help.github.com/articles/installing-git-large-file-storage/).
 
+On Linux it is necessary to actually pull in the LFS files (i.e. the libs, so that you may build)
+    
+    git lfs pull
+
 ## Running the v1 UI from the command line
 
 From the root of the project, execute:
