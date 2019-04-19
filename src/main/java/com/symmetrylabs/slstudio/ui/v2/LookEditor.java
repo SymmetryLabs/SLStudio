@@ -37,6 +37,10 @@ public class LookEditor implements Window {
         this.transformWepUi = new WepUi(lx, false, () -> UI.closePopup());
     }
 
+    public LXLook getLook() {
+        return look;
+    }
+
     public void setLook(LXLook l) {
         look = l;
     }
