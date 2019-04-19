@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.pattern.playback;
 import ar.com.hjg.pngj.IImageLine;
 import ar.com.hjg.pngj.ImageLineInt;
 import ar.com.hjg.pngj.PngReader;
+import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
@@ -22,6 +23,9 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import static com.symmetrylabs.slstudio.SLStudio.SHOW_FILE_NAME;
+import static com.symmetrylabs.util.Utils.loadStrings;
+
 public class MTCPlayback extends SLPattern<SLModel> {
 //public class MTCPlayback extends LXPattern {
     private static final String TAG = "MTC";
@@ -29,7 +33,8 @@ public class MTCPlayback extends SLPattern<SLModel> {
     private static final int CIRCULAR_BUFFER_SIZE = 16;
     private static final int JUMP_FRAME_SENSITIVITY = 300; // 10 sec should be good
 //    private static final String RENDER_ROOT = "/Users/symmetry/symmetrylabs/software/SLStudio/shows/pilots/render/";
-    private static final String RENDER_ROOT = "/Users/symmetry/symmetrylabs/software/DATA/render/";
+//    private static final String RENDER_ROOT = "/Users/symmetry/symmetrylabs/software/DATA/render/";
+    private static final String RENDER_ROOT = "/Users/symmetry/symmetrylabs/software/DATA/show/";
 
     protected final StringParameter renderFile = new StringParameter("renderFile", "");
 //    protected final BooleanParameter filePickerDialogue = new BooleanParameter("choose render", false).setMode(BooleanParameter.Mode.MOMENTARY);
@@ -88,6 +93,15 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
     public MTCPlayback(LX lx){
         super(lx);
+
+//        String[] lines = loadStrings(SHOW_FILE_NAME);
+//        if (lines != null && lines.length > 0){
+//            showName = lines[0].trim();
+////            SLStudio.setWarning("Show", "FOUND: " + showName);
+//        }
+//        else{
+////            SLStudio.setWarning("NoShow", "could not find show");
+//        }
 //        addParameter(filePickerDialogue);
 //        addParameter(renderFile);
 //        addParameter(freewheel);
@@ -244,7 +258,9 @@ public class MTCPlayback extends SLPattern<SLModel> {
                 songChangeDebounce--;
                 return;
             }
-            String dataPath = RENDER_ROOT;
+
+            String dataPath = constructDataPath();
+
             currentSongName = thisSong.song_name;
             renderFile.setValue( dataPath + thisSong.name_png + ".png");
             MTCOffset.setValue(songIndex*BIN_SIZE + thisSong.extra_MTC_offset);
@@ -252,6 +268,17 @@ public class MTCPlayback extends SLPattern<SLModel> {
             // reset the debounce.
             songChangeDebounce = SONG_CHANGE_DEBOUNCE;
         }
+    }
+
+    private String constructDataPath() {
+        String showName = SLStudio.applet.showName;
+        if (showName == null){
+            SLStudio.setWarning("NoShow", "could not find show");
+        }
+        else{
+            SLStudio.setWarning("FoShow", "Found show: " + showName);
+        }
+        return RENDER_ROOT + showName + "/";
     }
 
     private void clearSong() {
@@ -273,7 +300,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
             pngr = new PngReader(currentSongPng);
         }
         else{
-            System.err.println("must be png");
+            SLStudio.setWarning("BAD PATH (or not a valid *.png): ", path);
         }
     }
 

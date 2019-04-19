@@ -107,7 +107,8 @@ public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigCh
 
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
-        workspace = new Workspace(lx, ui, "shows/pilots");
+//        workspace = new Workspace(lx, ui, "shows/pilots");
+        workspace = new Workspace(lx, ui, "/Users/symmetry/symmetrylabs/software/SLStudio/shows/pilots");
         workspace.setRequestsBeforeSwitch(2);
 
         configurator = new CartConfigurator(ui, 0, 0, ui.rightPane.utility.getContentWidth());

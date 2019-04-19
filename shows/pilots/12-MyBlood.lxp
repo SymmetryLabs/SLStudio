@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545281058311,
+  "timestamp": 1539047366217,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 4,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -176,7 +176,7 @@
               "enabled": true,
               "cx": 410.0,
               "cy": 58.0,
-              "cz": 24.0,
+              "cz": 72.5,
               "lat": 0.0,
               "lon": 0.0,
               "turn": 0.0,
@@ -218,7 +218,7 @@
             "parameters": {
               "label": "CircleWipe",
               "enabled": true,
-              "rad": 718.9308471679688,
+              "rad": 830.1927490234375,
               "invert": true,
               "cx": 410.0,
               "cy": 58.0
@@ -404,11 +404,11 @@
               "label": "BoxMask",
               "enabled": true,
               "xSize": 557.5999967008829,
-              "cx": 368.7800009213388,
-              "ySize": 51.206894516944885,
-              "cy": 101.56000070482489,
-              "zSize": 100.5,
-              "cz": -20.219999011605978,
+              "cx": 410.0,
+              "ySize": 60.0000015620526,
+              "cy": 58.0,
+              "zSize": 136.30000019446015,
+              "cz": 72.5,
               "invert": false
             }
           },
@@ -436,20 +436,6 @@
               "Shape": 1,
               "Freq": 10.0,
               "Black": false
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            }
-          },
-          {
-            "id": 31450,
-            "class": "com.symmetrylabs.slstudio.effect.SOS_strobeNoMore",
-            "modulationColor": -1704192,
-            "parameters": {
-              "label": "SOS_strobeNoMore",
-              "enabled": true
             },
             "modulation": {
               "modulators": [],
@@ -587,9 +573,9 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 31257,
+        "id": 21742,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -7470849,
+        "modulationColor": -16449792,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
@@ -856,7 +842,31 @@
     "midi": {
       "inputs": [
         {
-          "name": "** Internal Error getting Device Name!",
+          "name": "CoreMIDI4J - Port 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 2",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 3",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 4",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Sync Port",
           "channel": true,
           "control": false,
           "sync": false
@@ -868,6 +878,7 @@
           "sync": false
         }
       ],
+      "surfaces": [],
       "mapping": []
     }
   },
@@ -883,9 +894,9 @@
         "4607": true
       },
       "preview": {
-        "radius": 593.6915971679597,
-        "theta": 0.17160183660254952,
-        "phi": 0.22547970771789497,
+        "radius": 545.4137548187742,
+        "theta": -0.7853981633974483,
+        "phi": 0.6154797077178955,
         "positionX": 410.0,
         "positionY": 48.0,
         "positionZ": 72.5

@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1545352621996,
+  "timestamp": 1539298723339,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,7 +14,7 @@
       "scene-5": false,
       "crossfader": 0.5172413792461157,
       "crossfaderBlendMode": 0,
-      "speed": 1.0,
+      "speed": 0.8166667073965073,
       "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
@@ -93,8 +93,8 @@
             "parameters": {
               "label": "ColorFilter",
               "enabled": true,
-              "Hue": 44.63999894186854,
-              "Sat": 91.00000020116568
+              "Hue": 51.839998941868544,
+              "Sat": 51.00000109523535
             },
             "modulation": {
               "modulators": [],
@@ -114,13 +114,13 @@
               "label": "Vortex",
               "count": 0,
               "size": 6.000000134110452,
-              "xrad": 360.7999937683343,
-              "zrad": 50.250001123175025,
-              "xc": 355.04000122845173,
-              "zc": -34.289999820291996,
-              "omega": 43.200001046061516,
-              "v": 63.36000079661608,
-              "radvar": 0.33999999351799487,
+              "xrad": 360.7999937683344,
+              "zrad": 34.79999954625964,
+              "xc": 410.0,
+              "zc": 59.44999373100693,
+              "omega": 32.40000128746033,
+              "v": 100.92000697463753,
+              "radvar": 0.11999999843537808,
               "smear": 0.5999999865889549,
               "reset": false
             },
@@ -239,9 +239,9 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 1034,
+        "id": 43,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16252673,
+        "modulationColor": -9502465,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
@@ -359,6 +359,36 @@
     "midi": {
       "inputs": [
         {
+          "name": "CoreMIDI4J - Port 1",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 2",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 3",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Port 4",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - Sync Port",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "** Internal Error getting Device Name!",
           "channel": true,
           "control": false,
@@ -369,6 +399,56 @@
           "channel": true,
           "control": false,
           "sync": false
+        }
+      ],
+      "surfaces": [
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
         }
       ],
       "mapping": []
@@ -382,9 +462,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 1066.3204667069926,
-        "theta": -0.04499999999999917,
-        "phi": 0.25800000000000334,
+        "radius": 555.0790186313667,
+        "theta": 0.5730000000000004,
+        "phi": 0.3690000000000002,
         "positionX": 410.0,
         "positionY": 58.0,
         "positionZ": 72.5

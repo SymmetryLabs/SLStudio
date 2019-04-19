@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1551534851486,
+  "timestamp": 1554488540428,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -228,10 +228,23 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.0
+        "brightness": 1.0
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 26020,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -7995137,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
       "envelop": {
         "id": 45,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -341,6 +354,18 @@
       "inputs": [
         {
           "name": "CoreMIDI4J - NateBus",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "** Internal Error getting Device Name!",
+          "channel": true,
+          "control": false,
+          "sync": false
+        },
+        {
+          "name": "Real Time Sequencer",
           "channel": true,
           "control": false,
           "sync": false

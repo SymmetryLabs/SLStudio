@@ -3,6 +3,7 @@ package com.symmetrylabs.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.symmetrylabs.shows.pilots.CartConfig;
 import com.symmetrylabs.slstudio.SLStudio;
 
 import java.io.File;
@@ -181,5 +182,13 @@ public class FileUtils {
     /** Loads an image from the show directory for the current show. */
     public static PImage loadShowImage(String filename) {
         return SLStudio.applet.loadImage(getShowPath(filename));
+    }
+
+    /**
+     * Reads a JSON file with path explicit,
+     * without complaining if the file is missing.
+     */
+    public static <T> T readAbsoluteJsonIfExists(String filename, Class<T> type) {
+        return readJsonIfExists(new File(filename), type);
     }
 }

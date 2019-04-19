@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1550423479563,
+  "timestamp": 1554408624685,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,7 +14,7 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 1.0,
+      "speed": 0.8499518036842346,
       "focusedChannel": 3,
       "cueA": false,
       "cueB": false,
@@ -91,7 +91,7 @@
               "label": "Mirror",
               "enabled": true,
               "x": true,
-              "cx": 355.0400009213388,
+              "cx": 412.4399999873696,
               "y": false,
               "cy": 58.99000001601875,
               "z": false,
@@ -107,11 +107,11 @@
               "label": "BoxMask",
               "enabled": true,
               "xSize": 410.0,
-              "cx": 355.04000122845173,
-              "ySize": 47.36238992214203,
+              "cx": 404.24000042790675,
+              "ySize": 116.00000762939453,
               "cy": 73.49999658577141,
-              "zSize": 64.32000080868602,
-              "cz": -31.274998764507473,
+              "zSize": 138.2699991557747,
+              "cz": 31.075003122501002,
               "invert": false
             }
           },
@@ -122,7 +122,7 @@
             "parameters": {
               "label": "Rotate",
               "enabled": true,
-              "cx": 355.04000122845173,
+              "cx": 412.44000029448256,
               "cy": 62.95000008009374,
               "cz": 24.0,
               "angle": 0.0
@@ -214,11 +214,11 @@
               "label": "BoxMask",
               "enabled": true,
               "xSize": 0.0,
-              "cx": 355.0400009213388,
+              "cx": 412.4399999873696,
               "ySize": 78.87999953329563,
               "cy": 87.69999971762297,
-              "zSize": 95.69999948143959,
-              "cz": 24.0,
+              "zSize": 134.85000022687018,
+              "cz": 23.199994828104877,
               "invert": false
             }
           }
@@ -408,7 +408,7 @@
               "label": "BoxMask",
               "enabled": false,
               "xSize": 416.2099998611957,
-              "cx": 361.91000107489526,
+              "cx": 419.3100001409261,
               "ySize": 81.19999818503857,
               "cy": 52.709999682903344,
               "zSize": 7.0349998427554965,
@@ -435,12 +435,12 @@
             "parameters": {
               "label": "BoxMask",
               "enabled": true,
-              "xSize": 350.36999344825745,
-              "cx": 356.25,
-              "ySize": 99.0,
+              "xSize": 418.1999921798706,
+              "cx": 409.99999750699385,
+              "ySize": 116.00000762939453,
               "cy": 63.599996044114235,
-              "zSize": 71.35499840509146,
-              "cz": -9.164998509921134,
+              "zSize": 100.04999776370823,
+              "cz": 8.235002016685883,
               "invert": false
             }
           }
@@ -751,7 +751,7 @@
               "Speed": 0.55,
               "Symm": 0,
               "Anim": 3,
-              "Dens": 0.8799999952316284,
+              "Dens": 0.9300000071525574,
               "AnimResets": false
             },
             "modulation": {
@@ -793,7 +793,7 @@
             "parameters": {
               "label": "Kaleidoscope",
               "enabled": true,
-              "cx": 355.03999999999996,
+              "cx": 412.43999906603085,
               "cy": 58.0,
               "cz": 24.0,
               "lat": 0.0,
@@ -907,7 +907,7 @@
               "palette": 0,
               "x": 0.0,
               "y": 1.0,
-              "z": 0.00248563289642334,
+              "z": 0.09668302536010742,
               "cx": 410.0,
               "cy": 116.0,
               "cz": 24.0,
@@ -959,7 +959,7 @@
             "parameters": {
               "label": "Kaleidoscope",
               "enabled": true,
-              "cx": 355.03999999999996,
+              "cx": 412.43999906603085,
               "cy": 58.0,
               "cz": 24.0,
               "lat": 0.0,
@@ -1480,6 +1480,19 @@
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 48999,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -16746497,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
       "envelop": {
         "id": 45,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -1616,12 +1629,12 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 462.39861588187654,
-        "theta": -1.5719999999999916,
-        "phi": 0.4427963705062862,
-        "positionX": 357.24761962890625,
-        "positionY": 76.25,
-        "positionZ": -26.318944931030273
+        "radius": 921.1212138463543,
+        "theta": 0.08700000000001987,
+        "phi": 0.48179637050628643,
+        "positionX": 436.9299621582031,
+        "positionY": 32.0,
+        "positionZ": 12.55766773223877
       }
     }
   }
