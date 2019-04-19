@@ -28,10 +28,10 @@ public class DoubleBufferedOfflineRenderOutputTest {
     public void testNormalOfflineRender(){
         OfflineRenderOutput output;
         output = new OfflineRenderOutput(lx);
-        output.pOutputFile.setValue("/Users/symmetry/symmetrylabs/software/SLStudio/shows/pilots/render/testCase.png");
+        output.pOutputFile.setValue(System.getProperty("user.home") + "/symmetrylabs/software/SLStudio/shows/pilots/render/testCase.png");
 
         lx.addOutput(output);
-        assertEquals("DoubleBuffer", "/Users/symmetry/symmetrylabs/software/SLStudio/shows/pilots/render/testCase.png", output.pOutputFile.getString());
+        assertEquals("DoubleBuffer", System.getProperty("user.home") + "/symmetrylabs/software/SLStudio/shows/pilots/render/testCase.png", output.pOutputFile.getString());
 
         output.externalSync.setValue(true);
         output.pStart.setValue(true);

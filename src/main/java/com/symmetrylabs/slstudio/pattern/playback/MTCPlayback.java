@@ -32,9 +32,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
     private static final int CIRCULAR_BUFFER_SIZE = 16;
     private static final int JUMP_FRAME_SENSITIVITY = 300; // 10 sec should be good
-//    private static final String RENDER_ROOT = "/Users/symmetry/symmetrylabs/software/SLStudio/shows/pilots/render/";
-//    private static final String RENDER_ROOT = "/Users/symmetry/symmetrylabs/software/DATA/render/";
-    private static final String RENDER_ROOT = "/Users/symmetry/symmetrylabs/software/DATA/show/";
+    private static final String RENDER_ROOT = System.getProperty("user.home") + "/symmetrylabs/software/SLStudio/shows/pilots/render/";
 
     protected final StringParameter renderFile = new StringParameter("renderFile", "");
 //    protected final BooleanParameter filePickerDialogue = new BooleanParameter("choose render", false).setMode(BooleanParameter.Mode.MOMENTARY);

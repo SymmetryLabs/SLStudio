@@ -12,7 +12,7 @@ public class ReEncoder {
     public ReEncoder(){
         String readName = "test.png";
 
-        String dataPath = "/Users/symmetry/symmetrylabs/software/SLStudio/shows/pilots/render/";
+        String dataPath = System.getProperty("user.home") + "/symmetrylabs/software/SLStudio/shows/pilots/render/";
         String pngPath = dataPath + readName;
         File inFile = new File(pngPath);
         if (inFile.isFile() && inFile.getName().endsWith(".png")) {
