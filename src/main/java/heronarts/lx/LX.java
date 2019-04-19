@@ -21,6 +21,7 @@
 package heronarts.lx;
 
 import com.google.common.base.Preconditions;
+import com.symmetrylabs.slstudio.palettes.SwatchLibrary;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXPalette;
 import heronarts.lx.data.Project;
@@ -171,6 +172,11 @@ public class LX {
      */
     public final Tempo tempo;
 
+    /**
+     * The active swatch library.
+     */
+    public final SwatchLibrary swatches;
+
     /** The list of globally registered pattern classes */
     private final List<Class<? extends LXPattern>> registeredPatterns = new ArrayList<Class<? extends LXPattern>>();
 
@@ -249,6 +255,9 @@ public class LX {
         // Tempo
         this.tempo = new Tempo(this);
         LX.initTimer.log("Tempo");
+
+        this.swatches = SwatchLibrary.getDefault();
+        LX.initTimer.log("Swatches");
 
         // Add a default channel
         LXLook look = this.engine.addLook();
