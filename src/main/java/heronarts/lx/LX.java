@@ -256,7 +256,8 @@ public class LX {
         this.tempo = new Tempo(this);
         LX.initTimer.log("Tempo");
 
-        this.swatches = SwatchLibrary.getDefault(this);
+        swatches = SwatchLibrary.getDefault(this);
+        engine.registerComponent("swatches", swatches);
         LX.initTimer.log("Swatches");
 
         // Add a default channel

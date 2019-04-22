@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.palettes;
 
+import com.google.gson.JsonObject;
 import heronarts.lx.*;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -7,12 +8,20 @@ import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import org.jetbrains.annotations.NotNull;
 import static com.symmetrylabs.util.MathUtils.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class SwatchLibrary extends LXComponent implements Iterable<SwatchLibrary.Swatch> {
+    private static final String KEY_SWATCH_INDEX = "index";
+    private static final String KEY_SWATCH_HUE = "hue";
+    private static final String KEY_SWATCH_SAT = "sat";
+    private static final String KEY_SWATCH_BRIGHT = "brightness";
+    private static final String KEY_SWATCHES = "swatches";
+
     public static class Swatch {
         public final ColorParameter color;
         public final int index;
@@ -23,6 +32,23 @@ public class SwatchLibrary extends LXComponent implements Iterable<SwatchLibrary
             color.hue.setValue(h);
             color.saturation.setValue(s);
             color.brightness.setValue(b);
+        }
+
+        JsonObject toJson() {
+            JsonObject res = new JsonObject();
+            res.addProperty(KEY_SWATCH_INDEX, index);
+            res.addProperty(KEY_SWATCH_HUE, color.hue.getValue());
+            res.addProperty(KEY_SWATCH_SAT, color.saturation.getValue());
+            res.addProperty(KEY_SWATCH_BRIGHT, color.brightness.getValue());
+            return res;
+        }
+
+        static Swatch fromJson(JsonObject obj) {
+            return new Swatch(
+                obj.get(KEY_SWATCH_INDEX).getAsInt(),
+                obj.get(KEY_SWATCH_HUE).getAsFloat(),
+                obj.get(KEY_SWATCH_SAT).getAsFloat(),
+                obj.get(KEY_SWATCH_BRIGHT).getAsFloat());
         }
     }
 
@@ -83,6 +109,7 @@ public class SwatchLibrary extends LXComponent implements Iterable<SwatchLibrary
         this.lx = lx;
         swatches = new ArrayList<>();
         transitions = new ArrayList<>();
+        addParameter(transitionTime);
     }
 
     public void loop(double elapsedMs) {
@@ -152,6 +179,30 @@ public class SwatchLibrary extends LXComponent implements Iterable<SwatchLibrary
             if (s != null) transitions.add(new SwatchTransition(s, s.getNormalized(), swatch.color.saturation.getNormalized(), tt, false));
             if (b != null) transitions.add(new SwatchTransition(b, b.getNormalized(), swatch.color.brightness.getNormalized(), tt, false));
         }
+    }
+
+    @Override
+    public void load(LX lx, JsonObject obj) {
+        swatches.clear();
+        transitions.clear();
+        super.load(lx, obj);
+
+        if (obj.has(KEY_SWATCHES)) {
+            JsonArray swatchArray = obj.getAsJsonArray(KEY_SWATCHES);
+            for (JsonElement swatchElem : swatchArray) {
+                swatches.add(Swatch.fromJson((JsonObject) swatchElem));
+            }
+        }
+    }
+
+    @Override
+    public void save(LX lx, JsonObject obj) {
+        super.save(lx, obj);
+        JsonArray arr = new JsonArray();
+        for (Swatch s : swatches) {
+            arr.add(s.toJson());
+        }
+        obj.add(KEY_SWATCHES, arr);
     }
 
     public static SwatchLibrary getDefault(LX lx) {
