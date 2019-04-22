@@ -424,6 +424,8 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
             addChannel().fader.setValue(1);
         }
 
+        /*
+          This currently fails because of some weird component registry error
         if (obj.has(KEY_SHELF)) {
             JsonObject shelfObj = obj.getAsJsonObject(KEY_SHELF);
             Shelf newShelf = Shelf.instantiateShelf(shelfObj.get(KEY_CLASS).getAsString());
@@ -432,6 +434,7 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
                 setShelf(newShelf);
             }
         }
+        */
 
         super.load(lx, obj);
     }
