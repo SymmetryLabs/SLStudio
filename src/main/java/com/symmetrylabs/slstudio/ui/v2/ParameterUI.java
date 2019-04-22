@@ -141,6 +141,15 @@ public class ParameterUI {
         return res;
     }
 
+    public static boolean toggle(LX lx, String label, BooleanParameter p, boolean important, float w) {
+        final boolean start = p.getValueb();
+        final boolean res = toggle(label, start, important, w);
+        if (res != start) {
+            lx.engine.addTask(() -> p.setValue(res));
+        }
+        return res;
+    }
+
     public static void draw(LX lx, BooleanParameter p) {
         draw(lx, p, false);
     }

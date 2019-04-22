@@ -22,25 +22,15 @@ public class ColorSwatchWindow extends CloseableWindow {
 
     @Override
     protected void windowSetup() {
-        UI.setNextWindowDefaults(50, 300, 450, 550);
+        UI.setNextWindowDefaults(50, 300, 400, 750);
     }
 
     @Override
     protected void drawContents() {
-        ParameterUI.draw(lx, lx.swatches.transitionTime, ParameterUI.WidgetType.KNOB);
+        UI.pushFont(FontLoader.DEFAULT_FONT_L);
+        UI.text("Swatch colors");
+        UI.popFont();
 
-        UI.spacing(5, 20);
-
-        final LXLook look = lookEditor.getLook();
-        for (SwatchLibrary.Swatch swatch : lx.swatches) {
-            ParameterUI.draw(lx, swatch.color);
-            if (UI.beginContextMenu("removeSwatch" + swatch.index)) {
-                if (UI.contextMenuItem("Remove")) {
-                    lx.engine.addTask(() -> lx.swatches.removeSwatch(swatch));
-                }
-                UI.endContextMenu();
-            }
-        }
         if (UI.button("Add swatch")) {
             lx.engine.addTask(() -> lx.swatches.addSwatch());
         }
@@ -57,7 +47,23 @@ public class ColorSwatchWindow extends CloseableWindow {
             UI.endPopup();
         }
 
+        final LXLook look = lookEditor.getLook();
+        for (SwatchLibrary.Swatch swatch : lx.swatches) {
+            ParameterUI.draw(lx, swatch.color);
+            if (UI.beginContextMenu("removeSwatch" + swatch.index)) {
+                if (UI.contextMenuItem("Remove")) {
+                    lx.engine.addTask(() -> lx.swatches.removeSwatch(swatch));
+                }
+                UI.endContextMenu();
+            }
+        }
+
         UI.spacing(5, 20);
+        UI.pushFont(FontLoader.DEFAULT_FONT_L);
+        UI.text("Activate");
+        UI.popFont();
+
+        ParameterUI.draw(lx, lx.swatches.transitionTime, ParameterUI.WidgetType.KNOB);
 
         UI.beginTable(4, "swatchButtons");
         for (SwatchLibrary.Swatch swatch : lx.swatches) {
@@ -69,6 +75,29 @@ public class ColorSwatchWindow extends CloseableWindow {
             }
             UI.popColor(2);
             UI.spacing(1, 10);
+            UI.nextCell();
+        }
+        UI.endTable();
+
+        UI.spacing(5, 20);
+        UI.pushFont(FontLoader.DEFAULT_FONT_L);
+        UI.text("Channel Scope");
+        UI.popFont();
+
+        if (UI.button("[all]")) {
+            for (LXChannel chan : look.channels) {
+                chan.acceptSwatches.setValue(true);
+            }
+        }
+        UI.sameLine();
+        if (UI.button("[none]")) {
+            for (LXChannel chan : look.channels) {
+                chan.acceptSwatches.setValue(false);
+            }
+        }
+        UI.beginTable(4, "channelScope");
+        for (LXChannel chan : look.channels) {
+            ParameterUI.toggle(lx, chan.getLabel(), chan.acceptSwatches, false, 0);
             UI.nextCell();
         }
         UI.endTable();

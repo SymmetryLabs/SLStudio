@@ -264,6 +264,10 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         new BooleanParameter("BlendPatterns", ApplicationState.inVolumeMode()) // defaults to true for Volume, false for SLStudio
             .setDescription("If true, all patterns in the channel are run and blended together. If false, only the active pattern is run.");
 
+    public final BooleanParameter acceptSwatches =
+        new BooleanParameter("AcceptSwatches", true)
+            .setDescription("If true, components in this channel will be updated when swatches are applied.");
+
     private final List<LXPattern> mutablePatterns = new ArrayList<LXPattern>();
     public final List<LXPattern> patterns = Collections.unmodifiableList(mutablePatterns);
 
