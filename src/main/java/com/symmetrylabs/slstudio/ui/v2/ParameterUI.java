@@ -42,7 +42,7 @@ public class ParameterUI {
 
     public static void draw(LX lx, BoundedParameter p, WidgetType wt) {
         if (wt == WidgetType.SLIDER) {
-            float start = p.getNormalizedf();
+            float start = p.getValuef();
             final float res = UI.sliderFloat(getID(p), start, (float) p.range.v0, (float) p.range.v1);
             if (start != res) {
                 lx.engine.addTask(() -> p.setValue(res));
