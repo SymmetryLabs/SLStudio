@@ -2,14 +2,17 @@ package com.symmetrylabs.slstudio.palettes;
 
 import heronarts.lx.*;
 import heronarts.lx.color.ColorParameter;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import org.jetbrains.annotations.NotNull;
+import static com.symmetrylabs.util.MathUtils.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class SwatchLibrary implements Iterable<SwatchLibrary.Swatch> {
+public class SwatchLibrary extends LXComponent implements Iterable<SwatchLibrary.Swatch> {
     public static class Swatch {
         public final ColorParameter color;
         public final int index;
@@ -21,42 +24,74 @@ public class SwatchLibrary implements Iterable<SwatchLibrary.Swatch> {
             color.saturation.setValue(s);
             color.brightness.setValue(b);
         }
+    }
 
-        public void apply(LXLook look) {
-            for (LXChannel chan : look.channels) {
-                for (LXPattern pat : chan.getPatterns()) {
-                    apply(pat);
-                }
-                for (LXEffect eff : chan.getEffects()) {
-                    apply(eff);
-                }
+    protected static class SwatchTransition {
+        public final LXNormalizedParameter param;
+        // if true, param is periodic with period = 1, and we should go through the periodic point instead of the "normal" way
+        public final boolean wrap;
+        public final double start;
+        public final double end;
+        public final double duration;
+        public float age;
+
+        SwatchTransition(LXNormalizedParameter param, double start, double end, double duration, boolean isPeriodic) {
+            this.param = param;
+            this.start = start;
+            this.end = end;
+            this.duration = duration;
+            this.age = 0;
+            if (isPeriodic) {
+                double a = Math.abs(end - start); // distance to go along the normal direction
+                double b = (1 - Double.max(start, end)) + Double.min(start, end); // distance to go if we exploit periodicity
+                this.wrap = b < a;
+            } else {
+                this.wrap = false;
             }
         }
 
-        public void apply(LXComponent c) {
-            for (LXParameter param : c.getParameters()) {
-                if (param instanceof ColorParameter) {
-                    ColorParameter cp = (ColorParameter) param;
-                    cp.hue.setValue(color.hue.getValue());
-                    cp.saturation.setValue(color.saturation.getValue());
-                    cp.brightness.setValue(color.brightness.getValue());
-                } else if (param.getLabel().toLowerCase().equals("hue")) {
-                    param.setValue(color.hue.getValue());
-                } else if (param.getLabel().toLowerCase().equals("saturation")) {
-                    param.setValue(color.saturation.getValue());
-                } else if (param.getLabel().toLowerCase().equals("sat")) {
-                    param.setValue(color.saturation.getValue());
-                } else if (param.getLabel().toLowerCase().equals("color")) {
-                    param.setValue(color.hue.getValue());
-                }
+        boolean loop(double deltaMs) {
+            age += deltaMs;
+            double t = age / duration;
+            if (t > 1) {
+                t = 1;
             }
+            double v;
+            if (wrap) {
+                double dist = end - start;
+                if (dist < 0) dist += 1;
+                else dist -= 1;
+
+                double trav = t * dist;
+                v = wrap(start + trav);
+            } else {
+                v = start + (end - start) * t;
+            }
+            param.setNormalized(v);
+            return t >= 1.0 - 1e-5;
         }
     }
 
     public final List<Swatch> swatches;
+    public final List<SwatchTransition> transitions;
+    public final CompoundParameter transitionTime =
+        (CompoundParameter) new CompoundParameter("transitionTime", 0, 0, 15_000).setExponent(3);
+    protected final LX lx;
 
-    public SwatchLibrary() {
+    public SwatchLibrary(LX lx) {
+        super(lx);
+        this.lx = lx;
         swatches = new ArrayList<>();
+        transitions = new ArrayList<>();
+    }
+
+    public void loop(double elapsedMs) {
+        for (Iterator<SwatchTransition> iter = transitions.iterator(); iter.hasNext();) {
+            SwatchTransition st = iter.next();
+            if (st.loop(elapsedMs)) {
+                iter.remove();
+            }
+        }
     }
 
     @NotNull
@@ -65,12 +100,69 @@ public class SwatchLibrary implements Iterable<SwatchLibrary.Swatch> {
         return swatches.iterator();
     }
 
-    public static SwatchLibrary getDefault() {
-        SwatchLibrary sl = new SwatchLibrary();
+    public void apply(Swatch swatch, LXLook look) {
+        transitions.clear();
+        applyImpl(swatch, look);
+    }
+
+    public void apply(Swatch swatch, LXComponent c) {
+        transitions.clear();
+        applyImpl(swatch, c);
+    }
+
+    protected void applyImpl(Swatch swatch, LXLook look) {
+        for (LXChannel chan : look.channels) {
+            for (LXPattern pat : chan.getPatterns()) {
+                applyImpl(swatch, pat);
+            }
+            for (LXEffect eff : chan.getEffects()) {
+                applyImpl(swatch, eff);
+            }
+        }
+    }
+
+    protected void applyImpl(Swatch swatch, LXComponent c) {
+        for (LXParameter param : c.getParameters()) {
+            if (param instanceof ColorParameter) {
+                ColorParameter cp = (ColorParameter) param;
+                applyImpl(swatch, cp.hue, cp.saturation, cp.brightness);
+            } else if (param instanceof LXNormalizedParameter) {
+                LXNormalizedParameter np = (LXNormalizedParameter) param;
+                if (np.getLabel().toLowerCase().equals("hue")) {
+                    applyImpl(swatch, np, null, null);
+                } else if (np.getLabel().toLowerCase().equals("saturation")) {
+                    applyImpl(swatch, null, np, null);
+                } else if (np.getLabel().toLowerCase().equals("sat")) {
+                    applyImpl(swatch, null, np, null);
+                } else if (np.getLabel().toLowerCase().equals("color")) {
+                    applyImpl(swatch, np, null, null);
+                }
+            }
+        }
+    }
+
+    protected void applyImpl(Swatch swatch, LXNormalizedParameter h, LXNormalizedParameter s, LXNormalizedParameter b) {
+        double tt = transitionTime.getValue();
+        if (tt == 0) {
+            if (h != null) h.setNormalized(swatch.color.hue.getNormalized());
+            if (s != null) s.setNormalized(swatch.color.saturation.getNormalized());
+            if (b != null) b.setNormalized(swatch.color.brightness.getNormalized());
+        } else {
+            if (h != null) transitions.add(new SwatchTransition(h, h.getNormalized(), swatch.color.hue.getNormalized(), tt, true));
+            if (s != null) transitions.add(new SwatchTransition(s, s.getNormalized(), swatch.color.saturation.getNormalized(), tt, false));
+            if (b != null) transitions.add(new SwatchTransition(b, b.getNormalized(), swatch.color.brightness.getNormalized(), tt, false));
+        }
+    }
+
+    public static SwatchLibrary getDefault(LX lx) {
+        SwatchLibrary sl = new SwatchLibrary(lx);
         sl.swatches.add(new Swatch(0, 0, 100, 100));
-        sl.swatches.add(new Swatch(1, 90, 100, 100));
-        sl.swatches.add(new Swatch(2, 180, 100, 100));
-        sl.swatches.add(new Swatch(3, 270, 100, 100));
+        sl.swatches.add(new Swatch(1, 30, 100, 100));
+        sl.swatches.add(new Swatch(2, 60, 100, 100));
+        sl.swatches.add(new Swatch(3, 90, 100, 100));
+        sl.swatches.add(new Swatch(4, 180, 100, 100));
+        sl.swatches.add(new Swatch(5, 225, 100, 100));
+        sl.swatches.add(new Swatch(6, 270, 100, 100));
         return sl;
     }
 }

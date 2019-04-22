@@ -914,6 +914,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
         this.modulation.loop(deltaMs);
         this.lx.palette.loop(deltaMs);
+        this.lx.swatches.loop(deltaMs);
 
         // Run top-level loop tasks
         for (LXLoopTask loopTask : this.loopTasks) {
