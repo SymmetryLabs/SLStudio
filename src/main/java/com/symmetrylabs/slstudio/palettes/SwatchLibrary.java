@@ -24,7 +24,7 @@ public class SwatchLibrary extends LXComponent implements Iterable<SwatchLibrary
 
     public static class Swatch {
         public final ColorParameter color;
-        public final int index;
+        public int index;
 
         public Swatch(int index, float h, float s, float b) {
             this.index = index;
@@ -110,6 +110,17 @@ public class SwatchLibrary extends LXComponent implements Iterable<SwatchLibrary
         swatches = new ArrayList<>();
         transitions = new ArrayList<>();
         addParameter(transitionTime);
+    }
+
+    public void addSwatch() {
+        swatches.add(new Swatch(swatches.size(), 0, 0, 0));
+    }
+
+    public void removeSwatch(Swatch swatch) {
+        swatches.remove(swatch);
+        for (int i = 0; i < swatches.size(); i++) {
+            swatches.get(i).index = i;
+        }
     }
 
     public void loop(double elapsedMs) {
@@ -205,15 +216,22 @@ public class SwatchLibrary extends LXComponent implements Iterable<SwatchLibrary
         obj.add(KEY_SWATCHES, arr);
     }
 
+    public void resetToDefault() {
+        swatches.clear();
+        transitions.clear();
+
+        swatches.add(new Swatch(0, 0, 100, 100));
+        swatches.add(new Swatch(1, 30, 100, 100));
+        swatches.add(new Swatch(2, 60, 100, 100));
+        swatches.add(new Swatch(3, 90, 100, 100));
+        swatches.add(new Swatch(4, 180, 100, 100));
+        swatches.add(new Swatch(5, 225, 100, 100));
+        swatches.add(new Swatch(6, 270, 100, 100));
+    }
+
     public static SwatchLibrary getDefault(LX lx) {
         SwatchLibrary sl = new SwatchLibrary(lx);
-        sl.swatches.add(new Swatch(0, 0, 100, 100));
-        sl.swatches.add(new Swatch(1, 30, 100, 100));
-        sl.swatches.add(new Swatch(2, 60, 100, 100));
-        sl.swatches.add(new Swatch(3, 90, 100, 100));
-        sl.swatches.add(new Swatch(4, 180, 100, 100));
-        sl.swatches.add(new Swatch(5, 225, 100, 100));
-        sl.swatches.add(new Swatch(6, 270, 100, 100));
+        sl.resetToDefault();
         return sl;
     }
 }

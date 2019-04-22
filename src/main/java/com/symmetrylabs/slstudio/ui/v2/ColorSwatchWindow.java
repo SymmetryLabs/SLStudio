@@ -34,6 +34,27 @@ public class ColorSwatchWindow extends CloseableWindow {
         final LXLook look = lookEditor.getLook();
         for (SwatchLibrary.Swatch swatch : lx.swatches) {
             ParameterUI.draw(lx, swatch.color);
+            if (UI.beginContextMenu("removeSwatch" + swatch.index)) {
+                if (UI.contextMenuItem("Remove")) {
+                    lx.engine.addTask(() -> lx.swatches.removeSwatch(swatch));
+                }
+                UI.endContextMenu();
+            }
+        }
+        if (UI.button("Add swatch")) {
+            lx.engine.addTask(() -> lx.swatches.addSwatch());
+        }
+        UI.sameLine();
+        if (UI.button("Reset to default")) {
+            UI.openPopup("resetSwatches");
+        }
+        if (UI.beginPopup("resetSwatches", false)) {
+            UI.text("Really reset swatches to default?");
+            if (UI.button("Yes, please remove all of my carefully chosen colors")) {
+                lx.swatches.resetToDefault();
+                UI.closePopup();
+            }
+            UI.endPopup();
         }
 
         UI.spacing(5, 20);
