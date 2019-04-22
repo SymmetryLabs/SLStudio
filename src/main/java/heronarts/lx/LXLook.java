@@ -132,10 +132,10 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
 
     public void setShelf(Shelf newShelf) {
         if (shelf != null) {
-            shelf.dispose();
+            removeModulator(shelf);
         }
         shelf = newShelf;
-        shelf.setParent(this);
+        addModulator(shelf);
     }
 
     public LXChannel addChannel() {
