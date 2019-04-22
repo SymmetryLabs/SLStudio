@@ -63,7 +63,8 @@ public class ColorSwatchWindow extends CloseableWindow {
         UI.text("Activate");
         UI.popFont();
 
-        ParameterUI.draw(lx, lx.swatches.transitionTime, ParameterUI.WidgetType.KNOB);
+        ParameterUI.draw(lx, lx.swatches.transitionTime, ParameterUI.WidgetType.SLIDER);
+        UI.spacing(1, 10);
 
         UI.beginTable(4, "swatchButtons");
         for (SwatchLibrary.Swatch swatch : lx.swatches) {
