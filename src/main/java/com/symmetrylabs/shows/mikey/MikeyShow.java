@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MikeyShow implements Show {
+    private static final float LED_PER_M = 60.0f;
+    private static final float LED_PITCH_CM = 100.0f / LED_PER_M;
     public static final String SHOW_NAME = "mikey";
 
     @Override
@@ -34,15 +36,13 @@ public class MikeyShow implements Show {
 
         public static MikeyModel create() {
             List<Strip> strips = new ArrayList<Strip>();
-            LXTransform t = new LXTransform();
+            Strip.Metrics m = new Strip.Metrics(5, LED_PITCH_CM);
 
-            for (int i = 0; i < 5; i++) {
-                t.push();
-                t.rotateZ(Math.PI * 75.f / 180.f);
-                Strip.Metrics metrics = new Strip.Metrics(50, 0.75);
-                strips.add(new Strip(String.format("strip-%d", i), metrics, t));
-                t.pop();
-                t.translate(5, 0, 0);
+            for (int i = 0; i < 20; i++) {
+                LXTransform t = new LXTransform();
+                t.translate(1.7f * LED_PITCH_CM * i, i % 2 == 0 ? 0 : 4 * LED_PITCH_CM, 0)
+                    .rotateZ(i % 2 == 0 ? Math.PI / 2 : 3 * Math.PI / 2);
+                strips.add(new Strip(Integer.toString(i), m, t));
             }
 
             return new MikeyModel(strips);
@@ -53,7 +53,8 @@ public class MikeyShow implements Show {
         public MikeyPixlite(LX lx, String ip, MikeyModel model) {
             super(lx, ip);
             addPixliteOutput(
-                new PointsGrouping("1").addPoints(model.getStripByIndex(0).getPoints()));
+                new PointsGrouping("1").addPoints(model.getPoints()));
+            /*
             addPixliteOutput(
                 new PointsGrouping("2").addPoints(model.getStripByIndex(1).getPoints()));
             addPixliteOutput(
@@ -62,6 +63,7 @@ public class MikeyShow implements Show {
                 new PointsGrouping("6").addPoints(model.getStripByIndex(3).getPoints()));
             addPixliteOutput(
                 new PointsGrouping("7").addPoints(model.getStripByIndex(4).getPoints()));
+            */
         }
 
         @Override
