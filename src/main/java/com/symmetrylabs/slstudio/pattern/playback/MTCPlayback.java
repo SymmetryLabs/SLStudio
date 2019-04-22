@@ -7,24 +7,16 @@ import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 import heronarts.lx.PolyBuffer;
-import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.MidiTime;
 import heronarts.lx.parameter.*;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
-import java.awt.*;
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import static com.symmetrylabs.slstudio.SLStudio.SHOW_FILE_NAME;
-import static com.symmetrylabs.util.Utils.loadStrings;
 
 public class MTCPlayback extends SLPattern<SLModel> {
 //public class MTCPlayback extends LXPattern {
@@ -32,7 +24,9 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
     private static final int CIRCULAR_BUFFER_SIZE = 16;
     private static final int JUMP_FRAME_SENSITIVITY = 300; // 10 sec should be good
-    private static final String RENDER_ROOT = System.getProperty("user.home") + "/symmetrylabs/software/SLStudio/shows/pilots/render/";
+//    private static final String RENDER_ROOT = System.getProperty("user.home") + "/symmetrylabs/software/SLStudio/shows/pilots/render/";
+    private static final String RENDER_ROOT = System.getProperty("user.home") + "/symmetrylabs/software/DATA/show/"; // new path for dual v1/v2 pilots
+
 
     protected final StringParameter renderFile = new StringParameter("renderFile", "");
 //    protected final BooleanParameter filePickerDialogue = new BooleanParameter("choose render", false).setMode(BooleanParameter.Mode.MOMENTARY);
