@@ -257,6 +257,13 @@ public class UI {
     }
 
     /**
+     * A class to represent sizes (width and height) in fractional pixels.
+     */
+    public static class Size {
+        public float width, height;
+    }
+
+    /**
      * The width, in pixels, of the current SLStudio window
      *
      * <p>
@@ -458,6 +465,11 @@ public class UI {
      * @param h the height of the window, in pixels
      */
     public static native void setNextWindowSize(float w, float h);
+
+    /**
+     * Get the size of the content in the current window
+     */
+    public static native Size getContentRegionSize();
 
     /**
      * Open a new window with the default flag set

@@ -304,6 +304,16 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowContentSize(JNIEnv *, jclas
     ImGui::SetNextWindowContentSize(ImVec2(LoadedDensity * w, LoadedDensity * h));
 }
 
+JNIEXPORT jobject JNICALL
+Java_com_symmetrylabs_slstudio_ui_v2_UI_getContentRegionSize(JNIEnv *env, jclass) {
+    ImVec2 size = ImGui::GetContentRegionMax();
+    jclass resCls = env->FindClass("com/symmetrylabs/slstudio/ui/v2/UI$Size");
+    jobject res = env->NewObject(resCls, env->GetMethodID(resCls, "<init>", "()V"));
+    env->SetFloatField(res, env->GetFieldID(resCls, "width", "F"), size.x);
+    env->SetFloatField(res, env->GetFieldID(resCls, "height", "F"), size.y);
+    return res;
+}
+
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_begin(JNIEnv *env, jclass, jstring jstr, jint flags) {
     JniString str(env, jstr);

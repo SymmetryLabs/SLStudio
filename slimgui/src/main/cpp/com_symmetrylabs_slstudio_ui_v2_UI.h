@@ -137,6 +137,14 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowSize
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    getContentRegionSize
+ * Signature: ()Lcom/symmetrylabs/slstudio/ui/v2/UI/Size;
+ */
+JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_getContentRegionSize
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    begin
  * Signature: (Ljava/lang/String;I)V
  */
@@ -241,22 +249,6 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endGroup
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
- * Method:    openPopup
- * Signature: (Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_openPopup
-  (JNIEnv *, jclass, jstring);
-
-/*
- * Class:     com_symmetrylabs_slstudio_ui_v2_UI
- * Method:    closePopup
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_closePopup
-  (JNIEnv *, jclass);
-
-/*
- * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    beginPopup
  * Signature: (Ljava/lang/String;ZI)Z
  */
@@ -269,6 +261,22 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginPopup
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endPopup
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    openPopup
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_openPopup
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    closePopup
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_closePopup
   (JNIEnv *, jclass);
 
 /*

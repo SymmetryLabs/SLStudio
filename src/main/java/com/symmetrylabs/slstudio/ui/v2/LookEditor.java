@@ -23,6 +23,7 @@ public class LookEditor implements Window {
     private final WepUi wepUi;
     private final WepUi transformWepUi;
     private boolean showLookTransform = false;
+    private float maxWindowHeight = -1;
 
     static final int[] MAP_COLORS = new int[10];
     static {
@@ -151,8 +152,13 @@ public class LookEditor implements Window {
             return;
         }
 
+        float capWindowHeight = UI.height - HEIGHT - MENU_HEIGHT;
+        float h = maxWindowHeight;
+        if (h <= 0 || h > capWindowHeight) {
+            h = capWindowHeight;
+        }
         UI.setNextWindowPosition(0, MENU_HEIGHT, 0, 0);
-        UI.setNextWindowSize(visibleWindowCount * (PIPELINE_WIDTH + PIPELINE_PAD), UI.height - HEIGHT - MENU_HEIGHT);
+        UI.setNextWindowSize(visibleWindowCount * (PIPELINE_WIDTH + PIPELINE_PAD), h);
         UI.begin("Pipeline Windows",
                  UI.WINDOW_NO_MOVE | UI.WINDOW_NO_RESIZE | UI.WINDOW_NO_DECORATION | UI.WINDOW_NO_DOCKING | UI.WINDOW_NO_SCROLL_WITH_MOUSE);
 
@@ -161,6 +167,8 @@ public class LookEditor implements Window {
                     UI.beginChild(chan.getLabel() + "##channel-child", false, 0, PIPELINE_WIDTH, (int) UI.height);
                     pipelineIndex = channelHeader(chan, chan.getLabel(), pipelineIndex);
                     ChannelUI.draw(lx, chan, wepUi);
+                    UI.Size childSize = UI.getContentRegionSize();
+                    maxWindowHeight = Float.max(maxWindowHeight, childSize.height);
                     UI.endChild();
                     UI.sameLine();
                 }
