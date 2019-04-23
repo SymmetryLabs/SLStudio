@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.ui.v2;
 
 import com.symmetrylabs.shows.ShowRegistry;
 import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.ui.v2.ViewController.ViewDirection;
 
 import heronarts.lx.LX;
 import heronarts.lx.data.Project;
@@ -26,6 +27,7 @@ public class MainMenu implements Window {
         if (!UI.beginMainMenuBar()) {
             return;
         }
+
         if (UI.beginMenu("File")) {
             if (UI.menuItem("New")) {
                 lx.engine.addTask(() -> lx.newProject());
@@ -52,6 +54,21 @@ public class MainMenu implements Window {
             if (UI.menuItem("Save As...")) {
                 runSaveAs();
             }
+            UI.endMenu();
+        }
+
+        if (UI.beginMenu("View")) {
+            if (UI.beginMenu("Set view")) {
+                for (ViewController.ViewDirection vd : ViewController.ViewDirection.values()) {
+                    if (UI.menuItem(vd.name)) {
+                        parent.viewController.setViewDirection(vd);
+                    }
+                }
+                UI.endMenu();
+            }
+            parent.viewController.setOrtho(UI.checkbox("Orthographic projection", parent.viewController.isOrtho()));
+            parent.viewController.setGnomonVisible(UI.checkbox("Show gnomon", parent.viewController.isGnomonVisible()));
+            parent.viewController.setMarkersVisible(UI.checkbox("Show markers", parent.viewController.isMarkersVisible()));
             UI.endMenu();
         }
 
@@ -110,6 +127,7 @@ public class MainMenu implements Window {
             }
             UI.endMenu();
         }
+
         UI.endMainMenuBar();
     }
 

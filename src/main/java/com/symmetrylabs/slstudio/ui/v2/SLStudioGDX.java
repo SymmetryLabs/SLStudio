@@ -31,6 +31,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
     private LX lx;
     private OutputControl outputControl;
     private LookEditor lookEditor;
+    public ViewController viewController;
 
     /* visible so that InternalsWindow can mutate it. */
     int clearRGB = 0x000000;
@@ -110,6 +111,8 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
         loadLxComponents();
 
+        viewController = new ViewController(lx, camController, renderer.cam, gnomon, markers);
+
         lookEditor = new LookEditor(lx);
         /* we want WindowManager to handle all of the drawing so it can manage the interaction between
            the UI running and the engine running, so we put it in charge of drawing the look editor */
@@ -124,8 +127,6 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this, mr), false);
         WindowManager.addPersistent("Master", () -> new MasterWindow(lx), true);
         WindowManager.addPersistent("Modulation", () -> new ModulationWindow(lx), false);
-        WindowManager.addPersistent(
-            "View", () -> new CameraControlWindow(lx, camController, renderer.cam, gnomon, markers), true);
 
         WindowManager.addPersistent("Imgui demo", () -> new SlimguiDemoWindow(), false);
         WindowManager.addPersistent("Imgui style editor", () -> new SlimguiStyleEditor(), false);

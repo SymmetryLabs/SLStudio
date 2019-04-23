@@ -23,6 +23,7 @@ public class ColorSwatchWindow extends CloseableWindow {
     @Override
     protected void windowSetup() {
         UI.setNextWindowDefaults(50, 300, 400, 750);
+        UI.setNextWindowPosition(UI.width - 20, 200, 1.0f, 0.0f);
     }
 
     @Override
