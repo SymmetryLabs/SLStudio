@@ -6,6 +6,7 @@ import heronarts.lx.PolyBuffer;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.MidiTime;
 import heronarts.lx.model.LXModel;
+import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -18,7 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class OfflineRenderOutput extends LXOutput {
+public class OfflineRenderOutput extends LXOutput implements  LXOscComponent{
     public static final String HEADER = "SLOutput";
     public static final int VERSION = 3;
 
@@ -42,6 +43,9 @@ public class OfflineRenderOutput extends LXOutput {
     public OfflineRenderOutput(LX lx) {
         super(lx);
         this.model = lx.model;
+
+        addParameter(pStart);
+
         pOutputFile.addListener(p -> {
                 dispose();
                 if (!pOutputFile.getString().equals("")) {
@@ -63,6 +67,8 @@ public class OfflineRenderOutput extends LXOutput {
         });
 
         arm_MTC_listeners(lx);
+
+        lx.engine.renderOutputRef = this;
     }
 
     private void arm_MTC_listeners(LX lx){
@@ -87,9 +93,10 @@ public class OfflineRenderOutput extends LXOutput {
     }
 
     private void triggerRecord(int frame) {
-        // vezer sends frame zero when jump to start of project, ignore this.
         if (externalSync.isOn()){
+            // vezer sends frame zero when jump to start of project, ignore this.
             if (frame == 0){ return; }
+
             extTrigger.setValue(true);
         }
     }
@@ -176,5 +183,10 @@ public class OfflineRenderOutput extends LXOutput {
 
             img.setRGB(0, inFrame, model.points.length, 1, carr, 0, model.points.length);
         }
+    }
+
+    @Override
+    public String getOscAddress() {
+        return "/lx/render";
     }
 }

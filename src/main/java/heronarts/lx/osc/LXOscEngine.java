@@ -20,43 +20,23 @@
 
 package heronarts.lx.osc;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.sound.midi.InvalidMidiDataException;
-import heronarts.lx.LX;
-import heronarts.lx.LXBus;
-import heronarts.lx.LXChannel;
-import heronarts.lx.LXComponent;
-import heronarts.lx.LXEffect;
-import heronarts.lx.LXEngine;
-import heronarts.lx.LXModulationComponent;
-import heronarts.lx.LXModulationEngine;
-import heronarts.lx.LXPattern;
+import heronarts.lx.*;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.midi.MidiControlChange;
 import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.midi.MidiPitchBend;
+import heronarts.lx.midi.MidiTimeCode;
 import heronarts.lx.modulator.LXModulator;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.lx.parameter.LXListenableParameter;
-import heronarts.lx.parameter.LXNormalizedParameter;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
-import heronarts.lx.parameter.LXTriggerModulation;
-import heronarts.lx.parameter.LXCompoundModulation;
-import heronarts.lx.parameter.StringParameter;
+import heronarts.lx.parameter.*;
 import heronarts.lx.warp.LXWarp;
+
+import javax.sound.midi.InvalidMidiDataException;
+import java.io.IOException;
+import java.net.*;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class LXOscEngine extends LXComponent {
 
@@ -86,6 +66,9 @@ public class LXOscEngine extends LXComponent {
     private static final String ROUTE_SATURATION = "saturation";
     private static final String ROUTE_BRIGHTNESS = "brightness";
     private static final String ROUTE_WARP = "warp";
+    private static final String ROUTE_MTC = "mtc";
+    private static final String ROUTE_RENDER = "render";
+    private static final String ROUTE_TRIGGER = "triggerExt";
 
     public final static int DEFAULT_RECEIVE_PORT = 3030;
     public final static int DEFAULT_TRANSMIT_PORT = 3131;
@@ -192,6 +175,9 @@ public class LXOscEngine extends LXComponent {
                             oscChannel(message, lx.engine.getChannel(parts[3]), parts, 4);
                         }
                     }
+                    else if (parts[2].equals(ROUTE_RENDER)) {
+                        oscRender(message, parts, 3);
+                    }
                 }
             } catch (Exception x) {
                 System.err.println("[OSC] No route for message: " + message.getAddressPattern().getValue());
@@ -204,6 +190,12 @@ public class LXOscEngine extends LXComponent {
             } else {
                 oscComponent(message, lx.tempo, parts, index);
             }
+        }
+
+        private void oscRender(OscMessage message, String[] parts, int index) {
+            // TODO: this renderOutputRef is a terrible hack because I couldn't figure out how
+            // TODO: to render specifically the OfflineRenderOutput params as an osc target
+            oscComponent(message, lx.engine.renderOutputRef, parts, index);
         }
 
         private void oscAudio(OscMessage message, String[] parts, int index) {
@@ -234,6 +226,13 @@ public class LXOscEngine extends LXComponent {
                     int msb = message.getInt();
                     int channel = message.getInt();
                     lx.engine.midi.dispatch(new MidiPitchBend(channel, msb));
+                } else if (parts[index].equals(ROUTE_MTC)) {
+                    int hour = message.getInt();
+                    int minute = message.getInt();
+                    int second = message.getInt();
+                    int frame = message.getInt();
+                    lx.engine.midi.dispatch(new MidiTimeCode(hour, minute, second, frame));
+                    // TODO: This does not actually dispatch the MTC message...
                 } else {
                     System.err.println("[OSC] Unrecognized MIDI message: " + message.getAddressPattern().getValue());
                 }

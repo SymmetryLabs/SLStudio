@@ -24,6 +24,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.symmetrylabs.color.Spaces;
+import com.symmetrylabs.slstudio.output.OfflineRenderOutput;
 import com.symmetrylabs.util.artnet.ArtNetEngine;
 import com.symmetrylabs.util.dmx.DMXEngine;
 import com.symmetrylabs.util.dmx.LXEngineDMXManager;
@@ -126,6 +127,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     public final LXMasterChannel masterChannel;
 
     public final Output output;
+
+    public OfflineRenderOutput renderOutputRef;
 
     private final List<Listener> listeners = new ArrayList<Listener>();
     private final List<MessageListener> messageListeners = new ArrayList<MessageListener>();
