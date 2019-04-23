@@ -149,6 +149,8 @@ public class SwatchLibrary extends LXComponent implements Iterable<SwatchLibrary
     }
 
     protected void applyImpl(Swatch swatch, LXLook look) {
+        applyImpl(swatch, lx.palette.color.hue, lx.palette.color.saturation, lx.palette.color.brightness);
+
         for (LXChannel chan : look.channels) {
             if (!chan.acceptSwatches.getValueb()) {
                 continue;
