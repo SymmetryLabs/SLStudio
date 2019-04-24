@@ -35,6 +35,8 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
     private final DiscreteParameter phaseAdjust = new DiscreteParameter("phase", 0, -10, 10);
 
+    private final BooleanParameter linux = new BooleanParameter("linux", true);
+
 
     public final MutableParameter hunkSize = new MutableParameter("hunkSize", 150);
 
@@ -100,6 +102,8 @@ public class MTCPlayback extends SLPattern<SLModel> {
         phaseAdjust.setPolarity(LXParameter.Polarity.BIPOLAR);
         addParameter(phaseAdjust);
 
+        addParameter(linux);
+
         setupMTCListeners();
 
 
@@ -151,6 +155,9 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
     @Override
     public void onParameterChanged(LXParameter p) {
+        if (p == linux){
+            clearSong();
+        }
 //        if (p == filePickerDialogue && filePickerDialogue.getValueb()) {
 //            FileDialog dialog = new FileDialog(
 //                (Frame) null, "Choose frame directory or baked image:", FileDialog.LOAD);
@@ -267,11 +274,17 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
     private String constructDataPath() {
         String showName = SLStudio.applet.showName;
-        if (showName == null){
-            SLStudio.setWarning("NoShow", "could not find show");
+        if (linux.getValueb()){
+            showName = "linux";
+            SLStudio.setWarning("linux", showName);
         }
         else{
-            SLStudio.setWarning("FoShow", "Found show: " + showName);
+            if (showName == null){
+                SLStudio.setWarning("NoShow", "could not find show");
+            }
+            else{
+                SLStudio.setWarning("FoShow", "Found show: " + showName);
+            }
         }
         return RENDER_ROOT + showName + "/";
     }
