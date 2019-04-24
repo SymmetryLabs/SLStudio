@@ -23,6 +23,7 @@ package heronarts.lx.midi.surface;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import com.symmetrylabs.slstudio.palettes.SwatchLibrary;
 
 import heronarts.lx.*;
 import heronarts.lx.midi.LXMidiInput;
@@ -449,6 +450,7 @@ public class APC40Mk2 extends LXMidiSurface {
             sendControlChange(0, CHANNEL_KNOB_STYLE+i, LED_STYLE_SINGLE);
         }
         sendChannels();
+        sendSwatches();
     }
 
     private void sendChannels() {
@@ -506,6 +508,17 @@ public class APC40Mk2 extends LXMidiSurface {
                 color = 117;
             }
             sendNoteOn(midiChannel, note, color);
+        }
+    }
+
+    private void sendSwatches() {
+        for (int i = 0; i <= SCENE_LAUNCH_NUM; i++) {
+            int v = 0; // corresponds to black
+            int c = lx.swatches.swatches.get(i).color.getColor();
+            if (i < lx.swatches.swatches.size()) {
+                v = APC40Colors.matchColor(c);
+            }
+            sendNoteOn(LED_MODE_PRIMARY, SCENE_LAUNCH + i, v);
         }
     }
 
@@ -581,6 +594,13 @@ public class APC40Mk2 extends LXMidiSurface {
         });
         sendNoteOn(0, METRONOME, lx.tempo.enabled.isOn() ? LED_ON : LED_OFF);
 
+        this.lx.swatches.addListener(new SwatchLibrary.SwatchListener() {
+            @Override
+            public void onSwatchesUpdated() {
+                sendSwatches();
+            }
+        });
+        sendSwatches();
     }
 
     private void registerChannel(LXChannel channel) {
@@ -640,12 +660,8 @@ public class APC40Mk2 extends LXMidiSurface {
         // Global momentary light-up buttons
         switch (pitch) {
         case CLIP_STOP:
-        case SCENE_LAUNCH:
             sendNoteOn(note.getChannel(), pitch, on ? LED_ON : LED_OFF);
             break;
-        }
-        if (pitch >= SCENE_LAUNCH && pitch <= SCENE_LAUNCH_MAX) {
-            sendNoteOn(note.getChannel(), pitch, on ? LED_GREEN : LED_OFF);
         }
 
         // Global momentary
@@ -699,6 +715,11 @@ public class APC40Mk2 extends LXMidiSurface {
                         }
                     }
                 }
+                return;
+            }
+
+            if (pitch >= SCENE_LAUNCH && pitch <= SCENE_LAUNCH_MAX) {
+                lx.swatches.apply(pitch - SCENE_LAUNCH);
                 return;
             }
         }
