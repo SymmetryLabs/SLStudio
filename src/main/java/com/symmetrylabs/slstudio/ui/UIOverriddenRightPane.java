@@ -1,22 +1,14 @@
 package com.symmetrylabs.slstudio.ui;
 
-import processing.core.PGraphics;
-
+import com.symmetrylabs.util.artnet.ui.UIArtNetConfig;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXMappingEngine;
 import heronarts.lx.LXModulationEngine;
 import heronarts.lx.audio.BandGate;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.modulator.LXModulator;
-import heronarts.lx.modulator.MacroKnobs;
-import heronarts.lx.modulator.MultiStageEnvelope;
-import heronarts.lx.modulator.VariableLFO;
-import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.LXCompoundModulation;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
-import heronarts.lx.parameter.LXTriggerModulation;
+import heronarts.lx.modulator.*;
+import heronarts.lx.parameter.*;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI2dScrollContext;
@@ -30,11 +22,7 @@ import heronarts.p3lx.ui.studio.midi.UIMidiSurfaces;
 import heronarts.p3lx.ui.studio.modulation.UIComponentModulator;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import heronarts.p3lx.ui.studio.osc.UIOscManager;
-
-import com.symmetrylabs.util.artnet.ui.UIArtNetConfig;
-import com.symmetrylabs.shows.tree.*;
-import com.symmetrylabs.shows.tree.ui.*;
-import com.symmetrylabs.slstudio.SLStudio;
+import processing.core.PGraphics;
 
 
 public class UIOverriddenRightPane extends UIPane {
@@ -178,7 +166,24 @@ public class UIOverriddenRightPane extends UIPane {
             .setMomentary(true)
             .setInactiveColor(ui.theme.getDeviceBackgroundColor())
             .setBorderRounding(4)
-            .setDescription("Add a new Beat detector to the modulation engine")
+            .setDescription("Add a new array of mappable Macros to the modulation engine")
+            .addToContainer(bar);
+
+        new UIButton(0, 0, ADD_BUTTON_WIDTH, 16) {
+            @Override
+            public void onToggle(boolean on) {
+                if (on) {
+                    GrandMaMacroKnobs grandMaMacroKnobs = new GrandMaMacroKnobs("GrandMa " + macroCount++);
+                    lx.engine.modulation.addModulator(grandMaMacroKnobs);
+                    grandMaMacroKnobs.start();
+                }
+            }
+        }
+            .setLabel("grandMa")
+            .setMomentary(true)
+            .setInactiveColor(ui.theme.getDeviceBackgroundColor())
+            .setBorderRounding(4)
+            .setDescription("Special GrandMA")
             .addToContainer(bar);
 
         final UIButton triggerButton = (UIButton) new UIButton(0, 0, 16, 16) {

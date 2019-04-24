@@ -26,21 +26,14 @@
 
 package heronarts.p3lx.ui;
 
+import heronarts.lx.audio.BandGate;
+import heronarts.lx.modulator.*;
+import heronarts.p3lx.ui.studio.modulation.*;
+
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-
-import heronarts.lx.audio.BandGate;
-import heronarts.lx.modulator.LXModulator;
-import heronarts.lx.modulator.MacroKnobs;
-import heronarts.lx.modulator.MultiStageEnvelope;
-import heronarts.lx.modulator.VariableLFO;
-import heronarts.p3lx.ui.studio.modulation.UIBandGate;
-import heronarts.p3lx.ui.studio.modulation.UIMacroKnobs;
-import heronarts.p3lx.ui.studio.modulation.UIModulator;
-import heronarts.p3lx.ui.studio.modulation.UIMultiStageEnvelope;
-import heronarts.p3lx.ui.studio.modulation.UIVariableLFO;
 
 public class UIRegistry {
 
@@ -54,6 +47,7 @@ public class UIRegistry {
         registerModulatorUI(MultiStageEnvelope.class, UIMultiStageEnvelope.class);
         registerModulatorUI(BandGate.class, UIBandGate.class);
         registerModulatorUI(MacroKnobs.class, UIMacroKnobs.class);
+        registerModulatorUI(GrandMaMacroKnobs.class, UIGrandMaMacroKnobs.class);
     }
 
     public <T extends LXModulator> void registerModulatorUI(Class<T> modulatorClass, Class<? extends UIModulator> uiClass) {
