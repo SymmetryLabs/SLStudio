@@ -316,6 +316,7 @@ public class APC40Mk2 extends LXMidiSurface {
             this.channel.crossfadeGroup.addListener(this);
             this.channel.focusedPattern.addListener(this);
             this.channel.acceptSwatches.addListener(this);
+            this.channel.speed.addListener(this);
 
             this.channel.controlSurfaceFocusLength.setValue(CLIP_LAUNCH_ROWS);
             int focusedPatternIndex = this.channel.getFocusedPatternIndex();
@@ -329,6 +330,8 @@ public class APC40Mk2 extends LXMidiSurface {
             this.channel.crossfadeGroup.removeListener(this);
             this.channel.focusedPattern.removeListener(this);
             this.channel.acceptSwatches.removeListener(this);
+            this.channel.speed.removeListener(this);
+
             this.channel.controlSurfaceFocusLength.setValue(0);
             this.channel.controlSurfaceFocusIndex.setValue(0);
         }
@@ -356,6 +359,8 @@ public class APC40Mk2 extends LXMidiSurface {
                 sendChannelPatterns(index, this.channel);
             } else if (p == this.channel.acceptSwatches) {
                 sendNoteOn(index, CHANNEL_RECORD, this.channel.acceptSwatches.isOn() ? LED_ON : LED_OFF);
+            } else if (p == this.channel.speed) {
+                sendControlChange(0, CHANNEL_KNOB + index, (int) (channel.speed.getNormalized() * 127));
             }
         }
 
@@ -478,6 +483,7 @@ public class APC40Mk2 extends LXMidiSurface {
             sendNoteOn(index, CHANNEL_CROSSFADE_GROUP, channel.crossfadeGroup.getValuei());
             sendNoteOn(index, CHANNEL_SOLO, channel.cueActive.isOn() ? LED_ON : LED_OFF);
             sendNoteOn(index, CHANNEL_RECORD, channel.acceptSwatches.isOn() ? LED_ON : LED_OFF);
+            sendControlChange(0, CHANNEL_KNOB + index, (int) (channel.speed.getNormalized() * 127));
         } else {
             sendNoteOn(index, CHANNEL_ACTIVE, LED_OFF);
             sendNoteOn(index, CHANNEL_CROSSFADE_GROUP, LED_OFF);
@@ -830,7 +836,10 @@ public class APC40Mk2 extends LXMidiSurface {
         }
 
         if (number >= CHANNEL_KNOB && number <= CHANNEL_KNOB_MAX) {
-            sendControlChange(cc.getChannel(), cc.getCC(), cc.getValue());
+            int chan = number - CHANNEL_KNOB;
+            if (chan < getVisibleChannelList().size()) {
+                getVisibleChannelList().get(chan).speed.setNormalized(cc.getNormalized());
+            }
             return;
         }
 
