@@ -83,6 +83,7 @@ public class APC40Mk2 extends LXMidiSurface {
     public static final int CLIP_LAUNCH_NUM = 40;
     public static final int CLIP_LAUNCH_MAX = CLIP_LAUNCH + CLIP_LAUNCH_NUM - 1;
 
+    public static final int CHANNEL_RECORD = 48;
     public static final int CHANNEL_SOLO = 49;
     public static final int CHANNEL_ACTIVE = 50;
     public static final int CHANNEL_FOCUS = 51;
@@ -314,6 +315,7 @@ public class APC40Mk2 extends LXMidiSurface {
             this.channel.enabled.addListener(this);
             this.channel.crossfadeGroup.addListener(this);
             this.channel.focusedPattern.addListener(this);
+            this.channel.acceptSwatches.addListener(this);
 
             this.channel.controlSurfaceFocusLength.setValue(CLIP_LAUNCH_ROWS);
             int focusedPatternIndex = this.channel.getFocusedPatternIndex();
@@ -326,6 +328,7 @@ public class APC40Mk2 extends LXMidiSurface {
             this.channel.enabled.removeListener(this);
             this.channel.crossfadeGroup.removeListener(this);
             this.channel.focusedPattern.removeListener(this);
+            this.channel.acceptSwatches.removeListener(this);
             this.channel.controlSurfaceFocusLength.setValue(0);
             this.channel.controlSurfaceFocusIndex.setValue(0);
         }
@@ -351,6 +354,8 @@ public class APC40Mk2 extends LXMidiSurface {
                     this.channel.controlSurfaceFocusIndex.setValue(focusedPatternIndex - CLIP_LAUNCH_ROWS + 1);
                 }
                 sendChannelPatterns(index, this.channel);
+            } else if (p == this.channel.acceptSwatches) {
+                sendNoteOn(index, CHANNEL_RECORD, this.channel.acceptSwatches.isOn() ? LED_ON : LED_OFF);
             }
         }
 
@@ -472,10 +477,12 @@ public class APC40Mk2 extends LXMidiSurface {
             sendNoteOn(index, CHANNEL_ACTIVE, channel.enabled.isOn() ? LED_ON : LED_OFF);
             sendNoteOn(index, CHANNEL_CROSSFADE_GROUP, channel.crossfadeGroup.getValuei());
             sendNoteOn(index, CHANNEL_SOLO, channel.cueActive.isOn() ? LED_ON : LED_OFF);
+            sendNoteOn(index, CHANNEL_RECORD, channel.acceptSwatches.isOn() ? LED_ON : LED_OFF);
         } else {
             sendNoteOn(index, CHANNEL_ACTIVE, LED_OFF);
             sendNoteOn(index, CHANNEL_CROSSFADE_GROUP, LED_OFF);
             sendNoteOn(index, CHANNEL_SOLO, LED_OFF);
+            sendNoteOn(index, CHANNEL_RECORD, LED_OFF);
         }
         sendChannelPatterns(index, channel);
     }
@@ -750,6 +757,9 @@ public class APC40Mk2 extends LXMidiSurface {
                 } else {
                     this.lx.engine.getFocusedLook().focusedChannel.setValue(channel.getIndex());
                 }
+                return;
+            case CHANNEL_RECORD:
+                channel.acceptSwatches.toggle();
                 return;
             case DEVICE_ON_OFF:
                 this.deviceListener.onDeviceOnOff();
