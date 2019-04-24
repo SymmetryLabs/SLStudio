@@ -244,6 +244,7 @@ public class SwatchLibrary extends LXComponent implements Iterable<SwatchLibrary
                 swatches.add(Swatch.fromJson((JsonObject) swatchElem, this));
             }
         }
+        bang();
     }
 
     @Override
@@ -263,10 +264,12 @@ public class SwatchLibrary extends LXComponent implements Iterable<SwatchLibrary
         swatches.add(new Swatch(0, 0, 100, 100, this));
         swatches.add(new Swatch(1, 30, 100, 100, this));
         swatches.add(new Swatch(2, 60, 100, 100, this));
-        swatches.add(new Swatch(3, 90, 100, 100, this));
+        swatches.add(new Swatch(3, 111, 100, 100, this));
         swatches.add(new Swatch(4, 180, 100, 100, this));
         swatches.add(new Swatch(5, 225, 100, 100, this));
         swatches.add(new Swatch(6, 270, 100, 100, this));
+
+        bang();
     }
 
     public static SwatchLibrary getDefault(LX lx) {
