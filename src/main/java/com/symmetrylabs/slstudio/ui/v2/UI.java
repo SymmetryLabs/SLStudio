@@ -257,10 +257,10 @@ public class UI {
     }
 
     /**
-     * A class to represent sizes (width and height) in fractional pixels.
+     * A class to represent screen-space positions and sizes (width and height) in fractional pixels.
      */
-    public static class Size {
-        public float width, height;
+    public static class ScreenVec2 {
+        public float x, y;
     }
 
     /**
@@ -467,9 +467,11 @@ public class UI {
     public static native void setNextWindowSize(float w, float h);
 
     /**
-     * Get the size of the content in the current window
+     * Get the location of the draw cursor.
+     *
+     * @return the location, in window-relative pixel coordinates, at which the next widget will be drawn.
      */
-    public static native Size getContentRegionSize();
+    public static native ScreenVec2 getCursorPosition();
 
     /**
      * Open a new window with the default flag set

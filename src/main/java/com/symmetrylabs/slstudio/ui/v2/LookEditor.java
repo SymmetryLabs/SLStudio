@@ -167,8 +167,7 @@ public class LookEditor implements Window {
                     UI.beginChild(chan.getLabel() + "##channel-child", false, 0, PIPELINE_WIDTH, (int) UI.height);
                     pipelineIndex = channelHeader(chan, chan.getLabel(), pipelineIndex);
                     ChannelUI.draw(lx, chan, wepUi);
-                    UI.Size childSize = UI.getContentRegionSize();
-                    maxWindowHeight = Float.max(maxWindowHeight, childSize.height);
+                    maxWindowHeight = Float.max(maxWindowHeight, UI.getCursorPosition().y);
                     UI.endChild();
                     UI.sameLine();
                 }

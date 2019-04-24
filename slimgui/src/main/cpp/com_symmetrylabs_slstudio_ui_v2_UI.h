@@ -137,10 +137,10 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowSize
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
- * Method:    getContentRegionSize
+ * Method:    getCursorPosition
  * Signature: ()Lcom/symmetrylabs/slstudio/ui/v2/UI/Size;
  */
-JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_getContentRegionSize
+JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_getCursorPosition
   (JNIEnv *, jclass);
 
 /*

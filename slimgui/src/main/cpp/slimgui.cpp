@@ -305,12 +305,12 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowContentSize(JNIEnv *, jclas
 }
 
 JNIEXPORT jobject JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_getContentRegionSize(JNIEnv *env, jclass) {
-    ImVec2 size = ImGui::GetContentRegionMax();
-    jclass resCls = env->FindClass("com/symmetrylabs/slstudio/ui/v2/UI$Size");
+Java_com_symmetrylabs_slstudio_ui_v2_UI_getCursorPosition(JNIEnv *env, jclass) {
+    ImVec2 size = CursorPos();
+    jclass resCls = env->FindClass("com/symmetrylabs/slstudio/ui/v2/UI$ScreenVec2");
     jobject res = env->NewObject(resCls, env->GetMethodID(resCls, "<init>", "()V"));
-    env->SetFloatField(res, env->GetFieldID(resCls, "width", "F"), size.x);
-    env->SetFloatField(res, env->GetFieldID(resCls, "height", "F"), size.y);
+    env->SetFloatField(res, env->GetFieldID(resCls, "x", "F"), size.x);
+    env->SetFloatField(res, env->GetFieldID(resCls, "y", "F"), size.y);
     return res;
 }
 
