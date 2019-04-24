@@ -7,6 +7,8 @@ public class GrandMaMacroKnobs extends LXModulator {
     public static int NUM_MACRO = 64;
     public final BoundedParameter[] macros = new BoundedParameter[NUM_MACRO];
 
+    public static String knobLabel = "grMA";
+
     public GrandMaMacroKnobs() {
         this("MACRO");
     }
@@ -14,8 +16,8 @@ public class GrandMaMacroKnobs extends LXModulator {
     public GrandMaMacroKnobs(String label) {
         super(label);
         for (int i = 0; i < NUM_MACRO; i++ ){
-            this.macros[i] = new BoundedParameter("gMa" + i);
-            addParameter("gMa" + i, this.macros[i]);
+            this.macros[i] = new BoundedParameter(knobLabel + i);
+            addParameter(knobLabel + i, this.macros[i]);
         }
     }
 

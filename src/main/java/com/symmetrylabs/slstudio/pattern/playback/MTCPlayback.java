@@ -35,7 +35,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
     private final DiscreteParameter phaseAdjust = new DiscreteParameter("phase", 0, -10, 10);
 
-    private final BooleanParameter linux = new BooleanParameter("linux", true);
+    private final BooleanParameter linux = new BooleanParameter("linux", false);
 
 
     public final MutableParameter hunkSize = new MutableParameter("hunkSize", 150);
@@ -102,7 +102,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
         phaseAdjust.setPolarity(LXParameter.Polarity.BIPOLAR);
         addParameter(phaseAdjust);
 
-        addParameter(linux);
+//        addParameter(linux);
 
         setupMTCListeners();
 
@@ -275,7 +275,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
     private String constructDataPath() {
         String showName = SLStudio.applet.showName;
         if (linux.getValueb()){
-            showName = "linux";
+            showName = "linux_" + showName;
             SLStudio.setWarning("linux", showName);
         }
         else{
