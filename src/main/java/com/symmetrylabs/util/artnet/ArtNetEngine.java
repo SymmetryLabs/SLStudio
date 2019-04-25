@@ -40,6 +40,7 @@ public class ArtNetEngine extends LXComponent {
 
     private final static String SHORT_NAME = "SLStudio";
     private final static String LONG_NAME = "SLStudio";
+    private static final boolean STRICT = true;
 
     public final DiscreteParameter subNet = (DiscreteParameter)
                     new DiscreteParameter("SubNet", DEFAULT_SUBNET, 0, 15)
@@ -269,7 +270,12 @@ public class ArtNetEngine extends LXComponent {
             if (interfaceAddress.getAddress().isLoopbackAddress())
                 continue;
             byte mostSignificantByte = interfaceAddress.getAddress().getAddress()[0];
-            if (mostSignificantByte == 2 || mostSignificantByte == 10) {
+            if (STRICT){
+                if (mostSignificantByte == 2 || mostSignificantByte == 10) {
+                    return interfaceAddress;
+                }
+            }
+            else {
                 return interfaceAddress;
             }
         }
