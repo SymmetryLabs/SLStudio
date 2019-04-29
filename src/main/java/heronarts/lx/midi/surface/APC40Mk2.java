@@ -761,9 +761,10 @@ public class APC40Mk2 extends LXMidiSurface {
                 if (this.shiftOn) {
                     channel.autoCycleEnabled.toggle();
                 } else {
-                    LXBus oldFocused = lx.engine.getFocusedLook().getFocusedChannel();
-                    this.lx.engine.getFocusedLook().focusedChannel.setValue(channel.getIndex());
-                    LXChannel focused = (LXChannel) lx.engine.getFocusedLook().getFocusedChannel();
+                    LXLook look = lx.engine.getFocusedLook();
+                    LXBus oldFocused = look.getFocusedChannel();
+                    look.focusedChannel.setValue(channel.getIndex());
+                    LXChannel focused = (LXChannel) look.getFocusedChannel();
                     /* if this channel was already focused and visible; hide it. If it was either not
                        focused or not visible, show it. */
                     focused.editorVisible.setValue(!focused.editorVisible.isOn() || oldFocused != focused);
@@ -787,6 +788,18 @@ public class APC40Mk2 extends LXMidiSurface {
             case BANK_RIGHT:
                 this.deviceListener.registerNext();
                 return;
+            }
+        } else {
+            if (note.getPitch() == CHANNEL_FOCUS) {
+                int targetChannel = note.getChannel();
+                System.out.println(targetChannel);
+                LXLook look = lx.engine.getFocusedLook();
+                while (look.channels.size() <= targetChannel) {
+                    look.addChannel();
+                }
+                LXChannel newC = look.channels.get(targetChannel);
+                newC.editorVisible.setValue(true);
+                look.setFocusedChannel(newC);
             }
         }
 
