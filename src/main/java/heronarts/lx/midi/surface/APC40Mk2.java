@@ -761,7 +761,12 @@ public class APC40Mk2 extends LXMidiSurface {
                 if (this.shiftOn) {
                     channel.autoCycleEnabled.toggle();
                 } else {
+                    LXBus oldFocused = lx.engine.getFocusedLook().getFocusedChannel();
                     this.lx.engine.getFocusedLook().focusedChannel.setValue(channel.getIndex());
+                    LXChannel focused = (LXChannel) lx.engine.getFocusedLook().getFocusedChannel();
+                    /* if this channel was already focused and visible; hide it. If it was either not
+                       focused or not visible, show it. */
+                    focused.editorVisible.setValue(!focused.editorVisible.isOn() || oldFocused != focused);
                 }
                 return;
             case CHANNEL_RECORD:
