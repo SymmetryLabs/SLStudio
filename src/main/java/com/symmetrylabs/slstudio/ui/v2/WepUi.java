@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import com.symmetrylabs.slstudio.ApplicationState;
+import org.lwjgl.glfw.GLFW;
 
 /**
  * A window that shows a tree view of warps, effects and patterns.
@@ -95,6 +96,8 @@ public class WepUi {
             }
         }
 
+        boolean firstMatch = true;
+
         UI.beginChild("wep-tree", false, 0, 300, maxHeight);
         if (allowPatterns && !visibleGroups.isEmpty() && UI.treeNode("Patterns", UI.TREE_FLAG_DEFAULT_OPEN)) {
             for (String groupName : grouping.groupNames) {
@@ -109,10 +112,14 @@ public class WepUi {
                         if (pi.visible) {
                             UI.treeNode(
                                 String.format("%s/%s", groupName, pi.label),
-                                UI.TREE_FLAG_LEAF, pi.label);
+                                UI.TREE_FLAG_LEAF | (firstMatch ? UI.TREE_FLAG_SELECTED : 0), pi.label);
                             if (UI.isItemClicked()) {
                                 activate(pi);
                             }
+                            if (firstMatch && UI.isKeyPressed(GLFW.GLFW_KEY_ENTER)) {
+                                activate(pi);
+                            }
+                            firstMatch = false;
                             UI.treePop();
                         }
                     }
@@ -125,10 +132,14 @@ public class WepUi {
         if (effectsVisible && UI.treeNode("Effects", UI.TREE_FLAG_DEFAULT_OPEN)) {
             for (WEPGrouping.EffectItem ei : grouping.effects) {
                 if (ei.visible) {
-                    UI.treeNode(ei.label, UI.TREE_FLAG_LEAF, ei.label);
+                    UI.treeNode(ei.label, UI.TREE_FLAG_LEAF | (firstMatch ? UI.TREE_FLAG_SELECTED : 0), ei.label);
                     if (UI.isItemClicked()) {
                         activate(ei);
                     }
+                    if (firstMatch && UI.isKeyPressed(GLFW.GLFW_KEY_ENTER)) {
+                        activate(ei);
+                    }
+                    firstMatch = false;
                     UI.treePop();
                 }
             }
@@ -138,10 +149,14 @@ public class WepUi {
         if (warpsVisible && UI.treeNode("Warps", UI.TREE_FLAG_DEFAULT_OPEN)) {
             for (WEPGrouping.WarpItem wi : grouping.warps) {
                 if (wi.visible) {
-                    UI.treeNode(wi.label, UI.TREE_FLAG_LEAF, wi.label);
+                    UI.treeNode(wi.label, UI.TREE_FLAG_LEAF | (firstMatch ? UI.TREE_FLAG_SELECTED : 0), wi.label);
                     if (UI.isItemClicked()) {
                         activate(wi);
                     }
+                    if (firstMatch && UI.isKeyPressed(GLFW.GLFW_KEY_ENTER)) {
+                        activate(wi);
+                    }
+                    firstMatch = false;
                     UI.treePop();
                 }
             }
