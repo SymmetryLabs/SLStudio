@@ -84,6 +84,13 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
         return (LXMidiInput) super.open();
     }
 
+    public LXMidiInput close() {
+        enabled.setValue(false);
+        device.close();
+        isOpen = false;
+        return this;
+    }
+
     @Override
     protected void onEnabled(boolean enabled) {
         if (enabled && !this.isOpen) {

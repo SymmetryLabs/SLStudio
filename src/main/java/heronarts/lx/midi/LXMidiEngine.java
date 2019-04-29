@@ -374,6 +374,15 @@ public class LXMidiEngine implements LXSerializable {
         }
     }
 
+    public void dispose() {
+        for (LXMidiSurface surface : surfaces) {
+            surface.enabled.setValue(false);
+        }
+        for (LXMidiInput input : inputs) {
+            input.close();
+        }
+    }
+
     private static final String KEY_INPUTS = "inputs";
     private static final String KEY_SURFACES = "surfaces";
     private static final String KEY_MAPPINGS = "mapping";

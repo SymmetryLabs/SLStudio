@@ -297,6 +297,7 @@ public class LX {
      */
     public void dispose() {
         this.engine.audio.dispose();
+        this.engine.midi.dispose();
     }
 
     /**
