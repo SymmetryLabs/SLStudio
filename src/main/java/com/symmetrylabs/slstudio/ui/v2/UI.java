@@ -467,6 +467,11 @@ public class UI {
     public static native void setNextWindowSize(float w, float h);
 
     /**
+     * Returns true if the current window appeared in this frame.
+     */
+    public static native boolean isWindowAppearing();
+
+    /**
      * Get the location of the draw cursor.
      *
      * @return the location, in window-relative pixel coordinates, at which the next widget will be drawn.
@@ -880,6 +885,21 @@ public class UI {
     public static native boolean isAltDown();
     public static native boolean isCtrlDown();
     public static native boolean isShiftDown();
+    public static native boolean isKeyPressed(int keycode);
+
+    /**
+     * Set keyboard focus on the next widget to be drawn.
+     */
+    public static void setKeyboardFocusHere() {
+        setKeyboardFocusHere(0);
+    }
+
+    /**
+     * Set keyboard focus on the next widget to be drawn.
+     *
+     * @param offset indexes into the sub-widgets of widgets where that applies (like vector sliders)
+     */
+    public static native void setKeyboardFocusHere(int offset);
 
     /* IO */
     static native float getFrameRate();

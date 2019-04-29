@@ -67,7 +67,10 @@ public class WepUi {
         }
     }
 
-    public void draw() {
+    public void draw(boolean setFocusOnFilter) {
+        if (setFocusOnFilter) {
+            UI.setKeyboardFocusHere();
+        }
         String newFilterText = UI.inputText("filter", filterText);
         if (!newFilterText.equals(filterText)) {
             filterText = newFilterText;

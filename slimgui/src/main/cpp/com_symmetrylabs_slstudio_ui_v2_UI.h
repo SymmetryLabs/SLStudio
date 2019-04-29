@@ -137,8 +137,16 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowSize
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    isWindowAppearing
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isWindowAppearing
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    getCursorPosition
- * Signature: ()Lcom/symmetrylabs/slstudio/ui/v2/UI/Size;
+ * Signature: ()Lcom/symmetrylabs/slstudio/ui/v2/UI/ScreenVec2;
  */
 JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_getCursorPosition
   (JNIEnv *, jclass);
@@ -646,6 +654,22 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isCtrlDown
  */
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isShiftDown
   (JNIEnv *, jclass);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    isKeyPressed
+ * Signature: (I)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isKeyPressed
+  (JNIEnv *, jclass, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    setKeyboardFocusHere
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setKeyboardFocusHere
+  (JNIEnv *, jclass, jint);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI

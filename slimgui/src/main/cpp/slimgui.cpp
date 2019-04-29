@@ -299,6 +299,10 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowSize(JNIEnv *, jclass, jflo
     ImGui::SetNextWindowSize(ImVec2(LoadedDensity * w, LoadedDensity * h));
 }
 
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isWindowAppearing(JNIEnv *, jclass) {
+    return ImGui::IsWindowAppearing();
+}
+
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowContentSize(JNIEnv *, jclass, jfloat w, jfloat h) {
     ImGui::SetNextWindowContentSize(ImVec2(LoadedDensity * w, LoadedDensity * h));
@@ -724,6 +728,14 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isCtrlDown(JN
 
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isShiftDown(JNIEnv *, jclass) {
     return ImGui::GetIO().KeyShift ? 1 : 0;
+}
+
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isKeyPressed(JNIEnv *, jclass, jint keyCode) {
+    return ImGui::IsKeyPressed(keyCode);
+}
+
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setKeyboardFocusHere(JNIEnv *, jclass, jint offset) {
+    ImGui::SetKeyboardFocusHere(offset);
 }
 
 JNIEXPORT jfloat JNICALL

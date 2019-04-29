@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.ui.v2;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Input;
+import org.lwjgl.glfw.GLFW;
 
 public class DelegatingInputProcessor implements InputProcessor {
     private final InputProcessor delegate;

@@ -18,6 +18,7 @@ import com.symmetrylabs.slstudio.ApplicationState;
  */
 public class WepWindow extends CloseableWindow {
     private final WepUi ui;
+    private boolean firstDraw = true;
 
     public WepWindow(LX lx) {
         super("Warps / effects / patterns");
@@ -31,6 +32,7 @@ public class WepWindow extends CloseableWindow {
 
     @Override
     protected void drawContents() {
-        ui.draw();
+        ui.draw(firstDraw);
+        firstDraw = false;
     }
 }

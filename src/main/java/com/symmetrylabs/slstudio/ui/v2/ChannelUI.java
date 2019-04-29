@@ -9,6 +9,7 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.warp.LXWarp;
 import java.util.ArrayList;
 import java.util.List;
+import org.lwjgl.glfw.GLFW;
 
 public class ChannelUI {
     public static void drawWarps(LX lx, String chanName, LXBus chan) {
@@ -70,14 +71,24 @@ public class ChannelUI {
 
     public static void drawWepPopup(LX lx, LXBus bus, WepUi wepUi) {
         UI.spacing(5, 5);
+        boolean shouldShow = false;
         if (UI.button("+")) {
+            shouldShow = true;
+        }
+        if (lx.engine.getFocusedLook().getFocusedChannel() == bus && UI.isKeyPressed(GLFW.GLFW_KEY_TAB)) {
+            shouldShow = true;
+        }
+        if (shouldShow) {
             lx.engine.setFocusedChannel(bus);
             UI.setNextWindowContentSize(300, 600);
             wepUi.resetFilter();
             UI.openPopup("Warps / effects / patterns");
         }
         if (UI.beginPopup("Warps / effects / patterns", false)) {
-            wepUi.draw();
+            wepUi.draw(UI.isWindowAppearing());
+            if (UI.isKeyPressed(GLFW.GLFW_KEY_ESCAPE)) {
+                UI.closePopup();
+            }
             UI.endPopup();
         }
     }
