@@ -792,7 +792,6 @@ public class APC40Mk2 extends LXMidiSurface {
         } else {
             if (note.getPitch() == CHANNEL_FOCUS) {
                 int targetChannel = note.getChannel();
-                System.out.println(targetChannel);
                 LXLook look = lx.engine.getFocusedLook();
                 while (look.channels.size() <= targetChannel) {
                     look.addChannel();
