@@ -268,7 +268,7 @@ public class APC40Mk2 extends LXMidiSurface {
         @Override
         public void onParameterChanged(LXParameter parameter) {
             if (this.channel != null && this.channel instanceof LXChannel && parameter == ((LXChannel)this.channel).focusedPattern) {
-                if (this.device instanceof LXPattern) {
+                if (this.device instanceof LXPattern || this.device == null) {
                     register(((LXChannel)this.channel).getFocusedPattern());
                 }
             } else if (this.effect != null && parameter == this.effect.enabled) {
