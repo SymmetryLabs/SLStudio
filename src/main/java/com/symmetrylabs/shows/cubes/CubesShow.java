@@ -35,7 +35,7 @@ public abstract class CubesShow implements Show {
     public static final float INCHES_PER_METER = 39.3701f;
 
     ListenableSet<CubesController> controllers = new ListenableSet<>();
-    CubePhysicalIdMap cubePhysicalIdMap = new CubePhysicalIdMap();
+    CubePhysicalIdMap cubePhysicalIdMap = CubePhysicalIdMap.loadFromDisk();
 
     private static Map<LX, WeakReference<CubesShow>> instanceByLX = new WeakHashMap<>();
 

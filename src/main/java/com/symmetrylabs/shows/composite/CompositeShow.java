@@ -37,15 +37,11 @@ import com.symmetrylabs.slstudio.output.TenereDatagram;
 
 public class CompositeShow implements Show {
     ListenableSet<SLController> controllers = new ListenableSet<>();
-    CubePhysicalIdMap cubePhysicalIdMap = new CubePhysicalIdMap();
+    CubePhysicalIdMap cubePhysicalIdMap = CubePhysicalIdMap.loadFromDisk();
 
     List<CubesModel.Cube> cubes = new ArrayList<>();
     List<TreeModel.Branch> branches = new ArrayList<>();
     List<ButterfliesModel.Butterfly> butterflies = new ArrayList<>();
-
-    // for SLController mac address lookup
-    static Map<String, String> macToPhysid = new HashMap<>();
-    static Map<String, String> physidToMac = new HashMap<>();
 
     static final float INCHES_PER_METER = 39.3701f;
 
