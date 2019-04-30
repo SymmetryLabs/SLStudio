@@ -146,6 +146,12 @@ public class MainMenu implements Window {
             UI.endMenu();
         }
 
+        if (UI.beginMenu("About")) {
+            UI.menuItem(String.format("Volume v%s", com.symmetrylabs.slstudio.Version.VERSION));
+            UI.menuText(String.format("Build %s", com.symmetrylabs.slstudio.Version.GIT_SHA.substring(0, 6)));
+            UI.menuText(String.format("Built at %s", com.symmetrylabs.slstudio.Version.BUILD_DATE));
+            UI.endMenu();
+        }
         UI.endMainMenuBar();
     }
 

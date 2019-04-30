@@ -17,6 +17,7 @@ plugins {
 	id 'java'
 	id 'application'
 	id 'edu.sc.seis.macAppBundle' version '2.3.0'
+    id "com.peterabeles.gversion" version "1.2.4"
 }
 
 apply plugin: 'com.palantir.docker'
@@ -219,3 +220,11 @@ tasks.withType(Javadoc) {
         links "https://docs.oracle.com/javase/8/docs/api/"
     }
 }
+
+/* creates com.symmetrylabs.slstudio.Version class with build information */
+gversion {
+  srcDir = "src/main/java/"
+  classPackage = "com.symmetrylabs.slstudio"
+  className = "Version"
+}
+project.compileJava.dependsOn(createVersionFile)
