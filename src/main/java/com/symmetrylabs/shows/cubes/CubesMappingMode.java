@@ -76,7 +76,7 @@ public class CubesMappingMode {
 
         cubesModel = lx.model instanceof CubesModel ? (CubesModel)lx.model : new CubesModel();
         for (CubesModel.Cube cube : cubesModel.getCubes()) {
-            fixturesMappedButNotOnNetwork.add(cube.id);
+            fixturesMappedButNotOnNetwork.add(cube.controllerId);
         }
 
         String[] emptyOptions = new String[] {"-"};
@@ -123,7 +123,7 @@ public class CubesMappingMode {
 
     public boolean isFixtureMapped(String id) {
         for (CubesModel.Cube fixture : cubesModel.getCubes()) {
-            if (fixture.id.equals(id))
+            if (fixture.controllerId.equals(id))
                 return true;
         }
         return false;

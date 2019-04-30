@@ -264,7 +264,7 @@ public class CompositeShow implements Show {
                 final PointsGrouping points = new PointsGrouping(physicalId);
 
                 for (CubesModel.Cube cube : cubes) {
-                    if (cube.id.equals(physicalId)) {
+                    if (cube.controllerId.equals(physicalId)) {
                         // this should live somewhere
                         List<Strip> strips = ((StripsModel)cube).getStrips();
 

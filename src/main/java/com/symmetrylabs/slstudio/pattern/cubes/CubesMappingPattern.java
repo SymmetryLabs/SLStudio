@@ -91,7 +91,7 @@ public class CubesMappingPattern extends SLPattern<CubesModel> {
 
         // we iterate all cubes and call continue here because multiple cubes might have zero as id
         for (CubesModel.Cube c : model.getCubes()) {
-            if (!c.id.equals(id))
+            if (!c.controllerId.equals(id))
                 continue;
 
             int i = 0;

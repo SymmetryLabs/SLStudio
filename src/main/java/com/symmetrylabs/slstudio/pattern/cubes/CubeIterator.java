@@ -37,10 +37,10 @@ public class CubeIterator extends SLPattern<CubesModel> implements MarkerSource 
         cubeIndex.setRange(0, model.getCubes().size());
         cubeIndex.addListener(param -> {
             CubesModel.Cube cube = model.getCubes().get(cubeIndex.getValuei());
-            String label = cube.id;
+            String label = cube.controllerId;
             if (cube instanceof CubesModel.DoubleControllerCube) {
                 CubesModel.DoubleControllerCube dc = (CubesModel.DoubleControllerCube) cube;
-                label = dc.idA + "/" + dc.idB;
+                label = dc.controllerIdA + "/" + dc.controllerIdB;
             }
             System.out.println(String.format(
                 Locale.US, "Cube %s: center at (%+6.1f, %+6.1f, %+6.2f)",
@@ -75,10 +75,10 @@ public class CubeIterator extends SLPattern<CubesModel> implements MarkerSource 
         for (CubesModel.Cube cube : cubes) {
             pos.set(cube.cx, cube.cy, cube.cz);
             int c = (i == cubeI) ? 0xffffff00 : 0x80008040;
-            String label = cube.id;
+            String label = cube.controllerId;
             if (cube instanceof CubesModel.DoubleControllerCube) {
                 CubesModel.DoubleControllerCube dc = (CubesModel.DoubleControllerCube) cube;
-                label = dc.idA + "\n" + dc.idB;
+                label = dc.controllerIdA + "\n" + dc.controllerIdB;
             }
             markers.add(new TextMarker(pos, size, c, label));
             i++;

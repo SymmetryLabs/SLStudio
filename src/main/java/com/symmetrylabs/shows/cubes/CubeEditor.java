@@ -53,20 +53,20 @@ public class CubeEditor extends CloseableWindow {
             if (c instanceof DoubleControllerCube) {
                 DoubleControllerCube dcc = (DoubleControllerCube) c;
                 UI.beginTable(2, "cubeIds");
-                String idA = UI.inputText(String.format("A##%d", i), dcc.idA);
+                String idA = UI.inputText(String.format("A##%d", i), dcc.controllerIdA);
                 UI.nextCell();
-                String idB = UI.inputText(String.format("B##%d", i), dcc.idB);
-                if (!idA.equals(dcc.idA) || !idB.equals(dcc.idB)) {
-                    dcc.id = idA;
-                    dcc.idA = idA;
-                    dcc.idB = idB;
+                String idB = UI.inputText(String.format("B##%d", i), dcc.controllerIdB);
+                if (!idA.equals(dcc.controllerIdA) || !idB.equals(dcc.controllerIdB)) {
+                    dcc.controllerId = idA;
+                    dcc.controllerIdA = idA;
+                    dcc.controllerIdB = idB;
                     updated = true;
                 }
                 UI.endTable();
             } else {
-                String id = UI.inputText(String.format("id##%d", i), c.id);
-                if (!id.equals(c.id)) {
-                    c.id = id;
+                String id = UI.inputText(String.format("id##%d", i), c.controllerId);
+                if (!id.equals(c.controllerId)) {
+                    c.controllerId = id;
                     updated = true;
                 }
             }

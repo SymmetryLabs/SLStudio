@@ -195,16 +195,16 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             for (CubesModel.Cube c : cubesModel.getCubes()) {
                 if (c instanceof CubesModel.DoubleControllerCube) {
                     CubesModel.DoubleControllerCube c2 = (CubesModel.DoubleControllerCube) c;
-                    if (c2.idA != null && c2.idB != null) {
-                        if (c2.idA.equals(id)) {
+                    if (c2.controllerIdA != null && c2.controllerIdB != null) {
+                        if (c2.controllerIdA.equals(id)) {
                             points = c2.getPointsA();
                         }
-                        if (c2.idB.equals(id)) {
+                        if (c2.controllerIdB.equals(id)) {
                             points = c2.getPointsB();
                         }
                     }
                 }
-                else if (c.id != null && c.id.equals(id)) {
+                else if (c.controllerId != null && c.controllerId.equals(id)) {
                     points = new PointsGrouping(c.getPoints());
                 }
             }
