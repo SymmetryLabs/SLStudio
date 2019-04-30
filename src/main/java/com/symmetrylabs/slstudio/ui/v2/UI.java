@@ -72,6 +72,12 @@ public class UI {
     public static int TREE_FLAG_SELECTED;
 
     /**
+     * If set, the given text input is read-only. Read-only text inputs are
+     * useful because they allow for copy-paste.
+     */
+    public static int INPUT_TEXT_FLAG_READ_ONLY;
+
+    /**
      * Allow horizontal scrolling in a window.
      * @see begin(String, int)
      * @see beginClosable(String, int)
@@ -569,6 +575,10 @@ public class UI {
      * Finish drawing the current table widget.
      */
     public static native void endTable();
+    /**
+     * Set the width of the given column, in pixels.
+     */
+    public static native void setColumnWidth(int column, float width);
 
     /**
      * Draw a horizontal separator.
@@ -778,6 +788,7 @@ public class UI {
     }
     public static native boolean selectable(String label, boolean v, float height);
     public static native String inputText(String label, String text);
+    public static native String inputTextMultiline(String label, String text, int displayLines, int flags);
     public static native int colorPicker(String label, int rgb);
     public static native float[] colorPickerHSV(String label, float h, float s, float v);
     public static native float sliderFloat(String label, float v, float v0, float v1);

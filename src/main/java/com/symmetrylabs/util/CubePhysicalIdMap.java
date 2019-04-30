@@ -88,12 +88,12 @@ public class CubePhysicalIdMap {
 
         void validate() {
             CubeDataError.require(idA != null, "idA is null");
-            CubeDataError.require(addrA != null, "addrA is null");
-            CubeDataError.require(MAC_ADDR_PATTERN.test(addrA), "bad format for mac address A: \"%s\"", addrA);
+            CubeDataError.require(addrA != null, "addrA is null on cube %s", idA);
+            CubeDataError.require(MAC_ADDR_PATTERN.test(addrA), "bad format for mac address A on cube %s: \"%s\"", idA, addrA);
             // both or neither of idB and addrB must be null
             CubeDataError.require((addrB == null) == (idB == null), "only one of idB and addrB were set on cube id %s", idA);
             if (addrB != null) {
-                CubeDataError.require(MAC_ADDR_PATTERN.test(addrB), "bad format for mac address B: \"%s\"", addrB);
+                CubeDataError.require(MAC_ADDR_PATTERN.test(addrB), "bad format for mac address B on cube %s: \"%s\"", idA, addrB);
             }
         }
     }

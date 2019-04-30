@@ -209,6 +209,14 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endTable
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    setColumnWidth
+ * Signature: (IF)V
+ */
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setColumnWidth
+  (JNIEnv *, jclass, jint, jfloat);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    separator
  * Signature: ()V
  */
@@ -334,6 +342,14 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_selectable
  */
 JNIEXPORT jstring JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_inputText
   (JNIEnv *, jclass, jstring, jstring);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    inputTextMultiline
+ * Signature: (Ljava/lang/String;Ljava/lang/String;II)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_inputTextMultiline
+  (JNIEnv *, jclass, jstring, jstring, jint, jint);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI

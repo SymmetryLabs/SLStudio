@@ -92,6 +92,8 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
     env->SetStaticIntField(cls, fid, ImGuiTreeNodeFlags_DefaultOpen);
     fid = env->GetStaticFieldID(cls, "TREE_FLAG_SELECTED", "I");
     env->SetStaticIntField(cls, fid, ImGuiTreeNodeFlags_Selected);
+    fid = env->GetStaticFieldID(cls, "INPUT_TEXT_FLAG_READ_ONLY", "I");
+    env->SetStaticIntField(cls, fid, ImGuiInputTextFlags_ReadOnly);
     fid = env->GetStaticFieldID(cls, "WINDOW_HORIZ_SCROLL", "I");
     env->SetStaticIntField(cls, fid, ImGuiWindowFlags_HorizontalScrollbar);
     fid = env->GetStaticFieldID(cls, "WINDOW_NO_RESIZE", "I");
@@ -358,6 +360,11 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_endTable(JNIEnv *, jclass) {
     ImGui::Columns(1);
 }
 
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setColumnWidth(
+    JNIEnv *, jclass, jint col, jfloat width) {
+    ImGui::SetColumnWidth(col, width);
+}
+
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_separator(JNIEnv *, jclass) {
     ImGui::Separator();
@@ -441,6 +448,17 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_inputText(JNIEnv *env, jclass, jstring j
     char input_buf[MAX_INPUT_LENGTH + 1] = {0};
     strncpy(input_buf, str, MAX_INPUT_LENGTH);
     ImGui::InputText(label, input_buf, MAX_INPUT_LENGTH + 1);
+    return env->NewStringUTF(input_buf);
+}
+
+JNIEXPORT jstring JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_inputTextMultiline(JNIEnv *env, jclass, jstring jlabel, jstring jstr, jint displayLines, jint flags) {
+    JniString label(env, jlabel);
+    JniString str(env, jstr);
+    char input_buf[MAX_INPUT_LENGTH + 1] = {0};
+    strncpy(input_buf, str, MAX_INPUT_LENGTH);
+    ImGui::InputTextMultiline(
+        label, input_buf, MAX_INPUT_LENGTH + 1,
+        ImVec2(-1.0f, ImGui::GetTextLineHeight() * displayLines), flags);
     return env->NewStringUTF(input_buf);
 }
 

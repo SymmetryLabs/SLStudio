@@ -8,8 +8,13 @@ import java.util.Map;
 public class ConsoleWindow extends CloseableWindow {
     static final String WINDOW_NAME = "Console";
 
+    private static class Warning {
+        String str;
+        int lines;
+    }
+
     private static final Object GLOBAL_WARNING_LOCK = new Object();
-    private static final Map<String, String> warnings = new HashMap<>();
+    private static final Map<String, Warning> warnings = new HashMap<>();
     private static final List<String> keys = new ArrayList<>();
 
     ConsoleWindow() {
@@ -18,16 +23,22 @@ public class ConsoleWindow extends CloseableWindow {
 
     @Override
     protected void windowSetup() {
-        UI.setNextWindowDefaults(25, 500, 500, 300);
+        UI.setNextWindowDefaults(25, 500, 700, 300);
     }
 
     @Override
     protected void drawContents() {
         /* do not add warnings inside this block, it will cause a deadlock! */
         synchronized (GLOBAL_WARNING_LOCK) {
+            UI.beginTable(2, "warnings");
+            UI.setColumnWidth(0, 150);
             for (String key : keys) {
-                UI.labelText(key, warnings.get(key));
+                UI.text(key);
+                UI.nextCell();
+                Warning warning = warnings.get(key);
+                UI.inputTextMultiline("##" + key, warning.str, warning.lines + 1, UI.INPUT_TEXT_FLAG_READ_ONLY);
             }
+            UI.endTable();
         }
     }
 
@@ -37,7 +48,13 @@ public class ConsoleWindow extends CloseableWindow {
                 if (!message.equals(warnings.get(key))) {
                     System.err.println("WARNING: " + key + ": " + message);
                 }
-                warnings.put(key, message);
+                Warning w = new Warning();
+                w.str = message;
+                w.lines = 1;
+                for (int i = 0; i < message.length(); i++) {
+                    if (message.charAt(i) == '\n') w.lines++;
+                }
+                warnings.put(key, w);
             } else {
                 warnings.remove(key);
             }
