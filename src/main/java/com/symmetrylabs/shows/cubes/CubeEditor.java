@@ -43,11 +43,13 @@ public class CubeEditor extends CloseableWindow {
             } else if (collapse) {
                 UI.setNextTreeNodeOpen(false);
             }
-            UI.CollapseResult cr = UI.collapsibleSection(String.format("Cube %d", i), false);
+            UI.CollapseResult cr = UI.collapsibleSection(c.modelId, false);
             if (!cr.isOpen) {
                 continue;
             }
             UI.labelText("type", c.type.toString());
+
+            UI.inputFloat3("position##" + i, new float[] {c.x, c.y, c.z}, UI.INPUT_TEXT_FLAG_READ_ONLY);
 
             boolean updated = false;
             if (c instanceof DoubleControllerCube) {
@@ -70,26 +72,6 @@ public class CubeEditor extends CloseableWindow {
                     updated = true;
                 }
             }
-            UI.beginTable(3, "cubeEditor");
-            float x = UI.floatBox(String.format("x##%d", i), c.x);
-            if (x != c.x) {
-                c.x = x;
-                updated = true;
-            }
-            UI.nextCell();
-            float y = UI.floatBox(String.format("y##%d", i), c.y);
-            if (y != c.y) {
-                c.y = y;
-                updated = true;
-            }
-            UI.nextCell();
-            float z = UI.floatBox(String.format("z##%d", i), c.z);
-            if (z != c.z) {
-                c.z = z;
-                updated = true;
-            }
-            UI.nextCell();
-            UI.endTable();
 
             if (updated) {
                 c.updatePoints(new LXTransform());

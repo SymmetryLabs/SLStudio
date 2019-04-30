@@ -385,6 +385,14 @@ JNIEXPORT jstring JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_inputTextMulti
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    inputFloat3
+ * Signature: (Ljava/lang/String;[FI)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_inputFloat3
+  (JNIEnv *, jclass, jstring, jfloatArray, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    colorPicker
  * Signature: (Ljava/lang/String;I)I
  */

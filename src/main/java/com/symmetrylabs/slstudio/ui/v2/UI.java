@@ -820,6 +820,16 @@ public class UI {
     public static native boolean selectable(String label, boolean v, float height);
     public static native String inputText(String label, String text);
     public static native String inputTextMultiline(String label, String text, int displayLines, int flags);
+
+    /**
+     * Shows three text fields for editing a triple of floats.
+     *
+     * @param label the label on the widget
+     * @param v the value to display (mutated when the UI input is edited)
+     * @param flags a bitset of INPUT_TEXT flags
+     * @return true if the array is changed
+     */
+    public static native boolean inputFloat3(String label, float[] v, int flags);
     public static native int colorPicker(String label, int rgb);
     public static native float[] colorPickerHSV(String label, float h, float s, float v);
     public static native float sliderFloat(String label, float v, float v0, float v1);

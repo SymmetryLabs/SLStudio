@@ -477,6 +477,15 @@ JNIEXPORT jstring JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_inputTextMulti
     return env->NewStringUTF(input_buf);
 }
 
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_inputFloat3(JNIEnv *env, jclass, jstring jlabel, jfloatArray jvals, jint flags) {
+    JniString label(env, jlabel);
+    jfloat vals[3];
+    env->GetFloatArrayRegion(jvals, 0, 3, vals);
+    bool edited = ImGui::InputFloat3(label, vals, "%.2f", flags);
+    env->SetFloatArrayRegion(jvals, 0, 3, vals);
+    return edited;
+}
+
 JNIEXPORT jint JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_colorPicker(JNIEnv *env, jclass, jstring jlabel, jint rgb) {
     JniString label(env, jlabel);
     float rgbchans[] = {
