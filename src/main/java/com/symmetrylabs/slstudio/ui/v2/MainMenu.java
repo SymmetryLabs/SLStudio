@@ -117,13 +117,31 @@ public class MainMenu implements Window {
 
         if (UI.beginMenu("Window")) {
             WindowManager wm = WindowManager.get();
+            String lastDirName = null;
+            boolean showCurrentDir = true;
             /* Iterate over entries to preserve order */
             for (WindowManager.PersistentWindow ws : wm.getSpecs()) {
-                if (UI.menuItemToggle(ws.name, null, ws.current != null, true)) {
-                    wm.showPersistent(ws);
-                } else {
-                    wm.hidePersistent(ws);
+                if ((ws.dirName == null) != (lastDirName == null) || (lastDirName != null && !ws.dirName.equals(lastDirName))) {
+                    if (lastDirName != null && showCurrentDir) {
+                        UI.endMenu();
+                    }
+                    if (ws.dirName != null) {
+                        showCurrentDir = UI.beginMenu(ws.dirName);
+                    } else {
+                        showCurrentDir = true;
+                    }
+                    lastDirName = ws.dirName;
                 }
+                if (showCurrentDir) {
+                    if (UI.menuItemToggle(ws.name, null, ws.current != null, true)) {
+                        wm.showPersistent(ws);
+                    } else {
+                        wm.hidePersistent(ws);
+                    }
+                }
+            }
+            if (lastDirName != null && showCurrentDir) {
+                UI.endMenu();
             }
             UI.endMenu();
         }

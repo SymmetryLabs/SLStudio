@@ -128,10 +128,10 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         WindowManager.addPersistent("Master", () -> new MasterWindow(lx), true);
         WindowManager.addPersistent("Modulation", () -> new ModulationWindow(lx), false);
 
-        WindowManager.addPersistent("Imgui demo", () -> new SlimguiDemoWindow(), false);
-        WindowManager.addPersistent("Imgui style editor", () -> new SlimguiStyleEditor(), false);
-        WindowManager.addPersistent("Imgui metrics", () -> new SlimguiMetricsWindow(), false);
-        WindowManager.addPersistent("About imgui", () -> new SlimguiAboutWindow(), false);
+        WindowManager.addPersistent("Developer/Imgui demo", () -> new SlimguiDemoWindow(), false);
+        WindowManager.addPersistent("Developer/Style editor", () -> new SlimguiStyleEditor(), false);
+        WindowManager.addPersistent("Developer/Imgui metrics", () -> new SlimguiMetricsWindow(), false);
+        WindowManager.addPersistent("Developer/About imgui", () -> new SlimguiAboutWindow(), false);
 
         lx.engine.isMultithreaded.setValue(true);
         lx.engine.isChannelMultithreaded.setValue(true);

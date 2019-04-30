@@ -108,6 +108,7 @@ public class WindowManager {
 
     static class PersistentWindow {
         String name;
+        String dirName;
         WindowCreator creator;
         Window current;
     }
@@ -137,10 +138,21 @@ public class WindowManager {
 
     void addPersistentImpl(String name, WindowCreator creator, boolean displayByDefault) {
         PersistentWindow ws = new PersistentWindow();
-        ws.name = name;
+        String[] nameParts = name.split("/", 2);
+        ws.dirName = nameParts.length > 1 ? nameParts[0] : null;
+        ws.name = nameParts.length > 1 ? nameParts[1] : nameParts[0];
         ws.creator = creator;
         ws.current = displayByDefault ? creator.create() : null;
         persistentWindows.add(ws);
+        persistentWindows.sort((ws1, ws2) -> {
+                String b1 = ws1.dirName == null ? ws1.name : ws1.dirName;
+                String b2 = ws2.dirName == null ? ws2.name : ws2.dirName;
+                int bcmp = b1.compareTo(b2);
+                if (bcmp != 0) {
+                    return bcmp;
+                }
+                return ws1.name.compareTo(ws2.name);
+            });
     }
 
     void addTransientImpl(Window w) {

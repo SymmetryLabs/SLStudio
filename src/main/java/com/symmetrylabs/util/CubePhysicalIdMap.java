@@ -168,15 +168,17 @@ public class CubePhysicalIdMap {
         }
     }
 
-    public void save() {
+    public boolean save() {
         try {
             JsonWriter writer = new JsonWriter(new FileWriter(CUBEDB_FILENAME));
             writer.setIndent("  ");
             new GsonBuilder().create().toJson(this, CubePhysicalIdMap.class, writer);
             writer.close();
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     public void addListener(Listener listener) {
