@@ -68,6 +68,11 @@ public class CubeOutputWindow extends CloseableWindow {
                 UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.RED_HOVER);
             }
             UI.CollapseResult cr = UI.collapsibleSection(cc.id, false);
+            if (cc.getMacAddress() != null && UI.beginDragDropSource()) {
+                UI.setDragDropPayload("SL.CubeMacAddress", cc.getMacAddress());
+                UI.endDragDropSource();
+            }
+
             UI.popColor(3);
             cc.sendTestPattern = UI.isItemClicked(true) && UI.isAltDown();
 

@@ -109,8 +109,20 @@ public class InventoryEditor extends CloseableWindow {
             UI.separator();
             pc.idA = UI.inputText("id A##" + i, pc.idA == null ? "" : pc.idA);
             pc.addrA = UI.inputText("addr A##" + i, pc.addrA == null ? "" : pc.addrA);
+            if (UI.beginDragDropTarget()) {
+                String addr = UI.acceptDragDropPayload("SL.CubeMacAddress", String.class);
+                if (addr != null) {
+                    pc.addrA = addr;
+                }
+            }
             pc.idB = UI.inputText("id B##" + i, pc.idB == null ? "" : pc.idB);
             pc.addrB = UI.inputText("addr B##" + i, pc.addrB == null ? "" : pc.addrB);
+            if (UI.beginDragDropTarget()) {
+                String addr = UI.acceptDragDropPayload("SL.CubeMacAddress", String.class);
+                if (addr != null) {
+                    pc.addrB = addr;
+                }
+            }
 
             if (pc.idA.length() == 0) pc.idA = null;
             if (pc.addrA.length() == 0) pc.addrA = null;

@@ -37,6 +37,7 @@ public class ConsoleWindow extends CloseableWindow {
                 UI.nextCell();
                 Warning warning = warnings.get(key);
                 UI.inputTextMultiline("##" + key, warning.str, warning.lines + 1, UI.INPUT_TEXT_FLAG_READ_ONLY);
+                UI.nextCell();
             }
             UI.endTable();
         }

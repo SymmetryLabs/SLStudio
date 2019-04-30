@@ -15,18 +15,20 @@ import heronarts.lx.output.LXOutput;
 import heronarts.lx.output.OPCConstants;
 import org.jetbrains.annotations.NotNull;
 import com.symmetrylabs.slstudio.ApplicationState;
+import com.symmetrylabs.util.CubeInventory;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.*;
 
-public class CubesController extends LXOutput implements Comparable<CubesController>, OPCConstants {
-    public final String id;
-    public final int idInt;
+public class CubesController extends LXOutput implements Comparable<CubesController>, OPCConstants, CubeInventory.Listener {
+    public String id;
+    public int idInt;
     public final InetAddress host;
     public final boolean isBroadcast;
     public final NetworkDevice networkDevice;
 
+    private final CubeInventory inventory;
     private DatagramSocket dsocket;
     private DatagramPacket packet;
     private OutputStream output;
@@ -50,8 +52,8 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     private CubesMappingMode mappingMode;
     private GammaExpander gammaExpander;
 
-    public CubesController(LX lx, NetworkDevice device, String id) {
-        this(lx, device, device.ipAddress, id, false);
+    public CubesController(LX lx, NetworkDevice device, CubeInventory inventory) {
+        this(lx, device, device.ipAddress, null, inventory, false);
     }
 
     public CubesController(LX lx, String _host, String _id) {
@@ -63,28 +65,51 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     }
 
     private CubesController(LX lx, String host, String id, boolean isBroadcast) {
-        this(lx, null, NetworkUtils.toInetAddress(host), id, isBroadcast);
+        this(lx, null, NetworkUtils.toInetAddress(host), id, null, isBroadcast);
     }
 
-    private CubesController(LX lx, NetworkDevice networkDevice, InetAddress host, String id, boolean isBroadcast) {
+    private CubesController(LX lx, NetworkDevice networkDevice, InetAddress host, String id, CubeInventory inventory, boolean isBroadcast) {
         super(lx);
 
         this.lx = lx;
         this.networkDevice = networkDevice;
         this.host = host;
         this.id = id;
+        this.inventory = inventory;
         this.isBroadcast = isBroadcast;
 
+        if (inventory != null) {
+            inventory.addListener(this);
+            onCubeListUpdated();
+        } else {
+            onIdUpdated();
+        }
+
+        mappingMode = CubesMappingMode.getInstance(lx);
+        gammaExpander = GammaExpander.getInstance(lx);
+
+        enabled.setValue(true);
+    }
+
+    public String getMacAddress() {
+        return networkDevice.deviceId;
+    }
+
+    @Override
+    public void onCubeListUpdated() {
+        String newId = inventory.getControllerId(networkDevice.deviceId);
+        if (newId != null && (id == null || !id.equals(newId))) {
+            id = newId;
+            onIdUpdated();
+        }
+    }
+
+    private void onIdUpdated() {
         int idInt = Integer.MAX_VALUE;
         try {
             idInt = Integer.parseInt(id);
         } catch (NumberFormatException e) {}
         this.idInt = idInt;
-
-        mappingMode = CubesMappingMode.getInstance(lx);
-        gammaExpander = gammaExpander.getInstance(lx);
-
-        enabled.setValue(true);
     }
 
     public void set16BitColorEnabled(boolean enable) {
@@ -269,6 +294,9 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     @Override
     public void dispose() {
         this.resetSocket();
+        if (inventory != null) {
+            inventory.removeListener(this);
+        }
         super.dispose();
     }
 

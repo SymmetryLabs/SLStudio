@@ -109,8 +109,7 @@ public abstract class CubesShow implements Show {
 
         networkMonitor.opcDeviceList.addListener(new SetListener<NetworkDevice>() {
             public void onItemAdded(NetworkDevice device) {
-                String physicalId = cubeInventory.getPhysicalId(device.deviceId);
-                final CubesController controller = new CubesController(lx, device, physicalId);
+                final CubesController controller = new CubesController(lx, device, cubeInventory);
                 controller.set16BitColorEnabled(device.featureIds.contains("rgb16"));
                 controllers.add(controller);
                 dispatcher.dispatchNetwork(() -> lx.addOutput(controller));

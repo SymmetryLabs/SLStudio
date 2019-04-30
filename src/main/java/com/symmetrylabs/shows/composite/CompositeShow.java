@@ -260,7 +260,7 @@ public class CompositeShow implements Show {
         // Put cubes on SLControllers
         networkMonitor.opcDeviceList.addListener(new SetListener<NetworkDevice>() {
             public void onItemAdded(NetworkDevice device) {
-                String physicalId = cubeInventory.getPhysicalId(device.deviceId);
+                String physicalId = cubeInventory.getControllerId(device.deviceId);
                 final PointsGrouping points = new PointsGrouping(physicalId);
 
                 for (CubesModel.Cube cube : cubes) {

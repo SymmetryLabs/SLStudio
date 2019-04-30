@@ -224,10 +224,10 @@ public class CubeInventory {
         return null;
     }
 
-    public String getPhysicalId(String macAddr) {
+    public String getControllerId(String macAddr) {
         PhysicalCube cube = getCube(macAddr);
         if (cube != null) {
-            return cube.getPhysicalId();
+            return macAddr.equals(cube.addrA) ? cube.idA : cube.idB;
         }
         return macAddr;
     }
