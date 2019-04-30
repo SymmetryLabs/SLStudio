@@ -14,6 +14,8 @@ import java.util.List;
 public class InventoryEditor extends CloseableWindow {
     protected final LX lx;
     protected final CubeInventory inventory;
+    protected String idFilter = "";
+    protected String macFilter = "";
 
     public InventoryEditor(LX lx, CubeInventory inventory) {
         super("Inventory editor");
@@ -83,22 +85,53 @@ public class InventoryEditor extends CloseableWindow {
             UI.endPopup();
         }
 
+        UI.sameLine();
+        if (UI.button("Clear filters")) {
+            idFilter = "";
+            macFilter = "";
+        }
+
+        idFilter = UI.inputText("ID filter", idFilter);
+        macFilter = UI.inputText("MAC filter", macFilter);
+
         UI.beginChild("cubeList", true, 0);
         int i = 0;
+        CubeInventory.PhysicalCube toRemove = null;
         for (CubeInventory.PhysicalCube pc : inventory.allCubes) {
+            /* cubes with null ID/addr on A are always displayed */
+            boolean match =
+                ((pc.idA == null || pc.idA.contains(idFilter)) || (pc.idB != null && pc.idB.contains(idFilter))) &&
+                ((pc.addrA == null || pc.addrA.contains(macFilter)) || (pc.addrB != null && pc.addrB.contains(macFilter)));
+            if (!match) {
+                continue;
+            }
+
             UI.separator();
-            pc.idA = UI.inputText("id A##" + i, pc.idA);
-            pc.addrA = UI.inputText("addr A##" + i, pc.addrA);
+            pc.idA = UI.inputText("id A##" + i, pc.idA == null ? "" : pc.idA);
+            pc.addrA = UI.inputText("addr A##" + i, pc.addrA == null ? "" : pc.addrA);
             pc.idB = UI.inputText("id B##" + i, pc.idB == null ? "" : pc.idB);
-            if (pc.idB.length() == 0) pc.idB = null;
             pc.addrB = UI.inputText("addr B##" + i, pc.addrB == null ? "" : pc.addrB);
+
+            if (pc.idA.length() == 0) pc.idA = null;
+            if (pc.addrA.length() == 0) pc.addrA = null;
+            if (pc.idB.length() == 0) pc.idB = null;
             if (pc.addrB.length() == 0) pc.addrB = null;
+
             if (pc.imported) {
                 UI.textWrapped("(imported from the old physid table)");
+            }
+            if (UI.button("Delete")) {
+                toRemove = pc;
             }
             i++;
             UI.spacing(10, 10);
         }
+
+        if (toRemove != null) {
+            inventory.allCubes.remove(toRemove);
+            inventory.rebuild();
+        }
+
         UI.endChild();
     }
 }

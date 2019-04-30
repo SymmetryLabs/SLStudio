@@ -29,7 +29,8 @@ import java.net.URL;
 
 public class CubeInventory {
     protected final static String LEGACY_FILENAME = "physid_to_mac.json";
-    protected final static String CUBEDB_FILENAME = "cubeinventory.json";
+    protected final static String INVENTORY_FILENAME = "cubeinventory.json";
+    protected final static boolean ALLOW_LEGACY_LOADER = false;
 
     protected final static Predicate<String> MAC_ADDR_PATTERN = Pattern.compile("[A-Fa-f0-9]{12}").asPredicate();
 
@@ -177,9 +178,9 @@ public class CubeInventory {
     public boolean save() {
         ClassLoader cl = CubeInventory.class.getClassLoader();
         /* check to see if we have the file in resources */
-        URL dbUrl = cl.getResource(CUBEDB_FILENAME);
+        URL dbUrl = cl.getResource(INVENTORY_FILENAME);
         /* this is where the file is stored in the source tree */
-        File resFile = new File("src/main/resources", CUBEDB_FILENAME);
+        File resFile = new File("src/main/resources", INVENTORY_FILENAME);
         /* if the source tree file isn't present but the resource is present, we aren't in a
            source distribution, so we can't save the file. */
         if (dbUrl != null && !resFile.exists()) {
@@ -233,7 +234,7 @@ public class CubeInventory {
 
     public static CubeInventory loadFromDisk() {
         ClassLoader cl = CubeInventory.class.getClassLoader();
-        InputStream cubedbStream = cl.getResourceAsStream(CUBEDB_FILENAME);
+        InputStream cubedbStream = cl.getResourceAsStream(INVENTORY_FILENAME);
         if (cubedbStream != null) {
             CubeInventory res = new Gson().fromJson(
                 new InputStreamReader(cubedbStream), CubeInventory.class);
@@ -241,6 +242,10 @@ public class CubeInventory {
                 res.rebuild();
                 return res;
             }
+        }
+        if (!ALLOW_LEGACY_LOADER) {
+            ApplicationState.setWarning("CubeInventory", "couldn't read inventory from disk");
+            return new CubeInventory();
         }
 
         InputStream legacyFileStream = cl.getResourceAsStream(LEGACY_FILENAME);
