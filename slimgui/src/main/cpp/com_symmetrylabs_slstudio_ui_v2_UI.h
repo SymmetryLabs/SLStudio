@@ -145,6 +145,14 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isWindowAppea
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    isWindowFocused
+ * Signature: (I)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isWindowFocused
+  (JNIEnv *, jclass, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    getCursorPosition
  * Signature: ()Lcom/symmetrylabs/slstudio/ui/v2/UI/ScreenVec2;
  */
@@ -710,6 +718,14 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isShiftDown
  */
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isKeyPressed
   (JNIEnv *, jclass, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    isAnyItemFocused
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isAnyItemFocused
+  (JNIEnv *, jclass);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI

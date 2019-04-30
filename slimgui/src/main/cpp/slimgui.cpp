@@ -140,6 +140,8 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
     env->SetStaticIntField(cls, fid, ImGuiCond_Once);
     fid = env->GetStaticFieldID(cls, "COND_APPEARING", "I");
     env->SetStaticIntField(cls, fid, ImGuiCond_Appearing);
+    fid = env->GetStaticFieldID(cls, "FOCUSED_FLAG_CHILD_WINDOWS", "I");
+    env->SetStaticIntField(cls, fid, ImGuiFocusedFlags_ChildWindows);
 
     if (gl3wInit()) {
         std::cout << "failed to init gl3w" << std::endl;
@@ -303,6 +305,14 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_setNextWindowSize(JNIEnv *, jclass, jflo
 
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isWindowAppearing(JNIEnv *, jclass) {
     return ImGui::IsWindowAppearing();
+}
+
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isWindowFocused(JNIEnv *, jclass, jint flags) {
+    return ImGui::IsWindowFocused(flags);
+}
+
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isAnyItemFocused(JNIEnv *, jclass) {
+    return ImGui::IsAnyItemFocused();
 }
 
 JNIEXPORT void JNICALL

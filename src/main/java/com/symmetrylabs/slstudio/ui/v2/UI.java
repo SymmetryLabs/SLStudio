@@ -213,6 +213,11 @@ public class UI {
     public static int COLOR_WINDOW_BORDER;
 
     /**
+     * Makes {@link isWindowFocused(int)} return true if a child window of this window is focused.
+     */
+    public static int FOCUSED_FLAG_CHILD_WINDOWS;
+
+    /**
      * Flag specifying that the given action should always be taken.
      *
      * <p>
@@ -476,6 +481,11 @@ public class UI {
      * Returns true if the current window appeared in this frame.
      */
     public static native boolean isWindowAppearing();
+
+    /**
+     * Returns true if focus is on the current window.
+     */
+    public static native boolean isWindowFocused(int flags);
 
     /**
      * Get the location of the draw cursor.
@@ -919,6 +929,11 @@ public class UI {
     public static native boolean isCtrlDown();
     public static native boolean isShiftDown();
     public static native boolean isKeyPressed(int keycode);
+
+    /**
+     * Returns true if any item has keyboard focus
+     */
+    public static native boolean isAnyItemFocused();
 
     /**
      * Set keyboard focus on the next widget to be drawn.

@@ -75,11 +75,12 @@ public class ChannelUI {
         if (UI.button("+")) {
             shouldShow = true;
         }
-        if (lx.engine.getFocusedLook().getFocusedChannel() == bus && UI.isKeyPressed(GLFW.GLFW_KEY_TAB)) {
+        if ((UI.isWindowFocused(UI.FOCUSED_FLAG_CHILD_WINDOWS) || !UI.wantCaptureKeyboard()) &&
+            lx.engine.getFocusedLook().getFocusedChannel() == bus && UI.isKeyPressed(GLFW.GLFW_KEY_TAB)) {
             shouldShow = true;
         }
         if (shouldShow) {
-            lx.engine.setFocusedChannel(bus);
+            lx.engine.getFocusedLook().setFocusedChannel(bus);
             UI.setNextWindowContentSize(300, 600);
             wepUi.resetFilter();
             UI.openPopup("Warps / effects / patterns");
