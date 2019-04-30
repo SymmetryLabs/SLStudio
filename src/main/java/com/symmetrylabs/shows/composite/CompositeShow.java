@@ -11,7 +11,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import com.symmetrylabs.shows.Show;
-import com.symmetrylabs.util.CubePhysicalIdMap;
+import com.symmetrylabs.util.CubeInventory;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transform.LXTransform;
@@ -37,7 +37,7 @@ import com.symmetrylabs.slstudio.output.TenereDatagram;
 
 public class CompositeShow implements Show {
     ListenableSet<SLController> controllers = new ListenableSet<>();
-    CubePhysicalIdMap cubePhysicalIdMap = CubePhysicalIdMap.loadFromDisk();
+    CubeInventory cubeInventory = CubeInventory.loadFromDisk();
 
     List<CubesModel.Cube> cubes = new ArrayList<>();
     List<TreeModel.Branch> branches = new ArrayList<>();
@@ -260,7 +260,7 @@ public class CompositeShow implements Show {
         // Put cubes on SLControllers
         networkMonitor.opcDeviceList.addListener(new SetListener<NetworkDevice>() {
             public void onItemAdded(NetworkDevice device) {
-                String physicalId = cubePhysicalIdMap.getPhysicalId(device.deviceId);
+                String physicalId = cubeInventory.getPhysicalId(device.deviceId);
                 final PointsGrouping points = new PointsGrouping(physicalId);
 
                 for (CubesModel.Cube cube : cubes) {

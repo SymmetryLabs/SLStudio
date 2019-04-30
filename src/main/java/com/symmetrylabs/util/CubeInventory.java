@@ -1,33 +1,35 @@
 package com.symmetrylabs.util;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.symmetrylabs.slstudio.ApplicationState;
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
-import com.google.gson.stream.JsonReader;
-import java.io.FileReader;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import java.io.File;
-import com.google.gson.JsonElement;
-import java.io.InputStreamReader;
-import java.io.InputStream;
-
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
+import org.apache.commons.collections4.iterators.IteratorChain;
+import java.net.URL;
 
-public class CubePhysicalIdMap {
+public class CubeInventory {
     protected final static String LEGACY_FILENAME = "physid_to_mac.json";
-    protected final static String CUBEDB_FILENAME = "cubedb.json";
+    protected final static String CUBEDB_FILENAME = "cubeinventory.json";
 
     protected final static Predicate<String> MAC_ADDR_PATTERN = Pattern.compile("[A-Fa-f0-9]{12}").asPredicate();
 
@@ -105,36 +107,44 @@ public class CubePhysicalIdMap {
     public final transient Map<String, PhysicalCube> cubeByPhysId = new HashMap<>();
     public final transient Set<String> unknownMacAddrs = new HashSet<>();
     private final transient List<Listener> listeners = new ArrayList<>();
-    private transient String cubeErrors;
-    private transient String missingMacAddrErrors;
+    private transient List<String> cubeErrors = new ArrayList<>();
+    private transient List<String> missingMacAddrErrors = new ArrayList<>();
 
-    protected CubePhysicalIdMap() {
+    protected CubeInventory() {
         allCubes = new ArrayList<PhysicalCube>();
     }
 
-    protected CubePhysicalIdMap(List<PhysicalCube> allCubes) {
+    protected CubeInventory(List<PhysicalCube> allCubes) {
         this.allCubes = allCubes;
         rebuild();
     }
 
-    public String getErrors() {
-        if (missingMacAddrErrors == null) return cubeErrors;
-        if (cubeErrors == null) return missingMacAddrErrors;
-        return cubeErrors + "\n" + missingMacAddrErrors;
+    public Iterator<CharSequence> getErrors() {
+        IteratorChain<CharSequence> iter = new IteratorChain<>();
+        iter.addIterator(cubeErrors.iterator());
+        iter.addIterator(missingMacAddrErrors.iterator());
+        return iter;
+    }
+
+    public String getErrorString() {
+        String res = String.join("\n", () -> getErrors());
+        if (res.length() == 0) {
+            return null;
+        }
+        return res;
     }
 
     private void onErrorMessagesUpdated() {
-        ApplicationState.setWarning("CubePhysicalIdMap", getErrors());
+        ApplicationState.setWarning("CubeInventory", getErrorString());
     }
 
     public void rebuild() {
         cubeByMacAddrs.clear();
         cubeByPhysId.clear();
         unknownMacAddrs.clear();
-        cubeErrors = null;
-        missingMacAddrErrors = null;
+        cubeErrors.clear();
+        missingMacAddrErrors.clear();
 
-        StringBuilder errs = new StringBuilder();
         for (PhysicalCube cube : allCubes) {
             try {
                 cube.validate();
@@ -151,12 +161,8 @@ public class CubePhysicalIdMap {
                     cubeByMacAddrs.put(mac, cube);
                 }
             } catch (CubeDataError e) {
-                errs.append(e.getMessage() + "\n");
+                cubeErrors.add(e.getMessage());
             }
-        }
-        cubeErrors = errs.toString().trim();
-        if (cubeErrors.length() == 0) {
-            cubeErrors = null;
         }
         onErrorMessagesUpdated();
         onUpdated();
@@ -169,11 +175,26 @@ public class CubePhysicalIdMap {
     }
 
     public boolean save() {
+        ClassLoader cl = CubeInventory.class.getClassLoader();
+        /* check to see if we have the file in resources */
+        URL dbUrl = cl.getResource(CUBEDB_FILENAME);
+        /* this is where the file is stored in the source tree */
+        File resFile = new File("src/main/resources", CUBEDB_FILENAME);
+        /* if the source tree file isn't present but the resource is present, we aren't in a
+           source distribution, so we can't save the file. */
+        if (dbUrl != null && !resFile.exists()) {
+            System.err.println(
+                String.format(
+                    "This build of Volume cannot save cube inventory files (resources are loaded from %s)",
+                    dbUrl));
+            return false;
+        }
         try {
-            JsonWriter writer = new JsonWriter(new FileWriter(CUBEDB_FILENAME));
+            JsonWriter writer = new JsonWriter(new FileWriter(resFile));
             writer.setIndent("  ");
-            new GsonBuilder().create().toJson(this, CubePhysicalIdMap.class, writer);
+            new GsonBuilder().create().toJson(this, CubeInventory.class, writer);
             writer.close();
+            System.out.println("cube inventory written to " + resFile);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -196,7 +217,7 @@ public class CubePhysicalIdMap {
         }
         if (!unknownMacAddrs.contains(macAddr)) {
             unknownMacAddrs.add(macAddr);
-            missingMacAddrErrors = "No cube registered in inventory for discovered MAC addresses: " + String.join(", ", unknownMacAddrs);
+            missingMacAddrErrors.add("No cube in inventory for discovered MAC address " + macAddr);
             onErrorMessagesUpdated();
         }
         return null;
@@ -210,19 +231,21 @@ public class CubePhysicalIdMap {
         return macAddr;
     }
 
-    public static CubePhysicalIdMap loadFromDisk() {
-        ClassLoader cl = CubePhysicalIdMap.class.getClassLoader();
+    public static CubeInventory loadFromDisk() {
+        ClassLoader cl = CubeInventory.class.getClassLoader();
         InputStream cubedbStream = cl.getResourceAsStream(CUBEDB_FILENAME);
         if (cubedbStream != null) {
-            CubePhysicalIdMap res = new Gson().fromJson(
-                new InputStreamReader(cubedbStream), CubePhysicalIdMap.class);
-            res.rebuild();
-            return res;
+            CubeInventory res = new Gson().fromJson(
+                new InputStreamReader(cubedbStream), CubeInventory.class);
+            if (res != null) {
+                res.rebuild();
+                return res;
+            }
         }
 
         InputStream legacyFileStream = cl.getResourceAsStream(LEGACY_FILENAME);
         if (legacyFileStream == null) {
-            return new CubePhysicalIdMap();
+            return new CubeInventory();
         }
 
         List<PhysicalCube> cubes = new ArrayList<>();
@@ -235,6 +258,6 @@ public class CubePhysicalIdMap {
             c.imported = true;
             cubes.add(c);
         }
-        return new CubePhysicalIdMap(cubes);
+        return new CubeInventory(cubes);
     }
 }

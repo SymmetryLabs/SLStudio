@@ -404,6 +404,11 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_text(JNIEnv *env, jclass, jstring jstr) 
     ImGui::Text("%s", str.str);
 }
 
+JNIEXPORT void JNICALL
+Java_com_symmetrylabs_slstudio_ui_v2_UI_textWrapped(JNIEnv *env, jclass, jstring jstr) {
+    JniString str(env, jstr);
+    ImGui::TextWrapped(str.str);
+}
 
 JNIEXPORT void JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_labelText(JNIEnv *env, jclass, jstring jlabel, jstring jtext) {
@@ -736,6 +741,11 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_isItemActive(JNIEnv *, jclass) {
     return ImGui::IsItemActive() ? 1 : 0;
 }
 
+JNIEXPORT jboolean JNICALL
+Java_com_symmetrylabs_slstudio_ui_v2_UI_isItemHovered(JNIEnv *, jclass) {
+    return ImGui::IsItemHovered() ? 1 : 0;
+}
+
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isAltDown(JNIEnv *, jclass) {
     return ImGui::GetIO().KeyAlt ? 1 : 0;
 }
@@ -830,6 +840,14 @@ JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endPopup(JNIEnv *
 
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_closePopup(JNIEnv *env, jclass) {
     ImGui::CloseCurrentPopup();
+}
+
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginTooltip(JNIEnv *, jclass) {
+    ImGui::BeginTooltip();
+}
+
+JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endTooltip(JNIEnv *, jclass) {
+    ImGui::EndTooltip();
 }
 
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginContextMenu(JNIEnv *env, jclass, jstring jlabel) {

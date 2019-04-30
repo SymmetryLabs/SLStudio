@@ -769,11 +769,32 @@ public class UI {
      */
     public static native void closePopup();
 
+    /**
+     * Starts drawing a tooltip for the widget that was just drawn.
+     */
+    public static native void beginTooltip();
+
+    /**
+     * Finishes drawing a tooltip.
+     */
+    public static native void endTooltip();
+
     /* Widgets */
+    /**
+     * Draws a single line of text.
+     *
+     * @param t the text to draw
+     */
     public static native void text(String t);
     public static void text(String t, Object... objs) {
         text(String.format(t, objs));
     }
+    /**
+     * Draws plain text word-wrapped to the size of its containing window.
+     *
+     * @param t the text to draw
+     */
+    public static native void textWrapped(String t);
     public static native void labelText(String label, String value);
     public static boolean button(String t) {
         return button(t, 0, 0);
@@ -893,6 +914,7 @@ public class UI {
     }
     public static native boolean isItemDoubleClicked(int mouseButton);
     public static native boolean isItemActive();
+    public static native boolean isItemHovered();
     public static native boolean isAltDown();
     public static native boolean isCtrlDown();
     public static native boolean isShiftDown();
