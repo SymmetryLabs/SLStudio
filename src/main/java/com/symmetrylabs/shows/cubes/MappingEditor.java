@@ -32,9 +32,31 @@ public class MappingEditor extends CloseableWindow {
         List<Cube> cubes = model.getCubes();
         UI.text("%d cubes", cubes.size());
 
+        UI.textWrapped(
+            "Output should update as soon as you hit enter, but changes will not be saved to disk unless you press Save.");
+
         boolean expand = UI.button("Expand all");
         UI.sameLine();
         boolean collapse = UI.button("Collapse all");
+
+        UI.sameLine();
+        if (UI.button("Save")) {
+            if (!model.mapping.save()) {
+                UI.openPopup("saveFailed");
+            }
+        }
+        if (UI.isItemHovered()) {
+            UI.beginTooltip();
+            UI.text("Saves the updated mapping to disk.");
+            UI.endTooltip();
+        }
+        if (UI.beginPopup("saveFailed", true)) {
+            UI.text("Failed to save mapping, check logs for details");
+            if (UI.button("Close")) {
+                UI.closePopup();
+            }
+            UI.endPopup();
+        }
 
         boolean anyUpdated = false;
         for (int i = 0; i < cubes.size(); i++) {
