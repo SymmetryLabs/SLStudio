@@ -2,6 +2,7 @@ package com.symmetrylabs.shows.cubes;
 
 import java.util.*;
 import java.lang.ref.WeakReference;
+import com.symmetrylabs.slstudio.output.CubeModelControllerMapping;
 
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
@@ -34,8 +35,9 @@ public abstract class CubesShow implements Show {
 
     public static final float INCHES_PER_METER = 39.3701f;
 
-    ListenableSet<CubesController> controllers = new ListenableSet<>();
-    CubeInventory cubeInventory = CubeInventory.loadFromDisk();
+    public ListenableSet<CubesController> controllers = new ListenableSet<>();
+    public CubeInventory cubeInventory = CubeInventory.loadFromDisk();
+    public CubeModelControllerMapping mapping = CubeModelControllerMapping.loadFromDisk(getShowName(), cubeInventory);
 
     private static Map<LX, WeakReference<CubesShow>> instanceByLX = new WeakHashMap<>();
 
@@ -166,4 +168,6 @@ public abstract class CubesShow implements Show {
         WindowManager.addPersistent("Cubes/Inventory editor", () -> new InventoryEditor(lx, cubeInventory), false);
         WindowManager.addPersistent("Cubes/Output", () -> new CubeOutputWindow(lx, this), false);
     }
+
+    public abstract String getShowName();
 }

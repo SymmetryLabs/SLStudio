@@ -192,22 +192,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
                 points = new PointsGrouping(cube.getPoints());
             }
         } else {
-            for (CubesModel.Cube c : cubesModel.getCubes()) {
-                if (c instanceof CubesModel.DoubleControllerCube) {
-                    CubesModel.DoubleControllerCube c2 = (CubesModel.DoubleControllerCube) c;
-                    if (c2.controllerIdA != null && c2.controllerIdB != null) {
-                        if (c2.controllerIdA.equals(id)) {
-                            points = c2.getPointsA();
-                        }
-                        if (c2.controllerIdB.equals(id)) {
-                            points = c2.getPointsB();
-                        }
-                    }
-                }
-                else if (c.controllerId != null && c.controllerId.equals(id)) {
-                    points = new PointsGrouping(c.getPoints());
-                }
-            }
+            points = cubesModel.getControllerPoints(id);
         }
 
         // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network

@@ -36,6 +36,8 @@ import com.symmetrylabs.util.listenable.SetListener;
 import com.symmetrylabs.slstudio.output.TenereDatagram;
 
 public class CompositeShow implements Show {
+    public static final String SHOW_NAME = "composite";
+
     ListenableSet<SLController> controllers = new ListenableSet<>();
     CubeInventory cubeInventory = CubeInventory.loadFromDisk();
 
@@ -263,25 +265,7 @@ public class CompositeShow implements Show {
                 String physicalId = cubeInventory.getControllerId(device.deviceId);
                 final PointsGrouping points = new PointsGrouping(physicalId);
 
-                for (CubesModel.Cube cube : cubes) {
-                    if (cube.controllerId.equals(physicalId)) {
-                        // this should live somewhere
-                        List<Strip> strips = ((StripsModel)cube).getStrips();
-
-                        points.addPoints(strips.get(6).points)
-                                    .addPoints(strips.get(7).points)
-                                    .addPoints(strips.get(8).points)
-                                    .addPoints(strips.get(9).points)
-                                    .addPoints(strips.get(10).points)
-                                    .addPoints(strips.get(11).points)
-                                    .addPoints(strips.get(0).points)
-                                    .addPoints(strips.get(1).points)
-                                    .addPoints(strips.get(2).points)
-                                    .addPoints(strips.get(3).points)
-                                    .addPoints(strips.get(4).points)
-                                    .addPoints(strips.get(5).points);
-                    }
-                }
+                /* mapping code here was removed when CubeInventory and CubeModelControllerMapping were created */
 
                 final SLController controller = new SLController(lx, device, points);
                 controllers.add(controller);

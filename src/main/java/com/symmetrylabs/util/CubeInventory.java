@@ -105,7 +105,7 @@ public class CubeInventory {
 
     /* the entire state of the class is built from the single persistent field allCubes */
     public final transient Map<String, PhysicalCube> cubeByMacAddrs = new HashMap<>();
-    public final transient Map<String, PhysicalCube> cubeByPhysId = new HashMap<>();
+    public final transient Map<String, PhysicalCube> cubeByCtrlId = new HashMap<>();
     public final transient Set<String> unknownMacAddrs = new HashSet<>();
     private final transient List<Listener> listeners = new ArrayList<>();
     private transient List<String> cubeErrors = new ArrayList<>();
@@ -139,9 +139,13 @@ public class CubeInventory {
         ApplicationState.setWarning("CubeInventory", getErrorString());
     }
 
+    public PhysicalCube lookUpByPhysId(String physId) {
+        return cubeByCtrlId.get(physId);
+    }
+
     public void rebuild() {
         cubeByMacAddrs.clear();
-        cubeByPhysId.clear();
+        cubeByCtrlId.clear();
         unknownMacAddrs.clear();
         cubeErrors.clear();
         missingMacAddrErrors.clear();
@@ -151,9 +155,9 @@ public class CubeInventory {
                 cube.validate();
                 for (String id : cube.getControllerIds()) {
                     CubeDataError.require(
-                        !cubeByPhysId.containsKey(id), "ID %s duplicated on cube %s and %s",
-                        id, cubeByPhysId.get(id), cube);
-                    cubeByPhysId.put(id, cube);
+                        !cubeByCtrlId.containsKey(id), "ID %s duplicated on cube %s and %s",
+                        id, cubeByCtrlId.get(id), cube);
+                    cubeByCtrlId.put(id, cube);
                 }
                 for (String mac : cube.getControllerAddrs()) {
                     CubeDataError.require(

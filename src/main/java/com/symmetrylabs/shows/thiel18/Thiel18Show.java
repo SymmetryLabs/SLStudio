@@ -292,7 +292,7 @@ public class Thiel18Show extends CubesShow {
                     float y = config.yValues[i];
                     CubesModel.DoubleControllerCube cube =
                         new CubesModel.DoubleControllerCube(
-                            idA, idB, x, y, z, rX, rY, rZ, globalTransform);
+                            idA, x, y, z, rX, rY, rZ, globalTransform);
                     cubes.add(cube);
                     allCubes.add(cube);
                 }
@@ -306,7 +306,7 @@ public class Thiel18Show extends CubesShow {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        CubesModel model = new CubesModel(towers, allCubesArr);
+        CubesModel model = new CubesModel(towers, allCubesArr, cubeInventory, mapping);
         model.setTopologyTolerances(6, 6, 8);
         return model;
     }
@@ -316,5 +316,10 @@ public class Thiel18Show extends CubesShow {
         new UICubesOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UICubesMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
         FaderLimiter.attach(lx, 0.72f);
+    }
+
+    @Override
+    public String getShowName() {
+        return SHOW_NAME;
     }
 }

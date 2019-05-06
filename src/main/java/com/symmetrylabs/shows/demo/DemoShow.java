@@ -123,6 +123,11 @@ public class DemoShow extends CubesShow implements Show {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        return new CubesModel(towers, allCubesArr);
+        return new CubesModel(towers, allCubesArr, cubeInventory, mapping);
+    }
+
+    @Override
+    public String getShowName() {
+        return SHOW_NAME;
     }
 }

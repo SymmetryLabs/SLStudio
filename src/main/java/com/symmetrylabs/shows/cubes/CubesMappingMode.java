@@ -8,15 +8,19 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.WeakHashMap;
 
+import com.symmetrylabs.slstudio.output.CubeModelControllerMapping.PhysIdAssignment;
+import com.symmetrylabs.slstudio.output.CubeModelControllerMapping;
 import com.symmetrylabs.slstudio.pattern.cubes.CubesMappingPattern;
+import com.symmetrylabs.util.CubeInventory.PhysicalCube;
+import com.symmetrylabs.util.CubeInventory;
 import com.symmetrylabs.util.listenable.SetListener;
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 import heronarts.lx.LXChannel;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.EnumParameter;
-import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.LXPattern;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.EnumParameter;
 
 /**
  * Mapping Mode
@@ -76,7 +80,13 @@ public class CubesMappingMode {
 
         cubesModel = lx.model instanceof CubesModel ? (CubesModel)lx.model : new CubesModel();
         for (CubesModel.Cube cube : cubesModel.getCubes()) {
-            fixturesMappedButNotOnNetwork.add(cube.controllerId);
+            CubeModelControllerMapping.PhysIdAssignment map = cubesModel.controllers.lookUpModel(cube.modelId);
+            if (map != null) {
+                CubeInventory.PhysicalCube pc = cubesModel.inventory.lookUpByPhysId(map.physicalId);
+                for (String ctrl : pc.getControllerIds()) {
+                    fixturesMappedButNotOnNetwork.add(ctrl);
+                }
+            }
         }
 
         String[] emptyOptions = new String[] {"-"};
@@ -122,11 +132,7 @@ public class CubesMappingMode {
     }
 
     public boolean isFixtureMapped(String id) {
-        for (CubesModel.Cube fixture : cubesModel.getCubes()) {
-            if (fixture.controllerId.equals(id))
-                return true;
-        }
-        return false;
+        return cubesModel.controllers.lookUpByControllerId(id) != null;
     }
 
     public boolean inMappedMode() {

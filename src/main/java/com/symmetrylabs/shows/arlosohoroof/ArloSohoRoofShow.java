@@ -85,7 +85,7 @@ public class ArloSohoRoofShow extends CubesShow implements Show, HasWorkspace {
 
             CubesModel.DoubleControllerCube cube =
                 new CubesModel.DoubleControllerCube(
-                    config.ids[0], config.ids[1], x, y, z, xRot, yRot, zRot, globalTransform);
+                    config.ids[0], x, y, z, xRot, yRot, zRot, globalTransform);
             cubes.add(cube);
             allCubes.add(cube);
 
@@ -97,7 +97,7 @@ public class ArloSohoRoofShow extends CubesShow implements Show, HasWorkspace {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        return new CubesModel(towers, allCubesArr);
+        return new CubesModel(towers, allCubesArr, cubeInventory, mapping);
     }
 
     @Override
@@ -114,5 +114,10 @@ public class ArloSohoRoofShow extends CubesShow implements Show, HasWorkspace {
     @Override
     public Workspace getWorkspace() {
         return workspace;
+    }
+
+    @Override
+    public String getShowName() {
+        return SHOW_NAME;
     }
 }

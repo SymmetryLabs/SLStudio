@@ -79,7 +79,7 @@ public class YsiadsPartyShow extends CubesShow implements Show {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        CubesModel m = new CubesModel(towers, allCubesArr);
+        CubesModel m = new CubesModel(towers, allCubesArr, cubeInventory, mapping);
         m.setTopologyTolerances(2, 6, 8);
         return m;
     }
@@ -87,6 +87,11 @@ public class YsiadsPartyShow extends CubesShow implements Show {
     public void setupUi(final SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
 
-    
+
+    }
+
+    @Override
+    public String getShowName() {
+        return SHOW_NAME;
     }
 }

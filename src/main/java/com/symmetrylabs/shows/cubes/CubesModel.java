@@ -2,7 +2,9 @@ package com.symmetrylabs.shows.cubes;
 
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
+import com.symmetrylabs.slstudio.output.CubeModelControllerMapping;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
+import com.symmetrylabs.util.CubeInventory;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
@@ -12,6 +14,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.symmetrylabs.slstudio.output.CubeModelControllerMapping.PhysIdAssignment;
+import static com.symmetrylabs.util.CubeInventory.PhysicalCube;
 
 import static com.symmetrylabs.util.MathUtils.*;
 import static com.symmetrylabs.util.DistanceConstants.*;
@@ -26,22 +31,28 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
     protected final List<Tower> towers = new ArrayList<>();
     protected final List<Cube> cubes = new ArrayList<>();
     protected final List<Face> faces = new ArrayList<>();
-    protected final Map<String, Cube> cubeControllerTable = new HashMap<>();
-    protected final Map<String, DoubleControllerCube> cubeControllerTableA = new HashMap<>();
-    protected final Map<String, DoubleControllerCube> cubeControllerTableB = new HashMap<>();
-
 
     private final List<Tower> towersUnmodifiable = Collections.unmodifiableList(towers);
     private final List<Cube> cubesUnmodifiable = Collections.unmodifiableList(cubes);
     private final List<Face> facesUnmodifiable = Collections.unmodifiableList(faces);
 
+    private final Map<String, PointsGrouping> controllerPointCache = new HashMap<>();
+
+    public final CubeModelControllerMapping controllers;
+    public final CubeInventory inventory;
+
+    private final Map<String, Cube> cubesByModelId = new HashMap<>();
+
     public CubesModel() {
-        this(new ArrayList<>(), new Cube[0]);
+        this(new ArrayList<>(), new Cube[0], null, null);
     }
 
-    public CubesModel(List<Tower> towers, Cube[] cubeArr) {
+    public CubesModel(List<Tower> towers, Cube[] cubeArr, CubeInventory inventory, CubeModelControllerMapping ctrl) {
         super(new Fixture(cubeArr));
         Fixture fixture = (Fixture) this.fixtures.get(0);
+
+        this.inventory = inventory;
+        this.controllers = ctrl;
 
         this.towers.addAll(towers);
         for (Cube cube : cubeArr) {
@@ -50,28 +61,14 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
                 this.faces.addAll(cube.getFaces());
                 this.strips.addAll(cube.getStrips());
             }
-        }
-        updateCubeTables();
-    }
-
-    private void updateCubeTables() {
-        cubeControllerTable.clear();
-        cubeControllerTableA.clear();
-        cubeControllerTableB.clear();
-        for (Cube c : cubes) {
-            cubeControllerTable.put(c.controllerId, c);
-            if (c instanceof DoubleControllerCube) {
-                DoubleControllerCube c2 = (DoubleControllerCube) c;
-                cubeControllerTableA.put(c2.controllerIdA, c2);
-                cubeControllerTableB.put(c2.controllerIdB, c2);
-            }
+            cubesByModelId.put(cube.modelId, cube);
         }
     }
 
     @Override
     public LXModel update(boolean normalize, boolean recurse) {
         super.update(normalize, recurse);
-        updateCubeTables();
+        controllerPointCache.clear();
         return this;
     }
 
@@ -99,26 +96,30 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         }
     }
 
-    public Cube getCubeById(String id) {
-        Cube c = cubeControllerTable.get(id);
-        if (c != null) {
-            return c;
-        }
-        c = cubeControllerTableA.get(id);
-        if (c != null) {
-            return c;
-        }
-        return cubeControllerTableB.get(id);
+    public Cube getCubeByModelId(String id) {
+        return cubesByModelId.get(id);
     }
 
-    public PointsGrouping getDoubleCubePoints(String controllerId) {
-        if (cubeControllerTableA.containsKey(controllerId)) {
-            return cubeControllerTableA.get(controllerId).getPointsA();
+    public PointsGrouping getControllerPoints(String controllerId) {
+        PointsGrouping cached = controllerPointCache.get(controllerId);
+        if (cached != null) {
+            return cached;
         }
-        if (cubeControllerTableB.containsKey(controllerId)) {
-            return cubeControllerTableB.get(controllerId).getPointsB();
+        PhysIdAssignment ca = controllers.lookUpByControllerId(controllerId);
+        if (ca == null) {
+            return null;
         }
-        return null;
+        Cube cube = cubesByModelId.get(ca.modelId);
+        PointsGrouping res;
+        if (cube instanceof DoubleControllerCube) {
+            DoubleControllerCube dcc = (DoubleControllerCube) cube;
+            PhysicalCube pc = inventory.cubeByCtrlId.get(ca.physicalId);
+            res = controllerId.equals(pc.idB) ? dcc.getPointsB() : dcc.getPointsA();
+        } else {
+            res = new PointsGrouping(cube.getPoints());
+        }
+        controllerPointCache.put(controllerId, res);
+        return res;
     }
 
     /**
@@ -164,14 +165,8 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
     }
 
     public static class DoubleControllerCube extends Cube {
-
-        public String controllerIdA;
-        public String controllerIdB;
-
-        public DoubleControllerCube(String idA, String idB, float x, float y, float z, float rx, float ry, float rz, LXTransform t) {
-            super(idA, x, y, z, rx, ry, rz+180, t, CubesModel.Cube.Type.HD);
-            this.controllerIdA = idA;
-            this.controllerIdB = idB;
+        public DoubleControllerCube(String modelId, float x, float y, float z, float rx, float ry, float rz, LXTransform t) {
+            super(modelId, x, y, z, rx, ry, rz+180, t, CubesModel.Cube.Type.HD);
         }
 
         public PointsGrouping getPointsB() {
@@ -256,7 +251,6 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
 
         public final Type type;
 
-        public String controllerId;
         public final String modelId;
 
         protected final List<Face> faces = new ArrayList<>();
@@ -292,18 +286,13 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
          */
         public float rz;
 
-        public Cube(String controllerId, float x, float y, float z, float rx, float ry, float rz, LXTransform t, Type type) {
-            this(controllerId, controllerId, x, y, z, rx, ry, rz, t, type);
-        }
-
-        public Cube(String modelId, String controllerId, float x, float y, float z, float rx, float ry, float rz, LXTransform t, Type type) {
+        public Cube(String modelId, float x, float y, float z, float rx, float ry, float rz, LXTransform t, Type type) {
             super(new Fixture(type));
 
             Fixture fixture = (Fixture) this.fixtures.get(0);
 
             this.type = type;
             this.modelId = modelId;
-            this.controllerId = controllerId;
 
             while (rx < 0) rx += 360;
             while (ry < 0) ry += 360;

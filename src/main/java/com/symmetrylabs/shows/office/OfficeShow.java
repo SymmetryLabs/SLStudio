@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
- 
+
 public class OfficeShow extends CubesShow implements HasWorkspace {
     public static final String SHOW_NAME = "office";
 
@@ -56,7 +56,7 @@ public class OfficeShow extends CubesShow implements HasWorkspace {
                 new String[] {"669", "668"},
                 new String[] {"551", "550"},
                 new String[] {"467", "466"},
-            }),    
+            }),
 
             new TowerConfig(SP * 1, SP * 0, SP * 0, new String[][]{
                 new String[] {"778", "970"},
@@ -75,7 +75,7 @@ public class OfficeShow extends CubesShow implements HasWorkspace {
             new TowerConfig(SP * 3, SP * 0, SP * 0, new String[][]{
                 new String[] {"1012", "1039"},
                 new String[] {"977", "1024"},
-            }),    
+            }),
 
 
 ////////////////////////// ROW 2
@@ -104,7 +104,7 @@ public class OfficeShow extends CubesShow implements HasWorkspace {
                 new TowerConfig(SP * 3, SP * 0, -SP * 1, new String[][]{
                 new String[] {"1046", "1045"},
                 new String[] {"954", "959"},
-                new String[] {"865", "864"},    
+                new String[] {"865", "864"},
             }),
 
 
@@ -116,7 +116,7 @@ public class OfficeShow extends CubesShow implements HasWorkspace {
                 new String[] {"725", "724"},
                 new String[] {"1017", "1016"},
             }),
-            
+
                 new TowerConfig(0, SP * 0, -SP * 2, new String[][]{
                 new String[] {"767", "766"},
                 new String[] {"775", "774"},
@@ -133,15 +133,15 @@ public class OfficeShow extends CubesShow implements HasWorkspace {
 
                 new TowerConfig(SP * 2, SP * 0, -SP * 2, new String[][]{
                 new String[] {"451", "450"},
-                new String[] {"1011", "802"}, 
+                new String[] {"1011", "802"},
                 new String[] {"587", "586"},
 
             }),
 
             new TowerConfig(SP * 3, SP * 0, -SP * 2, new String[][]{
                 new String[] {"739", "738"},
-                new String[] {"553", "552"}, 
-  
+                new String[] {"553", "552"},
+
             }),
 
 // //////////////////// ROW 4 ////////////////////////////////
@@ -149,14 +149,14 @@ public class OfficeShow extends CubesShow implements HasWorkspace {
             new TowerConfig(SP * 0, SP * 0, -SP * 3, new String[][]{
                 new String[] {"644", "820"},
                 new String[] {"737", "736"},
-                new String[] {"859", "858"}, 
-  
+                new String[] {"859", "858"},
+
             }),
 
             new TowerConfig(SP * 1, SP * 0, -SP * 3, new String[][]{
                 new String[] {"751", "750"},
-                new String[] {"527", "526"}, 
-  
+                new String[] {"527", "526"},
+
             }),
 
     };
@@ -236,8 +236,7 @@ public class OfficeShow extends CubesShow implements HasWorkspace {
                 float y = config.yValues[i];
                 CubesModel.DoubleControllerCube cube =
                     new CubesModel.DoubleControllerCube(
-                        config.ids[i][0], config.ids[i][1],
-                        x, y, z, xRot, yRot, zRot, globalTransform);
+                        config.ids[i][0], x, y, z, xRot, yRot, zRot, globalTransform);
                 cubes.add(cube);
                 allCubes.add(cube);
             }
@@ -250,7 +249,7 @@ public class OfficeShow extends CubesShow implements HasWorkspace {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        return new CubesModel(towers, allCubesArr);
+        return new CubesModel(towers, allCubesArr, cubeInventory, mapping);
     }
 
     @Override
@@ -262,5 +261,10 @@ public class OfficeShow extends CubesShow implements HasWorkspace {
     @Override
     public Workspace getWorkspace() {
         return workspace;
+    }
+
+    @Override
+    public String getShowName() {
+        return SHOW_NAME;
     }
 }

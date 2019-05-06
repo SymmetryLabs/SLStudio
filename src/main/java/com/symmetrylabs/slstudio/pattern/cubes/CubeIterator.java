@@ -30,6 +30,7 @@ public class CubeIterator extends SLPattern<CubesModel> implements MarkerSource 
 
     private final DiscreteParameter cubeIndex = new DiscreteParameter("CubeIndex", 0, 1);
     private final CompoundParameter labelSize = new CompoundParameter("LabelSize", 8, 2, 18);
+    private String caption = null;
 
     public CubeIterator(LX lx) {
         super(lx);
@@ -37,14 +38,10 @@ public class CubeIterator extends SLPattern<CubesModel> implements MarkerSource 
         cubeIndex.setRange(0, model.getCubes().size());
         cubeIndex.addListener(param -> {
             CubesModel.Cube cube = model.getCubes().get(cubeIndex.getValuei());
-            String label = cube.controllerId;
-            if (cube instanceof CubesModel.DoubleControllerCube) {
-                CubesModel.DoubleControllerCube dc = (CubesModel.DoubleControllerCube) cube;
-                label = dc.controllerIdA + "/" + dc.controllerIdB;
-            }
-            System.out.println(String.format(
+            caption = String.format(
                 Locale.US, "Cube %s: center at (%+6.1f, %+6.1f, %+6.2f)",
-                label, cube.cx, cube.cy, cube.cz));
+                cube.modelId, cube.cx, cube.cy, cube.cz);
+            System.out.println(caption);
         });
 
         addParameter(cubeIndex);
@@ -65,6 +62,11 @@ public class CubeIterator extends SLPattern<CubesModel> implements MarkerSource 
         markModified(SRGB8);
     }
 
+    @Override
+    public String getCaption() {
+        return caption;
+    }
+
     @Override public Collection<Marker> getMarkers() {
         List<Marker> markers = new ArrayList<>();
         List<CubesModel.Cube> cubes = model.getCubes();
@@ -75,12 +77,7 @@ public class CubeIterator extends SLPattern<CubesModel> implements MarkerSource 
         for (CubesModel.Cube cube : cubes) {
             pos.set(cube.cx, cube.cy, cube.cz);
             int c = (i == cubeI) ? 0xffffff00 : 0x80008040;
-            String label = cube.controllerId;
-            if (cube instanceof CubesModel.DoubleControllerCube) {
-                CubesModel.DoubleControllerCube dc = (CubesModel.DoubleControllerCube) cube;
-                label = dc.controllerIdA + "\n" + dc.controllerIdB;
-            }
-            markers.add(new TextMarker(pos, size, c, label));
+            markers.add(new TextMarker(pos, size, c, cube.modelId));
             i++;
         }
         return markers;

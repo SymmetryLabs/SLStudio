@@ -3,6 +3,7 @@ package com.symmetrylabs.shows.cubes;
 import static com.symmetrylabs.shows.cubes.CubesModel.Cube;
 import static com.symmetrylabs.shows.cubes.CubesModel.DoubleControllerCube;
 
+import com.symmetrylabs.slstudio.output.CubeModelControllerMapping;
 import com.symmetrylabs.slstudio.ui.v2.CloseableWindow;
 import com.symmetrylabs.slstudio.ui.v2.UI;
 import com.symmetrylabs.slstudio.ui.v2.UIConstants;
@@ -51,30 +52,15 @@ public class CubeEditor extends CloseableWindow {
 
             UI.inputFloat3("position##" + i, new float[] {c.x, c.y, c.z}, UI.INPUT_TEXT_FLAG_READ_ONLY);
 
-            boolean updated = false;
-            if (c instanceof DoubleControllerCube) {
-                DoubleControllerCube dcc = (DoubleControllerCube) c;
-                UI.beginTable(2, "cubeIds");
-                String idA = UI.inputText(String.format("A##%d", i), dcc.controllerIdA);
-                UI.nextCell();
-                String idB = UI.inputText(String.format("B##%d", i), dcc.controllerIdB);
-                if (!idA.equals(dcc.controllerIdA) || !idB.equals(dcc.controllerIdB)) {
-                    dcc.controllerId = idA;
-                    dcc.controllerIdA = idA;
-                    dcc.controllerIdB = idB;
-                    updated = true;
+            CubeModelControllerMapping.PhysIdAssignment pia = model.controllers.lookUpModel(c.modelId);
+            String oldPhysId = pia == null ? "" : pia.physicalId;
+            String newPhysId = UI.inputText(String.format("physid##%d", i), oldPhysId);
+            if (!oldPhysId.equals(newPhysId)) {
+                if (pia != null) {
+                    pia.physicalId = newPhysId;
+                } else {
+                    model.controllers.setControllerAssignment(c.modelId, newPhysId);
                 }
-                UI.endTable();
-            } else {
-                String id = UI.inputText(String.format("id##%d", i), c.controllerId);
-                if (!id.equals(c.controllerId)) {
-                    c.controllerId = id;
-                    updated = true;
-                }
-            }
-
-            if (updated) {
-                c.updatePoints(new LXTransform());
                 anyUpdated = true;
             }
         }
