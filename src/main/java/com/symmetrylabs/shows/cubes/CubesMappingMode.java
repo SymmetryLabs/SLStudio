@@ -80,7 +80,7 @@ public class CubesMappingMode {
 
         cubesModel = lx.model instanceof CubesModel ? (CubesModel)lx.model : new CubesModel();
         for (CubesModel.Cube cube : cubesModel.getCubes()) {
-            CubeModelControllerMapping.PhysIdAssignment map = cubesModel.controllers.lookUpModel(cube.modelId);
+            CubeModelControllerMapping.PhysIdAssignment map = cubesModel.mapping.lookUpModel(cube.modelId);
             if (map != null) {
                 CubeInventory.PhysicalCube pc = cubesModel.inventory.lookUpByPhysId(map.physicalId);
                 for (String ctrl : pc.getControllerIds()) {
@@ -132,7 +132,7 @@ public class CubesMappingMode {
     }
 
     public boolean isFixtureMapped(String id) {
-        return cubesModel.controllers.lookUpByControllerId(id) != null;
+        return cubesModel.mapping.lookUpByControllerId(id) != null;
     }
 
     public boolean inMappedMode() {

@@ -57,7 +57,7 @@ public class CubeOutputWindow extends CloseableWindow {
                 UI.setNextTreeNodeOpen(false);
             }
 
-            boolean mapped = model.controllers.lookUpByControllerId(cc.id) != null;
+            boolean mapped = model.mapping.lookUpByControllerId(cc.id) != null;
             if (mapped) {
                 UI.pushColor(UI.COLOR_HEADER, UIConstants.BLUE);
                 UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.BLUE);

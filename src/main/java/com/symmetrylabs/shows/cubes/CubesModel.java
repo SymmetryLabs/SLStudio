@@ -38,7 +38,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
 
     private final Map<String, PointsGrouping> controllerPointCache = new HashMap<>();
 
-    public final CubeModelControllerMapping controllers;
+    public final CubeModelControllerMapping mapping;
     public final CubeInventory inventory;
 
     private final Map<String, Cube> cubesByModelId = new HashMap<>();
@@ -47,12 +47,12 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         this(new ArrayList<>(), new Cube[0], null, null);
     }
 
-    public CubesModel(List<Tower> towers, Cube[] cubeArr, CubeInventory inventory, CubeModelControllerMapping ctrl) {
+    public CubesModel(List<Tower> towers, Cube[] cubeArr, CubeInventory inventory, CubeModelControllerMapping mapping) {
         super(new Fixture(cubeArr));
         Fixture fixture = (Fixture) this.fixtures.get(0);
 
         this.inventory = inventory;
-        this.controllers = ctrl;
+        this.mapping = mapping;
 
         this.towers.addAll(towers);
         for (Cube cube : cubeArr) {
@@ -105,7 +105,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         if (cached != null) {
             return cached;
         }
-        PhysIdAssignment ca = controllers.lookUpByControllerId(controllerId);
+        PhysIdAssignment ca = mapping.lookUpByControllerId(controllerId);
         if (ca == null) {
             return null;
         }

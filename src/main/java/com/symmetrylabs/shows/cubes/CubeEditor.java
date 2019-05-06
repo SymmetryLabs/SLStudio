@@ -52,14 +52,14 @@ public class CubeEditor extends CloseableWindow {
 
             UI.inputFloat3("position##" + i, new float[] {c.x, c.y, c.z}, UI.INPUT_TEXT_FLAG_READ_ONLY);
 
-            CubeModelControllerMapping.PhysIdAssignment pia = model.controllers.lookUpModel(c.modelId);
+            CubeModelControllerMapping.PhysIdAssignment pia = model.mapping.lookUpModel(c.modelId);
             String oldPhysId = pia == null ? "" : pia.physicalId;
             String newPhysId = UI.inputText(String.format("physid##%d", i), oldPhysId);
             if (!oldPhysId.equals(newPhysId)) {
                 if (pia != null) {
                     pia.physicalId = newPhysId;
                 } else {
-                    model.controllers.setControllerAssignment(c.modelId, newPhysId);
+                    model.mapping.setControllerAssignment(c.modelId, newPhysId);
                 }
                 anyUpdated = true;
             }
