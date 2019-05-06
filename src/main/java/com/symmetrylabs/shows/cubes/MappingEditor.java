@@ -12,12 +12,12 @@ import heronarts.lx.transform.LXTransform;
 import java.util.List;
 
 
-public class CubeEditor extends CloseableWindow {
+public class MappingEditor extends CloseableWindow {
     protected final LX lx;
     protected final CubesModel model;
 
-    public CubeEditor(LX lx, CubesModel model) {
-        super("Cube editor");
+    public MappingEditor(LX lx, CubesModel model) {
+        super("Mapping");
         this.lx = lx;
         this.model = model;
     }
@@ -45,6 +45,14 @@ public class CubeEditor extends CloseableWindow {
                 UI.setNextTreeNodeOpen(false);
             }
             UI.CollapseResult cr = UI.collapsibleSection(c.modelId, false);
+            if (UI.beginDragDropTarget()) {
+                String physId = UI.acceptDragDropPayload("SL.CubePhysId", String.class);
+                if (physId != null) {
+                    model.mapping.setControllerAssignment(c.modelId, physId);
+                    anyUpdated = true;
+                }
+            }
+
             if (!cr.isOpen) {
                 continue;
             }
@@ -56,11 +64,7 @@ public class CubeEditor extends CloseableWindow {
             String oldPhysId = pia == null ? "" : pia.physicalId;
             String newPhysId = UI.inputText(String.format("physid##%d", i), oldPhysId);
             if (!oldPhysId.equals(newPhysId)) {
-                if (pia != null) {
-                    pia.physicalId = newPhysId;
-                } else {
-                    model.mapping.setControllerAssignment(c.modelId, newPhysId);
-                }
+                model.mapping.setControllerAssignment(c.modelId, newPhysId);
                 anyUpdated = true;
             }
         }

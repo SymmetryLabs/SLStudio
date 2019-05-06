@@ -106,7 +106,16 @@ public class InventoryEditor extends CloseableWindow {
                 continue;
             }
 
-            UI.separator();
+            UI.CollapseResult cr = UI.collapsibleSection(
+                (pc.idA == null ? "" : pc.idA) + "###" + pc.hashCode(), false);
+            if (pc.getPhysicalId() != null && UI.beginDragDropSource()) {
+                UI.setDragDropPayload("SL.CubePhysId", pc.getPhysicalId());
+                UI.endDragDropSource();
+            }
+            if (!cr.isOpen) {
+                continue;
+            }
+
             pc.idA = UI.inputText("id A##" + i, pc.idA == null ? "" : pc.idA);
             pc.addrA = UI.inputText("addr A##" + i, pc.addrA == null ? "" : pc.addrA);
             if (UI.beginDragDropTarget()) {

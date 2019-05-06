@@ -72,11 +72,19 @@ public class CubeModelControllerMapping {
     }
 
     public void setControllerAssignment(String modelId, String physId) {
+        /* if physical output was mapped to another model, remove that assignment */
+        if (assignmentsByPhysId.containsKey(physId)) {
+            assignments.remove(assignmentsByPhysId.get(physId));
+        }
+        /* if model was mapped to another physical output, update that assignment */
         if (!assignmentsByModelId.containsKey(modelId)) {
             assignments.add(new PhysIdAssignment(modelId, physId));
-        } else {
+        }
+        /* otherwise create a new assignment */
+        else {
             assignmentsByModelId.get(modelId).physicalId = physId;
         }
+        /* rebuild lookup tables */
         onUpdate();
     }
 
