@@ -1,11 +1,4 @@
 {
   "allCubes": [
-    {
-      "addrA": "012346789abc",
-      "idA": "1234",
-      "addrB": "123456789abcd",
-      "idB": "2345",
-      "imported": false
-    }
   ]
 }
