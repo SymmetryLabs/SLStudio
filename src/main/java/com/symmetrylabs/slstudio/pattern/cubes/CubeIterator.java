@@ -89,7 +89,7 @@ public class CubeIterator extends SLPattern<CubesModel> implements MarkerSource 
     }
 
     @Override
-    public void drawSpriteMarkers(GdxGraphicsAdapter g) {
+    public void drawTextMarkers(GdxGraphicsAdapter g) {
         List<CubesModel.Cube> cubes = model.getCubes();
         if (cubes.isEmpty()) {
             return;
@@ -97,10 +97,10 @@ public class CubeIterator extends SLPattern<CubesModel> implements MarkerSource 
         final float targetWidth = cubes.get(0).xRange;
         final int halign = Align.center;
         final Quaternion rot = new Quaternion();
-        final Vector3 scale = new Vector3(0.7f, 0.7f, 0.7f);
+        final Vector3 scale = new Vector3(0.4f, 0.4f, 0.4f);
         for (CubesModel.Cube cube : cubes) {
-            g.batch.setTransformMatrix(new Matrix4(new Vector3(cube.xMin, cube.yMax, cube.cz), rot, scale));
-            g.font.draw(g.batch, cube.modelId, 0, 0, targetWidth, halign, false);
+            g.textBatch.setTransformMatrix(new Matrix4(new Vector3(cube.xMin, cube.yMax, cube.cz), rot, scale));
+            g.font.draw(g.textBatch, cube.modelId, 0, 0, targetWidth, halign, false);
         }
     }
 

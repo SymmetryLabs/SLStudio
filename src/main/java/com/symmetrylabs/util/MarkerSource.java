@@ -7,11 +7,14 @@ public interface MarkerSource {
     Collection<Marker> getMarkers();
 
     /**
-     * Draw 2D sprites using the SpriteBatch on the graphics adapter.
+     * Draw text sprites using the SpriteBatch on the graphics adapter.
      *
-     * This is part of an alternate marker API that allows for zero-allocation marker drawing.
+     * This is part of an alternate marker API that allows for zero-allocation
+     * marker drawing. The SpriteBatch on the graphics adapter is specifically
+     * configured for use by distance field fonts; you should pretty much always
+     * use the font object on the graphics adapter for drawing text.
      */
-    default void drawSpriteMarkers(GdxGraphicsAdapter g) {
+    default void drawTextMarkers(GdxGraphicsAdapter g) {
     }
 
     /**

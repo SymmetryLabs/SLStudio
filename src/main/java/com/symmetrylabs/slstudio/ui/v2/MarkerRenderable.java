@@ -27,6 +27,7 @@ import heronarts.lx.LXEffect;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.symmetrylabs.slstudio.ApplicationState;
 import org.lwjgl.opengl.GL41;
+import com.badlogic.gdx.graphics.g2d.DistanceFieldFont;
 
 
 public class MarkerRenderable implements RenderManager.Renderable {
@@ -46,20 +47,20 @@ public class MarkerRenderable implements RenderManager.Renderable {
         }
         GL41.glEnable(GL41.GL_LINE_SMOOTH);
         pg.setCamera(cam);
-        pg.batch.begin();
-        pg.batch.setProjectionMatrix(cam.combined);
+        pg.textBatch.begin();
+        pg.textBatch.setProjectionMatrix(cam.combined);
         for (LXChannel chan : lx.engine.getFocusedLook().channels) {
             for (LXWarp warp : chan.getWarps()) {
-                drawSprites(pg, warp);
+                drawText(pg, warp);
             }
             for (LXPattern pat : chan.getPatterns()) {
-                drawSprites(pg, pat);
+                drawText(pg, pat);
             }
             for (LXEffect effect : chan.getEffects()) {
-                drawSprites(pg, effect);
+                drawText(pg, effect);
             }
         }
-        pg.batch.end();
+        pg.textBatch.end();
 
         pg.renderer.setProjectionMatrix(cam.combined);
         pg.renderer.begin(ShapeRenderer.ShapeType.Line);
@@ -83,10 +84,10 @@ public class MarkerRenderable implements RenderManager.Renderable {
     public void dispose() {
     }
 
-    private void drawSprites(GdxGraphicsAdapter pg, LXComponent component) {
+    private void drawText(GdxGraphicsAdapter pg, LXComponent component) {
         if (component instanceof MarkerSource) {
             MarkerSource ms = (MarkerSource) component;
-            ms.drawSpriteMarkers(pg);
+            ms.drawTextMarkers(pg);
         }
     }
 
