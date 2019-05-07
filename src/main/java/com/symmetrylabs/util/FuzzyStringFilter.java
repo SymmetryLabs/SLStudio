@@ -31,6 +31,7 @@ import java.util.Iterator;
  */
 public class FuzzyStringFilter<T> {
     private static final int MIN_MIDDLE_MATCH_LEN = 2;
+    private static final boolean DEBUG_MATCHES = false;
 
     private class Sentence {
         T id;
@@ -56,11 +57,20 @@ public class FuzzyStringFilter<T> {
         matchesReady = false;
     }
 
-    public void setFilterText(String newFilterText) {
-        filterText = newFilterText.toLowerCase();
+    /**
+     * Returns true if the filter results were updated.
+     */
+    public boolean setFilterText(String newFilterText) {
+        newFilterText = newFilterText.toLowerCase();
+        if (newFilterText.equals(filterText)) {
+            return false;
+        }
+        filterText = newFilterText;
         if (matchesReady) {
             run();
+            return true;
         }
+        return false;
     }
 
     public void addSentence(T id, Collection<String> words) {
@@ -97,7 +107,7 @@ public class FuzzyStringFilter<T> {
                 while (splitPermute.hasNext()) {
                     s.matches = matchSplit(splitPermute.next(), s);
                     if (s.matches) {
-                        System.out.println(String.format("%s <- %s", String.join(" ", s.words), String.join(":", sp)));
+                        if (DEBUG_MATCHES) System.out.println(String.format("%s <- %s", String.join(" ", s.words), String.join(":", sp)));
                         break;
                     }
                 }

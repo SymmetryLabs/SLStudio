@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import com.symmetrylabs.slstudio.ApplicationState;
 import org.lwjgl.glfw.GLFW;
+import com.symmetrylabs.util.FuzzyStringFilter;
 
 /**
  * A window that shows a tree view of warps, effects and patterns.
@@ -27,11 +28,15 @@ public class WepUi {
     private final WEPGrouping grouping;
     private final boolean allowPatterns;
     private final HashSet<String> visibleGroups = new HashSet<>();
+    private final FuzzyStringFilter<Object> filter;
     private boolean effectsVisible;
     private boolean warpsVisible;
-    private String filterText = "";
+    private String visibleFilterText = "";
     private OnWepSelected cb;
     private int maxHeight = 0;
+
+    private final Object FILTER_MATCH_EFFECTS = new Object();
+    private final Object FILTER_MATCH_WARPS = new Object();
 
     public WepUi(LX lx, OnWepSelected cb) {
         this(lx, true, cb);
@@ -42,6 +47,22 @@ public class WepUi {
         this.grouping = new WEPGrouping(lx, ApplicationState.showName());
         this.cb = cb;
         this.allowPatterns = allowPatterns;
+
+        filter = new FuzzyStringFilter<>();
+        for (WEPGrouping.PatternItem i : grouping.patterns) {
+            filter.addSentence(i, nameToSentence(i.label, i.group));
+        }
+        for (WEPGrouping.EffectItem i : grouping.effects) {
+            filter.addSentence(i, nameToSentence(i.label, null));
+        }
+        for (WEPGrouping.WarpItem i : grouping.warps) {
+            filter.addSentence(i, nameToSentence(i.label, null));
+        }
+        filter.addSentence(FILTER_MATCH_WARPS, "warps");
+        filter.addSentence(FILTER_MATCH_EFFECTS, "effects");
+        filter.setFilterText("");
+        filter.run();
+
         resetFilter();
     }
 
@@ -50,15 +71,15 @@ public class WepUi {
     }
 
     public void resetFilter() {
-        filterText = "";
+        visibleFilterText = "";
+        filter.setFilterText("");
+
         visibleGroups.clear();
         visibleGroups.addAll(grouping.groupNames);
         effectsVisible = true;
         warpsVisible = true;
-        for (String groupName : grouping.groupNames) {
-            for (WEPGrouping.PatternItem pi : grouping.groups.get(groupName)) {
-                pi.visible = true;
-            }
+        for (WEPGrouping.PatternItem pi : grouping.patterns) {
+            pi.visible = true;
         }
         for (WEPGrouping.EffectItem ei : grouping.effects) {
             ei.visible = true;
@@ -72,13 +93,12 @@ public class WepUi {
         if (setFocusOnFilter) {
             UI.setKeyboardFocusHere();
         }
-        String newFilterText = UI.inputText("filter", filterText);
-        if (!newFilterText.equals(filterText)) {
-            filterText = newFilterText;
+        visibleFilterText = UI.inputText("filter", visibleFilterText);
+        if (filter.setFilterText(visibleFilterText)) {
             visibleGroups.clear();
             for (String groupName : grouping.groupNames) {
                 for (WEPGrouping.PatternItem pi : grouping.groups.get(groupName)) {
-                    pi.visible = match(pi.label) || match(groupName) || match("patterns");
+                    pi.visible = filter.matches(pi);
                     if (pi.visible) {
                         visibleGroups.add(groupName);
                     }
@@ -86,12 +106,12 @@ public class WepUi {
             }
             effectsVisible = false;
             for (WEPGrouping.EffectItem ei : grouping.effects) {
-                ei.visible = match(ei.label) || match("effects");
+                ei.visible = filter.matches(ei) || filter.matches(FILTER_MATCH_EFFECTS);
                 effectsVisible = effectsVisible || ei.visible;
             }
             warpsVisible = false;
             for (WEPGrouping.WarpItem wi : grouping.warps) {
-                wi.visible = match(wi.label) || match("warps");
+                wi.visible = filter.matches(wi) || filter.matches(FILTER_MATCH_WARPS);
                 warpsVisible = warpsVisible || wi.visible;
             }
         }
@@ -165,11 +185,6 @@ public class WepUi {
         UI.endChild();
     }
 
-    private boolean match(String label) {
-        return filterText.length() == 0 ||
-            (label != null && label.toLowerCase().contains(filterText.toLowerCase()));
-    }
-
     private void activate(WEPGrouping.PatternItem pi) {
         LXPattern instance = null;
         try {
@@ -185,7 +200,7 @@ public class WepUi {
         }
 
         if (instance != null) {
-            LXBus channel = lx.engine.getFocusedChannel();
+            LXBus channel = lx.engine.getFocusedLook().getFocusedChannel();
             if (channel instanceof LXChannel) {
                 ((LXChannel) channel).addPattern(instance);
             } else {
@@ -212,7 +227,7 @@ public class WepUi {
         }
 
         if (instance != null) {
-            lx.engine.getFocusedChannel().addEffect(instance);
+            lx.engine.getFocusedLook().getFocusedChannel().addEffect(instance);
             if (cb != null) {
                 cb.onWepAdded();
             }
@@ -234,10 +249,24 @@ public class WepUi {
         }
 
         if (instance != null) {
-            lx.engine.getFocusedChannel().addWarp(instance);
+            lx.engine.getFocusedLook().getFocusedChannel().addWarp(instance);
             if (cb != null) {
                 cb.onWepAdded();
             }
         }
+    }
+
+    private List<String> nameToSentence(String label, String group) {
+        List<String> res = new ArrayList<>();
+        for (int end = 0; end < label.length();) {
+            int start = end;
+            end++;
+            while (end < label.length() && Character.isLowerCase(label.charAt(end))) end++;
+            res.add(label.substring(start, end));
+        }
+        if (group != null) {
+            res.add(group);
+        }
+        return res;
     }
 }
