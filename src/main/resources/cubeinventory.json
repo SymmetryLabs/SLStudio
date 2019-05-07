@@ -1,3 +1,242 @@
 {
-  "allCubes": []
+  "allCubes": [
+    {
+      "addrA": "5410ecfd971f",
+      "idA": "1067",
+      "addrB": "5410ecf6a9b7",
+      "idB": "1066",
+      "imported": false
+    },
+    {
+      "addrA": "d880399b38d9",
+      "idA": "415HP",
+      "addrB": "5410ecfd7bee",
+      "idB": "1050",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf5aaf9",
+      "idA": "571",
+      "addrB": "5410ecf58776",
+      "idB": "570",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf63435",
+      "idA": "1012",
+      "addrB": "5410ecf671f0",
+      "idB": "1039",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf68bb1",
+      "idA": "977",
+      "addrB": "5410ecf61c4f",
+      "idB": "1024",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf57444",
+      "idA": "498",
+      "addrB": "5410ecf62721",
+      "idB": "831",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf644cc",
+      "idA": "897",
+      "addrB": "5410ecf58889",
+      "idB": "885",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf5541a",
+      "idA": "844",
+      "addrB": "5410ecf69ed9",
+      "idB": "845",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf5c3c7",
+      "idA": "443",
+      "addrB": "5410ecf54854",
+      "idB": "821",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf58ddd",
+      "idA": "499",
+      "addrB": "5410ecf5abe6",
+      "idB": "816",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf69cd4",
+      "idA": "467",
+      "addrB": "5410ecf55487",
+      "idB": "466",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf5abb6",
+      "idA": "601",
+      "addrB": "5410ecf5712c",
+      "idB": "600",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf553e1",
+      "idA": "975",
+      "addrB": "5410ecf5fd8d",
+      "idB": "489",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf5e2c8",
+      "idA": "507",
+      "addrB": "5410ecf5c5db",
+      "idB": "506",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf6272a",
+      "idA": "1118",
+      "addrB": "5410ecf5e5aa",
+      "idB": "1119",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf5a27c",
+      "idA": "725",
+      "addrB": "5410ecf5ac9e",
+      "idB": "724",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf5e270",
+      "idA": "900",
+      "addrB": "5410ecf5e596",
+      "idB": "901",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf5bc69",
+      "idA": "481",
+      "addrB": "5410ecf5ae9b",
+      "idB": "480",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf5face",
+      "idA": "911",
+      "addrB": "5410ecfdb7b3",
+      "idB": "1063",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf5c8b4",
+      "idA": "739",
+      "addrB": "5410ecf63f6b",
+      "idB": "738",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecfd7447",
+      "idA": "1017",
+      "addrB": "5410ecf61c57",
+      "idB": "1016",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf6296d",
+      "idA": "583",
+      "addrB": "5410ecf57cfa",
+      "idB": "582",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf653a3",
+      "idA": "1078",
+      "addrB": "5410ecf5a6c6",
+      "idB": "902",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf553e9",
+      "idA": "833",
+      "addrB": "5410ecf62716",
+      "idB": "832",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf57041",
+      "idA": "775",
+      "addrB": "5410ecf556f4",
+      "idB": "774",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf5dbb0",
+      "idA": "751",
+      "addrB": "5410ecf607e8",
+      "idB": "750",
+      "imported": false
+    },
+    {
+      "addrA": "d880399b11c2",
+      "idA": "366",
+      "addrB": "5410ecf5fb86",
+      "idB": "702",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf5fd65",
+      "idA": "859",
+      "addrB": "5410ecf5f004",
+      "idB": "858",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf58bf3",
+      "idA": "737",
+      "addrB": "5410ecf69ef2",
+      "idB": "736",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf61414",
+      "idA": "809",
+      "addrB": "5410ecf6407e",
+      "idB": "808",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf589a8",
+      "idA": "954",
+      "addrB": "5410ecf65e89",
+      "idB": "959",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf64376",
+      "idA": "865",
+      "addrB": "5410ecf5fc86",
+      "idB": "864",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf59ca4",
+      "idA": "546",
+      "addrB": "5410ecf5c527",
+      "idB": "913",
+      "imported": false
+    },
+    {
+      "addrA": "5410ecf5fbd3",
+      "idA": "527",
+      "addrB": "5410ecf5a144",
+      "idB": "526",
+      "imported": false
+    }
+  ]
 }
