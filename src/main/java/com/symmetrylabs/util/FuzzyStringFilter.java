@@ -58,7 +58,13 @@ public class FuzzyStringFilter<T> {
     }
 
     /**
-     * Returns true if the filter results were updated.
+     * Set the text that we will filter our corpus with.
+     *
+     * This will kick off a filter operation. For that reason, it's best to set
+     * up your corpus (by calling {@link addSentence(T, String...)}) before
+     * setting filter text, to avoid unnecessary computation.
+     *
+     * @return true if the filter was run as a by-product of setting filter text.
      */
     public boolean setFilterText(String newFilterText) {
         newFilterText = newFilterText.toLowerCase();
@@ -66,19 +72,33 @@ public class FuzzyStringFilter<T> {
             return false;
         }
         filterText = newFilterText;
-        if (matchesReady) {
-            run();
-            return true;
-        }
-        return false;
+        run();
+        return true;
     }
 
+    /**
+     * Add a sentence to the searched corpus.
+     *
+     * If the filter has already been run, this will re-run the filter to update match results.
+     *
+     * @param id the identifier for this sentence. Clients can query matches based on ID matching.
+     * @param words the set of words in the sentence. Both text-case and order of words have no effect on search.
+     */
     public void addSentence(T id, Collection<String> words) {
         String[] wordArray = new String[words.size()];
         words.toArray(wordArray);
         addSentence(id, wordArray);
     }
 
+
+    /**
+     * Add a sentence to the searched corpus.
+     *
+     * If the filter has already been run, this will re-run the filter to update match results.
+     *
+     * @param id the identifier for this sentence. Clients can query matches based on ID matching.
+     * @param words the set of words in the sentence. Both text-case and order of words have no effect on search.
+     */
     public void addSentence(T id, String... words) {
         Preconditions.checkArgument(!sentences.containsKey(id));
         Sentence s = new Sentence(id, words);
@@ -91,7 +111,8 @@ public class FuzzyStringFilter<T> {
         }
     }
 
-    public void run() {
+    /** Run the filter and set matches field on all of the sentences */
+    private void run() {
         Preconditions.checkState(filterText != null);
         splitCache.clear();
 
@@ -118,6 +139,14 @@ public class FuzzyStringFilter<T> {
         matchesReady = true;
     }
 
+    /**
+     * Returns true if the given split matches the sentence s.
+     *
+     * The match here assumes that the split is in-order, meaning that if chunk
+     * A comes before B, A's matching word will come before B's.
+     *
+     * This also updates the wordsMatched field on the sentence.
+     */
     private boolean matchSplit(List<String> split, Sentence s) {
         for (int i = 0; i < s.wordsMatched.length; i++) {
             s.wordsMatched[i] = false;
@@ -153,6 +182,16 @@ public class FuzzyStringFilter<T> {
         return true;
     }
 
+    /**
+     * Find all ways to split a string into a given number of parts.
+     *
+     * This uses dynamic programming to trade memory for performance; if you
+     * keep calling this method with very different strings without clearing
+     * splitCache, your memory will grow unbounded.
+     *
+     * @param s the string to split
+     * @param splitsleft the number of splits we're still allowed to make
+     */
     private List<List<String>> split(String s, int splitsleft) {
         Pair<String, Integer> splitkey = Pair.of(s, splitsleft);
         if (splitCache.containsKey(splitkey)) {
@@ -180,6 +219,12 @@ public class FuzzyStringFilter<T> {
         return res;
     }
 
+    /**
+     * Returns whether a sentence matches the given filter text.
+     *
+     * @param id the ID of the sentence to test
+     * @return true if the sentence with that ID was matched.
+     */
     public boolean matches(T id) {
         Preconditions.checkState(matchesReady);
         Preconditions.checkArgument(sentences.containsKey(id));
