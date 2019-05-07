@@ -45,22 +45,37 @@ public class MarkerRenderable implements RenderManager.Renderable {
             return;
         }
         GL41.glEnable(GL41.GL_LINE_SMOOTH);
-        pg.renderer.setProjectionMatrix(cam.combined);
-        pg.renderer.begin(ShapeRenderer.ShapeType.Line);
-
-        for (LXChannel chan : lx.engine.getChannels()) {
+        pg.setCamera(cam);
+        pg.batch.begin();
+        pg.batch.setProjectionMatrix(cam.combined);
+        for (LXChannel chan : lx.engine.getFocusedLook().channels) {
             for (LXWarp warp : chan.getWarps()) {
-                drawComponent(pg, warp);
+                drawSprites(pg, warp);
             }
             for (LXPattern pat : chan.getPatterns()) {
-                drawComponent(pg, pat);
+                drawSprites(pg, pat);
             }
             for (LXEffect effect : chan.getEffects()) {
-                drawComponent(pg, effect);
+                drawSprites(pg, effect);
             }
         }
+        pg.batch.end();
 
+        pg.renderer.setProjectionMatrix(cam.combined);
+        pg.renderer.begin(ShapeRenderer.ShapeType.Line);
+        for (LXChannel chan : lx.engine.getFocusedLook().channels) {
+            for (LXWarp warp : chan.getWarps()) {
+                drawLines(pg, warp);
+            }
+            for (LXPattern pat : chan.getPatterns()) {
+                drawLines(pg, pat);
+            }
+            for (LXEffect effect : chan.getEffects()) {
+                drawLines(pg, effect);
+            }
+        }
         pg.renderer.end();
+
         GL41.glDisable(GL41.GL_LINE_SMOOTH);
     }
 
@@ -68,9 +83,19 @@ public class MarkerRenderable implements RenderManager.Renderable {
     public void dispose() {
     }
 
-    private void drawComponent(GdxGraphicsAdapter pg, LXComponent component) {
+    private void drawSprites(GdxGraphicsAdapter pg, LXComponent component) {
         if (component instanceof MarkerSource) {
             MarkerSource ms = (MarkerSource) component;
+            ms.drawSpriteMarkers(pg);
+        }
+    }
+
+    private void drawLines(GdxGraphicsAdapter pg, LXComponent component) {
+        if (component instanceof MarkerSource) {
+            MarkerSource ms = (MarkerSource) component;
+            if (ms.drawLineMarkers(pg)) {
+                return;
+            }
             for (Marker m : ms.getMarkers()) {
                 pg.renderer.identity();
                 try {

@@ -3,13 +3,29 @@ package com.symmetrylabs.slstudio.ui.v2;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import org.lwjgl.opengl.GL41;
 import com.symmetrylabs.slstudio.ui.GraphicsAdapter;
+import java.util.function.Consumer;
+import java.util.ArrayList;
+import java.util.List;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
 public class GdxGraphicsAdapter implements GraphicsAdapter {
     public final ShapeRenderer renderer;
+    public final BitmapFont font = new BitmapFont();
+    public final SpriteBatch batch = new SpriteBatch();
+    protected SLCamera camera;
 
     public GdxGraphicsAdapter(ShapeRenderer renderer) {
         this.renderer = renderer;
+    }
+
+    public SLCamera getCamera() {
+        return camera;
+    }
+
+    void setCamera(SLCamera camera) {
+        this.camera = camera;
     }
 
     @Override

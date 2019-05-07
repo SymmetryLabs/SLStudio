@@ -5,6 +5,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import com.symmetrylabs.slstudio.ui.v2.GdxGraphicsAdapter;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.utils.Align;
 
 import com.symmetrylabs.shows.cubes.CubesShow;
 import heronarts.lx.LX;
@@ -81,5 +86,27 @@ public class CubeIterator extends SLPattern<CubesModel> implements MarkerSource 
             i++;
         }
         return markers;
+    }
+
+    @Override
+    public void drawSpriteMarkers(GdxGraphicsAdapter g) {
+        List<CubesModel.Cube> cubes = model.getCubes();
+        if (cubes.isEmpty()) {
+            return;
+        }
+        final float targetWidth = cubes.get(0).xRange;
+        final int halign = Align.center;
+        final Quaternion rot = new Quaternion();
+        final Vector3 scale = new Vector3(0.7f, 0.7f, 0.7f);
+        for (CubesModel.Cube cube : cubes) {
+            g.batch.setTransformMatrix(new Matrix4(new Vector3(cube.xMin, cube.yMax, cube.cz), rot, scale));
+            g.font.draw(g.batch, cube.modelId, 0, 0, targetWidth, halign, false);
+        }
+    }
+
+    @Override
+    public boolean drawLineMarkers(GdxGraphicsAdapter g) {
+        // mark ourselves as prefering the new direct-draw API
+        return true;
     }
 }

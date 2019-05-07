@@ -1,6 +1,8 @@
 package com.symmetrylabs.util;
 
 import com.symmetrylabs.slstudio.SLStudio;
+import org.lwjgl.system.CallbackI.Z;
+import com.symmetrylabs.slstudio.ui.GraphicsAdapter;
 
 import processing.core.PConstants;
 import processing.core.PFont;
