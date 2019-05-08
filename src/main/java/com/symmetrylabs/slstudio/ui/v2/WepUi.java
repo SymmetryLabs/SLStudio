@@ -61,7 +61,6 @@ public class WepUi {
         filter.addSentence(FILTER_MATCH_WARPS, "warps");
         filter.addSentence(FILTER_MATCH_EFFECTS, "effects");
         filter.setFilterText("");
-        filter.run();
 
         resetFilter();
     }
