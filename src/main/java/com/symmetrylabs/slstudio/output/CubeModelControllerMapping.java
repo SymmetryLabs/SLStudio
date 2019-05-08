@@ -44,6 +44,11 @@ public class CubeModelControllerMapping {
     protected final String showName;
     protected final CubeInventory inventory;
 
+    protected CubeModelControllerMapping() {
+        this.showName = null;
+        this.inventory = null;
+    }
+
     protected CubeModelControllerMapping(String showName, CubeInventory inventory) {
         this.showName = showName;
         this.inventory = inventory;
@@ -121,6 +126,7 @@ public class CubeModelControllerMapping {
                     new InputStreamReader(new FileInputStream(f)), CubeModelControllerMapping.class);
                 if (res != null) {
                     res.onUpdate();
+                    System.out.println("loaded mapping for show " + res.showName);
                     return res;
                 }
             } catch (IOException e) {

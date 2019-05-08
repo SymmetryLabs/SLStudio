@@ -16,6 +16,8 @@ import java.util.List;
  * This file implements the mapping functions needed to lay out the cubes.
  */
 public class SummerStage19Show extends CubesShow {
+    public static final String SHOW_NAME = "summerstage19";
+
     static final float CUBE_WIDTH = 24;
     static final float CUBE_HEIGHT = 24;
     static final float TOWER_WIDTH = 24;
@@ -33,8 +35,19 @@ public class SummerStage19Show extends CubesShow {
         new ClusterConfig("L1", 0, 5, 6,
             new CubeConfig("A1.5", 0, 0.5, 0),
             new CubeConfig("B1", 1, 0, 0),
-            new CubeConfig("B2", 2, 0, 0),
-            new CubeConfig("B3", 3, 0, 0)),
+            new CubeConfig("B2", 1, 1, 0),
+            new CubeConfig("B3", 1, 2, 0)),
+        new ClusterConfig("L2", 2, 5, 7,
+            new CubeConfig("A1", 0, 0, 0),
+            new CubeConfig("A2", 0, 1, 0),
+            new CubeConfig("A3", 0, 2, 0),
+            new CubeConfig("A4", 0, 3, 0),
+            new CubeConfig("A5", 0, 4, 0)),
+        new ClusterConfig("L3", 3, 4, 7,
+            new CubeConfig("A1", 0, 0, 0),
+            new CubeConfig("A2", 0, 1, 0),
+            new CubeConfig("A3", 0, 2, 0),
+            new CubeConfig("A4", 0, 3, 0)),
     };
 
     static class ClusterConfig {
@@ -55,13 +68,13 @@ public class SummerStage19Show extends CubesShow {
     }
 
     static class CubeConfig {
-        final String modelId;
+        final String baseModelId;
         final float x;
         final float y;
         final float z;
 
-        CubeConfig(String modelId, double x, double y, double z) {
-            this.modelId = modelId;
+        CubeConfig(String baseModelId, double x, double y, double z) {
+            this.baseModelId = baseModelId;
             this.x = (float) x;
             this.y = (float) y;
             this.z = (float) z;
@@ -85,7 +98,8 @@ public class SummerStage19Show extends CubesShow {
                 float y = SP * config.y;
                 float z = SP * config.z;
                 CubesModel.DoubleControllerCube cube = new CubesModel.DoubleControllerCube(
-                    config.modelId, x, y, z, 0, 0, 0, globalTransform);
+                    cluster.id + "-" + config.baseModelId,
+                    x, y, z, 0, 0, 0, globalTransform);
                 clusterCubes.add(cube);
                 allCubes.add(cube);
             }
@@ -110,6 +124,6 @@ public class SummerStage19Show extends CubesShow {
 
     @Override
     public String getShowName() {
-        return "summerstage";
+        return SHOW_NAME;
     }
 }

@@ -33,7 +33,7 @@ import com.badlogic.gdx.graphics.g2d.DistanceFieldFont;
 public class MarkerRenderable implements RenderManager.Renderable {
     private final LX lx;
     private final GdxGraphicsAdapter pg;
-    boolean visible;
+    boolean visible = true;
 
     public MarkerRenderable(LX lx) {
         this.lx = lx;

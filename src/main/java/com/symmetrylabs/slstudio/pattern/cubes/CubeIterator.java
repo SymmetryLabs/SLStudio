@@ -95,11 +95,16 @@ public class CubeIterator extends SLPattern<CubesModel> implements MarkerSource 
             return;
         }
         final float targetWidth = cubes.get(0).xRange;
-        final int halign = Align.center;
+        final int halign = Align.topLeft;
         final Quaternion rot = new Quaternion();
-        final Vector3 scale = new Vector3(0.4f, 0.4f, 0.4f);
+        final Vector3 scale = new Vector3(0.2f, 0.2f, 0.2f);
         for (CubesModel.Cube cube : cubes) {
-            g.textBatch.setTransformMatrix(new Matrix4(new Vector3(cube.xMin, cube.yMax, cube.cz), rot, scale));
+            g.textBatch.setTransformMatrix(new Matrix4(
+                new Vector3(
+                    cube.xMin + 0.1f * cube.xRange,
+                    cube.yMax - 0.1f * cube.yRange,
+                    cube.cz),
+                rot, scale));
             g.font.draw(g.textBatch, cube.modelId, 0, 0, targetWidth, halign, false);
         }
     }
