@@ -225,9 +225,10 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             int col = (int) ((System.nanoTime() / 1_000_000_000L) % 3L);
             int c = 0;
             switch (col) {
-            case 0: c = 0xFFFF0000; break;
-            case 1: c = 0xFF00FF00; break;
-            case 2: c = 0xFF0000FF; break;
+            /* don't use full-bright colors here, since they bust some of our fixtures. */
+            case 0: c = 0xFF880000; break;
+            case 1: c = 0xFF008800; break;
+            case 2: c = 0xFF000088; break;
             }
             initPacketData(numPixels, false);
             for (int i = 0; i < numPixels; i++) {
