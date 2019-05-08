@@ -254,6 +254,18 @@ public class SummerStage19Show extends CubesShow {
             new CubeConfig("A6", 0, 5, 0),
             new CubeConfig("B2", 1, 1, 0),
             new CubeConfig("B3", 1, 2, 0)),
+        new ClusterConfig("RC1", 39.5, 5.5, 2,
+            new CubeConfig("A1.5A", 0, 0.5, 0),
+            new CubeConfig("A1B", 0, 0, 1),
+            new CubeConfig("A2B", 0, 1, 1),
+            new CubeConfig("A1.5C", 0, 0.5, 2),
+            new CubeConfig("A2.5C", 0, 1.5, 2)),
+        new ClusterConfig("RC2", 39.5, 6, 5,
+            new CubeConfig("A1.5A", 0, 0.5, 0),
+            new CubeConfig("A2.5A", 0, 1.5, 0),
+            new CubeConfig("A1B", 0, 0, 1),
+            new CubeConfig("A2B", 0, 1, 1),
+            new CubeConfig("A3B", 0, 2, 1)),
     };
 
     static class ClusterConfig {
