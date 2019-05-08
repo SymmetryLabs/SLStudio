@@ -8,6 +8,9 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.modulator.SinLFO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class TestTowers extends SLPattern<CubesModel> {
     public static final String GROUP_NAME = CubesShow.SHOW_NAME;
@@ -19,7 +22,13 @@ public class TestTowers extends SLPattern<CubesModel> {
     public TestTowers(LX lx) {
         super(lx);
         this.selectedTower = new DiscreteParameter("selectedTower", 0, 0, model.getTowers().size()-1);
-        selectedTower.setOptions(new String[] {"LEFT_FACE", "RIGHT_FACE", "A", "B", "C", "D", "E", "Z", "Y", "X", "W", "V", "U", "Q"});
+        List<String> towerNames = new ArrayList<>();
+        for (CubesModel.Tower tower : model.getTowers()) {
+            towerNames.add(tower.id);
+        }
+        String[] paramOptions = new String[towerNames.size()];
+        towerNames.toArray(paramOptions);
+        selectedTower.setOptions(paramOptions);
         addParameter(selectedTower);
         addModulator(pulse).start();
     }
@@ -28,11 +37,11 @@ public class TestTowers extends SLPattern<CubesModel> {
         int i = 0;
 
         for (CubesModel.Tower tower : model.getTowers()) {
-            int hue = (i++*35) % 360;
+            int hue = (i++*55) % 360;
 
             for (LXPoint p : tower.getPoints()) {
                 colors[p.index] = lx.hsb(
-                    hue, 100, 30
+                    hue, 100, 60
                 );
             }
         }
