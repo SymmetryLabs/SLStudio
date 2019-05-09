@@ -32,6 +32,7 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
+import org.apache.commons.math3.util.FastMath;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,7 +70,7 @@ public abstract class LXOutput extends LXComponent {
     /**
      * Buffer with colors for this output, gamma-corrected
      */
-    private final PolyBuffer buffer;
+    protected final PolyBuffer buffer;
 
     /**
      * Local array for color-conversions
@@ -193,6 +194,9 @@ public abstract class LXOutput extends LXComponent {
         return this;
     }
 
+    /**
+     * Convert perceptual color data to linear color data for output.
+     */
     protected PolyBuffer processOutput(PolyBuffer src, PolyBuffer.Space space) {
         double lum = Spaces.cie_lightness_to_luminance(brightness.getValue());
 
@@ -217,10 +221,7 @@ public abstract class LXOutput extends LXComponent {
                         long[] srcLongs = (long[]) src.getArray(RGB16);
                         long[] outLongs = (long[]) buffer.getArray(RGB16);
                         for (int i = 0; i < srcLongs.length; ++i) {
-                            double factor = lum;
-                            for (int g = 0; g < gamma; g++) {
-                                factor *= Ops16.level(srcLongs[i]);
-                            }
+                            double factor = lum * FastMath.pow(Ops16.level(srcLongs[i]), gamma);
                             outLongs[i] = Ops16.multiply(srcLongs[i], factor);
                         }
                         buffer.markModified(RGB16);
@@ -228,10 +229,7 @@ public abstract class LXOutput extends LXComponent {
                         int[] srcInts = (int[]) src.getArray(RGB8);
                         int[] outInts = (int[]) buffer.getArray(RGB8);
                         for (int i = 0; i < srcInts.length; ++i) {
-                            double factor = lum;
-                            for (int g = 0; g < gamma; g++) {
-                                factor *= Ops8.level(srcInts[i]);
-                            }
+                            double factor = lum * FastMath.pow(Ops8.level(srcInts[i]), gamma);
                             outInts[i] = Ops8.multiply(srcInts[i], factor);
                         }
                         buffer.markModified(RGB8);
