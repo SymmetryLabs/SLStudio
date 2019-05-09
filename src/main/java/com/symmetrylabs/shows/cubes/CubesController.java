@@ -50,7 +50,6 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 
     private final LX lx;
     private CubesMappingMode mappingMode;
-    private GammaExpander gammaExpander;
 
     public CubesController(LX lx, NetworkDevice device, CubeInventory inventory) {
         this(lx, device, device.ipAddress, null, inventory, false);
@@ -86,7 +85,6 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         }
 
         mappingMode = CubesMappingMode.getInstance(lx);
-        gammaExpander = GammaExpander.getInstance(lx);
 
         enabled.setValue(true);
     }
