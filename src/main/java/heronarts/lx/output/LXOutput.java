@@ -195,7 +195,9 @@ public abstract class LXOutput extends LXComponent {
     }
 
     /**
-     * Convert perceptual color data to linear color data for output.
+     * Convert perceptual color data to linear color data for output, and apply target brightness.
+     *
+     * Note: output brightness is applied in linear space, not perceptual space.
      */
     protected PolyBuffer processOutput(PolyBuffer src, PolyBuffer.Space space) {
         double lum = Spaces.cie_lightness_to_luminance(brightness.getValue());
