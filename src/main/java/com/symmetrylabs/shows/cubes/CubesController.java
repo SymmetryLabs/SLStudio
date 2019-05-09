@@ -2,7 +2,6 @@ package com.symmetrylabs.shows.cubes;
 
 import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.component.GammaExpander;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
