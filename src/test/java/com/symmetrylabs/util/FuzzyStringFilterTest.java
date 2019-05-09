@@ -12,7 +12,6 @@ public class FuzzyStringFilterTest {
         fsf.addSentence(2, "dumb", "cat", "otter");
         fsf.addSentence(3, "dumb", "otter");
         fsf.setFilterText("cado");
-        fsf.run();
         Assert.assertTrue(fsf.matches(0));
         Assert.assertTrue(fsf.matches(1));
         Assert.assertTrue(fsf.matches(2));
@@ -25,7 +24,6 @@ public class FuzzyStringFilterTest {
         fsf.addSentence(0, "avocado", "thing");
         fsf.addSentence(1, "doca", "is", "a", "word");
         fsf.setFilterText("cado");
-        fsf.run();
         Assert.assertTrue(fsf.matches(0));
         Assert.assertFalse(fsf.matches(1));
     }
@@ -38,7 +36,6 @@ public class FuzzyStringFilterTest {
            "evocative". */
         fsf.addSentence(0, "doca", "is", "an", "evocative", "word");
         fsf.setFilterText("cado");
-        fsf.run();
         Assert.assertTrue(fsf.matches(0));
     }
 
@@ -50,7 +47,6 @@ public class FuzzyStringFilterTest {
         fsf.addSentence(2, "egbd", "xfx"); // not ok: match for f is in the middle
         fsf.addSentence(3, "e", "xgbdfx"); // short words should work with normally-too-short matches
         fsf.setFilterText("egbdf");
-        fsf.run();
         Assert.assertTrue(fsf.matches(0));
         Assert.assertTrue(fsf.matches(1));
         Assert.assertFalse(fsf.matches(2));
@@ -62,7 +58,6 @@ public class FuzzyStringFilterTest {
         FuzzyStringFilter<Integer> fsf = new FuzzyStringFilter<Integer>();
         fsf.addSentence(0, "ABadCase");
         fsf.setFilterText("badc");
-        fsf.run();
         Assert.assertTrue(fsf.matches(0));
     }
 
@@ -72,7 +67,6 @@ public class FuzzyStringFilterTest {
         fsf.addSentence(0, "one", "two");
         fsf.addSentence(1, "threethreethree");
         fsf.setFilterText("");
-        fsf.run();
         Assert.assertTrue(fsf.matches(0));
         Assert.assertTrue(fsf.matches(1));
     }
