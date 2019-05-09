@@ -29,14 +29,7 @@ public class GdxGraphicsAdapter implements GraphicsAdapter {
             Gdx.files.internal("fonts/InputSansGdxSDF.png"),
             false);
 
-        /* mega-hacks for MacOS's failure to create a SpriteBatch */
-        SpriteBatch b = null;
-        try {
-            b = new SpriteBatch();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        textBatch = b;
+        textBatch = new SpriteBatch(1000, SpriteShaderGL4.createDefaultShader());
     }
 
     public SLCamera getCamera() {

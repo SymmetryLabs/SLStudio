@@ -33,8 +33,7 @@ import com.badlogic.gdx.graphics.g2d.DistanceFieldFont;
 public class MarkerRenderable implements RenderManager.Renderable {
     private final LX lx;
     private final GdxGraphicsAdapter pg;
-    /* Disable by default, because markers don't work on MacOS */
-    boolean visible = false;
+    boolean visible = true;
 
     public MarkerRenderable(LX lx) {
         this.lx = lx;
