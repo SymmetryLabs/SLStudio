@@ -18,7 +18,7 @@ import com.badlogic.gdx.graphics.g2d.DistanceFieldFont;
 public class GdxGraphicsAdapter implements GraphicsAdapter {
     public final ShapeRenderer renderer;
     public final BitmapFont font;
-    public final SpriteBatch textBatch = new SpriteBatch();
+    public final SpriteBatch textBatch;
     protected SLCamera camera;
 
     public GdxGraphicsAdapter(ShapeRenderer renderer) {
@@ -28,6 +28,15 @@ public class GdxGraphicsAdapter implements GraphicsAdapter {
             Gdx.files.internal("fonts/InputSansGdxSDF.fnt"),
             Gdx.files.internal("fonts/InputSansGdxSDF.png"),
             false);
+
+        /* mega-hacks for MacOS's failure to create a SpriteBatch */
+        SpriteBatch b = null;
+        try {
+            b = new SpriteBatch();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        textBatch = b;
     }
 
     public SLCamera getCamera() {
