@@ -51,4 +51,22 @@ public class ApplicationState {
     public static boolean inSLStudioMode() {
         return get().interfaceMode() == Mode.SLSTUDIO;
     }
+
+    public static class DummyProvider implements Provider {
+        public String showName() {
+            return "DummyProvider.testshow";
+        }
+
+        public OutputControl outputControl() {
+            return null;
+        }
+
+        public void setWarning(String key, String message) {
+            System.out.println(String.format("WARN %s: %s", key, message));
+        }
+
+        public Mode interfaceMode() {
+            return Mode.VOLUME;
+        }
+    }
 }

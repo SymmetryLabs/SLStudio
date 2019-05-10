@@ -129,6 +129,14 @@ compileTestKotlin {
 	kotlinOptions.jvmTarget = "1.8"
 }
 
+test {
+    testLogging {
+        events "passed", "failed", "skipped"
+        showStandardStreams = true
+        exceptionFormat = "full"
+    }
+}
+
 jar {
 	exclude('**/*.swp')
 	exclude('**/*.swo')

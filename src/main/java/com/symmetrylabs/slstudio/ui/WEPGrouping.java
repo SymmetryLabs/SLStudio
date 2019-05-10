@@ -27,6 +27,7 @@ public class WEPGrouping {
     private final LX lx;
     public final HashMap<String, List<PatternItem>> groups = new HashMap<>();
     public final List<String> groupNames;
+    public final List<PatternItem> patterns;
     public final List<WarpItem> warps;
     public final List<EffectItem> effects;
 
@@ -39,11 +40,14 @@ public class WEPGrouping {
     public WEPGrouping(LX lx, String activeGroup) {
         this.lx = lx;
 
-        List<Class<? extends LXPattern>> patterns = lx.getRegisteredPatterns();
-        for (Class<? extends LXPattern> p : patterns) {
+        List<Class<? extends LXPattern>> patternClasses = lx.getRegisteredPatterns();
+        patterns = new ArrayList<>();
+        for (Class<? extends LXPattern> p : patternClasses) {
             String group = LXPattern.getGroupName(p);
+            PatternItem pi = new PatternItem(p, group);
             groups.putIfAbsent(group, new ArrayList<>());
-            groups.get(group).add(new PatternItem(p));
+            groups.get(group).add(pi);
+            patterns.add(pi);
         }
 
         for (List<PatternItem> ps : groups.values()) {
@@ -85,11 +89,13 @@ public class WEPGrouping {
     public static class PatternItem implements Comparable<PatternItem> {
         public final Class<? extends LXPattern> pattern;
         public final String label;
+        public final String group;
         /* Here so that UIs can keep track of visibility; defaults to true */
         public boolean visible = true;
 
-        PatternItem(Class<? extends LXPattern> pattern) {
+        PatternItem(Class<? extends LXPattern> pattern, String group) {
             this.pattern = pattern;
+            this.group = group;
             String simple = pattern.getSimpleName();
             if (simple.endsWith("Pattern")) {
                 simple = simple.substring(0, simple.length() - "Pattern".length());

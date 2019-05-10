@@ -343,6 +343,13 @@ public class Ops8 {
         );
     }
 
+    /**
+     * Returns the amount of power in a linear light sample; this is the sum of the channels, normalized to [0, 1].
+     */
+    public static double power(int rgb) {
+        return (double) ((rgb & 0xFF) + ((rgb >> 8) & 0xFF) + ((rgb >> 16) & 0xFF)) / (255.0 * 3.0);
+    }
+
     private static int min(int a, int b) { return a < b ? a : b; }
     private static int max(int a, int b) { return a > b ? a : b; }
     private static int clamp(int x) { return (x < 0 ? 0 : x > MAX ? MAX : x); }

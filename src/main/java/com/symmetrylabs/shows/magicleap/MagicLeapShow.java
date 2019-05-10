@@ -81,7 +81,7 @@ public class MagicLeapShow extends CubesShow implements Show {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        CubesModel m = new CubesModel(towers, allCubesArr);
+        CubesModel m = new CubesModel(towers, allCubesArr, cubeInventory, mapping);
         m.setTopologyTolerances(2, 6, 8);
         return m;
     }
@@ -92,5 +92,10 @@ public class MagicLeapShow extends CubesShow implements Show {
         lx.addProjectListener((file, change) -> {
             new GameRunner(lx);
         });
+    }
+
+    @Override
+    public String getShowName() {
+        return SHOW_NAME;
     }
 }

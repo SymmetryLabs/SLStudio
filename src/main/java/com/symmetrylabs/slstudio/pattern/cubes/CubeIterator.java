@@ -5,6 +5,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import com.symmetrylabs.slstudio.ui.v2.GdxGraphicsAdapter;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.utils.Align;
 
 import com.symmetrylabs.shows.cubes.CubesShow;
 import heronarts.lx.LX;
@@ -30,6 +35,7 @@ public class CubeIterator extends SLPattern<CubesModel> implements MarkerSource 
 
     private final DiscreteParameter cubeIndex = new DiscreteParameter("CubeIndex", 0, 1);
     private final CompoundParameter labelSize = new CompoundParameter("LabelSize", 8, 2, 18);
+    private String caption = null;
 
     public CubeIterator(LX lx) {
         super(lx);
@@ -37,14 +43,10 @@ public class CubeIterator extends SLPattern<CubesModel> implements MarkerSource 
         cubeIndex.setRange(0, model.getCubes().size());
         cubeIndex.addListener(param -> {
             CubesModel.Cube cube = model.getCubes().get(cubeIndex.getValuei());
-            String label = cube.controllerId;
-            if (cube instanceof CubesModel.DoubleControllerCube) {
-                CubesModel.DoubleControllerCube dc = (CubesModel.DoubleControllerCube) cube;
-                label = dc.controllerIdA + "/" + dc.controllerIdB;
-            }
-            System.out.println(String.format(
+            caption = String.format(
                 Locale.US, "Cube %s: center at (%+6.1f, %+6.1f, %+6.2f)",
-                label, cube.cx, cube.cy, cube.cz));
+                cube.modelId, cube.cx, cube.cy, cube.cz);
+            System.out.println(caption);
         });
 
         addParameter(cubeIndex);
@@ -65,6 +67,11 @@ public class CubeIterator extends SLPattern<CubesModel> implements MarkerSource 
         markModified(SRGB8);
     }
 
+    @Override
+    public String getCaption() {
+        return caption;
+    }
+
     @Override public Collection<Marker> getMarkers() {
         List<Marker> markers = new ArrayList<>();
         List<CubesModel.Cube> cubes = model.getCubes();
@@ -75,14 +82,36 @@ public class CubeIterator extends SLPattern<CubesModel> implements MarkerSource 
         for (CubesModel.Cube cube : cubes) {
             pos.set(cube.cx, cube.cy, cube.cz);
             int c = (i == cubeI) ? 0xffffff00 : 0x80008040;
-            String label = cube.controllerId;
-            if (cube instanceof CubesModel.DoubleControllerCube) {
-                CubesModel.DoubleControllerCube dc = (CubesModel.DoubleControllerCube) cube;
-                label = dc.controllerIdA + "\n" + dc.controllerIdB;
-            }
-            markers.add(new TextMarker(pos, size, c, label));
+            markers.add(new TextMarker(pos, size, c, cube.modelId));
             i++;
         }
         return markers;
+    }
+
+    @Override
+    public void drawTextMarkers(GdxGraphicsAdapter g) {
+        List<CubesModel.Cube> cubes = model.getCubes();
+        if (cubes.isEmpty()) {
+            return;
+        }
+        final float targetWidth = cubes.get(0).xRange;
+        final int halign = Align.topLeft;
+        final Quaternion rot = new Quaternion();
+        final Vector3 scale = new Vector3(0.2f, 0.2f, 0.2f);
+        for (CubesModel.Cube cube : cubes) {
+            g.textBatch.setTransformMatrix(new Matrix4(
+                new Vector3(
+                    cube.xMin + 0.1f * cube.xRange,
+                    cube.yMax - 0.1f * cube.yRange,
+                    cube.cz),
+                rot, scale));
+            g.font.draw(g.textBatch, cube.modelId, 0, 0, targetWidth, halign, false);
+        }
+    }
+
+    @Override
+    public boolean drawLineMarkers(GdxGraphicsAdapter g) {
+        // mark ourselves as prefering the new direct-draw API
+        return true;
     }
 }

@@ -52,7 +52,7 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
                 new String[] {"919", "910"},
                 new String[] {"637", "1057"},
                 new String[] {"529", "528"},
-                new String[] {"516", "1101"},                
+                new String[] {"516", "1101"},
             }),
 
 //TOWER 2
@@ -75,7 +75,7 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
                 new String[] {"757", "756"},
                 new String[] {"1096", "1095"},
                 new String[] {"867", "866"},
-                new String[] {"936", "921"},                
+                new String[] {"936", "921"},
             }),
 
 //TOWER 5
@@ -84,7 +84,7 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
                 new String[] {"1091", "1090"},
                 new String[] {"771", "770"},
                 new String[] {"1111", "1112"},
-                new String[] {"949", "946"},                
+                new String[] {"949", "946"},
             }),
 
 //TOWER 6
@@ -108,7 +108,7 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
             new TowerConfig(SP*4, SP * 1, -SP * 6, 0, 45, 0, new String[][]{
                 new String[] {"1099", "1098"},
                 new String[] {"924", "923"},
-                new String[] {"595", "804"},                
+                new String[] {"595", "804"},
             }),
 
 //TOWER 9
@@ -116,7 +116,7 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
             new TowerConfig(SP * 3, SP * 1, -SP * 7,  0, 45, 0,new String[][]{
                 new String[] {"1052", "830"},
                 new String[] {"1085", "920"},
-                new String[] {"473", "472"},            
+                new String[] {"473", "472"},
             }),
 
 
@@ -176,7 +176,7 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
                 new String[] {"876", "520"},
                 new String[] {"944", "947"},
                 new String[] {"914", "847"},
-                new String[] {"818", "464"},                
+                new String[] {"818", "464"},
             }),
 
 // //TOWER 17
@@ -185,7 +185,7 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
                 new String[] {"1075", "593"},
                 new String[] {"783", "782"},
                 new String[] {"495", "494"},
-                new String[] {"441", "440"},                
+                new String[] {"441", "440"},
             }),
 
 
@@ -213,7 +213,7 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 //                 new String[] {"919", "910"},
 //                 new String[] {"637", "1057"},
 //                 new String[] {"529", "528"},
-//                 new String[] {"516", "1101"},                
+//                 new String[] {"516", "1101"},
 //             }),
 
 // //TOWER 3 ROW 1
@@ -227,7 +227,7 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 //                 new String[] {"477", "476"},
 //             }),
 // //TOWER 4 ROW 1
-//             //tower of five 
+//             //tower of five
 //             new TowerConfig(SP * 1.5f,  0, SP * 0, new String[][]{
 //                 new String[] {"727", "726"},
 //                 new String[] {"945", "901"},
@@ -241,7 +241,7 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 //                 new String[] {"1091", "1090"},
 //                 new String[] {"771", "770"},
 //                 new String[] {"1111", "1112"},
-//                 new String[] {"949", "946"},                
+//                 new String[] {"949", "946"},
 //             }),
 
 
@@ -251,7 +251,7 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 //                 new String[] {"741", "740"},
 //                 new String[] {"1099", "1098"},
 //                 new String[] {"924", "923"},
-//                 new String[] {"595", "804"},                
+//                 new String[] {"595", "804"},
 //             }),
 
 //                 //tower of four
@@ -259,15 +259,15 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 //                 new String[] {"757", "756"},
 //                 new String[] {"1096", "1095"},
 //                 new String[] {"867", "866"},
-//                 new String[] {"936", "921"},                
+//                 new String[] {"936", "921"},
 //             }),
-    
+
 //             //tower of four
 //             new TowerConfig(-SP*.7f, SP * 0, -SP * 1, new String[][]{
 //                 new String[] {"1075", "593"},
 //                 new String[] {"783", "782"},
 //                 new String[] {"495", "494"},
-//                 new String[] {"441", "440"},                
+//                 new String[] {"441", "440"},
 //             }),
 
 //             new TowerConfig(SP * .7f, 0, -SP * 1,  new String[][] {
@@ -280,14 +280,14 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 
 // //ROW 3
 
-//                 //tower of three 
+//                 //tower of three
 //             new TowerConfig(SP * -4, 0, -SP * 2, new String[][]{
 //                 new String[] {"957", "998"},
 //                 new String[] {"1067", "1066"},
 //                 new String[] {"481", "480"},
 //             }),
 
-//                 //tower of three 
+//                 //tower of three
 //             new TowerConfig(SP * -1.5f, SP * 0, -SP * 2, new String[][]{
 //                 new String[] {"1009", "1008"},
 //                 new String[] {"935", "999"},
@@ -299,19 +299,19 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 //                 new String[] {"876", "520"},
 //                 new String[] {"944", "947"},
 //                 new String[] {"914", "847"},
-//                 new String[] {"818", "464"},                
+//                 new String[] {"818", "464"},
 //             }),
 
 
 
-//                 //tower of three 
+//                 //tower of three
 //             new TowerConfig(SP * 3.5f, 0, -SP * 2, new String[][]{
 //                 new String[] {"1028", "1029"},//UNLABLED CUBES
 //                 new String[] {"926", "998"},
 //                 new String[] {"906", "912"},
 //             }),
 
-//                 //tower of two 
+//                 //tower of two
 //             new TowerConfig(SP * 5f, SP * 0, -SP * 2, new String[][]{
 //                 new String[] {"896", "898"},
 //                 new String[] {"1104", "1103"},
@@ -320,13 +320,13 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 // //ROW 4
 
 
-//                     //tower of two 
+//                     //tower of two
 //             new TowerConfig(SP * -4.5f, SP * 0, -SP * 3, new String[][]{
 //                 new String[] {"719", "718"},
 //                 new String[] {"817", "682"},
 //             }),
 
-//                     //tower of two 
+//                     //tower of two
 //             new TowerConfig(-SP * 2, SP * 0, -SP * 3, new String[][]{
 //                 new String[] {"679", "678"},
 //                 new String[] {"707", "706"},
@@ -336,10 +336,10 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 //                 new String[] {"1052", "830"},
 //                 new String[] {"1085", "920"},
 //                 new String[] {"473", "472"},
-//                 new String[] {"455", "454"},                
+//                 new String[] {"455", "454"},
 //             }),
 
-//                         //tower of two 
+//                         //tower of two
 //             new TowerConfig(SP * 4, SP * 0, -SP * 3, new String[][]{
 //                 new String[] {"713", "712"},
 //                 new String[] {"940", "948"},
@@ -422,7 +422,7 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
                 float y = config.yValues[i];
                 CubesModel.DoubleControllerCube cube =
                     new CubesModel.DoubleControllerCube(
-                        config.ids[i][0], config.ids[i][1],
+                        config.ids[i][0],
                         x, y, z, xRot, yRot, zRot, globalTransform);
                 cubes.add(cube);
                 allCubes.add(cube);
@@ -436,7 +436,7 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        return new CubesModel(towers, allCubesArr);
+        return new CubesModel(towers, allCubesArr, cubeInventory, mapping);
     }
 
     @Override
@@ -448,5 +448,10 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
     @Override
     public Workspace getWorkspace() {
         return workspace;
+    }
+
+    @Override
+    public String getShowName() {
+        return SHOW_NAME;
     }
 }

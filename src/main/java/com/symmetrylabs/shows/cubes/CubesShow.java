@@ -2,6 +2,8 @@ package com.symmetrylabs.shows.cubes;
 
 import java.util.*;
 import java.lang.ref.WeakReference;
+import com.symmetrylabs.slstudio.output.CubeModelControllerMapping;
+import com.symmetrylabs.color.PerceptualColorScale;
 
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
@@ -34,8 +36,10 @@ public abstract class CubesShow implements Show {
 
     public static final float INCHES_PER_METER = 39.3701f;
 
-    ListenableSet<CubesController> controllers = new ListenableSet<>();
-    CubeInventory cubeInventory = CubeInventory.loadFromDisk();
+    public ListenableSet<CubesController> controllers = new ListenableSet<>();
+    public CubeInventory cubeInventory = CubeInventory.loadFromDisk();
+    public CubeModelControllerMapping mapping = CubeModelControllerMapping.loadFromDisk(getShowName(), cubeInventory);
+    public final PerceptualColorScale outputScaler = new PerceptualColorScale(new double[] { 2.0, 2.1, 2.8 }, 1.0);
 
     private static Map<LX, WeakReference<CubesShow>> instanceByLX = new WeakHashMap<>();
 
@@ -109,7 +113,7 @@ public abstract class CubesShow implements Show {
 
         networkMonitor.opcDeviceList.addListener(new SetListener<NetworkDevice>() {
             public void onItemAdded(NetworkDevice device) {
-                final CubesController controller = new CubesController(lx, device, cubeInventory);
+                final CubesController controller = new CubesController(lx, device, cubeInventory, outputScaler);
                 controller.set16BitColorEnabled(device.featureIds.contains("rgb16"));
                 controllers.add(controller);
                 dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
@@ -162,8 +166,11 @@ public abstract class CubesShow implements Show {
     }
 
     public void setupUi(LX lx) {
-        WindowManager.addPersistent("Cubes/Model editor", () -> new CubeEditor(lx, (CubesModel) lx.model), false);
-        WindowManager.addPersistent("Cubes/Inventory editor", () -> new InventoryEditor(lx, cubeInventory), false);
+        WindowManager.addPersistent("Cubes/Inventory", () -> new InventoryEditor(lx, cubeInventory), false);
+        WindowManager.addPersistent("Cubes/Mapping", () -> new MappingEditor(lx, (CubesModel) lx.model), false);
         WindowManager.addPersistent("Cubes/Output", () -> new CubeOutputWindow(lx, this), false);
+        WindowManager.addPersistent("Cubes/Scaling", () -> new OutputScaleWindow(lx, outputScaler), false);
     }
+
+    public abstract String getShowName();
 }

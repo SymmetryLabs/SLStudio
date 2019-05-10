@@ -343,6 +343,13 @@ public class Ops16 {
         );
     }
 
+    /**
+     * Returns the amount of power in a linear light sample; this is the sum of the channels, normalized to [0, 1].
+     */
+    public static double power(long rgb) {
+        return (double) ((rgb & 0xFFFF) + ((rgb >> 16) & 0xFFFF) + ((rgb >> 32) & 0xFFFF)) / (65536.0 * 3.0);
+    }
+
     private static int min(int a, int b) { return a < b ? a : b; }
     private static int max(int a, int b) { return a > b ? a : b; }
     private static long clamp(int x) { return (x < 0 ? 0 : x > MAX ? MAX : x); }

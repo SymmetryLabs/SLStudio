@@ -53,8 +53,8 @@ public class LoveBurnShow extends CubesShow implements HasWorkspace {
                 new String[] {"936", "921"},
                 new String[] {"1026", "1025"},
                 new String[] {"791", "790"},
-                new String[] {"487", "486"}, 
-                new String[] {"593", "1075"},       
+                new String[] {"487", "486"},
+                new String[] {"593", "1075"},
             }),
 // Front Row Right
             new TowerConfig(SP * 1.5f, SP * 0, SP * 0, new String[][]{
@@ -63,21 +63,21 @@ public class LoveBurnShow extends CubesShow implements HasWorkspace {
                 new String[] {"515", "514"},
                 new String[] {"491", "490"},
                 new String[] {"477", "476"},
-                new String[] {"1108", "1109"},                 
-               
+                new String[] {"1108", "1109"},
+
             }),
 // Back Row Middle
             new TowerConfig(SP * .75f, SP * 0, SP * 1.5f, new String[][]{
-            
+
                 new String[] {"472", "473"},
                 new String[] {"920", "1085"},
                 new String[] {"830", "1052"},
                 new String[] {"782", "783"},
-                new String[] {"1133", "1132"},            
+                new String[] {"1133", "1132"},
             }),
 
 
-    };            
+    };
 
 
 
@@ -156,8 +156,7 @@ public class LoveBurnShow extends CubesShow implements HasWorkspace {
                 float y = config.yValues[i];
                 CubesModel.DoubleControllerCube cube =
                     new CubesModel.DoubleControllerCube(
-                        config.ids[i][0], config.ids[i][1],
-                        x, y, z, xRot, yRot, zRot, globalTransform);
+                        config.ids[i][0], x, y, z, xRot, yRot, zRot, globalTransform);
                 cubes.add(cube);
                 allCubes.add(cube);
             }
@@ -170,7 +169,7 @@ public class LoveBurnShow extends CubesShow implements HasWorkspace {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        return new CubesModel(towers, allCubesArr);
+        return new CubesModel(towers, allCubesArr, cubeInventory, mapping);
     }
 
     @Override
@@ -182,5 +181,10 @@ public class LoveBurnShow extends CubesShow implements HasWorkspace {
     @Override
     public Workspace getWorkspace() {
         return workspace;
+    }
+
+    @Override
+    public String getShowName() {
+        return SHOW_NAME;
     }
 }

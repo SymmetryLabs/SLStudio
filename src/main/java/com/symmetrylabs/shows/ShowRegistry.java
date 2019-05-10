@@ -27,6 +27,7 @@ import com.symmetrylabs.shows.related.RelatedShow;
 import com.symmetrylabs.shows.streetlamp.StreetlampShow;
 import com.symmetrylabs.shows.summerbbq.SummerBBQShow;
 import com.symmetrylabs.shows.summerstage.SummerStageShow;
+import com.symmetrylabs.shows.summerstage19.SummerStage19Show;
 import com.symmetrylabs.shows.thiel18.Thiel18Show;
 import com.symmetrylabs.shows.ysiadsparty.YsiadsPartyShow;
 import com.symmetrylabs.shows.absinthedemo.AbsintheDemoShow;
@@ -102,6 +103,7 @@ public class ShowRegistry {
         map.put(AbsintheShow.SHOW_NAME, () -> new AbsintheShow());
         map.put(JapanTreeShow.SHOW_NAME, () -> new JapanTreeShow());
         map.put(TwigTestShow.SHOW_NAME, () -> new TwigTestShow());
+        map.put(SummerStage19Show.SHOW_NAME, () -> new SummerStage19Show());
     }
 
     static interface ShowBuilder {

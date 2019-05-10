@@ -27,12 +27,13 @@ import heronarts.lx.LXEffect;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.symmetrylabs.slstudio.ApplicationState;
 import org.lwjgl.opengl.GL41;
+import com.badlogic.gdx.graphics.g2d.DistanceFieldFont;
 
 
 public class MarkerRenderable implements RenderManager.Renderable {
     private final LX lx;
     private final GdxGraphicsAdapter pg;
-    boolean visible;
+    boolean visible = true;
 
     public MarkerRenderable(LX lx) {
         this.lx = lx;
@@ -45,22 +46,37 @@ public class MarkerRenderable implements RenderManager.Renderable {
             return;
         }
         GL41.glEnable(GL41.GL_LINE_SMOOTH);
-        pg.renderer.setProjectionMatrix(cam.combined);
-        pg.renderer.begin(ShapeRenderer.ShapeType.Line);
-
-        for (LXChannel chan : lx.engine.getChannels()) {
+        pg.setCamera(cam);
+        pg.textBatch.begin();
+        pg.textBatch.setProjectionMatrix(cam.combined);
+        for (LXChannel chan : lx.engine.getFocusedLook().channels) {
             for (LXWarp warp : chan.getWarps()) {
-                drawComponent(pg, warp);
+                drawText(pg, warp);
             }
             for (LXPattern pat : chan.getPatterns()) {
-                drawComponent(pg, pat);
+                drawText(pg, pat);
             }
             for (LXEffect effect : chan.getEffects()) {
-                drawComponent(pg, effect);
+                drawText(pg, effect);
             }
         }
+        pg.textBatch.end();
 
+        pg.renderer.setProjectionMatrix(cam.combined);
+        pg.renderer.begin(ShapeRenderer.ShapeType.Line);
+        for (LXChannel chan : lx.engine.getFocusedLook().channels) {
+            for (LXWarp warp : chan.getWarps()) {
+                drawLines(pg, warp);
+            }
+            for (LXPattern pat : chan.getPatterns()) {
+                drawLines(pg, pat);
+            }
+            for (LXEffect effect : chan.getEffects()) {
+                drawLines(pg, effect);
+            }
+        }
         pg.renderer.end();
+
         GL41.glDisable(GL41.GL_LINE_SMOOTH);
     }
 
@@ -68,9 +84,19 @@ public class MarkerRenderable implements RenderManager.Renderable {
     public void dispose() {
     }
 
-    private void drawComponent(GdxGraphicsAdapter pg, LXComponent component) {
+    private void drawText(GdxGraphicsAdapter pg, LXComponent component) {
         if (component instanceof MarkerSource) {
             MarkerSource ms = (MarkerSource) component;
+            ms.drawTextMarkers(pg);
+        }
+    }
+
+    private void drawLines(GdxGraphicsAdapter pg, LXComponent component) {
+        if (component instanceof MarkerSource) {
+            MarkerSource ms = (MarkerSource) component;
+            if (ms.drawLineMarkers(pg)) {
+                return;
+            }
             for (Marker m : ms.getMarkers()) {
                 pg.renderer.identity();
                 try {

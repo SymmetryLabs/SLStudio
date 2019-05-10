@@ -134,6 +134,8 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
     env->SetStaticIntField(cls, fid, ImGuiCol_ButtonHovered);
     fid = env->GetStaticFieldID(cls, "COLOR_WINDOW_BORDER", "I");
     env->SetStaticIntField(cls, fid, ImGuiCol_Border);
+    fid = env->GetStaticFieldID(cls, "COLOR_PLOT_LINES", "I");
+    env->SetStaticIntField(cls, fid, ImGuiCol_PlotLines);
     fid = env->GetStaticFieldID(cls, "COND_ALWAYS", "I");
     env->SetStaticIntField(cls, fid, ImGuiCond_Always);
     fid = env->GetStaticFieldID(cls, "COND_ONCE", "I");

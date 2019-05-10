@@ -2,7 +2,6 @@ package com.symmetrylabs.shows.cubes;
 
 import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.component.GammaExpander;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
@@ -16,6 +15,8 @@ import heronarts.lx.output.OPCConstants;
 import org.jetbrains.annotations.NotNull;
 import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.util.CubeInventory;
+import com.symmetrylabs.color.PerceptualColorScale;
+import com.symmetrylabs.color.Ops8;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -28,6 +29,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     public final boolean isBroadcast;
     public final NetworkDevice networkDevice;
 
+    private final PerceptualColorScale outputScaler;
     private final CubeInventory inventory;
     private DatagramSocket dsocket;
     private DatagramPacket packet;
@@ -50,10 +52,9 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 
     private final LX lx;
     private CubesMappingMode mappingMode;
-    private GammaExpander gammaExpander;
 
-    public CubesController(LX lx, NetworkDevice device, CubeInventory inventory) {
-        this(lx, device, device.ipAddress, null, inventory, false);
+    public CubesController(LX lx, NetworkDevice device, CubeInventory inventory, PerceptualColorScale outputScaler) {
+        this(lx, device, device.ipAddress, null, inventory, false, outputScaler);
     }
 
     public CubesController(LX lx, String _host, String _id) {
@@ -65,10 +66,10 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     }
 
     private CubesController(LX lx, String host, String id, boolean isBroadcast) {
-        this(lx, null, NetworkUtils.toInetAddress(host), id, null, isBroadcast);
+        this(lx, null, NetworkUtils.toInetAddress(host), id, null, isBroadcast, null);
     }
 
-    private CubesController(LX lx, NetworkDevice networkDevice, InetAddress host, String id, CubeInventory inventory, boolean isBroadcast) {
+    private CubesController(LX lx, NetworkDevice networkDevice, InetAddress host, String id, CubeInventory inventory, boolean isBroadcast, PerceptualColorScale outputScaler) {
         super(lx);
 
         this.lx = lx;
@@ -76,6 +77,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         this.host = host;
         this.id = id;
         this.inventory = inventory;
+        this.outputScaler = outputScaler;
         this.isBroadcast = isBroadcast;
 
         if (inventory != null) {
@@ -86,7 +88,6 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         }
 
         mappingMode = CubesMappingMode.getInstance(lx);
-        gammaExpander = GammaExpander.getInstance(lx);
 
         enabled.setValue(true);
     }
@@ -131,6 +132,9 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     }
 
     private void setPixel(int number, int c) {
+        if (outputScaler != null) {
+            c = outputScaler.apply8(c);
+        }
         int index = 4 + number * 3;
         packetData[index++] = LXColor.red(c);
         packetData[index++] = LXColor.green(c);
@@ -139,6 +143,9 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 
     private void setPixel(int number, long c) {
         int index = 4 + number * 6;
+        if (outputScaler != null) {
+            c = outputScaler.apply16(c);
+        }
         int red = Ops16.red(c);
         int green = Ops16.green(c);
         int blue = Ops16.blue(c);
@@ -192,22 +199,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
                 points = new PointsGrouping(cube.getPoints());
             }
         } else {
-            for (CubesModel.Cube c : cubesModel.getCubes()) {
-                if (c instanceof CubesModel.DoubleControllerCube) {
-                    CubesModel.DoubleControllerCube c2 = (CubesModel.DoubleControllerCube) c;
-                    if (c2.controllerIdA != null && c2.controllerIdB != null) {
-                        if (c2.controllerIdA.equals(id)) {
-                            points = c2.getPointsA();
-                        }
-                        if (c2.controllerIdB.equals(id)) {
-                            points = c2.getPointsB();
-                        }
-                    }
-                }
-                else if (c.controllerId != null && c.controllerId.equals(id)) {
-                    points = new PointsGrouping(c.getPoints());
-                }
-            }
+            points = cubesModel.getControllerPoints(id);
         }
 
         // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
@@ -240,9 +232,10 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             int col = (int) ((System.nanoTime() / 1_000_000_000L) % 3L);
             int c = 0;
             switch (col) {
-            case 0: c = 0xFFFF0000; break;
-            case 1: c = 0xFF00FF00; break;
-            case 2: c = 0xFF0000FF; break;
+            /* don't use full-bright colors here, since they bust some of our fixtures. */
+            case 0: c = 0xFF880000; break;
+            case 1: c = 0xFF008800; break;
+            case 2: c = 0xFF000088; break;
             }
             initPacketData(numPixels, false);
             for (int i = 0; i < numPixels; i++) {

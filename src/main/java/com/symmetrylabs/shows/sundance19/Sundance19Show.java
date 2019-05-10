@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
- 
+
 public class Sundance19Show extends CubesShow implements HasWorkspace {
     public static final String SHOW_NAME = "sundance19";
 
@@ -405,8 +405,7 @@ public class Sundance19Show extends CubesShow implements HasWorkspace {
                 float y = config.yValues[i];
                 CubesModel.DoubleControllerCube cube =
                     new CubesModel.DoubleControllerCube(
-                        config.ids[i][0], config.ids[i][1],
-                        x, y, z, xRot, yRot, zRot, globalTransform);
+                        config.ids[i][0], x, y, z, xRot, yRot, zRot, globalTransform);
                 cubes.add(cube);
                 allCubes.add(cube);
             }
@@ -419,7 +418,7 @@ public class Sundance19Show extends CubesShow implements HasWorkspace {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        return new CubesModel(towers, allCubesArr);
+        return new CubesModel(towers, allCubesArr, cubeInventory, mapping);
     }
 
     @Override
@@ -430,5 +429,10 @@ public class Sundance19Show extends CubesShow implements HasWorkspace {
     @Override
     public Workspace getWorkspace() {
         return workspace;
+    }
+
+    @Override
+    public String getShowName() {
+        return SHOW_NAME;
     }
 }

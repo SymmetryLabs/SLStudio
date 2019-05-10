@@ -500,7 +500,7 @@ public class SummerStageShow extends CubesShow {
                     String idA = config.ids[i][0];
                     String idB = config.ids[i][1];
                     float y = config.yValues[i];
-                    CubesModel.DoubleControllerCube cube = new CubesModel.DoubleControllerCube(idA, idB, x, y, z, rX, rY, rZ, globalTransform);
+                    CubesModel.DoubleControllerCube cube = new CubesModel.DoubleControllerCube(idA, x, y, z, rX, rY, rZ, globalTransform);
                     cubes.add(cube);
                     allCubes.add(cube);
                 }
@@ -514,7 +514,7 @@ public class SummerStageShow extends CubesShow {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        CubesModel model = new CubesModel(towers, allCubesArr);
+        CubesModel model = new CubesModel(towers, allCubesArr, cubeInventory, mapping);
         model.setTopologyTolerances(6, 6, 8);
         return model;
     }
@@ -523,5 +523,10 @@ public class SummerStageShow extends CubesShow {
         UI2dScrollContext utility = ui.rightPane.utility;
         new UICubesOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UICubesMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
+    }
+
+    @Override
+    public String getShowName() {
+        return "summerstage";
     }
 }

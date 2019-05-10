@@ -201,7 +201,7 @@ public static final String SHOW_NAME = "penfoldswine";
             float zRot = config.zRot;
             CubesModel.Cube.Type type = config.type;
 
-            CubesModel.DoubleControllerCube cube = new CubesModel.DoubleControllerCube(config.ids[0], config.ids[1], x, y, z, xRot, yRot, zRot, globalTransform);
+            CubesModel.DoubleControllerCube cube = new CubesModel.DoubleControllerCube(config.ids[0], x, y, z, xRot, yRot, zRot, globalTransform);
             cubes.add(cube);
             allCubes.add(cube);
 
@@ -214,7 +214,7 @@ public static final String SHOW_NAME = "penfoldswine";
             allCubesArr[i] = allCubes.get(i);
         }
 
-        return new CubesModel(towers, allCubesArr);
+        return new CubesModel(towers, allCubesArr, cubeInventory, mapping);
     }
 
     @Override
@@ -228,5 +228,10 @@ public static final String SHOW_NAME = "penfoldswine";
     @Override
     public Workspace getWorkspace() {
         return workspace;
+    }
+
+    @Override
+    public String getShowName() {
+        return SHOW_NAME;
     }
 }
