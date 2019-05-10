@@ -131,6 +131,7 @@ compileTestKotlin {
 
 test {
     testLogging {
+        events "passed", "failed", "skipped"
         showStandardStreams = true
         exceptionFormat = "full"
     }
