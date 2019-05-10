@@ -62,9 +62,10 @@ public class PerceptualColorScale {
                allowed to have in our output. We then map all input colors to output
                colors by applying that lightness scale to the perceptual color.
 
-               Since sRGB is only defined on 8-bit values, we only have 256 potential
-               coefficients. We just iterate through them and find the highest coefficient
-               that gives a gray whose output power is less than our target power.
+               Since we're looking for a scaling that gives us a given power on a
+               perceptual-white, there's only 65536 values that we could have, even with
+               16-bit color (since there are only 64K grays available to us). That's
+               totally feasible to just loop through to find the best one.
             */
             perceptualScale = 1.0;
             for (int gelem = 1; gelem < 65536; gelem++) {
