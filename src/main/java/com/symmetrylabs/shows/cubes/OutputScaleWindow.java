@@ -4,6 +4,7 @@ import heronarts.lx.LX;
 import com.symmetrylabs.slstudio.ui.v2.CloseableWindow;
 import com.symmetrylabs.color.PerceptualColorScale;
 import com.symmetrylabs.slstudio.ui.v2.UI;
+import com.symmetrylabs.color.Ops8;
 
 
 public class OutputScaleWindow extends CloseableWindow {
@@ -56,6 +57,8 @@ public class OutputScaleWindow extends CloseableWindow {
         UI.popColor(3);
 
         testColor = UI.colorPicker("test color", testColor);
-        UI.colorPicker("result", scale.apply8(testColor));
+        int resColor = scale.apply8(testColor);
+        UI.colorPicker("result", resColor);
+        UI.floatBox("result power", (float) Ops8.power(resColor));
     }
 }
