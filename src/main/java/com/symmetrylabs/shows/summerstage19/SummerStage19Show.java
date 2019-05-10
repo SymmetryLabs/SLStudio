@@ -387,6 +387,7 @@ public class SummerStage19Show extends CubesShow {
 
         /* TODO(jake): set actual brightness cap here! */
         outputScaler.setTargetLinearScale(1.0);
+        outputScaler.setUseMonoGamma(false);
     }
 
     @Override
