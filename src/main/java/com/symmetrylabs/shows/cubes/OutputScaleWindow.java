@@ -14,6 +14,7 @@ public class OutputScaleWindow extends CloseableWindow {
     protected final float[] lutGreen = new float[256];
     protected final float[] lutBlue = new float[256];
     protected double lutsGeneratedAt = 0;
+    protected int testColor = 0xFFFFFFFF;
 
     public OutputScaleWindow(LX lx, PerceptualColorScale scale) {
         super("Scaling");
@@ -49,5 +50,8 @@ public class OutputScaleWindow extends CloseableWindow {
         UI.pushColor(UI.COLOR_PLOT_LINES, 0x0000FF);
         UI.plot("blue LUT", lutBlue, 0, 1, 100);
         UI.popColor(3);
+
+        testColor = UI.colorPicker("test color", testColor);
+        UI.colorPicker("result", scale.apply8(testColor));
     }
 }
