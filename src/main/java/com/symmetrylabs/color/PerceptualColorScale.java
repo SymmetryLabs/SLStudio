@@ -48,6 +48,14 @@ public class PerceptualColorScale {
     protected void buildLuts() {
         lutLock.writeLock().lock();
         try {
+            /* Special-case scale == 1.0, so that we get a proper straight pass-through. */
+            if (Math.abs(targetLinearScale - 1.0) < 1e-4) {
+                for (int channel = 0; channel < 3; channel++) {
+                    for (int i = 0; i < 256; i++) lut8[channel][i] = i;
+                    for (int i = 0; i < 65536; i++) lut16[channel][i] = i;
+                }
+                return;
+            }
             /* We treat the target scale as a target luminance value, and then
                determine the lightness value associated with that luminance. We take
                this as the "lightness scale": the maximum lightness that we're
