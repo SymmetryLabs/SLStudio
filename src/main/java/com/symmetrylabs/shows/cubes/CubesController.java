@@ -15,6 +15,8 @@ import heronarts.lx.output.OPCConstants;
 import org.jetbrains.annotations.NotNull;
 import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.util.CubeInventory;
+import com.symmetrylabs.color.PerceptualColorScale;
+import com.symmetrylabs.color.Ops8;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -27,6 +29,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     public final boolean isBroadcast;
     public final NetworkDevice networkDevice;
 
+    private final PerceptualColorScale outputScaler;
     private final CubeInventory inventory;
     private DatagramSocket dsocket;
     private DatagramPacket packet;
@@ -50,8 +53,8 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     private final LX lx;
     private CubesMappingMode mappingMode;
 
-    public CubesController(LX lx, NetworkDevice device, CubeInventory inventory) {
-        this(lx, device, device.ipAddress, null, inventory, false);
+    public CubesController(LX lx, NetworkDevice device, CubeInventory inventory, PerceptualColorScale outputScaler) {
+        this(lx, device, device.ipAddress, null, inventory, false, outputScaler);
     }
 
     public CubesController(LX lx, String _host, String _id) {
@@ -63,10 +66,10 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     }
 
     private CubesController(LX lx, String host, String id, boolean isBroadcast) {
-        this(lx, null, NetworkUtils.toInetAddress(host), id, null, isBroadcast);
+        this(lx, null, NetworkUtils.toInetAddress(host), id, null, isBroadcast, null);
     }
 
-    private CubesController(LX lx, NetworkDevice networkDevice, InetAddress host, String id, CubeInventory inventory, boolean isBroadcast) {
+    private CubesController(LX lx, NetworkDevice networkDevice, InetAddress host, String id, CubeInventory inventory, boolean isBroadcast, PerceptualColorScale outputScaler) {
         super(lx);
 
         this.lx = lx;
@@ -74,6 +77,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         this.host = host;
         this.id = id;
         this.inventory = inventory;
+        this.outputScaler = outputScaler;
         this.isBroadcast = isBroadcast;
 
         if (inventory != null) {
@@ -128,6 +132,9 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     }
 
     private void setPixel(int number, int c) {
+        if (outputScaler != null) {
+            c = outputScaler.apply8(c);
+        }
         int index = 4 + number * 3;
         packetData[index++] = LXColor.red(c);
         packetData[index++] = LXColor.green(c);
@@ -136,6 +143,9 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 
     private void setPixel(int number, long c) {
         int index = 4 + number * 6;
+        if (outputScaler != null) {
+            c = outputScaler.apply16(c);
+        }
         int red = Ops16.red(c);
         int green = Ops16.green(c);
         int blue = Ops16.blue(c);

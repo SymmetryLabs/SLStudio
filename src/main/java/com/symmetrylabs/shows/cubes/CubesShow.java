@@ -113,7 +113,7 @@ public abstract class CubesShow implements Show {
 
         networkMonitor.opcDeviceList.addListener(new SetListener<NetworkDevice>() {
             public void onItemAdded(NetworkDevice device) {
-                final CubesController controller = new CubesController(lx, device, cubeInventory);
+                final CubesController controller = new CubesController(lx, device, cubeInventory, outputScaler);
                 controller.set16BitColorEnabled(device.featureIds.contains("rgb16"));
                 controllers.add(controller);
                 dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
