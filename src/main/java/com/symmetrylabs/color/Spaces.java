@@ -1,5 +1,8 @@
 package com.symmetrylabs.color;
 
+import org.apache.commons.math3.util.FastMath;
+
+
 /** Conversions between color spaces. */
 public class Spaces {
     private Spaces() {
@@ -87,6 +90,31 @@ public class Spaces {
         // derivative at the crossover point where t = 6 (l = 0.08).
         double t = l * 25 + 4;  // t ranges from 4 to 29
         return (t > 6 ? t * t * t : 3*(t - 4) * 6 * 6) / (29 * 29 * 29);
+    }
+
+    /**
+     * Converts a CIEXYZ linear luminance value (Y, in [0, 1]) to a CIELAB
+     * perceived lightness value (L, also ranging from 0 to 1)
+     *
+     * Tuned to guarantee that:
+     *     {@code f(0.0)} gives 0.0 exactly
+     *     {@code f(1.0)} gives 1.0 exactly
+     *     {@code 0.0 <= f(l) <= 1.0} for all double-precision values {@code 0.0 <= l <= 1.0}
+     *     {@code f(l2) >= f(l1)} for all double-precision values {@code l1} and {@code l2 > l1}
+     */
+    public static double cie_luminance_to_lightness(double Y) {
+        // See https://en.wikipedia.org/wiki/CIELAB_color_space#Forward_transformation
+        // The values of t and delta have been scaled up by 29 to avoid
+        // floating-point error.  This formulation is designed to yield
+        // exactly 0.0 and 1.0 for inputs of 0.0 and 1.0, and to make it
+        // easy to see that both parts have the same value and same first
+        // derivative at the crossover point where t = 6 (l = 0.08).
+        final double delta = 6.0 / 29.0;
+        final double f = (29.0 * 29.0 * 29.0) * Y > (6.0 * 6.0 * 6.0)
+            ? FastMath.pow(Y, 1.0 / 3.0)
+            : (Y / (3 * delta * delta)) + (4.0 / 29.0);
+        final double L = 1.16 * f - 0.16;
+        return L;
     }
 
     public static long rgb8ToRgb16(int rgb8) {
