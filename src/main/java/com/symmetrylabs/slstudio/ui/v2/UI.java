@@ -211,6 +211,11 @@ public class UI {
      * @see pushColor(int, int)
      */
     public static int COLOR_WINDOW_BORDER;
+    /**
+     * Sets the color of lines in plot widgets
+     * @see pushColor(int, int)
+     */
+    public static int COLOR_PLOT_LINES;
 
     /**
      * Makes {@link isWindowFocused(int)} return true if a child window of this window is focused.

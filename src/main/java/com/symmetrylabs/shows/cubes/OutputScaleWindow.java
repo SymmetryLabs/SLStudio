@@ -42,6 +42,12 @@ public class OutputScaleWindow extends CloseableWindow {
         if (Math.abs(targetScale - currentTarget) > 0.0001) {
             scale.setTargetLinearScale(targetScale);
         }
-        UI.plot("LUT", lutBlue, 0, 1, 150);
+        UI.pushColor(UI.COLOR_PLOT_LINES, 0xFF0000);
+        UI.plot("red LUT", lutRed, 0, 1, 100);
+        UI.pushColor(UI.COLOR_PLOT_LINES, 0x00FF00);
+        UI.plot("green LUT", lutGreen, 0, 1, 100);
+        UI.pushColor(UI.COLOR_PLOT_LINES, 0x0000FF);
+        UI.plot("blue LUT", lutBlue, 0, 1, 100);
+        UI.popColor(3);
     }
 }
