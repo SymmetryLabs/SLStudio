@@ -83,8 +83,10 @@ public class CubesMappingMode {
             CubeModelControllerMapping.PhysIdAssignment map = cubesModel.mapping.lookUpModel(cube.modelId);
             if (map != null) {
                 CubeInventory.PhysicalCube pc = cubesModel.inventory.lookUpByPhysId(map.physicalId);
-                for (String ctrl : pc.getControllerIds()) {
-                    fixturesMappedButNotOnNetwork.add(ctrl);
+                if (pc != null) {
+                    for (String ctrl : pc.getControllerIds()) {
+                        fixturesMappedButNotOnNetwork.add(ctrl);
+                    }
                 }
             }
         }
