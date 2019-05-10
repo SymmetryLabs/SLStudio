@@ -8,6 +8,7 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.transform.LXTransform;
 import heronarts.p3lx.ui.UI2dScrollContext;
+import heronarts.lx.LX;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -379,10 +380,13 @@ public class SummerStage19Show extends CubesShow {
         return model;
     }
 
-    public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
-        UI2dScrollContext utility = ui.rightPane.utility;
-        new UICubesOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
-        new UICubesMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
+
+    @Override
+    public void setupLx(LX lx) {
+        super.setupLx(lx);
+
+        /* TODO(jake): set actual brightness cap here! */
+        outputScaler.setTargetLinearScale(1.0);
     }
 
     @Override
