@@ -210,7 +210,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
             MEDIUM        (18,        60,       23),
             LARGE         (24,        30,       15),
             LARGE_DOUBLE  (24,        60,       30),
-            HD                        (24,        60,       28);
+            HD            (24,        60,       28);
 
 
             public final float EDGE_WIDTH;
@@ -242,6 +242,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         };
 
         public static final Type CUBE_TYPE_WITH_MOST_PIXELS = Type.LARGE_DOUBLE;
+        public static final int MAX_PIXELS_PER_CONTROLLER = Type.LARGE.POINTS_PER_CUBE;
 
         public final static int FACES_PER_CUBE = 4;
 
