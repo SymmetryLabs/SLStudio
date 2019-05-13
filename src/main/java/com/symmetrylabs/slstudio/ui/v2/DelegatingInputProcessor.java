@@ -7,9 +7,11 @@ import org.lwjgl.glfw.GLFW;
 
 public class DelegatingInputProcessor implements InputProcessor {
     private final InputProcessor delegate;
+    private final ModelPicker picker;
 
-    public DelegatingInputProcessor(InputProcessor delegate) {
+    public DelegatingInputProcessor(InputProcessor delegate, ModelPicker picker) {
         this.delegate = delegate;
+        this.picker = picker;
     }
 
     @Override
@@ -44,6 +46,7 @@ public class DelegatingInputProcessor implements InputProcessor {
         if (UI.wantCaptureMouse()) {
             return true;
         }
+        picker.mouseMoved(x, y);
         return delegate.mouseMoved(x, y);
     }
 

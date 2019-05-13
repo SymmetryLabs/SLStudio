@@ -2,6 +2,8 @@
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
+import org.apache.commons.collections4.IteratorUtils;
 
 import org.apache.commons.math3.util.FastMath;
 
@@ -23,23 +25,40 @@ public class SLModel extends LXModel {
     protected PointBatches pointBatches;
 
     public float[] pointsXYZ;
+    public final String modelId;
 
     public SLModel() {
         super();
+        modelId = null;
     }
 
     public SLModel(List<LXPoint> points) {
-        super(points);
-        setupPointsArray();
+        this(null, points);
     }
 
     public SLModel(LXFixture fixture) {
-        super(fixture);
-        setupPointsArray();
+        this(null, fixture);
     }
 
     public SLModel(LXFixture[] fixtures) {
+        this(null, fixtures);
+    }
+
+    public SLModel(String modelId, List<LXPoint> points) {
+        super(points);
+        this.modelId = modelId;
+        setupPointsArray();
+    }
+
+    public SLModel(String modelId, LXFixture fixture) {
+        super(fixture);
+        this.modelId = modelId;
+        setupPointsArray();
+    }
+
+    public SLModel(String modelId, LXFixture[] fixtures) {
         super(fixtures);
+        this.modelId = modelId;
         setupPointsArray();
     }
 
@@ -80,6 +99,10 @@ public class SLModel extends LXModel {
         }
 
         pointBatches.forEachPoint(consumer);
+    }
+
+    public /* abstract */ Iterator<? extends LXModel> getChildren() {
+        return IteratorUtils.emptyIterator();
     }
 
     public static class PointBatches {

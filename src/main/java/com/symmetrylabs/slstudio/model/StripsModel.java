@@ -1,6 +1,8 @@
 package com.symmetrylabs.slstudio.model;
 
 import com.symmetrylabs.slstudio.ApplicationState;
+import heronarts.lx.model.LXModel;
+import java.util.Iterator;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,17 +36,29 @@ public class StripsModel<T extends Strip> extends SLModel {
     }
 
     public StripsModel(List<T> strips) {
-        super(new Fixture<T>(strips));
+        this(null, strips);
+    }
+
+    protected StripsModel(LXFixture fixture) {
+        this(null, fixture);
+    }
+
+    protected StripsModel(LXFixture[] fixtures) {
+        this(null, fixtures);
+    }
+
+    public StripsModel(String modelId, List<T> strips) {
+        super(modelId, new Fixture<T>(strips));
 
         this.strips.addAll(strips);
     }
 
-    protected StripsModel(LXFixture fixture) {
-        super(fixture);
+    protected StripsModel(String modelId, LXFixture fixture) {
+        super(modelId, fixture);
     }
 
-    protected StripsModel(LXFixture[] fixtures) {
-        super(fixtures);
+    protected StripsModel(String modelId, LXFixture[] fixtures) {
+        super(modelId, fixtures);
     }
 
     public StripsTopology getTopology() {
@@ -67,6 +81,11 @@ public class StripsModel<T extends Strip> extends SLModel {
 
     public List<T> getStrips() {
         return stripsUnmodifiable;
+    }
+
+    @Override
+    public Iterator<? extends LXModel> getChildren() {
+        return getStrips().iterator();
     }
 
     public Strip getStripById(String id) {

@@ -32,7 +32,7 @@ public class TestTowers extends SLPattern<CubesModel> {
         this.selectedTower = new DiscreteParameter("selectedTower", 0, 0, model.getTowers().size()-1);
         List<String> towerNames = new ArrayList<>();
         for (CubesModel.Tower tower : model.getTowers()) {
-            towerNames.add(tower.id);
+            towerNames.add(tower.modelId);
         }
         String[] paramOptions = new String[towerNames.size()];
         towerNames.toArray(paramOptions);

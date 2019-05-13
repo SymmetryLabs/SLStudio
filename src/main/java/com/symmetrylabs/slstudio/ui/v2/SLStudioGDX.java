@@ -101,13 +101,14 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         renderer.add(gnomon);
         MarkerRenderable markers = new MarkerRenderable(lx);
         renderer.add(markers);
+        ModelPicker picker = new ModelPicker(lx.model, renderer.cam);
 
         camController = new SLCamera.InputController(renderer.cam);
         camController.setTargetLH(model.cx, model.cy, model.cz);
         camController.translateUnits = model.xRange;
         camController.scrollFactor *= -0.2f;
 
-        Gdx.input.setInputProcessor(new DelegatingInputProcessor(camController));
+        Gdx.input.setInputProcessor(new DelegatingInputProcessor(camController, picker));
 
         loadLxComponents();
 

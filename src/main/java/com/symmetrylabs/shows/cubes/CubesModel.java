@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Iterator;
 
 import static com.symmetrylabs.slstudio.output.CubeModelControllerMapping.PhysIdAssignment;
 import static com.symmetrylabs.util.CubeInventory.PhysicalCube;
@@ -84,6 +85,11 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         return facesUnmodifiable;
     }
 
+    @Override
+    public Iterator<? extends LXModel> getChildren() {
+        return towers.iterator();
+    }
+
     private static class Fixture extends LXAbstractFixture {
         private Fixture(Cube[] cubeArr) {
             for (Cube cube : cubeArr) {
@@ -126,12 +132,6 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
      * Model of a set of cubes stacked in a tower
      */
     public static class Tower extends StripsModel<CubesStrip> {
-
-        /**
-         * Tower id
-         */
-        public final String id;
-
         protected final List<Cube> cubes = new ArrayList<>();
         protected final List<Face> faces = new ArrayList<>();
 
@@ -144,15 +144,18 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
          * @param cubes Array of cubes
          */
         public Tower(String id, List<Cube> cubes) {
-            super(cubes.toArray(new Cube[0]));
-
-            this.id = id;
+            super(id, cubes.toArray(new Cube[0]));
 
             for (Cube cube : cubes) {
                 this.cubes.add(cube);
                 this.faces.addAll(cube.getFaces());
                 this.strips.addAll(cube.getStrips());
             }
+        }
+
+        @Override
+        public Iterator<? extends LXModel> getChildren() {
+            return cubes.iterator();
         }
 
         public List<Cube> getCubes() {
@@ -252,8 +255,6 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
 
         public final Type type;
 
-        public final String modelId;
-
         protected final List<Face> faces = new ArrayList<>();
         private final List<Face> facesUnmodifiable = Collections.unmodifiableList(faces);
 
@@ -288,12 +289,11 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         public float rz;
 
         public Cube(String modelId, float x, float y, float z, float rx, float ry, float rz, LXTransform t, Type type) {
-            super(new Fixture(type));
+            super(modelId, new Fixture(type));
 
             Fixture fixture = (Fixture) this.fixtures.get(0);
 
             this.type = type;
-            this.modelId = modelId;
 
             while (rx < 0) rx += 360;
             while (ry < 0) ry += 360;
