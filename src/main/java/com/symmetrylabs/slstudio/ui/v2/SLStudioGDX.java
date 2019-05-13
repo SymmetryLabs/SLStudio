@@ -112,12 +112,13 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
         loadLxComponents();
 
-        viewController = new ViewController(lx, camController, renderer.cam, gnomon, markers);
+        viewController = new ViewController(lx, camController, renderer.cam, gnomon, markers, picker);
 
         lookEditor = new LookEditor(lx);
         /* we want WindowManager to handle all of the drawing so it can manage the interaction between
            the UI running and the engine running, so we put it in charge of drawing the look editor */
         WindowManager.addTransient(lookEditor);
+        WindowManager.addTransient(picker);
 
         /* The main menu isn't really transient but we don't want it to appear in
            the Window menu and it doesn't have a close button, so there's no risk of

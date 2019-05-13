@@ -13,7 +13,7 @@ import com.google.common.base.Preconditions;
 import java.util.Comparator;
 
 
-public class ModelPicker {
+public class ModelPicker implements Window {
     private static final float MIN_PICK_WORLD_DIST = 2;
 
     public static final class PickPoint {
@@ -37,6 +37,7 @@ public class ModelPicker {
     private final LXModel model;
     private final ArrayList<PickPoint> pickPoints;
     private PickPoint currentHover = null;
+    public boolean enabled = true;
 
     public ModelPicker(LXModel model, SLCamera cam) {
         this.cam = cam;
@@ -46,6 +47,9 @@ public class ModelPicker {
     }
 
     public PickPoint getHovered() {
+        if (!enabled) {
+            return null;
+        }
         return currentHover;
     }
 
@@ -100,8 +104,11 @@ public class ModelPicker {
     }
 
     public void mouseMoved(int x, int y) {
-        Ray ray = cam.getPickRay(x, y);
+        if (!enabled) {
+            return;
+        }
 
+        Ray ray = cam.getPickRay(x, y);
         float nearestNormalProjection = 0;
         PickPoint nearest = null;
 
@@ -116,8 +123,17 @@ public class ModelPicker {
             }
         }
         currentHover = nearest;
-        if (nearest != null) {
-            System.out.println(nearest);
+    }
+
+    @Override
+    public void draw() {
+        if (!enabled) {
+            return;
+        }
+        if (currentHover != null) {
+            UI.beginTooltip();
+            UI.text(currentHover.description);
+            UI.endTooltip();
         }
     }
 }

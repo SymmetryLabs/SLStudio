@@ -69,6 +69,7 @@ public class MainMenu implements Window {
             parent.viewController.setOrtho(UI.checkbox("Orthographic projection", parent.viewController.isOrtho()));
             parent.viewController.setGnomonVisible(UI.checkbox("Show gnomon", parent.viewController.isGnomonVisible()));
             parent.viewController.setMarkersVisible(UI.checkbox("Show markers", parent.viewController.isMarkersVisible()));
+            parent.viewController.picker.enabled = UI.checkbox("Show point tooltips", parent.viewController.picker.enabled);
             UI.endMenu();
         }
 

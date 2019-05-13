@@ -11,6 +11,7 @@ public class ViewController {
     private final SLCamera camera;
     private final GnomonRenderable gnomon;
     private final MarkerRenderable markers;
+    public final ModelPicker picker;
     private final LX lx;
 
     private static final Vector3 ISO_VEC = new Vector3(0, 0, -1).rotateRad((float) Math.asin(1 / Math.sqrt(3)), 1, 0, 0);
@@ -42,12 +43,13 @@ public class ViewController {
         }
     }
 
-    public ViewController(LX lx, SLCamera.InputController cameraCtrl, SLCamera camera, GnomonRenderable gnomon, MarkerRenderable markers) {
+    public ViewController(LX lx, SLCamera.InputController cameraCtrl, SLCamera camera, GnomonRenderable gnomon, MarkerRenderable markers, ModelPicker picker) {
         this.lx = lx;
         this.cameraCtrl = cameraCtrl;
         this.camera = camera;
         this.gnomon = gnomon;
         this.markers = markers;
+        this.picker = picker;
         TextureManager.load("icons/back.png");
         TextureManager.load("icons/down.png");
         TextureManager.load("icons/front.png");
