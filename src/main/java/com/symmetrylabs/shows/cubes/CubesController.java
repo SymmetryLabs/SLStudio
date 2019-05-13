@@ -93,7 +93,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     }
 
     public String getMacAddress() {
-        return networkDevice.deviceId;
+        return networkDevice == null ? null : networkDevice.deviceId;
     }
 
     @Override
