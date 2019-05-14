@@ -17,16 +17,20 @@ public class ParameterUI {
     };
 
     public static ParameterUI getDefault(LX lx) {
-        return new ParameterUI(lx, WidgetType.SLIDER);
+        return new ParameterUI(
+            lx,
+            WidgetType.SLIDER,
+            true);
     }
 
     private final LX lx;
     WidgetType defaultBoundedWidget;
     protected boolean showLabel;
 
-    protected ParameterUI(LX lx, WidgetType defaultBoundedWidget) {
+    protected ParameterUI(LX lx, WidgetType defaultBoundedWidget, boolean showLabel) {
         this.lx = lx;
         this.defaultBoundedWidget = defaultBoundedWidget;
+        this.showLabel = showLabel;
     }
 
     public ParameterUI setDefaultBoundedWidget(WidgetType t) {
@@ -66,7 +70,7 @@ public class ParameterUI {
         final float res =
             p instanceof CompoundParameter
             ? compoundKnob((CompoundParameter) p)
-            : UI.knobFloat(getID(p), p.getValuef(), start);
+            : UI.knobFloat(getID(p), p.getValuef(), start, 0);
 
         if (UI.beginDragDropSource()) {
             UI.setDragDropPayload("SL.BoundedParameter", p);
@@ -112,7 +116,7 @@ public class ParameterUI {
             colors[i] = modulation.color.getColor();
         }
         return UI.knobModulatedFloat(
-            getID(cp), (float) cp.getBaseValue(), (float) cp.getBaseNormalized(), cp.getNormalizedf(), N, mins, maxs, colors);
+            getID(cp), (float) cp.getBaseValue(), (float) cp.getBaseNormalized(), cp.getNormalizedf(), N, mins, maxs, colors, 0);
     }
 
     public void draw(DiscreteParameter p) {

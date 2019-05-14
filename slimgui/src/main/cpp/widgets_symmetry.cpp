@@ -34,6 +34,11 @@ ImVec4 RGB(int v) {
     return RGBA((double) ((v >> 16) & 0xFF), (double) ((v >> 8) & 0xFF), (double) (v & 0xFF), (double) a);
 }
 
+ImVec4 ARGB(int v) {
+    int a = (v >> 24) & 0xFF;
+    return RGBA((double) ((v >> 16) & 0xFF), (double) ((v >> 8) & 0xFF), (double) (v & 0xFF), (double) a);
+}
+
 ImVec4 RGB(double r, double g, double b) {
     return RGBA(r, g, b, 1.0);
 }
@@ -52,7 +57,7 @@ static const ImVec4 KnobValueActiveColor  = RGB(0x00A5DB);
 static const ImVec4 KnobModulatorColor    = RGB(0x930FA5);
 
 bool Knob(const char *label, float *v, float vdisplay, float tmod, int mod_count,
-          const float *mod_min, const float *mod_max, const jint *mod_colors) {
+          const float *mod_min, const float *mod_max, const jint *mod_colors, jint dot_color) {
     auto window = GetCurrentWindow();
     if (window->SkipItems)
         return false;
@@ -142,6 +147,10 @@ bool Knob(const char *label, float *v, float vdisplay, float tmod, int mod_count
             rad -= style.KnobModThick;
         }
     }
+
+    window->DrawList->PathClear();
+    window->DrawList->PathArcTo(center, style.KnobRadius - style.KnobThick, 0, 2 * M_PI, 30);
+    window->DrawList->PathFillConvex(GetColorU32(ARGB(dot_color)));
 
     window->DrawList->PathClear();
     window->DrawList->PathArcTo(center, rad, a_lo, a_mod, 40);

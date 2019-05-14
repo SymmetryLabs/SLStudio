@@ -574,21 +574,21 @@ JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_floatBox(JNIEnv
 }
 
 JNIEXPORT jfloat JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_knobFloat(JNIEnv *env, jclass cls, jstring jlabel, jfloat vf, jfloat vn) {
+Java_com_symmetrylabs_slstudio_ui_v2_UI_knobFloat(JNIEnv *env, jclass cls, jstring jlabel, jfloat vf, jfloat vn, jint dotColor) {
     JniString label(env, jlabel);
-    Knob(label, &vn, vf, vn, 0, nullptr, nullptr, nullptr);
+    Knob(label, &vn, vf, vn, 0, nullptr, nullptr, nullptr, dotColor);
     return vn;
 }
 
 JNIEXPORT jfloat JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_knobModulatedFloat(
     JNIEnv *env, jclass cls, jstring jlabel, jfloat vf, jfloat vn,
-    jfloat modulated, jint modCount, jfloatArray jmins, jfloatArray jmaxs, jintArray jcolors) {
+    jfloat modulated, jint modCount, jfloatArray jmins, jfloatArray jmaxs, jintArray jcolors, jint dotColor) {
     JniString label(env, jlabel);
     JniFloatArray mins(env, jmins);
     JniFloatArray maxs(env, jmaxs);
     JniIntArray colors(env, jcolors);
-    Knob(label, &vn, vf, modulated, modCount, mins, maxs, colors);
+    Knob(label, &vn, vf, modulated, modCount, mins, maxs, colors, dotColor);
     return vn;
 }
 
