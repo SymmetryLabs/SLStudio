@@ -168,9 +168,7 @@ public class ParameterUI {
 
         if (isMapping && UI.isItemClicked()) {
             mapping.setControlTarget(p);
-        }
-
-        if (!isMapping && start != res) {
+        } else if (!isMapping && start != res) {
             final float fres = res;
             lx.engine.addTask(() -> p.setNormalized(fres));
         }
@@ -207,17 +205,22 @@ public class ParameterUI {
 
     public void draw(DiscreteParameter p) {
         String[] options = p.getOptions();
+        boolean isMapping = isMapping();
         if (options == null) {
             int start = p.getValuei();
             final int res = UI.sliderInt(
                 getID(p), start, p.getMinValue(), p.getMaxValue() - 1);
-            if (!isMapping() && start != res) {
+            if (isMapping && UI.isItemClicked()) {
+                mapping.setControlTarget(p);
+            } else if (!isMapping && start != res) {
                 lx.engine.addTask(() -> p.setValue(res));
             }
         } else {
             int start = p.getValuei();
             int res = UI.combo(getID(p), start, options);
-            if (!isMapping() && start != res) {
+            if (isMapping && UI.isItemClicked()) {
+                mapping.setControlTarget(p);
+            } else if (!isMapping && start != res) {
                 lx.engine.addTask(() -> p.setValue(res));
             }
         }
@@ -238,7 +241,10 @@ public class ParameterUI {
     public boolean toggle(BooleanParameter p, boolean important, float w) {
         final boolean start = p.getValueb();
         final boolean res = toggle(getID(p), start, important, w);
-        if (!isMapping() && start != res) {
+        final boolean isMapping = isMapping();
+        if (isMapping && UI.isItemClicked()) {
+            mapping.setControlTarget(p);
+        } else if (!isMapping && start != res) {
             lx.engine.addTask(() -> p.setValue(res));
         }
         return res;
@@ -247,7 +253,10 @@ public class ParameterUI {
     public boolean toggle(String label, BooleanParameter p, boolean important, float w) {
         final boolean start = p.getValueb();
         final boolean res = toggle(label, start, important, w);
-        if (!isMapping() && start != res) {
+        final boolean isMapping = isMapping();
+        if (isMapping && UI.isItemClicked()) {
+            mapping.setControlTarget(p);
+        } else if (!isMapping && start != res) {
             lx.engine.addTask(() -> p.setValue(res));
         }
         return res;
@@ -273,7 +282,10 @@ public class ParameterUI {
             UI.button(getID(p));
             res = UI.isItemActive();
         }
-        if (!isMapping() && start != res) {
+        final boolean isMapping = isMapping();
+        if (isMapping && UI.isItemClicked()) {
+            mapping.setControlTarget(p);
+        } else if (!isMapping() && start != res) {
             lx.engine.addTask(() -> p.setValue(res));
         }
     }
