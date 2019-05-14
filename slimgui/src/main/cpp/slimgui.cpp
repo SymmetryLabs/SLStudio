@@ -182,6 +182,9 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
     return 1;
 }
 
+static bool fontRangesReady = false;
+static ImVector<ImWchar> fontRanges;
+
 JNIEXPORT jlong JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_addFont(JNIEnv *env, jclass, jstring jname, jobject jbuf, jfloat fsize) {
     JniString name(env, jname);
     ImFontConfig fc;
@@ -191,9 +194,21 @@ JNIEXPORT jlong JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_addFont(JNIEnv *
     jlong size = env->GetDirectBufferCapacity(jbuf);
     void *data = malloc(size);
     memcpy(data, jdata, size);
+
+    if (!fontRangesReady) {
+        ImFontGlyphRangesBuilder builder;
+        builder.AddRanges(ImGui::GetIO().Fonts->GetGlyphRangesDefault());
+        /* various bullet characters */
+        builder.AddChar(0x2022);
+        builder.AddChar(0x25CF);
+        builder.AddChar(0x2B24);
+        builder.BuildRanges(&fontRanges);
+        fontRangesReady = true;
+    }
+
     return static_cast<jlong>(
         reinterpret_cast<intptr_t>(
-            ImGui::GetIO().Fonts->AddFontFromMemoryTTF(data, size, fsize, &fc)));
+            ImGui::GetIO().Fonts->AddFontFromMemoryTTF(data, size, fsize, &fc, fontRanges.Data)));
 }
 
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_pushFont(JNIEnv *, jclass, jlong fontHandle) {

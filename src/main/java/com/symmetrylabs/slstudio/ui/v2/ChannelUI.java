@@ -102,6 +102,8 @@ public class ChannelUI {
         pui.draw(chan.patternBlendMode);
         pui.draw(chan.midiChannel);
 
+        pui.push().allowMapping(true);
+
         drawWarps(lx, chanName, chan, pui);
 
         int active = chan.getActivePatternIndex();
@@ -157,5 +159,6 @@ public class ChannelUI {
         UI.spacing(5, 5);
         drawEffects(lx, chanName, chan, pui);
         drawWepPopup(lx, chan, wepUi);
+        pui.pop();
     }
 }

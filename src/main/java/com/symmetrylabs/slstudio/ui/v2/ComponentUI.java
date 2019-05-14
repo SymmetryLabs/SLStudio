@@ -60,7 +60,7 @@ public class ComponentUI {
 
     public void draw() {
         boolean needSep = false;
-        if (pui.defaultBoundedWidget == ParameterUI.WidgetType.KNOB) {
+        if (pui.getDefaultBoundedWidget() == ParameterUI.WidgetType.KNOB) {
             for (int i = 0; i < knobs.size(); i++) {
                 needSep = true;
                 pui.draw(knobs.get(i));

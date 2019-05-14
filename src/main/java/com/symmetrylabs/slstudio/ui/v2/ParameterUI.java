@@ -10,6 +10,8 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.LXComponent;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.LXMappingEngine;
+import java.util.Stack;
+import java.util.LinkedList;
 
 public class ParameterUI {
     public enum WidgetType {
@@ -18,46 +20,114 @@ public class ParameterUI {
     };
 
     public static ParameterUI getDefault(LX lx) {
-        return new ParameterUI(
-            lx,
-            WidgetType.SLIDER,
-            true);
+        return new ParameterUI(lx, new State());
+    }
+
+    protected static class State implements Cloneable {
+        WidgetType defaultBoundedWidget;
+        boolean showLabel;
+        boolean allowMapping;
+
+        public State() {
+            this.defaultBoundedWidget = WidgetType.SLIDER;
+            this.showLabel = true;
+            this.allowMapping = false;
+        }
+
+        @Override
+        public State clone() {
+            try {
+                return (State) super.clone();
+            } catch (CloneNotSupportedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     protected final LX lx;
     protected final LXMappingEngine mapping;
-    WidgetType defaultBoundedWidget;
-    protected boolean showLabel;
+    protected Stack<State> stateStack;
 
-    protected ParameterUI(LX lx, WidgetType defaultBoundedWidget, boolean showLabel) {
+    protected ParameterUI(LX lx, State initial) {
         this.lx = lx;
         this.mapping = lx.engine.mapping;
-        this.defaultBoundedWidget = defaultBoundedWidget;
-        this.showLabel = showLabel;
+        this.stateStack = new Stack<>();
+        stateStack.push(initial);
     }
 
-    public ParameterUI setDefaultBoundedWidget(WidgetType t) {
-        defaultBoundedWidget = t;
+    public ParameterUI push() {
+        stateStack.push(stateStack.peek().clone());
         return this;
     }
 
+    public ParameterUI pop() {
+        if (stateStack.size() > 1) {
+            stateStack.pop();
+        }
+        return this;
+    }
+
+    public ParameterUI setDefaultBoundedWidget(WidgetType t) {
+        stateStack.peek().defaultBoundedWidget = t;
+        return this;
+    }
+
+    WidgetType getDefaultBoundedWidget() {
+        return stateStack.peek().defaultBoundedWidget;
+    }
+
     public ParameterUI showLabel(boolean showLabel) {
-        this.showLabel = showLabel;
+        stateStack.peek().showLabel = showLabel;
+        return this;
+    }
+
+    public ParameterUI allowMapping(boolean allowMapping) {
+        stateStack.peek().allowMapping = allowMapping;
         return this;
     }
 
     public String getID(LXParameter p) {
-        LXComponent parent = p.getComponent();
-        if (parent == null) {
-            return (showLabel ? "" : "##") + p.getLabel();
+        return getID(p, true);
+    }
+
+    protected String getID(LXParameter p, boolean showMappingIndicator) {
+        String visibleLabel;
+        String stableId;
+        String parentId = null;
+
+        visibleLabel = p.getLabel();
+        stableId = visibleLabel;
+
+        if (showMappingIndicator && isMapping()) {
+            if (mapping.getControlTarget() == p) {
+                visibleLabel = visibleLabel + "**";
+            } else {
+                visibleLabel = visibleLabel + " \u25CF";
+            }
         }
-        return String.format(
-            showLabel ? "%s##%d/%s" : "##%s/%d/%s",
-            p.getLabel(), parent.getId(), p.getLabel());
+
+        LXComponent parent = p.getComponent();
+        if (parent != null) {
+            parentId = Integer.toString(parent.getId());
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(visibleLabel);
+        sb.append("###");
+        sb.append(stableId);
+        if (parentId != null) {
+            sb.append("/");
+            sb.append(parentId);
+        }
+        return sb.toString();
+    }
+
+    protected boolean isMapping() {
+        return stateStack.peek().allowMapping && mapping.mode.getEnum() == LXMappingEngine.Mode.MIDI;
     }
 
     public void draw(BoundedParameter p) {
-        draw(p, defaultBoundedWidget);
+        draw(p, stateStack.peek().defaultBoundedWidget);
     }
 
     public void draw(BoundedParameter p, WidgetType wt) {
@@ -71,15 +141,17 @@ public class ParameterUI {
         }
         final float start = p.getNormalizedf();
 
+        boolean isMapping = isMapping();
+
         int dotColor = 0;
-        if (mapping.mode.getEnum() == LXMappingEngine.Mode.MIDI) {
+        if (isMapping) {
             dotColor = mapping.getControlTarget() == p ? 0xFFFF0000 : 0xFFFFFFFF;
         }
 
         final float res =
             p instanceof CompoundParameter
             ? compoundKnob((CompoundParameter) p, dotColor)
-            : UI.knobFloat(getID(p), p.getValuef(), start, dotColor);
+            : UI.knobFloat(getID(p, false), p.getValuef(), start, dotColor);
 
         if (UI.beginDragDropSource()) {
             UI.setDragDropPayload("SL.BoundedParameter", p);
@@ -94,11 +166,11 @@ public class ParameterUI {
             UI.endDragDropTarget();
         }
 
-        if (UI.isItemClicked() && mapping.mode.getEnum() == LXMappingEngine.Mode.MIDI) {
+        if (isMapping && UI.isItemClicked()) {
             mapping.setControlTarget(p);
         }
 
-        if (start != res) {
+        if (!isMapping && start != res) {
             final float fres = res;
             lx.engine.addTask(() -> p.setNormalized(fres));
         }
@@ -129,7 +201,8 @@ public class ParameterUI {
             colors[i] = modulation.color.getColor();
         }
         return UI.knobModulatedFloat(
-            getID(cp), (float) cp.getBaseValue(), (float) cp.getBaseNormalized(), cp.getNormalizedf(), N, mins, maxs, colors, dotColor);
+            getID(cp, false), (float) cp.getBaseValue(), (float) cp.getBaseNormalized(),
+            cp.getNormalizedf(), N, mins, maxs, colors, dotColor);
     }
 
     public void draw(DiscreteParameter p) {
@@ -138,13 +211,13 @@ public class ParameterUI {
             int start = p.getValuei();
             final int res = UI.sliderInt(
                 getID(p), start, p.getMinValue(), p.getMaxValue() - 1);
-            if (start != res) {
+            if (!isMapping() && start != res) {
                 lx.engine.addTask(() -> p.setValue(res));
             }
         } else {
             int start = p.getValuei();
             int res = UI.combo(getID(p), start, options);
-            if (start != res) {
+            if (!isMapping() && start != res) {
                 lx.engine.addTask(() -> p.setValue(res));
             }
         }
@@ -165,7 +238,7 @@ public class ParameterUI {
     public boolean toggle(BooleanParameter p, boolean important, float w) {
         final boolean start = p.getValueb();
         final boolean res = toggle(getID(p), start, important, w);
-        if (res != start) {
+        if (!isMapping() && start != res) {
             lx.engine.addTask(() -> p.setValue(res));
         }
         return res;
@@ -174,7 +247,7 @@ public class ParameterUI {
     public boolean toggle(String label, BooleanParameter p, boolean important, float w) {
         final boolean start = p.getValueb();
         final boolean res = toggle(label, start, important, w);
-        if (res != start) {
+        if (!isMapping() && start != res) {
             lx.engine.addTask(() -> p.setValue(res));
         }
         return res;
@@ -200,7 +273,7 @@ public class ParameterUI {
             UI.button(getID(p));
             res = UI.isItemActive();
         }
-        if (res != start) {
+        if (!isMapping() && start != res) {
             lx.engine.addTask(() -> p.setValue(res));
         }
     }
@@ -211,7 +284,7 @@ public class ParameterUI {
         float s = p.saturation.getValuef();
         float b = p.brightness.getValuef();
         float[] res = UI.colorPickerHSV(getID(p), h, s, b);
-        if (h != res[0] || s != res[1] || b != res[2]) {
+        if (!isMapping() && (h != res[0] || s != res[1] || b != res[2])) {
             lx.engine.addTask(() -> {
                     p.hue.setValue(res[0]);
                     p.saturation.setValue(res[1]);
