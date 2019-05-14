@@ -12,15 +12,22 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.LXMappingEngine;
 import java.util.Stack;
 import java.util.LinkedList;
+import java.util.WeakHashMap;
+import heronarts.lx.midi.LXMidiEngine;
+import heronarts.lx.midi.LXMidiMapping;
 
-public class ParameterUI {
+public class ParameterUI implements LXMidiEngine.MappingListener {
     public enum WidgetType {
         KNOB,
         SLIDER,
     };
 
     public static ParameterUI getDefault(LX lx) {
-        return new ParameterUI(lx, new State());
+        return new ParameterUI(lx, false, new State());
+    }
+
+    public static ParameterUI getMappable(LX lx) {
+        return new ParameterUI(lx, true, new State());
     }
 
     protected static class State implements Cloneable {
@@ -47,12 +54,30 @@ public class ParameterUI {
     protected final LX lx;
     protected final LXMappingEngine mapping;
     protected Stack<State> stateStack;
+    protected final WeakHashMap<LXParameter, Object> mappedParameters = new WeakHashMap<>();
 
-    protected ParameterUI(LX lx, State initial) {
+    protected ParameterUI(LX lx, boolean registerMappingListener, State initial) {
         this.lx = lx;
         this.mapping = lx.engine.mapping;
         this.stateStack = new Stack<>();
+        if (registerMappingListener) {
+            lx.engine.midi.addMappingListener(this);
+        }
         stateStack.push(initial);
+    }
+
+    public void dispose() {
+        lx.engine.midi.removeMappingListener(this);
+    }
+
+    @Override
+    public void mappingAdded(LXMidiEngine engine, LXMidiMapping mapping) {
+        mappedParameters.put(mapping.parameter, new Object());
+    }
+
+    @Override
+    public void mappingRemoved(LXMidiEngine engine, LXMidiMapping mapping) {
+        mappedParameters.put(mapping.parameter, new Object());
     }
 
     public ParameterUI push() {
@@ -100,10 +125,12 @@ public class ParameterUI {
 
         if (showMappingIndicator && isMapping()) {
             if (mapping.getControlTarget() == p) {
-                visibleLabel = visibleLabel + "**";
+                visibleLabel = visibleLabel + " \u25CF"; // filled circle
             } else {
-                visibleLabel = visibleLabel + " \u25CF";
+                visibleLabel = visibleLabel + " \u25CB"; // outline circle
             }
+        } else if (mappedParameters.containsKey(p)) {
+            visibleLabel = visibleLabel + " \u25C6"; // outline diamond
         }
 
         LXComponent parent = p.getComponent();
@@ -145,7 +172,7 @@ public class ParameterUI {
 
         int dotColor = 0;
         if (isMapping) {
-            dotColor = mapping.getControlTarget() == p ? 0xFFFF0000 : 0xFFFFFFFF;
+            dotColor = mapping.getControlTarget() == p ? 0xFFFFFFFF : 0x88FFFFFF;
         }
 
         final float res =

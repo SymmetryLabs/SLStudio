@@ -197,6 +197,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
     private void disposeLX() {
         NetworkMonitor.shutdownInstance(lx);
+        lookEditor.dispose();
         renderer.dispose();
         lx.engine.stop();
         /* we have to call onDraw here because onDraw is the only thing that pokes the

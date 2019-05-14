@@ -75,7 +75,7 @@ public class ComponentUI {
             for (int i = 0; i < triggers.size(); i++) {
                 needSep = true;
                 pui.draw(triggers.get(i));
-                if (i % 4 != 3 && i != triggers.size() - 1) {
+                if (i % 3 != 2 && i != triggers.size() - 1) {
                     UI.sameLine();
                 }
             }

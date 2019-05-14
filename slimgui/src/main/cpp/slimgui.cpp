@@ -199,9 +199,9 @@ JNIEXPORT jlong JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_addFont(JNIEnv *
         ImFontGlyphRangesBuilder builder;
         builder.AddRanges(ImGui::GetIO().Fonts->GetGlyphRangesDefault());
         /* various bullet characters */
-        builder.AddChar(0x2022);
-        builder.AddChar(0x25CF);
-        builder.AddChar(0x2B24);
+        builder.AddChar(0x25C6); // outlined diamond
+        builder.AddChar(0x25CB); // outlined circle
+        builder.AddChar(0x25CF); // filled circle
         builder.BuildRanges(&fontRanges);
         fontRangesReady = true;
     }
