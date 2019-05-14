@@ -10,6 +10,7 @@ import org.lwjgl.system.CallbackI.B;
 import heronarts.lx.LXLook;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.BoundedParameter;
+import org.lwjgl.glfw.GLFW;
 
 
 public class LookEditor implements Window {

@@ -20,6 +20,8 @@ import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import heronarts.lx.model.LXPoint;
 import com.symmetrylabs.slstudio.output.OutputControl;
 import heronarts.lx.data.LXVersions;
+import org.lwjgl.glfw.GLFW;
+import heronarts.lx.LXMappingEngine;
 
 public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.Provider {
     private static final String DEFAULT_SHOW = "demo";
@@ -145,6 +147,13 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
     @Override
     public void render() {
+        /* handle global keyboard inputs */
+        if (UI.isKeyDown(GLFW.GLFW_KEY_M)) {
+            lx.engine.mapping.setMode(LXMappingEngine.Mode.MIDI);
+        } else {
+            lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
+        }
+
         int w = Gdx.graphics.getBackBufferWidth();
         int h = Gdx.graphics.getBackBufferHeight();
 

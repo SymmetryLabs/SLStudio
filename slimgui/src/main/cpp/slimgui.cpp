@@ -783,6 +783,10 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isKeyPressed(
     return ImGui::IsKeyPressed(keyCode);
 }
 
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isKeyDown(JNIEnv *, jclass, jint keyCode) {
+    return ImGui::IsKeyDown(keyCode);
+}
+
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setKeyboardFocusHere(JNIEnv *, jclass, jint offset) {
     ImGui::SetKeyboardFocusHere(offset);
 }

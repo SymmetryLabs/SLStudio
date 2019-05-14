@@ -729,6 +729,14 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isKeyPressed
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    isKeyDown
+ * Signature: (I)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isKeyDown
+  (JNIEnv *, jclass, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    isAnyItemFocused
  * Signature: ()Z
  */

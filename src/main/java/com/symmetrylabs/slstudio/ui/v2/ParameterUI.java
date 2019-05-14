@@ -9,6 +9,7 @@ import heronarts.lx.parameter.LXCompoundModulation;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.LXComponent;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.LXMappingEngine;
 
 public class ParameterUI {
     public enum WidgetType {
@@ -23,12 +24,14 @@ public class ParameterUI {
             true);
     }
 
-    private final LX lx;
+    protected final LX lx;
+    protected final LXMappingEngine mapping;
     WidgetType defaultBoundedWidget;
     protected boolean showLabel;
 
     protected ParameterUI(LX lx, WidgetType defaultBoundedWidget, boolean showLabel) {
         this.lx = lx;
+        this.mapping = lx.engine.mapping;
         this.defaultBoundedWidget = defaultBoundedWidget;
         this.showLabel = showLabel;
     }
@@ -67,10 +70,16 @@ public class ParameterUI {
             return;
         }
         final float start = p.getNormalizedf();
+
+        int dotColor = 0;
+        if (mapping.mode.getEnum() == LXMappingEngine.Mode.MIDI) {
+            dotColor = mapping.getControlTarget() == p ? 0xFFFF0000 : 0xFFFFFFFF;
+        }
+
         final float res =
             p instanceof CompoundParameter
-            ? compoundKnob((CompoundParameter) p)
-            : UI.knobFloat(getID(p), p.getValuef(), start, 0);
+            ? compoundKnob((CompoundParameter) p, dotColor)
+            : UI.knobFloat(getID(p), p.getValuef(), start, dotColor);
 
         if (UI.beginDragDropSource()) {
             UI.setDragDropPayload("SL.BoundedParameter", p);
@@ -85,13 +94,17 @@ public class ParameterUI {
             UI.endDragDropTarget();
         }
 
+        if (UI.isItemClicked() && mapping.mode.getEnum() == LXMappingEngine.Mode.MIDI) {
+            mapping.setControlTarget(p);
+        }
+
         if (start != res) {
             final float fres = res;
             lx.engine.addTask(() -> p.setNormalized(fres));
         }
     }
 
-    private float compoundKnob(CompoundParameter cp) {
+    private float compoundKnob(CompoundParameter cp, int dotColor) {
         int N = cp.modulations.size();
         float[] mins = new float[N];
         float[] maxs = new float[N];
@@ -116,7 +129,7 @@ public class ParameterUI {
             colors[i] = modulation.color.getColor();
         }
         return UI.knobModulatedFloat(
-            getID(cp), (float) cp.getBaseValue(), (float) cp.getBaseNormalized(), cp.getNormalizedf(), N, mins, maxs, colors, 0);
+            getID(cp), (float) cp.getBaseValue(), (float) cp.getBaseNormalized(), cp.getNormalizedf(), N, mins, maxs, colors, dotColor);
     }
 
     public void draw(DiscreteParameter p) {

@@ -944,6 +944,7 @@ public class UI {
     public static native boolean isCtrlDown();
     public static native boolean isShiftDown();
     public static native boolean isKeyPressed(int keycode);
+    public static native boolean isKeyDown(int keycode);
 
     /**
      * Returns true if any item has keyboard focus
