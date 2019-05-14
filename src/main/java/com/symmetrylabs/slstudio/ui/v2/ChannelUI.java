@@ -98,7 +98,9 @@ public class ChannelUI {
         String chanName = chan.getLabel();
 
         pui.draw(chan.blendPatterns);
+        pui.draw(chan.midiMonitor);
         pui.draw(chan.patternBlendMode);
+        pui.draw(chan.midiChannel);
 
         drawWarps(lx, chanName, chan, pui);
 
