@@ -17,10 +17,12 @@ import java.nio.file.Paths;
 public class MainMenu implements Window {
     private final LX lx;
     private final SLStudioGDX parent;
+    private final ParameterUI pui;
 
     public MainMenu(LX lx, SLStudioGDX parent) {
         this.lx = lx;
         this.parent = parent;
+        this.pui = ParameterUI.getDefault(lx);
     }
 
     public void draw() {
@@ -83,9 +85,9 @@ public class MainMenu implements Window {
             for (LXMidiInput input : midi.getInputs()) {
                 if (UI.beginMenu(input.getDescription() + "##input")) {
                     UI.menuText(input.getName());
-                    ParameterUI.menuItem(lx, input.channelEnabled, "Send events to channels");
-                    ParameterUI.menuItem(lx, input.controlEnabled, "Allow control mapping");
-                    ParameterUI.menuItem(lx, input.syncEnabled, "Use MIDI clock to set tempo");
+                    pui.menuItem(input.channelEnabled, "Send events to channels");
+                    pui.menuItem(input.controlEnabled, "Allow control mapping");
+                    pui.menuItem(input.syncEnabled, "Use MIDI clock to set tempo");
                     UI.endMenu();
                 }
             }
@@ -96,7 +98,7 @@ public class MainMenu implements Window {
                 UI.menuText("(no MIDI surfaces detected)");
             }
             for (LXMidiSurface surface : midi.surfaces) {
-                ParameterUI.menuItem(lx, surface.enabled, surface.getDescription() + "##surface");
+                pui.menuItem(surface.enabled, surface.getDescription() + "##surface");
             }
             UI.endMenu();
         }

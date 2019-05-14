@@ -19,7 +19,7 @@ import com.symmetrylabs.util.FuzzyStringFilter;
 /**
  * A window that shows a tree view of warps, effects and patterns.
  */
-public class WepUi {
+public class WepUI {
     public interface OnWepSelected {
         void onWepAdded();
     }
@@ -38,11 +38,11 @@ public class WepUi {
     private final Object FILTER_MATCH_EFFECTS = new Object();
     private final Object FILTER_MATCH_WARPS = new Object();
 
-    public WepUi(LX lx, OnWepSelected cb) {
+    public WepUI(LX lx, OnWepSelected cb) {
         this(lx, true, cb);
     }
 
-    public WepUi(LX lx, boolean allowPatterns, OnWepSelected cb) {
+    public WepUI(LX lx, boolean allowPatterns, OnWepSelected cb) {
         this.lx = lx;
         this.grouping = new WEPGrouping(lx, ApplicationState.showName());
         this.cb = cb;

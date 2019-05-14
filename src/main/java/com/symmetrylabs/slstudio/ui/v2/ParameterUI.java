@@ -16,31 +16,44 @@ public class ParameterUI {
         SLIDER,
     };
 
-    /* type-safe booleans */
-    public enum ShowLabel {
-        YES,
-        NO,
-    };
-
-    public static String getID(LXParameter p) {
-        return getID(p, ShowLabel.YES);
+    public static ParameterUI getDefault(LX lx) {
+        return new ParameterUI(lx, WidgetType.SLIDER);
     }
 
-    public static String getID(LXParameter p, ShowLabel invis) {
+    private final LX lx;
+    WidgetType defaultBoundedWidget;
+    protected boolean showLabel;
+
+    protected ParameterUI(LX lx, WidgetType defaultBoundedWidget) {
+        this.lx = lx;
+        this.defaultBoundedWidget = defaultBoundedWidget;
+    }
+
+    public ParameterUI setDefaultBoundedWidget(WidgetType t) {
+        defaultBoundedWidget = t;
+        return this;
+    }
+
+    public ParameterUI showLabel(boolean showLabel) {
+        this.showLabel = showLabel;
+        return this;
+    }
+
+    public String getID(LXParameter p) {
         LXComponent parent = p.getComponent();
         if (parent == null) {
-            return (invis == ShowLabel.NO ? "##" : "") + p.getLabel();
+            return (showLabel ? "" : "##") + p.getLabel();
         }
         return String.format(
-            invis == ShowLabel.NO ? "##%s/%d/%s" : "%s##%d/%s",
+            showLabel ? "%s##%d/%s" : "##%s/%d/%s",
             p.getLabel(), parent.getId(), p.getLabel());
     }
 
-    public static void draw(LX lx, BoundedParameter p) {
-        draw(lx, p, WidgetType.SLIDER);
+    public void draw(BoundedParameter p) {
+        draw(p, defaultBoundedWidget);
     }
 
-    public static void draw(LX lx, BoundedParameter p, WidgetType wt) {
+    public void draw(BoundedParameter p, WidgetType wt) {
         if (wt == WidgetType.SLIDER) {
             float start = p.getValuef();
             final float res = UI.sliderFloat(getID(p), start, (float) p.range.v0, (float) p.range.v1);
@@ -52,7 +65,7 @@ public class ParameterUI {
         final float start = p.getNormalizedf();
         final float res =
             p instanceof CompoundParameter
-            ? compoundKnob(lx, (CompoundParameter) p)
+            ? compoundKnob((CompoundParameter) p)
             : UI.knobFloat(getID(p), p.getValuef(), start);
 
         if (UI.beginDragDropSource()) {
@@ -74,7 +87,7 @@ public class ParameterUI {
         }
     }
 
-    private static float compoundKnob(LX lx, CompoundParameter cp) {
+    private float compoundKnob(CompoundParameter cp) {
         int N = cp.modulations.size();
         float[] mins = new float[N];
         float[] maxs = new float[N];
@@ -102,25 +115,25 @@ public class ParameterUI {
             getID(cp), (float) cp.getBaseValue(), (float) cp.getBaseNormalized(), cp.getNormalizedf(), N, mins, maxs, colors);
     }
 
-    public static void draw(LX lx, DiscreteParameter p, ShowLabel showLabel) {
+    public void draw(DiscreteParameter p) {
         String[] options = p.getOptions();
         if (options == null) {
             int start = p.getValuei();
             final int res = UI.sliderInt(
-                getID(p, showLabel), start, p.getMinValue(), p.getMaxValue() - 1);
+                getID(p), start, p.getMinValue(), p.getMaxValue() - 1);
             if (start != res) {
                 lx.engine.addTask(() -> p.setValue(res));
             }
         } else {
             int start = p.getValuei();
-            int res = UI.combo(getID(p, showLabel), start, options);
+            int res = UI.combo(getID(p), start, options);
             if (start != res) {
                 lx.engine.addTask(() -> p.setValue(res));
             }
         }
     }
 
-    public static boolean toggle(String label, boolean active, boolean important, float w) {
+    public boolean toggle(String label, boolean active, boolean important, float w) {
         if (active) {
             UI.pushColor(UI.COLOR_BUTTON, important ? UIConstants.RED : UIConstants.BLUE);
             UI.pushColor(UI.COLOR_BUTTON_HOVERED, important ? UIConstants.RED_HOVER : UIConstants.BLUE_HOVER);
@@ -132,7 +145,7 @@ public class ParameterUI {
         return flip ? !active : active;
     }
 
-    public static boolean toggle(LX lx, BooleanParameter p, boolean important, float w) {
+    public boolean toggle(BooleanParameter p, boolean important, float w) {
         final boolean start = p.getValueb();
         final boolean res = toggle(getID(p), start, important, w);
         if (res != start) {
@@ -141,7 +154,7 @@ public class ParameterUI {
         return res;
     }
 
-    public static boolean toggle(LX lx, String label, BooleanParameter p, boolean important, float w) {
+    public boolean toggle(String label, BooleanParameter p, boolean important, float w) {
         final boolean start = p.getValueb();
         final boolean res = toggle(label, start, important, w);
         if (res != start) {
@@ -150,11 +163,11 @@ public class ParameterUI {
         return res;
     }
 
-    public static void draw(LX lx, BooleanParameter p) {
-        draw(lx, p, false);
+    public void draw(BooleanParameter p) {
+        draw(p, false);
     }
 
-    public static void draw(LX lx, BooleanParameter p, boolean important) {
+    public void draw(BooleanParameter p, boolean important) {
         final boolean start = p.getValueb();
         boolean res;
         if (p.getMode() == BooleanParameter.Mode.TOGGLE) {
@@ -175,7 +188,7 @@ public class ParameterUI {
         }
     }
 
-    public static void draw(LX lx, ColorParameter p) {
+    public void draw(ColorParameter p) {
         int start = p.getColor();
         float h = p.hue.getValuef();
         float s = p.saturation.getValuef();
@@ -190,23 +203,23 @@ public class ParameterUI {
         }
     }
 
-    public static void draw(LX lx, LXParameter param) {
+    public void draw(LXParameter param) {
         if (param instanceof BoundedParameter) {
-            ParameterUI.draw(lx, (BoundedParameter) param);
+            draw((BoundedParameter) param);
         } else if (param instanceof DiscreteParameter) {
-            ParameterUI.draw(lx, (DiscreteParameter) param, ShowLabel.YES);
+            draw((DiscreteParameter) param);
         } else if (param instanceof BooleanParameter) {
-            ParameterUI.draw(lx, (BooleanParameter) param);
+            draw((BooleanParameter) param);
         } else if (param instanceof ColorParameter) {
-            ParameterUI.draw(lx, (ColorParameter) param);
+            draw((ColorParameter) param);
         }
     }
 
-    public static void menuItem(LX lx, BooleanParameter p) {
-        menuItem(lx, p, getID(p));
+    public void menuItem(BooleanParameter p) {
+        menuItem(p, getID(p));
     }
 
-    public static void menuItem(LX lx, BooleanParameter p, String label) {
+    public void menuItem(BooleanParameter p, String label) {
         boolean res = UI.menuItemToggle(label, null, p.getValueb(), true);
         if (res != p.getValueb()) {
             lx.engine.addTask(() -> p.setValue(res));

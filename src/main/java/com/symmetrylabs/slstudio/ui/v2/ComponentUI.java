@@ -17,21 +17,17 @@ import java.util.Set;
 public class ComponentUI {
     private final LX lx;
     private final LXComponent comp;
-    private final ParameterUI.WidgetType preferType;
+    private final ParameterUI pui;
 
     private final List<BoundedParameter> knobs = new ArrayList<>();
     private final List<BooleanParameter> triggers = new ArrayList<>();
     private final List<LXParameter> params = new ArrayList<>();
     private final Set<LXParameter> blacklist = new HashSet<>();
 
-    public ComponentUI(LX lx, LXComponent comp) {
-        this(lx, comp, ParameterUI.WidgetType.KNOB);
-    }
-
-    public ComponentUI(LX lx, LXComponent comp, ParameterUI.WidgetType preferType) {
+    public ComponentUI(LX lx, LXComponent comp, ParameterUI pui) {
         this.lx = lx;
         this.comp = comp;
-        this.preferType = preferType;
+        this.pui = pui;
 
         /* some parameters add other sub-parameters to be "helpful"; ColorParameter
            adds three child parameters for H/S/B when you add it. We just want to draw
@@ -64,10 +60,10 @@ public class ComponentUI {
 
     public void draw() {
         boolean needSep = false;
-        if (preferType == ParameterUI.WidgetType.KNOB) {
+        if (pui.defaultBoundedWidget == ParameterUI.WidgetType.KNOB) {
             for (int i = 0; i < knobs.size(); i++) {
                 needSep = true;
-                ParameterUI.draw(lx, knobs.get(i), preferType);
+                pui.draw(knobs.get(i));
                 if (i % 4 != 3 && i != knobs.size() - 1) {
                     UI.sameLine();
                 }
@@ -78,7 +74,7 @@ public class ComponentUI {
             }
             for (int i = 0; i < triggers.size(); i++) {
                 needSep = true;
-                ParameterUI.draw(lx, triggers.get(i));
+                pui.draw(triggers.get(i));
                 if (i % 4 != 3 && i != triggers.size() - 1) {
                     UI.sameLine();
                 }
@@ -89,14 +85,14 @@ public class ComponentUI {
             }
             for (LXParameter param : params) {
                 needSep = true;
-                ParameterUI.draw(lx, param);
+                pui.draw(param);
             }
         } else {
             for (LXParameter param : comp.getParameters()) {
                 if (blacklist.contains(param)) {
                     continue;
                 }
-                ParameterUI.draw(lx, param);
+                pui.draw(param);
             }
         }
     }
