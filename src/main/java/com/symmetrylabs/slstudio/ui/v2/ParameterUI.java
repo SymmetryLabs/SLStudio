@@ -115,7 +115,7 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
         return getID(p, true);
     }
 
-    protected String getID(LXParameter p, boolean showMappingIndicator) {
+    protected String getID(LXParameter p, boolean showMappingIndicators) {
         String visibleLabel;
         String stableId;
         String parentId = null;
@@ -123,13 +123,13 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
         visibleLabel = p.getLabel();
         stableId = visibleLabel;
 
-        if (showMappingIndicator && isMapping()) {
+        if (showMappingIndicators && isMapping()) {
             if (mapping.getControlTarget() == p) {
                 visibleLabel = visibleLabel + " \u25CF"; // filled circle
             } else {
                 visibleLabel = visibleLabel + " \u25CB"; // outline circle
             }
-        } else if (mappedParameters.containsKey(p)) {
+        } else if (showMappingIndicators && mappedParameters.containsKey(p)) {
             visibleLabel = visibleLabel + " \u25C6"; // outline diamond
         }
 
@@ -173,6 +173,8 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
         int dotColor = 0;
         if (isMapping) {
             dotColor = mapping.getControlTarget() == p ? 0xFFFFFFFF : 0x88FFFFFF;
+        } else if (mappedParameters.containsKey(p)) {
+            dotColor = 0xFFFFFFFF;
         }
 
         final float res =
