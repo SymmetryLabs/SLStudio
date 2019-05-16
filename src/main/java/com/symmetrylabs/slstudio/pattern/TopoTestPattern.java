@@ -163,7 +163,7 @@ public class TopoTestPattern<T extends Strip> extends SLPattern<StripsModel<T>> 
             }
 
             case CCS: {
-                float hstep = 330f / components.size();
+                float hstep = 360f / components.size();
                 int h = 0;
                 for (StripsTopologyComponents.ConnectedComponent cc : components) {
                     int c = LXColor.hsb(h, 100, 100);

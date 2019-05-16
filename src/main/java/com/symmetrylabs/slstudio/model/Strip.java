@@ -11,8 +11,6 @@ import heronarts.lx.transform.LXTransform;
 
 public class Strip extends SLModel {
 
-    public final String id;
-
     @Expose
     public final Metrics metrics;
 
@@ -20,27 +18,21 @@ public class Strip extends SLModel {
     public Object obj1 = null, obj2 = null;
 
     public Strip(Metrics metrics, List<LXPoint> points) {
-        this("untitled", metrics, points);
+        this(null, metrics, points);
     }
 
     public Strip(String id, Metrics metrics, List<LXPoint> points) {
-        super(points);
-
-        this.id = id;
+        super(id, points);
         this.metrics = metrics;
     }
 
     public Strip(String id, Metrics metrics, LXFixture fixture) {
-        super(fixture);
-
-        this.id = id;
+        super(id, fixture);
         this.metrics = metrics;
     }
 
     public Strip(String id, Metrics metrics, LXTransform t) {
-        super(new Fixture(metrics, t));
-
-        this.id = id;
+        super(id, new Fixture(metrics, t));
         this.metrics = metrics;
     }
 

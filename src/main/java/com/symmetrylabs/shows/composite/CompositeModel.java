@@ -22,7 +22,7 @@ public class CompositeModel extends StripsModel<Strip> {
 
         for (Strip strip : strips) {
             this.strips.add(strip);
-            this.stripTable.put(strip.id, strip);
+            this.stripTable.put(strip.modelId, strip);
         }
     }
 

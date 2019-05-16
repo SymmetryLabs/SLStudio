@@ -289,7 +289,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         public float rz;
 
         public Cube(String modelId, float x, float y, float z, float rx, float ry, float rz, LXTransform t, Type type) {
-            super(modelId, new Fixture(type));
+            super(modelId, new Fixture(modelId, type));
 
             Fixture fixture = (Fixture) this.fixtures.get(0);
 
@@ -341,9 +341,9 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
             private final List<Face> faces = new ArrayList<>();
             private final List<CubesStrip> strips = new ArrayList<>();
 
-            private Fixture(Type type) {
+            private Fixture(String cubeId, Type type) {
                 for (int i = 0; i < FACES_PER_CUBE; i++) {
-                    Face face = new Face(type.FACE_METRICS);
+                    Face face = new Face(cubeId, i, type.FACE_METRICS);
                     faces.add(face);
                     strips.addAll(face.getStrips());
                     for (LXPoint p : face.points) {
@@ -374,8 +374,8 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
 
         private final Metrics metrics;
 
-        public Face(Metrics metrics) {
-            super(new Fixture(metrics));
+        public Face(String cubeId, int faceIndex, Metrics metrics) {
+            super(String.format("%s / Face %d", cubeId, faceIndex), new Fixture(String.format("%s / Face %d", cubeId, faceIndex), metrics));
 
             Fixture fixture = (Fixture) this.fixtures.get(0);
             strips.addAll(fixture.strips);
@@ -398,11 +398,11 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
 
             private final List<CubesStrip> strips = new ArrayList<>();
 
-            private Fixture(Metrics metrics) {
+            private Fixture(String faceId, Metrics metrics) {
                 for (int i = 0; i < STRIPS_PER_FACE; i++) {
                     boolean isHorizontal = (i % 2 == 0);
                     CubesStrip.Metrics stripMetrics = isHorizontal ? metrics.horizontal : metrics.vertical;
-                    CubesStrip strip = new CubesStrip(i+"", stripMetrics, isHorizontal);
+                    CubesStrip strip = new CubesStrip(String.format("%s / Strip %d", faceId, i), stripMetrics, isHorizontal);
                     this.strips.add(strip);
                     for (LXPoint p : strip.points) {
                         this.points.add(p);
