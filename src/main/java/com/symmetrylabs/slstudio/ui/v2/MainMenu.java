@@ -83,7 +83,7 @@ public class MainMenu implements Window {
                 UI.menuText("(no MIDI inputs detected)");
             }
             for (LXMidiInput input : midi.getInputs()) {
-                if (UI.beginMenu(input.getDescription() + "##input")) {
+                if (UI.beginMenu(input.getDescription() + "##input" + input.getName())) {
                     UI.menuText(input.getName());
                     pui.menuItem(input.channelEnabled, "Send events to channels");
                     pui.menuItem(input.controlEnabled, "Allow control mapping");
