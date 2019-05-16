@@ -20,6 +20,7 @@ import heronarts.lx.parameter.ObjectParameter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Collection;
 
 
 public class LXLook extends LXModelComponent implements PolyBufferProvider {
@@ -235,6 +236,14 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
             focusedChannel.setValue(channels.indexOf(channel));
         }
         return this;
+    }
+
+    public Collection<LXComponent> allComponents() {
+        ArrayList<LXComponent> components = new ArrayList<>();
+        for (LXChannel channel : channels) {
+            components.addAll(channel.allComponents());
+        }
+        return components;
     }
 
     public void loop(double deltaMs, PolyBuffer.Space preferredSpace) {

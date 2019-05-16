@@ -120,12 +120,14 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         /* we want WindowManager to handle all of the drawing so it can manage the interaction between
            the UI running and the engine running, so we put it in charge of drawing the look editor */
         WindowManager.addTransient(lookEditor);
-        WindowManager.addTransient(picker);
 
-        /* The main menu isn't really transient but we don't want it to appear in
-           the Window menu and it doesn't have a close button, so there's no risk of
-           it disappearing. */
+        /* These windows aren't really transient but we don't want them to appear in
+           the Window menu and they don't have a close button, so there's no risk of
+           them disappearing. */
         WindowManager.addTransient(new MainMenu(lx, this));
+        WindowManager.addTransient(picker);
+        WindowManager.addTransient(new CaptionWindow(lx));
+
         WindowManager.addPersistent("Audio", () -> new AudioWindow(lx), false);
         WindowManager.addPersistent("Color swatches", () -> new ColorSwatchWindow(lx, lookEditor), false);
         WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this, mr), false);
