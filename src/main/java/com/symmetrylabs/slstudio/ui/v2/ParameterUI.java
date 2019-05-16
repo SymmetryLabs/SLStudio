@@ -73,6 +73,7 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
     @Override
     public void mappingAdded(LXMidiEngine engine, LXMidiMapping mapping) {
         mappedParameters.put(mapping.parameter, new Object());
+        this.mapping.setControlTarget(null);
     }
 
     @Override
