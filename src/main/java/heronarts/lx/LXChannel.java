@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import com.symmetrylabs.slstudio.ApplicationState;
+import java.util.Collection;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -611,6 +612,13 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         return this;
     }
 
+    public Collection<LXComponent> allComponents() {
+        ArrayList<LXComponent> components = new ArrayList<>();
+        components.addAll(mutablePatterns);
+        components.addAll(mutableEffects);
+        components.addAll(mutableWarps);
+        return components;
+    }
 
     public final int getFocusedPatternIndex() {
         return this.focusedPattern.getValuei();

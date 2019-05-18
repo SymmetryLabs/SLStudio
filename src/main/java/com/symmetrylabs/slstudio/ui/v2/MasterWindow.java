@@ -6,12 +6,14 @@ import heronarts.lx.LXLook;
 
 public class MasterWindow extends CloseableWindow {
     private final LX lx;
-    private WepUi wepUi;
+    private WepUI wepUi;
+    private ParameterUI pui;
 
     public MasterWindow(LX lx) {
         super("Master", UI.WINDOW_ALWAYS_AUTO_RESIZE | UI.WINDOW_NO_RESIZE | UI.WINDOW_NO_TITLE_BAR);
         this.lx = lx;
-        this.wepUi = new WepUi(lx, false, () -> UI.closePopup());
+        this.wepUi = new WepUI(lx, false, () -> UI.closePopup());
+        this.pui = ParameterUI.getDefault(lx);
     }
 
     @Override
@@ -34,10 +36,10 @@ public class MasterWindow extends CloseableWindow {
 
         LXLook look = lx.engine.getFocusedLook();
         UI.separator();
-        ParameterUI.draw(lx, look.crossfader);
-        ParameterUI.draw(lx, look.crossfaderBlendMode);
-        ParameterUI.draw(lx, look.cueA, true);
+        pui.draw(look.crossfader);
+        pui.draw(look.crossfaderBlendMode);
+        pui.draw(look.cueA, true);
         UI.sameLine();
-        ParameterUI.draw(lx, look.cueB, true);
+        pui.draw(look.cueB, true);
     }
 }

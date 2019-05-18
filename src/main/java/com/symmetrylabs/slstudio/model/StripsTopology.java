@@ -112,6 +112,19 @@ public class StripsTopology {
         }
     }
 
+    public static class OverlappingBundlesException extends IllegalStateException {
+        public final Dir dir;
+        public final Bundle b1;
+        public final Bundle b2;
+
+        OverlappingBundlesException(Dir dir, Bundle b1, Bundle b2) {
+            super(String.format("found overlapping %s bundles:\nb1: %s\nb2: %s", dir, b1, b2));
+            this.dir = dir;
+            this.b1 = b1;
+            this.b2 = b2;
+        }
+    }
+
     /**
      * The meeting point of up to 6 bundles.
      */
@@ -508,6 +521,19 @@ public class StripsTopology {
         }
 
         /**
+         * The number of strips in this bundle.
+         */
+        public int size() {
+            int size = 0;
+            for (int i = 0; i < strips.length; i++) {
+                if (strips[i] != NO_STRIP) {
+                    size++;
+                }
+            }
+            return size;
+        }
+
+        /**
          * An edge's "projection" is the projection of it's centroid onto the axis it's aligned with
          */
         public float projection() {
@@ -620,6 +646,43 @@ public class StripsTopology {
                 }
             }
             return count;
+        }
+
+        /**
+         * Builds a detailed and expensive-to-generate description of the contents of this bundle.
+         */
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Bundle ");
+            sb.append(index);
+            sb.append(" along ");
+            sb.append(dir);
+            sb.append(" with ");
+            sb.append(size());
+            sb.append(" of ");
+            sb.append(strips.length);
+            sb.append(" slots populated:\n");
+            for (int i = 0; i < strips.length; i++) {
+                sb.append("\tstrip ");
+                sb.append(i);
+                sb.append(": ");
+                if (strips[i] == NO_STRIP) {
+                    sb.append("(none)");
+                } else {
+                    Strip strip = model.getStripByIndex(strips[i]);
+                    if (strip == null) {
+                        sb.append("(null!)");
+                    } else {
+                        sb.append("id=");
+                        sb.append(strip.modelId);
+                        sb.append(" hash=");
+                        sb.append(strip.hashCode());
+                    }
+                }
+                sb.append("\n");
+            }
+            return sb.toString();
         }
     }
 
@@ -765,19 +828,19 @@ public class StripsTopology {
             switch (b.dir) {
                 case X:
                     if (b.p.nx != null) {
-                        throw new IllegalStateException("found overlapping bundles");
+                        throw new OverlappingBundlesException(b.dir, b.p.nx, b);
                     }
                     b.p.nx = b;
                     break;
                 case Y:
                     if (b.p.ny != null) {
-                        throw new IllegalStateException("found overlapping bundles");
+                        throw new OverlappingBundlesException(b.dir, b.p.ny, b);
                     }
                     b.p.ny = b;
                     break;
                 case Z:
                     if (b.p.nz != null) {
-                        throw new IllegalStateException("found overlapping bundles");
+                        throw new OverlappingBundlesException(b.dir, b.p.nz, b);
                     }
                     b.p.nz = b;
                     break;
@@ -806,19 +869,19 @@ public class StripsTopology {
             switch (b.dir) {
                 case X:
                     if (b.n.px != null) {
-                        throw new IllegalStateException("found overlapping bundles");
+                        throw new OverlappingBundlesException(b.dir, b.n.px, b);
                     }
                     b.n.px = b;
                     break;
                 case Y:
                     if (b.n.py != null) {
-                        throw new IllegalStateException("found overlapping bundles");
+                        throw new OverlappingBundlesException(b.dir, b.n.py, b);
                     }
                     b.n.py = b;
                     break;
                 case Z:
                     if (b.n.pz != null) {
-                        throw new IllegalStateException("found overlapping bundles");
+                        throw new OverlappingBundlesException(b.dir, b.n.pz, b);
                     }
                     b.n.pz = b;
                     break;

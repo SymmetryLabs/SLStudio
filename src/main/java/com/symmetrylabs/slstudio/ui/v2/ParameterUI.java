@@ -9,38 +9,156 @@ import heronarts.lx.parameter.LXCompoundModulation;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.LXComponent;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.LXMappingEngine;
+import java.util.Stack;
+import java.util.LinkedList;
+import java.util.WeakHashMap;
+import heronarts.lx.midi.LXMidiEngine;
+import heronarts.lx.midi.LXMidiMapping;
 
-public class ParameterUI {
+public class ParameterUI implements LXMidiEngine.MappingListener {
     public enum WidgetType {
         KNOB,
         SLIDER,
     };
 
-    /* type-safe booleans */
-    public enum ShowLabel {
-        YES,
-        NO,
-    };
-
-    public static String getID(LXParameter p) {
-        return getID(p, ShowLabel.YES);
+    public static ParameterUI getDefault(LX lx) {
+        return new ParameterUI(lx, false, new State());
     }
 
-    public static String getID(LXParameter p, ShowLabel invis) {
-        LXComponent parent = p.getComponent();
-        if (parent == null) {
-            return (invis == ShowLabel.NO ? "##" : "") + p.getLabel();
+    public static ParameterUI getMappable(LX lx) {
+        return new ParameterUI(lx, true, new State());
+    }
+
+    protected static class State implements Cloneable {
+        WidgetType defaultBoundedWidget;
+        boolean showLabel;
+        boolean allowMapping;
+
+        public State() {
+            this.defaultBoundedWidget = WidgetType.SLIDER;
+            this.showLabel = true;
+            this.allowMapping = false;
         }
-        return String.format(
-            invis == ShowLabel.NO ? "##%s/%d/%s" : "%s##%d/%s",
-            p.getLabel(), parent.getId(), p.getLabel());
+
+        @Override
+        public State clone() {
+            try {
+                return (State) super.clone();
+            } catch (CloneNotSupportedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
-    public static void draw(LX lx, BoundedParameter p) {
-        draw(lx, p, WidgetType.SLIDER);
+    protected final LX lx;
+    protected final LXMappingEngine mapping;
+    protected Stack<State> stateStack;
+    protected final WeakHashMap<LXParameter, Object> mappedParameters = new WeakHashMap<>();
+
+    protected ParameterUI(LX lx, boolean registerMappingListener, State initial) {
+        this.lx = lx;
+        this.mapping = lx.engine.mapping;
+        this.stateStack = new Stack<>();
+        if (registerMappingListener) {
+            lx.engine.midi.addMappingListener(this);
+        }
+        stateStack.push(initial);
     }
 
-    public static void draw(LX lx, BoundedParameter p, WidgetType wt) {
+    public void dispose() {
+        lx.engine.midi.removeMappingListener(this);
+    }
+
+    @Override
+    public void mappingAdded(LXMidiEngine engine, LXMidiMapping mapping) {
+        mappedParameters.put(mapping.parameter, new Object());
+        this.mapping.setControlTarget(null);
+    }
+
+    @Override
+    public void mappingRemoved(LXMidiEngine engine, LXMidiMapping mapping) {
+        mappedParameters.put(mapping.parameter, new Object());
+    }
+
+    public ParameterUI push() {
+        stateStack.push(stateStack.peek().clone());
+        return this;
+    }
+
+    public ParameterUI pop() {
+        if (stateStack.size() > 1) {
+            stateStack.pop();
+        }
+        return this;
+    }
+
+    public ParameterUI setDefaultBoundedWidget(WidgetType t) {
+        stateStack.peek().defaultBoundedWidget = t;
+        return this;
+    }
+
+    WidgetType getDefaultBoundedWidget() {
+        return stateStack.peek().defaultBoundedWidget;
+    }
+
+    public ParameterUI showLabel(boolean showLabel) {
+        stateStack.peek().showLabel = showLabel;
+        return this;
+    }
+
+    public ParameterUI allowMapping(boolean allowMapping) {
+        stateStack.peek().allowMapping = allowMapping;
+        return this;
+    }
+
+    public String getID(LXParameter p) {
+        return getID(p, true);
+    }
+
+    protected String getID(LXParameter p, boolean showMappingIndicators) {
+        String visibleLabel;
+        String stableId;
+        String parentId = null;
+
+        visibleLabel = p.getLabel();
+        stableId = visibleLabel;
+
+        if (showMappingIndicators && isMapping()) {
+            if (mapping.getControlTarget() == p) {
+                visibleLabel = visibleLabel + " \u25CF"; // filled circle
+            } else {
+                visibleLabel = visibleLabel + " \u25CB"; // outline circle
+            }
+        } else if (showMappingIndicators && mappedParameters.containsKey(p)) {
+            visibleLabel = visibleLabel + " \u25C6"; // outline diamond
+        }
+
+        LXComponent parent = p.getComponent();
+        if (parent != null) {
+            parentId = Integer.toString(parent.getId());
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(visibleLabel);
+        sb.append("###");
+        sb.append(stableId);
+        if (parentId != null) {
+            sb.append("/");
+            sb.append(parentId);
+        }
+        return sb.toString();
+    }
+
+    protected boolean isMapping() {
+        return stateStack.peek().allowMapping && mapping.mode.getEnum() == LXMappingEngine.Mode.MIDI;
+    }
+
+    public void draw(BoundedParameter p) {
+        draw(p, stateStack.peek().defaultBoundedWidget);
+    }
+
+    public void draw(BoundedParameter p, WidgetType wt) {
         if (wt == WidgetType.SLIDER) {
             float start = p.getValuef();
             final float res = UI.sliderFloat(getID(p), start, (float) p.range.v0, (float) p.range.v1);
@@ -50,10 +168,20 @@ public class ParameterUI {
             return;
         }
         final float start = p.getNormalizedf();
+
+        boolean isMapping = isMapping();
+
+        int dotColor = 0;
+        if (isMapping) {
+            dotColor = mapping.getControlTarget() == p ? 0xFFFFFFFF : 0x88FFFFFF;
+        } else if (mappedParameters.containsKey(p)) {
+            dotColor = 0xFFFFFFFF;
+        }
+
         final float res =
             p instanceof CompoundParameter
-            ? compoundKnob(lx, (CompoundParameter) p)
-            : UI.knobFloat(getID(p), p.getValuef(), start);
+            ? compoundKnob((CompoundParameter) p, dotColor)
+            : UI.knobFloat(getID(p, false), p.getValuef(), start, dotColor);
 
         if (UI.beginDragDropSource()) {
             UI.setDragDropPayload("SL.BoundedParameter", p);
@@ -68,13 +196,15 @@ public class ParameterUI {
             UI.endDragDropTarget();
         }
 
-        if (start != res) {
+        if (isMapping && UI.isItemClicked()) {
+            mapping.setControlTarget(p);
+        } else if (!isMapping && start != res) {
             final float fres = res;
             lx.engine.addTask(() -> p.setNormalized(fres));
         }
     }
 
-    private static float compoundKnob(LX lx, CompoundParameter cp) {
+    private float compoundKnob(CompoundParameter cp, int dotColor) {
         int N = cp.modulations.size();
         float[] mins = new float[N];
         float[] maxs = new float[N];
@@ -99,28 +229,34 @@ public class ParameterUI {
             colors[i] = modulation.color.getColor();
         }
         return UI.knobModulatedFloat(
-            getID(cp), (float) cp.getBaseValue(), (float) cp.getBaseNormalized(), cp.getNormalizedf(), N, mins, maxs, colors);
+            getID(cp, false), (float) cp.getBaseValue(), (float) cp.getBaseNormalized(),
+            cp.getNormalizedf(), N, mins, maxs, colors, dotColor);
     }
 
-    public static void draw(LX lx, DiscreteParameter p, ShowLabel showLabel) {
+    public void draw(DiscreteParameter p) {
         String[] options = p.getOptions();
+        boolean isMapping = isMapping();
         if (options == null) {
             int start = p.getValuei();
             final int res = UI.sliderInt(
-                getID(p, showLabel), start, p.getMinValue(), p.getMaxValue() - 1);
-            if (start != res) {
+                getID(p), start, p.getMinValue(), p.getMaxValue() - 1);
+            if (isMapping && UI.isItemClicked()) {
+                mapping.setControlTarget(p);
+            } else if (!isMapping && start != res) {
                 lx.engine.addTask(() -> p.setValue(res));
             }
         } else {
             int start = p.getValuei();
-            int res = UI.combo(getID(p, showLabel), start, options);
-            if (start != res) {
+            int res = UI.combo(getID(p), start, options);
+            if (isMapping && UI.isItemClicked()) {
+                mapping.setControlTarget(p);
+            } else if (!isMapping && start != res) {
                 lx.engine.addTask(() -> p.setValue(res));
             }
         }
     }
 
-    public static boolean toggle(String label, boolean active, boolean important, float w) {
+    public boolean toggle(String label, boolean active, boolean important, float w) {
         if (active) {
             UI.pushColor(UI.COLOR_BUTTON, important ? UIConstants.RED : UIConstants.BLUE);
             UI.pushColor(UI.COLOR_BUTTON_HOVERED, important ? UIConstants.RED_HOVER : UIConstants.BLUE_HOVER);
@@ -132,29 +268,35 @@ public class ParameterUI {
         return flip ? !active : active;
     }
 
-    public static boolean toggle(LX lx, BooleanParameter p, boolean important, float w) {
+    public boolean toggle(BooleanParameter p, boolean important, float w) {
         final boolean start = p.getValueb();
         final boolean res = toggle(getID(p), start, important, w);
-        if (res != start) {
+        final boolean isMapping = isMapping();
+        if (isMapping && UI.isItemClicked()) {
+            mapping.setControlTarget(p);
+        } else if (!isMapping && start != res) {
             lx.engine.addTask(() -> p.setValue(res));
         }
         return res;
     }
 
-    public static boolean toggle(LX lx, String label, BooleanParameter p, boolean important, float w) {
+    public boolean toggle(String label, BooleanParameter p, boolean important, float w) {
         final boolean start = p.getValueb();
         final boolean res = toggle(label, start, important, w);
-        if (res != start) {
+        final boolean isMapping = isMapping();
+        if (isMapping && UI.isItemClicked()) {
+            mapping.setControlTarget(p);
+        } else if (!isMapping && start != res) {
             lx.engine.addTask(() -> p.setValue(res));
         }
         return res;
     }
 
-    public static void draw(LX lx, BooleanParameter p) {
-        draw(lx, p, false);
+    public void draw(BooleanParameter p) {
+        draw(p, false);
     }
 
-    public static void draw(LX lx, BooleanParameter p, boolean important) {
+    public void draw(BooleanParameter p, boolean important) {
         final boolean start = p.getValueb();
         boolean res;
         if (p.getMode() == BooleanParameter.Mode.TOGGLE) {
@@ -170,18 +312,21 @@ public class ParameterUI {
             UI.button(getID(p));
             res = UI.isItemActive();
         }
-        if (res != start) {
+        final boolean isMapping = isMapping();
+        if (isMapping && UI.isItemClicked()) {
+            mapping.setControlTarget(p);
+        } else if (!isMapping() && start != res) {
             lx.engine.addTask(() -> p.setValue(res));
         }
     }
 
-    public static void draw(LX lx, ColorParameter p) {
+    public void draw(ColorParameter p) {
         int start = p.getColor();
         float h = p.hue.getValuef();
         float s = p.saturation.getValuef();
         float b = p.brightness.getValuef();
         float[] res = UI.colorPickerHSV(getID(p), h, s, b);
-        if (h != res[0] || s != res[1] || b != res[2]) {
+        if (!isMapping() && (h != res[0] || s != res[1] || b != res[2])) {
             lx.engine.addTask(() -> {
                     p.hue.setValue(res[0]);
                     p.saturation.setValue(res[1]);
@@ -190,23 +335,23 @@ public class ParameterUI {
         }
     }
 
-    public static void draw(LX lx, LXParameter param) {
+    public void draw(LXParameter param) {
         if (param instanceof BoundedParameter) {
-            ParameterUI.draw(lx, (BoundedParameter) param);
+            draw((BoundedParameter) param);
         } else if (param instanceof DiscreteParameter) {
-            ParameterUI.draw(lx, (DiscreteParameter) param, ShowLabel.YES);
+            draw((DiscreteParameter) param);
         } else if (param instanceof BooleanParameter) {
-            ParameterUI.draw(lx, (BooleanParameter) param);
+            draw((BooleanParameter) param);
         } else if (param instanceof ColorParameter) {
-            ParameterUI.draw(lx, (ColorParameter) param);
+            draw((ColorParameter) param);
         }
     }
 
-    public static void menuItem(LX lx, BooleanParameter p) {
-        menuItem(lx, p, getID(p));
+    public void menuItem(BooleanParameter p) {
+        menuItem(p, getID(p));
     }
 
-    public static void menuItem(LX lx, BooleanParameter p, String label) {
+    public void menuItem(BooleanParameter p, String label) {
         boolean res = UI.menuItemToggle(label, null, p.getValueb(), true);
         if (res != p.getValueb()) {
             lx.engine.addTask(() -> p.setValue(res));

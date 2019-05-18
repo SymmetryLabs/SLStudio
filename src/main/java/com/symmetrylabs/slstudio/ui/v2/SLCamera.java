@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.Input;
 
 
 /**
@@ -70,6 +71,11 @@ public class SLCamera extends Camera {
     public static class InputController extends CameraInputController {
         private final float orthoZoomScale = 0.0008f;
         private final float orthoZoomMin = 0.1f;
+        public int turnRotateIntoTranslateKey = Input.Keys.SHIFT_LEFT;
+        private boolean turnRotateIntoTranslateKeyDown = false;
+
+        private final Vector3 tmpV1 = new Vector3();
+        private final Vector3 tmpV2 = new Vector3();
 
         public InputController(SLCamera camera) {
             super(camera);
@@ -88,6 +94,40 @@ public class SLCamera extends Camera {
                 return true;
             }
             return false;
+        }
+
+        @Override
+        protected boolean process(float deltaX, float deltaY, int button) {
+            if (button == translateButton || button == rotateButton && turnRotateIntoTranslateKeyDown) {
+                camera.translate(tmpV1.set(camera.direction).crs(camera.up).nor().scl(-deltaX * translateUnits));
+                camera.translate(tmpV2.set(camera.up).scl(-deltaY * translateUnits));
+                if (translateTarget) target.add(tmpV1).add(tmpV2);
+            } else if (button == rotateButton) {
+                tmpV1.set(camera.direction).crs(camera.up).y = 0f;
+                camera.rotateAround(target, tmpV1.nor(), deltaY * rotateAngle);
+                camera.rotateAround(target, Vector3.Y, deltaX * -rotateAngle);
+            } else if (button == forwardButton) {
+                camera.translate(tmpV1.set(camera.direction).scl(deltaY * translateUnits));
+                if (forwardTarget) target.add(tmpV1);
+            }
+            if (autoUpdate) camera.update();
+            return true;
+        }
+
+        @Override
+        public boolean keyDown(int keycode) {
+            if (keycode == turnRotateIntoTranslateKey) {
+                turnRotateIntoTranslateKeyDown = true;
+            }
+            return super.keyDown(keycode);
+        }
+
+        @Override
+        public boolean keyUp(int keycode) {
+            if (keycode == turnRotateIntoTranslateKey) {
+                turnRotateIntoTranslateKeyDown = false;
+            }
+            return super.keyUp(keycode);
         }
     }
 }

@@ -17,12 +17,12 @@ import com.symmetrylabs.slstudio.ApplicationState;
  * A window that shows a tree view of warps, effects and patterns.
  */
 public class WepWindow extends CloseableWindow {
-    private final WepUi ui;
+    private final WepUI ui;
     private boolean firstDraw = true;
 
     public WepWindow(LX lx) {
         super("Warps / effects / patterns");
-        ui = new WepUi(lx, null);
+        ui = new WepUI(lx, null);
     }
 
     @Override

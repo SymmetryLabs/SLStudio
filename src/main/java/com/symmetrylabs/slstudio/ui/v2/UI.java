@@ -847,10 +847,10 @@ public class UI {
     public static native float floatBox(String label, float v, float speed, float min, float max, String valFmt);
 
     /* knob widgets are always over [0, 1] */
-    public static native float knobFloat(String label, float value, float normalized);
+    public static native float knobFloat(String label, float value, float normalized, int dotColor);
     public static native float knobModulatedFloat(
         String label, float value, float normalizedBase, float normalizedValue,
-        int modulatorCount, float[] modulatorMins, float[] modulatorMaxs, int[] modulatorColors);
+        int modulatorCount, float[] modulatorMins, float[] modulatorMaxs, int[] modulatorColors, int dotColor);
 
     public static boolean collapsibleSection(String label) {
         return collapsibleSection(label, false, 0).isOpen;
@@ -944,6 +944,7 @@ public class UI {
     public static native boolean isCtrlDown();
     public static native boolean isShiftDown();
     public static native boolean isKeyPressed(int keycode);
+    public static native boolean isKeyDown(int keycode);
 
     /**
      * Returns true if any item has keyboard focus

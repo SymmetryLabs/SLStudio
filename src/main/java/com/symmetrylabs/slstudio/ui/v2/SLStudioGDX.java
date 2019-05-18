@@ -20,6 +20,8 @@ import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import heronarts.lx.model.LXPoint;
 import com.symmetrylabs.slstudio.output.OutputControl;
 import heronarts.lx.data.LXVersions;
+import org.lwjgl.glfw.GLFW;
+import heronarts.lx.LXMappingEngine;
 
 public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.Provider {
     private static final String DEFAULT_SHOW = "demo";
@@ -101,27 +103,31 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         renderer.add(gnomon);
         MarkerRenderable markers = new MarkerRenderable(lx);
         renderer.add(markers);
+        ModelPicker picker = new ModelPicker(lx.model, renderer.cam);
 
         camController = new SLCamera.InputController(renderer.cam);
         camController.setTargetLH(model.cx, model.cy, model.cz);
         camController.translateUnits = model.xRange;
         camController.scrollFactor *= -0.2f;
 
-        Gdx.input.setInputProcessor(new DelegatingInputProcessor(camController));
+        Gdx.input.setInputProcessor(new DelegatingInputProcessor(camController, picker));
 
         loadLxComponents();
 
-        viewController = new ViewController(lx, camController, renderer.cam, gnomon, markers);
+        viewController = new ViewController(lx, camController, renderer.cam, gnomon, markers, picker);
 
         lookEditor = new LookEditor(lx);
         /* we want WindowManager to handle all of the drawing so it can manage the interaction between
            the UI running and the engine running, so we put it in charge of drawing the look editor */
         WindowManager.addTransient(lookEditor);
 
-        /* The main menu isn't really transient but we don't want it to appear in
-           the Window menu and it doesn't have a close button, so there's no risk of
-           it disappearing. */
+        /* These windows aren't really transient but we don't want them to appear in
+           the Window menu and they don't have a close button, so there's no risk of
+           them disappearing. */
         WindowManager.addTransient(new MainMenu(lx, this));
+        WindowManager.addTransient(picker);
+        WindowManager.addTransient(new CaptionWindow(lx));
+
         WindowManager.addPersistent("Audio", () -> new AudioWindow(lx), false);
         WindowManager.addPersistent("Color swatches", () -> new ColorSwatchWindow(lx, lookEditor), false);
         WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this, mr), false);
@@ -143,6 +149,13 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
     @Override
     public void render() {
+        /* handle global keyboard inputs */
+        if (UI.isKeyDown(GLFW.GLFW_KEY_M)) {
+            lx.engine.mapping.setMode(LXMappingEngine.Mode.MIDI);
+        } else {
+            lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
+        }
+
         int w = Gdx.graphics.getBackBufferWidth();
         int h = Gdx.graphics.getBackBufferHeight();
 
@@ -186,6 +199,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
     private void disposeLX() {
         NetworkMonitor.shutdownInstance(lx);
+        lookEditor.dispose();
         renderer.dispose();
         lx.engine.stop();
         /* we have to call onDraw here because onDraw is the only thing that pokes the

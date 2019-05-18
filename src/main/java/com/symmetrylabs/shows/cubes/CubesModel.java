@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Iterator;
 
 import static com.symmetrylabs.slstudio.output.CubeModelControllerMapping.PhysIdAssignment;
 import static com.symmetrylabs.util.CubeInventory.PhysicalCube;
@@ -84,6 +85,11 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         return facesUnmodifiable;
     }
 
+    @Override
+    public Iterator<? extends LXModel> getChildren() {
+        return towers.iterator();
+    }
+
     private static class Fixture extends LXAbstractFixture {
         private Fixture(Cube[] cubeArr) {
             for (Cube cube : cubeArr) {
@@ -126,12 +132,6 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
      * Model of a set of cubes stacked in a tower
      */
     public static class Tower extends StripsModel<CubesStrip> {
-
-        /**
-         * Tower id
-         */
-        public final String id;
-
         protected final List<Cube> cubes = new ArrayList<>();
         protected final List<Face> faces = new ArrayList<>();
 
@@ -144,15 +144,18 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
          * @param cubes Array of cubes
          */
         public Tower(String id, List<Cube> cubes) {
-            super(cubes.toArray(new Cube[0]));
-
-            this.id = id;
+            super(id, cubes.toArray(new Cube[0]));
 
             for (Cube cube : cubes) {
                 this.cubes.add(cube);
                 this.faces.addAll(cube.getFaces());
                 this.strips.addAll(cube.getStrips());
             }
+        }
+
+        @Override
+        public Iterator<? extends LXModel> getChildren() {
+            return cubes.iterator();
         }
 
         public List<Cube> getCubes() {
@@ -210,7 +213,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
             MEDIUM        (18,        60,       23),
             LARGE         (24,        30,       15),
             LARGE_DOUBLE  (24,        60,       30),
-            HD                        (24,        60,       28);
+            HD            (24,        60,       28);
 
 
             public final float EDGE_WIDTH;
@@ -242,6 +245,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         };
 
         public static final Type CUBE_TYPE_WITH_MOST_PIXELS = Type.LARGE_DOUBLE;
+        public static final int MAX_PIXELS_PER_CONTROLLER = Type.LARGE.POINTS_PER_CUBE;
 
         public final static int FACES_PER_CUBE = 4;
 
@@ -250,8 +254,6 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         public final static float CHANNEL_WIDTH = 1.5f;
 
         public final Type type;
-
-        public final String modelId;
 
         protected final List<Face> faces = new ArrayList<>();
         private final List<Face> facesUnmodifiable = Collections.unmodifiableList(faces);
@@ -287,12 +289,11 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         public float rz;
 
         public Cube(String modelId, float x, float y, float z, float rx, float ry, float rz, LXTransform t, Type type) {
-            super(new Fixture(type));
+            super(modelId, new Fixture(modelId, type));
 
             Fixture fixture = (Fixture) this.fixtures.get(0);
 
             this.type = type;
-            this.modelId = modelId;
 
             while (rx < 0) rx += 360;
             while (ry < 0) ry += 360;
@@ -340,9 +341,9 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
             private final List<Face> faces = new ArrayList<>();
             private final List<CubesStrip> strips = new ArrayList<>();
 
-            private Fixture(Type type) {
+            private Fixture(String cubeId, Type type) {
                 for (int i = 0; i < FACES_PER_CUBE; i++) {
-                    Face face = new Face(type.FACE_METRICS);
+                    Face face = new Face(cubeId, i, type.FACE_METRICS);
                     faces.add(face);
                     strips.addAll(face.getStrips());
                     for (LXPoint p : face.points) {
@@ -373,8 +374,8 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
 
         private final Metrics metrics;
 
-        public Face(Metrics metrics) {
-            super(new Fixture(metrics));
+        public Face(String cubeId, int faceIndex, Metrics metrics) {
+            super(String.format("%s / Face %d", cubeId, faceIndex), new Fixture(String.format("%s / Face %d", cubeId, faceIndex), metrics));
 
             Fixture fixture = (Fixture) this.fixtures.get(0);
             strips.addAll(fixture.strips);
@@ -397,11 +398,11 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
 
             private final List<CubesStrip> strips = new ArrayList<>();
 
-            private Fixture(Metrics metrics) {
+            private Fixture(String faceId, Metrics metrics) {
                 for (int i = 0; i < STRIPS_PER_FACE; i++) {
                     boolean isHorizontal = (i % 2 == 0);
                     CubesStrip.Metrics stripMetrics = isHorizontal ? metrics.horizontal : metrics.vertical;
-                    CubesStrip strip = new CubesStrip(i+"", stripMetrics, isHorizontal);
+                    CubesStrip strip = new CubesStrip(String.format("%s / Strip %d", faceId, i), stripMetrics, isHorizontal);
                     this.strips.add(strip);
                     for (LXPoint p : strip.points) {
                         this.points.add(p);

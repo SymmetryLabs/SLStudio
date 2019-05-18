@@ -376,7 +376,7 @@ public class SummerStage19Show extends CubesShow {
         allCubes.toArray(allCubesArr);
 
         CubesModel model = new CubesModel(towers, allCubesArr, cubeInventory, mapping);
-        model.setTopologyTolerances(6, 6, 8);
+        model.setTopologyTolerances(6, 6, 6);
         return model;
     }
 

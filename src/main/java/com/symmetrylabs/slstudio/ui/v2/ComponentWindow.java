@@ -15,9 +15,9 @@ import java.util.ArrayList;
 public class ComponentWindow extends CloseableWindow {
     private final ComponentUI ui;
 
-    public ComponentWindow(LX lx, String name, LXComponent comp) {
+    public ComponentWindow(LX lx, String name, LXComponent comp, ParameterUI pui) {
         super(name);
-        this.ui = new ComponentUI(lx, comp);
+        this.ui = new ComponentUI(lx, comp, pui);
     }
 
     @Override

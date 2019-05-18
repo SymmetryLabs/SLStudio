@@ -12,7 +12,7 @@ import java.util.List;
 import org.lwjgl.glfw.GLFW;
 
 public class ChannelUI {
-    public static void drawWarps(LX lx, String chanName, LXBus chan) {
+    public static void drawWarps(LX lx, String chanName, LXBus chan, ParameterUI pui) {
         List<LXWarp> warps = chan.getWarps();
         if (!warps.isEmpty()) {
             for (int i = 0; i < warps.size(); i++) {
@@ -34,14 +34,14 @@ public class ChannelUI {
                 } else if (section.shouldRemove) {
                     lx.engine.addTask(() -> chan.removeWarp(warp));
                 } else if (section.isOpen) {
-                    new ComponentUI(lx, warp).draw();
+                    new ComponentUI(lx, warp, pui).draw();
                 }
             }
             UI.spacing(5, 5);
         }
     }
 
-    public static void drawEffects(LX lx, String chanName, LXBus chan) {
+    public static void drawEffects(LX lx, String chanName, LXBus chan, ParameterUI pui) {
         List<LXEffect> effects = chan.getEffects();
         if (!effects.isEmpty()) {
             for (int i = 0; i < effects.size(); i++) {
@@ -63,13 +63,13 @@ public class ChannelUI {
                 } else if (section.shouldRemove) {
                     lx.engine.addTask(() -> chan.removeEffect(eff));
                 } else if (section.isOpen) {
-                    new ComponentUI(lx, eff).draw();
+                    new ComponentUI(lx, eff, pui).draw();
                 }
             }
         }
     }
 
-    public static void drawWepPopup(LX lx, LXBus bus, WepUi wepUi) {
+    public static void drawWepPopup(LX lx, LXBus bus, WepUI wepUi) {
         UI.spacing(5, 5);
         boolean shouldShow = false;
         if (UI.button("+")) {
@@ -94,13 +94,17 @@ public class ChannelUI {
         }
     }
 
-    public static void draw(LX lx, LXChannel chan, WepUi wepUi) {
+    public static void draw(LX lx, LXChannel chan, ParameterUI pui, WepUI wepUi) {
         String chanName = chan.getLabel();
 
-        ParameterUI.draw(lx, chan.blendPatterns);
-        ParameterUI.draw(lx, chan.patternBlendMode);
+        pui.draw(chan.blendPatterns);
+        pui.draw(chan.midiMonitor);
+        pui.draw(chan.patternBlendMode);
+        pui.draw(chan.midiChannel);
 
-        drawWarps(lx, chanName, chan);
+        pui.push().allowMapping(true);
+
+        drawWarps(lx, chanName, chan, pui);
 
         int active = chan.getActivePatternIndex();
         List<LXPattern> patterns = chan.getPatterns();
@@ -140,7 +144,7 @@ public class ChannelUI {
                     lx.engine.addTask(() -> chan.goIndex(patternIndex));
                 }
                 if (UI.contextMenuItem("Pop out")) {
-                    WindowManager.addTransient(new ComponentWindow(lx, id, pat));
+                    WindowManager.addTransient(new ComponentWindow(lx, id, pat, pui));
                 }
                 UI.endContextMenu();
             }
@@ -148,12 +152,13 @@ public class ChannelUI {
             if (section.shouldRemove) {
                 lx.engine.addTask(() -> chan.removePattern(pat));
             } else if (section.isOpen) {
-                new ComponentUI(lx, pat).draw();
+                new ComponentUI(lx, pat, pui).draw();
             }
         }
 
         UI.spacing(5, 5);
-        drawEffects(lx, chanName, chan);
+        drawEffects(lx, chanName, chan, pui);
         drawWepPopup(lx, chan, wepUi);
+        pui.pop();
     }
 }

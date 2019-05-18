@@ -17,6 +17,7 @@ import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.util.CubeInventory;
 import com.symmetrylabs.color.PerceptualColorScale;
 import com.symmetrylabs.color.Ops8;
+import com.symmetrylabs.shows.cubes.CubesModel.Cube;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -44,7 +45,6 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     };
 
     final int numStrips = STRIP_ORD.length;
-    int numPixels;
     int contentSizeBytes;
     int packetSizeBytes;
     byte[] packetData;
@@ -93,7 +93,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     }
 
     public String getMacAddress() {
-        return networkDevice.deviceId;
+        return networkDevice == null ? null : networkDevice.deviceId;
     }
 
     @Override
@@ -118,7 +118,6 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     }
 
     private void initPacketData(int numPixels, boolean use16) {
-        this.numPixels = numPixels;
         contentSizeBytes = (use16 ? BYTES_PER_16BIT_PIXEL : BYTES_PER_PIXEL) * numPixels;
         packetSizeBytes = HEADER_LEN + contentSizeBytes;
         if (packetData == null || packetData.length != packetSizeBytes) {
@@ -201,6 +200,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         } else {
             points = cubesModel.getControllerPoints(id);
         }
+        int numPixels = points == null ? 0 : points.size();
 
         // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
         // TODO: refactor here
@@ -237,13 +237,20 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             case 1: c = 0xFF008800; break;
             case 2: c = 0xFF000088; break;
             }
+            /* we want the test pattern to work even if we aren't mapped, and if
+               we aren't mapped we don't know how many pixels we have. Since
+               controllers are happy to receive more pixels than they have
+               connected to them, and we're just sending a constant color, we just
+               send enough pixels that our highest pixel-count-per-controller cube
+               would get enough pixels to turn on everything. */
+            if (numPixels == 0) {
+                numPixels = CubesModel.Cube.MAX_PIXELS_PER_CONTROLLER;
+            }
             initPacketData(numPixels, false);
             for (int i = 0; i < numPixels; i++) {
                 setPixel(i, c);
             }
         } else if (points != null) {
-            int numPixels = points.size();
-
             // Fill the datagram with pixel data
             if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
                 initPacketData(numPixels, true);

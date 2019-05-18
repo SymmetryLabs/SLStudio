@@ -13,11 +13,13 @@ import heronarts.lx.parameter.LXParameter;
 public class ColorSwatchWindow extends CloseableWindow {
     protected final LX lx;
     protected final LookEditor lookEditor;
+    protected final ParameterUI pui;
 
     public ColorSwatchWindow(LX lx, LookEditor lookEditor) {
         super("Color swatches");
         this.lx = lx;
         this.lookEditor = lookEditor;
+        this.pui = ParameterUI.getDefault(lx).setDefaultBoundedWidget(ParameterUI.WidgetType.SLIDER);
     }
 
     @Override
@@ -50,7 +52,7 @@ public class ColorSwatchWindow extends CloseableWindow {
 
         final LXLook look = lookEditor.getLook();
         for (SwatchLibrary.Swatch swatch : lx.swatches) {
-            ParameterUI.draw(lx, swatch.color);
+            pui.draw(swatch.color);
             if (UI.beginContextMenu("removeSwatch" + swatch.index)) {
                 if (UI.contextMenuItem("Remove")) {
                     lx.engine.addTask(() -> lx.swatches.removeSwatch(swatch));
@@ -64,7 +66,7 @@ public class ColorSwatchWindow extends CloseableWindow {
         UI.text("Activate");
         UI.popFont();
 
-        ParameterUI.draw(lx, lx.swatches.transitionTime, ParameterUI.WidgetType.SLIDER);
+        pui.draw(lx.swatches.transitionTime);
         UI.spacing(1, 10);
 
         UI.beginTable(4, "swatchButtons");
@@ -99,7 +101,7 @@ public class ColorSwatchWindow extends CloseableWindow {
         }
         UI.beginTable(4, "channelScope");
         for (LXChannel chan : look.channels) {
-            ParameterUI.toggle(lx, chan.getLabel(), chan.acceptSwatches, false, 0);
+            pui.toggle(chan.getLabel(), chan.acceptSwatches, false, 0);
             UI.nextCell();
         }
         UI.endTable();

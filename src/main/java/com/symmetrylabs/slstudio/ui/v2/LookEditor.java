@@ -10,6 +10,7 @@ import org.lwjgl.system.CallbackI.B;
 import heronarts.lx.LXLook;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.BoundedParameter;
+import org.lwjgl.glfw.GLFW;
 
 
 public class LookEditor implements Window {
@@ -20,8 +21,9 @@ public class LookEditor implements Window {
 
     private final LX lx;
     private LXLook look;
-    private final WepUi wepUi;
-    private final WepUi transformWepUi;
+    private final WepUI wepUi;
+    private final WepUI transformWepUi;
+    private final ParameterUI pui;
     private boolean showLookTransform = false;
     private float maxWindowHeight = -1;
 
@@ -34,8 +36,13 @@ public class LookEditor implements Window {
 
     public LookEditor(LX lx) {
         this.lx = lx;
-        this.wepUi = new WepUi(lx, () -> UI.closePopup());
-        this.transformWepUi = new WepUi(lx, false, () -> UI.closePopup());
+        this.wepUi = new WepUI(lx, () -> UI.closePopup());
+        this.transformWepUi = new WepUI(lx, false, () -> UI.closePopup());
+        this.pui = ParameterUI.getMappable(lx).setDefaultBoundedWidget(ParameterUI.WidgetType.KNOB);
+    }
+
+    public void dispose() {
+        pui.dispose();
     }
 
     public LXLook getLook() {
@@ -68,11 +75,7 @@ public class LookEditor implements Window {
             for (int row = 0; row < rows; row++) {
                 for (int col = 0; col < cols; col++) {
                     LXParameter param = look.shelf.getParameter(row, col);
-                    if (param instanceof BoundedParameter) {
-                        ParameterUI.draw(lx, (BoundedParameter) param, ParameterUI.WidgetType.KNOB);
-                    } else {
-                        ParameterUI.draw(lx, param);
-                    }
+                    pui.draw(param);
                     if (col < cols - 1) {
                         UI.sameLine();
                     }
@@ -101,17 +104,17 @@ public class LookEditor implements Window {
                 UI.beginGroup();
                 CrossfadeGroup group = chan.crossfadeGroup.getEnum();
 
-                ParameterUI.toggle(lx, chan.enabled, false, 40);
+                pui.toggle(chan.enabled, false, 40);
                 boolean cueStart = chan.cueActive.getValueb();
-                if (ParameterUI.toggle(lx, chan.cueActive, true, 40) && !cueStart) {
+                if (pui.toggle(chan.cueActive, true, 40) && !cueStart) {
                     for (LXChannel cc : look.channels) {
                         if (cc != chan) {
                             cc.cueActive.setValue(false);
                         }
                     }
                 }
-                boolean A = ParameterUI.toggle("A##" + chanName, group == CrossfadeGroup.A, false, 40);
-                boolean B = ParameterUI.toggle("B##" + chanName, group == CrossfadeGroup.B, false, 40);
+                boolean A = pui.toggle("A##" + chanName, group == CrossfadeGroup.A, false, 40);
+                boolean B = pui.toggle("B##" + chanName, group == CrossfadeGroup.B, false, 40);
 
                 if (A && group != CrossfadeGroup.A) {
                     group = CrossfadeGroup.A;
@@ -124,7 +127,9 @@ public class LookEditor implements Window {
                 UI.endGroup();
 
                 UI.pushWidth(80);
-                ParameterUI.draw(lx, chan.blendMode, ParameterUI.ShowLabel.NO);
+                pui.showLabel(false);
+                pui.draw(chan.blendMode);
+                pui.showLabel(true);
                 UI.popWidth();
 
                 UI.endChild();
@@ -166,7 +171,7 @@ public class LookEditor implements Window {
                 if (chan.editorVisible.getValueb()) {
                     UI.beginChild(chan.getLabel() + "##channel-child", false, 0, PIPELINE_WIDTH, (int) UI.height);
                     pipelineIndex = channelHeader(chan, chan.getLabel(), pipelineIndex);
-                    ChannelUI.draw(lx, chan, wepUi);
+                    ChannelUI.draw(lx, chan, pui, wepUi);
                     maxWindowHeight = Float.max(maxWindowHeight, UI.getCursorPosition().y);
                     UI.endChild();
                     UI.sameLine();
@@ -182,8 +187,8 @@ public class LookEditor implements Window {
             UI.popFont();
 
             LXMasterChannel mc = lx.engine.masterChannel;
-            ChannelUI.drawEffects(lx, "Look", mc);
-            ChannelUI.drawWarps(lx, "Look", mc);
+            ChannelUI.drawEffects(lx, "Look", mc, pui);
+            ChannelUI.drawWarps(lx, "Look", mc, pui);
             ChannelUI.drawWepPopup(lx, mc, transformWepUi);
 
             UI.endChild();

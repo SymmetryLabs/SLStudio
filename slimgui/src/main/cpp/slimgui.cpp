@@ -182,6 +182,9 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_init(JNIEnv *env, jclass cls, jlong wind
     return 1;
 }
 
+static bool fontRangesReady = false;
+static ImVector<ImWchar> fontRanges;
+
 JNIEXPORT jlong JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_addFont(JNIEnv *env, jclass, jstring jname, jobject jbuf, jfloat fsize) {
     JniString name(env, jname);
     ImFontConfig fc;
@@ -191,9 +194,21 @@ JNIEXPORT jlong JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_addFont(JNIEnv *
     jlong size = env->GetDirectBufferCapacity(jbuf);
     void *data = malloc(size);
     memcpy(data, jdata, size);
+
+    if (!fontRangesReady) {
+        ImFontGlyphRangesBuilder builder;
+        builder.AddRanges(ImGui::GetIO().Fonts->GetGlyphRangesDefault());
+        /* various bullet characters */
+        builder.AddChar(0x25C6); // outlined diamond
+        builder.AddChar(0x25CB); // outlined circle
+        builder.AddChar(0x25CF); // filled circle
+        builder.BuildRanges(&fontRanges);
+        fontRangesReady = true;
+    }
+
     return static_cast<jlong>(
         reinterpret_cast<intptr_t>(
-            ImGui::GetIO().Fonts->AddFontFromMemoryTTF(data, size, fsize, &fc)));
+            ImGui::GetIO().Fonts->AddFontFromMemoryTTF(data, size, fsize, &fc, fontRanges.Data)));
 }
 
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_pushFont(JNIEnv *, jclass, jlong fontHandle) {
@@ -574,21 +589,21 @@ JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_floatBox(JNIEnv
 }
 
 JNIEXPORT jfloat JNICALL
-Java_com_symmetrylabs_slstudio_ui_v2_UI_knobFloat(JNIEnv *env, jclass cls, jstring jlabel, jfloat vf, jfloat vn) {
+Java_com_symmetrylabs_slstudio_ui_v2_UI_knobFloat(JNIEnv *env, jclass cls, jstring jlabel, jfloat vf, jfloat vn, jint dotColor) {
     JniString label(env, jlabel);
-    Knob(label, &vn, vf, vn, 0, nullptr, nullptr, nullptr);
+    Knob(label, &vn, vf, vn, 0, nullptr, nullptr, nullptr, dotColor);
     return vn;
 }
 
 JNIEXPORT jfloat JNICALL
 Java_com_symmetrylabs_slstudio_ui_v2_UI_knobModulatedFloat(
     JNIEnv *env, jclass cls, jstring jlabel, jfloat vf, jfloat vn,
-    jfloat modulated, jint modCount, jfloatArray jmins, jfloatArray jmaxs, jintArray jcolors) {
+    jfloat modulated, jint modCount, jfloatArray jmins, jfloatArray jmaxs, jintArray jcolors, jint dotColor) {
     JniString label(env, jlabel);
     JniFloatArray mins(env, jmins);
     JniFloatArray maxs(env, jmaxs);
     JniIntArray colors(env, jcolors);
-    Knob(label, &vn, vf, modulated, modCount, mins, maxs, colors);
+    Knob(label, &vn, vf, modulated, modCount, mins, maxs, colors, dotColor);
     return vn;
 }
 
@@ -781,6 +796,10 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isShiftDown(J
 
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isKeyPressed(JNIEnv *, jclass, jint keyCode) {
     return ImGui::IsKeyPressed(keyCode);
+}
+
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isKeyDown(JNIEnv *, jclass, jint keyCode) {
+    return ImGui::IsKeyDown(keyCode);
 }
 
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_setKeyboardFocusHere(JNIEnv *, jclass, jint offset) {

@@ -450,18 +450,18 @@ JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_floatBox
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    knobFloat
- * Signature: (Ljava/lang/String;FF)F
+ * Signature: (Ljava/lang/String;FFI)F
  */
 JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobFloat
-  (JNIEnv *, jclass, jstring, jfloat, jfloat);
+  (JNIEnv *, jclass, jstring, jfloat, jfloat, jint);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    knobModulatedFloat
- * Signature: (Ljava/lang/String;FFFI[F[F[I)F
+ * Signature: (Ljava/lang/String;FFFI[F[F[II)F
  */
 JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobModulatedFloat
-  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat, jint, jfloatArray, jfloatArray, jintArray);
+  (JNIEnv *, jclass, jstring, jfloat, jfloat, jfloat, jint, jfloatArray, jfloatArray, jintArray, jint);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
@@ -725,6 +725,14 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isShiftDown
  * Signature: (I)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isKeyPressed
+  (JNIEnv *, jclass, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    isKeyDown
+ * Signature: (I)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_isKeyDown
   (JNIEnv *, jclass, jint);
 
 /*

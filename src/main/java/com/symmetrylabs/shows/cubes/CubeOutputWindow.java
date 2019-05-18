@@ -14,6 +14,7 @@ public class CubeOutputWindow extends CloseableWindow {
     private final LX lx;
     private final CubesModel model;
     private final CubesShow show;
+    private final ParameterUI pui;
     private final String[] featureIdBuffer = new String[32];
 
     private float editBrightness = 1.f;
@@ -23,13 +24,14 @@ public class CubeOutputWindow extends CloseableWindow {
         this.lx = lx;
         this.show = show;
         this.model = (CubesModel) lx.model;
+        this.pui = ParameterUI.getDefault(lx).setDefaultBoundedWidget(ParameterUI.WidgetType.SLIDER);
     }
 
     @Override
     protected void drawContents() {
-        ParameterUI.draw(lx, ApplicationState.outputControl().enabled);
-        ParameterUI.draw(lx, ApplicationState.outputControl().testBroadcast);
-        ParameterUI.draw(lx, ApplicationState.outputControl().controllerResetModule.enabled);
+        pui.draw(ApplicationState.outputControl().enabled);
+        pui.draw(ApplicationState.outputControl().testBroadcast);
+        pui.draw(ApplicationState.outputControl().controllerResetModule.enabled);
 
         UI.separator();
 
@@ -79,7 +81,7 @@ public class CubeOutputWindow extends CloseableWindow {
             if (!cr.isOpen) {
                 continue;
             }
-            new ComponentUI(lx, cc, ParameterUI.WidgetType.SLIDER).draw();
+            new ComponentUI(lx, cc, pui).draw();
             UI.labelText("Status", mapped ? "mapped" : "unmapped");
             NetworkDevice nd = cc.networkDevice;
             if (nd == null) {
