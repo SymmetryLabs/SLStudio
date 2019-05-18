@@ -311,4 +311,8 @@ public class LXVector {
         result = 31 * result + Float.floatToIntBits(this.z);
         return result;
     }
+
+    public LXPoint getPoint() {
+        return new LXPoint(this.x, this.y, this.z);
+    }
 }

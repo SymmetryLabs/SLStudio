@@ -50,18 +50,8 @@ public class FixtureViewer {
 
         String basePath = new File("").getAbsolutePath();
         System.out.println(basePath);
-//        String command = basePath+"/submodules/openpixelcontrol/bin/gl_server -l " + basePath + "/dynamic.json";
-        String command = basePath+"/submodules/openpixelcontrol/bin/gl_server -l " + basePath + "/dynamic.json -tUDP";
+        String command = basePath+"/../openpixelcontrol/bin/gl_server -l " + basePath + "/dynamic.json";
         System.out.println(command);
-
-        // start the process
         Process pr = rt.exec(command);
-
-        // let the process run...
-        try {
-            pr.waitFor();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }
