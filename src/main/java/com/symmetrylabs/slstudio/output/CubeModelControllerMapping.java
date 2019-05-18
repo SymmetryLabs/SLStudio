@@ -41,8 +41,8 @@ public class CubeModelControllerMapping {
     protected final List<PhysIdAssignment> assignments = new ArrayList<>();
     protected transient final Map<String, PhysIdAssignment> assignmentsByPhysId = new HashMap<>();
     protected transient final Map<String, PhysIdAssignment> assignmentsByModelId = new HashMap<>();
+    protected transient CubeInventory inventory;
     protected final String showName;
-    protected final CubeInventory inventory;
 
     protected CubeModelControllerMapping() {
         this.showName = null;
@@ -67,6 +67,9 @@ public class CubeModelControllerMapping {
     }
 
     public PhysIdAssignment lookUpByControllerId(String ctrlId) {
+        if (assignmentsByPhysId.containsKey(ctrlId)) {
+            return assignmentsByPhysId.get(ctrlId);
+        }
         CubeInventory.PhysicalCube pc = inventory.cubeByCtrlId.get(ctrlId);
         if (pc == null) return null;
         return assignmentsByPhysId.get(pc.getPhysicalId());
@@ -125,6 +128,7 @@ public class CubeModelControllerMapping {
                 CubeModelControllerMapping res = new Gson().fromJson(
                     new InputStreamReader(new FileInputStream(f)), CubeModelControllerMapping.class);
                 if (res != null) {
+                    res.inventory = inventory;
                     res.onUpdate();
                     System.out.println("loaded mapping for show " + res.showName);
                     return res;
