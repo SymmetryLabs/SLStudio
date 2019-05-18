@@ -2,11 +2,888 @@
   "assignments": [
     {
       "modelId": "L1-A1.5",
-      "physicalId": ""
+      "physicalId": "1027"
+    },
+    {
+      "modelId": "L1-B1",
+      "physicalId": "944"
+    },
+    {
+      "modelId": "L1-B2",
+      "physicalId": "587"
+    },
+    {
+      "modelId": "L1-B3",
+      "physicalId": "997"
+    },
+    {
+      "modelId": "L2-A1",
+      "physicalId": "924"
+    },
+    {
+      "modelId": "L2-A2",
+      "physicalId": "954"
+    },
+    {
+      "modelId": "L3-A1",
+      "physicalId": "669"
+    },
+    {
+      "modelId": "L3-A2",
+      "physicalId": "1248"
+    },
+    {
+      "modelId": "L3-A3",
+      "physicalId": "875"
+    },
+    {
+      "modelId": "L4-A1",
+      "physicalId": "204"
+    },
+    {
+      "modelId": "L4-A3",
+      "physicalId": "438"
+    },
+    {
+      "modelId": "L4-A4",
+      "physicalId": "495"
+    },
+    {
+      "modelId": "L5-A1",
+      "physicalId": "935"
+    },
+    {
+      "modelId": "L5-A2",
+      "physicalId": "481"
+    },
+    {
+      "modelId": "L5-A3",
+      "physicalId": "559"
+    },
+    {
+      "modelId": "L5-A4",
+      "physicalId": "679"
+    },
+    {
+      "modelId": "L6-A1",
+      "physicalId": "467"
+    },
+    {
+      "modelId": "L6-A2",
+      "physicalId": "1244"
+    },
+    {
+      "modelId": "L6-A3",
+      "physicalId": "1041"
+    },
+    {
+      "modelId": "L6-A4",
+      "physicalId": "906"
+    },
+    {
+      "modelId": "L6-A5",
+      "physicalId": "751"
+    },
+    {
+      "modelId": "L7-A1",
+      "physicalId": "1206"
+    },
+    {
+      "modelId": "L7-A2",
+      "physicalId": "876"
+    },
+    {
+      "modelId": "L7-A3",
+      "physicalId": "700"
+    },
+    {
+      "modelId": "L7-A4",
+      "physicalId": "601"
+    },
+    {
+      "modelId": "L8-A1",
+      "physicalId": "741"
+    },
+    {
+      "modelId": "L8-A2",
+      "physicalId": "591"
+    },
+    {
+      "modelId": "L8-A3",
+      "physicalId": "813"
+    },
+    {
+      "modelId": "L9-A1",
+      "physicalId": "1107"
+    },
+    {
+      "modelId": "L9-A2",
+      "physicalId": "823"
+    },
+    {
+      "modelId": "L9-A3",
+      "physicalId": "833"
+    },
+    {
+      "modelId": "L9-A4",
+      "physicalId": "1009"
+    },
+    {
+      "modelId": "LC1-A1A",
+      "physicalId": "991"
+    },
+    {
+      "modelId": "LC1-A3A",
+      "physicalId": "509"
+    },
+    {
+      "modelId": "LC1-A1.5B",
+      "physicalId": "1234"
+    },
+    {
+      "modelId": "LC1-A2.5B",
+      "physicalId": "443"
+    },
+    {
+      "modelId": "LC2-A1B",
+      "physicalId": "1212"
+    },
+    {
+      "modelId": "LC2-A2B",
+      "physicalId": "1231"
+    },
+    {
+      "modelId": "LC2-A3B+",
+      "physicalId": "1241"
+    },
+    {
+      "modelId": "LC2-A1C",
+      "physicalId": "1049"
+    },
+    {
+      "modelId": "LC2-A2D",
+      "physicalId": "1368"
+    },
+    {
+      "modelId": "CS1-A1.5",
+      "physicalId": "767"
+    },
+    {
+      "modelId": "CS1-B1",
+      "physicalId": "667"
+    },
+    {
+      "modelId": "CS1-B2",
+      "physicalId": "1069"
+    },
+    {
+      "modelId": "CS1-B3",
+      "physicalId": "1226"
+    },
+    {
+      "modelId": "CS1-C1",
+      "physicalId": "1011"
+    },
+    {
+      "modelId": "CS1-C2",
+      "physicalId": "644"
+    },
+    {
+      "modelId": "CS2-A3A",
+      "physicalId": "1246"
+    },
+    {
+      "modelId": "CS2-A4A",
+      "physicalId": "1363"
+    },
+    {
+      "modelId": "CS2-A3B",
+      "physicalId": "896"
+    },
+    {
+      "modelId": "CS2-B1A",
+      "physicalId": "967"
+    },
+    {
+      "modelId": "CS2-B2A",
+      "physicalId": "1093"
+    },
+    {
+      "modelId": "CS2-B3A",
+      "physicalId": "757"
+    },
+    {
+      "modelId": "CS2-B3B",
+      "physicalId": "1239"
+    },
+    {
+      "modelId": "CS2-B4B",
+      "physicalId": "1341"
+    },
+    {
+      "modelId": "CS2-B5B",
+      "physicalId": "1096"
+    },
+    {
+      "modelId": "CS2-B6B",
+      "physicalId": "1351"
+    },
+    {
+      "modelId": "CS2-C3A+",
+      "physicalId": "975"
+    },
+    {
+      "modelId": "CS2-C4A+",
+      "physicalId": "949"
+    },
+    {
+      "modelId": "CS3-A3B",
+      "physicalId": "1335"
+    },
+    {
+      "modelId": "CS3-A4B",
+      "physicalId": "1333"
+    },
+    {
+      "modelId": "CS3-A5B",
+      "physicalId": "1327"
+    },
+    {
+      "modelId": "CS3-B1A",
+      "physicalId": "1325"
+    },
+    {
+      "modelId": "CS3-B2A",
+      "physicalId": "361"
+    },
+    {
+      "modelId": "CS3-B3A",
+      "physicalId": "945"
+    },
+    {
+      "modelId": "CS3-B3B",
+      "physicalId": "1337"
+    },
+    {
+      "modelId": "CS3-C3A",
+      "physicalId": "1329"
+    },
+    {
+      "modelId": "CS3-C3B",
+      "physicalId": "353"
+    },
+    {
+      "modelId": "CS3-C4B",
+      "physicalId": "1331"
+    },
+    {
+      "modelId": "CS4-A3A",
+      "physicalId": "765"
+    },
+    {
+      "modelId": "CS4-A4A",
+      "physicalId": "1339"
+    },
+    {
+      "modelId": "CS4-A5A",
+      "physicalId": "1238"
+    },
+    {
+      "modelId": "CS4-A3B",
+      "physicalId": "1362"
+    },
+    {
+      "modelId": "CS4-B1A",
+      "physicalId": "475"
+    },
+    {
+      "modelId": "CS4-B2A",
+      "physicalId": "1221"
+    },
+    {
+      "modelId": "CS4-B3A",
+      "physicalId": "572"
+    },
+    {
+      "modelId": "CS4-C1A",
+      "physicalId": "1097"
+    },
+    {
+      "modelId": "CS4-C2A",
+      "physicalId": "685"
+    },
+    {
+      "modelId": "CS4-C3A",
+      "physicalId": "366"
+    },
+    {
+      "modelId": "CS4-C4A",
+      "physicalId": "517"
+    },
+    {
+      "modelId": "CS4-C5A",
+      "physicalId": "781"
+    },
+    {
+      "modelId": "CS4-C2B",
+      "physicalId": "1365"
+    },
+    {
+      "modelId": "CS4-C3B",
+      "physicalId": "908"
+    },
+    {
+      "modelId": "CS5-A3A",
+      "physicalId": "516"
+    },
+    {
+      "modelId": "CS5-A4A",
+      "physicalId": "926"
+    },
+    {
+      "modelId": "CS5-A1B",
+      "physicalId": "507"
+    },
+    {
+      "modelId": "CS5-A2B",
+      "physicalId": "551"
+    },
+    {
+      "modelId": "CS5-A3B",
+      "physicalId": "916"
+    },
+    {
+      "modelId": "CS5-B1B",
+      "physicalId": "499"
+    },
+    {
+      "modelId": "CS5-B2B",
+      "physicalId": "942"
+    },
+    {
+      "modelId": "CS5-B3B",
+      "physicalId": "1081"
+    },
+    {
+      "modelId": "CS5-B4B",
+      "physicalId": "1030"
+    },
+    {
+      "modelId": "CS5-B5B",
+      "physicalId": "553"
+    },
+    {
+      "modelId": "CS6-A3C",
+      "physicalId": "1012"
+    },
+    {
+      "modelId": "CS6-A4C",
+      "physicalId": "449"
+    },
+    {
+      "modelId": "CS6-A3B",
+      "physicalId": "1354"
+    },
+    {
+      "modelId": "CS6-A4B",
+      "physicalId": "1072"
+    },
+    {
+      "modelId": "CS6-B1A+",
+      "physicalId": "707"
+    },
+    {
+      "modelId": "CS6-B2A+",
+      "physicalId": "447"
+    },
+    {
+      "modelId": "CS6-B3A+",
+      "physicalId": "818"
+    },
+    {
+      "modelId": "CS6-B4A+",
+      "physicalId": "1358"
+    },
+    {
+      "modelId": "CS6-B5A+",
+      "physicalId": "1348"
+    },
+    {
+      "modelId": "CS6-B6A+",
+      "physicalId": "1130"
+    },
+    {
+      "modelId": "CS6-C2B",
+      "physicalId": "931"
+    },
+    {
+      "modelId": "CS6-C3B",
+      "physicalId": "1360"
+    },
+    {
+      "modelId": "CS6-C3C",
+      "physicalId": "1126"
+    },
+    {
+      "modelId": "CS6-C4C",
+      "physicalId": "1122"
+    },
+    {
+      "modelId": "CS7-A1A",
+      "physicalId": "900"
+    },
+    {
+      "modelId": "CS7-A2A",
+      "physicalId": "1046"
+    },
+    {
+      "modelId": "CS7-A3A",
+      "physicalId": "1224"
+    },
+    {
+      "modelId": "CS7-A4A",
+      "physicalId": "641"
+    },
+    {
+      "modelId": "CS7-A5A",
+      "physicalId": "1196"
+    },
+    {
+      "modelId": "CS7-A6A",
+      "physicalId": "1120"
+    },
+    {
+      "modelId": "CS7-B2A",
+      "physicalId": "852"
+    },
+    {
+      "modelId": "CS7-B3A",
+      "physicalId": "1214"
+    },
+    {
+      "modelId": "CS7-B2B",
+      "physicalId": "953"
+    },
+    {
+      "modelId": "CS7-B3B",
+      "physicalId": "140"
+    },
+    {
+      "modelId": "CS7-B4B",
+      "physicalId": "609"
+    },
+    {
+      "modelId": "CS7-B5B",
+      "physicalId": "1249"
+    },
+    {
+      "modelId": "CS8-A3B",
+      "physicalId": "518"
+    },
+    {
+      "modelId": "CS8-A4B",
+      "physicalId": "647"
+    },
+    {
+      "modelId": "CS8-A5B",
+      "physicalId": "1113"
+    },
+    {
+      "modelId": "CS8-B4B",
+      "physicalId": "966"
+    },
+    {
+      "modelId": "CS8-B5B",
+      "physicalId": "643"
+    },
+    {
+      "modelId": "CS8-B6B",
+      "physicalId": "615"
+    },
+    {
+      "modelId": "CS8-C2A",
+      "physicalId": "1209"
+    },
+    {
+      "modelId": "CS8-C3A",
+      "physicalId": "1323"
+    },
+    {
+      "modelId": "CS8-C4A",
+      "physicalId": "727"
+    },
+    {
+      "modelId": "CS8-C5A",
+      "physicalId": "308"
+    },
+    {
+      "modelId": "CS8-C4B",
+      "physicalId": "1192"
+    },
+    {
+      "modelId": "CS8-C5B",
+      "physicalId": "575"
+    },
+    {
+      "modelId": "CS9-A1A",
+      "physicalId": "1104"
+    },
+    {
+      "modelId": "CS9-A2A",
+      "physicalId": "713"
+    },
+    {
+      "modelId": "CS9-A3A",
+      "physicalId": "759"
+    },
+    {
+      "modelId": "CS9-A4A",
+      "physicalId": "603"
+    },
+    {
+      "modelId": "CS9-A5A",
+      "physicalId": "761"
+    },
+    {
+      "modelId": "CS9-B2A",
+      "physicalId": "441"
+    },
+    {
+      "modelId": "CS9-B3A",
+      "physicalId": "442"
+    },
+    {
+      "modelId": "CS9-B2B",
+      "physicalId": "455"
+    },
+    {
+      "modelId": "CS9-B3B",
+      "physicalId": "691"
+    },
+    {
+      "modelId": "CS9-B4B",
+      "physicalId": "1306"
+    },
+    {
+      "modelId": "CS10-A3A",
+      "physicalId": "1371"
+    },
+    {
+      "modelId": "CS10-A2B",
+      "physicalId": "897"
+    },
+    {
+      "modelId": "CS10-A3B",
+      "physicalId": "844"
+    },
+    {
+      "modelId": "CS10-A4B",
+      "physicalId": "940"
+    },
+    {
+      "modelId": "CS10-A5B",
+      "physicalId": "1216"
+    },
+    {
+      "modelId": "CS10-A6B",
+      "physicalId": "778"
+    },
+    {
+      "modelId": "CS10-B1B",
+      "physicalId": "873"
+    },
+    {
+      "modelId": "CS10-B2B",
+      "physicalId": "827"
+    },
+    {
+      "modelId": "CS10-B3B",
+      "physicalId": "143"
+    },
+    {
+      "modelId": "CS10-B4B",
+      "physicalId": "1037"
+    },
+    {
+      "modelId": "CS10-C4A",
+      "physicalId": "604"
+    },
+    {
+      "modelId": "CS10-C5B",
+      "physicalId": "929"
+    },
+    {
+      "modelId": "CS11-A2A",
+      "physicalId": "911"
+    },
+    {
+      "modelId": "CS11-A3A",
+      "physicalId": "747"
+    },
+    {
+      "modelId": "CS11-A4A",
+      "physicalId": "546"
+    },
+    {
+      "modelId": "CS11-A5A",
+      "physicalId": "971"
+    },
+    {
+      "modelId": "CS11-A6A",
+      "physicalId": "531"
+    },
+    {
+      "modelId": "CS11-B1A",
+      "physicalId": "775"
+    },
+    {
+      "modelId": "CS11-B2A",
+      "physicalId": "849"
+    },
+    {
+      "modelId": "CS11-B3A",
+      "physicalId": "1100"
+    },
+    {
+      "modelId": "CS11-B4A",
+      "physicalId": "1304"
+    },
+    {
+      "modelId": "CS11-B3B",
+      "physicalId": "865"
+    },
+    {
+      "modelId": "CS11-B4B",
+      "physicalId": "725"
+    },
+    {
+      "modelId": "CS11-B5B",
+      "physicalId": "1017"
+    },
+    {
+      "modelId": "CS11-C2A",
+      "physicalId": "415HP"
+    },
+    {
+      "modelId": "CS11-C3A",
+      "physicalId": "723"
+    },
+    {
+      "modelId": "CS11-C3B",
+      "physicalId": "451"
+    },
+    {
+      "modelId": "CS11-C4B",
+      "physicalId": "589"
+    },
+    {
+      "modelId": "CS12-A1",
+      "physicalId": "1300"
+    },
+    {
+      "modelId": "CS12-A2",
+      "physicalId": "527"
+    },
+    {
+      "modelId": "CS12-A3",
+      "physicalId": "1302"
+    },
+    {
+      "modelId": "CS12-A4",
+      "physicalId": "1053"
+    },
+    {
+      "modelId": "CS12-A5",
+      "physicalId": "794"
+    },
+    {
+      "modelId": "CS12-B2",
+      "physicalId": "968"
+    },
+    {
+      "modelId": "CS12-B3",
+      "physicalId": "549"
+    },
+    {
+      "modelId": "RC1-A1.5A",
+      "physicalId": "199"
+    },
+    {
+      "modelId": "RC1-A1B",
+      "physicalId": "1124"
+    },
+    {
+      "modelId": "RC1-A2B",
+      "physicalId": "1118"
+    },
+    {
+      "modelId": "RC1-A1.5C",
+      "physicalId": "614"
+    },
+    {
+      "modelId": "RC1-A2.5C",
+      "physicalId": "567"
+    },
+    {
+      "modelId": "RC2-A1.5A",
+      "physicalId": "1051"
+    },
+    {
+      "modelId": "RC2-A2.5A",
+      "physicalId": "446"
+    },
+    {
+      "modelId": "RC2-A1B",
+      "physicalId": "1236"
+    },
+    {
+      "modelId": "RC2-A2B",
+      "physicalId": "1242"
+    },
+    {
+      "modelId": "RC2-A3B",
+      "physicalId": "1309"
+    },
+    {
+      "modelId": "R1-A1",
+      "physicalId": "733"
+    },
+    {
+      "modelId": "R1-A2",
+      "physicalId": "773"
+    },
+    {
+      "modelId": "R1-A3",
+      "physicalId": "498"
+    },
+    {
+      "modelId": "R1-A4",
+      "physicalId": "977"
+    },
+    {
+      "modelId": "R2-A1",
+      "physicalId": "962"
+    },
+    {
+      "modelId": "R2-A2",
+      "physicalId": "919"
+    },
+    {
+      "modelId": "R2-A3",
+      "physicalId": "637"
+    },
+    {
+      "modelId": "R2-A4",
+      "physicalId": "957"
+    },
+    {
+      "modelId": "R3-A4A",
+      "physicalId": "711"
+    },
+    {
+      "modelId": "R3-A5A",
+      "physicalId": "893"
+    },
+    {
+      "modelId": "R3-A1B",
+      "physicalId": "571"
+    },
+    {
+      "modelId": "R3-A2B",
+      "physicalId": "1067"
+    },
+    {
+      "modelId": "R3-A3B",
+      "physicalId": "583"
+    },
+    {
+      "modelId": "R3-A4B",
+      "physicalId": "1211"
+    },
+    {
+      "modelId": "R3-A5B",
+      "physicalId": "928"
+    },
+    {
+      "modelId": "R4-A1",
+      "physicalId": "649"
+    },
+    {
+      "modelId": "R4-A2",
+      "physicalId": "825"
+    },
+    {
+      "modelId": "R4-A3",
+      "physicalId": "1077"
+    },
+    {
+      "modelId": "R4-A4",
+      "physicalId": "797"
+    },
+    {
+      "modelId": "R4-A5",
+      "physicalId": "987"
+    },
+    {
+      "modelId": "R4-A6",
+      "physicalId": "1032"
+    },
+    {
+      "modelId": "R5-A1",
+      "physicalId": "654"
+    },
+    {
+      "modelId": "R5-A2",
+      "physicalId": "529"
+    },
+    {
+      "modelId": "R5-A3",
+      "physicalId": "771"
+    },
+    {
+      "modelId": "R5-A4",
+      "physicalId": "737"
+    },
+    {
+      "modelId": "R5-A5",
+      "physicalId": "859"
+    },
+    {
+      "modelId": "R5-A6",
+      "physicalId": "657"
+    },
+    {
+      "modelId": "R6-A1",
+      "physicalId": "809"
+    },
+    {
+      "modelId": "R6-A2",
+      "physicalId": "1047"
+    },
+    {
+      "modelId": "R7-A2",
+      "physicalId": "1078"
+    },
+    {
+      "modelId": "R7-A3",
+      "physicalId": "745"
+    },
+    {
+      "modelId": "R7-A4",
+      "physicalId": "787"
+    },
+    {
+      "modelId": "R7-A5",
+      "physicalId": "595"
+    },
+    {
+      "modelId": "R8-A1",
+      "physicalId": "739"
+    },
+    {
+      "modelId": "R8-A2",
+      "physicalId": "905"
     }
   ],
-  "showName": "summerstage19",
-  "inventory": {
-    "allCubes": []
-  }
+  "showName": "summerstage19"
 }
