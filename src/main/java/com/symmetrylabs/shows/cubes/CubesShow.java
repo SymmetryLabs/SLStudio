@@ -36,9 +36,9 @@ public abstract class CubesShow implements Show {
 
     public static final float INCHES_PER_METER = 39.3701f;
 
-    public ListenableSet<CubesController> controllers = new ListenableSet<>();
-    public CubeInventory cubeInventory = CubeInventory.loadFromDisk();
-    public CubeModelControllerMapping mapping = CubeModelControllerMapping.loadFromDisk(getShowName(), cubeInventory);
+    public final ListenableSet<CubesController> controllers = new ListenableSet<>();
+    public final CubeInventory cubeInventory;
+    public final CubeModelControllerMapping mapping;
     public final PerceptualColorScale outputScaler = new PerceptualColorScale(new double[] { 2.0, 2.1, 2.8 }, 1.0);
 
     private static Map<LX, WeakReference<CubesShow>> instanceByLX = new WeakHashMap<>();
@@ -95,6 +95,11 @@ public abstract class CubesShow implements Show {
                 yValues[i] = y + i * (CUBE_HEIGHT + CUBE_SPACING);
             }
         }
+    }
+
+    public CubesShow() {
+        cubeInventory = CubeInventory.loadFromDisk();
+        mapping = CubeModelControllerMapping.loadFromDisk(getShowName(), cubeInventory);
     }
 
     public abstract SLModel buildModel();

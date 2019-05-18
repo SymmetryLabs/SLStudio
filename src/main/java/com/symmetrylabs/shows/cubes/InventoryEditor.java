@@ -42,7 +42,7 @@ public class InventoryEditor extends CloseableWindow {
         }
 
         UI.pushFont(FontLoader.DEFAULT_FONT_L);
-        UI.text("Inventory");
+        UI.text(String.format("Inventory: %d cubes", inventory.allCubes.size()));
         UI.popFont();
 
         if (UI.button("Add")) {

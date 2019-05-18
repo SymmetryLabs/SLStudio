@@ -119,7 +119,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         PointsGrouping res;
         if (cube instanceof DoubleControllerCube) {
             DoubleControllerCube dcc = (DoubleControllerCube) cube;
-            PhysicalCube pc = inventory.cubeByCtrlId.get(ca.physicalId);
+            PhysicalCube pc = inventory.lookUpByPhysId(ca.physicalId);
             res = controllerId.equals(pc.idB) ? dcc.getPointsB() : dcc.getPointsA();
         } else {
             res = new PointsGrouping(cube.getPoints());
