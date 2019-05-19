@@ -8,7 +8,7 @@ public class FaderLimiter implements LXLoopTask {
     private final float max;
 
     public FaderLimiter(LX lx) {
-        this(lx, 0.60f);
+        this(lx, 0.50f);
     }
 
     public FaderLimiter(LX lx, float max) {

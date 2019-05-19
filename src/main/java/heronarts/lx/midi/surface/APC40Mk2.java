@@ -768,7 +768,8 @@ public class APC40Mk2 extends LXMidiSurface {
                     LXChannel focused = (LXChannel) look.getFocusedChannel();
                     /* if this channel was already focused and visible; hide it. If it was either not
                        focused or not visible, show it. */
-                    focused.editorVisible.setValue(!focused.editorVisible.isOn() || oldFocused != focused);
+                    // RAPH IS TEMPORARILY DISABLING THIS FOR THE FIRST PASSION PIT SHOW. WILL MAKE THIS AN OPTION LATER
+                    // focused.editorVisible.setValue(!focused.editorVisible.isOn() || oldFocused != focused);
                 }
                 return;
             case CHANNEL_RECORD:
