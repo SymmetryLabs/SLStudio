@@ -847,7 +847,8 @@ public class APC40Mk2 extends LXMidiSurface {
             this.lx.engine.getFocusedLook().crossfader.setNormalized(cc.getNormalized());
             return;
         case GLOBAL_SPEED:
-            this.lx.engine.speed.setNormalized(cc.getNormalized());
+            this.lx.engine.speed.setValue(cc.getNormalized() * 2);
+            sendControlChange(0, number, cc.getValue());
             return;
         }
 
