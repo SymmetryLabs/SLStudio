@@ -63,6 +63,7 @@ public class APC40Mk2 extends LXMidiSurface {
     public static final int MASTER_FADER = 14;
     public static final int CROSSFADER = 15;
     public static final int CUE_LEVEL = 47;
+    public static final int GLOBAL_SPEED = 48;
 
     public static final int DEVICE_KNOB = 16;
     public static final int DEVICE_KNOB_NUM = 8;
@@ -844,6 +845,9 @@ public class APC40Mk2 extends LXMidiSurface {
             return;
         case CROSSFADER:
             this.lx.engine.getFocusedLook().crossfader.setNormalized(cc.getNormalized());
+            return;
+        case GLOBAL_SPEED:
+            this.lx.engine.speed.setNormalized(cc.getNormalized());
             return;
         }
 
