@@ -55,8 +55,8 @@ import static heronarts.lx.PolyBuffer.Space.RGB8;
 public class SLStudioLX extends P3LX {
     public static final String COPYRIGHT = "Symmetry Labs";
 
-    private static final String DEFAULT_PROJECT_FILE = "default.lxp";
-    private static final String PROJECT_FILE_NAME = ".lxproject";
+    public static final String DEFAULT_PROJECT_FILE = "default.lxp";
+    public static final String PROJECT_FILE_NAME = ".lxproject";
     private static final String KEY_UI = "ui";
     private static final int RESTART_EXIT_CODE = 999;
 

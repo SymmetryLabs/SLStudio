@@ -9,11 +9,17 @@ import com.symmetrylabs.LXClassLoader;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.ShowRegistry;
 import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.LX;
+import heronarts.lx.data.Project;
 import heronarts.lx.model.LXModel;
+
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
+
 import com.symmetrylabs.util.Utils;
 import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
@@ -72,10 +78,14 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
         ApplicationState.setProvider(this);
 
-        loadShow(sn);
+        loadShow(sn, true);
     }
 
     void loadShow(String showName) {
+        loadShow(showName, false);
+    }
+
+    protected void loadShow(String showName, boolean firstOpen) {
         System.out.println("opening show " + showName);
         if (lx != null) {
             disposeLX();
@@ -138,6 +148,23 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         WindowManager.addPersistent("Developer/Style editor", () -> new SlimguiStyleEditor(), false);
         WindowManager.addPersistent("Developer/Imgui metrics", () -> new SlimguiMetricsWindow(), false);
         WindowManager.addPersistent("Developer/About imgui", () -> new SlimguiAboutWindow(), false);
+
+        if (firstOpen) {
+            File lastProjectFile = new File(SLStudioLX.PROJECT_FILE_NAME);
+            if (lastProjectFile.exists()) {
+                try {
+                    List<String> lastProjectLines = Files.readAllLines(lastProjectFile.toPath());
+                    if (lastProjectLines.size() > 0) {
+                        File lastProject = new File(lastProjectLines.get(0));
+                        if (lastProject.exists()) {
+                            lx.openProject(Project.createLegacyProject(lastProject, RUNTIME_VERSION));
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
         lx.engine.isMultithreaded.setValue(true);
         lx.engine.isChannelMultithreaded.setValue(true);

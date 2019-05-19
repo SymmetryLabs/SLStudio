@@ -1,8 +1,9 @@
 package com.symmetrylabs.slstudio.ui.v2;
 
+import com.google.common.collect.Lists;
 import com.symmetrylabs.shows.ShowRegistry;
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.ui.v2.ViewController.ViewDirection;
+import com.symmetrylabs.slstudio.SLStudioLX;
 
 import heronarts.lx.LX;
 import heronarts.lx.data.Project;
@@ -10,8 +11,10 @@ import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.surface.LXMidiSurface;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class MainMenu implements Window {
@@ -43,7 +46,10 @@ public class MainMenu implements Window {
                            always get a concurrent modification exception while
                            rendering the UI. */
                         WindowManager.runSafelyWithEngine(
-                            lx, () -> lx.openProject(Project.createLegacyProject(projectFile, SLStudioGDX.RUNTIME_VERSION)));
+                            lx, () -> {
+                                lx.openProject(Project.createLegacyProject(projectFile, SLStudioGDX.RUNTIME_VERSION));
+                                onProjectChanged();
+                            });
                     });
             }
             if (UI.menuItem("Save")) {
@@ -51,10 +57,12 @@ public class MainMenu implements Window {
                     runSaveAs();
                 } else {
                     lx.saveProject();
+                    onProjectChanged();
                 }
             }
             if (UI.menuItem("Save As...")) {
                 runSaveAs();
+                onProjectChanged();
             }
             UI.endMenu();
         }
@@ -160,6 +168,20 @@ public class MainMenu implements Window {
 
     private void runSaveAs() {
         FileDialog.save(
-            lx, "Save project", projectFile -> lx.saveProject(Project.createLegacyProject(projectFile, SLStudioGDX.RUNTIME_VERSION)));
+            lx, "Save project", projectFile -> {
+                lx.saveProject(Project.createLegacyProject(projectFile, SLStudioGDX.RUNTIME_VERSION));
+                onProjectChanged();
+            });
+    }
+
+    private void onProjectChanged() {
+        Path project = lx.getProject().getRoot();
+        try {
+            Files.write(
+                new File(SLStudioLX.PROJECT_FILE_NAME).toPath(),
+                Lists.newArrayList(project.toString()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
