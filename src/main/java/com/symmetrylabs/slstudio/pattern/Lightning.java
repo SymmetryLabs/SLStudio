@@ -55,13 +55,14 @@ public class Lightning<T extends Strip> extends SLPattern<StripsModel<T>> {
         addParameter(debounce);
         trigger.setMode(BooleanParameter.Mode.MOMENTARY);
 
+        components = new ArrayList<>();
+        strikes = new ArrayList<>();
+
         topo = model.getTopology();
         if (topo == null) {
             return;
         }
 
-        components = new ArrayList<>();
-        strikes = new ArrayList<>();
         aStar = new EdgeAStar(topo);
         StripsTopologyComponents stc = new StripsTopologyComponents(topo);
 
