@@ -34,7 +34,8 @@ public class LXClassLoader {
     public static final boolean LOAD_TEST_PATTERNS = Boolean.getBoolean("loadTestPatterns");
 
     private static final String basePackageName = LXClassLoader.class.getPackage().getName();
-    private static final ScanResult classpathScanner = new FastClasspathScanner(basePackageName).scan();
+    private static final ScanResult classpathScanner =
+        new FastClasspathScanner(basePackageName, "heronarts.lx").scan();
 
     public static List<Class<LXPattern>> findPatterns() {
         return findPatterns(null);
