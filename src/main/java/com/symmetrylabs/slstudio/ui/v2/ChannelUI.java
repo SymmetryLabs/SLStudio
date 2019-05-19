@@ -97,10 +97,15 @@ public class ChannelUI {
     public static void draw(LX lx, LXChannel chan, ParameterUI pui, WepUI wepUi) {
         String chanName = chan.getLabel();
 
+        pui.push().setDefaultBoundedWidget(ParameterUI.WidgetType.SLIDER);
+
         pui.draw(chan.blendPatterns);
         pui.draw(chan.midiMonitor);
         pui.draw(chan.patternBlendMode);
         pui.draw(chan.midiChannel);
+        pui.draw(chan.speed);
+
+        pui.pop();
 
         pui.push().allowMapping(true);
 
