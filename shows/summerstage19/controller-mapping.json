@@ -162,7 +162,7 @@
     },
     {
       "modelId": "LC2-A2D",
-      "physicalId": "1368"
+      "physicalId": "1367"
     },
     {
       "modelId": "CS1-A1.5",
@@ -422,7 +422,7 @@
     },
     {
       "modelId": "CS6-C3C",
-      "physicalId": "1126"
+      "physicalId": "1343"
     },
     {
       "modelId": "CS6-C4C",
@@ -883,6 +883,34 @@
     {
       "modelId": "R8-A2",
       "physicalId": "905"
+    },
+    {
+      "modelId": "CS10-C4B",
+      "physicalId": "1128"
+    },
+    {
+      "modelId": "R7-A1",
+      "physicalId": "1186"
+    },
+    {
+      "modelId": "L4-A2",
+      "physicalId": "1191"
+    },
+    {
+      "modelId": "LC2-A2A",
+      "physicalId": "1369"
+    },
+    {
+      "modelId": "CS6-C2C",
+      "physicalId": "1126"
+    },
+    {
+      "modelId": "LC2-A2C",
+      "physicalId": "3010"
+    },
+    {
+      "modelId": "LC1-A2A",
+      "physicalId": "1111"
     }
   ],
   "showName": "summerstage19"

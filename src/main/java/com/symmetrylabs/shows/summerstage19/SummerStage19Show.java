@@ -1,5 +1,6 @@
 package com.symmetrylabs.shows.summerstage19;
 
+import com.symmetrylabs.slstudio.showplugins.FaderLimiter;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.shows.cubes.UICubesMappingPanel;
@@ -75,13 +76,13 @@ public class SummerStage19Show extends CubesShow {
             new CubeConfig("A2", 0, 1, 0), // 823
             new CubeConfig("A3", 0, 2, 0), // 833
             new CubeConfig("A4", 0, 3, 0)), // 1009
-        new ClusterConfig("LC1", 6.5, 4.5, 5,
+        new ClusterConfig("LC1", 6, 6.5, 5,
             new CubeConfig("A1A", 0, 0, 0), // 991
             new CubeConfig("A2A", 0, 1, 0), // 
             new CubeConfig("A3A", 0, 2, 0), // 509
             new CubeConfig("A1.5B", 0, 0.5, 1), // 1234
             new CubeConfig("A2.5B", 0, 1.5, 1)), // 443
-        new ClusterConfig("LC2", 6.5, 5, 1,
+        new ClusterConfig("LC2", 7, 5.5, 1,
             new CubeConfig("A2A", 0, 1, 0), // 
             new CubeConfig("A1B", 0, 0, 1), // 1212
             new CubeConfig("A2B", 0, 1, 1), // 1231
@@ -99,7 +100,8 @@ public class SummerStage19Show extends CubesShow {
         new ClusterConfig("CS2", 10, 4, 1,
             new CubeConfig("A3A", 0, 2, 0), // 1246
             new CubeConfig("A4A", 0, 3, 0), // 1363
-            new CubeConfig("A3B", 0, 2, 1), // 896
+            // new CubeConfig("A3B", 0, 2, 1), // 896 ----------------------------------------------------
+            new CubeConfig("A3B", 0, 4, 1, 0, 0, 180), // 896 ----------------------------------------------------
             new CubeConfig("B1A", 1, 0, 0), // 967
             new CubeConfig("B2A", 1, 1, 0), // 1093
             new CubeConfig("B3A", 1, 2, 0), // 757
@@ -123,7 +125,7 @@ public class SummerStage19Show extends CubesShow {
         new ClusterConfig("CS4", 16, 5, 1,
             new CubeConfig("A3A", 0, 2, 0), // 765
             new CubeConfig("A4A", 0, 3, 0), // 1339
-            new CubeConfig("A5A", 0, 3, 0), // 1238
+            new CubeConfig("A5A", 0, 4, 0), // 1238
             new CubeConfig("A3B", 0, 2, 1), // 1362
             new CubeConfig("B1A", 1, 0, 0), // 475
             new CubeConfig("B2A", 1, 1, 0), // 1221
@@ -160,7 +162,7 @@ public class SummerStage19Show extends CubesShow {
             new CubeConfig("B6A+", 1, 5, 0.5), // 1130
             new CubeConfig("C2B", 2, 1, 1), // 931
             new CubeConfig("C3B", 2, 2, 1), // 1360
-            new CubeConfig("C3C", 2, 1, 2), // 1126
+            new CubeConfig("C2C", 2, 1, 2), // 1126
             new CubeConfig("C3C", 2, 2, 2), // 1343
             new CubeConfig("C4C", 2, 3, 2)), // 1122
         new ClusterConfig("CS7", 24, 5, 1,
@@ -319,12 +321,28 @@ public class SummerStage19Show extends CubesShow {
         final float x;
         final float y;
         final float z;
+        final float rx;
+        final float ry;
+        final float rz;
 
         CubeConfig(String baseModelId, double x, double y, double z) {
             this.baseModelId = baseModelId;
             this.x = (float) x;
             this.y = (float) y;
             this.z = (float) z;
+            this.rx = 0;
+            this.ry = 0;
+            this.rz = 0;
+        }
+
+        CubeConfig(String baseModelId, double x, double y, double z, double rx, double ry, double rz) {
+            this.baseModelId = baseModelId;
+            this.x = (float) x;
+            this.y = (float) y;
+            this.z = (float) z;
+            this.rx = (float) rx;
+            this.ry = (float) ry;
+            this.rz = (float) rz;
         }
     }
 
@@ -344,9 +362,12 @@ public class SummerStage19Show extends CubesShow {
                 float x = SP * config.x;
                 float y = SP * config.y;
                 float z = SP * config.z;
+                float rx = config.rx;
+                float ry = config.ry;
+                float rz = config.rz;
                 CubesModel.DoubleControllerCube cube = new CubesModel.DoubleControllerCube(
                     cluster.id + "-" + config.baseModelId,
-                    x, y, z, 0, 0, 0, globalTransform);
+                    x, y, z, rx, ry, rz, globalTransform);
                 clusterCubes.add(cube);
                 allCubes.add(cube);
             }
@@ -367,7 +388,7 @@ public class SummerStage19Show extends CubesShow {
     @Override
     public void setupLx(LX lx) {
         super.setupLx(lx);
-
+        FaderLimiter.attach(lx);
         /* TODO(jake): set actual brightness cap here! */
         outputScaler.setTargetLinearScale(1.0);
         outputScaler.setUseMonoGamma(false);
