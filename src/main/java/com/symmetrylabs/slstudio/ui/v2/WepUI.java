@@ -185,9 +185,9 @@ public class WepUI {
     }
 
     private void activate(WEPGrouping.PatternItem pi) {
-        LXPattern instance = null;
+        LXPattern trinst = null;
         try {
-            instance = pi.pattern.getConstructor(LX.class).newInstance(lx);
+            trinst = pi.pattern.getConstructor(LX.class).newInstance(lx);
         } catch (NoSuchMethodException nsmx) {
             nsmx.printStackTrace();
         } catch (java.lang.reflect.InvocationTargetException itx) {
@@ -198,12 +198,13 @@ public class WepUI {
             ix.printStackTrace();
         }
 
-        if (instance != null) {
+        if (trinst != null) {
+            final LXPattern instance = trinst;
             LXBus channel = lx.engine.getFocusedLook().getFocusedChannel();
             if (channel instanceof LXChannel) {
-                ((LXChannel) channel).addPattern(instance);
+                lx.engine.addTask(() -> ((LXChannel) channel).addPattern(instance));
             } else {
-                lx.engine.addChannel(new LXPattern[] { instance });
+                lx.engine.addTask(() -> lx.engine.addChannel(new LXPattern[] { instance }));
             }
             if (cb != null) {
                 cb.onWepAdded();
@@ -212,9 +213,9 @@ public class WepUI {
     }
 
     private void activate(WEPGrouping.EffectItem pi) {
-        LXEffect instance = null;
+        LXEffect trinst = null;
         try {
-            instance = pi.effect.getConstructor(LX.class).newInstance(lx);
+            trinst = pi.effect.getConstructor(LX.class).newInstance(lx);
         } catch (NoSuchMethodException nsmx) {
             nsmx.printStackTrace();
         } catch (java.lang.reflect.InvocationTargetException itx) {
@@ -225,8 +226,9 @@ public class WepUI {
             ix.printStackTrace();
         }
 
-        if (instance != null) {
-            lx.engine.getFocusedLook().getFocusedChannel().addEffect(instance);
+        if (trinst != null) {
+            final LXEffect instance = trinst;
+            lx.engine.addTask(() -> lx.engine.getFocusedLook().getFocusedChannel().addEffect(instance));
             if (cb != null) {
                 cb.onWepAdded();
             }
@@ -234,9 +236,9 @@ public class WepUI {
     }
 
     private void activate(WEPGrouping.WarpItem pi) {
-        LXWarp instance = null;
+        LXWarp trinst = null;
         try {
-            instance = pi.warp.getConstructor(LX.class).newInstance(lx);
+            trinst = pi.warp.getConstructor(LX.class).newInstance(lx);
         } catch (NoSuchMethodException nsmx) {
             nsmx.printStackTrace();
         } catch (java.lang.reflect.InvocationTargetException itx) {
@@ -247,8 +249,9 @@ public class WepUI {
             ix.printStackTrace();
         }
 
-        if (instance != null) {
-            lx.engine.getFocusedLook().getFocusedChannel().addWarp(instance);
+        if (trinst != null) {
+            final LXWarp instance = trinst;
+            lx.engine.addTask(() -> lx.engine.getFocusedLook().getFocusedChannel().addWarp(instance));
             if (cb != null) {
                 cb.onWepAdded();
             }
