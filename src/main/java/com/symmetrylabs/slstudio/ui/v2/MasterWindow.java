@@ -13,7 +13,7 @@ public class MasterWindow extends CloseableWindow {
         super("Master", UI.WINDOW_ALWAYS_AUTO_RESIZE | UI.WINDOW_NO_RESIZE | UI.WINDOW_NO_TITLE_BAR);
         this.lx = lx;
         this.wepUi = new WepUI(lx, false, () -> UI.closePopup());
-        this.pui = ParameterUI.getDefault(lx);
+        this.pui = ParameterUI.getDefault(lx).allowMapping(true);
     }
 
     @Override

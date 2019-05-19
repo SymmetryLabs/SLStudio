@@ -186,10 +186,14 @@ public class LookEditor implements Window {
             showLookTransform = UI.selectable("Look Transform##look-transform-header", true);
             UI.popFont();
 
+            pui.push().allowMapping(true);
+
             LXMasterChannel mc = lx.engine.masterChannel;
             ChannelUI.drawEffects(lx, "Look", mc, pui);
             ChannelUI.drawWarps(lx, "Look", mc, pui);
             ChannelUI.drawWepPopup(lx, mc, transformWepUi);
+
+            pui.pop();
 
             UI.endChild();
         }
