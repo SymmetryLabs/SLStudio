@@ -89,7 +89,7 @@ public class SummerStage19Show extends CubesShow {
             new CubeConfig("A3B+", 0, 2, 1.5), // 1241
             new CubeConfig("A1C", 0, 0, 2), // 1049
             new CubeConfig("A2C", 0, 1, 2), // 
-            new CubeConfig("A2D", -0.25, 0, 3)), // 1368 
+            new CubeConfig("A2D", 0, 0, 3)), // 1368
         new ClusterConfig("CS1", 7, 5, 1,
             new CubeConfig("A1.5", 0, 0.5, 0), // 767
             new CubeConfig("B1", 1, 0, 0), // 667
