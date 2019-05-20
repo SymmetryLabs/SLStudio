@@ -55,6 +55,26 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
     protected Stack<State> stateStack;
     protected final WeakHashMap<LXParameter, Object> mappedParameters = new WeakHashMap<>();
 
+    /* HACK: it is possible for two different sources to be holding down a
+       momentary button, like the GUI and a MIDI mapping. LX has no built-in
+       mechanism to remember this; momentary boolean parameters don't have a
+       semaphore-ish way of representing being held down by more than one thing.
+       No one place in the system has the required context to know whether a
+       given momentary parameter should be turned off once it's on; ParameterUI
+       knows when it should be on because of the GUI, but it doesn't know if the
+       parameter should be off or whether it should be on because of some other
+       system when the button is being held down. With MIDI, the situation is
+       even worse; it knows to turn it on when it receives note-on, and off when
+       it receives note-off, but in the middle it has no opinion at all.
+
+       This is "solved" here by remembering the last momentary parameter that was
+       clicked on in the GUI, and if we get to that parameter on the next frame
+       and it's not being clicked, we conclude that /probably/ it should be off.
+       If a MIDI note-on event arrived at the exact same moment that the mouse-up
+       arrives, then that assumption will be incorrect and the parameter will be
+       incorrectly set to off. */
+    private LXParameter clickedMomentaryParameter = null;
+
     protected ParameterUI(LX lx, boolean registerMappingListener, State initial) {
         this.lx = lx;
         this.mapping = lx.engine.mapping;
@@ -349,9 +369,24 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
                 UI.button(getID(p));
             }
             boolean res = UI.isItemActive();
+
+            /* see comment on clickedMomentaryParameter for an explanation of this monstrosity */
+            boolean guiHasControl;
+            if (res) {
+                clickedMomentaryParameter = p;
+                guiHasControl = true;
+            } else {
+                if (clickedMomentaryParameter == p) {
+                    guiHasControl = true;
+                    clickedMomentaryParameter = null;
+                } else {
+                    guiHasControl = false;
+                }
+            }
+
             if (isMapping && UI.isItemClicked()) {
                 mapping.setControlTarget(p);
-            } else if (!isMapping && res != start) {
+            } else if (!isMapping && res != start && guiHasControl) {
                 /* only set the value if the button is held; if it's not held, let the parameter
                    have whatever value it has, in case something else, like a MIDI mapping,
                    is "holding down the button". */
