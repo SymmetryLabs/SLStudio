@@ -32,6 +32,11 @@ public abstract class LXWarp extends LXModelComponent implements LXComponent.Ren
     public final BooleanParameter enabled = new BooleanParameter("Enabled", false)
             .setDescription("Whether the warp is enabled");
 
+    public final BooleanParameter expandedInUi =
+        (BooleanParameter) new BooleanParameter("expandedInUi", true)
+        .setDescription("If set, this bus component is displayed expanded in the UI. Otherwise, it's collapsed and its parameters are hidden.")
+        .setVisible(false);
+
     private int index = -1;
 
     protected LXWarp inputSource = null;
@@ -45,6 +50,7 @@ public abstract class LXWarp extends LXModelComponent implements LXComponent.Ren
         label.setDescription("The name of this warp");
         label.setValue(getClass().getSimpleName().replaceAll("Warp$", ""));
         addParameter("enabled", enabled);
+        addParameter(expandedInUi);
 
         enabled.addListener(parameter -> {
             if (enabled.isOn()) {

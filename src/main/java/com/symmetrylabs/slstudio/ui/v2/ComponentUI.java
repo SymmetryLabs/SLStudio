@@ -32,6 +32,9 @@ public class ComponentUI {
            a rich UI for the parent pattern instead, so we detect and hide those
            sub-parameters. */
         for (LXParameter param : comp.getParameters()) {
+            if (!param.isVisible()) {
+                continue;
+            }
             if (param instanceof ColorParameter) {
                 ColorParameter cp = (ColorParameter) param;
                 blacklist.add(cp.hue);

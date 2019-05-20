@@ -201,4 +201,13 @@ public interface LXParameter {
     public String getLabel();
 
     public boolean getShouldSerialize();
+
+    /**
+     * Retursn whether this parameter should be displayed in the UI.
+     *
+     * @return true if this parameter should be displayed in the UI.
+     */
+    public default boolean isVisible() {
+        return true;
+    };
 }

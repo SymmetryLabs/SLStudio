@@ -2,6 +2,7 @@ package heronarts.lx;
 
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXVector;
+import heronarts.lx.parameter.BooleanParameter;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,8 +15,14 @@ import java.util.List;
 public abstract class LXBusComponent extends LXDeviceComponent {
     List<LXVector> vectorList = null;
 
+    public final BooleanParameter expandedInUi =
+        (BooleanParameter) new BooleanParameter("expandedInUi", true)
+        .setDescription("If set, this bus component is displayed expanded in the UI. Otherwise, it's collapsed and its parameters are hidden.")
+        .setVisible(false);
+
     protected LXBusComponent(LX lx) {
         super(lx);
+        addParameter(expandedInUi);
     }
 
     protected LXComponent setParent(LXComponent parent) {

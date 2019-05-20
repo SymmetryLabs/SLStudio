@@ -25,10 +25,13 @@ public class ChannelUI {
                     UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.BLUE);
                     UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.BLUE_HOVER);
                 }
-                UI.CollapseResult section = UI.collapsibleSection(warpName, true, UI.TREE_FLAG_DEFAULT_OPEN);
+                UI.CollapseResult section = UI.collapsibleSection(
+                    warpName, true,
+                    warp.expandedInUi.getValueb() ? UI.TREE_FLAG_DEFAULT_OPEN : 0);
                 if (warp.enabled.getValueb()) {
                     UI.popColor(3);
                 }
+                warp.expandedInUi.setValue(section.isOpen);
                 if (UI.isItemClicked() && UI.isAltDown()) {
                     warp.enabled.toggle();
                 } else if (section.shouldRemove) {
@@ -54,10 +57,13 @@ public class ChannelUI {
                     UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.BLUE);
                     UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.BLUE_HOVER);
                 }
-                UI.CollapseResult section = UI.collapsibleSection(effName, true, UI.TREE_FLAG_DEFAULT_OPEN);
+                UI.CollapseResult section = UI.collapsibleSection(
+                    effName, true,
+                    eff.expandedInUi.getValueb() ? UI.TREE_FLAG_DEFAULT_OPEN : 0);
                 if (eff.enabled.getValueb()) {
                     UI.popColor(3);
                 }
+                eff.expandedInUi.setValue(section.isOpen);
                 if (UI.isItemClicked() && UI.isAltDown()) {
                     eff.enabled.toggle();
                 } else if (section.shouldRemove) {
@@ -133,10 +139,14 @@ public class ChannelUI {
                 UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.BLUE);
                 UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.BLUE_HOVER);
             }
-            UI.CollapseResult section = UI.collapsibleSection(patName + "##pattern-" + i, true, UI.TREE_FLAG_DEFAULT_OPEN);
+            UI.CollapseResult section = UI.collapsibleSection(
+                patName + "##pattern-" + i, true,
+                pat.expandedInUi.getValueb() ? UI.TREE_FLAG_DEFAULT_OPEN : 0);
             if (isActive || isMidiFocused) {
                 UI.popColor(3);
             }
+            pat.expandedInUi.setValue(section.isOpen);
+
             if (UI.isItemClicked() && UI.isAltDown()) {
                 final int patternIndex = i;
                 lx.engine.addTask(() -> chan.goIndex(patternIndex));

@@ -53,6 +53,8 @@ public abstract class LXListenableParameter implements LXParameter {
 
     private boolean shouldSerialize = true;
 
+    private boolean visible = true;
+
     protected LXListenableParameter() {
         this(null, 0);
     }
@@ -240,4 +242,13 @@ public abstract class LXListenableParameter implements LXParameter {
      */
     protected abstract double updateValue(double value);
 
+    @Override
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public LXListenableParameter setVisible(boolean v) {
+        visible = v;
+        return this;
+    }
 }
