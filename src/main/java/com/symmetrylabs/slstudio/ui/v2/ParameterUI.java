@@ -195,9 +195,10 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
             }
             UI.endDragDropTarget();
         }
-
         if (isMapping && UI.isItemClicked()) {
             mapping.setControlTarget(p);
+        } else if (UI.isItemDoubleClicked()) {
+            p.reset();
         } else if (!isMapping && start != res) {
             final float fres = res;
             lx.engine.addTask(() -> p.setNormalized(fres));
