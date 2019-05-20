@@ -474,10 +474,10 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobToggle
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    knobButton
- * Signature: (Ljava/lang/String;I)Z
+ * Signature: (Ljava/lang/String;ZI)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobButton
-  (JNIEnv *, jclass, jstring, jint);
+  (JNIEnv *, jclass, jstring, jboolean, jint);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI

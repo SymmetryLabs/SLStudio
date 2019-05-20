@@ -344,17 +344,18 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
             /* we use isItemActive so we can figure out if the button is held;
                button() only returns true on press, but not on subsequent frames. */
             if (stateStack.peek().preferKnobsForButtons) {
-                UI.knobButton(getID(p, false), dotColor);
+                UI.knobButton(getID(p, false), start, dotColor);
             } else {
                 UI.button(getID(p));
             }
+            boolean res = UI.isItemActive();
             if (isMapping && UI.isItemClicked()) {
                 mapping.setControlTarget(p);
-            } else if (!isMapping && UI.isItemActive()) {
+            } else if (!isMapping && res != start) {
                 /* only set the value if the button is held; if it's not held, let the parameter
                    have whatever value it has, in case something else, like a MIDI mapping,
                    is "holding down the button". */
-                lx.engine.addTask(() -> p.setValue(true));
+                lx.engine.addTask(() -> p.setValue(res));
             }
         }
     }

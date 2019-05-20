@@ -614,9 +614,9 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobToggle(JN
     return v ? 1 : 0;
 }
 
-JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobButton(JNIEnv *env, jclass, jstring jlabel, jint dotColor) {
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobButton(JNIEnv *env, jclass, jstring jlabel, jboolean displayAsPressed, jint dotColor) {
     JniString label(env, jlabel);
-    return KnobButton(label, dotColor);
+    return KnobButton(label, displayAsPressed, dotColor);
 }
 
 JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_collapsibleSection(JNIEnv *env, jclass, jstring jlabel, jboolean allowClose, jint flags) {

@@ -237,7 +237,7 @@ bool KnobToggle(const char *label, bool *value, jint dot_color) {
     return pressed;
 }
 
-bool KnobButton(const char *label, jint dot_color) {
+bool KnobButton(const char *label, bool displayAsPressed, jint dot_color) {
     auto window = GetCurrentWindow();
     if (window->SkipItems)
         return false;
@@ -263,7 +263,10 @@ bool KnobButton(const char *label, jint dot_color) {
 
     ImVec2 center{pos.x + 0.5f * size.x + style.ItemInnerSpacing.x, pos.y + 0.45f * size.y};
 
-    int color = held ? GetColorU32(KnobValueColor) : hovered ? GetColorU32(ImGuiCol_FrameBgHovered) : GetColorU32(ImGuiCol_FrameBg);
+    int color =
+        (held || displayAsPressed) ? GetColorU32(KnobValueColor)
+        : hovered ? GetColorU32(ImGuiCol_FrameBgHovered)
+        : GetColorU32(ImGuiCol_FrameBg);
     window->DrawList->PathClear();
     window->DrawList->AddRectFilled(
         ImVec2{center.x - style.KnobRadius, center.y - style.KnobRadius},
