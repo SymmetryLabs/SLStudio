@@ -38,7 +38,7 @@ public class LookEditor implements Window {
         this.lx = lx;
         this.wepUi = new WepUI(lx, () -> UI.closePopup());
         this.transformWepUi = new WepUI(lx, false, () -> UI.closePopup());
-        this.pui = ParameterUI.getMappable(lx).setDefaultBoundedWidget(ParameterUI.WidgetType.KNOB);
+        this.pui = ParameterUI.getMappable(lx).preferKnobs(true);
     }
 
     public void dispose() {

@@ -607,6 +607,18 @@ Java_com_symmetrylabs_slstudio_ui_v2_UI_knobModulatedFloat(
     return vn;
 }
 
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobToggle(JNIEnv *env, jclass, jstring jlabel, jboolean value, jint dotColor) {
+    JniString label(env, jlabel);
+    bool v = value != 0;
+    KnobToggle(label, &v, dotColor);
+    return v ? 1 : 0;
+}
+
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobButton(JNIEnv *env, jclass, jstring jlabel, jint dotColor) {
+    JniString label(env, jlabel);
+    return KnobButton(label, dotColor);
+}
+
 JNIEXPORT jobject JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_collapsibleSection(JNIEnv *env, jclass, jstring jlabel, jboolean allowClose, jint flags) {
     JniString label(env, jlabel);
     bool display = true;

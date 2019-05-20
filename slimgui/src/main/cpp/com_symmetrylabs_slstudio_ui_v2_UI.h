@@ -465,6 +465,22 @@ JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobModulatedFl
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    knobToggle
+ * Signature: (Ljava/lang/String;ZI)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobToggle
+  (JNIEnv *, jclass, jstring, jboolean, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    knobButton
+ * Signature: (Ljava/lang/String;I)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_knobButton
+  (JNIEnv *, jclass, jstring, jint);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    collapsibleSection
  * Signature: (Ljava/lang/String;ZI)Lcom/symmetrylabs/slstudio/ui/v2/UI/CollapseResult;
  */

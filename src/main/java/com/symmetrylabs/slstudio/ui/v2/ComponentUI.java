@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.List;
 import heronarts.lx.parameter.BooleanParameter.Mode;
 import java.util.ArrayList;
-import com.symmetrylabs.slstudio.ui.v2.ParameterUI.WidgetType;
 import java.util.Set;
 
 public class ComponentUI {
@@ -19,8 +18,7 @@ public class ComponentUI {
     private final LXComponent comp;
     private final ParameterUI pui;
 
-    private final List<BoundedParameter> knobs = new ArrayList<>();
-    private final List<BooleanParameter> triggers = new ArrayList<>();
+    private final List<LXParameter> knobs = new ArrayList<>();
     private final List<LXParameter> params = new ArrayList<>();
     private final Set<LXParameter> blacklist = new HashSet<>();
 
@@ -40,42 +38,23 @@ public class ComponentUI {
                 blacklist.add(cp.saturation);
                 blacklist.add(cp.brightness);
                 params.add(param);
-            } else if (param instanceof BoundedParameter) {
-                knobs.add((BoundedParameter) param);
+            } else if (param instanceof BoundedParameter || param instanceof BooleanParameter) {
+                knobs.add(param);
             } else if (param instanceof DiscreteParameter) {
                 params.add(param);
-            } else if (param instanceof BooleanParameter) {
-                BooleanParameter bp = (BooleanParameter) param;
-                if (bp.getMode() == BooleanParameter.Mode.MOMENTARY) {
-                    triggers.add(bp);
-                } else {
-                    params.add(bp);
-                }
             }
         }
         knobs.removeAll(blacklist);
-        triggers.removeAll(blacklist);
         params.removeAll(blacklist);
     }
 
     public void draw() {
         boolean needSep = false;
-        if (pui.getDefaultBoundedWidget() == ParameterUI.WidgetType.KNOB) {
+        if (pui.peek().preferKnobsForFloats) {
             for (int i = 0; i < knobs.size(); i++) {
                 needSep = true;
                 pui.draw(knobs.get(i));
                 if (i % 4 != 3 && i != knobs.size() - 1) {
-                    UI.sameLine();
-                }
-            }
-            if (!triggers.isEmpty() && needSep) {
-                UI.separator();
-                needSep = false;
-            }
-            for (int i = 0; i < triggers.size(); i++) {
-                needSep = true;
-                pui.draw(triggers.get(i));
-                if (i % 3 != 2 && i != triggers.size() - 1) {
                     UI.sameLine();
                 }
             }

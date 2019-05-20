@@ -19,7 +19,7 @@ public class ColorSwatchWindow extends CloseableWindow {
         super("Color swatches");
         this.lx = lx;
         this.lookEditor = lookEditor;
-        this.pui = ParameterUI.getDefault(lx).setDefaultBoundedWidget(ParameterUI.WidgetType.SLIDER);
+        this.pui = ParameterUI.getDefault(lx);
     }
 
     @Override

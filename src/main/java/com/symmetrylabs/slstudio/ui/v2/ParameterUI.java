@@ -17,11 +17,6 @@ import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXMidiMapping;
 
 public class ParameterUI implements LXMidiEngine.MappingListener {
-    public enum WidgetType {
-        KNOB,
-        SLIDER,
-    };
-
     public static ParameterUI getDefault(LX lx) {
         return new ParameterUI(lx, false, new State());
     }
@@ -30,13 +25,17 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
         return new ParameterUI(lx, true, new State());
     }
 
-    protected static class State implements Cloneable {
-        WidgetType defaultBoundedWidget;
-        boolean showLabel;
-        boolean allowMapping;
+    public static class State implements Cloneable {
+        public boolean preferKnobsForFloats;
+        public boolean preferKnobsForToggles;
+        public boolean preferKnobsForButtons;
+        public boolean showLabel;
+        public boolean allowMapping;
 
         public State() {
-            this.defaultBoundedWidget = WidgetType.SLIDER;
+            this.preferKnobsForFloats = false;
+            this.preferKnobsForToggles = false;
+            this.preferKnobsForButtons = false;
             this.showLabel = true;
             this.allowMapping = false;
         }
@@ -93,13 +92,31 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
         return this;
     }
 
-    public ParameterUI setDefaultBoundedWidget(WidgetType t) {
-        stateStack.peek().defaultBoundedWidget = t;
+    State peek() {
+        return stateStack.peek();
+    }
+
+    public ParameterUI preferKnobsForButtons(boolean p) {
+        stateStack.peek().preferKnobsForButtons = p;
         return this;
     }
 
-    WidgetType getDefaultBoundedWidget() {
-        return stateStack.peek().defaultBoundedWidget;
+    public ParameterUI preferKnobsForFloats(boolean p) {
+        stateStack.peek().preferKnobsForFloats = p;
+        return this;
+    }
+
+    public ParameterUI preferKnobsForToggles(boolean p) {
+        stateStack.peek().preferKnobsForToggles = p;
+        return this;
+    }
+
+    public ParameterUI preferKnobs(boolean p) {
+        State s = stateStack.peek();
+        s.preferKnobsForButtons = p;
+        s.preferKnobsForFloats = p;
+        s.preferKnobsForToggles = p;
+        return this;
     }
 
     public ParameterUI showLabel(boolean showLabel) {
@@ -155,11 +172,7 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
     }
 
     public void draw(BoundedParameter p) {
-        draw(p, stateStack.peek().defaultBoundedWidget);
-    }
-
-    public void draw(BoundedParameter p, WidgetType wt) {
-        if (wt == WidgetType.SLIDER) {
+        if (!stateStack.peek().preferKnobsForFloats) {
             float start = p.getValuef();
             final float res = UI.sliderFloat(getID(p), start, (float) p.range.v0, (float) p.range.v1);
             if (start != res) {
@@ -300,17 +313,35 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
     public void draw(BooleanParameter p, boolean important) {
         final boolean start = p.getValueb();
         boolean res;
+
+        int dotColor = 0;
+        if (isMapping()) {
+            dotColor = mapping.getControlTarget() == p ? 0xFFFFFFFF : 0x88FFFFFF;
+        } else if (mappedParameters.containsKey(p)) {
+            dotColor = 0xFFFFFFFF;
+        }
+
         if (p.getMode() == BooleanParameter.Mode.TOGGLE) {
             if (important && start) {
                 UI.pushColor(UI.COLOR_WIDGET, UIConstants.RED);
                 UI.pushColor(UI.COLOR_WIDGET_HOVERED, UIConstants.RED_HOVER);
             }
-            res = UI.checkbox(getID(p), start);
+            if (stateStack.peek().preferKnobsForToggles) {
+                res = UI.knobToggle(getID(p, false), start, dotColor);
+            } else {
+                res = UI.checkbox(getID(p), start);
+            }
             if (important && start) {
                 UI.popColor(2);
             }
         } else {
-            UI.button(getID(p));
+            /* this is done this way so we can figure out if the button is held;
+               button() only returns true on press, but not on subsequent frames. */
+            if (stateStack.peek().preferKnobsForButtons) {
+                UI.knobButton(getID(p, false), dotColor);
+            } else {
+                UI.button(getID(p));
+            }
             res = UI.isItemActive();
         }
         final boolean isMapping = isMapping();

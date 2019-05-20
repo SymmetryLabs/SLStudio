@@ -851,6 +851,8 @@ public class UI {
     public static native float knobModulatedFloat(
         String label, float value, float normalizedBase, float normalizedValue,
         int modulatorCount, float[] modulatorMins, float[] modulatorMaxs, int[] modulatorColors, int dotColor);
+    public static native boolean knobToggle(String label, boolean value, int dotColor);
+    public static native boolean knobButton(String label, int dotColor);
 
     public static boolean collapsibleSection(String label) {
         return collapsibleSection(label, false, 0).isOpen;

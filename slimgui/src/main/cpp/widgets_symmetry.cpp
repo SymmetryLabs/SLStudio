@@ -118,7 +118,7 @@ bool Knob(const char *label, float *v, float vdisplay, float tmod, int mod_count
     float a = a_lo + t * (a_hi - a_lo);
     float a_mod = mod_count > 0 ? a_lo + tmod * (a_hi - a_lo) : a;
 
-    ImVec2 center{pos.x + 0.5f * size.x + style.ItemInnerSpacing.x, pos.y + 0.5f * size.y};
+    ImVec2 center{pos.x + 0.5f * size.x + style.ItemInnerSpacing.x, pos.y + 0.45f * size.y};
 
     float thick = style.KnobThick;
     float rad = style.KnobRadius;
@@ -182,6 +182,107 @@ bool Knob(const char *label, float *v, float vdisplay, float tmod, int mod_count
         RenderTextClipped(text_pos, text_clip, label, NULL, NULL, ImVec2{0.5f, 0});
     }
     return changed;
+}
+
+bool KnobToggle(const char *label, bool *value, jint dot_color) {
+    auto window = GetCurrentWindow();
+    if (window->SkipItems)
+        return false;
+
+    ImGuiContext &g = *GImGui;
+    const ImGuiStyle &style = g.Style;
+    auto pos = window->DC.CursorPos;
+    const ImGuiID id = window->GetID(label);
+
+    ImVec2 label_size = CalcTextSize(label, NULL, true);
+    ImVec2 size{
+        (style.ItemInnerSpacing.x + style.KnobRadius) * 2,
+        (style.ItemInnerSpacing.y + style.KnobRadius) * 2 + label_size.y + style.KnobThick};
+    const ImRect bb{pos, pos + size};
+
+    ItemSize(bb);
+    if (!ItemAdd(bb, id))
+        return false;
+
+    bool hovered = false;
+    bool held = false;
+    bool pressed = ButtonBehavior(bb, id, &hovered, &held, 0);
+    if (pressed) {
+        *value = !*value;
+    }
+
+    ImVec2 center{pos.x + 0.5f * size.x + style.ItemInnerSpacing.x, pos.y + 0.45f * size.y};
+
+    int color;
+    if (*value) {
+        color = GetColorU32(hovered ? KnobValueHoveredColor : KnobValueColor);
+    } else {
+        color = GetColorU32(hovered ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg);
+    }
+    window->DrawList->PathClear();
+    window->DrawList->PathArcTo(center, style.KnobRadius, 0, 2 * M_PI, 30);
+    window->DrawList->PathFillConvex(color);
+
+    window->DrawList->PathClear();
+    window->DrawList->PathArcTo(center, style.KnobRadius - style.KnobThick, 0, 2 * M_PI, 30);
+    window->DrawList->PathFillConvex(GetColorU32(ARGB(dot_color)));
+
+    ImVec2 text_pos {
+        center.x - style.KnobRadius - style.KnobThick / 2,
+        pos.y + 2 * style.KnobRadius + 1.5f * style.KnobThick + style.ItemInnerSpacing.y};
+    ImVec2 text_clip {
+        center.x + style.KnobRadius + style.KnobThick / 2,
+        text_pos.y + label_size.y + style.ItemInnerSpacing.y};
+    RenderTextClipped(text_pos, text_clip, label, NULL, NULL, ImVec2{0.5f, 0});
+    return pressed;
+}
+
+bool KnobButton(const char *label, jint dot_color) {
+    auto window = GetCurrentWindow();
+    if (window->SkipItems)
+        return false;
+
+    ImGuiContext &g = *GImGui;
+    const ImGuiStyle &style = g.Style;
+    auto pos = window->DC.CursorPos;
+    const ImGuiID id = window->GetID(label);
+
+    ImVec2 label_size = CalcTextSize(label, NULL, true);
+    ImVec2 size{
+        (style.ItemInnerSpacing.x + style.KnobRadius) * 2,
+        (style.ItemInnerSpacing.y + style.KnobRadius) * 2 + label_size.y + style.KnobThick};
+    const ImRect bb{pos, pos + size};
+
+    ItemSize(bb);
+    if (!ItemAdd(bb, id))
+        return false;
+
+    bool hovered = false;
+    bool held = false;
+    bool pressed = ButtonBehavior(bb, id, &hovered, &held, ImGuiButtonFlags_PressedOnClick);
+
+    ImVec2 center{pos.x + 0.5f * size.x + style.ItemInnerSpacing.x, pos.y + 0.45f * size.y};
+
+    int color = held ? GetColorU32(KnobValueColor) : hovered ? GetColorU32(ImGuiCol_FrameBgHovered) : GetColorU32(ImGuiCol_FrameBg);
+    window->DrawList->PathClear();
+    window->DrawList->AddRectFilled(
+        ImVec2{center.x - style.KnobRadius, center.y - style.KnobRadius},
+        ImVec2{center.x + style.KnobRadius, center.y + style.KnobRadius},
+        color,
+        /* rounding, rounding flags: */ 0, 0);
+
+    window->DrawList->PathClear();
+    window->DrawList->PathArcTo(center, style.KnobRadius - style.KnobThick, 0, 2 * M_PI, 30);
+    window->DrawList->PathFillConvex(GetColorU32(ARGB(dot_color)));
+
+    ImVec2 text_pos {
+        center.x - style.KnobRadius - style.KnobThick / 2,
+        pos.y + 2 * style.KnobRadius + 1.5f * style.KnobThick + style.ItemInnerSpacing.y};
+    ImVec2 text_clip {
+        center.x + style.KnobRadius + style.KnobThick / 2,
+        text_pos.y + label_size.y + style.ItemInnerSpacing.y};
+    RenderTextClipped(text_pos, text_clip, label, NULL, NULL, ImVec2{0.5f, 0});
+    return pressed;
 }
 
 ImGuiID dockspace_id;

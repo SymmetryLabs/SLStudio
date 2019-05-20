@@ -24,7 +24,7 @@ public class CubeOutputWindow extends CloseableWindow {
         this.lx = lx;
         this.show = show;
         this.model = (CubesModel) lx.model;
-        this.pui = ParameterUI.getDefault(lx).setDefaultBoundedWidget(ParameterUI.WidgetType.SLIDER);
+        this.pui = ParameterUI.getDefault(lx);
     }
 
     @Override

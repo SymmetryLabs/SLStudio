@@ -99,7 +99,7 @@ public class ChannelUI {
 
         pui.push().allowMapping(true);
 
-        pui.push().setDefaultBoundedWidget(ParameterUI.WidgetType.SLIDER);
+        pui.push().preferKnobs(false);
         pui.draw(chan.blendPatterns);
         pui.draw(chan.midiMonitor);
         pui.draw(chan.patternBlendMode);
