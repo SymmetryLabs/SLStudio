@@ -100,6 +100,7 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
 
         LXModel model = show.buildModel();
         lx = new LX(model);
+        lx.registerExternal("volumeWindowManager", WindowManager.getVisibilitySource());
 
         outputControl = new OutputControl(lx);
 
@@ -149,6 +150,13 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
         WindowManager.addPersistent("Developer/Imgui metrics", () -> new SlimguiMetricsWindow(), false);
         WindowManager.addPersistent("Developer/About imgui", () -> new SlimguiAboutWindow(), false);
 
+        lx.engine.isMultithreaded.setValue(true);
+        lx.engine.isChannelMultithreaded.setValue(true);
+        lx.engine.isNetworkMultithreaded.setValue(true);
+        lx.engine.start();
+
+        show.setupUi(lx);
+
         if (firstOpen) {
             File lastProjectFile = new File(SLStudioLX.PROJECT_FILE_NAME);
             if (lastProjectFile.exists()) {
@@ -165,13 +173,6 @@ public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.
                 }
             }
         }
-
-        lx.engine.isMultithreaded.setValue(true);
-        lx.engine.isChannelMultithreaded.setValue(true);
-        lx.engine.isNetworkMultithreaded.setValue(true);
-        lx.engine.start();
-
-        show.setupUi(lx);
     }
 
     @Override

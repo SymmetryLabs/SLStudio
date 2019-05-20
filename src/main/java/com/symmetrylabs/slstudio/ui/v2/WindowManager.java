@@ -3,6 +3,8 @@ package com.symmetrylabs.slstudio.ui.v2;
 import heronarts.lx.LX;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import heronarts.lx.LXSerializable;
+import com.google.gson.JsonObject;
 
 /**
  * Manages and draws windows in the UI.
@@ -94,6 +96,13 @@ public class WindowManager {
         INSTANCE.runSafelyWithEngineImpl(lx, r);
     }
 
+    /**
+     * Get a serializable source of window visibility state.
+     */
+    public static WindowVisibility getVisibilitySource() {
+        return new WindowVisibility();
+    }
+
     /* Package-private implementation follows */
 
     /** @return the global WindowManager singleton instance. */
@@ -109,6 +118,7 @@ public class WindowManager {
     static class PersistentWindow {
         String name;
         String dirName;
+        String id;
         WindowCreator creator;
         Window current;
     }
@@ -137,8 +147,14 @@ public class WindowManager {
     }
 
     void addPersistentImpl(String name, WindowCreator creator, boolean displayByDefault) {
+        for (PersistentWindow w : persistentWindows) {
+            if (w.id.equals(name)) {
+                throw new IllegalArgumentException("tried to add two persistent windows with name " + name);
+            }
+        }
         PersistentWindow ws = new PersistentWindow();
         String[] nameParts = name.split("/", 2);
+        ws.id = name;
         ws.dirName = nameParts.length > 1 ? nameParts[0] : null;
         ws.name = nameParts.length > 1 ? nameParts[1] : nameParts[0];
         ws.creator = creator;
@@ -264,6 +280,53 @@ public class WindowManager {
         }
         synchronized (toRemove) {
             toRemove.add(ws.current);
+        }
+    }
+
+    private static final String KEY_VISIBLE = "visible";
+
+    /**
+     * A proxy for window visibility that handles a change in WindowManager instance.
+     *
+     * This is a separate static class that uses the static API of
+     * WindowManager, so that if the WindowManager instance changes, this class
+     * (a) doesn't hold a reference to the old one and (b) still returns
+     * up-to-date data from the new one.
+     */
+    public static class WindowVisibility implements LXSerializable {
+        public void load(LX lx, JsonObject obj) {
+            WindowManager wm = get();
+            Collection<PersistentWindow> windows = wm.getSpecs();
+            for (String key : obj.keySet()) {
+                PersistentWindow found = null;
+                for (PersistentWindow window : windows) {
+                    if (window.id.equals(key)) {
+                        found = window;
+                        break;
+                    }
+                }
+                if (found == null) {
+                    continue;
+                }
+                JsonObject windowObj = (JsonObject) obj.get(key);
+                if (windowObj.has(KEY_VISIBLE)) {
+                    boolean visible = windowObj.get(KEY_VISIBLE).getAsBoolean();
+                    if (visible) {
+                        wm.showPersistent(found);
+                    } else {
+                        wm.hidePersistent(found);
+                    }
+                }
+            }
+        }
+
+        public void save(LX lx, JsonObject obj) {
+            WindowManager wm = get();
+            for (PersistentWindow window : wm.getSpecs()) {
+                JsonObject windowObj = new JsonObject();
+                windowObj.addProperty(KEY_VISIBLE, window.current != null);
+                obj.add(window.id, windowObj);
+            }
         }
     }
 }
