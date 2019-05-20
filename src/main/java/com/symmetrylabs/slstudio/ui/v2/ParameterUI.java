@@ -312,10 +312,10 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
 
     public void draw(BooleanParameter p, boolean important) {
         final boolean start = p.getValueb();
-        boolean res;
+        final boolean isMapping = isMapping();
 
         int dotColor = 0;
-        if (isMapping()) {
+        if (isMapping) {
             dotColor = mapping.getControlTarget() == p ? 0xFFFFFFFF : 0x88FFFFFF;
         } else if (mappedParameters.containsKey(p)) {
             dotColor = 0xFFFFFFFF;
@@ -326,6 +326,7 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
                 UI.pushColor(UI.COLOR_WIDGET, UIConstants.RED);
                 UI.pushColor(UI.COLOR_WIDGET_HOVERED, UIConstants.RED_HOVER);
             }
+            boolean res;
             if (stateStack.peek().preferKnobsForToggles) {
                 res = UI.knobToggle(getID(p, false), start, dotColor);
             } else {
@@ -334,21 +335,27 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
             if (important && start) {
                 UI.popColor(2);
             }
+            if (isMapping && UI.isItemClicked()) {
+                mapping.setControlTarget(p);
+            } else if (!isMapping && start != res) {
+                lx.engine.addTask(() -> p.setValue(res));
+            }
         } else {
-            /* this is done this way so we can figure out if the button is held;
+            /* we use isItemActive so we can figure out if the button is held;
                button() only returns true on press, but not on subsequent frames. */
             if (stateStack.peek().preferKnobsForButtons) {
                 UI.knobButton(getID(p, false), dotColor);
             } else {
                 UI.button(getID(p));
             }
-            res = UI.isItemActive();
-        }
-        final boolean isMapping = isMapping();
-        if (isMapping && UI.isItemClicked()) {
-            mapping.setControlTarget(p);
-        } else if (!isMapping() && start != res) {
-            lx.engine.addTask(() -> p.setValue(res));
+            if (isMapping && UI.isItemClicked()) {
+                mapping.setControlTarget(p);
+            } else if (!isMapping && UI.isItemActive()) {
+                /* only set the value if the button is held; if it's not held, let the parameter
+                   have whatever value it has, in case something else, like a MIDI mapping,
+                   is "holding down the button". */
+                lx.engine.addTask(() -> p.setValue(true));
+            }
         }
     }
 
