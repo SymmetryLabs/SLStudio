@@ -119,7 +119,7 @@ public class ChannelUI {
         List<LXPattern> patterns = chan.getPatterns();
         for (int i = 0; i < patterns.size(); i++) {
             final LXPattern pat = patterns.get(i);
-            String patName = pat.getClass().getSimpleName();
+            String patName = pat.getClass().getSimpleName() + "##pattern-" + i;
             String id = String.format("%s / %s", chanName, patName);
 
             UI.spacing(5, 5);
@@ -140,7 +140,7 @@ public class ChannelUI {
                 UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.BLUE_HOVER);
             }
             UI.CollapseResult section = UI.collapsibleSection(
-                patName + "##pattern-" + i, true,
+                patName, true,
                 pat.expandedInUi.getValueb() ? UI.TREE_FLAG_DEFAULT_OPEN : 0);
             if (isActive || isMidiFocused) {
                 UI.popColor(3);

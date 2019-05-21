@@ -889,7 +889,10 @@ public class UI {
 
     /* Context menus */
     public static native boolean beginContextMenu(String id);
-    public static native boolean contextMenuItem(String label);
+    public static boolean contextMenuItem(String label) {
+        return contextMenuItem(label, true);
+    }
+    public static native boolean contextMenuItem(String label, boolean enabled);
     public static native void endContextMenu();
 
     /* Trees */

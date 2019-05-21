@@ -7,6 +7,8 @@ import java.util.function.Consumer;
 
 
 public class IterationUtils {
+    public static class StopIteration extends RuntimeException {}
+
     /**
      * Iterate through a collection, aborting iteration if the collection is modified.
      *
@@ -17,6 +19,8 @@ public class IterationUtils {
      * instead of synchronizing on all accesses to the collection, we just iterate over
      * it with this function, which allows us to continue until the next frame,
      * when we will get a consistent view of the collection.
+     *
+     * @return true if the iteration finished normally (i.e., we went through the entire iterable or a StopIteration exception was raised)
      */
     public static <T> boolean forEachIgnoreModification(Iterable<T> collection, Consumer<? super T> action) {
         try {
@@ -26,6 +30,8 @@ public class IterationUtils {
             return true;
         } catch (ConcurrentModificationException e) {
             return false;
+        } catch (StopIteration e) {
+            return true;
         }
     }
 
@@ -57,6 +63,7 @@ public class IterationUtils {
             for (E val : collection) {
                 accum = action.apply(accum, val);
             }
+        } catch (StopIteration e) {
         } catch (ConcurrentModificationException e) {
         }
         return accum;

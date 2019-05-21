@@ -200,7 +200,7 @@ public class LookEditor implements Window {
         UI.end();
     }
 
-    private final int channelHeader(LXChannel chan, String chanName, int visibleWindowCount) {
+    private final int channelHeader(final LXChannel chan, String chanName, int visibleWindowCount) {
         UI.pushFont(FontLoader.DEFAULT_FONT_L);
         boolean isVisible = chan.editorVisible.getValueb();
         if (isVisible) {
@@ -218,6 +218,12 @@ public class LookEditor implements Window {
             UI.popColor(3);
         }
         UI.popFont();
+        if (UI.beginContextMenu(chanName)) {
+            if (UI.contextMenuItem("Delete", look.channels.size() > 1)) {
+                lx.engine.addTask(() -> lx.engine.getFocusedLook().removeChannel(chan));
+            }
+            UI.endContextMenu();
+        }
         return visibleWindowCount;
     }
 }

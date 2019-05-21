@@ -594,10 +594,10 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginContextM
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    contextMenuItem
- * Signature: (Ljava/lang/String;)Z
+ * Signature: (Ljava/lang/String;Z)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_contextMenuItem
-  (JNIEnv *, jclass, jstring);
+  (JNIEnv *, jclass, jstring, jboolean);
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI

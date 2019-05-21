@@ -907,9 +907,9 @@ JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_beginContextM
     return ImGui::BeginPopupContextItem(label) ? 1 : 0;
 }
 
-JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_contextMenuItem(JNIEnv *env, jclass, jstring jlabel) {
+JNIEXPORT jboolean JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_contextMenuItem(JNIEnv *env, jclass, jstring jlabel, jboolean enabled) {
     JniString label(env, jlabel);
-    return ImGui::Selectable(label) ? 1 : 0;
+    return ImGui::Selectable(label, false, enabled ? 0 : ImGuiSelectableFlags_Disabled) ? 1 : 0;
 }
 
 JNIEXPORT void JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_endContextMenu(JNIEnv *, jclass) {
