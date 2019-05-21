@@ -85,6 +85,10 @@ public abstract class LXMidiSurface implements LXMidiListener {
 
     }
 
+    public String getIdentifier() {
+        return String.format("in=%s/%s,out=%s/%s", input.getName(), input.getDescription(), output.getName(), output.getDescription());
+    }
+
     public String getDescription() {
         return this.input.getDescription();
     }

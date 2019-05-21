@@ -386,6 +386,7 @@ public class LXMidiEngine implements LXSerializable {
     private static final String KEY_INPUTS = "inputs";
     private static final String KEY_SURFACES = "surfaces";
     private static final String KEY_MAPPINGS = "mapping";
+    private static final String KEY_SURFACE_ID = "surfaceid";
 
     private final List<JsonObject> rememberMidiInputs = new ArrayList<JsonObject>();
     private final List<JsonObject> rememberMidiSurfaces = new ArrayList<JsonObject>();
@@ -402,15 +403,30 @@ public class LXMidiEngine implements LXSerializable {
         for (JsonObject remembered : this.rememberMidiInputs) {
             inputs.add(remembered);
         }
-
         object.add(KEY_INPUTS, inputs);
+
+        JsonArray surfaces = new JsonArray();
+        for (LXMidiSurface surface : this.mutableSurfaces) {
+            if (surface.enabled.isOn()) {
+                JsonObject sobj = new JsonObject();
+                sobj.addProperty(KEY_SURFACE_ID, surface.getIdentifier());
+                surfaces.add(sobj);
+            }
+        }
+        for (JsonObject remembered : this.rememberMidiSurfaces) {
+            surfaces.add(remembered);
+        }
+        object.add(KEY_SURFACES, surfaces);
+
         object.add(KEY_MAPPINGS, LXSerializable.Utils.toArray(lx, this.mutableMappings));
     }
 
     @Override
     public void load(final LX lx, final JsonObject object) {
         this.rememberMidiInputs.clear();
+        this.rememberMidiSurfaces.clear();
         this.mutableMappings.clear();
+
         if (object.has(KEY_MAPPINGS)) {
             JsonArray mappings = object.getAsJsonArray(KEY_MAPPINGS);
             for (JsonElement element : mappings) {
@@ -425,18 +441,37 @@ public class LXMidiEngine implements LXSerializable {
             public void run() {
                 if (object.has(KEY_INPUTS)) {
                     JsonArray inputs = object.getAsJsonArray(KEY_INPUTS);
-                    if (inputs.size() > 0) {
-                        for (JsonElement element : inputs) {
-                            JsonObject inputObj = element.getAsJsonObject();
-                            String inputName = inputObj.get(LXMidiInput.KEY_NAME).getAsString();
-                            boolean found = false;
-                            for (LXMidiInput input : mutableInputs) {
-                                if (inputName.equals(input.getName())) {
-                                    found = true;
-                                    input.load(lx, inputObj);
-                                    break;
-                                }
+                    for (JsonElement element : inputs) {
+                        JsonObject inputObj = element.getAsJsonObject();
+                        String inputName = inputObj.get(LXMidiInput.KEY_NAME).getAsString();
+                        boolean found = false;
+                        for (LXMidiInput input : mutableInputs) {
+                            if (inputName.equals(input.getName())) {
+                                found = true;
+                                input.load(lx, inputObj);
+                                break;
                             }
+                        }
+                        if (!found) {
+                            rememberMidiInputs.add(inputObj);
+                        }
+                    }
+                }
+                if (object.has(KEY_SURFACES)) {
+                    JsonArray sarray = object.getAsJsonArray(KEY_SURFACES);
+                    for (JsonElement selem : sarray) {
+                        JsonObject sobj = (JsonObject) selem;
+                        String id = sobj.get(KEY_SURFACE_ID).getAsString();
+                        boolean found = false;
+                        for (LXMidiSurface surf : mutableSurfaces) {
+                            if (surf.getIdentifier().equals(id)) {
+                                surf.enabled.setValue(true);
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            rememberMidiSurfaces.add(sobj);
                         }
                     }
                 }
