@@ -54,6 +54,7 @@ public abstract class LXListenableParameter implements LXParameter {
     private boolean shouldSerialize = true;
 
     private boolean visible = true;
+    private float priority = 0;
 
     protected LXListenableParameter() {
         this(null, 0);
@@ -249,6 +250,16 @@ public abstract class LXListenableParameter implements LXParameter {
 
     public LXListenableParameter setVisible(boolean v) {
         visible = v;
+        return this;
+    }
+
+    @Override
+    public float getPriority() {
+        return priority;
+    }
+
+    public LXListenableParameter setPriority(float p) {
+        priority = p;
         return this;
     }
 }

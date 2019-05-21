@@ -27,6 +27,10 @@ import java.util.List;
 import java.util.Map;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import java.util.Collections;
+import java.util.ArrayList;
+import com.google.common.collect.Comparators;
+import java.util.Comparator;
 
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.color.LXColor;
@@ -259,6 +263,7 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
     }
 
     protected final Map<String, LXParameter> parameters = new LinkedHashMap<String, LXParameter>();
+    protected final List<LXParameter> sortedParameters = new ArrayList<>();
 
     public final LXComponent addParameter(LXParameter parameter) {
         return addParameter(parameter.getLabel(), parameter);
@@ -279,6 +284,8 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         if (parameter instanceof LXListenableParameter) {
             ((LXListenableParameter) parameter).addListener(this);
         }
+        sortedParameters.add(parameter);
+        sortedParameters.sort(Comparator.comparingDouble(p -> p.getPriority()));
         return this;
     }
 
@@ -302,12 +309,13 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
             throw new IllegalStateException("Cannot remove parameter not owned by component");
         }
         this.parameters.remove(parameter.getPath());
+        sortedParameters.remove(parameter);
         parameter.dispose();
         return this;
     }
 
     public final Collection<LXParameter> getParameters() {
-        return this.parameters.values();
+        return this.sortedParameters;
     }
 
     public final LXParameter getParameter(String path) {

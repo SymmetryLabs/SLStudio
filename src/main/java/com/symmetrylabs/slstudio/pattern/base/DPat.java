@@ -109,13 +109,23 @@ public abstract class DPat extends SLPattern<SLModel> {
     }
 
     public CompoundParameter addParam(String label, double value) {
+        return addParam(label, value, 0);
+    }
+
+    public CompoundParameter addParam(String label, double value, float priority) {
         CompoundParameter p = new CompoundParameter(label, value);
+        p.setPriority(priority);
         addParameter(p);
         return p;
     }
 
     public CompoundParameter addParam(String label, double value, double min, double max) {
+        return addParam(label, value, min, max, 0);
+    }
+
+    public CompoundParameter addParam(String label, double value, double min, double max, float priority) {
         CompoundParameter p2 = new CompoundParameter(label, value, min, max);
+        p2.setPriority(priority);
         addParameter(p2);
         return p2;
     }
@@ -227,15 +237,15 @@ public abstract class DPat extends SLPattern<SLModel> {
 
     public DPat(LX lx) {
         super(lx);
-        pHue = addParam("Hue", 0, 0, 360);
-        pSpark = addParam("Spark", 0);
-        pWave = addParam("Wave", 0);
+        pHue = addParam("Hue", 0, 0, 360, -1);
+        pSpark = addParam("Spark", 0, -1);
+        pWave = addParam("Wave", 0, -1);
         pTransX = addParam("xPos", .5);
         pTransY = addParam("yPos", .5);
         pRotX = addParam("xRot", .5);
         pRotY = addParam("yRot", .5);
         pRotZ = addParam("zRot", .5);
-        pSpin = addParam("Spin", .5);
+        pSpin = addParam("Spin", .5, -1);
 
         pXsym = new BooleanParameter("X-SYM");
         pYsym = new BooleanParameter("Y-SYM");

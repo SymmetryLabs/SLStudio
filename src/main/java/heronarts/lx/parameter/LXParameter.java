@@ -203,11 +203,24 @@ public interface LXParameter {
     public boolean getShouldSerialize();
 
     /**
-     * Retursn whether this parameter should be displayed in the UI.
+     * Returns whether this parameter should be displayed in the UI.
      *
      * @return true if this parameter should be displayed in the UI.
      */
     public default boolean isVisible() {
         return true;
     };
+
+    /**
+     * Returns the priority of this parameter.
+     *
+     * Priority determines the order in which parameters are displayed in the UI; they are
+     * first sorted by priority, then by insertion order.
+     *
+     * This is a float so that there is always a value you can use to put a given parameter
+     * between two others.
+     */
+    public default float getPriority() {
+        return 0;
+    }
 }

@@ -30,10 +30,10 @@ public class Noise extends DPat {
 
     public Noise(LX lx) {
         super(lx);
-        addParameter(speed);
+        addParameter(speed.setPriority(-1));
         addParameter(symm);
         addParameter(mode);
-        addParameter(density);
+        addParameter(density.setPriority(-1));
         addParameter(animReset);
         mode.setValue(5);
 

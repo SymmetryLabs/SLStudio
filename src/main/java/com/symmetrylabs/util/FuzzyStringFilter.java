@@ -61,7 +61,7 @@ public class FuzzyStringFilter<T> {
      * Set the text that we will filter our corpus with.
      *
      * This will kick off a filter operation. For that reason, it's best to set
-     * up your corpus (by calling {@link addSentence(T, String...)}) before
+     * up your corpus (by calling {@code addSentence}) before
      * setting filter text, to avoid unnecessary computation.
      *
      * @return true if the filter was run as a by-product of setting filter text.
