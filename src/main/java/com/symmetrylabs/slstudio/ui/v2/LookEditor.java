@@ -91,7 +91,7 @@ public class LookEditor implements Window {
         int visibleWindowCount = IterationUtils.reduceIgnoreModification(look.channels, 0, (vwc, chan) -> {
                 String chanName = chan.getLabel();
                 UI.sameLine();
-                UI.beginChild(chanName, false, 0, 90, HEIGHT);
+                UI.beginChild("chanWindow" + chan.getIndex(), false, 0, 90, HEIGHT);
 
                 vwc = channelHeader(chan, chanName, vwc);
 
@@ -169,7 +169,7 @@ public class LookEditor implements Window {
 
         IterationUtils.reduceIgnoreModification(look.channels, 0, (pipelineIndex, chan) -> {
                 if (chan.editorVisible.getValueb()) {
-                    UI.beginChild(chan.getLabel() + "##channel-child", false, 0, PIPELINE_WIDTH, (int) UI.height);
+                    UI.beginChild("pipeline" + chan.getIndex(), false, 0, PIPELINE_WIDTH, (int) UI.height);
                     pipelineIndex = channelHeader(chan, chan.getLabel(), pipelineIndex);
                     ChannelUI.draw(lx, chan, pui, wepUi);
                     maxWindowHeight = Float.max(maxWindowHeight, UI.getCursorPosition().y);
@@ -210,7 +210,11 @@ public class LookEditor implements Window {
             UI.pushColor(UI.COLOR_HEADER_ACTIVE, c);
             UI.pushColor(UI.COLOR_HEADER_HOVERED, c);
         }
-        boolean newVisible = UI.selectable(chanName + "##header", isVisible);
+
+        // use the index here so that if we rename it we don't close the popup
+        String chanRef = "Chan" + chan.getIndex();
+
+        boolean newVisible = UI.selectable(chanName + "###header" + chanRef, isVisible);
         if (isVisible != newVisible) {
             lx.engine.addTask(() -> chan.editorVisible.setValue(newVisible));
         }
@@ -218,7 +222,9 @@ public class LookEditor implements Window {
             UI.popColor(3);
         }
         UI.popFont();
-        if (UI.beginContextMenu(chanName)) {
+        if (UI.beginContextMenu(chanRef)) {
+            UI.text("Rename channel:");
+            chan.label.setValue(UI.inputText("##newChanName", chan.getLabel()));
             if (UI.contextMenuItem("Delete", look.channels.size() > 1)) {
                 lx.engine.addTask(() -> lx.engine.getFocusedLook().removeChannel(chan));
             }
