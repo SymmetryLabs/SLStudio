@@ -831,6 +831,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         LXBlend blend = patternBlendMode.getObject();
 
         polyBuffer.setZero();
+        boolean first = true;
         for (int i = 0; i < patterns.size(); i++) {
             LXPattern pat = patterns.get(i);
             if (!pat.enabled.isOn()) {
@@ -839,8 +840,9 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             pat.setPreferredSpace(space);
             pat.loop(deltaMs);
 
-            if (i == 0) {
+            if (first) {
                 polyBuffer.copyFrom(pat, space);
+                first = false;
             } else {
                 blend.blend(polyBuffer, pat, 1, polyBuffer, space);
             }
