@@ -28,8 +28,11 @@ public abstract class CloseableWindow implements Window {
             WindowManager.closeWindow(this);
             return;
         }
-        drawContents();
-        UI.end();
+        try {
+            drawContents();
+        } finally {
+            UI.end();
+        }
         if (closeAfterEnd) {
             WindowManager.closeWindow(this);
         }
