@@ -236,6 +236,9 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
         }
         int ki = 0;
         for (LXListenableNormalizedParameter param : params) {
+            if (!param.isVisible()) {
+                continue;
+            }
             float x = (ki % perRow) * (UIKnob.WIDTH + 4);
             float y = 7 + (ki / perRow) * (UIKnob.HEIGHT + 10);
             if (param instanceof BoundedParameter || param instanceof DiscreteParameter) {
