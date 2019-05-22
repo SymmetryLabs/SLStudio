@@ -858,13 +858,14 @@ public class APC40Mk2 extends LXMidiSurface {
             return;
         }
 
-        if (number >= CHANNEL_KNOB && number <= CHANNEL_KNOB_MAX) {
-            int chan = number - CHANNEL_KNOB;
-            if (chan < getVisibleChannelList().size()) {
-                getVisibleChannelList().get(chan).speed.setNormalized(cc.getNormalized());
-            }
-            return;
-        }
+        // RAPH TEMPORARILY DISABLING FOR PASSION PIT
+        // if (number >= CHANNEL_KNOB && number <= CHANNEL_KNOB_MAX) {
+        //     int chan = number - CHANNEL_KNOB;
+        //     if (chan < getVisibleChannelList().size()) {
+        //         getVisibleChannelList().get(chan).speed.setNormalized(cc.getNormalized());
+        //     }
+        //     return;
+        // }
 
         // System.out.println("APC40mk2 UNMAPPED: " + cc);
     }

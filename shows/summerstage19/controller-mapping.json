@@ -205,10 +205,6 @@
       "physicalId": "967"
     },
     {
-      "modelId": "CS2-B2A",
-      "physicalId": "1093"
-    },
-    {
       "modelId": "CS2-B3A",
       "physicalId": "757"
     },
@@ -511,10 +507,6 @@
     {
       "modelId": "CS8-C4A",
       "physicalId": "726"
-    },
-    {
-      "modelId": "CS8-C5A",
-      "physicalId": "308"
     },
     {
       "modelId": "CS8-C4B",

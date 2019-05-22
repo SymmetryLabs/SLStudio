@@ -21,15 +21,22 @@ public class Sparkle extends LXPattern {
     private CompoundParameter hueVarianceParameter = new CompoundParameter("HueVar", 0.25);
     private CompoundParameter saturationParameter = new CompoundParameter("Sat", 0.5);
 
+    private boolean[] occupied;
+
     class Spark {
         LXVector vector;
         float value;
         float hue;
         boolean hasPeaked;
+        int index;
 
         Spark() {
             List<LXVector> vectors = getVectorList();
-            vector = vectors.get((int) Math.floor(LXUtils.random(0, vectors.size())));
+            do {
+                index = (int) Math.floor(LXUtils.random(0, vectors.size()));
+            } while (occupied[index]);
+            vector = vectors.get(index);
+            occupied[index] = true;
             hue = (float) LXUtils.random(0, 1);
             boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
             hasPeaked = infiniteAttack;
@@ -64,6 +71,10 @@ public class Sparkle extends LXPattern {
         addParameter(hueVarianceParameter);
         addParameter(saturationParameter);
         sparks = new LinkedList<Spark>();
+        occupied = new boolean[getVectorList().size()];
+        for (int i = 0; i < occupied.length; i++) {
+            occupied[i] = false;
+        }
     }
 
     public void run(double deltaMs) {
@@ -88,6 +99,7 @@ public class Sparkle extends LXPattern {
             boolean dead = spark.age(deltaMs);
             if (dead) {
                 i.remove();
+                occupied[spark.index] = false;
             }
         }
     }

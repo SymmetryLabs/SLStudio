@@ -35,7 +35,7 @@ public class ModelRenderer implements RenderManager.Renderable {
     protected float basePointSize;
 
     /* Visible so it can be modified in Internals window */
-    float scalePointSize = 1;
+    float scalePointSize = 0.1f;
 
     public ModelRenderer(LX lx, LXModel model) {
         this.model = model;
