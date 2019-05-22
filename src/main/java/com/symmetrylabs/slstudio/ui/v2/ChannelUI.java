@@ -32,6 +32,13 @@ public class ChannelUI {
                     UI.popColor(3);
                 }
                 warp.expandedInUi.setValue(section.isOpen);
+                if (UI.beginContextMenu(warpName)) {
+                    pui.push().preferKnobs(false).draw(warp.enabled).pop();
+                    if (UI.contextMenuItem("Pop out")) {
+                        WindowManager.addTransient(new ComponentWindow(lx, warpName, warp, pui));
+                    }
+                    UI.endContextMenu();
+                }
                 if (UI.isItemClicked() && UI.isAltDown()) {
                     warp.enabled.toggle();
                 } else if (section.shouldRemove) {
@@ -64,6 +71,13 @@ public class ChannelUI {
                     UI.popColor(3);
                 }
                 eff.expandedInUi.setValue(section.isOpen);
+                if (UI.beginContextMenu(effName)) {
+                    pui.push().preferKnobs(false).draw(eff.enabled).pop();
+                    if (UI.contextMenuItem("Pop out")) {
+                        WindowManager.addTransient(new ComponentWindow(lx, effName, eff, pui));
+                    }
+                    UI.endContextMenu();
+                }
                 if (UI.isItemClicked() && UI.isAltDown()) {
                     eff.enabled.toggle();
                 } else if (section.shouldRemove) {
