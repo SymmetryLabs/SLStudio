@@ -191,14 +191,14 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
         return stateStack.peek().allowMapping && mapping.mode.getEnum() == LXMappingEngine.Mode.MIDI;
     }
 
-    public void draw(BoundedParameter p) {
+    public ParameterUI draw(BoundedParameter p) {
         if (!stateStack.peek().preferKnobsForFloats) {
             float start = p.getValuef();
             final float res = UI.sliderFloat(getID(p), start, (float) p.range.v0, (float) p.range.v1);
             if (start != res) {
                 lx.engine.addTask(() -> p.setValue(res));
             }
-            return;
+            return this;
         }
         final float start = p.getNormalizedf();
 
@@ -236,6 +236,7 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
             final float fres = res;
             lx.engine.addTask(() -> p.setNormalized(fres));
         }
+        return this;
     }
 
     private float compoundKnob(CompoundParameter cp, int dotColor) {
@@ -267,7 +268,7 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
             cp.getNormalizedf(), N, mins, maxs, colors, dotColor);
     }
 
-    public void draw(DiscreteParameter p) {
+    public ParameterUI draw(DiscreteParameter p) {
         String[] options = p.getOptions();
         boolean isMapping = isMapping();
         if (options == null) {
@@ -288,6 +289,7 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
                 lx.engine.addTask(() -> p.setValue(res));
             }
         }
+        return this;
     }
 
     public boolean toggle(String label, boolean active, boolean important, float w) {
@@ -326,11 +328,11 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
         return res;
     }
 
-    public void draw(BooleanParameter p) {
-        draw(p, false);
+    public ParameterUI draw(BooleanParameter p) {
+        return draw(p, false);
     }
 
-    public void draw(BooleanParameter p, boolean important) {
+    public ParameterUI draw(BooleanParameter p, boolean important) {
         final boolean start = p.getValueb();
         final boolean isMapping = isMapping();
 
@@ -393,9 +395,10 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
                 lx.engine.addTask(() -> p.setValue(res));
             }
         }
+        return this;
     }
 
-    public void draw(ColorParameter p) {
+    public ParameterUI draw(ColorParameter p) {
         int start = p.getColor();
         float h = p.hue.getValuef();
         float s = p.saturation.getValuef();
@@ -408,9 +411,10 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
                     p.brightness.setValue(res[2]);
                 });
         }
+        return this;
     }
 
-    public void draw(LXParameter param) {
+    public ParameterUI draw(LXParameter param) {
         if (param instanceof BoundedParameter) {
             draw((BoundedParameter) param);
         } else if (param instanceof DiscreteParameter) {
@@ -420,16 +424,18 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
         } else if (param instanceof ColorParameter) {
             draw((ColorParameter) param);
         }
+        return this;
     }
 
-    public void menuItem(BooleanParameter p) {
-        menuItem(p, getID(p));
+    public ParameterUI menuItem(BooleanParameter p) {
+        return menuItem(p, getID(p));
     }
 
-    public void menuItem(BooleanParameter p, String label) {
+    public ParameterUI menuItem(BooleanParameter p, String label) {
         boolean res = UI.menuItemToggle(label, null, p.getValueb(), true);
         if (res != p.getValueb()) {
             lx.engine.addTask(() -> p.setValue(res));
         }
+        return this;
     }
 }

@@ -57,6 +57,10 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
     // run(deltaMs, preferredSpace) and use getArray(space) to get the array.
     protected int[] colors = null;
 
+    public final BooleanParameter enabled =
+        (BooleanParameter) new BooleanParameter("Enabled", true)
+            .setDescription("When BlendPatterns is activated, this turns on and off the contribution of this pattern to the channel blend")
+            .setVisible(false);
     public final BooleanParameter autoCycleEligible = new BooleanParameter("Cycle", true);
     public final Timer timer = new Timer();
 
@@ -74,6 +78,7 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
 
     protected LXPattern(LX lx) {
         super(lx);
+        addParameter(enabled);
         this.label.setDescription("The name of this pattern");
         this.label.setValue(getClass().getSimpleName().replaceAll("Pattern$", ""));
     }

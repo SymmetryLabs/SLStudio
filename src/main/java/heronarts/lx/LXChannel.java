@@ -833,6 +833,9 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         polyBuffer.setZero();
         for (int i = 0; i < patterns.size(); i++) {
             LXPattern pat = patterns.get(i);
+            if (!pat.enabled.isOn()) {
+                continue;
+            }
             pat.setPreferredSpace(space);
             pat.loop(deltaMs);
 
