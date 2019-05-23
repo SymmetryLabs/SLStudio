@@ -30,7 +30,7 @@ public class Lwjgl3Launcher {
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
         configuration.useOpenGL3(true, 4, 1);
-        configuration.setTitle("SLStudio");
+        configuration.setTitle("Volume by Symmetry Labs");
         configuration.setWindowedMode(1280, 1048);
         configuration.setWindowIcon("application.png");
         /* 8 bits per color+depth, 0 bits for stencil, 3 samples per pixel */
