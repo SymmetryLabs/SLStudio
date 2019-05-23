@@ -283,14 +283,14 @@ public class UI {
      * The width, in pixels, of the current SLStudio window
      *
      * <p>
-     * Set on every frame by SLStudioGDX for reading by UI clients that want to anchor themselves somewhere.
+     * Set on every frame by VolumeApplication for reading by UI clients that want to anchor themselves somewhere.
      */
     public static float width;
     /**
      * The height, in pixels, of the current SLStudio window
      *
      * <p>
-     * Set on every frame by SLStudioGDX for reading by UI clients that want to anchor themselves somewhere.
+     * Set on every frame by VolumeApplication for reading by UI clients that want to anchor themselves somewhere.
      */
     public static float height;
     /**

@@ -29,7 +29,15 @@ import heronarts.lx.data.LXVersions;
 import org.lwjgl.glfw.GLFW;
 import heronarts.lx.LXMappingEngine;
 
-public class SLStudioGDX extends ApplicationAdapter implements ApplicationState.Provider {
+/**
+ * The main class that runs the Volume application.
+ *
+ * Technically, our actual main method resides in {@link Lwjgl3Launcher}, whose sole job
+ * is to initialize our window + OpenGL context and create an instance of VolumeApplication
+ * attached to that context. Once the launcher does that and hands the VolumeApplication
+ * instance off to libgdx, this class is what actually runs the app.
+ */
+public class VolumeApplication extends ApplicationAdapter implements ApplicationState.Provider {
     private static final String DEFAULT_SHOW = "demo";
     public static final int RUNTIME_VERSION = LXVersions.VOLUME_WITH_LOOKS;
 

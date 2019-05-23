@@ -19,10 +19,10 @@ import java.nio.file.Paths;
 
 public class MainMenu implements Window {
     private final LX lx;
-    private final SLStudioGDX parent;
+    private final VolumeApplication parent;
     private final ParameterUI pui;
 
-    public MainMenu(LX lx, SLStudioGDX parent) {
+    public MainMenu(LX lx, VolumeApplication parent) {
         this.lx = lx;
         this.parent = parent;
         this.pui = ParameterUI.getDefault(lx);
@@ -47,7 +47,7 @@ public class MainMenu implements Window {
                            rendering the UI. */
                         WindowManager.runSafelyWithEngine(
                             lx, () -> {
-                                lx.openProject(Project.createLegacyProject(projectFile, SLStudioGDX.RUNTIME_VERSION));
+                                lx.openProject(Project.createLegacyProject(projectFile, VolumeApplication.RUNTIME_VERSION));
                                 onProjectChanged();
                             });
                     });
@@ -169,7 +169,7 @@ public class MainMenu implements Window {
     private void runSaveAs() {
         FileDialog.save(
             lx, "Save project", projectFile -> {
-                lx.saveProject(Project.createLegacyProject(projectFile, SLStudioGDX.RUNTIME_VERSION));
+                lx.saveProject(Project.createLegacyProject(projectFile, VolumeApplication.RUNTIME_VERSION));
                 onProjectChanged();
             });
     }

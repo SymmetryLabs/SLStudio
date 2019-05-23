@@ -2,17 +2,17 @@ package com.symmetrylabs.slstudio.ui.v2;
 
 import com.badlogic.gdx.Gdx;
 import heronarts.lx.LX;
-import heronarts.lx.LXEngine;
+
 import java.util.LinkedList;
 
 public class InternalsWindow extends CloseableWindow {
     private static final int FRAMES_TO_KEEP = 300; // 5 seconds at 60fps
     private final LX lx;
-    private final SLStudioGDX parent;
+    private final VolumeApplication parent;
     private final ModelRenderer modelRenderer;
     private final LinkedList<Float> frameTimes = new LinkedList<>();
 
-    InternalsWindow(LX lx, SLStudioGDX parent, ModelRenderer modelRenderer) {
+    InternalsWindow(LX lx, VolumeApplication parent, ModelRenderer modelRenderer) {
         super("Internals");
         this.lx = lx;
         this.parent = parent;
