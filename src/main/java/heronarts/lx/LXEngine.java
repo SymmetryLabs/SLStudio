@@ -56,6 +56,7 @@ import heronarts.lx.pattern.SolidColorPattern;
 import heronarts.lx.script.LXScriptEngine;
 import org.apache.commons.collections4.iterators.IteratorChain;
 import org.apache.commons.collections4.iterators.IteratorIterable;
+import java.util.Collection;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -839,6 +840,10 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     protected void enableAutoTransition(int autoTransitionThreshold) {
         getDefaultChannel().enableAutoTransition(autoTransitionThreshold);
+    }
+
+    public Collection<LXLook> getLooks() {
+        return Collections.unmodifiableList(mutableLooks);
     }
 
     public LXLook getFocusedLook() {

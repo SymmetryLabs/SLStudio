@@ -389,15 +389,18 @@ public class LXOscEngine extends LXComponent {
             }
             lx.engine.modulation.addListener(this);
             registerComponent(lx.engine.masterChannel);
-            for (LXChannel channel : lx.engine.getChannels()) {
-                registerChannel(channel);
+            for (LXLook look : lx.engine.getLooks()) {
+                registerComponent(look);
+                for (LXComponent comp : look.allComponents()) {
+                    registerComponent(comp);
+                }
             }
             lx.engine.getFocusedLook().addListener(this);
         }
 
         private void registerChannel(LXChannel channel) {
             registerComponent(channel);
-            for (LXPattern p : channel.patterns) {
+            for (LXComponent p : channel.allComponents()) {
                 registerComponent(p);
             }
             channel.addListener(this);
@@ -405,7 +408,7 @@ public class LXOscEngine extends LXComponent {
 
         private void unregisterChannel(LXChannel channel) {
             unregisterComponent(channel);
-            for (LXPattern p : channel.patterns) {
+            for (LXComponent p : channel.allComponents()) {
                 unregisterComponent(p);
             }
             channel.removeListener(this);
