@@ -6,6 +6,7 @@ import heronarts.lx.LXChannel;
 import static heronarts.lx.LXChannel.CrossfadeGroup;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
+import heronarts.lx.mutation.Mutations;
 import heronarts.lx.warp.LXWarp;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,11 @@ public class ChannelUI {
                 if (UI.isItemClicked() && UI.isAltDown()) {
                     warp.enabled.toggle();
                 } else if (section.shouldRemove) {
-                    lx.engine.addTask(() -> chan.removeWarp(warp));
+                    lx.engine.mutations.enqueue(
+                        Mutations.RemoveWarp.newBuilder()
+                        .setLook(lx.engine.getFocusedLook().getIndex())
+                        .setChannel(chan instanceof LXChannel ? ((LXChannel) chan).getIndex() : -1)
+                        .setWarp(i));
                 } else if (section.isOpen) {
                     new ComponentUI(lx, warp, pui).draw();
                 }
@@ -81,7 +86,11 @@ public class ChannelUI {
                 if (UI.isItemClicked() && UI.isAltDown()) {
                     eff.enabled.toggle();
                 } else if (section.shouldRemove) {
-                    lx.engine.addTask(() -> chan.removeEffect(eff));
+                    lx.engine.mutations.enqueue(
+                        Mutations.RemoveEffect.newBuilder()
+                            .setLook(lx.engine.getFocusedLook().getIndex())
+                            .setChannel(chan instanceof LXChannel ? ((LXChannel) chan).getIndex() : -1)
+                            .setEffect(i));
                 } else if (section.isOpen) {
                     new ComponentUI(lx, eff, pui).draw();
                 }
@@ -194,7 +203,11 @@ public class ChannelUI {
             }
 
             if (section.shouldRemove) {
-                lx.engine.addTask(() -> chan.removePattern(pat));
+                lx.engine.mutations.enqueue(
+                    Mutations.RemovePattern.newBuilder()
+                        .setLook(lx.engine.getFocusedLook().getIndex())
+                        .setChannel(chan.getIndex())
+                        .setPattern(i));
             } else if (section.isOpen) {
                 new ComponentUI(lx, pat, pui).draw();
             }

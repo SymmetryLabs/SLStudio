@@ -31,6 +31,30 @@ message RemovePattern {
     int32 pattern = 3;
 };
 
+message AddWarp {
+    int32 look = 1;
+    int32 channel = 2;
+    string warp_type = 3;
+};
+
+message RemoveWarp {
+    int32 look = 1;
+    int32 channel = 2;
+    int32 warp = 3;
+};
+
+message AddEffect {
+    int32 look = 1;
+    int32 channel = 2;
+    string effect_type = 3;
+};
+
+message RemoveEffect {
+    int32 look = 1;
+    int32 channel = 2;
+    int32 effect = 3;
+};
+
 message Mutation {
     oneof value {
         AddLook addLook = 1;
@@ -39,5 +63,9 @@ message Mutation {
         RemoveChannel removeChannel = 4;
         AddPattern addPattern = 5;
         RemovePattern removePattern = 6;
+        AddWarp addWarp = 7;
+        RemoveWarp removeWarp = 8;
+        AddEffect addEffect = 9;
+        RemoveEffect removeEffect = 10;
     }
 };

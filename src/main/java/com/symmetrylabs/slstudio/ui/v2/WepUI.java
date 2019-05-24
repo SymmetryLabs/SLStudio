@@ -196,48 +196,30 @@ public class WepUI {
     }
 
     private void activate(WEPGrouping.EffectItem pi) {
-        LXEffect trinst = null;
-        try {
-            trinst = pi.effect.getConstructor(LX.class).newInstance(lx);
-        } catch (NoSuchMethodException nsmx) {
-            nsmx.printStackTrace();
-        } catch (java.lang.reflect.InvocationTargetException itx) {
-            itx.printStackTrace();
-        } catch (IllegalAccessException ix) {
-            ix.printStackTrace();
-        } catch (InstantiationException ix) {
-            ix.printStackTrace();
+        LXLook look = lx.engine.getFocusedLook();
+        LXBus bus = look.getFocusedChannel();
+        if (bus instanceof LXChannel) {
+            lx.engine.mutations.enqueue(
+                Mutations.AddEffect.newBuilder()
+                    .setLook(look.getIndex()).setChannel(((LXChannel) bus).getIndex())
+                    .setEffectType(pi.effect.getCanonicalName()));
         }
-
-        if (trinst != null) {
-            final LXEffect instance = trinst;
-            lx.engine.addTask(() -> lx.engine.getFocusedLook().getFocusedChannel().addEffect(instance));
-            if (cb != null) {
-                cb.onWepAdded();
-            }
+        if (cb != null) {
+            cb.onWepAdded();
         }
     }
 
     private void activate(WEPGrouping.WarpItem pi) {
-        LXWarp trinst = null;
-        try {
-            trinst = pi.warp.getConstructor(LX.class).newInstance(lx);
-        } catch (NoSuchMethodException nsmx) {
-            nsmx.printStackTrace();
-        } catch (java.lang.reflect.InvocationTargetException itx) {
-            itx.printStackTrace();
-        } catch (IllegalAccessException ix) {
-            ix.printStackTrace();
-        } catch (InstantiationException ix) {
-            ix.printStackTrace();
+        LXLook look = lx.engine.getFocusedLook();
+        LXBus bus = look.getFocusedChannel();
+        if (bus instanceof LXChannel) {
+            lx.engine.mutations.enqueue(
+                Mutations.AddWarp.newBuilder()
+                    .setLook(look.getIndex()).setChannel(((LXChannel) bus).getIndex())
+                    .setWarpType(pi.warp.getCanonicalName()));
         }
-
-        if (trinst != null) {
-            final LXWarp instance = trinst;
-            lx.engine.addTask(() -> lx.engine.getFocusedLook().getFocusedChannel().addWarp(instance));
-            if (cb != null) {
-                cb.onWepAdded();
-            }
+        if (cb != null) {
+            cb.onWepAdded();
         }
     }
 

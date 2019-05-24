@@ -3,6 +3,7 @@ package heronarts.lx.mutation;
 import heronarts.lx.*;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.warp.LXWarp;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -46,6 +47,26 @@ public class LXMutationQueue extends LXComponent {
         enqueue(Mutation.newBuilder().setAddPattern(b).build());
     }
 
+    public void enqueue(AddEffect.Builder b) {
+        enqueue(Mutation.newBuilder().setAddEffect(b).build());
+    }
+
+    public void enqueue(AddWarp.Builder b) {
+        enqueue(Mutation.newBuilder().setAddWarp(b).build());
+    }
+
+    public void enqueue(RemovePattern.Builder b) {
+        enqueue(Mutation.newBuilder().setRemovePattern(b).build());
+    }
+
+    public void enqueue(RemoveEffect.Builder b) {
+        enqueue(Mutation.newBuilder().setRemoveEffect(b).build());
+    }
+
+    public void enqueue(RemoveWarp.Builder b) {
+        enqueue(Mutation.newBuilder().setRemoveWarp(b).build());
+    }
+
     // must be called from engine thread!
     public void dispatchAll() {
         Mutation m;
@@ -60,8 +81,12 @@ public class LXMutationQueue extends LXComponent {
     protected void dispatch(Mutation mut) {
         LXEngine e = lx.engine;
         LXLook look;
+        LXBus bus;
         LXChannel chan;
         LXPattern pattern;
+        LXEffect effect;
+        LXWarp warp;
+        int index;
 
         switch (mut.getValueCase()) {
             case ADDLOOK:
@@ -89,6 +114,43 @@ public class LXMutationQueue extends LXComponent {
                     chan.addPattern(pattern);
                 }
                 break;
+            case ADDEFFECT:
+                look = e.looks.get(mut.getAddEffect().getLook());
+                index = mut.getAddEffect().getChannel();
+                bus = index < 0 ? lx.engine.masterChannel : look.getChannel(index);
+                effect = instantiateComponent(LXEffect.class, mut.getAddEffect().getEffectType());
+                if (effect != null) {
+                    bus.addEffect(effect);
+                }
+                break;
+            case ADDWARP:
+                look = e.looks.get(mut.getAddWarp().getLook());
+                index = mut.getAddWarp().getChannel();
+                bus = index < 0 ? lx.engine.masterChannel : look.getChannel(index);
+                warp = instantiateComponent(LXWarp.class, mut.getAddWarp().getWarpType());
+                if (warp != null) {
+                    bus.addWarp(warp);
+                }
+                break;
+            case REMOVEPATTERN:
+                look = e.looks.get(mut.getRemovePattern().getLook());
+                chan = look.getChannel(mut.getRemovePattern().getChannel());
+                chan.removePattern(chan.getPattern(mut.getRemovePattern().getPattern()));
+                break;
+            case REMOVEEFFECT:
+                look = e.looks.get(mut.getRemoveEffect().getLook());
+                index = mut.getRemoveEffect().getChannel();
+                bus = index < 0 ? lx.engine.masterChannel : look.getChannel(index);
+                bus.removeEffect(bus.getEffect(mut.getRemoveEffect().getEffect()));
+                break;
+            case REMOVEWARP:
+                look = e.looks.get(mut.getRemoveWarp().getLook());
+                index = mut.getRemoveWarp().getChannel();
+                bus = index < 0 ? lx.engine.masterChannel : look.getChannel(index);
+                bus.removeWarp(bus.getWarp(mut.getRemoveWarp().getWarp()));
+                break;
+            default:
+                System.out.println("Unsupported mutation type in queue: " + mut.getValueCase());
         }
 
         lastMutations[mutationBufferNext] = mut.toString();
