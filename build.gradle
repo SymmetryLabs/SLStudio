@@ -207,21 +207,21 @@ task genUiHeader(type: Exec) {
 }
 
 task dist(type: Zip) {
-  dependsOn ":shadowJar"
-  from(".") {
-    include 'libs/**'
-    include 'shows/**'
-    include 'src/main/resources/**'
-  }
-  from("scripts") {
-    include 'SLStudio.bat'
-    include 'SLStudio.sh'
-    filter { line -> line.replace('$VERSION', project.version) }
-  }
-  from(shadowJar) {
-    include "*"
-  }
-  into "SLStudio-" + project.version
+    dependsOn ":shadowJar"
+    from(".") {
+        include 'libs/**'
+        include 'shows/**'
+        include 'src/main/resources/**'
+    }
+    from("scripts") {
+        include 'SLStudio.bat'
+        include 'SLStudio.sh'
+        filter { line -> line.replace('$VERSION', project.version) }
+    }
+    from(shadowJar) {
+        include "*"
+    }
+    into "SLStudio-" + project.version
 }
 
 tasks.withType(Javadoc) {
@@ -233,9 +233,9 @@ tasks.withType(Javadoc) {
 
 /* creates com.symmetrylabs.slstudio.Version class with build information */
 gversion {
-  srcDir = "src/main/java/"
-  classPackage = "com.symmetrylabs.slstudio"
-  className = "Version"
+    srcDir = "src/main/java/"
+    classPackage = "com.symmetrylabs.slstudio"
+    className = "Version"
 }
 project.compileJava.dependsOn(createVersionFile)
 
