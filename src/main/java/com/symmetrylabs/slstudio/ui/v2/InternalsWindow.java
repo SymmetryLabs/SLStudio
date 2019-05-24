@@ -60,5 +60,21 @@ public class InternalsWindow extends CloseableWindow {
 
         modelRenderer.scalePointSize = UI.sliderFloat("point size", modelRenderer.scalePointSize, 0.01f, 5);
         parent.clearRGB = UI.colorPicker("background", parent.clearRGB);
+
+        UI.separator();
+        UI.pushFont(FontLoader.DEFAULT_FONT_L);
+        UI.text("Last LXEngine Mutations");
+        UI.popFont();
+
+        /* this is complicated to avoid concurrent modification exceptions */
+        int mb = lx.engine.mutations.mutationBufferNext - 1;
+        int len = lx.engine.mutations.lastMutations.length;
+        if (mb < 0) mb = len - 1;
+        for (int offset = 0; offset < len; offset++) {
+            String msg = lx.engine.mutations.lastMutations[(mb + offset) % len];
+            if (msg != null) {
+                UI.textWrapped(msg);
+            }
+        }
     }
 }

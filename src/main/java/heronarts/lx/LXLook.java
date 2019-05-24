@@ -45,6 +45,8 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
     protected final BlendTarget groupB;  // working area for blending group B
     public final CuedBuffer buffer;
 
+    int index;
+
     protected final AddBlend addBlend;
 
     public final ObjectParameter<LXBlend> crossfaderBlendMode;
@@ -63,12 +65,13 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
         .setDescription("Enables cue preview of crossfade group B");
 
     public LXLook(LX lx) {
-        this(lx, String.format("Look-%d", lx.engine.looks.size() + 1));
+        this(lx, lx.engine.looks.size(), String.format("Look-%d", lx.engine.looks.size() + 1));
     }
 
-    public LXLook(LX lx, String label) {
+    public LXLook(LX lx, int index, String label) {
         super(lx, label);
         this.lx = lx;
+        this.index = index;
 
         addParameter("focusedChannel", focusedChannel);
 
@@ -114,6 +117,10 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
                 }
             }
         });
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     @Override

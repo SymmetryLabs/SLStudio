@@ -23,7 +23,6 @@ package heronarts.lx;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.symmetrylabs.color.Spaces;
 import com.symmetrylabs.util.artnet.ArtNetEngine;
 import com.symmetrylabs.util.dmx.DMXEngine;
 import com.symmetrylabs.util.dmx.LXEngineDMXManager;
@@ -45,18 +44,13 @@ import heronarts.lx.output.LXOutput;
 import heronarts.lx.output.LXOutputGroup;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
-import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
-import heronarts.lx.parameter.MutableParameter;
-import heronarts.lx.parameter.ObjectParameter;
-import heronarts.lx.pattern.SolidColorPattern;
 import heronarts.lx.script.LXScriptEngine;
 import org.apache.commons.collections4.iterators.IteratorChain;
 import org.apache.commons.collections4.iterators.IteratorIterable;
 import java.util.Collection;
+import heronarts.lx.mutation.LXMutationQueue;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -66,8 +60,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-import static heronarts.lx.LXChannel.CrossfadeGroup.A;
-import static heronarts.lx.LXChannel.CrossfadeGroup.B;
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
@@ -110,6 +102,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     public final DMXEngine dmx;
 
     public final LXScriptEngine script;
+
+    public final LXMutationQueue mutations;
 
     private Dispatch inputDispatch = null;
 
@@ -419,6 +413,10 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         this.script = new LXScriptEngine(lx);
         LX.initTimer.log("Engine: Script");
 
+        // Remote control
+        this.mutations = new LXMutationQueue(lx);
+        LX.initTimer.log("Engine: Remote control");
+
         // Parameters
         addParameter("speed", this.speed);
         addParameter("multithreaded", this.isMultithreaded);
@@ -719,6 +717,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     public LXLook addLook() {
         LXLook look = new LXLook(lx);
         look.setParent(this);
+        look.index = mutableLooks.size();
         mutableLooks.add(look);
         return look;
     }
@@ -937,6 +936,9 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
                 runnable.run();
             }
         }
+
+        // Apply all mutations in our mutation queue
+        mutations.dispatchAll();
 
         // The main work: run patterns, blend channels, send to outputs.
         long channelStart = System.nanoTime();

@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package heronarts.lx.mutation;
+option java_outer_classname = "Mutations";
+
+message AddLook {
+};
+
+message RemoveLook {
+    int32 look = 1;
+};
+
+message AddChannel {
+    int32 look = 1;
+};
+
+message RemoveChannel {
+    int32 look = 1;
+    int32 channel = 2;
+};
+
+message AddPattern {
+    int32 look = 1;
+    int32 channel = 2;
+    string pattern_type = 3;
+};
+
+message RemovePattern {
+    int32 look = 1;
+    int32 channel = 2;
+    int32 pattern = 3;
+};
+
+message Mutation {
+    oneof value {
+        AddLook addLook = 1;
+        RemoveLook removeLook = 2;
+        AddChannel addChannel = 3;
+        RemoveChannel removeChannel = 4;
+        AddPattern addPattern = 5;
+        RemovePattern removePattern = 6;
+    }
+};

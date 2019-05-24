@@ -17,6 +17,7 @@ plugins {
 	id 'com.palantir.docker' version '0.17.2'
 	id 'java'
 	id 'application'
+    id 'idea'
 	id 'edu.sc.seis.macAppBundle' version '2.3.0'
     id "com.peterabeles.gversion" version "1.2.4"
     id "com.google.protobuf" version "0.8.8"
@@ -115,6 +116,7 @@ dependencies {
 	implementation group: 'uk.co.xfactory-librarians', name: 'coremidi4j', version: '0.9'
     implementation group: 'org.smurn', name: 'jply', version: '0.2.0'
     implementation group: 'joda-time', name: 'joda-time', version: '2.10.1'
+    implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.7.1'
 
 	implementation files('libs/minim.jar')
 	implementation files('libs/jogamp-fat.jar')

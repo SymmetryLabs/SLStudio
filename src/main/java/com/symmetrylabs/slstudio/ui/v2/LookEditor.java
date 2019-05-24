@@ -6,11 +6,9 @@ import heronarts.lx.LXChannel.CrossfadeGroup;
 import heronarts.lx.LXMasterChannel;
 import heronarts.lx.color.LXColor;
 import com.symmetrylabs.util.IterationUtils;
-import org.lwjgl.system.CallbackI.B;
 import heronarts.lx.LXLook;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.BoundedParameter;
-import org.lwjgl.glfw.GLFW;
+import heronarts.lx.mutation.Mutations;
 
 
 public class LookEditor implements Window {
@@ -139,11 +137,7 @@ public class LookEditor implements Window {
         UI.sameLine();
         UI.pushFont(FontLoader.DEFAULT_FONT_XL);
         if (UI.button("+", 30, 230)) {
-            lx.engine.addTask(() -> {
-                    LXChannel chan = look.addChannel();
-                    look.setFocusedChannel(chan);
-                    chan.editorVisible.setValue(true);
-                });
+            lx.engine.mutations.enqueue(Mutations.AddChannel.newBuilder().setLook(look.getIndex()));
         }
         UI.popFont();
 
@@ -226,7 +220,9 @@ public class LookEditor implements Window {
             UI.text("Rename channel:");
             chan.label.setValue(UI.inputText("##newChanName", chan.getLabel()));
             if (UI.contextMenuItem("Delete", look.channels.size() > 1)) {
-                lx.engine.addTask(() -> lx.engine.getFocusedLook().removeChannel(chan));
+                lx.engine.mutations.enqueue(
+                    Mutations.RemoveChannel.newBuilder()
+                        .setLook(look.getIndex()).setChannel(chan.getIndex()));
             }
             UI.endContextMenu();
         }

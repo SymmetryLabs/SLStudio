@@ -1,11 +1,8 @@
 package com.symmetrylabs.slstudio.ui.v2;
 
 import com.symmetrylabs.slstudio.ui.WEPGrouping;
-import heronarts.lx.LX;
-import heronarts.lx.LXBus;
-import heronarts.lx.LXChannel;
-import heronarts.lx.LXEffect;
-import heronarts.lx.LXPattern;
+import heronarts.lx.*;
+import heronarts.lx.mutation.Mutations;
 import heronarts.lx.warp.LXWarp;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -185,30 +182,16 @@ public class WepUI {
     }
 
     private void activate(WEPGrouping.PatternItem pi) {
-        LXPattern trinst = null;
-        try {
-            trinst = pi.pattern.getConstructor(LX.class).newInstance(lx);
-        } catch (NoSuchMethodException nsmx) {
-            nsmx.printStackTrace();
-        } catch (java.lang.reflect.InvocationTargetException itx) {
-            itx.printStackTrace();
-        } catch (IllegalAccessException ix) {
-            ix.printStackTrace();
-        } catch (InstantiationException ix) {
-            ix.printStackTrace();
+        LXLook look = lx.engine.getFocusedLook();
+        LXBus bus = look.getFocusedChannel();
+        if (bus instanceof LXChannel) {
+            lx.engine.mutations.enqueue(
+                Mutations.AddPattern.newBuilder()
+                    .setLook(look.getIndex()).setChannel(((LXChannel) bus).getIndex())
+                    .setPatternType(pi.pattern.getCanonicalName()));
         }
-
-        if (trinst != null) {
-            final LXPattern instance = trinst;
-            LXBus channel = lx.engine.getFocusedLook().getFocusedChannel();
-            if (channel instanceof LXChannel) {
-                lx.engine.addTask(() -> ((LXChannel) channel).addPattern(instance));
-            } else {
-                lx.engine.addTask(() -> lx.engine.addChannel(new LXPattern[] { instance }));
-            }
-            if (cb != null) {
-                cb.onWepAdded();
-            }
+        if (cb != null) {
+            cb.onWepAdded();
         }
     }
 

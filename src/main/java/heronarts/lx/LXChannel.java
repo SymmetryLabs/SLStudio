@@ -258,7 +258,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
                     .setDescription("Overall speed adjustement to all components in this channel");
 
     public final BooleanParameter editorVisible =
-            new BooleanParameter("EditorVisible", false)
+            new BooleanParameter("EditorVisible", true)
                     .setDescription("Sets whether this channel is visible for editing in the look editor");
 
     public final BooleanParameter blendPatterns =
