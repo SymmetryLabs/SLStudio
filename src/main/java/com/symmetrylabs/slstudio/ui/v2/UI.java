@@ -845,6 +845,10 @@ public class UI {
         return floatBox(label, v, 1, 0, 0, null);
     }
     public static native float floatBox(String label, float v, float speed, float min, float max, String valFmt);
+    public static int intBox(String label, int v) {
+        return intBox(label, v, 1, 0, 0, null);
+    }
+    public static native int intBox(String label, int v, float speed, int min, int max, String valFmt);
 
     /* knob widgets are always over [0, 1] */
     public static native float knobFloat(String label, float value, float normalized, int dotColor);

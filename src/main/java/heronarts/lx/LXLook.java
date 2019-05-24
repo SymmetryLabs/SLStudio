@@ -241,6 +241,7 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
     public Collection<LXComponent> allComponents() {
         ArrayList<LXComponent> components = new ArrayList<>();
         for (LXChannel channel : channels) {
+            components.add(channel);
             components.addAll(channel.allComponents());
         }
         return components;

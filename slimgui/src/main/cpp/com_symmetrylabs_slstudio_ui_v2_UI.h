@@ -449,6 +449,14 @@ JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_floatBox
 
 /*
  * Class:     com_symmetrylabs_slstudio_ui_v2_UI
+ * Method:    intBox
+ * Signature: (Ljava/lang/String;IFIILjava/lang/String;)I
+ */
+JNIEXPORT jint JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_intBox
+  (JNIEnv *, jclass, jstring, jint, jfloat, jint, jint, jstring);
+
+/*
+ * Class:     com_symmetrylabs_slstudio_ui_v2_UI
  * Method:    knobFloat
  * Signature: (Ljava/lang/String;FFI)F
  */

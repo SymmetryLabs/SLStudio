@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.WeakHashMap;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXMidiMapping;
+import heronarts.lx.parameter.StringParameter;
 
 public class ParameterUI implements LXMidiEngine.MappingListener {
     public static ParameterUI getDefault(LX lx) {
@@ -25,10 +26,16 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
         return new ParameterUI(lx, true, new State());
     }
 
+    public enum IntWidget {
+        SLIDER,
+        BOX,
+    };
+
     public static class State implements Cloneable {
         public boolean preferKnobsForFloats;
         public boolean preferKnobsForToggles;
         public boolean preferKnobsForButtons;
+        public IntWidget preferIntWidget;
         public boolean showLabel;
         public boolean allowMapping;
 
@@ -36,6 +43,7 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
             this.preferKnobsForFloats = false;
             this.preferKnobsForToggles = false;
             this.preferKnobsForButtons = false;
+            this.preferIntWidget = IntWidget.SLIDER;
             this.showLabel = true;
             this.allowMapping = false;
         }
@@ -136,6 +144,11 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
         s.preferKnobsForButtons = p;
         s.preferKnobsForFloats = p;
         s.preferKnobsForToggles = p;
+        return this;
+    }
+
+    public ParameterUI preferIntWidget(IntWidget w) {
+        stateStack.peek().preferIntWidget = w;
         return this;
     }
 
@@ -273,8 +286,19 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
         boolean isMapping = isMapping();
         if (options == null) {
             int start = p.getValuei();
-            final int res = UI.sliderInt(
-                getID(p), start, p.getMinValue(), p.getMaxValue() - 1);
+            int r;
+            switch (stateStack.peek().preferIntWidget) {
+            case SLIDER:
+                r = UI.sliderInt(
+                    getID(p), start, p.getMinValue(), p.getMaxValue() - 1);
+                break;
+            case BOX:
+                r = UI.intBox(getID(p, false), start, 1, p.getMinValue(), p.getMaxValue(), null);
+                break;
+            default:
+                r = start;
+            }
+            final int res = r;
             if (isMapping && UI.isItemClicked()) {
                 mapping.setControlTarget(p);
             } else if (!isMapping && start != res) {
@@ -414,6 +438,15 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
         return this;
     }
 
+    public ParameterUI draw(StringParameter p) {
+        String start = p.getString();
+        final String res = UI.inputText(getID(p, false), start);
+        if (!res.equals(start)) {
+            lx.engine.addTask(() -> p.setValue(res));
+        }
+        return this;
+    }
+
     public ParameterUI draw(LXParameter param) {
         if (param instanceof BoundedParameter) {
             draw((BoundedParameter) param);
@@ -421,6 +454,8 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
             draw((DiscreteParameter) param);
         } else if (param instanceof BooleanParameter) {
             draw((BooleanParameter) param);
+        } else if (param instanceof StringParameter) {
+            draw((StringParameter) param);
         } else if (param instanceof ColorParameter) {
             draw((ColorParameter) param);
         }

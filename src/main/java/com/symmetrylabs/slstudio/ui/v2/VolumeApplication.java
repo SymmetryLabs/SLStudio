@@ -152,6 +152,7 @@ public class VolumeApplication extends ApplicationAdapter implements Application
         WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this, mr), false);
         WindowManager.addPersistent("Master", () -> new MasterWindow(lx), true);
         WindowManager.addPersistent("Modulation", () -> new ModulationWindow(lx), false);
+        WindowManager.addPersistent("OSC", () -> new OscWindow(lx), false);
 
         WindowManager.addPersistent("Developer/Imgui demo", () -> new SlimguiDemoWindow(), false);
         WindowManager.addPersistent("Developer/Style editor", () -> new SlimguiStyleEditor(), false);
