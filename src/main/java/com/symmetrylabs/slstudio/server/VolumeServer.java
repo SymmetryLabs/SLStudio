@@ -2,6 +2,8 @@ package com.symmetrylabs.slstudio.server;
 
 import heronarts.lx.mutation.LXMutationServer;
 
+import java.io.IOException;
+
 public class VolumeServer implements VolumeCore.Listener {
     private final VolumeCore core;
     private LXMutationServer server;
@@ -32,6 +34,11 @@ public class VolumeServer implements VolumeCore.Listener {
     @Override
     public void onCreateLX() {
         server = new LXMutationServer(core.lx);
+        try {
+            server.start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

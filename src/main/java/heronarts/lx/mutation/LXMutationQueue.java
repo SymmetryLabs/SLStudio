@@ -28,23 +28,27 @@ public class LXMutationQueue extends LXComponent {
 
     private final Queue<MutationRequest> mutations;
 
+    public final LXMutationSender sender;
+
     public final String[] lastMutations = new String[10];
     public int mutationBufferNext = 0;
 
     public LXMutationQueue(LX lx) {
         this.lx = lx;
+        sender = new LXMutationSender(lx);
         mutations = new ConcurrentLinkedQueue<>();
 
         addParameter(enabled);
         addParameter(server);
     }
 
-    public void enqueue(Mutation mut) {
-        mutations.add(new MutationRequest(mut, null));
+    public void enqueue(MutationRequest mut) {
+        sender.send(mut.mutation);
+        mutations.add(mut);
     }
 
-    public void enqueue(MutationRequest mut) {
-        mutations.add(mut);
+    public void enqueue(Mutation mut) {
+        enqueue(new MutationRequest(mut, null));
     }
 
     public void enqueue(AddChannel.Builder b) {

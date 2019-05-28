@@ -8,20 +8,20 @@ import io.grpc.stub.StreamObserver;
 import java.io.IOException;
 
 public class LXMutationServer {
-    public static final int MUTATION_SERVER_PORT = 3031;
+    public static final int PORT = 3031;
     private final LX lx;
     private final Server server;
 
     public LXMutationServer(LX lx) {
         this.lx = lx;
-        server = ServerBuilder.forPort(MUTATION_SERVER_PORT)
+        server = ServerBuilder.forPort(PORT)
             .addService(new ServiceImpl(lx))
             .build();
     }
 
     public void start() throws IOException {
         server.start();
-        System.out.println(String.format("LXMutationServer started, listening on " + MUTATION_SERVER_PORT));
+        System.out.println(String.format("LXMutationServer started, listening on " + PORT));
     }
 
     public void dispose() {
@@ -37,6 +37,7 @@ public class LXMutationServer {
 
         @Override
         public void apply(Mutation mut, StreamObserver<MutationResult> response) {
+            System.out.println("received " + mut);
             lx.engine.mutations.enqueue(new LXMutationQueue.MutationRequest(mut, e -> {
                 if (e == null) {
                     response.onNext(MutationResult.newBuilder().build());
