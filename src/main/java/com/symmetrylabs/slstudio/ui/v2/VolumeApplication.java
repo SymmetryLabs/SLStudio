@@ -20,24 +20,22 @@ import heronarts.lx.LXMappingEngine;
  * instance off to libgdx, this class is what actually runs the app.
  */
 public class VolumeApplication extends ApplicationAdapter implements VolumeCore.Listener {
-    private final VolumeCore skeleton;
+    private final VolumeCore core;
     private RenderManager renderer;
     private LookEditor lookEditor;
-    public ViewController viewController;
+    ViewController viewController;
 
     /* visible so that InternalsWindow can mutate it. */
     int clearRGB = 0x000000;
+
     /* disabled by default because on some platforms scaling makes things look much worse,
        and it's not obvious that scaling should be the default anyway. */
     boolean allowUiScale = false;
-    float osDensity;
+    private float osDensity;
+    private SLCamera.InputController camController;
 
-    SLCamera.InputController camController;
-
-    int lastBufWidth = 0, lastBufHeight;
-
-    public VolumeApplication() {
-        this.skeleton = new VolumeCore(this) {
+    VolumeApplication() {
+        this.core = new VolumeCore(this) {
             @Override
             public void setWarning(String key, String message) {
                 VolumeApplication.this.setWarning(key, message);
@@ -55,16 +53,16 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
         UI.setDensity(osDensity);
         FontLoader.loadAll();
 
-        skeleton.create();
+        core.create();
     }
 
     @Override
     public void render() {
         /* handle global keyboard inputs */
         if (UI.isKeyDown(GLFW.GLFW_KEY_M)) {
-            skeleton.lx.engine.mapping.setMode(LXMappingEngine.Mode.MIDI);
+            core.lx.engine.mapping.setMode(LXMappingEngine.Mode.MIDI);
         } else {
-            skeleton.lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
+            core.lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
         }
 
         int w = Gdx.graphics.getBackBufferWidth();
@@ -90,12 +88,12 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
         renderer.cam.viewportWidth = Gdx.graphics.getWidth();
         renderer.cam.update();
 
-        skeleton.lx.engine.onDraw();
+        core.lx.engine.onDraw();
 
         camController.update();
         renderer.draw();
         UI.newFrame();
-        lookEditor.setLook(skeleton.lx.engine.getFocusedLook());
+        lookEditor.setLook(core.lx.engine.getFocusedLook());
         WindowManager.get().draw();
 
         UI.setNextWindowPosition(UI.width - 30, UI.height - 30, 1, 1);
@@ -110,17 +108,17 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
 
     @Override
     public void dispose() {
-        skeleton.dispose();
+        core.dispose();
         UI.shutdown();
     }
 
     void loadShow(String showName) {
-        skeleton.loadShow(showName);
+        core.loadShow(showName);
     }
 
     @Override
     public void onCreateLX() {
-        skeleton.lx.registerExternal("volumeWindowManager", WindowManager.getVisibilitySource());
+        core.lx.registerExternal("volumeWindowManager", WindowManager.getVisibilitySource());
     }
 
     @Override
@@ -132,7 +130,7 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
 
     @Override
     public void onShowChangeFinished() {
-        LX lx = skeleton.lx;
+        LX lx = core.lx;
         LXModel model = lx.model;
 
         renderer = new RenderManager(lx);

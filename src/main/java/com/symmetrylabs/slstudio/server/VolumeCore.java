@@ -151,6 +151,10 @@ public abstract class VolumeCore implements ApplicationState.Provider {
         return outputControl;
     }
 
+    /** Left as an exercise to the reader. */
+    @Override
+    public abstract void setWarning(String key, String message);
+
     private void loadLxComponents() {
         LXClassLoader.findWarps().stream().forEach(lx::registerWarp);
         LXClassLoader.findEffects().stream().forEach(lx::registerEffect);
