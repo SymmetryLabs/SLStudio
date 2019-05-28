@@ -4,7 +4,6 @@ buildscript {
 		jcenter()
 	}
 	dependencies {
-		classpath 'edu.sc.seis.gradle:launch4j:2.4.2'
 		classpath "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.8'
@@ -14,7 +13,6 @@ buildscript {
 plugins {
 	id 'org.jetbrains.kotlin.jvm' version '1.2.60'
 	id 'com.github.johnrengelman.shadow' version '4.0.2'
-	id 'com.palantir.docker' version '0.17.2'
 	id 'java'
 	id 'application'
     id 'idea'
@@ -23,50 +21,9 @@ plugins {
     id "com.google.protobuf" version "0.8.8"
 }
 
-apply plugin: 'com.palantir.docker'
-
-// For building windows executable. See https://github.com/TheBoegl/gradle-launch4j
-apply plugin: 'edu.sc.seis.launch4j'
-
 group = 'com.symmetrylabs'
 version = '1.0.5'
 sourceCompatibility = 1.8
-
-mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
-
-run {
-	if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
-		jvmArgs '-XX:+UseParNewGC', '-XX:+UseConcMarkSweepGC'
-	}
-	jvmArgs '-Xmx1024M'
-
-	// To select a layout from the command line, "gradlew run -Playout=cubes"
-	systemProperty 'com.symmetrylabs.layout', findProperty('layout')
-
-	doLast {
-		while (file(".restart").exists()) {
-			file(".restart").delete()
-			println 'Restarting...'
-			run.exec()
-		}
-	}
-}
-
-docker {
-	name 'symmetrylabs/' + project.name.toLowerCase() + ':latest'
-	tags version
-	dockerfile project.file('docker/Dockerfile')
-
-	files tasks.distTar.outputs, project.files('docker'), project.files('.')
-	copySpec.exclude 'build'
-
-	if (System.getProperty("buildArgs") != null) {
-		buildArgs System.getProperty("buildArgs").split(/\s+/).collectEntries {
-			def kvp = it.split('=')
-			[(kvp[0]): kvp[1]]
-		}
-	}
-}
 
 allprojects {
 	repositories {
@@ -119,6 +76,7 @@ dependencies {
     implementation group: 'com.google.protobuf', name: 'protobuf-java', version: protocVersion
     implementation group: 'io.grpc', name: 'grpc-protobuf', version: grpcVersion
     implementation group: 'io.grpc', name: 'grpc-stub', version: grpcVersion
+    runtimeOnly group: 'io.grpc', name: 'grpc-netty-shaded', version: grpcVersion
 
 	implementation files('libs/minim.jar')
 	implementation files('libs/jogamp-fat.jar')
@@ -135,6 +93,25 @@ compileTestKotlin {
 	kotlinOptions.jvmTarget = "1.8"
 }
 
+run {
+    mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
+    if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
+        jvmArgs '-XX:+UseParNewGC', '-XX:+UseConcMarkSweepGC'
+    }
+    jvmArgs '-Xmx1024M'
+
+    // To select a layout from the command line, "gradlew run -Playout=cubes"
+    systemProperty 'com.symmetrylabs.layout', findProperty('layout')
+
+    doLast {
+        while (file(".restart").exists()) {
+            file(".restart").delete()
+            println 'Restarting...'
+            run.exec()
+        }
+    }
+}
+
 test {
     testLogging {
         events "passed", "failed", "skipped"
@@ -144,6 +121,7 @@ test {
 }
 
 jar {
+    mainClassName = 'com.symmetrylabs.slstudio.Volume'
 	exclude('**/*.swp')
 	exclude('**/*.swo')
 }
@@ -204,6 +182,13 @@ task runUIv2(type: JavaExec) {
    completing (like buildAndRunUIv2), building the prebuilt must happen before
    running. */
 runUIv2.mustRunAfter genPrebuiltSlimgui
+
+task runServer(type: JavaExec) {
+    main = 'com.symmetrylabs.slstudio.server.VolumeServer'
+    /* copy our classpath from the normal run task, which has its classpath filled in
+       by the java application plugin. */
+    classpath = run.classpath
+}
 
 task genUiHeader(type: Exec) {
     description "generates the JNI header file for the UI class wrapper around slimgui"
