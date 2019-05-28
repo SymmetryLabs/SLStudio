@@ -1,7 +1,7 @@
 package com.symmetrylabs.slstudio.server;
 
 import com.google.protobuf.ByteString;
-import com.symmetrylabs.slstudio.streaming.PixelData;
+import com.symmetrylabs.slstudio.streaming.Pixels;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.mutation.LXMutationServer;
@@ -22,10 +22,10 @@ public class VolumeServer implements VolumeCore.Listener {
     public static final int MAX_SENDS_PER_CLIENT = 3600;
 
     private static class Client {
-        StreamObserver<PixelData> pixelStream;
+        StreamObserver<Pixels> pixelStream;
         int sent = 0;
 
-        Client(StreamObserver<PixelData> pd) {
+        Client(StreamObserver<Pixels> pd) {
             pixelStream = pd;
         }
     }
@@ -70,7 +70,7 @@ public class VolumeServer implements VolumeCore.Listener {
                 transmitBuffer[3 * i + 1] = LXColor.green(c);
                 transmitBuffer[3 * i + 2] = LXColor.blue(c);
             }
-            PixelData pd = PixelData.newBuilder().setPixelData(ByteString.copyFrom(transmitBuffer)).build();
+            Pixels pd = Pixels.newBuilder().setColors(ByteString.copyFrom(transmitBuffer)).build();
             Iterator<Client> c = clients.iterator();
             while (c.hasNext()) {
                 Client client = c.next();
@@ -129,7 +129,7 @@ public class VolumeServer implements VolumeCore.Listener {
 
     private class PixelDataServiceImpl extends PixelDataServiceGrpc.PixelDataServiceImplBase {
         @Override
-        public void subscribe(PixelDataRequest req, StreamObserver<PixelData> response) {
+        public void subscribe(PixelDataRequest req, StreamObserver<Pixels> response) {
             clients.add(new Client(response));
         }
     }

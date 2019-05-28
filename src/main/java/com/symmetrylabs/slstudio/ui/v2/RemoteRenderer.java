@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.protobuf.ByteString;
 import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.server.VolumeServer;
-import com.symmetrylabs.slstudio.streaming.PixelData;
+import com.symmetrylabs.slstudio.streaming.Pixels;
 import com.symmetrylabs.slstudio.streaming.PixelDataRequest;
 import com.symmetrylabs.slstudio.streaming.PixelDataServiceGrpc;
 import heronarts.lx.LX;
@@ -19,7 +19,7 @@ public class RemoteRenderer extends PointColorRenderer {
     protected final ViewController viewController;
     private ManagedChannel channel;
     private PixelDataServiceGrpc.PixelDataServiceStub service;
-    private PixelData lastReceived = null;
+    private Pixels lastReceived = null;
     private long lastFrameReceivedAt = 0;
     private long lastFrameGap = -1;
 
@@ -51,9 +51,9 @@ public class RemoteRenderer extends PointColorRenderer {
     }
 
     protected void startStream() {
-        service.subscribe(PixelDataRequest.newBuilder().build(), new StreamObserver<PixelData>() {
+        service.subscribe(PixelDataRequest.newBuilder().build(), new StreamObserver<Pixels>() {
             @Override
-            public void onNext(PixelData value) {
+            public void onNext(Pixels value) {
                 lastReceived = value;
 
                 long time = System.nanoTime();
@@ -80,12 +80,12 @@ public class RemoteRenderer extends PointColorRenderer {
     @Override
     protected void fillGLBuffer() {
         /* copy to a variable so that our reference is stable even if a new one comes in */
-        final PixelData pd = lastReceived;
+        final Pixels pd = lastReceived;
         if (pd == null) {
             Arrays.fill(glColorBuffer, 0);
             return;
         }
-        final ByteString bs = pd.getPixelData();
+        final ByteString bs = pd.getColors();
         Preconditions.checkState(bs.size() % 3 == 0);
         for (int i = 0; i < bs.size() / 3; i++) {
             glColorBuffer[4 * i    ] = (float) (0xFF & bs.byteAt(3 * i    )) / 255.f;

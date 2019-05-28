@@ -4,13 +4,13 @@ package com.symmetrylabs.slstudio.streaming;
 
 option java_multiple_files = true;
 
-message PixelData {
-    bytes pixelData = 1;
+message Pixels {
+    bytes colors = 1;
 }
 
 message PixelDataRequest {
 }
 
 service PixelDataService {
-    rpc Subscribe(PixelDataRequest) returns (stream PixelData) {}
+    rpc Subscribe(PixelDataRequest) returns (stream Pixels) {}
 }
