@@ -156,9 +156,9 @@ public abstract class VolumeCore implements ApplicationState.Provider {
     public abstract void setWarning(String key, String message);
 
     private void loadLxComponents() {
-        LXClassLoader.findWarps().stream().forEach(lx::registerWarp);
-        LXClassLoader.findEffects().stream().forEach(lx::registerEffect);
-        LXClassLoader.findPatterns().stream().forEach(lx::registerPattern);
+        LXClassLoader.findWarps().forEach(lx::registerWarp);
+        LXClassLoader.findEffects().forEach(lx::registerEffect);
+        LXClassLoader.findPatterns().forEach(lx::registerPattern);
         lx.registerPattern(heronarts.p3lx.pattern.SolidColorPattern.class);
     }
 }

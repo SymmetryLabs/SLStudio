@@ -53,7 +53,7 @@ public class VolumeServer implements VolumeCore.Listener {
         core.create();
     }
 
-    public void tick() {
+    private void tick() {
         /* this is a hack but it's also The Only Way To Be Sure. */
         core.lx.engine.osc.receiveHost.setValue("0.0.0.0");
         core.lx.engine.osc.receivePort.setValue(LXOscEngine.DEFAULT_RECEIVE_PORT);

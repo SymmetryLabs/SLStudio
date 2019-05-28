@@ -35,7 +35,7 @@ public class RemoteRenderer extends PointColorRenderer {
     }
 
     public void disconnect() {
-        channel.shutdownNow();
+        channel.shutdown();
         channel = null;
         service = null;
     }
