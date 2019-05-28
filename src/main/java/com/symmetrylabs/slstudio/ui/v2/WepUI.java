@@ -2,6 +2,9 @@ package com.symmetrylabs.slstudio.ui.v2;
 
 import com.symmetrylabs.slstudio.ui.WEPGrouping;
 import heronarts.lx.*;
+import heronarts.lx.mutation.AddEffect;
+import heronarts.lx.mutation.AddPattern;
+import heronarts.lx.mutation.AddWarp;
 import heronarts.lx.mutation.Mutations;
 import heronarts.lx.warp.LXWarp;
 import java.util.ArrayList;
@@ -186,7 +189,7 @@ public class WepUI {
         LXBus bus = look.getFocusedChannel();
         if (bus instanceof LXChannel) {
             lx.engine.mutations.enqueue(
-                Mutations.AddPattern.newBuilder()
+                AddPattern.newBuilder()
                     .setLook(look.getIndex()).setChannel(((LXChannel) bus).getIndex())
                     .setPatternType(pi.pattern.getCanonicalName()));
         }
@@ -200,7 +203,7 @@ public class WepUI {
         LXBus bus = look.getFocusedChannel();
         if (bus instanceof LXChannel) {
             lx.engine.mutations.enqueue(
-                Mutations.AddEffect.newBuilder()
+                AddEffect.newBuilder()
                     .setLook(look.getIndex()).setChannel(((LXChannel) bus).getIndex())
                     .setEffectType(pi.effect.getCanonicalName()));
         }
@@ -214,7 +217,7 @@ public class WepUI {
         LXBus bus = look.getFocusedChannel();
         if (bus instanceof LXChannel) {
             lx.engine.mutations.enqueue(
-                Mutations.AddWarp.newBuilder()
+                AddWarp.newBuilder()
                     .setLook(look.getIndex()).setChannel(((LXChannel) bus).getIndex())
                     .setWarpType(pi.warp.getCanonicalName()));
         }

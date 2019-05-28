@@ -7,6 +7,9 @@ import static heronarts.lx.LXChannel.CrossfadeGroup;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
 import heronarts.lx.mutation.Mutations;
+import heronarts.lx.mutation.RemoveEffect;
+import heronarts.lx.mutation.RemovePattern;
+import heronarts.lx.mutation.RemoveWarp;
 import heronarts.lx.warp.LXWarp;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +47,7 @@ public class ChannelUI {
                     warp.enabled.toggle();
                 } else if (section.shouldRemove) {
                     lx.engine.mutations.enqueue(
-                        Mutations.RemoveWarp.newBuilder()
+                        RemoveWarp.newBuilder()
                         .setLook(lx.engine.getFocusedLook().getIndex())
                         .setChannel(chan instanceof LXChannel ? ((LXChannel) chan).getIndex() : -1)
                         .setWarp(i));
@@ -87,7 +90,7 @@ public class ChannelUI {
                     eff.enabled.toggle();
                 } else if (section.shouldRemove) {
                     lx.engine.mutations.enqueue(
-                        Mutations.RemoveEffect.newBuilder()
+                        RemoveEffect.newBuilder()
                             .setLook(lx.engine.getFocusedLook().getIndex())
                             .setChannel(chan instanceof LXChannel ? ((LXChannel) chan).getIndex() : -1)
                             .setEffect(i));
@@ -204,7 +207,7 @@ public class ChannelUI {
 
             if (section.shouldRemove) {
                 lx.engine.mutations.enqueue(
-                    Mutations.RemovePattern.newBuilder()
+                    RemovePattern.newBuilder()
                         .setLook(lx.engine.getFocusedLook().getIndex())
                         .setChannel(chan.getIndex())
                         .setPattern(i));

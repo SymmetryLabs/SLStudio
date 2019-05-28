@@ -7,6 +7,8 @@ import heronarts.lx.LXMasterChannel;
 import heronarts.lx.color.LXColor;
 import com.symmetrylabs.util.IterationUtils;
 import heronarts.lx.LXLook;
+import heronarts.lx.mutation.AddChannel;
+import heronarts.lx.mutation.RemoveChannel;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.mutation.Mutations;
 
@@ -137,7 +139,7 @@ public class LookEditor implements Window {
         UI.sameLine();
         UI.pushFont(FontLoader.DEFAULT_FONT_XL);
         if (UI.button("+", 30, 230)) {
-            lx.engine.mutations.enqueue(Mutations.AddChannel.newBuilder().setLook(look.getIndex()));
+            lx.engine.mutations.enqueue(AddChannel.newBuilder().setLook(look.getIndex()));
         }
         UI.popFont();
 
@@ -194,7 +196,7 @@ public class LookEditor implements Window {
         UI.end();
     }
 
-    private final int channelHeader(final LXChannel chan, String chanName, int visibleWindowCount) {
+    private int channelHeader(final LXChannel chan, String chanName, int visibleWindowCount) {
         UI.pushFont(FontLoader.DEFAULT_FONT_L);
         boolean isVisible = chan.editorVisible.getValueb();
         if (isVisible) {
@@ -221,7 +223,7 @@ public class LookEditor implements Window {
             chan.label.setValue(UI.inputText("##newChanName", chan.getLabel()));
             if (UI.contextMenuItem("Delete", look.channels.size() > 1)) {
                 lx.engine.mutations.enqueue(
-                    Mutations.RemoveChannel.newBuilder()
+                    RemoveChannel.newBuilder()
                         .setLook(look.getIndex()).setChannel(chan.getIndex()));
             }
             UI.endContextMenu();

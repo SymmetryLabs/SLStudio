@@ -6,19 +6,27 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.warp.LXWarp;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import static heronarts.lx.mutation.Mutations.*;
+import java.util.function.Consumer;
 
 public class LXMutationQueue extends LXComponent {
+    public static class MutationRequest {
+        public final Mutation mutation;
+        public final Consumer<Exception> callback;
+
+        public MutationRequest(Mutation mutation, Consumer<Exception> callback) {
+            this.mutation = mutation;
+            this.callback = callback;
+        }
+    }
+
     private final LX lx;
 
     public final BooleanParameter enabled = new BooleanParameter("enabled", false);
     public final StringParameter server = new StringParameter("server", "localhost");
 
-    private final Queue<Mutation> mutations;
+    private final Queue<MutationRequest> mutations;
 
     public final String[] lastMutations = new String[10];
     public int mutationBufferNext = 0;
@@ -32,6 +40,10 @@ public class LXMutationQueue extends LXComponent {
     }
 
     public void enqueue(Mutation mut) {
+        mutations.add(new MutationRequest(mut, null));
+    }
+
+    public void enqueue(MutationRequest mut) {
         mutations.add(mut);
     }
 
@@ -69,17 +81,28 @@ public class LXMutationQueue extends LXComponent {
 
     // must be called from engine thread!
     public void dispatchAll() {
-        Mutation m;
+        MutationRequest m;
         do {
             m = mutations.poll();
             if (m != null) {
-                dispatch(m);
+                try {
+                    dispatch(m);
+                } catch (Exception e) {
+                    if (m.callback != null) {
+                        System.err.println("caught error when applying mutation " + m);
+                        e.printStackTrace();
+                        m.callback.accept(e);
+                    } else {
+                        throw e;
+                    }
+                }
             }
         } while (m != null);
     }
 
-    protected void dispatch(Mutation mut) {
-        LXEngine e = lx.engine;
+    protected void dispatch(MutationRequest mr) {
+        final Mutation mut = mr.mutation;
+        final LXEngine e = lx.engine;
         LXLook look;
         LXBus bus;
         LXChannel chan;

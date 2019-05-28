@@ -1,7 +1,8 @@
 syntax = "proto3";
 
 package heronarts.lx.mutation;
-option java_outer_classname = "Mutations";
+
+option java_multiple_files = true;
 
 message AddLook {
 };
@@ -51,8 +52,7 @@ message AddEffect {
 
 message RemoveEffect {
     int32 look = 1;
-    int32 channel = 2;
-    int32 effect = 3;
+    int32 channel = 2; int32 effect = 3;
 };
 
 message Mutation {
@@ -68,4 +68,11 @@ message Mutation {
         AddEffect addEffect = 9;
         RemoveEffect removeEffect = 10;
     }
+};
+
+message MutationResult {
+};
+
+service MutationService {
+    rpc Apply(Mutation) returns (MutationResult) {}
 };

@@ -116,7 +116,9 @@ dependencies {
 	implementation group: 'uk.co.xfactory-librarians', name: 'coremidi4j', version: '0.9'
     implementation group: 'org.smurn', name: 'jply', version: '0.2.0'
     implementation group: 'joda-time', name: 'joda-time', version: '2.10.1'
-    implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.7.1'
+    implementation group: 'com.google.protobuf', name: 'protobuf-java', version: protocVersion
+    implementation group: 'io.grpc', name: 'grpc-protobuf', version: grpcVersion
+    implementation group: 'io.grpc', name: 'grpc-stub', version: grpcVersion
 
 	implementation files('libs/minim.jar')
 	implementation files('libs/jogamp-fat.jar')
@@ -244,6 +246,12 @@ project.compileJava.dependsOn(createVersionFile)
 protobuf {
     protoc {
         // Download protoc compiler from repositories
-        artifact = 'com.google.protobuf:protoc:3.0.0'
+        artifact = "com.google.protobuf:protoc:${protocVersion}"
+    }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
     }
 }

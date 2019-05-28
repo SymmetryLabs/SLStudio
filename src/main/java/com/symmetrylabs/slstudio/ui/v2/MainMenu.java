@@ -5,6 +5,7 @@ import com.symmetrylabs.shows.ShowRegistry;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
 
+import com.symmetrylabs.slstudio.server.VolumeCore;
 import heronarts.lx.LX;
 import heronarts.lx.data.Project;
 import heronarts.lx.midi.LXMidiEngine;
@@ -47,7 +48,7 @@ public class MainMenu implements Window {
                            rendering the UI. */
                         WindowManager.runSafelyWithEngine(
                             lx, () -> {
-                                lx.openProject(Project.createLegacyProject(projectFile, VolumeApplication.RUNTIME_VERSION));
+                                lx.openProject(Project.createLegacyProject(projectFile, VolumeCore.RUNTIME_VERSION));
                                 onProjectChanged();
                             });
                     });
@@ -169,7 +170,7 @@ public class MainMenu implements Window {
     private void runSaveAs() {
         FileDialog.save(
             lx, "Save project", projectFile -> {
-                lx.saveProject(Project.createLegacyProject(projectFile, VolumeApplication.RUNTIME_VERSION));
+                lx.saveProject(Project.createLegacyProject(projectFile, VolumeCore.RUNTIME_VERSION));
                 onProjectChanged();
             });
     }
