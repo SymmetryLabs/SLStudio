@@ -27,6 +27,10 @@ public class RenderManager {
         default void setDisplayProperties(int width, int height, float density) {}
         void draw(SLCamera camera);
         void dispose();
+
+        default boolean isEnabled() {
+            return true;
+        }
     }
 
     public final SLCamera cam;
@@ -71,7 +75,9 @@ public class RenderManager {
         GL41.glFrontFace(GL41.GL_CW);
         GL41.glDepthFunc(GL41.GL_LESS);
         for (Renderable r : renderables) {
-            r.draw(cam);
+            if (r.isEnabled()) {
+                r.draw(cam);
+            }
         }
         /* restore CCW winding to leave the render in a reasonable (cough cough) state */
         GL41.glFrontFace(GL41.GL_CCW);

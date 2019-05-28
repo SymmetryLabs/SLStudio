@@ -1,18 +1,17 @@
 package com.symmetrylabs.slstudio.ui.v2;
 
-import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import heronarts.lx.LX;
-import com.badlogic.gdx.graphics.Camera;
 
 
 public class ViewController {
+    private final LX lx;
     private final SLCamera.InputController cameraCtrl;
     private final SLCamera camera;
     private final GnomonRenderable gnomon;
     private final MarkerRenderable markers;
     public final ModelPicker picker;
-    private final LX lx;
+    private boolean remoteDataDisplayed;
 
     private static final Vector3 ISO_VEC = new Vector3(0, 0, -1).rotateRad((float) Math.asin(1 / Math.sqrt(3)), 1, 0, 0);
     private static final Vector3 ISO_L = new Vector3(ISO_VEC).rotate(-45, 0, 1, 0);
@@ -50,6 +49,7 @@ public class ViewController {
         this.gnomon = gnomon;
         this.markers = markers;
         this.picker = picker;
+        this.remoteDataDisplayed = false;
         TextureManager.load("icons/back.png");
         TextureManager.load("icons/down.png");
         TextureManager.load("icons/front.png");
@@ -91,5 +91,13 @@ public class ViewController {
         camera.position.set(vd.x, vd.y, vd.z).nor().scl(rad).add(cameraCtrl.target);
         camera.up.set(vd.ux, vd.uy, vd.uz).nor();
         camera.update();
+    }
+
+    public boolean isRemoteDataDisplayed() {
+        return remoteDataDisplayed;
+    }
+
+    public void setRemoteDataDisplayed(boolean rdd) {
+        remoteDataDisplayed = rdd;
     }
 }

@@ -52,7 +52,8 @@ message AddEffect {
 
 message RemoveEffect {
     int32 look = 1;
-    int32 channel = 2; int32 effect = 3;
+    int32 channel = 2;
+    int32 effect = 3;
 };
 
 message Mutation {
