@@ -72,7 +72,9 @@ public class RemoteRenderer extends PointColorRenderer {
     @Override
     public void dispose() {
         disconnect();
-        receiver.interrupt();
+        if (receiver != null) {
+            receiver.interrupt();
+        }
         super.dispose();
     }
 
@@ -165,7 +167,7 @@ public class RemoteRenderer extends PointColorRenderer {
                     for (Integer size : lastPacketSizes) {
                         bytes += size;
                     }
-                    megabitsPerSecond = (8.0f / (1 << 6)) * (bytes / duration);
+                    megabitsPerSecond = (bytes / duration) / 125000.f; // 125k = 1M / 8 bits/byte
 
                     lastPacketTimes.clear();
                     lastPacketSizes.clear();
