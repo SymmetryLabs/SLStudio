@@ -43,9 +43,10 @@ public class VolumeServer implements VolumeCore.Listener {
     private PolyBuffer lxColorBuffer = null;
     private byte[] transmitBuffer = null;
     private int[] offsets = null;
-    private List<Client> clients = new ArrayList<>();
+    private final List<Client> clients = new ArrayList<>();
+    private final List<Client> newClients = new ArrayList<>();
 
-    private long tickCount = 0;
+    private int tickCount = 0;
 
     public VolumeServer() {
         this.core = new VolumeCore(this) {
@@ -71,7 +72,15 @@ public class VolumeServer implements VolumeCore.Listener {
         core.lx.engine.onDraw();
 
         tickCount++;
+        /* roll over manually (so we don't roll over into negative values */
+        if (tickCount > (1L << 30)) {
+            tickCount = 0;
+        }
 
+        synchronized (newClients) {
+            clients.addAll(newClients);
+            newClients.clear();
+        }
         if (!clients.isEmpty()) {
             core.lx.engine.copyUIBuffer(lxColorBuffer, PolyBuffer.Space.SRGB8);
             int[] colors = (int[]) lxColorBuffer.getArray(PolyBuffer.Space.SRGB8);
@@ -165,6 +174,9 @@ public class VolumeServer implements VolumeCore.Listener {
             c.clientSock.close();
         }
         clients.clear();
+        synchronized (newClients) {
+            newClients.clear();
+        }
 
         lxColorBuffer = null;
         transmitBuffer = null;
@@ -177,7 +189,9 @@ public class VolumeServer implements VolumeCore.Listener {
             try {
                 DatagramSocket sock = new DatagramSocket();
                 sock.connect(new InetSocketAddress(req.getRecvAddress(), req.getRecvPort()));
-                clients.add(new Client(sock));
+                synchronized (newClients) {
+                    newClients.add(new Client(sock));
+                }
             } catch (SocketException e) {
                 e.printStackTrace();
                 response.onError(e);

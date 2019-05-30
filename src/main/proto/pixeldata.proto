@@ -9,7 +9,7 @@ message Pixels {
     bytes colors = 1;
     // the server tick that this pixel data was generated on, could be used by the client
     // to double-buffer incoming data to prevent tearing
-    uint64 tick = 2;
+    uint32 tick = 2;
     // offset of this color data into the model; a given frame of color data is split
     // into multiple packets to fit into the UDP MTU. This offset is given as the number
     // of points to offset, NOT the number of bytes; if offset is 100, then the color data

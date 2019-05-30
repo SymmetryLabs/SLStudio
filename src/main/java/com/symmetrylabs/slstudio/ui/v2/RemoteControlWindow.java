@@ -45,20 +45,11 @@ public class RemoteControlWindow extends CloseableWindow {
         UI.labelText("status", sender.getStatus().toString());
         vc.setRemoteDataDisplayed(UI.checkbox("streampixels", vc.isRemoteDataDisplayed()));
 
-        long lastFrameNanos = renderer.getLastFrameTimeNanos();
-        if (lastFrameNanos < 0) {
-            UI.text("no frame data received");
-        } else {
-            frameTimeAverages.add(1e9f / (float) renderer.getLastFrameTimeNanos());
-            float avg = 0;
-            for (int i = 0; i < frameTimeAverages.size(); i++) {
-                avg += frameTimeAverages.get(i);
-            }
-            avg /= frameTimeAverages.size();
-            if (frameTimeAverages.size() > 50) {
-                frameTimeAverages.remove(0);
-            }
-            UI.labelText("recv rate", String.format("%.0f fps", avg));
+        UI.intBox("servertick", (int) renderer.latestTick);
+        renderer.collectStats = UI.checkbox("collect render statistics", renderer.collectStats);
+        if (renderer.collectStats) {
+            UI.floatBox("packets/sec", renderer.packetsPerSecond);
+            UI.floatBox("Mbps", renderer.megabitsPerSecond);
         }
     }
 }
