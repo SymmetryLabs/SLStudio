@@ -23,6 +23,8 @@ message PixelDataRequest {
     uint32 recvPort = 1;
      // if not set, the server fills it in with the IP address it sees the request coming from
     string recvAddress = 2;
+    // the point indexes to request colors for. If none are specified, all points are sent
+    repeated uint32 pointMask = 3;
 }
 
 message PixelDataHandshake {

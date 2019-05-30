@@ -27,14 +27,61 @@ public class VolumeServer implements VolumeCore.Listener {
     private static final long MIN_TRANSMIT_PERIOD_NS = (long) Math.ceil(1e9f / MAX_TRANSMIT_FPS);
 
     private class Client {
-        DatagramSocket clientSock;
-        List<DatagramPacket> packets;
+        final DatagramSocket clientSock;
+        final List<DatagramPacket> packets;
+        final int[][] packetPoints;
+        final byte[][] colorBuffers;
+        final List<Pixels> pixelPrototypes;
 
-        Client(DatagramSocket clientSock) {
+        Client(DatagramSocket clientSock, List<Integer> pointMask) {
             this.clientSock = clientSock;
             this.packets = new ArrayList<>();
-            for (int i = 0; i < offsets.length; i++) {
+
+            if (pointMask == null || pointMask.isEmpty()) {
+                int size = core.lx.model.size;
+                int packetCount = (int) Math.ceil((float) size / POINTS_PER_UDP_PACKET);
+                packetPoints = new int[packetCount][];
+
+                int remaining = size;
+                int pointIndex = 0;
+                for (int i = 0; i < packetCount; i++) {
+                    packetPoints[i] = new int[Math.min(remaining, POINTS_PER_UDP_PACKET)];
+                    for (int j = 0; j < packetPoints[i].length; j++) {
+                        packetPoints[i][j] = pointIndex++;
+                    }
+                    remaining -= packetPoints[i].length;
+                }
+            } else {
+                int packetCount = (int) Math.ceil((float) pointMask.size() / POINTS_PER_UDP_PACKET);
+                packetPoints = new int[packetCount][];
+
+                int packetIdx = 0;
+                int idx = 0;
+                int remaining = pointMask.size();
+                while (remaining > 0) {
+                    int[] packetIndexes = new int[Math.min(remaining, POINTS_PER_UDP_PACKET)];
+                    for (int i = 0; i < packetIndexes.length; i++) {
+                        packetIndexes[i] = pointMask.get(idx++);
+                    }
+                    packetPoints[packetIdx++] = packetIndexes;
+                    remaining -= packetIndexes.length;
+                }
+            }
+
+            colorBuffers = new byte[packetPoints.length][];
+            for (int i = 0; i < colorBuffers.length; i++) {
+                colorBuffers[i] = new byte[packetPoints[i].length * 3];
+            }
+
+            for (int i = 0; i < packetPoints.length; i++) {
                 packets.add(new DatagramPacket(new byte[0], 0, 0, clientSock.getRemoteSocketAddress()));
+            }
+
+            pixelPrototypes = new ArrayList<>();
+            int offset = 0;
+            for (int[] packetPoint : packetPoints) {
+                pixelPrototypes.add(Pixels.newBuilder().setOffset(offset).build());
+                offset += packetPoint.length;
             }
         }
     }
@@ -92,6 +139,42 @@ public class VolumeServer implements VolumeCore.Listener {
             if (!clients.isEmpty()) {
                 core.lx.engine.copyUIBuffer(lxColorBuffer, PolyBuffer.Space.SRGB8);
                 int[] colors = (int[]) lxColorBuffer.getArray(PolyBuffer.Space.SRGB8);
+
+                Iterator<Client> c = clients.iterator();
+                while (c.hasNext()) {
+                    Client client = c.next();
+
+                    for (int packet = 0; packet < client.packetPoints.length; packet++) {
+                        int[] packetPoints = client.packetPoints[packet];
+                        byte[] buffer = client.colorBuffers[packet];
+                        for (int packetIndex = 0; packetIndex < packetPoints.length; packetIndex++) {
+                            int color = colors[packetPoints[packetIndex]];
+                            buffer[3 * packetIndex    ] = LXColor.red(color);
+                            buffer[3 * packetIndex + 1] = LXColor.green(color);
+                            buffer[3 * packetIndex + 2] = LXColor.blue(color);
+                        }
+
+                        Pixels p = Pixels.newBuilder(client.pixelPrototypes.get(packet))
+                            .setColors(ByteString.copyFrom(buffer))
+                            .setTick(tickCount)
+                            .build();
+                        byte[] encoded = p.toByteArray();
+                        client.packets.get(packet).setData(encoded);
+                        client.packets.get(packet).setLength(encoded.length);
+                    }
+
+                    try {
+                        for (DatagramPacket p : client.packets) {
+                            client.clientSock.send(p);
+                        }
+                    } catch (IOException e) {
+                        System.out.println("failed to send to " + client.toString() + ", removing connection");
+                        e.printStackTrace();
+                        c.remove();
+                    }
+                }
+
+                /*
                 for (int i = 0; i < colors.length; i++) {
                     int c = colors[i];
                     transmitBuffer[3 * i] = LXColor.red(c);
@@ -115,6 +198,7 @@ public class VolumeServer implements VolumeCore.Listener {
                 Iterator<Client> c = clients.iterator();
                 while (c.hasNext()) {
                     Client client = c.next();
+
                     for (int i = 0; i < pd.length; i++) {
                         byte[] buf = bufs[i];
                         DatagramPacket p = client.packets.get(i);
@@ -131,6 +215,7 @@ public class VolumeServer implements VolumeCore.Listener {
                         c.remove();
                     }
                 }
+                */
             }
         }
     }
@@ -199,7 +284,7 @@ public class VolumeServer implements VolumeCore.Listener {
                 DatagramSocket sock = new DatagramSocket();
                 sock.connect(new InetSocketAddress(req.getRecvAddress(), req.getRecvPort()));
                 synchronized (newClients) {
-                    newClients.add(new Client(sock));
+                    newClients.add(new Client(sock, req.getPointMaskList()));
                 }
             } catch (SocketException e) {
                 e.printStackTrace();
