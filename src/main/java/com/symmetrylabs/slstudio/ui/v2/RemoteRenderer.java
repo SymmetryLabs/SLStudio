@@ -19,7 +19,9 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 
 public class RemoteRenderer extends PointColorRenderer {
     private static final int MAX_PIXEL_MESSAGE_SIZE = 1024;
@@ -39,6 +41,10 @@ public class RemoteRenderer extends PointColorRenderer {
     private Deque<Integer> lastPacketSizes = new ArrayDeque<>();
 
     private final float[] incomingBuffer;
+
+    // 1 means all pixels are sent; 2 means every other, 3 means every third, etc.
+    int cullFactor = 3;
+    private List<Integer> pointMask;
 
     public RemoteRenderer(LX lx, LXModel model, ViewController vc) {
         super(lx, model);
@@ -79,7 +85,17 @@ public class RemoteRenderer extends PointColorRenderer {
     }
 
     private void startStream() {
-        service.subscribe(PixelDataRequest.newBuilder().setRecvPort(receiver.port).build(), new StreamObserver<PixelDataHandshake>() {
+        PixelDataRequest.Builder pdr = PixelDataRequest.newBuilder().setRecvPort(receiver.port);
+        if (cullFactor != 1) {
+            pointMask = new ArrayList<>();
+            for (int pointIndex = 0; pointIndex < model.size; pointIndex += cullFactor) {
+                pointMask.add(pointIndex);
+            }
+            pdr.addAllPointMask(pointMask);
+        } else {
+            pointMask = null;
+        }
+        service.subscribe(pdr.build(), new StreamObserver<PixelDataHandshake>() {
             @Override
             public void onNext(PixelDataHandshake value) {
             }
@@ -139,21 +155,32 @@ public class RemoteRenderer extends PointColorRenderer {
         }
 
         private void loadPixelData() throws InvalidProtocolBufferException {
-            Pixels p = Pixels.parser().parseFrom(packet.getData(), packet.getOffset(), packet.getLength());
-            byte[] data = p.getColors().toByteArray();
+            Pixels pixels = Pixels.parser().parseFrom(packet.getData(), packet.getOffset(), packet.getLength());
+            byte[] data = pixels.getColors().toByteArray();
             Preconditions.checkState(data.length % 3 == 0);
-            int npoints = data.length / 3;
-            float[] window = new float[4 * npoints];
-            for (int i = 0; i < npoints; i++) {
+
+            int windowSize = data.length / 3;
+            float[] window = new float[4 * windowSize];
+            for (int i = 0; i < windowSize; i++) {
                 window[4 * i    ] = (float) (0xFF & data[3 * i    ]) / 255.f;
                 window[4 * i + 1] = (float) (0xFF & data[3 * i + 1]) / 255.f;
                 window[4 * i + 2] = (float) (0xFF & data[3 * i + 2]) / 255.f;
                 window[4 * i + 3] = 1.f;
             }
-            synchronized (incomingBuffer) {
-                System.arraycopy(window, 0, incomingBuffer, 4 * p.getOffset(), window.length);
+
+            if (pointMask == null) {
+                synchronized (incomingBuffer) {
+                    System.arraycopy(window, 0, incomingBuffer, 4 * pixels.getOffset(), window.length);
+                }
+            } else {
+                synchronized (incomingBuffer) {
+                    for (int i = 0; i < windowSize; i++) {
+                        int point = pointMask.get(pixels.getOffset() + i);
+                        System.arraycopy(window, 4 * i, incomingBuffer, 4 * point, 4);
+                    }
+                }
             }
-            latestTick = Math.max(latestTick, p.getTick());
+            latestTick = Math.max(latestTick, pixels.getTick());
 
             if (collectStats) {
                 lastPacketTimes.addLast(System.nanoTime());

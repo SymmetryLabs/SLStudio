@@ -31,7 +31,7 @@ public class VolumeServer implements VolumeCore.Listener {
         final List<DatagramPacket> packets;
         final int[][] packetPoints;
         final byte[][] colorBuffers;
-        final List<Pixels> pixelPrototypes;
+        final int[] offsets;
 
         Client(DatagramSocket clientSock, List<Integer> pointMask) {
             this.clientSock = clientSock;
@@ -77,11 +77,11 @@ public class VolumeServer implements VolumeCore.Listener {
                 packets.add(new DatagramPacket(new byte[0], 0, 0, clientSock.getRemoteSocketAddress()));
             }
 
-            pixelPrototypes = new ArrayList<>();
+            offsets = new int[packetPoints.length];
             int offset = 0;
-            for (int[] packetPoint : packetPoints) {
-                pixelPrototypes.add(Pixels.newBuilder().setOffset(offset).build());
-                offset += packetPoint.length;
+            for (int i = 0; i < packetPoints.length; i++) {
+                offsets[i] = offset;
+                offset += packetPoints[i].length;
             }
         }
     }
@@ -154,8 +154,9 @@ public class VolumeServer implements VolumeCore.Listener {
                             buffer[3 * packetIndex + 2] = LXColor.blue(color);
                         }
 
-                        Pixels p = Pixels.newBuilder(client.pixelPrototypes.get(packet))
+                        Pixels p = Pixels.newBuilder()
                             .setColors(ByteString.copyFrom(buffer))
+                            .setOffset(client.offsets[packet])
                             .setTick(tickCount)
                             .build();
                         byte[] encoded = p.toByteArray();
@@ -279,7 +280,6 @@ public class VolumeServer implements VolumeCore.Listener {
     private class PixelDataBrokerImpl extends PixelDataBrokerGrpc.PixelDataBrokerImplBase {
         @Override
         public void subscribe(PixelDataRequest req, StreamObserver<PixelDataHandshake> response) {
-            System.out.println("got subscription request: " + req);
             try {
                 DatagramSocket sock = new DatagramSocket();
                 sock.connect(new InetSocketAddress(req.getRecvAddress(), req.getRecvPort()));
