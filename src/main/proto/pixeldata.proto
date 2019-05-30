@@ -5,12 +5,31 @@ package com.symmetrylabs.slstudio.streaming;
 option java_multiple_files = true;
 
 message Pixels {
+    // color data in R-G-B order, 3bpp.
     bytes colors = 1;
+    // the server tick that this pixel data was generated on, could be used by the client
+    // to double-buffer incoming data to prevent tearing
+    uint64 tick = 2;
+    // offset of this color data into the model; a given frame of color data is split
+    // into multiple packets to fit into the UDP MTU. This offset is given as the number
+    // of points to offset, NOT the number of bytes; if offset is 100, then the color data
+    // in this Pixels packet is the data for points 100, 101, etc, meaning that the offsets
+    // into a global byte buffer of color data would start at 300.
+    uint32 offset = 3;
 }
 
 message PixelDataRequest {
+    // the port to stream color data to
+    uint32 recvPort = 1;
+     // if not set, the server fills it in with the IP address it sees the request coming from
+    string recvAddress = 2;
 }
 
-service PixelDataService {
-    rpc Subscribe(PixelDataRequest) returns (stream Pixels) {}
+message PixelDataHandshake {
+}
+
+service PixelDataBroker {
+    // request that the server stream UDP color data (which are just byte-encoded Pixels messages)
+    // to the destination specified in the request
+    rpc Subscribe(PixelDataRequest) returns (PixelDataHandshake) {}
 }

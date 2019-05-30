@@ -1,32 +1,38 @@
 package com.symmetrylabs.slstudio.server;
 
 import com.google.protobuf.ByteString;
+import com.symmetrylabs.slstudio.streaming.PixelDataBrokerGrpc;
+import com.symmetrylabs.slstudio.streaming.PixelDataHandshake;
 import com.symmetrylabs.slstudio.streaming.Pixels;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.mutation.LXMutationServer;
 import com.symmetrylabs.slstudio.streaming.PixelDataRequest;
-import com.symmetrylabs.slstudio.streaming.PixelDataServiceGrpc;
 import heronarts.lx.osc.LXOscEngine;
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
+import io.grpc.*;
 import io.grpc.stub.StreamObserver;
 
 import java.io.IOException;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class VolumeServer implements VolumeCore.Listener {
     public static final int PIXEL_DATA_PORT = 3032;
-    public static final int MAX_SENDS_PER_CLIENT = 3600;
+    private static final int MAX_COLOR_DATA_SIZE_BYTES = 450;
+    private static final int POINTS_PER_UDP_PACKET = MAX_COLOR_DATA_SIZE_BYTES / 3;
 
-    private static class Client {
-        StreamObserver<Pixels> pixelStream;
-        int sent = 0;
+    private class Client {
+        DatagramSocket clientSock;
+        List<DatagramPacket> packets;
 
-        Client(StreamObserver<Pixels> pd) {
-            pixelStream = pd;
+        Client(DatagramSocket clientSock) {
+            this.clientSock = clientSock;
+            this.packets = new ArrayList<>();
+            for (int i = 0; i < offsets.length; i++) {
+                packets.add(new DatagramPacket(new byte[0], 0, 0, clientSock.getRemoteSocketAddress()));
+            }
         }
     }
 
@@ -36,7 +42,10 @@ public class VolumeServer implements VolumeCore.Listener {
 
     private PolyBuffer lxColorBuffer = null;
     private byte[] transmitBuffer = null;
+    private int[] offsets = null;
     private List<Client> clients = new ArrayList<>();
+
+    private long tickCount = 0;
 
     public VolumeServer() {
         this.core = new VolumeCore(this) {
@@ -61,6 +70,8 @@ public class VolumeServer implements VolumeCore.Listener {
 
         core.lx.engine.onDraw();
 
+        tickCount++;
+
         if (!clients.isEmpty()) {
             core.lx.engine.copyUIBuffer(lxColorBuffer, PolyBuffer.Space.SRGB8);
             int[] colors = (int[]) lxColorBuffer.getArray(PolyBuffer.Space.SRGB8);
@@ -70,13 +81,36 @@ public class VolumeServer implements VolumeCore.Listener {
                 transmitBuffer[3 * i + 1] = LXColor.green(c);
                 transmitBuffer[3 * i + 2] = LXColor.blue(c);
             }
-            Pixels pd = Pixels.newBuilder().setColors(ByteString.copyFrom(transmitBuffer)).build();
+            Pixels[] pd = new Pixels[offsets.length];
+            for (int i = 0; i < offsets.length; i++) {
+                int len = (i + 1 < offsets.length ? offsets[i + 1] : transmitBuffer.length / 3) - offsets[i];
+                pd[i] = Pixels.newBuilder()
+                    .setOffset(offsets[i])
+                    .setColors(ByteString.copyFrom(transmitBuffer, 3 * offsets[i], 3 * len))
+                    .setTick(tickCount)
+                    .build();
+            }
+            byte[][] bufs = new byte[pd.length][];
+            for (int i = 0; i < pd.length; i++) {
+                bufs[i] = pd[i].toByteArray();
+            }
+
             Iterator<Client> c = clients.iterator();
             while (c.hasNext()) {
                 Client client = c.next();
-                client.pixelStream.onNext(pd);
-                if (client.sent++ > MAX_SENDS_PER_CLIENT) {
-                    client.pixelStream.onCompleted();
+                for (int i = 0; i < pd.length; i++) {
+                    byte[] buf = bufs[i];
+                    DatagramPacket p = client.packets.get(i);
+                    p.setData(buf);
+                    p.setLength(buf.length);
+                }
+                try {
+                    for (DatagramPacket p : client.packets) {
+                        client.clientSock.send(p);
+                    }
+                } catch (IOException e) {
+                    System.out.println("failed to send to " + client.toString() + ", removing connection");
+                    e.printStackTrace();
                     c.remove();
                 }
             }
@@ -90,7 +124,10 @@ public class VolumeServer implements VolumeCore.Listener {
     @Override
     public void onCreateLX() {
         mutationServer = new LXMutationServer(core.lx);
-        pixelDataServer = ServerBuilder.forPort(PIXEL_DATA_PORT).addService(new PixelDataServiceImpl()).build();
+        pixelDataServer = ServerBuilder
+            .forPort(PIXEL_DATA_PORT)
+            .addService(ServerInterceptors.intercept(new PixelDataBrokerImpl(), new IPCapturingRequestInterceptor()))
+            .build();
 
         try {
             mutationServer.start();
@@ -100,7 +137,13 @@ public class VolumeServer implements VolumeCore.Listener {
         }
 
         lxColorBuffer = new PolyBuffer(core.lx);
-        transmitBuffer = new byte[core.lx.model.size * 3];
+
+        transmitBuffer = new byte[3 * core.lx.model.size];
+        int colorPackets = (int) Math.ceil((float) core.lx.model.size / (float) POINTS_PER_UDP_PACKET);
+        offsets = new int[colorPackets];
+        for (int i = 0; i < colorPackets; i++) {
+            offsets[i] = i * POINTS_PER_UDP_PACKET;
+        }
     }
 
     @Override
@@ -119,7 +162,7 @@ public class VolumeServer implements VolumeCore.Listener {
         pixelDataServer = null;
 
         for (Client c : clients) {
-            c.pixelStream.onCompleted();
+            c.clientSock.close();
         }
         clients.clear();
 
@@ -127,10 +170,60 @@ public class VolumeServer implements VolumeCore.Listener {
         transmitBuffer = null;
     }
 
-    private class PixelDataServiceImpl extends PixelDataServiceGrpc.PixelDataServiceImplBase {
+    private class PixelDataBrokerImpl extends PixelDataBrokerGrpc.PixelDataBrokerImplBase {
         @Override
-        public void subscribe(PixelDataRequest req, StreamObserver<Pixels> response) {
-            clients.add(new Client(response));
+        public void subscribe(PixelDataRequest req, StreamObserver<PixelDataHandshake> response) {
+            System.out.println("got subscription request: " + req);
+            try {
+                DatagramSocket sock = new DatagramSocket();
+                sock.connect(new InetSocketAddress(req.getRecvAddress(), req.getRecvPort()));
+                clients.add(new Client(sock));
+            } catch (SocketException e) {
+                e.printStackTrace();
+                response.onError(e);
+                return;
+            }
+            response.onNext(PixelDataHandshake.newBuilder().build());
+            response.onCompleted();
+        }
+    }
+
+    /**
+     * This abomination intercepts incoming requests, looks for PixelDataRequests, and when it finds one,
+     * if it doesn't have its IP address filled out, we fill it in with the address we received.
+     *
+     * This is the only way for us to get the IP address for the sender. We could just have senders
+     * tell us what IP address to send to, but then they would have to figure out which of their interfaces
+     * they want us to send to, when the process of sending us the subscription request is sufficient
+     * to discover which interface is the one they can reach the server from.
+     */
+    private class IPCapturingRequestInterceptor implements ServerInterceptor {
+        @Override
+        public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call, Metadata headers, ServerCallHandler<ReqT, RespT> next) {
+            SocketAddress remote = call.getAttributes().get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR);
+            final String remoteAddrString =
+                remote == null ? "" :
+                    remote instanceof InetSocketAddress
+                        ? ((InetSocketAddress) remote).getHostString()
+                        : remote.toString();
+
+            ServerCall.Listener<ReqT> listener = next.startCall(call, headers);
+            return new ForwardingServerCallListener.SimpleForwardingServerCallListener<ReqT>(listener) {
+                @Override
+                public void onMessage(ReqT message) {
+                    if (message instanceof PixelDataRequest) {
+                        PixelDataRequest incoming = (PixelDataRequest) message;
+                        if (incoming.getRecvAddress() == null || incoming.getRecvAddress().equals("")) {
+                            PixelDataRequest newMessage = PixelDataRequest
+                                .newBuilder((PixelDataRequest) message)
+                                .setRecvAddress(remoteAddrString)
+                                .build();
+                            message = (ReqT) newMessage;
+                        }
+                    }
+                    super.onMessage(message);
+                }
+            };
         }
     }
 
