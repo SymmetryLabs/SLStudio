@@ -31,7 +31,9 @@ public class LXMutationSender {
     }
 
     public void disconnect() {
-        channel.shutdownNow();
+        if (channel != null) {
+            channel.shutdownNow();
+        }
         target = null;
         channel = null;
         service = null;
