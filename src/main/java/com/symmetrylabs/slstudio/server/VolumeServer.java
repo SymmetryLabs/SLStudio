@@ -23,6 +23,9 @@ public class VolumeServer implements VolumeCore.Listener {
     private static final int MAX_COLOR_DATA_SIZE_BYTES = 450;
     private static final int POINTS_PER_UDP_PACKET = MAX_COLOR_DATA_SIZE_BYTES / 3;
 
+    private static final float MAX_TRANSMIT_FPS = 30.f;
+    private static final long MIN_TRANSMIT_PERIOD_NS = (long) Math.ceil(1e9f / MAX_TRANSMIT_FPS);
+
     private class Client {
         DatagramSocket clientSock;
         List<DatagramPacket> packets;
@@ -45,6 +48,8 @@ public class VolumeServer implements VolumeCore.Listener {
     private int[] offsets = null;
     private final List<Client> clients = new ArrayList<>();
     private final List<Client> newClients = new ArrayList<>();
+
+    private long lastTransmit = 0;
 
     private int tickCount = 0;
 
@@ -81,46 +86,50 @@ public class VolumeServer implements VolumeCore.Listener {
             clients.addAll(newClients);
             newClients.clear();
         }
-        if (!clients.isEmpty()) {
-            core.lx.engine.copyUIBuffer(lxColorBuffer, PolyBuffer.Space.SRGB8);
-            int[] colors = (int[]) lxColorBuffer.getArray(PolyBuffer.Space.SRGB8);
-            for (int i = 0; i < colors.length; i++) {
-                int c = colors[i];
-                transmitBuffer[3 * i    ] = LXColor.red(c);
-                transmitBuffer[3 * i + 1] = LXColor.green(c);
-                transmitBuffer[3 * i + 2] = LXColor.blue(c);
-            }
-            Pixels[] pd = new Pixels[offsets.length];
-            for (int i = 0; i < offsets.length; i++) {
-                int len = (i + 1 < offsets.length ? offsets[i + 1] : transmitBuffer.length / 3) - offsets[i];
-                pd[i] = Pixels.newBuilder()
-                    .setOffset(offsets[i])
-                    .setColors(ByteString.copyFrom(transmitBuffer, 3 * offsets[i], 3 * len))
-                    .setTick(tickCount)
-                    .build();
-            }
-            byte[][] bufs = new byte[pd.length][];
-            for (int i = 0; i < pd.length; i++) {
-                bufs[i] = pd[i].toByteArray();
-            }
-
-            Iterator<Client> c = clients.iterator();
-            while (c.hasNext()) {
-                Client client = c.next();
-                for (int i = 0; i < pd.length; i++) {
-                    byte[] buf = bufs[i];
-                    DatagramPacket p = client.packets.get(i);
-                    p.setData(buf);
-                    p.setLength(buf.length);
+        long transmitTIme = System.nanoTime();
+        if (transmitTIme - lastTransmit > MIN_TRANSMIT_PERIOD_NS) {
+            lastTransmit = transmitTIme;
+            if (!clients.isEmpty()) {
+                core.lx.engine.copyUIBuffer(lxColorBuffer, PolyBuffer.Space.SRGB8);
+                int[] colors = (int[]) lxColorBuffer.getArray(PolyBuffer.Space.SRGB8);
+                for (int i = 0; i < colors.length; i++) {
+                    int c = colors[i];
+                    transmitBuffer[3 * i] = LXColor.red(c);
+                    transmitBuffer[3 * i + 1] = LXColor.green(c);
+                    transmitBuffer[3 * i + 2] = LXColor.blue(c);
                 }
-                try {
-                    for (DatagramPacket p : client.packets) {
-                        client.clientSock.send(p);
+                Pixels[] pd = new Pixels[offsets.length];
+                for (int i = 0; i < offsets.length; i++) {
+                    int len = (i + 1 < offsets.length ? offsets[i + 1] : transmitBuffer.length / 3) - offsets[i];
+                    pd[i] = Pixels.newBuilder()
+                        .setOffset(offsets[i])
+                        .setColors(ByteString.copyFrom(transmitBuffer, 3 * offsets[i], 3 * len))
+                        .setTick(tickCount)
+                        .build();
+                }
+                byte[][] bufs = new byte[pd.length][];
+                for (int i = 0; i < pd.length; i++) {
+                    bufs[i] = pd[i].toByteArray();
+                }
+
+                Iterator<Client> c = clients.iterator();
+                while (c.hasNext()) {
+                    Client client = c.next();
+                    for (int i = 0; i < pd.length; i++) {
+                        byte[] buf = bufs[i];
+                        DatagramPacket p = client.packets.get(i);
+                        p.setData(buf);
+                        p.setLength(buf.length);
                     }
-                } catch (IOException e) {
-                    System.out.println("failed to send to " + client.toString() + ", removing connection");
-                    e.printStackTrace();
-                    c.remove();
+                    try {
+                        for (DatagramPacket p : client.packets) {
+                            client.clientSock.send(p);
+                        }
+                    } catch (IOException e) {
+                        System.out.println("failed to send to " + client.toString() + ", removing connection");
+                        e.printStackTrace();
+                        c.remove();
+                    }
                 }
             }
         }
