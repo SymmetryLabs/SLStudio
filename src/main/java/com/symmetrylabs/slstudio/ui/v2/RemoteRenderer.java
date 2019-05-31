@@ -18,10 +18,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 
 public class RemoteRenderer extends PointColorRenderer {
     private static final int MAX_PIXEL_MESSAGE_SIZE = 1024;
@@ -43,8 +40,9 @@ public class RemoteRenderer extends PointColorRenderer {
     private final float[] incomingBuffer;
 
     // 1 means all pixels are sent; 2 means every other, 3 means every third, etc.
-    int cullFactor = 3;
+    private int cullFactor = 3;
     private List<Integer> pointMask;
+    private int subscriptionId = 0;
 
     public RemoteRenderer(LX lx, LXModel model, ViewController vc) {
         super(lx, model);
@@ -84,6 +82,20 @@ public class RemoteRenderer extends PointColorRenderer {
         super.dispose();
     }
 
+    public void setCullFactor(int newCullFactor) {
+        if (newCullFactor == cullFactor) {
+            return;
+        }
+        cullFactor = newCullFactor;
+        if (channel != null) {
+            startStream();
+        }
+    }
+
+    public int getCullFactor() {
+        return cullFactor;
+    }
+
     private void startStream() {
         PixelDataRequest.Builder pdr = PixelDataRequest.newBuilder().setRecvPort(receiver.port);
         if (cullFactor != 1) {
@@ -95,6 +107,12 @@ public class RemoteRenderer extends PointColorRenderer {
         } else {
             pointMask = null;
         }
+
+        subscriptionId++;
+        pdr.setSubscriptionId(subscriptionId);
+
+        Arrays.fill(incomingBuffer, 0);
+
         service.subscribe(pdr.build(), new StreamObserver<PixelDataHandshake>() {
             @Override
             public void onNext(PixelDataHandshake value) {
@@ -156,6 +174,10 @@ public class RemoteRenderer extends PointColorRenderer {
 
         private void loadPixelData() throws InvalidProtocolBufferException {
             Pixels pixels = Pixels.parser().parseFrom(packet.getData(), packet.getOffset(), packet.getLength());
+            if (pixels.getSubscriptionId() != subscriptionId) {
+                return;
+            }
+
             byte[] data = pixels.getColors().toByteArray();
             Preconditions.checkState(data.length % 3 == 0);
 

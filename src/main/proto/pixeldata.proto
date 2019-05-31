@@ -16,6 +16,8 @@ message Pixels {
     // in this Pixels packet is the data for points 100, 101, etc, meaning that the offsets
     // into a global byte buffer of color data would start at 300.
     uint32 offset = 3;
+    // the subscription this was sent in response to
+    uint32 subscriptionId = 4;
 }
 
 message PixelDataRequest {
@@ -25,6 +27,8 @@ message PixelDataRequest {
     string recvAddress = 2;
     // the point indexes to request colors for. If none are specified, all points are sent
     repeated uint32 pointMask = 3;
+    // subscription ID that is echoed in pixel responses
+    uint32 subscriptionId = 4;
 }
 
 message PixelDataHandshake {

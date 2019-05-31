@@ -27,15 +27,19 @@ public class VolumeServer implements VolumeCore.Listener {
     private static final long MIN_TRANSMIT_PERIOD_NS = (long) Math.ceil(1e9f / MAX_TRANSMIT_FPS);
 
     private class Client {
+        final String target;
         final DatagramSocket clientSock;
         final List<DatagramPacket> packets;
         final int[][] packetPoints;
         final byte[][] colorBuffers;
         final int[] offsets;
+        final int subscriptionId;
 
-        Client(DatagramSocket clientSock, List<Integer> pointMask) {
+        Client(String target, DatagramSocket clientSock, List<Integer> pointMask, int subscriptionId) {
+            this.target = target;
             this.clientSock = clientSock;
             this.packets = new ArrayList<>();
+            this.subscriptionId = subscriptionId;
 
             if (pointMask == null || pointMask.isEmpty()) {
                 int size = core.lx.model.size;
@@ -130,6 +134,17 @@ public class VolumeServer implements VolumeCore.Listener {
         }
 
         synchronized (newClients) {
+            /* if a client is reconnecting, remove its old record */
+            for (Client newClient : newClients) {
+                Iterator<Client> citer = clients.iterator();
+                while (citer.hasNext()) {
+                    Client c = citer.next();
+                    if (c.target.equals(newClient.target)) {
+                        c.clientSock.disconnect();
+                        citer.remove();
+                    }
+                }
+            }
             clients.addAll(newClients);
             newClients.clear();
         }
@@ -158,6 +173,7 @@ public class VolumeServer implements VolumeCore.Listener {
                             .setColors(ByteString.copyFrom(buffer))
                             .setOffset(client.offsets[packet])
                             .setTick(tickCount)
+                            .setSubscriptionId(client.subscriptionId)
                             .build();
                         byte[] encoded = p.toByteArray();
                         client.packets.get(packet).setData(encoded);
@@ -174,49 +190,6 @@ public class VolumeServer implements VolumeCore.Listener {
                         c.remove();
                     }
                 }
-
-                /*
-                for (int i = 0; i < colors.length; i++) {
-                    int c = colors[i];
-                    transmitBuffer[3 * i] = LXColor.red(c);
-                    transmitBuffer[3 * i + 1] = LXColor.green(c);
-                    transmitBuffer[3 * i + 2] = LXColor.blue(c);
-                }
-                Pixels[] pd = new Pixels[offsets.length];
-                for (int i = 0; i < offsets.length; i++) {
-                    int len = (i + 1 < offsets.length ? offsets[i + 1] : transmitBuffer.length / 3) - offsets[i];
-                    pd[i] = Pixels.newBuilder()
-                        .setOffset(offsets[i])
-                        .setColors(ByteString.copyFrom(transmitBuffer, 3 * offsets[i], 3 * len))
-                        .setTick(tickCount)
-                        .build();
-                }
-                byte[][] bufs = new byte[pd.length][];
-                for (int i = 0; i < pd.length; i++) {
-                    bufs[i] = pd[i].toByteArray();
-                }
-
-                Iterator<Client> c = clients.iterator();
-                while (c.hasNext()) {
-                    Client client = c.next();
-
-                    for (int i = 0; i < pd.length; i++) {
-                        byte[] buf = bufs[i];
-                        DatagramPacket p = client.packets.get(i);
-                        p.setData(buf);
-                        p.setLength(buf.length);
-                    }
-                    try {
-                        for (DatagramPacket p : client.packets) {
-                            client.clientSock.send(p);
-                        }
-                    } catch (IOException e) {
-                        System.out.println("failed to send to " + client.toString() + ", removing connection");
-                        e.printStackTrace();
-                        c.remove();
-                    }
-                }
-                */
             }
         }
     }
@@ -284,7 +257,7 @@ public class VolumeServer implements VolumeCore.Listener {
                 DatagramSocket sock = new DatagramSocket();
                 sock.connect(new InetSocketAddress(req.getRecvAddress(), req.getRecvPort()));
                 synchronized (newClients) {
-                    newClients.add(new Client(sock, req.getPointMaskList()));
+                    newClients.add(new Client(req.getRecvAddress(), sock, req.getPointMaskList(), req.getSubscriptionId()));
                 }
             } catch (SocketException e) {
                 e.printStackTrace();

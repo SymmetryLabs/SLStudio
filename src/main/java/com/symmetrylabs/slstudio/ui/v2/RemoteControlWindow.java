@@ -26,6 +26,8 @@ public class RemoteControlWindow extends CloseableWindow {
         LXMutationSender sender = lx.engine.mutations.sender;
         target = UI.inputText("target", target);
 
+        renderer.setCullFactor(UI.sliderInt("downsample", renderer.getCullFactor(), 1, 5));
+
         if (UI.button("Connect")) {
             sender.connect(target);
             renderer.connect(target);
