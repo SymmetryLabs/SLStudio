@@ -37,7 +37,7 @@ public class ModelPicker implements Window {
     private final LXModel model;
     private final ArrayList<PickPoint> pickPoints;
     private PickPoint currentHover = null;
-    public boolean enabled = true;
+    public boolean enabled = false;
 
     public ModelPicker(LXModel model, SLCamera cam) {
         this.cam = cam;
