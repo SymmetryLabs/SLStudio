@@ -162,7 +162,7 @@ public class LookEditor implements Window {
             return;
         }
 
-        float capWindowHeight = UI.height - HEIGHT - MENU_HEIGHT;
+        float capWindowHeight = showLookEditorPanel ? UI.height - HEIGHT - MENU_HEIGHT : UI.height;
         float h = maxWindowHeight;
         if (h <= 0 || h > capWindowHeight) {
             h = capWindowHeight;
