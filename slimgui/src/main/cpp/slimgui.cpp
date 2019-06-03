@@ -591,7 +591,7 @@ JNIEXPORT jfloat JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_floatBox(JNIEnv
 JNIEXPORT jint JNICALL Java_com_symmetrylabs_slstudio_ui_v2_UI_intBox(JNIEnv *env, jclass, jstring jlabel, jint v, jfloat speed, jint min, jint max, jstring jfmtstr) {
     JniString label(env, jlabel);
     JniString fmtstr(env, jfmtstr);
-    jint res = v;
+    int res = v;
     ImGui::DragInt(label, &res, speed, min, max, fmtstr);
     return res;
 }
