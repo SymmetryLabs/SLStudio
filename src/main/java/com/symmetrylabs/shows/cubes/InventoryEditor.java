@@ -32,13 +32,12 @@ public class InventoryEditor extends CloseableWindow {
     protected void drawContents() {
         Iterator<CharSequence> errIter = inventory.getErrors();
         if (errIter.hasNext()) {
-            UI.pushFont(FontLoader.DEFAULT_FONT_L);
-            UI.text("Inventory file errors");
-            UI.popFont();
-            while (errIter.hasNext()) {
-                UI.textWrapped(errIter.next().toString());
+            if (UI.collapsibleSection("Inventory file errors")) {
+                while (errIter.hasNext()) {
+                    UI.textWrapped(errIter.next().toString());
+                }
+                UI.spacing(10, 10);
             }
-            UI.spacing(10, 10);
         }
 
         UI.pushFont(FontLoader.DEFAULT_FONT_L);
