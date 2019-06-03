@@ -92,6 +92,8 @@ abstract class PointColorRenderer implements RenderManager.Renderable {
     public void draw(SLCamera cam) {
         fillGLBuffer();
 
+        GL41.glBlendFunc(GL41.GL_SRC_ALPHA, GL41.GL_ONE_MINUS_SRC_ALPHA);
+        GL41.glEnable(GL41.GL_BLEND);
         GL41.glEnable(GL41.GL_PROGRAM_POINT_SIZE);
 
         pointShader.begin();
