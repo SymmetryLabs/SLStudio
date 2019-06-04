@@ -10,7 +10,7 @@ import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.OutputControl;
 import com.symmetrylabs.util.Utils;
 import heronarts.lx.LX;
-import heronarts.lx.data.LXVersions;
+import heronarts.lx.data.LXVersion;
 import heronarts.lx.data.Project;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
@@ -23,7 +23,7 @@ import java.util.List;
 
 public abstract class VolumeCore implements ApplicationState.Provider {
     private static final String DEFAULT_SHOW = "demo";
-    public static final int RUNTIME_VERSION = LXVersions.VOLUME_WITH_LOOKS;
+    public static final LXVersion RUNTIME_VERSION = LXVersion.VOLUME_WITH_LOOKS;
 
     public interface Listener {
         void onCreateLX();

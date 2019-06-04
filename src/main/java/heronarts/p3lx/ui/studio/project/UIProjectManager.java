@@ -90,7 +90,10 @@ public class UIProjectManager extends UICollapsibleSection {
             @Override
             public void onToggle(boolean on) {
                 if (on) {
-                    ui.applet.selectOutput("Select a file to save to:", "onSave", ui.applet.saveFile(project != null ? project.getRoot().toString() : DEFAULT_PROJECT_NAME), UIProjectManager.this);
+                    ui.applet.selectOutput(
+                        "Select a file to save to:", "onSave",
+                        ui.applet.saveFile(project != null ? project.getRoot().toString() : DEFAULT_PROJECT_NAME),
+                        UIProjectManager.this);
                 }
             }
         }

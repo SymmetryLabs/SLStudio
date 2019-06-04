@@ -29,7 +29,6 @@ package heronarts.p3lx;
 import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
-import heronarts.lx.ModelBuffer;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXModel;
@@ -38,11 +37,10 @@ import heronarts.p3lx.ui.UI;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
-import heronarts.lx.data.LXVersions;
+import heronarts.lx.data.LXVersion;
 
 import java.lang.reflect.Modifier;
 
-import static heronarts.lx.PolyBuffer.Space.RGB8;
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 /**
@@ -55,7 +53,7 @@ public class P3LX extends LX {
     public static boolean isProcessing2X = false;
 
     /** The runtime version number for all p3lx-derived frontends (LXStudio, SLStudio), stored in project files. */
-    public static int RUNTIME_VERSION = LXVersions.SLSTUDIO_WITH_LOOKS;
+    public static LXVersion RUNTIME_VERSION = LXVersion.SLSTUDIO_WITH_LOOKS;
 
     /**
      * Returns the version of the library.

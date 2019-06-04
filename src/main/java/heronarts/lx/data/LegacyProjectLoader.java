@@ -1,20 +1,16 @@
 package heronarts.lx.data;
 
 import com.google.gson.*;
-import heronarts.lx.LX.ProjectListener;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXSerializable;
 
-import java.util.IllegalFormatException;
 import com.symmetrylabs.slstudio.ApplicationState;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.stream.JsonWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+
+import java.io.*;
 import java.nio.file.Path;
 import java.util.Map;
 
@@ -46,9 +42,9 @@ public class LegacyProjectLoader {
         newRoot.add(key, subtree);
     }
 
-    private static JsonObject upgradeVersion(int fileVersion, int runtimeVersion, JsonObject obj) {
+    private static JsonObject upgradeVersion(LXVersion fileVersion, LXVersion runtimeVersion, JsonObject obj) {
         /* move LXEngine parameters (and all channels) onto a single LXLook when upgrading from pre-look to post-look */
-        if (fileVersion < LXVersions.SLSTUDIO_WITH_LOOKS && runtimeVersion >= LXVersions.SLSTUDIO_WITH_LOOKS) {
+        if (fileVersion.isBefore(LXVersion.SLSTUDIO_WITH_LOOKS) && runtimeVersion.isEqualOrAfter(LXVersion.SLSTUDIO_WITH_LOOKS)) {
             JsonObject engine = obj.getAsJsonObject("engine");
             JsonObject engineParams = engine.getAsJsonObject("parameters");
 
@@ -65,45 +61,41 @@ public class LegacyProjectLoader {
             looks.add(look);
             engine.add("looks", looks);
 
-            int newVersion = fileVersion == LXVersions.SLSTUDIO_ORIG
-                ? LXVersions.SLSTUDIO_WITH_LOOKS : LXVersions.VOLUME_WITH_LOOKS;
-            obj.addProperty(KEY_VERSION, newVersion);
-            System.out.println(String.format("upgraded project file from v%d to v%d", fileVersion, newVersion));
-        }
-        try {
-            JsonWriter writer = new JsonWriter(new FileWriter("upgraded.lxp"));
-            writer.setIndent("  ");
-            new GsonBuilder().create().toJson(obj, writer);
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+            LXVersion newVersion = fileVersion.equals(LXVersion.SLSTUDIO_ORIG)
+                ? LXVersion.SLSTUDIO_WITH_LOOKS : LXVersion.VOLUME_WITH_LOOKS;
+            obj.addProperty(KEY_VERSION, newVersion.versionCode);
+            System.out.println(String.format("upgraded project file from %s to %s", fileVersion, newVersion));
         }
         return obj;
     }
 
-    private static JsonObject checkAndUpgradeVersion(int runtimeVersion, JsonObject obj) {
+    private static JsonObject checkAndUpgradeVersion(LXVersion runtimeVersion, JsonObject obj) {
         ApplicationState.setWarning("ProjectLoader", null);
         JsonPrimitive versionElem = obj.getAsJsonPrimitive(KEY_VERSION);
-        int fileVersion;
+        int fileVersionCode;
 
         if (versionElem.isString()) {
             if (versionElem.getAsString().equals(INITIAL_LEGACY_PROJECT_VERSION_STRING)) {
-                fileVersion = 0;
+                fileVersionCode = 0;
             } else {
                 throw new IllegalVersionException(versionElem.getAsString());
             }
         } else if (versionElem.isNumber()) {
-            fileVersion = versionElem.getAsInt();
+            fileVersionCode = versionElem.getAsInt();
         } else {
+            throw new IllegalVersionException(versionElem.toString());
+        }
+        LXVersion fileVersion = LXVersion.fromCode(fileVersionCode);
+        if (fileVersion == null) {
             throw new IllegalVersionException(versionElem.toString());
         }
 
         /* if we have the same version, no problem */
-        if (fileVersion == runtimeVersion) {
+        if (fileVersion.equals(runtimeVersion)) {
             return obj;
         }
         /* if it's an old file, we can bring it up to speed */
-        if (fileVersion < runtimeVersion) {
+        if (fileVersion.isBefore(runtimeVersion)) {
             return upgradeVersion(fileVersion, runtimeVersion, obj);
         }
         /* if it's a newer file than our runtime, put up a warning and just hope for the best. */
@@ -113,16 +105,15 @@ public class LegacyProjectLoader {
         return obj;
     }
 
-    public static void load(Project project, LX lx) {
-        Preconditions.checkArgument(project.isLegacyProject());
-        Path projectFilePath = project.getAll(ProjectFileType.LegacyProjectFile).get(0);
-        File file = projectFilePath.toFile();
-
+    public static void load(Project project, LX lx, ProjectFileSource pfs) {
         try {
-            FileReader fr = null;
-            try {
-                fr = new FileReader(file);
-                JsonObject obj = new Gson().fromJson(fr, JsonObject.class);
+            try (InputStream lxpFile = pfs.inputStream(ProjectFileType.LegacyProjectFile, null)) {
+                if (lxpFile == null) {
+                    System.err.println("couldn't load project file: file not found in source " + pfs.sourceDescription());
+                    return;
+                }
+
+                JsonObject obj = new Gson().fromJson(new InputStreamReader(lxpFile), JsonObject.class);
                 obj = checkAndUpgradeVersion(project.getRuntimeVersion(), obj);
 
                 lx.componentRegistry.resetProject();
@@ -137,15 +128,9 @@ public class LegacyProjectLoader {
                         }
                     }
                 }
-                System.out.println("Project loaded successfully from " + file.toString());
+                System.out.println("Project loaded successfully from " + pfs.sourceDescription());
             } catch (IOException iox) {
                 System.err.println("Could not load project file: " + iox.getLocalizedMessage());
-            } finally {
-                if (fr != null) {
-                    try {
-                        fr.close();
-                    } catch (IOException ignored) {}
-                }
             }
         } catch (Exception x) {
             System.err.println("Exception in loadProject: " + x.getLocalizedMessage());
@@ -153,13 +138,9 @@ public class LegacyProjectLoader {
         }
     }
 
-    public static void save(Project project, LX lx) {
-        Preconditions.checkArgument(project.isLegacyProject());
-        Path projectFilePath = project.getAll(ProjectFileType.LegacyProjectFile).get(0);
-        File file = projectFilePath.toFile();
-
+    public static void save(Project project, LX lx, ProjectFileSource pfs) {
         JsonObject obj = new JsonObject();
-        obj.addProperty(KEY_VERSION, project.getRuntimeVersion());
+        obj.addProperty(KEY_VERSION, project.getRuntimeVersion().versionCode);
         obj.addProperty(KEY_TIMESTAMP, System.currentTimeMillis());
         obj.add(KEY_ENGINE, LXSerializable.Utils.toObject(lx, lx.engine));
         JsonObject externalsObj = new JsonObject();
@@ -168,12 +149,16 @@ public class LegacyProjectLoader {
             externalsObj.add(key, LXSerializable.Utils.toObject(lx, externals.get(key)));
         }
         obj.add(KEY_EXTERNALS, externalsObj);
-        try {
-            JsonWriter writer = new JsonWriter(new FileWriter(file));
+        try (OutputStream lxpFile = pfs.outputStream(ProjectFileType.LegacyProjectFile, null)) {
+            if (lxpFile == null) {
+                System.err.println("couldn't open output stream for lxp file in source " + pfs.sourceDescription());
+                return;
+            }
+            JsonWriter writer = new JsonWriter(new OutputStreamWriter(lxpFile));
             writer.setIndent("  ");
             new GsonBuilder().create().toJson(obj, writer);
-            writer.close();
-            System.out.println("Project saved successfully to " + file.toString());
+            writer.flush();
+            System.out.println("Project saved successfully to " + pfs.sourceDescription());
             lx.componentRegistry.resetProject();
         } catch (IOException iox) {
             System.err.println(iox.getLocalizedMessage());
