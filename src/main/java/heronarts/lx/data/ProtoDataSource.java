@@ -15,7 +15,15 @@ public class ProtoDataSource implements ProjectDataSource {
 
     @Override
     public String sourceDescription() {
-        return String.format("proto loaded from %s", sourceDescription);
+        StringBuilder fileSummary = new StringBuilder();
+        for (ProjectFile pf : data.getFileList()) {
+            fileSummary.append(pf.getType().toString());
+            if (pf.getId() != null) {
+                fileSummary.append(String.format(" (id=%s)", pf.getId()));
+            }
+            fileSummary.append(" ");
+        }
+        return String.format("proto with files %sloaded from %s", fileSummary.toString(), sourceDescription);
     }
 
     @Override
@@ -25,7 +33,7 @@ public class ProtoDataSource implements ProjectDataSource {
             if (!pf.getType().equals(fileType.protoType)) {
                 continue;
             }
-            if ((pf.getId() == null && id == null) || (id != null && id.equals(pf.getId()))) {
+            if ((pf.getId().equals("") && id == null) || (id != null && id.equals(pf.getId()))) {
                 return new ByteArrayInputStream(pf.getData().toByteArray());
             }
         }

@@ -39,7 +39,8 @@ public class LXMutationSender {
             projectService.pull(ProjectPullRequest.newBuilder().build(), new StreamObserver<ProjectData>() {
                 @Override
                 public void onNext(ProjectData value) {
-                    lx.getProject().load(lx, new ProtoDataSource("project loader from " + target, value));
+                    lx.engine.addTask(() ->
+                        lx.getProject().load(lx, new ProtoDataSource("project loader from " + target, value)));
                 }
 
                 @Override
@@ -57,7 +58,7 @@ public class LXMutationSender {
 
     public void disconnect() {
         if (channel != null) {
-            channel.shutdownNow();
+            channel.shutdown();
         }
         target = null;
         channel = null;
