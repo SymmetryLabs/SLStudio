@@ -122,7 +122,7 @@ test {
 }
 
 jar {
-    mainClassName = 'com.symmetrylabs.slstudio.Volume'
+    mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
 	exclude('**/*.swp')
 	exclude('**/*.swo')
 }
