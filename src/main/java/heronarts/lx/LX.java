@@ -24,6 +24,7 @@ import com.google.common.base.Preconditions;
 import com.symmetrylabs.slstudio.palettes.SwatchLibrary;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXPalette;
+import heronarts.lx.data.LXVersion;
 import heronarts.lx.data.Project;
 import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXModel;
@@ -128,6 +129,11 @@ public class LX {
     public final LXComponent.Registry componentRegistry = new LXComponent.Registry();
 
     /**
+     * The runtime version of this instance of LX.
+     */
+    public final LXVersion version;
+
+    /**
      * The width of the grid, immutable.
      */
     public final int width;
@@ -190,8 +196,8 @@ public class LX {
     /**
      * Creates an LX instance with no nodes.
      */
-    public LX() {
-        this(null);
+    public LX(LXVersion version) {
+        this(version, null);
     }
 
     /**
@@ -200,8 +206,8 @@ public class LX {
      *
      * @param total Number of nodes
      */
-    public LX(int total) {
-        this(total, 1);
+    public LX(LXVersion version, int total) {
+        this(version, total, 1);
     }
 
     /**
@@ -211,8 +217,8 @@ public class LX {
      * @param width Width
      * @param height Height
      */
-    public LX(int width, int height) {
-        this(new GridModel(width, height));
+    public LX(LXVersion version, int width, int height) {
+        this(version, new GridModel(width, height));
     }
 
     /**
@@ -220,9 +226,13 @@ public class LX {
      *
      * @param model Pixel model
      */
-    public LX(LXModel model) {
+    public LX(LXVersion version, LXModel model) {
         LX.initTimer.init();
+        this.version = version;
         this.model = model;
+
+        Preconditions.checkArgument(version != null);
+
         if (model == null) {
             this.total = this.width = this.height = 0;
             this.cx = this.cy = 0;
@@ -701,7 +711,7 @@ public class LX {
     public void newProject() {
         this.componentRegistry.resetProject();
         this.engine.load(this, new JsonObject());
-        setProject(null, ProjectListener.Change.NEW);
+        setProject(new Project(), ProjectListener.Change.NEW);
     }
 
     public LX registerExternal(String key, LXSerializable serializable) {

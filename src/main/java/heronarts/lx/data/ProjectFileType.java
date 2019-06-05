@@ -1,17 +1,18 @@
 package heronarts.lx.data;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 
 public enum ProjectFileType {
-    LegacyProjectFile(".lxp");
+    LegacyProjectFile(".lxp", ProjectFileTypeProto.LegacyProjectFile);
 
     public final String extension;
+    public final ProjectFileTypeProto protoType;
 
-    ProjectFileType(String extension) {
+    ProjectFileType(String extension, ProjectFileTypeProto protoType) {
         this.extension = extension;
+        this.protoType = protoType;
     }
 
     public static final Map<String, ProjectFileType> EXTENSION_MAP = new HashMap<>();

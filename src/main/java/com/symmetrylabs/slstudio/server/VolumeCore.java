@@ -79,7 +79,7 @@ public abstract class VolumeCore implements ApplicationState.Provider {
         show = ShowRegistry.getShow(showName);
 
         LXModel model = show.buildModel();
-        lx = new LX(model);
+        lx = new LX(RUNTIME_VERSION, model);
         listener.onCreateLX();
 
         outputControl = new OutputControl(lx);
@@ -106,7 +106,7 @@ public abstract class VolumeCore implements ApplicationState.Provider {
                     if (lastProjectLines.size() > 0) {
                         File lastProject = new File(lastProjectLines.get(0));
                         if (lastProject.exists()) {
-                            lx.openProject(Project.createLegacyProject(lastProject, RUNTIME_VERSION));
+                            lx.openProject(Project.createLegacyProject(lastProject));
                         }
                     }
                 } catch (IOException e) {

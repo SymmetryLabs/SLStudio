@@ -742,13 +742,13 @@ public class SLStudioLX extends P3LX {
                 if (lines != null && lines.length > 0) {
                     File file = this.applet.saveFile(lines[0]);
                     if (file.exists()) {
-                        openProject(Project.createLegacyProject(file, P3LX.RUNTIME_VERSION));
+                        openProject(Project.createLegacyProject(file));
                     }
                 }
             } else {
                 File defaultProject = this.applet.saveFile(DEFAULT_PROJECT_FILE);
                 if (defaultProject.exists()) {
-                    openProject(Project.createLegacyProject(defaultProject, P3LX.RUNTIME_VERSION));
+                    openProject(Project.createLegacyProject(defaultProject));
                 }
             }
         } catch (Exception x) {

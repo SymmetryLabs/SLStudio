@@ -48,7 +48,7 @@ public class MainMenu implements Window {
                            rendering the UI. */
                         WindowManager.runSafelyWithEngine(
                             lx, () -> {
-                                lx.openProject(Project.createLegacyProject(projectFile, VolumeCore.RUNTIME_VERSION));
+                                lx.openProject(Project.createLegacyProject(projectFile));
                                 onProjectChanged();
                             });
                     });
@@ -171,7 +171,7 @@ public class MainMenu implements Window {
     private void runSaveAs() {
         FileDialog.save(
             lx, "Save project", projectFile -> {
-                lx.saveProject(Project.createLegacyProject(projectFile, VolumeCore.RUNTIME_VERSION));
+                lx.saveProject(Project.createLegacyProject(projectFile));
                 onProjectChanged();
             });
     }
