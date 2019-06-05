@@ -115,8 +115,6 @@ public class LXMutationQueue extends LXComponent {
         LXWarp warp;
         int index;
 
-        System.out.println("dispatching mutation " + mr.mutation + (mr.callback == null ? "" : " +cb"));
-
         switch (mut.getValueCase()) {
             case ADDLOOK:
                 e.addLook();
