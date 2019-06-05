@@ -20,9 +20,17 @@ message ProjectData {
     repeated ProjectFile file = 2;
 }
 
+message ProjectPullRequest {
+}
+
 message ProjectLoadResponse {
 }
 
 service ProjectLoader {
-    rpc load(ProjectData) returns (ProjectLoadResponse);
+    // Reset the current engine state to the provided project data
+    rpc reset(ProjectData) returns (ProjectLoadResponse);
+    // Load the given data over the current engine state
+    rpc patch(ProjectData) returns (ProjectLoadResponse);
+    // Request the current state of the engine
+    rpc pull(ProjectPullRequest) returns (ProjectData);
 }

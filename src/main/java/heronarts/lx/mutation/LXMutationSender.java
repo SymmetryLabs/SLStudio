@@ -1,6 +1,10 @@
 package heronarts.lx.mutation;
 
 import heronarts.lx.LX;
+import heronarts.lx.data.ProjectData;
+import heronarts.lx.data.ProjectLoaderGrpc;
+import heronarts.lx.data.ProjectPullRequest;
+import heronarts.lx.data.ProtoDataSource;
 import io.grpc.ConnectivityState;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -11,7 +15,8 @@ public class LXMutationSender {
 
     private String target;
     private ManagedChannel channel;
-    private MutationServiceGrpc.MutationServiceStub service;
+    private MutationServiceGrpc.MutationServiceStub mutationService;
+    private ProjectLoaderGrpc.ProjectLoaderStub projectService;
 
     LXMutationSender(LX lx) {
         this.lx = lx;
@@ -24,10 +29,30 @@ public class LXMutationSender {
         return ConnectivityState.SHUTDOWN;
     }
 
-    public void connect(String target) {
+    public void connect(String target, boolean fetchState) {
         this.target = target;
         channel = ManagedChannelBuilder.forAddress(target, LXMutationServer.PORT).usePlaintext().build();
-        service = MutationServiceGrpc.newStub(channel);
+        mutationService = MutationServiceGrpc.newStub(channel);
+        projectService = ProjectLoaderGrpc.newStub(channel);
+
+        if (fetchState) {
+            projectService.pull(ProjectPullRequest.newBuilder().build(), new StreamObserver<ProjectData>() {
+                @Override
+                public void onNext(ProjectData value) {
+                    lx.getProject().load(lx, new ProtoDataSource("project loader from " + target, value));
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    System.err.println("couldn't fetch project data from server: " + t.getMessage());
+                    t.printStackTrace();
+                }
+
+                @Override
+                public void onCompleted() {
+                }
+            });
+        }
     }
 
     public void disconnect() {
@@ -36,7 +61,8 @@ public class LXMutationSender {
         }
         target = null;
         channel = null;
-        service = null;
+        mutationService = null;
+        projectService = null;
     }
 
     public void send(Mutation m) {
@@ -44,7 +70,7 @@ public class LXMutationSender {
             return;
         }
         System.out.println("sending " + m);
-        service.apply(m, new StreamObserver<MutationResult>() {
+        mutationService.apply(m, new StreamObserver<MutationResult>() {
             @Override
             public void onNext(MutationResult value) {
                 System.out.println("mutation " + m + " succeeded on " + target);

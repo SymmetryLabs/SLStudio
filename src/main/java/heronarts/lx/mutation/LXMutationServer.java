@@ -1,9 +1,7 @@
 package heronarts.lx.mutation;
 
 import heronarts.lx.LX;
-import heronarts.lx.data.ProjectData;
-import heronarts.lx.data.ProjectLoadResponse;
-import heronarts.lx.data.ProjectLoaderGrpc;
+import heronarts.lx.data.*;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
@@ -61,8 +59,33 @@ public class LXMutationServer {
         }
 
         @Override
-        public void load(ProjectData pd, StreamObserver<ProjectLoadResponse> response) {
+        public void reset(ProjectData pd, StreamObserver<ProjectLoadResponse> response) {
+            lx.newProject();
+            patch(pd, response);
+        }
 
+        @Override
+        public void patch(ProjectData pd, StreamObserver<ProjectLoadResponse> response) {
+            try {
+                lx.getProject().load(lx, new ProtoDataSource("mutation server request", pd));
+                response.onNext(ProjectLoadResponse.newBuilder().build());
+                response.onCompleted();
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.onError(e);
+            }
+        }
+
+        @Override
+        public void pull(ProjectPullRequest ppr, StreamObserver<ProjectData> response) {
+            try {
+                ProtoDataSink sink = new ProtoDataSink("mutation server request", response::onNext);
+                lx.getProject().save(lx, sink);
+                response.onCompleted();
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.onError(e);
+            }
         }
     }
 }
