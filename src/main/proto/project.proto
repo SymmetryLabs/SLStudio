@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package heronarts.lx.data;
+
+option java_multiple_files = true;
+option java_outer_classname = "ProjectProtos";
+
+enum ProjectFileTypeProto {
+    LegacyProjectFile = 0;
+}
+
+message ProjectFile {
+    ProjectFileTypeProto type = 1;
+    string id = 2;
+    bytes data = 3;
+}
+
+message ProjectData {
+    int32 version = 1;
+    repeated ProjectFile file = 2;
+}
+
+message ProjectLoadResponse {
+}
+
+service ProjectLoader {
+    rpc load(ProjectData) returns (ProjectLoadResponse);
+}

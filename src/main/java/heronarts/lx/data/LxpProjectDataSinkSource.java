@@ -1,18 +1,25 @@
 package heronarts.lx.data;
 
+import heronarts.lx.LX;
+
 import java.io.*;
 import java.nio.file.Path;
 
-public class LxpProjectFileSource implements ProjectFileSource {
+public class LxpProjectDataSinkSource implements ProjectDataSource, ProjectDataSink {
     protected final Path filePath;
 
-    public LxpProjectFileSource(Path filePath) {
+    public LxpProjectDataSinkSource(Path filePath) {
         this.filePath = filePath;
     }
 
     @Override
     public String sourceDescription() {
         return String.format("lxp loader %s", filePath);
+    }
+
+    @Override
+    public String sinkDescription() {
+        return String.format("lxp saver %s", filePath);
     }
 
     @Override
@@ -29,5 +36,13 @@ public class LxpProjectFileSource implements ProjectFileSource {
             return new FileOutputStream(filePath.toFile());
         }
         return null;
+    }
+
+    @Override
+    public void onWriteStart(LX lx, Project project) {
+    }
+
+    @Override
+    public void onWriteFinish() {
     }
 }

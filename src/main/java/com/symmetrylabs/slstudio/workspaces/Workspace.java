@@ -175,7 +175,7 @@ public class Workspace extends LXComponent {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            lx.openProject(Project.createLegacyProject(workspace.getFile(), P3LX.RUNTIME_VERSION));
+            lx.openProject(Project.createLegacyProject(workspace.getFile()));
         });
 
         /* We set up this task to run after the next frame of the UI is rendered. It

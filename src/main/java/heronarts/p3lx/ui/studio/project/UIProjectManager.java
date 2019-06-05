@@ -132,7 +132,7 @@ public class UIProjectManager extends UICollapsibleSection {
         if (saveFile != null) {
             lx.engine.addTask(new Runnable() {
                 public void run() {
-                    lx.saveProject(Project.createLegacyProject(saveFile, P3LX.RUNTIME_VERSION));
+                    lx.saveProject(Project.createLegacyProject(saveFile));
                 }
             });
         }
@@ -143,7 +143,7 @@ public class UIProjectManager extends UICollapsibleSection {
         if (openFile != null) {
             lx.engine.addTask(new Runnable() {
                 public void run() {
-                    lx.openProject(Project.createLegacyProject(openFile, P3LX.RUNTIME_VERSION));
+                    lx.openProject(Project.createLegacyProject(openFile));
                 }
             });
         }

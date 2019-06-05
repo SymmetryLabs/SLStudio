@@ -7,11 +7,9 @@ import heronarts.lx.LXSerializable;
 
 import com.symmetrylabs.slstudio.ApplicationState;
 
-import com.google.common.base.Preconditions;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.*;
-import java.nio.file.Path;
 import java.util.Map;
 
 
@@ -105,42 +103,35 @@ public class LegacyProjectLoader {
         return obj;
     }
 
-    public static void load(Project project, LX lx, ProjectFileSource pfs) {
-        try {
-            try (InputStream lxpFile = pfs.inputStream(ProjectFileType.LegacyProjectFile, null)) {
-                if (lxpFile == null) {
-                    System.err.println("couldn't load project file: file not found in source " + pfs.sourceDescription());
-                    return;
-                }
+    public static void load(Project project, LX lx, ProjectDataSource pfs) throws IOException {
+        try (InputStream lxpFile = pfs.inputStream(ProjectFileType.LegacyProjectFile, null)) {
+            if (lxpFile == null) {
+                System.err.println("couldn't load project file: file not found in source " + pfs.sourceDescription());
+                return;
+            }
 
-                JsonObject obj = new Gson().fromJson(new InputStreamReader(lxpFile), JsonObject.class);
-                obj = checkAndUpgradeVersion(project.getRuntimeVersion(), obj);
+            JsonObject obj = new Gson().fromJson(new InputStreamReader(lxpFile), JsonObject.class);
+            obj = checkAndUpgradeVersion(lx.version, obj);
 
-                lx.componentRegistry.resetProject();
-                lx.componentRegistry.setIdCounter(getMaxId(obj, lx.componentRegistry.getIdCounter()) + 1);
-                lx.engine.load(lx, obj.getAsJsonObject(KEY_ENGINE));
-                if (obj.has(KEY_EXTERNALS)) {
-                    JsonObject externalsObj = obj.getAsJsonObject(KEY_EXTERNALS);
-                    Map<String, LXSerializable> externals = lx.getExternals();
-                    for (String key : externals.keySet()) {
-                        if (externalsObj.has(key)) {
-                            externals.get(key).load(lx, externalsObj.getAsJsonObject(key));
-                        }
+            lx.componentRegistry.resetProject();
+            lx.componentRegistry.setIdCounter(getMaxId(obj, lx.componentRegistry.getIdCounter()) + 1);
+            lx.engine.load(lx, obj.getAsJsonObject(KEY_ENGINE));
+            if (obj.has(KEY_EXTERNALS)) {
+                JsonObject externalsObj = obj.getAsJsonObject(KEY_EXTERNALS);
+                Map<String, LXSerializable> externals = lx.getExternals();
+                for (String key : externals.keySet()) {
+                    if (externalsObj.has(key)) {
+                        externals.get(key).load(lx, externalsObj.getAsJsonObject(key));
                     }
                 }
-                System.out.println("Project loaded successfully from " + pfs.sourceDescription());
-            } catch (IOException iox) {
-                System.err.println("Could not load project file: " + iox.getLocalizedMessage());
             }
-        } catch (Exception x) {
-            System.err.println("Exception in loadProject: " + x.getLocalizedMessage());
-            x.printStackTrace(System.err);
+            System.out.println("Project loaded successfully from " + pfs.sourceDescription());
         }
     }
 
-    public static void save(Project project, LX lx, ProjectFileSource pfs) {
+    public static void save(Project project, LX lx, ProjectDataSink pfs) throws IOException {
         JsonObject obj = new JsonObject();
-        obj.addProperty(KEY_VERSION, project.getRuntimeVersion().versionCode);
+        obj.addProperty(KEY_VERSION, lx.version.versionCode);
         obj.addProperty(KEY_TIMESTAMP, System.currentTimeMillis());
         obj.add(KEY_ENGINE, LXSerializable.Utils.toObject(lx, lx.engine));
         JsonObject externalsObj = new JsonObject();
@@ -151,17 +142,15 @@ public class LegacyProjectLoader {
         obj.add(KEY_EXTERNALS, externalsObj);
         try (OutputStream lxpFile = pfs.outputStream(ProjectFileType.LegacyProjectFile, null)) {
             if (lxpFile == null) {
-                System.err.println("couldn't open output stream for lxp file in source " + pfs.sourceDescription());
+                System.err.println("couldn't open output stream for lxp file in source " + pfs.sinkDescription());
                 return;
             }
             JsonWriter writer = new JsonWriter(new OutputStreamWriter(lxpFile));
             writer.setIndent("  ");
             new GsonBuilder().create().toJson(obj, writer);
             writer.flush();
-            System.out.println("Project saved successfully to " + pfs.sourceDescription());
+            System.out.println("Project saved successfully to " + pfs.sinkDescription());
             lx.componentRegistry.resetProject();
-        } catch (IOException iox) {
-            System.err.println(iox.getLocalizedMessage());
         }
     }
 

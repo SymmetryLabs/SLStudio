@@ -1,6 +1,9 @@
 package heronarts.lx.mutation;
 
 import heronarts.lx.LX;
+import heronarts.lx.data.ProjectData;
+import heronarts.lx.data.ProjectLoadResponse;
+import heronarts.lx.data.ProjectLoaderGrpc;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
@@ -15,7 +18,8 @@ public class LXMutationServer {
     public LXMutationServer(LX lx) {
         this.lx = lx;
         server = ServerBuilder.forPort(PORT)
-            .addService(new ServiceImpl(lx))
+            .addService(new MutationServiceImpl(lx))
+            .addService(new ProjectServiceImpl(lx))
             .build();
     }
 
@@ -28,10 +32,10 @@ public class LXMutationServer {
         server.shutdown();
     }
 
-    private static class ServiceImpl extends MutationServiceGrpc.MutationServiceImplBase {
+    private static class MutationServiceImpl extends MutationServiceGrpc.MutationServiceImplBase {
         private final LX lx;
 
-        ServiceImpl(LX lx) {
+        MutationServiceImpl(LX lx) {
             this.lx = lx;
         }
 
@@ -46,6 +50,19 @@ public class LXMutationServer {
                     response.onError(e);
                 }
             }));
+        }
+    }
+
+    private static class ProjectServiceImpl extends ProjectLoaderGrpc.ProjectLoaderImplBase {
+        private final LX lx;
+
+        ProjectServiceImpl(LX lx) {
+            this.lx = lx;
+        }
+
+        @Override
+        public void load(ProjectData pd, StreamObserver<ProjectLoadResponse> response) {
+
         }
     }
 }
