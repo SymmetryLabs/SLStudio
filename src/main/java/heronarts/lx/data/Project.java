@@ -24,7 +24,7 @@ public class Project {
     }
 
     public String getName() {
-        return defaultSource.sourceDescription();
+        return defaultSource == null ? null : defaultSource.sourceDescription();
     }
 
     public void setDefaultSource(ProjectDataSource pfs) {
