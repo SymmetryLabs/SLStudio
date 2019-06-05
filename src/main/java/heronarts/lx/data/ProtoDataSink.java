@@ -69,11 +69,12 @@ public class ProtoDataSink implements ProjectDataSink {
         }
 
         for (FileStream fs : liveStreams) {
-            ProjectFile pf = ProjectFile.newBuilder()
-                .setId(fs.id)
+            ProjectFile.Builder pf = ProjectFile.newBuilder()
                 .setType(fs.type.protoType)
                 .setData(ByteString.copyFrom(fs.stream.toByteArray()))
-                .build();
+            if (fs.id != null) {
+                pf.setId(fs.id);
+            }
             pdb.addFile(pf);
         }
 
