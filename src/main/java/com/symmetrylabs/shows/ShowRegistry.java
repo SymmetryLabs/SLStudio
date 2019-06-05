@@ -16,7 +16,6 @@ import com.symmetrylabs.shows.japantree.JapanTreeShow;
 import com.symmetrylabs.shows.kalpa.KalpaShow;
 import com.symmetrylabs.shows.magicleap.MagicLeapShow;
 import com.symmetrylabs.shows.mikey.MikeyShow;
-import com.symmetrylabs.shows.obj.ObjShow;
 import com.symmetrylabs.shows.office.OfficeShow;
 import com.symmetrylabs.shows.penfoldswine.PenfoldsWineShow;
 import com.symmetrylabs.shows.pilots.PilotsShow;
@@ -65,7 +64,6 @@ public class ShowRegistry {
     private static void registerShows(PApplet applet, Map<String, ShowBuilder> map) {
         // This is the central registry of shows.  Add an entry here for each available show.
         map.put("demo", DemoShow::new);
-        map.put("obj", ObjShow::new);
         map.put("office", OfficeShow::new);
         map.put("kalpa", KalpaShow::new);
         map.put("summerstage", SummerStageShow::new);
