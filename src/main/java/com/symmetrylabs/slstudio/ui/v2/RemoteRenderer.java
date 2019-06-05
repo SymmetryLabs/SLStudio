@@ -19,6 +19,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class RemoteRenderer extends PointColorRenderer {
     private static final int MAX_PIXEL_MESSAGE_SIZE = 1024;
@@ -51,6 +52,12 @@ public class RemoteRenderer extends PointColorRenderer {
     }
 
     public void connect(String target) {
+        if (channel != null && !channel.isShutdown()) {
+            channel.shutdown();
+            try {
+                channel.awaitTermination(1, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {}
+        }
         channel = ManagedChannelBuilder.forAddress(target, VolumeServer.PIXEL_DATA_PORT).usePlaintext().build();
         service = PixelDataBrokerGrpc.newStub(channel);
         if (receiver == null) {
@@ -153,6 +160,7 @@ public class RemoteRenderer extends PointColorRenderer {
         final byte[] recvBuf;
 
         public ReceiverThread() throws SocketException {
+            super("RemoteRenderer.Receiver");
             socket = new DatagramSocket();
             port = socket.getLocalPort();
             recvBuf = new byte[MAX_PIXEL_MESSAGE_SIZE];
