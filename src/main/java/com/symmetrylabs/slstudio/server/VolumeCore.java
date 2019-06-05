@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.server;
 
+import com.google.common.base.Preconditions;
 import com.symmetrylabs.LXClassLoader;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.ShowRegistry;
@@ -79,6 +80,10 @@ public abstract class VolumeCore implements ApplicationState.Provider {
         show = ShowRegistry.getShow(showName);
 
         LXModel model = show.buildModel();
+        if (model.modelId == null || !model.modelId.equals(showName)) {
+            throw new IllegalStateException("model for show %s has incorrect model ID: expecting " + showName + " but got " + model.modelId);
+        }
+
         lx = new LX(RUNTIME_VERSION, model);
         listener.onCreateLX();
 

@@ -13,6 +13,7 @@ import heronarts.lx.transform.LXTransform;
  * This file implements the mapping functions needed to lay out the cubes.
  */
 public class DemoShow extends CubesShow implements Show {
+    public static String SHOW_NAME = "demo";
 
     static final float globalOffsetX = 0;
     static final float globalOffsetY = 0;

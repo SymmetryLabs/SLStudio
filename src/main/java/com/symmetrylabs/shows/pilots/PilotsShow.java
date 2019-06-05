@@ -29,7 +29,7 @@ import java.util.List;
  * This file creates and positions "carts" and creates one pixlite for each of them
  */
 public class PilotsShow implements Show, HasWorkspace, CartConfigurator.ConfigChangedListener, LXLook.Listener {
-    static final String SHOW_NAME = "pilots";
+    public static final String SHOW_NAME = "pilots";
 
     static final String IP_CONFIGS_FILENAME = "cart_IP_configs.txt";
 

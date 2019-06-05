@@ -64,11 +64,11 @@ public class ShowRegistry {
     /** Registers all available show builders in the given map. */
     private static void registerShows(PApplet applet, Map<String, ShowBuilder> map) {
         // This is the central registry of shows.  Add an entry here for each available show.
-        map.put("demo", DemoShow::new);
-        map.put("office", OfficeShow::new);
-        map.put("kalpa", KalpaShow::new);
-        map.put("summerstage", SummerStageShow::new);
-        map.put("pilots", PilotsShow::new);
+        map.put(DemoShow.SHOW_NAME, DemoShow::new);
+        map.put(OfficeShow.SHOW_NAME, OfficeShow::new);
+        map.put(KalpaShow.SHOW_NAME, KalpaShow::new);
+        map.put(SummerStageShow.SHOW_NAME, SummerStageShow::new);
+        map.put(PilotsShow.SHOW_NAME, PilotsShow::new);
         map.put(SummerBBQShow.SHOW_NAME, SummerBBQShow::new);
         map.put(StreetlampShow.SHOW_NAME, StreetlampShow::new);
         map.put(MagicLeapShow.SHOW_NAME, MagicLeapShow::new);

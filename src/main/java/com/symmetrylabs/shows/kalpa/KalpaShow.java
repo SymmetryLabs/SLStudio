@@ -28,6 +28,7 @@ import static com.symmetrylabs.util.DistanceConstants.*;
 
 
 public class KalpaShow extends TreeShow {
+    public static final String SHOW_NAME = "kalpa";
 
     public final Map<String, AssignablePixlite> pixlites = new HashMap<>();
     public final List<AssignablePixlite.Port> pixlitePorts = new ArrayList<>();
