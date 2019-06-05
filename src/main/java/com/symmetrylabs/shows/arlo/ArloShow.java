@@ -267,7 +267,7 @@ public static final String SHOW_NAME = "arlo";
             allCubesArr[i] = allCubes.get(i);
         }
 
-        return new CubesModel(towers, allCubesArr, cubeInventory, mapping);
+        return new CubesModel(SHOW_NAME, towers, allCubesArr, cubeInventory, mapping);
     }
 
     @Override

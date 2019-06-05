@@ -249,7 +249,7 @@ public class OfficeShow extends CubesShow implements HasWorkspace {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        return new CubesModel(towers, allCubesArr, cubeInventory, mapping);
+        return new CubesModel(SHOW_NAME, towers, allCubesArr, cubeInventory, mapping);
     }
 
     @Override

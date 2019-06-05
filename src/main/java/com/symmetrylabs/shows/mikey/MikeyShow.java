@@ -29,7 +29,7 @@ public class MikeyShow implements Show {
 
     static class MikeyModel extends StripsModel<Strip> {
         public MikeyModel(List<Strip> strips) {
-            super(strips);
+            super(SHOW_NAME, strips);
         }
 
         public static MikeyModel create() {

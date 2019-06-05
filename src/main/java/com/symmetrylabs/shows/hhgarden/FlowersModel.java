@@ -29,8 +29,8 @@ public class FlowersModel extends SLModel implements LXModel.Listener {
     private List<PanelRecord> panels;
     private HashMap<Integer, HashMap<Integer, List<FlowerModel>>> flowerByHarness = new HashMap<>();
 
-    protected FlowersModel(List<FlowerModel> flowers, ReadableObj model) {
-        super(new FlowerFixture(flowers));
+    protected FlowersModel(String showName, List<FlowerModel> flowers, ReadableObj model) {
+        super(showName, new FlowerFixture(flowers));
         this.flowers = flowers;
         for (FlowerModel m : flowers) {
             m.addListener(this);

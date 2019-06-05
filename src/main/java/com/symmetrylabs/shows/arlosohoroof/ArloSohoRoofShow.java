@@ -97,7 +97,7 @@ public class ArloSohoRoofShow extends CubesShow implements Show, HasWorkspace {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        return new CubesModel(towers, allCubesArr, cubeInventory, mapping);
+        return new CubesModel(SHOW_NAME, towers, allCubesArr, cubeInventory, mapping);
     }
 
     @Override

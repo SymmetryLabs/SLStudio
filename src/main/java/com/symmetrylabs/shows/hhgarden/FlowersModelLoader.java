@@ -22,7 +22,7 @@ public class FlowersModelLoader {
     static final String PANEL_FILENAME = "panels.txt";
     static final String PIXLITE_FILENAME = "pixlites.txt";
 
-    public static FlowersModel load() {
+    public static FlowersModel load(String showName) {
         ReadableObj model = FileUtils.readShowObj(GEOMETRY_FILENAME);
         if (model == null) return null;
 
@@ -40,9 +40,9 @@ public class FlowersModelLoader {
 
         ArrayList<FlowerModel> children = new ArrayList<>();
         for (FlowerData fd : flowerData) {
-            children.add(FlowerModel.create(fd));
+            children.add(FlowerModel.create(showName, fd));
         }
-        return new FlowersModel(children, model);
+        return new FlowersModel(showName, children, model);
     }
 
     private static void matchRecords(List<FlowerData> data, FlowerRecord[] records) {

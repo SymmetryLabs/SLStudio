@@ -21,7 +21,7 @@ public class HbLampModel extends StripsModel<Strip> {
     }
 
     protected HbLampModel(List<Strip> strips) {
-        super(strips);
+        super(HbLampShow.SHOW_NAME, strips);
     }
 
     public static HbLampModel create() {

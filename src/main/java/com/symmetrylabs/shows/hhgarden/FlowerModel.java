@@ -63,11 +63,11 @@ public class FlowerModel extends SLModel {
     private final FlowerData flowerData;
 
     public FlowerModel() {
-        this(new ArrayList<LXPoint>(), null);
+        this(null, new ArrayList<LXPoint>(), null);
     }
 
-    private FlowerModel(List<LXPoint> points, FlowerData flowerData) {
-        super(points);
+    private FlowerModel(String showName, List<LXPoint> points, FlowerData flowerData) {
+        super(showName, points);
         flowerPoints = new ArrayList<>(points.size());
         for (int i = 0; i < points.size(); i++) {
             flowerPoints.add((FlowerPoint) points.get(i));
@@ -90,8 +90,8 @@ public class FlowerModel extends SLModel {
         update(true, true);
     }
 
-    public static FlowerModel create() {
-        return create(new FlowerData(new LXVector(0, 0, 0)));
+    public static FlowerModel create(String showName) {
+        return create(showName, new FlowerData(new LXVector(0, 0, 0)));
     }
 
     /* ABC XZ are chosen so that they form an equilaterial triangle about the origin */
@@ -106,7 +106,7 @@ public class FlowerModel extends SLModel {
     private static final float P1Z = -1.f;
     private static final float STZ = -4.f;
 
-    public static FlowerModel create(FlowerData fd) {
+    public static FlowerModel create(String showName, FlowerData fd) {
         List<FlowerPoint> points = new ArrayList<>();
 
         points.add(new FlowerPoint(Group.STEM, Direction.A));
@@ -127,6 +127,6 @@ public class FlowerModel extends SLModel {
         for (FlowerPoint fp : points) {
             lxPoints.add(fp);
         }
-        return new FlowerModel(lxPoints, fd);
+        return new FlowerModel(showName, lxPoints, fd);
     }
 }

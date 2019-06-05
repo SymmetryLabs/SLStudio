@@ -10,8 +10,10 @@ public final class CirclesBuilder<T extends Strip> {
     private List<CirclesModel.Circle<T>> circles = new ArrayList<>();
 
     private final BiFunction<String, LXTransform, T> stripFactory;
+    private final String modelId;
 
-    public CirclesBuilder(BiFunction<String, LXTransform, T> defaultStripFactory) {
+    public CirclesBuilder(String modelId, BiFunction<String, LXTransform, T> defaultStripFactory) {
+        this.modelId = modelId;
         stripFactory = defaultStripFactory;
     }
 
@@ -20,7 +22,7 @@ public final class CirclesBuilder<T extends Strip> {
     }
 
     public CirclesModel<T> build() {
-        return new CirclesModel<T>(circles);
+        return new CirclesModel<T>(modelId, circles);
     }
 
     public class CircleBuilder {

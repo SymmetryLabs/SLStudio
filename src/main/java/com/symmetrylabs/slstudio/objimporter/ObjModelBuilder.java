@@ -90,7 +90,7 @@ class ObjModelBuilder {
         }
     }
 
-    public SLModel buildModel(LXTransform transform) {
+    public SLModel buildModel(String modelName, LXTransform transform) {
         List<LXPoint> points = new ArrayList();
 
         for (float[] vertex : this.vertices) {
@@ -109,6 +109,6 @@ class ObjModelBuilder {
         }
 
         System.out.println("Created a fixture with obj file: " + name);
-        return new SLModel(points);
+        return new SLModel(modelName, points);
     }
 }

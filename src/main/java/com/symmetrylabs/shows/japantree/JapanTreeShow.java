@@ -127,7 +127,7 @@ public class JapanTreeShow extends TreeShow {
                 new LimbConfig(false, 0, 0, 0, 0, 0, limbType2),
                 new LimbConfig(false, 0, 0, 0, 0, 0, limbType3),
             });
-        TreeModel tree = new TreeModel(config);
+        TreeModel tree = new TreeModel(SHOW_NAME, config);
         return tree;
     }
 

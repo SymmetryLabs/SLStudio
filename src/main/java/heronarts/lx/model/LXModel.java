@@ -48,6 +48,11 @@ public class LXModel implements LXFixture {
     private final List<LXPoint> pointList;
 
     /**
+     * An immutable identifier for this model.
+     */
+    public final String modelId;
+
+    /**
      * An immutable list of all the fixtures in this model
      */
     public final List<LXFixture> fixtures;
@@ -153,8 +158,8 @@ public class LXModel implements LXFixture {
     /**
      * Constructs a null model with no points
      */
-    public LXModel() {
-        this(new LXFixture[] {});
+    public LXModel(String modelId) {
+        this(modelId, new LXFixture[] {});
     }
 
     /**
@@ -162,8 +167,8 @@ public class LXModel implements LXFixture {
      *
      * @param points Points
      */
-    public LXModel(List<LXPoint> points) {
-        this(new BasicFixture(points));
+    public LXModel(String modelId, List<LXPoint> points) {
+        this(modelId, new BasicFixture(points));
     }
 
     /**
@@ -171,8 +176,8 @@ public class LXModel implements LXFixture {
      *
      * @param fixture Fixture
      */
-    public LXModel(LXFixture fixture) {
-        this(new LXFixture[] { fixture });
+    public LXModel(String modelId, LXFixture fixture) {
+        this(modelId, new LXFixture[] { fixture });
     }
 
     /**
@@ -180,20 +185,19 @@ public class LXModel implements LXFixture {
      *
      * @param fixtures Fixtures
      */
-    public LXModel(LXFixture[] fixtures) {
+    public LXModel(String modelId, LXFixture[] fixtures) {
         List<LXFixture> _fixtures = new ArrayList<LXFixture>();
         List<LXPoint> _points = new ArrayList<LXPoint>();
         for (LXFixture fixture : fixtures) {
             _fixtures.add(fixture);
-            for (LXPoint point : fixture.getPoints()) {
-                _points.add(point);
-            }
+            _points.addAll(fixture.getPoints());
         }
 
         this.size = _points.size();
         this.pointList = Collections.unmodifiableList(_points);
         this.points = _points.toArray(new LXPoint[0]);
         this.fixtures = Collections.unmodifiableList(_fixtures);
+        this.modelId = modelId;
         average();
     }
 

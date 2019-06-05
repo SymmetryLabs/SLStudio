@@ -79,7 +79,7 @@ public class YsiadsPartyShow extends CubesShow implements Show {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        CubesModel m = new CubesModel(towers, allCubesArr, cubeInventory, mapping);
+        CubesModel m = new CubesModel(SHOW_NAME, towers, allCubesArr, cubeInventory, mapping);
         m.setTopologyTolerances(2, 6, 8);
         return m;
     }

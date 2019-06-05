@@ -89,7 +89,7 @@ public class GridModel extends LXModel {
         public final GridPoint[] points;
 
         public Strip(int index, List<LXPoint> pointList) {
-            super(pointList);
+            super(String.format("Strip%d", index), pointList);
             this.index = index;
             LXPoint[] points = ((LXModel) this).points;
             this.points = new GridPoint[points.length];
@@ -142,8 +142,8 @@ public class GridModel extends LXModel {
      *
      * @param metrics Metrics
      */
-    public GridModel(Metrics metrics) {
-        super(new Fixture(metrics));
+    public GridModel(String id, Metrics metrics) {
+        super(id, new Fixture(metrics));
 
         this.metrics = metrics;
         this.width = metrics.width;
@@ -183,8 +183,8 @@ public class GridModel extends LXModel {
      * @param width Width in pixels
      * @param height Height in pixels
      */
-    public GridModel(int width, int height) {
-        this(width, height, 1, 1);
+    public GridModel(String id, int width, int height) {
+        this(id, width, height, 1, 1);
     }
 
     /**
@@ -195,8 +195,8 @@ public class GridModel extends LXModel {
      * @param xSpacing Spacing of nodes in x dimension
      * @param ySpacing Spacing of nodes in y dimension
      */
-    public GridModel(int width, int height, float xSpacing, float ySpacing) {
-        this(new Metrics(width, height).setSpacing(xSpacing, ySpacing));
+    public GridModel(String id, int width, int height, float xSpacing, float ySpacing) {
+        this(id, new Metrics(width, height).setSpacing(xSpacing, ySpacing));
     }
 
     public GridPoint getPoint(int x, int y) {

@@ -24,12 +24,12 @@ public class TreeModel extends SLModel {
 
     private float yRotation = 0;
 
-    public TreeModel() {
-        this(new TreeConfig());
+    public TreeModel(String showName) {
+        this(showName, new TreeConfig());
     }
 
-    public TreeModel(TreeConfig config) {
-        super(new Fixture(config));
+    public TreeModel(String showName, TreeConfig config) {
+        super(showName, new Fixture(config));
         this.config = config;
         Fixture f = (Fixture) this.fixtures.get(0);
         this.limbs  = Collections.unmodifiableList(f.limbs);
@@ -146,7 +146,7 @@ public class TreeModel extends SLModel {
         public final List<Leaf> leaves;
 
         public Limb(LXTransform t, LimbConfig config) {
-            super(new Fixture(t, config));
+            super("Limb", new Fixture(t, config));
             this.config = config;
             this.length = config.length;
             this.height = config.height;
@@ -262,7 +262,7 @@ public class TreeModel extends SLModel {
         public final List<Leaf> leaves;
 
         public Branch(LXTransform t, BranchConfig config) {
-            super(new Fixture(t, config));
+            super("Branch", new Fixture(t, config));
             this.config = config;
             this.azimuth = config.azimuth;
             this.elevation = config.elevation;
@@ -425,7 +425,7 @@ public class TreeModel extends SLModel {
         }
 
         public Twig(LXTransform t, TwigConfig config) {
-            super(new Fixture(t, config));
+            super("Twig", new Fixture(t, config));
             this.config = config;
             this.azimuth = config.azimuth;
             this.elevation = config.elevation;
@@ -560,7 +560,7 @@ public class TreeModel extends SLModel {
         public float z;
 
         public Leaf(LXTransform t, Config config) {
-            super(new Fixture(t, config));
+            super("Leaf", new Fixture(t, config));
             this.config = config;
             this.size = config.size;
             this.x = t.x();

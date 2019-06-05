@@ -27,7 +27,7 @@ public class GoogleHqModel extends SLModel implements MarkerSource {
     private Collection<Edge> edges;
 
     protected GoogleHqModel(List<LXPoint> points, ReadableObj model, Collection<Edge> edges) {
-        super(points);
+        super(GoogleHqShow.SHOW_NAME, points);
         this.model = model;
         this.edges = edges;
     }

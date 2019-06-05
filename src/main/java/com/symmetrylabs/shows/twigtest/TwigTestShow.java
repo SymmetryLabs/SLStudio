@@ -41,7 +41,7 @@ public class TwigTestShow implements Show {
                 new BranchConfig(false, "10.200.1.255", 5, 21.960005f, 21.0f, -5.7599936f, -21.6f, 0.0f, -7.2f, BRANCH_TYPE_A)
             })
         });
-        return new TreeModel(config);
+        return new TreeModel(SHOW_NAME, config);
     }
 
     public void setupLx(SLStudioLX lx) {
