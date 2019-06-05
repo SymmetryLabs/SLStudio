@@ -79,8 +79,7 @@ public class LXMutationServer {
         @Override
         public void pull(ProjectPullRequest ppr, StreamObserver<ProjectData> response) {
             try {
-                ProtoDataSink sink = new ProtoDataSink("mutation server request", response::onNext);
-                lx.getProject().save(lx, sink);
+                lx.getProject().save(lx, new ProtoDataSink("mutation server request", response::onNext));
                 response.onCompleted();
             } catch (Exception e) {
                 e.printStackTrace();
