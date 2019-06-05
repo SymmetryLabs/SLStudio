@@ -45,7 +45,7 @@ public class ObjImporter {
                 ObjModelBuilder objModelBuilder = new ObjModelBuilder(file, configReader);
 
                 if (objModelBuilder.config.enabled) {
-                    this.models.add(objModelBuilder.buildModel(transform));
+                    this.models.add(objModelBuilder.buildModel(file.toString(), transform));
                 }
             } catch (Exception e) {
                 System.out.println("Problem with obj file: " + file.getName());

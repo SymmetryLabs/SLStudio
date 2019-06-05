@@ -18,6 +18,7 @@ message ProjectFile {
 message ProjectData {
     int32 version = 1;
     repeated ProjectFile file = 2;
+    string modelName = 3;
 }
 
 message ProjectPullRequest {

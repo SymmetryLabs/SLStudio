@@ -35,7 +35,7 @@ public abstract class SLEffect<M extends SLModel> extends LXEffect {
         /* if it's a type variable, then SLEffect was instantiated without a type parameter,
              so we just assume the effect works on all SLModels. */
         if (tt.getType() instanceof TypeVariable) {
-            return (M) new SLModel();
+            return (M) SLModel.getModelWithoutModelIDForTypeTesting();
         }
 
         String modelClassName = tt.getType().getTypeName();

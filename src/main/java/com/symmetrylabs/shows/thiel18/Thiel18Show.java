@@ -306,7 +306,7 @@ public class Thiel18Show extends CubesShow {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        CubesModel model = new CubesModel(towers, allCubesArr, cubeInventory, mapping);
+        CubesModel model = new CubesModel(SHOW_NAME, towers, allCubesArr, cubeInventory, mapping);
         model.setTopologyTolerances(6, 6, 8);
         return model;
     }

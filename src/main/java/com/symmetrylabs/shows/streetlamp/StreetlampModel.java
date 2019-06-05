@@ -12,7 +12,7 @@ public class StreetlampModel extends SLModel {
     static final int ELEMENT_Z_SIZE = 4;
 
     private StreetlampModel(List<LXPoint> points) {
-        super(points);
+        super(StreetlampShow.SHOW_NAME, points);
     }
 
     private static LXPoint P(int x, int y, int z) {

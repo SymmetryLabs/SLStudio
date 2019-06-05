@@ -61,14 +61,14 @@ public class StripModel extends LXModel {
 
     public final int length;
 
-    public StripModel(Metrics metrics) {
-        super(new Fixture(metrics));
+    public StripModel(String id, Metrics metrics) {
+        super(id, new Fixture(metrics));
         this.metrics = metrics;
         this.length = metrics.length;
     }
 
-    public StripModel(int length) {
-        this(new Metrics(length));
+    public StripModel(String id, int length) {
+        this(id, new Metrics(length));
     }
 
     private static class Fixture extends LXAbstractFixture {

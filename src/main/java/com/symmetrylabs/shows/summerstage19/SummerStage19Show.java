@@ -378,7 +378,7 @@ public class SummerStage19Show extends CubesShow {
         CubesModel.Cube[] allCubesArr = new CubesModel.Cube[allCubes.size()];
         allCubes.toArray(allCubesArr);
 
-        CubesModel model = new CubesModel(towers, allCubesArr, cubeInventory, mapping);
+        CubesModel model = new CubesModel(SHOW_NAME, towers, allCubesArr, cubeInventory, mapping);
         model.setTopologyTolerances(6, 6, 6);
         return model;
     }

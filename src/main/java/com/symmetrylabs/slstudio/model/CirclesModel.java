@@ -15,10 +15,11 @@ public class CirclesModel<T extends Strip> extends StripsModel<T> {
     private final List<Circle<T>> circlesUnmodifiable = Collections.unmodifiableList(circles);
 
     public CirclesModel() {
+        this(null, new ArrayList<>());
     }
 
-    public CirclesModel(List<Circle<T>> circles) {
-        super(new Fixture(circles));
+    public CirclesModel(String modelId, List<Circle<T>> circles) {
+        super(modelId, new Fixture(circles));
 
         this.circles.addAll(circles);
 
@@ -33,7 +34,7 @@ public class CirclesModel<T extends Strip> extends StripsModel<T> {
 
     public static class Circle<T extends Strip> extends StripsModel<T> {
         public Circle(List<T> strips) {
-            super(strips);
+            super("Circle", strips);
         }
     }
 

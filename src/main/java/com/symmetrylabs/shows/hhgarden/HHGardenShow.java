@@ -35,7 +35,7 @@ public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener, 
 
     @Override
     public SLModel buildModel() {
-        return FlowersModelLoader.load();
+        return FlowersModelLoader.load(SHOW_NAME);
     }
 
     @Override

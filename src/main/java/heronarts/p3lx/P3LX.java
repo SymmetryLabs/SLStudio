@@ -55,6 +55,8 @@ public class P3LX extends LX {
     /** The runtime version number for all p3lx-derived frontends (LXStudio, SLStudio), stored in project files. */
     public static LXVersion RUNTIME_VERSION = LXVersion.SLSTUDIO_WITH_LOOKS;
 
+    public static final String DEFAULT_P3LX_MODEL_NAME = "P3LXDefaultModel";
+
     /**
      * Returns the version of the library.
      *
@@ -103,15 +105,7 @@ public class P3LX extends LX {
     public final Timer timer = new Timer();
 
     public P3LX(PApplet applet) {
-        this(applet, new LXModel());
-    }
-
-    public P3LX(PApplet applet, int length) {
-        this(applet, new StripModel(length));
-    }
-
-    public P3LX(PApplet applet, int width, int height) {
-        this(applet, new GridModel(width, height));
+        this(applet, new LXModel(DEFAULT_P3LX_MODEL_NAME));
     }
 
     public P3LX(PApplet applet, LXModel model) {

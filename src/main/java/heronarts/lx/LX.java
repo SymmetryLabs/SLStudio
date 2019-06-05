@@ -205,27 +205,6 @@ public class LX {
     }
 
     /**
-     * Creates an LX instance. This instance will run patterns for a grid of the
-     * specified size.
-     *
-     * @param total Number of nodes
-     */
-    public LX(LXVersion version, int total) {
-        this(version, total, 1);
-    }
-
-    /**
-     * Creates a LX instance. This instance will run patterns for a grid of the
-     * specified size.
-     *
-     * @param width Width
-     * @param height Height
-     */
-    public LX(LXVersion version, int width, int height) {
-        this(version, new GridModel(width, height));
-    }
-
-    /**
      * Constructs an LX instance with the given pixel model
      *
      * @param model Pixel model

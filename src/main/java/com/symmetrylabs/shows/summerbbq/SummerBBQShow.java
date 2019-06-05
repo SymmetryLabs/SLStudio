@@ -12,6 +12,8 @@ import com.symmetrylabs.slstudio.output.SimplePixlite;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 
 public class SummerBBQShow implements Show {
+    public static final String SHOW_NAME = "summerbbq";
+
     private static final float METER = 39.37008f;
     private static final float STRIP_LENGTH = 2 * METER;
     private static final int LED_PER_STRIP = 20;
@@ -21,8 +23,8 @@ public class SummerBBQShow implements Show {
         DoubleStrip.Metrics stripMetrics = new DoubleStrip.Metrics(
                 LED_PER_STRIP, STRIP_LENGTH / LED_PER_STRIP, 1, -STRIP_LENGTH / LED_PER_STRIP / 2); // 1" front/back gap
 
-        CirclesBuilder<DoubleStrip> builder = new CirclesBuilder<>(
-                (String id, LXTransform t) -> new DoubleStrip(id, stripMetrics, t));
+        CirclesBuilder<DoubleStrip> builder =
+            new CirclesBuilder<>(SHOW_NAME, (String id, LXTransform t) -> new DoubleStrip(id, stripMetrics, t));
 
         float scale = 1.0f;
 

@@ -27,24 +27,13 @@ public class StripsModel<T extends Strip> extends SLModel {
     protected final Map<String, Strip> stripTable = new HashMap<>();
 
     private StripsTopology topology = null;
-    boolean topologyInferenceAttempted = false;
+    private boolean topologyInferenceAttempted = false;
     private float orderTolerance = 2;  // tolerance for combining strips into bundles; inches along bundle's axis
     private float bucketTolerance = 6;  // tolerance for combining strips into bundles; inches perpendicular to bundle's axis
     private float endpointTolerance = 6;  // tolerance for combining endpoints into junctions; inches in any direction
 
-    public StripsModel() {
-    }
-
-    public StripsModel(List<T> strips) {
-        this(null, strips);
-    }
-
-    protected StripsModel(LXFixture fixture) {
-        this(null, fixture);
-    }
-
-    protected StripsModel(LXFixture[] fixtures) {
-        this(null, fixtures);
+    public StripsModel(String modelId) {
+        this(modelId, new ArrayList<>());
     }
 
     public StripsModel(String modelId, List<T> strips) {

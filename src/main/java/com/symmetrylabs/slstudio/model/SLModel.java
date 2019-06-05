@@ -25,40 +25,23 @@ public class SLModel extends LXModel {
     protected PointBatches pointBatches;
 
     public float[] pointsXYZ;
-    public final String modelId;
 
-    public SLModel() {
-        super();
-        modelId = null;
-    }
-
-    public SLModel(List<LXPoint> points) {
-        this(null, points);
-    }
-
-    public SLModel(LXFixture fixture) {
-        this(null, fixture);
-    }
-
-    public SLModel(LXFixture[] fixtures) {
-        this(null, fixtures);
+    public SLModel(String id) {
+        super(id);
     }
 
     public SLModel(String modelId, List<LXPoint> points) {
-        super(points);
-        this.modelId = modelId;
+        super(modelId, points);
         setupPointsArray();
     }
 
     public SLModel(String modelId, LXFixture fixture) {
-        super(fixture);
-        this.modelId = modelId;
+        super(modelId, fixture);
         setupPointsArray();
     }
 
     public SLModel(String modelId, LXFixture[] fixtures) {
-        super(fixtures);
-        this.modelId = modelId;
+        super(modelId, fixtures);
         setupPointsArray();
     }
 
@@ -136,5 +119,25 @@ public class SLModel extends LXModel {
             this.start = start;
             this.end = end;
         }
+    }
+
+    /**
+     * Do not use this! It's only for determining type tokens attached to existing SLModels.
+     *
+     * TODO: refactor this to use proper compile-time type embedding like we do with compatible pattern models in LXClassLoader.
+     */
+    @Deprecated
+    public SLModel() {
+        this(null);
+    }
+
+    /**
+     * Do not use this! It's only for determining type tokens attached to existing SLModels.
+     *
+     * TODO: refactor this to use proper compile-time type embedding like we do with compatible pattern models in LXClassLoader.
+     */
+    @Deprecated
+    public static SLModel getModelWithoutModelIDForTypeTesting() {
+        return new SLModel();
     }
 }

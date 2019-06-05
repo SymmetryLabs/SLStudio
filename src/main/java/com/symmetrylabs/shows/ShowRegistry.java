@@ -69,7 +69,7 @@ public class ShowRegistry {
         map.put("kalpa", KalpaShow::new);
         map.put("summerstage", SummerStageShow::new);
         map.put("pilots", PilotsShow::new);
-        map.put("summerbbq", SummerBBQShow::new);
+        map.put(SummerBBQShow.SHOW_NAME, SummerBBQShow::new);
         map.put(StreetlampShow.SHOW_NAME, StreetlampShow::new);
         map.put(MagicLeapShow.SHOW_NAME, MagicLeapShow::new);
         map.put(GoogleHqShow.SHOW_NAME, GoogleHqShow::new);

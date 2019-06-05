@@ -131,7 +131,7 @@ public class AbsintheShow extends TreeShow {
                 new LimbConfig(false, 14, 345, -90,  90 - 15,  0, LIMB_TYPE_SINGLE_BRANCH),
             });
 
-        TreeModel tree = new TreeModel(config);
+        TreeModel tree = new TreeModel(SHOW_NAME, config);
         tree.rotateY(35);
 
         return tree;

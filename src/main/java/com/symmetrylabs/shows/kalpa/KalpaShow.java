@@ -296,7 +296,7 @@ public class KalpaShow extends TreeShow {
             }),
         });
 
-        return new TreeModel(config);
+        return new TreeModel(SHOW_NAME, config);
     }
 
     public void setupLx(SLStudioLX lx) {

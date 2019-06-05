@@ -45,12 +45,15 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
     private final Map<String, Cube> cubesByModelId = new HashMap<>();
 
     public CubesModel() {
-        this(new ArrayList<>(), new Cube[0], null, null);
+        this(null);
     }
 
-    public CubesModel(List<Tower> towers, Cube[] cubeArr, CubeInventory inventory, CubeModelControllerMapping mapping) {
-        super(new Fixture(cubeArr));
-        Fixture fixture = (Fixture) this.fixtures.get(0);
+    public CubesModel(String modelId) {
+        this(modelId, new ArrayList<>(), new Cube[0], null, null);
+    }
+
+    public CubesModel(String modelId, List<Tower> towers, Cube[] cubeArr, CubeInventory inventory, CubeModelControllerMapping mapping) {
+        super(modelId, new Fixture(cubeArr));
 
         this.inventory = inventory;
         this.mapping = mapping;

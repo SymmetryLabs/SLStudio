@@ -35,10 +35,10 @@ public class PilotsModel extends StripsModel<Strip> {
     public Map<String, Cart> cartMap = new HashMap<>();
 
     public PilotsModel(List<Strip> strips, List<Cart> carts) {
-        super(strips);
+        super(PilotsShow.SHOW_NAME, strips);
         this.carts = carts;
         for (Cart cart : carts) {
-            cartMap.put(cart.id, cart);
+            cartMap.put(cart.modelId, cart);
         }
     }
 
@@ -62,14 +62,12 @@ public class PilotsModel extends StripsModel<Strip> {
      *     in order to make that mapping easier.
      */
     public static class Cart extends LXModel {
-        public final String id;
         private Map<String, Dataline> datalineMap = new HashMap<>();
         public final List<Dataline> datalines = new ArrayList<>();
         public final List<Strip> strips = new ArrayList<>();
 
         Cart(String id, LXVector position) {
-            super(new Fixture(position));
-            this.id = id;
+            super(id, new Fixture(position));
 
             Fixture fixture = (Cart.Fixture) this.fixtures.get(0);
             datalines.addAll(fixture.datalines);

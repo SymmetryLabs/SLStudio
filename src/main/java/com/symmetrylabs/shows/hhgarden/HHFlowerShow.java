@@ -20,9 +20,9 @@ public class HHFlowerShow implements Show {
         ArrayList<FlowerModel> flowers = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
             FlowerData fd = new FlowerData(new LXVector(14.f * (int) (i / 3), 0, 14.f * (i % 3)));
-            flowers.add(FlowerModel.create(fd));
+            flowers.add(FlowerModel.create(SHOW_NAME, fd));
         }
-        return new SLModel(new FlowerFixture(flowers));
+        return new SLModel(SHOW_NAME, new FlowerFixture(flowers));
     }
 
     @Override
