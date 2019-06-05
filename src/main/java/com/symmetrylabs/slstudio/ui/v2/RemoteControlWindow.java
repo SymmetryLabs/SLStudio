@@ -29,7 +29,7 @@ public class RemoteControlWindow extends CloseableWindow {
         renderer.setCullFactor(UI.sliderInt("downsample", renderer.getCullFactor(), 1, 5));
 
         if (UI.button("Connect")) {
-            sender.connect(target);
+            sender.connect(target, true);
             renderer.connect(target);
             lx.engine.osc.transmitHost.setValue(target);
             lx.engine.osc.transmitPort.setValue(LXOscEngine.DEFAULT_RECEIVE_PORT);

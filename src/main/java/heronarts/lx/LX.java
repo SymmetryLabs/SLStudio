@@ -192,6 +192,10 @@ public class LX {
     /** The list of globally registered effects */
     private final List<Class<? extends LXEffect>> registeredEffects = new ArrayList<Class<? extends LXEffect>>();
 
+    private final Map<String, LXSerializable> externals = new HashMap<String, LXSerializable>();
+
+    private Project project;
+
 
     /**
      * Creates an LX instance with no nodes.
@@ -275,6 +279,8 @@ public class LX {
         look.addChannel().fader.setValue(1);
         look.setShelf(new APC40Mk2Shelf());
         LX.initTimer.log("Default Look");
+
+        setProject(new Project(), ProjectListener.Change.NEW);
 
     }
 
@@ -677,14 +683,10 @@ public class LX {
         return this.registeredEffects;
     }
 
-    private final Map<String, LXSerializable> externals = new HashMap<String, LXSerializable>();
-
     private final static String KEY_VERSION = "version";
     private final static String KEY_TIMESTAMP = "timestamp";
     private final static String KEY_ENGINE = "engine";
     private final static String KEY_EXTERNALS = "externals";
-
-    private Project project;
 
     protected void setProject(Project project, ProjectListener.Change change) {
         this.project = project;
