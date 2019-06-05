@@ -1,5 +1,7 @@
 package heronarts.lx.output;
 
+import heronarts.lx.data.LXVersion;
+import heronarts.lx.model.GridModel;
 import org.junit.Test;
 import org.junit.Assert;
 import heronarts.lx.LX;
@@ -17,7 +19,7 @@ public class LXOutputTest {
         ApplicationState.setProvider(new ApplicationState.DummyProvider());
 
         /* 1000x100 grid -> 100000 colors per buffer */
-        LX lx = new LX(1000, 100);
+        LX lx = new LX(LXVersion.SLSTUDIO_ORIG, new GridModel("testmodel", 1000, 100));
 
         PolyBuffer pbuf = new PolyBuffer(lx);
 
