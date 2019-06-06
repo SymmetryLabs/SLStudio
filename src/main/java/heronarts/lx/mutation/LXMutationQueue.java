@@ -35,7 +35,7 @@ public class LXMutationQueue extends LXComponent {
 
     public LXMutationQueue(LX lx) {
         this.lx = lx;
-        sender = new LXMutationSender(lx);
+        sender = new LXMutationSender();
         mutations = new ConcurrentLinkedQueue<>();
 
         addParameter(enabled);
