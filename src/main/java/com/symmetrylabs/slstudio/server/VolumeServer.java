@@ -5,6 +5,7 @@ import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.streaming.*;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.data.LxpProjectDataSinkSource;
 import heronarts.lx.data.Project;
 import heronarts.lx.data.ProjectLoaderService;
 import heronarts.lx.mutation.LXMutationServer;
@@ -237,9 +238,11 @@ public class VolumeServer implements VolumeCore.Listener {
     @Override
     public void onShowChangeFinished() {
         File pf = new File(PROJECT_STORE);
-        Project p = Project.createLegacyProject(pf);
+        LxpProjectDataSinkSource lxp = new LxpProjectDataSinkSource(pf.toPath());
+        core.lx.getProject().setDefaultSource(lxp);
+        core.lx.getProject().setDefaultSink(lxp);
         if (pf.exists()) {
-            core.lx.openProject(p);
+            core.lx.openProject(core.lx.getProject());
         }
     }
 
