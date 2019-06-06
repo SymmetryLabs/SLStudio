@@ -124,7 +124,6 @@ public class VolumeServer implements VolumeCore.Listener {
                 }
             }
         };
-        core.lx.openProject(Project.createLegacyProject(new File(PROJECT_STORE)));
     }
 
     public void start() {
@@ -237,6 +236,7 @@ public class VolumeServer implements VolumeCore.Listener {
 
     @Override
     public void onShowChangeFinished() {
+        core.lx.openProject(Project.createLegacyProject(new File(PROJECT_STORE)));
     }
 
     @Override
