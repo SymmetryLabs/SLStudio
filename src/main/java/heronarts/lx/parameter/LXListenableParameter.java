@@ -54,6 +54,7 @@ public abstract class LXListenableParameter implements LXParameter {
     private boolean shouldSerialize = true;
 
     private boolean visible = true;
+    private boolean supportsOscTransmit = true;
     private float priority = 0;
 
     protected LXListenableParameter() {
@@ -261,5 +262,15 @@ public abstract class LXListenableParameter implements LXParameter {
     public LXListenableParameter setPriority(float p) {
         priority = p;
         return this;
+    }
+
+    public LXListenableParameter setSupportsOscTransmit(boolean supportsOscTransmit) {
+        this.supportsOscTransmit = supportsOscTransmit;
+        return this;
+    }
+
+    @Override
+    public boolean supportsOscTransmit() {
+        return supportsOscTransmit;
     }
 }

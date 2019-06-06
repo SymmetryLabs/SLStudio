@@ -89,31 +89,37 @@ public class LXOscEngine extends LXComponent {
 
     private final static int DEFAULT_MAX_PACKET_SIZE = 8192;
 
-    public final StringParameter receiveHost =
+    public final StringParameter receiveHost = (StringParameter)
         new StringParameter("RX Host", DEFAULT_RECEIVE_HOST)
-        .setDescription("Hostname to which OSC input socket is bound");
+        .setDescription("Hostname to which OSC input socket is bound")
+        .setSupportsOscTransmit(false);
 
     public final DiscreteParameter receivePort = (DiscreteParameter)
         new DiscreteParameter("RX Port", DEFAULT_RECEIVE_PORT, 1, 9999)
         .setDescription("UDP port on which the engine listens for OSC message")
-        .setUnits(LXParameter.Units.INTEGER);
+        .setUnits(LXParameter.Units.INTEGER)
+        .setSupportsOscTransmit(false);
 
     public final DiscreteParameter transmitPort = (DiscreteParameter)
         new DiscreteParameter("TX Port", DEFAULT_TRANSMIT_PORT, 1, 9999)
         .setDescription("UDP port on which the engine transmits OSC messages")
-        .setUnits(LXParameter.Units.INTEGER);
+        .setUnits(LXParameter.Units.INTEGER)
+        .setSupportsOscTransmit(false);
 
-    public final StringParameter transmitHost =
+    public final StringParameter transmitHost = (StringParameter)
         new StringParameter("TX Host", DEFAULT_TRANSMIT_HOST)
-        .setDescription("Hostname to which OSC messages are sent");
+        .setDescription("Hostname to which OSC messages are sent")
+        .setSupportsOscTransmit(false);
 
-    public final BooleanParameter receiveActive =
+    public final BooleanParameter receiveActive = (BooleanParameter)
         new BooleanParameter("RX Active", false)
-        .setDescription("Enables or disables OSC engine input");
+        .setDescription("Enables or disables OSC engine input")
+        .setSupportsOscTransmit(false);
 
-    public final BooleanParameter transmitActive =
+    public final BooleanParameter transmitActive = (BooleanParameter)
         new BooleanParameter("TX Active", false)
-        .setDescription("Enables or disables OSC engine output");
+        .setDescription("Enables or disables OSC engine output")
+        .setSupportsOscTransmit(false);
 
     private final List<Receiver> receivers = new ArrayList<Receiver>();
 
@@ -437,7 +443,7 @@ public class LXOscEngine extends LXComponent {
 
         @Override
         public void onParameterChanged(LXParameter parameter) {
-            if (transmitActive.isOn()) {
+            if (transmitActive.isOn() && parameter.supportsOscTransmit()) {
                 // TODO(mcslee): contemplate accumulating OscMessages into OscBundle
                 // and sending once per engine loop?? Probably a bad tradeoff since
                 // it would require dynamic memory allocations that we can skip here...

@@ -46,7 +46,6 @@ import heronarts.lx.data.Project;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -743,7 +742,7 @@ public class UI implements LXEngine.Dispatch {
     }
 
     private boolean isThreaded() {
-        return (this.lx != null) && (this.lx.engine.isThreaded());
+        return (this.lx != null) && (this.lx.engine.isThreadRunning());
     }
 
     public void dispatch() {

@@ -1,22 +1,15 @@
 package com.symmetrylabs.slstudio.ui;
 
-import com.symmetrylabs.slstudio.SLStudio;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
 import heronarts.lx.PolyBuffer;
 import heronarts.p3lx.P3LX;
 import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.UI2dContext;
 import heronarts.p3lx.ui.UI3dContext;
-import heronarts.p3lx.ui.UIObject;
-import processing.core.PFont;
-import processing.core.PGraphics;
 import heronarts.lx.LXLook;
 
 import static com.symmetrylabs.util.Utils.millis;
-import static processing.core.PConstants.LEFT;
-import static processing.core.PConstants.TOP;
 
 
 public class UIFramerate extends UITextOverlay {
@@ -30,7 +23,7 @@ public class UIFramerate extends UITextOverlay {
     }
 
     public String getText() {
-        if (lx.engine.isThreaded()) {
+        if (lx.engine.isThreadRunning()) {
             if (lx.engine.timer.runLastNanos >= 100000000
                 && lx.engine.timer.runLastNanos == lx.engine.timer.runWorstNanos
                 && lastDebugPrint + 500 < millis()) {

@@ -321,14 +321,17 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     private final PolyBuffer black;  // always black, read-only
     private final EngineBuffer buffer;  // destination buffers for final output
 
-    public final BooleanParameter isMultithreaded = new BooleanParameter("Threaded", false)
-        .setDescription("Whether the engine and UI are on separate threads");
+    public final BooleanParameter isMultithreaded = (BooleanParameter) new BooleanParameter("Threaded", false)
+        .setDescription("Whether the engine and UI are on separate threads")
+        .setSupportsOscTransmit(false);
 
-    public final BooleanParameter isChannelMultithreaded = new BooleanParameter("Channel Threaded", false)
-        .setDescription("Whether the engine is multi-threaded per channel");
+    public final BooleanParameter isChannelMultithreaded = (BooleanParameter) new BooleanParameter("Channel Threaded", false)
+        .setDescription("Whether the engine is multi-threaded per channel")
+        .setSupportsOscTransmit(false);
 
-    public final BooleanParameter isNetworkMultithreaded = new BooleanParameter("Network Threaded", false)
-        .setDescription("Whether the network output is on a separate thread");
+    public final BooleanParameter isNetworkMultithreaded = (BooleanParameter) new BooleanParameter("Network Threaded", false)
+        .setDescription("Whether the network output is on a separate thread")
+        .setSupportsOscTransmit(false);
 
     private volatile boolean isEngineThreadRunning = false;
 
@@ -486,7 +489,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
      *
      * @return Whether the engine is threaded
      */
-    public boolean isThreaded() {
+    public boolean isThreadRunning() {
         return this.isEngineThreadRunning;
     }
 

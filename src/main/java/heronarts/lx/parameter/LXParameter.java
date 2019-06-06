@@ -223,4 +223,14 @@ public interface LXParameter {
     public default float getPriority() {
         return 0;
     }
+
+    /**
+     * Returns true if updates to this parameter should be sent over OSC in transmit mode.
+     *
+     * This should return false for parameters that effect engine state, like lx.engine.multithreaded
+     * or lx.engine.osc.transmitActive.
+     */
+    default boolean supportsOscTransmit() {
+        return true;
+    }
 }

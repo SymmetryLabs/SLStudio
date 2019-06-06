@@ -30,9 +30,7 @@ import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
 import heronarts.lx.PolyBuffer;
-import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXModel;
-import heronarts.lx.model.StripModel;
 import heronarts.p3lx.ui.UI;
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -197,7 +195,7 @@ public class P3LX extends LX {
         // Give the engine a chance to sort itself out each frame
         this.engine.onDraw();
 
-        if (this.engine.isThreaded()) {
+        if (this.engine.isThreadRunning()) {
             // NOTE: because we don't hold a lock, it is *possible* that the
             // engine stops being in threading mode just between these lines,
             // triggered by some action on the engine thread itself. It's okay
