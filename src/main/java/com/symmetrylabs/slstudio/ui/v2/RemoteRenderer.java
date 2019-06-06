@@ -95,7 +95,9 @@ public class RemoteRenderer extends PointColorRenderer {
     }
 
     private void sendSubscriptionRequest() {
-        PixelDataRequest.Builder pdr = PixelDataRequest.newBuilder().setRecvPort(receiver.port);
+        PixelDataRequest.Builder pdr = PixelDataRequest.newBuilder()
+            .setShowName(ApplicationState.showName())
+            .setRecvPort(receiver.port);
         if (cullFactor != 1) {
             pointMask = new ArrayList<>();
             for (int pointIndex = 0; pointIndex < model.size; pointIndex += cullFactor) {
@@ -166,6 +168,7 @@ public class RemoteRenderer extends PointColorRenderer {
 
         public ReceiverThread() throws SocketException {
             super("RemoteRenderer.Receiver");
+            setDaemon(true);
             socket = new DatagramSocket();
             port = socket.getLocalPort();
             recvBuf = new byte[MAX_PIXEL_MESSAGE_SIZE];
