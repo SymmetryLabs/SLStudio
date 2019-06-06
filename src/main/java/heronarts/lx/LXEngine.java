@@ -960,18 +960,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         long nowNanos = System.nanoTime();
         this.timer.addRunTime(nowNanos - runStart, nowNanos);
 
-        if (this.logTimers) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("LXEngine::run() " + ((int) (this.timer.runNanos / 1000000)) + "ms\n");
-            sb.append("LXEngine::run()::channels " + ((int) (this.timer.channelNanos / 1000000)) + "ms\n");
-            for (LXChannel channel : this.getAllSubChannels()) {
-                sb.append("LXEngine::" + channel.getLabel() + "::loop() " + ((int) (channel.timer.loopNanos / 1000000)) + "ms\n");
-                LXPattern pattern = channel.getActivePattern();
-                sb.append("LXEngine::" + channel.getLabel() + "::" + pattern.getLabel() + "::run() " + ((int) (pattern.timer.runNanos / 1000000)) + "ms\n");
-            }
-            System.out.println(sb);
-            this.logTimers = false;
-        }
+        doLogTimers();
 
         conversionsPerFrame = PolyBuffer.getConversionCount() - initialConversionCount;
 
@@ -1109,22 +1098,41 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         long nowNanos = System.nanoTime();
         this.timer.addRunTime(nowNanos - runStart, nowNanos);
 
-        if (this.logTimers) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("LXEngine::run() " + ((int) (this.timer.runNanos / 1000000)) + "ms\n");
-            sb.append("LXEngine::run()::channels " + ((int) (this.timer.channelNanos / 1000000)) + "ms\n");
-            for (LXChannel channel : getAllSubChannels()) {
-                sb.append("LXEngine::" + channel.getLabel() + "::loop() " + ((int) (channel.timer.loopNanos / 1000000)) + "ms\n");
-                for (LXPattern pattern : channel.patterns) {
-                    sb.append("LXEngine::" + channel.getLabel() + "::" + pattern.getLabel() + "::run() " + ((int) (pattern.timer.runNanos / 1000000)) + "ms\n");
-                }
-                for (LXEffect effect : channel.effects) {
-                    sb.append("LXEngine::" + channel.getLabel() + "::" + effect.getLabel() + "::run() " + ((int) (effect.timer.runNanos / 1000000)) + "ms\n");
-                }
-            }
-            System.out.println(sb);
-            this.logTimers = false;
+        doLogTimers();
+    }
+
+    private void doLogTimers() {
+        if (!logTimers) {
+            return;
         }
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format(
+            "Engine:%4.0ffps (capped at %4.0f)   Net:%4.0ffps, max%5.1fms    Frame:%5.1fms, avg%5.1fms, max%5.1fms    16-bit conv:%3d %s",
+            Math.min(frameRate(), 999),  // frameRate() sometimes returns Infinity
+            framesPerSecond.getValuef(),
+            Math.min(network.frameRate(), 999),
+            network.timer.ts.worstNanos / 1e6,
+            timer.runCurrentNanos / 1e6,
+            timer.runAvgNanos / 1e6,
+            timer.runWorstNanos / 1e6,
+            conversionsPerFrame));
+        sb.append("LXEngine::run() ").append((int) (this.timer.runNanos / 1000000)).append("ms\n");
+        sb.append("LXEngine::run()::channels ").append((int) (this.timer.channelNanos / 1000000)).append("ms\n");
+        for (LXChannel channel : getAllSubChannels()) {
+            sb.append("LXEngine::").append(channel.getLabel()).append("::loop() ").append((int) (channel.timer.loopNanos / 1000000)).append("ms\n");
+            for (LXPattern pattern : channel.patterns) {
+                sb.append("LXEngine::").append(channel.getLabel()).append("::").append(pattern.getLabel()).append("::run() ")
+                    .append((int) (pattern.timer.runNanos / 1000000)).append("ms\n");
+            }
+            for (LXEffect effect : channel.effects) {
+                sb.append("LXEngine::").append(channel.getLabel()).append("::").append(effect.getLabel()).append("::run() ")
+                    .append((int) (effect.timer.runNanos / 1000000)).append("ms\n");
+            }
+        }
+        System.out.println(sb);
+        this.logTimers = false;
     }
 
     public class NetworkThread extends Thread {
