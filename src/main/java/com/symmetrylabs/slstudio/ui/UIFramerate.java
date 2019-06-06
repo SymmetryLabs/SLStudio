@@ -23,7 +23,7 @@ public class UIFramerate extends UITextOverlay {
     }
 
     public String getText() {
-        if (lx.engine.isThreadRunning()) {
+        if (lx.engine.isThreaded()) {
             if (lx.engine.timer.runLastNanos >= 100000000
                 && lx.engine.timer.runLastNanos == lx.engine.timer.runWorstNanos
                 && lastDebugPrint + 500 < millis()) {

@@ -6,7 +6,6 @@ import com.symmetrylabs.slstudio.streaming.*;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.data.LxpProjectDataSinkSource;
-import heronarts.lx.data.Project;
 import heronarts.lx.data.ProjectLoaderService;
 import heronarts.lx.mutation.LXMutationServer;
 import heronarts.lx.osc.LXOscEngine;
@@ -138,7 +137,7 @@ public class VolumeServer implements VolumeCore.Listener {
         core.lx.engine.osc.receiveActive.setValue(true);
 
         core.lx.engine.onDraw();
-        if (!core.lx.engine.isThreadRunning()) {
+        if (!core.lx.engine.isEngineThreadRunning()) {
             throw new IllegalStateException("engine thread stopped unexpectedly");
         }
 

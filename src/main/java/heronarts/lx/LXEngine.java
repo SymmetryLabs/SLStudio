@@ -497,8 +497,12 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
      *
      * @return Whether the engine is threaded
      */
-    public boolean isThreadRunning() {
+    public boolean isThreaded() {
         return this.isEngineThreadRunning;
+    }
+
+    public boolean isEngineThreadRunning() {
+        return isThreaded() && engineThread.isAlive();
     }
 
     /**

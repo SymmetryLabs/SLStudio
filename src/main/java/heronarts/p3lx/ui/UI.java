@@ -742,7 +742,7 @@ public class UI implements LXEngine.Dispatch {
     }
 
     private boolean isThreaded() {
-        return (this.lx != null) && (this.lx.engine.isThreadRunning());
+        return (this.lx != null) && (this.lx.engine.isThreaded());
     }
 
     public void dispatch() {
