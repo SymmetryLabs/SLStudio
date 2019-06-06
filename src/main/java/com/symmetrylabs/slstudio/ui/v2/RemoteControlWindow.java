@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.ui.v2;
 
+import com.symmetrylabs.slstudio.server.VolumeClient;
 import heronarts.lx.LX;
 import heronarts.lx.mutation.LXMutationSender;
 import heronarts.lx.osc.LXOscEngine;
@@ -8,44 +9,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RemoteControlWindow extends CloseableWindow {
-    private final LX lx;
-    private final ViewController vc;
-    private final RemoteRenderer renderer;
-    private final List<Float> frameTimeAverages = new ArrayList<>();
+    private final VolumeClient vc;
     String target = "";
 
-    RemoteControlWindow(LX lx, ViewController vc, RemoteRenderer renderer) {
+    RemoteControlWindow(VolumeClient vc) {
         super("Remote Control");
-        this.lx = lx;
         this.vc = vc;
-        this.renderer = renderer;
     }
 
     @Override
     protected void drawContents() {
-        LXMutationSender sender = lx.engine.mutations.sender;
         target = UI.inputText("target", target);
 
+        RemoteRenderer renderer = vc.getRemoteRenderer();
         renderer.setCullFactor(UI.sliderInt("downsample", renderer.getCullFactor(), 1, 5));
 
         if (UI.button("Connect")) {
-            sender.connect(target, true);
-            renderer.connect(target);
-            lx.engine.osc.transmitHost.setValue(target);
-            lx.engine.osc.transmitPort.setValue(LXOscEngine.DEFAULT_RECEIVE_PORT);
-            lx.engine.osc.transmitActive.setValue(true);
-            vc.setRemoteDataDisplayed(true);
+            vc.connect(target);
         }
         UI.sameLine();
         if (UI.button("Disconnect")) {
-            sender.disconnect();
-            renderer.disconnect();
-            lx.engine.osc.transmitActive.setValue(false);
-            vc.setRemoteDataDisplayed(false);
+            vc.disconnect();
         }
 
-        UI.labelText("status", sender.getStatus().toString());
-        vc.setRemoteDataDisplayed(UI.checkbox("streampixels", vc.isRemoteDataDisplayed()));
+        UI.labelText("connected", Boolean.toString(vc.isChannelConnected()));
+        UI.labelText("receiving", Boolean.toString(vc.isRendererReceiving()));
 
         UI.intBox("servertick", (int) renderer.latestTick);
         renderer.collectStats = UI.checkbox("collect render statistics", renderer.collectStats);

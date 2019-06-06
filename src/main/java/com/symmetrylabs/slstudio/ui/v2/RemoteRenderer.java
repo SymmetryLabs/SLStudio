@@ -3,7 +3,6 @@ package com.symmetrylabs.slstudio.ui.v2;
 import com.google.common.base.Preconditions;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.symmetrylabs.slstudio.ApplicationState;
-import com.symmetrylabs.slstudio.server.VolumeServer;
 import com.symmetrylabs.slstudio.streaming.PixelDataHandshake;
 import com.symmetrylabs.slstudio.streaming.Pixels;
 import com.symmetrylabs.slstudio.streaming.PixelDataRequest;
@@ -11,7 +10,6 @@ import com.symmetrylabs.slstudio.streaming.PixelDataBrokerGrpc;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXModel;
 import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
 import java.io.IOException;
@@ -19,14 +17,13 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class RemoteRenderer extends PointColorRenderer {
     private static final int MAX_PIXEL_MESSAGE_SIZE = 1024;
     private static final int MAX_STAT_QUEUE_SIZE = 2048;
+    private static final int NS_BEFORE_RECONNECT = 100_000_000; /* == 100ms */
 
     protected final ViewController viewController;
-    private ManagedChannel channel;
     private PixelDataBrokerGrpc.PixelDataBrokerStub service;
     private ReceiverThread receiver = null;
 
@@ -34,6 +31,7 @@ public class RemoteRenderer extends PointColorRenderer {
     float packetsPerSecond = -1;
     float megabitsPerSecond = -1;
     long latestTick = -1;
+    long lastUpdateAt = -1;
 
     private Deque<Long> lastPacketTimes = new ArrayDeque<>();
     private Deque<Integer> lastPacketSizes = new ArrayDeque<>();
@@ -51,14 +49,7 @@ public class RemoteRenderer extends PointColorRenderer {
         this.incomingBuffer = new float[model.size * 4];
     }
 
-    public void connect(String target) {
-        if (channel != null && !channel.isShutdown()) {
-            channel.shutdown();
-            try {
-                channel.awaitTermination(1, TimeUnit.SECONDS);
-            } catch (InterruptedException e) {}
-        }
-        channel = ManagedChannelBuilder.forAddress(target, VolumeServer.PIXEL_DATA_PORT).usePlaintext().build();
+    public void connect(ManagedChannel channel) {
         service = PixelDataBrokerGrpc.newStub(channel);
         if (receiver == null) {
             try {
@@ -69,15 +60,14 @@ public class RemoteRenderer extends PointColorRenderer {
                 e.printStackTrace();
             }
         }
-        startStream();
+        sendSubscriptionRequest();
     }
 
     public void disconnect() {
-        if (channel != null) {
-            channel.shutdown();
-        }
-        channel = null;
         service = null;
+        /* incrementing the subscription ID ensures that we ignore any further updates
+         * that come in after the call to disconnect. */
+        subscriptionId++;
     }
 
     @Override
@@ -85,6 +75,7 @@ public class RemoteRenderer extends PointColorRenderer {
         disconnect();
         if (receiver != null) {
             receiver.interrupt();
+            receiver = null;
         }
         super.dispose();
     }
@@ -94,8 +85,8 @@ public class RemoteRenderer extends PointColorRenderer {
             return;
         }
         cullFactor = newCullFactor;
-        if (channel != null) {
-            startStream();
+        if (receiver != null && receiver.isAlive()) {
+            sendSubscriptionRequest();
         }
     }
 
@@ -103,7 +94,7 @@ public class RemoteRenderer extends PointColorRenderer {
         return cullFactor;
     }
 
-    private void startStream() {
+    private void sendSubscriptionRequest() {
         PixelDataRequest.Builder pdr = PixelDataRequest.newBuilder().setRecvPort(receiver.port);
         if (cullFactor != 1) {
             pointMask = new ArrayList<>();
@@ -153,6 +144,10 @@ public class RemoteRenderer extends PointColorRenderer {
         return viewController.isRemoteDataDisplayed();
     }
 
+    public boolean isConnected() {
+        return System.nanoTime() - lastUpdateAt < NS_BEFORE_RECONNECT;
+    }
+
     private final class ReceiverThread extends Thread {
         final DatagramPacket packet;
         final DatagramSocket socket;
@@ -187,6 +182,7 @@ public class RemoteRenderer extends PointColorRenderer {
             if (pixels.getSubscriptionId() != subscriptionId) {
                 return;
             }
+            lastUpdateAt = System.nanoTime();
 
             byte[] data = pixels.getColors().toByteArray();
             Preconditions.checkState(data.length % 3 == 0);

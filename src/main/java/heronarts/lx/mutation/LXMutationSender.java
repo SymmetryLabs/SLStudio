@@ -1,73 +1,25 @@
 package heronarts.lx.mutation;
 
-import heronarts.lx.LX;
-import heronarts.lx.data.ProjectData;
-import heronarts.lx.data.ProjectLoaderGrpc;
-import heronarts.lx.data.ProjectPullRequest;
-import heronarts.lx.data.ProtoDataSource;
-import io.grpc.ConnectivityState;
 import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
 public class LXMutationSender {
-    private final LX lx;
-
     private String target;
-    private ManagedChannel channel;
     private MutationServiceGrpc.MutationServiceStub mutationService;
-    private ProjectLoaderGrpc.ProjectLoaderStub projectService;
 
-    LXMutationSender(LX lx) {
-        this.lx = lx;
-    }
-
-    public ConnectivityState getStatus() {
-        if (channel != null) {
-            return channel.getState(false);
-        }
-        return ConnectivityState.SHUTDOWN;
-    }
-
-    public void connect(String target, boolean fetchState) {
+    public void connect(ManagedChannel channel, String target, boolean fetchState) {
         this.target = target;
-        channel = ManagedChannelBuilder.forAddress(target, LXMutationServer.PORT).usePlaintext().build();
         mutationService = MutationServiceGrpc.newStub(channel);
-        projectService = ProjectLoaderGrpc.newStub(channel);
 
-        if (fetchState) {
-            projectService.pull(ProjectPullRequest.newBuilder().build(), new StreamObserver<ProjectData>() {
-                @Override
-                public void onNext(ProjectData value) {
-                    lx.engine.addTask(() ->
-                        lx.getProject().load(lx, new ProtoDataSource("project loader from " + target, value)));
-                }
-
-                @Override
-                public void onError(Throwable t) {
-                    System.err.println("couldn't fetch project data from server: " + t.getMessage());
-                    t.printStackTrace();
-                }
-
-                @Override
-                public void onCompleted() {
-                }
-            });
-        }
     }
 
     public void disconnect() {
-        if (channel != null) {
-            channel.shutdown();
-        }
         target = null;
-        channel = null;
         mutationService = null;
-        projectService = null;
     }
 
     public void send(Mutation m) {
-        if (channel == null || channel.isShutdown()) {
+        if (mutationService == null) {
             return;
         }
         System.out.println("sending " + m);

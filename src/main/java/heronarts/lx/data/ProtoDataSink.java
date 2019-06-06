@@ -30,7 +30,7 @@ public class ProtoDataSink implements ProjectDataSink {
     private final ProtoReadyCallback callback;
     private final String sinkDescription;
     private List<FileStream> liveStreams = new ArrayList<>();
-    private LXVersion currentProjectVersion = null;
+    private ProjectData.Builder currentBuilder = null;
 
     public ProtoDataSink(String sinkDescription, ProtoReadyCallback callback) {
         this.sinkDescription = sinkDescription;
@@ -58,16 +58,13 @@ public class ProtoDataSink implements ProjectDataSink {
     @Override
     public void onWriteStart(LX lx, Project project) {
         liveStreams.clear();
-        currentProjectVersion = lx.version;
+        currentBuilder = ProjectData.newBuilder()
+            .setVersion(lx.version.versionCode)
+            .setModelName(lx.model.modelId);
     }
 
     @Override
     public void onWriteFinish() throws IOException {
-        ProjectData.Builder pdb = ProjectData.newBuilder();
-        if (currentProjectVersion != null) {
-            pdb.setVersion(currentProjectVersion.versionCode);
-        }
-
         for (FileStream fs : liveStreams) {
             ProjectFile.Builder pf = ProjectFile.newBuilder()
                 .setType(fs.type.protoType)
@@ -75,11 +72,11 @@ public class ProtoDataSink implements ProjectDataSink {
             if (fs.id != null) {
                 pf.setId(fs.id);
             }
-            pdb.addFile(pf);
+            currentBuilder.addFile(pf);
         }
 
-        callback.onProtoReady(pdb.build());
+        callback.onProtoReady(currentBuilder.build());
         liveStreams.clear();
-        currentProjectVersion = null;
+        currentBuilder = null;
     }
 }

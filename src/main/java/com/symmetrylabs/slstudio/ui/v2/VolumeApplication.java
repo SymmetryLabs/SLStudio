@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
+import com.symmetrylabs.slstudio.server.VolumeClient;
 import com.symmetrylabs.slstudio.server.VolumeCore;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXModel;
@@ -22,6 +23,7 @@ import heronarts.lx.LXMappingEngine;
 public class VolumeApplication extends ApplicationAdapter implements VolumeCore.Listener {
     private final VolumeCore core;
     private RenderManager renderer;
+    private VolumeClient client;
     LookEditor lookEditor;
     ViewController viewController;
 
@@ -41,6 +43,7 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
                 VolumeApplication.this.setWarning(key, message);
             }
         };
+        this.client = new VolumeClient();
     }
 
     @Override
@@ -154,6 +157,8 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
         RemoteRenderer rr = new RemoteRenderer(lx, model, viewController);
         renderer.add(rr);
 
+        client.onLXChanged(lx, viewController, rr);
+
         lookEditor = new LookEditor(lx);
         /* we want WindowManager to handle all of the drawing so it can manage the interaction between
            the UI running and the engine running, so we put it in charge of drawing the look editor */
@@ -172,7 +177,7 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
         WindowManager.addPersistent("Master", () -> new MasterWindow(lx), true);
         WindowManager.addPersistent("Modulation", () -> new ModulationWindow(lx), false);
         WindowManager.addPersistent("OSC", () -> new OscWindow(lx), false);
-        WindowManager.addPersistent("Remote Control", () -> new RemoteControlWindow(lx, viewController, rr), false);
+        WindowManager.addPersistent("Remote Control", () -> new RemoteControlWindow(client), false);
 
         WindowManager.addPersistent("Developer/Imgui demo", SlimguiDemoWindow::new, false);
         WindowManager.addPersistent("Developer/Style editor", SlimguiStyleEditor::new, false);
