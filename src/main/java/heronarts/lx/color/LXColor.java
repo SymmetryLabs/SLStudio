@@ -58,24 +58,64 @@ public final class LXColor {
     /** Deprecated: Result is signed (-128 to 127) and dangerous in color arithmetic. */
     @Deprecated
     public static byte alpha(int argb) {
-        return (byte) ((argb & ALPHA_MASK) >>> ALPHA_SHIFT);
+        return alphaByteUnsafe(argb);
     }
 
     /** Deprecated: Result is signed (-128 to 127) and dangerous in color arithmetic. */
     @Deprecated
     public static byte red(int argb) {
-        return (byte) ((argb & RED_MASK) >>> RED_SHIFT);
+        return redByteUnsafe(argb);
     }
 
     /** Deprecated: Result is signed (-128 to 127) and dangerous in color arithmetic. */
     @Deprecated
     public static byte green(int argb) {
-        return (byte) ((argb & GREEN_MASK) >>> GREEN_SHIFT);
+        return greenByteUnsafe(argb);
     }
 
     /** Deprecated: Result is signed (-128 to 127) and dangerous in color arithmetic. */
     @Deprecated
     public static byte blue(int argb) {
+        return blueByteUnsafe(argb);
+    }
+
+    /**
+     * Return the byte representing the alpha channel in this color.
+     *
+     * Marked as unsafe because arithmetic on these values is almost guaranteed to be
+     * incorrect; Java bytes are signed so high alpha values will end up being negative bytes.
+     */
+    public static byte alphaByteUnsafe(int argb) {
+        return (byte) ((argb & ALPHA_MASK) >>> ALPHA_SHIFT);
+    }
+
+    /**
+     * Return the byte representing the red channel in this color.
+     *
+     * Marked as unsafe because arithmetic on these values is almost guaranteed to be
+     * incorrect; Java bytes are signed so high red values will end up being negative bytes.
+     */
+    public static byte redByteUnsafe(int argb) {
+        return (byte) ((argb & RED_MASK) >>> RED_SHIFT);
+    }
+
+    /**
+     * Return the byte representing the green channel in this color.
+     *
+     * Marked as unsafe because arithmetic on these values is almost guaranteed to be
+     * incorrect; Java bytes are signed so high green values will end up being negative bytes.
+     */
+    public static byte greenByteUnsafe(int argb) {
+        return (byte) ((argb & GREEN_MASK) >>> GREEN_SHIFT);
+    }
+
+    /**
+     * Return the byte representing the blue channel in this color.
+     *
+     * Marked as unsafe because arithmetic on these values is almost guaranteed to be
+     * incorrect; Java bytes are signed so high blue values will end up being negative bytes.
+     */
+    public static byte blueByteUnsafe(int argb) {
         return (byte) (argb & BLUE_MASK);
     }
 

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class VolumeServer implements VolumeCore.Listener {
-    public static final int VOLUME_SERVER_PORT = 3032;
+    static final int VOLUME_SERVER_PORT = 3032;
     private static final int MAX_COLOR_DATA_SIZE_BYTES = 450;
     private static final int POINTS_PER_UDP_PACKET = MAX_COLOR_DATA_SIZE_BYTES / 3;
 
@@ -41,9 +41,11 @@ public class VolumeServer implements VolumeCore.Listener {
             this.packets = new ArrayList<>();
             this.subscriptionId = subscriptionId;
 
-            for (Integer p : pointMask) {
-                if (p >= core.lx.model.size) {
-                    throw new IndexOutOfBoundsException();
+            if (pointMask != null) {
+                for (Integer p : pointMask) {
+                    if (p >= core.lx.model.size) {
+                        throw new IndexOutOfBoundsException();
+                    }
                 }
             }
 
@@ -170,9 +172,9 @@ public class VolumeServer implements VolumeCore.Listener {
                         byte[] buffer = client.colorBuffers[packet];
                         for (int packetIndex = 0; packetIndex < packetPoints.length; packetIndex++) {
                             int color = colors[packetPoints[packetIndex]];
-                            buffer[3 * packetIndex    ] = LXColor.red(color);
-                            buffer[3 * packetIndex + 1] = LXColor.green(color);
-                            buffer[3 * packetIndex + 2] = LXColor.blue(color);
+                            buffer[3 * packetIndex    ] = LXColor.redByteUnsafe(color);
+                            buffer[3 * packetIndex + 1] = LXColor.greenByteUnsafe(color);
+                            buffer[3 * packetIndex + 2] = LXColor.blueByteUnsafe(color);
                         }
 
                         Pixels p = Pixels.newBuilder()
