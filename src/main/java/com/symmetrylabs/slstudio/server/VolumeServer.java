@@ -6,6 +6,7 @@ import com.symmetrylabs.slstudio.streaming.PixelDataHandshake;
 import com.symmetrylabs.slstudio.streaming.Pixels;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.data.ProjectLoaderService;
 import heronarts.lx.mutation.LXMutationServer;
 import com.symmetrylabs.slstudio.streaming.PixelDataRequest;
 import heronarts.lx.osc.LXOscEngine;
@@ -17,9 +18,10 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class VolumeServer implements VolumeCore.Listener {
-    public static final int PIXEL_DATA_PORT = 3032;
+    public static final int VOLUME_SERVER_PORT = 3032;
     private static final int MAX_COLOR_DATA_SIZE_BYTES = 450;
     private static final int POINTS_PER_UDP_PACKET = MAX_COLOR_DATA_SIZE_BYTES / 3;
 
@@ -92,7 +94,7 @@ public class VolumeServer implements VolumeCore.Listener {
 
     private final VolumeCore core;
     private LXMutationServer mutationServer;
-    private Server pixelDataServer;
+    private Server grpcServer;
 
     private PolyBuffer lxColorBuffer = null;
     private byte[] transmitBuffer = null;
@@ -200,15 +202,15 @@ public class VolumeServer implements VolumeCore.Listener {
 
     @Override
     public void onCreateLX() {
-        mutationServer = new LXMutationServer(core.lx);
-        pixelDataServer = ServerBuilder
-            .forPort(PIXEL_DATA_PORT)
+        grpcServer = ServerBuilder
+            .forPort(VOLUME_SERVER_PORT)
             .addService(ServerInterceptors.intercept(new PixelDataBrokerImpl(), new IPCapturingRequestInterceptor()))
+            .addService(new LXMutationServer(core.lx))
+            .addService(new ProjectLoaderService(core.lx))
             .build();
 
         try {
-            mutationServer.start();
-            pixelDataServer.start();
+            grpcServer.start();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -233,10 +235,13 @@ public class VolumeServer implements VolumeCore.Listener {
 
     @Override
     public void onDisposeLX() {
-        mutationServer.dispose();
-        mutationServer = null;
-        pixelDataServer.shutdownNow();
-        pixelDataServer = null;
+        grpcServer.shutdown();
+        try {
+            grpcServer.awaitTermination(100, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        grpcServer = null;
 
         for (Client c : clients) {
             c.clientSock.close();

@@ -105,7 +105,7 @@ public class VolumeClient {
     }
 
     private void connectImpl() {
-        serverChannel = ManagedChannelBuilder.forAddress(target, LXMutationServer.PORT).usePlaintext().build();
+        serverChannel = ManagedChannelBuilder.forAddress(target, VolumeServer.VOLUME_SERVER_PORT).usePlaintext().build();
 
         projectService = ProjectLoaderGrpc.newStub(serverChannel);
         projectService.pull(ProjectPullRequest.newBuilder().build(), new StreamObserver<ProjectData>() {
