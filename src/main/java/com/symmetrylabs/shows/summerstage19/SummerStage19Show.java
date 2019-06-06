@@ -101,9 +101,8 @@ public class SummerStage19Show extends CubesShow {
             new CubeConfig("A3A", 0, 2, 0), // 1246
             new CubeConfig("A4A", 0, 3, 0), // 1363
             new CubeConfig("A3B", 0, 2, 1), // 896 ----------------------------------------------------
-            // new CubeConfig("A3B", 0, 4, 1, 0, 0, 180), // 896 ---------------------------------------------------- Disabling this cube because cube is rotated improperly
             new CubeConfig("B1A", 1, 0, 0), // 967
-            // new CubeConfig("B2A", 1, 1, 0), // 1093
+            new CubeConfig("B2A", 1, 1, 0), // 1093
             new CubeConfig("B3A", 1, 2, 0), // 757
             new CubeConfig("B3B", 1, 2, 1), // 1239
             new CubeConfig("B4B", 1, 3, 1), // 1341
@@ -188,7 +187,7 @@ public class SummerStage19Show extends CubesShow {
             new CubeConfig("C2A", 2, 1, 0), // 1209
             new CubeConfig("C3A", 2, 2, 0), // 1323
             new CubeConfig("C4A", 2, 3, 0), // 727
-            // BAD CUBE, new CubeConfig("C5A", 2, 4, 0), // 308
+            new CubeConfig("C5A", 2, 4, 0), // 308
             new CubeConfig("C4B", 2, 3, 1), // 1192
             new CubeConfig("C5B", 2, 4, 1)), // 575
         new ClusterConfig("CS9", 29, 5, 1,
