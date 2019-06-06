@@ -1113,7 +1113,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format(
-            "Engine:%4.0ffps (capped at %4.0f)   Net:%4.0ffps, max%5.1fms    Frame:%5.1fms, avg%5.1fms, max%5.1fms    16-bit conv:%3d",
+            "Engine:%4.0ffps (capped at %4.0f)   Net:%4.0ffps, max%5.1fms    Frame:%5.1fms, avg%5.1fms, max%5.1fms    16-bit conv:%3d\n",
             Math.min(frameRate(), 999),  // frameRate() sometimes returns Infinity
             framesPerSecond.getValuef(),
             Math.min(network.frameRate(), 999),
