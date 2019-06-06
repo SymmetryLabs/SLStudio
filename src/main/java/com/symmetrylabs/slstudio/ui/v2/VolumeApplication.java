@@ -36,6 +36,12 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
     private float osDensity;
     private SLCamera.InputController camController;
 
+    /* A tiny single-element queue for switching shows from the correct thread. If loadShow
+     * is called from a thread that isn't the main UI thread, we store it here, and on the next
+     * call to render() we swap to it. */
+    private String swapToShow = null;
+    private Thread mainUIThread = null;
+
     VolumeApplication() {
         this.core = new VolumeCore(this) {
             @Override
@@ -43,7 +49,7 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
                 VolumeApplication.this.setWarning(key, message);
             }
         };
-        this.client = new VolumeClient();
+        this.client = new VolumeClient(this);
     }
 
     @Override
@@ -57,10 +63,19 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
         FontLoader.loadAll();
 
         core.create();
+
+        mainUIThread = Thread.currentThread();
     }
 
     @Override
     public void render() {
+        if (swapToShow != null) {
+            String s = swapToShow;
+            swapToShow = null;
+            loadShow(s);
+            return;
+        }
+
         /* handle global keyboard inputs */
         if (UI.isKeyDown(GLFW.GLFW_KEY_M)) {
             core.lx.engine.mapping.setMode(LXMappingEngine.Mode.MIDI);
@@ -91,6 +106,7 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
         renderer.cam.viewportWidth = Gdx.graphics.getWidth();
         renderer.cam.update();
 
+        client.onDraw();
         core.lx.engine.onDraw();
 
         camController.update();
@@ -115,8 +131,12 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
         UI.shutdown();
     }
 
-    void loadShow(String showName) {
-        core.loadShow(showName);
+    public void loadShow(String showName) {
+        if (Thread.currentThread().equals(mainUIThread)) {
+            core.loadShow(showName);
+        } else {
+            swapToShow = showName;
+        }
     }
 
     @Override

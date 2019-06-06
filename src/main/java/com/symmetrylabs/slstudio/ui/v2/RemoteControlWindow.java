@@ -10,11 +10,16 @@ import java.util.List;
 
 public class RemoteControlWindow extends CloseableWindow {
     private final VolumeClient vc;
-    String target = "";
+    private String target;
 
     RemoteControlWindow(VolumeClient vc) {
         super("Remote Control");
         this.vc = vc;
+
+        target = vc.getTarget();
+        if (target == null) {
+            target = "";
+        }
     }
 
     @Override

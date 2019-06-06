@@ -440,8 +440,8 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
 
     public ParameterUI draw(StringParameter p) {
         String start = p.getString();
-        final String res = UI.inputText(getID(p, false), start);
-        if (!res.equals(start)) {
+        final String res = UI.inputText(getID(p, false), start == null ? "" : start);
+        if (!res.equals(start) && !(start == null && res.equals(""))) {
             lx.engine.addTask(() -> p.setValue(res));
         }
         return this;
