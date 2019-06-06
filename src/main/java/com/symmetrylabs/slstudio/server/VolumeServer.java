@@ -238,9 +238,7 @@ public class VolumeServer implements VolumeCore.Listener {
     public void onShowChangeFinished() {
         File pf = new File(PROJECT_STORE);
         Project p = Project.createLegacyProject(pf);
-        if (!pf.exists()) {
-            core.lx.saveProject(p);
-        } else {
+        if (pf.exists()) {
             core.lx.openProject(p);
         }
     }
