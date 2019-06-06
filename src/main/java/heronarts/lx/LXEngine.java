@@ -47,6 +47,7 @@ import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.script.LXScriptEngine;
+import heronarts.lx.warp.LXWarp;
 import org.apache.commons.collections4.iterators.IteratorChain;
 import org.apache.commons.collections4.iterators.IteratorIterable;
 import java.util.Collection;
@@ -1114,8 +1115,12 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             sb.append("LXEngine::run()::channels " + ((int) (this.timer.channelNanos / 1000000)) + "ms\n");
             for (LXChannel channel : getAllSubChannels()) {
                 sb.append("LXEngine::" + channel.getLabel() + "::loop() " + ((int) (channel.timer.loopNanos / 1000000)) + "ms\n");
-                LXPattern pattern = channel.getActivePattern();
-                sb.append("LXEngine::" + channel.getLabel() + "::" + pattern.getLabel() + "::run() " + ((int) (pattern.timer.runNanos / 1000000)) + "ms\n");
+                for (LXPattern pattern : channel.patterns) {
+                    sb.append("LXEngine::" + channel.getLabel() + "::" + pattern.getLabel() + "::run() " + ((int) (pattern.timer.runNanos / 1000000)) + "ms\n");
+                }
+                for (LXEffect effect : channel.effects) {
+                    sb.append("LXEngine::" + channel.getLabel() + "::" + effect.getLabel() + "::run() " + ((int) (effect.timer.runNanos / 1000000)) + "ms\n");
+                }
             }
             System.out.println(sb);
             this.logTimers = false;
