@@ -1,14 +1,12 @@
 package com.symmetrylabs.slstudio.server;
 
 import com.google.protobuf.ByteString;
-import com.symmetrylabs.slstudio.streaming.PixelDataBrokerGrpc;
-import com.symmetrylabs.slstudio.streaming.PixelDataHandshake;
-import com.symmetrylabs.slstudio.streaming.Pixels;
+import com.symmetrylabs.slstudio.ApplicationState;
+import com.symmetrylabs.slstudio.streaming.*;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.data.ProjectLoaderService;
 import heronarts.lx.mutation.LXMutationServer;
-import com.symmetrylabs.slstudio.streaming.PixelDataRequest;
 import heronarts.lx.osc.LXOscEngine;
 import io.grpc.*;
 import io.grpc.stub.StreamObserver;
@@ -42,6 +40,12 @@ public class VolumeServer implements VolumeCore.Listener {
             this.clientSock = clientSock;
             this.packets = new ArrayList<>();
             this.subscriptionId = subscriptionId;
+
+            for (Integer p : pointMask) {
+                if (p >= core.lx.model.size) {
+                    throw new IndexOutOfBoundsException();
+                }
+            }
 
             if (pointMask == null || pointMask.isEmpty()) {
                 int size = core.lx.model.size;
@@ -93,12 +97,9 @@ public class VolumeServer implements VolumeCore.Listener {
     }
 
     private final VolumeCore core;
-    private LXMutationServer mutationServer;
     private Server grpcServer;
 
     private PolyBuffer lxColorBuffer = null;
-    private byte[] transmitBuffer = null;
-    private int[] offsets = null;
     private final List<Client> clients = new ArrayList<>();
     private final List<Client> newClients = new ArrayList<>();
 
@@ -219,13 +220,6 @@ public class VolumeServer implements VolumeCore.Listener {
         }
 
         lxColorBuffer = new PolyBuffer(core.lx);
-
-        transmitBuffer = new byte[3 * core.lx.model.size];
-        int colorPackets = (int) Math.ceil((float) core.lx.model.size / (float) POINTS_PER_UDP_PACKET);
-        offsets = new int[colorPackets];
-        for (int i = 0; i < colorPackets; i++) {
-            offsets[i] = i * POINTS_PER_UDP_PACKET;
-        }
     }
 
     @Override
@@ -255,24 +249,37 @@ public class VolumeServer implements VolumeCore.Listener {
         }
 
         lxColorBuffer = null;
-        transmitBuffer = null;
     }
 
     private class PixelDataBrokerImpl extends PixelDataBrokerGrpc.PixelDataBrokerImplBase {
         @Override
         public void subscribe(PixelDataRequest req, StreamObserver<PixelDataHandshake> response) {
-            try {
-                DatagramSocket sock = new DatagramSocket();
-                sock.connect(new InetSocketAddress(req.getRecvAddress(), req.getRecvPort()));
-                synchronized (newClients) {
-                    newClients.add(new Client(req.getRecvAddress(), sock, req.getPointMaskList(), req.getSubscriptionId()));
+            PixelDataHandshake.Builder res = PixelDataHandshake.newBuilder();
+            if (req.getShowName().equals(ApplicationState.showName())) {
+                DatagramSocket sock = null;
+                try {
+                    sock = new DatagramSocket();
+                    sock.connect(new InetSocketAddress(req.getRecvAddress(), req.getRecvPort()));
+                    synchronized (newClients) {
+                        newClients.add(new Client(req.getRecvAddress(), sock, req.getPointMaskList(), req.getSubscriptionId()));
+                    }
+                    res.setStatus(PixelDataSubscriptionStatus.OK);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    if (sock != null) sock.close();
+                    res.setStatus(PixelDataSubscriptionStatus.MASK_INDEX_OUT_OF_RANGE);
+                } catch (SocketException e) {
+                    if (sock != null) sock.close();
+                    e.printStackTrace();
+                    response.onError(e);
+                    return;
                 }
-            } catch (SocketException e) {
-                e.printStackTrace();
-                response.onError(e);
-                return;
+            } else {
+                res.setStatus(PixelDataSubscriptionStatus.SHOW_NAME_MISMATCH)
+                    .setMessage(String.format(
+                        "server show name is %s, client requested pixel data for '%s'",
+                        ApplicationState.showName(), req.getShowName()));
             }
-            response.onNext(PixelDataHandshake.newBuilder().build());
+            response.onNext(res.build());
             response.onCompleted();
         }
     }

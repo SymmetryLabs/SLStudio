@@ -29,9 +29,19 @@ message PixelDataRequest {
     repeated uint32 pointMask = 3;
     // subscription ID that is echoed in pixel responses
     uint32 subscriptionId = 4;
+    // the name of the show we're requesting data for
+    string showName = 5;
+}
+
+enum PixelDataSubscriptionStatus {
+    OK = 0;
+    SHOW_NAME_MISMATCH = 1;
+    MASK_INDEX_OUT_OF_RANGE = 2;
 }
 
 message PixelDataHandshake {
+    PixelDataSubscriptionStatus status = 1;
+    string message = 2;
 }
 
 service PixelDataBroker {

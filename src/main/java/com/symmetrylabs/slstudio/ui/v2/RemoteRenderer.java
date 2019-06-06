@@ -115,7 +115,18 @@ public class RemoteRenderer extends PointColorRenderer {
 
         service.subscribe(pdr.build(), new StreamObserver<PixelDataHandshake>() {
             @Override
-            public void onNext(PixelDataHandshake value) {
+            public void onNext(PixelDataHandshake resp) {
+                switch (resp.getStatus()) {
+                    case OK:
+                        ApplicationState.setWarning("RemoteRenderer", null);
+                        break;
+                    case SHOW_NAME_MISMATCH:
+                        ApplicationState.setWarning("RemoteRenderer", resp.getMessage());
+                        break;
+                    case MASK_INDEX_OUT_OF_RANGE:
+                        ApplicationState.setWarning("RemoteRenderer", "server and client models differ in size");
+                        break;
+                }
             }
 
             @Override
@@ -127,7 +138,6 @@ public class RemoteRenderer extends PointColorRenderer {
 
             @Override
             public void onCompleted() {
-                ApplicationState.setWarning("RemoteRenderer", null);
             }
         });
     }
