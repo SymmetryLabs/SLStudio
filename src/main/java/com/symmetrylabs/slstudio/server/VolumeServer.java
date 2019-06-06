@@ -236,7 +236,13 @@ public class VolumeServer implements VolumeCore.Listener {
 
     @Override
     public void onShowChangeFinished() {
-        core.lx.openProject(Project.createLegacyProject(new File(PROJECT_STORE)));
+        File pf = new File(PROJECT_STORE);
+        Project p = Project.createLegacyProject(pf);
+        if (!pf.exists()) {
+            core.lx.saveProject(p);
+        } else {
+            core.lx.openProject(p);
+        }
     }
 
     @Override
