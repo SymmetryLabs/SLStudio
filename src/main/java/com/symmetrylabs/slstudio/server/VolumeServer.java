@@ -122,16 +122,15 @@ public class VolumeServer implements VolumeCore.Listener {
     }
 
     private void tick() {
-        if (!core.lx.engine.isThreadRunning()) {
-            throw new IllegalStateException("engine thread stopped unexpectedly");
-        }
-
         /* this is a hack but it's also The Only Way To Be Sure. */
         core.lx.engine.osc.receiveHost.setValue("0.0.0.0");
         core.lx.engine.osc.receivePort.setValue(LXOscEngine.DEFAULT_RECEIVE_PORT);
         core.lx.engine.osc.receiveActive.setValue(true);
 
         core.lx.engine.onDraw();
+        if (!core.lx.engine.isThreadRunning()) {
+            throw new IllegalStateException("engine thread stopped unexpectedly");
+        }
 
         tickCount++;
         /* roll over manually (so we don't roll over into negative values */
