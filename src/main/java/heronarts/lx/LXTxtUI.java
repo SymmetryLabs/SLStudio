@@ -38,7 +38,9 @@ public class LXTxtUI extends LXComponent implements LXLoopTask{
     public void loop(double deltaMs) {
         loop_count++;
         if(loop_count%100 == 0){
-            System.out.println(getText());
+            if (!getText().equals("")){
+                System.out.println(getText());
+            }
         }
     }
 }
