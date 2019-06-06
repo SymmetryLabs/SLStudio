@@ -5,12 +5,14 @@ import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.streaming.*;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.data.Project;
 import heronarts.lx.data.ProjectLoaderService;
 import heronarts.lx.mutation.LXMutationServer;
 import heronarts.lx.osc.LXOscEngine;
 import io.grpc.*;
 import io.grpc.stub.StreamObserver;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
@@ -20,6 +22,10 @@ import java.util.concurrent.TimeUnit;
 
 public class VolumeServer implements VolumeCore.Listener {
     static final int VOLUME_SERVER_PORT = 3032;
+
+    private static final String PROJECT_STORE = "volume-server-project.lxp";
+    private static final long SAVE_PROJECT_PERIOD_NS = 5_000_000_000L; /* = 5 sec */
+
     private static final int MAX_COLOR_DATA_SIZE_BYTES = 450;
     private static final int POINTS_PER_UDP_PACKET = MAX_COLOR_DATA_SIZE_BYTES / 3;
 
@@ -107,7 +113,7 @@ public class VolumeServer implements VolumeCore.Listener {
 
     private long lastTransmit = 0;
 
-    private int tickCount = 0;
+    private long lastSaveTime = -1;
 
     public VolumeServer() {
         this.core = new VolumeCore(this) {
@@ -118,6 +124,7 @@ public class VolumeServer implements VolumeCore.Listener {
                 }
             }
         };
+        core.lx.openProject(Project.createLegacyProject(new File(PROJECT_STORE)));
     }
 
     public void start() {
@@ -125,6 +132,12 @@ public class VolumeServer implements VolumeCore.Listener {
     }
 
     private void tick() {
+        if (System.nanoTime() - lastSaveTime > SAVE_PROJECT_PERIOD_NS) {
+            core.lx.engine.logTimers();
+            core.lx.saveProject();
+            lastSaveTime = System.nanoTime();
+        }
+
         /* this is a hack but it's also The Only Way To Be Sure. */
         core.lx.engine.osc.receiveHost.setValue("0.0.0.0");
         core.lx.engine.osc.receivePort.setValue(LXOscEngine.DEFAULT_RECEIVE_PORT);
@@ -133,12 +146,6 @@ public class VolumeServer implements VolumeCore.Listener {
         core.lx.engine.onDraw();
         if (!core.lx.engine.isThreadRunning()) {
             throw new IllegalStateException("engine thread stopped unexpectedly");
-        }
-
-        tickCount++;
-        /* roll over manually (so we don't roll over into negative values */
-        if (tickCount > (1L << 30)) {
-            tickCount = 0;
         }
 
         synchronized (newClients) {
@@ -180,7 +187,7 @@ public class VolumeServer implements VolumeCore.Listener {
                         Pixels p = Pixels.newBuilder()
                             .setColors(ByteString.copyFrom(buffer))
                             .setOffset(client.offsets[packet])
-                            .setTick(tickCount)
+                            .setTick(core.lx.engine.getTickCount())
                             .setSubscriptionId(client.subscriptionId)
                             .build();
                         byte[] encoded = p.toByteArray();

@@ -145,6 +145,9 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     private float frameRate = 0;
 
+    /* the number of frames we've processed */
+    private int tickCount = 0;
+
     public class Output extends LXOutputGroup implements LXOscComponent {
         Output(LX lx) {
             super(lx);
@@ -429,6 +432,10 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     public void logTimers() {
         this.logTimers = true;
+    }
+
+    public int getTickCount() {
+        return tickCount;
     }
 
     @Override
@@ -966,6 +973,12 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         }
 
         conversionsPerFrame = PolyBuffer.getConversionCount() - initialConversionCount;
+
+        tickCount++;
+        /* roll over manually (so we don't roll over into negative values */
+        if (tickCount > (1L << 30)) {
+            tickCount = 0;
+        }
     }
 
     /** Runs loop() on all enabled or cue-enabled channels. */
