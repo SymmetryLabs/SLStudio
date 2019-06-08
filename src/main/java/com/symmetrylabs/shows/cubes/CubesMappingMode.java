@@ -41,13 +41,9 @@ public class CubesMappingMode {
     public final StringParameter selectedControllerA;
     public final StringParameter selectedControllerB;
 
-//    public final SortedSet<String> fixturesMappedAndOnTheNetwork = new TreeSet<String>();
-//    public final SortedSet<String> fixturesMappedButNotOnNetwork = new TreeSet<String>();
-//    public final SortedSet<String> fixturesOnNetworkButNotMapped = new TreeSet<String>();
-
-    public final Set<String> fixturesMappedAndOnTheNetwork = new TreeSet<String>();
-    public final Set<String> fixturesMappedButNotOnNetwork = new TreeSet<String>();
-    public final Set<String> fixturesOnNetworkButNotMapped = new TreeSet<String>();
+    public final SortedSet<String> fixturesMappedAndOnTheNetwork = new TreeSet<String>();
+    public final SortedSet<String> fixturesMappedButNotOnNetwork = new TreeSet<String>();
+    public final SortedSet<String> fixturesOnNetworkButNotMapped = new TreeSet<String>();
 
     private LX lx;
     private CubesModel cubesModel;
@@ -61,6 +57,10 @@ public class CubesMappingMode {
             instanceByLX.put(lx, new WeakReference<>(ref = new CubesMappingMode(lx)));
         }
         return ref;
+    }
+
+    public void finalize(){
+        System.out.println();
     }
 
     private CubesMappingMode(LX lx) {
@@ -89,7 +89,7 @@ public class CubesMappingMode {
         String[] initialMappedFixtures = fixturesMappedButNotOnNetwork.isEmpty()
                 ? emptyOptions : fixturesMappedButNotOnNetwork.toArray(new String[0]);
 
-        selectedMappedFixture = new DiscreteParameter("selectedMappedFixture", initialMappedFixtures);
+        selectedMappedFixture = new DiscreteParameter("selectedModelFixture", initialMappedFixtures);
         selectedUnMappedFixture = new DiscreteParameter("selectedUnMappedFixture", emptyOptions);
 
         selectedControllerA = new StringParameter("uninitialized");

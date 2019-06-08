@@ -479,9 +479,11 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
 //        }
 
         UI2dScrollContext utility = ui.rightPane.utility;
+        new UINateMapper(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UICubesOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UIBlackList(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UICubesMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
+
     }
 
     @Override
