@@ -1,60 +1,58 @@
 package com.symmetrylabs.slstudio.microlooks;
 
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import heronarts.lx.LX;
+import heronarts.lx.LXChannel;
 import heronarts.lx.LXComponent;
-import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.StringParameter;
-import heronarts.lx.parameter.EnumParameter;
-import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
-import com.google.common.base.Preconditions;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonArray;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import com.symmetrylabs.slstudio.ApplicationState;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Collections; 
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
-import org.apache.commons.collections4.iterators.IteratorChain;
-import java.net.URL;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class MicroLooks extends LXComponent {
 	public DiscreteParameter looks;
 
-	private static String NAME_FILENAME = "looks.json";
+	private static JsonObject looksObject = null;
 
-	public String[] getLookNames() {
+	private static String getFilePath() {
+	    return System.getProperty("user.home") + "/Desktop/looks.json";
+    }
+
+	private static JsonObject getLooksObject() {
+	    if (looksObject == null) {
+	        try {
+                InputStream fstream = new FileInputStream(getFilePath());
+
+                JsonObject record = new Gson().fromJson(
+                    new InputStreamReader(fstream), JsonObject.class);
+                looksObject = record;
+            } catch (FileNotFoundException e) {
+	            System.out.println("No ~/Desktop/looks.json file found, microlooks disabled");
+	            looksObject = new JsonObject();
+	            looksObject.add("names", new JsonArray());
+            }
+
+        }
+	    if (!looksObject.has("the_looks")) {
+	        looksObject.add("the_looks", new JsonObject());
+        }
+
+
+        return looksObject;
+    }
+
+    private static void saveLooksObject(JsonObject obj) throws IOException {
+        Writer writer = new FileWriter(getFilePath());
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        gson.toJson(obj, writer);
+    }
+
+	public static String[] getLookNames() {
 		ArrayList<String> lookNames = new ArrayList();
 
-		ClassLoader cl = MicroLooks.class.getClassLoader();
-
-		InputStream fstream = cl.getResourceAsStream(NAME_FILENAME);
-
-		JsonObject record = new Gson().fromJson(
-		    new InputStreamReader(fstream), JsonObject.class);
-
-		JsonArray names = record.getAsJsonArray("names");
+        JsonObject record = getLooksObject();
+        JsonArray names = record.getAsJsonArray("names");
 		for (JsonElement e : names) {
 		   String name = e.getAsString();
 		   lookNames.add(name);
@@ -68,7 +66,47 @@ public class MicroLooks extends LXComponent {
 		return res;
 	}
 
-    public MicroLooks(LX lx) {
-    	looks = new DiscreteParameter("looks", getLookNames());
+	public static void saveChannel(LXChannel channel, String look) {
+        JsonObject allLooks = getLooksObject();
+        JsonObject realLooks = allLooks.getAsJsonObject("the_looks");
+        JsonObject obj = new JsonObject();
+        channel.save(channel.getLX(), obj);
+
+        JsonObject params = obj.getAsJsonObject("parameters");
+        String[] toDelete = new String[]{
+            "enabled",
+            "cue",
+            "midiMonitor",
+            "midiChannel",
+            "autoCycleEnabled",
+            "autoCycleTimeSecs",
+            "fader",
+            "crossfadeGroup",
+            "transitionEnabled",
+            "transitionTimeSecs",
+            "transitionBlendMode",
+            "autoDisable",
+            "editorVisible",
+        };
+        for (String toDel : toDelete) {
+            if (params.has(toDel)) {
+                params.remove(toDel);
+            }
+        }
+        realLooks.add(look, obj);
+        try {
+            saveLooksObject(allLooks);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadChannel(LXChannel channel, String look) {
+        JsonObject allLooks = MicroLooks.getLooksObject().getAsJsonObject("the_looks");
+        if (!allLooks.has(look)) {
+            return;
+        }
+        JsonObject obj = allLooks.getAsJsonObject(look);
+        channel.load(channel.getLX(), obj);
     }
 }
