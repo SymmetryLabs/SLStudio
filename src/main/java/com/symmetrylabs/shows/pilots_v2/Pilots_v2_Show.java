@@ -54,7 +54,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
 
 
     // add hoc read file
-    static String readFile(String path, Charset encoding)
+    String readFile(String path, Charset encoding)
         throws IOException
     {
         byte[] encoded = Files.readAllBytes(Paths.get(path));
@@ -65,31 +65,17 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
         ArrayList < String > controllers = new ArrayList < String > ();
     }
 
-    String jsonStr;
 
-    {
-        try {
-            jsonStr = readFile("/home/somaesthesia/symmetrylabs/software/SLStudio/data/mapping/pilots_v2.json", StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    private String[][] populateFromJSONarray() {
+//        return new String[][]{
+//            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
+//            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
+//            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
+//            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
+//        };
+//    }
 
-    Gson gson = new Gson();
-    Response response = gson.fromJson(jsonStr, Response.class);
-
-
-    private int controllerIndex = 0;
-    private String[][] populateFromJSONarray() {
-        return new String[][]{
-            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
-            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
-            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
-            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
-        };
-    }
-
-    String[][] towerArray = populateFromJSONarray();
+//    String[][] towerArray = populateFromJSONarray();
 
     static final ClusterConfig[] clusters = new ClusterConfig[] {
 
@@ -386,6 +372,23 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
         List<CubesModel.Tower> towers = new ArrayList<>();
         List<CubesModel.Cube> allCubes = new ArrayList<>();
 
+
+
+
+        // begin read in controller IDs from JSON
+        int controllerIndex = 0;
+        String jsonStr = null;
+        try {
+            jsonStr = readFile("/home/somaesthesia/symmetrylabs/software/SLStudio/data/mapping/pilots_v2.json", StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Gson gson = new Gson();
+        Response response = gson.fromJson(jsonStr, Response.class);
+
+        
+
 //        try {
 //            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
 //                Utils.createInput("data/SummerStageCoordinates.txt")));
@@ -419,7 +422,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
             globalTransform.translate(cluster.x, cluster.y, cluster.z);
 
 //            System.out.print('\n' + cluster.id + '\n');
-//            System.out.println();
+            System.out.println();
 
             for (TowerConfig config : cluster.configs) {
                 float x = config.x;
@@ -430,15 +433,18 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
                 float rZ = config.zRot;
 
                 for (int i = 0; i < config.ids.length; i++) {
-                    String idA = config.ids[i][0];
-                    String idB = config.ids[i][1];
+//                    String idA = config.ids[i][0];
+//                    String idB = config.ids[i][1];
+                    // grab the ids from the JSON interchange
+                    String idA = response.controllers.get(controllerIndex++);
+                    String idB = response.controllers.get(controllerIndex++);
                     float y = config.yValues[i];
                     CubesModel.DoubleControllerCube cube = new CubesModel.DoubleControllerCube(idA, idB, x, y, z, rX, rY, rZ, globalTransform);
-//                    System.out.print('"' + idA + '"' + ',' + '"' + idB + '"' + ',' + '\t' );
+                    System.out.print('"' + idA + '"' + ',' + '"' + idB + '"' + ',' + '\t' );
                     cubes.add(cube);
                     allCubes.add(cube);
                 }
-//                System.out.println();
+                System.out.println();
             }
             globalTransform.pop();
             towers.add(new CubesModel.Tower(cluster.id, cubes));
