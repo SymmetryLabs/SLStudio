@@ -32,11 +32,8 @@ public class Sparkle extends LXPattern {
 
         Spark() {
             List<LXVector> vectors = getVectorList();
-            do {
-                index = (int) Math.floor(LXUtils.random(0, vectors.size()));
-            } while (occupied[index]);
+            index = (int) Math.floor(LXUtils.random(0, vectors.size()));
             vector = vectors.get(index);
-            occupied[index] = true;
             hue = (float) LXUtils.random(0, 1);
             boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
             hasPeaked = infiniteAttack;
@@ -82,7 +79,11 @@ public class Sparkle extends LXPattern {
         float msPerSpark = 1000.f / (float)((densityParameter.getValuef() + .01) * (model.xRange*10));
         while (leftoverMs > msPerSpark) {
             leftoverMs -= msPerSpark;
-            sparks.add(new Spark());
+            Spark spark = new Spark();
+            if (!occupied[spark.index]) {
+                sparks.add(spark);
+                occupied[spark.index] = true;
+            }
         }
 
         Arrays.fill(colors, Ops8.BLACK);
