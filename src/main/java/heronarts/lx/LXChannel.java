@@ -272,6 +272,8 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     private final List<LXPattern> mutablePatterns = new ArrayList<LXPattern>();
     public final List<LXPattern> patterns = Collections.unmodifiableList(mutablePatterns);
 
+    public final DiscreteParameter localLooks = new DiscreteParameter("looks", 1);
+
     /**
      * A local buffer used for transition blending and effects on this channel
      */

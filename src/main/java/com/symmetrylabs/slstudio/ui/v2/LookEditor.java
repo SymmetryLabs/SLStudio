@@ -11,6 +11,7 @@ import heronarts.lx.mutation.AddChannel;
 import heronarts.lx.mutation.RemoveChannel;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.mutation.Mutations;
+import com.symmetrylabs.slstudio.microlooks.MicroLooks;
 
 
 public class LookEditor implements Window {
@@ -26,6 +27,7 @@ public class LookEditor implements Window {
     private final ParameterUI pui;
     private boolean showLookTransform = false;
     private float maxWindowHeight = -1;
+    private MicroLooks microLooks;
 
     static final int[] MAP_COLORS = new int[10];
     static {
@@ -39,6 +41,7 @@ public class LookEditor implements Window {
         this.wepUi = new WepUI(lx, () -> UI.closePopup());
         this.transformWepUi = new WepUI(lx, false, () -> UI.closePopup());
         this.pui = ParameterUI.getMappable(lx).preferKnobs(true);
+        this.microLooks = new MicroLooks(lx);
     }
 
     public void dispose() {
@@ -167,6 +170,7 @@ public class LookEditor implements Window {
                 if (chan.editorVisible.getValueb()) {
                     UI.beginChild("pipeline" + chan.getIndex(), false, 0, PIPELINE_WIDTH, (int) UI.height);
                     pipelineIndex = channelHeader(chan, chan.getLabel(), pipelineIndex);
+                    chan.localLooks.setOptions(microLooks.looks.getOptions());
                     ChannelUI.draw(lx, chan, pui, wepUi);
                     maxWindowHeight = Float.max(maxWindowHeight, UI.getCursorPosition().y);
                     UI.endChild();

@@ -11,9 +11,13 @@ import heronarts.lx.mutation.RemoveEffect;
 import heronarts.lx.mutation.RemovePattern;
 import heronarts.lx.mutation.RemoveWarp;
 import heronarts.lx.warp.LXWarp;
+import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.BooleanParameter;
 import java.util.ArrayList;
 import java.util.List;
 import org.lwjgl.glfw.GLFW;
+import com.symmetrylabs.slstudio.microlooks.MicroLooks;
+
 
 public class ChannelUI {
     public static void drawWarps(LX lx, String chanName, LXBus chan, ParameterUI pui) {
@@ -129,9 +133,15 @@ public class ChannelUI {
     public static void draw(LX lx, LXChannel chan, ParameterUI pui, WepUI wepUi) {
         String chanName = chan.getLabel();
 
+        BooleanParameter load = new BooleanParameter("load", false);
+        BooleanParameter save = new BooleanParameter("save", false);
+
         pui.push().allowMapping(true);
 
         pui.push().preferKnobs(false);
+        pui.draw(chan.localLooks);
+        pui.draw(load);
+        pui.draw(save);
         pui.draw(chan.blendPatterns);
         pui.draw(chan.midiMonitor);
         pui.draw(chan.patternBlendMode);
