@@ -6,7 +6,6 @@ import com.symmetrylabs.shows.arlo.ArloShow;
 import com.symmetrylabs.shows.arlosohoroof.ArloSohoRoofShow;
 import com.symmetrylabs.shows.arlotree.ArloTreeShow;
 import com.symmetrylabs.shows.artbasel.ArtBaselShow;
-import com.symmetrylabs.shows.composite.CompositeShow;
 import com.symmetrylabs.shows.demo.DemoShow;
 import com.symmetrylabs.shows.exploratorium.ExploratoriumShow;
 import com.symmetrylabs.shows.hblamp.HbLampShow;
@@ -17,10 +16,7 @@ import com.symmetrylabs.shows.japantree.JapanTreeShow;
 import com.symmetrylabs.shows.kalpa.KalpaShow;
 import com.symmetrylabs.shows.magicleap.MagicLeapShow;
 import com.symmetrylabs.shows.mikey.MikeyShow;
-import com.symmetrylabs.shows.obj.ObjShow;
 import com.symmetrylabs.shows.office.OfficeShow;
-import com.symmetrylabs.shows.oslo.OsloShow;
-import com.symmetrylabs.shows.oslo.TreeModel;
 import com.symmetrylabs.shows.penfoldswine.PenfoldsWineShow;
 import com.symmetrylabs.shows.pilots.PilotsShow;
 import com.symmetrylabs.shows.related.RelatedShow;
@@ -67,46 +63,38 @@ public class ShowRegistry {
     /** Registers all available show builders in the given map. */
     private static void registerShows(PApplet applet, Map<String, ShowBuilder> map) {
         // This is the central registry of shows.  Add an entry here for each available show.
-        map.put("demo", () -> new DemoShow());
-        if (applet != null) {
-            map.put("oslo", () -> new OsloShow(applet, TreeModel.ModelMode.MAJOR_LIMBS));
-        } else if (!showedProcessingWarning) {
-            System.err.println("disabling Oslo show, which requires Processing");
-            showedProcessingWarning = true;
-        }
-        map.put("composite", () -> new CompositeShow());
-        map.put("obj", () -> new ObjShow());
-        map.put("office", () -> new OfficeShow());
-        map.put("kalpa", () -> new KalpaShow());
-        map.put("summerstage", () -> new SummerStageShow());
-        map.put("pilots", () -> new PilotsShow());
-        map.put("summerbbq", () -> new SummerBBQShow());
-        map.put(StreetlampShow.SHOW_NAME, () -> new StreetlampShow());
-        map.put(MagicLeapShow.SHOW_NAME, () -> new MagicLeapShow());
-        map.put(GoogleHqShow.SHOW_NAME, () -> new GoogleHqShow());
-        map.put(PenfoldsWineShow.SHOW_NAME, () -> new PenfoldsWineShow());
-        map.put(MikeyShow.SHOW_NAME, () -> new MikeyShow());
-        map.put(HHFlowerShow.SHOW_NAME, () -> new HHFlowerShow());
-        map.put(ArloShow.SHOW_NAME, () -> new ArloShow());
-        map.put(HHGardenShow.SHOW_NAME, () -> new HHGardenShow());
-        map.put(ArloTreeShow.SHOW_NAME, () -> new ArloTreeShow());
-        map.put(ArloSohoRoofShow.SHOW_NAME, () -> new ArloSohoRoofShow());
-        map.put(ExploratoriumShow.SHOW_NAME, () -> new ExploratoriumShow());
-        map.put(ArtBaselShow.SHOW_NAME, () -> new ArtBaselShow());
-        map.put(Thiel18Show.SHOW_NAME, () -> new Thiel18Show());
-        map.put(RelatedShow.SHOW_NAME, () -> new RelatedShow());
-        map.put(YsiadsPartyShow.SHOW_NAME, () -> new YsiadsPartyShow());
-        map.put(AbsintheDemoShow.SHOW_NAME, () -> new AbsintheDemoShow());
-        map.put(HbLampShow.SHOW_NAME, () -> new HbLampShow());
-        map.put(LoveBurnShow.SHOW_NAME, () -> new LoveBurnShow());
-        map.put(Sundance19Show.SHOW_NAME, () -> new Sundance19Show());
-        map.put(AbsintheShow.SHOW_NAME, () -> new AbsintheShow());
-        map.put(JapanTreeShow.SHOW_NAME, () -> new JapanTreeShow());
-        map.put(TwigTestShow.SHOW_NAME, () -> new TwigTestShow());
-        map.put(SummerStage19Show.SHOW_NAME, () -> new SummerStage19Show());
+        map.put("demo", DemoShow::new);
+        map.put("office", OfficeShow::new);
+        map.put("kalpa", KalpaShow::new);
+        map.put("summerstage", SummerStageShow::new);
+        map.put("pilots", PilotsShow::new);
+        map.put("summerbbq", SummerBBQShow::new);
+        map.put(StreetlampShow.SHOW_NAME, StreetlampShow::new);
+        map.put(MagicLeapShow.SHOW_NAME, MagicLeapShow::new);
+        map.put(GoogleHqShow.SHOW_NAME, GoogleHqShow::new);
+        map.put(PenfoldsWineShow.SHOW_NAME, PenfoldsWineShow::new);
+        map.put(MikeyShow.SHOW_NAME, MikeyShow::new);
+        map.put(HHFlowerShow.SHOW_NAME, HHFlowerShow::new);
+        map.put(ArloShow.SHOW_NAME, ArloShow::new);
+        map.put(HHGardenShow.SHOW_NAME, HHGardenShow::new);
+        map.put(ArloTreeShow.SHOW_NAME, ArloTreeShow::new);
+        map.put(ArloSohoRoofShow.SHOW_NAME, ArloSohoRoofShow::new);
+        map.put(ExploratoriumShow.SHOW_NAME, ExploratoriumShow::new);
+        map.put(ArtBaselShow.SHOW_NAME, ArtBaselShow::new);
+        map.put(Thiel18Show.SHOW_NAME, Thiel18Show::new);
+        map.put(RelatedShow.SHOW_NAME, RelatedShow::new);
+        map.put(YsiadsPartyShow.SHOW_NAME, YsiadsPartyShow::new);
+        map.put(AbsintheDemoShow.SHOW_NAME, AbsintheDemoShow::new);
+        map.put(HbLampShow.SHOW_NAME, HbLampShow::new);
+        map.put(LoveBurnShow.SHOW_NAME, LoveBurnShow::new);
+        map.put(Sundance19Show.SHOW_NAME, Sundance19Show::new);
+        map.put(AbsintheShow.SHOW_NAME, AbsintheShow::new);
+        map.put(JapanTreeShow.SHOW_NAME, JapanTreeShow::new);
+        map.put(TwigTestShow.SHOW_NAME, TwigTestShow::new);
+        map.put(SummerStage19Show.SHOW_NAME, SummerStage19Show::new);
     }
 
-    static interface ShowBuilder {
+    interface ShowBuilder {
         Show build();
     }
 }

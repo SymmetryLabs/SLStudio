@@ -22,7 +22,7 @@ import heronarts.lx.LXMappingEngine;
 public class VolumeApplication extends ApplicationAdapter implements VolumeCore.Listener {
     private final VolumeCore core;
     private RenderManager renderer;
-    private LookEditor lookEditor;
+    LookEditor lookEditor;
     ViewController viewController;
 
     /* visible so that InternalsWindow can mutate it. */

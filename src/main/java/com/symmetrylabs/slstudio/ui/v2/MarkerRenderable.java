@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
+import com.symmetrylabs.util.IterationUtils;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.MarkerSource;
 import heronarts.lx.LX;
@@ -49,32 +50,20 @@ public class MarkerRenderable implements RenderManager.Renderable {
         pg.setCamera(cam);
         pg.textBatch.begin();
         pg.textBatch.setProjectionMatrix(cam.combined);
-        for (LXChannel chan : lx.engine.getFocusedLook().channels) {
-            for (LXWarp warp : chan.getWarps()) {
-                drawText(pg, warp);
-            }
-            for (LXPattern pat : chan.getPatterns()) {
-                drawText(pg, pat);
-            }
-            for (LXEffect effect : chan.getEffects()) {
-                drawText(pg, effect);
-            }
-        }
+        IterationUtils.forEachIgnoreModification(lx.engine.getFocusedLook().channels, chan -> {
+            IterationUtils.forEachIgnoreModification(chan.getWarps(), warp -> drawText(pg, warp));
+            IterationUtils.forEachIgnoreModification(chan.getPatterns(), pattern -> drawText(pg, pattern));
+            IterationUtils.forEachIgnoreModification(chan.getEffects(), effect -> drawText(pg, effect));
+        });
         pg.textBatch.end();
 
         pg.renderer.setProjectionMatrix(cam.combined);
         pg.renderer.begin(ShapeRenderer.ShapeType.Line);
-        for (LXChannel chan : lx.engine.getFocusedLook().channels) {
-            for (LXWarp warp : chan.getWarps()) {
-                drawLines(pg, warp);
-            }
-            for (LXPattern pat : chan.getPatterns()) {
-                drawLines(pg, pat);
-            }
-            for (LXEffect effect : chan.getEffects()) {
-                drawLines(pg, effect);
-            }
-        }
+        IterationUtils.forEachIgnoreModification(lx.engine.getFocusedLook().channels, chan -> {
+            IterationUtils.forEachIgnoreModification(chan.getWarps(), warp -> drawLines(pg, warp));
+            IterationUtils.forEachIgnoreModification(chan.getPatterns(), pattern -> drawLines(pg, pattern));
+            IterationUtils.forEachIgnoreModification(chan.getEffects(), effect -> drawLines(pg, effect));
+        });
         pg.renderer.end();
 
         GL41.glDisable(GL41.GL_LINE_SMOOTH);

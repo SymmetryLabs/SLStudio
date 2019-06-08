@@ -28,6 +28,7 @@ public class LookEditor implements Window {
     private boolean showLookTransform = false;
     private float maxWindowHeight = -1;
     private MicroLooks microLooks;
+    boolean showLookEditorPanel = true;
 
     static final int[] MAP_COLORS = new int[10];
     static {
@@ -58,40 +59,43 @@ public class LookEditor implements Window {
 
     @Override
     public void draw() {
-        UI.setNextWindowPosition(0, UI.height, 0, 1);
-        float desiredWidth = 260 + 100 * look.channels.size();
-        UI.setNextWindowSize(Float.min(desiredWidth + 22, UI.width), HEIGHT);
-        UI.setNextWindowContentSize(desiredWidth, HEIGHT - 22);
-        UI.begin(
-            "Look Editor Bottom Pane",
-            UI.WINDOW_NO_MOVE | UI.WINDOW_NO_RESIZE | UI.WINDOW_NO_TITLE_BAR | UI.WINDOW_NO_DOCKING
-            | UI.WINDOW_NO_SCROLLBAR | (desiredWidth > UI.width ? UI.WINDOW_FORCE_HORIZ_SCROLL : 0));
+        int visibleWindowCount;
 
-        UI.beginGroup();
-        UI.pushFont(FontLoader.DEFAULT_FONT_XL);
-        UI.text(look.getLabel());
-        UI.popFont();
+        if (showLookEditorPanel) {
+            UI.setNextWindowPosition(0, UI.height, 0, 1);
+            float desiredWidth = 260 + 100 * look.channels.size();
+            UI.setNextWindowSize(Float.min(desiredWidth + 22, UI.width), HEIGHT);
+            UI.setNextWindowContentSize(desiredWidth, HEIGHT - 22);
+            UI.begin(
+                "Look Editor Bottom Pane",
+                UI.WINDOW_NO_MOVE | UI.WINDOW_NO_RESIZE | UI.WINDOW_NO_TITLE_BAR | UI.WINDOW_NO_DOCKING
+                    | UI.WINDOW_NO_SCROLLBAR | (desiredWidth > UI.width ? UI.WINDOW_FORCE_HORIZ_SCROLL : 0));
 
-        if (look.shelf != null) {
-            int rows = look.shelf.rows();
-            int cols = look.shelf.cols();
-            for (int row = 0; row < rows; row++) {
-                for (int col = 0; col < cols; col++) {
-                    LXParameter param = look.shelf.getParameter(row, col);
-                    pui.draw(param);
-                    if (col < cols - 1) {
-                        UI.sameLine();
+            UI.beginGroup();
+            UI.pushFont(FontLoader.DEFAULT_FONT_XL);
+            UI.text(look.getLabel());
+            UI.popFont();
+
+            if (look.shelf != null) {
+                int rows = look.shelf.rows();
+                int cols = look.shelf.cols();
+                for (int row = 0; row < rows; row++) {
+                    for (int col = 0; col < cols; col++) {
+                        LXParameter param = look.shelf.getParameter(row, col);
+                        pui.draw(param);
+                        if (col < cols - 1) {
+                            UI.sameLine();
+                        }
                     }
                 }
             }
-        }
 
-        showLookTransform = UI.checkbox("Edit look transform", showLookTransform);
-        UI.endGroup();
-        UI.sameLine();
-        UI.spacing(10, 10);
+            showLookTransform = UI.checkbox("Edit look transform", showLookTransform);
+            UI.endGroup();
+            UI.sameLine();
+            UI.spacing(10, 10);
 
-        int visibleWindowCount = IterationUtils.reduceIgnoreModification(look.channels, 0, (vwc, chan) -> {
+            visibleWindowCount = IterationUtils.reduceIgnoreModification(look.channels, 0, (vwc, chan) -> {
                 String chanName = chan.getLabel();
                 UI.sameLine();
                 UI.beginChild("chanWindow" + chan.getIndex(), false, 0, 90, HEIGHT);
@@ -139,14 +143,19 @@ public class LookEditor implements Window {
                 return vwc;
             });
 
-        UI.sameLine();
-        UI.pushFont(FontLoader.DEFAULT_FONT_XL);
-        if (UI.button("+", 30, 230)) {
-            lx.engine.mutations.enqueue(AddChannel.newBuilder().setLook(look.getIndex()));
-        }
-        UI.popFont();
+            UI.sameLine();
+            UI.pushFont(FontLoader.DEFAULT_FONT_XL);
+            if (UI.button("+", 30, 230)) {
+                lx.engine.mutations.enqueue(AddChannel.newBuilder().setLook(look.getIndex()));
+            }
+            UI.popFont();
 
-        UI.end();
+            UI.end();
+        } else {
+            visibleWindowCount = IterationUtils.reduceIgnoreModification(
+                look.channels, 0,
+                (vwc, chan) -> vwc + (chan.editorVisible.getValueb() ? 1 : 0));
+        }
 
         if (showLookTransform) {
             visibleWindowCount++;
@@ -156,7 +165,7 @@ public class LookEditor implements Window {
             return;
         }
 
-        float capWindowHeight = UI.height - HEIGHT - MENU_HEIGHT;
+        float capWindowHeight = showLookEditorPanel ? UI.height - HEIGHT - MENU_HEIGHT : UI.height;
         float h = maxWindowHeight;
         if (h <= 0 || h > capWindowHeight) {
             h = capWindowHeight;

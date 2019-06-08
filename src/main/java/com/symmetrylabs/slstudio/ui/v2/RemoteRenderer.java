@@ -111,6 +111,8 @@ public class RemoteRenderer extends PointColorRenderer {
         subscriptionId++;
         pdr.setSubscriptionId(subscriptionId);
 
+        // this resets all colors to fully-transparent black, so the points will be
+        // hidden until we get our next color buffer update
         Arrays.fill(incomingBuffer, 0);
 
         service.subscribe(pdr.build(), new StreamObserver<PixelDataHandshake>() {

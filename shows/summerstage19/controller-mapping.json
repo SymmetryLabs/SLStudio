@@ -903,6 +903,14 @@
     {
       "modelId": "LC1-A2A",
       "physicalId": "1111"
+    },
+    {
+      "modelId": "CS2-B2A",
+      "physicalId": "1093"
+    },
+    {
+      "modelId": "CS8-C5A",
+      "physicalId": "308"
     }
   ],
   "showName": "summerstage19"
