@@ -1,5 +1,6 @@
 package com.symmetrylabs.shows.pilots_v2;
 
+import com.google.gson.Gson;
 import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.cubes.*;
 import com.symmetrylabs.slstudio.SLStudioLX;
@@ -10,6 +11,10 @@ import heronarts.lx.transform.LXTransform;
 import heronarts.p3lx.ui.UI2dScrollContext;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,15 +52,56 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
 
     static EdgeSwitch[] brains;
 
+
+    // add hoc read file
+    static String readFile(String path, Charset encoding)
+        throws IOException
+    {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, encoding);
+    }
+
+    public class Response {
+        ArrayList < String > controllers = new ArrayList < String > ();
+    }
+
+    String jsonStr;
+
+    {
+        try {
+            jsonStr = readFile("/home/somaesthesia/symmetrylabs/software/SLStudio/data/mapping/pilots_v2.json", StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    Gson gson = new Gson();
+    Response response = gson.fromJson(jsonStr, Response.class);
+
+
+    private int controllerIndex = 0;
+    private String[][] populateFromJSONarray() {
+        return new String[][]{
+            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
+            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
+            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
+            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
+        };
+    }
+
+    String[][] towerArray = populateFromJSONarray();
+
     static final ClusterConfig[] clusters = new ClusterConfig[] {
 
 
         /**--------------------------------------------------------------------------------------------------------------------------
          * LEFT FACE
         */
+
         new ClusterConfig("cart7",SP*6*CART_WIDE + SP*FLANK_SPACING, SP*0, -SP*CART_FORWARD_OFFSET, new TowerConfig[]{
 
             // col 1
+
             new TowerConfig(SP * 0, SP * 0, SP * 0, new String[][]{
                 new String[]{"607","606"},
                 new String[]{"673","1071"},
@@ -372,6 +418,9 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
             globalTransform.push();
             globalTransform.translate(cluster.x, cluster.y, cluster.z);
 
+//            System.out.print('\n' + cluster.id + '\n');
+//            System.out.println();
+
             for (TowerConfig config : cluster.configs) {
                 float x = config.x;
                 float z = config.z;
@@ -385,9 +434,11 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
                     String idB = config.ids[i][1];
                     float y = config.yValues[i];
                     CubesModel.DoubleControllerCube cube = new CubesModel.DoubleControllerCube(idA, idB, x, y, z, rX, rY, rZ, globalTransform);
+//                    System.out.print('"' + idA + '"' + ',' + '"' + idB + '"' + ',' + '\t' );
                     cubes.add(cube);
                     allCubes.add(cube);
                 }
+//                System.out.println();
             }
             globalTransform.pop();
             towers.add(new CubesModel.Tower(cluster.id, cubes));
