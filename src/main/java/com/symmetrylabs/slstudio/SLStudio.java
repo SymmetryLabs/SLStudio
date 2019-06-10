@@ -55,6 +55,8 @@ public class SLStudio extends PApplet {
     public static final int ENVELOP_OSC_PORT = 3377;
     public static final String MUTE_FILE_NAME = "start-muted";
 
+    public static final String MAPPINGS_DATA_PATH = System.getProperty("user.home") + "/symmetrylabs/mapping";
+
     private SLStudioLX lx;
     public Show show;
     public String showName;

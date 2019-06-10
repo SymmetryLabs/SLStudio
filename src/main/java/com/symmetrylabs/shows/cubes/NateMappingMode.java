@@ -1,22 +1,24 @@
 package com.symmetrylabs.shows.cubes;
 
-import com.symmetrylabs.slstudio.pattern.cubes.CubesMappingPattern;
-import com.symmetrylabs.util.listenable.SetListener;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.symmetrylabs.slstudio.pattern.cubes.NateCubesMappingForkPattern;
+import com.symmetrylabs.util.SLPathsHelper;
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXPattern;
-import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.StringParameter;
-import heronarts.p3lx.ui.component.UIComponentLabel;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.WeakHashMap;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Mapping Mode
@@ -28,11 +30,15 @@ import java.util.WeakHashMap;
 
 public class NateMappingMode {
 
+    private String[] fixtureIdStringArray;
+
     public static enum MappingModeType {MODEL, HELLOENUM};
     public static enum MappingDisplayModeType {ALL, ITERATE};
 
     private LXChannel mappingChannel = null;
     private LXPattern mappingPattern = null;
+
+    public final BooleanParameter saveVal = new BooleanParameter("SAVE", false).setMode(BooleanParameter.Mode.MOMENTARY).setDescription("save the current value into nonvolatile JSON file");
 
     public final BooleanParameter enabled;
     public final EnumParameter<MappingModeType> mode;
@@ -69,7 +75,7 @@ public class NateMappingMode {
 //        cubesModel = lx.model instanceof CubesModel ? (CubesModel)lx.model : new CubesModel();
         cubesModel = lx.model instanceof CubesModel ? (CubesModel)lx.model : new CubesModel();
 
-        String [] fixtureIdStringArray = new String[cubesModel.getCubes().size()*2];
+        fixtureIdStringArray = new String[cubesModel.getCubes().size()*2];
 
         int ii = 0;
         for (CubesModel.Cube cube : cubesModel.getCubes()) {
@@ -77,7 +83,7 @@ public class NateMappingMode {
 
             CubesModel.DoubleControllerCube cubei = (CubesModel.DoubleControllerCube) cube;
 
-            //these copy paste should be function
+            //these copy paste brackets should be function
             {
                 modelFixtures.add(cubei.idA);
                 fixtureIdStringArray[ii++] = cubei.idA;
@@ -99,6 +105,14 @@ public class NateMappingMode {
 
         this.displayMode = new EnumParameter<MappingDisplayModeType>("displayMode", MappingDisplayModeType.ALL)
          .setDescription("Mapping Mode: display all mapped/unmapped fixtures");
+
+
+        saveVal.addListener(p -> {
+            if (saveVal.getValueb()) {
+                saveToJson();
+            }
+        });
+
 
 //        String[] emptyOptions = new String[] {"-"};
 //
@@ -135,14 +149,47 @@ public class NateMappingMode {
 //            System.err.println("**WARNING** CubesMappingMode used before CubesShow has been initialized.");
 //        }
 //
-//        enabled.addListener(p -> {
-//            if (((BooleanParameter)p).isOn()) {
-//                addChannel();
-//            }
-//            else {
-//                removeChannel();
-//            }
-//        });
+        enabled.addListener(p -> {
+            if (((BooleanParameter)p).isOn()) {
+                addChannel();
+            }
+            else {
+                removeChannel();
+            }
+        });
+    }
+
+    private void writeData(String outputJsonString, String filePath) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+        writer.write(outputJsonString);
+        writer.close();
+    }
+
+    private void saveToJson() {
+        String idToMap = selectedOutput.getString();
+        fixtureIdStringArray[selectedModelFixture.getValuei()] = idToMap;
+
+        HashMap<String, String[]> controllers = new HashMap<>();
+        controllers.put("controllers", fixtureIdStringArray);
+
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+        String outString = gson.toJson(controllers);
+        System.out.println(outString);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd__HH_mm_ss");
+        System.out.println(sdf);
+
+        String dateString = sdf.format(new Date());
+
+        String pathRaw = SLPathsHelper.getMappingsDataPath();
+        String pathWithDate = SLPathsHelper.getMappingsDataDir() + '/' + dateString + ".json";
+        try {
+            writeData(outString, pathRaw);
+            writeData(outString, pathWithDate);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isFixtureMapped(String id) {
@@ -192,21 +239,21 @@ public class NateMappingMode {
 //        return LXColor.RED; // temp
 //    }
 //
-//    private void addChannel() {
-//        mappingPattern = new CubesMappingPattern(lx);
-//        mappingChannel = lx.engine.addChannel(new LXPattern[] {mappingPattern});
-//
-//        for (LXChannel channel : lx.engine.channels)
-//            channel.cueActive.setValue(false);
-//
-//        mappingChannel.fader.setValue(1);
-//        mappingChannel.label.setValue("Mapping");
-//        mappingChannel.cueActive.setValue(true);
-//    }
-//
-//    private void removeChannel() {
-//        lx.engine.removeChannel(mappingChannel);
-//        mappingChannel = null;
-//        mappingPattern = null;
-//    }
+    private void addChannel() {
+        mappingPattern = new NateCubesMappingForkPattern(lx);
+        mappingChannel = lx.engine.addChannel(new LXPattern[] {mappingPattern});
+
+        for (LXChannel channel : lx.engine.channels)
+            channel.cueActive.setValue(false);
+
+        mappingChannel.fader.setValue(1);
+        mappingChannel.label.setValue("Mapping");
+        mappingChannel.cueActive.setValue(true);
+    }
+
+    private void removeChannel() {
+        lx.engine.removeChannel(mappingChannel);
+        mappingChannel = null;
+        mappingPattern = null;
+    }
 }

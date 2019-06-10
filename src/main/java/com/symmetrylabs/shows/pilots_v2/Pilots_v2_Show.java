@@ -7,14 +7,18 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
 import com.symmetrylabs.util.EdgeSwitch.EdgeSwitch;
+import com.symmetrylabs.util.SLPathsHelper;
 import heronarts.lx.transform.LXTransform;
 import heronarts.p3lx.ui.UI2dScrollContext;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -361,6 +365,29 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
         }
     }
 
+    private void copyMappingsFile(){
+        File dir = new File(SLPathsHelper.getMappingsDataDir());
+
+        // create multiple directories at one time
+        boolean successful = dir.mkdirs();
+        if (successful) {
+            // created the directories successfully
+            System.out.println("directories were created successfully");
+        }
+        else {
+            // something failed trying to create the directories
+            System.out.println("failed trying to create the directories");
+        }
+        Path originalPath = Paths.get("data/mapping/pilots_v2.json");
+        Path copied = Paths.get(SLPathsHelper.getMappingsDataPath());
+        try {
+            Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
     public SLModel buildModel() {
         // Any global transforms
         LXTransform globalTransform = new LXTransform();
@@ -379,7 +406,18 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
         int controllerIndex = 0;
         String jsonStr = null;
         try {
-            jsonStr = readFile("/home/somaesthesia/symmetrylabs/software/SLStudio/data/mapping/pilots_v2.json", StandardCharsets.UTF_8);
+            File checkDir = new File(SLPathsHelper.getMappingsDataDir());
+            if (checkDir.isDirectory()){
+                System.out.println( checkDir.getAbsolutePath() + " is a directory");
+                // good goahead and source it.
+                jsonStr = readFile(SLPathsHelper.getMappingsDataPath(), StandardCharsets.UTF_8);
+            }
+            else {
+                System.out.println( checkDir.getAbsolutePath() + " not found.  Creating dir and copying local *.json");
+                copyMappingsFile();
+                jsonStr = readFile(SLPathsHelper.getMappingsDataPath(), StandardCharsets.UTF_8);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
