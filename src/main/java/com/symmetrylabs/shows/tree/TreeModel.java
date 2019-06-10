@@ -541,6 +541,10 @@ public class TreeModel extends SLModel {
 
           public final Leaf.Size size;
 
+          Config() {
+            this(Leaf.Size.LARGE, 0, 0, 0, 0);
+          }
+
           Config(Leaf.Size size, int index, float x, float y, float theta) {
             this.index = index;
             this.x = x;
@@ -558,6 +562,10 @@ public class TreeModel extends SLModel {
         public float x;
         public float y;
         public float z;
+
+        public Leaf(LXTransform t) {
+            this(t, new Config());
+        }
 
         public Leaf(LXTransform t, Config config) {
             super(new Fixture(t, config));

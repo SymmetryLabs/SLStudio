@@ -31,6 +31,7 @@ import com.symmetrylabs.shows.loveburn.LoveBurnShow;
 import com.symmetrylabs.shows.sundance19.Sundance19Show;
 import com.symmetrylabs.shows.absinthe.AbsintheShow;
 import com.symmetrylabs.shows.twigtest.TwigTestShow;
+import com.symmetrylabs.shows.empirewall.EmpireWallPrototypeShow;
 import processing.core.PApplet;
 
 public class ShowRegistry {
@@ -92,6 +93,7 @@ public class ShowRegistry {
         map.put(JapanTreeShow.SHOW_NAME, JapanTreeShow::new);
         map.put(TwigTestShow.SHOW_NAME, TwigTestShow::new);
         map.put(SummerStage19Show.SHOW_NAME, SummerStage19Show::new);
+        map.put(EmpireWallPrototypeShow.SHOW_NAME, EmpireWallPrototypeShow::new);
     }
 
     interface ShowBuilder {
