@@ -26,7 +26,7 @@ public class UINateMapper extends UICollapsibleSection {
 
         mappingMode = NateMappingMode.getInstance(lx);
 
-        setTitle("NateMapper");
+        setTitle("TOP_Mapper");
         setTitleX(20);
 
         addTopLevelComponent(new UIButton(4, 4, 12, 12) {
