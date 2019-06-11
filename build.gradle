@@ -24,6 +24,7 @@ plugins {
 group = 'com.symmetrylabs'
 version = '1.0.5'
 sourceCompatibility = 1.8
+mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
 
 allprojects {
 	repositories {
@@ -121,11 +122,6 @@ test {
     }
 }
 
-jar {
-    mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
-	exclude('**/*.swp')
-	exclude('**/*.swo')
-}
 
 macAppBundle {
 	mainClassName = rootProject.mainClassName
