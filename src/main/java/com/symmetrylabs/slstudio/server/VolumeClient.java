@@ -128,7 +128,7 @@ public class VolumeClient {
             lxState.lx.getProject().save(
                 lxState.lx, new ProtoDataSink(
                     "mutation server request",
-                    pd ->projectService.reset(pd, new StreamObserver<ProjectLoadResponse>() {
+                    pd ->projectService.push(pd, new StreamObserver<ProjectLoadResponse>() {
                         @Override
                         public void onNext(ProjectLoadResponse value) {
                             System.out.println("pushed project data to " + target);

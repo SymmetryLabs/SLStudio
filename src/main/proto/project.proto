@@ -28,10 +28,8 @@ message ProjectLoadResponse {
 }
 
 service ProjectLoader {
-    // Reset the current engine state to the provided project data
-    rpc reset(ProjectData) returns (ProjectLoadResponse);
-    // Load the given data over the current engine state
-    rpc patch(ProjectData) returns (ProjectLoadResponse);
+    // Set the current engine state to the provided project data
+    rpc push(ProjectData) returns (ProjectLoadResponse);
     // Request the current state of the engine
     rpc pull(ProjectPullRequest) returns (ProjectData);
 }

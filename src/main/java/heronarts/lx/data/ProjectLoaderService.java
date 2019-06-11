@@ -14,23 +14,11 @@ public class ProjectLoaderService extends ProjectLoaderGrpc.ProjectLoaderImplBas
     }
 
     @Override
-    public void reset(ProjectData pd, StreamObserver<ProjectLoadResponse> response) {
-        doLoad(pd, response, true);
-    }
-
-    @Override
-    public void patch(final ProjectData pd, StreamObserver<ProjectLoadResponse> response) {
-        doLoad(pd, response, false);
-    }
-
-    private void doLoad(ProjectData pd, StreamObserver<ProjectLoadResponse> response, boolean newProject) {
+    public void push(ProjectData pd, StreamObserver<ProjectLoadResponse> response) {
         try {
             projectLoadSemaphore.acquire();
             lx.engine.addTask(() -> {
                 try {
-                    if (newProject) {
-                        lx.newProject();
-                    }
                     lx.getProject().load(lx, new ProtoDataSource("mutation server request", pd));
                     response.onNext(ProjectLoadResponse.newBuilder().build());
                     response.onCompleted();
