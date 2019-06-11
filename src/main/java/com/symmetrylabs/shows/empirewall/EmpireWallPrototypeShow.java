@@ -1,13 +1,10 @@
 package com.symmetrylabs.shows.empirewall;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.net.SocketException;
 
 import heronarts.lx.LX;
 
 import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.shows.tree.TreeModel;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.vines.*;
 
@@ -81,7 +78,7 @@ public class EmpireWallPrototypeShow implements Show {
 	};
 
 	public SLModel buildModel() {
-		return new VineModel(VINES_CONFIG);		
+		return new VineModel(SHOW_NAME, VINES_CONFIG);
 	}
 
 	public void setupLx(final LX lx) {

@@ -16,8 +16,8 @@ public class VineModel extends SLModel {
 	public final List<Vine> vines;
 	public final List<TreeModel.Leaf> leaves;
 
-	public VineModel(VineConfig[] vineConfigs) {
-		super(new Fixture(Arrays.asList(vineConfigs)));
+	public VineModel(String modelId, VineConfig[] vineConfigs) {
+		super(modelId, new Fixture(Arrays.asList(vineConfigs)));
 
 		Fixture f = (Fixture) this.fixtures.get(0);
 		this.vines  = Collections.unmodifiableList(f.vines);
@@ -29,17 +29,12 @@ public class VineModel extends SLModel {
 		private final List<TreeModel.Leaf> leaves = new ArrayList<>();
 
 		private Fixture(List<VineConfig> vineConfigs) {
+		    int vineIndex = 1;
 			for (VineConfig vineConfig : vineConfigs) {
-				Vine vine = new Vine(vineConfig);
+				Vine vine = new Vine(String.format("Vine %d", vineIndex), vineConfig);
 				vines.add(vine);
-
-				for (TreeModel.Leaf leaf : vine.leaves) {
-					this.leaves.add(leaf);
-				}
-
-				for (LXPoint point : vine.points) {
-					this.points.add(point);
-				}
+                leaves.addAll(vine.leaves);
+                points.addAll(Arrays.asList(vine.points));
 			}
 		}
 	}
@@ -48,8 +43,8 @@ public class VineModel extends SLModel {
 
 		public final List<TreeModel.Leaf> leaves;
 
-		public Vine(VineConfig vineConfig) {
-			super(new Fixture(vineConfig));
+		public Vine(String modelId, VineConfig vineConfig) {
+			super(modelId, new Fixture(vineConfig));
 
 			Fixture f = (Fixture) this.fixtures.get(0);
 			this.leaves = Collections.unmodifiableList(f.leaves);
