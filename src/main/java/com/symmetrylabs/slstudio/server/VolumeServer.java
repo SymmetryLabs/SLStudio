@@ -16,16 +16,15 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class VolumeServer implements VolumeCore.Listener {
-    static final int VOLUME_SERVER_PORT = 3032;
+    public static final long CLIENT_SUBSCRIPTION_TIMEOUT_NS = 10_000_000_000L; /* = 10 sec */
+    public static final int VOLUME_SERVER_PORT = 3032;
+    private static final long SAVE_PROJECT_PERIOD_NS = 5_000_000_000L; /* = 5 sec */
 
     private static final String PROJECT_STORE = "volume-server-project.lxp";
-    private static final long SAVE_PROJECT_PERIOD_NS = 5_000_000_000L; /* = 5 sec */
 
     private static final int MAX_COLOR_DATA_SIZE_BYTES = 450;
     private static final int POINTS_PER_UDP_PACKET = MAX_COLOR_DATA_SIZE_BYTES / 3;
@@ -34,6 +33,8 @@ public class VolumeServer implements VolumeCore.Listener {
     private static final long MIN_TRANSMIT_PERIOD_NS = (long) Math.ceil(1e9f / MAX_TRANSMIT_FPS);
 
     private class Client {
+        final long connectedAt;
+        long lastRequestAt;
         final String target;
         final DatagramSocket clientSock;
         final List<DatagramPacket> packets;
@@ -49,6 +50,8 @@ public class VolumeServer implements VolumeCore.Listener {
             this.packets = new ArrayList<>();
             this.subscriptionId = subscriptionId;
             this.maskSize = pointMask == null ? 0 : pointMask.size();
+            this.connectedAt = System.nanoTime();
+            this.lastRequestAt = this.connectedAt;
 
             if (pointMask != null) {
                 for (Integer p : pointMask) {
@@ -107,12 +110,22 @@ public class VolumeServer implements VolumeCore.Listener {
         }
     }
 
+    private static class SubscriptionRequest {
+        final PixelDataRequest request;
+        final StreamObserver<PixelDataHandshake> response;
+
+        SubscriptionRequest(PixelDataRequest req, StreamObserver<PixelDataHandshake> resp) {
+            request = req;
+            response = resp;
+        }
+    }
+
     private final VolumeCore core;
     private Server grpcServer;
 
     private PolyBuffer lxColorBuffer = null;
-    private final List<Client> clients = new ArrayList<>();
-    private final List<Client> newClients = new ArrayList<>();
+    private final Map<String, Client> clients = new HashMap<>();
+    private final List<SubscriptionRequest> subscriptionRequests = new ArrayList<>();
     private ProjectLoaderService projectLoaderService;
 
     private long lastTransmit = 0;
@@ -154,20 +167,49 @@ public class VolumeServer implements VolumeCore.Listener {
             throw new RuntimeException(e);
         }
 
-        synchronized (newClients) {
+        synchronized (subscriptionRequests) {
             /* if a client is reconnecting, remove its old record */
-            for (Client newClient : newClients) {
-                Iterator<Client> citer = clients.iterator();
-                while (citer.hasNext()) {
-                    Client c = citer.next();
-                    if (c.target.equals(newClient.target)) {
-                        c.clientSock.disconnect();
-                        citer.remove();
-                    }
+            for (SubscriptionRequest newClient : subscriptionRequests) {
+                PixelDataRequest req = newClient.request;
+
+                Client existing = clients.get(req.getRecvAddress());
+                if (existing != null && existing.subscriptionId == req.getSubscriptionId()) {
+                    existing.lastRequestAt = System.nanoTime();
+                    newClient.response.onNext(PixelDataHandshake.newBuilder().setStatus(PixelDataSubscriptionStatus.RENEWED).build());
+                    newClient.response.onCompleted();
+                    continue;
+                } else if (existing != null) {
+                    existing.clientSock.disconnect();
+                    clients.remove(existing.target);
                 }
+
+                PixelDataHandshake.Builder res = PixelDataHandshake.newBuilder();
+                if (req.getShowName().equals(ApplicationState.showName())) {
+                    DatagramSocket sock = null;
+                    try {
+                        sock = new DatagramSocket();
+                        sock.connect(new InetSocketAddress(req.getRecvAddress(), req.getRecvPort()));
+                        clients.put(req.getRecvAddress(), new Client(req.getRecvAddress(), sock, req.getPointMaskList(), req.getSubscriptionId()));
+                        res.setStatus(PixelDataSubscriptionStatus.OK);
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        if (sock != null) sock.close();
+                        res.setStatus(PixelDataSubscriptionStatus.MASK_INDEX_OUT_OF_RANGE);
+                    } catch (SocketException e) {
+                        if (sock != null) sock.close();
+                        e.printStackTrace();
+                        newClient.response.onError(e);
+                        return;
+                    }
+                } else {
+                    res.setStatus(PixelDataSubscriptionStatus.SHOW_NAME_MISMATCH)
+                        .setMessage(String.format(
+                            "server show name is %s, client requested pixel data for '%s'",
+                            ApplicationState.showName(), req.getShowName()));
+                }
+                newClient.response.onNext(res.build());
+                newClient.response.onCompleted();
             }
-            clients.addAll(newClients);
-            newClients.clear();
+            subscriptionRequests.clear();
         }
         long transmitTIme = System.nanoTime();
         if (transmitTIme - lastTransmit > MIN_TRANSMIT_PERIOD_NS) {
@@ -176,9 +218,16 @@ public class VolumeServer implements VolumeCore.Listener {
                 core.lx.engine.copyUIBuffer(lxColorBuffer, PolyBuffer.Space.SRGB8);
                 int[] colors = (int[]) lxColorBuffer.getArray(PolyBuffer.Space.SRGB8);
 
-                Iterator<Client> c = clients.iterator();
+                Iterator<String> c = clients.keySet().iterator();
                 while (c.hasNext()) {
-                    Client client = c.next();
+                    String clientTarget = c.next();
+                    Client client = clients.get(clientTarget);
+
+                    if (System.nanoTime() - client.lastRequestAt > CLIENT_SUBSCRIPTION_TIMEOUT_NS) {
+                        System.out.println("removing client " + client.target + " due to inactivity");
+                        c.remove();
+                        continue;
+                    }
 
                     for (int packet = 0; packet < client.packetPoints.length; packet++) {
                         int[] packetPoints = client.packetPoints[packet];
@@ -222,8 +271,12 @@ public class VolumeServer implements VolumeCore.Listener {
 
             System.out.println(String.format("%d connected clients", clients.size()));
             float fsize = (float) core.lx.model.size;
-            for (Client c : clients) {
-                System.out.println(String.format("%16s subn%08d msk%%%.2f", c.target, c.subscriptionId, (float) c.maskSize / fsize));
+            for (Client c : clients.values()) {
+                System.out.println(
+                    String.format("%16s subn %04d msk%% %.2f tslu %05dms tsc %06ds",
+                        c.target, c.subscriptionId, (float) c.maskSize / fsize,
+                        (System.nanoTime() - c.lastRequestAt) / 1_000_000,
+                        (System.nanoTime() - c.connectedAt) / 1_000_000_000));
             }
         }
     }
@@ -276,12 +329,12 @@ public class VolumeServer implements VolumeCore.Listener {
         }
         grpcServer = null;
 
-        for (Client c : clients) {
+        for (Client c : clients.values()) {
             c.clientSock.close();
         }
         clients.clear();
-        synchronized (newClients) {
-            newClients.clear();
+        synchronized (subscriptionRequests) {
+            subscriptionRequests.clear();
         }
 
         lxColorBuffer = null;
@@ -290,33 +343,10 @@ public class VolumeServer implements VolumeCore.Listener {
     private class PixelDataBrokerImpl extends PixelDataBrokerGrpc.PixelDataBrokerImplBase {
         @Override
         public void subscribe(PixelDataRequest req, StreamObserver<PixelDataHandshake> response) {
-            PixelDataHandshake.Builder res = PixelDataHandshake.newBuilder();
-            if (req.getShowName().equals(ApplicationState.showName())) {
-                DatagramSocket sock = null;
-                try {
-                    sock = new DatagramSocket();
-                    sock.connect(new InetSocketAddress(req.getRecvAddress(), req.getRecvPort()));
-                    synchronized (newClients) {
-                        newClients.add(new Client(req.getRecvAddress(), sock, req.getPointMaskList(), req.getSubscriptionId()));
-                    }
-                    res.setStatus(PixelDataSubscriptionStatus.OK);
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    if (sock != null) sock.close();
-                    res.setStatus(PixelDataSubscriptionStatus.MASK_INDEX_OUT_OF_RANGE);
-                } catch (SocketException e) {
-                    if (sock != null) sock.close();
-                    e.printStackTrace();
-                    response.onError(e);
-                    return;
-                }
-            } else {
-                res.setStatus(PixelDataSubscriptionStatus.SHOW_NAME_MISMATCH)
-                    .setMessage(String.format(
-                        "server show name is %s, client requested pixel data for '%s'",
-                        ApplicationState.showName(), req.getShowName()));
+            SubscriptionRequest sr = new SubscriptionRequest(req, response);
+            synchronized (subscriptionRequests) {
+                subscriptionRequests.add(sr);
             }
-            response.onNext(res.build());
-            response.onCompleted();
         }
     }
 

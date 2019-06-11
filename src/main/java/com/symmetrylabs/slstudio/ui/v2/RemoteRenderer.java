@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.ui.v2;
 import com.google.common.base.Preconditions;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.symmetrylabs.slstudio.ApplicationState;
+import com.symmetrylabs.slstudio.server.VolumeServer;
 import com.symmetrylabs.slstudio.streaming.PixelDataHandshake;
 import com.symmetrylabs.slstudio.streaming.Pixels;
 import com.symmetrylabs.slstudio.streaming.PixelDataRequest;
@@ -22,8 +23,9 @@ public class RemoteRenderer extends PointColorRenderer {
     private static final int MAX_PIXEL_MESSAGE_SIZE = 1024;
     private static final int MAX_STAT_QUEUE_SIZE = 2048;
     private static final int NS_BEFORE_RECONNECT = 100_000_000; /* == 100ms */
+    private static final long REQUEST_UPDATE_PERIOD_NS = VolumeServer.CLIENT_SUBSCRIPTION_TIMEOUT_NS * 4 / 5;
 
-    protected final ViewController viewController;
+    private final ViewController viewController;
     private PixelDataBrokerGrpc.PixelDataBrokerStub service;
     private ReceiverThread receiver = null;
 
@@ -31,7 +33,9 @@ public class RemoteRenderer extends PointColorRenderer {
     float packetsPerSecond = -1;
     float megabitsPerSecond = -1;
     long latestTick = -1;
-    long lastUpdateAt = -1;
+
+    private long lastUpdateAt = -1;
+    private long lastRequestAt = -1;
 
     private Deque<Long> lastPacketTimes = new ArrayDeque<>();
     private Deque<Integer> lastPacketSizes = new ArrayDeque<>();
@@ -60,7 +64,7 @@ public class RemoteRenderer extends PointColorRenderer {
                 e.printStackTrace();
             }
         }
-        sendSubscriptionRequest();
+        sendSubscriptionRequest(true);
     }
 
     public void disconnect() {
@@ -86,7 +90,7 @@ public class RemoteRenderer extends PointColorRenderer {
         }
         cullFactor = newCullFactor;
         if (receiver != null && receiver.isAlive()) {
-            sendSubscriptionRequest();
+            sendSubscriptionRequest(true);
         }
     }
 
@@ -94,7 +98,9 @@ public class RemoteRenderer extends PointColorRenderer {
         return cullFactor;
     }
 
-    private void sendSubscriptionRequest() {
+    private synchronized void sendSubscriptionRequest(boolean newSubscription) {
+        lastRequestAt = System.nanoTime();
+
         PixelDataRequest.Builder pdr = PixelDataRequest.newBuilder()
             .setShowName(ApplicationState.showName())
             .setRecvPort(receiver.port);
@@ -108,7 +114,9 @@ public class RemoteRenderer extends PointColorRenderer {
             pointMask = null;
         }
 
-        subscriptionId++;
+        if (newSubscription) {
+            subscriptionId++;
+        }
         pdr.setSubscriptionId(subscriptionId);
 
         // this resets all colors to fully-transparent black, so the points will be
@@ -197,6 +205,10 @@ public class RemoteRenderer extends PointColorRenderer {
             }
             lastUpdateAt = System.nanoTime();
 
+            if (service != null && System.nanoTime() - lastRequestAt > REQUEST_UPDATE_PERIOD_NS) {
+                sendSubscriptionRequest(false);
+            }
+
             byte[] data = pixels.getColors().toByteArray();
             Preconditions.checkState(data.length % 3 == 0);
 
@@ -216,7 +228,11 @@ public class RemoteRenderer extends PointColorRenderer {
             } else {
                 synchronized (incomingBuffer) {
                     for (int i = 0; i < windowSize; i++) {
-                        int point = pointMask.get(pixels.getOffset() + i);
+                        int effidx = pixels.getOffset() + i;
+                        if (effidx >= pointMask.size()) {
+                            break;
+                        }
+                        int point = pointMask.get(effidx);
                         System.arraycopy(window, 4 * i, incomingBuffer, 4 * point, 4);
                     }
                 }

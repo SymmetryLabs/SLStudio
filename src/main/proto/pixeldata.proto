@@ -35,6 +35,7 @@ message PixelDataRequest {
 
 enum PixelDataSubscriptionStatus {
     OK = 0;
+    RENEWED = 3;
     SHOW_NAME_MISMATCH = 1;
     MASK_INDEX_OUT_OF_RANGE = 2;
 }
