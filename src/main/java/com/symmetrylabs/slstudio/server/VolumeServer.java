@@ -110,6 +110,7 @@ public class VolumeServer implements VolumeCore.Listener {
     private PolyBuffer lxColorBuffer = null;
     private final List<Client> clients = new ArrayList<>();
     private final List<Client> newClients = new ArrayList<>();
+    private ProjectLoaderService projectLoaderService;
 
     private long lastTransmit = 0;
 
@@ -131,12 +132,17 @@ public class VolumeServer implements VolumeCore.Listener {
     }
 
     private void tick() {
-        /* this is a hack but it's also The Only Way To Be Sure. */
-        core.lx.engine.osc.receiveHost.setValue("0.0.0.0");
-        core.lx.engine.osc.receivePort.setValue(LXOscEngine.DEFAULT_RECEIVE_PORT);
-        core.lx.engine.osc.receiveActive.setValue(true);
+        projectLoaderService.projectLoadLock.lock();
+        try {
+            /* this is a hack but it's also The Only Way To Be Sure. */
+            core.lx.engine.osc.receiveHost.setValue("0.0.0.0");
+            core.lx.engine.osc.receivePort.setValue(LXOscEngine.DEFAULT_RECEIVE_PORT);
+            core.lx.engine.osc.receiveActive.setValue(true);
+            core.lx.engine.onDraw();
+        } finally {
+            projectLoaderService.projectLoadLock.unlock();
+        }
 
-        core.lx.engine.onDraw();
         if (!core.lx.engine.isEngineThreadRunning()) {
             throw new IllegalStateException("engine thread stopped unexpectedly");
         }
@@ -214,11 +220,12 @@ public class VolumeServer implements VolumeCore.Listener {
 
     @Override
     public void onCreateLX() {
+        projectLoaderService = new ProjectLoaderService(core.lx);
         grpcServer = ServerBuilder
             .forPort(VOLUME_SERVER_PORT)
             .addService(ServerInterceptors.intercept(new PixelDataBrokerImpl(), new IPCapturingRequestInterceptor()))
             .addService(new LXMutationServer(core.lx))
-            .addService(new ProjectLoaderService(core.lx))
+            .addService(projectLoaderService)
             .build();
 
         try {

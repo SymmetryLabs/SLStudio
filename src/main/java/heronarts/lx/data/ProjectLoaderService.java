@@ -3,8 +3,12 @@ package heronarts.lx.data;
 import heronarts.lx.LX;
 import io.grpc.stub.StreamObserver;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class ProjectLoaderService extends ProjectLoaderGrpc.ProjectLoaderImplBase {
     private final LX lx;
+    public final Lock projectLoadLock = new ReentrantLock();
 
     public ProjectLoaderService(LX lx) {
         this.lx = lx;
@@ -21,6 +25,7 @@ public class ProjectLoaderService extends ProjectLoaderGrpc.ProjectLoaderImplBas
     }
 
     private void doLoad(ProjectData pd, StreamObserver<ProjectLoadResponse> response, boolean newProject) {
+        projectLoadLock.lock();
         try {
             lx.engine.addTask(() -> {
                 try {
@@ -33,6 +38,8 @@ public class ProjectLoaderService extends ProjectLoaderGrpc.ProjectLoaderImplBas
                 } catch (Exception e) {
                     e.printStackTrace();
                     response.onError(e);
+                } finally {
+                    projectLoadLock.unlock();
                 }
             });
         } catch (Exception e) {
