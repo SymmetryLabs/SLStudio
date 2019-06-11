@@ -348,6 +348,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     private boolean paused = false;
 
+    private boolean remoteMode = false;
+
     private static final long INIT_RUN = -1;
     private long lastMillis = INIT_RUN;
     long nowMillis = System.currentTimeMillis();
@@ -503,6 +505,11 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     public boolean isEngineThreadRunning() {
         return isThreaded() && engineThread.isAlive();
+    }
+
+    public LXEngine setRemoteMode(boolean remoteMode) {
+        this.remoteMode = remoteMode;
+        return this;
     }
 
     /**
@@ -957,10 +964,13 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
         // The main work: run patterns, blend channels, send to outputs.
         long channelStart = System.nanoTime();
-        loopAllLooks(deltaMs);
-        blendLooks(deltaMs, channelStart, colorSpace.getEnum());
-        this.artNet.processOutput();
-        sendToOutputs(runStart);
+        if (!remoteMode) {
+            loopAllLooks(deltaMs);
+            blendLooks(deltaMs, channelStart, colorSpace.getEnum());
+            this.artNet.processOutput();
+            sendToOutputs(runStart);
+        }
+
         long nowNanos = System.nanoTime();
         this.timer.addRunTime(nowNanos - runStart, nowNanos);
 

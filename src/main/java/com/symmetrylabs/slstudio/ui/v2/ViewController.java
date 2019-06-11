@@ -98,6 +98,7 @@ public class ViewController {
     }
 
     public void setRemoteDataDisplayed(boolean rdd) {
+        lx.engine.setRemoteMode(rdd);
         remoteDataDisplayed = rdd;
     }
 }
