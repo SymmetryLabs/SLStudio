@@ -23,7 +23,7 @@ public class BoxBlur extends SLEffect {
     public BoxBlur(LX lx) {
         super(lx);
         addParameter(radiusParam);
-        initKernels();
+        radiusForCurrentKernel = -Float.MAX_VALUE;
     }
 
     private void initKernels() {
