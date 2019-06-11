@@ -12,6 +12,7 @@ import heronarts.lx.osc.LXOscEngine;
 import io.grpc.*;
 import io.grpc.stub.StreamObserver;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.net.*;
@@ -40,12 +41,14 @@ public class VolumeServer implements VolumeCore.Listener {
         final byte[][] colorBuffers;
         final int[] offsets;
         final int subscriptionId;
+        final int maskSize;
 
-        Client(String target, DatagramSocket clientSock, List<Integer> pointMask, int subscriptionId) {
+        Client(String target, DatagramSocket clientSock, @Nullable List<Integer> pointMask, int subscriptionId) {
             this.target = target;
             this.clientSock = clientSock;
             this.packets = new ArrayList<>();
             this.subscriptionId = subscriptionId;
+            this.maskSize = pointMask == null ? 0 : pointMask.size();
 
             if (pointMask != null) {
                 for (Integer p : pointMask) {
@@ -212,9 +215,16 @@ public class VolumeServer implements VolumeCore.Listener {
         }
 
         if (System.nanoTime() - lastSaveTime > SAVE_PROJECT_PERIOD_NS) {
-            core.lx.engine.logTimers();
             core.lx.saveProject();
+
+            core.lx.engine.logTimers();
             lastSaveTime = System.nanoTime();
+
+            System.out.println(String.format("%d connected clients", clients.size()));
+            float fsize = (float) core.lx.model.size;
+            for (Client c : clients) {
+                System.out.println(String.format("%16s subn%08d msk%%%.2f", c.target, c.subscriptionId, (float) c.maskSize / fsize));
+            }
         }
     }
 
