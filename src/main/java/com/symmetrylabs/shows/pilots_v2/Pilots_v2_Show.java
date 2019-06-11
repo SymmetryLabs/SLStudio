@@ -7,14 +7,18 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
 import com.symmetrylabs.util.EdgeSwitch.EdgeSwitch;
+import com.symmetrylabs.util.SLPathsHelper;
 import heronarts.lx.transform.LXTransform;
 import heronarts.p3lx.ui.UI2dScrollContext;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +58,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
 
 
     // add hoc read file
-    static String readFile(String path, Charset encoding)
+    String readFile(String path, Charset encoding)
         throws IOException
     {
         byte[] encoded = Files.readAllBytes(Paths.get(path));
@@ -65,31 +69,17 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
         ArrayList < String > controllers = new ArrayList < String > ();
     }
 
-    String jsonStr;
 
-    {
-        try {
-            jsonStr = readFile("/home/somaesthesia/symmetrylabs/software/SLStudio/data/mapping/pilots_v2.json", StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    private String[][] populateFromJSONarray() {
+//        return new String[][]{
+//            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
+//            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
+//            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
+//            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
+//        };
+//    }
 
-    Gson gson = new Gson();
-    Response response = gson.fromJson(jsonStr, Response.class);
-
-
-    private int controllerIndex = 0;
-    private String[][] populateFromJSONarray() {
-        return new String[][]{
-            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
-            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
-            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
-            new String[]{response.controllers.get(controllerIndex++),response.controllers.get(controllerIndex++)},
-        };
-    }
-
-    String[][] towerArray = populateFromJSONarray();
+//    String[][] towerArray = populateFromJSONarray();
 
     static final ClusterConfig[] clusters = new ClusterConfig[] {
 
@@ -375,6 +365,29 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
         }
     }
 
+    private void copyMappingsFile(){
+        File dir = new File(SLPathsHelper.getMappingsDataDir());
+
+        // create multiple directories at one time
+        boolean successful = dir.mkdirs();
+        if (successful) {
+            // created the directories successfully
+            System.out.println("directories were created successfully");
+        }
+        else {
+            // something failed trying to create the directories
+            System.out.println("failed trying to create the directories");
+        }
+        Path originalPath = Paths.get("data/mapping/pilots_v2.json");
+        Path copied = Paths.get(SLPathsHelper.getMappingsDataPath());
+        try {
+            Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
     public SLModel buildModel() {
         // Any global transforms
         LXTransform globalTransform = new LXTransform();
@@ -385,6 +398,34 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
 
         List<CubesModel.Tower> towers = new ArrayList<>();
         List<CubesModel.Cube> allCubes = new ArrayList<>();
+
+
+
+
+        // begin read in controller IDs from JSON
+        int controllerIndex = 0;
+        String jsonStr = null;
+        try {
+            File checkDir = new File(SLPathsHelper.getMappingsDataDir());
+            if (checkDir.isDirectory()){
+                System.out.println( checkDir.getAbsolutePath() + " is a directory");
+                // good goahead and source it.
+                jsonStr = readFile(SLPathsHelper.getMappingsDataPath(), StandardCharsets.UTF_8);
+            }
+            else {
+                System.out.println( checkDir.getAbsolutePath() + " not found.  Creating dir and copying local *.json");
+                copyMappingsFile();
+                jsonStr = readFile(SLPathsHelper.getMappingsDataPath(), StandardCharsets.UTF_8);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Gson gson = new Gson();
+        Response response = gson.fromJson(jsonStr, Response.class);
+
+        
 
 //        try {
 //            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
@@ -419,7 +460,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
             globalTransform.translate(cluster.x, cluster.y, cluster.z);
 
 //            System.out.print('\n' + cluster.id + '\n');
-//            System.out.println();
+            System.out.println();
 
             for (TowerConfig config : cluster.configs) {
                 float x = config.x;
@@ -430,15 +471,18 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
                 float rZ = config.zRot;
 
                 for (int i = 0; i < config.ids.length; i++) {
-                    String idA = config.ids[i][0];
-                    String idB = config.ids[i][1];
+//                    String idA = config.ids[i][0];
+//                    String idB = config.ids[i][1];
+                    // grab the ids from the JSON interchange
+                    String idA = response.controllers.get(controllerIndex++);
+                    String idB = response.controllers.get(controllerIndex++);
                     float y = config.yValues[i];
                     CubesModel.DoubleControllerCube cube = new CubesModel.DoubleControllerCube(idA, idB, x, y, z, rX, rY, rZ, globalTransform);
-//                    System.out.print('"' + idA + '"' + ',' + '"' + idB + '"' + ',' + '\t' );
+                    System.out.print('"' + idA + '"' + ',' + '"' + idB + '"' + ',' + '\t' );
                     cubes.add(cube);
                     allCubes.add(cube);
                 }
-//                System.out.println();
+                System.out.println();
             }
             globalTransform.pop();
             towers.add(new CubesModel.Tower(cluster.id, cubes));
@@ -473,9 +517,11 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
 //        }
 
         UI2dScrollContext utility = ui.rightPane.utility;
+        new UINateMapper(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UICubesOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UIBlackList(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UICubesMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
+
     }
 
     @Override

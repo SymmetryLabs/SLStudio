@@ -37,7 +37,7 @@ import heronarts.lx.parameter.LXCompoundModulation;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.p3lx.ui.UITimerTask;
 
-public class UICompoundParameterControl extends UIParameterControl {
+class UICompoundParameterControl extends UIParameterControl {
     private double lastParameterValue = 0;
 
     private final List<LXListenableParameter> modulationParameters = new ArrayList<LXListenableParameter>();
@@ -60,7 +60,7 @@ public class UICompoundParameterControl extends UIParameterControl {
         }
     };
 
-    protected UICompoundParameterControl(float x, float y, float w, float h) {
+    public UICompoundParameterControl(float x, float y, float w, float h) {
         super(x, y, w, h);
 
         addLoopTask(checkRedrawTask);
