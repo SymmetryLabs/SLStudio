@@ -79,6 +79,10 @@ public class SLCamera extends Camera {
 
         public InputController(SLCamera camera) {
             super(camera);
+            forwardKey = -1;
+            backwardKey = -1;
+            rotateLeftKey = -1;
+            rotateRightKey = -1;
         }
 
         /** Sets the target in left-handed coordinates */
