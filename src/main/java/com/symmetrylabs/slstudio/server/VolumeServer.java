@@ -132,19 +132,23 @@ public class VolumeServer implements VolumeCore.Listener {
     }
 
     private void tick() {
-        projectLoaderService.projectLoadLock.lock();
         try {
-            /* this is a hack but it's also The Only Way To Be Sure. */
-            core.lx.engine.osc.receiveHost.setValue("0.0.0.0");
-            core.lx.engine.osc.receivePort.setValue(LXOscEngine.DEFAULT_RECEIVE_PORT);
-            core.lx.engine.osc.receiveActive.setValue(true);
-            core.lx.engine.onDraw();
-        } finally {
-            projectLoaderService.projectLoadLock.unlock();
-        }
+            projectLoaderService.projectLoadSemaphore.acquire();
+            try {
+                /* this is a hack but it's also The Only Way To Be Sure. */
+                core.lx.engine.osc.receiveHost.setValue("0.0.0.0");
+                core.lx.engine.osc.receivePort.setValue(LXOscEngine.DEFAULT_RECEIVE_PORT);
+                core.lx.engine.osc.receiveActive.setValue(true);
+                core.lx.engine.onDraw();
+            } finally {
+                projectLoaderService.projectLoadSemaphore.release();
+            }
 
-        if (!core.lx.engine.isEngineThreadRunning()) {
-            throw new IllegalStateException("engine thread stopped unexpectedly");
+            if (!core.lx.engine.isEngineThreadRunning()) {
+                throw new IllegalStateException("engine thread stopped unexpectedly");
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
 
         synchronized (newClients) {
