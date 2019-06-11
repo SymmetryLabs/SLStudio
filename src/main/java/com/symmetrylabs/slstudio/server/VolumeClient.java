@@ -5,10 +5,7 @@ import com.symmetrylabs.slstudio.ui.v2.RemoteRenderer;
 import com.symmetrylabs.slstudio.ui.v2.ViewController;
 import com.symmetrylabs.slstudio.ui.v2.VolumeApplication;
 import heronarts.lx.LX;
-import heronarts.lx.data.ProjectData;
-import heronarts.lx.data.ProjectLoaderGrpc;
-import heronarts.lx.data.ProjectPullRequest;
-import heronarts.lx.data.ProtoDataSource;
+import heronarts.lx.data.*;
 import heronarts.lx.mutation.LXMutationServer;
 import heronarts.lx.osc.LXOscEngine;
 import io.grpc.ConnectivityState;
@@ -19,6 +16,7 @@ import io.grpc.stub.StreamObserver;
 import java.util.concurrent.TimeUnit;
 
 public class VolumeClient {
+
     /** All client state associated with an instance of LX, so that remote connections can outlast LX instances */
     private static class LXState {
         final LX lx;
@@ -36,6 +34,7 @@ public class VolumeClient {
     private LXState lxState = null;
     private boolean isShuttingDown = false;
     private boolean wantsConnection = false;
+    private boolean pushProjectOnNextConnection = false;
     private String target = null;
 
     private ManagedChannel serverChannel;
@@ -53,11 +52,12 @@ public class VolumeClient {
         updateConnectionStates();
     }
 
-    public void connect(String target) {
+    public void connect(String target, boolean pushProjectOnConnect) {
         if (isPartiallyConnected() && !target.equals(this.target)) {
             disconnectImpl(true);
         }
         this.target = target;
+        this.pushProjectOnNextConnection = pushProjectOnConnect;
         wantsConnection = true;
         updateConnectionStates();
     }
@@ -123,35 +123,63 @@ public class VolumeClient {
         serverChannel = ManagedChannelBuilder.forAddress(target, VolumeServer.VOLUME_SERVER_PORT).usePlaintext().build();
 
         projectService = ProjectLoaderGrpc.newStub(serverChannel);
-        projectService.pull(ProjectPullRequest.newBuilder().build(), new StreamObserver<ProjectData>() {
-            @Override
-            public void onNext(ProjectData value) {
-                String remoteModelName = value.getModelName();
-                if (remoteModelName != null) {
-                    if (!ApplicationState.showName().equals(remoteModelName)) {
-                        System.out.println(String.format("start change show to match server: remote=%s, local=%s", remoteModelName, ApplicationState.showName()));
-                        /* if we need to change shows, we just change shows and discard the project info,
-                         * which would be discarded anyway when we reinitialize LX. When we get the new
-                         * LX, we'll get the callback, which will prompt us to load project data again.
-                         * This is a little wasteful, but one extra round trip ain't no thing. */
-                        app.loadShow(remoteModelName);
-                        return;
+
+        if (pushProjectOnNextConnection) {
+            lxState.lx.getProject().save(
+                lxState.lx, new ProtoDataSink(
+                    "mutation server request",
+                    pd ->projectService.reset(pd, new StreamObserver<ProjectLoadResponse>() {
+                        @Override
+                        public void onNext(ProjectLoadResponse value) {
+                            System.out.println("pushed project data to " + target);
+                            ApplicationState.setWarning("VolumeClient", null);
+                        }
+
+                        @Override
+                        public void onError(Throwable t) {
+                            System.err.println("couldn't push project data to server: " + t.getMessage());
+                            t.printStackTrace();
+                            ApplicationState.setWarning("VolumeClient", t.getMessage());
+                        }
+
+                        @Override
+                        public void onCompleted() {
+                        }
+                    })));
+            pushProjectOnNextConnection = false;
+        } else {
+            projectService.pull(ProjectPullRequest.newBuilder().build(), new StreamObserver<ProjectData>() {
+                @Override
+                public void onNext(ProjectData value) {
+                    String remoteModelName = value.getModelName();
+                    if (remoteModelName != null) {
+                        if (!ApplicationState.showName().equals(remoteModelName)) {
+                            System.out.println(String.format("start change show to match server: remote=%s, local=%s", remoteModelName, ApplicationState.showName()));
+                            /* if we need to change shows, we just change shows and discard the project info,
+                             * which would be discarded anyway when we reinitialize LX. When we get the new
+                             * LX, we'll get the callback, which will prompt us to load project data again.
+                             * This is a little wasteful, but one extra round trip ain't no thing. */
+                            app.loadShow(remoteModelName);
+                            return;
+                        }
                     }
+                    lxState.lx.engine.addTask(() ->
+                        lxState.lx.getProject().load(lxState.lx, new ProtoDataSource("project loader from " + target, value)));
+                    ApplicationState.setWarning("VolumeClient", null);
                 }
-                lxState.lx.engine.addTask(() ->
-                    lxState.lx.getProject().load(lxState.lx, new ProtoDataSource("project loader from " + target, value)));
-            }
 
-            @Override
-            public void onError(Throwable t) {
-                System.err.println("couldn't fetch project data from server: " + t.getMessage());
-                t.printStackTrace();
-            }
+                @Override
+                public void onError(Throwable t) {
+                    System.err.println("couldn't fetch project data from server: " + t.getMessage());
+                    t.printStackTrace();
+                    ApplicationState.setWarning("VolumeClient", t.getMessage());
+                }
 
-            @Override
-            public void onCompleted() {
-            }
-        });
+                @Override
+                public void onCompleted() {
+                }
+            });
+        }
 
         isShuttingDown = false;
         lxState.lx.engine.mutations.sender.connect(serverChannel, target, true);

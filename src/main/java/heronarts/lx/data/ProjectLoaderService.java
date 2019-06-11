@@ -17,11 +17,18 @@ public class ProjectLoaderService extends ProjectLoaderGrpc.ProjectLoaderImplBas
     }
 
     @Override
-    public void patch(ProjectData pd, StreamObserver<ProjectLoadResponse> response) {
+    public void patch(final ProjectData pd, StreamObserver<ProjectLoadResponse> response) {
         try {
-            lx.getProject().load(lx, new ProtoDataSource("mutation server request", pd));
-            response.onNext(ProjectLoadResponse.newBuilder().build());
-            response.onCompleted();
+            lx.engine.addTask(() -> {
+                try {
+                    lx.getProject().load(lx, new ProtoDataSource("mutation server request", pd));
+                    response.onNext(ProjectLoadResponse.newBuilder().build());
+                    response.onCompleted();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    response.onError(e);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
             response.onError(e);

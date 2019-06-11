@@ -29,8 +29,12 @@ public class RemoteControlWindow extends CloseableWindow {
         RemoteRenderer renderer = vc.getRemoteRenderer();
         renderer.setCullFactor(UI.sliderInt("downsample", renderer.getCullFactor(), 1, 5));
 
-        if (UI.button("Connect")) {
-            vc.connect(target);
+        if (UI.button("Connect + Pull")) {
+            vc.connect(target, false);
+        }
+        UI.sameLine();
+        if (UI.button("Connect + Push")) {
+            vc.connect(target, true);
         }
         UI.sameLine();
         if (UI.button("Disconnect")) {
