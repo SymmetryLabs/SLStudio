@@ -10,7 +10,7 @@ abstract class PointColorRenderer implements RenderManager.Renderable {
     protected static final PolyBuffer.Space UI_COLOR_SPACE = PolyBuffer.Space.SRGB8;
 
     /* Visible so it can be modified in Internals window */
-    static float scalePointSize = 0.1f;
+    static float scalePointSize = 0.2f;
 
     protected final LXModel model;
     protected final LX lx;
