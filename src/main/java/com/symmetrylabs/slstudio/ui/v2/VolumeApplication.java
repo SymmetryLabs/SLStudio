@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
+import com.symmetrylabs.cli.CommandLineInterface;
 import com.symmetrylabs.slstudio.server.VolumeClient;
 import com.symmetrylabs.slstudio.server.VolumeCore;
 import heronarts.lx.LX;
@@ -21,9 +22,9 @@ import heronarts.lx.LXMappingEngine;
  * instance off to libgdx, this class is what actually runs the app.
  */
 public class VolumeApplication extends ApplicationAdapter implements VolumeCore.Listener {
-    private final VolumeCore core;
+    private VolumeCore core;
     private RenderManager renderer;
-    private VolumeClient client;
+    public VolumeClient client;
     LookEditor lookEditor;
     ViewController viewController;
 
@@ -50,6 +51,17 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
             }
         };
         this.client = new VolumeClient(this);
+    }
+
+    public VolumeApplication(String args) {
+        this.client = new VolumeClient(this);
+        CommandLineInterface cli = new CommandLineInterface(this.client);
+        cli.exec(args);
+    }
+
+    // example CommandLineInterfaceInvocation of "VolumeApplication" base class.
+    public static void main(String[] arg){
+        new VolumeApplication("mac");
     }
 
     @Override

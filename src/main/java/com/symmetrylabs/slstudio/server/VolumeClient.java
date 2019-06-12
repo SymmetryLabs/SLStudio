@@ -13,6 +13,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
+import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
 public class VolumeClient {
@@ -215,4 +216,10 @@ public class VolumeClient {
         lxState.lx.engine.osc.transmitActive.setValue(false);
         lxState.vc.setRemoteDataDisplayed(false);
     }
+
+
+//    public static void main(String[] arg){
+//        VolumeApplication clientOnly = new VolumeApplication();
+////        clientOnly.client.connect("0.0.0.0");
+//    }
 }
