@@ -24,12 +24,11 @@ plugins {
 group = 'com.symmetrylabs'
 version = '1.0.5'
 sourceCompatibility = 1.8
-mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
+mainClassName = 'com.symmetrylabs.slstudio.SymmetryLauncher'
 
 allprojects {
 	repositories {
 		mavenCentral()
-
 		maven {
 			url 'https://jitpack.io'
 			// these credentials are for the symmetry-labs account
@@ -96,7 +95,7 @@ compileTestKotlin {
 }
 
 run {
-    mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
+    mainClassName = rootProject.mainClassName
     if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
         jvmArgs '-XX:+UseParNewGC', '-XX:+UseConcMarkSweepGC'
     }
@@ -104,6 +103,7 @@ run {
 
     // To select a layout from the command line, "gradlew run -Playout=cubes"
     systemProperty 'com.symmetrylabs.layout', findProperty('layout')
+    systemProperty 'com.symmetrylabs.app', 'slstudio'
 
     doLast {
         while (file(".restart").exists()) {
@@ -165,10 +165,12 @@ task runUIv2(type: JavaExec) {
         systemProperty 'java.awt.headless', true
     }
 
+    main = rootProject.mainClassName
+
     systemProperty 'org.lwjgl.util.Debug', true
     systemProperty 'java.library.path', 'libs'
+    systemProperty 'com.symmetrylabs.app', 'volume'
 
-    main = 'com.symmetrylabs.slstudio.ui.v2.Lwjgl3Launcher'
     /* copy our classpath from the normal run task, which has its classpath filled in
        by the java application plugin. */
     classpath = run.classpath
@@ -181,7 +183,8 @@ task runUIv2(type: JavaExec) {
 runUIv2.mustRunAfter genPrebuiltSlimgui
 
 task runServer(type: JavaExec) {
-    main = 'com.symmetrylabs.slstudio.server.VolumeServer'
+    systemProperty 'com.symmetrylabs.app', 'server'
+    main = rootProject.mainClassName
     /* copy our classpath from the normal run task, which has its classpath filled in
        by the java application plugin. */
     classpath = run.classpath
