@@ -63,7 +63,6 @@ public class MainMenu implements Window {
             }
             if (UI.menuItem("Save As...")) {
                 runSaveAs();
-                onProjectChanged();
             }
             UI.endMenu();
         }
