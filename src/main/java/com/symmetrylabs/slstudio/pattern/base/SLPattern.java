@@ -56,29 +56,22 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
         this.model = asSpecializedModel(model);
         isModelCompatible = (this.model != null);
         if (!isModelCompatible) {
-            this.model = getEmptyModel();
+            throw new RuntimeException(
+                "pattern " + getClass().getSimpleName() + " not compatible with model type " + getModelClass().toString());
         }
         return super.setModel(model);
     }
 
     /** Gets the model class, M. */
-    public Class getModelClass() {
-        return getEmptyModel().getClass();
-    }
-
-    /** Gets an empty instance of the model class, M. */
-    private M getEmptyModel() {
+    public Class<M> getModelClass() {
         String modelClassName = new TypeToken<M>(getClass()) {}.getType().getTypeName();
         String rawModelClassName = modelClassName.replaceAll("<.*", "");
-        M emptyModel;
         try {
-            emptyModel = (M) Class.forName(rawModelClassName).getConstructor().newInstance();
-        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |
-            InstantiationException | InvocationTargetException | ClassCastException e) {
+            return (Class<M>) Class.forName(rawModelClassName);
+        } catch (ClassNotFoundException | ClassCastException e) {
             throw new RuntimeException(
-                "Could not find a public default constructor for " + modelClassName + ": " + e);
+                "Could not find a class for type token " + modelClassName + ": " + e.getMessage());
         }
-        return emptyModel;
     }
 
     /** Casts the given model to the M type if possible, otherwise returns null. */
