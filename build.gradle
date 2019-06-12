@@ -195,6 +195,10 @@ task genUiHeader(type: Exec) {
     commandLine "javac", "-h", "slimgui/src/main/cpp/", "src/main/java/com/symmetrylabs/slstudio/ui/v2/UI.java"
 }
 
+shadowJar {
+    classifier = "all"
+}
+
 task dist(type: Zip) {
     dependsOn ":shadowJar"
     from(".") {
@@ -205,6 +209,9 @@ task dist(type: Zip) {
     from("scripts") {
         include 'SLStudio.bat'
         include 'SLStudio.sh'
+        include 'Volume.bat'
+        include 'Volume.sh'
+        include 'VolumeServer.sh'
         filter { line -> line.replace('$VERSION', project.version) }
     }
     from(shadowJar) {
