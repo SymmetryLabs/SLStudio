@@ -801,29 +801,113 @@ public class UI {
      * @param t the text to draw
      */
     public static native void text(String t);
+
+    /**
+     * Draws and formats a single line of text
+     *
+     * @param t a format pattern
+     * @param objs the objects to substitute in to the provided format pattern
+     */
     public static void text(String t, Object... objs) {
         text(String.format(t, objs));
     }
+
     /**
      * Draws plain text word-wrapped to the size of its containing window.
      *
      * @param t the text to draw
      */
     public static native void textWrapped(String t);
+
+    /**
+     * Draws static text with a label on the right.
+     *
+     * This mimics the layout of an input widget, but without making the text editable
+     *
+     * @param label the label to draw
+     * @param value the text that will be drawn
+     */
     public static native void labelText(String label, String value);
+
+    /**
+     * Draw a button
+     *
+     * @param t the ID of the button (and the text on the button)
+     * @return true if the button is pressed
+     */
     public static boolean button(String t) {
         return button(t, 0, 0);
     }
+
+    /**
+     * Draw a button
+     *
+     * @param t the ID of the button (and the text on the button)
+     * @param w the width of the button, in pixels. If 0, the button is sized to fit the label
+     * @return true if the button is pressed
+     */
     public static boolean button(String t, float w) {
         return button(t, w, 0);
     }
+
+    /**
+     * Draw a button
+     *
+     * @param t the ID of the button (and the text on the button)
+     * @param w the width of the button, in pixels. If 0, the button is sized to fit the label
+     * @param h the height of the button, in pixels. If 0, the button is sized to fit the label
+     * @return true if the button is pressed
+     */
     public static native boolean button(String t, float w, float h);
+
+    /**
+     * Draw a checkbox
+     *
+     * @param label the ID of (and label on) the checkbox
+     * @param v the current value of the checkbox
+     * @return the new value of the checkbox
+     */
     public static native boolean checkbox(String label, boolean v);
+
+    /**
+     * Draws a text widget that can be toggled on and off with a single-click
+     *
+     * @param label the ID of (and label on) the widget
+     * @param v true if the widget is currently selected
+     * @return true if the widget is selected after processing current mouse input
+     */
     public static boolean selectable(String label, boolean v) {
         return selectable(label, v, 0);
     }
+
+    /**
+     * Draws a text widget that can be toggled on and off with a single-click
+     *
+     * @param label the ID of (and label on) the widget
+     * @param v true if the widget is currently selected
+     * @param height the height of the widget. If zero, the widget is sized to fit its label
+     * @return true if the widget is selected after processing current mouse input
+     */
     public static native boolean selectable(String label, boolean v, float height);
+
+    /**
+     * Draws a text input field widget
+     *
+     * @param label the label to draw next to the field
+     * @param text the current contents of the input field
+     * @return the new contents of the input field
+     */
     public static native String inputText(String label, String text);
+
+    /**
+     * Draws a multi-line text input area widget
+     *
+     * @param label the label to draw next to the field
+     * @param text the current contents of the input field
+     * @param displayLines the height of the widget, in number of lines that should be visible
+     * @param flags a bitset of the INPUT_TEXT flags
+     * @return the new contents of the input field
+     */
     public static native String inputTextMultiline(String label, String text, int displayLines, int flags);
 
     /**
@@ -835,7 +919,30 @@ public class UI {
      * @return true if the array is changed
      */
     public static native boolean inputFloat3(String label, float[] v, int flags);
+
+    /**
+     * Draws a color widget with a Photoshop-style editor popup.
+     *
+     * @param label the ID of (and label on) the widget
+     * @param rgb the color to draw on the widget, in 8-bit ARGB format
+     * @return the new color, in 8-bit ARGB format
+     */
     public static native int colorPicker(String label, int rgb);
+
+    /**
+     * Draws a color widget with a Photoshop-style editor popup.
+     *
+     * This should be preferred whenever you have HSV values, because it will preserve the
+     * hue and saturation when saturation or value are at singular values; if you bring value
+     * to zero then back up to one, this function will maintain your hue value through it, which
+     * won't be the case if you convert your colors to RGB and use {@link colorPicker(String, int)}
+     *
+     * @param label the ID of (and label on) the widget
+     * @param h the hue of the color, between 0 and 360
+     * @param s the saturation of the color, between 0 and 100
+     * @param v the value of the color, between 0 and 100
+     * @return a 3-element float array containing hue, saturation, and value
+     */
     public static native float[] colorPickerHSV(String label, float h, float s, float v);
     public static native float sliderFloat(String label, float v, float v0, float v1);
     public static native float vertSliderFloat(String label, float v, float v0, float v1, String valFmt, float width, float height);
