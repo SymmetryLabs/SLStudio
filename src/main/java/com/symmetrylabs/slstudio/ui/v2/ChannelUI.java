@@ -3,17 +3,13 @@ package com.symmetrylabs.slstudio.ui.v2;
 import heronarts.lx.LX;
 import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
-import static heronarts.lx.LXChannel.CrossfadeGroup;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
-import heronarts.lx.mutation.Mutations;
 import heronarts.lx.mutation.RemoveEffect;
 import heronarts.lx.mutation.RemovePattern;
 import heronarts.lx.mutation.RemoveWarp;
 import heronarts.lx.warp.LXWarp;
-import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.lx.parameter.BooleanParameter;
-import java.util.ArrayList;
+
 import java.util.List;
 import org.lwjgl.glfw.GLFW;
 
@@ -129,23 +125,46 @@ public class ChannelUI {
         }
     }
 
+    private static String newPresetNameBuffer = "";
+
     public static void draw(LX lx, LXChannel chan, ParameterUI pui, WepUI wepUi) {
         String chanName = chan.getLabel();
 
-
-
         pui.push().allowMapping(true);
 
-        pui.push().preferKnobs(false);
-        pui.draw(chan.localLooks);
-        pui.draw(chan.loadLook);
-        pui.draw(chan.saveLook);
-        pui.draw(chan.blendPatterns);
-        pui.draw(chan.midiMonitor);
-        pui.draw(chan.patternBlendMode);
-        pui.draw(chan.midiChannel);
-        pui.draw(chan.speed);
-        pui.pop();
+        if (UI.collapsibleSection("Channel options")) {
+            pui.push().preferKnobs(false);
+            pui.draw(chan.blendPatterns);
+            pui.draw(chan.midiMonitor);
+            pui.draw(chan.patternBlendMode);
+            pui.draw(chan.midiChannel);
+            pui.draw(chan.speed);
+            pui.pop();
+        }
+        if (UI.collapsibleSection("Presets")) {
+            chan.linkedPreset = UI.combo("preset##" + chan.getIndex(), chan.linkedPreset, lx.channelPresets.getOptions());
+            if (chan.linkedPreset == lx.channelPresets.newPresetOptionIndex()) {
+                newPresetNameBuffer = UI.inputText("name", newPresetNameBuffer);
+            }
+            if (UI.button("Apply to channel") && chan.linkedPreset != lx.channelPresets.newPresetOptionIndex()) {
+                lx.engine.addTask(() -> lx.channelPresets.applyPresetToChannel(chan));
+            }
+            UI.sameLine();
+            if (UI.button("Save to preset")) {
+                if (chan.linkedPreset == lx.channelPresets.newPresetOptionIndex()) {
+                    if (!newPresetNameBuffer.equals("")) {
+                        final String newPresetName = newPresetNameBuffer;
+                        newPresetNameBuffer = "";
+                        lx.engine.addTask(() -> {
+                            lx.channelPresets.saveChannelAsPreset(chan, newPresetName);
+                            chan.linkedPreset = lx.channelPresets.getNames().indexOf(newPresetName);
+                        });
+                    }
+                } else {
+                    lx.engine.addTask(() -> lx.channelPresets.saveChannelAsPreset(chan));
+                }
+            }
+        }
 
         drawWarps(lx, chanName, chan, pui);
 

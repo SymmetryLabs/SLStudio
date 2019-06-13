@@ -22,6 +22,7 @@ package heronarts.lx;
 
 import com.google.common.base.Preconditions;
 import com.symmetrylabs.slstudio.palettes.SwatchLibrary;
+import com.symmetrylabs.slstudio.presets.ChannelPresetLibrary;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXPalette;
 import heronarts.lx.data.LXVersion;
@@ -183,6 +184,11 @@ public class LX {
      */
     public final SwatchLibrary swatches;
 
+    /**
+     * The active channel preset library.
+     */
+    public final ChannelPresetLibrary channelPresets;
+
     /** The list of globally registered pattern classes */
     private final List<Class<? extends LXPattern>> registeredPatterns = new ArrayList<Class<? extends LXPattern>>();
 
@@ -252,6 +258,10 @@ public class LX {
         swatches = SwatchLibrary.getDefault(this);
         engine.registerComponent("swatches", swatches);
         LX.initTimer.log("Swatches");
+
+        channelPresets = new ChannelPresetLibrary();
+        registerExternal("channelPresets", channelPresets);
+        LX.initTimer.log("Channel presets");
 
         // Add a default channel
         LXLook look = this.engine.addLook();

@@ -27,7 +27,6 @@ public class LookEditor implements Window {
     private boolean showLookTransform = false;
     private float maxWindowHeight = -1;
     boolean showLookEditorPanel = true;
-    private MicroLooks microLooks;
 
     static final int[] MAP_COLORS = new int[10];
     static {

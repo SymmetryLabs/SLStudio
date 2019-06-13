@@ -21,7 +21,6 @@
 package heronarts.lx;
 
 import heronarts.lx.blend.LXBlend;
-import heronarts.lx.color.ColorParameter;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXShortMessage;
 import heronarts.lx.model.LXModel;
@@ -33,13 +32,13 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.parameter.ObjectParameter;
 import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.pattern.SolidColorPattern;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import com.symmetrylabs.slstudio.ApplicationState;
 import java.util.Collection;
-import com.symmetrylabs.slstudio.microlooks.MicroLooks;
+import com.symmetrylabs.slstudio.presets.ChannelPresetLibrary;
 
 
 import com.google.gson.JsonArray;
@@ -274,10 +273,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     private final List<LXPattern> mutablePatterns = new ArrayList<LXPattern>();
     public final List<LXPattern> patterns = Collections.unmodifiableList(mutablePatterns);
 
-    public final DiscreteParameter localLooks = new DiscreteParameter("looks", 1);
-    public final BooleanParameter loadLook = new BooleanParameter("loadLook", false).setMode(BooleanParameter.Mode.MOMENTARY);
-    public final BooleanParameter saveLook = new BooleanParameter("saveLook", false).setMode(BooleanParameter.Mode.MOMENTARY);
-
     /**
      * A local buffer used for transition blending and effects on this channel
      */
@@ -290,6 +285,8 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
     private LXBlend transition = null;
     private long transitionMillis = 0;
+
+    public int linkedPreset = 0;
 
     ChannelThread thread = new ChannelThread();
 
@@ -377,28 +374,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         addParameter("editorVisible", this.editorVisible);
         addParameter("patternBlendMode", this.patternBlendMode);
         addParameter("blendPatterns", this.blendPatterns);
-
-        loadLook.addListener(p -> {
-            if (!loadLook.isOn()) return;
-            int lI = localLooks.getValuei();
-            if (lI == 0) {
-                return;
-            }
-            String look = localLooks.getOptions()[lI];
-            MicroLooks.loadChannel(this, look);
-
-
-        });
-        saveLook.addListener(p -> {
-            if (!saveLook.isOn()) return;
-            int lI = localLooks.getValuei();
-            if (lI == 0) {
-                return;
-            }
-            String look = localLooks.getOptions()[lI];
-            MicroLooks.saveChannel(this, look);
-        });
-        localLooks.setOptions(MicroLooks.getLookNames());
     }
 
     boolean shouldRun() {
