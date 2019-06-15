@@ -4,6 +4,8 @@ import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
+import com.symmetrylabs.slstudio.network.OpcMessage;
+import com.symmetrylabs.slstudio.network.OpcSocket;
 import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 import heronarts.lx.LX;
@@ -49,6 +51,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     int packetSizeBytes;
     byte[] packetData;
     boolean sendTestPattern = false;
+    boolean sendReset = false;
 
     private final LX lx;
     private CubesMappingMode mappingMode;
@@ -228,6 +231,13 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
                     setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
                 }
             }
+        } else if (sendReset) {
+            try (OpcSocket socket = new OpcSocket(dsocket.getInetAddress())) {
+                // @Deprecated: Switch to SYMMETRY_LABS_RESET sysex after all controllers are updated to Aura.
+                socket.send(new OpcMessage(0x88, 2));
+            }
+            // don't need to send multiple times
+            sendReset = false;
         } else if (sendTestPattern) {
             int col = (int) ((System.nanoTime() / 1_000_000_000L) % 3L);
             int c = 0;

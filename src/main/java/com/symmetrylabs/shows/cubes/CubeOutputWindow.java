@@ -51,6 +51,7 @@ public class CubeOutputWindow extends CloseableWindow {
         UI.sameLine();
         boolean collapse = UI.button("collapse all");
         UI.text("alt-click any controller to send test pattern");
+        UI.text("alt-ctl-click any controller to send reset");
 
         for (CubesController cc : ccs) {
             if (expand) {
@@ -69,7 +70,7 @@ public class CubeOutputWindow extends CloseableWindow {
                 UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.RED);
                 UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.RED_HOVER);
             }
-            UI.CollapseResult cr = UI.collapsibleSection(cc.id, false);
+            UI.CollapseResult cr = UI.collapsibleSection(cc.id + " (" + cc.networkDevice.versionId + ")", false);
             if (cc.getMacAddress() != null && UI.beginDragDropSource()) {
                 UI.setDragDropPayload("SL.CubeMacAddress", cc.getMacAddress());
                 UI.endDragDropSource();
@@ -77,6 +78,7 @@ public class CubeOutputWindow extends CloseableWindow {
 
             UI.popColor(3);
             cc.sendTestPattern = UI.isItemClicked(true) && UI.isAltDown();
+            cc.sendReset = UI.isItemClicked(true) && UI.isAltDown() && UI.isCtrlDown();
 
             if (!cr.isOpen) {
                 continue;
