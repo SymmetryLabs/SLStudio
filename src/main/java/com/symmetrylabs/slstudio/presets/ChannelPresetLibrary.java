@@ -39,6 +39,7 @@ public class ChannelPresetLibrary implements LXSerializable {
             "transitionBlendMode",
             "autoDisable",
             "editorVisible",
+            "label",
         };
         for (String toDel : toDelete) {
             if (params.has(toDel)) {
