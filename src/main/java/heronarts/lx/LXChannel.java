@@ -21,7 +21,6 @@
 package heronarts.lx;
 
 import heronarts.lx.blend.LXBlend;
-import heronarts.lx.color.ColorParameter;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXShortMessage;
 import heronarts.lx.model.LXModel;
@@ -33,12 +32,14 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.parameter.ObjectParameter;
 import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.pattern.SolidColorPattern;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import com.symmetrylabs.slstudio.ApplicationState;
 import java.util.Collection;
+import com.symmetrylabs.slstudio.presets.ChannelPresetLibrary;
+
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -284,6 +285,8 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
     private LXBlend transition = null;
     private long transitionMillis = 0;
+
+    public int linkedPreset = 0;
 
     ChannelThread thread = new ChannelThread();
 
