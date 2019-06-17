@@ -31,6 +31,7 @@ public class VolumeClient {
     }
 
     private final VolumeApplication app;
+    private LXOscEngine serverOsc;
     private LXState lxState = null;
     private boolean isShuttingDown = false;
     private boolean wantsConnection = false;
@@ -72,14 +73,9 @@ public class VolumeClient {
     }
 
     public void onDraw() {
-        /* When we're connected to a remote client, VolumeClient owns OSC settings.
-         * This is a poor fix for the fact that, when we push project data back and
-         * forth, we overwrite OSC settings with the remote's settings; the appropriate
-         * way to fix that is just mask out the OSC part of the project data somewhere,
-         * but it's not clear where yet. */
-        lxState.lx.engine.osc.transmitHost.setValue(target);
-        lxState.lx.engine.osc.transmitPort.setValue(LXOscEngine.DEFAULT_RECEIVE_PORT);
-        lxState.lx.engine.osc.transmitActive.setValue(true);
+        if (serverOsc != null) {
+            serverOsc.dispatch();
+        }
     }
 
     public RemoteRenderer getRemoteRenderer() {
@@ -184,11 +180,12 @@ public class VolumeClient {
         isShuttingDown = false;
         lxState.lx.engine.mutations.sender.connect(serverChannel, target, true);
         lxState.renderer.connect(serverChannel);
-        lxState.lx.engine.osc.transmitActive.setValue(false);
-        lxState.lx.engine.osc.transmitHost.setValue(target);
-        lxState.lx.engine.osc.transmitPort.setValue(LXOscEngine.DEFAULT_RECEIVE_PORT);
-        lxState.lx.engine.osc.transmitActive.setValue(true);
         lxState.vc.setRemoteDataDisplayed(true);
+
+        serverOsc = new LXOscEngine(lxState.lx);
+        serverOsc.transmitPort.setValue(VolumeServer.SERVER_OSC_PORT);
+        serverOsc.transmitHost.setValue(target);
+        serverOsc.transmitActive.setValue(true);
     }
 
     private void disconnectImpl(boolean waitForDisconnection) {
@@ -212,7 +209,11 @@ public class VolumeClient {
         }
         serverChannel = null;
 
-        lxState.lx.engine.osc.transmitActive.setValue(false);
+        if (serverOsc != null) {
+            serverOsc.dispose();
+            serverOsc = null;
+        }
+
         lxState.vc.setRemoteDataDisplayed(false);
     }
 }

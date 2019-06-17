@@ -22,6 +22,8 @@ import java.util.concurrent.TimeUnit;
 public class VolumeServer implements VolumeCore.Listener {
     public static final long CLIENT_SUBSCRIPTION_TIMEOUT_NS = 10_000_000_000L; /* = 10 sec */
     public static final int VOLUME_SERVER_PORT = 3032;
+    public static final int SERVER_OSC_PORT = 3033;
+
     private static final long SAVE_PROJECT_PERIOD_NS = 5_000_000_000L; /* = 5 sec */
 
     private static final String PROJECT_STORE = "volume-server-project.lxp";
@@ -127,6 +129,7 @@ public class VolumeServer implements VolumeCore.Listener {
     private final Map<String, Client> clients = new HashMap<>();
     private final List<SubscriptionRequest> subscriptionRequests = new ArrayList<>();
     private ProjectLoaderService projectLoaderService;
+    private LXOscEngine clientOsc;
 
     private long lastTransmit = 0;
 
@@ -151,10 +154,7 @@ public class VolumeServer implements VolumeCore.Listener {
         try {
             projectLoaderService.projectLoadSemaphore.acquire();
             try {
-                /* this is a hack but it's also The Only Way To Be Sure. */
-                core.lx.engine.osc.receiveHost.setValue("0.0.0.0");
-                core.lx.engine.osc.receivePort.setValue(LXOscEngine.DEFAULT_RECEIVE_PORT);
-                core.lx.engine.osc.receiveActive.setValue(true);
+                clientOsc.dispatch();
                 core.lx.engine.onDraw();
             } finally {
                 projectLoaderService.projectLoadSemaphore.release();
@@ -294,6 +294,11 @@ public class VolumeServer implements VolumeCore.Listener {
             .addService(new LXMutationServer(core.lx))
             .addService(projectLoaderService)
             .build();
+
+        clientOsc = new LXOscEngine(core.lx);
+        clientOsc.receiveHost.setValue("0.0.0.0");
+        clientOsc.receivePort.setValue(SERVER_OSC_PORT);
+        clientOsc.receiveActive.setValue(true);
 
         try {
             grpcServer.start();
