@@ -17,6 +17,8 @@ public class SimplexNoisePattern extends SLPattern<SLModel> {
         new CompoundParameter("rate", 1, 0, 10).setExponent(3);
     private final CompoundParameter exp = (CompoundParameter)
         new CompoundParameter("exp", 1.5, 0.01, 8).setExponent(2);
+    private final CompoundParameter offset = (CompoundParameter)
+        new CompoundParameter("offset", 0, 0, 10);
 
     private double w = 0;
 
@@ -25,11 +27,13 @@ public class SimplexNoisePattern extends SLPattern<SLModel> {
         addParameter(scale);
         addParameter(rate);
         addParameter(exp);
+        addParameter(offset);
     }
 
     @Override
     public void run(double elapsedMs, PolyBuffer.Space preferredSpace) {
         w += rate.getValue() * elapsedMs / 1000;
+        float off = offset.getValuef();
         float sc = (float) Math.pow(10, scale.getValue());
         long[] c = (long[]) getArray(PolyBuffer.Space.RGB16);
         float e = exp.getValuef();
@@ -37,7 +41,8 @@ public class SimplexNoisePattern extends SLPattern<SLModel> {
             double nv = SimplexNoise.noise(
                 sc * (v.x - model.cx),
                 sc * (v.y - model.cy),
-                sc * (v.z - model.cz), w);
+                sc * (v.z - model.cz),
+                w + off);
             long g = (long) (0xFFFFL * Math.pow(Math.abs(nv), e));
             c[v.index] = 0xFFFF_0000_0000_0000L | (g << 32) | (g << 16) | g;
         }
