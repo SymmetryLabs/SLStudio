@@ -120,24 +120,4 @@ public class SLModel extends LXModel {
             this.end = end;
         }
     }
-
-    /**
-     * Do not use this! It's only for determining type tokens attached to existing SLModels.
-     *
-     * TODO: refactor this to use proper compile-time type embedding like we do with compatible pattern models in LXClassLoader.
-     */
-    @Deprecated
-    public SLModel() {
-        this(null);
-    }
-
-    /**
-     * Do not use this! It's only for determining type tokens attached to existing SLModels.
-     *
-     * TODO: refactor this to use proper compile-time type embedding like we do with compatible pattern models in LXClassLoader.
-     */
-    @Deprecated
-    public static SLModel getModelWithoutModelIDForTypeTesting() {
-        return new SLModel();
-    }
 }
