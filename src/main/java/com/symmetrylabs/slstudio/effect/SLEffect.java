@@ -25,30 +25,15 @@ public abstract class SLEffect<M extends SLModel> extends LXEffect {
     }
 
     /** Gets the model class, M. */
-    public Class getModelClass() {
-        return getEmptyModel().getClass();
-    }
-
-    /** Gets an empty instance of the model class, M. */
-    private M getEmptyModel() {
-        TypeToken tt = new TypeToken<M>(getClass()) {};
-        /* if it's a type variable, then SLEffect was instantiated without a type parameter,
-             so we just assume the effect works on all SLModels. */
-        if (tt.getType() instanceof TypeVariable) {
-            return (M) SLModel.getModelWithoutModelIDForTypeTesting();
-        }
-
-        String modelClassName = tt.getType().getTypeName();
+    private Class<M> getModelClass() {
+        String modelClassName = new TypeToken<M>(getClass()) {}.getType().getTypeName();
         String rawModelClassName = modelClassName.replaceAll("<.*", "");
-        M emptyModel;
         try {
-            emptyModel = (M) Class.forName(rawModelClassName).getConstructor().newInstance();
-        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |
-                         InstantiationException | InvocationTargetException | ClassCastException e) {
+            return (Class<M>) Class.forName(rawModelClassName);
+        } catch (ClassNotFoundException | ClassCastException e) {
             throw new RuntimeException(
-                "Could not find a public default constructor for " + modelClassName + ": " + e);
+                "Could not find a class for type token " + modelClassName + ": " + e.getMessage());
         }
-        return emptyModel;
     }
 
     public M getModel() {
@@ -57,19 +42,17 @@ public abstract class SLEffect<M extends SLModel> extends LXEffect {
 
     @Override
     public LXModelComponent setModel(LXModel model) {
-        M emptyModel = getEmptyModel();
-
+        this.model = null;
         try {
-            if (emptyModel.getClass().isAssignableFrom(model.getClass())) {
+            if (getModelClass().isAssignableFrom(model.getClass())) {
                 this.model = (M) model;
             }
-            else {
-                this.model = emptyModel;
-            }
         } catch (ClassCastException e) {
-            this.model = emptyModel;
+            System.err.println(String.format(
+                "effect %s not compatible with model type %s:",
+                getClass().getSimpleName(), model.getClass()));
+            e.printStackTrace();
         }
-
         return super.setModel(model);
     }
 }
