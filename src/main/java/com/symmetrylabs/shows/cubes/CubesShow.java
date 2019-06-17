@@ -172,7 +172,7 @@ public abstract class CubesShow implements Show {
 
     public void setupUi(LX lx) {
         WindowManager.addPersistent("Cubes/Inventory", () -> new InventoryEditor(lx, cubeInventory), false);
-        WindowManager.addPersistent("Cubes/Mapping", () -> new MappingEditor(lx, (CubesModel) lx.model), false);
+        WindowManager.addPersistent("Cubes/Mapping", () -> new MappingWindow(lx, (CubesModel) lx.model), false);
         WindowManager.addPersistent("Cubes/Output", () -> new CubeOutputWindow(lx, this), false);
         WindowManager.addPersistent("Cubes/Scaling", () -> new OutputScaleWindow(lx, outputScaler), false);
     }

@@ -7,19 +7,23 @@ import com.symmetrylabs.slstudio.output.CubeModelControllerMapping;
 import com.symmetrylabs.slstudio.ui.v2.CloseableWindow;
 import com.symmetrylabs.slstudio.ui.v2.UI;
 import com.symmetrylabs.slstudio.ui.v2.UIConstants;
+import com.symmetrylabs.util.CubeInventory;
 import heronarts.lx.LX;
 import heronarts.lx.transform.LXTransform;
 import java.util.List;
 
 
-public class MappingEditor extends CloseableWindow {
+public class MappingWindow extends CloseableWindow {
     protected final LX lx;
     protected final CubesModel model;
+    protected final CubeInventory inventory;
+    private String filter = "";
 
-    public MappingEditor(LX lx, CubesModel model) {
+    public MappingWindow(LX lx, CubesModel model) {
         super("Mapping");
         this.lx = lx;
         this.model = model;
+        this.inventory = model.inventory;
     }
 
     @Override
@@ -58,9 +62,25 @@ public class MappingEditor extends CloseableWindow {
             UI.endPopup();
         }
 
+        UI.textWrapped("filters on model ID, associated phys ID, and associated controller IDs and MAC addresses");
+        filter = UI.inputText("filter", filter);
+
         boolean anyUpdated = false;
         for (int i = 0; i < cubes.size(); i++) {
             Cube c = cubes.get(i);
+            CubeModelControllerMapping.PhysIdAssignment pia = model.mapping.lookUpModel(c.modelId);
+            CubeInventory.PhysicalCube pc = pia != null ? model.inventory.lookUpByPhysId(pia.physicalId) : null;
+
+            if (!filter.equals("")) {
+                boolean modelIdMatch = c.modelId.contains(filter);
+                boolean physIdMatch = pia != null && pia.physicalId != null && pia.physicalId.contains(filter);
+                boolean ctrlIdMatch = pc != null && ((pc.idA != null && pc.idA.contains(filter)) || (pc.idB != null && pc.idB.contains(filter)));
+                boolean ctrlAddrMatch = pc != null && ((pc.addrA != null && pc.addrA.contains(filter)) || (pc.addrB != null && pc.addrB.contains(filter)));
+                if (!(modelIdMatch || physIdMatch || ctrlIdMatch || ctrlAddrMatch)) {
+                    continue;
+                }
+            }
+
             if (expand) {
                 UI.setNextTreeNodeOpen(true);
             } else if (collapse) {
@@ -82,12 +102,20 @@ public class MappingEditor extends CloseableWindow {
 
             UI.inputFloat3("position##" + i, new float[] {c.x, c.y, c.z}, UI.INPUT_TEXT_FLAG_READ_ONLY);
 
-            CubeModelControllerMapping.PhysIdAssignment pia = model.mapping.lookUpModel(c.modelId);
             String oldPhysId = pia == null ? "" : pia.physicalId;
             String newPhysId = UI.inputText(String.format("physid##%d", i), oldPhysId);
             if (!oldPhysId.equals(newPhysId)) {
                 model.mapping.setControllerAssignment(c.modelId, newPhysId);
                 anyUpdated = true;
+            }
+            if (pia != null && pc != null) {
+                UI.text("Associated cube data");
+                UI.labelText("idA", pc.idA == null ? "(null)" : pc.idA);
+                UI.labelText("addrA", pc.addrA == null ? "(null)" : pc.addrA);
+                if (pc.idB != null || pc.addrB != null) {
+                    UI.labelText("idB", pc.idB == null ? "(null)" : pc.idB);
+                    UI.labelText("addrB", pc.addrB == null ? "(null)" : pc.addrB);
+                }
             }
         }
 
