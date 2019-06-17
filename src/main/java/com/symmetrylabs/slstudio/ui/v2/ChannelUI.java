@@ -107,7 +107,7 @@ public class ChannelUI {
             shouldShow = true;
         }
         if ((UI.isWindowFocused(UI.FOCUSED_FLAG_CHILD_WINDOWS) || !UI.wantCaptureKeyboard()) &&
-            lx.engine.getFocusedLook().getFocusedChannel() == bus && UI.isKeyPressed(GLFW.GLFW_KEY_TAB)) {
+            lx.engine.getFocusedLook().getFocusedChannel() == bus && UI.isApplicationKeyChordPressed(GLFW.GLFW_KEY_TAB)) {
             shouldShow = true;
         }
         if (shouldShow) {

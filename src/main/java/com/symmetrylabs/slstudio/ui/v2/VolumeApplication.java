@@ -77,7 +77,7 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
         }
 
         /* handle global keyboard inputs */
-        if (UI.isKeyDown(GLFW.GLFW_KEY_M)) {
+        if (UI.isApplicationKeyChordDown(GLFW.GLFW_KEY_M)) {
             core.lx.engine.mapping.setMode(LXMappingEngine.Mode.MIDI);
         } else {
             core.lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);

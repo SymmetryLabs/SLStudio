@@ -5,11 +5,7 @@ import heronarts.lx.*;
 import heronarts.lx.mutation.AddEffect;
 import heronarts.lx.mutation.AddPattern;
 import heronarts.lx.mutation.AddWarp;
-import heronarts.lx.mutation.Mutations;
-import heronarts.lx.warp.LXWarp;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import com.symmetrylabs.slstudio.ApplicationState;
@@ -135,7 +131,7 @@ public class WepUI {
                             if (UI.isItemClicked()) {
                                 activate(pi);
                             }
-                            if (firstMatch && UI.isKeyPressed(GLFW.GLFW_KEY_ENTER)) {
+                            if (firstMatch && UI.isApplicationKeyChordPressed(GLFW.GLFW_KEY_ENTER)) {
                                 activate(pi);
                             }
                             firstMatch = false;
@@ -155,7 +151,7 @@ public class WepUI {
                     if (UI.isItemClicked()) {
                         activate(ei);
                     }
-                    if (firstMatch && UI.isKeyPressed(GLFW.GLFW_KEY_ENTER)) {
+                    if (firstMatch && UI.isApplicationKeyChordPressed(GLFW.GLFW_KEY_ENTER)) {
                         activate(ei);
                     }
                     firstMatch = false;
@@ -172,7 +168,7 @@ public class WepUI {
                     if (UI.isItemClicked()) {
                         activate(wi);
                     }
-                    if (firstMatch && UI.isKeyPressed(GLFW.GLFW_KEY_ENTER)) {
+                    if (firstMatch && UI.isApplicationKeyChordPressed(GLFW.GLFW_KEY_ENTER)) {
                         activate(wi);
                     }
                     firstMatch = false;

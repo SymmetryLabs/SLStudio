@@ -54,6 +54,7 @@ import java.nio.ByteBuffer;
  * read the <a href="https://github.com/ocornut/imgui/blob/9a0e71a6ecef4402d0504e3a2c9a05ca705ed5db/imgui.cpp#L658">
  * primer on the ID stack in the ImGui codebase</a>.
  */
+@SuppressWarnings("WeakerAccess")
 public class UI {
     /** This class is static because our UI is stateless! */
     private UI() {}
@@ -1035,6 +1036,7 @@ public class UI {
         if (res == null || !cls.isAssignableFrom(res.getClass())) {
             return null;
         }
+        //noinspection unchecked
         return (T) res;
     }
 
@@ -1059,8 +1061,53 @@ public class UI {
     public static native boolean isAltDown();
     public static native boolean isCtrlDown();
     public static native boolean isShiftDown();
-    public static native boolean isKeyPressed(int keycode);
-    public static native boolean isKeyDown(int keycode);
+    static native boolean isKeyPressed(int keycode);
+    static native boolean isKeyDown(int keycode);
+
+    /**
+     * Returns true if the given key chord is currently down.
+     *
+     * This ensures we don't react to key events that are going to be consumed
+     * by slimgui. This should almost always be preferred to {@link isKeyDown(int)}.
+     *
+     * @param keycodes the keys that must all be down for the event to fire
+     * @return true if the key chord is newly pressed on this frame
+     */
+    public static boolean isApplicationKeyChordDown(int... keycodes) {
+        if (UI.wantCaptureKeyboard()) {
+            return false;
+        }
+        boolean allDown = true;
+        for (int keycode : keycodes) {
+            allDown = allDown && UI.isKeyDown(keycode);
+        }
+        return allDown;
+    }
+
+    /**
+     * Returns true if the given key chord has fired on this frame.
+     *
+     * This handles two things: key debouncing for key chords, and ensuring we don't
+     * react to key events that are going to be consumed by slimgui. This should almost always
+     * be preferred to {@link isKeyPressed(int)} or {@link isKeyDown(int)}.
+     *
+     * @param keycodes the keys that must all be down for the event to fire
+     * @return true if the key chord is newly pressed on this frame
+     */
+    public static boolean isApplicationKeyChordPressed(int... keycodes) {
+        if (UI.wantCaptureKeyboard()) {
+            return false;
+        }
+        /* we only return true if one of these keys was pressed on this frame and
+         * all of them are down. */
+        boolean anyPressed = false;
+        boolean allDown = true;
+        for (int keycode : keycodes) {
+            allDown = allDown && UI.isKeyDown(keycode);
+            anyPressed = anyPressed || UI.isKeyPressed(keycode);
+        }
+        return anyPressed && allDown;
+    }
 
     /**
      * Returns true if any item has keyboard focus
