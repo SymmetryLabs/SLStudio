@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 /**
  * The Java half of "slimgui", the Symmetry Labs wrapper around Dear Imgui, an immediate-mode GUI library
  *
+ * <h1>About immediate-mode UIs</h1>
+ *
  * <p>
  * <a href="https://github.com/ocornut/imgui">Dear Imgui</a> is the
  * industry-standard implementation of the immediate-mode GUI (IMGUI) UI
@@ -16,7 +18,7 @@ import java.nio.ByteBuffer;
  * of Dear Imgui</a> has a good introduction to immediate-mode GUIs and Dear
  * Imgui.
  *
- * <h2>IDs and labels for windows and widgets</h2>
+ * <h1>IDs and labels for windows and widgets</h1>
  *
  * <p>
  * The API of ImGui is stateless, but the library itself is not. The library
