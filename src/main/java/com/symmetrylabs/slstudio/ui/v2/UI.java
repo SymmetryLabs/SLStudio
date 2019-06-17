@@ -54,7 +54,7 @@ import java.nio.ByteBuffer;
  * read the <a href="https://github.com/ocornut/imgui/blob/9a0e71a6ecef4402d0504e3a2c9a05ca705ed5db/imgui.cpp#L658">
  * primer on the ID stack in the ImGui codebase</a>.
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "JavadocReference"})
 public class UI {
     /** This class is static because our UI is stateless! */
     private UI() {}
