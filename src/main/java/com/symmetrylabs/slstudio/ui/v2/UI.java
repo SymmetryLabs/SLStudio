@@ -1372,19 +1372,80 @@ public class UI {
      */
     public static native void endContextMenu();
 
-    /* Trees */
+    /**
+     * Draw a tree node.
+     *
+     * This is a convenience method that passes the default set of flags and sets
+     * the label and the ID to be the same thing.
+     *
+     * If this returns true, you should draw the children of this node (also using the
+     * {@code treeNode} family of functions) and then call {@link treePop()}. Do not
+     * call {@code treePop} if this function returns false.
+     *
+     * Note that this function will always draw a node with the triangle handle to
+     * expand or collapse a subtree; to draw leaf nodes, use one of the variants that
+     * allows you to pass flags and pass {@link TREE_FLAG_LEAF}.
+     *
+     * @param label the label and ID of the node
+     * @return true if the subtree rooted at this tree is open
+     */
     public static boolean treeNode(String label) {
         return treeNode(label, 0, label);
     }
+
+    /**
+     * Draw a tree node.
+     *
+     * This is a convenience method that sets the label and the ID to be the same thing.
+     *
+     * If this returns true, you should draw the children of this node (also using the
+     * {@code treeNode} family of functions) and then call {@link treePop()}. Do not
+     * call {@code treePop} if this function returns false.
+     *
+     * @param label the label and ID of the node
+     * @param flags the tree flags that should be used to draw this node
+     * @return true if the subtree rooted at this tree is open
+     */
     public static boolean treeNode(String label, int flags) {
         return treeNode(label, flags, label);
     }
+
+    /**
+     * Draw a tree node.
+     *
+     * If this returns true, you should draw the children of this node (also using the
+     * {@code treeNode} family of functions) and then call {@link treePop()}. Do not
+     * call {@code treePop} if this function returns false.
+     *
+     * @param id the ID of the node (should be stable between frames)
+     * @param flags the tree flags that should be used to draw this node
+     * @param label the label on the node (can change as much as you'd like)
+     * @return true if the subtree rooted at this tree is open
+     */
     public static native boolean treeNode(String id, int flags, String label);
+
+    /**
+     * Finish drawing the current subtree, or finish drawing a tree widget if we're already at the root level.
+     *
+     * This function must be called once for every call to {@code treeNode} that returns true.
+     */
     public static native void treePop();
 
+    /**
+     * Set whether the next tree node or collapsible section should be open or closed
+     *
+     * @param isOpen true to open it, false to close it
+     */
     public static void setNextTreeNodeOpen(boolean isOpen) {
         setNextTreeNodeOpen(isOpen, COND_ALWAYS);
     }
+
+    /**
+     * Conditionally set whether the next tree node or collapsible section should be open or closed
+     *
+     * @param isOpen true to open it, false to close it
+     * @param when one of the {@code COND} flags that sets the conditions in which this function call should apply
+     */
     public static native void setNextTreeNodeOpen(boolean isOpen, int when);
 
     public static boolean beginDragDropSource() {
