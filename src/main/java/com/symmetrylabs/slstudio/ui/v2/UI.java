@@ -1244,26 +1244,132 @@ public class UI {
      */
     static native boolean imageButton(int texId, float w, float h, float u0, float v0, float u1, float v1);
 
-    /* Menus */
+    /**
+     * Starts drawing the main menu bar at the top of the screen
+     *
+     * @return true if the menu bar should be drawn. If false, do not draw the menu and do not call {@link endMainMenuBar()}.
+     */
     public static native boolean beginMainMenuBar();
+
+    /**
+     * Finish drawing the main menu bar.
+     *
+     * Only call this after a call to {@link beginMainMenuBar()} returns true.
+     */
     public static native void endMainMenuBar();
+
+    /**
+     * Draw a menu button in a menu bar, and determine whether the menu is open.
+     *
+     * A menu is something like "File" or "Edit" in a traditional application; it's a button in the menu
+     * bar that expands/collapses an actual menu.
+     *
+     * If this returns false, the menu is not open and you should not draw the menu items, nor should
+     * you call {@link endMenu()}. If this returns true, you should draw the contents of the
+     * menu, followed by {@link endMenu()}.
+     *
+     * Menu contents can be any widget, but widgets that start with {@code menu} (like {@link menuItem(String)}
+     * will look more natural in menus than other widgets.
+     *
+     * @param label the label of this menu
+     * @return true if the menu is open and its contents should be drawn
+     */
     public static native boolean beginMenu(String label);
+
+    /**
+     * Finish drawing an open menu.
+     */
     public static native void endMenu();
+
+    /**
+     * Draws a selectable text item in a menu
+     *
+     * @param label the ID of (and label on) this menu item
+     * @param shortcut if not null, this text is drawn on the right side of the menu (where you would normally draw a keyboard shortcut in a menu). This has no behavioral effect.
+     * @param selected if true, a checkmark is drawn on the right of this menu item
+     * @param enabled if true, this menu item can be selected
+     * @return true if the item is clicked in this frame
+     */
     public static native boolean menuItem(String label, String shortcut, boolean selected, boolean enabled);
+
+    /**
+     * Draws a selectable text item in a menu
+     *
+     * @param label the ID of (and label on) this menu item
+     * @return true if the item is clicked in this frame
+     */
     public static boolean menuItem(String label) {
         return menuItem(label, null, false, true);
     }
-    public static boolean menuText(String label) {
-        return menuItem(label, null, false, false);
+
+    /**
+     * Draws a dimmed non-selectable text item in a menu
+     *
+     * @param label the ID of (and label on) this menu item
+     */
+    public static void menuText(String label) {
+        menuItem(label, null, false, false);
     }
+
+    /**
+     * Draw a toggleable menu item.
+     *
+     * This is a convenience method over {@link menuItem(String, String, boolean, boolean)} that manages
+     * the underlying selected state; it toggles selection on click and returns the selection state
+     * instead of returning the mouse state of the item.
+     *
+     * @param label the ID of (and label on) this menu item
+     * @param shortcut if not null, this text is drawn on the right side of the menu (where you would normally draw a keyboard shortcut in a menu). This has no behavioral effect.
+     * @param selected true if the menu item is currently selected
+     * @param enabled if true, this menu item can be selected
+     * @return the new selection state
+     */
     public static native boolean menuItemToggle(String label, String shortcut, boolean selected, boolean enabled);
 
-    /* Context menus */
+    /**
+     * Start drawing a context menu (i.e., a right click menu) for the last widget drawn
+     *
+     * Returns true if the last widget drawn was right clicked and thus the context menu
+     * should be drawn. If this returns true, draw the contents of the menu and then call
+     * {@link endContextMenu()}. If this function returns false, do not draw the context
+     * menu contents and do not call the end function.
+     *
+     * Any widget can be drawn in a context menu, but if you're just looking for selectable
+     * text items, you should use {@link contextMenuItem(String, boolean)}, which will draw
+     * nice-looking menu items.
+     *
+     * The open state of the menu is entirely managed by ImGUI; it will automatically close
+     * the menu when an item in the menu is selected or the user clicks out of it.
+     *
+     * @param id the ID of this context menu (used to disambiguate context menu state between different context menus)
+     * @return true if the menu is open and its contents should be drawn
+     */
     public static native boolean beginContextMenu(String id);
+
+    /**
+     * Draw a context menu item
+     *
+     * @param label the ID of (and label on) the context menu item
+     * @return true if the item was clicked
+     */
     public static boolean contextMenuItem(String label) {
         return contextMenuItem(label, true);
     }
+
+    /**
+     * Draw a context menu item
+     *
+     * @param label the ID of (and label on) the context menu item
+     * @param enabled true if the item is enabled. If false, the item is drawn grayed out and it won't respond to click events
+     * @return true if the item was clicked
+     */
     public static native boolean contextMenuItem(String label, boolean enabled);
+
+    /**
+     * Finish drawing the contents of a context menu.
+     *
+     * This should only be called after a call to {@link beginContextMenu(String)} returns true
+     */
     public static native void endContextMenu();
 
     /* Trees */
