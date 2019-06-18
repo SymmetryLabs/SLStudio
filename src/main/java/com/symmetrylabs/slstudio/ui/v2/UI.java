@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.ui.v2;
 
+import javax.annotation.Nullable;
 import java.nio.ByteBuffer;
 
 
@@ -846,7 +847,7 @@ public class UI {
      * Draw a button
      *
      * @param t the ID of the button (and the text on the button)
-     * @param w the width of the button, in pixels. If 0, the button is sized to fit the label
+     * @param w the width of the button, in pixels. If 0, the button is sized to fit the label. If -1, the button takes up the remainder of the space on the current line.
      * @return true if the button is pressed
      */
     public static boolean button(String t, float w) {
@@ -857,7 +858,7 @@ public class UI {
      * Draw a button
      *
      * @param t the ID of the button (and the text on the button)
-     * @param w the width of the button, in pixels. If 0, the button is sized to fit the label
+     * @param w the width of the button, in pixels. If 0, the button is sized to fit the label. If -1, the button takes up the remainder of the space on the current line.
      * @param h the height of the button, in pixels. If 0, the button is sized to fit the label
      * @return true if the button is pressed
      */
@@ -947,44 +948,300 @@ public class UI {
      * @return a 3-element float array containing hue, saturation, and value
      */
     public static native float[] colorPickerHSV(String label, float h, float s, float v);
+
+    /**
+     * Draws a horizontal slider widget
+     *
+     * @param label the ID of (and label on) the widget
+     * @param v the current value of the slider
+     * @param v0 the leftmost value of the slider
+     * @param v1 the rightmost value of the slider
+     * @return the new value of the slider
+     */
     public static native float sliderFloat(String label, float v, float v0, float v1);
+
+    /**
+     * Draws a vertical slider widget
+     *
+     * @param label the ID of (and label on) the widget
+     * @param v the current value of the slider
+     * @param v0 the bottommost value of the slider
+     * @param v1 the topmost value of the slider
+     * @param valFmt a String.format-style format string used to display the value of the slider; should contain one %f flag with optional modifiers
+     * @param width the width of the drawn widget, in pixels. If -1, uses the remainder of the space on the current line
+     * @param height the height of the drawn widget, in pixels
+     * @return the new value of the slider
+     */
     public static native float vertSliderFloat(String label, float v, float v0, float v1, String valFmt, float width, float height);
+
+    /**
+     * Draws a horizontal slider widget with discrete integer values
+     *
+     * @param label the ID of (and label on) the widget
+     * @param v the current value of the slider
+     * @param v0 the leftmost value of the slider
+     * @param v1 the rightmost value of the slider
+     * @return the new value of ths slider
+     */
     public static native int sliderInt(String label, int v, int v0, int v1);
+
+    /**
+     * Draws a combo-box widget for choosing between a list of options.
+     *
+     * @param label the ID of (and label on) the widget
+     * @param selected the index of the currently-selected item. If this is not in {@code [0, options.length)}, the widget will be drawn with no item selected
+     * @param options the list of options shown in the combo box
+     * @return the index of the selected item.
+     */
     public static native int combo(String label, int selected, String[] options);
+
+    /**
+     * Draws an input widget for entering unbounded floating-point values.
+     *
+     * This widget supports two kinds of modification: textual keyboard input and dragging
+     *
+     * @param label the ID of (and label on) the widget
+     * @param v the current value of the widget
+     * @return the new value of the widget
+     */
     public static float floatBox(String label, float v) {
         return floatBox(label, v, 1, 0, 0, null);
     }
-    public static native float floatBox(String label, float v, float speed, float min, float max, String valFmt);
+
+    /**
+     * Draws an input widget for entering bounded floating-point values.
+     *
+     * This widget supports two kinds of modification: textual keyboard input and dragging
+     *
+     * @param label the ID of (and label on) the widget
+     * @param v the current value of the widget
+     * @param speed the rate at which the value changes when dragged
+     * @param min the minimum value of the widget's value. If both this and max are zero, the value is unbounded.
+     * @param max the maximum value of the widget's value. If both this and min are zero, the value is unbounded.
+     * @param valFmt a format string to control how the value is displayed in the widget box. If null, a default format string is used.
+     * @return the new value of the widget
+     */
+    public static native float floatBox(String label, float v, float speed, float min, float max, @Nullable String valFmt);
+
+    /**
+     * Draws an input widget for entering unbounded integer values.
+     *
+     * This widget supports two kinds of modification: textual keyboard input and dragging
+     *
+     * @param label the ID of (and label on) the widget
+     * @param v the current value of the widget
+     * @return the new value of the widget
+     */
     public static int intBox(String label, int v) {
         return intBox(label, v, 1, 0, 0, null);
     }
+
+    /**
+     * Draws an input widget for entering bounded integer values.
+     *
+     * This widget supports two kinds of modification: textual keyboard input and dragging
+     *
+     * @param label the ID of (and label on) the widget
+     * @param v the current value of the widget
+     * @param speed the rate at which the value changes when dragged
+     * @param min the minimum value of the widget's value. If both this and max are zero, the value is unbounded.
+     * @param max the maximum value of the widget's value. If both this and min are zero, the value is unbounded.
+     * @param valFmt a format string to control how the value is displayed in the widget box. If null, a default format string is used.
+     * @return the new value of the widget
+     */
     public static native int intBox(String label, int v, float speed, int min, int max, String valFmt);
 
-    /* knob widgets are always over [0, 1] */
-    public static native float knobFloat(String label, float value, float normalized, int dotColor);
+    /**
+     * Draws a knob widget.
+     *
+     * Other than the display value, everything about knobs is done in normalized values, rather
+     * than actual values. This is to make it easier to support exponents and other tricky bits
+     * of LXParameters; the knob doesn't actually care about that, since exponents and other
+     * transformations are applied to the normalized value, which is then mapped onto the actual
+     * parameter range.
+     *
+     * @param label the ID of (and label on) the widget
+     * @param displayValue the value to display as text under the widget when manipulating
+     * @param normalizedValue the value of the widget as a proportion of it's range, must be in [0, 1]
+     * @param dotColor the color of the dot drawn at the center of the knob, in 0xAARRGGBB format. Passing 0 has the effect of not drawing the dot (as alpha = 0)
+     * @return the new <b>normalized</b> value of the widget, in [0, 1].
+     */
+    public static native float knobFloat(String label, float displayValue, float normalizedValue, int dotColor);
+
+    /**
+     * Draws a knob widget with modulation rings around it.
+     *
+     * This is really specific to drawing knobs for CompoundParameter values.
+     *
+     * Other than the display value, everything about knobs is done in normalized values, rather
+     * than actual values. This is to make it easier to support exponents and other tricky bits
+     * of LXParameters; the knob doesn't actually care about that, since exponents and other
+     * transformations are applied to the normalized value, which is then mapped onto the actual
+     * parameter range.
+     *
+     * @param label the ID of (and label on) the widget
+     * @param displayValue the value to display as text under the widget when manipulating
+     * @param normalizedBase the normalized value of the underlying parameter without modulation applied, must be in [0, 1]
+     * @param normalizedValue the value of the parameter after modulation is applied, must be in [0, 1]
+     * @param modulatorCount the number of modulation rings to draw
+     * @param modulatorMins the minimum values for each of the modulation rings, in normalized space (i.e.,, in [0, 1])
+     * @param modulatorMaxs the maximum values for each of the modulation rings, in normalized space (i.e.,, in [0, 1])
+     * @param modulatorColors the colors for each modulation, as 0xRRGGBB
+     * @param dotColor the color of the dot drawn in the center of the knob, in 0xAARRGGBB format. Passing 0 has the effect of not drawing the dot (as alpha = 0)
+     * @return the new value of the underlying parameter (this is essentially an updated normalizedBase)
+     */
     public static native float knobModulatedFloat(
-        String label, float value, float normalizedBase, float normalizedValue,
+        String label, float displayValue, float normalizedBase, float normalizedValue,
         int modulatorCount, float[] modulatorMins, float[] modulatorMaxs, int[] modulatorColors, int dotColor);
+
+    /**
+     * Draw a checkbox-like widget that fits visually into a grid of knobs.
+     *
+     * @param label the ID of (and label on) the widget
+     * @param value the current value of the checkbox
+     * @param dotColor the color of the dot drawn in the center of the knob, in 0xAARRGGBB format. Passing 0 has the effect of not drawing the dot (as alpha = 0)
+     * @return the new value of the checkbox
+     */
     public static native boolean knobToggle(String label, boolean value, int dotColor);
+
+    /**
+     * Draw a button-like widget that fits visually into a grid of knobs.
+     *
+     * Note that this has an important behavior difference from a normal button widget: normal buttons
+     * only return true on mouse-down, but do not continue firing while the mouse is being held.
+     * Because this is specifically intended for momentary boolean parameters, this returns true
+     * as long as the button is being held down.
+     *
+     * @param label the ID of (and label on) the widget
+     * @param displayAsPressed if true, the widget is drawn as if it were pressed (so that these widgets can represent the state of an underlying BooleanParameter)
+     * @param dotColor the color of the dot drawn in the center of the knob, in 0xAARRGGBB format. Passing 0 has the effect of not drawing the dot (as alpha = 0)
+     * @return true if the button is currently being pressed
+     */
     public static native boolean knobButton(String label, boolean displayAsPressed, int dotColor);
 
+    /**
+     * Draw the header of a collapsible section.
+     *
+     * Collapsible sections are a clever imgui trick. This function only draws the header and returns
+     * whether the rest of the section should be drawn; if this function returns false, you just don't
+     * draw the contents of the section. That's how "collapsing" works; you just don't call the
+     * functions to draw the widgets if the header is in the collapsed state.
+     *
+     * @param label the ID of (and label on) the collapsible section header
+     * @return true if the section is currently open
+     */
     public static boolean collapsibleSection(String label) {
         return collapsibleSection(label, false, 0).isOpen;
     }
+
+    /**
+     * Draw the header of a collapsible section.
+     *
+     * Collapsible sections are a clever imgui trick. This function only draws the header and returns
+     * whether the rest of the section should be drawn; if this function returns false, you just don't
+     * draw the contents of the section. That's how "collapsing" works; you just don't call the
+     * functions to draw the widgets if the header is in the collapsed state.
+     *
+     * This function differs from the one-argument version {@link collapsibleSection(String)} in that
+     * it also draws a close button if {@code allowClose} is set. If close is clicked, the
+     * {@code shouldRemove} field will be set on the returned {@link CollapseResult}.
+     *
+     * @param label the ID of (and label on) the collapsible section header
+     * @param allowClose if true, draws a close button on the header as well as the collapse arrow
+     * @return a CollapseResult object that contains both the collapsed and removed states.
+     */
     public static CollapseResult collapsibleSection(String label, boolean allowClose) {
         return collapsibleSection(label, allowClose, 0);
     }
+
+    /**
+     * Draw the header of a collapsible section.
+     *
+     * Collapsible sections are a clever imgui trick. This function only draws the header and returns
+     * whether the rest of the section should be drawn; if this function returns false, you just don't
+     * draw the contents of the section. That's how "collapsing" works; you just don't call the
+     * functions to draw the widgets if the header is in the collapsed state.
+     *
+     * This function differs from the one-argument version {@link collapsibleSection(String)} in that
+     * it also draws a close button if {@code allowClose} is set. If close is clicked, the
+     * {@code shouldRemove} field will be set on the returned {@link CollapseResult}.
+     *
+     * @param label the ID of (and label on) the collapsible section header
+     * @param allowClose if true, draws a close button on the header as well as the collapse arrow
+     * @param flags a bitset of TREE flags to apply to this section (you might be especially interested in {@code TREE_FLAG_DEFAULT_OPEN})
+     * @return a CollapseResult object that contains both the collapsed and removed states.
+     */
     public static native CollapseResult collapsibleSection(String label, boolean allowClose, int flags);
 
+    /**
+     * Draw a histogram of the given floating-point values
+     *
+     * @param label the ID of (and label on) the widget
+     * @param values an array of floating point values to draw
+     * @param min the minimum value of the Y axis
+     * @param max the maximum value of the Y axis
+     * @param size the height of the histogram, in pixels
+     */
     public static native void histogram(String label, float[] values, float min, float max, int size);
-    public static native void plot(String label, float[] values, float min, float max, int size);
-    public static native boolean colorButton(String id, float h, float s, float b);
 
-    public static native void envelopeEditor(String label, double[] basis, double[] value, double[] shape);
+    /**
+     * Draw a line graph of the given floating-point values
+     *
+     * @param label the ID of (and label on) the widget
+     * @param values an array of floating point values to draw
+     * @param min the minimum value of the Y axis
+     * @param max the maximum value of the Y axis
+     * @param size the height of the graph, in pixels
+     */
+    public static native void plot(String label, float[] values, float min, float max, int size);
+
+    /**
+     * Draw a color swatch that is also a button
+     *
+     * @param id the ID of the button
+     * @param h the hue of the color to draw, in [0, 360]
+     * @param s the saturation of the color to draw, in [0, 100]
+     * @param b the brightness of the color to draw, in [0, 100]
+     * @return true if the button is pressed
+     */
+    public static native boolean colorButton(String id, float h, float s, float b);
 
     /* Images. These are package-private; code should interact with TextureManager, which
        actually handles the complexity of texture loading/unloading for you. */
+
+    /**
+     * Draw a given texture as an image.
+     *
+     * Client code outside of {@link TextureManager} itself should interact with {@code TextureManager}
+     * instead of this function; it has all of the logic required for loading images into GL textures
+     * for you, and can manage your UVs.
+     *
+     * @param texId the texture ID to draw
+     * @param w the width in pixels of the draw rect
+     * @param h the height in pixels of the draw rect
+     * @param u0 the u value of the upper-left UV
+     * @param v0 the v value of the upper-left UV
+     * @param u1 the u value of the lower-right UV
+     * @param v1 the v value of the lower-right UV
+     */
     static native void image(int texId, float w, float h, float u0, float v0, float u1, float v1);
+
+    /**
+     * Draws a button with an image on it.
+     *
+     * Client code outside of {@link TextureManager} itself should interact with {@code TextureManager} and
+     * not use this function; it has all of the logic required for loading images into GL textures for
+     * you, and can manage your UVs.
+     *
+     * @param texId the texture ID to draw
+     * @param w the width in pixels of the draw rect
+     * @param h the height in pixels of the draw rect
+     * @param u0 the u value of the upper-left UV
+     * @param v0 the v value of the upper-left UV
+     * @param u1 the u value of the lower-right UV
+     * @param v1 the v value of the lower-right UV
+     * @return true if the button is pressed
+     */
     static native boolean imageButton(int texId, float w, float h, float u0, float v0, float u1, float v1);
 
     /* Menus */
