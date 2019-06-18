@@ -103,7 +103,7 @@ public class ChannelUI {
     public static void drawWepPopup(LX lx, LXBus bus, WepUI wepUi) {
         UI.spacing(5, 5);
         boolean shouldShow = false;
-        if (UI.button("+")) {
+        if (UI.button("+", -1)) {
             shouldShow = true;
         }
         if ((UI.isWindowFocused(UI.FOCUSED_FLAG_CHILD_WINDOWS) || !UI.wantCaptureKeyboard()) &&
