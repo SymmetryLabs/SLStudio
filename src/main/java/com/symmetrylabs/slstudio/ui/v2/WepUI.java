@@ -131,7 +131,9 @@ public class WepUI {
                             if (UI.isItemClicked()) {
                                 activate(pi);
                             }
-                            if (firstMatch && UI.isApplicationKeyChordPressed(GLFW.GLFW_KEY_ENTER)) {
+                            /* don't use isApplicationKeyChordPressed because we want to handle the enter
+                             * when imgui has keyboard focus (because we're filtering) */
+                            if (firstMatch && UI.isKeyDown(GLFW.GLFW_KEY_ENTER)) {
                                 activate(pi);
                             }
                             firstMatch = false;
@@ -151,7 +153,7 @@ public class WepUI {
                     if (UI.isItemClicked()) {
                         activate(ei);
                     }
-                    if (firstMatch && UI.isApplicationKeyChordPressed(GLFW.GLFW_KEY_ENTER)) {
+                    if (firstMatch && UI.isKeyDown(GLFW.GLFW_KEY_ENTER)) {
                         activate(ei);
                     }
                     firstMatch = false;
@@ -168,7 +170,7 @@ public class WepUI {
                     if (UI.isItemClicked()) {
                         activate(wi);
                     }
-                    if (firstMatch && UI.isApplicationKeyChordPressed(GLFW.GLFW_KEY_ENTER)) {
+                    if (firstMatch && UI.isKeyDown(GLFW.GLFW_KEY_ENTER)) {
                         activate(wi);
                     }
                     firstMatch = false;
