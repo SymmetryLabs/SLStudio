@@ -64,14 +64,7 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
 
     /** Gets the model class, M. */
     public Class<M> getModelClass() {
-        String modelClassName = new TypeToken<M>(getClass()) {}.getType().getTypeName();
-        String rawModelClassName = modelClassName.replaceAll("<.*", "");
-        try {
-            return (Class<M>) Class.forName(rawModelClassName);
-        } catch (ClassNotFoundException | ClassCastException e) {
-            throw new RuntimeException(
-                "Could not find a class for type token " + modelClassName + ": " + e.getMessage());
-        }
+        return (Class<M>) new TypeToken<M>(getClass()){}.getRawType();
     }
 
     /** Casts the given model to the M type if possible, otherwise returns null. */
