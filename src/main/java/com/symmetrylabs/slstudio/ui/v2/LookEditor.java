@@ -162,22 +162,28 @@ public class LookEditor implements Window {
             return;
         }
 
-        float capWindowHeight = showLookEditorPanel ? UI.height - HEIGHT - MENU_HEIGHT : UI.height;
+        float capWindowHeight = showLookEditorPanel ? UI.height - HEIGHT - MENU_HEIGHT : UI.height - MENU_HEIGHT;
         float h = maxWindowHeight;
         if (h <= 0 || h > capWindowHeight) {
             h = capWindowHeight;
         }
+        final int pipelineWindowHeight = (int) h;
         UI.setNextWindowPosition(0, MENU_HEIGHT, 0, 0);
-        UI.setNextWindowSize(visibleWindowCount * (PIPELINE_WIDTH + PIPELINE_PAD), h);
+        UI.setNextWindowSize(visibleWindowCount * (PIPELINE_WIDTH + PIPELINE_PAD), pipelineWindowHeight);
         UI.begin("Pipeline Windows",
                  UI.WINDOW_NO_MOVE | UI.WINDOW_NO_RESIZE | UI.WINDOW_NO_DECORATION | UI.WINDOW_NO_DOCKING | UI.WINDOW_NO_SCROLL_WITH_MOUSE);
 
         IterationUtils.reduceIgnoreModification(look.channels, 0, (pipelineIndex, chan) -> {
                 if (chan.editorVisible.getValueb()) {
-                    UI.beginChild("pipeline" + chan.getIndex(), false, 0, PIPELINE_WIDTH, (int) UI.height);
+                    UI.beginChild("pipeline" + chan.getIndex(), false, 0, PIPELINE_WIDTH, pipelineWindowHeight);
                     pipelineIndex = channelHeader(chan, chan.getLabel(), pipelineIndex);
                     ChannelUI.draw(lx, chan, pui, wepUi);
                     maxWindowHeight = Float.max(maxWindowHeight, UI.getCursorPosition().y);
+                    /* this spacing is to give a little room at the bottom of the window under the
+                     * add-WEP button when the pipeline is so full that it scrolls. Without this,
+                     * the max scroll position puts the add-WEP button right against the edge of
+                     * the window, which looks ugly. */
+                    UI.spacing(1, 20);
                     UI.endChild();
                     UI.sameLine();
                 }
