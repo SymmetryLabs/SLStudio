@@ -1448,16 +1448,101 @@ public class UI {
      */
     public static native void setNextTreeNodeOpen(boolean isOpen, int when);
 
+    /**
+     * Mark the previously drawn widget as a drag-drop source
+     *
+     * If this returns true, the widget is currently being dragged and its payload is needed; you must
+     * set the drag-drop payload using {@link setDragDropPayload(String, Object)} and call
+     * {@link endDragDropSource()}. If this returns false, do not call either.
+     *
+     * @return true if the widget is currently being dragged and its payload is needed
+     */
     public static boolean beginDragDropSource() {
         return beginDragDropSource(0);
     }
+
+    /**
+     * Mark the previously drawn widget as a drag-drop source
+     *
+     * If this returns true, the widget is currently being dragged and its payload is needed; you must
+     * set the drag-drop payload using {@link setDragDropPayload(String, Object)} and call
+     * {@link endDragDropSource()}. If this returns false, do not call either.
+     *
+     * @param flags Flags to pass to the drag-drop system. None of the imgui flags are currently exposed via slimgui.
+     *
+     * @return true if the widget is currently being dragged and its payload is needed
+     */
     public static native boolean beginDragDropSource(int flags);
-    public static native void endDragDropSource();
+
+    /**
+     * Sets the drag-drop payload for the currently-active drag
+     *
+     * The string types are matched between source and target to make sure they're compatible.
+     * ParameterUI defines a few of these, as do the cube mapping and output systems, but in general
+     * they should just be reasonably short and scoped strings. All built-in drag-drop payload types
+     * start with "_", so type strings should not start with "_" unless they are intentionally
+     * integrating with built-in drag-drop types in Dear Imgui.
+     *
+     * This can be called multiple times for a single source with multiple payload types, to allow
+     * for a single widget to be interpreted multiple ways.
+     *
+     * @param type the type of the payload, used to ensure that sources and targets are compatible
+     * @param data the data to pass through the payload
+     * @return whether the payload was successfully loaded into slimgui
+     */
     public static native boolean setDragDropPayload(String type, Object data);
+
+    /**
+     * Called to declare that we have finished specifying the payload(s) for an active drag-drop source.
+     *
+     * This should only be called after a call to {@link beginDragDropSource()} returns true.
+     */
+    public static native void endDragDropSource();
+
+    /**
+     * Mark the previously-drawn widget as a drag-drop target
+     *
+     * If this returns true, there is a drag-drop payload available for dropping. If the widget wants
+     * it, it should call {@link acceptDragDropPayload(String, Class)}. If this returns true, you
+     * must follow it with a call to {@link endDragDropTarget()}.
+     *
+     * @return true if there is a payload in flight that could be accepted
+     */
     public static native boolean beginDragDropTarget();
+
+    /**
+     * Called to declare that we are finished handling drag-drop payloads for the current widget.
+     *
+     * This must be called for every call to {@link beginDragDropTarget()} that returns true.
+     */
     public static native void endDragDropTarget();
-    public static native Object acceptDragDropPayload(String type, int flags);
-    public static <T> T acceptDragDropPayload(String type, Class<T> cls) {
+
+    /**
+     * Accepts a drag-drop payload of a given type.
+     *
+     * If the type specified here matches the type of one of the currently in-flight payloads, this
+     * will return the object that was specified in that payload.
+     *
+     * @param type the string type of the payload this call accepts, which is matched against the string type specified in {@link setDragDropPayload(String, Object)}
+     * @param flags flags to pass to the drag-drop system. None of the Dear Imgui drag-drop flags are currently exposed via slimgui.
+     * @return the object associated with the payload, or null if there is no payload with the given type
+     */
+    public static native @Nullable Object acceptDragDropPayload(String type, int flags);
+
+    /**
+     * Accepts a drag-drop payload of a given type.
+     *
+     * If the type specified here matches the type of one of the currently in-flight payloads, this
+     * will return the object that was specified in that payload.
+     *
+     * This is a convenience wrapper around {@link acceptDragDropPayload(String, int)} with "typechecking".
+     *
+     * @param type the string type of the payload this call accepts, which is matched against the string type specified in {@link setDragDropPayload(String, Object)}
+     * @param <T> the expected type of the payload object
+     * @param cls the class object associated with the given payload
+     * @return the object in the payload, or null if there is no payload with the given string type or if the class does not match the class of the payload object
+     */
+    public static @Nullable <T> T acceptDragDropPayload(String type, Class<T> cls) {
         Object res = acceptDragDropPayload(type, 0);
         if (res == null || !cls.isAssignableFrom(res.getClass())) {
             return null;
@@ -1466,35 +1551,129 @@ public class UI {
         return (T) res;
     }
 
-    /* Interaction */
+    /**
+     * Determine if the last widget drawn was clicked in this frame
+     *
+     * @return true if the last widget drawn was clicked in this frame
+     */
     public static boolean isItemClicked() {
         return isItemClicked(0, false);
     }
+
+    /**
+     * Determine if the last widget drawn was clicked in this frame by a given mouse button
+     *
+     * @param mouseButton the mouse button to check. 0 is left, 1 is middle, 2 is right.
+     * @return true if the last widget drawn was clicked in this frame
+     */
     public static boolean isItemClicked(int mouseButton) {
         return isItemClicked(mouseButton, false);
     }
+
+    /**
+     * Determine if the last widget drawn was clicked in this frame
+     *
+     * @param allowMouseHold if true, return true on every frame in which the mouse is down on the widget. If false, this only returns true on the first frame in which the mouse is down on the widget.
+     * @return true if the last widget drawn is being clicked
+     */
     public static boolean isItemClicked(boolean allowMouseHold) {
         return isItemClicked(0, allowMouseHold);
     }
+
+    /**
+     * Determine if the last widget drawn was clicked in this frame by a given mouse button
+     *
+     * @param mouseButton the mouse button to check. 0 is left, 1 is middle, 2 is right.
+     * @param allowMouseHold if true, return true on every frame in which the mouse is down on the widget. If false, this only returns true on the first frame in which the mouse is down on the widget.
+     * @return true if the last widget drawn is being clicked
+     */
     public static native boolean isItemClicked(int mouseButton, boolean allowMouseHold);
 
+    /**
+     * Determine if the last widget drawn was double-left-clicked in this frame
+     *
+     * @return true if the last widget drawn was double-left-clicked in this frame
+     */
     public static boolean isItemDoubleClicked() {
         return isItemDoubleClicked(0);
     }
+
+    /**
+     * Determine if the last widget drawn was double-clicked in this frame by a given mouse button
+     *
+     * @param mouseButton the mouse button to check. 0 is left, 1 is middle, 2 is right.
+     * @return true if the last widget drawn was double-clicked in this frame by the given mouse button
+     */
     public static native boolean isItemDoubleClicked(int mouseButton);
+
+    /**
+     * Return true if the last widget drawn is "active"
+     *
+     * Active means that it has focus. For keyboard-focusable widgets, this means keyboard focus or
+     * a click. For all other widgets, this means the mouse is currently down on part of the widget
+     * that is interactive.
+     *
+     * @return true if the widget is active
+     */
     public static native boolean isItemActive();
+
+    /**
+     * Return true if the mouse pointer is currently over the last widget drawn
+     *
+     * @return true if the mouse pointer is currently over the last widget drawn
+     */
     public static native boolean isItemHovered();
+
+    /**
+     * Return true if the alt key is down
+     *
+     * @return true if the alt key is down
+     */
     public static native boolean isAltDown();
+
+    /**
+     * Return true if the control key is down
+     *
+     * @return true if the control key is down
+     */
     public static native boolean isCtrlDown();
+
+    /**
+     * Return true if the shift key is down
+     *
+     * @return true if the shift key is down
+     */
     public static native boolean isShiftDown();
+
+    /**
+     * Return true if the given key is currently pressed
+     *
+     * "Pressed" here means that the physical key is currently depressed. This function returns
+     * true for any frame in which the key is depressed.
+     *
+     * @param keycode the GLFW keycode for the given key. These are the {@code KEY} constants from {@link org.lwjgl.glfw.GLFW}.
+     * @return true if the key is depressed
+     */
     static native boolean isKeyPressed(int keycode);
+
+    /**
+     * Return true if the given key was newly pressed in this frame
+     *
+     * This emulates a "key down" event; it debounces keys and diffs from frame to frame to only
+     * fire this when the key goes from up to pressed.
+     *
+     * @param keycode the GLFW keycode for the given key. These are the {@code KEY} constants from {@link org.lwjgl.glfw.GLFW}.
+     * @return true if the key was pressed on this frame
+     */
     static native boolean isKeyDown(int keycode);
 
     /**
      * Returns true if the given key chord is currently down.
      *
      * This ensures we don't react to key events that are going to be consumed
-     * by slimgui. This should almost always be preferred to {@link isKeyDown(int)}.
+     * by slimgui. This should almost always be preferred to {@link isKeyDown(int)}, unless
+     * it's for a key that you want to be active when a text field has focus (like the Enter
+     * key submitting a form).
      *
      * @param keycodes the keys that must all be down for the event to fire
      * @return true if the key chord is newly pressed on this frame
@@ -1515,7 +1694,9 @@ public class UI {
      *
      * This handles two things: key debouncing for key chords, and ensuring we don't
      * react to key events that are going to be consumed by slimgui. This should almost always
-     * be preferred to {@link isKeyPressed(int)} or {@link isKeyDown(int)}.
+     * be preferred to {@link isKeyPressed(int)} or {@link isKeyDown(int)}, unless
+     * it's for a key that you want to be active when a text field has focus (like the Enter
+     * key submitting a form).
      *
      * @param keycodes the keys that must all be down for the event to fire
      * @return true if the key chord is newly pressed on this frame
@@ -1554,19 +1735,94 @@ public class UI {
      */
     public static native void setKeyboardFocusHere(int offset);
 
-    /* IO */
+    /**
+     * Get slimgui's measurement of frame timings
+     *
+     * @return slimgui's frame rate, in frames per second
+     */
     static native float getFrameRate();
+
+    /**
+     * Returns true if slimgui has keyboard focus and is consuming key events
+     *
+     * If this is true, the rest of the application should ignore key events.
+     *
+     * @return true if slimgui wants keyboard focus
+     */
     static native boolean wantCaptureKeyboard();
+
+    /**
+     * Returns true if slimgui has mouse focus and is consuming mouse events
+     *
+     * If this is true, the rest of the application should ignore mouse events, especially
+     * mouse button events.
+     *
+     * @return true if slimgui wants mouse focus
+     */
     static native boolean wantCaptureMouse();
+
+    /**
+     * Tells slimgui that the given key is depressed
+     *
+     * @param keycode the GLFW key code of the key that was depressed
+     */
     static native void keyDown(int keycode);
+
+    /**
+     * Tells slimgui that the given key was released
+     *
+     * @param keycode the GLFW key code of the key that was released
+     */
     static native void keyUp(int keycode);
+
+    /**
+     * Add a character of text input to slimgui's input buffer
+     *
+     * Slimgui gets all of its keyboard input this way; {@link keyDown(int)} is used for querying
+     * the state of specific keys, but those key events are not translated into typing for
+     * text input. That all happens through this interface instead, so the OS can translate key
+     * codes into characters for us.
+     *
+     * @param c the character to add
+     */
     static native void addInputCharacter(char c);
+
+    /**
+     * Tells slimgui that the scroll wheel moved by a certain amount
+     *
+     * @param amount the amount the scroll wheel moved
+     */
     static native void scrolled(float amount);
 
-    /* Testing */
+    /**
+     * Draws the Dear ImGui demo window
+     *
+     * @return true if the window should remain visible (if false, the close button was clicked)
+     */
     static native boolean showDemoWindow();
+
+    /**
+     * Draws the Dear ImGui metrics window
+     *
+     * This contains a ton of information about the draw calls that are happening in each
+     * frame, and is invaluable for debugging drawing issues.
+     *
+     * @return true if the window should remain visible (if false, the close button was clicked)
+     */
     static native boolean showMetricsWindow();
+
+    /**
+     * Draws the Dear ImGui style editor window
+     *
+     * @return true if the window should remain visible (if false, the close button was clicked)
+     */
     static native boolean showStyleEditor();
+
+    /**
+     * Draws the Dear ImGui "About" window
+     *
+     * @return true if the window should remain visible (if false, the close button was clicked)
+     */
     static native boolean showAboutWindow();
 
     static {
