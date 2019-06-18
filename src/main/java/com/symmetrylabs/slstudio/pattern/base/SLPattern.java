@@ -57,7 +57,7 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
         isModelCompatible = (this.model != null);
         if (!isModelCompatible) {
             throw new RuntimeException(
-                "pattern " + getClass().getSimpleName() + " not compatible with model type " + getModelClass().toString());
+                "pattern " + getClass().getSimpleName() + " not compatible with model type " + model.getClass().toString());
         }
         return super.setModel(model);
     }
