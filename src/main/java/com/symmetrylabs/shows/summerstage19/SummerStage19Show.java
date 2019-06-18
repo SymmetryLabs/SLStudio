@@ -387,7 +387,7 @@ public class SummerStage19Show extends CubesShow {
     @Override
     public void setupLx(LX lx) {
         super.setupLx(lx);
-        FaderLimiter.attach(lx);
+        FaderLimiter.attach(lx, 0.5f);
         /* TODO(jake): set actual brightness cap here! */
         outputScaler.setTargetLinearScale(1.0);
         outputScaler.setUseMonoGamma(false);
