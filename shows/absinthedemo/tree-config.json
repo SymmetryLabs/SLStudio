@@ -91,11 +91,12 @@
               "tilt": 0.0,
               "index": 8
             }
-          ]
+          ],
+          "flipped": false
         },
         {
-          "locked": false,
-          "ipAddress": "0.0.0.0",
+          "locked": true,
+          "ipAddress": "10.200.1.151",
           "channel": 8,
           "x": 5.811453E-7,
           "y": 35.7,
@@ -176,7 +177,8 @@
               "tilt": 0.0,
               "index": 8
             }
-          ]
+          ],
+          "flipped": false
         },
         {
           "locked": false,
@@ -261,7 +263,8 @@
               "tilt": -180.0,
               "index": 8
             }
-          ]
+          ],
+          "flipped": false
         },
         {
           "locked": false,
@@ -346,7 +349,8 @@
               "tilt": -180.0,
               "index": 8
             }
-          ]
+          ],
+          "flipped": false
         },
         {
           "locked": false,
@@ -431,7 +435,8 @@
               "tilt": -180.0,
               "index": 8
             }
-          ]
+          ],
+          "flipped": false
         }
       ]
     }

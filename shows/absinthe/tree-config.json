@@ -9,8 +9,8 @@
       "tilt": 0.0,
       "branches": [
         {
-          "locked": false,
-          "ipAddress": "10.200.1.226",
+          "locked": true,
+          "ipAddress": "10.200.1.151",
           "channel": 1,
           "x": -30.61,
           "y": 87.01,
@@ -449,8 +449,8 @@
       "tilt": 0.0,
       "branches": [
         {
-          "locked": false,
-          "ipAddress": "10.200.1.198",
+          "locked": true,
+          "ipAddress": "10.200.1.147",
           "channel": 1,
           "x": -30.61,
           "y": 87.01,
@@ -889,8 +889,8 @@
       "tilt": 0.0,
       "branches": [
         {
-          "locked": false,
-          "ipAddress": "10.200.1.240",
+          "locked": true,
+          "ipAddress": "10.200.1.204",
           "channel": 1,
           "x": -30.61,
           "y": 87.01,
