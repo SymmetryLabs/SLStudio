@@ -192,6 +192,7 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
         WindowManager.addTransient(new CaptionWindow(lx));
 
         WindowManager.addPersistent("Audio", () -> new AudioWindow(lx), false);
+        WindowManager.addPersistent("Tap Tempo", () -> new TapTempoWindow(lx), false);
         WindowManager.addPersistent("Color swatches", () -> new ColorSwatchWindow(lx, lookEditor), false);
         WindowManager.addPersistent("Internals", () -> new InternalsWindow(lx, this), false);
         WindowManager.addPersistent("Master", () -> new MasterWindow(lx), true);
