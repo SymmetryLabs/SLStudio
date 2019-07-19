@@ -43,8 +43,13 @@ public class TapTempoWindow extends CloseableWindow {
         }
 
         UI.sameLine();
+        if (UI.button("Trigger", 70, 30)) {
+            lx.tempo.trigger();
+        }
+
         UI.pushFont(FontLoader.DEFAULT_FONT_L);
-        UI.text(String.valueOf((int) lx.tempo.bpm.getValue()));
+        int bpm = UI.intBox("bpm", (int) lx.tempo.bpm.getValue(), 0.5f, (int) lx.tempo.MIN_BPM, (int) lx.tempo.MAX_BPM, null);
+        lx.tempo.bpm.setValue(bpm);
         UI.popFont();
     }
 }
