@@ -537,6 +537,9 @@ public abstract class UI2dComponent extends UIObject {
      * @return
      */
     public static String clipTextToWidth(PGraphics pg, String str, float width) {
+        if (str == null){
+            str = "null";
+        }
         while (str.length() > 0 && pg.textWidth(str) > width) {
             str = str.substring(0, str.length() - 1);
         }
