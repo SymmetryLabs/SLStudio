@@ -7,6 +7,8 @@ import com.symmetrylabs.shows.ShowRegistry;
 import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
+import com.symmetrylabs.slstudio.envelop.Envelop;
+import com.symmetrylabs.slstudio.envelop.EnvelopOscListener;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.OutputControl;
 import com.symmetrylabs.util.Utils;
@@ -18,9 +20,12 @@ import heronarts.lx.model.LXPoint;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.SocketException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+
+import static com.symmetrylabs.slstudio.SLStudio.ENVELOP_OSC_PORT;
 
 public abstract class VolumeCore implements ApplicationState.Provider {
     private static final String DEFAULT_SHOW = "demo";
@@ -95,6 +100,16 @@ public abstract class VolumeCore implements ApplicationState.Provider {
         loadLxComponents();
 
         listener.onShowChangeFinished();
+
+        Envelop envelop = Envelop.getInstance(lx);
+        lx.engine.registerComponent("envelop", envelop);
+        lx.engine.addLoopTask(envelop);
+
+        try {
+            lx.engine.osc.receiver(ENVELOP_OSC_PORT).addListener(new EnvelopOscListener(lx, envelop));
+        } catch (SocketException sx) {
+            throw new RuntimeException(sx);
+        }
 
         lx.engine.isMultithreaded.setValue(true);
         lx.engine.isChannelMultithreaded.setValue(true);
