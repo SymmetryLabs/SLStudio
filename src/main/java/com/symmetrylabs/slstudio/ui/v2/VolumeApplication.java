@@ -42,6 +42,8 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
     private String swapToShow = null;
     private Thread mainUIThread = null;
 
+    private boolean midiToggled = false;
+
     VolumeApplication() {
         this.core = new VolumeCore(this) {
             @Override
@@ -78,9 +80,15 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
 
         /* handle global keyboard inputs */
         if (UI.isApplicationKeyChordDown(GLFW.GLFW_KEY_M)) {
-            core.lx.engine.mapping.setMode(LXMappingEngine.Mode.MIDI);
+            if (!midiToggled) {
+                boolean alreadyMidi = core.lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI;
+                core.lx.engine.mapping.setMode(alreadyMidi ? LXMappingEngine.Mode.OFF : LXMappingEngine.Mode.MIDI);
+            }
+            midiToggled = true;
+            // core.lx.engine.mapping.setMode(LXMappingEngine.Mode.MIDI);
         } else {
-            core.lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
+            midiToggled = false;
+            // core.lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
         }
 
         int w = Gdx.graphics.getBackBufferWidth();

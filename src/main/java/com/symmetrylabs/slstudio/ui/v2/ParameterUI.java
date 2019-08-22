@@ -219,7 +219,7 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
 
         int dotColor = 0;
         if (isMapping) {
-            dotColor = mapping.getControlTarget() == p ? 0xFFFFFFFF : 0x88FFFFFF;
+            dotColor = mapping.getControlTarget() == p ? 0xFFFFFFFF : 0x80FF0000;
         } else if (mappedParameters.containsKey(p)) {
             dotColor = 0xFFFFFFFF;
         }
@@ -362,7 +362,7 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
 
         int dotColor = 0;
         if (isMapping) {
-            dotColor = mapping.getControlTarget() == p ? 0xFFFFFFFF : 0x88FFFFFF;
+            dotColor = mapping.getControlTarget() == p ? 0xFFFFFFFF : 0x80FF0000;
         } else if (mappedParameters.containsKey(p)) {
             dotColor = 0xFFFFFFFF;
         }
