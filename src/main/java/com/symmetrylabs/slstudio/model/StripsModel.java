@@ -22,7 +22,7 @@ import static com.symmetrylabs.util.DistanceUtils.squaredEuclideanDistance;
 public class StripsModel<T extends Strip> extends SLModel {
     private static final float DEFAULT_STRIP_JOINING_DISTANCE = 0;
 
-    protected final List<T> strips = new ArrayList<>();
+    public final List<T> strips = new ArrayList<>();
     protected final List<T> stripsUnmodifiable = Collections.unmodifiableList(strips);
     protected final Map<String, Strip> stripTable = new HashMap<>();
 
