@@ -7,6 +7,7 @@ import java.util.Arrays;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXTransform;
+import heronarts.lx.transform.LXVector;
 
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.shows.tree.config.*;
@@ -558,6 +559,7 @@ public class TreeModel extends SLModel {
         public final Config config;
         public final Size size;
         public final LXPoint point;
+        public LXVector[] coords = new LXVector[4];
 
         public float x;
         public float y;
@@ -569,12 +571,15 @@ public class TreeModel extends SLModel {
 
         public Leaf(LXTransform t, Config config) {
             super("Leaf", new Fixture(t, config));
+            Fixture f = (Fixture) this.fixtures.get(0);
+
             this.config = config;
             this.size = config.size;
             this.x = t.x();
             this.y = t.y();
             this.z = t.z();
             this.point = points[0];
+            this.coords = f.coords;
         }
 
         public void reconfigure(LXTransform t) {
@@ -611,6 +616,18 @@ public class TreeModel extends SLModel {
                 t.translate(0, -LED_SPACING, 0);
                 points[i++].update(t.x(), t.y(), t.z());
             }
+            t.pop();
+
+            t.push();
+            t.translate(-WIDTH/2, 0);
+            this.coords[0] = t.vector();
+            t.translate(0, LENGTH);
+            this.coords[1] = t.vector();
+            t.translate(WIDTH, 0);
+            this.coords[2] = t.vector();
+            t.translate(0, -LENGTH);
+            this.coords[3] = t.vector();
+            t.pop();
 //            else if (config.size == Size.SMALL) {
 //                t.translate(-.05f*INCHES, 0, 0);
 //                points[i++].update(t.x(), t.y(), t.z());
@@ -626,10 +643,11 @@ public class TreeModel extends SLModel {
 //                t.translate(0, -LED_SPACING, 0);
 //                points[i++].update(t.x(), t.y(), t.z());
 //            }
-            t.pop();
         }
 
         private static class Fixture extends LXAbstractFixture {
+            public final LXVector[] coords = new LXVector[4];
+
             private Fixture(LXTransform t, Config config) {
                 t.push();
                 if (config.size == Size.LARGE) {
@@ -655,6 +673,18 @@ public class TreeModel extends SLModel {
                     t.translate(0, -LED_SPACING, 0);
                     addPoint(new LXPoint(t));
                 }
+                t.pop();
+
+                t.push();
+                t.translate(-WIDTH/2, 0);
+                this.coords[0] = t.vector();
+                t.translate(0, LENGTH);
+                this.coords[1] = t.vector();
+                t.translate(WIDTH, 0);
+                this.coords[2] = t.vector();
+                t.translate(0, -LENGTH);
+                this.coords[3] = t.vector();
+                t.pop();
 //                else if (config.size == Size.SMALL) {
 //                    t.translate(-.05f*INCHES, 0, 0);
 //                    addPoint(new LXPoint(t));
@@ -670,7 +700,6 @@ public class TreeModel extends SLModel {
 //                    t.translate(0, -LED_SPACING, 0);
 //                    addPoint(new LXPoint(t));
 //                }
-                t.pop();
             }
         }
     }

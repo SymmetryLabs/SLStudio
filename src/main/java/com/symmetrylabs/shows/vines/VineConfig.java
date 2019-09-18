@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 
 public class VineConfig {
-	List<LeafConfig> leaves = new ArrayList<LeafConfig>();
+	public List<LeafConfig> leaves = new ArrayList<LeafConfig>();
 
 	public VineConfig(LeafConfig[] leaves) {
 		this.leaves = Arrays.asList(leaves);
