@@ -101,7 +101,7 @@ public class VineModel extends SLModel {
 				LeafConfig leafConfig = config.getLeaves().get(leafIndex++);
 				System.out.println(leafConfig.index);
 				t.push();
-				t.translate(leafConfig.x, leafConfig.y, leafConfig.z);
+				t.translate(leafConfig.x, leafConfig.y, -leafConfig.z);
 				t.rotateX(leafConfig.xRot * PI / 180.f);
 				t.rotateY(leafConfig.yRot * PI / 180.f);
 				t.rotateZ(leafConfig.zRot * PI / 180.f);
@@ -128,7 +128,7 @@ public class VineModel extends SLModel {
 				List<TreeModel.Leaf> vineLeaves = new ArrayList<>();
 				for (LeafConfig leafConfig : config.getLeaves()) {
 					transform.push();
-					transform.translate(leafConfig.x, leafConfig.y, leafConfig.z);
+					transform.translate(leafConfig.x, leafConfig.y, -leafConfig.z);
 					transform.rotateX(leafConfig.xRot * PI / 180.);
 					transform.rotateY(leafConfig.yRot * PI / 180.);
 					transform.rotateZ(leafConfig.zRot * PI / 180.);
