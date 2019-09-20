@@ -13,7 +13,7 @@ import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.shows.tree.TreeModel;
 import com.symmetrylabs.util.FileUtils;
 
-public class VineWallConfigStore implements SLStudioLX.SaveHook {
+public class VineWallConfigStore { //implements SLStudioLX.SaveHook {
     private final VineModel model;
     private File file = null;
     private VineWallConfig config = null;
@@ -58,10 +58,10 @@ public class VineWallConfigStore implements SLStudioLX.SaveHook {
         model.reconfigure(config);
     }
 
-    @Override
-    public void onSave() {
-        writeConfig();
-    }
+    // @Override
+    // public void onSave() {
+    //     writeConfig();
+    // }
 
     public void writeConfig() {
         writeConfig(file);

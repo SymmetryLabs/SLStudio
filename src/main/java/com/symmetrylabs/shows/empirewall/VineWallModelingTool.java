@@ -38,6 +38,8 @@ public class VineWallModelingTool extends LXComponent {
 
     public final LeafManipulator leafManipulator;
 
+    public final BooleanParameter onSave = new BooleanParameter("save", false).setMode(BooleanParameter.Mode.MOMENTARY);
+
     private VineWallModelingTool(LX lx, boolean readConfigFromDisk) {
         super(lx, "VineModelingTool");
         this.lx = lx;
@@ -49,6 +51,10 @@ public class VineWallModelingTool extends LXComponent {
 
         this.selectedVine = new ObjectParameter<VineModel.Vine>("selectedVine", vineWall.getVinesArray());
         this.selectedLeaves = new DiscreteParameter[vineWall.vines.size()];
+
+        onSave.addListener(parameter -> {
+            store.writeConfig();
+        });
 
         for (int i = 0; i < vineWall.vines.size(); i++) {
             VineModel.Vine vine = vineWall.vines.get(i);

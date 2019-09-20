@@ -85,7 +85,14 @@ public class UIVineWallModelingTool extends UICollapsibleSection {
         selectedVine.setOptions(vineIds);
 
 
-        new UILabel(0, 50, 50, 15).setLabel("Leaves")
+
+
+        UIButton save = new UIButton(200, 3, 50, 18);
+        save.setParameter(modelingTool.onSave).setLabel("Save");
+        save.addToContainer(this);
+
+
+        new UILabel(0, 40, 50, 15).setLabel("Leaves")
             .setPadding(0, 5)
             .addToContainer(this);
 
@@ -98,7 +105,7 @@ public class UIVineWallModelingTool extends UICollapsibleSection {
         // });
 
         this.leafSelectorKnob = new UIKnob(modelingTool.selectedLeaves[0]);
-        leafSelectorKnob.setPosition(KNOB_WIDTH*0, 100)
+        leafSelectorKnob.setPosition(KNOB_WIDTH*0, 70)
             .setSize(KNOB_WIDTH, KNOB_HEIGHT)
             .addToContainer(this);
 
@@ -107,41 +114,41 @@ public class UIVineWallModelingTool extends UICollapsibleSection {
         //     redrawWindow();
         // });
 
-        new UI2dContainer(KNOB_WIDTH*1+3, 100, 30, KNOB_HEIGHT)
+        new UI2dContainer(KNOB_WIDTH*1+3, 70, 30, KNOB_HEIGHT)
             .setBackgroundColor(ui.theme.getDarkBackgroundColor())
             .addToContainer(this);
 
         UIKnob xPos = new UIKnob(modelingTool.leafManipulator.x);
-        xPos.setPosition(KNOB_WIDTH*1+3, 100)
+        xPos.setPosition(KNOB_WIDTH*1+3, 70)
             .setSize(KNOB_WIDTH, KNOB_HEIGHT)
             .addToContainer(this);
 
         UIKnob yPos = new UIKnob(modelingTool.leafManipulator.y);
-        yPos.setPosition(KNOB_WIDTH*2+3 * 1, 100)
+        yPos.setPosition(KNOB_WIDTH*2+3 * 1, 70)
             .setSize(KNOB_WIDTH, KNOB_HEIGHT)
             .addToContainer(this);
 
         UIKnob zPos = new UIKnob(modelingTool.leafManipulator.z);
-        zPos.setPosition(KNOB_WIDTH*3+3, 100)
+        zPos.setPosition(KNOB_WIDTH*3+3, 70)
             .setSize(KNOB_WIDTH, KNOB_HEIGHT)
             .addToContainer(this);
 
-        new UI2dContainer(KNOB_WIDTH*4+3, 100, 1, KNOB_HEIGHT)
+        new UI2dContainer(KNOB_WIDTH*4+3, 70, 1, KNOB_HEIGHT)
             .setBackgroundColor(ui.theme.getDarkBackgroundColor())
             .addToContainer(this);
 
         UIKnob xRot = new UIKnob(modelingTool.leafManipulator.xRot);
-        xRot.setPosition(KNOB_WIDTH*4+4, 100)
+        xRot.setPosition(KNOB_WIDTH*4+4, 70)
             .setSize(KNOB_WIDTH, KNOB_HEIGHT)
             .addToContainer(this);
 
         UIKnob yRot = new UIKnob(modelingTool.leafManipulator.yRot);
-        yRot.setPosition(KNOB_WIDTH*5+4, 100)
+        yRot.setPosition(KNOB_WIDTH*5+4, 70)
             .setSize(KNOB_WIDTH, KNOB_HEIGHT)
             .addToContainer(this);
 
         UIKnob zRot = new UIKnob(modelingTool.leafManipulator.zRot);
-        zRot.setPosition(KNOB_WIDTH*6+4, 100)
+        zRot.setPosition(KNOB_WIDTH*6+4, 70)
             .setSize(KNOB_WIDTH, KNOB_HEIGHT)
             .addToContainer(this);
 
@@ -160,9 +167,9 @@ public class UIVineWallModelingTool extends UICollapsibleSection {
         //     modelingTool.setSelectedTwig(modelingTool.getSelectedBranch().getTwigs().get(0));
         // });
 
-        if (ui instanceof SLStudioLX.UI) {
-            ((SLStudioLX.UI) ui).addSaveHook(modelingTool.store);
-        }
+        // if (ui instanceof SLStudioLX.UI) {
+        //     ((SLStudioLX.UI) ui).addSaveHook(modelingTool.store);
+        // }
     }
 
     private void redrawWindow() {
@@ -291,7 +298,7 @@ public class UIVineWallModelingTool extends UICollapsibleSection {
     }
 
     // // (todo) make these a little more elegant...
-    // private class LeafItem extends UIItemList.AbstractItem {
+    // getPrimaryColorvate class LeafItem extends UIItemList.AbstractItem {
     //     final TreeModel.Leaf leaf;
 
     //     LeafItem(TreeModel.Leaf leaf) {
