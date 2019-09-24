@@ -204,7 +204,8 @@ public class MTCPlayback extends SLPattern<SLModel> {
         final int TREES = (int) (11.5*BIN_PER_HOUR);
 
         final int HYPE = (int) (9.5*BIN_PER_HOUR);
-
+        final int FALL_AWAY = (int)(10*BIN_PER_HOUR);
+        final int LEVITATE_ROUND2 = (int)(13*BIN_PER_HOUR);
 
         // no symmetry
         final int WEDONTBELIEVE = (int)(3.5*BIN_PER_HOUR);
@@ -234,6 +235,8 @@ public class MTCPlayback extends SLPattern<SLModel> {
         new SongIndex("LeaveTheCity", LEAVE_THE_CITY);
         new SongIndex("Trees", TREES);
         new SongIndex("Hype", HYPE);
+        new SongIndex("FallAway", FALL_AWAY);
+        new SongIndex("LevitateRev2", LEVITATE_ROUND2).addOffset(0,5,0);
     }
 
     private void decodeSongOffset(int frame) {

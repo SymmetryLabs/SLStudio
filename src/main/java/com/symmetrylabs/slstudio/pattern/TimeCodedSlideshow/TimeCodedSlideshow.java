@@ -362,7 +362,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
             int j = (int) (shrink * (v.x - model.xMin));
             int color;
             if (i >= croppedHeight || j >= croppedWidth || i < 0 || j < 0) {
-                color = 0;
+                    color = 0;
             } else {
                 int vcolor = img.getRGB(j + cropLeft, i + cropTop);
                 color = LXColor.rgb(
