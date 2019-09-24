@@ -8,11 +8,7 @@ import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.MidiTime;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.MutableParameter;
-import heronarts.lx.parameter.StringParameter;
+import heronarts.lx.parameter.*;
 import heronarts.lx.transform.LXVector;
 
 import javax.imageio.ImageIO;
@@ -49,6 +45,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     private final MutableParameter tcStartFrame = new MutableParameter("tcStart", 0);
     private final BooleanParameter freewheel = new BooleanParameter("run", false);
     private final BooleanParameter freewheelReset = new BooleanParameter("runReset", false).setMode(BooleanParameter.Mode.MOMENTARY);
+    private final DiscreteParameter frameSelect = new DiscreteParameter("selFrame", 0, 0, 6000);
 
     private MidiTime mt;
     int currentFrame;
@@ -225,12 +222,20 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                 return;
             }
 
-            File load = new File(dialog.getDirectory(), fname);
-            Path loadPath = load.toPath().toAbsolutePath();
-            Path repoRoot = Paths.get("").toAbsolutePath();
-            Path rel = repoRoot.relativize(loadPath);
-            directory.setValue(rel.toString());
-            loadDirectory();
+            if (fname.endsWith(".png")){
+                File load = new File(dialog.getDirectory(), fname);
+                Path loadPath = load.toPath().toAbsolutePath();
+                Path repoRoot = Paths.get("").toAbsolutePath();
+                Path rel = repoRoot.relativize(loadPath);
+                System.out.println("got png");
+                directory.setValue(rel.toString());
+                loadDirectory();
+            }
+            else if (fname.endsWith(".bmp")){
+                System.out.println("got bmp");
+                directory.setValue(dialog.getDirectory());
+                loadDirectory();
+            }
 
         } else if (p == bake && bake.getValueb()) {
             FileDialog dialog = new FileDialog(
@@ -245,6 +250,9 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         } else if (p == freewheelReset && freewheelReset.getValueb()) {
             currentFrame = -1;
             freewheelTime = 0;
+        }
+        else if (p == frameSelect){
+            currentFrame = frameSelect.getValuei();
         }
     }
 
@@ -274,6 +282,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
             SLStudio.setWarning(TAG, "slideshow directory does not exist or no *.png hunk");
             return;
         }
+        baked = false;
         File[] files = dir.listFiles(fn -> fn.getName().endsWith(".bmp"));
         if (files == null) {
             SLStudio.setWarning(TAG, "no files in directory");
@@ -369,7 +378,8 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     public void run(double elapsedMs, PolyBuffer.Space preferredSpace) {
         if (freewheel.getValueb()) {
             freewheelTime += elapsedMs;
-            if (freewheelTime > 1000 / 30) {
+            int FUDGE = 5; // hacky compensation fudge factor to keep in time
+            if (freewheelTime > 1000. / 30 + FUDGE) {
                 freewheelTime = 0;
                 currentFrame++;
             }
