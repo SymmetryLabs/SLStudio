@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1569311176595,
+  "timestamp": 1569331885552,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 1,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -130,7 +130,8 @@
             "parameters": {
               "label": "MTCPlayback",
               "palette": 0,
-              "phase": 0
+              "phase": 0,
+              "ALT": 2
             },
             "modulation": {
               "modulators": [],
@@ -154,7 +155,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.22344468533992767,
           "crossfadeGroup": 0,
           "blendMode": 2,
           "transitionEnabled": false,
@@ -499,13 +500,7 @@
     "midi": {
       "inputs": [
         {
-          "name": "CoreMIDI4J - Bus 1",
-          "channel": false,
-          "control": true,
-          "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - Lockstep",
+          "name": "VirMIDI [hw:2,0,0]",
           "channel": true,
           "control": false,
           "sync": false

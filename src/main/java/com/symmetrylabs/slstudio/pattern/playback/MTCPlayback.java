@@ -35,6 +35,8 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
     private final DiscreteParameter phaseAdjust = new DiscreteParameter("phase", 0, -10, 10);
 
+    private final DiscreteParameter altSequence = new DiscreteParameter("ALT", 0, 0,3);
+
 
     public final MutableParameter hunkSize = new MutableParameter("hunkSize", 150);
 
@@ -99,6 +101,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
 //        addParameter(freewheel);
         phaseAdjust.setPolarity(LXParameter.Polarity.BIPOLAR);
         addParameter(phaseAdjust);
+        addParameter(altSequence);
 
         setupMTCListeners();
 
@@ -260,7 +263,14 @@ public class MTCPlayback extends SLPattern<SLModel> {
             String dataPath = constructDataPath();
 
             currentSongName = thisSong.song_name;
-            renderFile.setValue( dataPath + thisSong.name_png + ".png");
+
+            String addAltString = "";
+            if ((altSequence.getValuei() == 0)) {
+                addAltString = "";
+            } else {
+                addAltString += "_alt" + altSequence.getValuei();
+            }
+            renderFile.setValue( dataPath + thisSong.name_png + addAltString + ".png");
             MTCOffset.setValue(songIndex*BIN_SIZE + thisSong.extra_MTC_offset);
             loadSong();
             // reset the debounce.
