@@ -34,8 +34,8 @@ public class MTCPlayback extends SLPattern<SLModel> {
     private final BooleanParameter freewheel = new BooleanParameter("run", false);
 
     private final DiscreteParameter phaseAdjust = new DiscreteParameter("phase", 0, -10, 10);
+    private final DiscreteParameter  altSequence = new DiscreteParameter("ALT", 0, 0, 5);
 
-    private final DiscreteParameter altSequence = new DiscreteParameter("ALT", 0, 0,3);
 
 
     public final MutableParameter hunkSize = new MutableParameter("hunkSize", 150);
@@ -256,8 +256,14 @@ public class MTCPlayback extends SLPattern<SLModel> {
             return;
         }
 
+        String addAltString = "";
+        if (altSequence.getValuei() == 0) {
+            addAltString = "";
+        } else {
+            addAltString = "_alt" + Integer.toString(altSequence.getValuei());
+        }
 
-        if (currentSongPng == null || !currentSongPng.getName().equals(thisSong.name_png + ".png")){ // if the current file is not the one loaded...
+        if (currentSongPng == null || !currentSongPng.getName().equals(thisSong.name_png + addAltString + ".png")){ // if the current file is not the one loaded...
             if (songChangeDebounce > 0){
                 songChangeDebounce--;
                 return;
@@ -267,12 +273,6 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
             currentSongName = thisSong.song_name;
 
-            String addAltString = "";
-            if ((altSequence.getValuei() == 0)) {
-                addAltString = "";
-            } else {
-                addAltString += "_alt" + altSequence.getValuei();
-            }
             renderFile.setValue( dataPath + thisSong.name_png + addAltString + ".png");
             MTCOffset.setValue(songIndex*BIN_SIZE + thisSong.extra_MTC_offset);
             loadSong();
@@ -287,7 +287,8 @@ public class MTCPlayback extends SLPattern<SLModel> {
             SLStudio.setWarning("NoShow", "could not find show");
         }
         else{
-            SLStudio.setWarning("FoShow", "Found show: " + showName);
+            // SLStudio.setWarning("FoShow", "Found show: " + showName);
+            System.out.println("Found show: " + showName);
         }
         return RENDER_ROOT + showName + "/";
     }
@@ -299,7 +300,9 @@ public class MTCPlayback extends SLPattern<SLModel> {
         renderFile.setValue("");
     }
 
+    static private int numReload = 0;
     public void loadSong() {
+        SLStudio.setWarning("((reload *.png)): ", Integer.toString(numReload++) );
         String path = renderFile.getString();
         if (path == null) {
             System.err.println("invalid path");
