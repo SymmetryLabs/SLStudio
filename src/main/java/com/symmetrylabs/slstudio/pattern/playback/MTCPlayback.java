@@ -200,6 +200,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
         final int RIDE2 = (int)(9.25*BIN_PER_HOUR);
         final int MY_BLOOD = (int)(8.5*BIN_PER_HOUR);
         final int MORPH1 = (int)(8*BIN_PER_HOUR);
+        final int MORPH_NEW = (int)(13.25*BIN_PER_HOUR);
 //        final int MORPH2 = (int)((8 + 3.0/60 + 36.0/(60*60) )*BIN_PER_HOUR);
         final int CAR_RADIO = (int) (7*BIN_PER_HOUR);
         final int CHLORINE = (int) (18*BIN_PER_HOUR);
@@ -238,8 +239,10 @@ public class MTCPlayback extends SLPattern<SLModel> {
         new SongIndex("LeaveTheCity", LEAVE_THE_CITY);
         new SongIndex("Trees", TREES);
         new SongIndex("Hype", HYPE);
+
         new SongIndex("FallAway", FALL_AWAY);
         new SongIndex("LevitateRev2", LEVITATE_ROUND2).addOffset(0,5,0);
+        new SongIndex("MorphRev2", MORPH_NEW);
     }
 
     private void decodeSongOffset(int frame) {
