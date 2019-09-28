@@ -20,10 +20,7 @@
 
 package heronarts.lx.modulator;
 
-import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.FixedParameter;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.ObjectParameter;
+import heronarts.lx.parameter.*;
 
 /**
  * A sawtooth LFO oscillates from one extreme value to another. When the later
@@ -39,6 +36,8 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
 
     /** Period of the waveform, in ms */
     public final CompoundParameter period;
+
+  public final DiscreteParameter tempoPeriod = new DiscreteParameter("tempo", -4, 4);
 
     public final CompoundParameter skew = (CompoundParameter)
         new CompoundParameter("Skew", 0, -1, 1)
@@ -106,10 +105,20 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
         setPeriod(period);
         addParameter("wave", waveshape);
         addParameter("period", period);
+        addParameter("tempo", tempoPeriod);
         addParameter("skew", skew);
         addParameter("shape", shape);
         addParameter("phase", phase);
         addParameter("exp", exp);
+    }
+
+    public void onParameterChanged(LXParameter p) {
+        if (p == this.tempoPeriod) {
+            double beats_per_period = Math.pow(2.0, this.tempoPeriod.getValue());
+
+            double periodMs = getLX().tempo.period.getValuef() / beats_per_period;
+            setPeriod(periodMs);
+        }
     }
 
     public LXWaveshape getWaveshape() {

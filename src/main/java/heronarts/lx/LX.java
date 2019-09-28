@@ -23,6 +23,9 @@ package heronarts.lx;
 import com.google.common.base.Preconditions;
 import com.symmetrylabs.slstudio.palettes.SwatchLibrary;
 import com.symmetrylabs.slstudio.presets.ChannelPresetLibrary;
+import com.symmetrylabs.shows.pilots.CartConfig;
+import com.symmetrylabs.shows.pilots.PilotsPixlite;
+import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXPalette;
 import heronarts.lx.data.LXVersion;
@@ -169,10 +172,22 @@ public class LX {
      */
     public final LXPalette palette;
 
+		// arbitrarily set now
+  public static final int NUM_PALLETS = 4;
+	/**
+	 * multiple palettes
+	 */
+	public final ArrayList<LXPalette> palettes;
+
     /**
      * The animation engine.
      */
     public final LXEngine engine;
+
+    /**
+     * Non-GUI UI
+     */
+    public final LXTxtUI txt_ui;
 
     /**
      * The global tempo object.
@@ -241,8 +256,15 @@ public class LX {
         LX.initTimer.log("Model");
 
         // Color palette
-        this.palette = new LXPalette(this);
-        LX.initTimer.log("Palette");
+//    this.palette = new LXPalette(this);
+//    LX.initTimer.log("Palette");
+
+		this.palettes = new ArrayList<>();
+		LX.initTimer.log("Auxiliary Macro Palettes");
+		for (int i = 0; i < NUM_PALLETS; i++){
+			this.palettes.add(new LXPalette(this, i));
+		}
+		this.palette = this.palettes.get(0);
 
         // Construct the engine
         this.engine = new LXEngine(this);

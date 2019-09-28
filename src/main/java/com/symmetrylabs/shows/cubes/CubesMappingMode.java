@@ -1,12 +1,7 @@
 package com.symmetrylabs.shows.cubes;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.WeakHashMap;
+import java.util.*;
 
 import com.symmetrylabs.slstudio.output.CubeModelControllerMapping.PhysIdAssignment;
 import com.symmetrylabs.slstudio.output.CubeModelControllerMapping;
@@ -21,6 +16,9 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
+import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.parameter.StringParameter;
 
 /**
  * Mapping Mode
@@ -29,6 +27,7 @@ import heronarts.lx.parameter.EnumParameter;
  *  2) get cubes not mapped but on network to pulse
  *  3) get a "display orientation" mode
  */
+
 public class CubesMappingMode {
 
     public static enum MappingModeType {MAPPED, UNMAPPED};
@@ -44,6 +43,9 @@ public class CubesMappingMode {
 
     public final DiscreteParameter selectedMappedFixture;
     public final DiscreteParameter selectedUnMappedFixture;
+
+    public final StringParameter selectedControllerA;
+    public final StringParameter selectedControllerB;
 
     public final SortedSet<String> fixturesMappedAndOnTheNetwork = new TreeSet<String>();
     public final SortedSet<String> fixturesMappedButNotOnNetwork = new TreeSet<String>();
@@ -61,6 +63,10 @@ public class CubesMappingMode {
             instanceByLX.put(lx, new WeakReference<>(ref = new CubesMappingMode(lx)));
         }
         return ref;
+    }
+
+    public void finalize(){
+        System.out.println();
     }
 
     private CubesMappingMode(LX lx) {
@@ -96,8 +102,11 @@ public class CubesMappingMode {
         String[] initialMappedFixtures = fixturesMappedButNotOnNetwork.isEmpty()
                 ? emptyOptions : fixturesMappedButNotOnNetwork.toArray(new String[0]);
 
-        selectedMappedFixture = new DiscreteParameter("selectedMappedFixture", initialMappedFixtures);
+        selectedMappedFixture = new DiscreteParameter("selectedModelFixture", initialMappedFixtures);
         selectedUnMappedFixture = new DiscreteParameter("selectedUnMappedFixture", emptyOptions);
+
+        selectedControllerA = new StringParameter("uninitialized");
+        selectedControllerB = new StringParameter("uninitialized");
 
         CubesShow show = CubesShow.getInstance(lx);
 
@@ -154,11 +163,15 @@ public class CubesMappingMode {
     }
 
     public String getSelectedMappedFixtureId() {
-        return (String)selectedMappedFixture.getOption();
+        String returnval = (String)selectedMappedFixture.getOption();
+        selectedControllerA.setValue(returnval);
+        return returnval;
     }
 
     public String getSelectedUnMappedFixtureId() {
-        return (String)selectedUnMappedFixture.getOption();
+        String returnval = (String)selectedUnMappedFixture.getOption();
+        selectedControllerB.setValue(returnval);
+        return returnval;
     }
 
     public boolean isSelectedUnMappedFixture(String id) {

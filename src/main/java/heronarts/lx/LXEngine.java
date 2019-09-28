@@ -23,6 +23,8 @@ package heronarts.lx;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.symmetrylabs.color.Spaces;
+import com.symmetrylabs.slstudio.output.OfflineRenderOutput;
 import com.symmetrylabs.util.artnet.ArtNetEngine;
 import com.symmetrylabs.util.dmx.DMXEngine;
 import com.symmetrylabs.util.dmx.LXEngineDMXManager;
@@ -36,6 +38,8 @@ import heronarts.lx.blend.LightestBlend;
 import heronarts.lx.blend.MultiplyBlend;
 import heronarts.lx.blend.NormalBlend;
 import heronarts.lx.blend.SubtractBlend;
+import heronarts.lx.clip.LXClip;
+import heronarts.lx.color.LXPalette;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.osc.LXOscComponent;
@@ -121,6 +125,9 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     public final Output output;
 
+    public OfflineRenderOutput renderOutputRef;
+
+    private final List<Listener> listeners = new ArrayList<Listener>();
     private final List<MessageListener> messageListeners = new ArrayList<MessageListener>();
 
     public final BoundedParameter framesPerSecond = new BoundedParameter("FPS", 60, 0, 300);
@@ -134,6 +141,10 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     public final BoundedParameter speed =
         new BoundedParameter("Speed", 1, 0, 2)
         .setDescription("Overall speed adjustement to the entire engine (does not apply to master tempo and audio)");
+
+    public final DiscreteParameter layer =
+        new DiscreteParameter("Layer", 7, 6, 32)
+            .setDescription("Just like photoshop.  Higher layer is displayed.");
 
     /** The color space that the engine renders to. */
     public final EnumParameter<PolyBuffer.Space> colorSpace =
@@ -941,6 +952,10 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         this.modulation.loop(deltaMs);
         this.lx.palette.loop(deltaMs);
         this.lx.swatches.loop(deltaMs);
+
+        for (LXPalette palette : this.lx.palettes){
+            palette.loop(deltaMs);
+        }
 
         // Run top-level loop tasks
         for (LXLoopTask loopTask : this.loopTasks) {

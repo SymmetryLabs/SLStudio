@@ -30,6 +30,7 @@ import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.MutableParameter;
+import heronarts.p3lx.ui.component.UIToggleSet;
 
 /**
  * Class to represent a musical tempo at which patterns are operating. This can
@@ -83,6 +84,11 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
         new BoundedParameter("BPM", DEFAULT_BPM, MIN_BPM, MAX_BPM)
         .setDescription("Beats per minute of the master tempo object");
 
+    public final BooleanParameter measureTrigger =
+        new BooleanParameter("MeasureTrigger")
+            .setDescription("Listeable trigger which is set on beginning of each measure")
+            .setMode(BooleanParameter.Mode.MOMENTARY);
+
     public final BooleanParameter trigger =
         new BooleanParameter("Trigger")
         .setDescription("Listeable trigger which is set on each beat")
@@ -130,6 +136,7 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
         addParameter("nudgeDown", this.nudgeDown);
         addParameter("beatsPerMeasure", this.beatsPerMeasure);
         addParameter("trigger", this.trigger);
+        addParameter("measureTrigger", this.measureTrigger);
         addParameter("enabled", this.enabled);
         startModulator(this.click);
     }
@@ -168,6 +175,9 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
         } else if (p == this.trigger) {
             if (this.trigger.isOn()) {
                 this.trigger.setValue(false);
+            }
+            if (this.measureTrigger.isOn()) {
+                this.measureTrigger.setValue(false);
             }
         }
     }
@@ -351,6 +361,7 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
             }
             int beatIndex = this.beatCount % this.beatsPerMeasure.getValuei();
             if (beatIndex == 0) {
+                this.measureTrigger.setValue(true);
                 for (Listener listener : listeners) {
                     listener.onMeasure(this);
                 }

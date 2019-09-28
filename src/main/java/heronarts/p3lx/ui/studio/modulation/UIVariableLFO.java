@@ -60,6 +60,7 @@ public class UIVariableLFO extends UIModulator {
         new UIKnob(lfo.exp).addToContainer(knobs);
         new UIKnob(lfo.phase).addToContainer(knobs);
         new UIKnob(lfo.period).addToContainer(knobs);
+        new UIKnob(lfo.tempoPeriod).addToContainer(knobs);
 
     }
 

@@ -26,6 +26,7 @@
 
 package heronarts.p3lx.ui.component;
 
+import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.StringParameter;
@@ -118,5 +119,4 @@ public class UITextBox extends UIInputBox {
     protected boolean isValidCharacter(char keyChar) {
         return isValidTextCharacter(keyChar);
     }
-
 }

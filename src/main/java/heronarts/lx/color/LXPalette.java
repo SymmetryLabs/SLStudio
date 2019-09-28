@@ -20,6 +20,8 @@
 
 package heronarts.lx.color;
 
+import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.color.Ops8;
 import heronarts.lx.LX;
 import heronarts.lx.LXModelComponent;
 import heronarts.lx.model.LXModel;
@@ -43,7 +45,14 @@ import heronarts.lx.transform.LXVector;
  */
 public class LXPalette extends LXModelComponent implements LXOscComponent {
 
-    public enum Mode {
+	/**
+	 * The index of this palette in the engine.
+	 */
+	// -1 is the default palette
+	private int index = -1;
+
+
+	public enum Mode {
         FIXED,
         OSCILLATE,
         CYCLE
@@ -138,6 +147,12 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
     private double zMult;
     private double rMult;
 
+  // index for if we make multiple palettes.
+	public LXPalette(LX lx, int index) {
+		this(lx);
+		this.index = index;
+	}
+
     public LXPalette(LX lx) {
         super(lx);
         computeMults(lx.model);
@@ -169,8 +184,18 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
     }
 
     public String getOscAddress() {
-        return "/lx/palette";
+		if (this.index == -1){
+			return "/lx/palette";
+		}
+		else {
+			return "/lx/palette/" + (this.index+1);
+		}
     }
+
+	public int getColorByRange(int x, float width) {
+		double hue = getHue() + ((x-width/2) / (width-2)) * spread.getValuef();
+		return LXColor.hsb(hue, getSaturation(), 100); // color at x coordinate
+	}
 
     @Override
     public String getLabel() {
@@ -213,7 +238,7 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
     }
 
     public double getHue() {
-        return this.hue.getValue();
+    return this.clr.hue.getValue();
     }
 
     public final float getHuef() {
@@ -271,6 +296,10 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
     public int getColor() {
         return LXColor.hsb(getHue(), getSaturation(), 100);
     }
+
+	public long getColor16() {
+		return Ops16.hsb(getHue()/360, getSaturation()/100.0, 1.0);
+	}
 
     public int getColor(double brightness) {
         if (brightness > 0) {

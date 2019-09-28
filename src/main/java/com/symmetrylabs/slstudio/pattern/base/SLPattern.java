@@ -132,6 +132,7 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
         return new ArrayList<Marker>();
     }
 
+    @Override
     public String getCaption() {
         return null;
     }

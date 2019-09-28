@@ -1,5 +1,12 @@
 package com.symmetrylabs.slstudio;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.net.SocketException;
+
+import com.symmetrylabs.slstudio.ui.UILayer;
+import com.symmetrylabs.util.MarkerSource;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.symmetrylabs.shows.HasWorkspace;
@@ -48,6 +55,8 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
     public static final String RESTART_FILE_NAME = ".restart";
     public static final int ENVELOP_OSC_PORT = 3377;
     public static final String MUTE_FILE_NAME = "start-muted";
+
+    public static final String MAPPINGS_DATA_PATH = System.getProperty("user.home") + "/symmetrylabs/mapping";
 
     private SLStudioLX lx;
     public Show show;
@@ -190,6 +199,7 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
                 ui.preview.setPhi(0).setMinRadius(0 * FEET).setMaxRadius(150 * FEET).setRadius(25 * FEET);
                 new UIFramerateControl(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
                 new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 2);
+                new UILayer(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
 
                 show.setupUi(lx, ui);
 

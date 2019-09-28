@@ -16,7 +16,7 @@ import java.util.List;
 public class Peaks extends SLPattern<SLModel> {
     public static final String GROUP_NAME = PilotsShow.SHOW_NAME;
 
-    private final DiscreteParameter count = new DiscreteParameter("count", 7, 2, 20);
+    private final DiscreteParameter count = new DiscreteParameter("count", 7, 0, 20);
     private final CompoundParameter height = new CompoundParameter("height", 100, 0, 800);
     private final CompoundParameter omega = new CompoundParameter("omega", 120, -960, 960);
     private final CompoundParameter radius = new CompoundParameter("radius", 16, 0, 200);

@@ -62,6 +62,11 @@ public abstract class LXPeriodicModulator extends LXModulator {
     private LXParameter period;
 
     /**
+     * The number of milliseconds in the period of this modulator.
+     */
+    private LXParameter beat_period;
+
+    /**
      * Utility constructor with period
      *
      * @param label Label
@@ -171,6 +176,18 @@ public abstract class LXPeriodicModulator extends LXModulator {
      * @return Modulator, for method chaining;
      */
     public final LXPeriodicModulator setPeriod(double periodMs) {
+        this.period = new FixedParameter(periodMs);
+        return this;
+    }
+
+    /**
+     * Modify the period of this modulator on the basis of the tempo
+     *
+     * @param tempo New tempo sync, in tempo
+     * @return Modulator, for method chaining;
+     */
+    public final LXPeriodicModulator setPeriodSync(int numbeats) {
+        double periodMs = getLX().tempo.period.getValuei();
         this.period = new FixedParameter(periodMs);
         return this;
     }

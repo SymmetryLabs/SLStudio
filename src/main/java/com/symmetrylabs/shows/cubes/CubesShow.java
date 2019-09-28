@@ -166,8 +166,10 @@ public abstract class CubesShow implements Show {
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         UI2dScrollContext utility = ui.rightPane.utility;
+        new UIUbnt(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UICubesOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UICubesMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
+        new UIBlackList(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
     }
 
     public void setupUi(LX lx) {

@@ -82,7 +82,13 @@ public class CubeIterator extends SLPattern<CubesModel> implements MarkerSource 
         for (CubesModel.Cube cube : cubes) {
             pos.set(cube.cx, cube.cy, cube.cz);
             int c = (i == cubeI) ? 0xffffff00 : 0x80008040;
-            markers.add(new TextMarker(pos, size, c, cube.modelId));
+            String label = cube.id;
+            if (cube instanceof CubesModel.DoubleControllerCube) {
+                CubesModel.DoubleControllerCube dc = (CubesModel.DoubleControllerCube) cube;
+//                label = dc.idA + "\n" + dc.idB;
+                label = dc.idB + "\n" + dc.idA;
+            }
+            markers.add(new TextMarker(pos, size, c, label));
             i++;
         }
         return markers;

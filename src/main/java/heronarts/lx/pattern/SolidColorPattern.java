@@ -24,7 +24,10 @@ import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXPalette;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.PaletteParameter;
 import heronarts.lx.transform.LXVector;
 
 import java.util.Arrays;
@@ -34,20 +37,34 @@ import static heronarts.lx.PolyBuffer.Space.SRGB8;
 public class SolidColorPattern extends LXPattern {
 
     public final ColorParameter color = new ColorParameter("Color");
+  public final BooleanParameter usePalette = new BooleanParameter("use palette");
 
     public SolidColorPattern(LX lx) {
-        this(lx, LXColor.RED);
+    this(lx, LXColor.BLACK);
     }
 
     public SolidColorPattern(LX lx, int color) {
         super(lx);
         this.color.setColor(color);
         addParameter("color", this.color);
+        addParameter("bool_palette", this.usePalette);
         render();
     }
 
     public void render() {
-        int c = color.getColor();
+//      LXPalette activePalette = getActivePalette();
+//      LXPalette activePalette  = lx.palettes.get(paletteParameter.getValuei());
+
+        int c; // local color var
+        if (this.usePalette.getValueb()){
+            c = palette.getColor();
+        }
+        else {
+            c = color.getColor();
+        }
+
+
+
         int[] colors = (int[]) getArray(SRGB8);
         for (LXVector v : getVectors()) {
             colors[v.index] = c;
@@ -58,6 +75,7 @@ public class SolidColorPattern extends LXPattern {
     @Override
     public void onParameterChanged(LXParameter p) {
         if (p == this.color) render();
+    if (p instanceof PaletteParameter || p instanceof BooleanParameter) render();
     }
 
     @Override

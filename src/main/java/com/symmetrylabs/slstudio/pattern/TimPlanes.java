@@ -10,6 +10,7 @@ import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
 //import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
@@ -36,6 +37,8 @@ public class TimPlanes extends LXPattern {//SLPattern<StripsModel<Strip>>  {
     private CompoundParameter hueParameter = new CompoundParameter("Hue", 0.75);
     private CompoundParameter hueSpreadParameter = new CompoundParameter("HSpr", 0.68);
 
+    private BooleanParameter splitHue = new BooleanParameter("splitHue");
+
     final float centerX, centerY, centerZ;
     float phase;
 
@@ -57,6 +60,7 @@ public class TimPlanes extends LXPattern {//SLPattern<StripsModel<Strip>>  {
         centerY = (model.yMin + model.yMax) / 2;
         centerZ = (model.zMin + model.zMax) / 2;
         phase = 0;
+        addParameter(splitHue);
         addParameter(wobbleParameter);
         addParameter(wobbleSpreadParameter);
         addParameter(wobbleSpeedParameter);
@@ -88,7 +92,11 @@ public class TimPlanes extends LXPattern {//SLPattern<StripsModel<Strip>>  {
         float wobble = wobbleParameter.getValuef() * PI;
         float wobbleSpread = wobbleSpreadParameter.getValuef() * PI;
         float hue = hueParameter.getValuef() * 360;
-        float hueSpread = (hueSpreadParameter.getValuef() - 0.5f) * 360;
+        float hueSpread0 = (hueSpreadParameter.getValuef() - 0.5f) * 360;
+        float hueSpread1 = hueSpread0;
+        if (splitHue.getValueb()){
+            hueSpread1 = - hueSpread0;
+        }
 
         float saturation = 10f + 60.0f * ((float) pow(ramp, 0.25f));
 
@@ -98,7 +106,7 @@ public class TimPlanes extends LXPattern {//SLPattern<StripsModel<Strip>>  {
             new Plane(
                 new LXVector(centerX, centerY + ySpread, centerZ),
                 new Rotation(((float) wobble) - ((float) wobbleSpread), ((float) phase), 0f),
-                hue + 360f - hueSpread),
+                hue + 360f - hueSpread0),
             new Plane(
                 new LXVector(centerX, centerY, centerZ),
                 new Rotation(wobble, phase, 0),
@@ -106,7 +114,7 @@ public class TimPlanes extends LXPattern {//SLPattern<StripsModel<Strip>>  {
             new Plane(
                 new LXVector(centerX, centerY - ySpread, centerZ),
                 new Rotation(wobble + wobbleSpread, phase, 0),
-                hue + 360 + hueSpread)
+                hue + 360 + hueSpread1)
         };
 
         float thickness = (thicknessParameter.getValuef() * 25 + 1);

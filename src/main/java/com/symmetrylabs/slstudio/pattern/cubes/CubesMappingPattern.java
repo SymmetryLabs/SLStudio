@@ -7,6 +7,7 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.transform.LXVector;
 import heronarts.lx.model.LXPoint;
 
 
@@ -14,8 +15,8 @@ public class CubesMappingPattern extends SLPattern<CubesModel> {
     private final SinLFO pulse = new SinLFO(20, 100, 800);
 
     public int mappedAndOnNetworkColor = LXColor.GREEN;
-    public int mappedButNotOnNetworkColor = LXColor.BLACK;
-    public int unMappedButOnNetworkColor = LXColor.BLACK;
+    public int mappedButNotOnNetworkColor = LXColor.RED;
+    public int unMappedButOnNetworkColor = LXColor.BLUE;
 
     private CubesMappingMode mappingMode;
 
@@ -89,6 +90,7 @@ public class CubesMappingPattern extends SLPattern<CubesModel> {
         if (id.equals("-"))
             return;
 
+        // Do something with all the mapped fixtures on the network
         // we iterate all cubes and call continue here because multiple cubes might have zero as id
         for (CubesModel.Cube c : model.getCubes()) {
             if (!c.modelId.equals(id))

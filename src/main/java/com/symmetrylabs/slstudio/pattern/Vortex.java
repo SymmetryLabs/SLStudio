@@ -6,10 +6,7 @@ import com.symmetrylabs.util.CubeMarker;
 import com.symmetrylabs.util.Marker;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.*;
 import heronarts.lx.transform.LXVector;
 import processing.core.PVector;
 

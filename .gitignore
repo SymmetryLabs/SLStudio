@@ -298,3 +298,10 @@ TAGS
 .project
 .classpath
 bin
+
+# nate
+.vscode
+shows/pilots/files
+scratch
+*.bak
+.lxproject.render

@@ -328,7 +328,8 @@ public class Crystalline extends SLPattern<SLModel> {
             m.step(elapsedMs);
         }
 
-        final long on = 0xFFFF_FFFF_FFFF_FFFFL;
+//		final long on = 0xFFFF_FFFF_FFFF_FFFFL;
+		final long on = palette.getColor16();
         final long off = alphaBg.getValueb() ? 0 : Ops16.rgba(0, 0, 0, 0xFFFF);
         Arrays.fill(colors, off);
 

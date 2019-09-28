@@ -50,7 +50,7 @@ public class Inversion extends SLWarp {
 
     public boolean run(double deltaMs, boolean inputVectorsChanged) {
         if (inputVectorsChanged || getAndClearParameterChangeDetectedFlag()) {
-            System.out.println("Recomputing Inversion warp (" + inputVectors.length + " inputVectors)...");
+//            System.out.println("Recomputing Inversion warp (" + inputVectors.length + " inputVectors)...");
             float ox = cxParam.getValuef();
             float oy = cyParam.getValuef();
             float oz = czParam.getValuef();

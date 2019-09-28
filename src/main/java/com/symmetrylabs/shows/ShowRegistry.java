@@ -19,6 +19,7 @@ import com.symmetrylabs.shows.mikey.MikeyShow;
 import com.symmetrylabs.shows.office.OfficeShow;
 import com.symmetrylabs.shows.penfoldswine.PenfoldsWineShow;
 import com.symmetrylabs.shows.pilots.PilotsShow;
+import com.symmetrylabs.shows.pilots_v2.Pilots_v2_Show;
 import com.symmetrylabs.shows.related.RelatedShow;
 import com.symmetrylabs.shows.streetlamp.StreetlampShow;
 import com.symmetrylabs.shows.summerbbq.SummerBBQShow;

@@ -72,8 +72,8 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
 
     public static class Registry {
         private int idCounter = ID_ENGINE+1;
-        private final Map<Integer, LXComponent> components = new HashMap<Integer, LXComponent>();
-        private final Map<Integer, LXComponent> projectIdMap = new HashMap<Integer, LXComponent>();
+        private final Map<Integer, LXComponent> components = new HashMap<>();
+        private final Map<Integer, LXComponent> projectIdMap = new HashMap<>();
 
         public LXComponent getProjectComponent(int projectId) {
             // Check first in the project ID map, there may be another layer of

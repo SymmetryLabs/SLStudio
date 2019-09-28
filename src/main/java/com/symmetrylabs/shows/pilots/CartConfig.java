@@ -41,17 +41,18 @@ public class CartConfig {
 
     public static CartConfig[] defaultConfigs() {
         return new CartConfig[]{
-            new CartConfig(FSL, "10.200.1.11"),
-            new CartConfig(BSL, "10.200.1.12"),
-            new CartConfig(BSCL, "10.200.1.13"),
-            new CartConfig(BSC, "10.200.1.14"),
-            new CartConfig(BSCR, "10.200.1.15"),
-            new CartConfig(BSR, "10.200.1.16"),
-            new CartConfig(FSR, "10.200.1.17"),
+            new CartConfig(FSL, "10.200.1.13"),
+            new CartConfig(BSL, "10.200.1.17"),
+            new CartConfig(BSCL, "10.200.1.16"),
+            new CartConfig(BSC, "10.200.1.15"),
+            new CartConfig(BSCR, "10.200.1.14"),
+            new CartConfig(BSR, "10.200.1.11"),
+            new CartConfig(FSR, "10.200.1.12"),
         };
     }
 
     public static CartConfig[] readConfigsFromFile() {
-        return FileUtils.readShowJsonIfExists(PilotsShow.IP_CONFIGS_FILENAME, CartConfig[].class);
+//        return FileUtils.readShowJsonIfExists(PilotsShow.IP_CONFIGS_FILENAME, CartConfig[].class);
+        return FileUtils.readAbsoluteJsonIfExists(PilotsShow.IP_CONFIGS_FILENAME, CartConfig[].class);
     }
 }

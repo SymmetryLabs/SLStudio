@@ -84,6 +84,15 @@ public abstract class LXOutput extends LXComponent {
         new BooleanParameter("Enabled", true)
         .setDescription("Whether the output is active");
 
+    /**
+     * Whether the output is blacklisted.
+     * "blacklist" is a pun.  It means this output should only receive black.
+     * Usefull for "quieting" a controller with connection issues.
+     */
+    public final BooleanParameter blacklist =
+        new BooleanParameter("Enabled", false)
+            .setDescription("Whether the output can receive lights on data.");
+
     public enum Mode {
         NORMAL,
         WHITE,

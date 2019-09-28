@@ -20,6 +20,8 @@
 
 package heronarts.lx;
 
+import com.symmetrylabs.util.CaptionSource;
+import heronarts.lx.color.LXPalette;
 import heronarts.lx.midi.MidiAftertouch;
 import heronarts.lx.midi.MidiControlChange;
 
@@ -33,6 +35,7 @@ import heronarts.lx.midi.MidiProgramChange;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.PaletteParameter;
 import heronarts.lx.transform.LXVector;
 
 import java.util.Arrays;
@@ -45,7 +48,7 @@ import static heronarts.lx.PolyBuffer.Space.SRGB8;
  * A pattern is the core object that the animation engine uses to generate
  * colors for all the points.
  */
-public abstract class LXPattern extends LXBusComponent implements LXComponent.Renamable, LXLayeredComponent.Buffered, LXMidiListener, LXOscComponent, LXUtils.IndexedElement {
+public abstract class LXPattern extends LXBusComponent implements LXComponent.Renamable, LXLayeredComponent.Buffered, LXMidiListener, LXOscComponent, LXUtils.IndexedElement, CaptionSource {
     private int index = -1;
     private int intervalBegin = -1;
     private int intervalEnd = -1;
@@ -76,8 +79,18 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
         public long runNanos = 0;
     }
 
+    // default palette parameter
+    protected PaletteParameter paletteParameter = new PaletteParameter();
+
+  protected LXPalette getActivePalette (){
+        LXPalette activePalette = this.lx.palettes.get(this.paletteParameter.getValuei());
+        return activePalette;
+    }
+
     protected LXPattern(LX lx) {
         super(lx);
+        this.addParameter(paletteParameter);
+        palette = getActivePalette();
         addParameter(enabled);
         this.label.setDescription("The name of this pattern");
         this.label.setValue(getClass().getSimpleName().replaceAll("Pattern$", ""));
@@ -208,6 +221,7 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
 
     @Override
     protected final void onLoop(double deltaMs) {
+        palette = getActivePalette();
         long runStart = System.nanoTime();
         this.runMs += deltaMs;
         this.run(deltaMs, preferredSpace);
@@ -233,6 +247,9 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
      *     is free to use any space, though doing so may sacrifice quality or efficiency)
      */
     protected /* abstract */ void run(double deltaMs, PolyBuffer.Space preferredSpace) {
+    // nate: update the palette with the active selection for this pattern
+        palette = getActivePalette();
+
         // For compatibility, this invokes the method that previous subclasses
         // were supposed to implement.  Implementations of run(deltaMs) are
         // assumed to operate only on the "colors" array, and are not expected
@@ -252,6 +269,7 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
      * or reset parameters if desired.
      */
     public /* abstract */ void onActive() {
+        lx.txt_ui.addSource(this);
     }
 
     /**
@@ -259,6 +277,7 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
      * no longer active. Resources may be freed if desired.
      */
     public /* abstract */ void onInactive() {
+        lx.txt_ui.removeSource(this);
     }
 
     /**
@@ -344,6 +363,13 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
             return (String) pClass.getField("GROUP_NAME").get(null);
         } catch (NoSuchFieldException | IllegalAccessException | ClassCastException e) {
         }
+        return null;
+    }
+
+    /* override this to submit info to the debug section in TTY stream
+    *
+     */
+    public String getCaption() {
         return null;
     }
 }
