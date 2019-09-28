@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern.TimeCodedSlideshow;
 
+import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.util.Hunk;
 import com.symmetrylabs.util.DoubleBuffer;
@@ -86,7 +87,7 @@ public class OfflinePlayback extends LXPattern {
         }
         // jump forward
         else if (currentHunk() > doubleBuffer.getFront().hunkIndex + 1){
-            SLStudio.setWarning("PlayerInfo: ", "Jump forward.");
+            ApplicationState.setWarning("PlayerInfo: ", "Jump forward.");
             // reset
             doubleBuffer.dispose();
             doubleBuffer.initialize();
@@ -126,17 +127,17 @@ public class OfflinePlayback extends LXPattern {
             // ok we already have the current one in memory. Good we're currently writing to that buffer.
             // get the next one loaded
             else if (current_hunk_index_from_MTC == most_recent_hunk_in_memory){
-                SLStudio.setWarning("loader", "look ahead");
+                ApplicationState.setWarning("loader", "look ahead");
                 get_this_index = current_hunk_index_from_MTC +1;
             }
 
             else if (current_hunk_index_from_MTC < most_recent_hunk_in_memory){
-                SLStudio.setWarning("loader", "reinitialize load");
+                ApplicationState.setWarning("loader", "reinitialize load");
                 get_this_index = current_hunk_index_from_MTC;
             }
 
             else if (current_hunk_index_from_MTC > most_recent_hunk_in_memory) {
-                SLStudio.setWarning("loader", "snapping forward");
+                ApplicationState.setWarning("loader", "snapping forward");
                 get_this_index = current_hunk_index_from_MTC;
 //                if (strict){
 //                    throw new IllegalStateException("If playing linearly the current hunk index bin should never get ahead of what's already in memory.");
@@ -150,7 +151,7 @@ public class OfflinePlayback extends LXPattern {
 
             File hunkFile = new File(hunkPath);
 
-            SLStudio.setWarning(TAG, "loading: " + get_this_index + ".png" + " --- already have: " + most_recent_hunk_in_memory + ".png");
+            ApplicationState.setWarning(TAG, "loading: " + get_this_index + ".png" + " --- already have: " + most_recent_hunk_in_memory + ".png");
 
             Hunk curBuffer = null;
             if (hunkFile.isFile() && hunkFile.getName().endsWith(".png")) {
@@ -158,7 +159,7 @@ public class OfflinePlayback extends LXPattern {
                     curBuffer = new Hunk(ImageIO.read(hunkFile), get_this_index);
                 } catch (IOException e) {
                     String error_msg = "couldn't load next cache in sequence";
-                    SLStudio.setWarning(TAG, error_msg);
+                    ApplicationState.setWarning(TAG, error_msg);
                     System.out.println(error_msg);
                     e.printStackTrace();
                 }
@@ -252,7 +253,7 @@ public class OfflinePlayback extends LXPattern {
     @Override
     public void onInactive() {
         super.onInactive();
-        SLStudio.setWarning(TAG, null);
+        ApplicationState.setWarning(TAG, null);
         stopping = true;
         // gracefully destroy loader thread
         if (loaderThread != null) {

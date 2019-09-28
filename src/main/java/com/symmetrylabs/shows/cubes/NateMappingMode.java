@@ -85,13 +85,13 @@ public class NateMappingMode {
 
             //these copy paste brackets should be function
             {
-                modelFixtures.add(cubei.idA);
-                fixtureIdStringArray[ii++] = cubei.idA;
+                modelFixtures.add(cubei.modelId);
+                fixtureIdStringArray[ii++] = cubei.modelId;
             }
 
             {
-                modelFixtures.add(cubei.idB);
-                fixtureIdStringArray[ii++] = cubei.idB;
+                modelFixtures.add(cubei.modelId + "_B");
+                fixtureIdStringArray[ii++] = cubei.modelId + "_B";
             }
         }
         this.selectedModelFixture = new DiscreteParameter("SelectFixtureInModel", fixtureIdStringArray)
@@ -194,7 +194,7 @@ public class NateMappingMode {
 
     public boolean isFixtureMapped(String id) {
         for (CubesModel.Cube fixture : cubesModel.getCubes()) {
-            if (fixture.id.equals(id))
+            if (fixture.modelId.equals(id))
                 return true;
         }
         return false;
@@ -243,7 +243,7 @@ public class NateMappingMode {
         mappingPattern = new NateCubesMappingForkPattern(lx);
         mappingChannel = lx.engine.addChannel(new LXPattern[] {mappingPattern});
 
-        for (LXChannel channel : lx.engine.channels)
+        for (LXChannel channel : lx.engine.getAllSubChannels())
             channel.cueActive.setValue(false);
 
         mappingChannel.fader.setValue(1);

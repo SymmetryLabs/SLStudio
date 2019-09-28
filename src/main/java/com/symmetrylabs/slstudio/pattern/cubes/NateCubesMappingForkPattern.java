@@ -82,20 +82,20 @@ public class NateCubesMappingForkPattern extends SLPattern<CubesModel> {
         // we iterate all cubes and call continue here because multiple cubes might have zero as id
 
         // made specific double controller cube
-        for (CubesModel.Cube c : model.getCubes()) {
-            CubesModel.DoubleControllerCube cc = (CubesModel.DoubleControllerCube) c;
-            if (!cc.idA.equals(id) && !cc.idB.equals(id))
-                // neither controller a match
-                continue;
-
-            PointsGrouping pointsGrouping = (cc.idA.equals(id)) ? cc.getPointsA() : cc.getPointsB();
-            int i = 0;
-            for (LXPoint v : pointsGrouping.getPoints()) {
-                if (dotted) {
-                    col = (i++ % 2 == 0) ? LXColor.scaleBrightness(LXColor.GREEN, 0.2f) : LXColor.BLACK;
-                }
-                colors[v.index] = col;
-            }
-        }
+//        for (CubesModel.Cube c : model.getCubes()) {
+//            CubesModel.DoubleControllerCube cc = (CubesModel.DoubleControllerCube) c;
+//            if (!cc.idA.equals(id) && !cc.idB.equals(id))
+//                // neither controller a match
+//                continue;
+//
+//            PointsGrouping pointsGrouping = (cc.idA.equals(id)) ? cc.getPointsA() : cc.getPointsB();
+//            int i = 0;
+//            for (LXPoint v : pointsGrouping.getPoints()) {
+//                if (dotted) {
+//                    col = (i++ % 2 == 0) ? LXColor.scaleBrightness(LXColor.GREEN, 0.2f) : LXColor.BLACK;
+//                }
+//                colors[v.index] = col;
+//            }
+//        }
     }
 }

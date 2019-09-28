@@ -45,8 +45,8 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 
     private static final double MAX_POWER_CAP = 0.62;
 
-    public final String id;
-    public final int idInt;
+    public String id;
+    public int idInt;
     public final InetAddress host;
     public final boolean isBroadcast;
     public final NetworkDevice networkDevice;
@@ -293,7 +293,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 //                }
 
                 // check 16 bit power
-                fault_condition = power_level_has_fault_condition(points, is16BitColorEnabled, srcLongs);
+//                fault_condition = power_level_has_fault_condition(points, is16BitColorEnabled, srcLongs);
                 if (!fault_condition) {
                     for (int i = 0; i < numPixels; i++) {
                         LXPoint point = points.getPoint(i);
@@ -365,35 +365,35 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     }
 
 
-        private boolean power_level_has_fault_condition (PointsGrouping points, boolean is16BitColorEnabled, long[] poly) {
-//            double THRESH = 0.7;
-//            double THRESH = lx.engine.powerCap.getValuef();
-            double THRESH = MAX_POWER_CAP;
-            numPixels = points.size();
-
-            double aggregate = 0; // just count up the mean intensity
-            double pixel_contribution = 0; // contribution from one pixel
-
-            for (int i = 0; i < numPixels; i++) {
-                LXPoint point = points.getPoint(i);
-                long c = poly[point.index];
-
-                if (is16BitColorEnabled){
-                    pixel_contribution = Ops16.mean(c);
-                }
-                aggregate += pixel_contribution;
-            }
-            double normalize = aggregate/numPixels;
-
-            return (normalize > THRESH);
-
-        }
+//        private boolean power_level_has_fault_condition (PointsGrouping points, boolean is16BitColorEnabled, long[] poly) {
+////            double THRESH = 0.7;
+////            double THRESH = lx.engine.powerCap.getValuef();
+//            double THRESH = MAX_POWER_CAP;
+//            numPixels = points.size();
+//
+//            double aggregate = 0; // just count up the mean intensity
+//            double pixel_contribution = 0; // contribution from one pixel
+//
+//            for (int i = 0; i < numPixels; i++) {
+//                LXPoint point = points.getPoint(i);
+//                long c = poly[point.index];
+//
+//                if (is16BitColorEnabled){
+//                    pixel_contribution = Ops16.mean(c);
+//                }
+//                aggregate += pixel_contribution;
+//            }
+//            double normalize = aggregate/numPixels;
+//
+//            return (normalize > THRESH);
+//
+//        }
     // this function looks at the buffer getting sent out every time and if there's a fault condition it reports it.
 
     private void connectionWarning(Exception e) {
         if (dsocket != null) {
             // System.err.println("Disconnected from OPC server");
-            SLStudio.setWarning("CubesController", "failed to send packet: " + e.getMessage());
+            ApplicationState.setWarning("CubesController", "failed to send packet: " + e.getMessage());
         }
     }
 

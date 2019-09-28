@@ -187,7 +187,7 @@ public class LX {
     /**
      * Non-GUI UI
      */
-    public final LXTxtUI txt_ui;
+//    public final LXTxtUI txt_ui;
 
     /**
      * The global tempo object.

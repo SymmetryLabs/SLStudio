@@ -269,7 +269,6 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
      * or reset parameters if desired.
      */
     public /* abstract */ void onActive() {
-        lx.txt_ui.addSource(this);
     }
 
     /**
@@ -277,7 +276,6 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
      * no longer active. Resources may be freed if desired.
      */
     public /* abstract */ void onInactive() {
-        lx.txt_ui.removeSource(this);
     }
 
     /**

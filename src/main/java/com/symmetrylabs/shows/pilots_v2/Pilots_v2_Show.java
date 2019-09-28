@@ -478,7 +478,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
                     String idA = response.controllers.get(controllerIndex++);
                     String idB = response.controllers.get(controllerIndex++);
                     float y = config.yValues[i];
-                    CubesModel.DoubleControllerCube cube = new CubesModel.DoubleControllerCube(idA, idB, x, y, z, rX, rY, rZ, globalTransform);
+                    CubesModel.DoubleControllerCube cube = new CubesModel.DoubleControllerCube(idA, x, y, z, rX, rY, rZ, globalTransform);
                     System.out.print('"' + idA + '"' + ',' + '"' + idB + '"' + ',' + '\t' );
                     cubes.add(cube);
                     allCubes.add(cube);
@@ -494,7 +494,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        CubesModel model = new CubesModel(towers, allCubesArr);
+        CubesModel model = new CubesModel("id", towers, allCubesArr, cubeInventory, mapping);
         model.setTopologyTolerances(6, 6, 8);
         return model;
     }
@@ -523,6 +523,11 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
         new UIBlackList(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UICubesMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
 
+    }
+
+    @Override
+    public String getShowName() {
+        return "Pilots_v2";
     }
 
     @Override

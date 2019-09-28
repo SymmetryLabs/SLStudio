@@ -98,6 +98,8 @@ public class ShowRegistry {
         map.put(SummerStage19Show.SHOW_NAME, SummerStage19Show::new);
         map.put(EmpireWallShow.SHOW_NAME, EmpireWallShow::new);
         map.put(WingPortalShow.SHOW_NAME, WingPortalShow::new);
+        map.put(Pilots_v2_Show.SHOW_NAME, Pilots_v2_Show::new);
+        map.put(PilotsShow.SHOW_NAME, PilotsShow::new);
     }
 
     interface ShowBuilder {

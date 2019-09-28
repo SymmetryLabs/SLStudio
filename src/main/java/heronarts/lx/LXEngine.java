@@ -23,47 +23,26 @@ package heronarts.lx;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.symmetrylabs.color.Spaces;
 import com.symmetrylabs.slstudio.output.OfflineRenderOutput;
 import com.symmetrylabs.util.artnet.ArtNetEngine;
 import com.symmetrylabs.util.dmx.DMXEngine;
 import com.symmetrylabs.util.dmx.LXEngineDMXManager;
 import heronarts.lx.audio.LXAudioEngine;
-import heronarts.lx.blend.AddBlend;
-import heronarts.lx.blend.DarkestBlend;
-import heronarts.lx.blend.DifferenceBlend;
-import heronarts.lx.blend.DissolveBlend;
-import heronarts.lx.blend.LXBlend;
-import heronarts.lx.blend.LightestBlend;
-import heronarts.lx.blend.MultiplyBlend;
-import heronarts.lx.blend.NormalBlend;
-import heronarts.lx.blend.SubtractBlend;
-import heronarts.lx.clip.LXClip;
+import heronarts.lx.blend.*;
 import heronarts.lx.color.LXPalette;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.mutation.LXMutationQueue;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.osc.LXOscEngine;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.output.LXOutputGroup;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.BoundedParameter;
-import heronarts.lx.parameter.EnumParameter;
-import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.*;
 import heronarts.lx.script.LXScriptEngine;
-import heronarts.lx.warp.LXWarp;
 import org.apache.commons.collections4.iterators.IteratorChain;
 import org.apache.commons.collections4.iterators.IteratorIterable;
-import java.util.Collection;
-import heronarts.lx.mutation.LXMutationQueue;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
@@ -127,7 +106,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     public OfflineRenderOutput renderOutputRef;
 
-    private final List<Listener> listeners = new ArrayList<Listener>();
+//    private final List<Listener> listeners = new ArrayList<Listener>();
     private final List<MessageListener> messageListeners = new ArrayList<MessageListener>();
 
     public final BoundedParameter framesPerSecond = new BoundedParameter("FPS", 60, 0, 300);

@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.output;
 
+import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.SLStudio;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
@@ -151,7 +152,7 @@ public class OfflineRenderOutput extends LXOutput implements  LXOscComponent{
         int framesSkipped = -1;
         if (inFrame > (lastFrameWritten + 1)){
             framesSkipped = inFrame - (lastFrameWritten + 1);
-            SLStudio.setWarning("OFFLINERENDER", "Skipped Frames: " + framesSkipped);
+            ApplicationState.setWarning("OFFLINERENDER", "Skipped Frames: " + framesSkipped);
         }
 
 

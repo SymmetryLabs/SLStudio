@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.pattern.playback;
 import ar.com.hjg.pngj.IImageLine;
 import ar.com.hjg.pngj.ImageLineInt;
 import ar.com.hjg.pngj.PngReader;
+import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
@@ -284,7 +285,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
     private String constructDataPath() {
         String showName = SLStudio.applet.showName;
         if (showName == null){
-            SLStudio.setWarning("NoShow", "could not find show");
+            ApplicationState.setWarning("NoShow", "could not find show");
         }
         else{
             // SLStudio.setWarning("FoShow", "Found show: " + showName);
@@ -302,7 +303,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
 
     static private int numReload = 0;
     public void loadSong() {
-        SLStudio.setWarning("((reload *.png)): ", Integer.toString(numReload++) );
+        ApplicationState.setWarning("((reload *.png)): ", Integer.toString(numReload++) );
         String path = renderFile.getString();
         if (path == null) {
             System.err.println("invalid path");
@@ -314,7 +315,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
             pngr = new PngReader(currentSongPng);
         }
         else{
-            SLStudio.setWarning("BAD PATH (or not a valid *.png): ", path);
+            ApplicationState.setWarning("BAD PATH (or not a valid *.png): ", path);
         }
     }
 
