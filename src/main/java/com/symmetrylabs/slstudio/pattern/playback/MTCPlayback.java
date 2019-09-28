@@ -283,7 +283,9 @@ public class MTCPlayback extends SLPattern<SLModel> {
     }
 
     private String constructDataPath() {
-        String showName = SLStudio.applet.showName;
+//        String showName = SLStudio.applet.showName;
+        // if Volume... get the showname this way
+        String showName = ApplicationState.showName();
         if (showName == null){
             ApplicationState.setWarning("NoShow", "could not find show");
         }

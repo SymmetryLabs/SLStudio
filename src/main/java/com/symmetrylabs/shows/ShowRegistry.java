@@ -72,6 +72,7 @@ public class ShowRegistry {
         map.put(KalpaShow.SHOW_NAME, KalpaShow::new);
         map.put(SummerStageShow.SHOW_NAME, SummerStageShow::new);
         map.put(PilotsShow.SHOW_NAME, PilotsShow::new);
+        map.put(Pilots_v2_Show.SHOW_NAME, Pilots_v2_Show::new);
         map.put(SummerBBQShow.SHOW_NAME, SummerBBQShow::new);
         map.put(StreetlampShow.SHOW_NAME, StreetlampShow::new);
         map.put(MagicLeapShow.SHOW_NAME, MagicLeapShow::new);
@@ -98,8 +99,6 @@ public class ShowRegistry {
         map.put(SummerStage19Show.SHOW_NAME, SummerStage19Show::new);
         map.put(EmpireWallShow.SHOW_NAME, EmpireWallShow::new);
         map.put(WingPortalShow.SHOW_NAME, WingPortalShow::new);
-        map.put(Pilots_v2_Show.SHOW_NAME, Pilots_v2_Show::new);
-        map.put(PilotsShow.SHOW_NAME, PilotsShow::new);
     }
 
     interface ShowBuilder {

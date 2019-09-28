@@ -27,6 +27,8 @@ import java.util.List;
  */
 public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
 
+    public static final String SHOW_NAME = "pilots_v2";
+
     private Workspace workspace;
 
     static final float globalOffsetX = 0;
@@ -494,7 +496,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        CubesModel model = new CubesModel("id", towers, allCubesArr, cubeInventory, mapping);
+        CubesModel model = new CubesModel(getShowName(), towers, allCubesArr, cubeInventory, mapping);
         model.setTopologyTolerances(6, 6, 8);
         return model;
     }
@@ -527,7 +529,7 @@ public class Pilots_v2_Show extends CubesShow implements HasWorkspace {
 
     @Override
     public String getShowName() {
-        return "Pilots_v2";
+        return "pilots_v2";
     }
 
     @Override

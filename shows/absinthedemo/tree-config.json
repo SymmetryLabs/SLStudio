@@ -91,7 +91,8 @@
               "tilt": 0.0,
               "index": 8
             }
-          ]
+          ],
+          "flipped": false
         },
         {
           "locked": false,
@@ -176,7 +177,8 @@
               "tilt": 0.0,
               "index": 8
             }
-          ]
+          ],
+          "flipped": false
         },
         {
           "locked": false,
@@ -261,7 +263,8 @@
               "tilt": -180.0,
               "index": 8
             }
-          ]
+          ],
+          "flipped": false
         },
         {
           "locked": false,
@@ -346,7 +349,8 @@
               "tilt": -180.0,
               "index": 8
             }
-          ]
+          ],
+          "flipped": false
         },
         {
           "locked": false,
@@ -431,7 +435,8 @@
               "tilt": -180.0,
               "index": 8
             }
-          ]
+          ],
+          "flipped": false
         }
       ]
     }
