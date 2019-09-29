@@ -416,6 +416,9 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         this.mutations = new LXMutationQueue(lx);
         LX.initTimer.log("Engine: Remote control");
 
+        // Offline Render
+//        this.renderOutputRef = new OfflineRenderOutput(lx);
+
         // Parameters
         addParameter("speed", this.speed);
         addParameter("multithreaded", this.isMultithreaded);
