@@ -23,7 +23,8 @@ plugins {
 
 group = 'com.symmetrylabs'
 version = '1.0.5'
-sourceCompatibility = 1.8
+//sourceCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_HIGHER
 mainClassName = 'com.symmetrylabs.slstudio.SymmetryLauncher'
 
 allprojects {
@@ -37,7 +38,8 @@ allprojects {
 	}
 
 	tasks.withType(JavaCompile) {
-		sourceCompatibility = '1.8'
+//		sourceCompatibility = '1.8'
+        sourceCompatibility = '12'
 	}
 }
 
@@ -126,13 +128,17 @@ dependencies {
 	implementation group: 'net.sf.expectit', name: 'expectit-core', version: '0.9.0'
 
 	compile 'commons-net:commons-net:3.3'
+
+    compile 'org.glassfish:javax.annotation:10.0-b28'
 }
 
 compileKotlin {
-	kotlinOptions.jvmTarget = "1.8"
+//	kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "12"
 }
 compileTestKotlin {
-	kotlinOptions.jvmTarget = "1.8"
+//	kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "12"
 }
 
 run {
