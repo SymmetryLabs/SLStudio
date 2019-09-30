@@ -224,7 +224,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
         new SongIndex("Heathens", HEATHENS);
         new SongIndex("WeDontBelieve", WEDONTBELIEVE);
         new SongIndex("Judge", JUDGE);
-        new SongIndex("CutMyLip", CUT);
+        new SongIndex("CutMyLip", CUT).addOffset(0, 17, 0);
         new SongIndex("LaneBoy1", LANE_BOY1);
         new SongIndex("nico", NICO).addOffset(0, 1, 4);
         new SongIndex("PetCheetah", CHEETAH).addOffset(1,3,7);
@@ -241,7 +241,8 @@ public class MTCPlayback extends SLPattern<SLModel> {
         new SongIndex("Hype", HYPE);
 
         new SongIndex("FallAway", FALL_AWAY);
-        new SongIndex("LevitateRev2", LEVITATE_ROUND2).addOffset(0,5,0);
+        new SongIndex("LevitateRev2", LEVITATE_ROUND2).addOffset(0,1,10);
+//        new SongIndex("LevitateRev2", LEVITATE_ROUND2);
         new SongIndex("MorphRev2", MORPH_NEW);
     }
 
