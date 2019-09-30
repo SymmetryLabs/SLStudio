@@ -34,7 +34,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
     private final MutableParameter MTCOffset = new MutableParameter("MTC_OFFSET", 0);
     private final BooleanParameter freewheel = new BooleanParameter("run", false);
 
-    private final DiscreteParameter phaseAdjust = new DiscreteParameter("phase", 0, -10, 10);
+    private final DiscreteParameter phaseAdjust = new DiscreteParameter("phase", 0, -90, 90);
     private final DiscreteParameter  altSequence = new DiscreteParameter("ALT", 0, 0, 5);
 
 
@@ -225,7 +225,7 @@ public class MTCPlayback extends SLPattern<SLModel> {
         new SongIndex("Heathens", HEATHENS);
         new SongIndex("WeDontBelieve", WEDONTBELIEVE);
         new SongIndex("Judge", JUDGE);
-        new SongIndex("CutMyLip", CUT);
+        new SongIndex("CutMyLip", CUT).addOffset(0, 17, 0);
         new SongIndex("LaneBoy1", LANE_BOY1);
         new SongIndex("nico", NICO).addOffset(0, 1, 4);
         new SongIndex("PetCheetah", CHEETAH).addOffset(1,3,7);
@@ -242,7 +242,8 @@ public class MTCPlayback extends SLPattern<SLModel> {
         new SongIndex("Hype", HYPE);
 
         new SongIndex("FallAway", FALL_AWAY);
-        new SongIndex("LevitateRev2", LEVITATE_ROUND2).addOffset(0,5,0);
+        new SongIndex("LevitateRev2", LEVITATE_ROUND2).addOffset(0,1,10);
+//        new SongIndex("LevitateRev2", LEVITATE_ROUND2);
         new SongIndex("MorphRev2", MORPH_NEW);
     }
 
@@ -430,12 +431,16 @@ public class MTCPlayback extends SLPattern<SLModel> {
     @Override
     public String getCaption() {
         return String.format(
-            "time %s / frame %d / current song: %s / file %s ",
-            mt == null ? "unknown" : mt.toString(),
-            lastFrameRendered,
-            getCurrentSongName(),
-            currentSongPng == null ? "null" : currentSongPng.getName()
+            "time %s",
+            mt == null ? "unknown" : mt.toString()
         );
+//        return String.format(
+//            "time %s / frame %d / current song: %s / file %s ",
+//            mt == null ? "unknown" : mt.toString(),
+//            lastFrameRendered,
+//            getCurrentSongName(),
+//            currentSongPng == null ? "null" : currentSongPng.getName()
+//        );
     }
 
     private String getCurrentSongName() {
