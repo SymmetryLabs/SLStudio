@@ -12,7 +12,6 @@ import heronarts.lx.parameter.*;
 import heronarts.lx.transform.LXVector;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.awt.FileDialog;
 import java.awt.Frame;
@@ -36,7 +35,8 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
     final StringParameter directory = new StringParameter("dir", null);
     private final BooleanParameter chooseDir = new BooleanParameter("pick", false).setMode(BooleanParameter.Mode.MOMENTARY);
     private final BooleanParameter bake = new BooleanParameter("bake", false).setMode(BooleanParameter.Mode.MOMENTARY);
-    private final CompoundParameter shrinkParam = new CompoundParameter("shrink", 1, 1.4, 3);
+    private final CompoundParameter scaleYY = new CompoundParameter("scaleYY", 1, .1, 5);
+    private final CompoundParameter scaleXX = new CompoundParameter("scaleXX", 1, .1, 5);
     private final CompoundParameter yOffsetParam = new CompoundParameter("yoff", 0, 0, 1);
     private final CompoundParameter cropLeftParam = new CompoundParameter("cropL", 0, 0, 1);
     private final CompoundParameter cropRightParam = new CompoundParameter("cropR", 0, 0, 1);
@@ -97,7 +97,8 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         super(lx);
         addParameter(directory);
         addParameter(chooseDir);
-        addParameter(shrinkParam);
+        addParameter(scaleYY);
+        addParameter(scaleXX);
         addParameter(yOffsetParam);
         addParameter(cropLeftParam);
         addParameter(cropRightParam);
@@ -107,6 +108,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         addParameter(bake);
         addParameter(freewheel);
         addParameter(freewheelReset);
+        addParameter(frameSelect);
 
         for (LXMidiInput input : lx.engine.midi.inputs) {
             input.addTimeListener(new LXMidiInput.MidiTimeListener() {
@@ -236,7 +238,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
                 directory.setValue(dialog.getDirectory());
                 loadDirectory();
             }
-
+            onActive();
         } else if (p == bake && bake.getValueb()) {
             FileDialog dialog = new FileDialog(
                 (Frame) null, "Save baked video as:", FileDialog.SAVE);
@@ -253,6 +255,7 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         }
         else if (p == frameSelect){
             currentFrame = frameSelect.getValuei();
+            loaderSemaphore.release(2); // sort of a hack?
         }
     }
 
@@ -351,15 +354,16 @@ public class TimeCodedSlideshow extends SLPattern<SLModel> {
         int cropTop = Math.round(cropTopParam.getValuef() * img.getHeight());
         int cropBottom = Math.round(cropBottomParam.getValuef() * img.getHeight());
 
-        float shrink = shrinkParam.getValuef();
+        float shrinkX = scaleYY.getValuef();
+        float shrinkY = scaleXX.getValuef();
         int croppedWidth = img.getWidth() - cropLeft - cropRight;
         int croppedHeight = img.getHeight() - cropTop - cropBottom;
 
         Arrays.fill(ccs, 0);
 
         for (LXVector v : getVectors()) {
-            int i = (int) ((shrink * (model.yMax - v.y)) + yOffsetParam.getValue() * img.getHeight());
-            int j = (int) (shrink * (v.x - model.xMin));
+            int i = (int) ((shrinkX * (model.yMax - v.y)) + yOffsetParam.getValue() * img.getHeight());
+            int j = (int) (shrinkY * (v.x - model.xMin));
             int color;
             if (i >= croppedHeight || j >= croppedWidth || i < 0 || j < 0) {
                     color = 0;
