@@ -1,0 +1,29 @@
+[Unit]
+Description=VolumeServer
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=symmetry
+Group=symmetry
+
+WorkingDirectory=/home/symmetry/SLStudio/
+ExecStart=/home/symmetry/SLStudio/VolumeServer.sh
+
+StandardOutput=journal
+StandardError=inherit
+
+# Disable timeout logic and wait until process is stopped
+TimeoutStopSec=0
+
+# SIGTERM signal is used to stop the Java process
+KillSignal=SIGTERM
+
+# When a JVM receives a SIGTERM signal it exits with code 143
+SuccessExitStatus=143
+
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -207,6 +207,7 @@ task dist(type: Zip) {
     from(".") {
         include 'libs/**'
         include 'shows/**'
+        include 'data/**'
         include 'src/main/resources/**'
     }
     from("scripts") {
@@ -215,6 +216,7 @@ task dist(type: Zip) {
         include 'Volume.bat'
         include 'Volume.sh'
         include 'VolumeServer.sh'
+        include 'VolumeServer.service'
         filter { line -> line.replace('$VERSION', project.version) }
     }
     from(shadowJar) {
