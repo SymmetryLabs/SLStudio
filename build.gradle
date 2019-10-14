@@ -138,9 +138,11 @@ dependencies {
 	// is declared here instead of vlcj (which is intentional!) check out
 	// https://www.slf4j.org/manual.html
 	implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+	implementation 'net.java.dev.jna:jna-platform:5.4.0'
 
 	implementation files('libs/minim.jar')
 	implementation files('libs/jogamp-fat.jar')
+	implementation files('libs/openkinect_processing.jar')
 
 	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
 	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.1.1'
