@@ -24,6 +24,7 @@ public class NetworkDevice {
     protected final static Pattern PRODUCT_VERSION = Pattern.compile("^(\\w+)/([\\w+]+)");
     protected final static Pattern FEATURE_LIST = Pattern.compile("\\(([\\w,]+)\\)");
     protected final static Pattern DEVICE_ID = Pattern.compile("\\[(\\w+)\\]");
+    protected final static Pattern DEVICE_ID_LONG_MAC = Pattern.compile("\\[(\\w+::\\w+::\\w+::\\w+::\\w+::\\w+)\\]");
 
     public NetworkDevice(InetAddress ipAddress, String productId, String versionId, String deviceId, String[] featureIds) {
         this.ipAddress = ipAddress;
@@ -96,6 +97,12 @@ public class NetworkDevice {
         matcher = DEVICE_ID.matcher(idStr);
         if (matcher.find()) {
             deviceId = matcher.group(1);
+        }
+        else {
+            matcher = DEVICE_ID_LONG_MAC.matcher(idStr);
+            if (matcher.find()) {
+                deviceId = matcher.group(1);
+            }
         }
         return new NetworkDevice(ipAddress, productId, versionId, deviceId, featureIds);
     }
