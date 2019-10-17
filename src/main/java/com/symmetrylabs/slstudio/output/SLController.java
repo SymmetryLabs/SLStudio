@@ -1,17 +1,23 @@
 package com.symmetrylabs.slstudio.output;
 
 import com.symmetrylabs.color.Ops8;
+import com.symmetrylabs.shows.cubes.CubesController;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.component.GammaExpander;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
+import com.symmetrylabs.util.CubeInventory;
 import heronarts.lx.LX;
 import heronarts.lx.output.LXOutput;
+import heronarts.lx.output.OPCConstants;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.*;
 
-public class SLController extends LXOutput {
+public class SLController extends LXOutput implements Comparable<SLController>, OPCConstants {
+    public String id;
+    public int idInt;
     public final InetAddress host;
     public final boolean isBroadcast;
     public final NetworkDevice networkDevice;
@@ -31,13 +37,14 @@ public class SLController extends LXOutput {
     private final LX lx;
     private GammaExpander GammaExpander;
 
-    public SLController(LX lx, NetworkDevice device, PointsGrouping points) {
-        this(lx, device, device.ipAddress, points, false);
+    public SLController(LX lx, NetworkDevice device, PointsGrouping points, String id) {
+        this(lx, device, device.ipAddress, points, false, id);
     }
 
-    private SLController(LX lx, NetworkDevice networkDevice, InetAddress host, PointsGrouping points, boolean isBroadcast) {
+    private SLController(LX lx, NetworkDevice networkDevice, InetAddress host, PointsGrouping points, boolean isBroadcast, String id) {
         super(lx);
 
+        this.id = id;
         this.lx = lx;
         this.networkDevice = networkDevice;
         this.host = host;
@@ -47,6 +54,10 @@ public class SLController extends LXOutput {
         GammaExpander = GammaExpander.getInstance(lx);
         initPacketData(points.size());
         enabled.setValue(true);
+    }
+
+    public String getMacAddress() {
+        return networkDevice == null ? null : networkDevice.deviceId;
     }
 
     private void initPacketData(int numPixels) {
@@ -106,6 +117,14 @@ public class SLController extends LXOutput {
         catch (Exception e) {dispose();}
     }
 
+    private void onIdUpdated() {
+        int idInt = Integer.MAX_VALUE;
+        try {
+            idInt = Integer.parseInt(id);
+        } catch (NumberFormatException e) {}
+        this.idInt = idInt;
+    }
+
     @Override
     public void dispose() {
         if (dsocket != null) {
@@ -114,5 +133,10 @@ public class SLController extends LXOutput {
         System.err.println("Failed to connect to OPC server " + host);
         socket = null;
         dsocket = null;
+    }
+
+    @Override
+    public int compareTo(@NotNull SLController other) {
+        return idInt != other.idInt ? Integer.compare(idInt, other.idInt) : id.compareTo(other.id);
     }
 }

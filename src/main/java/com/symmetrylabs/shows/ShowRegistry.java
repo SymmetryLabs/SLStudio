@@ -6,6 +6,7 @@ import com.symmetrylabs.shows.arlo.ArloShow;
 import com.symmetrylabs.shows.arlosohoroof.ArloSohoRoofShow;
 import com.symmetrylabs.shows.arlotree.ArloTreeShow;
 import com.symmetrylabs.shows.artbasel.ArtBaselShow;
+import com.symmetrylabs.shows.base.BaseDemoShow;
 import com.symmetrylabs.shows.demo.DemoShow;
 import com.symmetrylabs.shows.exploratorium.ExploratoriumShow;
 import com.symmetrylabs.shows.hblamp.HbLampShow;
@@ -67,6 +68,7 @@ public class ShowRegistry {
     private static void registerShows(PApplet applet, Map<String, ShowBuilder> map) {
         // This is the central registry of shows.  Add an entry here for each available show.
         map.put(DemoShow.SHOW_NAME, DemoShow::new);
+        map.put(BaseDemoShow.SHOW_NAME, BaseDemoShow::new);
         map.put(OfficeShow.SHOW_NAME, OfficeShow::new);
         map.put(KalpaShow.SHOW_NAME, KalpaShow::new);
         map.put(SummerStageShow.SHOW_NAME, SummerStageShow::new);
