@@ -5,15 +5,17 @@ import com.symmetrylabs.slstudio.network.OpcSysExMsg;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.slstudio.output.SLController;
 import heronarts.lx.LX;
-import heronarts.lx.output.OPCDatagram;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.*;
 
 public class TreeController extends SLController {
-    private static final int DEFAULT_TREE_CONTROLLER_PORT = 7890;
-    DatagramSocket dsock;
+    private static final int DEFAULT_TREE_CONTROLLER_PORT = 1337;
+    DatagramSocket machineSock;
+    private static InetSocketAddress addr;
+
+    static DatagramSocket debugSock;
+    static DatagramSocket staticMachineSock;
 
     class PowerSamples{
         private int samples[] = new int[8];
@@ -28,9 +30,9 @@ public class TreeController extends SLController {
     public long acquirePowerSample(){
         OpcSysExMsg sysEx = new OpcSysExMsg(0, 2, 0, new byte[0]);
         try {
-            dsock = new DatagramSocket();
-            dsock.connect(new InetSocketAddress(networkDevice.ipAddress, DEFAULT_TREE_CONTROLLER_PORT));
-            dsock.send(sysEx.getDatagramPacket());
+            machineSock = new DatagramSocket();
+            machineSock.connect(new InetSocketAddress(networkDevice.ipAddress, DEFAULT_TREE_CONTROLLER_PORT));
+            machineSock.send(sysEx.getDatagramPacket());
         } catch (SocketException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -40,8 +42,35 @@ public class TreeController extends SLController {
         byte respBuf[] = new byte[256];
         DatagramPacket recvPacket = new DatagramPacket(respBuf, 256);
         try {
-            dsock.receive(recvPacket);
-            System.out.println(new String(recvPacket.getData(), 8, recvPacket.getData().length - 8));
+            machineSock.receive(recvPacket);
+            System.out.println(new String(recvPacket.getData(), 8, recvPacket.getLength() - 8));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return System.currentTimeMillis();
+    }
+
+    // common debug port for all Tree Controllers .. probably makes sense to abstract to all cubes controllers
+    static public long debugPortMonitor(){
+        byte[] respBuf = new byte[256];
+        DatagramPacket recvPacket = new DatagramPacket(respBuf, 256);
+        try {
+            debugSock.receive(recvPacket);
+            System.out.println(new String(recvPacket.getData(), 0, recvPacket.getLength()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return System.currentTimeMillis();
+    }
+
+    static public long machinePortMonitor(){
+        byte[] respBuf = new byte[256];
+        DatagramPacket recvPacket = new DatagramPacket(respBuf, 256);
+        try {
+            staticMachineSock.receive(recvPacket);
+            OpcSysExMsg sysExIn = new OpcSysExMsg(recvPacket.getData(), recvPacket.getLength());
         } catch (IOException e) {
             e.printStackTrace();
         }
