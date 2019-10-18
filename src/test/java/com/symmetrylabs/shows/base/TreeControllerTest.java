@@ -46,7 +46,7 @@ class TreeControllerTest {
         volumeServer.start();
         LX lx = volumeServer.core.lx;
 
-        long TEST_TIME_MILLIS = 1000;
+        long TEST_TIME_MILLIS = 60000;
 
         long millis_start = System.currentTimeMillis();
 
@@ -70,7 +70,7 @@ class TreeControllerTest {
         volumeServer.start();
         LX lx = volumeServer.core.lx;
 
-        long TEST_TIME_MILLIS = 1000;
+        long TEST_TIME_MILLIS = 50000;
 
         long millis_start = System.currentTimeMillis();
 

@@ -65,15 +65,18 @@ public class TreeController extends SLController {
         return System.currentTimeMillis();
     }
 
-    static public long machinePortMonitor(){
+    static public long machinePortMonitor() {
         byte[] respBuf = new byte[256];
         DatagramPacket recvPacket = new DatagramPacket(respBuf, 256);
+        OpcSysExMsg sysExIn = null;
         try {
             staticMachineSock.receive(recvPacket);
-            OpcSysExMsg sysExIn = new OpcSysExMsg(recvPacket.getData(), recvPacket.getLength());
+            sysExIn = new OpcSysExMsg(recvPacket.getData(), recvPacket.getLength());
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        sysExIn.deserializeSysEx_0x7();
 
         return System.currentTimeMillis();
     }

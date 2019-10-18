@@ -134,6 +134,7 @@ public abstract class UdpBroadcastNetworkScanner {
 
             // try and nerf all other network comms... i feel like statics will still play out.
             if(broadcast.toString().equals("/10.255.255.255")){
+//            if(true){
                 if (!chans.containsKey(broadcast)) {
                     try {
                         DatagramChannel recvChan = SelectorProvider.provider().openDatagramChannel();
