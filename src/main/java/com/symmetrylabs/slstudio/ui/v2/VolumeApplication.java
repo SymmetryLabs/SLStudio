@@ -21,7 +21,7 @@ import heronarts.lx.LXMappingEngine;
  * instance off to libgdx, this class is what actually runs the app.
  */
 public class VolumeApplication extends ApplicationAdapter implements VolumeCore.Listener {
-    private final VolumeCore core;
+    public final VolumeCore core;
     private RenderManager renderer;
     private VolumeClient client;
     LookEditor lookEditor;
@@ -44,7 +44,7 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
 
     private boolean midiToggled = false;
 
-    VolumeApplication() {
+    public VolumeApplication() {
         this.core = new VolumeCore(this) {
             @Override
             public void setWarning(String key, String message) {

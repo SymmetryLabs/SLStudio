@@ -1,5 +1,8 @@
 package com.symmetrylabs.slstudio.network;
 
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+
 /** Serializer and deserializer for the OPC message format: http://openpixelcontrol.org */
 public class OpcMessage {
     public final byte[] bytes;  // raw bytes as seen on the wire
@@ -119,5 +122,9 @@ public class OpcMessage {
         payload[3] = (byte) (sysexCode & 0xff);
         System.arraycopy(sysexPayload, 0, payload, 4, sysexPayload.length);
         return payload;
+    }
+
+    public DatagramPacket getDatagramPacket() {
+        return new DatagramPacket(bytes, rawLength);
     }
 }

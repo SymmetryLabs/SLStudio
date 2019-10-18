@@ -41,7 +41,7 @@ public class SLController extends LXOutput implements Comparable<SLController>, 
         this(lx, device, device.ipAddress, points, false, id);
     }
 
-    private SLController(LX lx, NetworkDevice networkDevice, InetAddress host, PointsGrouping points, boolean isBroadcast, String id) {
+    protected SLController(LX lx, NetworkDevice networkDevice, InetAddress host, PointsGrouping points, boolean isBroadcast, String id) {
         super(lx);
 
         this.id = id;

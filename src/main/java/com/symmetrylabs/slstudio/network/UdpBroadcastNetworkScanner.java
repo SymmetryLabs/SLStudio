@@ -131,39 +131,43 @@ public abstract class UdpBroadcastNetworkScanner {
         for (InetAddress broadcast : NetworkUtils.getBroadcastAddresses()) {
             /* Create the channel that we'll receive return broadcasts on, if we haven't made
                one already. */
-            if (!chans.containsKey(broadcast)) {
-                try {
-                    DatagramChannel recvChan = SelectorProvider.provider().openDatagramChannel();
-                    recvChan.setOption(StandardSocketOptions.SO_BROADCAST, true);
-                    recvChan.configureBlocking(false);
-                    prepareChannel(recvChan, broadcast);
+
+            // try and nerf all other network comms... i feel like statics will still play out.
+            if(broadcast.toString().equals("/10.255.255.255")){
+                if (!chans.containsKey(broadcast)) {
+                    try {
+                        DatagramChannel recvChan = SelectorProvider.provider().openDatagramChannel();
+                        recvChan.setOption(StandardSocketOptions.SO_BROADCAST, true);
+                        recvChan.configureBlocking(false);
+                        prepareChannel(recvChan, broadcast);
                     /* attach ourselves as a selector attachment so that NetworkMonitor can
                        give us a callback when we're selected. */
-                    recvChan.register(recvSelector, SelectionKey.OP_READ, this);
-                    chans.put(broadcast, recvChan);
-                    System.out.println("bound to new interface " + broadcast + " for " + protoName);
-                } catch (IOException e) {
-                    if (!errorBroadcasts.contains(broadcast)) {
-                        System.err.println("couldn't set up " + protoName + " discovery listener on " + broadcast + ":");
-                        e.printStackTrace();
-                        errorBroadcasts.add(broadcast);
-                        continue;
+                        recvChan.register(recvSelector, SelectionKey.OP_READ, this);
+                        chans.put(broadcast, recvChan);
+                        System.out.println("bound to new interface " + broadcast + " for " + protoName);
+                    } catch (IOException e) {
+                        if (!errorBroadcasts.contains(broadcast)) {
+                            System.err.println("couldn't set up " + protoName + " discovery listener on " + broadcast + ":");
+                            e.printStackTrace();
+                            errorBroadcasts.add(broadcast);
+                            continue;
+                        }
                     }
                 }
-            }
 
-            /* Then send the discovery packet */
-            try {
-                DatagramChannel chan = chans.get(broadcast);
-                for (int i = 0; i < discoveryPackets.length; i++) {
-                    discoveryPackets[i].rewind();
-                    sendPacket(broadcast, chan, discoveryPackets[i]);
-                }
-            } catch (IOException e) {
-                if (!errorBroadcasts.contains(broadcast)) {
-                    System.err.println(String.format("couldn't send %s poll to %s:", protoName, broadcast));
-                    e.printStackTrace();
-                    errorBroadcasts.add(broadcast);
+                /* Then send the discovery packet */
+                try {
+                    DatagramChannel chan = chans.get(broadcast);
+                    for (int i = 0; i < discoveryPackets.length; i++) {
+                        discoveryPackets[i].rewind();
+                        sendPacket(broadcast, chan, discoveryPackets[i]);
+                    }
+                } catch (IOException e) {
+                    if (!errorBroadcasts.contains(broadcast)) {
+                        System.err.println(String.format("couldn't send %s poll to %s:", protoName, broadcast));
+                        e.printStackTrace();
+                        errorBroadcasts.add(broadcast);
+                    }
                 }
             }
         }

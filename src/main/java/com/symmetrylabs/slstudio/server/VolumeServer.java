@@ -122,7 +122,7 @@ public class VolumeServer implements VolumeCore.Listener {
         }
     }
 
-    private final VolumeCore core;
+    public final VolumeCore core;
     private Server grpcServer;
 
     private PolyBuffer lxColorBuffer = null;

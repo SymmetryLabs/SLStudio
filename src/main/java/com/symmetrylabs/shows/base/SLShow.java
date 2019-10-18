@@ -10,6 +10,7 @@ import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.CubeModelControllerMapping;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.slstudio.output.SLController;
+//import com.symmetrylabs.slstudio.output.TreeController;
 import com.symmetrylabs.slstudio.ui.v2.WindowManager;
 import com.symmetrylabs.util.CubeInventory;
 import com.symmetrylabs.util.dispatch.Dispatcher;
@@ -29,9 +30,11 @@ import java.util.WeakHashMap;
  * Base class of utilities all shows should derive from and benefit from
  */
 public abstract class SLShow implements Show {
-    public static final String SHOW_NAME = "cubes";
+    public static final String SHOW_NAME = "slshow";
 
     public final ListenableSet<SLController> controllers = new ListenableSet<>();
+    public final ListenableSet<CubesController> cubesControllers = new ListenableSet<>();
+//    public final ListenableSet<TreeController> treeControllers = new ListenableSet<>();
     public final CubeInventory cubeInventory;
     public final CubeModelControllerMapping mapping;
     public final PerceptualColorScale outputScaler = new PerceptualColorScale(new double[] { 2.0, 2.1, 2.8 }, 1.0);
@@ -64,9 +67,22 @@ public abstract class SLShow implements Show {
 
         networkMonitor.opcDeviceList.addListener(new SetListener<NetworkDevice>() {
             public void onItemAdded(NetworkDevice device) {
+                if (device.productId.equals("symmeTree")){
+//                    treeControllers.add(new TreeController(controller).powerMonitorThreadStart()/*start the powermon thread*/); // after cubes controller extends SLController
+//                    dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
+                }
                 final SLController controller = new SLController(lx, device, new PointsGrouping(), device.deviceId);
 //                controller.set16BitColorEnabled(device.featureIds.contains("rgb16"));
                 controllers.add(controller);
+//                if (controller.networkDevice.productId.equals("Cubes")){
+//                    cubesControllers.add(controller); // after cubes controller extends SLController
+//                }
+
+                if (controller.networkDevice.productId.equals("symmeTree")){
+//                    treeControllers.add(new TreeController(controller).powerMonitorThreadStart()/*start the powermon thread*/); // after cubes controller extends SLController
+//                    dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
+                }
+
                 dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
                 //controller.enabled.setValue(false);
             }
@@ -106,6 +122,10 @@ public abstract class SLShow implements Show {
         return new TreeSet<SLController>(controllers);
     }
 
+//    public Collection<SymmeTreeControlleer> getSortedControllers() {
+//        return new TreeSet<SLController>(controllers);
+//    }
+
     public void addControllerSetListener(SetListener<SLController> listener) {
         controllers.addListener(listener);
     }
@@ -117,10 +137,10 @@ public abstract class SLShow implements Show {
     }
 
     public void setupUi(LX lx) {
-        WindowManager.addPersistent("Cubes/Inventory", () -> new InventoryEditor(lx, cubeInventory), false);
-        WindowManager.addPersistent("Cubes/Mapping", () -> new MappingWindow(lx, (CubesModel) lx.model), false);
-        WindowManager.addPersistent("Cubes/Output", () -> new SLOutputWindow(lx, this), false);
-        WindowManager.addPersistent("Cubes/Scaling", () -> new OutputScaleWindow(lx, outputScaler), false);
+        WindowManager.addPersistent("Controllers/Inventory", () -> new InventoryEditor(lx, cubeInventory), false);
+        WindowManager.addPersistent("Controllers/Mapping", () -> new MappingWindow(lx, (CubesModel) lx.model), false);
+        WindowManager.addPersistent("Controllers/Output", () -> new SLOutputWindow(lx, this), false);
+        WindowManager.addPersistent("Controllers/Scaling", () -> new OutputScaleWindow(lx, outputScaler), false);
     }
 
     public abstract String getShowName();
