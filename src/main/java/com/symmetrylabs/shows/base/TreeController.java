@@ -27,12 +27,14 @@ public class TreeController extends SLController {
     /*
      * Returns delta since last sample.
      */
-    public long acquirePowerSample(){
-        OpcSysExMsg sysEx = new OpcSysExMsg(0, 2, 0, new byte[0]);
+    public long testSendOPCSysEx(){
+        OpcSysExMsg requestID = new OpcSysExMsg(0, 2, 0, new byte[0]);
+
+        OpcSysExMsg readRam = new OpcSysExMsg(0, 2, 0x20, new byte[0]);
         try {
             machineSock = new DatagramSocket();
             machineSock.connect(new InetSocketAddress(networkDevice.ipAddress, DEFAULT_TREE_CONTROLLER_PORT));
-            machineSock.send(sysEx.getDatagramPacket());
+            machineSock.send(requestID.getDatagramPacket());
         } catch (SocketException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -41,9 +43,15 @@ public class TreeController extends SLController {
         }
         byte respBuf[] = new byte[256];
         DatagramPacket recvPacket = new DatagramPacket(respBuf, 256);
+//        try {
+//            machineSock.receive(recvPacket);
+//            System.out.println(new String(recvPacket.getData(), 8, recvPacket.getLength() - 8));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
         try {
-            machineSock.receive(recvPacket);
-            System.out.println(new String(recvPacket.getData(), 8, recvPacket.getLength() - 8));
+            machineSock.send(readRam.getDatagramPacket());
         } catch (IOException e) {
             e.printStackTrace();
         }

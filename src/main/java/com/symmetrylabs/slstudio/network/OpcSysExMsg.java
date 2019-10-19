@@ -40,21 +40,15 @@ public class OpcSysExMsg extends OpcMessage {
         int NUM_CHANNEL = 8;
         int UINT16_PER_CHANNEL = 4;
         int[][] allSample = new int[NUM_CHANNEL][UINT16_PER_CHANNEL];
+        int[] analogSampleArray = new int[NUM_CHANNEL];
+
+        int powerOnStateMask = 0;
 
         MetaSample(){
             for (int i = 0; i < NUM_CHANNEL; i++) {
                 for (int j = 0; j < UINT16_PER_CHANNEL; j++) {
                     allSample[i][j] = 0;
                 }
-            }
-        }
-
-        public void dump() {
-            for (int i = 0; i < NUM_CHANNEL; i++) {
-                for (int j = 0; j < UINT16_PER_CHANNEL; j++) {
-                    System.out.print(allSample[i][j]);
-                }
-                System.out.println();
             }
         }
     }
@@ -67,13 +61,33 @@ public class OpcSysExMsg extends OpcMessage {
 
     public void deserializeSysEx_0x7(){
         for (int i = 0; i < getLength(); i += 2){
-            int chIndex = i/8;
-            int structIndex = (i%8) / 2;
-            allChData.allSample[chIndex][structIndex] = (unsignedToBytes(payload[i+1]) << 8) + (unsignedToBytes(payload[i]) & 0xff);
-            if (structIndex == 0){
-                System.out.print(allChData.allSample[chIndex][structIndex]);
+            // first 8 half words are the analog channel samples
+            int chIndex = i/2;
+            if (chIndex < 8){
+                allChData.analogSampleArray[chIndex] = (unsignedToBytes(payload[i+1]) << 8) + (unsignedToBytes(payload[i]) & 0xff);
+                System.out.print(allChData.analogSampleArray[chIndex]);
                 System.out.print("\t");
             }
+            if (chIndex == 8){ // the fault mask
+                allChData.powerOnStateMask = (unsignedToBytes(payload[i]));
+                for (int j = 0; j < 8; j ++){
+                    if ( ((allChData.powerOnStateMask >> j) & 1) == 1 ){
+                        System.out.print("1");
+                    }
+                    else {
+                        System.out.print("0");
+                    }
+                }
+                System.out.print("\t");
+            }
+
+            // The old with all samples
+//            int structIndex = (i%8) / 2;
+//            allChData.allSample[chIndex][structIndex] = (unsignedToBytes(payload[i+1]) << 8) + (unsignedToBytes(payload[i]) & 0xff);
+//            if (structIndex == 0){
+//                System.out.print(allChData.allSample[chIndex][structIndex]);
+//                System.out.print("\t");
+//            }
         }
         System.out.println();
     }

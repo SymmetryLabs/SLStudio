@@ -39,7 +39,8 @@ public class OpcNetworkScanner extends UdpBroadcastNetworkScanner {
 
     @Override
     protected void sendPacket(InetAddress broadcast, DatagramChannel chan, ByteBuffer data) throws IOException {
-        chan.send(data, new InetSocketAddress(broadcast, OpcSocket.DEFAULT_PORT));
+//        chan.send(data, new InetSocketAddress(broadcast, OpcSocket.DEFAULT_PORT));
+        chan.send(data, new InetSocketAddress(broadcast, 1337));
     }
 
     @Override
