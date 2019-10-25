@@ -183,6 +183,11 @@ public class LXTransform {
         return this;
     }
 
+    public LXTransform push(LXMatrix m) {
+        this.matrices.push(getMatrix().copy().multiply(m));
+        return this;
+    }
+
     /**
      * Pops the matrix stack, to its previous state
      *

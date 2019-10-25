@@ -1,4 +1,4 @@
-    package com.symmetrylabs.slstudio.model;
+package com.symmetrylabs.slstudio.model;
 
 import java.util.List;
 import java.util.ArrayList;
