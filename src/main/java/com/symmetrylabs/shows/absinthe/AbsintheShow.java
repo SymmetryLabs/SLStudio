@@ -1,36 +1,27 @@
 package com.symmetrylabs.shows.absinthe;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.net.SocketException;
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
-import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
-import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 
+import com.symmetrylabs.shows.base.TreeController;
+import com.symmetrylabs.util.NetworkChannelDebugMonitor.DebugPortMonitor;
+
+import com.symmetrylabs.util.NetworkChannelDebugMonitor.MachinePortMonitor;
 import heronarts.lx.LX;
-import heronarts.lx.model.LXPoint;
-import heronarts.lx.LXLoopTask;
 
-import com.symmetrylabs.shows.Show;
-import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.shows.tree.config.*;
 import com.symmetrylabs.shows.tree.ui.*;
 import com.symmetrylabs.shows.tree.ui.UITenereControllers;
+import heronarts.lx.LXLoopTask;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
 
 import static com.symmetrylabs.util.DistanceConstants.*;
-import static com.symmetrylabs.util.MathConstants.*;
 import static com.symmetrylabs.util.MathUtils.*;
+import static org.lwjgl.opengl.KHRDebug.glDebugMessageControl;
 
-import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.UI3dComponent;
 import processing.core.PGraphics;
 
 
@@ -153,6 +144,14 @@ public class AbsintheShow extends TreeShow {
 //            }
 //        });
 
+
+
+        DebugPortMonitor debugPortMonitor = new DebugPortMonitor();
+        debugPortMonitor.start();
+
+        MachinePortMonitor machinePortMonitor = new MachinePortMonitor();
+        machinePortMonitor.start();
+
         try {
             for (TreeModel.Branch branch : tree.getBranches()) {
                 AssignableTenereController controller = new AssignableTenereController(lx, branch);
@@ -166,6 +165,7 @@ public class AbsintheShow extends TreeShow {
             AssignableTenereController controller = controllers.get(modeler.getSelectedBranch());
             controller.setIpAddress(modeler.branchManipulator.ipAddress.getString());
         });
+
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {

@@ -127,12 +127,16 @@ public class SLController extends LXOutput implements Comparable<SLController>, 
 
     @Override
     public void dispose() {
-        if (dsocket != null) {
-            System.err.println("Disconnected from OPC server");
+        boolean DEBUG_OPC_CONNECT = false;
+        if (DEBUG_OPC_CONNECT){
+            if (dsocket != null) {
+                System.err.println("Disconnected from OPC server");
+            }
+            System.err.println("Failed to connect to OPC server " + host);
+            socket = null;
+            dsocket = null;
+
         }
-        System.err.println("Failed to connect to OPC server " + host);
-        socket = null;
-        dsocket = null;
     }
 
     @Override

@@ -14,13 +14,11 @@ public class TreeController extends SLController {
     DatagramSocket machineSock;
     private static InetSocketAddress addr;
 
-    static DatagramSocket debugSock;
-    static DatagramSocket staticMachineSock;
 
     class PowerSamples{
         private int samples[] = new int[8];
     }
-    TreeController(LX lx, NetworkDevice networkDevice, InetAddress host, PointsGrouping points, boolean isBroadcast, String id) {
+    public TreeController(LX lx, NetworkDevice networkDevice, InetAddress host, PointsGrouping points, boolean isBroadcast, String id) {
         super(lx, networkDevice, host, points, isBroadcast, id);
     }
 
@@ -59,33 +57,5 @@ public class TreeController extends SLController {
         return System.currentTimeMillis();
     }
 
-    // common debug port for all Tree Controllers .. probably makes sense to abstract to all cubes controllers
-    static public long debugPortMonitor(){
-        byte[] respBuf = new byte[256];
-        DatagramPacket recvPacket = new DatagramPacket(respBuf, 256);
-        try {
-            debugSock.receive(recvPacket);
-            System.out.println(new String(recvPacket.getData(), 0, recvPacket.getLength()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        return System.currentTimeMillis();
-    }
-
-    static public long machinePortMonitor() {
-        byte[] respBuf = new byte[256];
-        DatagramPacket recvPacket = new DatagramPacket(respBuf, 256);
-        OpcSysExMsg sysExIn = null;
-        try {
-            staticMachineSock.receive(recvPacket);
-            sysExIn = new OpcSysExMsg(recvPacket.getData(), recvPacket.getLength());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        sysExIn.deserializeSysEx_0x7();
-
-        return System.currentTimeMillis();
-    }
 }

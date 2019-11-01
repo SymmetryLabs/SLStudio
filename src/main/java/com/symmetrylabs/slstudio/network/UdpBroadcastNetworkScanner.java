@@ -132,7 +132,9 @@ public abstract class UdpBroadcastNetworkScanner {
             /* Create the channel that we'll receive return broadcasts on, if we haven't made
                one already. */
 
-            // try and nerf all other network comms... i feel like statics will still play out.
+            // try and nerf all other network comms...
+            // I feel like static IP targets will still send.  Which is bad.
+            // NOTE this is important because otherwise our application floods sum shit.
             if(broadcast.toString().equals("/10.255.255.255")){
 //            if(true){
                 if (!chans.containsKey(broadcast)) {

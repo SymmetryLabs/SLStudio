@@ -48,7 +48,7 @@ public class ConsoleWindow extends CloseableWindow {
             if (message != null && !message.isEmpty()) {
                 Warning existing = warnings.get(key);
                 if (existing == null || !message.equals(existing.str)) {
-                    System.err.println("WARNING: " + key + ": " + message);
+//                    System.err.println("WARNING: " + key + ": " + message);
                 }
                 Warning w = new Warning();
                 w.str = message;

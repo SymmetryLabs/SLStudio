@@ -1,5 +1,7 @@
 package com.symmetrylabs.slstudio.network;
 
+import com.symmetrylabs.slstudio.ApplicationState;
+
 public class OpcSysExMsg extends OpcMessage {
     byte channel;
     byte command;
@@ -60,26 +62,28 @@ public class OpcSysExMsg extends OpcMessage {
     }
 
     public void deserializeSysEx_0x7(){
+        String deserializeResult = "";
         for (int i = 0; i < getLength(); i += 2){
             // first 8 half words are the analog channel samples
             int chIndex = i/2;
             if (chIndex < 8){
                 allChData.analogSampleArray[chIndex] = (unsignedToBytes(payload[i+1]) << 8) + (unsignedToBytes(payload[i]) & 0xff);
-                System.out.print(allChData.analogSampleArray[chIndex]);
-                System.out.print("\t");
+                deserializeResult += (allChData.analogSampleArray[chIndex]);
+                deserializeResult += ("\t");
             }
             if (chIndex == 8){ // the fault mask
                 allChData.powerOnStateMask = (unsignedToBytes(payload[i]));
                 for (int j = 0; j < 8; j ++){
                     if ( ((allChData.powerOnStateMask >> j) & 1) == 1 ){
-                        System.out.print("1");
+                        deserializeResult += ("1");
                     }
                     else {
-                        System.out.print("0");
+                        deserializeResult += ("0");
                     }
                 }
-                System.out.print("\t");
+                deserializeResult += ("\t");
             }
+
 
             // The old with all samples
 //            int structIndex = (i%8) / 2;
@@ -89,6 +93,7 @@ public class OpcSysExMsg extends OpcMessage {
 //                System.out.print("\t");
 //            }
         }
-        System.out.println();
+//        System.out.println(deserializeResult);
+        ApplicationState.setWarning("powerSample: ", deserializeResult);
     }
 }

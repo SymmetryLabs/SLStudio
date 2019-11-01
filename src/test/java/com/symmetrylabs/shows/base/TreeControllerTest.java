@@ -3,7 +3,10 @@ package com.symmetrylabs.shows.base;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.slstudio.server.VolumeServer;
+import com.symmetrylabs.util.NetworkChannelDebugMonitor.DebugPortMonitor;
+import com.symmetrylabs.util.NetworkChannelDebugMonitor.MachinePortMonitor;
 import heronarts.lx.LX;
+import heronarts.lx.LXLoopTask;
 import org.junit.jupiter.api.Test;
 
 import java.net.*;
@@ -37,22 +40,19 @@ class TreeControllerTest {
         volumeServer.start();
         LX lx = volumeServer.core.lx;
 
-        long TEST_TIME_MILLIS = 60000;
+        long TEST_TIME_MILLIS = 600000;
 
         long millis_start = System.currentTimeMillis();
 
         long delta = System.currentTimeMillis() - millis_start;
 
-        try {
-            TreeController.debugSock = new DatagramSocket(5678);
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-
-        do {
-            TreeController.debugPortMonitor();
-            delta = System.currentTimeMillis() - millis_start;
-        } while(delta  < TEST_TIME_MILLIS );
+        DebugPortMonitor debugPortMonitor = new DebugPortMonitor();
+        lx.engine.addLoopTask(new LXLoopTask() {
+            @Override
+            public void loop(double v){
+                debugPortMonitor.start();
+            }
+        });
     }
 
     @Test
@@ -61,21 +61,17 @@ class TreeControllerTest {
         volumeServer.start();
         LX lx = volumeServer.core.lx;
 
-        long TEST_TIME_MILLIS = 60000;
+        long TEST_TIME_MILLIS = 600;
 
         long millis_start = System.currentTimeMillis();
 
         long delta = System.currentTimeMillis() - millis_start;
 
-        try {
-            TreeController.staticMachineSock = new DatagramSocket(5679);
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-
-        do {
-            TreeController.machinePortMonitor();
-            delta = System.currentTimeMillis() - millis_start;
-        } while(delta  < TEST_TIME_MILLIS );
+//        MachinePortMonitor machinePortMonitor = new MachinePortMonitor();
+//        machinePortMonitor.start();
+//
+//        do {
+//            machinePortMonitor.keepAlive(true);
+//        } while(delta  < TEST_TIME_MILLIS );
     }
 }

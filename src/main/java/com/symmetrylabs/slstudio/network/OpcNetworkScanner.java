@@ -28,19 +28,26 @@ public class OpcNetworkScanner extends UdpBroadcastNetworkScanner {
     protected Map<String, Long> lastReplyMillis = new HashMap<>();
     protected Dispatcher dispatcher;
 
+    private int port;
+
     public OpcNetworkScanner(Dispatcher dispatcher, Selector selector) {
         super(selector, "OPC", 65536, new ByteBuffer[] {
                 /* this is a legacy "poll" message that is needed for cubes with very old firmware */
                 ByteBuffer.wrap(new OpcMessage(0x88, 4).bytes),
                 ByteBuffer.wrap(new OpcMessage(0, SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY).bytes),
             });
+        port = OpcSocket.DEFAULT_PORT;
         this.dispatcher = dispatcher;
+    }
+
+    public OpcNetworkScanner(Dispatcher dispatcher, Selector selector, int port) {
+        this(dispatcher, selector);
+        this.port = port; // overwrite the port with selection
     }
 
     @Override
     protected void sendPacket(InetAddress broadcast, DatagramChannel chan, ByteBuffer data) throws IOException {
-//        chan.send(data, new InetSocketAddress(broadcast, OpcSocket.DEFAULT_PORT));
-        chan.send(data, new InetSocketAddress(broadcast, 1337));
+        chan.send(data, new InetSocketAddress(broadcast, port));
     }
 
     @Override

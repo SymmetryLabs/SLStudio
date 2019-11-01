@@ -170,7 +170,7 @@ task runUIv2(type: JavaExec) {
 
     main = rootProject.mainClassName
 
-    systemProperty 'org.lwjgl.util.Debug', true
+    systemProperty 'org.lwjgl.util.Debug', false
     systemProperty 'java.library.path', 'libs'
     systemProperty 'com.symmetrylabs.app', 'volume'
 

@@ -2,6 +2,8 @@ package com.symmetrylabs.shows.cubes;
 
 import java.util.*;
 import java.lang.ref.WeakReference;
+
+import com.symmetrylabs.shows.base.TreeController;
 import com.symmetrylabs.slstudio.output.CubeModelControllerMapping;
 import com.symmetrylabs.color.PerceptualColorScale;
 
@@ -134,6 +136,26 @@ public abstract class CubesShow implements Show {
                 });
             }
         });
+
+//        networkMonitor.treeDeviceList.addListener(new SetListener<NetworkDevice>() {
+//            public void onItemAdded(NetworkDevice device) {
+//////                final TreeController controller = new TreeController(lx, device, cubeInventory, outputScaler);
+////                final TreeController controller = new TreeController(lx, device)
+////                controller.set16BitColorEnabled(device.featureIds.contains("rgb16"));
+////                controllers.add(controller);
+////                dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
+////                //controller.enabled.setValue(false);
+//            }
+//
+//            public void onItemRemoved(NetworkDevice device) {
+//                final CubesController controller = getControllerByDevice(device);
+//                controllers.remove(controller);
+//                dispatcher.dispatchNetwork(() -> {
+//                    controller.dispose();
+//                    lx.removeOutput(controller);
+//                });
+//            }
+//        });
 
         //lx.addOutput(new CubesController(lx, "10.200.1.255"));
 

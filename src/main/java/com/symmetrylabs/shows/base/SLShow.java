@@ -13,6 +13,7 @@ import com.symmetrylabs.slstudio.output.SLController;
 //import com.symmetrylabs.slstudio.output.TreeController;
 import com.symmetrylabs.slstudio.ui.v2.WindowManager;
 import com.symmetrylabs.util.CubeInventory;
+import com.symmetrylabs.util.NetworkChannelDebugMonitor.DebugPortMonitor;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.ListenableSet;
 import com.symmetrylabs.util.listenable.SetListener;
@@ -107,6 +108,9 @@ public abstract class SLShow implements Show {
         });
 
         System.out.println("set up controllers");
+
+        DebugPortMonitor debugPortMonitor = new DebugPortMonitor();
+        debugPortMonitor.start();
     }
 
     public SLController getControllerByDevice(NetworkDevice device) {
