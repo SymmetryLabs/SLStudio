@@ -30,8 +30,8 @@ public class OsloShow extends TreeShow {
         new LimbConfig(
             new BranchConfig[] {
                 new BranchConfig("L8-2-B2", "A000", LXMatrix.createFromColumnMajor(new float[] {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1})),
-                new BranchConfig("L8-2-B2", "A000", LXMatrix.createFromColumnMajor(new float[] {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 50, 0, 1})),
-                new BranchConfig("L8-2-B2", "A000", LXMatrix.createFromColumnMajor(new float[] {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 100, 0, 1})),
+                //new BranchConfig("L8-2-B2", "A000", LXMatrix.createFromColumnMajor(new float[] {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 50, 0, 1})),
+                //new BranchConfig("L8-2-B2", "A000", LXMatrix.createFromColumnMajor(new float[] {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 100, 0, 1})),
             }
         ),
         new LimbConfig(

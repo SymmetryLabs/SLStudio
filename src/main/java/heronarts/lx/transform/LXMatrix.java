@@ -41,6 +41,22 @@ public class LXMatrix {
         return new LXMatrix(rowMajor);
     }
 
+    public static LXMatrix createFromColumnMajor(double[] columnMajor) {
+        float[] rowMajor = new float[16];
+        for (int i = 0; i < 4; ++i) {
+            for (int j = 0; j < 4; ++j) {
+                rowMajor[i * 4 + j] = (float) columnMajor[j * 4 + i];
+            }
+        }
+
+        // TEMP - convert from millimeters to inches
+        rowMajor[3] = rowMajor[3] * 0.0393701f;
+        rowMajor[7] = rowMajor[7] * 0.0393701f;
+        rowMajor[11] = rowMajor[11] * 0.0393701f;
+
+        return new LXMatrix(rowMajor);
+    }
+
     /**
      * Makes a new identity matrix.
      */

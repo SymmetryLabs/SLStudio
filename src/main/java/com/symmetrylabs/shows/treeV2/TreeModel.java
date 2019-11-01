@@ -385,6 +385,7 @@ public class TreeModel extends SLModel {
 
             private Fixture(LXTransform t) {
                 t.push();
+                t.rotateY(PI);
                 t.translate(-.05f*INCHES, 0, 0);
                 addPoint(new LXPoint(t));
                 t.translate(0, LED_SPACING, 0);
