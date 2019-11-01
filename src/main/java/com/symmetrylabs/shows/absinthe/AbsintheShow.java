@@ -135,14 +135,14 @@ public class AbsintheShow extends TreeShow {
 
         System.out.println("Number of branches: " + tree.getBranches().size());
 
-//        lx.engine.addLoopTask(new LXLoopTask() {
-//            @Override
-//            public void loop(double v) {
-//                if (lx.engine.framesPerSecond.getValuef() != 34) {
-//                    lx.engine.framesPerSecond.setValue(34);
-//                }
-//            }
-//        });
+        lx.engine.addLoopTask(new LXLoopTask() {
+            @Override
+            public void loop(double v) {
+                if (lx.engine.framesPerSecond.getValuef() != 34) {
+                    lx.engine.framesPerSecond.setValue(34);
+                }
+            }
+        });
 
 
 
