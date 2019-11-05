@@ -49,10 +49,10 @@ public class LXMatrix {
             }
         }
 
-        // TEMP - convert from millimeters to inches
-        rowMajor[3] = rowMajor[3] * 0.0393701f;
-        rowMajor[7] = rowMajor[7] * 0.0393701f;
-        rowMajor[11] = rowMajor[11] * 0.0393701f;
+        // TEMP - convert from meters to inches
+        rowMajor[3] = rowMajor[3] * 39.3701f;
+        rowMajor[7] = rowMajor[7] * 39.3701f;
+        rowMajor[11] = rowMajor[11] * 39.3701f;
 
         return new LXMatrix(rowMajor);
     }
