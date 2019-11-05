@@ -89,46 +89,30 @@ public class AbsintheShow extends TreeShow {
 
         TreeConfig config = new TreeConfig(new LimbConfig[] {
                 // L7
-                new LimbConfig(false, 15, 130, 0,   -90 + 13.5f, 0, LIMB_TYPE_L1),
-                new LimbConfig(false, 15, 130, 90,  -90 + 13.5f, 0, LIMB_TYPE_L1),
-                new LimbConfig(false, 15, 130, 180, -90 + 13.5f, 0, LIMB_TYPE_L1),
-                new LimbConfig(false, 15, 130, -90, -90 + 13.5f, 0, LIMB_TYPE_L1),
+//                new LimbConfig(false, 13.5f, 170, 45,   -90 + 18.5f, 0, LIMB_TYPE_L1),
+            new LimbConfig(false, 13.5f, 170, 135,  -90 + 18.5f, 0, LIMB_TYPE_L1),
+            new LimbConfig(false, 13.5f, 170, -135, -90 + 18.5f, 0, LIMB_TYPE_L1),
+            new LimbConfig(false, 13.5f, 170, -45,  -90 + 18.5f, 0, LIMB_TYPE_L1),
+            // L5
+            new LimbConfig(false, 11.5f, 210, 0,   90 - 23.5f, 0, LIMB_TYPE_L2),
+            new LimbConfig(false, 11.5f, 210, 90,  90 - 23.5f, 0, LIMB_TYPE_L2),
+            new LimbConfig(false, 11.5f, 210, 180, 90 - 23.5f, 0, LIMB_TYPE_L2),
+            new LimbConfig(false, 11.5f, 210, -90, 90 - 23.5f, 0, LIMB_TYPE_L2),
 
-                // L6
-                new LimbConfig(false, 13.5f, 170, 45,   -90 + 18.5f, 0, LIMB_TYPE_L1),
-                new LimbConfig(false, 13.5f, 170, 135,  -90 + 18.5f, 0, LIMB_TYPE_L1),
-                new LimbConfig(false, 13.5f, 170, -135, -90 + 18.5f, 0, LIMB_TYPE_L1),
-                new LimbConfig(false, 13.5f, 170, -45,  -90 + 18.5f, 0, LIMB_TYPE_L1),
+            // L4
+            new LimbConfig(false, 9.5f, 250, 45,   90 - 23.5f, 0, LIMB_TYPE_L2),
+            new LimbConfig(false, 9.5f, 250, 135,  90 - 23.5f, 0, LIMB_TYPE_L2),
+            new LimbConfig(false, 9.5f, 250, -135, 90 - 23.5f, 0, LIMB_TYPE_L2),
+            new LimbConfig(false, 9.5f, 250, -45,  90 - 23.5f, 0, LIMB_TYPE_L2),
+            // L3
+            new LimbConfig(false, 7.5f, 290, 0,   90 - 17f, 0, LIMB_TYPE_L3),
+            new LimbConfig(false, 7.5f, 290, 90,  90 - 17f, 0, LIMB_TYPE_L3),
+            new LimbConfig(false, 7.5f, 290, 180, 90 - 17f, 0, LIMB_TYPE_L3),
+            new LimbConfig(false, 7.5f, 290, -90, 90 - 17f, 0, LIMB_TYPE_L3),
 
-                // L5
-                new LimbConfig(false, 11.5f, 210, 0,   90 - 23.5f, 0, LIMB_TYPE_L2),
-                new LimbConfig(false, 11.5f, 210, 90,  90 - 23.5f, 0, LIMB_TYPE_L2),
-                new LimbConfig(false, 11.5f, 210, 180, 90 - 23.5f, 0, LIMB_TYPE_L2),
-                new LimbConfig(false, 11.5f, 210, -90, 90 - 23.5f, 0, LIMB_TYPE_L2),
-
-                // L4
-                new LimbConfig(false, 9.5f, 250, 45,   90 - 23.5f, 0, LIMB_TYPE_L2),
-                new LimbConfig(false, 9.5f, 250, 135,  90 - 23.5f, 0, LIMB_TYPE_L2),
-                new LimbConfig(false, 9.5f, 250, -135, 90 - 23.5f, 0, LIMB_TYPE_L2),
-                new LimbConfig(false, 9.5f, 250, -45,  90 - 23.5f, 0, LIMB_TYPE_L2),
-
-                // L3
-                new LimbConfig(false, 7.5f, 290, 0,   90 - 17f, 0, LIMB_TYPE_L3),
-                new LimbConfig(false, 7.5f, 290, 90,  90 - 17f, 0, LIMB_TYPE_L3),
-                new LimbConfig(false, 7.5f, 290, 180, 90 - 17f, 0, LIMB_TYPE_L3),
-                new LimbConfig(false, 7.5f, 290, -90, 90 - 17f, 0, LIMB_TYPE_L3),
-
-                // L2
-                new LimbConfig(false, 24, 320, 45,   90 - 25,  0, LIMB_TYPE_SINGLE_BRANCH),
-                new LimbConfig(false, 24, 320, 135,  90 - 25,  0, LIMB_TYPE_SINGLE_BRANCH),
-                new LimbConfig(false, 24, 320, -135, 90 - 25,  0, LIMB_TYPE_SINGLE_BRANCH),
-                new LimbConfig(false, 24, 320, -45,  90 - 25,  0, LIMB_TYPE_SINGLE_BRANCH),
-
-                // L1
-                new LimbConfig(false, 14, 345, 0,    90 - 15,  0, LIMB_TYPE_SINGLE_BRANCH),
-                new LimbConfig(false, 14, 345, 90,   90 - 15,  0, LIMB_TYPE_SINGLE_BRANCH),
-                new LimbConfig(false, 14, 345, 180,  90 - 15,  0, LIMB_TYPE_SINGLE_BRANCH),
-                new LimbConfig(false, 14, 345, -90,  90 - 15,  0, LIMB_TYPE_SINGLE_BRANCH),
+            // L2
+            new LimbConfig(false, 7.5f, 290, -90, 90 - 17f, 0, LIMB_TYPE_L3),
+            new LimbConfig(false, 14, 345, -90,  90 - 15,  0, LIMB_TYPE_SINGLE_BRANCH),
             });
 
         TreeModel tree = new TreeModel(SHOW_NAME, config);
