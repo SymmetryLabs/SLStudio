@@ -25,7 +25,7 @@ public class SLOutputWindow extends CloseableWindow {
         super("SL Outputs");
         this.lx = lx;
         this.show = show;
-        this.model = (CubesModel) lx.model;
+        this.model = (SLModel) lx.model;
         this.pui = ParameterUI.getDefault(lx);
     }
 
