@@ -1,30 +1,5 @@
 package com.symmetrylabs.shows.base;
 
-import com.symmetrylabs.color.Ops16;
-import com.symmetrylabs.color.PerceptualColorScale;
-import com.symmetrylabs.shows.cubes.CubesMappingMode;
-import com.symmetrylabs.shows.cubes.CubesModel;
-import com.symmetrylabs.shows.cubes.CubesModel.Cube;
-import com.symmetrylabs.slstudio.ApplicationState;
-import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.slstudio.output.PointsGrouping;
-import com.symmetrylabs.util.CubeInventory;
-import com.symmetrylabs.util.NetworkUtils;
-import heronarts.lx.LX;
-import heronarts.lx.PolyBuffer;
-import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXPoint;
-import heronarts.lx.output.LXOutput;
-import heronarts.lx.output.OPCConstants;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-
 //public class SLController extends LXOutput implements Comparable<SLController>, OPCConstants {
 //    public String id;
 //    public int idInt;

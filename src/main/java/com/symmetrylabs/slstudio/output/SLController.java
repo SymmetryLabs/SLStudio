@@ -1,11 +1,9 @@
 package com.symmetrylabs.slstudio.output;
 
 import com.symmetrylabs.color.Ops8;
-import com.symmetrylabs.shows.cubes.CubesController;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.component.GammaExpander;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.util.CubeInventory;
 import heronarts.lx.LX;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.output.OPCConstants;

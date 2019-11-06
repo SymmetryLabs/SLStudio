@@ -1,24 +1,22 @@
 package com.symmetrylabs.slstudio.output;
 
-import java.util.Map;
-import java.util.List;
-import java.util.HashMap;
-import java.io.IOException;
-import com.symmetrylabs.util.hardware.CubeInventory;
-import com.google.gson.GsonBuilder;
-import java.io.File;
-import com.google.gson.stream.JsonWriter;
-import java.io.FileWriter;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-
-import com.symmetrylabs.slstudio.ApplicationState;
-import java.util.ArrayList;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonWriter;
+import com.symmetrylabs.slstudio.ApplicationState;
+import com.symmetrylabs.util.hardware.SLControllerInventory;
+import com.symmetrylabs.util.hardware.CubeInventory;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
-public class CubeModelControllerMapping {
-    public static final String CTRL_MAP_FILENAME = "controller-mapping.json";
+public class SLModelControllerMapping {
+    public static final String CTRL_MAP_FILENAME = "sl-controller-mapping.json";
+
 
     public static final class PhysIdAssignment {
         public String modelId;
@@ -38,17 +36,20 @@ public class CubeModelControllerMapping {
     protected final List<PhysIdAssignment> assignments = new ArrayList<>();
     protected transient final Map<String, PhysIdAssignment> assignmentsByPhysId = new HashMap<>();
     protected transient final Map<String, PhysIdAssignment> assignmentsByModelId = new HashMap<>();
-    protected transient CubeInventory inventory;
+    protected transient SLControllerInventory inventory = new SLControllerInventory();
     protected final String showName;
 
-    protected CubeModelControllerMapping() {
+    protected SLModelControllerMapping() {
         this.showName = null;
         this.inventory = null;
     }
 
-    protected CubeModelControllerMapping(String showName, CubeInventory inventory) {
+    protected SLModelControllerMapping(String showName) {
         this.showName = showName;
-        this.inventory = inventory;
+    }
+
+    public SLModelControllerMapping(String showName, SLControllerInventory inventory) {
+        this.showName = showName;
     }
 
     protected File showFile() {
@@ -63,13 +64,13 @@ public class CubeModelControllerMapping {
         return assignmentsByPhysId.get(physId);
     }
 
-    public PhysIdAssignment lookUpByControllerId(String ctrlId) {
+    public PhysIdAssignment lookUpByHumanID(String ctrlId) {
         if (assignmentsByPhysId.containsKey(ctrlId)) {
             return assignmentsByPhysId.get(ctrlId);
         }
-        CubeInventory.PhysicalCube pc = inventory.cubeByCtrlId.get(ctrlId);
+        SLControllerInventory.ControllerMetadata pc = inventory.treeInventoryMap.get(ctrlId);
         if (pc == null) return null;
-        return assignmentsByPhysId.get(pc.getPhysicalId());
+        return assignmentsByPhysId.get(pc.getHumanID());
     }
 
     public PhysIdAssignment lookUpModel(String modelId) {
@@ -118,12 +119,12 @@ public class CubeModelControllerMapping {
         return false;
     }
 
-    public static CubeModelControllerMapping loadFromDisk(String showName, CubeInventory inventory) {
+    public static SLModelControllerMapping loadFromDisk(String showName, SLControllerInventory inventory) {
         File f = showFile(showName);
         if (f.exists()) {
             try {
-                CubeModelControllerMapping res = new Gson().fromJson(
-                    new InputStreamReader(new FileInputStream(f)), CubeModelControllerMapping.class);
+                SLModelControllerMapping res = new Gson().fromJson(
+                    new InputStreamReader(new FileInputStream(f)), SLModelControllerMapping.class);
                 if (res != null) {
                     res.inventory = inventory;
                     res.onUpdate();
@@ -136,6 +137,6 @@ public class CubeModelControllerMapping {
         } else {
             ApplicationState.setWarning("CubeModelControllerMapping", "no addressing information for show " + showName);
         }
-        return new CubeModelControllerMapping(showName, inventory);
+        return new SLModelControllerMapping(showName, inventory);
     }
 }

@@ -3,7 +3,6 @@ package com.symmetrylabs.shows.cubes;
 import java.util.*;
 import java.lang.ref.WeakReference;
 
-import com.symmetrylabs.shows.base.TreeController;
 import com.symmetrylabs.slstudio.output.CubeModelControllerMapping;
 import com.symmetrylabs.color.PerceptualColorScale;
 
@@ -13,7 +12,7 @@ import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.ui.v2.WindowManager;
-import com.symmetrylabs.util.CubeInventory;
+import com.symmetrylabs.util.hardware.CubeInventory;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.ListenableSet;
 import com.symmetrylabs.util.listenable.SetListener;

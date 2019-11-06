@@ -1,18 +1,14 @@
 package com.symmetrylabs.shows.cubes;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.WeakHashMap;
 
-import com.symmetrylabs.slstudio.output.CubeModelControllerMapping.PhysIdAssignment;
 import com.symmetrylabs.slstudio.output.CubeModelControllerMapping;
 import com.symmetrylabs.slstudio.pattern.cubes.CubesMappingPattern;
-import com.symmetrylabs.util.CubeInventory.PhysicalCube;
-import com.symmetrylabs.util.CubeInventory;
+import com.symmetrylabs.util.hardware.CubeInventory;
 import com.symmetrylabs.util.listenable.SetListener;
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;

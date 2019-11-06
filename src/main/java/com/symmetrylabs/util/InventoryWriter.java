@@ -2,10 +2,7 @@ package com.symmetrylabs.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
-import heronarts.lx.audio.LXAudioInput;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -13,9 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
-
-import static com.symmetrylabs.util.CubeInventory.INVENTORY_FILENAME;
-
 
 
 // delegate here to write metadata regarding inventory bits and pieces.

@@ -1,14 +1,15 @@
 package com.symmetrylabs.util;
 
+import com.symmetrylabs.util.hardware.SLControllerInventory;
 import org.junit.Test;
 
 import java.io.IOException;
 
-public class TreeControllerInventoryWriterTest {
+public class SLControllerInventoryTest {
 
     @Test
     public void parseInRawData() {
-        TreeControllerInventoryWriter inventoryWriter = new TreeControllerInventoryWriter();
+        SLControllerInventory inventoryWriter = new SLControllerInventory();
         try {
             inventoryWriter.parseInRawToMapByHumanID();
         } catch (IOException e) {
@@ -18,7 +19,7 @@ public class TreeControllerInventoryWriterTest {
 
     @Test
     public void parseInRawToMacToHumanID() {
-        TreeControllerInventoryWriter inventoryWriter = new TreeControllerInventoryWriter();
+        SLControllerInventory inventoryWriter = new SLControllerInventory();
         try {
             inventoryWriter.parseInRawToMapByMAC();
         } catch (IOException e) {

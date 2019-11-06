@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.symmetrylabs.util.SLInventory;
+import com.symmetrylabs.util.hardware.SLControllerInventory;
 import org.apache.commons.collections4.IteratorUtils;
 
 import org.apache.commons.math3.util.FastMath;
@@ -22,7 +22,7 @@ public class SLModel extends LXModel {
     public static final int NUM_POINT_BATCHES = 64;
     public static final int OCTREE_INDEX_MIN_POINTS = 1000;
 
-    public final SLInventory inventory;
+    public final SLControllerInventory inventory;
 
     private ModelIndex modelIndex, modelIndexZFlattened;
 
@@ -53,7 +53,7 @@ public class SLModel extends LXModel {
         setupPointsArray();
     }
 
-    public SLModel(String modelId, LXFixture[] fixtures, SLInventory inventory) {
+    public SLModel(String modelId, LXFixture[] fixtures, SLControllerInventory inventory) {
         super(modelId, fixtures);
 
         this.inventory = inventory;
@@ -98,6 +98,11 @@ public class SLModel extends LXModel {
         }
 
         pointBatches.forEachPoint(consumer);
+    }
+
+    // just like get children below, but with expectation of a fixture that a controller is mapped to.
+    public /* abstract */ Iterator<? extends SLModel> getMappableFixtures(){
+        return IteratorUtils.emptyIterator();
     }
 
     public /* abstract */ Iterator<? extends LXModel> getChildren() {

@@ -1,8 +1,6 @@
 package com.symmetrylabs.shows.cubes;
 
 import com.symmetrylabs.color.Ops16;
-import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
@@ -14,10 +12,8 @@ import heronarts.lx.output.LXOutput;
 import heronarts.lx.output.OPCConstants;
 import org.jetbrains.annotations.NotNull;
 import com.symmetrylabs.slstudio.ApplicationState;
-import com.symmetrylabs.util.CubeInventory;
+import com.symmetrylabs.util.hardware.CubeInventory;
 import com.symmetrylabs.color.PerceptualColorScale;
-import com.symmetrylabs.color.Ops8;
-import com.symmetrylabs.shows.cubes.CubesModel.Cube;
 
 import java.io.IOException;
 import java.io.OutputStream;

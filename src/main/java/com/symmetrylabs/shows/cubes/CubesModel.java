@@ -4,7 +4,7 @@ import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.output.CubeModelControllerMapping;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
-import com.symmetrylabs.util.CubeInventory;
+import com.symmetrylabs.util.hardware.CubeInventory;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Iterator;
 
 import static com.symmetrylabs.slstudio.output.CubeModelControllerMapping.PhysIdAssignment;
-import static com.symmetrylabs.util.CubeInventory.PhysicalCube;
+import static com.symmetrylabs.util.hardware.CubeInventory.PhysicalCube;
 
 import static com.symmetrylabs.util.MathUtils.*;
 import static com.symmetrylabs.util.DistanceConstants.*;

@@ -3,12 +3,10 @@ package com.symmetrylabs.shows.cubes;
 import com.symmetrylabs.slstudio.ui.v2.CloseableWindow;
 import com.symmetrylabs.slstudio.ui.v2.FontLoader;
 import com.symmetrylabs.slstudio.ui.v2.UI;
-import com.symmetrylabs.slstudio.ui.v2.UIConstants;
-import com.symmetrylabs.util.CubeInventory;
+import com.symmetrylabs.util.hardware.CubeInventory;
 import heronarts.lx.LX;
-import heronarts.lx.transform.LXTransform;
+
 import java.util.Iterator;
-import java.util.List;
 
 
 public class InventoryEditor extends CloseableWindow {

@@ -3,6 +3,8 @@ package com.symmetrylabs.shows.oslo;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.shows.base.UIOutputs;
+import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.shows.cubes.MappingWindow;
 import com.symmetrylabs.shows.cubes.UICubesMappingPanel;
 import com.symmetrylabs.shows.cubes.UICubesOutputs;
 import com.symmetrylabs.shows.tree.AssignablePixlite;
@@ -20,6 +22,8 @@ import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.ui.v2.SLModelMappingWindow;
+import com.symmetrylabs.slstudio.ui.v2.WindowManager;
 import com.symmetrylabs.util.NetworkChannelDebugMonitor.DebugPortMonitor;
 import com.symmetrylabs.util.NetworkChannelDebugMonitor.MachinePortMonitor;
 import heronarts.lx.LX;
@@ -173,7 +177,6 @@ public class OsloShow extends SLShow implements Show {
         UITreeModelingTool.instance = new UITreeModelingTool(
             ui, TreeModelingTool.getInstance(lx), 0, 0, ui.rightPane.model.getContentWidth());
         UITreeModelingTool.instance.addToContainer(ui.rightPane.model);
-
     }
 
 

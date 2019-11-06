@@ -11,6 +11,8 @@ import heronarts.lx.transform.LXVector;
 
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.shows.tree.config.*;
+import org.apache.commons.collections4.IteratorUtils;
+
 import static com.symmetrylabs.util.DistanceConstants.*;
 import static com.symmetrylabs.util.MathConstants.*;
 
@@ -52,6 +54,11 @@ public class TreeModel extends SLModel {
           leaves.addAll(twig.leaves);
       }
       this.leaves = Collections.unmodifiableList(leaves);
+    }
+
+    @Override
+    public /* abstract */ Iterator<? extends SLModel> getMappableFixtures(){
+        return branches.iterator();
     }
 
     private static class Fixture extends LXAbstractFixture {

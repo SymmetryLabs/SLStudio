@@ -1,26 +1,26 @@
-package com.symmetrylabs.util;
+package com.symmetrylabs.util.hardware;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.util.NetworkUtil.MACAddress;
 
 import java.io.*;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.*;
 
-public class TreeControllerInventoryWriter {
-    String RAW_CONTROLLER_PHYSIDS = "src/main/resources/tree_controllers.raw.txt";
-    String TREE_INVENTORY_FILENAME = "tree-inventory.json";
-    String MAC_TO_HUMAN_ID_FILENAME = "mac_to_humanID.json";
+public class SLControllerInventory {
+    private final static String RESOURCES_DIR = "src/main/resources";
+    private final static String RAW_CONTROLLER_PHYSIDS = "src/main/resources/tree_controllers.raw.txt";
+    private final static String TREE_INVENTORY_FILENAME = "tree-inventory.json";
+    private final static String MAC_TO_HUMAN_ID_FILENAME = "mac_to_humanID.json";
 
-    private class ControllerMetadata{
+    public class ControllerMetadata{
         @Expose
         Inet4Address ipAddr;
 
@@ -48,13 +48,26 @@ public class TreeControllerInventoryWriter {
             humanID = chunkArr[2];
             statusNotes = chunkArr[3] == null ? "null" : chunkArr[3];
         }
+
+        public String getHumanID() {
+            return humanID;
+        }
     }
 
     ArrayList<ControllerMetadata> treeInventory = new ArrayList<>();
 
-    TreeMap<String, ControllerMetadata> treeInventoryMap = new TreeMap<>();
+    public TreeMap<String, ControllerMetadata> treeInventoryMap = new TreeMap<>();
 
-    public TreeControllerInventoryWriter(){}
+    public final transient Map<String, CubeInventory.PhysicalCube> controllerByMacAddrs = new TreeMap<>();
+    public final transient Map<String, CubeInventory.PhysicalCube> controllerByCtrlId = new TreeMap<>();
+
+    public SLControllerInventory(){
+        try {
+            this.loadFromDisk();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void parseInRawToMapByHumanID() throws IOException {
         FileReader r=new FileReader(RAW_CONTROLLER_PHYSIDS);
@@ -138,5 +151,10 @@ public class TreeControllerInventoryWriter {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void loadFromDisk() throws FileNotFoundException {
+        JsonReader reader = new JsonReader(new FileReader(RESOURCES_DIR + "/" + TREE_INVENTORY_FILENAME));
+        treeInventoryMap = new Gson().fromJson(reader, treeInventoryMap.getClass());
     }
 }
