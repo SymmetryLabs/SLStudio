@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.output;
 
 import com.symmetrylabs.color.Ops8;
+import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.component.GammaExpander;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
@@ -85,7 +86,7 @@ public class SLController extends LXOutput implements Comparable<SLController>, 
 
     @Override
     protected void onSend(int[] colors) {
-        if (isBroadcast != SLStudio.applet.outputControl.broadcastPacket.isOn())
+        if (isBroadcast != ApplicationState.outputControl().broadcastPacket.isOn())
             return;
 
         // Create data socket connection if needed

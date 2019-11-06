@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.symmetrylabs.slstudio.output.SLController;
+//import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
 import com.symmetrylabs.util.NetworkUtil.MACAddress;
 
 import java.io.*;
@@ -19,6 +19,20 @@ public class SLControllerInventory {
     private final static String RAW_CONTROLLER_PHYSIDS = "src/main/resources/tree_controllers.raw.txt";
     private final static String TREE_INVENTORY_FILENAME = "tree-inventory.json";
     private final static String MAC_TO_HUMAN_ID_FILENAME = "mac_to_humanID.json";
+
+    private final transient List<SLControllerInventory.Listener> listeners = new ArrayList<>();
+
+    public void addListener(Listener listener) {
+        listeners.add(listener);
+    }
+
+    public String getControllerId(String deviceId) {
+        return treeInventoryMap.get(deviceId).humanID;
+    }
+
+    public interface Listener {
+        void onControllerListUpdated();
+    }
 
     public class ControllerMetadata{
         @Expose
@@ -58,8 +72,9 @@ public class SLControllerInventory {
 
     public TreeMap<String, ControllerMetadata> treeInventoryMap = new TreeMap<>();
 
-    public final transient Map<String, CubeInventory.PhysicalCube> controllerByMacAddrs = new TreeMap<>();
-    public final transient Map<String, CubeInventory.PhysicalCube> controllerByCtrlId = new TreeMap<>();
+    public final transient Map<String, ControllerMetadata> controllerByMacAddrs = new TreeMap<>();
+    public final transient Map<String,ControllerMetadata> controllerByCtrlId = new TreeMap<>();
+    public final transient Map<String, ControllerMetadata> controllerByIP = new TreeMap<>();
 
     public SLControllerInventory(){
         try {
@@ -69,6 +84,11 @@ public class SLControllerInventory {
         }
     }
 
+    private void onUpdated() {
+        for (SLControllerInventory.Listener l : listeners) {
+            l.onControllerListUpdated();
+        }
+    }
     public void parseInRawToMapByHumanID() throws IOException {
         FileReader r=new FileReader(RAW_CONTROLLER_PHYSIDS);
         BufferedReader br=new BufferedReader(r);
@@ -90,7 +110,25 @@ public class SLControllerInventory {
                 idx = 0;
                 treeInventory.add(meta);
                 treeInventoryMap.put(meta.humanID, meta);
+
             }
+        }
+
+        int count = 0;
+        for(Map.Entry<String,ControllerMetadata> entry : treeInventoryMap.entrySet()) {
+            String key = entry.getKey();
+            ControllerMetadata value = entry.getValue();
+
+            String ipAddrString = value.ipAddr.toString();
+            if (controllerByIP.containsKey(ipAddrString)){
+                System.out.println("contains: " + ipAddrString);
+                System.out.println(controllerByIP.get(ipAddrString).macAddr);
+                System.out.println(value.macAddr);
+                System.out.println(count++);
+            }
+            controllerByIP.put(ipAddrString, value);
+
+//            System.out.println(key + " => " + value);
         }
 //        Gson gson = new GsonBuilder()
 //            .setPrettyPrinting()
