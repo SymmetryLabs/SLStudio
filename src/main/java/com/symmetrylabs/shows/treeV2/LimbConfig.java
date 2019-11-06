@@ -25,6 +25,11 @@ public class LimbConfig {
 		this.branches = branches;
 	}
 
+	public LimbConfig(BranchConfig[] branches, LimbConfig[] limbs) {
+		this.limbs = limbs;
+		this.branches = branches;
+	}
+
 	public LimbConfig[] getLimbs() {
 		return limbs;
 	}
