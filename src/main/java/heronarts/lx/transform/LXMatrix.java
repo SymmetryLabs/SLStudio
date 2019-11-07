@@ -31,6 +31,32 @@ public class LXMatrix {
         m31 = 0, m32 = 0, m33 = 1, m34 = 0,
         m41 = 0, m42 = 0, m43 = 0, m44 = 1;
 
+    public static LXMatrix createFromColumnMajor(float[] columnMajor) {
+        float[] rowMajor = new float[16];
+        for (int i = 0; i < 4; ++i) {
+            for (int j = 0; j < 4; ++j) {
+                rowMajor[i * 4 + j] = columnMajor[j * 4 + i];
+            }
+        }
+        return new LXMatrix(rowMajor);
+    }
+
+    public static LXMatrix createFromColumnMajor(double[] columnMajor) {
+        float[] rowMajor = new float[16];
+        for (int i = 0; i < 4; ++i) {
+            for (int j = 0; j < 4; ++j) {
+                rowMajor[i * 4 + j] = (float) columnMajor[j * 4 + i];
+            }
+        }
+
+        // TEMP - convert from meters to inches
+        rowMajor[3] = rowMajor[3] * 39.3701f;
+        rowMajor[7] = rowMajor[7] * 39.3701f;
+        rowMajor[11] = rowMajor[11] * 39.3701f;
+
+        return new LXMatrix(rowMajor);
+    }
+
     /**
      * Makes a new identity matrix.
      */
@@ -110,6 +136,11 @@ public class LXMatrix {
         m42 = m.m42;
         m43 = m.m43;
         m44 = m.m44;
+    }
+
+    public LXMatrix copy() {
+        return new LXMatrix(m11, m12, m13, m14, m21, m22, m23, m24,
+                            m31, m32, m33, m34, m41, m42, m43, m44);
     }
 
     /**
