@@ -13,18 +13,16 @@ import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.output.LXDatagramOutput;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.output.OPCConstants;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
+import java.net.*;
 
-public abstract class AbstractSLControllerBase extends LXOutput implements Comparable<AbstractSLControllerBase>, OPCConstants, SLControllerInventory.Listener {
+public abstract class AbstractSLControllerBase extends LXDatagramOutput implements Comparable<AbstractSLControllerBase>, OPCConstants, SLControllerInventory.Listener {
     public String id;
     public int idInt;
     public final InetAddress host;
@@ -38,6 +36,8 @@ public abstract class AbstractSLControllerBase extends LXOutput implements Compa
     private OutputStream output;
     protected boolean is16BitColorEnabled = false;
 
+    private int port = 7890;
+
     int contentSizeBytes;
     int packetSizeBytes;
     byte[] packetData;
@@ -46,23 +46,23 @@ public abstract class AbstractSLControllerBase extends LXOutput implements Compa
     private final LX lx;
 //    private MappingMode mappingMode;
 
-    public AbstractSLControllerBase(LX lx, NetworkDevice device, SLControllerInventory inventory, PerceptualColorScale outputScaler) {
+    public AbstractSLControllerBase(LX lx, NetworkDevice device, SLControllerInventory inventory, PerceptualColorScale outputScaler) throws SocketException {
         this(lx, device, device.ipAddress, null, inventory, false, outputScaler);
     }
 
-    public AbstractSLControllerBase(LX lx, String _host, String _id) {
+    public AbstractSLControllerBase(LX lx, String _host, String _id) throws SocketException {
         this(lx, _host, _id, false);
     }
 
-    public AbstractSLControllerBase(LX lx, String _host) {
+    public AbstractSLControllerBase(LX lx, String _host) throws SocketException {
         this(lx, _host, "", true);
     }
 
-    private AbstractSLControllerBase(LX lx, String host, String id, boolean isBroadcast) {
+    private AbstractSLControllerBase(LX lx, String host, String id, boolean isBroadcast) throws SocketException {
         this(lx, null, NetworkUtils.toInetAddress(host), id, null, isBroadcast, null);
     }
 
-    private AbstractSLControllerBase(LX lx, NetworkDevice networkDevice, InetAddress host, String id, SLControllerInventory inventory, boolean isBroadcast, PerceptualColorScale outputScaler) {
+    private AbstractSLControllerBase(LX lx, NetworkDevice networkDevice, InetAddress host, String id, SLControllerInventory inventory, boolean isBroadcast, PerceptualColorScale outputScaler) throws SocketException {
         super(lx);
 
         this.lx = lx;
@@ -149,133 +149,124 @@ public abstract class AbstractSLControllerBase extends LXOutput implements Compa
         packetData[index++] = (byte) (blue & 0xff);
     }
 
-//    @Override
-//    protected void onSend(PolyBuffer src) {
-//        if (isBroadcast != ApplicationState.outputControl().broadcastPacket.isOn())
+    @Override
+    protected void onSend(PolyBuffer src) {
+        if (isBroadcast != ApplicationState.outputControl().broadcastPacket.isOn())
+            return;
+
+        // Create data socket connection if needed
+        if (dsocket == null) {
+            try {
+                dsocket = new DatagramSocket();
+                dsocket.connect(new InetSocketAddress(host, this.port));
+            }
+            catch (IOException e) {}
+            finally {
+                if (dsocket == null) {
+                    ApplicationState.setWarning("AbstractSLController", "could not create datagram socket");
+                    return;
+                }
+            }
+        }
+
+        // Find the Cube we're outputting to
+        // If we're on broadcast, use cube 0 for all cubes, even
+        // if that cube isn't modelled yet
+        // Use the mac address to find the cube if we have it
+        // Otherwise use the cube id
+//        if (!(lx.model instanceof CubesModel)) {
+//            ApplicationState.setWarning("CubesController", "model is not a cube model");
 //            return;
-//
-//        // Create data socket connection if needed
-//        if (dsocket == null) {
-//            try {
-//                dsocket = new DatagramSocket();
-//                dsocket.connect(new InetSocketAddress(host, 7890));
-//            }
-//            catch (IOException e) {}
-//            finally {
-//                if (dsocket == null) {
-//                    ApplicationState.setWarning("CubesController", "could not create datagram socket");
-//                    return;
-//                }
-//            }
 //        }
+
+        PointsGrouping points = null;
+        CubesModel cubesModel = (CubesModel)lx.model;
+
+        if ((ApplicationState.outputControl().testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
+            CubesModel.Cube cube = cubesModel.getCubes().get(0);
+            if (cube instanceof CubesModel.DoubleControllerCube) {
+                points = ((CubesModel.DoubleControllerCube)cube).getPointsA();
+            }
+            else {
+                points = new PointsGrouping(cube.getPoints());
+            }
+        } else {
+            points = cubesModel.getControllerPoints(id);
+        }
+        int numPixels = points == null ? 0 : points.size();
+
+        // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
+        // TODO: refactor here
+//        if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(id)) {
+//            initPacketData(numPixels, false);
+//            if (mappingMode.inUnMappedMode()) {
+//                if (mappingMode.inDisplayAllMode()) {
+//                    int col = mappingMode.getUnMappedColor();
 //
-//        // Find the Cube we're outputting to
-//        // If we're on broadcast, use cube 0 for all cubes, even
-//        // if that cube isn't modelled yet
-//        // Use the mac address to find the cube if we have it
-//        // Otherwise use the cube id
-////        if (!(lx.model instanceof CubesModel)) {
-////            ApplicationState.setWarning("CubesController", "model is not a cube model");
-////            return;
-////        }
+//                    for (int i = 0; i < numPixels; i++)
+//                        setPixel(i, col);
+//                } else {
+//                    if (mappingMode.isSelectedUnMappedFixture(id)) {
+//                        int col = mappingMode.getUnMappedColor();
 //
-//        PointsGrouping points = null;
-//        CubesModel cubesModel = (CubesModel)lx.model;
-//
-//        if ((ApplicationState.outputControl().testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
-//            CubesModel.Cube cube = cubesModel.getCubes().get(0);
-//            if (cube instanceof CubesModel.DoubleControllerCube) {
-//                points = ((CubesModel.DoubleControllerCube)cube).getPointsA();
-//            }
-//            else {
-//                points = new PointsGrouping(cube.getPoints());
-//            }
-//        } else {
-//            points = cubesModel.getControllerPoints(id);
-//        }
-//        int numPixels = points == null ? 0 : points.size();
-//
-//        // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
-//        // TODO: refactor here
-////        if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(id)) {
-////            initPacketData(numPixels, false);
-////            if (mappingMode.inUnMappedMode()) {
-////                if (mappingMode.inDisplayAllMode()) {
-////                    int col = mappingMode.getUnMappedColor();
-////
-////                    for (int i = 0; i < numPixels; i++)
-////                        setPixel(i, col);
-////                } else {
-////                    if (mappingMode.isSelectedUnMappedFixture(id)) {
-////                        int col = mappingMode.getUnMappedColor();
-////
-////                        for (int i = 0; i < numPixels; i++)
-////                            setPixel(i, col);
-////                    } else {
-////                        for (int i = 0; i < numPixels; i++)
-////                            setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
-////                    }
-////                }
-////            } else {
-////                for (int i = 0; i < numPixels; i++) {
-////                    setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
-////                }
-////            }
-////        } else if (sendTestPattern) {
-//            int col = (int) ((System.nanoTime() / 1_000_000_000L) % 3L);
-//            int c = 0;
-//            switch (col) {
-//            /* don't use full-bright colors here, since they bust some of our fixtures. */
-//            case 0: c = 0xFF880000; break;
-//            case 1: c = 0xFF008800; break;
-//            case 2: c = 0xFF000088; break;
-//            }
-//            /* we want the test pattern to work even if we aren't mapped, and if
-//               we aren't mapped we don't know how many pixels we have. Since
-//               controllers are happy to receive more pixels than they have
-//               connected to them, and we're just sending a constant color, we just
-//               send enough pixels that our highest pixel-count-per-controller cube
-//               would get enough pixels to turn on everything. */
-//            if (numPixels == 0) {
-//                numPixels = CubesModel.Cube.MAX_PIXELS_PER_CONTROLLER;
-//            }
-////            initPacketData(numPixels, false);
-//            for (int i = 0; i < numPixels; i++) {
-//                setPixel(i, c);
-//            }
-//        } else if (points != null) {
-//            // Fill the datagram with pixel data
-//            if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
-//                initPacketData(numPixels, true);
-//                long[] srcLongs = (long[]) src.getArray(PolyBuffer.Space.RGB16);
-//                for (int i = 0; i < numPixels; i++) {
-//                    LXPoint point = points.getPoint(i);
-//                    setPixel(i, srcLongs[point.index]);
+//                        for (int i = 0; i < numPixels; i++)
+//                            setPixel(i, col);
+//                    } else {
+//                        for (int i = 0; i < numPixels; i++)
+//                            setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
+//                    }
 //                }
 //            } else {
-//                initPacketData(numPixels, false);
-//                int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
 //                for (int i = 0; i < numPixels; i++) {
-//                    LXPoint point = points.getPoint(i);
-//                    setPixel(i, srcInts[point.index]);
+//                    setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
 //                }
 //            }
-//        } else {
-//            // Fill with all black if we don't have cube data
+//        }
+        if (false);
+        else if (sendTestPattern) {
+            int col = (int) ((System.nanoTime() / 1_000_000_000L) % 3L);
+            int c = 0;
+            switch (col) {
+            /* don't use full-bright colors here, since they bust some of our fixtures. */
+            case 0: c = 0xFF880000; break;
+            case 1: c = 0xFF008800; break;
+            case 2: c = 0xFF000088; break;
+            }
+            /* we want the test pattern to work even if we aren't mapped, and if
+               we aren't mapped we don't know how many pixels we have. Since
+               controllers are happy to receive more pixels than they have
+               connected to them, and we're just sending a constant color, we just
+               send enough pixels that our highest pixel-count-per-controller cube
+               would get enough pixels to turn on everything. */
+            if (numPixels == 0) {
+                numPixels = CubesModel.Cube.MAX_PIXELS_PER_CONTROLLER;
+            }
 //            initPacketData(numPixels, false);
-//            for (int i = 0; i < numPixels; i++) {
-//                setPixel(i, LXColor.BLACK);
-//            }
-//        }
-//
-//        // Send the cube data to the cube. yay!
-//        try {
-//            dsocket.send(packet);
-//        }
-//        catch (Exception e) {
-//            ApplicationState.setWarning("CubesController", "failed to send packet: " + e.getMessage());
-//        }
-//    }
+            for (int i = 0; i < numPixels; i++) {
+                setPixel(i, c);
+            }
+        } else if (points != null) {
+            // Fill the datagram with pixel data
+            fillDataGram();
+        } else {
+            // Fill with all black if we don't have cube data
+//            initPacketData(numPixels, false);
+            for (int i = 0; i < numPixels; i++) {
+                setPixel(i, LXColor.BLACK);
+            }
+        }
+
+        // Send the cube data to the cube. yay!
+        try {
+            dsocket.send(packet);
+        }
+        catch (Exception e) {
+            ApplicationState.setWarning("CubesController", "failed to send packet: " + e.getMessage());
+        }
+    }
+
+    // inheriting class must impliment
+    protected abstract void fillDataGram();
 
     private void resetSocket() {
         if (dsocket != null) {

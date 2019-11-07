@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.net.InetAddress;
+
+import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
 import heronarts.lx.parameter.StringParameter;
 
 import heronarts.lx.LX;
@@ -13,9 +15,10 @@ import heronarts.lx.output.LXDatagramOutput;
 
 import com.symmetrylabs.slstudio.output.TenereDatagram;
 import com.symmetrylabs.shows.tree.TreeModel;
+import org.jetbrains.annotations.NotNull;
 
 
-public class AssignableTenereController extends LXDatagramOutput {
+public class AssignableTenereController extends AbstractSLControllerBase {
 
 	private static final int TWIGS_PER_PACKET = 3;
 	private static final int POINTS_PER_PACKET = TreeModel.Twig.NUM_LEDS * TWIGS_PER_PACKET;
@@ -27,7 +30,7 @@ public class AssignableTenereController extends LXDatagramOutput {
     private final int[][] packets;
 
 	public AssignableTenereController(LX lx, TreeModel.Branch branch) throws SocketException {
-		super(lx);
+		super(lx, branch.getConfig().ipAddress);
         this.lx = lx;
 		this.ipAddress = branch.getConfig().ipAddress;
         this.branch = branch;
@@ -112,4 +115,14 @@ public class AssignableTenereController extends LXDatagramOutput {
 	public String getIpAddress() {
 		return ipAddress;
 	}
+
+    @Override
+    protected void fillDataGram() {
+        updateIndexesFromBranch();
+    }
+
+    @Override
+    public int compareTo(@NotNull AbstractSLControllerBase o) {
+        return 0;
+    }
 }

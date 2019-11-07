@@ -163,6 +163,7 @@ public class OsloShow extends SLShow implements Show {
             AssignableTenereController controller = treeControllers.get(modeler.getSelectedBranch());
             controller.setIpAddress(modeler.branchManipulator.ipAddress.getString());
         });
+        lx.engine.output.enabled.setValue(false);
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {

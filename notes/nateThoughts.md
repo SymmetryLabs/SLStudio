@@ -10,3 +10,10 @@ Enumerate/traverse model elts.
 
 
 L4-2-B1 -- no power branch cable.
+
+
+
+TDD
+Abstract controller base.
+
+Broadcast - send to all discovered controllers.
