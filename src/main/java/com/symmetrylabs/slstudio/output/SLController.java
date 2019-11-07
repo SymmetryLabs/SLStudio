@@ -12,6 +12,7 @@ import heronarts.lx.LX;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.output.OPCConstants;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.DiscreteParameter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -48,6 +49,14 @@ public class SLController extends LXOutput implements Comparable<SLController>, 
     private GammaExpander GammaExpander;
 
     public final BooleanParameter[] pwrMask = new BooleanParameter[8];
+
+
+    /********
+     * Power management related - should probably be separated to another class
+     */
+    public DiscreteParameter blackoutPowerThreshold = new DiscreteParameter("Blackout", 0, 4095);
+    public final BooleanParameter blackoutRogueLEDsActive = new BooleanParameter("Activate blackout procedure", false);
+
     private int pwrMaskByte = 0;
 
     public SLController(LX lx, NetworkDevice device, PointsGrouping points, String id) {
@@ -167,6 +176,22 @@ public class SLController extends LXOutput implements Comparable<SLController>, 
         lastReceivedPowerSample = metaPowerSample;
     }
 
+    // flips port power if above threshold (like a digital breaker)
+    public void killByThreshHold(){
+        for (int i = 0; i < 8; i++){
+            if (lastReceivedPowerSample.analogSampleArray[i] > blackoutPowerThreshold.getValuei()){
+                pwrMask[i].setValue(true); // mask this output i.e. shutoff this output
+            }
+            else {
+                pwrMask[i].setValue(false);
+            }
+        }
+        try {
+            killPortPower();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void killPortPower() throws IOException {
         if (hasPortPowerFeedback){
@@ -191,7 +216,12 @@ public class SLController extends LXOutput implements Comparable<SLController>, 
             byte[] packetData = data.array();
             int packetSizeBytes = packetData.length;
             DatagramPacket packet = new DatagramPacket(packetData, packetSizeBytes);
-            dsocket.send( packet );
+            if (dsocket == null){
+                System.out.println("No socket for some reason?");
+            }
+            else{
+                dsocket.send( packet );
+            }
         }
     }
 }

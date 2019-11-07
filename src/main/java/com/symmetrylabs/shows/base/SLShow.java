@@ -20,6 +20,7 @@ import com.symmetrylabs.util.listenable.ListenableSet;
 import com.symmetrylabs.util.listenable.SetListener;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.p3lx.ui.UI2dScrollContext;
 
 import java.lang.ref.WeakReference;
@@ -31,6 +32,11 @@ import java.util.*;
  */
 public abstract class SLShow implements Show {
     public static final String SHOW_NAME = "slshow";
+
+    /**
+     * Power related.
+     */
+    DiscreteParameter globalBlackoutPowerThreshhold = new DiscreteParameter("global blackout", 4095);
 
     public final HashMap<InetAddress, SLController> controllerByInetAddrMap = new HashMap<>();
 

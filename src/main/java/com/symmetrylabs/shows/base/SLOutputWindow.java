@@ -36,6 +36,8 @@ public class SLOutputWindow extends CloseableWindow {
         pui.draw(ApplicationState.outputControl().testBroadcast);
         pui.draw(ApplicationState.outputControl().controllerResetModule.enabled);
 
+        pui.draw(show.globalBlackoutPowerThreshhold);
+
         UI.separator();
 
         Collection<SLController> ccs = show.getSortedControllers();
@@ -55,6 +57,8 @@ public class SLOutputWindow extends CloseableWindow {
         boolean collapse = UI.button("collapse all");
         UI.text("alt-click any controller to send test pattern");
 
+        boolean blackout = UI.button("blackout procedure");
+
         boolean dump = UI.button("dump metadata to file");
 
         if (dump){
@@ -68,6 +72,12 @@ public class SLOutputWindow extends CloseableWindow {
             }
             if (dump){
                 System.out.println( "\"" + cc.networkDevice.ipAddress.toString().split("/")[1] + "\"" + ",");
+            }
+
+            if (blackout){
+                cc.blackoutRogueLEDsActive.setValue(true);
+                cc.blackoutPowerThreshold.setValue(show.globalBlackoutPowerThreshhold.getValuei());
+                cc.killByThreshHold();
             }
 
 //            boolean mapped = model.mapping.lookUpByControllerId(cc.id) != null;
