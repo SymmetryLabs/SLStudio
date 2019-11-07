@@ -18,7 +18,7 @@ import com.symmetrylabs.shows.kalpa.KalpaShow;
 import com.symmetrylabs.shows.magicleap.MagicLeapShow;
 import com.symmetrylabs.shows.mikey.MikeyShow;
 import com.symmetrylabs.shows.office.OfficeShow;
-import com.symmetrylabs.shows.oslo.OsloShow;
+import com.symmetrylabs.shows.oslo.NateOsloShow;
 import com.symmetrylabs.shows.penfoldswine.PenfoldsWineShow;
 import com.symmetrylabs.shows.pilots.PilotsShow;
 import com.symmetrylabs.shows.related.RelatedShow;
@@ -95,7 +95,7 @@ public class ShowRegistry {
         map.put(LoveBurnShow.SHOW_NAME, LoveBurnShow::new);
         map.put(Sundance19Show.SHOW_NAME, Sundance19Show::new);
         map.put(AbsintheShow.SHOW_NAME, AbsintheShow::new);
-        map.put(OsloShow.SHOW_NAME, OsloShow::new);
+        map.put(NateOsloShow.SHOW_NAME, NateOsloShow::new);
         map.put(JapanTreeShow.SHOW_NAME, JapanTreeShow::new);
         map.put(TwigTestShow.SHOW_NAME, TwigTestShow::new);
         map.put(SummerStage19Show.SHOW_NAME, SummerStage19Show::new);

@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class OsloShow extends SLShow implements Show {
+public class NateOsloShow extends SLShow implements Show {
 
     public static final String SHOW_NAME = "oslo";
 
