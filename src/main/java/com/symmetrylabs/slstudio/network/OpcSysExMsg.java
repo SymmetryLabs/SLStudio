@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.network;
 
 import com.symmetrylabs.slstudio.ApplicationState;
+import com.symmetrylabs.util.hardware.powerMon.MetaSample;
 
 public class OpcSysExMsg extends OpcMessage {
     byte channel;
@@ -36,26 +37,8 @@ public class OpcSysExMsg extends OpcMessage {
     }
 
 
-    public class MetaSample {
-        // how to initialize two dimensional array in Java
-        // using for loop
-        int NUM_CHANNEL = 8;
-        int UINT16_PER_CHANNEL = 4;
-        int[][] allSample = new int[NUM_CHANNEL][UINT16_PER_CHANNEL];
-        int[] analogSampleArray = new int[NUM_CHANNEL];
 
-        int powerOnStateMask = 0;
-
-        MetaSample(){
-            for (int i = 0; i < NUM_CHANNEL; i++) {
-                for (int j = 0; j < UINT16_PER_CHANNEL; j++) {
-                    allSample[i][j] = 0;
-                }
-            }
-        }
-    }
-
-    public MetaSample allChData = new MetaSample();
+    public MetaSample metaPowerSample = new MetaSample();
 
     public static int unsignedToBytes(byte b) {
         return b & 0xFF;
@@ -67,14 +50,14 @@ public class OpcSysExMsg extends OpcMessage {
             // first 8 half words are the analog channel samples
             int chIndex = i/2;
             if (chIndex < 8){
-                allChData.analogSampleArray[chIndex] = (unsignedToBytes(payload[i+1]) << 8) + (unsignedToBytes(payload[i]) & 0xff);
-                deserializeResult += (allChData.analogSampleArray[chIndex]);
+                metaPowerSample.analogSampleArray[chIndex] = (unsignedToBytes(payload[i+1]) << 8) + (unsignedToBytes(payload[i]) & 0xff);
+                deserializeResult += (metaPowerSample.analogSampleArray[chIndex]);
                 deserializeResult += ("\t");
             }
             if (chIndex == 8){ // the fault mask
-                allChData.powerOnStateMask = (unsignedToBytes(payload[i]));
+                metaPowerSample.powerOnStateMask = (unsignedToBytes(payload[i]));
                 for (int j = 0; j < 8; j ++){
-                    if ( ((allChData.powerOnStateMask >> j) & 1) == 1 ){
+                    if ( ((metaPowerSample.powerOnStateMask >> j) & 1) == 1 ){
                         deserializeResult += ("1");
                     }
                     else {
@@ -83,8 +66,6 @@ public class OpcSysExMsg extends OpcMessage {
                 }
                 deserializeResult += ("\t");
             }
-
-
             // The old with all samples
 //            int structIndex = (i%8) / 2;
 //            allChData.allSample[chIndex][structIndex] = (unsignedToBytes(payload[i+1]) << 8) + (unsignedToBytes(payload[i]) & 0xff);
@@ -93,6 +74,7 @@ public class OpcSysExMsg extends OpcMessage {
 //                System.out.print("\t");
 //            }
         }
+
 //        System.out.println(deserializeResult);
         ApplicationState.setWarning("powerSample: ", deserializeResult);
     }

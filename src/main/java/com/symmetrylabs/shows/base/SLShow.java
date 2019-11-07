@@ -23,16 +23,16 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.p3lx.ui.UI2dScrollContext;
 
 import java.lang.ref.WeakReference;
-import java.util.Collection;
-import java.util.Map;
-import java.util.TreeSet;
-import java.util.WeakHashMap;
+import java.net.InetAddress;
+import java.util.*;
 
 /**
  * Base class of utilities all shows should derive from and benefit from
  */
 public abstract class SLShow implements Show {
     public static final String SHOW_NAME = "slshow";
+
+    public final HashMap<InetAddress, SLController> controllerByInetAddrMap = new HashMap<>();
 
     public final ListenableSet<SLController> controllers = new ListenableSet<>();
     public final ListenableSet<CubesController> cubesControllers = new ListenableSet<>();
@@ -76,6 +76,7 @@ public abstract class SLShow implements Show {
                 final SLController controller = new SLController(lx, device, new PointsGrouping(), device.deviceId);
 //                controller.set16BitColorEnabled(device.featureIds.contains("rgb16"));
                 controllers.add(controller);
+                controllerByInetAddrMap.put(device.ipAddress, controller);
 //                if (controller.networkDevice.productId.equals("Cubes")){
 //                    cubesControllers.add(controller); // after cubes controller extends SLController
 //                }
@@ -144,9 +145,13 @@ public abstract class SLShow implements Show {
     public void setupUi(LX lx) {
         WindowManager.addPersistent("Controllers/Inventory", () -> new InventoryEditor(lx, cubeInventory), false);
         WindowManager.addPersistent("Controllers/Mapping", () -> new SLModelMappingWindow(lx, (SLModel) lx.model), true);
-        WindowManager.addPersistent("Controllers/Output", () -> new SLOutputWindow(lx, this), false);
+        WindowManager.addPersistent("Controllers/Output", () -> new SLOutputWindow(lx, this), true);
         WindowManager.addPersistent("Controllers/Scaling", () -> new OutputScaleWindow(lx, outputScaler), false);
     }
 
     public abstract String getShowName();
+
+    public SLController getControllerByInetAddr(InetAddress sourceControllerAddr) {
+        return controllerByInetAddrMap.get(sourceControllerAddr);
+    }
 }

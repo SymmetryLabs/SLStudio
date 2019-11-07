@@ -5,14 +5,22 @@ import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.component.GammaExpander;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
+import com.symmetrylabs.slstudio.network.OpcMessage;
+import com.symmetrylabs.slstudio.network.OpcSysExMsg;
+import com.symmetrylabs.util.hardware.powerMon.MetaSample;
 import heronarts.lx.LX;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.output.OPCConstants;
+import heronarts.lx.parameter.BooleanParameter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.*;
+import java.nio.ByteBuffer;
+
+import static com.symmetrylabs.slstudio.network.OpcMessage.SYMMETRY_LABS;
+import static com.symmetrylabs.slstudio.network.OpcMessage.SYMMETRY_LABS_IDENTIFY;
 
 public class SLController extends LXOutput implements Comparable<SLController>, OPCConstants {
     public String id;
@@ -21,6 +29,9 @@ public class SLController extends LXOutput implements Comparable<SLController>, 
     public final boolean isBroadcast;
     public final NetworkDevice networkDevice;
     public final PointsGrouping points;
+
+    public boolean hasPortPowerFeedback = false;
+    public MetaSample lastReceivedPowerSample;
 
     private Socket socket;
     private DatagramSocket dsocket;
@@ -36,6 +47,9 @@ public class SLController extends LXOutput implements Comparable<SLController>, 
     private final LX lx;
     private GammaExpander GammaExpander;
 
+    public final BooleanParameter[] pwrMask = new BooleanParameter[8];
+    private int pwrMaskByte = 0;
+
     public SLController(LX lx, NetworkDevice device, PointsGrouping points, String id) {
         this(lx, device, device.ipAddress, points, false, id);
     }
@@ -49,6 +63,11 @@ public class SLController extends LXOutput implements Comparable<SLController>, 
         this.host = host;
         this.points = points;
         this.isBroadcast = isBroadcast;
+
+        for (int i = 0; i < 8; i++){
+            pwrMask[i] = new BooleanParameter("pwr"+i, false);
+            addParameter("pwr" + i, pwrMask[i]);
+        }
 
         GammaExpander = GammaExpander.getInstance(lx);
         initPacketData(points.size());
@@ -93,7 +112,7 @@ public class SLController extends LXOutput implements Comparable<SLController>, 
         if (dsocket == null) {
             try {
                 dsocket = new DatagramSocket();
-                dsocket.connect(new InetSocketAddress(host, 7890));
+                dsocket.connect(new InetSocketAddress(host, 1337));
                 //socket.setTcpNoDelay(true);
                 // output = socket.getOutputStream();
             }
@@ -141,5 +160,38 @@ public class SLController extends LXOutput implements Comparable<SLController>, 
     @Override
     public int compareTo(@NotNull SLController other) {
         return idInt != other.idInt ? Integer.compare(idInt, other.idInt) : id.compareTo(other.id);
+    }
+
+    public void writeSample(MetaSample metaPowerSample) {
+        hasPortPowerFeedback = true;
+        lastReceivedPowerSample = metaPowerSample;
+    }
+
+
+    public void killPortPower() throws IOException {
+        if (hasPortPowerFeedback){
+
+            int incomingPwrMaskByte = 0;
+            for (int i = 0; i < 8; i++){
+                incomingPwrMaskByte |= pwrMask[i].getValueb() ? 0x1 << i : 0;
+            }
+            if (incomingPwrMaskByte == pwrMaskByte){
+                // if state hasn't changed exit
+                return;
+            }
+            pwrMaskByte = incomingPwrMaskByte;
+            System.out.println(pwrMaskByte);
+
+            byte[] payload = new byte[1];
+            payload[0] = (byte)pwrMaskByte;
+            System.out.println(payload[0]);
+//            ByteBuffer data = ByteBuffer.wrap(new OpcMessage(0, SYMMETRY_LABS, 0x41, payload).bytes);
+            // use MIDI style - bug in the other.
+            ByteBuffer data = ByteBuffer.wrap(new OpcMessage(0xf0, 0x41, payload).bytes);
+            byte[] packetData = data.array();
+            int packetSizeBytes = packetData.length;
+            DatagramPacket packet = new DatagramPacket(packetData, packetSizeBytes);
+            dsocket.send( packet );
+        }
     }
 }

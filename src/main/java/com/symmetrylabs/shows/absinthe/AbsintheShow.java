@@ -146,11 +146,11 @@ public class AbsintheShow extends TreeShow {
 
 
 
-        DebugPortMonitor debugPortMonitor = new DebugPortMonitor();
-        debugPortMonitor.start();
-
-        MachinePortMonitor machinePortMonitor = new MachinePortMonitor();
-        machinePortMonitor.start();
+//        DebugPortMonitor debugPortMonitor = new DebugPortMonitor();
+//        debugPortMonitor.start();
+//
+//        MachinePortMonitor machinePortMonitor = new MachinePortMonitor(this);
+//        machinePortMonitor.start();
 
         try {
             for (TreeModel.Branch branch : tree.getBranches()) {

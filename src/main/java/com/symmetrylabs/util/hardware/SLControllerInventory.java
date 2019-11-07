@@ -124,6 +124,8 @@ public class SLControllerInventory {
                 System.out.println("contains: " + ipAddrString);
                 System.out.println(controllerByIP.get(ipAddrString).macAddr);
                 System.out.println(value.macAddr);
+                System.out.println(value.humanID);
+                System.out.println(controllerByIP.get(ipAddrString).humanID);
                 System.out.println(count++);
             }
             controllerByIP.put(ipAddrString, value);

@@ -10,6 +10,7 @@ import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.slstudio.ui.v2.*;
 import heronarts.lx.LX;
 
+import java.io.IOException;
 import java.util.Collection;
 
 public class SLOutputWindow extends CloseableWindow {
@@ -89,25 +90,51 @@ public class SLOutputWindow extends CloseableWindow {
             // TODO:: impliment this
 //            cc.sendTestPattern = UI.isItemClicked(true) && UI.isAltDown();
 
-            if (!cr.isOpen) {
-                continue;
-            }
-            new ComponentUI(lx, cc, pui).draw();
-            // todo the mapping
+            if (cr.isOpen) {
+                new ComponentUI(lx, cc, pui).draw();
+                // todo the mapping
 //            UI.labelText("Status", mapped ? "mapped" : "unmapped");
-            NetworkDevice nd = cc.networkDevice;
-            if (nd == null) {
-                UI.text("(no network device)");
-            } else {
-                String version = nd.versionId;
-                if (version.isEmpty()) {
-                    version = String.format("%d*", nd.version.get());
+                NetworkDevice nd = cc.networkDevice;
+                if (nd == null) {
+                    UI.text("(no network device)");
+                } else {
+                    String version = nd.versionId;
+                    if (version.isEmpty()) {
+                        version = String.format("%d*", nd.version.get());
+                    }
+                    UI.labelText("Version", version);
+                    UI.labelText("IP", nd.ipAddress.toString());
+                    UI.labelText("Product", nd.productId);
+                    UI.labelText("Device", nd.deviceId);
+                    UI.labelText("Features", String.join(",", nd.featureIds));
                 }
-                UI.labelText("Version", version);
-                UI.labelText("IP", nd.ipAddress.toString());
-                UI.labelText("Product", nd.productId);
-                UI.labelText("Device", nd.deviceId);
-                UI.labelText("Features", String.join(",", nd.featureIds));
+                if(cc.hasPortPowerFeedback){
+                    UI.separator();
+//                    boolean killSwitch[] = new boolean[8];
+//                    for (int i = 0; i < 8; i++){
+//                        killSwitch[i] = ( (cc.pwrMask >>> i) & 0x1) == 0x1;
+//                    }
+                    for (int i = 0; i < 8; i++){
+                        UI.intBox(Integer.toString(i), cc.lastReceivedPowerSample.analogSampleArray[i]);
+//                        UI.sameLine();
+//                        killSwitch[i] = UI.checkbox(Integer.toString(i), killSwitch[i]);
+                    }
+//                    for (int i = 0; i < 8; i++){
+//                        cc.pwrMask |= killSwitch[i] ? 0x1 << i : 0;
+//                    }
+                    try {
+                        cc.killPortPower();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+//                    for (int i = 4; i < 8; i++){
+//                        UI.intBox(Integer.toString(i), cc.lastReceivedPowerSample.analogSampleArray[i]);
+//                        UI.sameLine();
+//                        UI.checkbox(Integer.toString(i), killSwitch[i]);
+//                        UI.sameLine();
+//                    }
+
+                }
             }
         }
         if (dump){
