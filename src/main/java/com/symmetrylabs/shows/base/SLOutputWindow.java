@@ -54,6 +54,10 @@ public class SLOutputWindow extends CloseableWindow {
         boolean collapse = UI.button("collapse all");
         UI.text("alt-click any controller to send test pattern");
 
+        UI.separator();
+        boolean shutoff = UI.button("shutoff");
+        UI.separator();
+
         boolean dump = UI.button("dump metadata to file");
 
         if (dump){
@@ -69,6 +73,9 @@ public class SLOutputWindow extends CloseableWindow {
                 System.out.println( "\"" + cc.networkDevice.ipAddress.toString().split("/")[1] + "\"" + ",");
             }
 
+            if (shutoff){
+                ((TreeController) cc).sendShutoff((byte) 0xff);
+            }
 //            boolean mapped = model.mapping.lookUpByControllerId(cc.id) != null;
             if (false) {
                 UI.pushColor(UI.COLOR_HEADER, UIConstants.BLUE);
@@ -109,6 +116,7 @@ public class SLOutputWindow extends CloseableWindow {
                 UI.labelText("Device", nd.deviceId);
                 UI.labelText("Features", String.join(",", nd.featureIds));
             }
+
         }
         if (dump){
             System.out.println("]");
