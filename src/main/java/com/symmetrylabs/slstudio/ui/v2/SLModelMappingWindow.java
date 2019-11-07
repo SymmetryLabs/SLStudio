@@ -96,6 +96,7 @@ public class SLModelMappingWindow extends CloseableWindow {
             }
 
             UI.CollapseResult cr = UI.collapsibleSection(c.modelId, false);
+//            UI.CollapseResult cr = UI.collapsibleSection(c.modelId, false);
 //            if (UI.beginDragDropTarget()) {
 //                String physId = UI.acceptDragDropPayload("SL.CubePhysId", String.class);
 //                if (physId != null) {

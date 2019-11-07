@@ -184,4 +184,9 @@ public class JapanTreeShow extends TreeShow {
                 }
             });
     }
+
+    @Override
+    public String getShowName() {
+        return SHOW_NAME;
+    }
 }

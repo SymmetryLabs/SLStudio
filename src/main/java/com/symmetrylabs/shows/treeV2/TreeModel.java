@@ -298,7 +298,7 @@ public class TreeModel extends SLModel {
 
                 // for (int i = 0; i < NUM_LEAVES; ++i) {
                 //   Leaf.Config leafConfig = LEAVES[i];
-                //   t.push();	
+                //   t.push();
                 //   t.translate(leafConfig.x, leafConfig.y, (i % 3) * (.1f*INCHES));
                 //   t.rotateZ(leafConfig.theta * PI / 180.);
                 //   Leaf leaf = new Leaf(t, leafConfig);
@@ -421,5 +421,9 @@ public class TreeModel extends SLModel {
                 t.pop();
             }
         }
+    }
+    @Override
+    public /* abstract */ Iterator<? extends SLModel> getMappableFixtures(){
+        return branches.iterator();
     }
 }

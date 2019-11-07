@@ -20,10 +20,17 @@ public class SLControllerInventory {
     private final static String TREE_INVENTORY_FILENAME = "tree-inventory.json";
     private final static String MAC_TO_HUMAN_ID_FILENAME = "mac_to_humanID.json";
 
+    public String getHostAddressByControllerID(String controllerId) {
+        ControllerMetadata controller = treeInventoryMap.get(controllerId);
+        String hostAddr = controller == null ? "0.0.0.0" : controller.ipAddr.getHostAddress();
+        return hostAddr;
+    }
+
     public class ControllerMetadata{
         @Expose
         Inet4Address ipAddr;
 
+        @Expose
         MACAddress macAddress;
         @Expose
         String macAddr;
@@ -52,21 +59,28 @@ public class SLControllerInventory {
         public String getHumanID() {
             return humanID;
         }
+
+        public String getHostAddress() { return ipAddr.getHostAddress(); }
     }
 
     ArrayList<ControllerMetadata> treeInventory = new ArrayList<>();
 
     public TreeMap<String, ControllerMetadata> treeInventoryMap = new TreeMap<>();
 
-    public final transient Map<String, CubeInventory.PhysicalCube> controllerByMacAddrs = new TreeMap<>();
-    public final transient Map<String, CubeInventory.PhysicalCube> controllerByCtrlId = new TreeMap<>();
+//    public final transient Map<String, CubeInventory.PhysicalCube> controllerByMacAddrs = new TreeMap<>();
+//    public final transient Map<String, CubeInventory.PhysicalCube> controllerByCtrlId = new TreeMap<>();
 
     public SLControllerInventory(){
         try {
-            this.loadFromDisk();
-        } catch (FileNotFoundException e) {
+            parseInRawToMapByHumanID();
+        } catch (IOException e) {
             e.printStackTrace();
         }
+//        try {
+//            this.loadFromDisk();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void parseInRawToMapByHumanID() throws IOException {

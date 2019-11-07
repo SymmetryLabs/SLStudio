@@ -341,6 +341,11 @@ public class KalpaShow extends TreeShow {
         // new UITreeControls(ui, uiTreeStructure, uiTreeLeaves).setExpanded(false).addToContainer(ui.leftPane.global);
         new UIPixlites(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
     }
+
+    @Override
+    public String getShowName() {
+        return SHOW_NAME;
+    }
 }
 
 class UIRocoBuilding extends UI3dComponent {

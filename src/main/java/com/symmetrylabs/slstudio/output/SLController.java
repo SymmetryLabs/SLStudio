@@ -85,8 +85,8 @@ public class SLController extends LXOutput implements Comparable<SLController>, 
 
     @Override
     protected void onSend(int[] colors) {
-        if (isBroadcast != SLStudio.applet.outputControl.broadcastPacket.isOn())
-            return;
+//        if (isBroadcast != SLStudio.applet.outputControl.broadcastPacket.isOn())
+//            return;
 
         // Create data socket connection if needed
         if (dsocket == null) {

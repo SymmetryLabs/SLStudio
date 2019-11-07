@@ -38,7 +38,7 @@ import java.util.Map;
 
 public class NateOsloShow extends SLShow implements Show {
 
-    public static final String SHOW_NAME = "oslo";
+    public static final String SHOW_NAME = "NateOslo";
 
     public final Map<TreeModel.Branch, AssignableTenereController> treeControllers = new HashMap<>();
 
@@ -54,12 +54,12 @@ public class NateOsloShow extends SLShow implements Show {
         }
         lx.engine.registerComponent("treeModelingTool", TreeModelingTool.getInstance(lx, readConfig));
 
-
+//
         TreeModel tree = (TreeModel) (lx.model);
-        TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
+//        TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
 
-        System.out.println("Number of branches: " + tree.getBranches().size());
-
+//        System.out.println("Number of branches: " + tree.getBranches().size());
+//
 
         DebugPortMonitor debugPortMonitor = new DebugPortMonitor();
         debugPortMonitor.start();
@@ -67,102 +67,20 @@ public class NateOsloShow extends SLShow implements Show {
         MachinePortMonitor machinePortMonitor = new MachinePortMonitor();
         machinePortMonitor.start();
 
-        String ips[] = { "10.1.20.138",
-            "10.128.24.140",
-            "10.128.28.142",
-            "10.128.38.19",
-            "10.128.49.24",
-            "10.128.9.132",
-            "10.128.14.135",
-            "10.0.13.6",
-            "10.128.27.141",
-            "10.128.33.144",
-            "10.128.38.147",
-            "10.128.42.21",
-            "10.1.6.131",
-            "10.129.39.19",
-            "10.129.68.34",
-            "10.129.5.2",
-            "10.1.45.150",
-            "10.129.27.13",
-            "10.129.41.148",
-            "10.129.53.26",
-            "10.129.66.33",
-            "10.129.69.162",
-            "10.2.49.152",
-            "10.2.53.154",
-            "10.2.55.155",
-            "10.2.7.131",
-            "10.130.18.137",
-            "10.130.31.15",
-            "10.130.37.146",
-            "10.130.41.148",
-            "10.130.48.24",
-            "10.130.53.26",
-            "10.130.56.28",
-            "10.130.57.156",
-            "10.130.66.161",
-            "10.130.67.33",
-            "10.2.19.9",
-            "10.2.20.138",
-            "10.2.26.141",
-            "10.2.38.19",
-            "10.2.39.19",
-            "10.2.47.151",
-            "10.2.48.24",
-            "10.2.54.27",
-            "10.2.54.155",
-            "10.2.57.28",
-            "10.2.3.129",
-            "10.2.58.29",
-            "10.2.58.157",
-            "10.2.60.158",
-            "10.2.67.161",
-            "10.2.4.130",
-            "10.2.10.133",
-            "10.130.18.9",
-            "10.130.23.11",
-            "10.130.26.141",
-            "10.130.33.144",
-            "10.130.39.19",
-            "10.130.43.149",
-            "10.130.44.150",
-            "10.130.48.152",
-            "10.130.54.27",
-            "10.130.59.157",
-            "10.130.60.30",
-            "10.130.14.7",
-            "10.130.15.7",
-            "10.3.64.160",
-            "10.3.10.133",
-            "10.4.33.144",
-            "10.4.49.24",
-            "10.4.53.26",
-            "10.4.5.130",
-            "10.4.26.141",
-            "10.4.10.133",
-            "10.5.36.18",
-            "10.5.52.154",
-            "10.5.55.27",
-            "10.5.73.164",
-            "10.5.109.54" };
-
-        int increment = 0;
         try {
             for (TreeModel.Branch branch : tree.getBranches()) {
                 AssignableTenereController controller = new AssignableTenereController(lx, branch);
 //                controller.brightness.setValue(0.7);
-                controller.setIpAddress(ips[increment]);
-                increment++;
                 treeControllers.put(branch, controller);
                 lx.addOutput(controller);
             }
         } catch (SocketException e) { }
 
-        modeler.branchManipulator.ipAddress.addListener(param -> {
-            AssignableTenereController controller = treeControllers.get(modeler.getSelectedBranch());
-            controller.setIpAddress(modeler.branchManipulator.ipAddress.getString());
-        });
+//        modeler.branchManipulator.ipAddress.addListener(param -> {
+//            AssignableTenereController controller = treeControllers.get(modeler.getSelectedBranch());
+//            controller.setIpAddress(modeler.branchManipulator.ipAddress.getString());
+//        });
+        lx.engine.output.enabled.setValue(false);
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
