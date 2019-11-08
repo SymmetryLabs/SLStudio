@@ -3,11 +3,11 @@ package com.symmetrylabs.slstudio.effect;
 import com.symmetrylabs.slstudio.effect.SLEffect;
 import com.symmetrylabs.slstudio.kernel.SLKernel;
 import heronarts.lx.LX;
-import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.CompoundParameter;
 
 
 public class ColorShiftEffect extends SLEffect {
-    public BoundedParameter shift = new BoundedParameter("Shift", 0, 360);
+    public CompoundParameter shift = new CompoundParameter("Shift", 0, 360);
 
     private final ColorShiftKernel kernel = new ColorShiftKernel();
 
