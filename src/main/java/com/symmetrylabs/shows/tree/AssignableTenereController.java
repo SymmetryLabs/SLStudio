@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.net.InetAddress;
+import java.util.HashMap;
 
+import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 import heronarts.lx.parameter.StringParameter;
 
@@ -62,11 +64,13 @@ public class AssignableTenereController extends LXDatagramOutput {
             });
 	}
 
+	static HashMap<String, AssignableTenereController> allImportedIps = new HashMap<>();
 	// TODO: undo copied code from above
     public AssignableTenereController(LX lx, com.symmetrylabs.shows.treeV2.TreeModel.Branch branch, SLControllerInventory slControllerInventory) throws SocketException {
         super(lx);
         this.lx = lx;
-        this.ipAddress = slControllerInventory.getHostAddressByControllerID(branch.controllerId.getString());// "HumanID"
+        String ipIn = slControllerInventory.getHostAddressByControllerID(branch.controllerId.getString());
+        this.ipAddress = ipNotAlreadyAlocated(ipIn, this) ? ipIn : "0.0.0.0"; // only assign ip if it's hasn't been taken in
         this.branch_v2 = branch;
 
         packets = new int[][] {
@@ -81,6 +85,17 @@ public class AssignableTenereController extends LXDatagramOutput {
         updateIndexesFromBranch2();
     }
 
+    private boolean ipNotAlreadyAlocated(String ipIn, AssignableTenereController branch) {
+        if (allImportedIps.containsKey(ipIn)){
+            System.out.println("Oops.. " + ipIn + " was already allocated to controller: " + allImportedIps.get(ipIn).branch_v2.controllerId);
+            return false;
+        }
+        else {
+            allImportedIps.put(ipIn, this);
+            return true;
+        }
+    }
+
     public void updateIndexesFromBranch2() {
         for (int i = 0; i < packets.length; ++i) {
             // Initialize to nothing
@@ -92,18 +107,10 @@ public class AssignableTenereController extends LXDatagramOutput {
         for (com.symmetrylabs.shows.treeV2.TreeModel.Twig twig : branch_v2.twigs) {
             int index = twig.index;
             int packet = index / TWIGS_PER_PACKET; // truncates to floor
-            int pindex = TreeModel.Twig.NUM_LEDS * (index - (TWIGS_PER_PACKET * packet));
+            int pindex = com.symmetrylabs.shows.treeV2.TreeModel.Twig.NUM_LEDS * (index - (TWIGS_PER_PACKET * packet));
             for (int indexInTwig = 0; indexInTwig < twig.points.length; indexInTwig++) {
                 boolean skip = false;
-//                int[] disabled = twig.getConfig().disabledPixels;
-//                if (disabled != null) {
-//                    for (int d = 0; d < disabled.length; d++) {
-//                        if (disabled[d] == indexInTwig) {
-//                            skip = true;
-//                        }
-//                    }
-//                }
-                packets[packet][pindex++] = skip ? -1 : twig.points[indexInTwig].index;
+                packets[packet][pindex++] = twig.points[indexInTwig].index;
             }
         }
 

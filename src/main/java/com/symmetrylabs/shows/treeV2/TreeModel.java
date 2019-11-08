@@ -204,7 +204,7 @@ public class TreeModel extends SLModel {
 
 				for (int i = 0; i < NUM_TWIGS; i++) {
 					t.push();
-					twigs.add(new Twig(t, config.getTwigMatrix(i)));
+					twigs.add(new Twig(t, config.getTwigMatrix(i), i));
 					t.pop();
 				}
 			}
@@ -253,7 +253,7 @@ public class TreeModel extends SLModel {
         //   }
         // }
 
-        public Twig(LXTransform t, LXMatrix m) {
+        public Twig(LXTransform t, LXMatrix m, int i) {
             super("Twig", new Fixture(t, m));
 
             Fixture f = (Fixture) this.fixtures.get(0);
@@ -261,6 +261,7 @@ public class TreeModel extends SLModel {
             this.x = f.x;
             this.y = f.y;
             this.z = f.z;
+            this.index = i;
         }
 
         public String toString() {

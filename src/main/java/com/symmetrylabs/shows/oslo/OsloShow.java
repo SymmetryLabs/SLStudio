@@ -27,7 +27,7 @@ import static com.symmetrylabs.util.MathConstants.*;
 import static com.symmetrylabs.util.MathUtils.*;
 
 
-public class OsloShow extends SLShow {
+public class OsloShow extends TreeShow {
     public static final String SHOW_NAME = "Oslo";
 
     // put in to json?
@@ -341,10 +341,5 @@ public class OsloShow extends SLShow {
         //ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
 
         //new UITenereControllers(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
-    }
-
-    @Override
-    public String getShowName() {
-        return SHOW_NAME;
     }
 }
