@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.symmetrylabs.shows.treeV2.TreeModel;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 import org.apache.commons.collections4.IteratorUtils;
 
@@ -23,6 +24,7 @@ public class SLModel extends LXModel {
     public static final int OCTREE_INDEX_MIN_POINTS = 1000;
 
     public final SLControllerInventory inventory;
+    public String controllerId = null;
 
     private ModelIndex modelIndex, modelIndexZFlattened;
 
@@ -59,6 +61,12 @@ public class SLModel extends LXModel {
         this.inventory = inventory;
 
         setupPointsArray();
+    }
+
+    public SLModel(String modelId, String controllerId, LXFixture fixture) {
+        super(modelId, fixture);
+        this.inventory = null;
+        this.controllerId = controllerId;
     }
 
     private void setupPointsArray() {

@@ -96,7 +96,6 @@ public class SLModelMappingWindow extends CloseableWindow {
             }
 
             UI.CollapseResult cr = UI.collapsibleSection(c.modelId, false);
-//            UI.CollapseResult cr = UI.collapsibleSection(c.modelId, false);
 //            if (UI.beginDragDropTarget()) {
 //                String physId = UI.acceptDragDropPayload("SL.CubePhysId", String.class);
 //                if (physId != null) {
@@ -112,7 +111,7 @@ public class SLModelMappingWindow extends CloseableWindow {
 
             UI.inputFloat3("position##" + i, new float[] {c.ax, c.ay, c.az, c.cx, c.cy, c.cz}, UI.INPUT_TEXT_FLAG_READ_ONLY);
 
-            UI.labelText("idA", c.modelId == null ? "(null)" : c.modelId);
+            UI.labelText("controllerID", c.controllerId == null ? "(null)" : c.controllerId);
 
 //            String oldPhysId = pia == null ? "" : pia.physicalId;
 //            String newPhysId = UI.inputText(String.format("physid##%d", i), oldPhysId);

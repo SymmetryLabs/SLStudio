@@ -168,7 +168,7 @@ public class TreeModel extends SLModel {
 		public final List<Leaf> leaves;
 
 		public Branch(BranchConfig config) {
-			super("Branch", new Fixture(config));
+			super(config.getModelId(), config.getControllerId(), new Fixture(config));
 			this.config = config;
 			this.modelId = config.getModelId();
 			this.controllerId = new StringParameter("controllerID", config.getControllerId());
