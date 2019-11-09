@@ -175,6 +175,11 @@ public class AbsintheShow extends TreeShow {
 
         new UITenereControllers(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
     }
+
+    @Override
+    public String getShowName() {
+        return SHOW_NAME;
+    }
 }
 
 class UITent extends UI3dComponent {

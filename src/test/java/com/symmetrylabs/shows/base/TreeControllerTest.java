@@ -74,4 +74,28 @@ class TreeControllerTest {
 //            machinePortMonitor.keepAlive(true);
 //        } while(delta  < TEST_TIME_MILLIS );
     }
+
+    @org.junit.Test
+    public void testSendOPCSysEx1() {
+    }
+
+    @org.junit.Test
+    public void sendShutoff() {
+        VolumeServer volumeServer = new VolumeServer();
+        volumeServer.start();
+        LX lx = volumeServer.core.lx;
+
+        InetAddress inetAddr;
+        NetworkDevice networkDevice = null;
+        try {
+            inetAddr = InetAddress.getByName("10.2.42.21");
+            networkDevice = NetworkDevice.fromIdentifier(inetAddr, "symmeTree/14a7cf7 (tree_rgb8,powerManager) [e::7::b::5::2f::17]".getBytes());
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        PointsGrouping pointsGrouping = new PointsGrouping();
+
+        TreeController controller = new TreeController(lx, networkDevice, networkDevice.ipAddress, pointsGrouping, true, "hi");
+        controller.sendShutoff();
+    }
 }

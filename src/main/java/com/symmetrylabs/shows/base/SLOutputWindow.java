@@ -146,6 +146,7 @@ public class SLOutputWindow extends CloseableWindow {
 
                 }
             }
+
         }
         if (dump){
             System.out.println("]");

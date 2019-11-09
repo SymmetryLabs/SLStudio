@@ -34,10 +34,17 @@ public class SLControllerInventory {
         void onControllerListUpdated();
     }
 
+    public String getHostAddressByControllerID(String controllerId) {
+        ControllerMetadata controller = treeInventoryMap.get(controllerId);
+        String hostAddr = controller == null ? "0.0.0.0" : controller.ipAddr.getHostAddress();
+        return hostAddr;
+    }
+
     public class ControllerMetadata{
         @Expose
         Inet4Address ipAddr;
 
+        @Expose
         MACAddress macAddress;
         @Expose
         String macAddr;
@@ -66,6 +73,8 @@ public class SLControllerInventory {
         public String getHumanID() {
             return humanID;
         }
+
+        public String getHostAddress() { return ipAddr.getHostAddress(); }
     }
 
     ArrayList<ControllerMetadata> treeInventory = new ArrayList<>();
@@ -78,10 +87,15 @@ public class SLControllerInventory {
 
     public SLControllerInventory(){
         try {
-            this.loadFromDisk();
-        } catch (FileNotFoundException e) {
+            parseInRawToMapByHumanID();
+        } catch (IOException e) {
             e.printStackTrace();
         }
+//        try {
+//            this.loadFromDisk();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void onUpdated() {

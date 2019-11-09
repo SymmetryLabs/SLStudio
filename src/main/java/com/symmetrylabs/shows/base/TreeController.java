@@ -57,5 +57,40 @@ public class TreeController extends SLController {
         return System.currentTimeMillis();
     }
 
+    public long sendShutoff(byte cmd){
+//        OpcSysExMsg requestID = new OpcSysExMsg(0, 2, 0, new byte[0]);
+
+        // cmd bytes
+        byte[] bytes = new byte[1];
+        bytes[0] = cmd;
+
+        OpcSysExMsg setPwrPortStateCmd = new OpcSysExMsg(0, 2, 0x41, bytes );
+        try {
+            machineSock = new DatagramSocket();
+            machineSock.connect(new InetSocketAddress(networkDevice.ipAddress, DEFAULT_TREE_CONTROLLER_PORT));
+            machineSock.send(setPwrPortStateCmd.getDatagramPacket());
+        } catch (SocketException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("couldn't send packet");
+        }
+        byte respBuf[] = new byte[256];
+        DatagramPacket recvPacket = new DatagramPacket(respBuf, 256);
+//        try {
+//            machineSock.receive(recvPacket);
+//            System.out.println(new String(recvPacket.getData(), 8, recvPacket.getLength() - 8));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        try {
+            machineSock.send(setPwrPortStateCmd.getDatagramPacket());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return System.currentTimeMillis();
+    }
 
 }

@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class OsloShowTest {
+public class NateOsloShowTest {
 
     @Test
     public void AssignOutput(){
