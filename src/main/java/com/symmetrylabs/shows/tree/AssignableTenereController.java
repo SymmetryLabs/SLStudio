@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.net.InetAddress;
+import java.util.HashMap;
 
 import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
+import com.symmetrylabs.util.hardware.SLControllerInventory;
 import heronarts.lx.parameter.StringParameter;
 
 import heronarts.lx.LX;
@@ -66,7 +68,7 @@ public class AssignableTenereController extends AbstractSLControllerBase {
 	static HashMap<String, AssignableTenereController> allImportedIps = new HashMap<>();
 	// TODO: undo copied code from above
     public AssignableTenereController(LX lx, com.symmetrylabs.shows.treeV2.TreeModel.Branch branch, SLControllerInventory slControllerInventory) throws SocketException {
-        super(lx);
+        super(lx, slControllerInventory.getHostAddressByControllerID(branch.controllerId.getString()));
         this.lx = lx;
         String ipIn = slControllerInventory.getHostAddressByControllerID(branch.controllerId.getString());
         this.ipAddress = ipNotAlreadyAlocated(ipIn, this) ? ipIn : "0.0.0.0"; // only assign ip if it's hasn't been taken in

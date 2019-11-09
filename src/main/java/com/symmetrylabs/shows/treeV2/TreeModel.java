@@ -22,7 +22,7 @@ public class TreeModel extends SLModel {
 	public final List<Leaf> leaves;
 
 	public TreeModel(TreeConfig config) {
-		super("Oslo", new Fixture(config));
+		super("oslo", new Fixture(config));
 
 		Fixture f = (Fixture) this.fixtures.get(0);
 		this.limbs  = Collections.unmodifiableList(f.limbs);

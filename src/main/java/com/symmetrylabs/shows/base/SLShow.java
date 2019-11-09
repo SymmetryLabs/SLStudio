@@ -116,9 +116,6 @@ public abstract class SLShow implements Show {
         });
 
         System.out.println("set up controllers");
-
-        DebugPortMonitor debugPortMonitor = new DebugPortMonitor();
-        debugPortMonitor.start();
     }
 
     public SLController getControllerByDevice(NetworkDevice device) {

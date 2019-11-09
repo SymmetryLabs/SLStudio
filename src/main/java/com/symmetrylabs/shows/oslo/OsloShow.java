@@ -10,6 +10,8 @@ import java.net.SocketException;
 import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.shows.tree.AssignableTenereController;
 import com.symmetrylabs.shows.tree.TreeModelingTool;
+import com.symmetrylabs.util.NetworkChannelDebugMonitor.DebugPortMonitor;
+import com.symmetrylabs.util.NetworkChannelDebugMonitor.MachinePortMonitor;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
@@ -27,8 +29,8 @@ import static com.symmetrylabs.util.MathConstants.*;
 import static com.symmetrylabs.util.MathUtils.*;
 
 
-public class OsloShow extends TreeShow {
-    public static final String SHOW_NAME = "Oslo";
+public class OsloShow extends SLShow {
+    public static final String SHOW_NAME = "oslo";
 
     // put in to json?
     final LimbConfig[] LIMB_CONFIGS = new LimbConfig[] {
@@ -322,17 +324,17 @@ public class OsloShow extends TreeShow {
         SLControllerInventory slControllerInventory = new SLControllerInventory();
         try {
             for (TreeModel.Branch branch : tree.getBranches()) {
-                AssignableTenereController controller = new AssignableTenereController(lx, branch);
+                AssignableTenereController controller = new AssignableTenereController(lx, branch, slControllerInventory);
 //                controller.brightness.setValue(1);
-                treeControllers.put(branch, controller);
+//                treeControllers.put(branch, controller);
                 lx.addOutput(controller);
             }
         } catch (SocketException e) { }
 
-        modeler.branchManipulator.ipAddress.addListener(param -> {
-            AssignableTenereController controller = treeControllers.get(modeler.getSelectedBranch());
-            controller.setIpAddress(modeler.branchManipulator.ipAddress.getString());
-        });
+//        modeler.branchManipulator.ipAddress.addListener(param -> {
+//            AssignableTenereController controller = treeControllers.get(modeler.getSelectedBranch());
+//            controller.setIpAddress(modeler.branchManipulator.ipAddress.getString());
+//        });
         lx.engine.output.enabled.setValue(false);
     }
 
@@ -341,5 +343,10 @@ public class OsloShow extends TreeShow {
         //ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
 
         //new UITenereControllers(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
+    }
+
+    @Override
+    public String getShowName() {
+        return SHOW_NAME;
     }
 }

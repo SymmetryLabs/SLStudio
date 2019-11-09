@@ -64,7 +64,7 @@ public class NateOsloShow extends SLShow implements Show {
         DebugPortMonitor debugPortMonitor = new DebugPortMonitor();
         debugPortMonitor.start();
 
-        MachinePortMonitor machinePortMonitor = new MachinePortMonitor();
+        MachinePortMonitor machinePortMonitor = new MachinePortMonitor(this);
         machinePortMonitor.start();
 
         try {
