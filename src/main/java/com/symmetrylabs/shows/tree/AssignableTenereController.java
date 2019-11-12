@@ -41,11 +41,15 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
     private boolean hasPortPowerFeedback;
     private final BooleanParameter[] pwrMask = new BooleanParameter[8];
     private int pwrMaskByte = 0;
+    DiscreteParameter blackoutPowerThreshold = new DiscreteParameter("Blackout", 0, 4095);
+    BooleanParameter blackoutRogueLEDsActive = new BooleanParameter("Activate blackout procedure", false);
+
 
 //    public DiscreteParameter blackoutPowerThreshold = new DiscreteParameter("Blackout", 0, 4095);
 //    public final BooleanParameter blackoutRogueLEDsActive = new BooleanParameter("Activate blackout procedure", false);
     private MetaSample lastReceivedPowerSample = null;
 
+    // ARRRRrrrrgggggghhhh delete these...
     public AssignableTenereController(LX lx, TreeModel.Branch branch) throws SocketException {
 		super(lx, branch.getConfig().ipAddress);
         this.lx = lx;
@@ -81,18 +85,7 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
             });
 	}
 
-    private void addPowerParameters() {
-        for (int i = 0; i < 8; i++){
-            pwrMask[i] = new BooleanParameter("pwr"+i, false);
-            addParameter("pwr" + i, pwrMask[i]);
-        }
-        addParameter(blackoutPowerThreshold);
-        addParameter(blackoutRogueLEDsActive);
-
-    }
-
-    private static HashMap<String, AssignableTenereController> allImportedIps = new HashMap<>();
-	// TODO: undo copied code from above
+    // ARRRRrrrrgggggghhhh delete these...
     public AssignableTenereController(LX lx, com.symmetrylabs.shows.treeV2.TreeModel.Branch branch, SLControllerInventory slControllerInventory) throws SocketException {
         super(lx, slControllerInventory.getHostAddressByControllerID(branch.controllerId.getString()));
         this.lx = lx;
@@ -118,6 +111,8 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
         this.ipAddress = device.ipAddress.getHostAddress();
         this.branch = branch;
 
+        addPowerParameters();
+
         pixelColors = new int[][] {
             new int[POINTS_PER_PACKET],
             new int[POINTS_PER_PACKET],
@@ -128,6 +123,19 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
             enabled.setValue(false);
         }
     }
+
+    private void addPowerParameters() {
+        for (int i = 0; i < 8; i++){
+            pwrMask[i] = new BooleanParameter("pwr"+i, false);
+            addParameter("pwr" + i, pwrMask[i]);
+        }
+        addParameter(blackoutPowerThreshold);
+        addParameter(blackoutRogueLEDsActive);
+
+    }
+
+    private static HashMap<String, AssignableTenereController> allImportedIps = new HashMap<>();
+	// TODO: undo copied code from above
 
     private boolean ipNotAlreadyAllocated(String ipIn, AssignableTenereController branch) {
         if (allImportedIps.containsKey(ipIn)){
@@ -246,7 +254,17 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
     @Override
     protected void fillDatagramsAndAddToOutput() {
         clearDatagrams();
-        addDatagrams(new TenereDatagramSet(lx, pixelColors, networkDevice).getDatagrams());
+        if (testOutput.isOn()){
+            // raw unmapped colors
+            addDatagrams(new TenereDatagramSet(lx, pixelColors, networkDevice).getDatagrams());
+        }
+        else if (unmappedSendBlack.isOn()){
+            // otherwise use color buffer indices
+            addDatagrams(new TenereDatagramSet(lx, pixelColors, networkDevice).getDatagrams());
+        }
+        else {
+            // finally .. ok we actually have a fixture
+        }
     }
 
     public void writeSample(MetaSample metaPowerSample) {
@@ -290,12 +308,14 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
             byte[] packetData = data.array();
             int packetSizeBytes = packetData.length;
             DatagramPacket packet = new DatagramPacket(packetData, packetSizeBytes);
-            if (dsocket == null){
+            packet.setAddress(networkDevice.ipAddress);
+            packet.setPort(1337); // static port?
+            if (this.socket == null){
                 System.out.println("No socket for some reason?");
             }
             else{
                 try {
-                    dsocket.send( packet );
+                    this.socket.send( packet );
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -306,5 +326,15 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
     @Override
     public MetaSample getLastSample() {
         return lastReceivedPowerSample;
+    }
+
+    @Override
+    public void enableBlackoutProcedure(boolean b) {
+        blackoutRogueLEDsActive.setValue(b);
+    }
+
+    @Override
+    public void setBlackoutThreshhold(int valuei) {
+        blackoutPowerThreshold.setValue(valuei);
     }
 }

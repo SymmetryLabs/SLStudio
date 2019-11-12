@@ -320,16 +320,14 @@ public class OsloShow extends SLShow {
         MachinePortMonitor machinePortMonitor = new MachinePortMonitor(this);
         machinePortMonitor.start();
 
-        int increment = 0;
-        SLControllerInventory slControllerInventory = new SLControllerInventory();
-        try {
-            for (TreeModel.Branch branch : tree.getBranches()) {
-                AssignableTenereController controller = new AssignableTenereController(lx, branch, slControllerInventory);
-//                controller.brightness.setValue(1);
-//                treeControllers.put(branch, controller);
-                lx.addOutput(controller);
-            }
-        } catch (SocketException e) { }
+//        try {
+//            for (TreeModel.Branch branch : tree.getBranches()) {
+//                AssignableTenereController controller = new AssignableTenereController(lx, branch, slControllerInventory);
+////                controller.brightness.setValue(1);
+////                treeControllers.put(branch, controller);
+//                lx.addOutput(controller);
+//            }
+//        } catch (SocketException e) { }
 
 //        modeler.branchManipulator.ipAddress.addListener(param -> {
 //            AssignableTenereController controller = treeControllers.get(modeler.getSelectedBranch());

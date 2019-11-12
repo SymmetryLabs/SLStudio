@@ -40,7 +40,7 @@ import static heronarts.lx.PolyBuffer.Space.RGB8;
  */
 public class LXDatagramOutput extends LXOutput {
 
-    private final DatagramSocket socket;
+    protected final DatagramSocket socket;
 
     private final Map<InetAddress, LXDatagramDestination> destinations = new HashMap<InetAddress, LXDatagramDestination>();
     private final List<LXDatagram> datagrams = new ArrayList<LXDatagram>();

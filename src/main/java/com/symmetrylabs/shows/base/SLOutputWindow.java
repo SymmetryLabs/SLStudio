@@ -78,8 +78,8 @@ public class SLOutputWindow extends CloseableWindow {
 
             if (cc instanceof ControllerWithPowerFeedback){
                 if (blackout){
-                    ((ControllerWithPowerFeedback) cc).blackoutRogueLEDsActive.setValue(true);
-                    ((ControllerWithPowerFeedback) cc).blackoutPowerThreshold.setValue(show.globalBlackoutPowerThreshhold.getValuei());
+                    ((ControllerWithPowerFeedback) cc).enableBlackoutProcedure(true);
+                    ((ControllerWithPowerFeedback) cc).setBlackoutThreshhold(show.globalBlackoutPowerThreshhold.getValuei());
                     ((ControllerWithPowerFeedback) cc).killByThreshHold();
                 }
             }
@@ -124,15 +124,14 @@ public class SLOutputWindow extends CloseableWindow {
                 }
 
                 if(cc instanceof ControllerWithPowerFeedback){
-                    UI.separator();
-                    for (int i = 0; i < 8; i++){
-                        if ( ((ControllerWithPowerFeedback) cc).getLastSample() != null ) {
+                    if ( ((ControllerWithPowerFeedback) cc).getLastSample() != null ) {
+                        for (int i = 0; i < 8; i++){
                             UI.intBox(Integer.toString(i), ((ControllerWithPowerFeedback) cc).getLastSample().analogSampleArray[i]);
                         }
 //                        UI.sameLine();
 //                        killSwitch[i] = UI.checkbox(Integer.toString(i), killSwitch[i]);
+                        ((ControllerWithPowerFeedback) cc).killPortPower();
                     }
-                    ((ControllerWithPowerFeedback) cc).killPortPower();
                 }
             }
 

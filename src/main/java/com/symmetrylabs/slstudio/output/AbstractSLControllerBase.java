@@ -30,11 +30,13 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
     private final PerceptualColorScale outputScaler; // should this really be part of the controller logic?
     private final SLControllerInventory inventory;
     protected int numPixels;
-    protected DatagramSocket dsocket;
     protected boolean is16BitColorEnabled = false;
 
     // must be public to render?
     public BooleanParameter testOutput = new BooleanParameter("send test data", false);
+
+    // variable set to true when on network, and unmapped "should be black
+    protected BooleanParameter unmappedSendBlack = new BooleanParameter("black when unmapped", true);
 
     private final LX lx;
     private int port;
@@ -132,19 +134,19 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
             return;
 
         // Create data socket connection if needed
-        if (dsocket == null) {
-            try {
-                dsocket = new DatagramSocket();
-                dsocket.connect(new InetSocketAddress(networkDevice.ipAddress.getHostName(), this.port));
-            }
-            catch (IOException e) {}
-            finally {
-                if (dsocket == null) {
-                    ApplicationState.setWarning("AbstractSLController", "could not create datagram socket");
-                    return;
-                }
-            }
-        }
+//        if (dsocket == null) {
+//            try {
+//                dsocket = new DatagramSocket();
+//                dsocket.connect(new InetSocketAddress(networkDevice.ipAddress.getHostName(), this.port));
+//            }
+//            catch (IOException e) {}
+//            finally {
+//                if (dsocket == null) {
+//                    ApplicationState.setWarning("AbstractSLController", "could not create datagram socket");
+//                    return;
+//                }
+//            }
+//        }
 
         // Find the Cube we're outputting to
         // If we're on broadcast, use cube 0 for all cubes, even
@@ -230,9 +232,11 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
         } else {
             // Fill with all black if we don't have cube data
 //            initPacketData(numPixels, false);
+            unmappedSendBlack.setValue(true);
             for (int i = 0; i < numPixels; i++) {
                 setPixel8(i, LXColor.BLACK);
             }
+            fillDatagramsAndAddToOutput();
         }
 
 
@@ -252,10 +256,10 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
     protected abstract void fillDatagramsAndAddToOutput();
 
     private void resetSocket() {
-        if (dsocket != null) {
+        if (socket != null) {
             System.out.println("closing socket for controller: " + this.id + "---" + this.networkDevice.ipAddress);
-            dsocket.close();
-            dsocket = null;
+            socket.close();
+//            dsocket = null;
         }
     }
 

@@ -7,9 +7,6 @@ import java.io.IOException;
 
 public interface ControllerWithPowerFeedback {
 
-    DiscreteParameter blackoutPowerThreshold = new DiscreteParameter("Blackout", 0, 4095);
-    BooleanParameter blackoutRogueLEDsActive = new BooleanParameter("Activate blackout procedure", false);
-
     void writeSample(MetaSample metaPowerSample);
 
     // flips port power if above threshold (like a digital breaker)
@@ -19,4 +16,8 @@ public interface ControllerWithPowerFeedback {
     void killPortPower();
 
     MetaSample getLastSample();
+
+    void enableBlackoutProcedure(boolean b);
+
+    void setBlackoutThreshhold(int valuei);
 }
