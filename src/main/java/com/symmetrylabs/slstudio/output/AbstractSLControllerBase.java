@@ -156,20 +156,21 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
 //        }
 
         PointsGrouping points = null;
-        CubesModel cubesModel = (CubesModel)lx.model;
-
-        if ((ApplicationState.outputControl().testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
-            CubesModel.Cube cube = cubesModel.getCubes().get(0);
-            if (cube instanceof CubesModel.DoubleControllerCube) {
-                points = ((CubesModel.DoubleControllerCube)cube).getPointsA();
-            }
-            else {
-                points = new PointsGrouping(cube.getPoints());
-            }
-        } else {
-            points = cubesModel.getControllerPoints(id);
-        }
-        numPixels = points == null ? 0 : points.size();
+//        CubesModel cubesModel = (CubesModel)lx.model;
+//
+//        if ((ApplicationState.outputControl().testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
+//            CubesModel.Cube cube = cubesModel.getCubes().get(0);
+//            if (cube instanceof CubesModel.DoubleControllerCube) {
+//                points = ((CubesModel.DoubleControllerCube)cube).getPointsA();
+//            }
+//            else {
+//                points = new PointsGrouping(cube.getPoints());
+//            }
+//        } else {
+//            points = cubesModel.getControllerPoints(id);
+//        }
+//        numPixels = points == null ? 0 : points.size();
+        numPixels = 0;
 
         // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
         // TODO: refactor here
@@ -203,9 +204,9 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
             int c = 0;
             switch (col) {
             /* don't use full-bright colors here, since they bust some of our fixtures. */
-            case 0: c = 0xFF020000; break;
-            case 1: c = 0xFF000200; break;
-            case 2: c = 0xFF000002; break;
+            case 0: c = 0xFFf20000; break;
+            case 1: c = 0xFF00f200; break;
+            case 2: c = 0xFF0000f2; break;
             }
             /* we want the test pattern to work even if we aren't mapped, and if
                we aren't mapped we don't know how many pixels we have. Since
