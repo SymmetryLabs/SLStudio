@@ -25,6 +25,7 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.p3lx.ui.UI2dScrollContext;
 
+import java.io.FileNotFoundException;
 import java.lang.ref.WeakReference;
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -76,6 +77,12 @@ public abstract class SLShow implements Show {
         controllers.add(local_debug);
         lx.addOutput(local_debug);
         */
+        try {
+            controllerInventory = SLControllerInventory.loadFromDisk();
+        } catch (FileNotFoundException e) {
+            System.err.println("Could not load inventory from disk");
+            e.printStackTrace();
+        }
 
         networkMonitor.opcDeviceList.addListener(new SetListener<NetworkDevice>() {
             public void onItemAdded(NetworkDevice device) {
