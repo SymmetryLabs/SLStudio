@@ -4,6 +4,7 @@ import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.slstudio.network.OpcSysExMsg;
 import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
 import com.symmetrylabs.slstudio.output.SLController;
+import com.symmetrylabs.util.hardware.powerMon.ControllerWithPowerFeedback;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -37,15 +38,18 @@ public class MachinePortMonitor extends Thread {
                 e.printStackTrace();
             }
 
+            // currently all we do is watch for power updates
             sysExIn.deserializeSysEx_0x7();
 
             // which ip do we have?
             InetAddress sourceControllerAddr = recvPacket.getAddress();
 
-//            PowerControllerInterface controller = show.getControllerByInetAddr(sourceControllerAddr);
-//            if (controller != null){
-//                controller.writeSample(sysExIn.metaPowerSample);
-//            }
+            AbstractSLControllerBase controller = show.getControllerByInetAddr(sourceControllerAddr);
+            if (controller != null){
+                if (controller instanceof ControllerWithPowerFeedback){
+                    ((ControllerWithPowerFeedback) controller).writeSample(sysExIn.metaPowerSample);
+                }
+            }
         }
     }
 

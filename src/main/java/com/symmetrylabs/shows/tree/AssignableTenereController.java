@@ -1,15 +1,22 @@
 package com.symmetrylabs.shows.tree;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.SocketException;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 
 import com.symmetrylabs.color.PerceptualColorScale;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
+import com.symmetrylabs.slstudio.network.OpcMessage;
 import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
 import com.symmetrylabs.slstudio.output.symmetree.TenereDatagramSet;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
+import com.symmetrylabs.util.hardware.powerMon.ControllerWithPowerFeedback;
+import com.symmetrylabs.util.hardware.powerMon.MetaSample;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.StringParameter;
 
 import heronarts.lx.LX;
@@ -18,7 +25,7 @@ import heronarts.lx.output.LXDatagram;
 import com.symmetrylabs.slstudio.output.TenereDatagram;
 
 
-public class AssignableTenereController extends AbstractSLControllerBase {
+public class AssignableTenereController extends AbstractSLControllerBase implements ControllerWithPowerFeedback {
 
 	private static final int TWIGS_PER_PACKET = 3;
 	private static final int POINTS_PER_PACKET = TreeModel.Twig.NUM_LEDS * TWIGS_PER_PACKET;
@@ -30,11 +37,22 @@ public class AssignableTenereController extends AbstractSLControllerBase {
     private final LX lx;
     private final int[][] pixelColors;
 
-	public AssignableTenereController(LX lx, TreeModel.Branch branch) throws SocketException {
+    // current draw feedback
+    private boolean hasPortPowerFeedback;
+    private final BooleanParameter[] pwrMask = new BooleanParameter[8];
+    private int pwrMaskByte = 0;
+
+//    public DiscreteParameter blackoutPowerThreshold = new DiscreteParameter("Blackout", 0, 4095);
+//    public final BooleanParameter blackoutRogueLEDsActive = new BooleanParameter("Activate blackout procedure", false);
+    private MetaSample lastReceivedPowerSample = null;
+
+    public AssignableTenereController(LX lx, TreeModel.Branch branch) throws SocketException {
 		super(lx, branch.getConfig().ipAddress);
         this.lx = lx;
 		this.ipAddress = branch.getConfig().ipAddress;
         this.branch = branch;
+
+        addPowerParameters();
 
 		pixelColors = new int[][] {
 		    new int[POINTS_PER_PACKET],
@@ -63,7 +81,17 @@ public class AssignableTenereController extends AbstractSLControllerBase {
             });
 	}
 
-	private static HashMap<String, AssignableTenereController> allImportedIps = new HashMap<>();
+    private void addPowerParameters() {
+        for (int i = 0; i < 8; i++){
+            pwrMask[i] = new BooleanParameter("pwr"+i, false);
+            addParameter("pwr" + i, pwrMask[i]);
+        }
+        addParameter(blackoutPowerThreshold);
+        addParameter(blackoutRogueLEDsActive);
+
+    }
+
+    private static HashMap<String, AssignableTenereController> allImportedIps = new HashMap<>();
 	// TODO: undo copied code from above
     public AssignableTenereController(LX lx, com.symmetrylabs.shows.treeV2.TreeModel.Branch branch, SLControllerInventory slControllerInventory) throws SocketException {
         super(lx, slControllerInventory.getHostAddressByControllerID(branch.controllerId.getString()));
@@ -219,5 +247,64 @@ public class AssignableTenereController extends AbstractSLControllerBase {
     protected void fillDatagramsAndAddToOutput() {
         clearDatagrams();
         addDatagrams(new TenereDatagramSet(lx, pixelColors, networkDevice).getDatagrams());
+    }
+
+    public void writeSample(MetaSample metaPowerSample) {
+        hasPortPowerFeedback = true;
+        lastReceivedPowerSample = metaPowerSample;
+    }
+
+    // flips port power if above threshold (like a digital breaker)
+    public void killByThreshHold(){
+        for (int i = 0; i < 8; i++){
+            if (lastReceivedPowerSample.analogSampleArray[i] > blackoutPowerThreshold.getValuei()){
+                pwrMask[i].setValue(true); // mask this output i.e. shutoff this output
+            }
+            else {
+                pwrMask[i].setValue(false);
+            }
+        }
+        killPortPower();
+    }
+
+    public void killPortPower() {
+        if (hasPortPowerFeedback){
+
+            int incomingPwrMaskByte = 0;
+            for (int i = 0; i < 8; i++){
+                incomingPwrMaskByte |= pwrMask[i].getValueb() ? 0x1 << i : 0;
+            }
+            if (incomingPwrMaskByte == pwrMaskByte){
+                // if state hasn't changed exit
+                return;
+            }
+            pwrMaskByte = incomingPwrMaskByte;
+            System.out.println(pwrMaskByte);
+
+            byte[] payload = new byte[1];
+            payload[0] = (byte)pwrMaskByte;
+            System.out.println(payload[0]);
+//            ByteBuffer data = ByteBuffer.wrap(new OpcMessage(0, SYMMETRY_LABS, 0x41, payload).bytes);
+            // use MIDI style - bug in the other.
+            ByteBuffer data = ByteBuffer.wrap(new OpcMessage(0xf0, 0x41, payload).bytes);
+            byte[] packetData = data.array();
+            int packetSizeBytes = packetData.length;
+            DatagramPacket packet = new DatagramPacket(packetData, packetSizeBytes);
+            if (dsocket == null){
+                System.out.println("No socket for some reason?");
+            }
+            else{
+                try {
+                    dsocket.send( packet );
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
+    public MetaSample getLastSample() {
+        return lastReceivedPowerSample;
     }
 }

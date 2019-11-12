@@ -6,8 +6,9 @@ import heronarts.lx.parameter.BooleanParameter;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.network.ControllerResetModule;
+import heronarts.lx.parameter.DiscreteParameter;
 
- /*
+/*
  * Output Component
  *---------------------------------------------------------------------------*/
 public final class OutputControl extends LXComponent {

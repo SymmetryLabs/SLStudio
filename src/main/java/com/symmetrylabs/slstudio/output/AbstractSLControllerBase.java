@@ -7,6 +7,7 @@ import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
+import com.symmetrylabs.util.hardware.powerMon.MetaSample;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
@@ -29,7 +30,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
     private final PerceptualColorScale outputScaler; // should this really be part of the controller logic?
     private final SLControllerInventory inventory;
     protected int numPixels;
-    private DatagramSocket dsocket;
+    protected DatagramSocket dsocket;
     protected boolean is16BitColorEnabled = false;
 
     // must be public to render?

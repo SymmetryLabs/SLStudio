@@ -42,6 +42,7 @@ public abstract class SLShow implements Show {
      */
     DiscreteParameter globalBlackoutPowerThreshhold = new DiscreteParameter("global blackout", 4095);
 
+
     public final HashMap<InetAddress, AbstractSLControllerBase> controllerByInetAddrMap = new HashMap<>();
 
     public final ListenableSet<AbstractSLControllerBase> controllers = new ListenableSet<>();
