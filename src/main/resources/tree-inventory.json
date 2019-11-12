@@ -475,40 +475,47 @@
     "humanID": "A070",
     "statusNotes": "good"
   },
+  "A071": {
+    "ipAddr": "10.2.54.155",
+    "macAddress": {},
+    "macAddr": "2A:15:05:02:36:9B",
+    "humanID": "A071",
+    "statusNotes": "good"
+  },
   "A072": {
     "ipAddr": "10.1.45.150",
     "macAddress": {},
     "macAddr": "2A:15:03:01:2D:96",
     "humanID": "A072",
-    "statusNotes": "10.2.54.155"
+    "statusNotes": "good"
   },
   "A073": {
     "ipAddr": "10.130.67.33",
     "macAddress": {},
     "macAddr": "2A:15:04:82:43:21",
     "humanID": "A073",
-    "statusNotes": "10.2.54.155"
+    "statusNotes": "good"
   },
   "A074": {
     "ipAddr": "10.4.49.24",
     "macAddress": {},
     "macAddr": "2A:15:08:04:31:18",
     "humanID": "A074",
-    "statusNotes": "10.2.54.155"
+    "statusNotes": "good"
   },
   "A076": {
     "ipAddr": "10.130.15.135",
     "macAddress": {},
     "macAddr": "2A:15:05:82:0F:87",
     "humanID": "A076",
-    "statusNotes": "10.2.54.155"
+    "statusNotes": "good"
   },
   "A077": {
     "ipAddr": "10.128.14.135",
     "macAddress": {},
     "macAddr": "2A:15:00:80:0E:87",
     "humanID": "A077",
-    "statusNotes": "10.2.54.155"
+    "statusNotes": "good"
   },
   "A078": {
     "ipAddr": "10.0.13.6",
@@ -907,7 +914,7 @@
     "macAddress": {},
     "macAddr": "2A:15:03:81:45:A2",
     "humanID": "A140",
-    "statusNotes": "10.2.54.155"
+    "statusNotes": "good"
   },
   "A141": {
     "ipAddr": "10.2.10.133",

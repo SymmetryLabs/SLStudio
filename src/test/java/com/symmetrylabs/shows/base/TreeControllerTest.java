@@ -96,6 +96,6 @@ class TreeControllerTest {
         PointsGrouping pointsGrouping = new PointsGrouping();
 
         TreeController controller = new TreeController(lx, networkDevice, networkDevice.ipAddress, pointsGrouping, true, "hi");
-        controller.sendShutoff();
+//        controller.sendShutoff();
     }
 }

@@ -251,7 +251,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
 
     private void resetSocket() {
         if (dsocket != null) {
-            System.out.println("closing socket for controller: " + this.id);
+            System.out.println("closing socket for controller: " + this.id + "---" + this.networkDevice.ipAddress);
             dsocket.close();
             dsocket = null;
         }
