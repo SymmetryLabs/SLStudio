@@ -61,6 +61,8 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
     private AbstractSLControllerBase(LX lx, NetworkDevice networkDevice, InetAddress host, String id, SLControllerInventory inventory, boolean isBroadcast, PerceptualColorScale outputScaler) throws SocketException {
         super(lx);
 
+        System.out.println("created socket for controller: " + networkDevice.ipAddress);
+
         this.lx = lx;
         this.networkDevice = networkDevice;
         this.id = id;

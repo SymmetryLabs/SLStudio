@@ -147,9 +147,7 @@ public class TreeModel extends SLModel {
 				}
 
 				for (Twig twig : twigs) {
-					for (LXPoint p : twig.points) {
-						this.points.add(p);
-					}
+                    this.points.addAll(Arrays.asList(twig.points));
 				}
 			}
 		}

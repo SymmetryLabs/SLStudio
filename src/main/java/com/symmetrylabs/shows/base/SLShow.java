@@ -149,8 +149,8 @@ public abstract class SLShow implements Show {
 
     public void setupUi(LX lx) {
         WindowManager.addPersistent("Controllers/Inventory", () -> new InventoryEditor(lx, cubeInventory), false);
-        WindowManager.addPersistent("Controllers/Mapping", () -> new SLModelMappingWindow(lx, (SLModel) lx.model), true);
-        WindowManager.addPersistent("Controllers/Output", () -> new SLOutputWindow(lx, this), true);
+        WindowManager.addPersistent("Controllers/Mapping", () -> new SLModelMappingWindow(lx, (SLModel) lx.model), false);
+        WindowManager.addPersistent("Controllers/Output", () -> new SLOutputWindow(lx, this), false);
         WindowManager.addPersistent("Controllers/Scaling", () -> new OutputScaleWindow(lx, outputScaler), false);
     }
 
