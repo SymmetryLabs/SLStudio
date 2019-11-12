@@ -1,10 +1,11 @@
 package com.symmetrylabs.slstudio.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.symmetrylabs.shows.treeV2.TreeModel;
+import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 import org.apache.commons.collections4.IteratorUtils;
 
@@ -31,6 +32,9 @@ public class SLModel extends LXModel {
     protected PointBatches pointBatches;
 
     public float[] pointsXYZ;
+
+    // Global.  Perhaps really should be owned by top level SLModel.
+    static private HashMap<String, SLModel> fixtureByMappedID = new HashMap<>();
 
     public SLModel(String id) {
         super(id);
@@ -67,6 +71,7 @@ public class SLModel extends LXModel {
         super(modelId, fixture);
         this.inventory = null;
         this.controllerId = controllerId;
+        SLModel.fixtureByMappedID.put(controllerId, this);
     }
 
     private void setupPointsArray() {
@@ -115,6 +120,11 @@ public class SLModel extends LXModel {
 
     public /* abstract */ Iterator<? extends LXModel> getChildren() {
         return IteratorUtils.emptyIterator();
+    }
+
+    public PointsGrouping getPointsMappedToControllerID(String id) {
+        LXFixture mappedModel = fixtureByMappedID.get(id);
+        return mappedModel == null ? null : new PointsGrouping(mappedModel.getPoints());
     }
 
     public static class PointBatches {

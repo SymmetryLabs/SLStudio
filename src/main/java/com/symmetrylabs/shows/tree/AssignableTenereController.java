@@ -48,6 +48,7 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
 //    public DiscreteParameter blackoutPowerThreshold = new DiscreteParameter("Blackout", 0, 4095);
 //    public final BooleanParameter blackoutRogueLEDsActive = new BooleanParameter("Activate blackout procedure", false);
     private MetaSample lastReceivedPowerSample = null;
+    private int[][] pixelIndices;
 
     // ARRRRrrrrgggggghhhh delete these...
     public AssignableTenereController(LX lx, TreeModel.Branch branch) throws SocketException {
@@ -63,6 +64,11 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
 		    new int[POINTS_PER_PACKET],
 		    new int[POINTS_PER_PACKET],
 		};
+        pixelIndices = new int[][] {
+            new int[POINTS_PER_PACKET],
+            new int[POINTS_PER_PACKET],
+            new int[POINTS_PER_PACKET],
+        };
 
         if (ipAddress.equals("0.0.0.0")) {
             enabled.setValue(false);
@@ -98,6 +104,11 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
             new int[POINTS_PER_PACKET],
             new int[POINTS_PER_PACKET],
         };
+        pixelIndices = new int[][] {
+            new int[POINTS_PER_PACKET],
+            new int[POINTS_PER_PACKET],
+            new int[POINTS_PER_PACKET],
+        };
 
         if (ipAddress.equals("0.0.0.0")) {
             enabled.setValue(false);
@@ -114,6 +125,11 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
         addPowerParameters();
 
         pixelColors = new int[][] {
+            new int[POINTS_PER_PACKET],
+            new int[POINTS_PER_PACKET],
+            new int[POINTS_PER_PACKET],
+        };
+        pixelIndices = new int[][] {
             new int[POINTS_PER_PACKET],
             new int[POINTS_PER_PACKET],
             new int[POINTS_PER_PACKET],
@@ -181,10 +197,10 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
     }
 
     public void updateIndexesFromBranch() {
-		for (int i = 0; i < pixelColors.length; ++i) {
+		for (int i = 0; i < pixelIndices.length; ++i) {
 		    // Initialize to nothing
 		    for (int j = 0; j < POINTS_PER_PACKET; j++) {
-		        pixelColors[i][j] = -1;
+		        pixelIndices[i][j] = -1;
 		    }
 		}
 
@@ -202,13 +218,28 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
                         }
                     }
                 }
-                pixelColors[packet][pindex++] = skip ? -1 : twig.points[indexInTwig].index;
+                pixelIndices[packet][pindex++] = skip ? -1 : twig.points[indexInTwig].index;
             }
         }
 
         clearDatagrams();
         byte channel = 0;
-        for (int[] packet : pixelColors) {
+        for (int[] packet : pixelIndices) {
+            TenereDatagram datagram = new TenereDatagram(lx, packet, channel);
+            try {
+                datagram.setAddress(branch.getConfig().ipAddress).setPort(OPC_PORT);
+                addDatagram(datagram);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            channel += TWIGS_PER_PACKET;
+        }
+    }
+
+    public void addPacketsFromIndices(){
+        clearDatagrams();
+        byte channel = 0;
+        for (int[] packet : pixelIndices) {
             TenereDatagram datagram = new TenereDatagram(lx, packet, channel);
             try {
                 datagram.setAddress(branch.getConfig().ipAddress).setPort(OPC_PORT);
@@ -247,6 +278,11 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
     }
 
     @Override
+    protected void setPixel16(int i, long srcLong) {
+        // not relevent yet - no 16 bit on controller.
+    }
+
+    @Override
     protected void setNumPixels() {
         this.numPixels = TWIGS_PER_PACKET*150*3;
     }
@@ -263,7 +299,9 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
             addDatagrams(new TenereDatagramSet(lx, pixelColors, networkDevice).getDatagrams());
         }
         else {
-            // finally .. ok we actually have a fixture
+            // finally add datagram for this controller
+            // update indices should not be responsibility of the controller.  Should just be pixel data.
+            addPacketsFromIndices();
         }
     }
 

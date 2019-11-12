@@ -4,20 +4,20 @@ import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.color.PerceptualColorScale;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.slstudio.ApplicationState;
+import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
-import com.symmetrylabs.util.hardware.powerMon.MetaSample;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.model.LXModel;
+import heronarts.lx.model.LXPoint;
 import heronarts.lx.output.LXDatagramOutput;
 import heronarts.lx.output.OPCConstants;
 import heronarts.lx.parameter.BooleanParameter;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.net.*;
 
 // All of our controllers operate on UDP but the business logic isn't fundamentally coupled to the transport... (i.e. merits refactor to LXOutput)
@@ -110,7 +110,9 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
 
     protected abstract void initPacketData(int numPixels, boolean use16);
 
+    // methods for setting pixel
     protected abstract void setPixel8(int number, int c);
+    protected abstract void setPixel16(int i, long srcLong);
 
     private void setPixel16(int number, long c, int[] packetData) {
         int index = 4 + number * 6;
@@ -159,21 +161,10 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
 //        }
 
         PointsGrouping points = null;
-//        CubesModel cubesModel = (CubesModel)lx.model;
-//
-//        if ((ApplicationState.outputControl().testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
-//            CubesModel.Cube cube = cubesModel.getCubes().get(0);
-//            if (cube instanceof CubesModel.DoubleControllerCube) {
-//                points = ((CubesModel.DoubleControllerCube)cube).getPointsA();
-//            }
-//            else {
-//                points = new PointsGrouping(cube.getPoints());
-//            }
-//        } else {
-//            points = cubesModel.getControllerPoints(id);
-//        }
-//        numPixels = points == null ? 0 : points.size();
-        numPixels = 0;
+
+        points = getPointsMappedToController(); // returns null if we're not broadcast
+
+        numPixels = points == null ? 0 : points.size();
 
         // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
         // TODO: refactor here
@@ -228,6 +219,21 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
             fillDatagramsAndAddToOutput();
         } else if (points != null) {
             // Fill the datagram with pixel data
+            if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
+                initPacketData(numPixels, true);
+                long[] srcLongs = (long[]) src.getArray(PolyBuffer.Space.RGB16);
+                for (int i = 0; i < numPixels; i++) {
+                    LXPoint point = points.getPoint(i);
+                    setPixel16(i, srcLongs[point.index]);
+                }
+            } else {
+                initPacketData(numPixels, false);
+                int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
+                for (int i = 0; i < numPixels; i++) {
+                    LXPoint point = points.getPoint(i);
+                    setPixel8(i, srcInts[point.index]);
+                }
+            }
             fillDatagramsAndAddToOutput();
         } else {
             // Fill with all black if we don't have cube data
@@ -239,15 +245,33 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
             fillDatagramsAndAddToOutput();
         }
 
-
-        // Send the cube data to the cube. yay!
+        // Send the correctly formatted data to the fixture. yay!
         super.onSend(src);
-//        try {
-//            dsocket.send(packet);
-//        }
-//        catch (Exception e) {
-//            ApplicationState.setWarning("CubesController", "failed to send packet: " + e.getMessage());
-//        }
+    }
+
+    private PointsGrouping getPointsMappedToController() {
+        SLModel model = (SLModel) lx.model;
+        return model.getPointsMappedToControllerID(this.id);
+    }
+
+
+    private PointsGrouping getBroadcastPointsFromFixture0(LXModel model) {
+        PointsGrouping points = null;
+        if (model instanceof CubesModel){
+            CubesModel cubesModel = (CubesModel) model;
+            if ((ApplicationState.outputControl().testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
+                CubesModel.Cube cube = cubesModel.getCubes().get(0);
+                if (cube instanceof CubesModel.DoubleControllerCube) {
+                    points = ((CubesModel.DoubleControllerCube)cube).getPointsA();
+                }
+                else {
+                    points = new PointsGrouping(cube.getPoints());
+                }
+            } else {
+                points = cubesModel.getControllerPoints(id);
+            }
+        }
+        return points;
     }
 
     protected abstract void setNumPixels();
@@ -259,7 +283,6 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
         if (socket != null) {
             System.out.println("closing socket for controller: " + this.id + "---" + this.networkDevice.ipAddress);
             socket.close();
-//            dsocket = null;
         }
     }
 
