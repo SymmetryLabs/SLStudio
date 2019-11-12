@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonWriter;
 import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
-import com.symmetrylabs.util.hardware.CubeInventory;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -68,7 +67,7 @@ public class SLModelControllerMapping {
         if (assignmentsByPhysId.containsKey(ctrlId)) {
             return assignmentsByPhysId.get(ctrlId);
         }
-        SLControllerInventory.ControllerMetadata pc = inventory.treeInventoryMap.get(ctrlId);
+        SLControllerInventory.ControllerMetadata pc = inventory.macAddrToControllerMetadataMap.get(ctrlId);
         if (pc == null) return null;
         return assignmentsByPhysId.get(pc.getHumanID());
     }

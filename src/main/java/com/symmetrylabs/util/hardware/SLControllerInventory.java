@@ -3,7 +3,6 @@ package com.symmetrylabs.util.hardware;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
-import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 //import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
 import com.symmetrylabs.util.NetworkUtil.MACAddress;
@@ -19,8 +18,10 @@ public class SLControllerInventory {
     private final static String RAW_CONTROLLER_PHYSIDS = "src/main/resources/tree_controllers.raw.txt";
     private final static String TREE_INVENTORY_FILENAME = "tree-inventory.json";
     private final static String MAC_TO_HUMAN_ID_FILENAME = "mac_to_humanID.json";
+    private final static String PERSISTENT_SLCONTROLLER_INVENTORY = "slcontrollerinventory.json";
 
     private final transient List<SLControllerInventory.Listener> listeners = new ArrayList<>();
+
 
     public void addListener(Listener listener) {
         listeners.add(listener);
@@ -28,7 +29,7 @@ public class SLControllerInventory {
 
     public String getControllerId(String deviceId) {
         //TODO: actually impliment SLController inventory.
-//        return treeInventoryMap.get(deviceId).humanID;
+//        return macAddrToControllerMetadataMap.get(deviceId).humanID;
         return deviceId;
     }
 
@@ -37,7 +38,7 @@ public class SLControllerInventory {
     }
 
     public String getHostAddressByControllerID(String controllerId) {
-        ControllerMetadata controller = treeInventoryMap.get(controllerId);
+        ControllerMetadata controller = macAddrToControllerMetadataMap.get(controllerId);
         String hostAddr = controller == null ? "0.0.0.0" : controller.ipAddr.getHostAddress();
         return hostAddr;
     }
@@ -81,24 +82,13 @@ public class SLControllerInventory {
 
     ArrayList<ControllerMetadata> treeInventory = new ArrayList<>();
 
-    public TreeMap<String, ControllerMetadata> treeInventoryMap = new TreeMap<>();
+    // Map to controller metadata based on MAC
+    @Expose
+    public TreeMap<String, ControllerMetadata> macAddrToControllerMetadataMap = new TreeMap<>();
 
     public final transient Map<String, ControllerMetadata> controllerByMacAddrs = new TreeMap<>();
     public final transient Map<String,ControllerMetadata> controllerByCtrlId = new TreeMap<>();
     public final transient Map<String, ControllerMetadata> controllerByIP = new TreeMap<>();
-
-    public SLControllerInventory(){
-        try {
-            parseInRawToMapByHumanID();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-//        try {
-//            this.loadFromDisk();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-    }
 
     private void onUpdated() {
         for (SLControllerInventory.Listener l : listeners) {
@@ -125,13 +115,13 @@ public class SLControllerInventory {
                 ControllerMetadata meta = new ControllerMetadata(chunkArr);
                 idx = 0;
                 treeInventory.add(meta);
-                treeInventoryMap.put(meta.humanID, meta);
+                macAddrToControllerMetadataMap.put(meta.humanID, meta);
 
             }
         }
 
         int count = 0;
-        for(Map.Entry<String,ControllerMetadata> entry : treeInventoryMap.entrySet()) {
+        for(Map.Entry<String,ControllerMetadata> entry : macAddrToControllerMetadataMap.entrySet()) {
             String key = entry.getKey();
             ControllerMetadata value = entry.getValue();
 
@@ -152,14 +142,14 @@ public class SLControllerInventory {
 //            .setPrettyPrinting()
 //            .excludeFieldsWithoutExposeAnnotation()
 //            .create();
-//        System.out.println(gson.toJson(treeInventoryMap));
+//        System.out.println(gson.toJson(macAddrToControllerMetadataMap));
 
         // need to do something here regarding saving a source distribution or not .. see CubeInventory class
         File resFile = new File("src/main/resources", TREE_INVENTORY_FILENAME);
         try {
             JsonWriter writer = new JsonWriter(new FileWriter(resFile));
             writer.setIndent("  ");
-            new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create().toJson(treeInventoryMap, treeInventoryMap.getClass(), writer);
+            new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create().toJson(macAddrToControllerMetadataMap, macAddrToControllerMetadataMap.getClass(), writer);
             writer.close();
             System.out.println("inventory map written to: " + resFile);
         } catch (IOException e) {
@@ -187,21 +177,21 @@ public class SLControllerInventory {
                 ControllerMetadata meta = new ControllerMetadata(chunkArr);
                 idx = 0;
                 treeInventory.add(meta);
-                treeInventoryMap.put(meta.macAddr, meta);
+                macAddrToControllerMetadataMap.put(meta.macAddr, meta);
             }
         }
 //        Gson gson = new GsonBuilder()
 //            .setPrettyPrinting()
 //            .excludeFieldsWithoutExposeAnnotation()
 //            .create();
-//        System.out.println(gson.toJson(treeInventoryMap));
+//        System.out.println(gson.toJson(macAddrToControllerMetadataMap));
 
         // need to do something here regarding saving a source distribution or not .. see CubeInventory class
         File resFile = new File("src/main/resources", MAC_TO_HUMAN_ID_FILENAME);
         try {
             JsonWriter writer = new JsonWriter(new FileWriter(resFile));
             writer.setIndent("  ");
-            new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create().toJson(treeInventoryMap, treeInventoryMap.getClass(), writer);
+            new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create().toJson(macAddrToControllerMetadataMap, macAddrToControllerMetadataMap.getClass(), writer);
             writer.close();
             System.out.println("inventory map written to: " + resFile);
         } catch (IOException e) {
@@ -209,8 +199,25 @@ public class SLControllerInventory {
         }
     }
 
-    public void loadFromDisk() throws FileNotFoundException {
-        JsonReader reader = new JsonReader(new FileReader(RESOURCES_DIR + "/" + TREE_INVENTORY_FILENAME));
-        treeInventoryMap = new Gson().fromJson(reader, treeInventoryMap.getClass());
+    public void writeInventoryToDisk() throws IOException {
+
+        File resFile = new File(RESOURCES_DIR, PERSISTENT_SLCONTROLLER_INVENTORY);
+        JsonWriter writer = new JsonWriter(new FileWriter(resFile));
+        writer.setIndent("  ");
+
+        new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(this, SLControllerInventory.class, writer);
+        writer.close();
+        System.out.println("inventory file writen " + resFile);
+    }
+
+
+    public static SLControllerInventory loadFromDisk() throws FileNotFoundException {
+        ClassLoader cl = SLControllerInventory.class.getClassLoader();
+        InputStream resourceStream = cl.getResourceAsStream(PERSISTENT_SLCONTROLLER_INVENTORY);
+        if (resourceStream != null) {
+            SLControllerInventory loadMe = new Gson().fromJson(new InputStreamReader(resourceStream), SLControllerInventory.class);
+            return loadMe;
+        }
+        return new SLControllerInventory();
     }
 }
