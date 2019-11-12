@@ -41,10 +41,10 @@ public class MachinePortMonitor extends Thread {
             // which ip do we have?
             InetAddress sourceControllerAddr = recvPacket.getAddress();
 
-            SLController controller = show.getControllerByInetAddr(sourceControllerAddr);
-            if (controller != null){
-                controller.writeSample(sysExIn.metaPowerSample);
-            }
+//            SLController controller = show.getControllerByInetAddr(sourceControllerAddr);
+//            if (controller != null){
+//                controller.writeSample(sysExIn.metaPowerSample);
+//            }
         }
     }
 

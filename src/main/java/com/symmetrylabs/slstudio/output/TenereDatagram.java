@@ -28,6 +28,19 @@ public class TenereDatagram extends OPCDatagram {
         this.brightness = lx.engine.output.brightness;
     }
 
+    public TenereDatagram(LX lx, int[] packet, byte channel, boolean isRawBuffer) {
+        super(packet.length, channel);
+        this.brightness = lx.engine.output.brightness;
+
+        int i = 4;
+        for (int c : packet) {
+            this.buffer[i    ] = (byte) (0xff & (c >> 16)); // R
+            this.buffer[i + 1] = (byte) (0xff & (c >> 8)); // G
+            this.buffer[i + 2] = (byte) (0xff & c); // B
+            i += 3;
+        }
+    }
+
     @Override
     protected LXDatagram copyPoints(int[] colors, int[] pointIndices, int offset) {
         final byte[] gamma = GAMMA_LUT[Math.round(255 * this.brightness.getValuef())];

@@ -6,7 +6,8 @@ import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.slstudio.output.SLController;
+import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
+import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
 import com.symmetrylabs.slstudio.ui.v2.*;
 import heronarts.lx.LX;
 
@@ -40,13 +41,13 @@ public class SLOutputWindow extends CloseableWindow {
 
         UI.separator();
 
-        Collection<SLController> ccs = show.getSortedControllers();
+        Collection<AbstractSLControllerBase> ccs = show.getSortedControllers();
         UI.text("%d controllers", ccs.size());
 
         if (UI.collapsibleSection("Edit all")) {
             editBrightness = UI.sliderFloat("Brightness", editBrightness, 0, 1);
             if (UI.button("Set")) {
-                for (SLController cc : ccs) {
+                for (AbstractSLControllerBase cc : ccs) {
                     cc.brightness.setValue(editBrightness);
                 }
             }
@@ -64,7 +65,7 @@ public class SLOutputWindow extends CloseableWindow {
         if (dump){
             System.out.println("[");
         }
-        for (SLController cc : ccs) {
+        for (AbstractSLControllerBase cc : ccs) {
             if (expand) {
                 UI.setNextTreeNodeOpen(true);
             } else if (collapse) {
@@ -74,11 +75,11 @@ public class SLOutputWindow extends CloseableWindow {
                 System.out.println( "\"" + cc.networkDevice.ipAddress.toString().split("/")[1] + "\"" + ",");
             }
 
-            if (blackout){
-                cc.blackoutRogueLEDsActive.setValue(true);
-                cc.blackoutPowerThreshold.setValue(show.globalBlackoutPowerThreshhold.getValuei());
-                cc.killByThreshHold();
-            }
+//            if (blackout){
+//                cc.blackoutRogueLEDsActive.setValue(true);
+//                cc.blackoutPowerThreshold.setValue(show.globalBlackoutPowerThreshhold.getValuei());
+//                cc.killByThreshHold();
+//            }
 
 //            boolean mapped = model.mapping.lookUpByControllerId(cc.id) != null;
             if (false) {
@@ -118,33 +119,33 @@ public class SLOutputWindow extends CloseableWindow {
                     UI.labelText("Device", nd.deviceId);
                     UI.labelText("Features", String.join(",", nd.featureIds));
                 }
-                if(cc.hasPortPowerFeedback){
-                    UI.separator();
-//                    boolean killSwitch[] = new boolean[8];
+//                if(cc.hasPortPowerFeedback){
+//                    UI.separator();
+////                    boolean killSwitch[] = new boolean[8];
+////                    for (int i = 0; i < 8; i++){
+////                        killSwitch[i] = ( (cc.pwrMask >>> i) & 0x1) == 0x1;
+////                    }
 //                    for (int i = 0; i < 8; i++){
-//                        killSwitch[i] = ( (cc.pwrMask >>> i) & 0x1) == 0x1;
-//                    }
-                    for (int i = 0; i < 8; i++){
-                        UI.intBox(Integer.toString(i), cc.lastReceivedPowerSample.analogSampleArray[i]);
-//                        UI.sameLine();
-//                        killSwitch[i] = UI.checkbox(Integer.toString(i), killSwitch[i]);
-                    }
-//                    for (int i = 0; i < 8; i++){
-//                        cc.pwrMask |= killSwitch[i] ? 0x1 << i : 0;
-//                    }
-                    try {
-                        cc.killPortPower();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-//                    for (int i = 4; i < 8; i++){
 //                        UI.intBox(Integer.toString(i), cc.lastReceivedPowerSample.analogSampleArray[i]);
-//                        UI.sameLine();
-//                        UI.checkbox(Integer.toString(i), killSwitch[i]);
-//                        UI.sameLine();
+////                        UI.sameLine();
+////                        killSwitch[i] = UI.checkbox(Integer.toString(i), killSwitch[i]);
 //                    }
-
-                }
+////                    for (int i = 0; i < 8; i++){
+////                        cc.pwrMask |= killSwitch[i] ? 0x1 << i : 0;
+////                    }
+//                    try {
+//                        cc.killPortPower();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+////                    for (int i = 4; i < 8; i++){
+////                        UI.intBox(Integer.toString(i), cc.lastReceivedPowerSample.analogSampleArray[i]);
+////                        UI.sameLine();
+////                        UI.checkbox(Integer.toString(i), killSwitch[i]);
+////                        UI.sameLine();
+////                    }
+//
+//                }
             }
 
         }

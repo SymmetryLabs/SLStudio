@@ -27,7 +27,9 @@ public class SLControllerInventory {
     }
 
     public String getControllerId(String deviceId) {
-        return treeInventoryMap.get(deviceId).humanID;
+        //TODO: actually impliment SLController inventory.
+//        return treeInventoryMap.get(deviceId).humanID;
+        return deviceId;
     }
 
     public interface Listener {

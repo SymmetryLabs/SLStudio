@@ -2,48 +2,41 @@ package com.symmetrylabs.slstudio.output;
 
 import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.color.PerceptualColorScale;
-import com.symmetrylabs.shows.cubes.CubesMappingMode;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
-import com.symmetrylabs.util.hardware.CubeInventory;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.output.LXDatagramOutput;
-import heronarts.lx.output.LXOutput;
 import heronarts.lx.output.OPCConstants;
+import heronarts.lx.parameter.BooleanParameter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.*;
 
+// All of our controllers operate on UDP but the business logic isn't fundamentally coupled to the transport... (i.e. merits refactor to LXOutput)
 public abstract class AbstractSLControllerBase extends LXDatagramOutput implements Comparable<AbstractSLControllerBase>, OPCConstants, SLControllerInventory.Listener {
     public String id;
     public int idInt;
-    public final InetAddress host;
     public final boolean isBroadcast;
     public final NetworkDevice networkDevice;
 
-    private final PerceptualColorScale outputScaler;
+    private final PerceptualColorScale outputScaler; // should this really be part of the controller logic?
     private final SLControllerInventory inventory;
+    protected int numPixels;
     private DatagramSocket dsocket;
-    private DatagramPacket packet;
-    private OutputStream output;
     protected boolean is16BitColorEnabled = false;
 
-    private int port = 7890;
-
-    int contentSizeBytes;
-    int packetSizeBytes;
-    byte[] packetData;
-    boolean sendTestPattern = false;
+    // must be public to render?
+    public BooleanParameter testOutput = new BooleanParameter("send test data", false);
 
     private final LX lx;
+    private int port;
 //    private MappingMode mappingMode;
 
     public AbstractSLControllerBase(LX lx, NetworkDevice device, SLControllerInventory inventory, PerceptualColorScale outputScaler) throws SocketException {
@@ -67,11 +60,12 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
 
         this.lx = lx;
         this.networkDevice = networkDevice;
-        this.host = host;
         this.id = id;
         this.inventory = inventory;
         this.outputScaler = outputScaler;
         this.isBroadcast = isBroadcast;
+
+        this.addParameter("testOut", testOutput);
 
         if (inventory != null) {
             inventory.addListener(this);
@@ -83,6 +77,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
 //        mappingMode = CubesMappingMode.getInstance(lx);
 
         enabled.setValue(true);
+        testOutput.setValue(false);
     }
 
     public String getMacAddress() {
@@ -110,30 +105,11 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
         this.is16BitColorEnabled = enable;
     }
 
-//    private void initPacketData(int numPixels, boolean use16) {
-//        contentSizeBytes = (use16 ? BYTES_PER_16BIT_PIXEL : BYTES_PER_PIXEL) * numPixels;
-//        packetSizeBytes = HEADER_LEN + contentSizeBytes;
-//        if (packetData == null || packetData.length != packetSizeBytes) {
-//            packetData = new byte[packetSizeBytes];
-//            packet = new DatagramPacket(packetData, packetSizeBytes);
-//        }
-//        packetData[0] = 0; // Channel
-//        packetData[1] = use16 ? COMMAND_SET_16BIT_PIXEL_COLORS : COMMAND_SET_PIXEL_COLORS;
-//        packetData[2] = (byte) ((contentSizeBytes >> 8) & 0xFF);
-//        packetData[3] = (byte) (contentSizeBytes & 0xFF);
-//    }
-//
-    private void setPixel(int number, int c) {
-        if (outputScaler != null) {
-            c = outputScaler.apply8(c);
-        }
-        int index = 4 + number * 3;
-        packetData[index++] = LXColor.red(c);
-        packetData[index++] = LXColor.green(c);
-        packetData[index++] = LXColor.blue(c);
-    }
+    protected abstract void initPacketData(int numPixels, boolean use16);
 
-    private void setPixel(int number, long c) {
+    protected abstract void setPixel8(int number, int c);
+
+    private void setPixel16(int number, long c, int[] packetData) {
         int index = 4 + number * 6;
         if (outputScaler != null) {
             c = outputScaler.apply16(c);
@@ -158,7 +134,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
         if (dsocket == null) {
             try {
                 dsocket = new DatagramSocket();
-                dsocket.connect(new InetSocketAddress(host, this.port));
+                dsocket.connect(new InetSocketAddress(networkDevice.ipAddress.getHostName(), this.port));
             }
             catch (IOException e) {}
             finally {
@@ -193,7 +169,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
         } else {
             points = cubesModel.getControllerPoints(id);
         }
-        int numPixels = points == null ? 0 : points.size();
+        numPixels = points == null ? 0 : points.size();
 
         // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
         // TODO: refactor here
@@ -222,15 +198,14 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
 //                }
 //            }
 //        }
-        if (false);
-        else if (sendTestPattern) {
+        if (testOutput.isOn()) {
             int col = (int) ((System.nanoTime() / 1_000_000_000L) % 3L);
             int c = 0;
             switch (col) {
             /* don't use full-bright colors here, since they bust some of our fixtures. */
-            case 0: c = 0xFF880000; break;
-            case 1: c = 0xFF008800; break;
-            case 2: c = 0xFF000088; break;
+            case 0: c = 0xFF020000; break;
+            case 1: c = 0xFF000200; break;
+            case 2: c = 0xFF000002; break;
             }
             /* we want the test pattern to work even if we aren't mapped, and if
                we aren't mapped we don't know how many pixels we have. Since
@@ -239,58 +214,62 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
                send enough pixels that our highest pixel-count-per-controller cube
                would get enough pixels to turn on everything. */
             if (numPixels == 0) {
-                numPixels = CubesModel.Cube.MAX_PIXELS_PER_CONTROLLER;
+                setNumPixels();
             }
 //            initPacketData(numPixels, false);
             for (int i = 0; i < numPixels; i++) {
-                setPixel(i, c);
+                setPixel8(i, c);
             }
+
+            fillDatagramsAndAddToOutput();
         } else if (points != null) {
             // Fill the datagram with pixel data
-            fillDataGram();
+            fillDatagramsAndAddToOutput();
         } else {
             // Fill with all black if we don't have cube data
 //            initPacketData(numPixels, false);
             for (int i = 0; i < numPixels; i++) {
-                setPixel(i, LXColor.BLACK);
+                setPixel8(i, LXColor.BLACK);
             }
         }
 
+
         // Send the cube data to the cube. yay!
-        try {
-            dsocket.send(packet);
-        }
-        catch (Exception e) {
-            ApplicationState.setWarning("CubesController", "failed to send packet: " + e.getMessage());
-        }
+        super.onSend(src);
+//        try {
+//            dsocket.send(packet);
+//        }
+//        catch (Exception e) {
+//            ApplicationState.setWarning("CubesController", "failed to send packet: " + e.getMessage());
+//        }
     }
 
+    protected abstract void setNumPixels();
+
     // inheriting class must impliment
-    protected abstract void fillDataGram();
+    protected abstract void fillDatagramsAndAddToOutput();
 
     private void resetSocket() {
         if (dsocket != null) {
+            System.out.println("closing socket for controller: " + this.id);
             dsocket.close();
             dsocket = null;
         }
     }
 
-//    @Override
-//    public void dispose() {
-//        this.resetSocket();
-//        if (inventory != null) {
-//            inventory.removeListener(this);
-//        }
-//        super.dispose();
-//    }
+    @Override
+    public void dispose() {
+        this.resetSocket();
+        super.dispose();
+    }
 
-//    @Override
-//    public int compareTo(@NotNull AbstractSLControllerBase other) {
-//        return idInt != other.idInt ? Integer.compare(idInt, other.idInt) : id.compareTo(other.id);
-//    }
+    @Override
+    public int compareTo(@NotNull AbstractSLControllerBase other) {
+        return idInt != other.idInt ? Integer.compare(idInt, other.idInt) : id.compareTo(other.id);
+    }
 
     @Override
     public String toString() {
-        return String.format("cube id=%s ip=%s bcast=%s", id, host, isBroadcast ? "yes" : "no");
+        return String.format("cube id=%s ip=%s bcast=%s", id, networkDevice.ipAddress.getHostAddress(), isBroadcast ? "yes" : "no");
     }
 }

@@ -60,6 +60,18 @@ public class OPCDatagram extends LXDatagram implements OPCConstants {
         this.buffer[INDEX_DATA_LEN_LSB] = (byte)(dataLength & 0xFF);
     }
 
+    public OPCDatagram(int size, byte channel) {
+        super(HEADER_LEN + BYTES_PER_PIXEL*size);
+        indices = new int[0]; // zero size indice array if we're going raw
+        this.channel = channel;
+
+        int dataLength = BYTES_PER_PIXEL*size;
+        this.buffer[INDEX_CHANNEL] = channel;
+        this.buffer[INDEX_COMMAND] = COMMAND_SET_PIXEL_COLORS;
+        this.buffer[INDEX_DATA_LEN_MSB] = (byte)(dataLength >>> 8);
+        this.buffer[INDEX_DATA_LEN_LSB] = (byte)(dataLength & 0xFF);
+    }
+
     public void set16BitColorEnabled(boolean enable) {
         is16BitColorEnabled = enable;
     }

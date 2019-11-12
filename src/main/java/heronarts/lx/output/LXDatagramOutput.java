@@ -48,6 +48,7 @@ public class LXDatagramOutput extends LXOutput {
     private final SimpleDateFormat date = new SimpleDateFormat("[HH:mm:ss]");
 
     private boolean logConnections = true;
+    private long lastFrameMillis = 0;
 
     public LXDatagramOutput(LX lx) throws SocketException {
         this(lx, new DatagramSocket());
@@ -143,8 +144,10 @@ public class LXDatagramOutput extends LXOutput {
     protected void onSend(PolyBuffer src) {
         long now = System.currentTimeMillis();
         beforeSend(src);
-        for (LXDatagram datagram : this.datagrams) {
-            if (datagram.enabled.isOn() && (now > datagram.destination.sendAfter)) {
+        double fps = framesPerSecond.getValue();
+        if (enabled.isOn() && (fps == 0 || now > lastFrameMillis + 1000/fps)) {
+            for (LXDatagram datagram : this.datagrams) {
+//            if (datagram.enabled.isOn() && (now > datagram.destination.sendAfter)) {
                 datagram.onSend(src);
                 try {
                     this.socket.send(datagram.packet);
@@ -173,7 +176,9 @@ public class LXDatagramOutput extends LXOutput {
                         datagram.destination.error.setValue(true);
                     }
                 }
+
             }
+            lastFrameMillis = now;
         }
         afterSend(src);
     }

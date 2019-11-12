@@ -30,7 +30,6 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     private final CubeInventory inventory;
     private DatagramSocket dsocket;
     private DatagramPacket packet;
-    private OutputStream output;
     protected boolean is16BitColorEnabled = false;
 
     final int[] STRIP_ORD = new int[] {
@@ -130,7 +129,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         if (outputScaler != null) {
             c = outputScaler.apply8(c);
         }
-        int index = 4 + number * 3;
+        int index = HEADER_LEN + number * 3;
         packetData[index++] = LXColor.red(c);
         packetData[index++] = LXColor.green(c);
         packetData[index++] = LXColor.blue(c);

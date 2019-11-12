@@ -2,7 +2,8 @@ package com.symmetrylabs.shows.base;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.slstudio.output.SLController;
+import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
+import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.IntListener;
 import com.symmetrylabs.util.listenable.SetListener;
@@ -31,8 +32,8 @@ public class UIOutputs extends UICollapsibleSection {
         outputList.setSingleClickActivate(true);
         outputList.addToContainer(this);
 
-        show.addControllerSetListener(new SetListener<SLController>() {
-            public void onItemAdded(final SLController c) {
+        show.addControllerSetListener(new SetListener<AbstractSLControllerBase>() {
+            public void onItemAdded(final AbstractSLControllerBase c) {
                 dispatcher.dispatchUi(() -> {
                     if (c.networkDevice != null) {
                     c.networkDevice.version.addListener(deviceVersionListener);
@@ -42,7 +43,7 @@ public class UIOutputs extends UICollapsibleSection {
                 });
             }
 
-            public void onItemRemoved(final SLController c) {
+            public void onItemRemoved(final AbstractSLControllerBase c) {
                 dispatcher.dispatchUi(() -> {
                     if (c.networkDevice != null) {
                     c.networkDevice.version.removeListener(deviceVersionListener);
@@ -75,7 +76,7 @@ public class UIOutputs extends UICollapsibleSection {
 
     private void updateItems(SLShow show) {
         final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
-        for (SLController c : show.getSortedControllers()) { items.add(new ControllerItem(c)); }
+        for (AbstractSLControllerBase c : show.getSortedControllers()) { items.add(new ControllerItem(c)); }
         outputList.setItems(items);
         setTitle(items.size());
         redraw();
@@ -89,9 +90,9 @@ public class UIOutputs extends UICollapsibleSection {
     }
 
     class ControllerItem extends UIItemList.AbstractItem {
-        final SLController controller;
+        final AbstractSLControllerBase controller;
 
-        ControllerItem(SLController _controller) {
+        ControllerItem(AbstractSLControllerBase _controller) {
             this.controller = _controller;
             controller.enabled.addListener(param -> redraw());
         }

@@ -2,22 +2,20 @@ package com.symmetrylabs.shows.tree;
 
 import java.io.IOException;
 import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.net.InetAddress;
 import java.util.HashMap;
 
+import com.symmetrylabs.color.PerceptualColorScale;
+import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
+import com.symmetrylabs.slstudio.output.symmetree.TenereDatagramSet;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.StringParameter;
 
 import heronarts.lx.LX;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.output.LXDatagram;
-import heronarts.lx.output.LXDatagramOutput;
 
 import com.symmetrylabs.slstudio.output.TenereDatagram;
-import com.symmetrylabs.shows.tree.TreeModel;
-import org.jetbrains.annotations.NotNull;
 
 
 public class AssignableTenereController extends AbstractSLControllerBase {
@@ -30,7 +28,7 @@ public class AssignableTenereController extends AbstractSLControllerBase {
     private String ipAddress;
     private TreeModel.Branch branch;
     private final LX lx;
-    private final int[][] packets;
+    private final int[][] pixelColors;
 
 	public AssignableTenereController(LX lx, TreeModel.Branch branch) throws SocketException {
 		super(lx, branch.getConfig().ipAddress);
@@ -38,7 +36,7 @@ public class AssignableTenereController extends AbstractSLControllerBase {
 		this.ipAddress = branch.getConfig().ipAddress;
         this.branch = branch;
 
-		packets = new int[][] {
+		pixelColors = new int[][] {
 		    new int[POINTS_PER_PACKET],
 		    new int[POINTS_PER_PACKET],
 		    new int[POINTS_PER_PACKET],
@@ -65,16 +63,16 @@ public class AssignableTenereController extends AbstractSLControllerBase {
             });
 	}
 
-	static HashMap<String, AssignableTenereController> allImportedIps = new HashMap<>();
+	private static HashMap<String, AssignableTenereController> allImportedIps = new HashMap<>();
 	// TODO: undo copied code from above
     public AssignableTenereController(LX lx, com.symmetrylabs.shows.treeV2.TreeModel.Branch branch, SLControllerInventory slControllerInventory) throws SocketException {
         super(lx, slControllerInventory.getHostAddressByControllerID(branch.controllerId.getString()));
         this.lx = lx;
         String ipIn = slControllerInventory.getHostAddressByControllerID(branch.controllerId.getString());
-        this.ipAddress = ipNotAlreadyAlocated(ipIn, this) ? ipIn : "0.0.0.0"; // only assign ip if it's hasn't been taken in
+        this.ipAddress = ipNotAlreadyAllocated(ipIn, this) ? ipIn : "0.0.0.0"; // only assign ip if it's hasn't been taken in
         this.branch_v2 = branch;
 
-        packets = new int[][] {
+        pixelColors = new int[][] {
             new int[POINTS_PER_PACKET],
             new int[POINTS_PER_PACKET],
             new int[POINTS_PER_PACKET],
@@ -86,7 +84,24 @@ public class AssignableTenereController extends AbstractSLControllerBase {
         updateIndexesFromBranch2();
     }
 
-    private boolean ipNotAlreadyAlocated(String ipIn, AssignableTenereController branch) {
+    public AssignableTenereController(LX lx, NetworkDevice device, SLControllerInventory controllerInventory) throws SocketException {
+        super(lx, device, controllerInventory, new PerceptualColorScale(new double[] { 2.0, 2.1, 2.8 }, 1.0) );
+        this.lx = lx;
+        this.ipAddress = device.ipAddress.getHostAddress();
+        this.branch = branch;
+
+        pixelColors = new int[][] {
+            new int[POINTS_PER_PACKET],
+            new int[POINTS_PER_PACKET],
+            new int[POINTS_PER_PACKET],
+        };
+
+        if (ipAddress.equals("0.0.0.0")) {
+            enabled.setValue(false);
+        }
+    }
+
+    private boolean ipNotAlreadyAllocated(String ipIn, AssignableTenereController branch) {
         if (allImportedIps.containsKey(ipIn)){
             System.out.println("Oops.. " + ipIn + " was already allocated to controller: " + allImportedIps.get(ipIn).branch_v2.controllerId);
             return false;
@@ -98,10 +113,10 @@ public class AssignableTenereController extends AbstractSLControllerBase {
     }
 
     public void updateIndexesFromBranch2() {
-        for (int i = 0; i < packets.length; ++i) {
+        for (int i = 0; i < pixelColors.length; ++i) {
             // Initialize to nothing
             for (int j = 0; j < POINTS_PER_PACKET; j++) {
-                packets[i][j] = -1;
+                pixelColors[i][j] = -1;
             }
         }
 
@@ -111,13 +126,13 @@ public class AssignableTenereController extends AbstractSLControllerBase {
             int pindex = com.symmetrylabs.shows.treeV2.TreeModel.Twig.NUM_LEDS * (index - (TWIGS_PER_PACKET * packet));
             for (int indexInTwig = 0; indexInTwig < twig.points.length; indexInTwig++) {
                 boolean skip = false;
-                packets[packet][pindex++] = twig.points[indexInTwig].index;
+                pixelColors[packet][pindex++] = twig.points[indexInTwig].index;
             }
         }
 
         clearDatagrams();
         byte channel = 0;
-        for (int[] packet : packets) {
+        for (int[] packet : pixelColors) {
             TenereDatagram datagram = new TenereDatagram(lx, packet, channel);
             try {
                 datagram.setAddress(this.ipAddress).setPort(OPC_PORT);
@@ -130,10 +145,10 @@ public class AssignableTenereController extends AbstractSLControllerBase {
     }
 
     public void updateIndexesFromBranch() {
-		for (int i = 0; i < packets.length; ++i) {
+		for (int i = 0; i < pixelColors.length; ++i) {
 		    // Initialize to nothing
 		    for (int j = 0; j < POINTS_PER_PACKET; j++) {
-		        packets[i][j] = -1;
+		        pixelColors[i][j] = -1;
 		    }
 		}
 
@@ -151,13 +166,13 @@ public class AssignableTenereController extends AbstractSLControllerBase {
                         }
                     }
                 }
-                packets[packet][pindex++] = skip ? -1 : twig.points[indexInTwig].index;
+                pixelColors[packet][pindex++] = skip ? -1 : twig.points[indexInTwig].index;
             }
         }
 
         clearDatagrams();
         byte channel = 0;
-        for (int[] packet : packets) {
+        for (int[] packet : pixelColors) {
             TenereDatagram datagram = new TenereDatagram(lx, packet, channel);
             try {
                 datagram.setAddress(branch.getConfig().ipAddress).setPort(OPC_PORT);
@@ -176,7 +191,7 @@ public class AssignableTenereController extends AbstractSLControllerBase {
 			for (LXDatagram datagram : getDatagrams()) {
 				datagram.setAddress(ipAddress);
 			}
-		} catch (Exception e) { }
+		} catch (Exception e) { System.out.println("could not allocate host");}
 	}
 
 	public String getIpAddress() {
@@ -184,12 +199,25 @@ public class AssignableTenereController extends AbstractSLControllerBase {
 	}
 
     @Override
-    protected void fillDataGram() {
-        updateIndexesFromBranch();
+    protected void initPacketData(int numPixels, boolean use16) {
     }
 
     @Override
-    public int compareTo(@NotNull AbstractSLControllerBase o) {
-        return 0;
+    protected void setPixel8(int pixelIndex, int c) {
+        // to which packet does this pixel belong
+        int[] pixelColorPacket = pixelColors[pixelIndex/POINTS_PER_PACKET];
+
+        pixelColorPacket[pixelIndex%POINTS_PER_PACKET] = c;
+    }
+
+    @Override
+    protected void setNumPixels() {
+        this.numPixels = TWIGS_PER_PACKET*150*3;
+    }
+
+    @Override
+    protected void fillDatagramsAndAddToOutput() {
+        clearDatagrams();
+        addDatagrams(new TenereDatagramSet(lx, pixelColors, networkDevice).getDatagrams());
     }
 }
