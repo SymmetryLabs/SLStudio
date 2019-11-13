@@ -46,7 +46,7 @@ public class LimbSelectah extends SLPattern<SLModel> {
         int sublimHueRotate = 0;
         for (TreeModel.Limb l : sublimbs){
             for (LXPoint p : l.points) {
-                colors[p.index] = LXColor.hsb(sublimHueRotate * 80, 50, 100);
+                colors[p.index] = LXColor.hsb(60 + sublimHueRotate * 120, 100, 100);
             }
             sublimHueRotate++;
         }

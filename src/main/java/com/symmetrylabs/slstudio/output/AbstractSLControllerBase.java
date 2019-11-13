@@ -207,7 +207,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
             case 2: c = 0xFF0000f2; break;
             }
             if (momentaryAltTestOutput.isOn()){
-                c = 0xFFf1f2f3;
+                c = LXColor.hsb(0, 0, lx.engine.output.brightness.getNormalizedf() * 100);
             }
             /* we want the test pattern to work even if we aren't mapped, and if
                we aren't mapped we don't know how many pixels we have. Since
