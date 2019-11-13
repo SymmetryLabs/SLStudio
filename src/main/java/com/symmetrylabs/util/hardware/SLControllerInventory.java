@@ -83,6 +83,8 @@ public class SLControllerInventory {
         }
 
         public String getHostAddress() { return ipAddr.getHostAddress(); }
+
+        public String getMacAddr() { return macAddr; }
     }
 
     ArrayList<ControllerMetadata> treeInventory = new ArrayList<>();

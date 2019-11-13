@@ -932,12 +932,12 @@ public class EmpireWallShow implements Show {
 
 
 	// static class VineConfig {
-	// 	String id;
+	// 	String humanID;
 	// 	Quadrant quadrant;
 	// 	List<LeafConfig> leaves = new ArrayList<LeafConfig>();
 
-	// 	public VineConfig(String id, Quadrant quadrant, LeafConfig[] leaves) {
-	// 		this.id = id;
+	// 	public VineConfig(String humanID, Quadrant quadrant, LeafConfig[] leaves) {
+	// 		this.humanID = humanID;
 	// 		this.leaves = Arrays.asList(leaves);
 	// 	}
 	// }

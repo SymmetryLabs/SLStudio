@@ -129,7 +129,9 @@ public class BaseDemoShow extends SLShow implements Show {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        return new CubesModel(SHOW_NAME, towers, allCubesArr, cubeInventory, mapping);
+//        return new SLModel(SHOW_NAME, towers, allCubesArr, cubeInventory, mapping);
+//        return new SLModel(SHOW_NAME, towers, allCubesArr, cubeInventory, mapping);
+        return new SLModel("null", allCubesArr); // fix this later.
     }
 
     @Override

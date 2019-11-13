@@ -91,7 +91,7 @@ public class CubeInventory {
             CubeDataError.require(addrA != null, "addrA is null on cube %s", idA);
             CubeDataError.require(MAC_ADDR_PATTERN.test(addrA), "bad format for mac address A on cube %s: \"%s\"", idA, addrA);
             // both or neither of idB and addrB must be null
-            CubeDataError.require((addrB == null) == (idB == null), "only one of idB and addrB were set on cube id %s", idA);
+            CubeDataError.require((addrB == null) == (idB == null), "only one of idB and addrB were set on cube humanID %s", idA);
             if (addrB != null) {
                 CubeDataError.require(MAC_ADDR_PATTERN.test(addrB), "bad format for mac address B on cube %s: \"%s\"", idA, addrB);
             }

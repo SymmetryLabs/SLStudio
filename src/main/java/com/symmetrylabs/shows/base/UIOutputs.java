@@ -3,7 +3,6 @@ package com.symmetrylabs.shows.base;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
-import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.IntListener;
 import com.symmetrylabs.util.listenable.SetListener;
@@ -100,11 +99,11 @@ public class UIOutputs extends UICollapsibleSection {
         public String getLabel() {
             NetworkDevice device = controller.networkDevice;
             if (device != null && !device.versionId.isEmpty()) {
-                return controller.id + " (" + device.versionId + ")";
+                return controller.humanID + " (" + device.versionId + ")";
             } else if (device != null && device.version.get() >= 0) {
-                return controller.id + " (v" + device.version + ")";
+                return controller.humanID + " (v" + device.version + ")";
             } else {
-                return controller.id;
+                return controller.humanID;
             }
         }
 

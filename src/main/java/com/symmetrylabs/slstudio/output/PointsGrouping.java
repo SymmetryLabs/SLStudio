@@ -15,7 +15,7 @@ public class PointsGrouping {
     private final List<LXPoint> points = new ArrayList<LXPoint>();
 
     public PointsGrouping() {
-        this("no-id");
+        this("no-humanID");
     }
 
     public PointsGrouping(String id) {
@@ -23,11 +23,11 @@ public class PointsGrouping {
     }
 
     public PointsGrouping(List<LXPoint> points) {
-        this("no-id", points);
+        this("no-humanID", points);
     }
 
     public PointsGrouping(LXPoint[] points) {
-        this("ni-id", points);
+        this("ni-humanID", points);
     }
 
     public PointsGrouping(String id, List<LXPoint> points) {

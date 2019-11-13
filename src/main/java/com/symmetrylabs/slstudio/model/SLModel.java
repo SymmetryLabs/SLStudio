@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.slstudio.mappings.SLModelControllerMapping;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 import org.apache.commons.collections4.IteratorUtils;
@@ -24,9 +26,6 @@ public class SLModel extends LXModel {
     public static final int NUM_POINT_BATCHES = 64;
     public static final int OCTREE_INDEX_MIN_POINTS = 1000;
 
-    public final SLControllerInventory inventory;
-    public String controllerId = null;
-
     private ModelIndex modelIndex, modelIndexZFlattened;
 
     protected PointBatches pointBatches;
@@ -34,43 +33,30 @@ public class SLModel extends LXModel {
     public float[] pointsXYZ;
 
     // Global.  Perhaps really should be owned by top level SLModel.
-    static private HashMap<String, SLModel> fixtureByMappedID = new HashMap<>();
+    static public HashMap<String, SLModel> fixtureByMappedID = new HashMap<>();
 
-    public SLModel(String id) {
+    public SLModel(String id, List<CubesModel.Tower> towers, CubesModel.Cube[] allCubesArr) {
         super(id);
-        this.inventory = null;
     }
 
     public SLModel(String modelId, List<LXPoint> points) {
         super(modelId, points);
-        this.inventory = null;
         setupPointsArray();
     }
 
     public SLModel(String modelId, LXFixture fixture) {
         super(modelId, fixture);
-        this.inventory = null;
         setupPointsArray();
     }
 
     public SLModel(String modelId, LXFixture[] fixtures) {
         super(modelId, fixtures);
-        this.inventory = null;
-        setupPointsArray();
-    }
-
-    public SLModel(String modelId, LXFixture[] fixtures, SLControllerInventory inventory) {
-        super(modelId, fixtures);
-
-        this.inventory = inventory;
-
         setupPointsArray();
     }
 
     public SLModel(String modelId, String controllerId, LXFixture fixture) {
         super(modelId, fixture);
-        this.inventory = null;
-        this.controllerId = controllerId;
+//        this.mapping.setControllerAssignment(modelId, controllerId);
         SLModel.fixtureByMappedID.put(controllerId, this);
     }
 
@@ -120,11 +106,6 @@ public class SLModel extends LXModel {
 
     public /* abstract */ Iterator<? extends LXModel> getChildren() {
         return IteratorUtils.emptyIterator();
-    }
-
-    public PointsGrouping getPointsMappedToControllerID(String id) {
-        LXFixture mappedModel = fixtureByMappedID.get(id);
-        return mappedModel == null ? null : new PointsGrouping(mappedModel.getPoints());
     }
 
     public static class PointBatches {

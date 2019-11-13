@@ -2,9 +2,9 @@ package com.symmetrylabs.slstudio.output;
 
 import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.color.PerceptualColorScale;
+import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.slstudio.ApplicationState;
-import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
@@ -22,7 +22,7 @@ import java.net.*;
 
 // All of our controllers operate on UDP but the business logic isn't fundamentally coupled to the transport... (i.e. merits refactor to LXOutput)
 public abstract class AbstractSLControllerBase extends LXDatagramOutput implements Comparable<AbstractSLControllerBase>, OPCConstants, SLControllerInventory.Listener {
-    public String id;
+    public String humanID;
     public int idInt;
     public final boolean isBroadcast;
     public final NetworkDevice networkDevice;
@@ -54,18 +54,18 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
         this(lx, _host, "", true);
     }
 
-    private AbstractSLControllerBase(LX lx, String host, String id, boolean isBroadcast) throws SocketException {
-        this(lx, null, NetworkUtils.toInetAddress(host), id, null, isBroadcast, null);
+    private AbstractSLControllerBase(LX lx, String host, String humanID, boolean isBroadcast) throws SocketException {
+        this(lx, null, NetworkUtils.toInetAddress(host), humanID, null, isBroadcast, null);
     }
 
-    private AbstractSLControllerBase(LX lx, NetworkDevice networkDevice, InetAddress host, String id, SLControllerInventory inventory, boolean isBroadcast, PerceptualColorScale outputScaler) throws SocketException {
+    private AbstractSLControllerBase(LX lx, NetworkDevice networkDevice, InetAddress host, String humanID, SLControllerInventory inventory, boolean isBroadcast, PerceptualColorScale outputScaler) throws SocketException {
         super(lx);
 
         System.out.println("created socket for controller: " + networkDevice.ipAddress);
 
         this.lx = lx;
         this.networkDevice = networkDevice;
-        this.id = id;
+        this.humanID = humanID;
         this.inventory = inventory;
         this.outputScaler = outputScaler;
         this.isBroadcast = isBroadcast;
@@ -92,8 +92,8 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
     @Override
     public void onControllerListUpdated() {
         String newId = inventory.getControllerId(networkDevice.deviceId);
-        if (newId != null && (id == null || !id.equals(newId))) {
-            id = newId;
+        if (newId != null && (humanID == null || !humanID.equals(newId))) {
+            humanID = newId;
             onIdUpdated();
         }
     }
@@ -101,7 +101,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
     private void onIdUpdated() {
         int idInt = Integer.MAX_VALUE;
         try {
-            idInt = Integer.parseInt(id);
+            idInt = Integer.parseInt(humanID);
         } catch (NumberFormatException e) {}
         this.idInt = idInt;
     }
@@ -156,7 +156,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
         // If we're on broadcast, use cube 0 for all cubes, even
         // if that cube isn't modelled yet
         // Use the mac address to find the cube if we have it
-        // Otherwise use the cube id
+        // Otherwise use the cube humanID
 //        if (!(lx.model instanceof CubesModel)) {
 //            ApplicationState.setWarning("CubesController", "model is not a cube model");
 //            return;
@@ -164,13 +164,13 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
 
         PointsGrouping points = null;
 
-        points = getPointsMappedToController(); // returns null if we're not broadcast
+        points = SLShow.getPointsMappedToControllerID(this.humanID); // returns null if we're not broadcast
 
         numPixels = points == null ? 0 : points.size();
 
         // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
         // TODO: refactor here
-//        if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(id)) {
+//        if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(humanID)) {
 //            initPacketData(numPixels, false);
 //            if (mappingMode.inUnMappedMode()) {
 //                if (mappingMode.inDisplayAllMode()) {
@@ -179,7 +179,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
 //                    for (int i = 0; i < numPixels; i++)
 //                        setPixel(i, col);
 //                } else {
-//                    if (mappingMode.isSelectedUnMappedFixture(id)) {
+//                    if (mappingMode.isSelectedUnMappedFixture(humanID)) {
 //                        int col = mappingMode.getUnMappedColor();
 //
 //                        for (int i = 0; i < numPixels; i++)
@@ -195,6 +195,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
 //                }
 //            }
 //        }
+
         if (testOutput.isOn()) {
             int col = (int) ((System.nanoTime() / 1_000_000_000L) % 3L);
             int c = 0;
@@ -219,7 +220,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
             }
 
             fillDatagramsAndAddToOutput();
-        } else if (points != null) {
+        } else if (points != null) { // there is a fixture for this one
             // Fill the datagram with pixel data
             if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
                 initPacketData(numPixels, true);
@@ -241,8 +242,13 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
             // Fill with all black if we don't have cube data
 //            initPacketData(numPixels, false);
             unmappedSendBlack.setValue(true);
+            if (numPixels == 0) {
+                setNumPixels();
+            }
             for (int i = 0; i < numPixels; i++) {
-                setPixel8(i, LXColor.BLACK);
+                int unmappedColor = LXColor.rgba(0xff, 0, 0, (int) (lx.engine.output.brightness.getValue() * 0xff));
+                unmappedColor = LXColor.scaleBrightness(unmappedColor, lx.engine.output.brightness.getNormalizedf());
+                setPixel8(i, unmappedColor);
             }
             fillDatagramsAndAddToOutput();
         }
@@ -251,10 +257,6 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
         super.onSend(src);
     }
 
-    private PointsGrouping getPointsMappedToController() {
-        SLModel model = (SLModel) lx.model;
-        return model.getPointsMappedToControllerID(this.id);
-    }
 
 
     private PointsGrouping getBroadcastPointsFromFixture0(LXModel model) {
@@ -270,7 +272,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
                     points = new PointsGrouping(cube.getPoints());
                 }
             } else {
-                points = cubesModel.getControllerPoints(id);
+                points = cubesModel.getControllerPoints(humanID);
             }
         }
         return points;
@@ -283,7 +285,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
 
     private void resetSocket() {
         if (socket != null) {
-            System.out.println("closing socket for controller: " + this.id + "---" + this.networkDevice.ipAddress);
+            System.out.println("closing socket for controller: " + this.humanID + "---" + this.networkDevice.ipAddress);
             socket.close();
         }
     }
@@ -296,11 +298,11 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
 
     @Override
     public int compareTo(@NotNull AbstractSLControllerBase other) {
-        return idInt != other.idInt ? Integer.compare(idInt, other.idInt) : id.compareTo(other.id);
+        return idInt != other.idInt ? Integer.compare(idInt, other.idInt) : humanID.compareTo(other.humanID);
     }
 
     @Override
     public String toString() {
-        return String.format("cube id=%s ip=%s bcast=%s", id, networkDevice.ipAddress.getHostAddress(), isBroadcast ? "yes" : "no");
+        return String.format("cube humanID=%s ip=%s bcast=%s", humanID, networkDevice.ipAddress.getHostAddress(), isBroadcast ? "yes" : "no");
     }
 }

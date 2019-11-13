@@ -175,7 +175,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         // If we're on broadcast, use cube 0 for all cubes, even
         // if that cube isn't modelled yet
         // Use the mac address to find the cube if we have it
-        // Otherwise use the cube id
+        // Otherwise use the cube humanID
         if (!(lx.model instanceof CubesModel)) {
             ApplicationState.setWarning("CubesController", "model is not a cube model");
             return;
@@ -302,6 +302,6 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 
     @Override
     public String toString() {
-        return String.format("cube id=%s ip=%s bcast=%s", id, host, isBroadcast ? "yes" : "no");
+        return String.format("cube humanID=%s ip=%s bcast=%s", id, host, isBroadcast ? "yes" : "no");
     }
 }

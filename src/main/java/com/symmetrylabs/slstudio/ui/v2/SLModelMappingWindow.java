@@ -1,9 +1,8 @@
 package com.symmetrylabs.slstudio.ui.v2;
 
+import com.symmetrylabs.shows.base.SLShow;
+import com.symmetrylabs.slstudio.mappings.SLModelControllerMapping;
 import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.output.CubeModelControllerMapping;
-import com.symmetrylabs.slstudio.output.SLModelControllerMapping;
-import com.symmetrylabs.util.hardware.CubeInventory;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXModel;
@@ -18,12 +17,14 @@ public class SLModelMappingWindow extends CloseableWindow {
     protected final SLModel model;
     protected final SLControllerInventory inventory;
     private String filter = "";
+    private SLShow show;
 
-    public SLModelMappingWindow(LX lx, SLModel model) {
+    public SLModelMappingWindow(LX lx, SLShow show) {
         super("Mapping");
         this.lx = lx;
-        this.model = model;
-        this.inventory = model.inventory;
+        this.show = show;
+        this.inventory = show.controllerInventory;
+        this.model = (SLModel) lx.model; // top level model
     }
 
     @Override
@@ -76,18 +77,18 @@ public class SLModelMappingWindow extends CloseableWindow {
 
             SLModel c = topoModel.get(i);
 
-//            SLModelControllerMapping.PhysIdAssignment pia = model.mapping.lookUpModel(c.modelId);
-//            CubeInventory.PhysicalCube pc = pia != null ? model.inventory.lookUpByPhysId(pia.physicalId) : null;
+            SLModelControllerMapping.PhysIdAssignment pia = show.mapping.lookUpModel(c.modelId);
+            SLControllerInventory.ControllerMetadata pc = pia != null ? show.controllerInventory.controllerByCtrlId.get(pia.humanID) : null;
 
-//            if (!filter.equals("")) {
-//                boolean modelIdMatch = c.modelId.contains(filter);
-//                boolean physIdMatch = pia != null && pia.physicalId != null && pia.physicalId.contains(filter);
-//                boolean ctrlIdMatch = pc != null && ((pc.idA != null && pc.idA.contains(filter)) || (pc.idB != null && pc.idB.contains(filter)));
-//                boolean ctrlAddrMatch = pc != null && ((pc.addrA != null && pc.addrA.contains(filter)) || (pc.addrB != null && pc.addrB.contains(filter)));
-//                if (!(modelIdMatch || physIdMatch || ctrlIdMatch || ctrlAddrMatch)) {
-//                    continue;
-//                }
-//            }
+            if (!filter.equals("")) {
+                boolean modelIdMatch = c.modelId.contains(filter);
+                boolean physIdMatch = pia != null && pia.humanID != null && pia.humanID.contains(filter);
+                boolean ctrlIdMatch = pc != null && ((pc.getHumanID() != null && pc.getHumanID().contains(filter)));
+                boolean ctrlAddrMatch = pc != null && ((pc.getMacAddr() != null && pc.getMacAddr().contains(filter)));
+                if (!(modelIdMatch || physIdMatch || ctrlIdMatch || ctrlAddrMatch)) {
+                    continue;
+                }
+            }
 
             if (expand) {
                 UI.setNextTreeNodeOpen(true);
@@ -96,13 +97,13 @@ public class SLModelMappingWindow extends CloseableWindow {
             }
 
             UI.CollapseResult cr = UI.collapsibleSection(c.modelId, false);
-//            if (UI.beginDragDropTarget()) {
-//                String physId = UI.acceptDragDropPayload("SL.CubePhysId", String.class);
-//                if (physId != null) {
-//                    model.mapping.setControllerAssignment(c.modelId, physId);
-//                    anyUpdated = true;
-//                }
-//            }
+            if (UI.beginDragDropTarget()) {
+                String physId = UI.acceptDragDropPayload("SL.CubePhysId", String.class);
+                if (physId != null) {
+                    show.mapping.setControllerAssignment(c.modelId, physId);
+                    anyUpdated = true;
+                }
+            }
 
             if (!cr.isOpen) {
                 continue;
@@ -111,7 +112,7 @@ public class SLModelMappingWindow extends CloseableWindow {
 
             UI.inputFloat3("position##" + i, new float[] {c.ax, c.ay, c.az, c.cx, c.cy, c.cz}, UI.INPUT_TEXT_FLAG_READ_ONLY);
 
-            UI.labelText("controllerID", c.controllerId == null ? "(null)" : c.controllerId);
+//            UI.labelText("controllerID", c.controllerId == null ? "(null)" : c.controllerId);
 
 //            String oldPhysId = pia == null ? "" : pia.physicalId;
 //            String newPhysId = UI.inputText(String.format("physid##%d", i), oldPhysId);

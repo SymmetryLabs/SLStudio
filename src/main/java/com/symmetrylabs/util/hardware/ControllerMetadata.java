@@ -44,7 +44,7 @@
 //            ipAddr = (Inet4Address) slc.networkDevice.ipAddress;
 //
 //        macAddrString = MACAddress.valueOf(slc.networkDevice.deviceId).toString();
-//        humanID = slc.id;
+//        humanID = slc.humanID;
 //        statusNotes = slc.notes;
 //        switchPort = slc.switchPortNumber;
 //    }

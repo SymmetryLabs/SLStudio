@@ -1,7 +1,7 @@
 package com.symmetrylabs.shows.base;
 
 //public class SLController extends LXOutput implements Comparable<SLController>, OPCConstants {
-//    public String id;
+//    public String humanID;
 //    public int idInt;
 //    public final InetAddress host;
 //    public final boolean isBroadcast;
@@ -34,17 +34,17 @@ package com.symmetrylabs.shows.base;
 //        this(lx, _host, "", true);
 //    }
 //
-//    private SLController(LX lx, String host, String id, boolean isBroadcast) {
-//        this(lx, null, NetworkUtils.toInetAddress(host), id, null, isBroadcast, null);
+//    private SLController(LX lx, String host, String humanID, boolean isBroadcast) {
+//        this(lx, null, NetworkUtils.toInetAddress(host), humanID, null, isBroadcast, null);
 //    }
 //
-//    private SLController(LX lx, NetworkDevice networkDevice, InetAddress host, String id, CubeInventory inventory, boolean isBroadcast, PerceptualColorScale outputScaler) {
+//    private SLController(LX lx, NetworkDevice networkDevice, InetAddress host, String humanID, CubeInventory inventory, boolean isBroadcast, PerceptualColorScale outputScaler) {
 //        super(lx);
 //
 //        this.lx = lx;
 //        this.networkDevice = networkDevice;
 //        this.host = host;
-//        this.id = id;
+//        this.humanID = humanID;
 ////        this.inventory = inventory;
 //        this.outputScaler = outputScaler;
 //        this.isBroadcast = isBroadcast;
@@ -68,8 +68,8 @@ package com.symmetrylabs.shows.base;
 //
 //    public void onControllerListUpdated() {
 ////        String newId = inventory.getControllerId(networkDevice.deviceId);
-////        if (newId != null && (id == null || !id.equals(newId))) {
-////            id = newId;
+////        if (newId != null && (humanID == null || !humanID.equals(newId))) {
+////            humanID = newId;
 ////            onIdUpdated();
 ////        }
 //            onIdUpdated();
@@ -78,7 +78,7 @@ package com.symmetrylabs.shows.base;
 //    private void onIdUpdated() {
 //        int idInt = Integer.MAX_VALUE;
 //        try {
-//            idInt = Integer.parseInt(id);
+//            idInt = Integer.parseInt(humanID);
 //        } catch (NumberFormatException e) {}
 //        this.idInt = idInt;
 //    }
@@ -150,7 +150,7 @@ package com.symmetrylabs.shows.base;
 //        // If we're on broadcast, use cube 0 for all cubes, even
 //        // if that cube isn't modelled yet
 //        // Use the mac address to find the cube if we have it
-//        // Otherwise use the cube id
+//        // Otherwise use the cube humanID
 //        if (!(lx.model instanceof CubesModel)) {
 //            ApplicationState.setWarning("CubesController", "model is not a cube model");
 //            return;
@@ -179,11 +179,11 @@ package com.symmetrylabs.shows.base;
 //
 //    @Override
 //    public int compareTo(@NotNull SLController other) {
-//        return idInt != other.idInt ? Integer.compare(idInt, other.idInt) : id.compareTo(other.id);
+//        return idInt != other.idInt ? Integer.compare(idInt, other.idInt) : humanID.compareTo(other.humanID);
 //    }
 //
 //    @Override
 //    public String toString() {
-//        return String.format("cube id=%s ip=%s bcast=%s", id, host, isBroadcast ? "yes" : "no");
+//        return String.format("cube humanID=%s ip=%s bcast=%s", humanID, host, isBroadcast ? "yes" : "no");
 //    }
 //}

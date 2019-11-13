@@ -674,7 +674,7 @@ public class StripsTopology {
                     if (strip == null) {
                         sb.append("(null!)");
                     } else {
-                        sb.append("id=");
+                        sb.append("humanID=");
                         sb.append(strip.modelId);
                         sb.append(" hash=");
                         sb.append(strip.hashCode());

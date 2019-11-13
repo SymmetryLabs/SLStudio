@@ -5,17 +5,16 @@ import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.cubes.*;
 import com.symmetrylabs.shows.tree.AssignableTenereController;
 import com.symmetrylabs.slstudio.SLStudioLX;
+import com.symmetrylabs.slstudio.mappings.SLModelControllerMapping;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
-import com.symmetrylabs.slstudio.output.CubeModelControllerMapping;
-import com.symmetrylabs.slstudio.output.PointsGrouping;
-import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
 //import com.symmetrylabs.slstudio.output.TreeController;
+import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.slstudio.ui.v2.SLModelMappingWindow;
 import com.symmetrylabs.slstudio.ui.v2.WindowManager;
-import com.symmetrylabs.util.hardware.CubeInventory;
+import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 import com.symmetrylabs.util.listenable.ListenableSet;
@@ -37,6 +36,11 @@ import java.util.*;
 public abstract class SLShow implements Show {
     public static final String SHOW_NAME = "slshow";
 
+
+    // top level metadata used in any show
+    public static SLModelControllerMapping mapping = null; // only initialized for top level... more evidence we need a top level SLModel
+    public SLControllerInventory controllerInventory = new SLControllerInventory();
+
     /**
      * Power related.
      */
@@ -48,12 +52,9 @@ public abstract class SLShow implements Show {
     public final ListenableSet<AbstractSLControllerBase> controllers = new ListenableSet<>();
     public final ListenableSet<CubesController> cubesControllers = new ListenableSet<>();
 //    public final ListenableSet<TreeController> treeControllers = new ListenableSet<>();
-    public final CubeInventory cubeInventory;
-    public final CubeModelControllerMapping mapping;
     public final PerceptualColorScale outputScaler = new PerceptualColorScale(new double[] { 2.0, 2.1, 2.8 }, 1.0);
 
     private static Map<LX, WeakReference<SLShow>> instanceByLX = new WeakHashMap<>();
-    private SLControllerInventory controllerInventory = new SLControllerInventory();
 
     public static SLShow getInstance(LX lx) {
         WeakReference<SLShow> weakRef = instanceByLX.get(lx);
@@ -61,8 +62,13 @@ public abstract class SLShow implements Show {
     }
 
     public SLShow() {
-        cubeInventory = CubeInventory.loadFromDisk();
-        mapping = CubeModelControllerMapping.loadFromDisk(getShowName(), cubeInventory);
+        try {
+            controllerInventory = SLControllerInventory.loadFromDisk();
+        } catch (FileNotFoundException e) {
+            System.err.println("could not load controller inventory");
+            e.printStackTrace();
+        }
+        mapping = SLModelControllerMapping.loadFromDisk(getShowName(), controllerInventory);
     }
 
     public abstract SLModel buildModel();
@@ -78,12 +84,6 @@ public abstract class SLShow implements Show {
         controllers.add(local_debug);
         lx.addOutput(local_debug);
         */
-        try {
-            controllerInventory = SLControllerInventory.loadFromDisk();
-        } catch (FileNotFoundException e) {
-            System.err.println("Could not load inventory from disk");
-            e.printStackTrace();
-        }
 
         networkMonitor.opcDeviceList.addListener(new SetListener<NetworkDevice>() {
             public void onItemAdded(NetworkDevice device) {
@@ -141,6 +141,13 @@ public abstract class SLShow implements Show {
         controllers.addListener(listener);
     }
 
+    public static PointsGrouping getPointsMappedToControllerID(String humanID) {
+        SLModel mappedModel = SLModel.fixtureByMappedID.get(humanID);
+        // ok we found a mapping. Place it in the mappings.
+        mapping.setControllerAssignment(mappedModel.modelId, humanID); // is this necessary after constructor?
+        return mappedModel == null ? null : new PointsGrouping(mappedModel.getPoints());
+    }
+
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         UI2dScrollContext utility = ui.rightPane.utility;
         new UIOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
@@ -148,8 +155,8 @@ public abstract class SLShow implements Show {
     }
 
     public void setupUi(LX lx) {
-        WindowManager.addPersistent("Controllers/Inventory", () -> new InventoryEditor(lx, cubeInventory), false);
-        WindowManager.addPersistent("Controllers/Mapping", () -> new SLModelMappingWindow(lx, (SLModel) lx.model), false);
+//        WindowManager.addPersistent("Controllers/Inventory", () -> new CubesInventoryEditor(lx, controllerInventory), false);
+        WindowManager.addPersistent("Controllers/Mapping", () -> new SLModelMappingWindow(lx, this), false);
         WindowManager.addPersistent("Controllers/Output", () -> new SLOutputWindow(lx, this), false);
         WindowManager.addPersistent("Controllers/Scaling", () -> new OutputScaleWindow(lx, outputScaler), false);
     }

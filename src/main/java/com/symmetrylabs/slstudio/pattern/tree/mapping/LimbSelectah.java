@@ -16,12 +16,15 @@ public class LimbSelectah extends SLPattern<SLModel> {
 
     private final TreeModel model;
     private final DiscreteParameter selectedLimb;
+    private final DiscreteParameter skippy;
 
     public LimbSelectah(LX lx) {
         super(lx);
         this.model = (TreeModel) lx.model;
         this.selectedLimb = new DiscreteParameter("limb", 1, 1, model.limbs.size()+1);
+        this.skippy = new DiscreteParameter("every n pixel", 1, 5);
         addParameter(selectedLimb);
+        addParameter(skippy);
     }
 
     public void run(double deltaMs, PolyBuffer.Space space) {
@@ -29,9 +32,10 @@ public class LimbSelectah extends SLPattern<SLModel> {
         setColors(0);
 
         TreeModel.Limb limb = model.limbs.get(selectedLimb.getValuei()-1);
-        int skippy = 0;
+        int skip = 0;
         for (LXPoint p : limb.points) {
-            colors[p.index] = skippy++%4 == 0 ? 0xff010233 : 0;
+            int c = palette.getColor();
+            colors[p.index] = skip++%skippy.getValuei() == 0 ? c : 0;
         }
         markModified(SRGB8);
     }

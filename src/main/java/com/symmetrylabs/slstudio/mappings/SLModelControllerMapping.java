@@ -1,9 +1,13 @@
-package com.symmetrylabs.slstudio.output;
+package com.symmetrylabs.slstudio.mappings;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonWriter;
 import com.symmetrylabs.slstudio.ApplicationState;
+import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.output.PointsGrouping;
+import com.symmetrylabs.slstudio.output.SLController;
+import com.symmetrylabs.util.hardware.CubeInventory;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 
 import java.io.*;
@@ -16,26 +20,25 @@ import java.util.Map;
 public class SLModelControllerMapping {
     public static final String CTRL_MAP_FILENAME = "sl-controller-mapping.json";
 
-
     public static final class PhysIdAssignment {
         public String modelId;
-        public String physicalId;
+        public String humanID;
 
-        protected PhysIdAssignment(String modelId, String physicalId) {
+        protected PhysIdAssignment(String modelId, String humanID) {
             this.modelId = modelId;
-            this.physicalId = physicalId;
+            this.humanID = humanID;
         }
 
         @Override
         public String toString() {
-            return String.format("phys %s = model %s", physicalId, modelId);
+            return String.format("phys %s = model %s", humanID, modelId);
         }
     }
 
     protected final List<PhysIdAssignment> assignments = new ArrayList<>();
-    protected transient final Map<String, PhysIdAssignment> assignmentsByPhysId = new HashMap<>();
+    public transient final Map<String, PhysIdAssignment> assignmentsByHumanID = new HashMap<>();
     protected transient final Map<String, PhysIdAssignment> assignmentsByModelId = new HashMap<>();
-    protected transient SLControllerInventory inventory = new SLControllerInventory();
+    protected transient SLControllerInventory inventory;
     protected final String showName;
 
     protected SLModelControllerMapping() {
@@ -43,12 +46,9 @@ public class SLModelControllerMapping {
         this.inventory = null;
     }
 
-    protected SLModelControllerMapping(String showName) {
+    protected SLModelControllerMapping(String showName, SLControllerInventory inventory) {
         this.showName = showName;
-    }
-
-    public SLModelControllerMapping(String showName, SLControllerInventory inventory) {
-        this.showName = showName;
+        this.inventory = inventory;
     }
 
     protected File showFile() {
@@ -60,16 +60,16 @@ public class SLModelControllerMapping {
     }
 
     public PhysIdAssignment lookUpByPhysId(String physId) {
-        return assignmentsByPhysId.get(physId);
+        return assignmentsByHumanID.get(physId);
     }
 
-    public PhysIdAssignment lookUpByHumanID(String ctrlId) {
-        if (assignmentsByPhysId.containsKey(ctrlId)) {
-            return assignmentsByPhysId.get(ctrlId);
+    public PhysIdAssignment lookUpByControllerId(String ctrlId) {
+        if (assignmentsByHumanID.containsKey(ctrlId)) {
+            return assignmentsByHumanID.get(ctrlId);
         }
-        SLControllerInventory.ControllerMetadata pc = inventory.macAddrToControllerMetadataMap.get(ctrlId);
+        SLControllerInventory.ControllerMetadata pc = inventory.controllerByCtrlId.get(ctrlId);
         if (pc == null) return null;
-        return assignmentsByPhysId.get(pc.getHumanID());
+        return assignmentsByHumanID.get(pc.getHumanID());
     }
 
     public PhysIdAssignment lookUpModel(String modelId) {
@@ -78,8 +78,8 @@ public class SLModelControllerMapping {
 
     public void setControllerAssignment(String modelId, String physId) {
         /* if physical output was mapped to another model, remove that assignment */
-        if (assignmentsByPhysId.containsKey(physId)) {
-            assignments.remove(assignmentsByPhysId.get(physId));
+        if (assignmentsByHumanID.containsKey(physId)) {
+            assignments.remove(assignmentsByHumanID.get(physId));
         }
         /* if model was mapped to another physical output, update that assignment */
         if (!assignmentsByModelId.containsKey(modelId)) {
@@ -87,17 +87,17 @@ public class SLModelControllerMapping {
         }
         /* otherwise create a new assignment */
         else {
-            assignmentsByModelId.get(modelId).physicalId = physId;
+            assignmentsByModelId.get(modelId).humanID = physId;
         }
         /* rebuild lookup tables */
         onUpdate();
     }
 
     public void onUpdate() {
-        assignmentsByPhysId.clear();
+        assignmentsByHumanID.clear();
         assignmentsByModelId.clear();
         for (PhysIdAssignment ca : assignments) {
-            assignmentsByPhysId.put(ca.physicalId, ca);
+            assignmentsByHumanID.put(ca.humanID, ca);
             assignmentsByModelId.put(ca.modelId, ca);
         }
     }
@@ -138,4 +138,5 @@ public class SLModelControllerMapping {
         }
         return new SLModelControllerMapping(showName, inventory);
     }
+
 }

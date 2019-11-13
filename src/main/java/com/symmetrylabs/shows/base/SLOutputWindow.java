@@ -1,18 +1,13 @@
 package com.symmetrylabs.shows.base;
 
-import com.symmetrylabs.shows.cubes.CubesController;
-import com.symmetrylabs.shows.cubes.CubesModel;
-import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
 import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
 import com.symmetrylabs.slstudio.ui.v2.*;
 import com.symmetrylabs.util.hardware.powerMon.ControllerWithPowerFeedback;
 import heronarts.lx.LX;
 
-import java.io.IOException;
 import java.util.Collection;
 
 public class SLOutputWindow extends CloseableWindow {
@@ -84,8 +79,8 @@ public class SLOutputWindow extends CloseableWindow {
                 }
             }
 
-//            boolean mapped = model.mapping.lookUpByControllerId(cc.id) != null;
-            if (false) {
+            boolean mapped = show.mapping.lookUpByControllerId(cc.humanID) != null;
+            if (mapped) {
                 UI.pushColor(UI.COLOR_HEADER, UIConstants.BLUE);
                 UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.BLUE);
                 UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.BLUE_HOVER);
@@ -94,7 +89,7 @@ public class SLOutputWindow extends CloseableWindow {
                 UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.RED);
                 UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.RED_HOVER);
             }
-            UI.CollapseResult cr = UI.collapsibleSection(cc.id, false);
+            UI.CollapseResult cr = UI.collapsibleSection(cc.humanID, false);
             if (cc.getMacAddress() != null && UI.beginDragDropSource()) {
                 UI.setDragDropPayload("SL.CubeMacAddress", cc.getMacAddress());
                 UI.endDragDropSource();
