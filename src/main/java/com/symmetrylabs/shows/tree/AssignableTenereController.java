@@ -313,8 +313,10 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
     // flips port power if above threshold (like a digital breaker)
     public void killByThreshHold(){
         for (int i = 0; i < 8; i++){
-            if (lastReceivedPowerSample.analogSampleArray[i] > blackoutPowerThreshold.getValuei()){
-                pwrMask[i].setValue(true); // mask this output i.e. shutoff this output
+            if (lastReceivedPowerSample != null){
+                if (lastReceivedPowerSample.analogSampleArray[i] > blackoutPowerThreshold.getValuei()){
+                    pwrMask[i].setValue(true); // mask this output i.e. shutoff this output
+                }
             }
             else {
                 pwrMask[i].setValue(false);
