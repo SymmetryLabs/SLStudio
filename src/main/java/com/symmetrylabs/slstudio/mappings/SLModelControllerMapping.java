@@ -69,7 +69,7 @@ public class SLModelControllerMapping {
         return assignmentsByHumanID.get(pc.getHumanID());
     }
 
-    public PhysIdAssignment lookUpModel(String modelId) {
+    public PhysIdAssignment lookUpByModelID(String modelId) {
         return assignmentsByModelId.get(modelId);
     }
 

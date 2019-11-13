@@ -15,7 +15,6 @@ import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.slstudio.ui.v2.SLModelMappingWindow;
 import com.symmetrylabs.slstudio.ui.v2.WindowManager;
 import com.symmetrylabs.util.dispatch.Dispatcher;
-import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 import com.symmetrylabs.util.listenable.ListenableSet;
 import com.symmetrylabs.util.listenable.SetListener;
@@ -44,10 +43,11 @@ public abstract class SLShow implements Show {
     /**
      * Power related.
      */
-    DiscreteParameter globalBlackoutPowerThreshhold = new DiscreteParameter("global blackout", 4095);
+    DiscreteParameter globalBlackoutPowerThreshhold = new DiscreteParameter("global blackout", 200, 0, 4095);
 
 
     public final HashMap<InetAddress, AbstractSLControllerBase> controllerByInetAddrMap = new HashMap<>();
+    public final HashMap<String, AbstractSLControllerBase> controllerByName = new HashMap<String, AbstractSLControllerBase>();
 
     public final ListenableSet<AbstractSLControllerBase> controllers = new ListenableSet<>();
     public final ListenableSet<CubesController> cubesControllers = new ListenableSet<>();
@@ -92,6 +92,7 @@ public abstract class SLShow implements Show {
                     controller = new AssignableTenereController(lx, device, controllerInventory);
                     controllers.add(controller);
                     controllerByInetAddrMap.put(device.ipAddress, controller);
+                    controllerByName.put(controller.humanID, controller);
                     dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
                 } catch (SocketException e) {
                     e.printStackTrace();

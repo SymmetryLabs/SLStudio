@@ -17,6 +17,7 @@ import static com.symmetrylabs.util.MathConstants.*;
 public class TreeModel extends SLModel {
 
 	public final List<Limb> limbs;
+    public final List<Limb> allSublimbs = new ArrayList<>();
 	public final List<Branch> branches;
 	public final List<Twig> twigs;
 	public final List<Leaf> leaves;

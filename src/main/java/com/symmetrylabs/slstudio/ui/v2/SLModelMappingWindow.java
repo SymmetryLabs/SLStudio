@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.ui.v2;
 import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.slstudio.mappings.SLModelControllerMapping;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXModel;
@@ -77,7 +78,7 @@ public class SLModelMappingWindow extends CloseableWindow {
 
             SLModel c = topoModel.get(i);
 
-            SLModelControllerMapping.PhysIdAssignment pia = show.mapping.lookUpModel(c.modelId);
+            SLModelControllerMapping.PhysIdAssignment pia = SLShow.mapping.lookUpByModelID(c.modelId);
             SLControllerInventory.ControllerMetadata pc = pia != null ? show.controllerInventory.controllerByCtrlId.get(pia.humanID) : null;
 
             if (!filter.equals("")) {
@@ -105,6 +106,13 @@ public class SLModelMappingWindow extends CloseableWindow {
                 }
             }
 
+            if (pc != null){
+                AbstractSLControllerBase cc = show.controllerByName.get(pc.getHumanID());
+                if (cc != null){
+                    cc.momentaryAltTestOutput.setValue(UI.isItemClicked(true) && UI.isAltDown());
+                }
+            }
+
             if (!cr.isOpen) {
                 continue;
             }
@@ -112,7 +120,7 @@ public class SLModelMappingWindow extends CloseableWindow {
 
             UI.inputFloat3("position##" + i, new float[] {c.ax, c.ay, c.az, c.cx, c.cy, c.cz}, UI.INPUT_TEXT_FLAG_READ_ONLY);
 
-//            UI.labelText("controllerID", c.controllerId == null ? "(null)" : c.controllerId);
+            UI.labelText("controllerID", pia == null ? "(null)" : pia.humanID);
 
 //            String oldPhysId = pia == null ? "" : pia.physicalId;
 //            String newPhysId = UI.inputText(String.format("physid##%d", i), oldPhysId);

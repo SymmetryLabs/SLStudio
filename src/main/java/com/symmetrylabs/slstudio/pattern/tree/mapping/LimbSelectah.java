@@ -9,6 +9,10 @@ import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXParameter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
@@ -21,7 +25,7 @@ public class LimbSelectah extends SLPattern<SLModel> {
     public LimbSelectah(LX lx) {
         super(lx);
         this.model = (TreeModel) lx.model;
-        this.selectedLimb = new DiscreteParameter("limb", 1, 1, model.limbs.size()+1);
+        this.selectedLimb = new DiscreteParameter("limb", 0, model.limbs.size());
         this.skippy = new DiscreteParameter("every n pixel", 1, 5);
         addParameter(selectedLimb);
         addParameter(skippy);
@@ -31,12 +35,22 @@ public class LimbSelectah extends SLPattern<SLModel> {
         int[] colors = (int[]) getArray(SRGB8);
         setColors(0);
 
-        TreeModel.Limb limb = model.limbs.get(selectedLimb.getValuei()-1);
+        TreeModel.Limb limb = model.limbs.get(selectedLimb.getValuei());
+        List<TreeModel.Limb> sublimbs = limb.limbs;
         int skip = 0;
         for (LXPoint p : limb.points) {
             int c = palette.getColor();
             colors[p.index] = skip++%skippy.getValuei() == 0 ? c : 0;
         }
+
+        int sublimHueRotate = 0;
+        for (TreeModel.Limb l : sublimbs){
+            for (LXPoint p : l.points) {
+                colors[p.index] = LXColor.hsb(sublimHueRotate * 80, 50, 100);
+            }
+            sublimHueRotate++;
+        }
+
         markModified(SRGB8);
     }
 }
