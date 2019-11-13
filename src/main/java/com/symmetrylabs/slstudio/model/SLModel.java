@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.slstudio.mappings.SLModelControllerMapping;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
@@ -56,8 +57,9 @@ public class SLModel extends LXModel {
 
     public SLModel(String modelId, String controllerId, LXFixture fixture) {
         super(modelId, fixture);
-//        this.mapping.setControllerAssignment(modelId, controllerId);
+        SLShow.mapping.setControllerAssignment(modelId, controllerId);
         SLModel.fixtureByMappedID.put(controllerId, this);
+
     }
 
     private void setupPointsArray() {

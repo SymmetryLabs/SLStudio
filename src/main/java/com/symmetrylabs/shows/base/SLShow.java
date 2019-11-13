@@ -144,8 +144,12 @@ public abstract class SLShow implements Show {
     public static PointsGrouping getPointsMappedToControllerID(String humanID) {
         SLModel mappedModel = SLModel.fixtureByMappedID.get(humanID);
         // ok we found a mapping. Place it in the mappings.
-        mapping.setControllerAssignment(mappedModel.modelId, humanID); // is this necessary after constructor?
-        return mappedModel == null ? null : new PointsGrouping(mappedModel.getPoints());
+        if (mappedModel != null) {
+
+//            CONCURRENT MODIFICATION EXCEPTION: mapping.setControllerAssignment(mappedModel.modelId, humanID); // is this necessary after constructor?
+            return new PointsGrouping(mappedModel.getPoints());
+        }
+        else return null;
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {

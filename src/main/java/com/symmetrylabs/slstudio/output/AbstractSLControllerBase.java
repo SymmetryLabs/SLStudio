@@ -34,6 +34,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
 
     // must be public to render?
     public BooleanParameter testOutput = new BooleanParameter("send test data", false);
+    public BooleanParameter momentaryAltTestOutput = new BooleanParameter("output on alt down", false);
 
     // variable set to true when on network, and unmapped "should be black
     protected BooleanParameter unmappedSendBlack = new BooleanParameter("black when unmapped", true);
@@ -196,7 +197,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
 //            }
 //        }
 
-        if (testOutput.isOn()) {
+        if (testOutput.isOn() || momentaryAltTestOutput.isOn()) {
             int col = (int) ((System.nanoTime() / 1_000_000_000L) % 3L);
             int c = 0;
             switch (col) {
@@ -204,6 +205,9 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
             case 0: c = 0xFFf20000; break;
             case 1: c = 0xFF00f200; break;
             case 2: c = 0xFF0000f2; break;
+            }
+            if (momentaryAltTestOutput.isOn()){
+                c = 0xFFf1f2f3;
             }
             /* we want the test pattern to work even if we aren't mapped, and if
                we aren't mapped we don't know how many pixels we have. Since

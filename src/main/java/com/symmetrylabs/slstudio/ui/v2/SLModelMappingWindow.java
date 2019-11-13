@@ -100,7 +100,7 @@ public class SLModelMappingWindow extends CloseableWindow {
             if (UI.beginDragDropTarget()) {
                 String physId = UI.acceptDragDropPayload("SL.CubePhysId", String.class);
                 if (physId != null) {
-                    show.mapping.setControllerAssignment(c.modelId, physId);
+                    SLShow.mapping.setControllerAssignment(c.modelId, physId);
                     anyUpdated = true;
                 }
             }

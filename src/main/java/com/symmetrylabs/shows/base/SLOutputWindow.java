@@ -7,6 +7,7 @@ import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
 import com.symmetrylabs.slstudio.ui.v2.*;
 import com.symmetrylabs.util.hardware.powerMon.ControllerWithPowerFeedback;
 import heronarts.lx.LX;
+import heronarts.lx.parameter.BooleanParameter;
 
 import java.util.Collection;
 
@@ -18,6 +19,8 @@ public class SLOutputWindow extends CloseableWindow {
     private final String[] featureIdBuffer = new String[32];
 
     private float editBrightness = 1.f;
+
+    private BooleanParameter onlyUnmapped = new BooleanParameter("display unmapped only", false);
 
     public SLOutputWindow(LX lx, SLShow show) {
         super("SL Outputs");
@@ -34,6 +37,8 @@ public class SLOutputWindow extends CloseableWindow {
         pui.draw(ApplicationState.outputControl().controllerResetModule.enabled);
 
         pui.draw(show.globalBlackoutPowerThreshhold);
+
+        pui.draw(onlyUnmapped);
 
         UI.separator();
 
@@ -79,8 +84,11 @@ public class SLOutputWindow extends CloseableWindow {
                 }
             }
 
-            boolean mapped = show.mapping.lookUpByControllerId(cc.humanID) != null;
+            boolean mapped = SLShow.mapping.lookUpByControllerId(cc.humanID) != null;
             if (mapped) {
+                if (onlyUnmapped.isOn()){
+                    continue;
+                }
                 UI.pushColor(UI.COLOR_HEADER, UIConstants.BLUE);
                 UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.BLUE);
                 UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.BLUE_HOVER);
@@ -97,7 +105,7 @@ public class SLOutputWindow extends CloseableWindow {
 
             UI.popColor(3);
             // TODO:: impliment this
-//            cc.sendTestPattern = UI.isItemClicked(true) && UI.isAltDown();
+            cc.momentaryAltTestOutput.setValue(UI.isItemClicked(true) && UI.isAltDown());
 
             if (cr.isOpen) {
                 new ComponentUI(lx, cc, pui).draw();

@@ -11,10 +11,7 @@ import com.symmetrylabs.util.hardware.CubeInventory;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class SLModelControllerMapping {
@@ -76,18 +73,18 @@ public class SLModelControllerMapping {
         return assignmentsByModelId.get(modelId);
     }
 
-    public void setControllerAssignment(String modelId, String physId) {
+    public void setControllerAssignment(String modelId, String humanID) {
         /* if physical output was mapped to another model, remove that assignment */
-        if (assignmentsByHumanID.containsKey(physId)) {
-            assignments.remove(assignmentsByHumanID.get(physId));
+        if (assignmentsByHumanID.containsKey(humanID)) {
+            assignments.remove(assignmentsByHumanID.get(humanID));
         }
         /* if model was mapped to another physical output, update that assignment */
         if (!assignmentsByModelId.containsKey(modelId)) {
-            assignments.add(new PhysIdAssignment(modelId, physId));
+            assignments.add(new PhysIdAssignment(modelId, humanID));
         }
         /* otherwise create a new assignment */
         else {
-            assignmentsByModelId.get(modelId).humanID = physId;
+            assignmentsByModelId.get(modelId).humanID = humanID;
         }
         /* rebuild lookup tables */
         onUpdate();
@@ -96,7 +93,8 @@ public class SLModelControllerMapping {
     public void onUpdate() {
         assignmentsByHumanID.clear();
         assignmentsByModelId.clear();
-        for (PhysIdAssignment ca : assignments) {
+        for (Iterator<PhysIdAssignment> iter = assignments.iterator(); iter.hasNext();){
+            PhysIdAssignment ca = iter.next();
             assignmentsByHumanID.put(ca.humanID, ca);
             assignmentsByModelId.put(ca.modelId, ca);
         }
