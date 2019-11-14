@@ -14,6 +14,8 @@ import com.symmetrylabs.slstudio.output.symmetree.TenereDatagramSet;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 import com.symmetrylabs.util.hardware.powerMon.ControllerWithPowerFeedback;
 import com.symmetrylabs.util.hardware.powerMon.MetaSample;
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.StringParameter;
@@ -43,6 +45,8 @@ public class AssignableTenereController extends DiscoverableController implement
     private int pwrMaskByte = 0;
     DiscreteParameter blackoutPowerThreshold = new DiscreteParameter("Blackout", 0, 4095);
     BooleanParameter blackoutRogueLEDsActive = new BooleanParameter("Activate blackout procedure", false);
+
+    long lastFrameMillis;
 
 
 //    public DiscreteParameter blackoutPowerThreshold = new DiscreteParameter("Blackout", 0, 4095);
@@ -368,6 +372,7 @@ public class AssignableTenereController extends DiscoverableController implement
         for (int i = 0; i < 8; i++){
             pwrMask[i].setValue(mask >>> i & 0x1);
         }
+        killPortPower();
     }
 
     @Override
@@ -410,5 +415,16 @@ public class AssignableTenereController extends DiscoverableController implement
     @Override
     public BooleanParameter[] getPwrMaskParams(){
         return pwrMask;
+    }
+
+    @Override
+    protected void onSend(PolyBuffer src) {
+        super.onSend(src);
+
+        long now = System.currentTimeMillis();
+        if ( now > lastFrameMillis + 10) {
+            killPortPower(); // every 10 ms
+            lastFrameMillis = now;
+        }
     }
 }

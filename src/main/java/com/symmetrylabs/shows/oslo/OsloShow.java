@@ -1,5 +1,6 @@
 package com.symmetrylabs.shows.oslo;
 
+import com.symmetrylabs.controllers.symmeTreeController.infrastructure.AllPortsPowerEnableMask;
 import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.shows.treeV2.BranchConfig;
 import com.symmetrylabs.shows.treeV2.LimbConfig;
@@ -14,6 +15,7 @@ import heronarts.lx.transform.LXMatrix;
 
 public class OsloShow extends SLShow {
     public static final String SHOW_NAME = "oslo";
+
 
     // put in to json?
     final LimbConfig[] LIMB_CONFIGS = new LimbConfig[] {

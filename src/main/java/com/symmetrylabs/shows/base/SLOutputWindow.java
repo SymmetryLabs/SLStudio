@@ -1,5 +1,7 @@
 package com.symmetrylabs.shows.base;
 
+import com.symmetrylabs.controllers.symmeTreeController.infrastructure.AllPortsPowerEnableMask;
+import com.symmetrylabs.shows.oslo.OsloShow;
 import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
@@ -10,6 +12,7 @@ import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
+import java.io.IOException;
 import java.util.Collection;
 
 public class SLOutputWindow extends CloseableWindow {
@@ -66,10 +69,40 @@ public class SLOutputWindow extends CloseableWindow {
 
         boolean dump = UI.button("dump metadata to file");
 
+        boolean savePortPowerPreferencesToRAM = UI.button("Save port power to RAM"); // hmm.. should only have bottom two
+        boolean writePortPowerPreferencesFromRAM = UI.button("Write port power from RAM"); // hmm.. should only have bottom two
+        boolean savePortPowerPreferencesToDisk = UI.button("Save port power to disk"); // all that's needed?
+        boolean loadPortPowerPreferencesFromDisk = UI.button("Load port power from disk"); // all that's needed?
+
         boolean broadcastPortPowerOn = UI.button("broadcast turn on port power");
 
         pui.draw(filterLessThanThreshhold);
         pui.draw(filterOnlyAboveAcceptableDarkCurrentThreshhold);
+
+        if (savePortPowerPreferencesToRAM){
+            if (show instanceof OsloShow){
+                ((OsloShow) show).allPortsPowerEnableMask.loadControllerSetMaskStateTo_RAM(ccs);
+            }
+        }
+        if (writePortPowerPreferencesFromRAM){
+            if (show instanceof OsloShow){
+                ((OsloShow) show).allPortsPowerEnableMask.RAM_ApplyMaskAllControllers(ccs);
+            }
+        }
+        if (savePortPowerPreferencesToDisk){
+            if (show instanceof OsloShow){
+                try {
+                    ((OsloShow) show).allPortsPowerEnableMask.saveToDisk();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        if (loadPortPowerPreferencesFromDisk){
+            if (show instanceof OsloShow){
+                ((OsloShow) show).allPortsPowerEnableMask = AllPortsPowerEnableMask.loadFromDisk();
+            }
+        }
 
         if (dump){
             System.out.println("[");

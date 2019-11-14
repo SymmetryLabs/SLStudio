@@ -1,6 +1,7 @@
 package com.symmetrylabs.shows.base;
 
 import com.symmetrylabs.color.PerceptualColorScale;
+import com.symmetrylabs.controllers.symmeTreeController.infrastructure.AllPortsPowerEnableMask;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.cubes.*;
 import com.symmetrylabs.shows.tree.AssignableTenereController;
@@ -16,6 +17,7 @@ import com.symmetrylabs.slstudio.ui.v2.SLModelMappingWindow;
 import com.symmetrylabs.slstudio.ui.v2.WindowManager;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
+import com.symmetrylabs.util.hardware.powerMon.ControllerWithPowerFeedback;
 import com.symmetrylabs.util.listenable.ListenableSet;
 import com.symmetrylabs.util.listenable.SetListener;
 import heronarts.lx.LX;
@@ -35,6 +37,8 @@ import java.util.*;
 public abstract class SLShow implements Show {
     public static final String SHOW_NAME = "slshow";
 
+    // power mask stuff.. this will be pretty universal and should proably be an inherited class.  For now just testing;
+    public AllPortsPowerEnableMask allPortsPowerEnableMask = AllPortsPowerEnableMask.loadFromDisk();
 
     // top level metadata used in any show
     public static SLModelControllerMapping mapping = null; // only initialized for top level... more evidence we need a top level SLModel
@@ -92,6 +96,8 @@ public abstract class SLShow implements Show {
                     controllerByInetAddrMap.put(device.ipAddress, controller);
                     controllerByName.put(controller.humanID, controller);
                     dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
+                    // set port mask initially
+                    allPortsPowerEnableMask.applyStateToController((ControllerWithPowerFeedback) controller);
                 } catch (SocketException e) {
                     e.printStackTrace();
                 }
@@ -156,7 +162,7 @@ public abstract class SLShow implements Show {
     public void setupUi(LX lx) {
 //        WindowManager.addPersistent("Controllers/Inventory", () -> new CubesInventoryEditor(lx, controllerInventory), false);
         WindowManager.addPersistent("Controllers/Mapping", () -> new SLModelMappingWindow(lx, this), false);
-        WindowManager.addPersistent("Controllers/Output", () -> new SLOutputWindow(lx, this), false);
+        WindowManager.addPersistent("Controllers/Output", () -> new SLOutputWindow(lx, this), true);
         WindowManager.addPersistent("Controllers/Scaling", () -> new OutputScaleWindow(lx, outputScaler), false);
     }
 
