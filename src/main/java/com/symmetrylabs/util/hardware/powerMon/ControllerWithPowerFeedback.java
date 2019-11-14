@@ -10,7 +10,7 @@ public interface ControllerWithPowerFeedback {
     void killByThreshHold();
 
     // kills port power
-    void killPortPower();
+    void writePortPowerMaskToController();
 
     void setPortPowerMask(byte mask);
 
@@ -25,4 +25,6 @@ public interface ControllerWithPowerFeedback {
     String getHumanId();
 
     BooleanParameter[] getPwrMaskParams();
+
+    void enableAllPorts();
 }

@@ -3,6 +3,7 @@ package com.symmetrylabs.shows.base;
 import com.symmetrylabs.controllers.symmeTreeController.infrastructure.AllPortsPowerEnableMask;
 import com.symmetrylabs.shows.oslo.OsloShow;
 import com.symmetrylabs.slstudio.ApplicationState;
+import com.symmetrylabs.slstudio.mappings.SLModelControllerMapping;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.output.DiscoverableController;
@@ -21,6 +22,7 @@ public class SLOutputWindow extends CloseableWindow {
     private final SLShow show;
     private final ParameterUI pui;
     private final String[] featureIdBuffer = new String[32];
+    private String modelID_filter = "";
 
     private float editBrightness = 1.f;
 
@@ -64,6 +66,7 @@ public class SLOutputWindow extends CloseableWindow {
         UI.sameLine();
         boolean collapse = UI.button("collapse all");
         UI.text("alt-click any controller to send test pattern");
+        UI.text("alt-shift-click any controller to momentarily blackout all outputs");
 
         boolean blackout = UI.button("blackout procedure");
 
@@ -71,10 +74,12 @@ public class SLOutputWindow extends CloseableWindow {
 
         boolean savePortPowerPreferencesToRAM = UI.button("Save port power to RAM"); // hmm.. should only have bottom two
         boolean writePortPowerPreferencesFromRAM = UI.button("Write port power from RAM"); // hmm.. should only have bottom two
-        boolean savePortPowerPreferencesToDisk = UI.button("Save port power to disk"); // all that's needed?
-        boolean loadPortPowerPreferencesFromDisk = UI.button("Load port power from disk"); // all that's needed?
+        boolean savePortPowerPreferencesToDisk = UI.button("Save port power RAM to disk"); // all that's needed?
+        boolean loadPortPowerPreferencesFromDisk = UI.button("Load port power from disk into RAM"); // all that's needed?
 
         boolean broadcastPortPowerOn = UI.button("broadcast turn on port power");
+
+        modelID_filter = UI.inputText("filter by controllerId or modelId", modelID_filter);
 
         pui.draw(filterLessThanThreshhold);
         pui.draw(filterOnlyAboveAcceptableDarkCurrentThreshhold);
@@ -118,6 +123,9 @@ public class SLOutputWindow extends CloseableWindow {
             }
 
             if (cc instanceof ControllerWithPowerFeedback){
+                if (broadcastPortPowerOn){
+                    ((ControllerWithPowerFeedback) cc).enableAllPorts();
+                }
                 if ( filterOnlyAboveAcceptableDarkCurrentThreshhold.isOn() && ((ControllerWithPowerFeedback) cc).allPortsLessThanThreshholdDuringBlackout(filterLessThanThreshhold.getValuei()) ){
                     continue;
                 }
@@ -125,6 +133,19 @@ public class SLOutputWindow extends CloseableWindow {
                     ((ControllerWithPowerFeedback) cc).enableBlackoutProcedure(true);
                     ((ControllerWithPowerFeedback) cc).setBlackoutThreshhold(show.globalBlackoutPowerThreshhold.getValuei());
                     ((ControllerWithPowerFeedback) cc).killByThreshHold();
+                }
+            }
+
+            if (!modelID_filter.equals("")) {
+                SLModelControllerMapping.PhysIdAssignment pia = SLShow.mapping.lookUpByControllerId(cc.humanID);
+                if (pia != null){
+                    String modelId = pia.modelId;
+                    boolean modelIdMatch = modelId.contains(modelID_filter);
+                    boolean ctrlIdMatch = pia.humanID != null && ((pia.humanID != null && pia.humanID.contains(modelID_filter)));
+                    if (!(modelIdMatch || ctrlIdMatch )) {
+                        continue;
+                    }
+
                 }
             }
 
@@ -150,6 +171,8 @@ public class SLOutputWindow extends CloseableWindow {
             UI.popColor(3);
             // TODO:: impliment this
             cc.momentaryAltTestOutput.setValue(UI.isItemClicked(true) && UI.isAltDown());
+            cc.momentaryAltShiftTestBlackout.setValue(UI.isItemClicked(true) && UI.isAltDown() && UI.isShiftDown());
+
 
             if (cr.isOpen) {
                 // todo the mapping
@@ -171,6 +194,7 @@ public class SLOutputWindow extends CloseableWindow {
 
                 ComponentUI componentUI = new ComponentUI(lx, cc, pui);
                 if(cc instanceof ControllerWithPowerFeedback){
+                    ControllerWithPowerFeedback pfc = ((ControllerWithPowerFeedback) cc);
                     UI.separator();
                     componentUI.blacklist(((ControllerWithPowerFeedback)cc).getPwrMaskParams());
                     if ( ((ControllerWithPowerFeedback) cc).getLastSample() != null ) {
@@ -180,7 +204,7 @@ public class SLOutputWindow extends CloseableWindow {
                             pui.draw(((ControllerWithPowerFeedback) cc).getPwrMaskParams()[i]);
                         }
 //                        killSwitch[i] = UI.checkbox(Integer.toString(i), killSwitch[i]);
-                        ((ControllerWithPowerFeedback) cc).killPortPower();
+                        ((ControllerWithPowerFeedback) cc).writePortPowerMaskToController();
                         UI.separator();
                     }
                 }

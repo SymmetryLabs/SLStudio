@@ -1,11 +1,13 @@
 package com.symmetrylabs.slstudio.output;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.color.PerceptualColorScale;
 import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
+import com.symmetrylabs.slstudio.ui.UIOfflineRender;
 import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 import heronarts.lx.LX;
@@ -36,6 +38,7 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
     // must be public to render?
     public BooleanParameter testOutput = new BooleanParameter("send test data", false);
     public BooleanParameter momentaryAltTestOutput = new BooleanParameter("output on alt down", false);
+    public BooleanParameter momentaryAltShiftTestBlackout = new BooleanParameter("blackout on alt shift down", false);
 
     // variable set to true when on network, and unmapped "should be black
     protected BooleanParameter unmappedSendBlack = new BooleanParameter("black when unmapped", true);

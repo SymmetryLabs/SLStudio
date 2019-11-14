@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "timestamp": 1573767046399,
+  "timestamp": 1573770714699,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -59,7 +59,7 @@
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.4397590160369873,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -99,7 +99,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -65361,
+          "modulationColor": -50432,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,

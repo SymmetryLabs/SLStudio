@@ -91,7 +91,7 @@ public abstract class SLShow implements Show {
             public void onItemAdded(NetworkDevice device) {
                 final DiscoverableController controller;
                 try {
-                    controller = new AssignableTenereController(lx, device, controllerInventory);
+                    controller = new AssignableTenereController(lx, device, controllerInventory, allPortsPowerEnableMask);
                     controllers.add(controller);
                     controllerByInetAddrMap.put(device.ipAddress, controller);
                     controllerByName.put(controller.humanID, controller);

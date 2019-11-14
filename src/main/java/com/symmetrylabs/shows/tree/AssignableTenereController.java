@@ -7,6 +7,7 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 
 import com.symmetrylabs.color.PerceptualColorScale;
+import com.symmetrylabs.controllers.symmeTreeController.infrastructure.AllPortsPowerEnableMask;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.network.OpcMessage;
 import com.symmetrylabs.slstudio.output.DiscoverableController;
@@ -15,7 +16,6 @@ import com.symmetrylabs.util.hardware.SLControllerInventory;
 import com.symmetrylabs.util.hardware.powerMon.ControllerWithPowerFeedback;
 import com.symmetrylabs.util.hardware.powerMon.MetaSample;
 import heronarts.lx.PolyBuffer;
-import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.StringParameter;
@@ -47,6 +47,7 @@ public class AssignableTenereController extends DiscoverableController implement
     BooleanParameter blackoutRogueLEDsActive = new BooleanParameter("Activate blackout procedure", false);
 
     long lastFrameMillis;
+    AllPortsPowerEnableMask allPortsPowerEnableMask;
 
 
 //    public DiscreteParameter blackoutPowerThreshold = new DiscreteParameter("Blackout", 0, 4095);
@@ -142,6 +143,11 @@ public class AssignableTenereController extends DiscoverableController implement
         if (ipAddress.equals("0.0.0.0")) {
             enabled.setValue(false);
         }
+    }
+
+    public AssignableTenereController(LX lx, NetworkDevice device, SLControllerInventory controllerInventory, AllPortsPowerEnableMask allPortsPowerEnableMask) throws SocketException {
+        this(lx, device, controllerInventory);
+        this.allPortsPowerEnableMask = allPortsPowerEnableMask;
     }
 
     private void addPowerParameters() {
@@ -326,10 +332,10 @@ public class AssignableTenereController extends DiscoverableController implement
                 pwrMask[i].setValue(false);
             }
         }
-        killPortPower();
+        writePortPowerMaskToController();
     }
 
-    public void killPortPower() {
+    public void writePortPowerMaskToController() {
         if (hasPortPowerFeedback){
 
             int incomingPwrMaskByte = 0;
@@ -372,7 +378,7 @@ public class AssignableTenereController extends DiscoverableController implement
         for (int i = 0; i < 8; i++){
             pwrMask[i].setValue(mask >>> i & 0x1);
         }
-        killPortPower();
+        writePortPowerMaskToController();
     }
 
     @Override
@@ -418,13 +424,34 @@ public class AssignableTenereController extends DiscoverableController implement
     }
 
     @Override
+    public void enableAllPorts() {
+        for (BooleanParameter port : pwrMask){
+            port.setValue(0); // active low
+        }
+        writePortPowerMaskToController();
+    }
+
+    boolean blackoutlatch = false;
+    @Override
     protected void onSend(PolyBuffer src) {
         super.onSend(src);
 
         long now = System.currentTimeMillis();
         if ( now > lastFrameMillis + 10) {
-            killPortPower(); // every 10 ms
+            if (momentaryAltShiftTestBlackout.isOn()){
+                setPortPowerMask((byte) 0xff); // blackout
+                blackoutlatch = true;
+            }
+            else if (blackoutlatch){
+                restorePortPowerMask();
+                blackoutlatch = false;
+            }
+            writePortPowerMaskToController(); // every 10 ms
             lastFrameMillis = now;
         }
+    }
+
+    private void restorePortPowerMask() {
+        allPortsPowerEnableMask.applyStateToController(this);
     }
 }
