@@ -8,6 +8,7 @@ import com.symmetrylabs.slstudio.ui.v2.*;
 import com.symmetrylabs.util.hardware.powerMon.ControllerWithPowerFeedback;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.DiscreteParameter;
 
 import java.util.Collection;
 
@@ -21,6 +22,8 @@ public class SLOutputWindow extends CloseableWindow {
     private float editBrightness = 1.f;
 
     private BooleanParameter onlyUnmapped = new BooleanParameter("display unmapped only", false);
+    private DiscreteParameter filterLessThanThreshhold = new DiscreteParameter("acceptable dark current draw threshhold", 200, 0, 4095);
+    private BooleanParameter filterOnlyAboveAcceptableDarkCurrentThreshhold = new BooleanParameter("filter violations dark current", false);
 
     public SLOutputWindow(LX lx, SLShow show) {
         super("SL Outputs");
@@ -63,6 +66,11 @@ public class SLOutputWindow extends CloseableWindow {
 
         boolean dump = UI.button("dump metadata to file");
 
+        boolean broadcastPortPowerOn = UI.button("broadcast turn on port power");
+
+        pui.draw(filterLessThanThreshhold);
+        pui.draw(filterOnlyAboveAcceptableDarkCurrentThreshhold);
+
         if (dump){
             System.out.println("[");
         }
@@ -77,6 +85,9 @@ public class SLOutputWindow extends CloseableWindow {
             }
 
             if (cc instanceof ControllerWithPowerFeedback){
+                if ( filterOnlyAboveAcceptableDarkCurrentThreshhold.isOn() && ((ControllerWithPowerFeedback) cc).allPortsLessThanThreshholdDuringBlackout(filterLessThanThreshhold.getValuei()) ){
+                    continue;
+                }
                 if (blackout){
                     ((ControllerWithPowerFeedback) cc).enableBlackoutProcedure(true);
                     ((ControllerWithPowerFeedback) cc).setBlackoutThreshhold(show.globalBlackoutPowerThreshhold.getValuei());

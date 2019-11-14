@@ -377,4 +377,22 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
     public void setBlackoutThreshhold(int valuei) {
         blackoutPowerThreshold.setValue(valuei);
     }
+
+    @Override
+    public boolean allPortsLessThanThreshholdDuringBlackout(int acceptableDarkCurrentLevel) {
+        if (lastReceivedPowerSample == null){
+            return true; // can't test if no sample.
+        }
+        for(int sample : lastReceivedPowerSample.analogSampleArray){
+            if (sample > acceptableDarkCurrentLevel){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public String getHumanId() {
+        return humanID;
+    }
 }

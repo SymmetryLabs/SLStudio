@@ -29,6 +29,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
 
     private final PerceptualColorScale outputScaler; // should this really be part of the controller logic?
     private final SLControllerInventory inventory;
+    public Integer switchPortNumber; // the physical port index which this controller is plugged to.  May be null.
     protected int numPixels;
     protected boolean is16BitColorEnabled = false;
 
@@ -44,7 +45,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
 //    private MappingMode mappingMode;
 
     public AbstractSLControllerBase(LX lx, NetworkDevice device, SLControllerInventory inventory, PerceptualColorScale outputScaler) throws SocketException {
-        this(lx, device, device.ipAddress, null, inventory, false, outputScaler);
+        this(lx, device, device.ipAddress, device.deviceId, inventory, false, outputScaler);
     }
 
     public AbstractSLControllerBase(LX lx, String _host, String _id) throws SocketException {
@@ -62,7 +63,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
     private AbstractSLControllerBase(LX lx, NetworkDevice networkDevice, InetAddress host, String humanID, SLControllerInventory inventory, boolean isBroadcast, PerceptualColorScale outputScaler) throws SocketException {
         super(lx);
 
-        System.out.println("created socket for controller: " + networkDevice.ipAddress);
+        System.out.println("created socket for controller: " + ((networkDevice == null) ? "null" : networkDevice.ipAddress));
 
         this.lx = lx;
         this.networkDevice = networkDevice;

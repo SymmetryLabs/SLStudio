@@ -20,4 +20,8 @@ public interface ControllerWithPowerFeedback {
     void enableBlackoutProcedure(boolean b);
 
     void setBlackoutThreshhold(int valuei);
+
+    boolean allPortsLessThanThreshholdDuringBlackout(int valuei);
+
+    String getHumanId();
 }

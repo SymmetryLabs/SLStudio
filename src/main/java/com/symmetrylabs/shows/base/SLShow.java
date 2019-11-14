@@ -50,8 +50,6 @@ public abstract class SLShow implements Show {
     public final HashMap<String, AbstractSLControllerBase> controllerByName = new HashMap<String, AbstractSLControllerBase>();
 
     public final ListenableSet<AbstractSLControllerBase> controllers = new ListenableSet<>();
-    public final ListenableSet<CubesController> cubesControllers = new ListenableSet<>();
-//    public final ListenableSet<TreeController> treeControllers = new ListenableSet<>();
     public final PerceptualColorScale outputScaler = new PerceptualColorScale(new double[] { 2.0, 2.1, 2.8 }, 1.0);
 
     private static Map<LX, WeakReference<SLShow>> instanceByLX = new WeakHashMap<>();
@@ -133,10 +131,6 @@ public abstract class SLShow implements Show {
     public Collection<AbstractSLControllerBase> getSortedControllers() {
         return new TreeSet<AbstractSLControllerBase>(controllers);
     }
-
-//    public Collection<SymmeTreeControlleer> getSortedControllers() {
-//        return new TreeSet<AbstractSLControllerBase>(controllers);
-//    }
 
     public void addControllerSetListener(SetListener<AbstractSLControllerBase> listener) {
         controllers.addListener(listener);

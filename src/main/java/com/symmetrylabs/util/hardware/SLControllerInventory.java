@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.stream.JsonWriter;
 //import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
+import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
 import com.symmetrylabs.util.NetworkUtil.MACAddress;
 
 import java.io.*;
@@ -48,7 +49,7 @@ public class SLControllerInventory {
         return hostAddr;
     }
 
-    public class ControllerMetadata{
+    public static class ControllerMetadata{
         @Expose
         Inet4Address ipAddr;
 
@@ -76,6 +77,14 @@ public class SLControllerInventory {
             macAddr = macAddress.toString();
             humanID = chunkArr[2];
             statusNotes = chunkArr[3] == null ? "null" : chunkArr[3];
+        }
+
+        public ControllerMetadata(AbstractSLControllerBase cc) {
+            ipAddr = (Inet4Address) cc.networkDevice.ipAddress;
+            macAddr = cc.networkDevice.deviceId;
+            macAddress = MACAddress.valueOf(cc.networkDevice.deviceId);
+            humanID = cc.humanID;
+            statusNotes = "null for now";
         }
 
         public String getHumanID() {

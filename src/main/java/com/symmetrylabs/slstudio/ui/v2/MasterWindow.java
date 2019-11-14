@@ -42,5 +42,6 @@ public class MasterWindow extends CloseableWindow {
         UI.sameLine();
         pui.draw(look.cueB, true);
         pui.draw(lx.engine.speed);
+        pui.draw(lx.engine.framesPerSecond);
     }
 }
