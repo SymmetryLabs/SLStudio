@@ -1,0 +1,8 @@
+{
+  "portMaskByControllerHumanID": {
+    "a100": -16,
+    "a101": -16,
+    "a102": -16,
+    "a103": -16
+  }
+}

@@ -4,12 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.stream.JsonWriter;
-import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
-import com.symmetrylabs.slstudio.output.SLController;
-import com.symmetrylabs.util.InventoryWriter;
+import com.symmetrylabs.slstudio.output.DiscoverableController;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.TreeMap;
 
 public class PhysicalSwitchLayout {
@@ -44,7 +41,7 @@ public class PhysicalSwitchLayout {
 
     }
 
-    public void putController(AbstractSLControllerBase cc) {
+    public void putController(DiscoverableController cc) {
         switchLayoutMap.put(cc.switchPortNumber, new SLControllerInventory.ControllerMetadata(cc));
     }
 

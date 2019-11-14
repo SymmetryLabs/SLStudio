@@ -2,7 +2,7 @@ package com.symmetrylabs.controllers.symmeTreeController.infrastructure;
 
 import com.symmetrylabs.shows.tree.AssignableTenereController;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
+import com.symmetrylabs.slstudio.output.DiscoverableController;
 import com.symmetrylabs.util.hardware.powerMon.MetaSample;
 import org.junit.Test;
 
@@ -11,16 +11,17 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import static org.junit.Assert.*;
 
-public class AllPortsPowerEnabledMaskTest {
-    AllPortsPowerEnabledMask objUnderTest = new AllPortsPowerEnabledMask();
+public class AllPortsPowerEnableMaskTest {
+    private AllPortsPowerEnableMask objUnderTest = new AllPortsPowerEnableMask();
 
-    @Test
-    public void loadCurrentSculptureOutputStateTo_RAM() {
-        List<AbstractSLControllerBase> treeControllers = new ArrayList<>();
+    // some test objects
+    Collection<DiscoverableController> treeControllers = new ArrayList<>();
+
+    private void loadMockControllers() {
         AssignableTenereController controller = null;
         try {
             for (int i = 0; i < 4; i++){
@@ -34,18 +35,27 @@ public class AllPortsPowerEnabledMaskTest {
 
                 treeControllers.add(controller);
             }
-        } catch (SocketException e) {
-            e.printStackTrace();
-        } catch (UnknownHostException e) {
+        } catch (SocketException | UnknownHostException e) {
             e.printStackTrace();
         }
+    }
 
+    @Test
+    public void loadCurrentSculptureOutputStateTo_RAM() {
+        loadMockControllers();
         objUnderTest.loadControllerSetMaskStateTo_RAM(treeControllers);
         assertNotNull(objUnderTest);
     }
 
+    /**
+     * Should set the state of all controllers to be equivalent to the mask.
+     */
     @Test
     public void RAM_ApplyMaskAllControllers() {
+        // For every controller in the show..
+        objUnderTest = AllPortsPowerEnableMask.loadFromDisk();
+        objUnderTest.RAM_ApplyMaskAllControllers(treeControllers);
+        // set the power state to equal the mask.
     }
 
     @Test
@@ -61,7 +71,7 @@ public class AllPortsPowerEnabledMaskTest {
 
     @Test
     public void loadFromDisk() {
-        AllPortsPowerEnabledMask objUnderTest = AllPortsPowerEnabledMask.loadFromDisk();
+        objUnderTest = AllPortsPowerEnableMask.loadFromDisk();
         assertNotNull(objUnderTest);
     }
 }

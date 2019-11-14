@@ -7,11 +7,10 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
-import java.util.HashSet;
-import java.util.List;
+
+import java.util.*;
+
 import heronarts.lx.parameter.BooleanParameter.Mode;
-import java.util.ArrayList;
-import java.util.Set;
 
 public class ComponentUI {
     private final LX lx;
@@ -77,5 +76,9 @@ public class ComponentUI {
                 pui.draw(param);
             }
         }
+    }
+
+    public void blacklist(LXParameter[] blacklistParams) {
+        blacklist.addAll(Arrays.asList(blacklistParams));
     }
 }

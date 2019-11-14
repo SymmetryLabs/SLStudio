@@ -9,12 +9,11 @@ import java.util.HashMap;
 import com.symmetrylabs.color.PerceptualColorScale;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.network.OpcMessage;
-import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
+import com.symmetrylabs.slstudio.output.DiscoverableController;
 import com.symmetrylabs.slstudio.output.symmetree.TenereDatagramSet;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 import com.symmetrylabs.util.hardware.powerMon.ControllerWithPowerFeedback;
 import com.symmetrylabs.util.hardware.powerMon.MetaSample;
-import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.StringParameter;
@@ -23,9 +22,10 @@ import heronarts.lx.LX;
 import heronarts.lx.output.LXDatagram;
 
 import com.symmetrylabs.slstudio.output.TenereDatagram;
+import org.jetbrains.annotations.NotNull;
 
 
-public class AssignableTenereController extends AbstractSLControllerBase implements ControllerWithPowerFeedback {
+public class AssignableTenereController extends DiscoverableController implements ControllerWithPowerFeedback {
 
 	private static final int TWIGS_PER_PACKET = 3;
 	private static final int POINTS_PER_PACKET = TreeModel.Twig.NUM_LEDS * TWIGS_PER_PACKET;
@@ -116,7 +116,7 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
         updateIndexesFromBranch2();
     }
 
-    public AssignableTenereController(LX lx, NetworkDevice device, SLControllerInventory controllerInventory) throws SocketException {
+    public AssignableTenereController(LX lx, @NotNull NetworkDevice device, SLControllerInventory controllerInventory) throws SocketException {
         super(lx, device, controllerInventory, new PerceptualColorScale(new double[] { 2.0, 2.1, 2.8 }, 1.0) );
         this.lx = lx;
         this.ipAddress = device.ipAddress.getHostAddress();
@@ -364,6 +364,13 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
     }
 
     @Override
+    public void setPortPowerMask(byte mask) {
+        for (int i = 0; i < 8; i++){
+            pwrMask[i].setValue(mask >>> i & 0x1);
+        }
+    }
+
+    @Override
     public MetaSample getLastSample() {
         return lastReceivedPowerSample;
     }
@@ -394,5 +401,14 @@ public class AssignableTenereController extends AbstractSLControllerBase impleme
     @Override
     public String getHumanId() {
         return humanID;
+    }
+
+    public boolean portIsMasked(int i) {
+        return pwrMask[i].isOn();
+    }
+
+    @Override
+    public BooleanParameter[] getPwrMaskParams(){
+        return pwrMask;
     }
 }

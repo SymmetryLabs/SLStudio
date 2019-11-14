@@ -3,7 +3,7 @@ package com.symmetrylabs.shows.base;
 import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
+import com.symmetrylabs.slstudio.output.DiscoverableController;
 import com.symmetrylabs.slstudio.ui.v2.*;
 import com.symmetrylabs.util.hardware.powerMon.ControllerWithPowerFeedback;
 import heronarts.lx.LX;
@@ -45,13 +45,13 @@ public class SLOutputWindow extends CloseableWindow {
 
         UI.separator();
 
-        Collection<AbstractSLControllerBase> ccs = show.getSortedControllers();
+        Collection<DiscoverableController> ccs = show.getSortedControllers();
         UI.text("%d controllers", ccs.size());
 
         if (UI.collapsibleSection("Edit all")) {
             editBrightness = UI.sliderFloat("Brightness", editBrightness, 0, 1);
             if (UI.button("Set")) {
-                for (AbstractSLControllerBase cc : ccs) {
+                for (DiscoverableController cc : ccs) {
                     cc.brightness.setValue(editBrightness);
                 }
             }
@@ -74,7 +74,7 @@ public class SLOutputWindow extends CloseableWindow {
         if (dump){
             System.out.println("[");
         }
-        for (AbstractSLControllerBase cc : ccs) {
+        for (DiscoverableController cc : ccs) {
             if (expand) {
                 UI.setNextTreeNodeOpen(true);
             } else if (collapse) {
@@ -119,7 +119,6 @@ public class SLOutputWindow extends CloseableWindow {
             cc.momentaryAltTestOutput.setValue(UI.isItemClicked(true) && UI.isAltDown());
 
             if (cr.isOpen) {
-                new ComponentUI(lx, cc, pui).draw();
                 // todo the mapping
 //            UI.labelText("Status", mapped ? "mapped" : "unmapped");
                 NetworkDevice nd = cc.networkDevice;
@@ -137,16 +136,22 @@ public class SLOutputWindow extends CloseableWindow {
                     UI.labelText("Features", String.join(",", nd.featureIds));
                 }
 
+                ComponentUI componentUI = new ComponentUI(lx, cc, pui);
                 if(cc instanceof ControllerWithPowerFeedback){
+                    UI.separator();
+                    componentUI.blacklist(((ControllerWithPowerFeedback)cc).getPwrMaskParams());
                     if ( ((ControllerWithPowerFeedback) cc).getLastSample() != null ) {
                         for (int i = 0; i < 8; i++){
                             UI.intBox(Integer.toString(i), ((ControllerWithPowerFeedback) cc).getLastSample().analogSampleArray[i]);
+                            UI.sameLine();
+                            pui.draw(((ControllerWithPowerFeedback) cc).getPwrMaskParams()[i]);
                         }
-//                        UI.sameLine();
 //                        killSwitch[i] = UI.checkbox(Integer.toString(i), killSwitch[i]);
                         ((ControllerWithPowerFeedback) cc).killPortPower();
+                        UI.separator();
                     }
                 }
+                componentUI.draw();
             }
 
         }

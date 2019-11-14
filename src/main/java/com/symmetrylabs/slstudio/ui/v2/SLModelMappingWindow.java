@@ -3,7 +3,7 @@ package com.symmetrylabs.slstudio.ui.v2;
 import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.slstudio.mappings.SLModelControllerMapping;
 import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
+import com.symmetrylabs.slstudio.output.DiscoverableController;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXModel;
@@ -107,7 +107,7 @@ public class SLModelMappingWindow extends CloseableWindow {
             }
 
             if (pc != null){
-                AbstractSLControllerBase cc = show.controllerByName.get(pc.getHumanID());
+                DiscoverableController cc = show.controllerByName.get(pc.getHumanID());
                 if (cc != null){
                     cc.momentaryAltTestOutput.setValue(UI.isItemClicked(true) && UI.isAltDown());
                 }

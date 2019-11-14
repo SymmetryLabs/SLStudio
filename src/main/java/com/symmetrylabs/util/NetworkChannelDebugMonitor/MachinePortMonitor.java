@@ -2,8 +2,7 @@ package com.symmetrylabs.util.NetworkChannelDebugMonitor;
 
 import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.slstudio.network.OpcSysExMsg;
-import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
-import com.symmetrylabs.slstudio.output.SLController;
+import com.symmetrylabs.slstudio.output.DiscoverableController;
 import com.symmetrylabs.util.hardware.powerMon.ControllerWithPowerFeedback;
 
 import java.io.IOException;
@@ -44,7 +43,7 @@ public class MachinePortMonitor extends Thread {
             // which ip do we have?
             InetAddress sourceControllerAddr = recvPacket.getAddress();
 
-            AbstractSLControllerBase controller = show.getControllerByInetAddr(sourceControllerAddr);
+            DiscoverableController controller = show.getControllerByInetAddr(sourceControllerAddr);
             if (controller != null){
                 if (controller instanceof ControllerWithPowerFeedback){
                     ((ControllerWithPowerFeedback) controller).writeSample(sysExIn.metaPowerSample);

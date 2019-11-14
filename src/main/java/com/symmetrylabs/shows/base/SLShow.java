@@ -9,7 +9,7 @@ import com.symmetrylabs.slstudio.mappings.SLModelControllerMapping;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
-import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
+import com.symmetrylabs.slstudio.output.DiscoverableController;
 //import com.symmetrylabs.slstudio.output.TreeController;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.slstudio.ui.v2.SLModelMappingWindow;
@@ -46,10 +46,10 @@ public abstract class SLShow implements Show {
     DiscreteParameter globalBlackoutPowerThreshhold = new DiscreteParameter("global blackout", 200, 0, 4095);
 
 
-    public final HashMap<InetAddress, AbstractSLControllerBase> controllerByInetAddrMap = new HashMap<>();
-    public final HashMap<String, AbstractSLControllerBase> controllerByName = new HashMap<String, AbstractSLControllerBase>();
+    public final HashMap<InetAddress, DiscoverableController> controllerByInetAddrMap = new HashMap<>();
+    public final HashMap<String, DiscoverableController> controllerByName = new HashMap<String, DiscoverableController>();
 
-    public final ListenableSet<AbstractSLControllerBase> controllers = new ListenableSet<>();
+    public final ListenableSet<DiscoverableController> controllers = new ListenableSet<>();
     public final PerceptualColorScale outputScaler = new PerceptualColorScale(new double[] { 2.0, 2.1, 2.8 }, 1.0);
 
     private static Map<LX, WeakReference<SLShow>> instanceByLX = new WeakHashMap<>();
@@ -78,14 +78,14 @@ public abstract class SLShow implements Show {
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
 
         /*
-        AbstractSLControllerBase local_debug = new CubesController(lx, "localhost", "localdebug");
+        DiscoverableController local_debug = new CubesController(lx, "localhost", "localdebug");
         controllers.add(local_debug);
         lx.addOutput(local_debug);
         */
 
         networkMonitor.opcDeviceList.addListener(new SetListener<NetworkDevice>() {
             public void onItemAdded(NetworkDevice device) {
-                final AbstractSLControllerBase controller;
+                final DiscoverableController controller;
                 try {
                     controller = new AssignableTenereController(lx, device, controllerInventory);
                     controllers.add(controller);
@@ -98,7 +98,7 @@ public abstract class SLShow implements Show {
             }
 
             public void onItemRemoved(NetworkDevice device) {
-                final AbstractSLControllerBase controller = getControllerByDevice(device);
+                final DiscoverableController controller = getControllerByDevice(device);
                 controllers.remove(controller);
                 dispatcher.dispatchNetwork(() -> {
                     controller.dispose();
@@ -107,11 +107,11 @@ public abstract class SLShow implements Show {
             }
         });
 
-        //lx.addOutput(new AbstractSLControllerBase(lx, "10.200.1.255"));
+        //lx.addOutput(new DiscoverableController(lx, "10.200.1.255"));
 
         lx.engine.output.enabled.addListener(param -> {
             boolean isEnabled = ((BooleanParameter) param).isOn();
-            for (AbstractSLControllerBase controller : controllers) {
+            for (DiscoverableController controller : controllers) {
                 controller.enabled.setValue(isEnabled);
             }
         });
@@ -119,8 +119,8 @@ public abstract class SLShow implements Show {
         System.out.println("set up controllers");
     }
 
-    public AbstractSLControllerBase getControllerByDevice(NetworkDevice device) {
-        for (AbstractSLControllerBase controller : controllers) {
+    public DiscoverableController getControllerByDevice(NetworkDevice device) {
+        for (DiscoverableController controller : controllers) {
             if (controller.networkDevice == device) {
                 return controller;
             }
@@ -128,11 +128,11 @@ public abstract class SLShow implements Show {
         return null;
     }
 
-    public Collection<AbstractSLControllerBase> getSortedControllers() {
-        return new TreeSet<AbstractSLControllerBase>(controllers);
+    public Collection<DiscoverableController> getSortedControllers() {
+        return new TreeSet<DiscoverableController>(controllers);
     }
 
-    public void addControllerSetListener(SetListener<AbstractSLControllerBase> listener) {
+    public void addControllerSetListener(SetListener<DiscoverableController> listener) {
         controllers.addListener(listener);
     }
 
@@ -162,7 +162,7 @@ public abstract class SLShow implements Show {
 
     public abstract String getShowName();
 
-    public AbstractSLControllerBase getControllerByInetAddr(InetAddress sourceControllerAddr) {
+    public DiscoverableController getControllerByInetAddr(InetAddress sourceControllerAddr) {
         return controllerByInetAddrMap.get(sourceControllerAddr);
     }
 }

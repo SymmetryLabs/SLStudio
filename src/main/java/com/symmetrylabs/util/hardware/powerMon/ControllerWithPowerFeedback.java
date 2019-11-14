@@ -1,9 +1,6 @@
 package com.symmetrylabs.util.hardware.powerMon;
 
 import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.DiscreteParameter;
-
-import java.io.IOException;
 
 public interface ControllerWithPowerFeedback {
 
@@ -15,6 +12,8 @@ public interface ControllerWithPowerFeedback {
     // kills port power
     void killPortPower();
 
+    void setPortPowerMask(byte mask);
+
     MetaSample getLastSample();
 
     void enableBlackoutProcedure(boolean b);
@@ -24,4 +23,6 @@ public interface ControllerWithPowerFeedback {
     boolean allPortsLessThanThreshholdDuringBlackout(int valuei);
 
     String getHumanId();
+
+    BooleanParameter[] getPwrMaskParams();
 }

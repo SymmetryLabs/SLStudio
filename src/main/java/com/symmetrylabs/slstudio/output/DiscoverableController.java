@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.net.*;
 
 // All of our controllers operate on UDP but the business logic isn't fundamentally coupled to the transport... (i.e. merits refactor to LXOutput)
-public abstract class AbstractSLControllerBase extends LXDatagramOutput implements Comparable<AbstractSLControllerBase>, OPCConstants, SLControllerInventory.Listener {
+public abstract class DiscoverableController extends LXDatagramOutput implements Comparable<DiscoverableController>, OPCConstants, SLControllerInventory.Listener {
     public String humanID;
     public int idInt;
     public final boolean isBroadcast;
@@ -44,23 +44,23 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
     private int port;
 //    private MappingMode mappingMode;
 
-    public AbstractSLControllerBase(LX lx, NetworkDevice device, SLControllerInventory inventory, PerceptualColorScale outputScaler) throws SocketException {
+    public DiscoverableController(LX lx, NetworkDevice device, SLControllerInventory inventory, PerceptualColorScale outputScaler) throws SocketException {
         this(lx, device, device.ipAddress, device.deviceId, inventory, false, outputScaler);
     }
 
-    public AbstractSLControllerBase(LX lx, String _host, String _id) throws SocketException {
+    public DiscoverableController(LX lx, String _host, String _id) throws SocketException {
         this(lx, _host, _id, false);
     }
 
-    public AbstractSLControllerBase(LX lx, String _host) throws SocketException {
+    public DiscoverableController(LX lx, String _host) throws SocketException {
         this(lx, _host, "", true);
     }
 
-    private AbstractSLControllerBase(LX lx, String host, String humanID, boolean isBroadcast) throws SocketException {
+    private DiscoverableController(LX lx, String host, String humanID, boolean isBroadcast) throws SocketException {
         this(lx, null, NetworkUtils.toInetAddress(host), humanID, null, isBroadcast, null);
     }
 
-    private AbstractSLControllerBase(LX lx, NetworkDevice networkDevice, InetAddress host, String humanID, SLControllerInventory inventory, boolean isBroadcast, PerceptualColorScale outputScaler) throws SocketException {
+    private DiscoverableController(LX lx, NetworkDevice networkDevice, InetAddress host, String humanID, SLControllerInventory inventory, boolean isBroadcast, PerceptualColorScale outputScaler) throws SocketException {
         super(lx);
 
         System.out.println("created socket for controller: " + ((networkDevice == null) ? "null" : networkDevice.ipAddress));
@@ -302,7 +302,7 @@ public abstract class AbstractSLControllerBase extends LXDatagramOutput implemen
     }
 
     @Override
-    public int compareTo(@NotNull AbstractSLControllerBase other) {
+    public int compareTo(@NotNull DiscoverableController other) {
         return idInt != other.idInt ? Integer.compare(idInt, other.idInt) : humanID.compareTo(other.humanID);
     }
 

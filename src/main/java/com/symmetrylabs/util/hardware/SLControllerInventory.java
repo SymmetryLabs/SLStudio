@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.stream.JsonWriter;
-//import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
-import com.symmetrylabs.slstudio.output.AbstractSLControllerBase;
+//import com.symmetrylabs.slstudio.output.DiscoverableController;
+import com.symmetrylabs.slstudio.output.DiscoverableController;
 import com.symmetrylabs.util.NetworkUtil.MACAddress;
 
 import java.io.*;
@@ -79,7 +79,7 @@ public class SLControllerInventory {
             statusNotes = chunkArr[3] == null ? "null" : chunkArr[3];
         }
 
-        public ControllerMetadata(AbstractSLControllerBase cc) {
+        public ControllerMetadata(DiscoverableController cc) {
             ipAddr = (Inet4Address) cc.networkDevice.ipAddress;
             macAddr = cc.networkDevice.deviceId;
             macAddress = MACAddress.valueOf(cc.networkDevice.deviceId);
