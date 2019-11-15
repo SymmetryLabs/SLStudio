@@ -1,6 +1,6 @@
 // package com.symmetrylabs.shows.tree.ui;
 
-// import com.symmetrylabs.shows.tree.TreeModel;
+// import com.symmetrylabs.shows.tree.TreeModel_v2;
 // import heronarts.p3lx.P3LX;
 // import heronarts.p3lx.ui.UI;
 // import heronarts.p3lx.ui.UI3dComponent;
@@ -19,11 +19,11 @@
 // public class UITreeLeaves extends UI3dComponent {
 
 //   private final P3LX lx;
-//   private final TreeModel tree;
+//   private final TreeModel_v2 tree;
 //   protected final PImage texImage;
 //   private LeafShape shape;
 
-//   public UITreeLeaves(P3LX lx, PApplet applet, TreeModel tree) {
+//   public UITreeLeaves(P3LX lx, PApplet applet, TreeModel_v2 tree) {
 //     this.lx = lx;
 //     this.tree = tree;
 //     this.texImage = applet.loadImage("leaf.png");
@@ -55,7 +55,7 @@
 //       setStroke(false);
 //       setFill(false);
 //       beginShape(QUADS);
-//       for (TreeModel.Leaf leaf : tree.leaves) {
+//       for (TreeModel_v2.Leaf leaf : tree.leaves2) {
 //         vertex(leaf.coords[0].x, leaf.coords[0].y, leaf.coords[0].z, 0, 1);
 //         vertex(leaf.coords[1].x, leaf.coords[1].y, leaf.coords[1].z, 0, 0);
 //         vertex(leaf.coords[2].x, leaf.coords[2].y, leaf.coords[2].z, 1, 0);
@@ -67,7 +67,7 @@
 //       initBuffers();
 
 //       this.tintBuffer = ByteBuffer
-//       .allocateDirect(tree.leaves.size() * 4 * Integer.SIZE / 8)
+//       .allocateDirect(tree.leaves2.size() * 4 * Integer.SIZE / 8)
 //       .order(ByteOrder.nativeOrder())
 //       .asIntBuffer();
 //     }
@@ -79,7 +79,7 @@
 
 //       this.tintBuffer.rewind();
 //       if (BIG_ENDIAN) {
-//         for (int i = 0; i < colors.length; i += TreeModel.Leaf.NUM_LEDS) {
+//         for (int i = 0; i < colors.length; i += TreeModel_v2.Leaf.NUM_LEDS) {
 //           int nativeARGB = (colors[i] >>> 24) | (colors[i] << 8);
 //           this.tintBuffer.put(nativeARGB);
 //           this.tintBuffer.put(nativeARGB);
@@ -87,7 +87,7 @@
 //           this.tintBuffer.put(nativeARGB);
 //         }
 //       } else {
-//         for (int i = 0; i < colors.length; i += TreeModel.Leaf.NUM_LEDS) {
+//         for (int i = 0; i < colors.length; i += TreeModel_v2.Leaf.NUM_LEDS) {
 //           int rb = colors[i] & 0x00ff00ff;
 //           int nativeARGB = (colors[i] & 0xff00ff00) | (rb << 16) | (rb >> 16);
 //           this.tintBuffer.put(nativeARGB);
@@ -98,7 +98,7 @@
 //       }
 //       this.tintBuffer.position(0);
 //       pgl.bindBuffer(PGL.ARRAY_BUFFER, bufPolyColor.glId);
-//       pgl.bufferData(PGL.ARRAY_BUFFER, tree.leaves.size() * 4 * Integer.SIZE/8, this.tintBuffer, PGL.STREAM_DRAW);
+//       pgl.bufferData(PGL.ARRAY_BUFFER, tree.leaves2.size() * 4 * Integer.SIZE/8, this.tintBuffer, PGL.STREAM_DRAW);
 //       pgl.bindBuffer(PGL.ARRAY_BUFFER, 0);
 //     }
 //   }

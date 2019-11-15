@@ -12,13 +12,13 @@
 // import heronarts.lx.output.LXDatagramOutput;
 
 // import com.symmetrylabs.slstudio.output.TenereDatagram;
-// import com.symmetrylabs.shows.tree.TreeModel;
+// import com.symmetrylabs.shows.tree.TreeModel_v2;
 
 
 // public class SymmetreeController extends LXDatagramOutput {
 
 // 	private static final int TWIGS_PER_PACKET = 3;
-// 	private static final int POINTS_PER_PACKET = TreeModel.Twig.NUM_LEDS * TWIGS_PER_PACKET;
+// 	private static final int POINTS_PER_PACKET = TreeModel_v2.Twig.NUM_LEDS * TWIGS_PER_PACKET;
 // 	private static final int OPC_PORT = 1337;
 
 //     private final LX lx;
@@ -30,7 +30,7 @@
 
 //     private String ipAddress;
 
-//     private TreeModel.Branch branch;
+//     private TreeModel_v2.Branch branch;
 
 //     public enum FirwareMode {
 //         DEFAULT, BYPASS, TEST
@@ -103,7 +103,7 @@
 //         // send to controller!
 //     }
 
-//     public void setBranch(TreeModel.Branch branch) {
+//     public void setBranch(TreeModel_v2.Branch branch) {
 //         this.branch = branch;
 //         updateTwigIndices();
 //     }
@@ -112,10 +112,10 @@
 // 		for (int i = 0; i < packets.length; ++i) {
 // 		    for (int j = 0; j < POINTS_PER_PACKET; j++) packets[i][j] = -1; // Initialize to nothing
 // 		}
-//         for (TreeModel.Twig twig : branch.getTwigs()) {
+//         for (TreeModel_v2.Twig twig : branch.getTwigs()) {
 //             int index = twig.index;
 //             int packet = index / TWIGS_PER_PACKET; // truncates to floor
-//             int pindex = TreeModel.Twig.NUM_LEDS * (index - (TWIGS_PER_PACKET * packet));
+//             int pindex = TreeModel_v2.Twig.NUM_LEDS * (index - (TWIGS_PER_PACKET * packet));
 //             for (int indexInTwig = 0; indexInTwig < twig.points.length; indexInTwig++) {
 //                 boolean skip = false;
 //                 int[] disabled = twig.getConfig().disabledPixels;

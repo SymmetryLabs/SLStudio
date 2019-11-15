@@ -25,7 +25,7 @@ public abstract class TreeThreadedPattern extends TreePattern {
             this.threads[i] = new WorkerThread(getClass().getName() + "-Thread" + i);
         }
 
-        // Distribute branches over the threads
+        // Distribute branches2 over the threads
         allocateBranches();
 
         // Start the threads
@@ -40,7 +40,7 @@ public abstract class TreeThreadedPattern extends TreePattern {
     }
 
     // Your subclass may want to override this method to allocate
-    // branches in a different manner
+    // branches2 in a different manner
     public void allocateBranches() {
         int i = 0;
         for (TreeModel.Branch branch : model.branches) {
@@ -80,13 +80,13 @@ public abstract class TreeThreadedPattern extends TreePattern {
     }
 
     // Your subclass should extend this method, and compute the colors only for the
-    // branches specified, taking care to note that you are running in a unique
+    // branches2 specified, taking care to note that you are running in a unique
     // thread context and should not be depending upon or modifying global state that
-    // would affect how *other* branches are rendered!
+    // would affect how *other* branches2 are rendered!
     abstract void runThread(List<TreeModel.Branch> branches, double deltaMs); /* {
-        for (Branch branch : branches) {
+        for (Branch branch : branches2) {
             // Per-branch computation, e.g.
-            for (Leaf leaf : branch.leaves) {
+            for (Leaf leaf : branch.leaves2) {
                 // Per-leaf computation, e.g.
                 setColor(leaf, computedColor);
             }

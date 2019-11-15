@@ -50,7 +50,7 @@ public class EmpireWallPrototypeController extends LXDatagramOutput {
             }
         }
 
-        //for (TreeModel.Twig twig : branch.getTwigs()) {
+        //for (TreeModel_v2.Twig twig : branch.getTwigs()) {
         int i = 0;
         for (VineModel.Vine vine : model.vines) {
             int index = i;
@@ -107,7 +107,7 @@ public class EmpireWallPrototypeController extends LXDatagramOutput {
 
 // 	private static final int OPC_PORT = 1337;
 //     private static final int TWIGS_PER_PACKET = 3;
-//     private static final int POINTS_PER_PACKET = TreeModel.Twig.NUM_LEDS * TWIGS_PER_PACKET;
+//     private static final int POINTS_PER_PACKET = TreeModel_v2.Twig.NUM_LEDS * TWIGS_PER_PACKET;
 
 // 	private String ipAddress;
 //     private final LX lx;

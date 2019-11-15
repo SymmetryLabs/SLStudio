@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import com.symmetrylabs.color.PerceptualColorScale;
 import com.symmetrylabs.controllers.symmeTreeController.infrastructure.AllPortsPowerEnableMask;
+import com.symmetrylabs.shows.treeV2.TreeModel_v2;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.network.OpcMessage;
 import com.symmetrylabs.slstudio.output.DiscoverableController;
@@ -32,7 +33,7 @@ public class AssignableTenereController extends DiscoverableController implement
 	private static final int TWIGS_PER_PACKET = 3;
 	private static final int POINTS_PER_PACKET = TreeModel.Twig.NUM_LEDS * TWIGS_PER_PACKET;
 	private static final int OPC_PORT = 1337;
-    private com.symmetrylabs.shows.treeV2.TreeModel.Branch branch_v2 = null;
+    private com.symmetrylabs.shows.treeV2.TreeModel_v2.Branch branch_v2 = null;
 
     private String ipAddress;
     private TreeModel.Branch branch;
@@ -97,7 +98,7 @@ public class AssignableTenereController extends DiscoverableController implement
 	}
 
     // ARRRRrrrrgggggghhhh delete these...
-    public AssignableTenereController(LX lx, com.symmetrylabs.shows.treeV2.TreeModel.Branch branch, SLControllerInventory slControllerInventory) throws SocketException {
+    public AssignableTenereController(LX lx, TreeModel_v2.Branch branch, SLControllerInventory slControllerInventory) throws SocketException {
         super(lx, slControllerInventory.getHostAddressByControllerID(branch.controllerId.getString()));
         this.lx = lx;
         String ipIn = slControllerInventory.getHostAddressByControllerID(branch.controllerId.getString());
@@ -182,10 +183,10 @@ public class AssignableTenereController extends DiscoverableController implement
             }
         }
 
-        for (com.symmetrylabs.shows.treeV2.TreeModel.Twig twig : branch_v2.twigs) {
+        for (TreeModel_v2.Twig twig : branch_v2.twigs) {
             int index = twig.index;
             int packet = index / TWIGS_PER_PACKET; // truncates to floor
-            int pindex = com.symmetrylabs.shows.treeV2.TreeModel.Twig.NUM_LEDS * (index - (TWIGS_PER_PACKET * packet));
+            int pindex = TreeModel_v2.Twig.NUM_LEDS * (index - (TWIGS_PER_PACKET * packet));
             for (int indexInTwig = 0; indexInTwig < twig.points.length; indexInTwig++) {
                 boolean skip = false;
                 pixelColors[packet][pindex++] = twig.points[indexInTwig].index;

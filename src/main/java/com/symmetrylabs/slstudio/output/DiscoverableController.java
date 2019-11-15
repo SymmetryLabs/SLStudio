@@ -1,6 +1,5 @@
 package com.symmetrylabs.slstudio.output;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.color.PerceptualColorScale;
 import com.symmetrylabs.shows.base.SLShow;

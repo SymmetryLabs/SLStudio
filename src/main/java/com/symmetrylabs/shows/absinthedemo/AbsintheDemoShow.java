@@ -162,7 +162,7 @@ public class AbsintheDemoShow extends TreeShow {
         super.setupUi(lx, ui);
         //ui.preview.addComponent(new UIRocoBuilding());
         ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
-        // UITreeLeaves uiTreeLeaves = new UITreeLeaves(lx, applet, (TreeModel) lx.model);
+        // UITreeLeaves uiTreeLeaves = new UITreeLeaves(lx, applet, (TreeModel_v2) lx.model);
         // ui.preview.addComponent(uiTreeLeaves);
         // new UITreeControls(ui, uiTreeStructure, uiTreeLeaves).setExpanded(false).addToContainer(ui.leftPane.global);
     }

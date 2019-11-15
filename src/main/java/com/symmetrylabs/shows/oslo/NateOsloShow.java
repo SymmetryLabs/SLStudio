@@ -58,7 +58,7 @@ public class NateOsloShow extends SLShow implements Show {
         TreeModel tree = (TreeModel) (lx.model);
 //        TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
 
-//        System.out.println("Number of branches: " + tree.getBranches().size());
+//        System.out.println("Number of branches2: " + tree.getBranches().size());
 //
 
         DebugPortMonitor debugPortMonitor = new DebugPortMonitor();

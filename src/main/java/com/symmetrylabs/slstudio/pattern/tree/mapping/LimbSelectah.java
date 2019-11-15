@@ -1,7 +1,6 @@
 package com.symmetrylabs.slstudio.pattern.tree.mapping;
 
-import com.symmetrylabs.shows.treeV2.TreeModel;
-import com.symmetrylabs.shows.treeV2.patterns.TreePattern;
+import com.symmetrylabs.shows.treeV2.TreeModel_v2;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
@@ -10,16 +9,14 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.lx.parameter.LXParameter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 public class LimbSelectah extends SLPattern<SLModel> {
 
-    private final TreeModel model;
+    private final TreeModel_v2 model;
     private final DiscreteParameter selectedLimb;
     private final DiscreteParameter skippy;
 
@@ -27,8 +24,8 @@ public class LimbSelectah extends SLPattern<SLModel> {
 
     public LimbSelectah(LX lx) {
         super(lx);
-        this.model = (TreeModel) lx.model;
-        this.selectedLimb = new DiscreteParameter("limb", 0, model.limbs.size());
+        this.model = (TreeModel_v2) lx.model;
+        this.selectedLimb = new DiscreteParameter("limb", 0, model.limbs2.size());
         this.skippy = new DiscreteParameter("every n pixel", 1, 5);
         this.directionalityTwigs = new BooleanParameter("twig directionality", false);
         addParameter(directionalityTwigs);
@@ -40,14 +37,14 @@ public class LimbSelectah extends SLPattern<SLModel> {
         int[] colors = (int[]) getArray(SRGB8);
         setColors(0);
 
-        TreeModel.Limb limb = model.limbs.get(selectedLimb.getValuei());
-        List<TreeModel.Limb> sublimbs = limb.limbs;
+        TreeModel_v2.Limb limb = model.limbs2.get(selectedLimb.getValuei());
+        List<TreeModel_v2.Limb> sublimbs = limb.limbs;
         int skip = 0;
 
         if (directionalityTwigs.isOn()){
-            for (TreeModel.Branch branch : limb.branches){
+            for (TreeModel_v2.Branch branch : limb.branches){
                 int bright = 100;
-                for (TreeModel.Twig twig : branch.twigs){
+                for (TreeModel_v2.Twig twig : branch.twigs){
                     for (LXPoint p : twig.points){
                         colors[p.index] = LXColor.hsb(120, bright, bright);
                     }
@@ -63,15 +60,15 @@ public class LimbSelectah extends SLPattern<SLModel> {
         }
 
         int sublimHueRotate = 0;
-        for (TreeModel.Limb l : sublimbs){
+        for (TreeModel_v2.Limb l : sublimbs){
             for (LXPoint p : l.points) {
                 colors[p.index] = LXColor.hsb(60 + sublimHueRotate * 120, 100, 100);
             }
             sublimHueRotate++;
             if (directionalityTwigs.isOn()){
-                for (TreeModel.Branch branch : l.branches){
+                for (TreeModel_v2.Branch branch : l.branches){
                     int bright = 100;
-                    for (TreeModel.Twig twig : branch.twigs){
+                    for (TreeModel_v2.Twig twig : branch.twigs){
                         for (LXPoint p : twig.points){
                             colors[p.index] = LXColor.hsb(60 + sublimHueRotate * 120, bright, bright);
                         }

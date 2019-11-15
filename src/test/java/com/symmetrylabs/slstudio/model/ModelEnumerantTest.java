@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 
 public class ModelEnumerantTest {
 
-    // Goal is to enumerate 124 model branches.
+    // Goal is to enumerate 124 model branches2.
     @Test
     public void enumerateModel() {
         VolumeServer volumeServer = new VolumeServer();

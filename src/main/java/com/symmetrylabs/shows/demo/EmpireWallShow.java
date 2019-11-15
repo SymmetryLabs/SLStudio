@@ -55,7 +55,7 @@ public class EmpireWallShow implements Show {
 		 *
 		 * The wall can be broken in to four quadrants, top left, top right, bottom left, and bottom right.
 		 * The origin of each quadrant is it's corner of the wall. The quadrant a vine belongs is determined 
-		 * by the position of the vines hole on the 2x8 frame. The postiion of the vine's leaves are then measured 
+		 * by the position of the vines hole on the 2x8 frame. The postiion of the vine's leaves2 are then measured
 		 * relative to the origin of the quadrant the vine belongs. 
 		 * 
 		 * TOP LEFT:     x goes to the right,  y goes down,  z goes away from the wall
@@ -219,7 +219,7 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
-//d1 is missing leaves
+//d1 is missing leaves2
 		new VineConfig("D1",
 			new LeafConfig[] {
 				new LeafConfig(2, 48, -6, 0, 0, 0),    //1
@@ -518,7 +518,7 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(216-103, 59, 3.5f, 0, 0, 0),
 			}
 		),
-//added a few leaves
+//added a few leaves2
 		new VineConfig("H1",
 			new LeafConfig[] {
 				new LeafConfig(216-1, 15, 1, 0, 0, 0),
@@ -934,11 +934,11 @@ public class EmpireWallShow implements Show {
 	// static class VineConfig {
 	// 	String humanID;
 	// 	Quadrant quadrant;
-	// 	List<LeafConfig> leaves = new ArrayList<LeafConfig>();
+	// 	List<LeafConfig> leaves2 = new ArrayList<LeafConfig>();
 
-	// 	public VineConfig(String humanID, Quadrant quadrant, LeafConfig[] leaves) {
+	// 	public VineConfig(String humanID, Quadrant quadrant, LeafConfig[] leaves2) {
 	// 		this.humanID = humanID;
-	// 		this.leaves = Arrays.asList(leaves);
+	// 		this.leaves2 = Arrays.asList(leaves2);
 	// 	}
 	// }
 

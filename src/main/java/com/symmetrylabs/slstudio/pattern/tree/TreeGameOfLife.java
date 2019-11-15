@@ -170,7 +170,7 @@ public class TreeGameOfLife extends TreePattern {
     public void run(double deltaMs) {
         // Update the world
         update_world(deltaMs);
-        // Let's iterate over all the leaves...
+        // Let's iterate over all the leaves2...
         int l = 0;
         for (TreeModel.Leaf leaf : tree.getLeaves()) {
             //print("leaf_ind: " + l + ",  x_ind: " + world_indices[l][0] + ",  y_ind: " + world_indices[l][1] + ",  z_ind: " + world_indices[l][2]);

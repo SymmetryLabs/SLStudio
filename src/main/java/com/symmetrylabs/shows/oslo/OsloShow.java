@@ -5,7 +5,7 @@ import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.shows.treeV2.BranchConfig;
 import com.symmetrylabs.shows.treeV2.LimbConfig;
 import com.symmetrylabs.shows.treeV2.TreeConfig;
-import com.symmetrylabs.shows.treeV2.TreeModel;
+import com.symmetrylabs.shows.treeV2.TreeModel_v2;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.util.NetworkChannelDebugMonitor.DebugPortMonitor;
 import com.symmetrylabs.util.NetworkChannelDebugMonitor.MachinePortMonitor;
@@ -293,16 +293,16 @@ public class OsloShow extends SLShow {
         )
     };
 
-    public TreeModel buildModel() {
-        return new TreeModel(new TreeConfig(LIMB_CONFIGS));
+    public TreeModel_v2 buildModel() {
+        return new TreeModel_v2(new TreeConfig(LIMB_CONFIGS));
     }
 
     public void setupLx(final LX lx) {
         super.setupLx(lx);
-         TreeModel tree = (TreeModel) (lx.model);
+         TreeModel_v2 tree = (TreeModel_v2) (lx.model);
 //         TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
 
-         System.out.println("Number of branches: " + tree.getBranches().size());
+         System.out.println("Number of branches2: " + tree.getBranches().size());
 
         // for now these are declared here. But there should be a more deterministic way of instantiating
         // .. such as a hook on discovery of symmeTree controller
@@ -313,7 +313,7 @@ public class OsloShow extends SLShow {
         machinePortMonitor.start();
 
 //        try {
-//            for (TreeModel.Branch branch : tree.getBranches()) {
+//            for (TreeModel_v2.Branch branch : tree.getBranches()) {
 //                AssignableTenereController controller = new AssignableTenereController(lx, branch, slControllerInventory);
 ////                controller.brightness.setValue(1);
 ////                treeControllers.put(branch, controller);
@@ -330,7 +330,7 @@ public class OsloShow extends SLShow {
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
-        //ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
+        //ui.preview.addComponent(new UITreeStructure((TreeModel_v2) lx.model));
 
         //new UITenereControllers(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
     }

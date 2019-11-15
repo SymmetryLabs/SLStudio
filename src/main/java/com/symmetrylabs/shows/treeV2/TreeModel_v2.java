@@ -2,6 +2,7 @@ package com.symmetrylabs.shows.treeV2;
 
 import java.util.*;
 
+import com.symmetrylabs.shows.tree.TreeModel;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.transform.LXTransform;
 import heronarts.lx.transform.LXVector;
@@ -14,43 +15,43 @@ import static com.symmetrylabs.util.DistanceConstants.*;
 import static com.symmetrylabs.util.MathConstants.*;
 
 
-public class TreeModel extends SLModel {
+public class TreeModel_v2 extends TreeModel {
 
-	public final List<Limb> limbs;
+	public final List<Limb> limbs2;
     public final List<Limb> allSublimbs = new ArrayList<>();
-	public final List<Branch> branches;
-	public final List<Twig> twigs;
-	public final List<Leaf> leaves;
+	public final List<Branch> branches2;
+	public final List<Twig> twigs2;
+	public final List<Leaf> leaves2;
 
-	public TreeModel(TreeConfig config) {
+	public TreeModel_v2(TreeConfig config) {
 		super("oslo", new Fixture(config));
 
 		Fixture f = (Fixture) this.fixtures.get(0);
-		this.limbs  = Collections.unmodifiableList(f.limbs);
+		this.limbs2 = Collections.unmodifiableList(f.limbs);
 
 		final List<Branch> branches = new ArrayList<>();
-		for (Limb limb : limbs) {
+		for (Limb limb : limbs2) {
 		    branches.addAll(limb.branches);
 		}
-		this.branches = Collections.unmodifiableList(branches);
+		this.branches2 = Collections.unmodifiableList(branches);
 
 		final List<Twig> twigs = new ArrayList<>();
 		for (Branch branch : branches) {
 		    twigs.addAll(branch.twigs);
 		}
-		this.twigs = Collections.unmodifiableList(twigs);
+		this.twigs2 = Collections.unmodifiableList(twigs);
 
 		final List<Leaf> leaves = new ArrayList<>();
 		for (Twig twig : twigs) {
 		    leaves.addAll(twig.leaves);
 		}
-		this.leaves = Collections.unmodifiableList(leaves);
+		this.leaves2 = Collections.unmodifiableList(leaves);
 
 		this.reflectZ();
 	}
 
 
-    private static class Fixture extends LXAbstractFixture {
+    public static class Fixture extends LXAbstractFixture {
 
 		public final List<Limb> limbs = new ArrayList<>();
 
@@ -67,35 +68,7 @@ public class TreeModel extends SLModel {
 		}
 	}
 
-    public List<Limb> getLimbs() {
-        return limbs;
-    }
-    public Limb[] getLimbsArray() {
-        return limbs.toArray(new Limb[limbs.size()]);
-    }
-
-    public List<Branch> getBranches() {
-        return branches;
-    }
-    public Branch[] getBranchesArray() {
-        return branches.toArray(new Branch[branches.size()]);
-    }
-
-    public List<Twig> getTwigs() {
-        return twigs;
-    }
-    public Twig[] getTwigsArray() {
-        return twigs.toArray(new Twig[twigs.size()]);
-    }
-
-    public List<Leaf> getLeaves() {
-        return leaves;
-    }
-    public Leaf[] getLeavesArray() {
-        return leaves.toArray(new Leaf[leaves.size()]);
-    }
-
-	public static class Limb extends SLModel {
+	public static class Limb extends TreeModel.Limb {
 
 		public final List<Limb> limbs;
 		public final List<Branch> branches;
@@ -112,7 +85,7 @@ public class TreeModel extends SLModel {
 			this.leaves = Collections.unmodifiableList(f.leaves);
 		}
 
-		private static class Fixture extends LXAbstractFixture {
+		public static class Fixture extends LXAbstractFixture {
 
 			public final List<Limb> limbs = new ArrayList<>();
 			public final List<Branch> branches = new ArrayList<>();
@@ -157,7 +130,7 @@ public class TreeModel extends SLModel {
 		}
 	}
 
-	public static class Branch extends SLModel {
+	public static class Branch extends TreeModel.Branch {
 
 		public static final int NUM_TWIGS = 8;
 
@@ -197,7 +170,7 @@ public class TreeModel extends SLModel {
 			this.controllerId.setValue(controllerId);
 		}
 
-		private static class Fixture extends LXAbstractFixture {
+		public static class Fixture extends LXAbstractFixture {
 
 			public final List<Twig> twigs = new ArrayList<>();
 			public final List<Leaf> leaves = new ArrayList<>();
@@ -213,6 +186,7 @@ public class TreeModel extends SLModel {
 				}
 
                 for (Twig twig : twigs) {
+                    leaves.addAll(twig.leaves);
                     for (LXPoint p : twig.points) {
                         this.points.add(p);
                     }
@@ -224,7 +198,7 @@ public class TreeModel extends SLModel {
     /*
      * Twig
      *--------------------------------------------------------------*/
-    public static class Twig extends SLModel {
+    public static class Twig extends TreeModel.Twig {
 
         public static final int NUM_LEAVES = 15;
         public static final int NUM_LEDS = NUM_LEAVES * Leaf.NUM_LEDS;
@@ -255,7 +229,7 @@ public class TreeModel extends SLModel {
         // };
 
         // static {
-        //   // The last eight leaves are just inverse of the first about the y-axis.
+        //   // The last eight leaves2 are just inverse of the first about the y-axis.
         //   for (int i = 0; i < 7; ++i) {
         //     Leaf.Config thisLeaf = LEAVES[i];
         //     int index = LEAVES.length - 1 - i;
@@ -278,20 +252,22 @@ public class TreeModel extends SLModel {
             return Integer.toString(index);
         }
 
-        public List<Leaf> getLeaves() {
-            return leaves;
-        }
-        public Leaf[] getLeavesArray() {
-            return leaves.toArray(new Leaf[leaves.size()]);
-        }
+//        public List<Leaf> getLeaves() {
+//            return leaves2;
+//        }
+//        public Leaf[] getLeavesArray() {
+//            return leaves2.toArray(new Leaf[leaves2.size()]);
+//        }
 
         public List<LXPoint> getPoints() {
             return Arrays.asList(points);
         }
 
-        private static class Fixture extends LXAbstractFixture {
-            private final List<Leaf> leaves = new ArrayList<Leaf>();
-            private final float x, y, z;
+        public static class Fixture extends LXAbstractFixture {
+            public final List<Leaf> leaves = new ArrayList<Leaf>();
+            public final float x;
+            public final float y;
+            public final float z;
 
             private Fixture(LXTransform t, LXMatrix m) {
             	t.push(m);
@@ -313,7 +289,7 @@ public class TreeModel extends SLModel {
                 //   t.translate(leafConfig.x, leafConfig.y, (i % 3) * (.1f*INCHES));
                 //   t.rotateZ(leafConfig.theta * PI / 180.);
                 //   Leaf leaf = new Leaf(t, leafConfig);
-                //   this.leaves.add(leaf);
+                //   this.leaves2.add(leaf);
                 //   addPoints(leaf);
                 //   t.pop();
                 // }
@@ -326,7 +302,7 @@ public class TreeModel extends SLModel {
 	/*
      * Leaf
      *--------------------------------------------------------------*/
-    public static class Leaf extends SLModel {
+    public static class Leaf extends TreeModel.Leaf {
 
         public static final int NUM_LEDS = 10;
         public static final float LED_SPACING = 1.3f*INCHES;
@@ -391,7 +367,7 @@ public class TreeModel extends SLModel {
             this.coords = f.coords;
         }
 
-        private static class Fixture extends LXAbstractFixture {
+        public static class Fixture extends LXAbstractFixture {
             public final LXVector[] coords = new LXVector[4];
 
             private Fixture(LXTransform t) {
@@ -435,6 +411,6 @@ public class TreeModel extends SLModel {
     }
     @Override
     public /* abstract */ Iterator<? extends SLModel> getMappableFixtures(){
-        return branches.iterator();
+        return branches2.iterator();
     }
 }

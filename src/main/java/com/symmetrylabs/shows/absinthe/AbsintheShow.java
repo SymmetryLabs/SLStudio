@@ -133,7 +133,7 @@ public class AbsintheShow extends TreeShow {
         TreeModel tree = (TreeModel) (lx.model);
         TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
 
-        System.out.println("Number of branches: " + tree.getBranches().size());
+        System.out.println("Number of branches2: " + tree.getBranches().size());
 
         lx.engine.addLoopTask(new LXLoopTask() {
             @Override
