@@ -8,6 +8,7 @@ import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 
@@ -22,11 +23,15 @@ public class LimbSelectah extends SLPattern<SLModel> {
     private final DiscreteParameter selectedLimb;
     private final DiscreteParameter skippy;
 
+    private final BooleanParameter directionalityTwigs;
+
     public LimbSelectah(LX lx) {
         super(lx);
         this.model = (TreeModel) lx.model;
         this.selectedLimb = new DiscreteParameter("limb", 0, model.limbs.size());
         this.skippy = new DiscreteParameter("every n pixel", 1, 5);
+        this.directionalityTwigs = new BooleanParameter("twig directionality", false);
+        addParameter(directionalityTwigs);
         addParameter(selectedLimb);
         addParameter(skippy);
     }
@@ -38,9 +43,23 @@ public class LimbSelectah extends SLPattern<SLModel> {
         TreeModel.Limb limb = model.limbs.get(selectedLimb.getValuei());
         List<TreeModel.Limb> sublimbs = limb.limbs;
         int skip = 0;
-        for (LXPoint p : limb.points) {
-            int c = palette.getColor();
-            colors[p.index] = skip++%skippy.getValuei() == 0 ? c : 0;
+
+        if (directionalityTwigs.isOn()){
+            for (TreeModel.Branch branch : limb.branches){
+                int bright = 100;
+                for (TreeModel.Twig twig : branch.twigs){
+                    for (LXPoint p : twig.points){
+                        colors[p.index] = LXColor.hsb(120, bright, bright);
+                    }
+                    bright -= 13;
+                }
+            }
+        }
+        else{
+            for (LXPoint p : limb.points) {
+                int c = palette.getColor();
+                colors[p.index] = skip++%skippy.getValuei() == 0 ? c : 0;
+            }
         }
 
         int sublimHueRotate = 0;
@@ -49,6 +68,17 @@ public class LimbSelectah extends SLPattern<SLModel> {
                 colors[p.index] = LXColor.hsb(60 + sublimHueRotate * 120, 100, 100);
             }
             sublimHueRotate++;
+            if (directionalityTwigs.isOn()){
+                for (TreeModel.Branch branch : l.branches){
+                    int bright = 100;
+                    for (TreeModel.Twig twig : branch.twigs){
+                        for (LXPoint p : twig.points){
+                            colors[p.index] = LXColor.hsb(60 + sublimHueRotate * 120, bright, bright);
+                        }
+                        bright -= 13;
+                    }
+                }
+            }
         }
 
         markModified(SRGB8);

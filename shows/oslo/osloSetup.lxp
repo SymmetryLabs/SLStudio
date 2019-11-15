@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "timestamp": 1573770714699,
+  "timestamp": 1573815151946,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -44,7 +44,7 @@
         "modulationColor": -8912641,
         "parameters": {
           "label": "Look-1",
-          "focusedChannel": 0
+          "focusedChannel": 1
         },
         "channels": [
           {
@@ -59,7 +59,7 @@
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.4397590160369873,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -83,8 +83,59 @@
                   "label": "LimbSelectah",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "limb": 0,
+                  "twig directionality": true,
+                  "limb": 4,
                   "every n pixel": 1
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                },
+                "autoCycleEnabled": true
+              }
+            ]
+          },
+          {
+            "id": 285,
+            "class": "heronarts.lx.LXChannel",
+            "modulationColor": -16711874,
+            "parameters": {
+              "label": "Channel-2",
+              "enabled": true,
+              "cue": false,
+              "midiMonitor": false,
+              "midiChannel": 16,
+              "autoCycleEnabled": false,
+              "autoCycleTimeSecs": 60.0,
+              "fader": 0.5240963697433472,
+              "crossfadeGroup": 0,
+              "blendMode": 0,
+              "transitionEnabled": false,
+              "transitionTimeSecs": 5.0,
+              "transitionBlendMode": 0,
+              "autoDisable": false,
+              "speed": 1.0,
+              "editorVisible": true,
+              "patternBlendMode": 0,
+              "blendPatterns": true
+            },
+            "warps": [],
+            "effects": [],
+            "patternIndex": 0,
+            "patterns": [
+              {
+                "id": 286,
+                "class": "heronarts.lx.pattern.SolidColorPattern",
+                "modulationColor": -31744,
+                "parameters": {
+                  "label": "SolidColor",
+                  "expandedInUi": true,
+                  "Enabled": true,
+                  "color/hue": 0.0,
+                  "color/brightness": 100.0,
+                  "color/saturation": 0.0,
+                  "color": -1
                 },
                 "modulation": {
                   "modulators": [],
@@ -99,7 +150,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -50432,
+          "modulationColor": -65362,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,

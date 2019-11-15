@@ -110,6 +110,24 @@ public class SLModel extends LXModel {
         return IteratorUtils.emptyIterator();
     }
 
+    protected void reflectX() {
+        for (LXPoint p : this.points){
+            p.x = -p.x;
+        }
+    }
+
+    protected void reflectY() {
+        for (LXPoint p : this.points){
+            p.y = -p.y;
+        }
+    }
+
+    protected void reflectZ() {
+        for (LXPoint p : this.points){
+            p.z = -p.z;
+        }
+    }
+
     public static class PointBatches {
         private final List<LXPoint> points;
         private final int batchCount;

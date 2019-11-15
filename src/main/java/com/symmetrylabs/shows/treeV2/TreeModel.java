@@ -45,9 +45,12 @@ public class TreeModel extends SLModel {
 		    leaves.addAll(twig.leaves);
 		}
 		this.leaves = Collections.unmodifiableList(leaves);
+
+		this.reflectZ();
 	}
 
-	private static class Fixture extends LXAbstractFixture {
+
+    private static class Fixture extends LXAbstractFixture {
 
 		public final List<Limb> limbs = new ArrayList<>();
 
@@ -179,6 +182,7 @@ public class TreeModel extends SLModel {
 			controllerId.addListener(p -> {
 				config.setControllerId(controllerId.getString());
 			});
+
 		}
 
 		public String getModelId() {
@@ -203,6 +207,7 @@ public class TreeModel extends SLModel {
 
 				for (int i = 0; i < NUM_TWIGS; i++) {
 					t.push();
+					t.rotateY(PI);
 					twigs.add(new Twig(t, config.getTwigMatrix(i), i));
 					t.pop();
 				}
