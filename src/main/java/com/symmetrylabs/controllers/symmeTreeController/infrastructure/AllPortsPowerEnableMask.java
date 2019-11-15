@@ -31,7 +31,9 @@ public class AllPortsPowerEnableMask {
     public void applyStateToController(ControllerWithPowerFeedback controller){
         Byte portMask;
         portMask = portMaskByControllerHumanID.get(controller.getHumanId());
-        controller.setPortPowerMask(portMask);
+        if (portMask!=null){
+            controller.setPortPowerMask(portMask);
+        }
     }
 
     private Byte filterIntToByte(int powerOnStateMask) {
