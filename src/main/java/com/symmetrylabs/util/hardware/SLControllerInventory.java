@@ -7,6 +7,7 @@ import com.google.gson.stream.JsonWriter;
 //import com.symmetrylabs.slstudio.output.DiscoverableController;
 import com.symmetrylabs.slstudio.output.DiscoverableController;
 import com.symmetrylabs.util.NetworkUtil.MACAddress;
+import heronarts.lx.parameter.DiscreteParameter;
 
 import java.io.*;
 import java.net.Inet4Address;
@@ -23,6 +24,7 @@ public class SLControllerInventory {
 
     private final transient List<SLControllerInventory.Listener> listeners = new ArrayList<>();
 
+    private transient HashMap<String, DiscoverableController> sl_controller_index = new HashMap<>();
 
     public void addListener(Listener listener) {
         listeners.add(listener);

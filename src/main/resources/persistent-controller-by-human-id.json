@@ -1,0 +1,24 @@
+{
+  "slControllerIndex": {
+    "A400": {
+      "ipAddress": "10.28.241.174",
+      "productId": "symmeTree",
+      "versionId": "75e7542",
+      "deviceId": "12::2a::0::1::ef::51",
+      "featureIds": [
+        "powerManager",
+        "tree_rgb8"
+      ]
+    },
+    "asdf": {
+      "ipAddress": "10.3.40.176",
+      "productId": "symmeTree",
+      "versionId": "18d88a9",
+      "deviceId": "12::e::0::3::28::b0",
+      "featureIds": [
+        "powerManager",
+        "tree_rgb8"
+      ]
+    }
+  }
+}

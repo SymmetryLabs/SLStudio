@@ -2,6 +2,7 @@ package com.symmetrylabs.shows.base;
 
 import com.symmetrylabs.color.PerceptualColorScale;
 import com.symmetrylabs.controllers.symmeTreeController.infrastructure.AllPortsPowerEnableMask;
+import com.symmetrylabs.controllers.symmeTreeController.infrastructure.PersistentControllerByHumanIdMap;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.cubes.*;
 import com.symmetrylabs.shows.tree.AssignableTenereController;
@@ -43,6 +44,7 @@ public abstract class SLShow implements Show {
     // top level metadata used in any show
     public static SLModelControllerMapping mapping = null; // only initialized for top level... more evidence we need a top level SLModel
     public SLControllerInventory controllerInventory = new SLControllerInventory();
+    public PersistentControllerByHumanIdMap controllerInventory2 = new PersistentControllerByHumanIdMap();
 
     /**
      * Power related.
@@ -66,6 +68,7 @@ public abstract class SLShow implements Show {
     public SLShow() {
         try {
             controllerInventory = SLControllerInventory.loadFromDisk();
+            controllerInventory2 = PersistentControllerByHumanIdMap.loadFromDisk();
         } catch (FileNotFoundException e) {
             System.err.println("could not load controller inventory");
             e.printStackTrace();

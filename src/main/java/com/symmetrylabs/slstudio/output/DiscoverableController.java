@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.output;
 
+import com.google.gson.annotations.Expose;
 import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.color.PerceptualColorScale;
 import com.symmetrylabs.shows.base.SLShow;
@@ -26,11 +27,13 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
     public String humanID;
     public int idInt;
     public final boolean isBroadcast;
+    @Expose
     public final NetworkDevice networkDevice;
 
     private final PerceptualColorScale outputScaler; // should this really be part of the controller logic?
     private final SLControllerInventory inventory;
     public Integer switchPortNumber; // the physical port index which this controller is plugged to.  May be null.
+    public String newControllerID = ""; // tmp holder for new controller ID to write
     protected int numPixels;
     protected boolean is16BitColorEnabled = false;
 

@@ -112,32 +112,32 @@ public class SLOutputWindow extends CloseableWindow {
         if (dump){
             System.out.println("[");
         }
-        for (DiscoverableController cc : ccs) {
+        for (DiscoverableController dc : ccs) {
             if (expand) {
                 UI.setNextTreeNodeOpen(true);
             } else if (collapse) {
                 UI.setNextTreeNodeOpen(false);
             }
             if (dump){
-                System.out.println( "\"" + cc.networkDevice.ipAddress.toString().split("/")[1] + "\"" + ",");
+                System.out.println( "\"" + dc.networkDevice.ipAddress.toString().split("/")[1] + "\"" + ",");
             }
 
-            if (cc instanceof ControllerWithPowerFeedback){
+            if (dc instanceof ControllerWithPowerFeedback){
                 if (broadcastPortPowerOn){
-                    ((ControllerWithPowerFeedback) cc).enableAllPorts();
+                    ((ControllerWithPowerFeedback) dc).enableAllPorts();
                 }
-                if ( filterOnlyAboveAcceptableDarkCurrentThreshhold.isOn() && ((ControllerWithPowerFeedback) cc).allPortsLessThanThreshholdDuringBlackout(filterLessThanThreshhold.getValuei()) ){
+                if ( filterOnlyAboveAcceptableDarkCurrentThreshhold.isOn() && ((ControllerWithPowerFeedback) dc).allPortsLessThanThreshholdDuringBlackout(filterLessThanThreshhold.getValuei()) ){
                     continue;
                 }
                 if (blackout){
-                    ((ControllerWithPowerFeedback) cc).enableBlackoutProcedure(true);
-                    ((ControllerWithPowerFeedback) cc).setBlackoutThreshhold(show.globalBlackoutPowerThreshhold.getValuei());
-                    ((ControllerWithPowerFeedback) cc).killByThreshHold();
+                    ((ControllerWithPowerFeedback) dc).enableBlackoutProcedure(true);
+                    ((ControllerWithPowerFeedback) dc).setBlackoutThreshhold(show.globalBlackoutPowerThreshhold.getValuei());
+                    ((ControllerWithPowerFeedback) dc).killByThreshHold();
                 }
             }
 
             if (!modelID_filter.equals("")) {
-                SLModelControllerMapping.PhysIdAssignment pia = SLShow.mapping.lookUpByControllerId(cc.humanID);
+                SLModelControllerMapping.PhysIdAssignment pia = SLShow.mapping.lookUpByControllerId(dc.humanID);
                 if (pia != null){
                     String modelId = pia.modelId;
                     boolean modelIdMatch = modelId.contains(modelID_filter);
@@ -149,7 +149,7 @@ public class SLOutputWindow extends CloseableWindow {
                 }
             }
 
-            boolean mapped = SLShow.mapping.lookUpByControllerId(cc.humanID) != null;
+            boolean mapped = SLShow.mapping.lookUpByControllerId(dc.humanID) != null;
             if (mapped) {
                 if (onlyUnmapped.isOn()){
                     continue;
@@ -162,22 +162,31 @@ public class SLOutputWindow extends CloseableWindow {
                 UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.RED);
                 UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.RED_HOVER);
             }
-            UI.CollapseResult cr = UI.collapsibleSection(cc.humanID, false);
-            if (cc.getMacAddress() != null && UI.beginDragDropSource()) {
-                UI.setDragDropPayload("SL.CubeMacAddress", cc.getMacAddress());
+            UI.CollapseResult cr = UI.collapsibleSection(dc.humanID, false);
+            if (dc.getMacAddress() != null && UI.beginDragDropSource()) {
+                UI.setDragDropPayload("SL.CubeMacAddress", dc.getMacAddress());
                 UI.endDragDropSource();
             }
 
             UI.popColor(3);
             // TODO:: impliment this
-            cc.momentaryAltTestOutput.setValue(UI.isItemClicked(true) && UI.isAltDown());
-            cc.momentaryAltShiftTestBlackout.setValue(UI.isItemClicked(true) && UI.isAltDown() && UI.isShiftDown());
+            dc.momentaryAltTestOutput.setValue(UI.isItemClicked(true) && UI.isAltDown());
+            dc.momentaryAltShiftTestBlackout.setValue(UI.isItemClicked(true) && UI.isAltDown() && UI.isShiftDown());
 
 
             if (cr.isOpen) {
+                dc.newControllerID = UI.inputText("new ID " + dc.humanID, dc.newControllerID);
+                if (UI.button("save " + dc.newControllerID)){
+                    try {
+                        show.controllerInventory2.indexController(dc.newControllerID, dc);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 // todo the mapping
 //            UI.labelText("Status", mapped ? "mapped" : "unmapped");
-                NetworkDevice nd = cc.networkDevice;
+                NetworkDevice nd = dc.networkDevice;
                 if (nd == null) {
                     UI.text("(no network device)");
                 } else {
@@ -192,19 +201,19 @@ public class SLOutputWindow extends CloseableWindow {
                     UI.labelText("Features", String.join(",", nd.featureIds));
                 }
 
-                ComponentUI componentUI = new ComponentUI(lx, cc, pui);
-                if(cc instanceof ControllerWithPowerFeedback){
-                    ControllerWithPowerFeedback pfc = ((ControllerWithPowerFeedback) cc);
+                ComponentUI componentUI = new ComponentUI(lx, dc, pui);
+                if(dc instanceof ControllerWithPowerFeedback){
+                    ControllerWithPowerFeedback pfc = ((ControllerWithPowerFeedback) dc);
                     UI.separator();
-                    componentUI.blacklist(((ControllerWithPowerFeedback)cc).getPwrMaskParams());
-                    if ( ((ControllerWithPowerFeedback) cc).getLastSample() != null ) {
+                    componentUI.blacklist(((ControllerWithPowerFeedback)dc).getPwrMaskParams());
+                    if ( ((ControllerWithPowerFeedback) dc).getLastSample() != null ) {
                         for (int i = 0; i < 8; i++){
-                            UI.intBox(Integer.toString(i), ((ControllerWithPowerFeedback) cc).getLastSample().analogSampleArray[i]);
+                            UI.intBox(Integer.toString(i), ((ControllerWithPowerFeedback) dc).getLastSample().analogSampleArray[i]);
                             UI.sameLine();
-                            pui.draw(((ControllerWithPowerFeedback) cc).getPwrMaskParams()[i]);
+                            pui.draw(((ControllerWithPowerFeedback) dc).getPwrMaskParams()[i]);
                         }
 //                        killSwitch[i] = UI.checkbox(Integer.toString(i), killSwitch[i]);
-                        ((ControllerWithPowerFeedback) cc).writePortPowerMaskToController();
+                        ((ControllerWithPowerFeedback) dc).writePortPowerMaskToController();
                         UI.separator();
                     }
                 }

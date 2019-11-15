@@ -9,13 +9,19 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.gson.annotations.Expose;
 import com.symmetrylabs.util.listenable.ListenableInt;
 
 public class NetworkDevice {
+    @Expose
     public final InetAddress ipAddress;
+    @Expose
     public final String productId;
+    @Expose
     public final String versionId;
+    @Expose
     public final String deviceId;
+    @Expose
     public final Set<String> featureIds = new HashSet<String>();
 
     @Deprecated // Remove this field after all controllers are updated to Aura.
