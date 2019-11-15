@@ -34,6 +34,7 @@ import com.symmetrylabs.shows.twigtest.TwigTestShow;
 //import com.symmetrylabs.shows.empirewall.EmpireWallPrototypeShow;
 import com.symmetrylabs.shows.empirewall.EmpireWallShow;
 import com.symmetrylabs.shows.wingportal.WingPortalShow;
+import com.symmetrylabs.shows.gospel.GospelShow;
 import processing.core.PApplet;
 
 public class ShowRegistry {
@@ -97,6 +98,7 @@ public class ShowRegistry {
         map.put(SummerStage19Show.SHOW_NAME, SummerStage19Show::new);
         map.put(EmpireWallShow.SHOW_NAME, EmpireWallShow::new);
         map.put(WingPortalShow.SHOW_NAME, WingPortalShow::new);
+        map.put(GospelShow.SHOW_NAME, GospelShow::new);
     }
 
     interface ShowBuilder {
