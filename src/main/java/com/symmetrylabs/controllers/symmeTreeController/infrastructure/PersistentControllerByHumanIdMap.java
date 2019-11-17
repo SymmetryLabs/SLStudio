@@ -62,6 +62,7 @@ public class PersistentControllerByHumanIdMap {
     public void indexController(String newControllerID, DiscoverableController dc) throws IOException {
         slControllerIndex.put(newControllerID, dc.networkDevice);
         macIndex.put(dc.networkDevice.deviceId, dc.networkDevice);
+        macAddrToHumanIdMap.put(dc.networkDevice.deviceId, newControllerID);
         validateNetwork();
         saveToDisk();
     }
@@ -75,7 +76,7 @@ public class PersistentControllerByHumanIdMap {
     }
 
     public String getNameByMac(String deviceId) {
-        return macAddrToHumanIdMap.get(deviceId);
+        return macAddrToHumanIdMap.get(deviceId) == null ? deviceId : macAddrToHumanIdMap.get(deviceId);
     }
 
     public void buildMacAddrMap() {

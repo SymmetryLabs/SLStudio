@@ -3,6 +3,7 @@
     "52::30::6::4::9d::e3": "B249",
     "67::82::9::f::ae::71": "B226",
     "71::49::0::a9::39::b7": "B255",
+    "77::51::d::bf::92::37": "B265",
     "78::49::b::f3::8f::d7": "B253",
     "82::48::1::ee::4e::17": "B280",
     "83::65::e::bc::19::37": "B225",
@@ -71,6 +72,16 @@
         "tree_rgb8"
       ]
     },
+    "B265": {
+      "ipAddress": "10.191.146.55",
+      "productId": "symmeTree",
+      "versionId": "rev8",
+      "deviceId": "77::51::d::bf::92::37",
+      "featureIds": [
+        "powerManager",
+        "tree_rgb8"
+      ]
+    },
     "B280": {
       "ipAddress": "10.238.78.23",
       "productId": "symmeTree",
@@ -103,6 +114,16 @@
     }
   },
   "macIndex": {
+    "77::51::d::bf::92::37": {
+      "ipAddress": "10.191.146.55",
+      "productId": "symmeTree",
+      "versionId": "rev8",
+      "deviceId": "77::51::d::bf::92::37",
+      "featureIds": [
+        "powerManager",
+        "tree_rgb8"
+      ]
+    },
     "83::65::e::bc::19::37": {
       "ipAddress": "10.188.25.55",
       "productId": "symmeTree",
