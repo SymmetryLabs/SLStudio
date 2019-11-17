@@ -13,7 +13,7 @@ public class PhysicalSwitchLayout {
     private static String RESOURCE_DIR = "src/main/resources";
     private static String RESOURCE_FILENAME = "switchLayout.json";
     @Expose
-    TreeMap<Integer, SLControllerInventory.ControllerMetadata> switchLayoutMap = new TreeMap<>();
+    TreeMap<Integer, ControllerMetadata> switchLayoutMap = new TreeMap<>();
 
     public static PhysicalSwitchLayout loadFromDisk(){
         ClassLoader cl = PhysicalSwitchLayout.class.getClassLoader();
@@ -42,7 +42,7 @@ public class PhysicalSwitchLayout {
     }
 
     public void putController(DiscoverableController cc) {
-        switchLayoutMap.put(cc.switchPortNumber, new SLControllerInventory.ControllerMetadata(cc));
+        switchLayoutMap.put(cc.switchPortNumber, new ControllerMetadata(cc));
     }
 
 }

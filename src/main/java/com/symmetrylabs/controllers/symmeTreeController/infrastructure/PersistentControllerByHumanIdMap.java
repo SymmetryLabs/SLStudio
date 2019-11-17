@@ -18,6 +18,8 @@ public class PersistentControllerByHumanIdMap {
     private static String CONTROLLER_INDEX_FILENAME = "persistent-controller-by-human-id.json";
 
     @Expose
+    final TreeMap<String, String> macAddrToHumanIdMap = new TreeMap<>();
+    @Expose
     final TreeMap<String, NetworkDevice> slControllerIndex = new TreeMap<>();
 
     @Expose
@@ -64,12 +66,26 @@ public class PersistentControllerByHumanIdMap {
         saveToDisk();
     }
 
-    private void saveToDisk() throws IOException {
+    public void saveToDisk() throws IOException {
         new ClassWriterLoader<>(CONTROLLER_INDEX_FILENAME, PersistentControllerByHumanIdMap.class).writeObj(this);
     }
 
     public static PersistentControllerByHumanIdMap loadFromDisk (){
         return new ClassWriterLoader<>(CONTROLLER_INDEX_FILENAME, PersistentControllerByHumanIdMap.class).loadObj();
+    }
+
+    public String getNameByMac(String deviceId) {
+        return macAddrToHumanIdMap.get(deviceId);
+    }
+
+    public void buildMacAddrMap() {
+        macAddrToHumanIdMap.clear();
+
+        for (String key : slControllerIndex.keySet()){
+            NetworkDevice deviceToCheck = slControllerIndex.get(key);
+            macAddrToHumanIdMap.put(deviceToCheck.deviceId, key);
+        }
+
     }
 }
 

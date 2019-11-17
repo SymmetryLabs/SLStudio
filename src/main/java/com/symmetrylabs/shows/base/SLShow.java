@@ -42,8 +42,8 @@ public abstract class SLShow implements Show {
     public AllPortsPowerEnableMask allPortsPowerEnableMask = AllPortsPowerEnableMask.loadFromDisk();
 
     // top level metadata used in any show
-    public static SLSculptureControllerMapping mapping = null; // only initialized for top level... more evidence we need a top level SLModel
-    public SLControllerInventory controllerInventory = new SLControllerInventory();
+    public static SLSculptureControllerMapping mapping = null; // only initialized for top level... more evidence we need a top level SLModel.
+    public static SLControllerInventory controllerInventory;
     public PersistentControllerByHumanIdMap controllerInventory2 = new PersistentControllerByHumanIdMap();
 
     /**
@@ -66,13 +66,8 @@ public abstract class SLShow implements Show {
     }
 
     public SLShow() {
-        try {
-            controllerInventory = SLControllerInventory.loadFromDisk();
-            controllerInventory2 = PersistentControllerByHumanIdMap.loadFromDisk();
-        } catch (FileNotFoundException e) {
-            System.err.println("could not load controller inventory");
-            e.printStackTrace();
-        }
+        controllerInventory = SLControllerInventory.loadFromDisk();
+        controllerInventory2 = PersistentControllerByHumanIdMap.loadFromDisk();
         mapping = SLSculptureControllerMapping.loadFromDisk(getShowName(), controllerInventory);
 //        mapping = SLSculptureControllerMapping.loadFromDisk(getShowName(), controllerInventory2);
     }

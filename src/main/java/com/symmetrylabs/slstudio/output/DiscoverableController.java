@@ -31,6 +31,8 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
     @Expose
     public final NetworkDevice networkDevice;
 
+    public String notes = "";
+
     private final PerceptualColorScale outputScaler; // should this really be part of the controller logic?
     private final SLControllerInventory inventory;
     public Integer switchPortNumber; // the physical port index which this controller is plugged to.  May be null.
