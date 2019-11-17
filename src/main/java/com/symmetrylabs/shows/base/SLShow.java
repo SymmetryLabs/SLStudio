@@ -7,7 +7,7 @@ import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.cubes.*;
 import com.symmetrylabs.shows.tree.AssignableTenereController;
 import com.symmetrylabs.slstudio.SLStudioLX;
-import com.symmetrylabs.slstudio.mappings.SLModelControllerMapping;
+import com.symmetrylabs.slstudio.mappings.SLSculptureControllerMapping;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
@@ -42,7 +42,7 @@ public abstract class SLShow implements Show {
     public AllPortsPowerEnableMask allPortsPowerEnableMask = AllPortsPowerEnableMask.loadFromDisk();
 
     // top level metadata used in any show
-    public static SLModelControllerMapping mapping = null; // only initialized for top level... more evidence we need a top level SLModel
+    public static SLSculptureControllerMapping mapping = null; // only initialized for top level... more evidence we need a top level SLModel
     public SLControllerInventory controllerInventory = new SLControllerInventory();
     public PersistentControllerByHumanIdMap controllerInventory2 = new PersistentControllerByHumanIdMap();
 
@@ -73,7 +73,8 @@ public abstract class SLShow implements Show {
             System.err.println("could not load controller inventory");
             e.printStackTrace();
         }
-        mapping = SLModelControllerMapping.loadFromDisk(getShowName(), controllerInventory);
+        mapping = SLSculptureControllerMapping.loadFromDisk(getShowName(), controllerInventory);
+//        mapping = SLSculptureControllerMapping.loadFromDisk(getShowName(), controllerInventory2);
     }
 
     public abstract SLModel buildModel();

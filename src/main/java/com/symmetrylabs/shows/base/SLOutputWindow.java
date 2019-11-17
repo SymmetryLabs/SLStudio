@@ -3,7 +3,7 @@ package com.symmetrylabs.shows.base;
 import com.symmetrylabs.controllers.symmeTreeController.infrastructure.AllPortsPowerEnableMask;
 import com.symmetrylabs.shows.oslo.OsloShow;
 import com.symmetrylabs.slstudio.ApplicationState;
-import com.symmetrylabs.slstudio.mappings.SLModelControllerMapping;
+import com.symmetrylabs.slstudio.mappings.SLSculptureControllerMapping;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.output.DiscoverableController;
@@ -137,7 +137,7 @@ public class SLOutputWindow extends CloseableWindow {
             }
 
             if (!modelID_filter.equals("")) {
-                SLModelControllerMapping.PhysIdAssignment pia = SLShow.mapping.lookUpByControllerId(dc.humanID);
+                SLSculptureControllerMapping.PhysIdAssignment pia = SLShow.mapping.lookUpByControllerId(dc.humanID);
                 if (pia != null){
                     String modelId = pia.modelId;
                     boolean modelIdMatch = modelId.contains(modelID_filter);
@@ -179,6 +179,7 @@ public class SLOutputWindow extends CloseableWindow {
                 if (UI.button("save " + dc.newControllerID)){
                     try {
                         show.controllerInventory2.indexController(dc.newControllerID, dc);
+//                        show.controllerInventory2.validateNetwork();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

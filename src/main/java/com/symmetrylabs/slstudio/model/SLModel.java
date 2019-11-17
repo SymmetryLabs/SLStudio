@@ -7,9 +7,7 @@ import java.util.Iterator;
 
 import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.shows.cubes.CubesModel;
-import com.symmetrylabs.slstudio.mappings.SLModelControllerMapping;
-import com.symmetrylabs.slstudio.output.PointsGrouping;
-import com.symmetrylabs.util.hardware.SLControllerInventory;
+import com.symmetrylabs.slstudio.mappings.SLSculptureControllerMapping;
 import org.apache.commons.collections4.IteratorUtils;
 
 import org.apache.commons.math3.util.FastMath;
@@ -28,6 +26,9 @@ public class SLModel extends LXModel {
     public static final int OCTREE_INDEX_MIN_POINTS = 1000;
 
     private ModelIndex modelIndex, modelIndexZFlattened;
+
+
+    public final SLSculptureControllerMapping mapping = null;
 
     protected PointBatches pointBatches;
 

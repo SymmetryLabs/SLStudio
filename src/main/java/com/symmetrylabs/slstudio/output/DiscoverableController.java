@@ -24,6 +24,7 @@ import java.net.*;
 
 // All of our controllers operate on UDP but the business logic isn't fundamentally coupled to the transport... (i.e. merits refactor to LXOutput)
 public abstract class DiscoverableController extends LXDatagramOutput implements Comparable<DiscoverableController>, OPCConstants, SLControllerInventory.Listener {
+    @Expose
     public String humanID;
     public int idInt;
     public final boolean isBroadcast;
