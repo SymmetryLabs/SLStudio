@@ -1,4 +1,16 @@
 {
+  "macAddrToHumanIdMap": {
+    "52::30::6::4::9d::e3": "B249",
+    "67::82::9::f::ae::71": "B226",
+    "71::49::0::a9::39::b7": "B255",
+    "77::51::d::bf::92::37": "B265",
+    "78::49::b::f3::8f::d7": "B253",
+    "82::48::1::ee::4e::17": "B280",
+    "83::65::e::bc::19::37": "B225",
+    "84::78::c::10::4f::e1": "B282",
+    "87::51::0::6::56::26": "B281",
+    "89::49::8::91::4c::f7": "B232"
+  },
   "slControllerIndex": {
     "A133": {
       "ipAddress": "10.3.135.22",
@@ -410,6 +422,16 @@
         "tree_rgb8"
       ]
     },
+    "B265": {
+      "ipAddress": "10.191.146.55",
+      "productId": "symmeTree",
+      "versionId": "rev8",
+      "deviceId": "77::51::d::bf::92::37",
+      "featureIds": [
+        "powerManager",
+        "tree_rgb8"
+      ]
+    },
     "B280": {
       "ipAddress": "10.238.78.23",
       "productId": "symmeTree",
@@ -495,6 +517,28 @@
       "productId": "symmeTree",
       "versionId": "rev8",
       "deviceId": "83::51::e::f1::ca::27",
+      "featureIds": [
+        "powerManager",
+        "tree_rgb8"
+      ]
+    }
+  },
+  "macIndex": {
+    "77::51::d::bf::92::37": {
+      "ipAddress": "10.191.146.55",
+      "productId": "symmeTree",
+      "versionId": "rev8",
+      "deviceId": "77::51::d::bf::92::37",
+      "featureIds": [
+        "powerManager",
+        "tree_rgb8"
+      ]
+    },
+    "83::65::e::bc::19::37": {
+      "ipAddress": "10.188.25.55",
+      "productId": "symmeTree",
+      "versionId": "rev8",
+      "deviceId": "83::65::e::bc::19::37",
       "featureIds": [
         "powerManager",
         "tree_rgb8"

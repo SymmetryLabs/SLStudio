@@ -4,17 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonWriter;
 import com.symmetrylabs.slstudio.ApplicationState;
-import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.output.PointsGrouping;
-import com.symmetrylabs.slstudio.output.SLController;
-import com.symmetrylabs.util.hardware.CubeInventory;
+import com.symmetrylabs.util.hardware.ControllerMetadata;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 
 import java.io.*;
 import java.util.*;
 
 
-public class SLModelControllerMapping {
+public class SLSculptureControllerMapping {
     public static final String CTRL_MAP_FILENAME = "sl-controller-mapping.json";
 
     public static final class PhysIdAssignment {
@@ -38,12 +35,12 @@ public class SLModelControllerMapping {
     protected transient SLControllerInventory inventory;
     protected final String showName;
 
-    protected SLModelControllerMapping() {
+    protected SLSculptureControllerMapping() {
         this.showName = null;
         this.inventory = null;
     }
 
-    protected SLModelControllerMapping(String showName, SLControllerInventory inventory) {
+    protected SLSculptureControllerMapping(String showName, SLControllerInventory inventory) {
         this.showName = showName;
         this.inventory = inventory;
     }
@@ -64,7 +61,7 @@ public class SLModelControllerMapping {
         if (assignmentsByHumanID.containsKey(ctrlId)) {
             return assignmentsByHumanID.get(ctrlId);
         }
-        SLControllerInventory.ControllerMetadata pc = inventory.controllerByCtrlId.get(ctrlId);
+        ControllerMetadata pc = inventory.controllerByCtrlId.get(ctrlId);
         if (pc == null) return null;
         return assignmentsByHumanID.get(pc.getHumanID());
     }
@@ -116,12 +113,12 @@ public class SLModelControllerMapping {
         return false;
     }
 
-    public static SLModelControllerMapping loadFromDisk(String showName, SLControllerInventory inventory) {
+    public static SLSculptureControllerMapping loadFromDisk(String showName, SLControllerInventory inventory) {
         File f = showFile(showName);
         if (f.exists()) {
             try {
-                SLModelControllerMapping res = new Gson().fromJson(
-                    new InputStreamReader(new FileInputStream(f)), SLModelControllerMapping.class);
+                SLSculptureControllerMapping res = new Gson().fromJson(
+                    new InputStreamReader(new FileInputStream(f)), SLSculptureControllerMapping.class);
                 if (res != null) {
                     res.inventory = inventory;
                     res.onUpdate();
@@ -132,9 +129,9 @@ public class SLModelControllerMapping {
                 e.printStackTrace();
             }
         } else {
-            ApplicationState.setWarning("CubeModelControllerMapping", "no addressing information for show " + showName);
+            ApplicationState.setWarning("SL Controller Mapping", "no addressing information for show " + showName);
         }
-        return new SLModelControllerMapping(showName, inventory);
+        return new SLSculptureControllerMapping(showName, inventory);
     }
 
 }

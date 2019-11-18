@@ -1,9 +1,10 @@
 package com.symmetrylabs.slstudio.ui.v2;
 
 import com.symmetrylabs.shows.base.SLShow;
-import com.symmetrylabs.slstudio.mappings.SLModelControllerMapping;
+import com.symmetrylabs.slstudio.mappings.SLSculptureControllerMapping;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.output.DiscoverableController;
+import com.symmetrylabs.util.hardware.ControllerMetadata;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXModel;
@@ -52,10 +53,9 @@ public class SLModelMappingWindow extends CloseableWindow {
 
         UI.sameLine();
         if (UI.button("Save")) {
-//            if (!model.mapping.save()) {
-//                UI.openPopup("saveFailed");
-//            }
-            System.out.println("save hit");
+            if (!SLShow.mapping.save()) {
+                UI.openPopup("saveFailed");
+            }
         }
         if (UI.isItemHovered()) {
             UI.beginTooltip();
@@ -78,8 +78,8 @@ public class SLModelMappingWindow extends CloseableWindow {
 
             SLModel c = topoModel.get(i);
 
-            SLModelControllerMapping.PhysIdAssignment pia = SLShow.mapping.lookUpByModelID(c.modelId);
-            SLControllerInventory.ControllerMetadata pc = pia != null ? show.controllerInventory.controllerByCtrlId.get(pia.humanID) : null;
+            SLSculptureControllerMapping.PhysIdAssignment pia = SLShow.mapping.lookUpByModelID(c.modelId);
+            ControllerMetadata pc = pia != null ? show.controllerInventory.controllerByCtrlId.get(pia.humanID) : null;
 
             if (!filter.equals("")) {
                 boolean modelIdMatch = c.modelId.contains(filter);

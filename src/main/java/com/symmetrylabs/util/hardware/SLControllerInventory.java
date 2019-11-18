@@ -41,6 +41,11 @@ public class SLControllerInventory {
         return deviceId;
     }
 
+    public String getNameByMac(String deviceId) {
+        ControllerMetadata metadata = macAddrToControllerMetadataMap.get(deviceId);
+        return metadata == null ? deviceId : metadata.humanID;
+    }
+
     public interface Listener {
         void onControllerListUpdated();
     }
@@ -51,54 +56,8 @@ public class SLControllerInventory {
         return hostAddr;
     }
 
-    public static class ControllerMetadata{
-        @Expose
-        Inet4Address ipAddr;
 
-        @Expose
-        MACAddress macAddress;
-        @Expose
-        String macAddr;
-
-        @Expose
-        String humanID;
-
-        @Expose
-        String statusNotes;
-
-        public ControllerMetadata(String[] chunkArr) {
-            if (chunkArr.length > 4|| chunkArr.length < 3) {
-                throw new IllegalStateException("Chunk malformed, incorrect number data elts.");
-            }
-            try {
-                ipAddr = (Inet4Address) InetAddress.getByName(chunkArr[0]);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
-            macAddress = MACAddress.valueOf(chunkArr[1]);
-            macAddr = macAddress.toString();
-            humanID = chunkArr[2];
-            statusNotes = chunkArr[3] == null ? "null" : chunkArr[3];
-        }
-
-        public ControllerMetadata(DiscoverableController cc) {
-            ipAddr = (Inet4Address) cc.networkDevice.ipAddress;
-            macAddr = cc.networkDevice.deviceId;
-            macAddress = MACAddress.valueOf(cc.networkDevice.deviceId);
-            humanID = cc.humanID;
-            statusNotes = "null for now";
-        }
-
-        public String getHumanID() {
-            return humanID;
-        }
-
-        public String getHostAddress() { return ipAddr.getHostAddress(); }
-
-        public String getMacAddr() { return macAddr; }
-    }
-
-    ArrayList<ControllerMetadata> treeInventory = new ArrayList<>();
+//    ArrayList<ControllerMetadata> treeInventory = new ArrayList<>();
 
     // Map to controller metadata based on MAC
     @Expose
@@ -132,7 +91,7 @@ public class SLControllerInventory {
                 }
                 ControllerMetadata meta = new ControllerMetadata(chunkArr);
                 idx = 0;
-                treeInventory.add(meta);
+//                treeInventory.add(meta);
                 macAddrToControllerMetadataMap.put(meta.humanID, meta);
 
             }
@@ -194,8 +153,8 @@ public class SLControllerInventory {
                 }
                 ControllerMetadata meta = new ControllerMetadata(chunkArr);
                 idx = 0;
-                treeInventory.add(meta);
-                macAddrToControllerMetadataMap.put(meta.macAddr, meta);
+//                treeInventory.add(meta);
+                macAddrToControllerMetadataMap.put(meta.macAddrString, meta);
             }
         }
 //        Gson gson = new GsonBuilder()
@@ -229,7 +188,7 @@ public class SLControllerInventory {
     }
 
 
-    public static SLControllerInventory loadFromDisk() throws FileNotFoundException {
+    public static SLControllerInventory loadFromDisk() {
         ClassLoader cl = SLControllerInventory.class.getClassLoader();
         InputStream resourceStream = cl.getResourceAsStream(PERSISTENT_SLCONTROLLER_INVENTORY);
         if (resourceStream != null) {
