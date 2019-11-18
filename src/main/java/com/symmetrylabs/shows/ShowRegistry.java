@@ -37,6 +37,7 @@ import com.symmetrylabs.shows.empirewall.EmpireWallShow;
 import com.symmetrylabs.shows.wingportal.WingPortalShow;
 import com.symmetrylabs.shows.gospel.GospelShow;
 import com.symmetrylabs.shows.oslo.OsloShow;
+import com.symmetrylabs.shows.banyan.BanyanShow;
 import processing.core.PApplet;
 
 public class ShowRegistry {
@@ -103,6 +104,7 @@ public class ShowRegistry {
         map.put(WingPortalShow.SHOW_NAME, WingPortalShow::new);
         map.put(GospelShow.SHOW_NAME, GospelShow::new);
         map.put(OsloShow.SHOW_NAME, OsloShow::new);
+        map.put(BanyanShow.SHOW_NAME, BanyanShow::new);
     }
 
     interface ShowBuilder {
