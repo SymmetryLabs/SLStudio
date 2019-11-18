@@ -40,14 +40,14 @@ public class BanyanShow extends TreeShow {
     public static final int NUM_BRANCHES = 80;
 
     final TwigConfig[] BRANCH = new TwigConfig[]{
-        new TwigConfig( 0, 0, 0,0, 0, 0, 1),
-        new TwigConfig( 0, 0, 0,0, 0, 0, 2),
-        new TwigConfig( 0, 0, 0,0, 0, 0, 3),
-        new TwigConfig( 0, 0, 0,0, 0, 0, 4),
-        new TwigConfig( 0, 0, 0,0, 0, 0, 5),
-        new TwigConfig( 0, 0, 0,0, 0, 0, 6),
-        new TwigConfig( 0, 0, 0,0, 0, 0, 7),
-        new TwigConfig( 0, 0, 0,0, 0, 0, 8),
+        new TwigConfig(-22.367998f, 0.0f, 0.0f, 43.2f, 0.0f, 0.0f, 1),
+        new TwigConfig(-19.487999f, 12.575999f, 0.0f, 30.599998f, 0.0f, 0.0f, 2),
+        new TwigConfig(-12.479999f, 26.208f, 0.0f, 16.919998f, 0.0f, 0.0f, 3),
+        new TwigConfig(-1.344f, 31.008f, 0.0f, 6.1199994f, 0.0f, 0.0f, 4),
+        new TwigConfig(8.063999f, 31.104f, 0.0f, -10.799999f, 0.0f, 0.0f, 5),
+        new TwigConfig(13.727999f, 20.159998f, 0.0f, -46.799995f, 0.0f, 0.0f, 6),
+        new TwigConfig(18.24f, 8.9279995f, 0.0f, -45.359997f, 0.0f, 0.0f, 7),
+        new TwigConfig(21.792f, 0.0f, 0.0f, -47.159996f, 0.0f, 0.0f, 8)
     };
 
     BranchConfig[] LIMB_TYPE = new BranchConfig[NUM_BRANCHES];
