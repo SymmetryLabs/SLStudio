@@ -11,13 +11,17 @@ import heronarts.lx.parameter.BoundedParameter;
 
 
 public class Cue {
+    static int uid_counter = 0;
+    public int uid = 0;
     public final StringParameter startAtStr;
     public final CompoundParameter durationMs;
     public final CompoundParameter fadeTo;
     public final BoundedParameter cuedParameter;
     private DateTime startAt;
 
-    public Cue(LX lx, BoundedParameter cuedParameter) {
+    public Cue(BoundedParameter cuedParameter) {
+        this.uid = Cue.uid_counter++;
+
         this.cuedParameter = cuedParameter;
 
         startAtStr = new StringParameter("startAt", "00:00");

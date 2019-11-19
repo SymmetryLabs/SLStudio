@@ -29,7 +29,6 @@ import heronarts.lx.midi.MidiNote;
  * parameters, such as a pattern, effect, or transition.
  */
 public interface LXParameter {
-
     public enum Polarity {
         UNIPOLAR,
         BIPOLAR;
@@ -233,4 +232,6 @@ public interface LXParameter {
     default boolean supportsOscTransmit() {
         return true;
     }
+
+    default int getUid(){ return -1; }
 }

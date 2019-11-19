@@ -7,6 +7,7 @@ import com.symmetrylabs.shows.ShowRegistry;
 import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
+import com.symmetrylabs.slstudio.cue.CueManager;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.OutputControl;
 import com.symmetrylabs.util.Utils;
@@ -38,6 +39,8 @@ public abstract class VolumeCore implements ApplicationState.Provider {
     private String showName;
     private OutputControl outputControl;
     private Show show;
+
+    public CueManager cueManager;
 
     public VolumeCore(Listener listener) {
         this.listener = listener;
@@ -165,5 +168,7 @@ public abstract class VolumeCore implements ApplicationState.Provider {
         LXClassLoader.findEffects().forEach(lx::registerEffect);
         LXClassLoader.findPatterns().forEach(lx::registerPattern);
         lx.registerPattern(heronarts.p3lx.pattern.SolidColorPattern.class);
+
+        cueManager = CueManager.attach(lx);
     }
 }

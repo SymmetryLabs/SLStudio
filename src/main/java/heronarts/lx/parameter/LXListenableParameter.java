@@ -33,6 +33,8 @@ import heronarts.lx.LXComponent;
  * modifications *must* come through setValue().
  */
 public abstract class LXListenableParameter implements LXParameter {
+    static private int uid_counter = 0;
+    public int uid;
 
     private final String label;
 
@@ -70,6 +72,7 @@ public abstract class LXListenableParameter implements LXParameter {
     }
 
     protected LXListenableParameter(String label, double value) {
+        this.uid = LXListenableParameter.uid_counter++;
         this.label = label;
         this.defaultValue = this.value = value;
     }
@@ -272,5 +275,10 @@ public abstract class LXListenableParameter implements LXParameter {
     @Override
     public boolean supportsOscTransmit() {
         return supportsOscTransmit;
+    }
+
+    @Override
+    public int getUid(){
+        return uid;
     }
 }
