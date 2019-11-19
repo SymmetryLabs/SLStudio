@@ -1,0 +1,123 @@
+{
+  "switchLayoutMap": {
+    "0": {
+      "ipAddr": "10.2.48.24",
+      "macAddrString": "2A:15:05:02:30:18",
+      "humanID": "2a::15::5::2::30::18",
+      "statusNotes": "(none)",
+      "switchPort": 0
+    },
+    "128": {
+      "ipAddr": "10.2.47.23",
+      "macAddrString": "2A:15:04:02:2F:17",
+      "humanID": "2a::15::4::2::2f::17",
+      "statusNotes": "(none)",
+      "switchPort": 128
+    },
+    "1": {
+      "ipAddr": "10.2.48.24",
+      "macAddrString": "2A:15:05:02:30:18",
+      "humanID": "2a::15::5::2::30::18",
+      "statusNotes": "(none)",
+      "switchPort": 1
+    },
+    "129": {
+      "ipAddr": "10.129.41.148",
+      "macAddrString": "2A:15:02:81:29:94",
+      "humanID": "2a::15::2::81::29::94",
+      "statusNotes": "(none)",
+      "switchPort": 129
+    },
+    "2": {
+      "ipAddr": "10.130.44.150",
+      "macAddrString": "2A:15:05:82:2C:96",
+      "humanID": "2a::15::5::82::2c::96",
+      "statusNotes": "(none)",
+      "switchPort": 2
+    },
+    "130": {
+      "ipAddr": "10.130.16.8",
+      "macAddrString": "2A:15:05:82:10:08",
+      "humanID": "2a::15::5::82::10::8",
+      "statusNotes": "(none)",
+      "switchPort": 130
+    },
+    "131": {
+      "ipAddr": "10.2.48.24",
+      "macAddrString": "2A:15:05:02:30:18",
+      "humanID": "2a::15::5::2::30::18",
+      "statusNotes": "(none)",
+      "switchPort": 131
+    },
+    "12": {
+      "ipAddr": "10.129.41.148",
+      "macAddrString": "2A:15:02:81:29:94",
+      "humanID": "2a::15::2::81::29::94",
+      "statusNotes": "(none)",
+      "switchPort": 12
+    },
+    "13": {
+      "ipAddr": "10.2.48.24",
+      "macAddrString": "2A:15:05:02:30:18",
+      "humanID": "2a::15::5::2::30::18",
+      "statusNotes": "(none)",
+      "switchPort": 13
+    },
+    "23": {
+      "ipAddr": "10.130.44.150",
+      "macAddrString": "2A:15:05:82:2C:96",
+      "humanID": "2a::15::5::82::2c::96",
+      "statusNotes": "(none)",
+      "switchPort": 23
+    },
+    "121": {
+      "ipAddr": "10.130.66.161",
+      "macAddrString": "2A:15:04:82:42:A1",
+      "humanID": "2a::15::4::82::42::a1",
+      "statusNotes": "(none)",
+      "switchPort": 121
+    },
+    "122": {
+      "ipAddr": "10.130.48.152",
+      "macAddrString": "2A:15:05:82:30:98",
+      "humanID": "2a::15::5::82::30::98",
+      "statusNotes": "(none)",
+      "switchPort": 122
+    },
+    "123": {
+      "ipAddr": "10.5.55.27",
+      "macAddrString": "0E:07:0B:05:37:1B",
+      "humanID": "e::7::b::5::37::1b",
+      "statusNotes": "(none)",
+      "switchPort": 123
+    },
+    "124": {
+      "ipAddr": "10.130.44.150",
+      "macAddrString": "2A:15:05:82:2C:96",
+      "humanID": "2a::15::5::82::2c::96",
+      "statusNotes": "(none)",
+      "switchPort": 124
+    },
+    "125": {
+      "ipAddr": "10.2.58.29",
+      "macAddrString": "2A:15:05:02:3A:1D",
+      "humanID": "2a::15::5::2::3a::1d",
+      "statusNotes": "(none)",
+      "switchPort": 125
+    },
+    "126": {
+      "ipAddr": "10.130.60.30",
+      "macAddrString": "2A:15:05:82:3C:1E",
+      "humanID": "2a::15::5::82::3c::1e",
+      "statusNotes": "(none)",
+      "switchPort": 126
+    },
+    "127": {
+      "ipAddr": "10.128.9.132",
+      "macAddrString": "2A:15:00:80:09:84",
+      "humanID": "2a::15::0::80::9::84",
+      "statusNotes": "(none)",
+      "switchPort": 127
+    }
+  }
+}

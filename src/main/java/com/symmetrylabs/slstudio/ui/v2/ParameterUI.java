@@ -193,6 +193,7 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
         sb.append(visibleLabel);
         sb.append("###");
         sb.append(stableId);
+        sb.append(p.getUid());
         if (parentId != null) {
             sb.append("/");
             sb.append(parentId);

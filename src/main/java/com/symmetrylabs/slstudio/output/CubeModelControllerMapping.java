@@ -4,20 +4,17 @@ import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
 import java.io.IOException;
-import com.symmetrylabs.util.CubeInventory;
+import com.symmetrylabs.util.hardware.CubeInventory;
 import com.google.gson.GsonBuilder;
 import java.io.File;
 import com.google.gson.stream.JsonWriter;
 import java.io.FileWriter;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.io.InputStream;
-import com.google.gson.JsonElement;
+
 import com.symmetrylabs.slstudio.ApplicationState;
 import java.util.ArrayList;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.common.base.Preconditions;
 
 
 public class CubeModelControllerMapping {

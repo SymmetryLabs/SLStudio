@@ -1,8 +1,6 @@
 package com.symmetrylabs.shows.cubes;
 
 import com.symmetrylabs.color.Ops16;
-import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
@@ -14,10 +12,8 @@ import heronarts.lx.output.LXOutput;
 import heronarts.lx.output.OPCConstants;
 import org.jetbrains.annotations.NotNull;
 import com.symmetrylabs.slstudio.ApplicationState;
-import com.symmetrylabs.util.CubeInventory;
+import com.symmetrylabs.util.hardware.CubeInventory;
 import com.symmetrylabs.color.PerceptualColorScale;
-import com.symmetrylabs.color.Ops8;
-import com.symmetrylabs.shows.cubes.CubesModel.Cube;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -34,7 +30,6 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     private final CubeInventory inventory;
     private DatagramSocket dsocket;
     private DatagramPacket packet;
-    private OutputStream output;
     protected boolean is16BitColorEnabled = false;
 
     final int[] STRIP_ORD = new int[] {
@@ -134,7 +129,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         if (outputScaler != null) {
             c = outputScaler.apply8(c);
         }
-        int index = 4 + number * 3;
+        int index = HEADER_LEN + number * 3;
         packetData[index++] = LXColor.red(c);
         packetData[index++] = LXColor.green(c);
         packetData[index++] = LXColor.blue(c);
@@ -180,7 +175,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         // If we're on broadcast, use cube 0 for all cubes, even
         // if that cube isn't modelled yet
         // Use the mac address to find the cube if we have it
-        // Otherwise use the cube id
+        // Otherwise use the cube humanID
         if (!(lx.model instanceof CubesModel)) {
             ApplicationState.setWarning("CubesController", "model is not a cube model");
             return;
@@ -307,6 +302,6 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 
     @Override
     public String toString() {
-        return String.format("cube id=%s ip=%s bcast=%s", id, host, isBroadcast ? "yes" : "no");
+        return String.format("cube humanID=%s ip=%s bcast=%s", id, host, isBroadcast ? "yes" : "no");
     }
 }

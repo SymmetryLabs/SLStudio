@@ -3,21 +3,19 @@ package com.symmetrylabs.shows.cubes;
 import com.symmetrylabs.slstudio.ui.v2.CloseableWindow;
 import com.symmetrylabs.slstudio.ui.v2.FontLoader;
 import com.symmetrylabs.slstudio.ui.v2.UI;
-import com.symmetrylabs.slstudio.ui.v2.UIConstants;
-import com.symmetrylabs.util.CubeInventory;
+import com.symmetrylabs.util.hardware.CubeInventory;
 import heronarts.lx.LX;
-import heronarts.lx.transform.LXTransform;
+
 import java.util.Iterator;
-import java.util.List;
 
 
-public class InventoryEditor extends CloseableWindow {
+public class CubesInventoryEditor extends CloseableWindow {
     protected final LX lx;
     protected final CubeInventory inventory;
     protected String idFilter = "";
     protected String macFilter = "";
 
-    public InventoryEditor(LX lx, CubeInventory inventory) {
+    public CubesInventoryEditor(LX lx, CubeInventory inventory) {
         super("Inventory editor");
         this.lx = lx;
         this.inventory = inventory;
@@ -115,7 +113,7 @@ public class InventoryEditor extends CloseableWindow {
                 continue;
             }
 
-            pc.idA = UI.inputText("id A##" + i, pc.idA == null ? "" : pc.idA);
+            pc.idA = UI.inputText("humanID A##" + i, pc.idA == null ? "" : pc.idA);
             pc.addrA = UI.inputText("addr A##" + i, pc.addrA == null ? "" : pc.addrA);
             if (UI.beginDragDropTarget()) {
                 String addr = UI.acceptDragDropPayload("SL.CubeMacAddress", String.class);
@@ -123,7 +121,7 @@ public class InventoryEditor extends CloseableWindow {
                     pc.addrA = addr;
                 }
             }
-            pc.idB = UI.inputText("id B##" + i, pc.idB == null ? "" : pc.idB);
+            pc.idB = UI.inputText("humanID B##" + i, pc.idB == null ? "" : pc.idB);
             pc.addrB = UI.inputText("addr B##" + i, pc.addrB == null ? "" : pc.addrB);
             if (UI.beginDragDropTarget()) {
                 String addr = UI.acceptDragDropPayload("SL.CubeMacAddress", String.class);

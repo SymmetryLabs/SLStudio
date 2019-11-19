@@ -38,7 +38,7 @@ public class UILeaves extends UI3dComponent {
     pg.texture(this.texImage);
     int i = 0;
     for (TreeModel.Leaf leaf : model.leaves) {
-      //System.out.println("drawing leaves: " + i++ );
+      //System.out.println("drawing leaves2: " + i++ );
       if (output.colors != null) {
         pg.tint(output.colors[leaf.points[0].index]);
       }

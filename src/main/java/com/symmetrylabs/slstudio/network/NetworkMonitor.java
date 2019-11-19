@@ -8,9 +8,6 @@ import heronarts.lx.LX;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.InetAddress;
-import java.net.SocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.spi.SelectorProvider;
@@ -22,9 +19,11 @@ public class NetworkMonitor {
     private static final int SCAN_PERIOD_MS = 500;
 
     public final ListenableSet<NetworkDevice> opcDeviceList;
+//    public final ListenableSet<NetworkDevice> treeDeviceList;
     public final ListenableSet<InetAddress> artNetDeviceList;
 
-    private final OpcNetworkScanner opcNetworkScanner;
+    private final OpcNetworkScanner cubesOpcNetworkScanner;
+    private final OpcNetworkScanner treeOpcNetworkScanner;
     private final ArtNetNetworkScanner artNetNetworkScanner;
     private final Selector recvSelector;
 
@@ -63,8 +62,14 @@ public class NetworkMonitor {
             throw new RuntimeException(e);
         }
 
-        opcNetworkScanner = new OpcNetworkScanner(dispatcher, recvSelector);
-        opcDeviceList = opcNetworkScanner.deviceList;
+        cubesOpcNetworkScanner = new OpcNetworkScanner(dispatcher, recvSelector);
+//        opcDeviceList = cubesOpcNetworkScanner.deviceList;
+
+        // new scanner for tree controllers on port 1337
+        treeOpcNetworkScanner = new OpcNetworkScanner(dispatcher, recvSelector, 1337);
+//        treeDeviceList = treeOpcNetworkScanner.deviceList;
+        opcDeviceList = treeOpcNetworkScanner.deviceList;
+
 
         artNetNetworkScanner = new ArtNetNetworkScanner(dispatcher, recvSelector);
         artNetDeviceList = artNetNetworkScanner.deviceList;
@@ -122,7 +127,8 @@ public class NetworkMonitor {
 
     private void loop() {
         while (started) {
-            opcNetworkScanner.scan();
+            cubesOpcNetworkScanner.scan();
+            treeOpcNetworkScanner.scan();
             artNetNetworkScanner.scan();
 
             long start = System.nanoTime();
@@ -144,7 +150,7 @@ public class NetworkMonitor {
                     SelectionKey sel = iter.next();
 
                     /* UdpBroadcastNetworkScanner is the only thing that gets to stick stuff to our
-                       Selector, and it promises the attachment is always a poitner to a
+                       Selector, and it promises the attachment is always a pointer to a
                        UdpBroadcastNetworkScanner. */
                     UdpBroadcastNetworkScanner sc = (UdpBroadcastNetworkScanner) sel.attachment();
                     sc.onSelected(sel);
@@ -159,7 +165,7 @@ public class NetworkMonitor {
                 remaining = 1_000_000L * SCAN_PERIOD_MS - (System.nanoTime() - start);
             } while (remaining > 0 && started);
         }
-        opcNetworkScanner.close();
+        cubesOpcNetworkScanner.close();
         artNetNetworkScanner.close();
     }
 }

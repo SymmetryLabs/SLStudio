@@ -89,7 +89,7 @@ public class CubesMappingPattern extends SLPattern<CubesModel> {
         if (id.equals("-"))
             return;
 
-        // we iterate all cubes and call continue here because multiple cubes might have zero as id
+        // we iterate all cubes and call continue here because multiple cubes might have zero as humanID
         for (CubesModel.Cube c : model.getCubes()) {
             if (!c.modelId.equals(id))
                 continue;

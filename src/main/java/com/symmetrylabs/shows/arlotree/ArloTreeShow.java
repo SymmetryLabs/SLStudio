@@ -101,4 +101,9 @@ public class ArloTreeShow extends TreeShow {
         super.setupUi(lx, ui);
         XfadeTimer.attach(lx, ui);
     }
+
+    @Override
+    public String getShowName() {
+        return SHOW_NAME;
+    }
 }

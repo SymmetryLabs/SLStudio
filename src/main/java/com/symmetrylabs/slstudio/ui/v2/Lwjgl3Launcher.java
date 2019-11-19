@@ -35,7 +35,8 @@ public class Lwjgl3Launcher {
         configuration.setWindowIcon("application.png");
         /* 8 bits per color+depth, 0 bits for stencil, 3 samples per pixel */
         configuration.setBackBufferConfig(8, 8, 8, 8, 8, 0, 3);
-        configuration.enableGLDebugOutput(true, System.out);
+//        configuration.enableGLDebugOutput(true, System.out);
+        configuration.enableGLDebugOutput(false, System.out);
         return configuration;
     }
 }

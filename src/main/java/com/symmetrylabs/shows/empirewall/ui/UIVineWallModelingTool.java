@@ -179,7 +179,7 @@ public class UIVineWallModelingTool extends UICollapsibleSection {
     // private void updateBranchControl() {
     //     List<BranchItem> items = modelingTool.getSelectedLimb().getBranches().stream()
     //         .map(branch -> new BranchItem(branch)).collect(Collectors.toList());
-    //     branchControls.branches.setItems(items);
+    //     branchControls.branches2.setItems(items);
     // }
 
     private class LeafControls extends UI2dContainer {
@@ -299,20 +299,20 @@ public class UIVineWallModelingTool extends UICollapsibleSection {
 
     // // (todo) make these a little more elegant...
     // getPrimaryColorvate class LeafItem extends UIItemList.AbstractItem {
-    //     final TreeModel.Leaf leaf;
+    //     final TreeModel_v2.Leaf leaf;
 
-    //     LeafItem(TreeModel.Leaf leaf) {
+    //     LeafItem(TreeModel_v2.Leaf leaf) {
     //         this.leaf = leaf;
     //     }
 
     //     public String getLabel() {
-    //         return "Leaf #" + modelingTool.getSelectedVine().leaves.indexOf(leaf);
+    //         return "Leaf #" + modelingTool.getSelectedVine().leaves2.indexOf(leaf);
     //     }
 
     //     public boolean isSelected() {
-    //         // List<TreeModel.Limb> limbs = modelingTool.tree.getLimbs();
-    //         // TreeModel.Limb selectedLimb = (TreeModel.Limb) modelingTool.getSelectedLimb();
-    //         // return limbs.indexOf(limb) == limbs.indexOf(selectedLimb);
+    //         // List<TreeModel_v2.Limb> limbs2 = modelingTool.tree.getLimbs();
+    //         // TreeModel_v2.Limb selectedLimb = (TreeModel_v2.Limb) modelingTool.getSelectedLimb();
+    //         // return limbs2.indexOf(limb) == limbs2.indexOf(selectedLimb);
     //         return false;
     //     }
 

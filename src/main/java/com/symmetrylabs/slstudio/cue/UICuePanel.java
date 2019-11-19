@@ -1,7 +1,6 @@
 package com.symmetrylabs.slstudio.cue;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.LX;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.component.UIItemList;
@@ -104,7 +103,7 @@ public class UICuePanel extends UICollapsibleSection implements CueManager.CueLi
 
     private void addCue() {
         /* this will end up calling cueListChanged, which will trigger the redraw */
-        mgr.addCue(new Cue(lx, lx.engine.output.brightness));
+        mgr.addCue(new Cue(lx.engine.output.brightness));
     }
 
     private void setSelected(Cue cue) {

@@ -86,9 +86,9 @@ public class TreeModelingPattern extends SLPattern<TreeModel> {
 
 //                if (uiModelingTool.displayTwigIndices.isOn()) {
 //                    int bi = 0;
-//                    for (TreeModel.Twig twig : modelingTool.getSelectedBranch().getTwigs()) {
+//                    for (TreeModel_v2.Twig twig : modelingTool.getSelectedBranch().getTwigs()) {
 //                        int ti = -1;
-//                        for (TreeModel.Leaf leaf : twig.getLeaves()) {
+//                        for (TreeModel_v2.Leaf leaf : twig.getLeaves()) {
 //                            if (bi > ti++) {
 //                                for (LXPoint p : leaf.getPoints()) {
 //                                    colors[p.index] = LXColor.GREEN;
@@ -102,13 +102,13 @@ public class TreeModelingPattern extends SLPattern<TreeModel> {
 
             case TWIG:
                 i1 = 0; i2 = 0;
-                //for (TreeModel.Twig twig : modelingTool.getSelectedBranch().getTwigs()) {
+                //for (TreeModel_v2.Twig twig : modelingTool.getSelectedBranch().getTwigs()) {
                 TreeModel.Branch branch = modelingTool.getSelectedBranch();
 
 
 //                for (int i = 0; i < branch.getTwigs().size(); i++) {
 //                     System.out.println("------------------------------");
-//                     for (TreeModel.Twig twig : branch.getTwigs()) {
+//                     for (TreeModel_v2.Twig twig : branch.getTwigs()) {
 //                         System.out.println("twig index: " + twig.getConfig().index);
 //                     }
 //                }

@@ -102,7 +102,7 @@ public abstract class LXOutput extends LXComponent {
      * Framerate throttle
      */
     public final BoundedParameter framesPerSecond =
-        new BoundedParameter("FPS", 0, 300)
+        new BoundedParameter("FPS", 34,0, 300)
         .setDescription("Maximum frames per second this output will send");
 
     /**

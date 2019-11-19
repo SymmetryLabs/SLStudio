@@ -79,7 +79,7 @@ public class Panelizer {
                     panelPixlites.put(panel, pr);
                 }
             } catch (NumberFormatException e) {
-                System.err.println(String.format("bad pixlite id: '%s'", bits[0]));
+                System.err.println(String.format("bad pixlite humanID: '%s'", bits[0]));
                 return;
             }
         }

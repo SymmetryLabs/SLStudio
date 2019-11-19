@@ -4,6 +4,7 @@ import java.util.*;
 import java.lang.Integer;
 import java.util.Arrays;
 
+import com.symmetrylabs.shows.treeV2.TreeModel_v2;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXTransform;
@@ -11,6 +12,8 @@ import heronarts.lx.transform.LXVector;
 
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.shows.tree.config.*;
+import org.apache.commons.collections4.IteratorUtils;
+
 import static com.symmetrylabs.util.DistanceConstants.*;
 import static com.symmetrylabs.util.MathConstants.*;
 
@@ -52,6 +55,35 @@ public class TreeModel extends SLModel {
           leaves.addAll(twig.leaves);
       }
       this.leaves = Collections.unmodifiableList(leaves);
+    }
+
+    public TreeModel(String oslo, TreeModel_v2.Fixture fixture) {
+        super(oslo, fixture);
+
+        this.limbs  = Collections.unmodifiableList(fixture.limbs);
+
+        final List<Branch> branches = new ArrayList<>();
+        for (Limb limb : limbs) {
+            branches.addAll(limb.branches);
+        }
+        this.branches = Collections.unmodifiableList(branches);
+
+        final List<Twig> twigs = new ArrayList<>();
+        for (Branch branch : branches) {
+            twigs.addAll(branch.twigs);
+        }
+        this.twigs = Collections.unmodifiableList(twigs);
+
+        final List<Leaf> leaves = new ArrayList<>();
+        for (Twig twig : twigs) {
+            leaves.addAll(twig.leaves);
+        }
+        this.leaves = Collections.unmodifiableList(leaves);
+    }
+
+    @Override
+    public /* abstract */ Iterator<? extends SLModel> getMappableFixtures(){
+        return branches.iterator();
     }
 
     private static class Fixture extends LXAbstractFixture {
@@ -159,6 +191,13 @@ public class TreeModel extends SLModel {
             this.branches = Collections.unmodifiableList(f.branches);
             this.twigs = Collections.unmodifiableList(f.twigs);
             this.leaves = Collections.unmodifiableList(f.leaves);
+        }
+
+        public Limb(String limb, TreeModel_v2.Limb.Fixture fixture) {
+            super(limb, fixture);
+            this.branches = Collections.unmodifiableList(fixture.branches);
+            this.twigs = Collections.unmodifiableList(fixture.twigs);
+            this.leaves = Collections.unmodifiableList(fixture.leaves);
         }
 
         public void reconfigure(LXTransform t, LimbConfig config) {
@@ -276,6 +315,13 @@ public class TreeModel extends SLModel {
             this.y = f.y;
             this.z = f.z;
 
+        }
+
+        public Branch(String modelId, String controllerId, TreeModel_v2.Branch.Fixture fixture) {
+            super(modelId, controllerId, fixture);
+
+            this.twigs = Collections.unmodifiableList(fixture.twigs);
+            this.leaves = Collections.unmodifiableList(fixture.leaves);
         }
 
         public void reconfigure(LXTransform t, BranchConfig config) {
@@ -417,7 +463,7 @@ public class TreeModel extends SLModel {
         };
 
         static {
-          // The last eight leaves are just inverse of the first about the y-axis.
+          // The last eight leaves2 are just inverse of the first about the y-axis.
           for (int i = 0; i < 7; ++i) {
             Leaf.Config thisLeaf = LEAVES[i];
             int index = LEAVES.length - 1 - i;
@@ -438,6 +484,15 @@ public class TreeModel extends SLModel {
             this.x = f.x;
             this.y = f.y;
             this.z = f.z;
+        }
+
+        public Twig(String twig, TreeModel_v2.Twig.Fixture fixture) {
+            super(twig, fixture);
+
+            this.leaves = Collections.unmodifiableList(fixture.leaves);
+            this.x = fixture.x;
+            this.y = fixture.y;
+            this.z = fixture.z;
         }
 
         public String toString() {
@@ -581,6 +636,18 @@ public class TreeModel extends SLModel {
             this.point = points[0];
             this.coords = f.coords;
         }
+
+        public Leaf(String leaf, TreeModel_v2.Leaf.Fixture fixture) {
+            super(leaf, fixture);
+
+//            Fixture f = (Fixture) this.fixtures.get(0);
+
+            this.size = null;
+            this.config = null;
+            this.point = points[0];
+//            this.coords = f.coords;
+        }
+
 
         public void reconfigure(LXTransform t) {
             this.x = t.x();

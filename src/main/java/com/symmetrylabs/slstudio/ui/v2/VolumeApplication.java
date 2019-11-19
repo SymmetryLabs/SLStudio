@@ -21,7 +21,7 @@ import heronarts.lx.LXMappingEngine;
  * instance off to libgdx, this class is what actually runs the app.
  */
 public class VolumeApplication extends ApplicationAdapter implements VolumeCore.Listener {
-    private final VolumeCore core;
+    public final VolumeCore core;
     private RenderManager renderer;
     private VolumeClient client;
     LookEditor lookEditor;
@@ -44,7 +44,7 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
 
     private boolean midiToggled = false;
 
-    VolumeApplication() {
+    public VolumeApplication() {
         this.core = new VolumeCore(this) {
             @Override
             public void setWarning(String key, String message) {
@@ -207,6 +207,8 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
         WindowManager.addPersistent("Modulation", () -> new ModulationWindow(lx), false);
         WindowManager.addPersistent("OSC", () -> new OscWindow(lx), false);
         WindowManager.addPersistent("Remote Control", () -> new RemoteControlWindow(client), false);
+
+        WindowManager.addPersistent("Cue", () -> new CueWindow(lx, core.cueManager), true);
 
         WindowManager.addPersistent("Developer/Imgui demo", SlimguiDemoWindow::new, false);
         WindowManager.addPersistent("Developer/Style editor", SlimguiStyleEditor::new, false);

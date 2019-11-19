@@ -1,0 +1,125 @@
+Has to do with SLShow creating too many sockets for broadcast advertize
+
+
+=============
+
+
+java.net.SocketException: Too many open files in system (Socket creation failed)
+	at java.net.NetworkInterface.getAll(Native Method)
+	at java.net.NetworkInterface.getNetworkInterfaces(NetworkInterface.java:355)
+	at com.symmetrylabs.util.NetworkUtils.loadBroadcastAddresses(NetworkUtils.java:48)
+	at com.symmetrylabs.util.NetworkUtils.getBroadcastAddresses(NetworkUtils.java:81)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.expireInterfaces(UdpBroadcastNetworkScanner.java:205)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.scan(UdpBroadcastNetworkScanner.java:129)
+	at com.symmetrylabs.slstudio.network.NetworkMonitor.loop(NetworkMonitor.java:131)
+	at java.lang.Thread.run(Thread.java:748)
+lost interface /10.255.255.255
+bound to new interface /10.255.255.255 for OPC
+java.net.SocketException: Too many open files in system (Socket creation failed)
+	at java.net.NetworkInterface.getAll(Native Method)
+	at java.net.NetworkInterface.getNetworkInterfaces(NetworkInterface.java:355)
+	at com.symmetrylabs.util.NetworkUtils.loadBroadcastAddresses(NetworkUtils.java:48)
+	at com.symmetrylabs.util.NetworkUtils.getBroadcastAddresses(NetworkUtils.java:81)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.expireInterfaces(UdpBroadcastNetworkScanner.java:205)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.scan(UdpBroadcastNetworkScanner.java:129)
+	at com.symmetrylabs.slstudio.network.NetworkMonitor.loop(NetworkMonitor.java:132)
+	at java.lang.Thread.run(Thread.java:748)
+lost interface /10.255.255.255
+bound to new interface /10.255.255.255 for ArtNet
+java.net.SocketException: Too many open files in system (Socket creation failed)
+	at java.net.NetworkInterface.getAll(Native Method)
+	at java.net.NetworkInterface.getNetworkInterfaces(NetworkInterface.java:355)
+	at com.symmetrylabs.util.NetworkUtils.loadBroadcastAddresses(NetworkUtils.java:48)
+	at com.symmetrylabs.util.NetworkUtils.getBroadcastAddresses(NetworkUtils.java:81)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.expireInterfaces(UdpBroadcastNetworkScanner.java:205)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.scan(UdpBroadcastNetworkScanner.java:129)
+	at com.symmetrylabs.slstudio.network.NetworkMonitor.loop(NetworkMonitor.java:130)
+	at java.lang.Thread.run(Thread.java:748)
+lost interface /10.255.255.255
+bound to new interface /10.255.255.255 for OPC
+java.net.SocketException: Too many open files in system (Socket creation failed)
+	at java.net.NetworkInterface.getAll(Native Method)
+	at java.net.NetworkInterface.getNetworkInterfaces(NetworkInterface.java:355)
+	at com.symmetrylabs.util.NetworkUtils.loadBroadcastAddresses(NetworkUtils.java:48)
+	at com.symmetrylabs.util.NetworkUtils.getBroadcastAddresses(NetworkUtils.java:81)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.expireInterfaces(UdpBroadcastNetworkScanner.java:205)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.scan(UdpBroadcastNetworkScanner.java:129)
+	at com.symmetrylabs.slstudio.network.NetworkMonitor.loop(NetworkMonitor.java:131)
+	at java.lang.Thread.run(Thread.java:748)
+lost interface /10.255.255.255
+bound to new interface /10.255.255.255 for OPC
+java.net.SocketException: Too many open files in system (Socket creation failed)
+	at java.net.NetworkInterface.getAll(Native Method)
+	at java.net.NetworkInterface.getNetworkInterfaces(NetworkInterface.java:355)
+	at com.symmetrylabs.util.NetworkUtils.loadBroadcastAddresses(NetworkUtils.java:48)
+	at com.symmetrylabs.util.NetworkUtils.getBroadcastAddresses(NetworkUtils.java:81)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.expireInterfaces(UdpBroadcastNetworkScanner.java:205)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.scan(UdpBroadcastNetworkScanner.java:129)
+	at com.symmetrylabs.slstudio.network.NetworkMonitor.loop(NetworkMonitor.java:132)
+	at java.lang.Thread.run(Thread.java:748)
+lost interface /10.255.255.255
+bound to new interface /10.255.255.255 for ArtNet
+java.net.SocketException: Too many open files in system (Socket creation failed)
+	at java.net.NetworkInterface.getAll(Native Method)
+	at java.net.NetworkInterface.getNetworkInterfaces(NetworkInterface.java:355)
+	at com.symmetrylabs.util.NetworkUtils.loadBroadcastAddresses(NetworkUtils.java:48)
+	at com.symmetrylabs.util.NetworkUtils.getBroadcastAddresses(NetworkUtils.java:81)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.expireInterfaces(UdpBroadcastNetworkScanner.java:205)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.scan(UdpBroadcastNetworkScanner.java:129)
+	at com.symmetrylabs.slstudio.network.NetworkMonitor.loop(NetworkMonitor.java:130)
+	at java.lang.Thread.run(Thread.java:748)
+lost interface /10.255.255.255
+bound to new interface /10.255.255.255 for OPC
+java.net.SocketException: Too many open files in system (Socket creation failed)
+	at java.net.NetworkInterface.getAll(Native Method)
+	at java.net.NetworkInterface.getNetworkInterfaces(NetworkInterface.java:355)
+	at com.symmetrylabs.util.NetworkUtils.loadBroadcastAddresses(NetworkUtils.java:48)
+	at com.symmetrylabs.util.NetworkUtils.getBroadcastAddresses(NetworkUtils.java:81)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.expireInterfaces(UdpBroadcastNetworkScanner.java:205)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.scan(UdpBroadcastNetworkScanner.java:129)
+	at com.symmetrylabs.slstudio.network.NetworkMonitor.loop(NetworkMonitor.java:131)
+	at java.lang.Thread.run(Thread.java:748)
+lost interface /10.255.255.255
+bound to new interface /10.255.255.255 for OPC
+java.net.SocketException: Too many open files in system (Socket creation failed)
+	at java.net.NetworkInterface.getAll(Native Method)
+	at java.net.NetworkInterface.getNetworkInterfaces(NetworkInterface.java:355)
+	at com.symmetrylabs.util.NetworkUtils.loadBroadcastAddresses(NetworkUtils.java:48)
+	at com.symmetrylabs.util.NetworkUtils.getBroadcastAddresses(NetworkUtils.java:81)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.expireInterfaces(UdpBroadcastNetworkScanner.java:205)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.scan(UdpBroadcastNetworkScanner.java:129)
+	at com.symmetrylabs.slstudio.network.NetworkMonitor.loop(NetworkMonitor.java:132)
+	at java.lang.Thread.run(Thread.java:748)
+lost interface /10.255.255.255
+bound to new interface /10.255.255.255 for ArtNet
+java.net.SocketException: Too many open files in system (Socket creation failed)
+	at java.net.NetworkInterface.getAll(Native Method)
+	at java.net.NetworkInterface.getNetworkInterfaces(NetworkInterface.java:355)
+	at com.symmetrylabs.util.NetworkUtils.loadBroadcastAddresses(NetworkUtils.java:48)
+	at com.symmetrylabs.util.NetworkUtils.getBroadcastAddresses(NetworkUtils.java:81)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.expireInterfaces(UdpBroadcastNetworkScanner.java:205)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.scan(UdpBroadcastNetworkScanner.java:129)
+	at com.symmetrylabs.slstudio.network.NetworkMonitor.loop(NetworkMonitor.java:130)
+	at java.lang.Thread.run(Thread.java:748)
+lost interface /10.255.255.255
+java.net.SocketException: Too many open files in system (Socket creation failed)
+	at java.net.NetworkInterface.getAll(Native Method)
+	at java.net.NetworkInterface.getNetworkInterfaces(NetworkInterface.java:355)
+	at com.symmetrylabs.util.NetworkUtils.loadBroadcastAddresses(NetworkUtils.java:48)
+	at com.symmetrylabs.util.NetworkUtils.getBroadcastAddresses(NetworkUtils.java:81)
+bound to new interface /10.255.255.255 for OPC
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.expireInterfaces(UdpBroadcastNetworkScanner.java:205)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.scan(UdpBroadcastNetworkScanner.java:129)
+	at com.symmetrylabs.slstudio.network.NetworkMonitor.loop(NetworkMonitor.java:131)
+	at java.lang.Thread.run(Thread.java:748)
+lost interface /10.255.255.255
+bound to new interface /10.255.255.255 for OPC
+java.net.SocketException: Too many open files in system (Socket creation failed)
+	at java.net.NetworkInterface.getAll(Native Method)
+	at java.net.NetworkInterface.getNetworkInterfaces(NetworkInterface.java:355)
+	at com.symmetrylabs.util.NetworkUtils.loadBroadcastAddresses(NetworkUtils.java:48)
+	at com.symmetrylabs.util.NetworkUtils.getBroadcastAddresses(NetworkUtils.java:81)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.expireInterfaces(UdpBroadcastNetworkScanner.java:205)
+	at com.symmetrylabs.slstudio.network.UdpBroadcastNetworkScanner.scan(UdpBroadcastNetworkScanner.java:129)
+	at com.symmetrylabs.slstudio.network.NetworkMonitor.loop(NetworkMonitor.java:132)
+	at java.lang.Thread.run(Thread.java:748)

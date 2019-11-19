@@ -67,7 +67,7 @@ public class SummerStageShow extends CubesShow {
                 new String[]{"1023", "1024"}, new String[]{"647", "646"}
             }),
             new TowerConfig(SP * 1, SP * 1, SP * -1, new String[][]{
-                new String[]{"891", "682"} // mac address/id won't work
+                new String[]{"891", "682"} // mac address/humanID won't work
             }),
             // col 3
             new TowerConfig(SP * 2, SP * 10, SP * 0, new String[][]{

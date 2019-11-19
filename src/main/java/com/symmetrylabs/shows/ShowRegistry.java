@@ -6,6 +6,7 @@ import com.symmetrylabs.shows.arlo.ArloShow;
 import com.symmetrylabs.shows.arlosohoroof.ArloSohoRoofShow;
 import com.symmetrylabs.shows.arlotree.ArloTreeShow;
 import com.symmetrylabs.shows.artbasel.ArtBaselShow;
+import com.symmetrylabs.shows.base.BaseDemoShow;
 import com.symmetrylabs.shows.demo.DemoShow;
 import com.symmetrylabs.shows.exploratorium.ExploratoriumShow;
 import com.symmetrylabs.shows.hblamp.HbLampShow;
@@ -17,6 +18,7 @@ import com.symmetrylabs.shows.kalpa.KalpaShow;
 import com.symmetrylabs.shows.magicleap.MagicLeapShow;
 import com.symmetrylabs.shows.mikey.MikeyShow;
 import com.symmetrylabs.shows.office.OfficeShow;
+import com.symmetrylabs.shows.oslo.NateOsloShow;
 import com.symmetrylabs.shows.penfoldswine.PenfoldsWineShow;
 import com.symmetrylabs.shows.pilots.PilotsShow;
 import com.symmetrylabs.shows.related.RelatedShow;
@@ -35,6 +37,7 @@ import com.symmetrylabs.shows.twigtest.TwigTestShow;
 import com.symmetrylabs.shows.empirewall.EmpireWallShow;
 import com.symmetrylabs.shows.wingportal.WingPortalShow;
 import com.symmetrylabs.shows.gospel.GospelShow;
+import com.symmetrylabs.shows.oslo.OsloShow;
 import processing.core.PApplet;
 
 public class ShowRegistry {
@@ -68,6 +71,7 @@ public class ShowRegistry {
     private static void registerShows(PApplet applet, Map<String, ShowBuilder> map) {
         // This is the central registry of shows.  Add an entry here for each available show.
         map.put(DemoShow.SHOW_NAME, DemoShow::new);
+        map.put(BaseDemoShow.SHOW_NAME, BaseDemoShow::new);
         map.put(OfficeShow.SHOW_NAME, OfficeShow::new);
         map.put(KalpaShow.SHOW_NAME, KalpaShow::new);
         map.put(SummerStageShow.SHOW_NAME, SummerStageShow::new);
@@ -99,6 +103,8 @@ public class ShowRegistry {
         map.put(EmpireWallShow.SHOW_NAME, EmpireWallShow::new);
         map.put(WingPortalShow.SHOW_NAME, WingPortalShow::new);
         map.put(GospelShow.SHOW_NAME, GospelShow::new);
+        map.put(NateOsloShow.SHOW_NAME, NateOsloShow::new);
+        map.put(OsloShow.SHOW_NAME, OsloShow::new);
     }
 
     interface ShowBuilder {

@@ -21,12 +21,14 @@ import static com.symmetrylabs.slstudio.network.OpcMessage.SYMMETRY_LABS_IDENTIF
 import static com.symmetrylabs.slstudio.network.OpcMessage.SYMMETRY_LABS_IDENTIFY_REPLY;
 
 public class OpcNetworkScanner extends UdpBroadcastNetworkScanner {
-    protected static long MAX_MILLIS_WITHOUT_REPLY = 10000;
+    protected static long MAX_MILLIS_WITHOUT_REPLY = 2000;
 
     public final ListenableSet<NetworkDevice> deviceList = new ListenableSet<NetworkDevice>();
     protected Map<String, NetworkDevice> deviceMap = new HashMap<>();
     protected Map<String, Long> lastReplyMillis = new HashMap<>();
     protected Dispatcher dispatcher;
+
+    private int port;
 
     public OpcNetworkScanner(Dispatcher dispatcher, Selector selector) {
         super(selector, "OPC", 65536, new ByteBuffer[] {
@@ -34,12 +36,18 @@ public class OpcNetworkScanner extends UdpBroadcastNetworkScanner {
                 ByteBuffer.wrap(new OpcMessage(0x88, 4).bytes),
                 ByteBuffer.wrap(new OpcMessage(0, SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY).bytes),
             });
+        port = OpcSocket.DEFAULT_PORT;
         this.dispatcher = dispatcher;
+    }
+
+    public OpcNetworkScanner(Dispatcher dispatcher, Selector selector, int port) {
+        this(dispatcher, selector);
+        this.port = port; // overwrite the port with selection
     }
 
     @Override
     protected void sendPacket(InetAddress broadcast, DatagramChannel chan, ByteBuffer data) throws IOException {
-        chan.send(data, new InetSocketAddress(broadcast, OpcSocket.DEFAULT_PORT));
+        chan.send(data, new InetSocketAddress(broadcast, port));
     }
 
     @Override

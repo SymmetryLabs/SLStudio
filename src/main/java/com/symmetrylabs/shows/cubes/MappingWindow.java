@@ -1,15 +1,14 @@
 package com.symmetrylabs.shows.cubes;
 
 import static com.symmetrylabs.shows.cubes.CubesModel.Cube;
-import static com.symmetrylabs.shows.cubes.CubesModel.DoubleControllerCube;
 
 import com.symmetrylabs.slstudio.output.CubeModelControllerMapping;
 import com.symmetrylabs.slstudio.ui.v2.CloseableWindow;
 import com.symmetrylabs.slstudio.ui.v2.UI;
 import com.symmetrylabs.slstudio.ui.v2.UIConstants;
-import com.symmetrylabs.util.CubeInventory;
+import com.symmetrylabs.util.hardware.CubeInventory;
 import heronarts.lx.LX;
-import heronarts.lx.transform.LXTransform;
+
 import java.util.List;
 
 

@@ -1,8 +1,13 @@
-    package com.symmetrylabs.slstudio.model;
+package com.symmetrylabs.slstudio.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import com.symmetrylabs.shows.base.SLShow;
+import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.slstudio.mappings.SLSculptureControllerMapping;
 import org.apache.commons.collections4.IteratorUtils;
 
 import org.apache.commons.math3.util.FastMath;
@@ -22,11 +27,17 @@ public class SLModel extends LXModel {
 
     private ModelIndex modelIndex, modelIndexZFlattened;
 
+
+    public final SLSculptureControllerMapping mapping = null;
+
     protected PointBatches pointBatches;
 
     public float[] pointsXYZ;
 
-    public SLModel(String id) {
+    // Global.  Perhaps really should be owned by top level SLModel.
+    static public HashMap<String, SLModel> fixtureByMappedID = new HashMap<>();
+
+    public SLModel(String id, List<CubesModel.Tower> towers, CubesModel.Cube[] allCubesArr) {
         super(id);
     }
 
@@ -43,6 +54,13 @@ public class SLModel extends LXModel {
     public SLModel(String modelId, LXFixture[] fixtures) {
         super(modelId, fixtures);
         setupPointsArray();
+    }
+
+    public SLModel(String modelId, String controllerId, LXFixture fixture) {
+        super(modelId, fixture);
+        SLShow.mapping.setControllerAssignment(modelId, controllerId);
+        SLModel.fixtureByMappedID.put(controllerId, this);
+
     }
 
     private void setupPointsArray() {
@@ -84,8 +102,31 @@ public class SLModel extends LXModel {
         pointBatches.forEachPoint(consumer);
     }
 
+    // just like get children below, but with expectation of a fixture that a controller is mapped to.
+    public /* abstract */ Iterator<? extends SLModel> getMappableFixtures(){
+        return IteratorUtils.emptyIterator();
+    }
+
     public /* abstract */ Iterator<? extends LXModel> getChildren() {
         return IteratorUtils.emptyIterator();
+    }
+
+    protected void reflectX() {
+        for (LXPoint p : this.points){
+            p.x = -p.x;
+        }
+    }
+
+    protected void reflectY() {
+        for (LXPoint p : this.points){
+            p.y = -p.y;
+        }
+    }
+
+    protected void reflectZ() {
+        for (LXPoint p : this.points){
+            p.z = -p.z;
+        }
     }
 
     public static class PointBatches {

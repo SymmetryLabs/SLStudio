@@ -2,6 +2,7 @@ package com.symmetrylabs.shows.cubes;
 
 import java.util.*;
 import java.lang.ref.WeakReference;
+
 import com.symmetrylabs.slstudio.output.CubeModelControllerMapping;
 import com.symmetrylabs.color.PerceptualColorScale;
 
@@ -11,7 +12,7 @@ import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.ui.v2.WindowManager;
-import com.symmetrylabs.util.CubeInventory;
+import com.symmetrylabs.util.hardware.CubeInventory;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.ListenableSet;
 import com.symmetrylabs.util.listenable.SetListener;
@@ -135,6 +136,26 @@ public abstract class CubesShow implements Show {
             }
         });
 
+//        networkMonitor.treeDeviceList.addListener(new SetListener<NetworkDevice>() {
+//            public void onItemAdded(NetworkDevice device) {
+//////                final TreeController controller = new TreeController(lx, device, cubeInventory, outputScaler);
+////                final TreeController controller = new TreeController(lx, device)
+////                controller.set16BitColorEnabled(device.featureIds.contains("rgb16"));
+////                controllers.add(controller);
+////                dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
+////                //controller.enabled.setValue(false);
+//            }
+//
+//            public void onItemRemoved(NetworkDevice device) {
+//                final CubesController controller = getControllerByDevice(device);
+//                controllers.remove(controller);
+//                dispatcher.dispatchNetwork(() -> {
+//                    controller.dispose();
+//                    lx.removeOutput(controller);
+//                });
+//            }
+//        });
+
         //lx.addOutput(new CubesController(lx, "10.200.1.255"));
 
         lx.engine.output.enabled.addListener(param -> {
@@ -171,7 +192,7 @@ public abstract class CubesShow implements Show {
     }
 
     public void setupUi(LX lx) {
-        WindowManager.addPersistent("Cubes/Inventory", () -> new InventoryEditor(lx, cubeInventory), false);
+        WindowManager.addPersistent("Cubes/Inventory", () -> new CubesInventoryEditor(lx, cubeInventory), false);
         WindowManager.addPersistent("Cubes/Mapping", () -> new MappingWindow(lx, (CubesModel) lx.model), false);
         WindowManager.addPersistent("Cubes/Output", () -> new CubeOutputWindow(lx, this), false);
         WindowManager.addPersistent("Cubes/Scaling", () -> new OutputScaleWindow(lx, outputScaler), false);

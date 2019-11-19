@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.shows.tree.ui.UIPixlites;
 import com.symmetrylabs.shows.tree.ui.UITreeModelAxes;
 import com.symmetrylabs.shows.tree.ui.UITreeModelingTool;
@@ -17,7 +18,7 @@ import heronarts.lx.LX;
 import com.symmetrylabs.shows.Show;
 
 
-public abstract class TreeShow implements Show {
+public abstract class TreeShow extends SLShow implements Show {
     public static final String SHOW_NAME = "tree";
 
     public final Map<String, AssignablePixlite> pixlites = new HashMap<>();

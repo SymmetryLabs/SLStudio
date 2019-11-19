@@ -1,21 +1,38 @@
 package com.symmetrylabs.slstudio.output;
 
 import com.symmetrylabs.color.Ops8;
+import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.component.GammaExpander;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
+import com.symmetrylabs.slstudio.network.OpcMessage;
+import com.symmetrylabs.slstudio.network.OpcSysExMsg;
+import com.symmetrylabs.util.hardware.powerMon.MetaSample;
 import heronarts.lx.LX;
 import heronarts.lx.output.LXOutput;
+import heronarts.lx.output.OPCConstants;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.DiscreteParameter;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.*;
+import java.nio.ByteBuffer;
 
-public class SLController extends LXOutput {
+import static com.symmetrylabs.slstudio.network.OpcMessage.SYMMETRY_LABS;
+import static com.symmetrylabs.slstudio.network.OpcMessage.SYMMETRY_LABS_IDENTIFY;
+
+public class SLController extends LXOutput implements Comparable<SLController>, OPCConstants {
+    public String id;
+    public int idInt;
     public final InetAddress host;
     public final boolean isBroadcast;
     public final NetworkDevice networkDevice;
     public final PointsGrouping points;
+
+    public boolean hasPortPowerFeedback = false;
+    public MetaSample lastReceivedPowerSample;
 
     private Socket socket;
     private DatagramSocket dsocket;
@@ -31,22 +48,43 @@ public class SLController extends LXOutput {
     private final LX lx;
     private GammaExpander GammaExpander;
 
-    public SLController(LX lx, NetworkDevice device, PointsGrouping points) {
-        this(lx, device, device.ipAddress, points, false);
+    public final BooleanParameter[] pwrMask = new BooleanParameter[8];
+
+
+    /********
+     * Power management related - should probably be separated to another class
+     */
+    public DiscreteParameter blackoutPowerThreshold = new DiscreteParameter("Blackout", 0, 4095);
+    public final BooleanParameter blackoutRogueLEDsActive = new BooleanParameter("Activate blackout procedure", false);
+
+    private int pwrMaskByte = 0;
+
+    public SLController(LX lx, NetworkDevice device, PointsGrouping points, String id) {
+        this(lx, device, device.ipAddress, points, false, id);
     }
 
-    private SLController(LX lx, NetworkDevice networkDevice, InetAddress host, PointsGrouping points, boolean isBroadcast) {
+    protected SLController(LX lx, NetworkDevice networkDevice, InetAddress host, PointsGrouping points, boolean isBroadcast, String id) {
         super(lx);
 
+        this.id = id;
         this.lx = lx;
         this.networkDevice = networkDevice;
         this.host = host;
         this.points = points;
         this.isBroadcast = isBroadcast;
 
+        for (int i = 0; i < 8; i++){
+            pwrMask[i] = new BooleanParameter("pwr"+i, false);
+            addParameter("pwr" + i, pwrMask[i]);
+        }
+
         GammaExpander = GammaExpander.getInstance(lx);
         initPacketData(points.size());
         enabled.setValue(true);
+    }
+
+    public String getMacAddress() {
+        return networkDevice == null ? null : networkDevice.deviceId;
     }
 
     private void initPacketData(int numPixels) {
@@ -76,14 +114,14 @@ public class SLController extends LXOutput {
 
     @Override
     protected void onSend(int[] colors) {
-        if (isBroadcast != SLStudio.applet.outputControl.broadcastPacket.isOn())
+        if (isBroadcast != ApplicationState.outputControl().broadcastPacket.isOn())
             return;
 
         // Create data socket connection if needed
         if (dsocket == null) {
             try {
                 dsocket = new DatagramSocket();
-                dsocket.connect(new InetSocketAddress(host, 7890));
+                dsocket.connect(new InetSocketAddress(host, 1337));
                 //socket.setTcpNoDelay(true);
                 // output = socket.getOutputStream();
             }
@@ -106,13 +144,84 @@ public class SLController extends LXOutput {
         catch (Exception e) {dispose();}
     }
 
+    private void onIdUpdated() {
+        int idInt = Integer.MAX_VALUE;
+        try {
+            idInt = Integer.parseInt(id);
+        } catch (NumberFormatException e) {}
+        this.idInt = idInt;
+    }
+
     @Override
     public void dispose() {
-        if (dsocket != null) {
-            System.err.println("Disconnected from OPC server");
+        boolean DEBUG_OPC_CONNECT = false;
+        if (DEBUG_OPC_CONNECT){
+            if (dsocket != null) {
+                System.err.println("Disconnected from OPC server");
+            }
+            System.err.println("Failed to connect to OPC server " + host);
+            socket = null;
+            dsocket = null;
+
         }
-        System.err.println("Failed to connect to OPC server " + host);
-        socket = null;
-        dsocket = null;
+    }
+
+    @Override
+    public int compareTo(@NotNull SLController other) {
+        return idInt != other.idInt ? Integer.compare(idInt, other.idInt) : id.compareTo(other.id);
+    }
+
+    public void writeSample(MetaSample metaPowerSample) {
+        hasPortPowerFeedback = true;
+        lastReceivedPowerSample = metaPowerSample;
+    }
+
+    // flips port power if above threshold (like a digital breaker)
+    public void killByThreshHold(){
+        for (int i = 0; i < 8; i++){
+            if (lastReceivedPowerSample.analogSampleArray[i] > blackoutPowerThreshold.getValuei()){
+                pwrMask[i].setValue(true); // mask this output i.e. shutoff this output
+            }
+            else {
+                pwrMask[i].setValue(false);
+            }
+        }
+        try {
+            killPortPower();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void killPortPower() throws IOException {
+        if (hasPortPowerFeedback){
+
+            int incomingPwrMaskByte = 0;
+            for (int i = 0; i < 8; i++){
+                incomingPwrMaskByte |= pwrMask[i].getValueb() ? 0x1 << i : 0;
+            }
+            if (incomingPwrMaskByte == pwrMaskByte){
+                // if state hasn't changed exit
+                return;
+            }
+            pwrMaskByte = incomingPwrMaskByte;
+            System.out.println(pwrMaskByte);
+
+            byte[] payload = new byte[1];
+            payload[0] = (byte)pwrMaskByte;
+            System.out.println(payload[0]);
+//            ByteBuffer data = ByteBuffer.wrap(new OpcMessage(0, SYMMETRY_LABS, 0x41, payload).bytes);
+            // use MIDI style - bug in the other.
+            ByteBuffer data = ByteBuffer.wrap(new OpcMessage(0xf0, 0x41, payload).bytes);
+            byte[] packetData = data.array();
+            int packetSizeBytes = packetData.length;
+            DatagramPacket packet = new DatagramPacket(packetData, packetSizeBytes);
+            if (dsocket == null){
+                System.out.println("No socket for some reason?");
+            }
+            else{
+                dsocket.send( packet );
+            }
+        }
     }
 }
