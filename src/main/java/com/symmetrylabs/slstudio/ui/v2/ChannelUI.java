@@ -139,6 +139,12 @@ public class ChannelUI {
             pui.draw(chan.patternBlendMode);
             pui.draw(chan.midiChannel);
             pui.draw(chan.speed);
+            pui.draw(chan.blendPatterns);
+            pui.draw(chan.autoCycleEnabled);
+            pui.draw(chan.autoCycleTimeSecs);
+            pui.draw(chan.transitionEnabled);
+            pui.draw(chan.transitionBlendMode);
+            pui.draw(chan.transitionTimeSecs);
             pui.pop();
         }
         if (UI.collapsibleSection("Presets")) {

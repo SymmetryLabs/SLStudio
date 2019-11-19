@@ -262,8 +262,11 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             new BooleanParameter("EditorVisible", true)
                     .setDescription("Sets whether this channel is visible for editing in the look editor");
 
+//    public final BooleanParameter blendPatterns =
+//        new BooleanParameter("BlendPatterns", ApplicationState.inVolumeMode()) // defaults to true for Volume, false for SLStudio
+//            .setDescription("If true, all patterns in the channel are run and blended together. If false, only the active pattern is run.");
     public final BooleanParameter blendPatterns =
-        new BooleanParameter("BlendPatterns", ApplicationState.inVolumeMode()) // defaults to true for Volume, false for SLStudio
+        new BooleanParameter("BlendPatterns", false) // defaults to true for Volume, false for SLStudio
             .setDescription("If true, all patterns in the channel are run and blended together. If false, only the active pattern is run.");
 
     public final BooleanParameter acceptSwatches =
