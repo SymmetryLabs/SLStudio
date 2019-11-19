@@ -31,8 +31,9 @@ public class CueWindow extends  CloseableWindow {
             String cueLabel = cue.startAtStr.getString() + "###" + cue.uid;
             UI.CollapseResult cr = UI.collapsibleSection(cueLabel, false);
             if (cr.isOpen) {
+                UI.text(cue.toString());
                 pui.draw(cue.startAtStr);
-                pui.draw(cue.durationMs);
+                pui.draw(cue.durationSec);
                 pui.draw(cue.fadeTo);
             }
         }
