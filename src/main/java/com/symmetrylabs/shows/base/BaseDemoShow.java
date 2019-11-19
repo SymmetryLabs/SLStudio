@@ -5,6 +5,7 @@ import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.shows.cubes.CubesShow.TowerConfig;
 import com.symmetrylabs.slstudio.model.SLModel;
+import heronarts.lx.model.LXModel;
 import heronarts.lx.transform.LXTransform;
 
 import java.util.ArrayList;
@@ -131,7 +132,7 @@ public class BaseDemoShow extends SLShow implements Show {
 
 //        return new SLModel(SHOW_NAME, towers, allCubesArr, cubeInventory, mapping);
 //        return new SLModel(SHOW_NAME, towers, allCubesArr, cubeInventory, mapping);
-        return new SLModel("null", allCubesArr); // fix this later.
+        return new SLModel(SHOW_NAME, new LXModel("baseDemo")); // fix this later.
     }
 
     @Override
