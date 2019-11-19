@@ -18,7 +18,6 @@ import com.symmetrylabs.shows.kalpa.KalpaShow;
 import com.symmetrylabs.shows.magicleap.MagicLeapShow;
 import com.symmetrylabs.shows.mikey.MikeyShow;
 import com.symmetrylabs.shows.office.OfficeShow;
-import com.symmetrylabs.shows.oslo.NateOsloShow;
 import com.symmetrylabs.shows.penfoldswine.PenfoldsWineShow;
 import com.symmetrylabs.shows.pilots.PilotsShow;
 import com.symmetrylabs.shows.related.RelatedShow;
@@ -103,7 +102,6 @@ public class ShowRegistry {
         map.put(EmpireWallShow.SHOW_NAME, EmpireWallShow::new);
         map.put(WingPortalShow.SHOW_NAME, WingPortalShow::new);
         map.put(GospelShow.SHOW_NAME, GospelShow::new);
-        map.put(NateOsloShow.SHOW_NAME, NateOsloShow::new);
         map.put(OsloShow.SHOW_NAME, OsloShow::new);
     }
 

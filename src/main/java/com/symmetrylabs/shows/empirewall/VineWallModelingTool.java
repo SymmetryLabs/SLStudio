@@ -78,7 +78,7 @@ public class VineWallModelingTool extends LXComponent {
         // selectedTwig.setOptions(optionNames);
 
         selectedVine.addListener(parameter -> {
-            // selectedLeaf = new ObjectParameter<TreeModel_v2.Leaf>("selectedLeaf", getSelectedVine().getLeavesArray());
+            // selectedLeaf = new ObjectParameter<TreeModel.Leaf>("selectedLeaf", getSelectedVine().getLeavesArray());
 
             // int numLeaves = getSelectedVine().getLeavesArray().length;
             // String[] numLeavesOptions = new String[numLeaves];
@@ -137,7 +137,7 @@ public class VineWallModelingTool extends LXComponent {
         return getSelectedVine().getConfig().getLeaves().get(i);
     }
 
-    // public void setSelectedLeaf(TreeModel_v2.Leaf leaf) {
+    // public void setSelectedLeaf(TreeModel.Leaf leaf) {
     //     int i = selectedVine.getValuei();
     //     selectedLeaves[i].setObjects(getSelectedVine().getLeavesArray());
     //     selectedLeaves[i].setValue(leaf);
