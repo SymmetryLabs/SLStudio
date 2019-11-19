@@ -112,4 +112,9 @@ public class BanyanShow extends TreeShow {
 
         new UITenereControllers(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
     }
+    
+    @Override
+    public String getShowName() {
+        return SHOW_NAME;
+    }
 }
