@@ -4,7 +4,7 @@ import com.symmetrylabs.slstudio.cue.Cue;
 import com.symmetrylabs.slstudio.cue.CueManager;
 import heronarts.lx.LX;
 
-public class CueWindow extends  CloseableWindow {
+public class CueWindow extends CloseableWindow {
 
     CueManager cueManager;
     Cue selectedCue;
@@ -17,7 +17,7 @@ public class CueWindow extends  CloseableWindow {
         this.lx = lx;
         this.cueManager = cueManager;
         this.pui = ParameterUI.getDefault(lx);
-
+        this.cueManager.loadFromCueFile();
     }
 
     @Override
@@ -25,16 +25,24 @@ public class CueWindow extends  CloseableWindow {
         if (UI.button("add cue")){
             this.cueManager.addCue(new Cue(lx.engine.output.brightness));
         }
+        UI.sameLine();
+        if (UI.button("save cues")){
+            this.cueManager.onSave();
+        }
+        UI.separator();
 
         int idx = 0;
         for (Cue cue : cueManager.getCues()){
             String cueLabel = cue.startAtStr.getString() + "###" + cue.uid;
             UI.CollapseResult cr = UI.collapsibleSection(cueLabel, false);
             if (cr.isOpen) {
-                UI.text(cue.toString());
+                UI.textWrapped(cue.toString());
                 pui.draw(cue.startAtStr);
                 pui.draw(cue.durationSec);
                 pui.draw(cue.fadeTo);
+                if (UI.button("remove" + "##" + cue.uid)){
+                    this.cueManager.removeCue(cue);
+                }
             }
         }
     }

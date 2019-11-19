@@ -220,12 +220,12 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
      * Time in milliseconds after which transition thru the pattern set is automatically initiated.
      */
     public final BoundedParameter autoCycleTimeSecs = (BoundedParameter)
-            new BoundedParameter("Cycle Time", 60, .1, 60 * 60 * 4)
+            new BoundedParameter("Cycle Time", 60, .1, 10 * 60)
                     .setDescription("Sets the number of seconds after which the channel cycles to the next pattern")
                     .setUnits(LXParameter.Units.SECONDS);
 
     public final BoundedParameter transitionTimeSecs = (BoundedParameter)
-            new BoundedParameter("Transition Time", 5, .1, 180)
+            new BoundedParameter("Trans Time", 5, .1, 180)
                     .setDescription("Sets the duration of blending transitions between patterns")
                     .setUnits(LXParameter.Units.SECONDS);
 
@@ -240,18 +240,18 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
                     .setDescription("Sets the alpha level of the output of this channel");
 
     public final BooleanParameter autoDisable =
-                    new BooleanParameter("AutoDisable", false)
+                    new BooleanParameter("Auto Disable", false)
                                     .setDescription("If true, disables the channel when the fader goes to zero");
 
     public final ObjectParameter<LXBlend> blendMode;
     public final ObjectParameter<LXBlend> patternBlendMode;
 
     public final MutableParameter controlSurfaceFocusIndex = (MutableParameter)
-            new MutableParameter("SurfaceFocusIndex", 0)
+            new MutableParameter("Surface Focus Index", 0)
                     .setDescription("Control surface focus index");
 
     public final MutableParameter controlSurfaceFocusLength = (MutableParameter)
-            new MutableParameter("SurfaceFocusLength", 0)
+            new MutableParameter("Surface Focus Length", 0)
                     .setDescription("Control surface focus length");
 
     public final BoundedParameter speed =
@@ -259,18 +259,18 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
                     .setDescription("Overall speed adjustement to all components in this channel");
 
     public final BooleanParameter editorVisible =
-            new BooleanParameter("EditorVisible", true)
+            new BooleanParameter("Editor Visible", true)
                     .setDescription("Sets whether this channel is visible for editing in the look editor");
 
 //    public final BooleanParameter blendPatterns =
 //        new BooleanParameter("BlendPatterns", ApplicationState.inVolumeMode()) // defaults to true for Volume, false for SLStudio
 //            .setDescription("If true, all patterns in the channel are run and blended together. If false, only the active pattern is run.");
     public final BooleanParameter blendPatterns =
-        new BooleanParameter("BlendPatterns", false) // defaults to true for Volume, false for SLStudio
+        new BooleanParameter("Blend Patterns", false) // defaults to true for Volume, false for SLStudio
             .setDescription("If true, all patterns in the channel are run and blended together. If false, only the active pattern is run.");
 
     public final BooleanParameter acceptSwatches =
-        new BooleanParameter("AcceptSwatches", true)
+        new BooleanParameter("Accept Swatches", true)
             .setDescription("If true, components in this channel will be updated when swatches are applied.");
 
     private final List<LXPattern> mutablePatterns = new ArrayList<LXPattern>();
@@ -351,14 +351,26 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
         this.blendMode = new ObjectParameter<LXBlend>("Blend", lx.engine.channelBlends)
                 .setDescription("Specifies the blending function used for the channel fader");
-        this.patternBlendMode = new ObjectParameter<LXBlend>("PatternBlend", lx.engine.channelBlends)
+        this.patternBlendMode = new ObjectParameter<LXBlend>("Blending", lx.engine.channelBlends)
             .setDescription("Specifies the blending function used for blending patterns together when blendPatterns is set");
 
-        this.transitionBlendMode = new ObjectParameter<LXBlend>("Transition Blend", lx.engine.crossfaderBlends)
+        this.transitionBlendMode = new ObjectParameter<LXBlend>("Trans Blend", lx.engine.crossfaderBlends)
                 .setDescription("Specifies the blending function used for transitions between patterns on the channel");
 
         this.transitionMillis = lx.engine.nowMillis;
         _updatePatterns(patterns);
+
+        this.autoCycleEnabled.addListener(p -> {
+            if (((BooleanParameter) p).isOn()) {
+                this.blendPatterns.setValue(false);
+            }
+        });
+
+        this.blendPatterns.addListener(p -> {
+            if (this.autoCycleEnabled.isOn()) {
+                this.blendPatterns.setValue(false);
+            }
+        });
 
         addParameter("enabled", this.enabled);
         addParameter("cue", this.cueActive);

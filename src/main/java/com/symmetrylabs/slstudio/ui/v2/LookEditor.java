@@ -15,7 +15,7 @@ import heronarts.lx.mutation.Mutations;
 
 public class LookEditor implements Window {
     private static final int HEIGHT = 300;
-    private static final int PIPELINE_WIDTH = 230;
+    private static final int PIPELINE_WIDTH = 300;
     private static final int PIPELINE_PAD = 8;
     private static final int MENU_HEIGHT = 22;
 

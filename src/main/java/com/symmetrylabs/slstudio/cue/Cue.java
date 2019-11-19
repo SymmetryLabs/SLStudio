@@ -8,6 +8,9 @@ import org.joda.time.DateTime;
 
 
 public class Cue {
+
+    public final static int MAX_DURATION = 10;
+
     private static int uid_counter = 0;
     public int uid;
     public final StringParameter startAtStr;
@@ -24,12 +27,12 @@ public class Cue {
 
         startAtStr = new StringParameter("startAt", "00:00");
         startAt = DateTime.now().withTime(0, 0, 0, 0);
-        durationMs = (CompoundParameter) new CompoundParameter("duration", 1000, 50, 30 * 60 * 1000)
+        durationMs = (CompoundParameter) new CompoundParameter("duration", 1000, 50, MAX_DURATION * 1000)
             .setExponent(4)
             .setUnits(LXParameter.Units.MILLISECONDS);
 
         // proxy just for nice display
-        durationSec = (CompoundParameter) new CompoundParameter("duration (sec)", 1, 0.05, 15*60)
+        durationSec = (CompoundParameter) new CompoundParameter("duration (sec)", 1, 0.05, MAX_DURATION)
             .setExponent(4)
             .setUnits(LXParameter.Units.SECONDS).addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {

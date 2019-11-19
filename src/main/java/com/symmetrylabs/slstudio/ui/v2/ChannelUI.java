@@ -18,6 +18,9 @@ public class ChannelUI {
     public static void drawWarps(LX lx, String chanName, LXBus chan, ParameterUI pui) {
         List<LXWarp> warps = chan.getWarps();
         if (!warps.isEmpty()) {
+            UI.spacing(5, 2);
+            UI.separator();
+            UI.labelText("", "Warps");
             for (int i = 0; i < warps.size(); i++) {
                 LXWarp warp = warps.get(i);
                 String warpName = String.format("%s##%s/warp/%d", warp.getClass().getSimpleName(), chanName, i);
@@ -61,6 +64,9 @@ public class ChannelUI {
     public static void drawEffects(LX lx, String chanName, LXBus chan, ParameterUI pui) {
         List<LXEffect> effects = chan.getEffects();
         if (!effects.isEmpty()) {
+            UI.spacing(5, 2);
+            UI.separator();
+            UI.labelText("", "Effects");
             for (int i = 0; i < effects.size(); i++) {
                 LXEffect eff = effects.get(i);
                 String effName = String.format("%s##%s/effect/%d", eff.getClass().getSimpleName(), chanName, i);
@@ -132,19 +138,23 @@ public class ChannelUI {
 
         pui.push().allowMapping(true);
 
-        if (UI.collapsibleSection("Channel options")) {
+        if (UI.collapsibleSection("Channel Options")) {
             pui.push().preferKnobs(false);
             pui.draw(chan.blendPatterns);
             pui.draw(chan.midiMonitor);
             pui.draw(chan.patternBlendMode);
             pui.draw(chan.midiChannel);
-            pui.draw(chan.speed);
-            pui.draw(chan.blendPatterns);
+            UI.spacing(5, 2);
+            UI.separator();
+            UI.spacing(5, 2);
             pui.draw(chan.autoCycleEnabled);
             pui.draw(chan.autoCycleTimeSecs);
             pui.draw(chan.transitionEnabled);
             pui.draw(chan.transitionBlendMode);
             pui.draw(chan.transitionTimeSecs);
+            UI.spacing(5, 2);
+            UI.separator();
+            UI.spacing(5, 2);
             pui.pop();
         }
         if (UI.collapsibleSection("Presets")) {
@@ -177,6 +187,9 @@ public class ChannelUI {
         boolean blendPatternsOn = chan.blendPatterns.isOn();
         int active = chan.getActivePatternIndex();
 
+        UI.spacing(5, 2);
+        UI.separator();
+        UI.labelText("", "Patterns");
         List<LXPattern> patterns = chan.getPatterns();
         for (int i = 0; i < patterns.size(); i++) {
             final LXPattern pat = patterns.get(i);
