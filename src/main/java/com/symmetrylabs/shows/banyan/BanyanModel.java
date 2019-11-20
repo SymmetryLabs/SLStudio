@@ -39,12 +39,18 @@ public class BanyanModel extends TreeModel {
 				t.rotateY(config.yRot * PI / 180.);
 				//...
                 for (int i = 0; i < NUM_SYMMETRY; i++){
-//                t.rotateZ(45);
+                    t.rotateZ((-PI/4));
+                    t.push();
+                    t.translate(-5, 2, 0);
                     InsideShardPanel shard = new InsideShardPanel("tip", t);
+                    t.rotateZ(PI);
+                    t.rotateZ(-PI/8);
+                    t.translate(-16, -45, 0);
+//                    t.translate(0, -10, 0);
                     TipShardPanel tipper = new TipShardPanel("tipper", t);
-//                t.translate(10, 20, 0);
                     points.addAll(shard.getPoints());
                     points.addAll(tipper.getPoints());
+                    t.pop();
                 }
 			}
 		}

@@ -53,13 +53,19 @@ public class TipShardPanel extends Panel {
                if (rightTraversal){
                    for (int j = i + 1; j < i + wide; j++){
                        if (config[j] == 1){
-                           points.add(new LXPoint(j%wide + t.x(), i/wide + t.y()));
+                           t.push();
+                           t.translate(j%wide, i/wide, 0);
+                           points.add(new LXPoint(t));
+                           t.pop();
                        }
                    }
                } else {
                    for (int j = i + wide - 1; j > i; j--){
                        if (config[j] == 1){
-                           points.add(new LXPoint(j%wide + t.x(), i/wide + t.y()));
+                           t.push();
+                           t.translate(j%wide, i/wide, 0);
+                           points.add(new LXPoint(t));
+                           t.pop();
                        }
                    }
                }

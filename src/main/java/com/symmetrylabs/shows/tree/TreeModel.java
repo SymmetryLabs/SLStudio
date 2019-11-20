@@ -96,19 +96,18 @@ public class TreeModel extends SLModel {
         private final List<Limb> limbs = new ArrayList<>();
 
         private Fixture(TreeConfig config, LXFixture miscPoints) {
+
+            // Points of the top level fixture need to be added in the order
+            // that they were created with new LXPoint()
+            this.points.addAll(miscPoints.getPoints());
+
             LXTransform t = new LXTransform();
 
             for (LimbConfig limbConfig : config.getLimbs()) {
                 Limb limb = new Limb(t, limbConfig);
                 limbs.add(limb);
 
-                for (LXPoint p : limb.points) {
-                    this.points.add(p);
-                }
-            }
-
-            for (LXPoint p : miscPoints.getPoints()) {
-                this.points.add(p);
+                this.points.addAll(Arrays.asList(limb.points));
             }
         }
     }

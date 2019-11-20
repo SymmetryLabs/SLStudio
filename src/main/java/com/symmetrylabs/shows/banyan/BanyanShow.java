@@ -46,7 +46,7 @@ public class BanyanShow extends TreeShow {
             new LimbConfig(false, 0, 0, 0, 0, 0, LIMB_TYPE),
         });
 
-        BanyanModel.Star.Config starConfig = new BanyanModel.Star.Config(0, 0, 0, 0);
+        BanyanModel.Star.Config starConfig = new BanyanModel.Star.Config(0, 0, 100, 0);
 
         return new BanyanModel(SHOW_NAME, treeConfig, starConfig);
 //        return new TipShardPanel(SHOW_NAME, new LXTransform());
