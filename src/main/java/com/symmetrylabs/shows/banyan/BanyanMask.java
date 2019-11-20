@@ -27,7 +27,7 @@ public class BanyanMask extends SLEffect<BanyanModel> {
 
     	switch (mode.getEnum()) {
     		case TREE:
-    			for (LXPoint p : tree.star.points) {
+    			for (LXPoint p : BanyanModel.star.points) {
     				colors[p.index] = 0;
     			}
     			break;

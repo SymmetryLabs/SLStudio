@@ -16,7 +16,7 @@ import static com.symmetrylabs.util.MathConstants.*;
 
 public class BanyanModel extends TreeModel {
 
-	public Star star;
+	public static Star star;
 
 	public BanyanModel(String showName, TreeConfig treeConfig, Star.Config starConfig) {
 		super(showName, treeConfig, new Star(starConfig));
@@ -27,6 +27,9 @@ public class BanyanModel extends TreeModel {
 
 		public Star(Star.Config config) {
 			super("star", new Fixture(config));
+			BanyanModel.star = this;
+			Fixture f = (Fixture) this.fixtures.get(0);
+			this.panels.addAll(f.panels);
 		}
 
 		public static class Fixture extends LXAbstractFixture {
@@ -43,11 +46,13 @@ public class BanyanModel extends TreeModel {
                     t.push();
                     t.translate(-5, 2, 0);
                     InsideShardPanel shard = new InsideShardPanel("tip", t);
+                    this.panels.add(shard);
                     t.rotateZ(PI);
                     t.rotateZ(-PI/8);
                     t.translate(-16, -45, 0);
 //                    t.translate(0, -10, 0);
                     TipShardPanel tipper = new TipShardPanel("tipper", t);
+                    this.panels.add(tipper);
                     points.addAll(shard.getPoints());
                     points.addAll(tipper.getPoints());
                     t.pop();

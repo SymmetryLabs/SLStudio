@@ -1,5 +1,6 @@
 package com.symmetrylabs.shows.banyan;
 
+import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.banyan.InsideShardPanel;
 
 import com.symmetrylabs.slstudio.SLStudioLX;
@@ -7,6 +8,9 @@ import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.shows.tree.config.*;
 import com.symmetrylabs.shows.tree.ui.UITenereControllers;
+import com.symmetrylabs.slstudio.output.PointsGrouping;
+import com.symmetrylabs.slstudio.output.SimplePixlite;
+import heronarts.lx.LX;
 import heronarts.lx.transform.LXTransform;
 
 
@@ -43,12 +47,12 @@ public class BanyanShow extends TreeShow {
 
         TreeConfig treeConfig = new TreeConfig(new LimbConfig[] {
             // just one limb
-            new LimbConfig(false, 0, 0, 0, 0, 0, LIMB_TYPE),
+//            new LimbConfig(false, 0, 0, 0, 0, 0, LIMB_TYPE),
         });
 
         BanyanModel.Star.Config starConfig = new BanyanModel.Star.Config(0, 0, 100, 0);
 
-        return new BanyanModel(SHOW_NAME, treeConfig, starConfig);
+        BanyanModel banyanModel = new BanyanModel(SHOW_NAME, treeConfig, starConfig);
 //        return new TipShardPanel(SHOW_NAME, new LXTransform());
 //        return new InsideShardPanel(SHOW_NAME, new LXTransform());
 //            }
@@ -67,6 +71,18 @@ public class BanyanShow extends TreeShow {
 //            AssignableTenereController controller = controllers.get(modeler.getSelectedBranch());
 //            controller.setIpAddress(modeler.branchManipulator.ipAddress.getString());
 //        });
+
+        return banyanModel;
+    }
+
+    @Override
+    public void setupLx(LX lx) {
+        super.setupLx(lx);
+        SimplePixlite starLite = new SimplePixlite(lx, "10.200.1.100");
+        for (int portNum = 1; portNum < 17; portNum++){
+            starLite.addPixliteOutput(new PointsGrouping("" + portNum, BanyanModel.star.panels.get(portNum).getPoints()));
+        }
+        lx.addOutput(starLite);
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
