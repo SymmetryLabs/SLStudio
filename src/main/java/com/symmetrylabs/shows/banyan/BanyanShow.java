@@ -1,37 +1,13 @@
 package com.symmetrylabs.shows.banyan;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.net.SocketException;
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
-import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
-import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
+import com.symmetrylabs.slstudio.model.banyan.InsideShardPanel;
 
-import heronarts.lx.LX;
-import heronarts.lx.model.LXPoint;
-import heronarts.lx.LXLoopTask;
-
-import com.symmetrylabs.shows.Show;
-import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.shows.tree.config.*;
-import com.symmetrylabs.shows.tree.ui.*;
 import com.symmetrylabs.shows.tree.ui.UITenereControllers;
-import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.UI3dComponent;
-
-import static com.symmetrylabs.util.DistanceConstants.*;    
-import static com.symmetrylabs.util.MathConstants.*;
-import static com.symmetrylabs.util.MathUtils.*;
-
-import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.UI3dComponent;
-import processing.core.PGraphics;
+import heronarts.lx.transform.LXTransform;
 
 
 public class BanyanShow extends TreeShow {
@@ -70,40 +46,27 @@ public class BanyanShow extends TreeShow {
             new LimbConfig(false, 0, 0, 0, 0, 0, LIMB_TYPE),
         });
 
-        BanyanModel.Star.Config starConfig = new BanyanModel.Star.Config(0, 0, 0, 0);
+        BanyanModel.Star.Config starConfig = new BanyanModel.Star.Config(0, 0, 100, 0);
 
         return new BanyanModel(SHOW_NAME, treeConfig, starConfig);
-    }
+//        return new TipShardPanel(SHOW_NAME, new LXTransform());
+//        return new InsideShardPanel(SHOW_NAME, new LXTransform());
+//            }
+//        });
 
-    public void setupLx(final LX lx) {
-        super.setupLx(lx);
-        TreeModel tree = (TreeModel) (lx.model);
-        TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
+//        try {
+//            for (TreeModel.Branch branch : tree.getBranches()) {
+//                AssignableTenereController controller = new AssignableTenereController(lx, branch);
+//                controller.brightness.setValue(0.7);
+//                controllers.put(branch, controller);
+//                lx.addOutput(controller);
+//            }
+//        } catch (SocketException e) { }
 
-        System.out.println("Number of branches: " + tree.getBranches().size());
-
-        lx.engine.addLoopTask(new LXLoopTask() {
-            @Override
-            public void loop(double v) {
-                if (lx.engine.framesPerSecond.getValuef() != 60) {
-                    lx.engine.framesPerSecond.setValue(60);
-                }
-            }
-        });
-
-        try {
-            for (TreeModel.Branch branch : tree.getBranches()) {
-                AssignableTenereController controller = new AssignableTenereController(lx, branch);
-                controller.brightness.setValue(0.7);
-                controllers.put(branch, controller);
-                lx.addOutput(controller);
-            }
-        } catch (SocketException e) { }
-
-        modeler.branchManipulator.ipAddress.addListener(param -> {
-            AssignableTenereController controller = controllers.get(modeler.getSelectedBranch());
-            controller.setIpAddress(modeler.branchManipulator.ipAddress.getString());
-        });
+//        modeler.branchManipulator.ipAddress.addListener(param -> {
+//            AssignableTenereController controller = controllers.get(modeler.getSelectedBranch());
+//            controller.setIpAddress(modeler.branchManipulator.ipAddress.getString());
+//        });
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {

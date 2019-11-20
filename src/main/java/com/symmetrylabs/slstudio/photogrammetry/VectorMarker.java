@@ -35,6 +35,6 @@ public class VectorMarker implements Marker {
         float z0 = end.z;
         pg.strokeWeight(1);
         pg.stroke((rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff);
-        pg.line(x, y, z, x + x0, y + y0, z + z0);
+        pg.line(x, y, z, x0, y0, z0);
     }
 }
