@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
+import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.slstudio.server.VolumeClient;
 import com.symmetrylabs.slstudio.server.VolumeCore;
 import heronarts.lx.LX;

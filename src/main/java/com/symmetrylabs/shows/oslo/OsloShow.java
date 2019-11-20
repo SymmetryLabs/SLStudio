@@ -43,7 +43,11 @@ public class OsloShow extends SLShow implements Show {
     }
 //
     public void setupLx(LX lx) {
+        lx.engine.output.enabled.setValue(false);
+
         super.setupLx(lx);
+
+
         boolean readConfig = readConfigFromDisk();
         if (!readConfig) {
             ApplicationState.setWarning("TreeShow", "show is set to not read tree model from disk, model changes will be saved but not loaded on restart");
@@ -55,6 +59,7 @@ public class OsloShow extends SLShow implements Show {
         TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
 
         System.out.println("Number of branches: " + tree.getBranches().size());
+
 
 
         DebugPortMonitor debugPortMonitor = new DebugPortMonitor();

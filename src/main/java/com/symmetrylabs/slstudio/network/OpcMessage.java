@@ -73,6 +73,7 @@ public class OpcMessage {
     }
 
     /** Constructs a system-exclusive OpcMessage. */
+    //use this for twigshutoff
     public OpcMessage(int channel, int systemId, int sysexCode, byte[] sysexContent) {
         this(channel, SYSTEM_EXCLUSIVE, createSysexPayload(systemId, sysexCode, sysexContent));
     }

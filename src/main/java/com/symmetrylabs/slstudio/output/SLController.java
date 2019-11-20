@@ -30,6 +30,7 @@ public class SLController extends LXOutput implements Comparable<SLController>, 
     static final int HEADER_LENGTH = 4;
     static final int BYTES_PER_PIXEL = 3;
 
+
     int contentSizeBytes;
     int packetSizeBytes;
     byte[] packetData;

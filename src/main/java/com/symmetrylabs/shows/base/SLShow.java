@@ -11,6 +11,7 @@ import com.symmetrylabs.slstudio.output.CubeModelControllerMapping;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.slstudio.output.SLController;
 //import com.symmetrylabs.slstudio.output.TreeController;
+import com.symmetrylabs.slstudio.ui.v2.TwigShutOffWindow;
 import com.symmetrylabs.slstudio.ui.v2.WindowManager;
 import com.symmetrylabs.util.CubeInventory;
 import com.symmetrylabs.util.NetworkChannelDebugMonitor.DebugPortMonitor;
@@ -144,6 +145,8 @@ public abstract class SLShow implements Show {
         WindowManager.addPersistent("Controllers/Inventory", () -> new InventoryEditor(lx, cubeInventory), false);
         WindowManager.addPersistent("Controllers/Mapping", () -> new MappingWindow(lx, (CubesModel) lx.model), false);
         WindowManager.addPersistent("Controllers/Output", () -> new SLOutputWindow(lx, this), false);
+        WindowManager.addPersistent("TwigShutOff", () -> new TwigShutOffWindow(lx, this), false);
+
         WindowManager.addPersistent("Controllers/Scaling", () -> new OutputScaleWindow(lx, outputScaler), false);
     }
 
