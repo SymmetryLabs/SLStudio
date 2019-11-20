@@ -65,14 +65,14 @@ public class BanyanShow extends TreeShow {
         TreeConfig.createLimbType("Limb 1", LIMB_TYPE);
         TreeConfig.createBranchType("Branch", BRANCH);
 
-        TreeConfig config = new TreeConfig(new LimbConfig[] {
+        TreeConfig treeConfig = new TreeConfig(new LimbConfig[] {
             // just one limb
             new LimbConfig(false, 0, 0, 0, 0, 0, LIMB_TYPE),
         });
 
-        TreeModel tree = new TreeModel(SHOW_NAME, config);
+        BanyanModel.Star.Config starConfig = new BanyanModel.Star.Config(0, 0, 0, 0);
 
-        return tree;
+        return new BanyanModel(SHOW_NAME, treeConfig, starConfig);
     }
 
     public void setupLx(final LX lx) {
