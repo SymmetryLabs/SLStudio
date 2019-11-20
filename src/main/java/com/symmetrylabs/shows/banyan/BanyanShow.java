@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.net.SocketException;
+
+import com.symmetrylabs.slstudio.model.banyan.StarModel;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
@@ -70,40 +72,40 @@ public class BanyanShow extends TreeShow {
             new LimbConfig(false, 0, 0, 0, 0, 0, LIMB_TYPE),
         });
 
-        TreeModel tree = new TreeModel(SHOW_NAME, config);
+//        TreeModel tree = new TreeModel(SHOW_NAME, config);
 
-        return tree;
+        return new StarModel("banyan");
     }
 
     public void setupLx(final LX lx) {
         super.setupLx(lx);
-        TreeModel tree = (TreeModel) (lx.model);
-        TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
+//        TreeModel tree = (TreeModel) (lx.model);
+//        TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
 
-        System.out.println("Number of branches: " + tree.getBranches().size());
+//        System.out.println("Number of branches: " + tree.getBranches().size());
 
-        lx.engine.addLoopTask(new LXLoopTask() {
-            @Override
-            public void loop(double v) {
-                if (lx.engine.framesPerSecond.getValuef() != 60) {
-                    lx.engine.framesPerSecond.setValue(60);
-                }
-            }
-        });
+//        lx.engine.addLoopTask(new LXLoopTask() {
+//            @Override
+//            public void loop(double v) {
+//                if (lx.engine.framesPerSecond.getValuef() != 60) {
+//                    lx.engine.framesPerSecond.setValue(60);
+//                }
+//            }
+//        });
 
-        try {
-            for (TreeModel.Branch branch : tree.getBranches()) {
-                AssignableTenereController controller = new AssignableTenereController(lx, branch);
-                controller.brightness.setValue(0.7);
-                controllers.put(branch, controller);
-                lx.addOutput(controller);
-            }
-        } catch (SocketException e) { }
+//        try {
+//            for (TreeModel.Branch branch : tree.getBranches()) {
+//                AssignableTenereController controller = new AssignableTenereController(lx, branch);
+//                controller.brightness.setValue(0.7);
+//                controllers.put(branch, controller);
+//                lx.addOutput(controller);
+//            }
+//        } catch (SocketException e) { }
 
-        modeler.branchManipulator.ipAddress.addListener(param -> {
-            AssignableTenereController controller = controllers.get(modeler.getSelectedBranch());
-            controller.setIpAddress(modeler.branchManipulator.ipAddress.getString());
-        });
+//        modeler.branchManipulator.ipAddress.addListener(param -> {
+//            AssignableTenereController controller = controllers.get(modeler.getSelectedBranch());
+//            controller.setIpAddress(modeler.branchManipulator.ipAddress.getString());
+//        });
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
