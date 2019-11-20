@@ -5,10 +5,10 @@ import java.lang.Integer;
 import java.util.Arrays;
 
 import com.symmetrylabs.shows.treeV2.TreeModel_v2;
-import heronarts.lx.model.LXAbstractFixture;
-import heronarts.lx.model.LXPoint;
+import heronarts.lx.model.*;
 import heronarts.lx.transform.LXTransform;
 import heronarts.lx.transform.LXVector;
+
 
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.shows.tree.config.*;
@@ -29,11 +29,15 @@ public class TreeModel extends SLModel {
     private float yRotation = 0;
 
     public TreeModel(String showName) {
-        this(showName, new TreeConfig());
+        this(showName, new TreeConfig(), new EmptyFixture());
     }
 
-    public TreeModel(String showName, TreeConfig config) {
-        super(showName, new Fixture(config));
+    public TreeModel(String showName, TreeConfig treeConfig) {
+        this(showName, treeConfig, new EmptyFixture());
+    }
+
+    public TreeModel(String showName, TreeConfig config, LXFixture miscPoints) {
+        super(showName, new Fixture(config, miscPoints));
         this.config = config;
         Fixture f = (Fixture) this.fixtures.get(0);
         this.limbs  = Collections.unmodifiableList(f.limbs);
@@ -89,7 +93,7 @@ public class TreeModel extends SLModel {
     private static class Fixture extends LXAbstractFixture {
         private final List<Limb> limbs = new ArrayList<>();
 
-        private Fixture(TreeConfig config) {
+        private Fixture(TreeConfig config, LXFixture miscPoints) {
             LXTransform t = new LXTransform();
 
             for (LimbConfig limbConfig : config.getLimbs()) {
@@ -99,6 +103,10 @@ public class TreeModel extends SLModel {
                 for (LXPoint p : limb.points) {
                     this.points.add(p);
                 }
+            }
+
+            for (LXPoint p : miscPoints.getPoints()) {
+                this.points.add(p);
             }
         }
     }
