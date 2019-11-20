@@ -17,9 +17,9 @@ public class StarModel extends SLModel{
 
             for (int i = 0; i < NUM_SYMMETRY; i++){
 //                t.rotateZ(45);
-                TipperModel tipper = new TipperModel("tipper", t);
+                TipShardPanel tipper = new TipShardPanel("tipper", t);
 //                t.translate(10, 20, 0);
-                TipModel shard = new TipModel("tip", t);
+                InsideShardPanel shard = new InsideShardPanel("tip", t);
                 points.addAll(shard.getPoints());
                 points.addAll(tipper.getPoints());
             }

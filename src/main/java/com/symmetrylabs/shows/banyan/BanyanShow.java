@@ -1,16 +1,13 @@
 package com.symmetrylabs.shows.banyan;
 
-import com.symmetrylabs.slstudio.model.banyan.StarModel;
-import com.symmetrylabs.slstudio.model.banyan.TipModel;
-
-import com.symmetrylabs.slstudio.model.banyan.TipperModel;
-import heronarts.lx.LX;
+import com.symmetrylabs.slstudio.model.banyan.InsideShardPanel;
 
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.shows.tree.config.*;
 import com.symmetrylabs.shows.tree.ui.UITenereControllers;
+import heronarts.lx.transform.LXTransform;
 
 
 public class BanyanShow extends TreeShow {
@@ -52,21 +49,8 @@ public class BanyanShow extends TreeShow {
         BanyanModel.Star.Config starConfig = new BanyanModel.Star.Config(0, 0, 0, 0);
 
         return new BanyanModel(SHOW_NAME, treeConfig, starConfig);
-    }
-
-    public void setupLx(final LX lx) {
-        super.setupLx(lx);
-//        TreeModel tree = (TreeModel) (lx.model);
-//        TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
-
-//        System.out.println("Number of branches: " + tree.getBranches().size());
-
-//        lx.engine.addLoopTask(new LXLoopTask() {
-//            @Override
-//            public void loop(double v) {
-//                if (lx.engine.framesPerSecond.getValuef() != 60) {
-//                    lx.engine.framesPerSecond.setValue(60);
-//                }
+//        return new TipShardPanel(SHOW_NAME, new LXTransform());
+//        return new InsideShardPanel(SHOW_NAME, new LXTransform());
 //            }
 //        });
 

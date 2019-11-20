@@ -5,7 +5,7 @@ import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXTransform;
 
-public class TipModel extends SLModel {
+public class InsideShardPanel extends Panel {
     static byte[] bitmap = new byte[] {
         1,0,0,0,0,0,1,0,0,0,0,0,0,0,
         1,0,0,0,0,0,1,0,0,0,0,0,0,0,
@@ -35,7 +35,7 @@ public class TipModel extends SLModel {
     };
 
 
-    public TipModel(String modelId, LXTransform t) {
+    public InsideShardPanel(String modelId, LXTransform t) {
         super(modelId, new Fixture(bitmap, t));
     }
 

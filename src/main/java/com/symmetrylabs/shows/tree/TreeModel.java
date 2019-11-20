@@ -38,8 +38,10 @@ public class TreeModel extends SLModel {
 
     public TreeModel(String showName, TreeConfig config, LXFixture miscPoints) {
         super(showName, new Fixture(config, miscPoints));
+
         this.config = config;
         Fixture f = (Fixture) this.fixtures.get(0);
+
         this.limbs  = Collections.unmodifiableList(f.limbs);
 
       final List<Branch> branches = new ArrayList<>();
