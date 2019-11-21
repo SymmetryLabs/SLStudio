@@ -3,6 +3,8 @@ package com.symmetrylabs.slstudio.output;
 import heronarts.lx.LX;
 import heronarts.lx.output.LXOutputGroup;
 import heronarts.lx.output.LXDatagramOutput;
+import heronarts.lx.parameter.BooleanParameter;
+import org.lwjgl.system.CallbackI;
 
 import java.net.SocketException;
 
@@ -33,6 +35,7 @@ public class SimplePixlite extends ArtNetOutput {
         private final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
         private final int outputIndex;
         private final int firstUniverseOnOutput;
+        private BooleanParameter testDataline = new BooleanParameter("testDataline", true);
 
         public SimplePixliteOutput(PointsGrouping pointsGrouping) throws SocketException {
             super(lx);
@@ -47,17 +50,45 @@ public class SimplePixlite extends ArtNetOutput {
             int numUniverses = (numPoints / MAX_NUM_POINTS_PER_UNIVERSE) + 1;
             int counter = 0;
 
-            for (int i = 0; i < numUniverses; i++) {
-                int universe = firstUniverseOnOutput + i;
-                int numIndices = ((i + 1) * MAX_NUM_POINTS_PER_UNIVERSE) > numPoints
-                    ? (numPoints % MAX_NUM_POINTS_PER_UNIVERSE)
-                    : MAX_NUM_POINTS_PER_UNIVERSE;
-                int[] indices = new int[numIndices];
-                for (int i1 = 0; i1 < numIndices; i1++) {
-                    indices[i1] = pointsGrouping.getPoint(counter++).index;
+            if (testDataline.isOn()){
+                long millis = System.currentTimeMillis();
+                int PERIOD = 5000; // 2 seconds
+
+                int[] g_buffer = new int[numPoints];
+                long limitLightUp = (millis%PERIOD) / 10;
+                for (int i = 0; i < numPoints; i++) {
+                    g_buffer[i] = 0xffee00ff;
+                    if (i > limitLightUp){
+                        g_buffer[i] = 0xff00ff00;
+                    }
                 }
-                ArtNetDmxDatagram dmxDatagram = new ArtNetDmxDatagram(lx, ipAddress, indices, universe - 1);
-                addDatagram(dmxDatagram);
+                int global_index = 0;
+                for (int i = 0; i < numUniverses; i++) {
+                    int universe = firstUniverseOnOutput + i;
+                    int numIndices = ((i + 1) * MAX_NUM_POINTS_PER_UNIVERSE) > numPoints
+                        ? (numPoints % MAX_NUM_POINTS_PER_UNIVERSE)
+                        : MAX_NUM_POINTS_PER_UNIVERSE;
+                    int[] buffer = new int[numIndices];
+                    for (int i1 = 0; i1 < numIndices; i1++) {
+                        buffer[i1] = g_buffer[global_index++];
+                    }
+                    ArtNetDmxDatagram dmxDatagram = new ArtNetDmxDatagram(lx, ipAddress, buffer, universe - 1, true);
+                    addDatagram(dmxDatagram);
+                }
+            }
+            else {
+                for (int i = 0; i < numUniverses; i++) {
+                    int universe = firstUniverseOnOutput + i;
+                    int numIndices = ((i + 1) * MAX_NUM_POINTS_PER_UNIVERSE) > numPoints
+                        ? (numPoints % MAX_NUM_POINTS_PER_UNIVERSE)
+                        : MAX_NUM_POINTS_PER_UNIVERSE;
+                    int[] indices = new int[numIndices];
+                    for (int i1 = 0; i1 < numIndices; i1++) {
+                        indices[i1] = pointsGrouping.getPoint(counter++).index;
+                    }
+                    ArtNetDmxDatagram dmxDatagram = new ArtNetDmxDatagram(lx, ipAddress, indices, universe - 1);
+                    addDatagram(dmxDatagram);
+                }
             }
         }
     }

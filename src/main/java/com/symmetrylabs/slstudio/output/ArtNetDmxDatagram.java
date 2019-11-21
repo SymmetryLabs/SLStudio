@@ -17,6 +17,9 @@ public class ArtNetDmxDatagram extends LXDatagram {
     private final static int DEFAULT_UNIVERSE = 0;
     private final static long FLASH_NANOS = 100_000_000;
 
+    // test data
+    private int[] testColors;
+
     private int[] pointIndices;
     private boolean sequenceEnabled = false;
     private byte sequence = 1;
@@ -31,6 +34,35 @@ public class ArtNetDmxDatagram extends LXDatagram {
 
     public ArtNetDmxDatagram(LX lx, String ipAddress, int[] indices, int universeNumber) {
         this(lx, ipAddress, indices, 3 * indices.length, universeNumber);
+    }
+
+    public ArtNetDmxDatagram(LX lx, String ipAddress, int[] colors, int universeNumber, boolean testOutput) {
+        super(ArtNetDatagramUtil.HEADER_LENGTH + ARTNET_DMX_HEADER_LENGTH + 3*colors.length + (3*colors.length % 2));
+
+        // copy over test colors
+        testColors = new int[colors.length];
+        int c_index = 0;
+        for (int c : colors){
+            testColors[c_index++] = c;
+        }
+
+        int dataLength = 3*colors.length;
+        testDataLine.setValue(testOutput);
+
+        try {
+            setAddress(ipAddress);
+            setPort(ArtNetDatagramUtil.ARTNET_PORT);
+        } catch (UnknownHostException e) {
+            //System.out.println("MappingPixlite with ip address (" + ipAddress + ") is not on the network.");
+        }
+
+        ArtNetDatagramUtil.fillHeader(buffer, ARTNET_DMX_OPCODE);
+        this.buffer[12] = 0; // Sequence
+        this.buffer[13] = 0; // Physical
+        this.buffer[14] = (byte) (universeNumber & 0xff); // Universe LSB
+        this.buffer[15] = (byte) ((universeNumber >>> 8) & 0xff); // Universe MSB
+        this.buffer[16] = (byte) ((dataLength >>> 8) & 0xff);
+        this.buffer[17] = (byte) (dataLength & 0xff);
     }
 
     public ArtNetDmxDatagram(LX lx, String ipAddress, int[] indices, int dataLength, int universeNumber) {
@@ -89,7 +121,7 @@ public class ArtNetDmxDatagram extends LXDatagram {
     @Override
     public void onSend(int[] colors) {
         if (testDataLine.isOn()){
-            copyTestPoints(this.pointIndices.length, ArtNetDatagramUtil.HEADER_LENGTH + ARTNET_DMX_HEADER_LENGTH);
+            copyTestPoints(this.testColors.length, ArtNetDatagramUtil.HEADER_LENGTH + ARTNET_DMX_HEADER_LENGTH);
         }
         else {
             copyPointsGamma(
@@ -108,21 +140,13 @@ public class ArtNetDmxDatagram extends LXDatagram {
         busySleep(3000);
     }
 
-    private void copyTestPoints(int length, int j) {
-        long millis = System.currentTimeMillis();
-        int PERIOD = 5000; // 2 seconds
-
-        long limitLightUp = (millis%PERIOD) / 10;
-        for (int i = j; i < length; i++) {
-            buffer[i + 0] = (byte) 0xff;
-            buffer[i + 1] = (byte) 0x00;
-            buffer[i + 2] = (byte) 0xff;
-            if (i > limitLightUp){
-                buffer[i + 0] = (byte) 0x0;
-                buffer[i + 1] = (byte) 0xff;
-                buffer[i + 2] = (byte) 0x0;
-            }
-
+    private void copyTestPoints(int length, int offset) {
+        int c_index = 0;
+        for (int i = offset; i < length*3; i+=3, c_index++) {
+            int c = testColors[c_index];
+            buffer[i + 0] = (byte) (c & 0xff);
+            buffer[i + 1] = (byte) (c >> 8 & 0xff);
+            buffer[i + 2] = (byte) (c >> 16 & 0xff);
             i += 3;
         }
     }
