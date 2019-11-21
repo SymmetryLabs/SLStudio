@@ -1,5 +1,6 @@
 package com.symmetrylabs.shows.banyan;
 
+import com.symmetrylabs.shows.tree.ui.UITreeStructure;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.banyan.InsideShardPanel;
 
@@ -12,6 +13,8 @@ import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.slstudio.output.SimplePixlite;
 import heronarts.lx.LX;
 import heronarts.lx.transform.LXTransform;
+
+import java.net.SocketException;
 
 
 public class BanyanShow extends TreeShow {
@@ -37,10 +40,10 @@ public class BanyanShow extends TreeShow {
             LIMB_TYPE[i] = new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH, true);
         }
 
-        LimbConfig.lengthEnabled = false;
-        LimbConfig.heightEnabled = false;
-        LimbConfig.azimuthEnabled = false;
-        LimbConfig.elevationEnabled = false;
+//        LimbConfig.lengthEnabled = false;
+//        LimbConfig.heightEnabled = false;
+//        LimbConfig.azimuthEnabled = false;
+//        LimbConfig.elevationEnabled = false;
 
         TreeConfig.createLimbType("Limb 1", LIMB_TYPE);
         TreeConfig.createBranchType("Branch", BRANCH);
@@ -61,8 +64,7 @@ public class BanyanShow extends TreeShow {
     public void setupLx(LX lx) {
         super.setupLx(lx);
 
-        TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
-
+        // static pixlite output for the star
         SimplePixlite starLite = new SimplePixlite(lx, "10.200.1.100");
         for (int portNum = 0; portNum < 16; portNum++){
             starLite.addPixliteOutput(new PointsGrouping( (portNum + 1) + "", BanyanModel.star.innerPanels.get( (portNum) % 8).getPoints()).reversePoints()
@@ -70,16 +72,11 @@ public class BanyanShow extends TreeShow {
         }
         lx.addOutput(starLite);
 
-        modeler.branchManipulator.ipAddress.addListener(param -> {
-            AssignableTenereController controller = controllers.get(modeler.getSelectedBranch());
-            controller.setIpAddress(modeler.branchManipulator.ipAddress.getString());
-        });
-
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
-        //ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
+        ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
 
 //        new UITenereControllers(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
     }

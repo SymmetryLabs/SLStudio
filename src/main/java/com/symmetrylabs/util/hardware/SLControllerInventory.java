@@ -8,6 +8,7 @@ import com.google.gson.stream.JsonWriter;
 import com.symmetrylabs.slstudio.output.DiscoverableController;
 import com.symmetrylabs.util.NetworkUtil.MACAddress;
 import heronarts.lx.parameter.DiscreteParameter;
+import org.apache.commons.collections4.iterators.IteratorChain;
 
 import java.io.*;
 import java.net.Inet4Address;
@@ -23,8 +24,15 @@ public class SLControllerInventory {
     private final static String PERSISTENT_SLCONTROLLER_INVENTORY = "slcontrollerinventory.json";
 
     private final transient List<SLControllerInventory.Listener> listeners = new ArrayList<>();
+    public final ArrayList<ControllerMetadata> allControllers = new ArrayList<>();
+
+    private transient List<String> inventoryErrors = new ArrayList<>();
 
     private transient HashMap<String, DiscoverableController> sl_controller_index = new HashMap<>();
+
+    protected SLControllerInventory() {
+//        allControllers = new ArrayList<DiscoverableController>();
+    }
 
     public void addListener(Listener listener) {
         listeners.add(listener);
@@ -44,6 +52,21 @@ public class SLControllerInventory {
     public String getNameByMac(String deviceId) {
         ControllerMetadata metadata = macAddrToControllerMetadataMap.get(deviceId);
         return metadata == null ? deviceId : metadata.humanID;
+    }
+
+    public Iterator<CharSequence> getErrors() {
+        IteratorChain<CharSequence> iter = new IteratorChain<>();
+        iter.addIterator(inventoryErrors.iterator());
+        return iter;
+    }
+
+    public void rebuild() {
+        // logic to rebuild inventory
+    }
+
+    public boolean save() {
+        // logic to save
+        return false;
     }
 
     public interface Listener {

@@ -127,10 +127,8 @@ public class TreeModel extends SLModel {
         t.rotateY(yRotation * Math.PI / 180.);
         t.push();
         int i = 0;
-        if (config.getLimbs().size() > 0){
-            for (Limb limb : limbs) {
-                limb.reconfigure(t, config.getLimbs().get(i++));
-            }
+        for (Limb limb : limbs) {
+            limb.reconfigure(t, config.getLimbs().get(i++));
         }
         update(true, true);
         t.pop();
@@ -298,6 +296,8 @@ public class TreeModel extends SLModel {
      *--------------------------------------------------------------*/
     public static class Branch extends SLModel {
 
+        private static int uid = 0;
+
         public static final int NUM_TWIGS = 8; // needs to be remmoved (we need to refactor patterns for arbitrary lengths
 
         private BranchConfig config;
@@ -313,7 +313,7 @@ public class TreeModel extends SLModel {
         public final List<Leaf> leaves;
 
         public Branch(LXTransform t, BranchConfig config) {
-            super("Branch", new Fixture(t, config));
+            super("Branch" + uid++, new Fixture(t, config));
             this.config = config;
             this.azimuth = config.azimuth;
             this.elevation = config.elevation;

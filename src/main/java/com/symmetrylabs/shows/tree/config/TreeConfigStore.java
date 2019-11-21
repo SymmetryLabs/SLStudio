@@ -35,7 +35,8 @@ public class TreeConfigStore implements SLStudioLX.SaveHook {
         }
 
         this.file = file;
-        this.config = FileUtils.readJson(file, TreeConfig.class);
+        TreeConfig configIn = FileUtils.readJson(file, TreeConfig.class);
+        this.config = configIn == null ? this.config : configIn;
         if (config != null) reconfigureTree(config);
     }
 

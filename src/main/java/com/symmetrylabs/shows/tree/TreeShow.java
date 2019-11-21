@@ -40,24 +40,24 @@ public abstract class TreeShow extends SLShow implements Show {
         if (!readConfig) {
             ApplicationState.setWarning("TreeShow", "show is set to not read tree model from disk, model changes will be saved but not loaded on restart");
         }
-//        lx.engine.registerComponent("treeModelingTool", TreeModelingTool.getInstance(lx, readConfig));
+        lx.engine.registerComponent("treeModelingTool", TreeModelingTool.getInstance(lx, readConfig));
     }
 
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
-        //ui.preview.addComponent(new UITreeTrunk(SLStudio.applet));
+        ui.preview.addComponent(new UITreeTrunk(SLStudio.applet));
 
         ui.preview.addComponent(UITreeModelAxes.getInstance(lx));
 
         UITreeModelAxes uiTreeModelAxes = UITreeModelAxes.getInstance(lx);
         ui.preview.addComponent(uiTreeModelAxes);
 
-//        UITreeModelingTool.instance = new UITreeModelingTool(
-//            ui, TreeModelingTool.getInstance(lx), 0, 0, ui.rightPane.model.getContentWidth());
-//        UITreeModelingTool.instance.addToContainer(ui.rightPane.model);
+        UITreeModelingTool.instance = new UITreeModelingTool(
+            ui, TreeModelingTool.getInstance(lx), 0, 0, ui.rightPane.model.getContentWidth());
+        UITreeModelingTool.instance.addToContainer(ui.rightPane.model);
     }
 
     protected boolean readConfigFromDisk() {
-        return true;
+        return true; // need to be able to get this intelligently (i.e. does the file exist?)
     }
 }

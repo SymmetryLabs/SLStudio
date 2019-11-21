@@ -51,6 +51,9 @@ public class ControllerMetadata{
         switchPort = slc.switchPortNumber;
     }
 
+    public ControllerMetadata() {
+    }
+
     public String getHumanID() {
         return humanID;
     }

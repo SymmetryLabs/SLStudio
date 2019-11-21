@@ -14,6 +14,7 @@ import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.DiscoverableController;
 //import com.symmetrylabs.slstudio.output.TreeController;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
+import com.symmetrylabs.slstudio.ui.v2.ControllerMgmt.SLInventoryWindow;
 import com.symmetrylabs.slstudio.ui.v2.SLModelMappingWindow;
 import com.symmetrylabs.slstudio.ui.v2.WindowManager;
 import com.symmetrylabs.util.dispatch.Dispatcher;
@@ -159,7 +160,7 @@ public abstract class SLShow implements Show {
     }
 
     public void setupUi(LX lx) {
-//        WindowManager.addPersistent("Controllers/Inventory", () -> new CubesInventoryEditor(lx, controllerInventory), false);
+        WindowManager.addPersistent("Controllers/Inventory", () -> new SLInventoryWindow(lx, controllerInventory), false);
         WindowManager.addPersistent("Controllers/Mapping", () -> new SLModelMappingWindow(lx, this), false);
         WindowManager.addPersistent("Controllers/Output", () -> new SLOutputWindow(lx, this), false);
         WindowManager.addPersistent("Controllers/Scaling", () -> new OutputScaleWindow(lx, outputScaler), false);
