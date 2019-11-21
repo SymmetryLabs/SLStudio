@@ -45,7 +45,7 @@ public abstract class SLShow implements Show {
     // top level metadata used in any show
     public static SLSculptureControllerMapping mapping = null; // only initialized for top level... more evidence we need a top level SLModel.
     public static SLControllerInventory controllerInventory;
-    public PersistentControllerByHumanIdMap controllerInventory2 = new PersistentControllerByHumanIdMap();
+    public PersistentControllerByHumanIdMap controllerInventory2;
 
     /**
      * Power related.

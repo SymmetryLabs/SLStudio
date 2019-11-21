@@ -24,6 +24,8 @@ public class SLControllerInventory {
     private final static String PERSISTENT_SLCONTROLLER_INVENTORY = "slcontrollerinventory.json";
 
     private final transient List<SLControllerInventory.Listener> listeners = new ArrayList<>();
+
+    @Expose
     public final ArrayList<ControllerMetadata> allControllers = new ArrayList<>();
 
     private transient List<String> inventoryErrors = new ArrayList<>();
@@ -196,6 +198,14 @@ public class SLControllerInventory {
             System.out.println("inventory map written to: " + resFile);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void rebuildAllControllers() {
+        allControllers.clear();
+        for (String key : macAddrToControllerMetadataMap.keySet()){
+            ControllerMetadata meta = macAddrToControllerMetadataMap.get(key);
+            allControllers.add(meta);
         }
     }
 

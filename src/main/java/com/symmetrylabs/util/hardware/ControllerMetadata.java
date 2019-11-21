@@ -1,6 +1,7 @@
 package com.symmetrylabs.util.hardware;
 
 import com.google.gson.annotations.Expose;
+import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.output.DiscoverableController;
 import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.util.NetworkUtil.MACAddress;
@@ -11,6 +12,12 @@ import java.net.UnknownHostException;
 import java.util.Collection;
 
 public class ControllerMetadata{
+    @Expose
+    NetworkDevice networkDevice;
+
+    @Expose
+    String allocatedToShow; // where is this controller currently?
+
     @Expose
     Inet4Address ipAddr;
 
