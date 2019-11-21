@@ -27,7 +27,7 @@ public class ArtNetDmxDatagram extends LXDatagram {
     private long lastFlashNanos = System.nanoTime();
 
     private GammaExpander GammaExpander;
-    private BooleanParameter testDataLine = new BooleanParameter("Test Dataline", true);
+    private BooleanParameter testDataLine = new BooleanParameter("Test Dataline", false);
 
     public ArtNetDmxDatagram(LX lx, String ipAddress, int[] indices, int universeNumber) {
         this(lx, ipAddress, indices, 3 * indices.length, universeNumber);
@@ -91,29 +91,29 @@ public class ArtNetDmxDatagram extends LXDatagram {
         if (testDataLine.isOn()){
             copyTestPoints(this.pointIndices.length, ArtNetDatagramUtil.HEADER_LENGTH + ARTNET_DMX_HEADER_LENGTH);
         }
-        else{
+        else {
             copyPointsGamma(
                 colors, this.pointIndices, ArtNetDatagramUtil.HEADER_LENGTH + ARTNET_DMX_HEADER_LENGTH);
-
-            if (this.sequenceEnabled) {
-                if (++this.sequence == 0) {
-                    ++this.sequence;
-                }
-                this.buffer[SEQUENCE_INDEX] = this.sequence;
-            }
-
-            // We need to slow down the speed at which we send the packets so that we don't overload our switches. 3us seems to
-            // be about right - Yona
-            busySleep(3000);
         }
+
+        if (this.sequenceEnabled) {
+            if (++this.sequence == 0) {
+                ++this.sequence;
+            }
+            this.buffer[SEQUENCE_INDEX] = this.sequence;
+        }
+
+        // We need to slow down the speed at which we send the packets so that we don't overload our switches. 3us seems to
+        // be about right - Yona
+        busySleep(3000);
     }
 
     private void copyTestPoints(int length, int j) {
         long millis = System.currentTimeMillis();
-        int PERIOD = 3000; // 2 seconds
+        int PERIOD = 5000; // 2 seconds
 
-        long limitLightUp = (millis%PERIOD) / 20;
-        for (int i = 0; i < length; i++) {
+        long limitLightUp = (millis%PERIOD) / 10;
+        for (int i = j; i < length; i++) {
             buffer[i + 0] = (byte) 0xff;
             buffer[i + 1] = (byte) 0x00;
             buffer[i + 2] = (byte) 0xff;
