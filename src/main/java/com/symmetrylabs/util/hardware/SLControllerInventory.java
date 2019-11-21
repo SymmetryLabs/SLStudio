@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.stream.JsonWriter;
 //import com.symmetrylabs.slstudio.output.DiscoverableController;
+import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.output.DiscoverableController;
 import com.symmetrylabs.util.NetworkUtil.MACAddress;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -27,6 +28,9 @@ public class SLControllerInventory {
 
     @Expose
     public final ArrayList<ControllerMetadata> allControllers = new ArrayList<>();
+
+    @Expose
+    public TreeMap<String, ControllerMetadata> macAddrToControllerMetadataMap = new TreeMap<>();
 
     private transient List<String> inventoryErrors = new ArrayList<>();
 
@@ -71,6 +75,11 @@ public class SLControllerInventory {
         return false;
     }
 
+    public void addNetworkDeviceByName(String hID, NetworkDevice networkDevice) {
+        controllerByCtrlId.put(hID, new ControllerMetadata(hID, networkDevice));
+        macAddrToControllerMetadataMap.put(networkDevice.deviceId, new ControllerMetadata(hID, networkDevice));
+    }
+
     public interface Listener {
         void onControllerListUpdated();
     }
@@ -85,8 +94,6 @@ public class SLControllerInventory {
 //    ArrayList<ControllerMetadata> treeInventory = new ArrayList<>();
 
     // Map to controller metadata based on MAC
-    @Expose
-    public TreeMap<String, ControllerMetadata> macAddrToControllerMetadataMap = new TreeMap<>();
 
     public final transient Map<String, ControllerMetadata> controllerByMacAddrs = new TreeMap<>();
     public final transient Map<String,ControllerMetadata> controllerByCtrlId = new TreeMap<>();

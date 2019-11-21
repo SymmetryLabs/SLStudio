@@ -61,6 +61,11 @@ public class ControllerMetadata{
     public ControllerMetadata() {
     }
 
+    public ControllerMetadata(String hID, NetworkDevice networkDevice) {
+        this.networkDevice = networkDevice;
+        this.humanID = hID;
+    }
+
     public String getHumanID() {
         return humanID;
     }
