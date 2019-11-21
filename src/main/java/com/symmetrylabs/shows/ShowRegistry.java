@@ -17,6 +17,7 @@ import com.symmetrylabs.shows.japantree.JapanTreeShow;
 import com.symmetrylabs.shows.kalpa.KalpaShow;
 import com.symmetrylabs.shows.magicleap.MagicLeapShow;
 import com.symmetrylabs.shows.mikey.MikeyShow;
+import com.symmetrylabs.shows.misc.Andy;
 import com.symmetrylabs.shows.office.OfficeShow;
 import com.symmetrylabs.shows.penfoldswine.PenfoldsWineShow;
 import com.symmetrylabs.shows.pilots.PilotsShow;
@@ -105,6 +106,7 @@ public class ShowRegistry {
         map.put(GospelShow.SHOW_NAME, GospelShow::new);
         map.put(OsloShow.SHOW_NAME, OsloShow::new);
         map.put(BanyanShow.SHOW_NAME, BanyanShow::new);
+        map.put(Andy.SHOW_NAME, Andy::new);
     }
 
     interface ShowBuilder {
