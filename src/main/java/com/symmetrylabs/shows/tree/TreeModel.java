@@ -127,8 +127,10 @@ public class TreeModel extends SLModel {
         t.rotateY(yRotation * Math.PI / 180.);
         t.push();
         int i = 0;
-        for (Limb limb : limbs) {
-            limb.reconfigure(t, config.getLimbs().get(i++));
+        if (config.getLimbs().size() > 0){
+            for (Limb limb : limbs) {
+                limb.reconfigure(t, config.getLimbs().get(i++));
+            }
         }
         update(true, true);
         t.pop();

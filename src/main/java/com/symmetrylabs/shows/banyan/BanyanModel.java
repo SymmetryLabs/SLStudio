@@ -25,16 +25,23 @@ public class BanyanModel extends TreeModel {
 	public static class Star extends SLModel {
 		public List<Panel> panels = new ArrayList<Panel>();
 
+        public List<Panel> innerPanels = new ArrayList<Panel>();
+        public List<Panel> outerPanels = new ArrayList<Panel>();
+
 		public Star(Star.Config config) {
 			super("star", new Fixture(config));
 			BanyanModel.star = this;
 			Fixture f = (Fixture) this.fixtures.get(0);
 			this.panels.addAll(f.panels);
+			this.innerPanels.addAll(f.innerPanels);
+			this.outerPanels.addAll(f.outerPanels);
 		}
 
 		public static class Fixture extends LXAbstractFixture {
             private static final int NUM_SYMMETRY = 8;
             public List<Panel> panels = new ArrayList<Panel>();
+            public List<Panel> innerPanels = new ArrayList<Panel>();
+            public List<Panel> outerPanels = new ArrayList<Panel>();
 
 			public Fixture(BanyanModel.Star.Config config) {
 				LXTransform t = new LXTransform();
@@ -47,12 +54,14 @@ public class BanyanModel extends TreeModel {
                     t.translate(-5, 2, 0);
                     InsideShardPanel shard = new InsideShardPanel("tip", t);
                     this.panels.add(shard);
+                    this.innerPanels.add(shard);
                     t.rotateZ(PI);
                     t.rotateZ(-PI/8);
                     t.translate(-16, -45, 0);
 //                    t.translate(0, -10, 0);
                     TipShardPanel tipper = new TipShardPanel("tipper", t);
                     this.panels.add(tipper);
+                    this.outerPanels.add(tipper);
                     points.addAll(shard.getPoints());
                     points.addAll(tipper.getPoints());
                     t.pop();

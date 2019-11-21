@@ -47,30 +47,12 @@ public class BanyanShow extends TreeShow {
 
         TreeConfig treeConfig = new TreeConfig(new LimbConfig[] {
             // just one limb
-//            new LimbConfig(false, 0, 0, 0, 0, 0, LIMB_TYPE),
+            new LimbConfig(false, 0, 0, 0, 0, 0, LIMB_TYPE),
         });
 
         BanyanModel.Star.Config starConfig = new BanyanModel.Star.Config(0, 0, 100, 0);
 
         BanyanModel banyanModel = new BanyanModel(SHOW_NAME, treeConfig, starConfig);
-//        return new TipShardPanel(SHOW_NAME, new LXTransform());
-//        return new InsideShardPanel(SHOW_NAME, new LXTransform());
-//            }
-//        });
-
-//        try {
-//            for (TreeModel.Branch branch : tree.getBranches()) {
-//                AssignableTenereController controller = new AssignableTenereController(lx, branch);
-//                controller.brightness.setValue(0.7);
-//                controllers.put(branch, controller);
-//                lx.addOutput(controller);
-//            }
-//        } catch (SocketException e) { }
-
-//        modeler.branchManipulator.ipAddress.addListener(param -> {
-//            AssignableTenereController controller = controllers.get(modeler.getSelectedBranch());
-//            controller.setIpAddress(modeler.branchManipulator.ipAddress.getString());
-//        });
 
         return banyanModel;
     }
@@ -78,18 +60,29 @@ public class BanyanShow extends TreeShow {
     @Override
     public void setupLx(LX lx) {
         super.setupLx(lx);
+
+        TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
+
         SimplePixlite starLite = new SimplePixlite(lx, "10.200.1.100");
         for (int portNum = 0; portNum < 16; portNum++){
-            starLite.addPixliteOutput(new PointsGrouping("" + portNum+1, BanyanModel.star.panels.get(portNum).getPoints()));
+//            starLite.addPixliteOutput("" + portNum + 1, new PointsGrouping("" + portNum+1, BanyanModel.star.panels.get(portNum).getPoints()));
+            starLite.addPixliteOutput("" + portNum + 1, new PointsGrouping(BanyanModel.star.innerPanels.get( (portNum) % 8).getPoints()).reversePoints()
+            .addPoints(BanyanModel.star.outerPanels.get( (portNum) % 8).getPoints()));
         }
         lx.addOutput(starLite);
+
+        modeler.branchManipulator.ipAddress.addListener(param -> {
+            AssignableTenereController controller = controllers.get(modeler.getSelectedBranch());
+            controller.setIpAddress(modeler.branchManipulator.ipAddress.getString());
+        });
+
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
         //ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
 
-        new UITenereControllers(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
+//        new UITenereControllers(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
     }
     
     @Override
