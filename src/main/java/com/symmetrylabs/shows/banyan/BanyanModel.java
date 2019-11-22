@@ -57,7 +57,7 @@ public class BanyanModel extends TreeModel {
                     this.innerPanels.add(shard);
                     t.rotateZ(PI);
                     t.rotateZ(-PI/8);
-                    t.translate(-16, -45, 0);
+                    t.translate(-14, -34, 0);
 //                    t.translate(0, -10, 0);
                     TipShardPanel tipper = new TipShardPanel("tipper", t);
                     this.panels.add(tipper);
