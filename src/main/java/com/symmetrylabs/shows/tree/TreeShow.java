@@ -36,6 +36,7 @@ public abstract class TreeShow extends SLShow implements Show {
     }
 
     public void setupLx(LX lx) {
+        super.setupLx(lx);
         boolean readConfig = readConfigFromDisk();
         if (!readConfig) {
             ApplicationState.setWarning("TreeShow", "show is set to not read tree model from disk, model changes will be saved but not loaded on restart");
@@ -45,6 +46,7 @@ public abstract class TreeShow extends SLShow implements Show {
 
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
+        super.setupUi(lx, ui);
         ui.preview.addComponent(new UITreeTrunk(SLStudio.applet));
 
         ui.preview.addComponent(UITreeModelAxes.getInstance(lx));

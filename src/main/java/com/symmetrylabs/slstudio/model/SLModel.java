@@ -8,6 +8,7 @@ import java.util.Iterator;
 import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.slstudio.mappings.SLSculptureControllerMapping;
+import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import org.apache.commons.collections4.IteratorUtils;
 
 import org.apache.commons.math3.util.FastMath;
@@ -36,6 +37,7 @@ public class SLModel extends LXModel {
 
     // Global.  Perhaps really should be owned by top level SLModel.
     static public HashMap<String, SLModel> fixtureByMappedID = new HashMap<>();
+    private static HashMap<String, SLModel> fixtureByModelID = new HashMap<>();
 
     public SLModel(String id, List<CubesModel.Tower> towers, CubesModel.Cube[] allCubesArr) {
         super(id);
@@ -60,7 +62,8 @@ public class SLModel extends LXModel {
         super(modelId, fixture);
         SLShow.mapping.setControllerAssignment(modelId, controllerId);
         SLModel.fixtureByMappedID.put(controllerId, this);
-
+//        SLModel.fixtureByModelID.put(modelId, this);
+        SLShow.mapping.pointsByModelID.put(modelId, this);
     }
 
     private void setupPointsArray() {

@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonWriter;
 import com.symmetrylabs.slstudio.ApplicationState;
+import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.util.hardware.ControllerMetadata;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 
@@ -13,6 +15,20 @@ import java.util.*;
 
 public class SLSculptureControllerMapping {
     public static final String CTRL_MAP_FILENAME = "sl-controller-mapping.json";
+    public HashMap<String, SLModel> pointsByModelID = new HashMap<>(); // TODO: inject points here.
+
+    public PointsGrouping getPointsMappedToControllerID(String humanID) {
+//        return new PointsGrouping(pointsByModelID.get(lookUpByPhysId(humanID).modelId).getPoints());
+        PhysIdAssignment assignment = lookUpByPhysId(humanID);
+        if (assignment == null){
+            return null;
+        }
+        SLModel modelFromID = pointsByModelID.get(assignment.modelId);
+        if (modelFromID == null){
+            return null;
+        }
+        return new PointsGrouping(modelFromID.getPoints());
+    }
 
     public static final class PhysIdAssignment {
         public String modelId;

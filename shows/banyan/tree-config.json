@@ -57,10 +57,10 @@
             },
             {
               "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
+              "y": 47.328,
+              "z": -18.72,
+              "azimuth": 60.12,
+              "elevation": 50.399998,
               "tilt": 0.0,
               "index": 4,
               "disabledPixels": [
@@ -123,7 +123,7 @@
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 0.0,
-          "y": 201.0,
+          "y": 9.0,
           "z": 176.4,
           "azimuth": 0.0,
           "elevation": 0.0,
@@ -136,7 +136,7 @@
               "azimuth": 43.2,
               "elevation": 0.0,
               "tilt": 0.0,
-              "index": 1,
+              "index": 3,
               "disabledPixels": [
                 -1
               ]
@@ -160,7 +160,7 @@
               "azimuth": 16.919998,
               "elevation": 0.0,
               "tilt": 0.0,
-              "index": 3,
+              "index": 1,
               "disabledPixels": [
                 -1
               ]
@@ -207,7 +207,7 @@
               "z": 0.0,
               "azimuth": -45.359997,
               "elevation": 0.0,
-              "tilt": 0.0,
+              "tilt": -136.8,
               "index": 7,
               "disabledPixels": [
                 -1

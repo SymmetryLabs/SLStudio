@@ -1,0 +1,17 @@
+{
+  "assignments": [
+    {
+      "modelId": "Branch0",
+      "humanID": "A049"
+    },
+    {
+      "modelId": "Branch1",
+      "humanID": "A027"
+    },
+    {
+      "modelId": "Branch2",
+      "humanID": "B221"
+    }
+  ],
+  "showName": "banyan"
+}

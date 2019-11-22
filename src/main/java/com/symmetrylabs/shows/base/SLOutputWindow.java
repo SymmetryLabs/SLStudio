@@ -163,8 +163,8 @@ public class SLOutputWindow extends CloseableWindow {
                 UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.RED_HOVER);
             }
 
-//            String displayName = SLShow.controllerInventory.getNameByMac(dc.networkDevice.deviceId);
-            String displayName = show.controllerInventory2.getNameByMac(dc.networkDevice.deviceId);
+            String displayName = SLShow.controllerInventory.getNameByMac(dc.networkDevice.deviceId);
+//            String displayName = show.controllerInventory2.getNameByMac(dc.networkDevice.deviceId);
             UI.CollapseResult cr = UI.collapsibleSection(displayName, false);
 
             if (dc.getMacAddress() != null && UI.beginDragDropSource()) {

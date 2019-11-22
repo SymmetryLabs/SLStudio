@@ -111,7 +111,7 @@ public class SLInventoryWindow extends CloseableWindow {
             UI.CollapseResult cr = UI.collapsibleSection(
                 (humanID == null ? "" : humanID) + "###" + meta.hashCode(), false);
             if (humanID != null && UI.beginDragDropSource()) {
-                UI.setDragDropPayload("SL.CubePhysId", humanID);
+                UI.setDragDropPayload("SL.ControllerHumanID", humanID);
                 UI.endDragDropSource();
             }
             if (!cr.isOpen) {

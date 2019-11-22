@@ -5,7 +5,9 @@ import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.color.PerceptualColorScale;
 import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.shows.tree.TreeModel;
 import com.symmetrylabs.slstudio.ApplicationState;
+import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.ui.UIOfflineRender;
 import com.symmetrylabs.util.NetworkUtils;
@@ -174,7 +176,8 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
 
         PointsGrouping points = null;
 
-        points = SLShow.getPointsMappedToControllerID(this.humanID); // returns null if we're not broadcast
+//        points = SLShow.getPointsMappedToControllerID(this.humanID); // returns null if we're not broadcast
+        points = SLShow.mapping.getPointsMappedToControllerID(this.humanID); // returns null if we're not broadcast
 
         numPixels = points == null ? 0 : points.size();
 
@@ -210,12 +213,18 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
             int col = (int) ((System.nanoTime() / 1_000_000_000L) % 3L);
             int c = 0;
             switch (col) {
-            /* don't use full-bright colors here, since they bust some of our fixtures. */
-            case 0: c = 0xFFf20000; break;
-            case 1: c = 0xFF00f200; break;
-            case 2: c = 0xFF0000f2; break;
+                /* don't use full-bright colors here, since they bust some of our fixtures. */
+                case 0:
+                    c = 0xFFf20000;
+                    break;
+                case 1:
+                    c = 0xFF00f200;
+                    break;
+                case 2:
+                    c = 0xFF0000f2;
+                    break;
             }
-            if (momentaryAltTestOutput.isOn()){
+            if (momentaryAltTestOutput.isOn()) {
                 c = LXColor.hsb(0, 0, lx.engine.output.brightness.getNormalizedf() * 100);
             }
             /* we want the test pattern to work even if we aren't mapped, and if
@@ -232,6 +241,32 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
                 setPixel8(i, c);
             }
 
+            fillDatagramsAndAddToOutput();
+        } else if (ApplicationState.outputControl().testBroadcast.isOn() || isBroadcast) {
+            SLModel model = ((SLModel) lx.model);
+            System.out.println("gotBroadcast");
+            if (model instanceof TreeModel){
+                points = new PointsGrouping(((TreeModel) model).getBranches().get(0).getPoints());
+                System.out.println("gotTree");
+            }
+            if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
+                initPacketData(numPixels, true);
+                long[] srcLongs = (long[]) src.getArray(PolyBuffer.Space.RGB16);
+                for (int i = 0; i < numPixels; i++) {
+                    LXPoint point = points.getPoint(i);
+                    setPixel16(i, srcLongs[point.index]);
+                }
+            } else {
+                // WARNING!! static desperate to get tree working - change later
+                numPixels = 1200;
+
+                initPacketData(numPixels, false);
+                int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
+                for (int i = 0; i < numPixels; i++) {
+                    LXPoint point = points.getPoint(i);
+                    setPixel8(i, srcInts[point.index]);
+                }
+            }
             fillDatagramsAndAddToOutput();
         } else if (points != null) { // there is a fixture for this one
             // Fill the datagram with pixel data
@@ -258,6 +293,7 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
             if (numPixels == 0) {
                 setNumPixels();
             }
+            // set value red
             for (int i = 0; i < numPixels; i++) {
                 int unmappedColor = LXColor.rgba(0xff, 0, 0, (int) (lx.engine.output.brightness.getValue() * 0xff));
                 unmappedColor = LXColor.scaleBrightness(unmappedColor, lx.engine.output.brightness.getNormalizedf());

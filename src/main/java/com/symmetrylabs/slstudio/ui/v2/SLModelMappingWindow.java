@@ -99,7 +99,7 @@ public class SLModelMappingWindow extends CloseableWindow {
 
             UI.CollapseResult cr = UI.collapsibleSection(c.modelId, false);
             if (UI.beginDragDropTarget()) {
-                String physId = UI.acceptDragDropPayload("SL.CubePhysId", String.class);
+                String physId = UI.acceptDragDropPayload("SL.ControllerHumanID", String.class);
                 if (physId != null) {
                     SLShow.mapping.setControllerAssignment(c.modelId, physId);
                     anyUpdated = true;
