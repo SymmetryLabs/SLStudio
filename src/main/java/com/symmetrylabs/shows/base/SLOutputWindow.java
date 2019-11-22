@@ -137,6 +137,9 @@ public class SLOutputWindow extends CloseableWindow {
             }
 
             if (!modelID_filter.equals("")) {
+                if (!dc.humanID.contains(modelID_filter)){
+                    continue;
+                }
                 SLSculptureControllerMapping.PhysIdAssignment pia = SLShow.mapping.lookUpByControllerId(dc.humanID);
                 if (pia != null){
                     String modelId = pia.modelId;

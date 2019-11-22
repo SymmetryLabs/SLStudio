@@ -77,7 +77,7 @@ public class SLSculptureControllerMapping {
         if (assignmentsByHumanID.containsKey(ctrlId)) {
             return assignmentsByHumanID.get(ctrlId);
         }
-        ControllerMetadata pc = inventory.controllerByCtrlId.get(ctrlId);
+        ControllerMetadata pc = inventory.controllerByCtrlId.get(ctrlId); // in case we have a MAC as the name
         if (pc == null) return null;
         return assignmentsByHumanID.get(pc.getHumanID());
     }

@@ -128,6 +128,8 @@ public class AssignableTenereController extends DiscoverableController implement
         this.ipAddress = device.ipAddress.getHostAddress();
         this.branch = branch;
 
+        this.humanID = controllerInventory.getNameByMac(networkDevice.deviceId);
+
         addPowerParameters();
 
         pixelColors = new int[][] {

@@ -13,15 +13,21 @@ public class ControllerStaticNetworkIntegrityChecker {
 
     HashMap<InetAddress, String> controllerByInetAddressMap = new HashMap<>();
 
+    boolean noProblemsFound = true;
+
     // for given dictionary of controllers ensure that there are no duplicate IPs
     public boolean staticNetworkAllocationIsValid(){
         for (String key : controllerByHumanIdMap.slControllerIndex.keySet()){
             NetworkDevice deviceToCheck = controllerByHumanIdMap.slControllerIndex.get(key);
             if (controllerByInetAddressMap.containsKey(deviceToCheck.ipAddress)){
                 System.out.println("Conflict! " + deviceToCheck.ipAddress  +  "  Controller " + key + " matches IP address with " + controllerByInetAddressMap.get(deviceToCheck.ipAddress));
+                noProblemsFound = false;
                 return false;
             }
             controllerByInetAddressMap.put(deviceToCheck.ipAddress, key);
+        }
+        if (noProblemsFound){
+            System.out.println("SUCCESS - no problems found");
         }
 
         return true; // guilty until proven innocent

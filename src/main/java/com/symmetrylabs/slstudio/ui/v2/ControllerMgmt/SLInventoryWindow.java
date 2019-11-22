@@ -97,7 +97,7 @@ public class SLInventoryWindow extends CloseableWindow {
         UI.beginChild("controller list", true, 0);
         int i = 0;
         ControllerMetadata toRemove = null;
-        for (ControllerMetadata meta : inventory.allControllers) {
+        for (ControllerMetadata meta : inventory.getSortedControllers()) {
             /* cubes with null ID/addr on A are always displayed */
             boolean match =
                 (meta.getHumanID() == null || meta.getHumanID().contains(idFilter)) &&

@@ -8,13 +8,9 @@ import com.google.gson.stream.JsonWriter;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.output.DiscoverableController;
 import com.symmetrylabs.util.NetworkUtil.MACAddress;
-import heronarts.lx.parameter.DiscreteParameter;
 import org.apache.commons.collections4.iterators.IteratorChain;
 
 import java.io.*;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.*;
 
 public class SLControllerInventory {
@@ -28,6 +24,10 @@ public class SLControllerInventory {
 
     @Expose
     public final ArrayList<ControllerMetadata> allControllers = new ArrayList<>();
+
+    public Collection<ControllerMetadata> getSortedControllers() {
+        return new TreeSet<>(allControllers);
+    }
 
     @Expose
     public TreeMap<String, ControllerMetadata> macAddrToControllerMetadataMap = new TreeMap<>();

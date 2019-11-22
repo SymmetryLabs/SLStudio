@@ -296,7 +296,7 @@ public class TreeModel extends SLModel {
      *--------------------------------------------------------------*/
     public static class Branch extends SLModel {
 
-        private static int uid = 0;
+        private static int uid = 1;
 
         public static final int NUM_TWIGS = 8; // needs to be remmoved (we need to refactor patterns for arbitrary lengths
 

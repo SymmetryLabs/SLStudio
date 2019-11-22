@@ -46,16 +46,19 @@ public class SLModel extends LXModel {
     public SLModel(String modelId, List<LXPoint> points) {
         super(modelId, points);
         setupPointsArray();
+        SLShow.mapping.pointsByModelID.put(modelId, this);
     }
 
     public SLModel(String modelId, LXFixture fixture) {
         super(modelId, fixture);
         setupPointsArray();
+        SLShow.mapping.pointsByModelID.put(modelId, this);
     }
 
     public SLModel(String modelId, LXFixture[] fixtures) {
         super(modelId, fixtures);
         setupPointsArray();
+        SLShow.mapping.pointsByModelID.put(modelId, this);
     }
 
     public SLModel(String modelId, String controllerId, LXFixture fixture) {

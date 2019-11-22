@@ -5,13 +5,14 @@ import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.output.DiscoverableController;
 import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.util.NetworkUtil.MACAddress;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collection;
 
-public class ControllerMetadata{
+public class ControllerMetadata implements Comparable<ControllerMetadata>{
     @Expose
     NetworkDevice networkDevice;
 
@@ -74,5 +75,10 @@ public class ControllerMetadata{
 
     public String getMacAddr() {
         return macAddrString;
+    }
+
+    @Override
+    public int compareTo(@NotNull ControllerMetadata o) {
+        return humanID.compareTo(o.humanID);
     }
 }

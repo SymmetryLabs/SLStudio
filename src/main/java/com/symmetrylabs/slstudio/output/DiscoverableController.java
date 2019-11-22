@@ -244,10 +244,8 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
             fillDatagramsAndAddToOutput();
         } else if (ApplicationState.outputControl().testBroadcast.isOn() || isBroadcast) {
             SLModel model = ((SLModel) lx.model);
-            System.out.println("gotBroadcast");
             if (model instanceof TreeModel){
                 points = new PointsGrouping(((TreeModel) model).getBranches().get(0).getPoints());
-                System.out.println("gotTree");
             }
             if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
                 initPacketData(numPixels, true);
@@ -269,6 +267,7 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
             }
             fillDatagramsAndAddToOutput();
         } else if (points != null) { // there is a fixture for this one
+            numPixels = 1200;
             // Fill the datagram with pixel data
             if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
                 initPacketData(numPixels, true);
