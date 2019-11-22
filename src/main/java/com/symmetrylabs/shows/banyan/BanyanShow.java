@@ -18,8 +18,7 @@ import heronarts.lx.transform.LXTransform;
 import java.net.SocketException;
 
 
-//public class BanyanShow extends TreeShow {
-public class BanyanShow extends SLShow {
+public class BanyanShow extends TreeShow {
     public static final String SHOW_NAME = "banyan";
 
     public static final int NUM_BRANCHES = 80;
@@ -97,18 +96,32 @@ public class BanyanShow extends SLShow {
         get = 1;
         starLite.addPixliteOutput(new PointsGrouping( "8", BanyanModel.star.innerPanels.get(get).getPoints()).reversePoints()
             .addPoints(BanyanModel.star.outerPanels.get(get).getPoints()));
-//        starLite.addPixliteOutput(new PointsGrouping( "1", BanyanModel.star.innerPanels.get(1).getPoints()).reversePoints()
-//            .addPoints(BanyanModel.star.outerPanels.get(1).getPoints()));
-//        starLite.addPixliteOutput(new PointsGrouping( "1", BanyanModel.star.innerPanels.get(1).getPoints()).reversePoints()
-//            .addPoints(BanyanModel.star.outerPanels.get(1).getPoints()));
-//        starLite.addPixliteOutput(new PointsGrouping( "1", BanyanModel.star.innerPanels.get(1).getPoints()).reversePoints()
-//            .addPoints(BanyanModel.star.outerPanels.get(1).getPoints()));
-//        starLite.addPixliteOutput(new PointsGrouping( "1", BanyanModel.star.innerPanels.get(1).getPoints()).reversePoints()
-//            .addPoints(BanyanModel.star.outerPanels.get(1).getPoints()));
-//        starLite.addPixliteOutput(new PointsGrouping( "1", BanyanModel.star.innerPanels.get(1).getPoints()).reversePoints()
-//            .addPoints(BanyanModel.star.outerPanels.get(1).getPoints()));
-//        starLite.addPixliteOutput(new PointsGrouping( "1", BanyanModel.star.innerPanels.get(1).getPoints()).reversePoints()
-//            .addPoints(BanyanModel.star.outerPanels.get(1).getPoints()));
+
+        get = 8%8;
+        starLite.addPixliteOutput(new PointsGrouping( "9", BanyanModel.star.innerPanels.get(get).getPoints()).reversePoints()
+            .addPoints(BanyanModel.star.outerPanels.get(get).getPoints()));
+        get = 15%8;
+        starLite.addPixliteOutput(new PointsGrouping( "10", BanyanModel.star.innerPanels.get(get).getPoints()).reversePoints()
+            .addPoints(BanyanModel.star.outerPanels.get(get).getPoints()));
+        get = 14%8;
+        starLite.addPixliteOutput(new PointsGrouping( "11", BanyanModel.star.innerPanels.get(get).getPoints()).reversePoints()
+            .addPoints(BanyanModel.star.outerPanels.get(get).getPoints()));
+        get = 13%8;
+        starLite.addPixliteOutput(new PointsGrouping( "12", BanyanModel.star.innerPanels.get(get).getPoints()).reversePoints()
+            .addPoints(BanyanModel.star.outerPanels.get(get).getPoints()));
+        get = 12%8;
+        starLite.addPixliteOutput(new PointsGrouping( "13", BanyanModel.star.innerPanels.get(get).getPoints()).reversePoints()
+            .addPoints(BanyanModel.star.outerPanels.get(get).getPoints()));
+        get = 11%8;
+        starLite.addPixliteOutput(new PointsGrouping( "14", BanyanModel.star.innerPanels.get(get).getPoints()).reversePoints()
+            .addPoints(BanyanModel.star.outerPanels.get(get).getPoints()));
+        get = 10%8;
+        starLite.addPixliteOutput(new PointsGrouping( "15", BanyanModel.star.innerPanels.get(get).getPoints()).reversePoints()
+            .addPoints(BanyanModel.star.outerPanels.get(get).getPoints()));
+        get = 9%8;
+        starLite.addPixliteOutput(new PointsGrouping( "16", BanyanModel.star.innerPanels.get(get).getPoints()).reversePoints()
+            .addPoints(BanyanModel.star.outerPanels.get(get).getPoints()));
+
 
         lx.addOutput(starLite);
 
