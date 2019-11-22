@@ -81,11 +81,15 @@ public abstract class SLShow implements Show {
         final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
 
-        /*
-        DiscoverableController local_debug = new CubesController(lx, "localhost", "localdebug");
-        controllers.add(local_debug);
-        lx.addOutput(local_debug);
-        */
+        try {
+            DiscoverableController broadCastDevice = new AssignableTenereController(lx, new NetworkDevice("10.255.255.255"));
+            broadCastDevice.isBroadcastDevice.setValue(true);
+            broadCastDevice.humanID = "broadcast";
+            controllers.add(broadCastDevice);
+            lx.addOutput(broadCastDevice);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
 
         networkMonitor.opcDeviceList.addListener(new SetListener<NetworkDevice>() {
             public void onItemAdded(NetworkDevice device) {
@@ -135,7 +139,7 @@ public abstract class SLShow implements Show {
     }
 
     public Collection<DiscoverableController> getSortedControllers() {
-        return new TreeSet<DiscoverableController>(controllers);
+        return new TreeSet<>(controllers);
     }
 
     public void addControllerSetListener(SetListener<DiscoverableController> listener) {

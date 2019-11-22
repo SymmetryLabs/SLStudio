@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.network;
 
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -10,11 +11,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.google.gson.annotations.Expose;
+import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.util.listenable.ListenableInt;
 
 public class NetworkDevice {
+    // for matcher mishaps
+    static int uid = 0;
+
     @Expose
-    public final InetAddress ipAddress;
+    public InetAddress ipAddress;
     @Expose
     public final String productId;
     @Expose
@@ -38,6 +43,17 @@ public class NetworkDevice {
         this.versionId = versionId == null ? "" : versionId;
         this.deviceId = deviceId == null ? "" : deviceId;
         this.featureIds.addAll(Arrays.asList(featureIds));
+    }
+
+    public NetworkDevice(String s) {
+        try {
+            this.ipAddress = InetAddress.getByName(s);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        this.productId = "";
+        this.versionId = "";
+        this.deviceId = "broadcast";
     }
 
     public boolean equals(Object object) {
@@ -109,6 +125,17 @@ public class NetworkDevice {
             if (matcher.find()) {
                 deviceId = matcher.group(1);
             }
+            try {
+                deviceId = matcher.group(1);
+            } catch (RuntimeException e){
+                System.out.println("not sure why the above matcher is failing.");
+            }
+        }
+        if (deviceId.equals("")){
+            String tempDeviceID = "de::ad::be:ef::" + uid++%100;
+            ApplicationState.setWarning("device matcher error", "assigning temporary id: " + uid);
+            deviceId = tempDeviceID;
+            System.out.println(uid);
         }
         return new NetworkDevice(ipAddress, productId, versionId, deviceId, featureIds);
     }

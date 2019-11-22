@@ -126,9 +126,8 @@ public class AssignableTenereController extends DiscoverableController implement
         super(lx, device, controllerInventory, new PerceptualColorScale(new double[] { 2.0, 2.1, 2.8 }, 1.0) );
         this.lx = lx;
         this.ipAddress = device.ipAddress.getHostAddress();
-        this.branch = branch;
 
-        this.humanID = controllerInventory.getNameByMac(networkDevice.deviceId);
+        this.humanID = controllerInventory == null ? device.ipAddress.getHostAddress() : controllerInventory.getNameByMac(networkDevice.deviceId);
 
         addPowerParameters();
 
@@ -151,6 +150,10 @@ public class AssignableTenereController extends DiscoverableController implement
     public AssignableTenereController(LX lx, NetworkDevice device, SLControllerInventory controllerInventory, AllPortsPowerEnableMask allPortsPowerEnableMask) throws SocketException {
         this(lx, device, controllerInventory);
         this.allPortsPowerEnableMask = allPortsPowerEnableMask;
+    }
+
+    public AssignableTenereController(LX lx, NetworkDevice networkDevice) throws SocketException {
+        this(lx, networkDevice, null);
     }
 
     private void addPowerParameters() {

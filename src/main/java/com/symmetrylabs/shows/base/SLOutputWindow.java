@@ -41,6 +41,7 @@ public class SLOutputWindow extends CloseableWindow {
     @Override
     protected void drawContents() {
         pui.draw(ApplicationState.outputControl().enabled);
+        pui.draw(ApplicationState.outputControl().testUnicast);
         pui.draw(ApplicationState.outputControl().testBroadcast);
         pui.draw(ApplicationState.outputControl().controllerResetModule.enabled);
 

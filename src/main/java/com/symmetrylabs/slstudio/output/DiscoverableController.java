@@ -39,6 +39,7 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
     private final SLControllerInventory inventory;
     public Integer switchPortNumber; // the physical port index which this controller is plugged to.  May be null.
     public String newControllerID = ""; // tmp holder for new controller ID to write
+    public BooleanParameter isBroadcastDevice = new BooleanParameter("this is the special 10.255.255.255 device", false);
     protected int numPixels;
     protected boolean is16BitColorEnabled = false;
 
@@ -242,7 +243,8 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
             }
 
             fillDatagramsAndAddToOutput();
-        } else if (ApplicationState.outputControl().testBroadcast.isOn() || isBroadcast) {
+        } else if (ApplicationState.outputControl().testUnicast.isOn() || isBroadcast || ApplicationState.outputControl().testBroadcast.isOn()) {
+            // first get the fixture.
             SLModel model = ((SLModel) lx.model);
             if (model instanceof TreeModel){
                 points = new PointsGrouping(((TreeModel) model).getBranches().get(0).getPoints());
@@ -263,6 +265,19 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
                 for (int i = 0; i < numPixels; i++) {
                     LXPoint point = points.getPoint(i);
                     setPixel8(i, srcInts[point.index]);
+                }
+            }
+
+            // then add output depending on controller
+            if (ApplicationState.outputControl().testBroadcast.isOn()){
+                // ok only if we are the special broadcast device
+                if (!this.isBroadcastDevice.isOn()){
+                    return; // do nothing if we're not the device
+                }
+            }
+            else { // if we're outputing normally we don't want this.
+                if (this.isBroadcastDevice.isOn()){
+                    return;
                 }
             }
             fillDatagramsAndAddToOutput();
@@ -311,7 +326,7 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
         PointsGrouping points = null;
         if (model instanceof CubesModel){
             CubesModel cubesModel = (CubesModel) model;
-            if ((ApplicationState.outputControl().testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
+            if ((ApplicationState.outputControl().testUnicast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
                 CubesModel.Cube cube = cubesModel.getCubes().get(0);
                 if (cube instanceof CubesModel.DoubleControllerCube) {
                     points = ((CubesModel.DoubleControllerCube)cube).getPointsA();
@@ -346,7 +361,9 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
 
     @Override
     public int compareTo(@NotNull DiscoverableController other) {
-        return idInt != other.idInt ? Integer.compare(idInt, other.idInt) : humanID.compareTo(other.humanID);
+//        return idInt != other.idInt ? Integer.compare(idInt, other.idInt) : humanID.compareTo(other.humanID);
+        assert !humanID.equals(other.humanID);
+        return humanID.compareTo(other.humanID);
     }
 
     @Override
