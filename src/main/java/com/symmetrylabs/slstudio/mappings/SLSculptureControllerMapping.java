@@ -15,7 +15,6 @@ import java.util.*;
 
 public class SLSculptureControllerMapping {
     public static final String CTRL_MAP_FILENAME = "sl-controller-mapping.json";
-    public HashMap<String, SLModel> pointsByModelID = new HashMap<>(); // TODO: inject points here.
 
     public PointsGrouping getPointsMappedToControllerID(String humanID) {
 //        return new PointsGrouping(pointsByModelID.get(lookUpByPhysId(humanID).modelId).getPoints());
@@ -50,6 +49,7 @@ public class SLSculptureControllerMapping {
     protected transient final Map<String, PhysIdAssignment> assignmentsByModelId = new HashMap<>();
     protected transient SLControllerInventory inventory;
     protected final String showName;
+    public transient HashMap<String, SLModel> pointsByModelID = new HashMap<>(); // TODO: inject points here.
 
     protected SLSculptureControllerMapping() {
         this.showName = null;

@@ -65,12 +65,12 @@ public class BanyanShow extends TreeShow {
         super.setupLx(lx);
 
         // static pixlite output for the star
-        SimplePixlite starLite = new SimplePixlite(lx, "10.200.1.100");
-        for (int portNum = 0; portNum < 16; portNum++){
-            starLite.addPixliteOutput(new PointsGrouping( (portNum + 1) + "", BanyanModel.star.innerPanels.get( (portNum) % 8).getPoints()).reversePoints()
-            .addPoints(BanyanModel.star.outerPanels.get( (portNum + 7/*left rotate 1*/)% 8).getPoints()));
-        }
-        lx.addOutput(starLite);
+//        SimplePixlite starLite = new SimplePixlite(lx, "10.200.1.100");
+//        for (int portNum = 0; portNum < 16; portNum++){
+//            starLite.addPixliteOutput(new PointsGrouping( (portNum + 1) + "", BanyanModel.star.innerPanels.get( (portNum) % 8).getPoints()).reversePoints()
+//            .addPoints(BanyanModel.star.outerPanels.get( (portNum + 7/*left rotate 1*/)% 8).getPoints()));
+//        }
+//        lx.addOutput(starLite);
 
     }
 

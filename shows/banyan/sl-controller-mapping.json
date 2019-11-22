@@ -1,25 +1,308 @@
 {
-  "pointsByModelID": {},
   "assignments": [
     {
-      "modelId": "Branch0",
-      "humanID": "A049"
-    },
-    {
       "modelId": "Branch1",
-      "humanID": "B213"
+      "humanID": "B292"
     },
     {
       "modelId": "Branch2",
-      "humanID": "B214"
+      "humanID": "B236"
     },
     {
       "modelId": "Branch3",
-      "humanID": "B216"
+      "humanID": "B270"
     },
     {
       "modelId": "Branch4",
+      "humanID": "B274"
+    },
+    {
+      "modelId": "Branch5",
+      "humanID": "B273"
+    },
+    {
+      "modelId": "Branch6",
+      "humanID": "B227"
+    },
+    {
+      "modelId": "Branch7",
       "humanID": "B217"
+    },
+    {
+      "modelId": "Branch8",
+      "humanID": "B248"
+    },
+    {
+      "modelId": "Branch9",
+      "humanID": "B220"
+    },
+    {
+      "modelId": "Branch10",
+      "humanID": "B263"
+    },
+    {
+      "modelId": "Branch11",
+      "humanID": "B253"
+    },
+    {
+      "modelId": "Branch12",
+      "humanID": "B264"
+    },
+    {
+      "modelId": "Branch13",
+      "humanID": "B243"
+    },
+    {
+      "modelId": "Branch14",
+      "humanID": "B260"
+    },
+    {
+      "modelId": "Branch16",
+      "humanID": "B269"
+    },
+    {
+      "modelId": "Branch17",
+      "humanID": "B238"
+    },
+    {
+      "modelId": "Branch18",
+      "humanID": "B249"
+    },
+    {
+      "modelId": "Branch19",
+      "humanID": "B280"
+    },
+    {
+      "modelId": "Branch20",
+      "humanID": "B226"
+    },
+    {
+      "modelId": "Branch21",
+      "humanID": "B258"
+    },
+    {
+      "modelId": "Branch22",
+      "humanID": "B283"
+    },
+    {
+      "modelId": "Branch23",
+      "humanID": "B278"
+    },
+    {
+      "modelId": "Branch24",
+      "humanID": "B214"
+    },
+    {
+      "modelId": "Branch25",
+      "humanID": "B290"
+    },
+    {
+      "modelId": "Branch26",
+      "humanID": "B279"
+    },
+    {
+      "modelId": "Branch27",
+      "humanID": "B297"
+    },
+    {
+      "modelId": "Branch28",
+      "humanID": "B267"
+    },
+    {
+      "modelId": "Branch29",
+      "humanID": "B286"
+    },
+    {
+      "modelId": "Branch30",
+      "humanID": "B295"
+    },
+    {
+      "modelId": "Branch31",
+      "humanID": "B223"
+    },
+    {
+      "modelId": "Branch32",
+      "humanID": "B234"
+    },
+    {
+      "modelId": "Branch33",
+      "humanID": "B216"
+    },
+    {
+      "modelId": "Branch34",
+      "humanID": "B293"
+    },
+    {
+      "modelId": "Branch35",
+      "humanID": "B277"
+    },
+    {
+      "modelId": "Branch36",
+      "humanID": "B237"
+    },
+    {
+      "modelId": "Branch37",
+      "humanID": "B271"
+    },
+    {
+      "modelId": "Branch38",
+      "humanID": "B246"
+    },
+    {
+      "modelId": "Branch39",
+      "humanID": "B247"
+    },
+    {
+      "modelId": "Branch40",
+      "humanID": "B284"
+    },
+    {
+      "modelId": "Branch41",
+      "humanID": "B294"
+    },
+    {
+      "modelId": "Branch42",
+      "humanID": "B257"
+    },
+    {
+      "modelId": "Branch43",
+      "humanID": "B244"
+    },
+    {
+      "modelId": "Branch44",
+      "humanID": "B232"
+    },
+    {
+      "modelId": "Branch45",
+      "humanID": "B262"
+    },
+    {
+      "modelId": "Branch46",
+      "humanID": "B222"
+    },
+    {
+      "modelId": "Branch47",
+      "humanID": "B285"
+    },
+    {
+      "modelId": "Branch48",
+      "humanID": "B250"
+    },
+    {
+      "modelId": "Branch49",
+      "humanID": "B245"
+    },
+    {
+      "modelId": "Branch50",
+      "humanID": "B296"
+    },
+    {
+      "modelId": "Branch51",
+      "humanID": "B261"
+    },
+    {
+      "modelId": "Branch54",
+      "humanID": "B252"
+    },
+    {
+      "modelId": "Branch55",
+      "humanID": "B259"
+    },
+    {
+      "modelId": "Branch56",
+      "humanID": "B282"
+    },
+    {
+      "modelId": "Branch57",
+      "humanID": "B235"
+    },
+    {
+      "modelId": "Branch58",
+      "humanID": "B240"
+    },
+    {
+      "modelId": "Branch59",
+      "humanID": "B219"
+    },
+    {
+      "modelId": "Branch60",
+      "humanID": "B291"
+    },
+    {
+      "modelId": "Branch61",
+      "humanID": "B233"
+    },
+    {
+      "modelId": "Branch62",
+      "humanID": "B265"
+    },
+    {
+      "modelId": "Branch63",
+      "humanID": "B225"
+    },
+    {
+      "modelId": "Branch64",
+      "humanID": "B229"
+    },
+    {
+      "modelId": "Branch65",
+      "humanID": "B221"
+    },
+    {
+      "modelId": "Branch66",
+      "humanID": "B230"
+    },
+    {
+      "modelId": "Branch67",
+      "humanID": "B231"
+    },
+    {
+      "modelId": "Branch68",
+      "humanID": "B241"
+    },
+    {
+      "modelId": "Branch69",
+      "humanID": "B276"
+    },
+    {
+      "modelId": "Branch70",
+      "humanID": "B251"
+    },
+    {
+      "modelId": "Branch71",
+      "humanID": "B254"
+    },
+    {
+      "modelId": "Branch72",
+      "humanID": "B239"
+    },
+    {
+      "modelId": "Branch73",
+      "humanID": "B242"
+    },
+    {
+      "modelId": "Branch75",
+      "humanID": "B289"
+    },
+    {
+      "modelId": "Branch76",
+      "humanID": "B287"
+    },
+    {
+      "modelId": "Branch77",
+      "humanID": "B218"
+    },
+    {
+      "modelId": "Branch78",
+      "humanID": "B213"
+    },
+    {
+      "modelId": "Branch79",
+      "humanID": "B255"
+    },
+    {
+      "modelId": "Branch80",
+      "humanID": "B228"
     }
   ],
   "showName": "banyan"

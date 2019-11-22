@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern.tree.mapping;
 
+import com.symmetrylabs.shows.tree.TreeModel;
 import com.symmetrylabs.shows.treeV2.TreeModel_v2;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
@@ -19,7 +20,7 @@ import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 public class BranchSelectah extends SLPattern<SLModel> {
 
-    private final TreeModel_v2 model;
+    private final TreeModel model;
     private final DiscreteParameter selectedBrancy;
 
     private final CompoundParameter bright = new CompoundParameter("bright", 0, 100);
@@ -29,7 +30,7 @@ public class BranchSelectah extends SLPattern<SLModel> {
 
     public BranchSelectah(LX lx) {
         super(lx);
-        this.model = (TreeModel_v2) lx.model;
+        this.model = (TreeModel) lx.model;
         this.selectedBrancy = new DiscreteParameter("branch", 0, model.branches.size());
         addParameter(selectedBrancy);
         addParameter(pulseFrequency);
@@ -47,7 +48,7 @@ public class BranchSelectah extends SLPattern<SLModel> {
         int[] colors = (int[]) getArray(SRGB8);
         setColors(0);
 
-        TreeModel_v2.Branch branch = model.branches2.get(selectedBrancy.getValuei());
+        TreeModel.Branch branch = model.branches.get(selectedBrancy.getValuei());
 
         for (LXPoint p : branch.points){
             colors[p.index] = LXColor.hsb(0, 0, x.getValuef() * bright.getNormalizedf());

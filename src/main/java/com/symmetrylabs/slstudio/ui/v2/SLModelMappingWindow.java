@@ -97,7 +97,8 @@ public class SLModelMappingWindow extends CloseableWindow {
                 UI.setNextTreeNodeOpen(false);
             }
 
-            UI.CollapseResult cr = UI.collapsibleSection(c.modelId, false);
+            String addControllerID = pia ==  null ? "" : " - " + pia.humanID;
+            UI.CollapseResult cr = UI.collapsibleSection(c.modelId + addControllerID, false);
             if (UI.beginDragDropTarget()) {
                 String physId = UI.acceptDragDropPayload("SL.ControllerHumanID", String.class);
                 if (physId != null) {
