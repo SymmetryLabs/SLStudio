@@ -150,6 +150,10 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
         if (isBroadcast != ApplicationState.outputControl().broadcastPacket.isOn())
             return;
 
+        // We should never use the broadcast device concurrently with unicast
+        if(!ApplicationState.outputControl().testBroadcast.isOn() && this.isBroadcastDevice.isOn()) { // if we're outputing normally we don't want this.
+            return;
+        }
         // Create data socket connection if needed
 //        if (dsocket == null) {
 //            try {
