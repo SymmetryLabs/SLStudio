@@ -11,7 +11,7 @@ public class TwigConfig {
 
     public static final float DEFAULT_Y = 0*FEET;
     public static final float MIN_Y =  0*FEET;
-    public static final float MAX_Y =  8*FEET;
+    public static final float MAX_Y =  6*FEET;
     private static boolean Y_ENABLED = true;
 
     public static final float DEFAULT_Z = 0*FEET;

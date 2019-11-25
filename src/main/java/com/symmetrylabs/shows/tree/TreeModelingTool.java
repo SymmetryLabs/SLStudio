@@ -277,7 +277,9 @@ public class TreeModelingTool extends LXComponent {
                 config.tilt = tilt.getValuef();
                 config.locked = locked.isOn();
                 config.flipped = flipped.getValueb();
-                tree.reconfigure();
+                //tree.reconfigure();
+                getSelectedBranch().reconfigure(config);
+                getSelectedBranch().update(true, true);
             }
             if (mode.getEnum() != Mode.BRANCH) {
                 mode.setValue(Mode.BRANCH);
@@ -362,7 +364,9 @@ public class TreeModelingTool extends LXComponent {
                 config.tilt = tilt.getValuef();
                 config.index = index.getValuei()+1;
                 config.disabledPixels = getDisabledPixels();
-                tree.reconfigure();
+                //tree.reconfigure();
+                getSelectedBranch().reconfigure();
+                tree.update(true, true);
                 branchManipulator.type.setValue(0); // Custom
             }
             if (mode.getEnum() != Mode.TWIG) {

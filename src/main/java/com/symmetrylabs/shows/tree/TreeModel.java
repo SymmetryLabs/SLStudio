@@ -130,7 +130,7 @@ public class TreeModel extends SLModel {
         for (Limb limb : limbs) {
             limb.reconfigure(t, config.getLimbs().get(i++));
         }
-        update(true, true);
+        update(false, false);
         t.pop();
     }
 
@@ -335,6 +335,14 @@ public class TreeModel extends SLModel {
             this.leaves = Collections.unmodifiableList(fixture.leaves);
         }
 
+        public void reconfigure() {
+            reconfigure(new LXTransform(), this.config);
+        }
+
+        public void reconfigure(BranchConfig config) {
+            reconfigure(new LXTransform(), config);
+        }
+
         public void reconfigure(LXTransform t, BranchConfig config) {
             this.config = config;
 
@@ -532,6 +540,10 @@ public class TreeModel extends SLModel {
 
         public TwigConfig getConfig() {
             return config;
+        }
+
+        public void setConfig(TwigConfig config) {
+            this.config = config;
         }
 
         public List<Leaf> getLeaves() {

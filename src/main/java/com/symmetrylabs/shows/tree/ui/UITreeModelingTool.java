@@ -341,9 +341,9 @@ public class UITreeModelingTool extends UICollapsibleSection {
                 .setPadding(0, 5)
                 .addToContainer(this);
 
-            new UIToggleSet(0, 23, getContentWidth(), 30)
-                .setParameter(modelingTool.selectedTwig)
-                .addToContainer(this);
+            UIToggleSet selectedTwig = new UIToggleSet(0, 23, getContentWidth(), 30);
+            selectedTwig.setParameter(modelingTool.selectedTwig).addToContainer(this);
+            selectedTwig.setOptions(new String[] {"1", "2", "3", "4", "5", "6", "7", "8"});
 
             new UILabel(0, 60, 50, 15).setLabel("Index")
                 .setPadding(0, 5)
@@ -509,7 +509,7 @@ public class UITreeModelingTool extends UICollapsibleSection {
             int index = modelingTool.getSelectedLimb().getBranches().indexOf(branch);
             String ipAddress = branch.getConfig().ipAddress;
             int output = branch.getConfig().channel;
-            return index + "/  (ip: " + ipAddress + ")  [ch: " + output + "]" + isLocked;
+            return (index+1) + "/  (ip: " + ipAddress + ")  [ch: " + output + "]" + isLocked;
         }
 
         public boolean isSelected() {

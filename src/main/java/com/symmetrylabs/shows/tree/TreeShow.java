@@ -47,7 +47,7 @@ public abstract class TreeShow extends SLShow implements Show {
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
-        ui.preview.addComponent(new UITreeTrunk(SLStudio.applet));
+        //ui.preview.addComponent(new UITreeTrunk(SLStudio.applet));
 
         ui.preview.addComponent(UITreeModelAxes.getInstance(lx));
 

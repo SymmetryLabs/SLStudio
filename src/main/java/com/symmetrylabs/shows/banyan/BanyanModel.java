@@ -19,7 +19,7 @@ public class BanyanModel extends TreeModel {
 	public static Star star;
 
 	public BanyanModel(String showName, TreeConfig treeConfig, Star.Config starConfig) {
-		super(showName, treeConfig, new Star(starConfig));
+		super(showName, treeConfig);
 	}
 
 	public static class Star extends SLModel {
