@@ -38,7 +38,7 @@ public class BanyanShow extends TreeShow {
 
     public SLModel buildModel() {
         for (int i = 0; i < NUM_BRANCHES; i++) {
-            LIMB_TYPE[i] = new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH, true);
+            LIMB_TYPE[i] = new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH);
         }
 
 //        LimbConfig.lengthEnabled = false;
