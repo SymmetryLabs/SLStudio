@@ -12,11 +12,11 @@
           "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
-          "x": 35.999996,
-          "y": 90.0,
-          "z": 169.2,
-          "azimuth": 0.0,
-          "elevation": 0.0,
+          "x": -57.600002,
+          "y": 291.0,
+          "z": -28.800003,
+          "azimuth": 141.84,
+          "elevation": 124.56,
           "tilt": 0.0,
           "twigs": [
             {
@@ -122,11 +122,11 @@
           "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
-          "x": 0.0,
-          "y": 93.0,
+          "x": -3.6,
+          "y": 279.0,
           "z": 53.999996,
-          "azimuth": 0.0,
-          "elevation": 0.0,
+          "azimuth": -2.5199997,
+          "elevation": 61.560005,
           "tilt": 0.0,
           "twigs": [
             {
@@ -232,11 +232,121 @@
           "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
-          "x": 104.399994,
-          "y": 69.0,
+          "x": 39.239998,
+          "y": 291.0,
           "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
+          "azimuth": -86.759995,
+          "elevation": 76.32,
+          "tilt": -7.2,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": 31.680002,
+          "y": 221.09999,
+          "z": -140.04001,
+          "azimuth": -176.4,
+          "elevation": 61.199997,
           "tilt": 0.0,
           "twigs": [
             {
@@ -342,11 +452,121 @@
           "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
-          "x": 158.4,
-          "y": 0.0,
+          "x": -89.28,
+          "y": 234.0,
+          "z": -96.48,
+          "azimuth": 38.52,
+          "elevation": -115.200005,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": -58.68,
+          "y": 268.2,
           "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
+          "azimuth": 64.799995,
+          "elevation": 79.2,
           "tilt": 0.0,
           "twigs": [
             {
@@ -452,11 +672,231 @@
           "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
-          "x": -151.2,
-          "y": 147.0,
+          "x": -29.16001,
+          "y": 300.0,
+          "z": 38.519997,
+          "azimuth": 57.6,
+          "elevation": 75.6,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": 59.4,
+          "y": 260.4,
           "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
+          "azimuth": -79.2,
+          "elevation": 82.799995,
+          "tilt": -18.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": 78.479996,
+          "y": 208.5,
+          "z": 2.5199957,
+          "azimuth": -99.0,
+          "elevation": 75.6,
           "tilt": 0.0,
           "twigs": [
             {
@@ -562,452 +1002,12 @@
           "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
-          "x": -90.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": -169.2,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 180.0,
-          "y": 120.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 93.6,
-          "y": 90.0,
-          "z": -86.4,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 79.200005,
-          "y": 108.0,
-          "z": -151.2,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
+          "x": 2.1600068,
+          "y": 255.3,
+          "z": -75.24,
+          "azimuth": -25.199999,
+          "elevation": -74.16,
+          "tilt": 7.2,
           "twigs": [
             {
               "x": -22.367998,
@@ -1113,10 +1113,10 @@
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 0.0,
-          "y": 63.0,
-          "z": -147.59999,
+          "y": 300.0,
+          "z": -64.799995,
           "azimuth": 0.0,
-          "elevation": 0.0,
+          "elevation": -99.72,
           "tilt": 0.0,
           "twigs": [
             {
@@ -1222,12 +1222,12 @@
           "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
-          "x": 126.0,
-          "y": 87.0,
+          "x": 39.600002,
+          "y": 256.2,
           "z": 46.8,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
+          "azimuth": -46.8,
+          "elevation": 71.28,
+          "tilt": -19.079998,
           "twigs": [
             {
               "x": -22.367998,
@@ -1332,11 +1332,11 @@
           "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
-          "x": 93.6,
-          "y": 144.0,
-          "z": 180.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
+          "x": 46.8,
+          "y": 179.7,
+          "z": 21.600004,
+          "azimuth": -71.28,
+          "elevation": 95.759995,
           "tilt": 0.0,
           "twigs": [
             {
@@ -1443,10 +1443,10 @@
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 0.0,
-          "y": 36.0,
+          "y": 246.0,
           "z": 82.799995,
-          "azimuth": 0.0,
-          "elevation": 0.0,
+          "azimuth": 14.4,
+          "elevation": 97.2,
           "tilt": 0.0,
           "twigs": [
             {
@@ -1552,11 +1552,11 @@
           "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
-          "x": -180.0,
-          "y": 108.0,
-          "z": 180.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
+          "x": -75.600006,
+          "y": 236.4,
+          "z": 50.4,
+          "azimuth": 43.2,
+          "elevation": 72.0,
           "tilt": 0.0,
           "twigs": [
             {
@@ -1662,11 +1662,11 @@
           "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
-          "x": 90.0,
-          "y": 0.0,
-          "z": -129.6,
-          "azimuth": 0.0,
-          "elevation": 0.0,
+          "x": 70.2,
+          "y": 234.6,
+          "z": -41.40001,
+          "azimuth": -50.399998,
+          "elevation": -100.799995,
           "tilt": 0.0,
           "twigs": [
             {
@@ -1772,12 +1772,12 @@
           "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
-          "x": -122.4,
-          "y": 0.0,
-          "z": -68.4,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
+          "x": -85.32,
+          "y": 163.5,
+          "z": -14.760006,
+          "azimuth": 92.16,
+          "elevation": 93.6,
+          "tilt": 25.199999,
           "twigs": [
             {
               "x": -22.367998,
@@ -1882,11 +1882,11 @@
           "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": -147.59999,
-          "azimuth": 0.0,
-          "elevation": 0.0,
+          "x": 4.0233135E-6,
+          "y": 144.0,
+          "z": -82.799995,
+          "azimuth": 10.08,
+          "elevation": -92.159996,
           "tilt": 0.0,
           "twigs": [
             {
@@ -1993,450 +1993,10 @@
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 64.799995,
-          "y": 0.0,
-          "z": -79.2,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 72.0,
-          "y": 0.0,
-          "z": -36.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": -53.999996,
-          "y": 111.0,
-          "z": 136.8,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": -115.200005,
-          "y": 69.0,
-          "z": 147.59999,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": -176.4,
-          "y": 99.0,
-          "z": 72.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
+          "y": 153.0,
+          "z": -39.6,
+          "azimuth": -79.2,
+          "elevation": -68.399994,
           "tilt": 0.0,
           "twigs": [
             {
@@ -2543,10 +2103,3090 @@
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 54.0,
-          "y": 57.0,
-          "z": 97.200005,
+          "y": 153.0,
+          "z": 32.399998,
+          "azimuth": -129.59999,
+          "elevation": -71.99999,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": -43.199997,
+          "y": 258.0,
+          "z": 54.000004,
+          "azimuth": 0.0,
+          "elevation": 82.8,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": -115.200005,
+          "y": 245.4,
+          "z": -18.000006,
+          "azimuth": 50.399998,
+          "elevation": -79.92,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": -57.599995,
+          "y": 189.3,
+          "z": 82.8,
+          "azimuth": 50.399998,
+          "elevation": 118.799995,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": -21.599998,
+          "y": 129.0,
+          "z": 72.00001,
+          "azimuth": 14.399999,
+          "elevation": 82.799995,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": -21.6,
+          "y": 213.0,
+          "z": 75.6,
+          "azimuth": 0.0,
+          "elevation": 104.399994,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": 0.0,
+          "y": 183.0,
+          "z": 86.4,
+          "azimuth": 0.0,
+          "elevation": 100.799995,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": 0.0,
+          "y": 231.0,
+          "z": 68.4,
+          "azimuth": 0.0,
+          "elevation": 108.0,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": 0.0,
+          "y": 234.0,
+          "z": -68.4,
+          "azimuth": 0.0,
+          "elevation": -104.4,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": 0.0,
+          "y": 192.0,
+          "z": -54.0,
+          "azimuth": 0.0,
+          "elevation": -111.6,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": -61.199997,
+          "y": 192.0,
+          "z": 10.8,
+          "azimuth": 57.6,
+          "elevation": -111.6,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
           "azimuth": 0.0,
           "elevation": 0.0,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": 93.6,
+          "y": 108.0,
+          "z": 0.0,
+          "azimuth": -90.0,
+          "elevation": -72.0,
+          "tilt": 21.6,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": 10.8,
+          "y": 114.0,
+          "z": 68.4,
+          "azimuth": 0.0,
+          "elevation": 104.399994,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": 54.0,
+          "y": 123.0,
+          "z": -82.799995,
+          "azimuth": -54.0,
+          "elevation": -86.4,
+          "tilt": -10.8,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": -57.6,
+          "y": 207.0,
+          "z": -39.6,
+          "azimuth": 61.199997,
+          "elevation": -86.4,
+          "tilt": 3.6,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": 14.4,
+          "y": 99.0,
+          "z": -57.6,
+          "azimuth": 0.0,
+          "elevation": -97.2,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": -82.799995,
+          "y": 114.0,
+          "z": -3.6,
+          "azimuth": 97.200005,
+          "elevation": 79.2,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": -61.199997,
+          "y": 129.0,
+          "z": -54.000004,
+          "azimuth": 28.8,
+          "elevation": -75.6,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": 61.199997,
+          "y": 99.0,
+          "z": 75.600006,
+          "azimuth": -36.0,
+          "elevation": 100.799995,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": -75.6,
+          "y": 96.0,
+          "z": -90.0,
+          "azimuth": 32.399998,
+          "elevation": -122.399994,
+          "tilt": 7.2,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": -54.0,
+          "y": 150.0,
+          "z": 46.8,
+          "azimuth": 64.799995,
+          "elevation": 79.2,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": -82.799995,
+          "y": 114.0,
+          "z": 50.4,
+          "azimuth": 32.399998,
+          "elevation": 93.6,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": 57.6,
+          "y": 75.0,
+          "z": -82.799995,
+          "azimuth": -32.399998,
+          "elevation": -90.0,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": -25.199999,
+          "y": 90.0,
+          "z": 79.2,
+          "azimuth": 0.0,
+          "elevation": 118.799995,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": 50.399998,
+          "y": 63.0,
+          "z": 57.6,
+          "azimuth": -43.2,
+          "elevation": 97.2,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": -72.0,
+          "y": 93.0,
+          "z": 18.0,
+          "azimuth": 64.799995,
+          "elevation": 97.2,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": -75.6,
+          "y": 72.0,
+          "z": -43.2,
+          "azimuth": 28.8,
+          "elevation": -97.2,
+          "tilt": 0.0,
+          "twigs": [
+            {
+              "x": -22.367998,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": 43.2,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 1,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -19.487999,
+              "y": 12.575999,
+              "z": 0.0,
+              "azimuth": 30.599998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 2,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -12.479999,
+              "y": 26.208,
+              "z": 0.0,
+              "azimuth": 16.919998,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 3,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": -1.344,
+              "y": 31.008,
+              "z": 0.0,
+              "azimuth": 6.1199994,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 4,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 8.063999,
+              "y": 31.104,
+              "z": 0.0,
+              "azimuth": -10.799999,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 5,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 13.727999,
+              "y": 20.159998,
+              "z": 0.0,
+              "azimuth": -46.799995,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 6,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 18.24,
+              "y": 8.9279995,
+              "z": 0.0,
+              "azimuth": -45.359997,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 7,
+              "disabledPixels": [
+                -1
+              ]
+            },
+            {
+              "x": 21.792,
+              "y": 0.0,
+              "z": 0.0,
+              "azimuth": -47.159996,
+              "elevation": 0.0,
+              "tilt": 0.0,
+              "index": 8,
+              "disabledPixels": [
+                -1
+              ]
+            }
+          ],
+          "flipped": true
+        },
+        {
+          "locked": true,
+          "ipAddress": "0.0.0.0",
+          "channel": 1,
+          "x": 68.4,
+          "y": 63.0,
+          "z": 0.0,
+          "azimuth": -104.399994,
+          "elevation": -75.6,
           "tilt": 0.0,
           "twigs": [
             {
@@ -6063,2647 +8703,7 @@
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "azimuth": 0.0,
-          "elevation": 0.0,
-          "tilt": 0.0,
-          "twigs": [
-            {
-              "x": -22.367998,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": 43.2,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 1,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -19.487999,
-              "y": 12.575999,
-              "z": 0.0,
-              "azimuth": 30.599998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 2,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -12.479999,
-              "y": 26.208,
-              "z": 0.0,
-              "azimuth": 16.919998,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 3,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": -1.344,
-              "y": 31.008,
-              "z": 0.0,
-              "azimuth": 6.1199994,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 4,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 8.063999,
-              "y": 31.104,
-              "z": 0.0,
-              "azimuth": -10.799999,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 5,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 13.727999,
-              "y": 20.159998,
-              "z": 0.0,
-              "azimuth": -46.799995,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 6,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 18.24,
-              "y": 8.9279995,
-              "z": 0.0,
-              "azimuth": -45.359997,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 7,
-              "disabledPixels": [
-                -1
-              ]
-            },
-            {
-              "x": 21.792,
-              "y": 0.0,
-              "z": 0.0,
-              "azimuth": -47.159996,
-              "elevation": 0.0,
-              "tilt": 0.0,
-              "index": 8,
-              "disabledPixels": [
-                -1
-              ]
-            }
-          ],
-          "flipped": true
-        },
-        {
-          "locked": true,
-          "ipAddress": "0.0.0.0",
-          "channel": 1,
-          "x": 0.0,
-          "y": 0.0,
+          "y": 27.0,
           "z": 0.0,
           "azimuth": 0.0,
           "elevation": 0.0,
