@@ -250,6 +250,7 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
             final float fres = res;
             lx.engine.addTask(() -> p.setNormalized(fres));
         }
+        MainMenu.getInstance().setOscRoute(p);
         return this;
     }
 
@@ -314,6 +315,7 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
                 lx.engine.addTask(() -> p.setValue(res));
             }
         }
+        MainMenu.getInstance().setOscRoute(p);
         return this;
     }
 
@@ -420,6 +422,7 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
                 lx.engine.addTask(() -> p.setValue(res));
             }
         }
+        MainMenu.getInstance().setOscRoute(p);
         return this;
     }
 
@@ -436,6 +439,7 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
                     p.brightness.setValue(res[2]);
                 });
         }
+        MainMenu.getInstance().setOscRoute(p);
         return this;
     }
 
@@ -445,6 +449,7 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
         if (!res.equals(start) && !(start == null && res.equals(""))) {
             lx.engine.addTask(() -> p.setValue(res));
         }
+        MainMenu.getInstance().setOscRoute(p);
         return this;
     }
 
@@ -460,6 +465,7 @@ public class ParameterUI implements LXMidiEngine.MappingListener {
         } else if (param instanceof ColorParameter) {
             draw((ColorParameter) param);
         }
+        MainMenu.getInstance().setOscRoute(param);
         return this;
     }
 
