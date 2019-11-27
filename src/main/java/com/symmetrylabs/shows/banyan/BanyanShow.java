@@ -129,7 +129,7 @@ public class BanyanShow extends TreeShow {
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
-        ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
+        //ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
 
 //        new UITenereControllers(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
     }
