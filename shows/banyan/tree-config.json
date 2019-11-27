@@ -229,7 +229,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 6.0,
@@ -559,7 +559,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": -3.0,
@@ -999,7 +999,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 62.0,
@@ -1109,7 +1109,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 28.0,
@@ -1329,7 +1329,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 105.0,
@@ -1659,7 +1659,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 79.0,
@@ -3199,7 +3199,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 74.0,
@@ -3309,7 +3309,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 90.0,
@@ -3419,7 +3419,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 110.0,
@@ -3639,7 +3639,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 59.0,
@@ -3749,7 +3749,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 39.0,
@@ -3859,7 +3859,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 60.0,
@@ -4079,7 +4079,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": -15.0,
@@ -5179,7 +5179,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 72.0,
@@ -5289,7 +5289,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 64.0,
@@ -5399,7 +5399,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 18.0,
@@ -5509,7 +5509,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 27.0,
@@ -5619,7 +5619,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": -9.0,
@@ -5839,7 +5839,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 1.0,
@@ -6059,7 +6059,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": -1.0,
@@ -6169,7 +6169,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 50.0,
@@ -6389,7 +6389,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 78.0,
@@ -6499,7 +6499,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 27.0,
@@ -6609,7 +6609,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 74.0,
@@ -6719,7 +6719,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 86.0,
@@ -6829,7 +6829,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 0.0,
@@ -6939,7 +6939,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 80.0,
@@ -7049,7 +7049,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 84.0,
@@ -7159,7 +7159,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 61.0,
@@ -7269,7 +7269,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 67.0,
@@ -8149,7 +8149,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 38.0,
@@ -8259,7 +8259,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 45.0,
@@ -8369,7 +8369,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 39.0,
@@ -8479,7 +8479,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 25.0,
