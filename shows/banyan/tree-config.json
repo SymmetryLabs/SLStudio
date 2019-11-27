@@ -119,7 +119,7 @@
           "flipped": false
         },
         {
-          "locked": false,
+          "locked": true,
           "ipAddress": "0.0.0.0",
           "channel": 1,
           "x": 0.0,
@@ -130,7 +130,7 @@
           "tilt": 0.0,
           "twigs": [
             {
-              "x": -22.367998,
+              "x": 1.6320014,
               "y": 0.0,
               "z": 0.0,
               "azimuth": 43.2,
