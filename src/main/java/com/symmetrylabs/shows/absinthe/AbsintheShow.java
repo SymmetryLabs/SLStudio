@@ -33,6 +33,8 @@ import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
 import processing.core.PGraphics;
 
+import com.symmetrylabs.shows.banyan.BanyanModel;
+
 
 public class AbsintheShow extends TreeShow {
     public static final String SHOW_NAME = "absinthe";
@@ -131,7 +133,9 @@ public class AbsintheShow extends TreeShow {
                 new LimbConfig(false, 14, 345, -90,  90 - 15,  0, LIMB_TYPE_SINGLE_BRANCH),
             });
 
-        TreeModel tree = new TreeModel(SHOW_NAME, config);
+        BanyanModel.Star.Config starConfig = new BanyanModel.Star.Config(0, 34*12, 0, 220);
+
+        TreeModel tree = new BanyanModel(SHOW_NAME, config, starConfig);
         tree.rotateY(35);
 
         return tree;
