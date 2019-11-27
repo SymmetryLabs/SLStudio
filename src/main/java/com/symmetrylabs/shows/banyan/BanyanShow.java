@@ -22,6 +22,7 @@ public class BanyanShow extends TreeShow {
     public static final String SHOW_NAME = "banyan";
 
     public static final int NUM_BRANCHES = 80;
+    final float FOOT = 12;
 
     final TwigConfig[] BRANCH = new TwigConfig[]{
         new TwigConfig(-22.367998f, 0.0f, 0.0f, 43.2f, 0.0f, 0.0f, 1),
@@ -34,12 +35,111 @@ public class BanyanShow extends TreeShow {
         new TwigConfig(21.792f, 0.0f, 0.0f, -47.159996f, 0.0f, 0.0f, 8)
     };
 
-    BranchConfig[] LIMB_TYPE = new BranchConfig[NUM_BRANCHES];
+    BranchConfig[] LIMB_TYPE = new BranchConfig[] {
+
+        // -------------------------------------------------------
+        /* 1  */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 2  */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 3  */ new BranchConfig(false, -86+92, 20*FOOT+1, 90-75, 0, 0, 0, BRANCH),
+        /* 4  */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 5  */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 6  */ new BranchConfig(false, -95+92, 20*FOOT, -10-75, 0, 0, 0, BRANCH),
+        /* 7  */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 8  */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 9  */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 10 */ new BranchConfig(false, -30+92, 18*FOOT+10, 28-75, 0, 0, 0, BRANCH),
+
+        // -------------------------------------------------------
+        /* 11 */ new BranchConfig(false, -64+92, 16*FOOT+11, -91-75, 0, 0, 0, BRANCH),
+        /* 12 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 13 */ new BranchConfig(false, 13+92, 16*FOOT, 26-75, 0, 0, 0, BRANCH),
+        /* 14 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 15 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 16 */ new BranchConfig(false, -13+92, 19*FOOT+2, 48-75, 0, 0, 0, BRANCH),
+        /* 17 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 18 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 19 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 20 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+
+        // -------------------------------------------------------
+        /* 21 */ // new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH), EMPTY!
+        /* 22 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 23 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 24 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 25 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 26 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 27 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 28 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 29 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 30 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+
+        // -------------------------------------------------------
+        /* 31 */ new BranchConfig(false, -18+92, 16*FOOT+8, 150-75, 0, 0, 0, BRANCH),
+        /* 32 */ new BranchConfig(false,  -2+92, 17*FOOT+3, 111-75, 0, 0, 0, BRANCH),
+        /* 33 */ new BranchConfig(false, 18+92, 18*FOOT, 63-75, 0, 0, 0, BRANCH),
+        /* 34 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 35 */ new BranchConfig(false, -33+92, 19*FOOT, 140-75, 0, 0, 0, BRANCH),
+        /* 36 */ new BranchConfig(false, -53+92, 20*FOOT, 126-75, 0, 0, 0, BRANCH),
+        /* 37 */ new BranchConfig(false, -32+92, 14*FOOT+6, 82-75, 0, 0, 0, BRANCH),
+        /* 38 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 39 */ new BranchConfig(false, -107+92, 16*FOOT+8, 116-75, 0, 0, 0, BRANCH),
+        /* 40 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+
+        // -------------------------------------------------------
+        /* 41 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 42 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 43 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 44 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 45 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 46 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 47 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 48 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 49 */ new BranchConfig(false, -20+92, 20*FOOT+9, 93-75, 0, 0, 0, BRANCH),
+        /* 50 */ new BranchConfig(false, -28+92, 21*FOOT+7, 79-75, 0, 0, 0, BRANCH),
+
+        // -------------------------------------------------------
+        /* 51 */ new BranchConfig(false, -74+92, 18*FOOT+7, 78-75, 0, 0, 0, BRANCH),
+        /* 52 */ new BranchConfig(false, -65+92, 17*FOOT+6, 69-75, 0, 0, 0, BRANCH),
+        /* 53 */ new BranchConfig(false, -101+92, 17*FOOT+3, 44-75, 0, 0, 0, BRANCH),
+        /* 54 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 55 */ new BranchConfig(false, -91+92, 19*FOOT+4, 35-75, 0, 0, 0, BRANCH),
+        /* 56 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 57 */ new BranchConfig(false, -93+92, 11*FOOT+11, -14-75, 0, 0, 0, BRANCH),
+        /* 58 */ new BranchConfig(false, -42+92, 14*FOOT+5,   10-75, 0, 0, 0, BRANCH),
+        /* 59 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 60 */ new BranchConfig(false, -14+92, 11*FOOT+10,  42-75, 0, 0, 0, BRANCH),
+
+        // -------------------------------------------------------
+        /* 61 */ new BranchConfig(false, -65+92, 13*FOOT+4, -26-75, 0, 0, 0, BRANCH),
+        /* 62 */ new BranchConfig(false, -18+92, 13*FOOT+4,   0, 0, 0, 0, BRANCH),
+        /* 63 */ new BranchConfig(false,  -6+92, 15*FOOT+2, -32-75, 0, 0, 0, BRANCH),
+        /* 64 */ new BranchConfig(false, 0, 14*FOOT+10, 45-75, 0, 0, 0, BRANCH),
+        /* 65 */ new BranchConfig(false, -12+92, 17*FOOT+2, 39-75, 0, 0, 0, BRANCH),
+        /* 66 */ new BranchConfig(false,  -8+92, 17*FOOT+6, -15-75, 0, 0, 0, BRANCH),
+        /* 67 */ new BranchConfig(false, -31+92, 15*FOOT+8, -60-75, 0, 0, 0, BRANCH),
+        /* 68 */ new BranchConfig(false, -25+92, 17*FOOT+9, -60-75, 0, 0, 0, BRANCH),
+        /* 69 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 70 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+
+        // -------------------------------------------------------
+        /* 71 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 72 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 73 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 74 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 75 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 76 */ new BranchConfig(false, -54+92, 19*FOOT+8, 29-75, 0, 0, 0, BRANCH),
+        /* 77 */ new BranchConfig(false, -47+92, 18*FOOT+4, 20-75, 0, 0, 0, BRANCH),
+        /* 78 */ new BranchConfig(false, -53+92, 19*FOOT+4, -59-75, 0, 0, 0, BRANCH),
+        /* 79 */ new BranchConfig(false, -67+92, 20*FOOT, -24-75, 0, 0, 0, BRANCH),
+        /* 80 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+    };
 
     public SLModel buildModel() {
-        for (int i = 0; i < NUM_BRANCHES; i++) {
-            LIMB_TYPE[i] = new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH, true);
-        }
+        // for (int i = 0; i < NUM_BRANCHES; i++) {
+        //     LIMB_TYPE[i] = new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH, true);
+        // }
+
+
 
 //        LimbConfig.lengthEnabled = false;
 //        LimbConfig.heightEnabled = false;
@@ -54,7 +154,7 @@ public class BanyanShow extends TreeShow {
             new LimbConfig(false, 0, 0, 0, 0, 0, LIMB_TYPE),
         });
 
-        BanyanModel.Star.Config starConfig = new BanyanModel.Star.Config(0, 0, 100, 0);
+        BanyanModel.Star.Config starConfig = new BanyanModel.Star.Config(0, 30*FOOT, 0, 220);
 
         BanyanModel banyanModel = new BanyanModel(SHOW_NAME, treeConfig, starConfig);
         return banyanModel;
@@ -129,7 +229,7 @@ public class BanyanShow extends TreeShow {
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
-        //ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
+        ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
 
 //        new UITenereControllers(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
     }
