@@ -20,7 +20,7 @@ public class PersistentControllerByHumanIdMap {
     @Expose
     final TreeMap<String, String> macAddrToHumanIdMap = new TreeMap<>();
     @Expose
-    final TreeMap<String, NetworkDevice> slControllerIndex = new TreeMap<>();
+    public final TreeMap<String, NetworkDevice> slControllerIndex = new TreeMap<>();
 
     @Expose
     final TreeMap<String, NetworkDevice> macIndex = new TreeMap<>();

@@ -167,7 +167,7 @@ public class SLOutputWindow extends CloseableWindow {
                 UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.RED_HOVER);
             }
 
-            String displayName = SLShow.controllerInventory.getNameByMac(dc.networkDevice.deviceId);
+            String displayName = show.controllerInventory.getNameByMac(dc.networkDevice.deviceId);
 //            String displayName = show.controllerInventory2.getNameByMac(dc.networkDevice.deviceId);
             UI.CollapseResult cr = UI.collapsibleSection(displayName, false);
 
@@ -187,6 +187,7 @@ public class SLOutputWindow extends CloseableWindow {
                 if (UI.button("save " + dc.newControllerID)){
                     try {
                         show.controllerInventory2.indexController(dc.newControllerID, dc);
+                        show.controllerInventory.importPersistentControllerByHumanIdMap(show.controllerInventory2);
 //                        show.controllerInventory2.validateNetwork();
                     } catch (IOException e) {
                         e.printStackTrace();

@@ -44,7 +44,7 @@ public abstract class SLShow implements Show {
 
     // top level metadata used in any show
     public static SLSculptureControllerMapping mapping = null; // only initialized for top level... more evidence we need a top level SLModel.
-    public static SLControllerInventory controllerInventory;
+    public SLControllerInventory controllerInventory;
     public PersistentControllerByHumanIdMap controllerInventory2;
 
     /**
@@ -69,6 +69,8 @@ public abstract class SLShow implements Show {
     public SLShow() {
         controllerInventory = SLControllerInventory.loadFromDisk();
         controllerInventory2 = PersistentControllerByHumanIdMap.loadFromDisk();
+        controllerInventory.importPersistentControllerByHumanIdMap(controllerInventory2);
+
         mapping = SLSculptureControllerMapping.loadFromDisk(getShowName(), controllerInventory);
 //        mapping = SLSculptureControllerMapping.loadFromDisk(getShowName(), controllerInventory2);
     }
