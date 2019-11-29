@@ -29,7 +29,7 @@ public class SLModel extends LXModel {
     private ModelIndex modelIndex, modelIndexZFlattened;
 
 
-    public final SLSculptureControllerMapping mapping = null;
+//    public final SLSculptureControllerMapping mapping = null;
 
     protected PointBatches pointBatches;
 
@@ -46,27 +46,37 @@ public class SLModel extends LXModel {
     public SLModel(String modelId, List<LXPoint> points) {
         super(modelId, points);
         setupPointsArray();
-        SLShow.mapping.pointsByModelID.put(modelId, this);
+        if (SLShow.mapping != null){
+            SLShow.mapping.pointsByModelID.put(modelId, this);
+        }
     }
 
     public SLModel(String modelId, LXFixture fixture) {
         super(modelId, fixture);
         setupPointsArray();
-        SLShow.mapping.pointsByModelID.put(modelId, this);
+        if (SLShow.mapping != null){
+            SLShow.mapping.pointsByModelID.put(modelId, this);
+        }
     }
 
     public SLModel(String modelId, LXFixture[] fixtures) {
         super(modelId, fixtures);
         setupPointsArray();
-        SLShow.mapping.pointsByModelID.put(modelId, this);
+        if (SLShow.mapping != null){
+            SLShow.mapping.pointsByModelID.put(modelId, this);
+        }
     }
 
     public SLModel(String modelId, String controllerId, LXFixture fixture) {
         super(modelId, fixture);
-        SLShow.mapping.setControllerAssignment(modelId, controllerId);
+        if (SLShow.mapping != null){
+            SLShow.mapping.setControllerAssignment(modelId, controllerId);
+        }
         SLModel.fixtureByMappedID.put(controllerId, this);
 //        SLModel.fixtureByModelID.put(modelId, this);
-        SLShow.mapping.pointsByModelID.put(modelId, this);
+        if (SLShow.mapping != null){
+            SLShow.mapping.pointsByModelID.put(modelId, this);
+        }
     }
 
     private void setupPointsArray() {
