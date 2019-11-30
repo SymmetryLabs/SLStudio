@@ -133,6 +133,8 @@ public class BanyanShow extends TreeShow {
         /* 79 */ new BranchConfig(false, -67+92, 20*FOOT, -24-75, 0, 0, 0, BRANCH), // Round A
         /* 80 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
 
+        /* 80 */ new BranchConfig(false, -86+92, 20*FOOT, 42-75, 0, 0, 0, BRANCH), // was 53B!
+
     };
 
     public SLModel buildModel() {
@@ -155,7 +157,7 @@ public class BanyanShow extends TreeShow {
             new LimbConfig(false, 0, 0, 0, 0, 0, LIMB_TYPE),
         });
 
-        BanyanModel.Star.Config starConfig = new BanyanModel.Star.Config(0, 30*FOOT, 0, 220);
+        BanyanModel.Star.Config starConfig = new BanyanModel.Star.Config(0, 26*FOOT, 0, 220);
 
         BanyanModel banyanModel = new BanyanModel(SHOW_NAME, treeConfig, starConfig);
         return banyanModel;
@@ -230,7 +232,7 @@ public class BanyanShow extends TreeShow {
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
-        ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
+       // ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
 
 //        new UITenereControllers(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
     }
