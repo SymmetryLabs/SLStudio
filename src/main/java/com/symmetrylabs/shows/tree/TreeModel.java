@@ -19,6 +19,7 @@ import static com.symmetrylabs.util.MathConstants.*;
 
 
 public class TreeModel extends SLModel {
+    protected static final boolean SMALL_TREE_MODEL = true;
 
     private TreeConfig config;
     public final List<Limb> limbs;
@@ -731,6 +732,10 @@ public class TreeModel extends SLModel {
                 if (config.size == Size.LARGE) {
                     t.translate(-.05f*INCHES, 0, 0);
                     addPoint(new LXPoint(t));
+                    if (SMALL_TREE_MODEL){
+                        t.pop();
+                        return;
+                    }
                     t.translate(0, LED_SPACING, 0);
                     addPoint(new LXPoint(t));
                     t.translate(0, LED_SPACING, 0);

@@ -153,7 +153,10 @@ public class SLOutputWindow extends CloseableWindow {
                 }
             }
 
-            boolean mapped = SLShow.mapping.lookUpByControllerId(dc.humanID) != null;
+            boolean mapped = false;
+            if (SLShow.mapping != null){
+                mapped = SLShow.mapping.lookUpByControllerId(dc.humanID) != null;
+            }
             if (mapped) {
                 if (onlyUnmapped.isOn()){
                     continue;
