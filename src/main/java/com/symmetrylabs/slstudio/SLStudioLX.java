@@ -761,7 +761,7 @@ public class SLStudioLX extends P3LX {
     @Override
     public void setProject(Project project, ProjectListener.Change change) {
         super.setProject(project, change);
-        if (project != null && project.getRoot() != null) {
+        if (applet != null && project != null && project.getRoot() != null) {
             /* We have to turn the paths into absolute paths here to satisfy the
              * Windows Path implementation. */
             Path projectDir = applet.saveFile(PROJECT_FILE_NAME).getParentFile().toPath().toAbsolutePath();

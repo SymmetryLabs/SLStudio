@@ -1,975 +1,975 @@
 {
   "0E:07:0B:05:06:03": {
     "ipAddr": "10.5.6.3",
-    "macAddress": {},
-    "macAddr": "0E:07:0B:05:06:03",
+    "macAddrString": "0E:07:0B:05:06:03",
     "humanID": "A092",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "0E:07:0B:05:24:12": {
     "ipAddr": "10.5.36.18",
-    "macAddress": {},
-    "macAddr": "0E:07:0B:05:24:12",
+    "macAddrString": "0E:07:0B:05:24:12",
     "humanID": "A022",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "0E:07:0B:05:2F:17": {
     "ipAddr": "10.5.47.23",
-    "macAddress": {},
-    "macAddr": "0E:07:0B:05:2F:17",
+    "macAddrString": "0E:07:0B:05:2F:17",
     "humanID": "A024",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "0E:07:0B:05:34:9A": {
     "ipAddr": "10.5.52.154",
-    "macAddress": {},
-    "macAddr": "0E:07:0B:05:34:9A",
+    "macAddrString": "0E:07:0B:05:34:9A",
     "humanID": "A031",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "0E:07:0B:05:37:1B": {
     "ipAddr": "10.5.55.27",
-    "macAddress": {},
-    "macAddr": "0E:07:0B:05:37:1B",
+    "macAddrString": "0E:07:0B:05:37:1B",
     "humanID": "A010",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "0E:07:0B:05:49:A4": {
     "ipAddr": "10.5.73.164",
-    "macAddress": {},
-    "macAddr": "0E:07:0B:05:49:A4",
+    "macAddrString": "0E:07:0B:05:49:A4",
     "humanID": "A049",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "0E:07:0B:05:62:31": {
     "ipAddr": "10.5.98.49",
-    "macAddress": {},
-    "macAddr": "0E:07:0B:05:62:31",
+    "macAddrString": "0E:07:0B:05:62:31",
     "humanID": "A027",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "0E:07:0B:05:6D:36": {
     "ipAddr": "10.5.109.54",
-    "macAddress": {},
-    "macAddr": "0E:07:0B:05:6D:36",
+    "macAddrString": "0E:07:0B:05:6D:36",
     "humanID": "A131",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "0E:07:0B:05:92:C9": {
     "ipAddr": "10.5.146.201",
-    "macAddress": {},
-    "macAddr": "0E:07:0B:05:92:C9",
+    "macAddrString": "0E:07:0B:05:92:C9",
     "humanID": "A052",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "26:13:02:01:14:8A": {
     "ipAddr": "10.1.20.138",
-    "macAddress": {},
-    "macAddr": "26:13:02:01:14:8A",
+    "macAddrString": "26:13:02:01:14:8A",
     "humanID": "A098",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:00:80:03:01": {
     "ipAddr": "10.128.3.1",
-    "macAddress": {},
-    "macAddr": "2A:15:00:80:03:01",
+    "macAddrString": "2A:15:00:80:03:01",
     "humanID": "A132",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:00:80:07:83": {
     "ipAddr": "10.128.7.131",
-    "macAddress": {},
-    "macAddr": "2A:15:00:80:07:83",
+    "macAddrString": "2A:15:00:80:07:83",
     "humanID": "A101",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:00:80:09:84": {
     "ipAddr": "10.128.9.132",
-    "macAddress": {},
-    "macAddr": "2A:15:00:80:09:84",
+    "macAddrString": "2A:15:00:80:09:84",
     "humanID": "A015",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:00:80:0E:87": {
     "ipAddr": "10.128.14.135",
-    "macAddress": {},
-    "macAddr": "2A:15:00:80:0E:87",
+    "macAddrString": "2A:15:00:80:0E:87",
     "humanID": "A077",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:00:80:18:8C": {
     "ipAddr": "10.128.24.140",
-    "macAddress": {},
-    "macAddr": "2A:15:00:80:18:8C",
+    "macAddrString": "2A:15:00:80:18:8C",
     "humanID": "A080",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:00:80:19:8C": {
     "ipAddr": "10.128.25.140",
-    "macAddress": {},
-    "macAddr": "2A:15:00:80:19:8C",
+    "macAddrString": "2A:15:00:80:19:8C",
     "humanID": "A154",
-    "statusNotes": "eth good"
+    "statusNotes": "eth good",
+    "switchPort": -1
   },
   "2A:15:00:80:1C:8E": {
     "ipAddr": "10.128.28.142",
-    "macAddress": {},
-    "macAddr": "2A:15:00:80:1C:8E",
+    "macAddrString": "2A:15:00:80:1C:8E",
     "humanID": "A094",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:00:80:26:13": {
     "ipAddr": "10.128.38.19",
-    "macAddress": {},
-    "macAddr": "2A:15:00:80:26:13",
+    "macAddrString": "2A:15:00:80:26:13",
     "humanID": "A046",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:00:80:31:18": {
     "ipAddr": "10.128.49.24",
-    "macAddress": {},
-    "macAddr": "2A:15:00:80:31:18",
+    "macAddrString": "2A:15:00:80:31:18",
     "humanID": "A064",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:00:80:39:1C": {
     "ipAddr": "10.128.57.28",
-    "macAddress": {},
-    "macAddr": "2A:15:00:80:39:1C",
+    "macAddrString": "2A:15:00:80:39:1C",
     "humanID": "A099",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:00:80:3A:1D": {
     "ipAddr": "10.128.58.29",
-    "macAddress": {},
-    "macAddr": "2A:15:00:80:3A:1D",
+    "macAddrString": "2A:15:00:80:3A:1D",
     "humanID": "A012",
-    "statusNotes": "All good"
+    "statusNotes": "All good",
+    "switchPort": -1
   },
   "2A:15:01:00:0D:06": {
     "ipAddr": "10.0.13.6",
-    "macAddress": {},
-    "macAddr": "2A:15:01:00:0D:06",
+    "macAddrString": "2A:15:01:00:0D:06",
     "humanID": "A078",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:01:80:18:8C": {
     "ipAddr": "10.128.24.140",
-    "macAddress": {},
-    "macAddr": "2A:15:01:80:18:8C",
+    "macAddrString": "2A:15:01:80:18:8C",
     "humanID": "A017",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:01:80:1B:8D": {
     "ipAddr": "10.128.27.141",
-    "macAddress": {},
-    "macAddr": "2A:15:01:80:1B:8D",
+    "macAddrString": "2A:15:01:80:1B:8D",
     "humanID": "A054",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:01:80:21:90": {
     "ipAddr": "10.128.33.144",
-    "macAddress": {},
-    "macAddr": "2A:15:01:80:21:90",
+    "macAddrString": "2A:15:01:80:21:90",
     "humanID": "A042",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:01:80:24:92": {
     "ipAddr": "10.128.36.146",
-    "macAddress": {},
-    "macAddr": "2A:15:01:80:24:92",
+    "macAddrString": "2A:15:01:80:24:92",
     "humanID": "A045",
-    "statusNotes": "port4 bad"
+    "statusNotes": "port4 bad",
+    "switchPort": -1
   },
   "2A:15:01:80:26:93": {
     "ipAddr": "10.128.38.147",
-    "macAddress": {},
-    "macAddr": "2A:15:01:80:26:93",
+    "macAddrString": "2A:15:01:80:26:93",
     "humanID": "A083",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:01:80:2A:15": {
     "ipAddr": "10.128.42.21",
-    "macAddress": {},
-    "macAddr": "2A:15:01:80:2A:15",
+    "macAddrString": "2A:15:01:80:2A:15",
     "humanID": "A104",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:01:80:2B:95": {
     "ipAddr": "10.128.43.149",
-    "macAddress": {},
-    "macAddr": "2A:15:01:80:2B:95",
+    "macAddrString": "2A:15:01:80:2B:95",
     "humanID": "A059",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:01:80:3C:1E": {
     "ipAddr": "10.128.60.30",
-    "macAddress": {},
-    "macAddr": "2A:15:01:80:3C:1E",
+    "macAddrString": "2A:15:01:80:3C:1E",
     "humanID": "A058",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:02:01:06:83": {
     "ipAddr": "10.1.6.131",
-    "macAddress": {},
-    "macAddr": "2A:15:02:01:06:83",
+    "macAddrString": "2A:15:02:01:06:83",
     "humanID": "A119",
-    "statusNotes": "ignore flash reset delay"
+    "statusNotes": "ignore flash reset delay",
+    "switchPort": -1
   },
   "2A:15:02:81:04:82": {
     "ipAddr": "10.129.4.130",
-    "macAddress": {},
-    "macAddr": "2A:15:02:81:04:82",
+    "macAddrString": "2A:15:02:81:04:82",
     "humanID": "A034",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:02:81:05:02": {
     "ipAddr": "10.129.5.2",
-    "macAddress": {},
-    "macAddr": "2A:15:02:81:05:02",
+    "macAddrString": "2A:15:02:81:05:02",
     "humanID": "A120",
-    "statusNotes": "ignore flash reset delay"
+    "statusNotes": "ignore flash reset delay",
+    "switchPort": -1
   },
   "2A:15:02:81:14:A1": {
     "ipAddr": "10.129.20.10",
-    "macAddress": {},
-    "macAddr": "2A:15:02:81:14:A1",
+    "macAddrString": "2A:15:02:81:14:A1",
     "humanID": "A029",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:02:81:27:13": {
     "ipAddr": "10.129.39.19",
-    "macAddress": {},
-    "macAddr": "2A:15:02:81:27:13",
+    "macAddrString": "2A:15:02:81:27:13",
     "humanID": "A085",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:02:81:28:94": {
     "ipAddr": "10.129.40.148",
-    "macAddress": {},
-    "macAddr": "2A:15:02:81:28:94",
+    "macAddrString": "2A:15:02:81:28:94",
     "humanID": "A003",
-    "statusNotes": "GOOD"
+    "statusNotes": "GOOD",
+    "switchPort": -1
   },
   "2A:15:02:81:29:94": {
     "ipAddr": "10.129.41.148",
-    "macAddress": {},
-    "macAddr": "2A:15:02:81:29:94",
+    "macAddrString": "2A:15:02:81:29:94",
     "humanID": "A038",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:02:81:2C:16": {
     "ipAddr": "10.129.44.22",
-    "macAddress": {},
-    "macAddr": "2A:15:02:81:2C:16",
+    "macAddrString": "2A:15:02:81:2C:16",
     "humanID": "A048",
-    "statusNotes": "P2 Bad"
+    "statusNotes": "P2 Bad",
+    "switchPort": -1
   },
   "2A:15:02:81:42:21": {
     "ipAddr": "10.129.66.33",
-    "macAddress": {},
-    "macAddr": "2A:15:02:81:42:21",
+    "macAddrString": "2A:15:02:81:42:21",
     "humanID": "A041",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:02:81:44:22": {
     "ipAddr": "10.129.68.34",
-    "macAddress": {},
-    "macAddr": "2A:15:02:81:44:22",
+    "macAddrString": "2A:15:02:81:44:22",
     "humanID": "A128",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:03:01:2D:96": {
     "ipAddr": "10.1.45.150",
-    "macAddress": {},
-    "macAddr": "2A:15:03:01:2D:96",
+    "macAddrString": "2A:15:03:01:2D:96",
     "humanID": "A072",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:03:81:17:0B": {
     "ipAddr": "10.129.23.11",
-    "macAddress": {},
-    "macAddr": "2A:15:03:81:17:0B",
+    "macAddrString": "2A:15:03:81:17:0B",
     "humanID": "A011",
-    "statusNotes": "All good."
+    "statusNotes": "All good.",
+    "switchPort": -1
   },
   "2A:15:03:81:19:8C": {
     "ipAddr": "10.129.25.140",
-    "macAddress": {},
-    "macAddr": "2A:15:03:81:19:8C",
+    "macAddrString": "2A:15:03:81:19:8C",
     "humanID": "A153",
-    "statusNotes": "eth good"
+    "statusNotes": "eth good",
+    "switchPort": -1
   },
   "2A:15:03:81:1B:0D": {
     "ipAddr": "10.129.27.13",
-    "macAddress": {},
-    "macAddr": "2A:15:03:81:1B:0D",
+    "macAddrString": "2A:15:03:81:1B:0D",
     "humanID": "A090",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:03:81:29:94": {
     "ipAddr": "10.129.41.148",
-    "macAddress": {},
-    "macAddr": "2A:15:03:81:29:94",
+    "macAddrString": "2A:15:03:81:29:94",
     "humanID": "A137",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:03:81:35:1A": {
     "ipAddr": "10.129.53.26",
-    "macAddress": {},
-    "macAddr": "2A:15:03:81:35:1A",
+    "macAddrString": "2A:15:03:81:35:1A",
     "humanID": "A136",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:03:81:42:21": {
     "ipAddr": "10.129.66.33",
-    "macAddress": {},
-    "macAddr": "2A:15:03:81:42:21",
+    "macAddrString": "2A:15:03:81:42:21",
     "humanID": "A051",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:03:81:45:A2": {
     "ipAddr": "10.129.69.162",
-    "macAddress": {},
-    "macAddr": "2A:15:03:81:45:A2",
+    "macAddrString": "2A:15:03:81:45:A2",
     "humanID": "A140",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:04:02:06:03": {
     "ipAddr": "10.2.6.3",
-    "macAddress": {},
-    "macAddr": "2A:15:04:02:06:03",
+    "macAddrString": "2A:15:04:02:06:03",
     "humanID": "A020",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:04:02:2C:16": {
     "ipAddr": "10.2.44.22",
-    "macAddress": {},
-    "macAddr": "2A:15:04:02:2C:16",
+    "macAddrString": "2A:15:04:02:2C:16",
     "humanID": "A123",
-    "statusNotes": "ignore flash reset delay"
+    "statusNotes": "ignore flash reset delay",
+    "switchPort": -1
   },
   "2A:15:04:02:2F:17": {
     "ipAddr": "10.2.47.23",
-    "macAddress": {},
-    "macAddr": "2A:15:04:02:2F:17",
+    "macAddrString": "2A:15:04:02:2F:17",
     "humanID": "A035",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:04:02:31:98": {
     "ipAddr": "10.2.49.152",
-    "macAddress": {},
-    "macAddr": "2A:15:04:02:31:98",
+    "macAddrString": "2A:15:04:02:31:98",
     "humanID": "A116",
-    "statusNotes": "ignore flash reset delay"
+    "statusNotes": "ignore flash reset delay",
+    "switchPort": -1
   },
   "2A:15:04:02:35:9A": {
     "ipAddr": "10.2.53.154",
-    "macAddress": {},
-    "macAddr": "2A:15:04:02:35:9A",
+    "macAddrString": "2A:15:04:02:35:9A",
     "humanID": "A113",
-    "statusNotes": "ignore flash reset delay"
+    "statusNotes": "ignore flash reset delay",
+    "switchPort": -1
   },
   "2A:15:04:02:36:9B": {
     "ipAddr": "10.2.54.155",
-    "macAddress": {},
-    "macAddr": "2A:15:04:02:36:9B",
+    "macAddrString": "2A:15:04:02:36:9B",
     "humanID": "A152",
-    "statusNotes": "eth good"
+    "statusNotes": "eth good",
+    "switchPort": -1
   },
   "2A:15:04:02:37:9B": {
     "ipAddr": "10.2.55.155",
-    "macAddress": {},
-    "macAddr": "2A:15:04:02:37:9B",
+    "macAddrString": "2A:15:04:02:37:9B",
     "humanID": "A033",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:04:02:3C:9E": {
     "ipAddr": "10.2.60.158",
-    "macAddress": {},
-    "macAddr": "2A:15:04:02:3C:9E",
+    "macAddrString": "2A:15:04:02:3C:9E",
     "humanID": "A006",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:04:02:43:A1": {
     "ipAddr": "10.2.67.161",
-    "macAddress": {},
-    "macAddr": "2A:15:04:02:43:A1",
+    "macAddrString": "2A:15:04:02:43:A1",
     "humanID": "A019",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:04:82:03:81": {
     "ipAddr": "10.130.3.129",
-    "macAddress": {},
-    "macAddr": "2A:15:04:82:03:81",
+    "macAddrString": "2A:15:04:82:03:81",
     "humanID": "A009",
-    "statusNotes": "Good"
+    "statusNotes": "Good",
+    "switchPort": -1
   },
   "2A:15:04:82:12:89": {
     "ipAddr": "10.130.18.137",
-    "macAddress": {},
-    "macAddr": "2A:15:04:82:12:89",
+    "macAddrString": "2A:15:04:82:12:89",
     "humanID": "A143",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:04:82:19:8C": {
     "ipAddr": "10.130.25.140",
-    "macAddress": {},
-    "macAddr": "2A:15:04:82:19:8C",
+    "macAddrString": "2A:15:04:82:19:8C",
     "humanID": "A133",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:04:82:1F:0F": {
     "ipAddr": "10.130.31.15",
-    "macAddress": {},
-    "macAddr": "2A:15:04:82:1F:0F",
+    "macAddrString": "2A:15:04:82:1F:0F",
     "humanID": "A142",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:04:82:21:10": {
     "ipAddr": "10.130.33.16",
-    "macAddress": {},
-    "macAddr": "2A:15:04:82:21:10",
+    "macAddrString": "2A:15:04:82:21:10",
     "humanID": "A106",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:04:82:25:92": {
     "ipAddr": "10.130.37.146",
-    "macAddress": {},
-    "macAddr": "2A:15:04:82:25:92",
+    "macAddrString": "2A:15:04:82:25:92",
     "humanID": "A013",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:04:82:27:13": {
     "ipAddr": "10.130.39.19",
-    "macAddress": {},
-    "macAddr": "2A:15:04:82:27:13",
+    "macAddrString": "2A:15:04:82:27:13",
     "humanID": "A001",
-    "statusNotes": "Ch8 out."
+    "statusNotes": "Ch8 out.",
+    "switchPort": -1
   },
   "2A:15:04:82:29:94": {
     "ipAddr": "10.130.41.148",
-    "macAddress": {},
-    "macAddr": "2A:15:04:82:29:94",
+    "macAddrString": "2A:15:04:82:29:94",
     "humanID": "A091",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:04:82:2E:17": {
     "ipAddr": "10.130.46.23",
-    "macAddress": {},
-    "macAddr": "2A:15:04:82:2E:17",
+    "macAddrString": "2A:15:04:82:2E:17",
     "humanID": "A139",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:04:82:30:18": {
     "ipAddr": "10.130.48.24",
-    "macAddress": {},
-    "macAddr": "2A:15:04:82:30:18",
+    "macAddrString": "2A:15:04:82:30:18",
     "humanID": "A103",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:04:82:35:1A": {
     "ipAddr": "10.130.53.26",
-    "macAddress": {},
-    "macAddr": "2A:15:04:82:35:1A",
+    "macAddrString": "2A:15:04:82:35:1A",
     "humanID": "A111",
-    "statusNotes": "ignore flash reset delay"
+    "statusNotes": "ignore flash reset delay",
+    "switchPort": -1
   },
   "2A:15:04:82:38:1C": {
     "ipAddr": "10.130.56.28",
-    "macAddress": {},
-    "macAddr": "2A:15:04:82:38:1C",
+    "macAddrString": "2A:15:04:82:38:1C",
     "humanID": "A021",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:04:82:39:9C": {
     "ipAddr": "10.130.57.156",
-    "macAddress": {},
-    "macAddr": "2A:15:04:82:39:9C",
+    "macAddrString": "2A:15:04:82:39:9C",
     "humanID": "A087",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:04:82:42:A1": {
     "ipAddr": "10.130.66.161",
-    "macAddress": {},
-    "macAddr": "2A:15:04:82:42:A1",
+    "macAddrString": "2A:15:04:82:42:A1",
     "humanID": "A008",
-    "statusNotes": "All good."
+    "statusNotes": "All good.",
+    "switchPort": -1
   },
   "2A:15:04:82:43:21": {
     "ipAddr": "10.130.67.33",
-    "macAddress": {},
-    "macAddr": "2A:15:04:82:43:21",
+    "macAddrString": "2A:15:04:82:43:21",
     "humanID": "A073",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:03:81": {
     "ipAddr": "10.2.3.129",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:03:81",
+    "macAddrString": "2A:15:05:02:03:81",
     "humanID": "A117",
-    "statusNotes": "ignore flash reset delay"
+    "statusNotes": "ignore flash reset delay",
+    "switchPort": -1
   },
   "2A:15:05:02:04:82": {
     "ipAddr": "10.2.4.130",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:04:82",
+    "macAddrString": "2A:15:05:02:04:82",
     "humanID": "A023",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:0A:85": {
     "ipAddr": "10.2.10.133",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:0A:85",
+    "macAddrString": "2A:15:05:02:0A:85",
     "humanID": "A145",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:11:88": {
     "ipAddr": "10.2.17.136",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:11:88",
+    "macAddrString": "2A:15:05:02:11:88",
     "humanID": "A089",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:13:09": {
     "ipAddr": "10.2.19.9",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:13:09",
+    "macAddrString": "2A:15:05:02:13:09",
     "humanID": "A300",
-    "statusNotes": "ignore flash reset delay"
+    "statusNotes": "ignore flash reset delay",
+    "switchPort": -1
   },
   "2A:15:05:02:14:8A": {
     "ipAddr": "10.2.20.138",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:14:8A",
+    "macAddrString": "2A:15:05:02:14:8A",
     "humanID": "A129",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:15:0A": {
     "ipAddr": "10.2.21.10",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:15:0A",
+    "macAddrString": "2A:15:05:02:15:0A",
     "humanID": "A088",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:18:8C": {
     "ipAddr": "10.2.24.140",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:18:8C",
+    "macAddrString": "2A:15:05:02:18:8C",
     "humanID": "A138",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:19:8C": {
     "ipAddr": "10.2.25.140",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:19:8C",
+    "macAddrString": "2A:15:05:02:19:8C",
     "humanID": "A108",
-    "statusNotes": "ignore flash reset delay"
+    "statusNotes": "ignore flash reset delay",
+    "switchPort": -1
   },
   "2A:15:05:02:1A:8D": {
     "ipAddr": "10.2.26.141",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:1A:8D",
+    "macAddrString": "2A:15:05:02:1A:8D",
     "humanID": "A135",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:20:90": {
     "ipAddr": "10.2.32.144",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:20:90",
+    "macAddrString": "2A:15:05:02:20:90",
     "humanID": "A130",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:25:12": {
     "ipAddr": "10.2.37.18",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:25:12",
+    "macAddrString": "2A:15:05:02:25:12",
     "humanID": "A147",
-    "statusNotes": "eth good"
+    "statusNotes": "eth good",
+    "switchPort": -1
   },
   "2A:15:05:02:26:13": {
     "ipAddr": "10.2.38.19",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:26:13",
+    "macAddrString": "2A:15:05:02:26:13",
     "humanID": "A057",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:27:13": {
     "ipAddr": "10.2.39.19",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:27:13",
+    "macAddrString": "2A:15:05:02:27:13",
     "humanID": "A053",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:2A:15": {
     "ipAddr": "10.2.42.21",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:2A:15",
+    "macAddrString": "2A:15:05:02:2A:15",
     "humanID": "A040",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:2F:97": {
     "ipAddr": "10.2.47.151",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:2F:97",
+    "macAddrString": "2A:15:05:02:2F:97",
     "humanID": "A050",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:30:18": {
     "ipAddr": "10.2.48.24",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:30:18",
+    "macAddrString": "2A:15:05:02:30:18",
     "humanID": "A044",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:36:1B": {
     "ipAddr": "10.2.54.27",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:36:1B",
+    "macAddrString": "2A:15:05:02:36:1B",
     "humanID": "A007",
-    "statusNotes": "All good agent double \"Oh\" seven."
+    "statusNotes": "All good agent double \"Oh\" seven.",
+    "switchPort": -1
   },
   "2A:15:05:02:36:9B": {
     "ipAddr": "10.2.54.155",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:36:9B",
+    "macAddrString": "2A:15:05:02:36:9B",
     "humanID": "A071",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:39:1C": {
     "ipAddr": "10.2.57.28",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:39:1C",
+    "macAddrString": "2A:15:05:02:39:1C",
     "humanID": "A016",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:3A:1D": {
     "ipAddr": "10.2.58.29",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:3A:1D",
+    "macAddrString": "2A:15:05:02:3A:1D",
     "humanID": "A039",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:3A:D1": {
     "ipAddr": "10.2.58.157",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:3A:D1",
+    "macAddrString": "2A:15:05:02:3A:D1",
     "humanID": "A036",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:3B:1D": {
     "ipAddr": "10.2.59.29",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:3B:1D",
+    "macAddrString": "2A:15:05:02:3B:1D",
     "humanID": "A095",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:3C:9E": {
     "ipAddr": "10.2.60.158",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:3C:9E",
+    "macAddrString": "2A:15:05:02:3C:9E",
     "humanID": "A125",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:02:43:A1": {
     "ipAddr": "10.2.67.161",
-    "macAddress": {},
-    "macAddr": "2A:15:05:02:43:A1",
+    "macAddrString": "2A:15:05:02:43:A1",
     "humanID": "A060",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:01:00": {
     "ipAddr": "10.130.1.0",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:01:00",
+    "macAddrString": "2A:15:05:82:01:00",
     "humanID": "A066",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:04:02": {
     "ipAddr": "10.130.4.2",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:04:02",
+    "macAddrString": "2A:15:05:82:04:02",
     "humanID": "A055",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:0B:85": {
     "ipAddr": "10.130.11.133",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:0B:85",
+    "macAddrString": "2A:15:05:82:0B:85",
     "humanID": "A018",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:0E:07": {
     "ipAddr": "10.130.14.7",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:0E:07",
+    "macAddrString": "2A:15:05:82:0E:07",
     "humanID": "A100",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:0F:07": {
     "ipAddr": "10.130.15.7",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:0F:07",
+    "macAddrString": "2A:15:05:82:0F:07",
     "humanID": "A118",
-    "statusNotes": "ignore flash reset delay"
+    "statusNotes": "ignore flash reset delay",
+    "switchPort": -1
   },
   "2A:15:05:82:0F:87": {
     "ipAddr": "10.130.15.135",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:0F:87",
+    "macAddrString": "2A:15:05:82:0F:87",
     "humanID": "A076",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:10:08": {
     "ipAddr": "10.130.16.8",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:10:08",
+    "macAddrString": "2A:15:05:82:10:08",
     "humanID": "A068",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:12:09": {
     "ipAddr": "10.130.18.9",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:12:09",
+    "macAddrString": "2A:15:05:82:12:09",
     "humanID": "A084",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:14:0A": {
     "ipAddr": "10.130.20.10",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:14:0A",
+    "macAddrString": "2A:15:05:82:14:0A",
     "humanID": "A155",
-    "statusNotes": "eth good"
+    "statusNotes": "eth good",
+    "switchPort": -1
   },
   "2A:15:05:82:17:0B": {
     "ipAddr": "10.130.23.11",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:17:0B",
+    "macAddrString": "2A:15:05:82:17:0B",
     "humanID": "A014",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:1A:0D": {
     "ipAddr": "10.130.26.13",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:1A:0D",
+    "macAddrString": "2A:15:05:82:1A:0D",
     "humanID": "A151",
-    "statusNotes": "eth good"
+    "statusNotes": "eth good",
+    "switchPort": -1
   },
   "2A:15:05:82:1A:8D": {
     "ipAddr": "10.130.26.141",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:1A:8D",
+    "macAddrString": "2A:15:05:82:1A:8D",
     "humanID": "A122",
-    "statusNotes": "ignore flash reset delay"
+    "statusNotes": "ignore flash reset delay",
+    "switchPort": -1
   },
   "2A:15:05:82:1B:8D": {
     "ipAddr": "10.130.27.141",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:1B:8D",
+    "macAddrString": "2A:15:05:82:1B:8D",
     "humanID": "A065",
-    "statusNotes": "p3"
+    "statusNotes": "p3",
+    "switchPort": -1
   },
   "2A:15:05:82:1E:0F": {
     "ipAddr": "10.130.30.15",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:1E:0F",
+    "macAddrString": "2A:15:05:82:1E:0F",
     "humanID": "A150",
-    "statusNotes": "eth good"
+    "statusNotes": "eth good",
+    "switchPort": -1
   },
   "2A:15:05:82:21:90": {
     "ipAddr": "10.130.33.144",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:21:90",
+    "macAddrString": "2A:15:05:82:21:90",
     "humanID": "A097",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:22:91": {
     "ipAddr": "10.130.34.145",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:22:91",
+    "macAddrString": "2A:15:05:82:22:91",
     "humanID": "A149",
-    "statusNotes": "eth good"
+    "statusNotes": "eth good",
+    "switchPort": -1
   },
   "2A:15:05:82:24:92": {
     "ipAddr": "10.130.36.146",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:24:92",
+    "macAddrString": "2A:15:05:82:24:92",
     "humanID": "A146",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:25:92": {
     "ipAddr": "10.130.37.146",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:25:92",
+    "macAddrString": "2A:15:05:82:25:92",
     "humanID": "A026",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:27:13": {
     "ipAddr": "10.130.39.19",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:27:13",
+    "macAddrString": "2A:15:05:82:27:13",
     "humanID": "A127",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:2B:95": {
     "ipAddr": "10.130.43.149",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:2B:95",
+    "macAddrString": "2A:15:05:82:2B:95",
     "humanID": "A115",
-    "statusNotes": "ignore flash reset delay"
+    "statusNotes": "ignore flash reset delay",
+    "switchPort": -1
   },
   "2A:15:05:82:2C:96": {
     "ipAddr": "10.130.44.150",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:2C:96",
+    "macAddrString": "2A:15:05:82:2C:96",
     "humanID": "A063",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:30:98": {
     "ipAddr": "10.130.48.152",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:30:98",
+    "macAddrString": "2A:15:05:82:30:98",
     "humanID": "A004",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:31:98": {
     "ipAddr": "10.130.49.152",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:31:98",
+    "macAddrString": "2A:15:05:82:31:98",
     "humanID": "A093",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:33:99": {
     "ipAddr": "10.130.51.153",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:33:99",
+    "macAddrString": "2A:15:05:82:33:99",
     "humanID": "A134",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:36:1B": {
     "ipAddr": "10.130.54.27",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:36:1B",
+    "macAddrString": "2A:15:05:82:36:1B",
     "humanID": "A110",
-    "statusNotes": "ignore flash reset delay"
+    "statusNotes": "ignore flash reset delay",
+    "switchPort": -1
   },
   "2A:15:05:82:3B:9D": {
     "ipAddr": "10.130.59.157",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:3B:9D",
+    "macAddrString": "2A:15:05:82:3B:9D",
     "humanID": "A082",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:3C:1E": {
     "ipAddr": "10.130.60.30",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:3C:1E",
+    "macAddrString": "2A:15:05:82:3C:1E",
     "humanID": "A030",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:05:82:3D:9E": {
     "ipAddr": "10.130.61.158",
-    "macAddress": {},
-    "macAddr": "2A:15:05:82:3D:9E",
+    "macAddrString": "2A:15:05:82:3D:9E",
     "humanID": "A126",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:06:03:0A:85": {
     "ipAddr": "10.3.10.133",
-    "macAddress": {},
-    "macAddr": "2A:15:06:03:0A:85",
+    "macAddrString": "2A:15:06:03:0A:85",
     "humanID": "A105",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:06:03:1D:0E": {
     "ipAddr": "10.3.29.14",
-    "macAddress": {},
-    "macAddr": "2A:15:06:03:1D:0E",
+    "macAddrString": "2A:15:06:03:1D:0E",
     "humanID": "A148",
-    "statusNotes": "eth good"
+    "statusNotes": "eth good",
+    "switchPort": -1
   },
   "2A:15:06:03:40:A0": {
     "ipAddr": "10.3.64.160",
-    "macAddress": {},
-    "macAddr": "2A:15:06:03:40:A0",
+    "macAddrString": "2A:15:06:03:40:A0",
     "humanID": "A121",
-    "statusNotes": "ignore flash reset delay"
+    "statusNotes": "ignore flash reset delay",
+    "switchPort": -1
   },
   "2A:15:08:04:05:82": {
     "ipAddr": "10.4.5.130",
-    "macAddress": {},
-    "macAddr": "2A:15:08:04:05:82",
+    "macAddrString": "2A:15:08:04:05:82",
     "humanID": "A069",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:08:04:13:89": {
     "ipAddr": "10.4.19.137",
-    "macAddress": {},
-    "macAddr": "2A:15:08:04:13:89",
+    "macAddrString": "2A:15:08:04:13:89",
     "humanID": "A067",
-    "statusNotes": "p8"
+    "statusNotes": "p8",
+    "switchPort": -1
   },
   "2A:15:08:04:1A:0D": {
     "ipAddr": "10.4.26.13",
-    "macAddress": {},
-    "macAddr": "2A:15:08:04:1A:0D",
+    "macAddrString": "2A:15:08:04:1A:0D",
     "humanID": "A107",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:08:04:21:90": {
     "ipAddr": "10.4.33.144",
-    "macAddress": {},
-    "macAddr": "2A:15:08:04:21:90",
+    "macAddrString": "2A:15:08:04:21:90",
     "humanID": "A102",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:08:04:25:12": {
     "ipAddr": "10.4.37.18",
-    "macAddress": {},
-    "macAddr": "2A:15:08:04:25:12",
+    "macAddrString": "2A:15:08:04:25:12",
     "humanID": "A032",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:08:04:31:18": {
     "ipAddr": "10.4.49.24",
-    "macAddress": {},
-    "macAddr": "2A:15:08:04:31:18",
+    "macAddrString": "2A:15:08:04:31:18",
     "humanID": "A074",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:08:04:35:1A": {
     "ipAddr": "10.4.53.26",
-    "macAddress": {},
-    "macAddr": "2A:15:08:04:35:1A",
+    "macAddrString": "2A:15:08:04:35:1A",
     "humanID": "A109",
-    "statusNotes": "ignore flash reset delay"
+    "statusNotes": "ignore flash reset delay",
+    "switchPort": -1
   },
   "2A:15:09:04:0A:85": {
     "ipAddr": "10.4.10.133",
-    "macAddress": {},
-    "macAddr": "2A:15:09:04:0A:85",
+    "macAddrString": "2A:15:09:04:0A:85",
     "humanID": "A070",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:09:04:0D:86": {
     "ipAddr": "10.4.13.134",
-    "macAddress": {},
-    "macAddr": "2A:15:09:04:0D:86",
+    "macAddrString": "2A:15:09:04:0D:86",
     "humanID": "A144",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   },
   "2A:15:09:04:1A:8D": {
     "ipAddr": "10.4.26.141",
-    "macAddress": {},
-    "macAddr": "2A:15:09:04:1A:8D",
+    "macAddrString": "2A:15:09:04:1A:8D",
     "humanID": "A005",
-    "statusNotes": "good yo"
+    "statusNotes": "good yo",
+    "switchPort": -1
   },
   "51:28:6F:37:51:A8": {
     "ipAddr": "10.55.81.168",
-    "macAddress": {},
-    "macAddr": "51:28:6F:37:51:A8",
+    "macAddrString": "51:28:6F:37:51:A8",
     "humanID": "A062",
-    "statusNotes": "good"
+    "statusNotes": "good",
+    "switchPort": -1
   }
 }

@@ -5,10 +5,10 @@ import java.lang.Integer;
 import java.util.Arrays;
 
 import com.symmetrylabs.shows.treeV2.TreeModel_v2;
-import heronarts.lx.model.LXAbstractFixture;
-import heronarts.lx.model.LXPoint;
+import heronarts.lx.model.*;
 import heronarts.lx.transform.LXTransform;
 import heronarts.lx.transform.LXVector;
+
 
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.shows.tree.config.*;
@@ -19,6 +19,7 @@ import static com.symmetrylabs.util.MathConstants.*;
 
 
 public class TreeModel extends SLModel {
+    protected static final boolean SMALL_TREE_MODEL = true;
 
     private TreeConfig config;
     public final List<Limb> limbs;
@@ -29,13 +30,19 @@ public class TreeModel extends SLModel {
     private float yRotation = 0;
 
     public TreeModel(String showName) {
-        this(showName, new TreeConfig());
+        this(showName, new TreeConfig(), new EmptyFixture());
     }
 
-    public TreeModel(String showName, TreeConfig config) {
-        super(showName, new Fixture(config));
+    public TreeModel(String showName, TreeConfig treeConfig) {
+        this(showName, treeConfig, new EmptyFixture());
+    }
+
+    public TreeModel(String showName, TreeConfig config, LXFixture miscPoints) {
+        super(showName, new Fixture(config, miscPoints));
+
         this.config = config;
         Fixture f = (Fixture) this.fixtures.get(0);
+
         this.limbs  = Collections.unmodifiableList(f.limbs);
 
       final List<Branch> branches = new ArrayList<>();
@@ -89,16 +96,19 @@ public class TreeModel extends SLModel {
     private static class Fixture extends LXAbstractFixture {
         private final List<Limb> limbs = new ArrayList<>();
 
-        private Fixture(TreeConfig config) {
+        private Fixture(TreeConfig config, LXFixture miscPoints) {
+
+            // Points of the top level fixture need to be added in the order
+            // that they were created with new LXPoint()
+            this.points.addAll(miscPoints.getPoints());
+
             LXTransform t = new LXTransform();
 
             for (LimbConfig limbConfig : config.getLimbs()) {
                 Limb limb = new Limb(t, limbConfig);
                 limbs.add(limb);
 
-                for (LXPoint p : limb.points) {
-                    this.points.add(p);
-                }
+                this.points.addAll(Arrays.asList(limb.points));
             }
         }
     }
@@ -287,6 +297,8 @@ public class TreeModel extends SLModel {
      *--------------------------------------------------------------*/
     public static class Branch extends SLModel {
 
+        private static int uid = 1;
+
         public static final int NUM_TWIGS = 8; // needs to be remmoved (we need to refactor patterns for arbitrary lengths
 
         private BranchConfig config;
@@ -302,7 +314,7 @@ public class TreeModel extends SLModel {
         public final List<Leaf> leaves;
 
         public Branch(LXTransform t, BranchConfig config) {
-            super("Branch", new Fixture(t, config));
+            super("Branch" + uid++, new Fixture(t, config));
             this.config = config;
             this.azimuth = config.azimuth;
             this.elevation = config.elevation;
@@ -720,6 +732,10 @@ public class TreeModel extends SLModel {
                 if (config.size == Size.LARGE) {
                     t.translate(-.05f*INCHES, 0, 0);
                     addPoint(new LXPoint(t));
+                    if (SMALL_TREE_MODEL){
+                        t.pop();
+                        return;
+                    }
                     t.translate(0, LED_SPACING, 0);
                     addPoint(new LXPoint(t));
                     t.translate(0, LED_SPACING, 0);

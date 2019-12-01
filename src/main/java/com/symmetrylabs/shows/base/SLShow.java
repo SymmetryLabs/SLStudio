@@ -7,13 +7,14 @@ import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.cubes.*;
 import com.symmetrylabs.shows.tree.AssignableTenereController;
 import com.symmetrylabs.slstudio.SLStudioLX;
-import com.symmetrylabs.slstudio.mappings.SLModelControllerMapping;
+import com.symmetrylabs.slstudio.mappings.SLSculptureControllerMapping;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.DiscoverableController;
 //import com.symmetrylabs.slstudio.output.TreeController;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
+import com.symmetrylabs.slstudio.ui.v2.ControllerMgmt.SLInventoryWindow;
 import com.symmetrylabs.slstudio.ui.v2.SLModelMappingWindow;
 import com.symmetrylabs.slstudio.ui.v2.WindowManager;
 import com.symmetrylabs.util.dispatch.Dispatcher;
@@ -42,9 +43,12 @@ public abstract class SLShow implements Show {
     public AllPortsPowerEnableMask allPortsPowerEnableMask = AllPortsPowerEnableMask.loadFromDisk();
 
     // top level metadata used in any show
-    public static SLModelControllerMapping mapping = null; // only initialized for top level... more evidence we need a top level SLModel
-    public SLControllerInventory controllerInventory = new SLControllerInventory();
-    public PersistentControllerByHumanIdMap controllerInventory2 = new PersistentControllerByHumanIdMap();
+    public SLControllerInventory controllerInventory;
+    public PersistentControllerByHumanIdMap controllerInventory2;
+    public static SLSculptureControllerMapping mapping; // only initialized for top level... more evidence we need a top level SLModel.
+    {
+        SLSculptureControllerMapping.loadFromDisk(getShowName(), controllerInventory);
+    }
 
     /**
      * Power related.
@@ -66,14 +70,10 @@ public abstract class SLShow implements Show {
     }
 
     public SLShow() {
-        try {
-            controllerInventory = SLControllerInventory.loadFromDisk();
-            controllerInventory2 = PersistentControllerByHumanIdMap.loadFromDisk();
-        } catch (FileNotFoundException e) {
-            System.err.println("could not load controller inventory");
-            e.printStackTrace();
-        }
-        mapping = SLModelControllerMapping.loadFromDisk(getShowName(), controllerInventory);
+        controllerInventory = SLControllerInventory.loadFromDisk();
+        controllerInventory2 = PersistentControllerByHumanIdMap.loadFromDisk();
+        controllerInventory.importPersistentControllerByHumanIdMap(controllerInventory2);
+        //        mapping = SLSculptureControllerMapping.loadFromDisk(getShowName(), controllerInventory2);
     }
 
     public abstract SLModel buildModel();
@@ -84,11 +84,15 @@ public abstract class SLShow implements Show {
         final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
 
-        /*
-        DiscoverableController local_debug = new CubesController(lx, "localhost", "localdebug");
-        controllers.add(local_debug);
-        lx.addOutput(local_debug);
-        */
+        try {
+            DiscoverableController broadCastDevice = new AssignableTenereController(lx, new NetworkDevice("10.255.255.255"));
+            broadCastDevice.isBroadcastDevice.setValue(true);
+            broadCastDevice.humanID = "broadcast";
+            controllers.add(broadCastDevice);
+            lx.addOutput(broadCastDevice);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
 
         networkMonitor.opcDeviceList.addListener(new SetListener<NetworkDevice>() {
             public void onItemAdded(NetworkDevice device) {
@@ -138,7 +142,7 @@ public abstract class SLShow implements Show {
     }
 
     public Collection<DiscoverableController> getSortedControllers() {
-        return new TreeSet<DiscoverableController>(controllers);
+        return new TreeSet<>(controllers);
     }
 
     public void addControllerSetListener(SetListener<DiscoverableController> listener) {
@@ -163,9 +167,9 @@ public abstract class SLShow implements Show {
     }
 
     public void setupUi(LX lx) {
-//        WindowManager.addPersistent("Controllers/Inventory", () -> new CubesInventoryEditor(lx, controllerInventory), false);
+        WindowManager.addPersistent("Controllers/Inventory", () -> new SLInventoryWindow(lx, controllerInventory), false);
         WindowManager.addPersistent("Controllers/Mapping", () -> new SLModelMappingWindow(lx, this), false);
-        WindowManager.addPersistent("Controllers/Output", () -> new SLOutputWindow(lx, this), true);
+        WindowManager.addPersistent("Controllers/Output", () -> new SLOutputWindow(lx, this), false);
         WindowManager.addPersistent("Controllers/Scaling", () -> new OutputScaleWindow(lx, outputScaler), false);
     }
 

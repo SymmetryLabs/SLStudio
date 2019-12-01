@@ -56,7 +56,8 @@ public class SimplePixlite extends ArtNetOutput {
                 for (int i1 = 0; i1 < numIndices; i1++) {
                     indices[i1] = pointsGrouping.getPoint(counter++).index;
                 }
-                addDatagram(new ArtNetDmxDatagram(lx, ipAddress, indices, universe - 1));
+                ArtNetDmxDatagram dmxDatagram = new ArtNetDmxDatagram(lx, ipAddress, indices, universe - 1);
+                addDatagram(dmxDatagram);
             }
         }
     }

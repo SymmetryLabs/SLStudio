@@ -26,6 +26,7 @@ import com.symmetrylabs.slstudio.presets.ChannelPresetLibrary;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXPalette;
 import heronarts.lx.data.LXVersion;
+import heronarts.lx.data.LxpProjectDataSinkSource;
 import heronarts.lx.data.Project;
 import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXModel;
@@ -269,7 +270,8 @@ public class LX {
         look.setShelf(new APC40Mk2Shelf());
         LX.initTimer.log("Default Look");
 
-        setProject(new Project(), ProjectListener.Change.NEW);
+        Project legacyProject = Project.createLegacyProject(new File("default.lxp"));
+        setProject(legacyProject, ProjectListener.Change.NEW);
 
     }
 

@@ -3,7 +3,7 @@ package com.symmetrylabs.shows.base;
 import com.symmetrylabs.controllers.symmeTreeController.infrastructure.AllPortsPowerEnableMask;
 import com.symmetrylabs.shows.oslo.OsloShow;
 import com.symmetrylabs.slstudio.ApplicationState;
-import com.symmetrylabs.slstudio.mappings.SLModelControllerMapping;
+import com.symmetrylabs.slstudio.mappings.SLSculptureControllerMapping;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.output.DiscoverableController;
@@ -41,6 +41,7 @@ public class SLOutputWindow extends CloseableWindow {
     @Override
     protected void drawContents() {
         pui.draw(ApplicationState.outputControl().enabled);
+        pui.draw(ApplicationState.outputControl().testUnicast);
         pui.draw(ApplicationState.outputControl().testBroadcast);
         pui.draw(ApplicationState.outputControl().controllerResetModule.enabled);
 
@@ -137,7 +138,10 @@ public class SLOutputWindow extends CloseableWindow {
             }
 
             if (!modelID_filter.equals("")) {
-                SLModelControllerMapping.PhysIdAssignment pia = SLShow.mapping.lookUpByControllerId(dc.humanID);
+                if (!dc.humanID.contains(modelID_filter)){
+                    continue;
+                }
+                SLSculptureControllerMapping.PhysIdAssignment pia = SLShow.mapping.lookUpByControllerId(dc.humanID);
                 if (pia != null){
                     String modelId = pia.modelId;
                     boolean modelIdMatch = modelId.contains(modelID_filter);
@@ -149,7 +153,10 @@ public class SLOutputWindow extends CloseableWindow {
                 }
             }
 
-            boolean mapped = SLShow.mapping.lookUpByControllerId(dc.humanID) != null;
+            boolean mapped = false;
+            if (SLShow.mapping != null){
+                mapped = SLShow.mapping.lookUpByControllerId(dc.humanID) != null;
+            }
             if (mapped) {
                 if (onlyUnmapped.isOn()){
                     continue;
@@ -162,7 +169,11 @@ public class SLOutputWindow extends CloseableWindow {
                 UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.RED);
                 UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.RED_HOVER);
             }
-            UI.CollapseResult cr = UI.collapsibleSection(dc.humanID, false);
+
+            String displayName = show.controllerInventory.getNameByMac(dc.networkDevice.deviceId);
+//            String displayName = show.controllerInventory2.getNameByMac(dc.networkDevice.deviceId);
+            UI.CollapseResult cr = UI.collapsibleSection(displayName, false);
+
             if (dc.getMacAddress() != null && UI.beginDragDropSource()) {
                 UI.setDragDropPayload("SL.CubeMacAddress", dc.getMacAddress());
                 UI.endDragDropSource();
@@ -179,6 +190,8 @@ public class SLOutputWindow extends CloseableWindow {
                 if (UI.button("save " + dc.newControllerID)){
                     try {
                         show.controllerInventory2.indexController(dc.newControllerID, dc);
+                        show.controllerInventory.importPersistentControllerByHumanIdMap(show.controllerInventory2);
+//                        show.controllerInventory2.validateNetwork();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

@@ -1,977 +1,4304 @@
 {
+  "allControllers": [
+    {
+      "ipAddr": "10.5.6.3",
+      "macAddrString": "0E:07:0B:05:06:03",
+      "humanID": "A092",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.5.36.18",
+      "macAddrString": "0E:07:0B:05:24:12",
+      "humanID": "A022",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.5.47.23",
+      "macAddrString": "0E:07:0B:05:2F:17",
+      "humanID": "A024",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.5.52.154",
+      "macAddrString": "0E:07:0B:05:34:9A",
+      "humanID": "A031",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.5.55.27",
+      "macAddrString": "0E:07:0B:05:37:1B",
+      "humanID": "A010",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.5.73.164",
+      "macAddrString": "0E:07:0B:05:49:A4",
+      "humanID": "A049",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.5.98.49",
+      "macAddrString": "0E:07:0B:05:62:31",
+      "humanID": "A027",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.5.109.54",
+      "macAddrString": "0E:07:0B:05:6D:36",
+      "humanID": "A131",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.5.146.201",
+      "macAddrString": "0E:07:0B:05:92:C9",
+      "humanID": "A052",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.157.107.80",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "12::2a::6::9d::6b::50",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B221",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.243.107.80",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "12::2a::6::f3::6b::50",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B231",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.12.13.80",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "12::2a::8::c::d::50",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B147",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.76.76.0",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "12::2d::5::4c::4c::0",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B268",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.162.76.0",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "12::2d::7::a2::4c::0",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B229",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.1.20.138",
+      "macAddrString": "26:13:02:01:14:8A",
+      "humanID": "A098",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.3.1",
+      "macAddrString": "2A:15:00:80:03:01",
+      "humanID": "A132",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.7.131",
+      "macAddrString": "2A:15:00:80:07:83",
+      "humanID": "A101",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.9.132",
+      "macAddrString": "2A:15:00:80:09:84",
+      "humanID": "A015",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.14.135",
+      "macAddrString": "2A:15:00:80:0E:87",
+      "humanID": "A077",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.24.140",
+      "macAddrString": "2A:15:00:80:18:8C",
+      "humanID": "A080",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.25.140",
+      "macAddrString": "2A:15:00:80:19:8C",
+      "humanID": "A154",
+      "statusNotes": "eth good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.28.142",
+      "macAddrString": "2A:15:00:80:1C:8E",
+      "humanID": "A094",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.38.19",
+      "macAddrString": "2A:15:00:80:26:13",
+      "humanID": "A046",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.49.24",
+      "macAddrString": "2A:15:00:80:31:18",
+      "humanID": "A064",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.57.28",
+      "macAddrString": "2A:15:00:80:39:1C",
+      "humanID": "A099",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.58.29",
+      "macAddrString": "2A:15:00:80:3A:1D",
+      "humanID": "A012",
+      "statusNotes": "All good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.0.13.6",
+      "macAddrString": "2A:15:01:00:0D:06",
+      "humanID": "A078",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.24.140",
+      "macAddrString": "2A:15:01:80:18:8C",
+      "humanID": "A017",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.27.141",
+      "macAddrString": "2A:15:01:80:1B:8D",
+      "humanID": "A054",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.33.144",
+      "macAddrString": "2A:15:01:80:21:90",
+      "humanID": "A042",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.36.146",
+      "macAddrString": "2A:15:01:80:24:92",
+      "humanID": "A045",
+      "statusNotes": "port4 bad",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.38.147",
+      "macAddrString": "2A:15:01:80:26:93",
+      "humanID": "A083",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.42.21",
+      "macAddrString": "2A:15:01:80:2A:15",
+      "humanID": "A104",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.43.149",
+      "macAddrString": "2A:15:01:80:2B:95",
+      "humanID": "A059",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.128.60.30",
+      "macAddrString": "2A:15:01:80:3C:1E",
+      "humanID": "A058",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.1.6.131",
+      "macAddrString": "2A:15:02:01:06:83",
+      "humanID": "A119",
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.129.4.130",
+      "macAddrString": "2A:15:02:81:04:82",
+      "humanID": "A034",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.129.5.2",
+      "macAddrString": "2A:15:02:81:05:02",
+      "humanID": "A120",
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.129.20.10",
+      "macAddrString": "2A:15:02:81:14:A1",
+      "humanID": "A029",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.129.39.19",
+      "macAddrString": "2A:15:02:81:27:13",
+      "humanID": "A085",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.129.40.148",
+      "macAddrString": "2A:15:02:81:28:94",
+      "humanID": "A003",
+      "statusNotes": "GOOD",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.129.41.148",
+      "macAddrString": "2A:15:02:81:29:94",
+      "humanID": "A038",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.129.44.22",
+      "macAddrString": "2A:15:02:81:2C:16",
+      "humanID": "A048",
+      "statusNotes": "P2 Bad",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.129.66.33",
+      "macAddrString": "2A:15:02:81:42:21",
+      "humanID": "A041",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.129.68.34",
+      "macAddrString": "2A:15:02:81:44:22",
+      "humanID": "A128",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.1.45.150",
+      "macAddrString": "2A:15:03:01:2D:96",
+      "humanID": "A072",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.129.23.11",
+      "macAddrString": "2A:15:03:81:17:0B",
+      "humanID": "A011",
+      "statusNotes": "All good.",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.129.25.140",
+      "macAddrString": "2A:15:03:81:19:8C",
+      "humanID": "A153",
+      "statusNotes": "eth good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.129.27.13",
+      "macAddrString": "2A:15:03:81:1B:0D",
+      "humanID": "A090",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.129.41.148",
+      "macAddrString": "2A:15:03:81:29:94",
+      "humanID": "A137",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.129.53.26",
+      "macAddrString": "2A:15:03:81:35:1A",
+      "humanID": "A136",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.129.66.33",
+      "macAddrString": "2A:15:03:81:42:21",
+      "humanID": "A051",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.129.69.162",
+      "macAddrString": "2A:15:03:81:45:A2",
+      "humanID": "A140",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.6.3",
+      "macAddrString": "2A:15:04:02:06:03",
+      "humanID": "A020",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.44.22",
+      "macAddrString": "2A:15:04:02:2C:16",
+      "humanID": "A123",
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.47.23",
+      "macAddrString": "2A:15:04:02:2F:17",
+      "humanID": "A035",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.49.152",
+      "macAddrString": "2A:15:04:02:31:98",
+      "humanID": "A116",
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.53.154",
+      "macAddrString": "2A:15:04:02:35:9A",
+      "humanID": "A113",
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.54.155",
+      "macAddrString": "2A:15:04:02:36:9B",
+      "humanID": "A152",
+      "statusNotes": "eth good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.55.155",
+      "macAddrString": "2A:15:04:02:37:9B",
+      "humanID": "A033",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.60.158",
+      "macAddrString": "2A:15:04:02:3C:9E",
+      "humanID": "A006",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.67.161",
+      "macAddrString": "2A:15:04:02:43:A1",
+      "humanID": "A019",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.3.129",
+      "macAddrString": "2A:15:04:82:03:81",
+      "humanID": "A009",
+      "statusNotes": "Good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.18.137",
+      "macAddrString": "2A:15:04:82:12:89",
+      "humanID": "A143",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.25.140",
+      "macAddrString": "2A:15:04:82:19:8C",
+      "humanID": "A133",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.31.15",
+      "macAddrString": "2A:15:04:82:1F:0F",
+      "humanID": "A142",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.33.16",
+      "macAddrString": "2A:15:04:82:21:10",
+      "humanID": "A106",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.37.146",
+      "macAddrString": "2A:15:04:82:25:92",
+      "humanID": "A013",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.39.19",
+      "macAddrString": "2A:15:04:82:27:13",
+      "humanID": "A001",
+      "statusNotes": "Ch8 out.",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.41.148",
+      "macAddrString": "2A:15:04:82:29:94",
+      "humanID": "A091",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.46.23",
+      "macAddrString": "2A:15:04:82:2E:17",
+      "humanID": "A139",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.48.24",
+      "macAddrString": "2A:15:04:82:30:18",
+      "humanID": "A103",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.53.26",
+      "macAddrString": "2A:15:04:82:35:1A",
+      "humanID": "A111",
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.56.28",
+      "macAddrString": "2A:15:04:82:38:1C",
+      "humanID": "A021",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.57.156",
+      "macAddrString": "2A:15:04:82:39:9C",
+      "humanID": "A087",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.66.161",
+      "macAddrString": "2A:15:04:82:42:A1",
+      "humanID": "A008",
+      "statusNotes": "All good.",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.67.33",
+      "macAddrString": "2A:15:04:82:43:21",
+      "humanID": "A073",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.3.129",
+      "macAddrString": "2A:15:05:02:03:81",
+      "humanID": "A117",
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.4.130",
+      "macAddrString": "2A:15:05:02:04:82",
+      "humanID": "A023",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.10.133",
+      "macAddrString": "2A:15:05:02:0A:85",
+      "humanID": "A145",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.17.136",
+      "macAddrString": "2A:15:05:02:11:88",
+      "humanID": "A089",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.19.9",
+      "macAddrString": "2A:15:05:02:13:09",
+      "humanID": "A300",
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.20.138",
+      "macAddrString": "2A:15:05:02:14:8A",
+      "humanID": "A129",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.21.10",
+      "macAddrString": "2A:15:05:02:15:0A",
+      "humanID": "A088",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.24.140",
+      "macAddrString": "2A:15:05:02:18:8C",
+      "humanID": "A138",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.25.140",
+      "macAddrString": "2A:15:05:02:19:8C",
+      "humanID": "A108",
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.26.141",
+      "macAddrString": "2A:15:05:02:1A:8D",
+      "humanID": "A135",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.32.144",
+      "macAddrString": "2A:15:05:02:20:90",
+      "humanID": "A130",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.37.18",
+      "macAddrString": "2A:15:05:02:25:12",
+      "humanID": "A147",
+      "statusNotes": "eth good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.38.19",
+      "macAddrString": "2A:15:05:02:26:13",
+      "humanID": "A057",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.39.19",
+      "macAddrString": "2A:15:05:02:27:13",
+      "humanID": "A053",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.42.21",
+      "macAddrString": "2A:15:05:02:2A:15",
+      "humanID": "A040",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.47.151",
+      "macAddrString": "2A:15:05:02:2F:97",
+      "humanID": "A050",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.48.24",
+      "macAddrString": "2A:15:05:02:30:18",
+      "humanID": "A044",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.54.27",
+      "macAddrString": "2A:15:05:02:36:1B",
+      "humanID": "A007",
+      "statusNotes": "All good agent double \"Oh\" seven.",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.54.155",
+      "macAddrString": "2A:15:05:02:36:9B",
+      "humanID": "A071",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.57.28",
+      "macAddrString": "2A:15:05:02:39:1C",
+      "humanID": "A016",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.58.29",
+      "macAddrString": "2A:15:05:02:3A:1D",
+      "humanID": "A039",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.58.157",
+      "macAddrString": "2A:15:05:02:3A:D1",
+      "humanID": "A036",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.59.29",
+      "macAddrString": "2A:15:05:02:3B:1D",
+      "humanID": "A095",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.60.158",
+      "macAddrString": "2A:15:05:02:3C:9E",
+      "humanID": "A125",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.2.67.161",
+      "macAddrString": "2A:15:05:02:43:A1",
+      "humanID": "A060",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.1.0",
+      "macAddrString": "2A:15:05:82:01:00",
+      "humanID": "A066",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.4.2",
+      "macAddrString": "2A:15:05:82:04:02",
+      "humanID": "A055",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.11.133",
+      "macAddrString": "2A:15:05:82:0B:85",
+      "humanID": "A018",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.14.7",
+      "macAddrString": "2A:15:05:82:0E:07",
+      "humanID": "A100",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.15.7",
+      "macAddrString": "2A:15:05:82:0F:07",
+      "humanID": "A118",
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.15.135",
+      "macAddrString": "2A:15:05:82:0F:87",
+      "humanID": "A076",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.16.8",
+      "macAddrString": "2A:15:05:82:10:08",
+      "humanID": "A068",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.18.9",
+      "macAddrString": "2A:15:05:82:12:09",
+      "humanID": "A084",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.20.10",
+      "macAddrString": "2A:15:05:82:14:0A",
+      "humanID": "A155",
+      "statusNotes": "eth good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.23.11",
+      "macAddrString": "2A:15:05:82:17:0B",
+      "humanID": "A014",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.26.13",
+      "macAddrString": "2A:15:05:82:1A:0D",
+      "humanID": "A151",
+      "statusNotes": "eth good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.26.141",
+      "macAddrString": "2A:15:05:82:1A:8D",
+      "humanID": "A122",
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.27.141",
+      "macAddrString": "2A:15:05:82:1B:8D",
+      "humanID": "A065",
+      "statusNotes": "p3",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.30.15",
+      "macAddrString": "2A:15:05:82:1E:0F",
+      "humanID": "A150",
+      "statusNotes": "eth good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.33.144",
+      "macAddrString": "2A:15:05:82:21:90",
+      "humanID": "A097",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.34.145",
+      "macAddrString": "2A:15:05:82:22:91",
+      "humanID": "A149",
+      "statusNotes": "eth good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.36.146",
+      "macAddrString": "2A:15:05:82:24:92",
+      "humanID": "A146",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.37.146",
+      "macAddrString": "2A:15:05:82:25:92",
+      "humanID": "A026",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.39.19",
+      "macAddrString": "2A:15:05:82:27:13",
+      "humanID": "A127",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.43.149",
+      "macAddrString": "2A:15:05:82:2B:95",
+      "humanID": "A115",
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.44.150",
+      "macAddrString": "2A:15:05:82:2C:96",
+      "humanID": "A063",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.48.152",
+      "macAddrString": "2A:15:05:82:30:98",
+      "humanID": "A004",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.49.152",
+      "macAddrString": "2A:15:05:82:31:98",
+      "humanID": "A093",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.51.153",
+      "macAddrString": "2A:15:05:82:33:99",
+      "humanID": "A134",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.54.27",
+      "macAddrString": "2A:15:05:82:36:1B",
+      "humanID": "A110",
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.59.157",
+      "macAddrString": "2A:15:05:82:3B:9D",
+      "humanID": "A082",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.60.30",
+      "macAddrString": "2A:15:05:82:3C:1E",
+      "humanID": "A030",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.130.61.158",
+      "macAddrString": "2A:15:05:82:3D:9E",
+      "humanID": "A126",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.3.10.133",
+      "macAddrString": "2A:15:06:03:0A:85",
+      "humanID": "A105",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.3.29.14",
+      "macAddrString": "2A:15:06:03:1D:0E",
+      "humanID": "A148",
+      "statusNotes": "eth good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.3.64.160",
+      "macAddrString": "2A:15:06:03:40:A0",
+      "humanID": "A121",
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.4.5.130",
+      "macAddrString": "2A:15:08:04:05:82",
+      "humanID": "A069",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.4.19.137",
+      "macAddrString": "2A:15:08:04:13:89",
+      "humanID": "A067",
+      "statusNotes": "p8",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.4.26.13",
+      "macAddrString": "2A:15:08:04:1A:0D",
+      "humanID": "A107",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.4.33.144",
+      "macAddrString": "2A:15:08:04:21:90",
+      "humanID": "A102",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.4.37.18",
+      "macAddrString": "2A:15:08:04:25:12",
+      "humanID": "A032",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.4.49.24",
+      "macAddrString": "2A:15:08:04:31:18",
+      "humanID": "A074",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.4.53.26",
+      "macAddrString": "2A:15:08:04:35:1A",
+      "humanID": "A109",
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.4.10.133",
+      "macAddrString": "2A:15:09:04:0A:85",
+      "humanID": "A070",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.4.13.134",
+      "macAddrString": "2A:15:09:04:0D:86",
+      "humanID": "A144",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.4.26.141",
+      "macAddrString": "2A:15:09:04:1A:8D",
+      "humanID": "A005",
+      "statusNotes": "good yo",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.181.10.243",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "32::58::6::b5::a::f3",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B213",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.48.241.211",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "46::31::a::30::f1::d3",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B286",
+      "switchPort": -1
+    },
+    {
+      "ipAddr": "10.55.81.168",
+      "macAddrString": "51:28:6F:37:51:A8",
+      "humanID": "A062",
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.4.157.227",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "52::30::6::4::9d::e3",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B249",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.243.129.195",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "58::30::f::f3::81::c3",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B290",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.35.227.23",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "65::49::c::23::e3::17",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B218",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.76.75.103",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "65::49::c::4c::4b::67",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B262",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.114.128.119",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "65::50::c::72::80::77",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B269",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.172.93.103",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "65::50::c::ac::5d::67",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B271",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.228.79.215",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "65::50::f::e4::4f::d7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B263",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.148.98.55",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "65::52::c::94::62::37",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B270",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.176.9.39",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "66::49::d::b0::9::27",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B235",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.45.249.119",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "66::50::e::2d::f9::77",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B278",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.57.235.183",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "66::50::e::39::eb::b7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B254",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.241.131.183",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "66::50::e::f1::83::b7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B295",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.207.109.103",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "66::52::c::cf::6d::67",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B245",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.151.12.103",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "66::66::d::97::c::67",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B243",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.204.75.231",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "67::49::d::cc::4b::e7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B240",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.15.174.113",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "67::82::9::f::ae::71",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B226",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.15.127.247",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "70::49::3::f::7f::f7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B241",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.71.91.231",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "71::49::0::47::5b::e7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B238",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.149.172.167",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "71::49::0::95::ac::a7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B283",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.149.191.167",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "71::49::0::95::bf::a7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B244",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.169.57.183",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "71::49::0::a9::39::b7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B255",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.30.46.7",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "71::49::3::1e::2e::7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B273",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.129.62.183",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "75::49::c::81::3e::b7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B228",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.13.79.199",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "75::49::f::d::4f::c7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B220",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.236.190.55",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "75::51::f::ec::be::37",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B293",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.164.180.1",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "75::75::c::a4::b4::1",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B285",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.7.52.119",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "77::50::a::7::34::77",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B284",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.191.146.55",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "77::51::d::bf::92::37",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B265",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.228.23.1",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "77::75::9::e4::17::1",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B216",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.243.143.215",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "78::49::b::f3::8f::d7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B253",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.49.110.135",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "78::50::8::31::6e::87",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B274",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.251.121.231",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "78::50::b::fb::79::e7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B219",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.36.95.71",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "78::51::8::24::5f::47",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B289",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.79.104.199",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "78::70::9::4f::68::c7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B252",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.160.126.231",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "78::70::b::a0::7e::e7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B296",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.237.73.135",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "78::70::b::ed::49::87",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B230",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.233.201.215",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "80::48::3::e9::c9::d7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B264",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.175.147.7",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "80::49::3::af::93::7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B247",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.193.238.23",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "80::50::3::c1::ee::17",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B236",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.0.106.119",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "80::67::0::0::6a::77",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B233",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.65.210.167",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::48::1::41::d2::a7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B292",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.164.51.199",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::48::1::a4::33::c7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B291",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.238.78.23",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::48::1::ee::4e::17",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B280",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.128.252.199",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::49::1::80::fc::c7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B239",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.137.125.87",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::50::1::89::7d::57",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B260",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.65.139.103",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::51::1::41::8b::67",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B267",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.71.127.103",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::51::1::47::7f::67",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B277",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.71.140.151",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::51::1::47::8c::97",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B223",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.125.143.103",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::65::1::7d::8f::67",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B227",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.129.207.1",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::75::1::81::cf::1",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B248",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.60.189.215",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "83::48::e::3c::bd::d7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B222",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.209.201.39",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "83::51::1::d1::c9::27",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B234",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.27.80.71",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "83::51::e::1b::50::47",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B275",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.62.90.135",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "83::51::e::3e::5a::87",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B251",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.241.202.39",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "83::51::e::f1::ca::27",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B297",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.6.77.7",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "83::65::d::6::4d::7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B276",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.188.25.55",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "83::65::e::bc::19::37",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B225",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.37.94.71",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "84::51::c::25::5e::47",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B287",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.16.80.151",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "84::51::f::10::50::97",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B261",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.221.97.55",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "84::51::f::dd::61::37",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B237",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.16.79.225",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "84::78::c::10::4f::e1",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B282",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.144.18.167",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "85::48::f::90::12::a7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B266",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.108.83.119",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "85::51::c::6c::53::77",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B294",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.14.177.55",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "85::51::c::e::b1::37",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B257",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.170.78.23",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "85::67::c::aa::4e::17",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B258",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.129.148.65",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "85::75::f::81::94::41",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B246",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.108.89.167",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "87::49::e::6c::59::a7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B242",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.6.86.38",
+        "productId": "symmeTree",
+        "versionId": "18d88a9",
+        "deviceId": "87::51::0::6::56::26",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B281",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.157.122.129",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "87::80::a::9d::7a::81",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B217",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.29.141.23",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "88::48::8::1d::8d::17",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B259",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.106.107.23",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "88::49::b::6a::6b::17",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B256",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.79.220.71",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "88::50::b::4f::dc::47",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B250",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.178.216.55",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "88::50::b::b2::d8::37",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B214",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.190.206.113",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "88::75::b::be::ce::71",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B224",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.192.235.1",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "88::78::a::c0::eb::1",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B279",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.145.76.247",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "89::49::8::91::4c::f7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B232",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.131.94.71",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "89::50::8::83::5e::47",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B215",
+      "switchPort": -1
+    }
+  ],
   "macAddrToControllerMetadataMap": {
     "0E:07:0B:05:06:03": {
       "ipAddr": "10.5.6.3",
-      "macAddress": {},
-      "macAddr": "0E:07:0B:05:06:03",
+      "macAddrString": "0E:07:0B:05:06:03",
       "humanID": "A092",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "0E:07:0B:05:24:12": {
       "ipAddr": "10.5.36.18",
-      "macAddress": {},
-      "macAddr": "0E:07:0B:05:24:12",
+      "macAddrString": "0E:07:0B:05:24:12",
       "humanID": "A022",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "0E:07:0B:05:2F:17": {
       "ipAddr": "10.5.47.23",
-      "macAddress": {},
-      "macAddr": "0E:07:0B:05:2F:17",
+      "macAddrString": "0E:07:0B:05:2F:17",
       "humanID": "A024",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "0E:07:0B:05:34:9A": {
       "ipAddr": "10.5.52.154",
-      "macAddress": {},
-      "macAddr": "0E:07:0B:05:34:9A",
+      "macAddrString": "0E:07:0B:05:34:9A",
       "humanID": "A031",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "0E:07:0B:05:37:1B": {
       "ipAddr": "10.5.55.27",
-      "macAddress": {},
-      "macAddr": "0E:07:0B:05:37:1B",
+      "macAddrString": "0E:07:0B:05:37:1B",
       "humanID": "A010",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "0E:07:0B:05:49:A4": {
       "ipAddr": "10.5.73.164",
-      "macAddress": {},
-      "macAddr": "0E:07:0B:05:49:A4",
+      "macAddrString": "0E:07:0B:05:49:A4",
       "humanID": "A049",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "0E:07:0B:05:62:31": {
       "ipAddr": "10.5.98.49",
-      "macAddress": {},
-      "macAddr": "0E:07:0B:05:62:31",
+      "macAddrString": "0E:07:0B:05:62:31",
       "humanID": "A027",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "0E:07:0B:05:6D:36": {
       "ipAddr": "10.5.109.54",
-      "macAddress": {},
-      "macAddr": "0E:07:0B:05:6D:36",
+      "macAddrString": "0E:07:0B:05:6D:36",
       "humanID": "A131",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "0E:07:0B:05:92:C9": {
       "ipAddr": "10.5.146.201",
-      "macAddress": {},
-      "macAddr": "0E:07:0B:05:92:C9",
+      "macAddrString": "0E:07:0B:05:92:C9",
       "humanID": "A052",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    "12::2a::6::9d::6b::50": {
+      "networkDevice": {
+        "ipAddress": "10.157.107.80",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "12::2a::6::9d::6b::50",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B221",
+      "switchPort": -1
+    },
+    "12::2a::6::f3::6b::50": {
+      "networkDevice": {
+        "ipAddress": "10.243.107.80",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "12::2a::6::f3::6b::50",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B231",
+      "switchPort": -1
+    },
+    "12::2a::8::c::d::50": {
+      "networkDevice": {
+        "ipAddress": "10.12.13.80",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "12::2a::8::c::d::50",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B147",
+      "switchPort": -1
+    },
+    "12::2d::5::4c::4c::0": {
+      "networkDevice": {
+        "ipAddress": "10.76.76.0",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "12::2d::5::4c::4c::0",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B268",
+      "switchPort": -1
+    },
+    "12::2d::7::a2::4c::0": {
+      "networkDevice": {
+        "ipAddress": "10.162.76.0",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "12::2d::7::a2::4c::0",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B229",
+      "switchPort": -1
     },
     "26:13:02:01:14:8A": {
       "ipAddr": "10.1.20.138",
-      "macAddress": {},
-      "macAddr": "26:13:02:01:14:8A",
+      "macAddrString": "26:13:02:01:14:8A",
       "humanID": "A098",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:00:80:03:01": {
       "ipAddr": "10.128.3.1",
-      "macAddress": {},
-      "macAddr": "2A:15:00:80:03:01",
+      "macAddrString": "2A:15:00:80:03:01",
       "humanID": "A132",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:00:80:07:83": {
       "ipAddr": "10.128.7.131",
-      "macAddress": {},
-      "macAddr": "2A:15:00:80:07:83",
+      "macAddrString": "2A:15:00:80:07:83",
       "humanID": "A101",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:00:80:09:84": {
       "ipAddr": "10.128.9.132",
-      "macAddress": {},
-      "macAddr": "2A:15:00:80:09:84",
+      "macAddrString": "2A:15:00:80:09:84",
       "humanID": "A015",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:00:80:0E:87": {
       "ipAddr": "10.128.14.135",
-      "macAddress": {},
-      "macAddr": "2A:15:00:80:0E:87",
+      "macAddrString": "2A:15:00:80:0E:87",
       "humanID": "A077",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:00:80:18:8C": {
       "ipAddr": "10.128.24.140",
-      "macAddress": {},
-      "macAddr": "2A:15:00:80:18:8C",
+      "macAddrString": "2A:15:00:80:18:8C",
       "humanID": "A080",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:00:80:19:8C": {
       "ipAddr": "10.128.25.140",
-      "macAddress": {},
-      "macAddr": "2A:15:00:80:19:8C",
+      "macAddrString": "2A:15:00:80:19:8C",
       "humanID": "A154",
-      "statusNotes": "eth good"
+      "statusNotes": "eth good",
+      "switchPort": -1
     },
     "2A:15:00:80:1C:8E": {
       "ipAddr": "10.128.28.142",
-      "macAddress": {},
-      "macAddr": "2A:15:00:80:1C:8E",
+      "macAddrString": "2A:15:00:80:1C:8E",
       "humanID": "A094",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:00:80:26:13": {
       "ipAddr": "10.128.38.19",
-      "macAddress": {},
-      "macAddr": "2A:15:00:80:26:13",
+      "macAddrString": "2A:15:00:80:26:13",
       "humanID": "A046",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:00:80:31:18": {
       "ipAddr": "10.128.49.24",
-      "macAddress": {},
-      "macAddr": "2A:15:00:80:31:18",
+      "macAddrString": "2A:15:00:80:31:18",
       "humanID": "A064",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:00:80:39:1C": {
       "ipAddr": "10.128.57.28",
-      "macAddress": {},
-      "macAddr": "2A:15:00:80:39:1C",
+      "macAddrString": "2A:15:00:80:39:1C",
       "humanID": "A099",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:00:80:3A:1D": {
       "ipAddr": "10.128.58.29",
-      "macAddress": {},
-      "macAddr": "2A:15:00:80:3A:1D",
+      "macAddrString": "2A:15:00:80:3A:1D",
       "humanID": "A012",
-      "statusNotes": "All good"
+      "statusNotes": "All good",
+      "switchPort": -1
     },
     "2A:15:01:00:0D:06": {
       "ipAddr": "10.0.13.6",
-      "macAddress": {},
-      "macAddr": "2A:15:01:00:0D:06",
+      "macAddrString": "2A:15:01:00:0D:06",
       "humanID": "A078",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:01:80:18:8C": {
       "ipAddr": "10.128.24.140",
-      "macAddress": {},
-      "macAddr": "2A:15:01:80:18:8C",
+      "macAddrString": "2A:15:01:80:18:8C",
       "humanID": "A017",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:01:80:1B:8D": {
       "ipAddr": "10.128.27.141",
-      "macAddress": {},
-      "macAddr": "2A:15:01:80:1B:8D",
+      "macAddrString": "2A:15:01:80:1B:8D",
       "humanID": "A054",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:01:80:21:90": {
       "ipAddr": "10.128.33.144",
-      "macAddress": {},
-      "macAddr": "2A:15:01:80:21:90",
+      "macAddrString": "2A:15:01:80:21:90",
       "humanID": "A042",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:01:80:24:92": {
       "ipAddr": "10.128.36.146",
-      "macAddress": {},
-      "macAddr": "2A:15:01:80:24:92",
+      "macAddrString": "2A:15:01:80:24:92",
       "humanID": "A045",
-      "statusNotes": "port4 bad"
+      "statusNotes": "port4 bad",
+      "switchPort": -1
     },
     "2A:15:01:80:26:93": {
       "ipAddr": "10.128.38.147",
-      "macAddress": {},
-      "macAddr": "2A:15:01:80:26:93",
+      "macAddrString": "2A:15:01:80:26:93",
       "humanID": "A083",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:01:80:2A:15": {
       "ipAddr": "10.128.42.21",
-      "macAddress": {},
-      "macAddr": "2A:15:01:80:2A:15",
+      "macAddrString": "2A:15:01:80:2A:15",
       "humanID": "A104",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:01:80:2B:95": {
       "ipAddr": "10.128.43.149",
-      "macAddress": {},
-      "macAddr": "2A:15:01:80:2B:95",
+      "macAddrString": "2A:15:01:80:2B:95",
       "humanID": "A059",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:01:80:3C:1E": {
       "ipAddr": "10.128.60.30",
-      "macAddress": {},
-      "macAddr": "2A:15:01:80:3C:1E",
+      "macAddrString": "2A:15:01:80:3C:1E",
       "humanID": "A058",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:02:01:06:83": {
       "ipAddr": "10.1.6.131",
-      "macAddress": {},
-      "macAddr": "2A:15:02:01:06:83",
+      "macAddrString": "2A:15:02:01:06:83",
       "humanID": "A119",
-      "statusNotes": "ignore flash reset delay"
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
     },
     "2A:15:02:81:04:82": {
       "ipAddr": "10.129.4.130",
-      "macAddress": {},
-      "macAddr": "2A:15:02:81:04:82",
+      "macAddrString": "2A:15:02:81:04:82",
       "humanID": "A034",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:02:81:05:02": {
       "ipAddr": "10.129.5.2",
-      "macAddress": {},
-      "macAddr": "2A:15:02:81:05:02",
+      "macAddrString": "2A:15:02:81:05:02",
       "humanID": "A120",
-      "statusNotes": "ignore flash reset delay"
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
     },
     "2A:15:02:81:14:A1": {
       "ipAddr": "10.129.20.10",
-      "macAddress": {},
-      "macAddr": "2A:15:02:81:14:A1",
+      "macAddrString": "2A:15:02:81:14:A1",
       "humanID": "A029",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:02:81:27:13": {
       "ipAddr": "10.129.39.19",
-      "macAddress": {},
-      "macAddr": "2A:15:02:81:27:13",
+      "macAddrString": "2A:15:02:81:27:13",
       "humanID": "A085",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:02:81:28:94": {
       "ipAddr": "10.129.40.148",
-      "macAddress": {},
-      "macAddr": "2A:15:02:81:28:94",
+      "macAddrString": "2A:15:02:81:28:94",
       "humanID": "A003",
-      "statusNotes": "GOOD"
+      "statusNotes": "GOOD",
+      "switchPort": -1
     },
     "2A:15:02:81:29:94": {
       "ipAddr": "10.129.41.148",
-      "macAddress": {},
-      "macAddr": "2A:15:02:81:29:94",
+      "macAddrString": "2A:15:02:81:29:94",
       "humanID": "A038",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:02:81:2C:16": {
       "ipAddr": "10.129.44.22",
-      "macAddress": {},
-      "macAddr": "2A:15:02:81:2C:16",
+      "macAddrString": "2A:15:02:81:2C:16",
       "humanID": "A048",
-      "statusNotes": "P2 Bad"
+      "statusNotes": "P2 Bad",
+      "switchPort": -1
     },
     "2A:15:02:81:42:21": {
       "ipAddr": "10.129.66.33",
-      "macAddress": {},
-      "macAddr": "2A:15:02:81:42:21",
+      "macAddrString": "2A:15:02:81:42:21",
       "humanID": "A041",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:02:81:44:22": {
       "ipAddr": "10.129.68.34",
-      "macAddress": {},
-      "macAddr": "2A:15:02:81:44:22",
+      "macAddrString": "2A:15:02:81:44:22",
       "humanID": "A128",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:03:01:2D:96": {
       "ipAddr": "10.1.45.150",
-      "macAddress": {},
-      "macAddr": "2A:15:03:01:2D:96",
+      "macAddrString": "2A:15:03:01:2D:96",
       "humanID": "A072",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:03:81:17:0B": {
       "ipAddr": "10.129.23.11",
-      "macAddress": {},
-      "macAddr": "2A:15:03:81:17:0B",
+      "macAddrString": "2A:15:03:81:17:0B",
       "humanID": "A011",
-      "statusNotes": "All good."
+      "statusNotes": "All good.",
+      "switchPort": -1
     },
     "2A:15:03:81:19:8C": {
       "ipAddr": "10.129.25.140",
-      "macAddress": {},
-      "macAddr": "2A:15:03:81:19:8C",
+      "macAddrString": "2A:15:03:81:19:8C",
       "humanID": "A153",
-      "statusNotes": "eth good"
+      "statusNotes": "eth good",
+      "switchPort": -1
     },
     "2A:15:03:81:1B:0D": {
       "ipAddr": "10.129.27.13",
-      "macAddress": {},
-      "macAddr": "2A:15:03:81:1B:0D",
+      "macAddrString": "2A:15:03:81:1B:0D",
       "humanID": "A090",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:03:81:29:94": {
       "ipAddr": "10.129.41.148",
-      "macAddress": {},
-      "macAddr": "2A:15:03:81:29:94",
+      "macAddrString": "2A:15:03:81:29:94",
       "humanID": "A137",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:03:81:35:1A": {
       "ipAddr": "10.129.53.26",
-      "macAddress": {},
-      "macAddr": "2A:15:03:81:35:1A",
+      "macAddrString": "2A:15:03:81:35:1A",
       "humanID": "A136",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:03:81:42:21": {
       "ipAddr": "10.129.66.33",
-      "macAddress": {},
-      "macAddr": "2A:15:03:81:42:21",
+      "macAddrString": "2A:15:03:81:42:21",
       "humanID": "A051",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:03:81:45:A2": {
       "ipAddr": "10.129.69.162",
-      "macAddress": {},
-      "macAddr": "2A:15:03:81:45:A2",
+      "macAddrString": "2A:15:03:81:45:A2",
       "humanID": "A140",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:04:02:06:03": {
       "ipAddr": "10.2.6.3",
-      "macAddress": {},
-      "macAddr": "2A:15:04:02:06:03",
+      "macAddrString": "2A:15:04:02:06:03",
       "humanID": "A020",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:04:02:2C:16": {
       "ipAddr": "10.2.44.22",
-      "macAddress": {},
-      "macAddr": "2A:15:04:02:2C:16",
+      "macAddrString": "2A:15:04:02:2C:16",
       "humanID": "A123",
-      "statusNotes": "ignore flash reset delay"
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
     },
     "2A:15:04:02:2F:17": {
       "ipAddr": "10.2.47.23",
-      "macAddress": {},
-      "macAddr": "2A:15:04:02:2F:17",
+      "macAddrString": "2A:15:04:02:2F:17",
       "humanID": "A035",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:04:02:31:98": {
       "ipAddr": "10.2.49.152",
-      "macAddress": {},
-      "macAddr": "2A:15:04:02:31:98",
+      "macAddrString": "2A:15:04:02:31:98",
       "humanID": "A116",
-      "statusNotes": "ignore flash reset delay"
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
     },
     "2A:15:04:02:35:9A": {
       "ipAddr": "10.2.53.154",
-      "macAddress": {},
-      "macAddr": "2A:15:04:02:35:9A",
+      "macAddrString": "2A:15:04:02:35:9A",
       "humanID": "A113",
-      "statusNotes": "ignore flash reset delay"
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
     },
     "2A:15:04:02:36:9B": {
       "ipAddr": "10.2.54.155",
-      "macAddress": {},
-      "macAddr": "2A:15:04:02:36:9B",
+      "macAddrString": "2A:15:04:02:36:9B",
       "humanID": "A152",
-      "statusNotes": "eth good"
+      "statusNotes": "eth good",
+      "switchPort": -1
     },
     "2A:15:04:02:37:9B": {
       "ipAddr": "10.2.55.155",
-      "macAddress": {},
-      "macAddr": "2A:15:04:02:37:9B",
+      "macAddrString": "2A:15:04:02:37:9B",
       "humanID": "A033",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:04:02:3C:9E": {
       "ipAddr": "10.2.60.158",
-      "macAddress": {},
-      "macAddr": "2A:15:04:02:3C:9E",
+      "macAddrString": "2A:15:04:02:3C:9E",
       "humanID": "A006",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:04:02:43:A1": {
       "ipAddr": "10.2.67.161",
-      "macAddress": {},
-      "macAddr": "2A:15:04:02:43:A1",
+      "macAddrString": "2A:15:04:02:43:A1",
       "humanID": "A019",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:04:82:03:81": {
       "ipAddr": "10.130.3.129",
-      "macAddress": {},
-      "macAddr": "2A:15:04:82:03:81",
+      "macAddrString": "2A:15:04:82:03:81",
       "humanID": "A009",
-      "statusNotes": "Good"
+      "statusNotes": "Good",
+      "switchPort": -1
     },
     "2A:15:04:82:12:89": {
       "ipAddr": "10.130.18.137",
-      "macAddress": {},
-      "macAddr": "2A:15:04:82:12:89",
+      "macAddrString": "2A:15:04:82:12:89",
       "humanID": "A143",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:04:82:19:8C": {
       "ipAddr": "10.130.25.140",
-      "macAddress": {},
-      "macAddr": "2A:15:04:82:19:8C",
+      "macAddrString": "2A:15:04:82:19:8C",
       "humanID": "A133",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:04:82:1F:0F": {
       "ipAddr": "10.130.31.15",
-      "macAddress": {},
-      "macAddr": "2A:15:04:82:1F:0F",
+      "macAddrString": "2A:15:04:82:1F:0F",
       "humanID": "A142",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:04:82:21:10": {
       "ipAddr": "10.130.33.16",
-      "macAddress": {},
-      "macAddr": "2A:15:04:82:21:10",
+      "macAddrString": "2A:15:04:82:21:10",
       "humanID": "A106",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:04:82:25:92": {
       "ipAddr": "10.130.37.146",
-      "macAddress": {},
-      "macAddr": "2A:15:04:82:25:92",
+      "macAddrString": "2A:15:04:82:25:92",
       "humanID": "A013",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:04:82:27:13": {
       "ipAddr": "10.130.39.19",
-      "macAddress": {},
-      "macAddr": "2A:15:04:82:27:13",
+      "macAddrString": "2A:15:04:82:27:13",
       "humanID": "A001",
-      "statusNotes": "Ch8 out."
+      "statusNotes": "Ch8 out.",
+      "switchPort": -1
     },
     "2A:15:04:82:29:94": {
       "ipAddr": "10.130.41.148",
-      "macAddress": {},
-      "macAddr": "2A:15:04:82:29:94",
+      "macAddrString": "2A:15:04:82:29:94",
       "humanID": "A091",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:04:82:2E:17": {
       "ipAddr": "10.130.46.23",
-      "macAddress": {},
-      "macAddr": "2A:15:04:82:2E:17",
+      "macAddrString": "2A:15:04:82:2E:17",
       "humanID": "A139",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:04:82:30:18": {
       "ipAddr": "10.130.48.24",
-      "macAddress": {},
-      "macAddr": "2A:15:04:82:30:18",
+      "macAddrString": "2A:15:04:82:30:18",
       "humanID": "A103",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:04:82:35:1A": {
       "ipAddr": "10.130.53.26",
-      "macAddress": {},
-      "macAddr": "2A:15:04:82:35:1A",
+      "macAddrString": "2A:15:04:82:35:1A",
       "humanID": "A111",
-      "statusNotes": "ignore flash reset delay"
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
     },
     "2A:15:04:82:38:1C": {
       "ipAddr": "10.130.56.28",
-      "macAddress": {},
-      "macAddr": "2A:15:04:82:38:1C",
+      "macAddrString": "2A:15:04:82:38:1C",
       "humanID": "A021",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:04:82:39:9C": {
       "ipAddr": "10.130.57.156",
-      "macAddress": {},
-      "macAddr": "2A:15:04:82:39:9C",
+      "macAddrString": "2A:15:04:82:39:9C",
       "humanID": "A087",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:04:82:42:A1": {
       "ipAddr": "10.130.66.161",
-      "macAddress": {},
-      "macAddr": "2A:15:04:82:42:A1",
+      "macAddrString": "2A:15:04:82:42:A1",
       "humanID": "A008",
-      "statusNotes": "All good."
+      "statusNotes": "All good.",
+      "switchPort": -1
     },
     "2A:15:04:82:43:21": {
       "ipAddr": "10.130.67.33",
-      "macAddress": {},
-      "macAddr": "2A:15:04:82:43:21",
+      "macAddrString": "2A:15:04:82:43:21",
       "humanID": "A073",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:03:81": {
       "ipAddr": "10.2.3.129",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:03:81",
+      "macAddrString": "2A:15:05:02:03:81",
       "humanID": "A117",
-      "statusNotes": "ignore flash reset delay"
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
     },
     "2A:15:05:02:04:82": {
       "ipAddr": "10.2.4.130",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:04:82",
+      "macAddrString": "2A:15:05:02:04:82",
       "humanID": "A023",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:0A:85": {
       "ipAddr": "10.2.10.133",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:0A:85",
+      "macAddrString": "2A:15:05:02:0A:85",
       "humanID": "A145",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:11:88": {
       "ipAddr": "10.2.17.136",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:11:88",
+      "macAddrString": "2A:15:05:02:11:88",
       "humanID": "A089",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:13:09": {
       "ipAddr": "10.2.19.9",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:13:09",
+      "macAddrString": "2A:15:05:02:13:09",
       "humanID": "A300",
-      "statusNotes": "ignore flash reset delay"
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
     },
     "2A:15:05:02:14:8A": {
       "ipAddr": "10.2.20.138",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:14:8A",
+      "macAddrString": "2A:15:05:02:14:8A",
       "humanID": "A129",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:15:0A": {
       "ipAddr": "10.2.21.10",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:15:0A",
+      "macAddrString": "2A:15:05:02:15:0A",
       "humanID": "A088",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:18:8C": {
       "ipAddr": "10.2.24.140",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:18:8C",
+      "macAddrString": "2A:15:05:02:18:8C",
       "humanID": "A138",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:19:8C": {
       "ipAddr": "10.2.25.140",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:19:8C",
+      "macAddrString": "2A:15:05:02:19:8C",
       "humanID": "A108",
-      "statusNotes": "ignore flash reset delay"
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
     },
     "2A:15:05:02:1A:8D": {
       "ipAddr": "10.2.26.141",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:1A:8D",
+      "macAddrString": "2A:15:05:02:1A:8D",
       "humanID": "A135",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:20:90": {
       "ipAddr": "10.2.32.144",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:20:90",
+      "macAddrString": "2A:15:05:02:20:90",
       "humanID": "A130",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:25:12": {
       "ipAddr": "10.2.37.18",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:25:12",
+      "macAddrString": "2A:15:05:02:25:12",
       "humanID": "A147",
-      "statusNotes": "eth good"
+      "statusNotes": "eth good",
+      "switchPort": -1
     },
     "2A:15:05:02:26:13": {
       "ipAddr": "10.2.38.19",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:26:13",
+      "macAddrString": "2A:15:05:02:26:13",
       "humanID": "A057",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:27:13": {
       "ipAddr": "10.2.39.19",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:27:13",
+      "macAddrString": "2A:15:05:02:27:13",
       "humanID": "A053",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:2A:15": {
       "ipAddr": "10.2.42.21",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:2A:15",
+      "macAddrString": "2A:15:05:02:2A:15",
       "humanID": "A040",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:2F:97": {
       "ipAddr": "10.2.47.151",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:2F:97",
+      "macAddrString": "2A:15:05:02:2F:97",
       "humanID": "A050",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:30:18": {
       "ipAddr": "10.2.48.24",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:30:18",
+      "macAddrString": "2A:15:05:02:30:18",
       "humanID": "A044",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:36:1B": {
       "ipAddr": "10.2.54.27",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:36:1B",
+      "macAddrString": "2A:15:05:02:36:1B",
       "humanID": "A007",
-      "statusNotes": "All good agent double \"Oh\" seven."
+      "statusNotes": "All good agent double \"Oh\" seven.",
+      "switchPort": -1
     },
     "2A:15:05:02:36:9B": {
       "ipAddr": "10.2.54.155",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:36:9B",
+      "macAddrString": "2A:15:05:02:36:9B",
       "humanID": "A071",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:39:1C": {
       "ipAddr": "10.2.57.28",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:39:1C",
+      "macAddrString": "2A:15:05:02:39:1C",
       "humanID": "A016",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:3A:1D": {
       "ipAddr": "10.2.58.29",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:3A:1D",
+      "macAddrString": "2A:15:05:02:3A:1D",
       "humanID": "A039",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:3A:D1": {
       "ipAddr": "10.2.58.157",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:3A:D1",
+      "macAddrString": "2A:15:05:02:3A:D1",
       "humanID": "A036",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:3B:1D": {
       "ipAddr": "10.2.59.29",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:3B:1D",
+      "macAddrString": "2A:15:05:02:3B:1D",
       "humanID": "A095",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:3C:9E": {
       "ipAddr": "10.2.60.158",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:3C:9E",
+      "macAddrString": "2A:15:05:02:3C:9E",
       "humanID": "A125",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:02:43:A1": {
       "ipAddr": "10.2.67.161",
-      "macAddress": {},
-      "macAddr": "2A:15:05:02:43:A1",
+      "macAddrString": "2A:15:05:02:43:A1",
       "humanID": "A060",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:01:00": {
       "ipAddr": "10.130.1.0",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:01:00",
+      "macAddrString": "2A:15:05:82:01:00",
       "humanID": "A066",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:04:02": {
       "ipAddr": "10.130.4.2",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:04:02",
+      "macAddrString": "2A:15:05:82:04:02",
       "humanID": "A055",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:0B:85": {
       "ipAddr": "10.130.11.133",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:0B:85",
+      "macAddrString": "2A:15:05:82:0B:85",
       "humanID": "A018",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:0E:07": {
       "ipAddr": "10.130.14.7",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:0E:07",
+      "macAddrString": "2A:15:05:82:0E:07",
       "humanID": "A100",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:0F:07": {
       "ipAddr": "10.130.15.7",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:0F:07",
+      "macAddrString": "2A:15:05:82:0F:07",
       "humanID": "A118",
-      "statusNotes": "ignore flash reset delay"
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
     },
     "2A:15:05:82:0F:87": {
       "ipAddr": "10.130.15.135",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:0F:87",
+      "macAddrString": "2A:15:05:82:0F:87",
       "humanID": "A076",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:10:08": {
       "ipAddr": "10.130.16.8",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:10:08",
+      "macAddrString": "2A:15:05:82:10:08",
       "humanID": "A068",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:12:09": {
       "ipAddr": "10.130.18.9",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:12:09",
+      "macAddrString": "2A:15:05:82:12:09",
       "humanID": "A084",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:14:0A": {
       "ipAddr": "10.130.20.10",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:14:0A",
+      "macAddrString": "2A:15:05:82:14:0A",
       "humanID": "A155",
-      "statusNotes": "eth good"
+      "statusNotes": "eth good",
+      "switchPort": -1
     },
     "2A:15:05:82:17:0B": {
       "ipAddr": "10.130.23.11",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:17:0B",
+      "macAddrString": "2A:15:05:82:17:0B",
       "humanID": "A014",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:1A:0D": {
       "ipAddr": "10.130.26.13",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:1A:0D",
+      "macAddrString": "2A:15:05:82:1A:0D",
       "humanID": "A151",
-      "statusNotes": "eth good"
+      "statusNotes": "eth good",
+      "switchPort": -1
     },
     "2A:15:05:82:1A:8D": {
       "ipAddr": "10.130.26.141",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:1A:8D",
+      "macAddrString": "2A:15:05:82:1A:8D",
       "humanID": "A122",
-      "statusNotes": "ignore flash reset delay"
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
     },
     "2A:15:05:82:1B:8D": {
       "ipAddr": "10.130.27.141",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:1B:8D",
+      "macAddrString": "2A:15:05:82:1B:8D",
       "humanID": "A065",
-      "statusNotes": "p3"
+      "statusNotes": "p3",
+      "switchPort": -1
     },
     "2A:15:05:82:1E:0F": {
       "ipAddr": "10.130.30.15",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:1E:0F",
+      "macAddrString": "2A:15:05:82:1E:0F",
       "humanID": "A150",
-      "statusNotes": "eth good"
+      "statusNotes": "eth good",
+      "switchPort": -1
     },
     "2A:15:05:82:21:90": {
       "ipAddr": "10.130.33.144",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:21:90",
+      "macAddrString": "2A:15:05:82:21:90",
       "humanID": "A097",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:22:91": {
       "ipAddr": "10.130.34.145",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:22:91",
+      "macAddrString": "2A:15:05:82:22:91",
       "humanID": "A149",
-      "statusNotes": "eth good"
+      "statusNotes": "eth good",
+      "switchPort": -1
     },
     "2A:15:05:82:24:92": {
       "ipAddr": "10.130.36.146",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:24:92",
+      "macAddrString": "2A:15:05:82:24:92",
       "humanID": "A146",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:25:92": {
       "ipAddr": "10.130.37.146",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:25:92",
+      "macAddrString": "2A:15:05:82:25:92",
       "humanID": "A026",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:27:13": {
       "ipAddr": "10.130.39.19",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:27:13",
+      "macAddrString": "2A:15:05:82:27:13",
       "humanID": "A127",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:2B:95": {
       "ipAddr": "10.130.43.149",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:2B:95",
+      "macAddrString": "2A:15:05:82:2B:95",
       "humanID": "A115",
-      "statusNotes": "ignore flash reset delay"
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
     },
     "2A:15:05:82:2C:96": {
       "ipAddr": "10.130.44.150",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:2C:96",
+      "macAddrString": "2A:15:05:82:2C:96",
       "humanID": "A063",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:30:98": {
       "ipAddr": "10.130.48.152",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:30:98",
+      "macAddrString": "2A:15:05:82:30:98",
       "humanID": "A004",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:31:98": {
       "ipAddr": "10.130.49.152",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:31:98",
+      "macAddrString": "2A:15:05:82:31:98",
       "humanID": "A093",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:33:99": {
       "ipAddr": "10.130.51.153",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:33:99",
+      "macAddrString": "2A:15:05:82:33:99",
       "humanID": "A134",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:36:1B": {
       "ipAddr": "10.130.54.27",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:36:1B",
+      "macAddrString": "2A:15:05:82:36:1B",
       "humanID": "A110",
-      "statusNotes": "ignore flash reset delay"
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
     },
     "2A:15:05:82:3B:9D": {
       "ipAddr": "10.130.59.157",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:3B:9D",
+      "macAddrString": "2A:15:05:82:3B:9D",
       "humanID": "A082",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:3C:1E": {
       "ipAddr": "10.130.60.30",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:3C:1E",
+      "macAddrString": "2A:15:05:82:3C:1E",
       "humanID": "A030",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:05:82:3D:9E": {
       "ipAddr": "10.130.61.158",
-      "macAddress": {},
-      "macAddr": "2A:15:05:82:3D:9E",
+      "macAddrString": "2A:15:05:82:3D:9E",
       "humanID": "A126",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:06:03:0A:85": {
       "ipAddr": "10.3.10.133",
-      "macAddress": {},
-      "macAddr": "2A:15:06:03:0A:85",
+      "macAddrString": "2A:15:06:03:0A:85",
       "humanID": "A105",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:06:03:1D:0E": {
       "ipAddr": "10.3.29.14",
-      "macAddress": {},
-      "macAddr": "2A:15:06:03:1D:0E",
+      "macAddrString": "2A:15:06:03:1D:0E",
       "humanID": "A148",
-      "statusNotes": "eth good"
+      "statusNotes": "eth good",
+      "switchPort": -1
     },
     "2A:15:06:03:40:A0": {
       "ipAddr": "10.3.64.160",
-      "macAddress": {},
-      "macAddr": "2A:15:06:03:40:A0",
+      "macAddrString": "2A:15:06:03:40:A0",
       "humanID": "A121",
-      "statusNotes": "ignore flash reset delay"
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
     },
     "2A:15:08:04:05:82": {
       "ipAddr": "10.4.5.130",
-      "macAddress": {},
-      "macAddr": "2A:15:08:04:05:82",
+      "macAddrString": "2A:15:08:04:05:82",
       "humanID": "A069",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:08:04:13:89": {
       "ipAddr": "10.4.19.137",
-      "macAddress": {},
-      "macAddr": "2A:15:08:04:13:89",
+      "macAddrString": "2A:15:08:04:13:89",
       "humanID": "A067",
-      "statusNotes": "p8"
+      "statusNotes": "p8",
+      "switchPort": -1
     },
     "2A:15:08:04:1A:0D": {
       "ipAddr": "10.4.26.13",
-      "macAddress": {},
-      "macAddr": "2A:15:08:04:1A:0D",
+      "macAddrString": "2A:15:08:04:1A:0D",
       "humanID": "A107",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:08:04:21:90": {
       "ipAddr": "10.4.33.144",
-      "macAddress": {},
-      "macAddr": "2A:15:08:04:21:90",
+      "macAddrString": "2A:15:08:04:21:90",
       "humanID": "A102",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:08:04:25:12": {
       "ipAddr": "10.4.37.18",
-      "macAddress": {},
-      "macAddr": "2A:15:08:04:25:12",
+      "macAddrString": "2A:15:08:04:25:12",
       "humanID": "A032",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:08:04:31:18": {
       "ipAddr": "10.4.49.24",
-      "macAddress": {},
-      "macAddr": "2A:15:08:04:31:18",
+      "macAddrString": "2A:15:08:04:31:18",
       "humanID": "A074",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:08:04:35:1A": {
       "ipAddr": "10.4.53.26",
-      "macAddress": {},
-      "macAddr": "2A:15:08:04:35:1A",
+      "macAddrString": "2A:15:08:04:35:1A",
       "humanID": "A109",
-      "statusNotes": "ignore flash reset delay"
+      "statusNotes": "ignore flash reset delay",
+      "switchPort": -1
     },
     "2A:15:09:04:0A:85": {
       "ipAddr": "10.4.10.133",
-      "macAddress": {},
-      "macAddr": "2A:15:09:04:0A:85",
+      "macAddrString": "2A:15:09:04:0A:85",
       "humanID": "A070",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:09:04:0D:86": {
       "ipAddr": "10.4.13.134",
-      "macAddress": {},
-      "macAddr": "2A:15:09:04:0D:86",
+      "macAddrString": "2A:15:09:04:0D:86",
       "humanID": "A144",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
     },
     "2A:15:09:04:1A:8D": {
       "ipAddr": "10.4.26.141",
-      "macAddress": {},
-      "macAddr": "2A:15:09:04:1A:8D",
+      "macAddrString": "2A:15:09:04:1A:8D",
       "humanID": "A005",
-      "statusNotes": "good yo"
+      "statusNotes": "good yo",
+      "switchPort": -1
+    },
+    "32::58::6::b5::a::f3": {
+      "networkDevice": {
+        "ipAddress": "10.181.10.243",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "32::58::6::b5::a::f3",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B213",
+      "switchPort": -1
+    },
+    "46::31::a::30::f1::d3": {
+      "networkDevice": {
+        "ipAddress": "10.48.241.211",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "46::31::a::30::f1::d3",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B286",
+      "switchPort": -1
     },
     "51:28:6F:37:51:A8": {
       "ipAddr": "10.55.81.168",
-      "macAddress": {},
-      "macAddr": "51:28:6F:37:51:A8",
+      "macAddrString": "51:28:6F:37:51:A8",
       "humanID": "A062",
-      "statusNotes": "good"
+      "statusNotes": "good",
+      "switchPort": -1
+    },
+    "52::30::6::4::9d::e3": {
+      "networkDevice": {
+        "ipAddress": "10.4.157.227",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "52::30::6::4::9d::e3",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B249",
+      "switchPort": -1
+    },
+    "58::30::f::f3::81::c3": {
+      "networkDevice": {
+        "ipAddress": "10.243.129.195",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "58::30::f::f3::81::c3",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B290",
+      "switchPort": -1
+    },
+    "65::49::c::23::e3::17": {
+      "networkDevice": {
+        "ipAddress": "10.35.227.23",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "65::49::c::23::e3::17",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B218",
+      "switchPort": -1
+    },
+    "65::49::c::4c::4b::67": {
+      "networkDevice": {
+        "ipAddress": "10.76.75.103",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "65::49::c::4c::4b::67",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B262",
+      "switchPort": -1
+    },
+    "65::50::c::72::80::77": {
+      "networkDevice": {
+        "ipAddress": "10.114.128.119",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "65::50::c::72::80::77",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B269",
+      "switchPort": -1
+    },
+    "65::50::c::ac::5d::67": {
+      "networkDevice": {
+        "ipAddress": "10.172.93.103",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "65::50::c::ac::5d::67",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B271",
+      "switchPort": -1
+    },
+    "65::50::f::e4::4f::d7": {
+      "networkDevice": {
+        "ipAddress": "10.228.79.215",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "65::50::f::e4::4f::d7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B263",
+      "switchPort": -1
+    },
+    "65::52::c::94::62::37": {
+      "networkDevice": {
+        "ipAddress": "10.148.98.55",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "65::52::c::94::62::37",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B270",
+      "switchPort": -1
+    },
+    "66::49::d::b0::9::27": {
+      "networkDevice": {
+        "ipAddress": "10.176.9.39",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "66::49::d::b0::9::27",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B235",
+      "switchPort": -1
+    },
+    "66::50::e::2d::f9::77": {
+      "networkDevice": {
+        "ipAddress": "10.45.249.119",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "66::50::e::2d::f9::77",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B278",
+      "switchPort": -1
+    },
+    "66::50::e::39::eb::b7": {
+      "networkDevice": {
+        "ipAddress": "10.57.235.183",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "66::50::e::39::eb::b7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B254",
+      "switchPort": -1
+    },
+    "66::50::e::f1::83::b7": {
+      "networkDevice": {
+        "ipAddress": "10.241.131.183",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "66::50::e::f1::83::b7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B295",
+      "switchPort": -1
+    },
+    "66::52::c::cf::6d::67": {
+      "networkDevice": {
+        "ipAddress": "10.207.109.103",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "66::52::c::cf::6d::67",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B245",
+      "switchPort": -1
+    },
+    "66::66::d::97::c::67": {
+      "networkDevice": {
+        "ipAddress": "10.151.12.103",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "66::66::d::97::c::67",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B243",
+      "switchPort": -1
+    },
+    "67::49::d::cc::4b::e7": {
+      "networkDevice": {
+        "ipAddress": "10.204.75.231",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "67::49::d::cc::4b::e7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B240",
+      "switchPort": -1
+    },
+    "67::82::9::f::ae::71": {
+      "networkDevice": {
+        "ipAddress": "10.15.174.113",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "67::82::9::f::ae::71",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B226",
+      "switchPort": -1
+    },
+    "70::49::3::f::7f::f7": {
+      "networkDevice": {
+        "ipAddress": "10.15.127.247",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "70::49::3::f::7f::f7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B241",
+      "switchPort": -1
+    },
+    "71::49::0::47::5b::e7": {
+      "networkDevice": {
+        "ipAddress": "10.71.91.231",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "71::49::0::47::5b::e7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B238",
+      "switchPort": -1
+    },
+    "71::49::0::95::ac::a7": {
+      "networkDevice": {
+        "ipAddress": "10.149.172.167",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "71::49::0::95::ac::a7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B283",
+      "switchPort": -1
+    },
+    "71::49::0::95::bf::a7": {
+      "networkDevice": {
+        "ipAddress": "10.149.191.167",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "71::49::0::95::bf::a7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B244",
+      "switchPort": -1
+    },
+    "71::49::0::a9::39::b7": {
+      "networkDevice": {
+        "ipAddress": "10.169.57.183",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "71::49::0::a9::39::b7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B255",
+      "switchPort": -1
+    },
+    "71::49::3::1e::2e::7": {
+      "networkDevice": {
+        "ipAddress": "10.30.46.7",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "71::49::3::1e::2e::7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B273",
+      "switchPort": -1
+    },
+    "75::49::c::81::3e::b7": {
+      "networkDevice": {
+        "ipAddress": "10.129.62.183",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "75::49::c::81::3e::b7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B228",
+      "switchPort": -1
+    },
+    "75::49::f::d::4f::c7": {
+      "networkDevice": {
+        "ipAddress": "10.13.79.199",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "75::49::f::d::4f::c7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B220",
+      "switchPort": -1
+    },
+    "75::51::f::ec::be::37": {
+      "networkDevice": {
+        "ipAddress": "10.236.190.55",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "75::51::f::ec::be::37",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B293",
+      "switchPort": -1
+    },
+    "75::75::c::a4::b4::1": {
+      "networkDevice": {
+        "ipAddress": "10.164.180.1",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "75::75::c::a4::b4::1",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B285",
+      "switchPort": -1
+    },
+    "77::50::a::7::34::77": {
+      "networkDevice": {
+        "ipAddress": "10.7.52.119",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "77::50::a::7::34::77",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B284",
+      "switchPort": -1
+    },
+    "77::51::d::bf::92::37": {
+      "networkDevice": {
+        "ipAddress": "10.191.146.55",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "77::51::d::bf::92::37",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B265",
+      "switchPort": -1
+    },
+    "77::75::9::e4::17::1": {
+      "networkDevice": {
+        "ipAddress": "10.228.23.1",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "77::75::9::e4::17::1",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B216",
+      "switchPort": -1
+    },
+    "78::49::b::f3::8f::d7": {
+      "networkDevice": {
+        "ipAddress": "10.243.143.215",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "78::49::b::f3::8f::d7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B253",
+      "switchPort": -1
+    },
+    "78::50::8::31::6e::87": {
+      "networkDevice": {
+        "ipAddress": "10.49.110.135",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "78::50::8::31::6e::87",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B274",
+      "switchPort": -1
+    },
+    "78::50::b::fb::79::e7": {
+      "networkDevice": {
+        "ipAddress": "10.251.121.231",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "78::50::b::fb::79::e7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B219",
+      "switchPort": -1
+    },
+    "78::51::8::24::5f::47": {
+      "networkDevice": {
+        "ipAddress": "10.36.95.71",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "78::51::8::24::5f::47",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B289",
+      "switchPort": -1
+    },
+    "78::70::9::4f::68::c7": {
+      "networkDevice": {
+        "ipAddress": "10.79.104.199",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "78::70::9::4f::68::c7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B252",
+      "switchPort": -1
+    },
+    "78::70::b::a0::7e::e7": {
+      "networkDevice": {
+        "ipAddress": "10.160.126.231",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "78::70::b::a0::7e::e7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B296",
+      "switchPort": -1
+    },
+    "78::70::b::ed::49::87": {
+      "networkDevice": {
+        "ipAddress": "10.237.73.135",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "78::70::b::ed::49::87",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B230",
+      "switchPort": -1
+    },
+    "80::48::3::e9::c9::d7": {
+      "networkDevice": {
+        "ipAddress": "10.233.201.215",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "80::48::3::e9::c9::d7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B264",
+      "switchPort": -1
+    },
+    "80::49::3::af::93::7": {
+      "networkDevice": {
+        "ipAddress": "10.175.147.7",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "80::49::3::af::93::7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B247",
+      "switchPort": -1
+    },
+    "80::50::3::c1::ee::17": {
+      "networkDevice": {
+        "ipAddress": "10.193.238.23",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "80::50::3::c1::ee::17",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B236",
+      "switchPort": -1
+    },
+    "80::67::0::0::6a::77": {
+      "networkDevice": {
+        "ipAddress": "10.0.106.119",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "80::67::0::0::6a::77",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B233",
+      "switchPort": -1
+    },
+    "82::48::1::41::d2::a7": {
+      "networkDevice": {
+        "ipAddress": "10.65.210.167",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::48::1::41::d2::a7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B292",
+      "switchPort": -1
+    },
+    "82::48::1::a4::33::c7": {
+      "networkDevice": {
+        "ipAddress": "10.164.51.199",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::48::1::a4::33::c7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B291",
+      "switchPort": -1
+    },
+    "82::48::1::ee::4e::17": {
+      "networkDevice": {
+        "ipAddress": "10.238.78.23",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::48::1::ee::4e::17",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B280",
+      "switchPort": -1
+    },
+    "82::49::1::80::fc::c7": {
+      "networkDevice": {
+        "ipAddress": "10.128.252.199",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::49::1::80::fc::c7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B239",
+      "switchPort": -1
+    },
+    "82::50::1::89::7d::57": {
+      "networkDevice": {
+        "ipAddress": "10.137.125.87",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::50::1::89::7d::57",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B260",
+      "switchPort": -1
+    },
+    "82::51::1::41::8b::67": {
+      "networkDevice": {
+        "ipAddress": "10.65.139.103",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::51::1::41::8b::67",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B267",
+      "switchPort": -1
+    },
+    "82::51::1::47::7f::67": {
+      "networkDevice": {
+        "ipAddress": "10.71.127.103",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::51::1::47::7f::67",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B277",
+      "switchPort": -1
+    },
+    "82::51::1::47::8c::97": {
+      "networkDevice": {
+        "ipAddress": "10.71.140.151",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::51::1::47::8c::97",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B223",
+      "switchPort": -1
+    },
+    "82::65::1::7d::8f::67": {
+      "networkDevice": {
+        "ipAddress": "10.125.143.103",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::65::1::7d::8f::67",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B227",
+      "switchPort": -1
+    },
+    "82::75::1::81::cf::1": {
+      "networkDevice": {
+        "ipAddress": "10.129.207.1",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "82::75::1::81::cf::1",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B248",
+      "switchPort": -1
+    },
+    "83::48::e::3c::bd::d7": {
+      "networkDevice": {
+        "ipAddress": "10.60.189.215",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "83::48::e::3c::bd::d7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B222",
+      "switchPort": -1
+    },
+    "83::51::1::d1::c9::27": {
+      "networkDevice": {
+        "ipAddress": "10.209.201.39",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "83::51::1::d1::c9::27",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B234",
+      "switchPort": -1
+    },
+    "83::51::e::1b::50::47": {
+      "networkDevice": {
+        "ipAddress": "10.27.80.71",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "83::51::e::1b::50::47",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B275",
+      "switchPort": -1
+    },
+    "83::51::e::3e::5a::87": {
+      "networkDevice": {
+        "ipAddress": "10.62.90.135",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "83::51::e::3e::5a::87",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B251",
+      "switchPort": -1
+    },
+    "83::51::e::f1::ca::27": {
+      "networkDevice": {
+        "ipAddress": "10.241.202.39",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "83::51::e::f1::ca::27",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B297",
+      "switchPort": -1
+    },
+    "83::65::d::6::4d::7": {
+      "networkDevice": {
+        "ipAddress": "10.6.77.7",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "83::65::d::6::4d::7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B276",
+      "switchPort": -1
+    },
+    "83::65::e::bc::19::37": {
+      "networkDevice": {
+        "ipAddress": "10.188.25.55",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "83::65::e::bc::19::37",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B225",
+      "switchPort": -1
+    },
+    "84::51::c::25::5e::47": {
+      "networkDevice": {
+        "ipAddress": "10.37.94.71",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "84::51::c::25::5e::47",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B287",
+      "switchPort": -1
+    },
+    "84::51::f::10::50::97": {
+      "networkDevice": {
+        "ipAddress": "10.16.80.151",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "84::51::f::10::50::97",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B261",
+      "switchPort": -1
+    },
+    "84::51::f::dd::61::37": {
+      "networkDevice": {
+        "ipAddress": "10.221.97.55",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "84::51::f::dd::61::37",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B237",
+      "switchPort": -1
+    },
+    "84::78::c::10::4f::e1": {
+      "networkDevice": {
+        "ipAddress": "10.16.79.225",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "84::78::c::10::4f::e1",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B282",
+      "switchPort": -1
+    },
+    "85::48::f::90::12::a7": {
+      "networkDevice": {
+        "ipAddress": "10.144.18.167",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "85::48::f::90::12::a7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B266",
+      "switchPort": -1
+    },
+    "85::51::c::6c::53::77": {
+      "networkDevice": {
+        "ipAddress": "10.108.83.119",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "85::51::c::6c::53::77",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B294",
+      "switchPort": -1
+    },
+    "85::51::c::e::b1::37": {
+      "networkDevice": {
+        "ipAddress": "10.14.177.55",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "85::51::c::e::b1::37",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B257",
+      "switchPort": -1
+    },
+    "85::67::c::aa::4e::17": {
+      "networkDevice": {
+        "ipAddress": "10.170.78.23",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "85::67::c::aa::4e::17",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B258",
+      "switchPort": -1
+    },
+    "85::75::f::81::94::41": {
+      "networkDevice": {
+        "ipAddress": "10.129.148.65",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "85::75::f::81::94::41",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B246",
+      "switchPort": -1
+    },
+    "87::49::e::6c::59::a7": {
+      "networkDevice": {
+        "ipAddress": "10.108.89.167",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "87::49::e::6c::59::a7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B242",
+      "switchPort": -1
+    },
+    "87::51::0::6::56::26": {
+      "networkDevice": {
+        "ipAddress": "10.6.86.38",
+        "productId": "symmeTree",
+        "versionId": "18d88a9",
+        "deviceId": "87::51::0::6::56::26",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B281",
+      "switchPort": -1
+    },
+    "87::80::a::9d::7a::81": {
+      "networkDevice": {
+        "ipAddress": "10.157.122.129",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "87::80::a::9d::7a::81",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B217",
+      "switchPort": -1
+    },
+    "88::48::8::1d::8d::17": {
+      "networkDevice": {
+        "ipAddress": "10.29.141.23",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "88::48::8::1d::8d::17",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B259",
+      "switchPort": -1
+    },
+    "88::49::b::6a::6b::17": {
+      "networkDevice": {
+        "ipAddress": "10.106.107.23",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "88::49::b::6a::6b::17",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B256",
+      "switchPort": -1
+    },
+    "88::50::b::4f::dc::47": {
+      "networkDevice": {
+        "ipAddress": "10.79.220.71",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "88::50::b::4f::dc::47",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B250",
+      "switchPort": -1
+    },
+    "88::50::b::b2::d8::37": {
+      "networkDevice": {
+        "ipAddress": "10.178.216.55",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "88::50::b::b2::d8::37",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B214",
+      "switchPort": -1
+    },
+    "88::75::b::be::ce::71": {
+      "networkDevice": {
+        "ipAddress": "10.190.206.113",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "88::75::b::be::ce::71",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B224",
+      "switchPort": -1
+    },
+    "88::78::a::c0::eb::1": {
+      "networkDevice": {
+        "ipAddress": "10.192.235.1",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "88::78::a::c0::eb::1",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B279",
+      "switchPort": -1
+    },
+    "89::49::8::91::4c::f7": {
+      "networkDevice": {
+        "ipAddress": "10.145.76.247",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "89::49::8::91::4c::f7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B232",
+      "switchPort": -1
+    },
+    "89::50::8::83::5e::47": {
+      "networkDevice": {
+        "ipAddress": "10.131.94.71",
+        "productId": "symmeTree",
+        "versionId": "rev8",
+        "deviceId": "89::50::8::83::5e::47",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "B215",
+      "switchPort": -1
     }
   }
 }

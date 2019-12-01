@@ -16,7 +16,6 @@ import com.symmetrylabs.util.hardware.CubeInventory;
 import com.symmetrylabs.color.PerceptualColorScale;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.*;
 
 public class CubesController extends LXOutput implements Comparable<CubesController>, OPCConstants, CubeInventory.Listener {
@@ -184,7 +183,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         PointsGrouping points = null;
         CubesModel cubesModel = (CubesModel)lx.model;
 
-        if ((ApplicationState.outputControl().testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
+        if ((ApplicationState.outputControl().testUnicast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
             CubesModel.Cube cube = cubesModel.getCubes().get(0);
             if (cube instanceof CubesModel.DoubleControllerCube) {
                 points = ((CubesModel.DoubleControllerCube)cube).getPointsA();

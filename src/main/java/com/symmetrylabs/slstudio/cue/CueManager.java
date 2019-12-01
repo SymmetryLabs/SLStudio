@@ -10,25 +10,18 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.util.CaptionSource;
 import com.symmetrylabs.util.FileUtils;
 import heronarts.lx.LX;
-import heronarts.lx.LXComponent;
 import heronarts.lx.LXLoopTask;
-import heronarts.lx.LXSerializable;
-import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.StringParameter;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Duration;
-import org.joda.time.LocalDate;
-import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
@@ -208,7 +201,7 @@ public class CueManager implements LXLoopTask, CaptionSource, SLStudioLX.SaveHoo
             JsonArray cueArr = obj.getAsJsonArray(KEY_CUES);
             for (JsonElement cueElem : cueArr) {
                 JsonObject cueObj = cueElem.getAsJsonObject();
-                Cue c = new Cue(lx, lx.engine.output.brightness);
+                Cue c = new Cue(lx.engine.output.brightness);
                 c.load(cueObj);
                 addCue(c);
             }

@@ -5,7 +5,9 @@ import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.color.PerceptualColorScale;
 import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.shows.tree.TreeModel;
 import com.symmetrylabs.slstudio.ApplicationState;
+import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.ui.UIOfflineRender;
 import com.symmetrylabs.util.NetworkUtils;
@@ -24,16 +26,20 @@ import java.net.*;
 
 // All of our controllers operate on UDP but the business logic isn't fundamentally coupled to the transport... (i.e. merits refactor to LXOutput)
 public abstract class DiscoverableController extends LXDatagramOutput implements Comparable<DiscoverableController>, OPCConstants, SLControllerInventory.Listener {
+    @Expose
     public String humanID;
     public int idInt;
     public final boolean isBroadcast;
     @Expose
     public final NetworkDevice networkDevice;
 
+    public String notes = "";
+
     private final PerceptualColorScale outputScaler; // should this really be part of the controller logic?
     private final SLControllerInventory inventory;
     public Integer switchPortNumber; // the physical port index which this controller is plugged to.  May be null.
     public String newControllerID = ""; // tmp holder for new controller ID to write
+    public BooleanParameter isBroadcastDevice = new BooleanParameter("this is the special 10.255.255.255 device", false);
     protected int numPixels;
     protected boolean is16BitColorEnabled = false;
 
@@ -144,6 +150,10 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
         if (isBroadcast != ApplicationState.outputControl().broadcastPacket.isOn())
             return;
 
+        // We should never use the broadcast device concurrently with unicast
+        if(!ApplicationState.outputControl().testBroadcast.isOn() && this.isBroadcastDevice.isOn()) { // if we're outputing normally we don't want this.
+            return;
+        }
         // Create data socket connection if needed
 //        if (dsocket == null) {
 //            try {
@@ -171,7 +181,10 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
 
         PointsGrouping points = null;
 
-        points = SLShow.getPointsMappedToControllerID(this.humanID); // returns null if we're not broadcast
+//        points = SLShow.getPointsMappedToControllerID(this.humanID); // returns null if we're not broadcast
+        if (SLShow.mapping != null){
+            points = SLShow.mapping.getPointsMappedToControllerID(this.humanID); // returns null if we're not broadcast
+        }
 
         numPixels = points == null ? 0 : points.size();
 
@@ -207,12 +220,18 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
             int col = (int) ((System.nanoTime() / 1_000_000_000L) % 3L);
             int c = 0;
             switch (col) {
-            /* don't use full-bright colors here, since they bust some of our fixtures. */
-            case 0: c = 0xFFf20000; break;
-            case 1: c = 0xFF00f200; break;
-            case 2: c = 0xFF0000f2; break;
+                /* don't use full-bright colors here, since they bust some of our fixtures. */
+                case 0:
+                    c = 0xFFf20000;
+                    break;
+                case 1:
+                    c = 0xFF00f200;
+                    break;
+                case 2:
+                    c = 0xFF0000f2;
+                    break;
             }
-            if (momentaryAltTestOutput.isOn()){
+            if (momentaryAltTestOutput.isOn()) {
                 c = LXColor.hsb(0, 0, lx.engine.output.brightness.getNormalizedf() * 100);
             }
             /* we want the test pattern to work even if we aren't mapped, and if
@@ -230,7 +249,46 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
             }
 
             fillDatagramsAndAddToOutput();
+        } else if (ApplicationState.outputControl().testUnicast.isOn() || isBroadcast || ApplicationState.outputControl().testBroadcast.isOn()) {
+            // first get the fixture.
+            SLModel model = ((SLModel) lx.model);
+            if (model instanceof TreeModel){
+                points = new PointsGrouping(((TreeModel) model).getBranches().get(0).getPoints());
+            }
+            if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
+                initPacketData(numPixels, true);
+                long[] srcLongs = (long[]) src.getArray(PolyBuffer.Space.RGB16);
+                for (int i = 0; i < numPixels; i++) {
+                    LXPoint point = points.getPoint(i);
+                    setPixel16(i, srcLongs[point.index]);
+                }
+            } else {
+                // WARNING!! static desperate to get tree working - change later
+                numPixels = 1200;
+
+                initPacketData(numPixels, false);
+                int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
+                for (int i = 0; i < numPixels; i++) {
+                    LXPoint point = points.getPoint(i);
+                    setPixel8(i, srcInts[point.index]);
+                }
+            }
+
+            // then add output depending on controller
+            if (ApplicationState.outputControl().testBroadcast.isOn()){
+                // ok only if we are the special broadcast device
+                if (!this.isBroadcastDevice.isOn()){
+                    return; // do nothing if we're not the device
+                }
+            }
+            else { // if we're outputing normally we don't want this.
+                if (this.isBroadcastDevice.isOn()){
+                    return;
+                }
+            }
+            fillDatagramsAndAddToOutput();
         } else if (points != null) { // there is a fixture for this one
+            numPixels = 1200;
             // Fill the datagram with pixel data
             if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
                 initPacketData(numPixels, true);
@@ -255,6 +313,7 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
             if (numPixels == 0) {
                 setNumPixels();
             }
+            // set value red
             for (int i = 0; i < numPixels; i++) {
                 int unmappedColor = LXColor.rgba(0xff, 0, 0, (int) (lx.engine.output.brightness.getValue() * 0xff));
                 unmappedColor = LXColor.scaleBrightness(unmappedColor, lx.engine.output.brightness.getNormalizedf());
@@ -273,7 +332,7 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
         PointsGrouping points = null;
         if (model instanceof CubesModel){
             CubesModel cubesModel = (CubesModel) model;
-            if ((ApplicationState.outputControl().testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
+            if ((ApplicationState.outputControl().testUnicast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
                 CubesModel.Cube cube = cubesModel.getCubes().get(0);
                 if (cube instanceof CubesModel.DoubleControllerCube) {
                     points = ((CubesModel.DoubleControllerCube)cube).getPointsA();
@@ -308,7 +367,9 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
 
     @Override
     public int compareTo(@NotNull DiscoverableController other) {
-        return idInt != other.idInt ? Integer.compare(idInt, other.idInt) : humanID.compareTo(other.humanID);
+//        return idInt != other.idInt ? Integer.compare(idInt, other.idInt) : humanID.compareTo(other.humanID);
+        assert !humanID.equals(other.humanID);
+        return humanID.compareTo(other.humanID);
     }
 
     @Override

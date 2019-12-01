@@ -195,7 +195,7 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
         /* These windows aren't really transient but we don't want them to appear in
            the Window menu and they don't have a close button, so there's no risk of
            them disappearing. */
-        WindowManager.addTransient(new MainMenu(lx, this));
+        WindowManager.addTransient(MainMenu.getInstance(lx, this));
         WindowManager.addTransient(picker);
         WindowManager.addTransient(new CaptionWindow(lx));
 
@@ -207,6 +207,8 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
         WindowManager.addPersistent("Modulation", () -> new ModulationWindow(lx), false);
         WindowManager.addPersistent("OSC", () -> new OscWindow(lx), false);
         WindowManager.addPersistent("Remote Control", () -> new RemoteControlWindow(client), false);
+
+        WindowManager.addPersistent("Cue", () -> new CueWindow(lx, core.cueManager), true);
 
         WindowManager.addPersistent("Developer/Imgui demo", SlimguiDemoWindow::new, false);
         WindowManager.addPersistent("Developer/Style editor", SlimguiStyleEditor::new, false);

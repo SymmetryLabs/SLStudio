@@ -5,14 +5,13 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.stream.JsonWriter;
 //import com.symmetrylabs.slstudio.output.DiscoverableController;
+import com.symmetrylabs.controllers.symmeTreeController.infrastructure.PersistentControllerByHumanIdMap;
+import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.output.DiscoverableController;
 import com.symmetrylabs.util.NetworkUtil.MACAddress;
-import heronarts.lx.parameter.DiscreteParameter;
+import org.apache.commons.collections4.iterators.IteratorChain;
 
 import java.io.*;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.*;
 
 public class SLControllerInventory {
@@ -24,7 +23,23 @@ public class SLControllerInventory {
 
     private final transient List<SLControllerInventory.Listener> listeners = new ArrayList<>();
 
+    @Expose
+    public final ArrayList<ControllerMetadata> allControllers = new ArrayList<>();
+
+    public Collection<ControllerMetadata> getSortedControllers() {
+        return new TreeSet<>(allControllers);
+    }
+
+    @Expose
+    public TreeMap<String, ControllerMetadata> macAddrToControllerMetadataMap = new TreeMap<>();
+
+    private transient List<String> inventoryErrors = new ArrayList<>();
+
     private transient HashMap<String, DiscoverableController> sl_controller_index = new HashMap<>();
+
+    protected SLControllerInventory() {
+//        allControllers = new ArrayList<DiscoverableController>();
+    }
 
     public void addListener(Listener listener) {
         listeners.add(listener);
@@ -41,6 +56,31 @@ public class SLControllerInventory {
         return deviceId;
     }
 
+    public String getNameByMac(String deviceId) {
+        ControllerMetadata metadata = macAddrToControllerMetadataMap.get(deviceId);
+        return metadata == null ? deviceId : metadata.humanID;
+    }
+
+    public Iterator<CharSequence> getErrors() {
+        IteratorChain<CharSequence> iter = new IteratorChain<>();
+        iter.addIterator(inventoryErrors.iterator());
+        return iter;
+    }
+
+    public void rebuild() {
+        // logic to rebuild inventory
+    }
+
+    public boolean save() {
+        // logic to save
+        return false;
+    }
+
+    public void addNetworkDeviceByName(String hID, NetworkDevice networkDevice) {
+        controllerByCtrlId.put(hID, new ControllerMetadata(hID, networkDevice));
+        macAddrToControllerMetadataMap.put(networkDevice.deviceId, new ControllerMetadata(hID, networkDevice));
+    }
+
     public interface Listener {
         void onControllerListUpdated();
     }
@@ -51,58 +91,10 @@ public class SLControllerInventory {
         return hostAddr;
     }
 
-    public static class ControllerMetadata{
-        @Expose
-        Inet4Address ipAddr;
 
-        @Expose
-        MACAddress macAddress;
-        @Expose
-        String macAddr;
-
-        @Expose
-        String humanID;
-
-        @Expose
-        String statusNotes;
-
-        public ControllerMetadata(String[] chunkArr) {
-            if (chunkArr.length > 4|| chunkArr.length < 3) {
-                throw new IllegalStateException("Chunk malformed, incorrect number data elts.");
-            }
-            try {
-                ipAddr = (Inet4Address) InetAddress.getByName(chunkArr[0]);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
-            macAddress = MACAddress.valueOf(chunkArr[1]);
-            macAddr = macAddress.toString();
-            humanID = chunkArr[2];
-            statusNotes = chunkArr[3] == null ? "null" : chunkArr[3];
-        }
-
-        public ControllerMetadata(DiscoverableController cc) {
-            ipAddr = (Inet4Address) cc.networkDevice.ipAddress;
-            macAddr = cc.networkDevice.deviceId;
-            macAddress = MACAddress.valueOf(cc.networkDevice.deviceId);
-            humanID = cc.humanID;
-            statusNotes = "null for now";
-        }
-
-        public String getHumanID() {
-            return humanID;
-        }
-
-        public String getHostAddress() { return ipAddr.getHostAddress(); }
-
-        public String getMacAddr() { return macAddr; }
-    }
-
-    ArrayList<ControllerMetadata> treeInventory = new ArrayList<>();
+//    ArrayList<ControllerMetadata> treeInventory = new ArrayList<>();
 
     // Map to controller metadata based on MAC
-    @Expose
-    public TreeMap<String, ControllerMetadata> macAddrToControllerMetadataMap = new TreeMap<>();
 
     public final transient Map<String, ControllerMetadata> controllerByMacAddrs = new TreeMap<>();
     public final transient Map<String,ControllerMetadata> controllerByCtrlId = new TreeMap<>();
@@ -132,7 +124,7 @@ public class SLControllerInventory {
                 }
                 ControllerMetadata meta = new ControllerMetadata(chunkArr);
                 idx = 0;
-                treeInventory.add(meta);
+//                treeInventory.add(meta);
                 macAddrToControllerMetadataMap.put(meta.humanID, meta);
 
             }
@@ -194,8 +186,8 @@ public class SLControllerInventory {
                 }
                 ControllerMetadata meta = new ControllerMetadata(chunkArr);
                 idx = 0;
-                treeInventory.add(meta);
-                macAddrToControllerMetadataMap.put(meta.macAddr, meta);
+//                treeInventory.add(meta);
+                macAddrToControllerMetadataMap.put(meta.macAddrString, meta);
             }
         }
 //        Gson gson = new GsonBuilder()
@@ -217,6 +209,27 @@ public class SLControllerInventory {
         }
     }
 
+    public void importPersistentControllerByHumanIdMap(PersistentControllerByHumanIdMap importme){
+        for (String hID : importme.slControllerIndex.keySet()){
+            this.addNetworkDeviceByName(hID, importme.slControllerIndex.get(hID));
+        }
+        this.rebuildAllControllers();
+        try {
+            this.writeInventoryToDisk();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void rebuildAllControllers() {
+        allControllers.clear();
+        for (String key : macAddrToControllerMetadataMap.keySet()){
+            ControllerMetadata meta = macAddrToControllerMetadataMap.get(key);
+            allControllers.add(meta);
+        }
+    }
+
     public void writeInventoryToDisk() throws IOException {
 
         File resFile = new File(RESOURCES_DIR, PERSISTENT_SLCONTROLLER_INVENTORY);
@@ -229,7 +242,7 @@ public class SLControllerInventory {
     }
 
 
-    public static SLControllerInventory loadFromDisk() throws FileNotFoundException {
+    public static SLControllerInventory loadFromDisk() {
         ClassLoader cl = SLControllerInventory.class.getClassLoader();
         InputStream resourceStream = cl.getResourceAsStream(PERSISTENT_SLCONTROLLER_INVENTORY);
         if (resourceStream != null) {

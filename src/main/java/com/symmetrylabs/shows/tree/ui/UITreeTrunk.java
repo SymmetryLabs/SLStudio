@@ -30,7 +30,7 @@ public class UITreeTrunk extends UI3dComponent {
         this.cylinder = new UICylinder(TRUNK_DIAMETER/2, TRUNK_DIAMETER/4, -LIMB_HEIGHT, 6*FEET, 8);
         this.dust = FileUtils.loadShowImage("dust.png");
         this.person = FileUtils.loadShowImage("person.png");
-        addChild(this.cylinder);
+        //addChild(this.cylinder);
     }
 
     @Override

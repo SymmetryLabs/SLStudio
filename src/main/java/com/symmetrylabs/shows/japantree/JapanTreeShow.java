@@ -110,9 +110,9 @@ public class JapanTreeShow extends TreeShow {
         HashMap<Integer, TwigConfig[]> branchTypes = new HashMap<>();
         branchTypes.put(0, branch);
         branchTypes.put(1, twigBranch);
-        limbType1 = loadFromPly("shows/japantree/limbs2.ply", 0, branchTypes);
-        limbType2 = loadFromPly("shows/japantree/limbs2.ply", 1, branchTypes);
-        limbType3 = loadFromPly("shows/japantree/limbs2.ply", 2, branchTypes);
+        limbType1 = loadFromPly("shows/japantree/limbs.ply", 0, branchTypes);
+        limbType2 = loadFromPly("shows/japantree/limbs.ply", 1, branchTypes);
+        limbType3 = loadFromPly("shows/japantree/limbs.ply", 2, branchTypes);
     }
 
     @Override
@@ -138,7 +138,7 @@ public class JapanTreeShow extends TreeShow {
         TreeModel tree = (TreeModel) (lx.model);
         TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
 
-        System.out.println("Number of branches2: " + tree.getBranches().size());
+        System.out.println("Number of branches: " + tree.getBranches().size());
 
         lx.engine.addLoopTask(new LXLoopTask() {
             @Override

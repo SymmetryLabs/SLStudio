@@ -375,6 +375,10 @@ public class TreeModel_v2 extends TreeModel {
                 t.rotateY(PI);
                 t.translate(-.05f*INCHES, 0, 0);
                 addPoint(new LXPoint(t));
+                if (SMALL_TREE_MODEL){
+                    t.pop();
+                    return;
+                }
                 t.translate(0, LED_SPACING, 0);
                 addPoint(new LXPoint(t));
                 t.translate(0, LED_SPACING, 0);

@@ -76,6 +76,6 @@ public class OpcSysExMsg extends OpcMessage {
         }
 
 //        System.out.println(deserializeResult);
-        ApplicationState.setWarning("powerSample: ", deserializeResult);
+//        ApplicationState.setWarning("powerSample: ", deserializeResult);
     }
 }

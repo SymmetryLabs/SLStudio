@@ -17,8 +17,8 @@ import com.symmetrylabs.shows.japantree.JapanTreeShow;
 import com.symmetrylabs.shows.kalpa.KalpaShow;
 import com.symmetrylabs.shows.magicleap.MagicLeapShow;
 import com.symmetrylabs.shows.mikey.MikeyShow;
+import com.symmetrylabs.shows.misc.Andy;
 import com.symmetrylabs.shows.office.OfficeShow;
-import com.symmetrylabs.shows.oslo.NateOsloShow;
 import com.symmetrylabs.shows.penfoldswine.PenfoldsWineShow;
 import com.symmetrylabs.shows.pilots.PilotsShow;
 import com.symmetrylabs.shows.related.RelatedShow;
@@ -36,7 +36,9 @@ import com.symmetrylabs.shows.twigtest.TwigTestShow;
 //import com.symmetrylabs.shows.empirewall.EmpireWallPrototypeShow;
 import com.symmetrylabs.shows.empirewall.EmpireWallShow;
 import com.symmetrylabs.shows.wingportal.WingPortalShow;
+import com.symmetrylabs.shows.gospel.GospelShow;
 import com.symmetrylabs.shows.oslo.OsloShow;
+import com.symmetrylabs.shows.banyan.BanyanShow;
 import processing.core.PApplet;
 
 public class ShowRegistry {
@@ -101,8 +103,10 @@ public class ShowRegistry {
         map.put(SummerStage19Show.SHOW_NAME, SummerStage19Show::new);
         map.put(EmpireWallShow.SHOW_NAME, EmpireWallShow::new);
         map.put(WingPortalShow.SHOW_NAME, WingPortalShow::new);
-        map.put(NateOsloShow.SHOW_NAME, NateOsloShow::new);
+        map.put(GospelShow.SHOW_NAME, GospelShow::new);
         map.put(OsloShow.SHOW_NAME, OsloShow::new);
+        map.put(BanyanShow.SHOW_NAME, BanyanShow::new);
+        map.put(Andy.SHOW_NAME, Andy::new);
     }
 
     interface ShowBuilder {

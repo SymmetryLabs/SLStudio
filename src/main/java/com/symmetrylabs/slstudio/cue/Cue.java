@@ -3,28 +3,42 @@ package com.symmetrylabs.slstudio.cue;
 import com.google.gson.JsonObject;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
-import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.StringParameter;
+import heronarts.lx.parameter.*;
 import org.joda.time.DateTime;
-import heronarts.lx.parameter.BoundedParameter;
 
 
 public class Cue {
+
+    public final static int MAX_DURATION = 10;
+
+    private static int uid_counter = 0;
+    public int uid;
     public final StringParameter startAtStr;
     public final CompoundParameter durationMs;
+    public final CompoundParameter durationSec;
     public final CompoundParameter fadeTo;
     public final BoundedParameter cuedParameter;
     private DateTime startAt;
 
-    public Cue(LX lx, BoundedParameter cuedParameter) {
+    public Cue(BoundedParameter cuedParameter) {
+        this.uid = Cue.uid_counter++;
+
         this.cuedParameter = cuedParameter;
 
         startAtStr = new StringParameter("startAt", "00:00");
         startAt = DateTime.now().withTime(0, 0, 0, 0);
-        durationMs = (CompoundParameter) new CompoundParameter("duration", 1000, 50, 30 * 60 * 1000)
+        durationMs = (CompoundParameter) new CompoundParameter("duration", 1000, 50, MAX_DURATION * 1000)
             .setExponent(4)
             .setUnits(LXParameter.Units.MILLISECONDS);
+
+        // proxy just for nice display
+        durationSec = (CompoundParameter) new CompoundParameter("duration (sec)", 1, 0.05, MAX_DURATION)
+            .setExponent(4)
+            .setUnits(LXParameter.Units.SECONDS).addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter p) {
+                durationMs.setValue(durationSec.getValue() * 1000);
+            }
+        });
         fadeTo = new CompoundParameter("fadeTo", cuedParameter.getValue(), cuedParameter.range.v0, cuedParameter.range.v1);
 
         startAtStr.addListener(p -> {
@@ -42,6 +56,7 @@ public class Cue {
                 }
                 startAt = DateTime.now().withTime(h, m, s, 0);
             });
+
     }
 
     @Override

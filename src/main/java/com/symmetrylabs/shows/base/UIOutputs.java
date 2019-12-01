@@ -56,7 +56,7 @@ public class UIOutputs extends UICollapsibleSection {
         UIButton testOutput = new UIButton(0, 0, w/2 - 8, 19) {
             @Override
             public void onToggle(boolean isOn) { }
-        }.setLabel("Test Broadcast").setParameter(SLStudio.applet.outputControl.testBroadcast);
+        }.setLabel("Test Broadcast").setParameter(SLStudio.applet.outputControl.testUnicast);
         testOutput.addToContainer(this);
 
         UIButton resetCubes = new UIButton(w/2-6, 0, w/2 - 1, 19) {
