@@ -1,19 +1,21 @@
 package com.symmetrylabs.shows.oslo;
 
 import com.symmetrylabs.controllers.symmeTreeController.infrastructure.AllPortsPowerEnableMask;
+import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.shows.treeV2.BranchConfig;
 import com.symmetrylabs.shows.treeV2.LimbConfig;
 import com.symmetrylabs.shows.treeV2.TreeConfig;
 import com.symmetrylabs.shows.treeV2.TreeModel_v2;
 import com.symmetrylabs.slstudio.SLStudioLX;
+import com.symmetrylabs.slstudio.workspaces.Workspace;
 import com.symmetrylabs.util.NetworkChannelDebugMonitor.DebugPortMonitor;
 import com.symmetrylabs.util.NetworkChannelDebugMonitor.MachinePortMonitor;
 import heronarts.lx.LX;
 import heronarts.lx.transform.LXMatrix;
 
 
-public class OsloShow extends SLShow {
+public class OsloShow extends SLShow implements HasWorkspace {
     public static final String SHOW_NAME = "oslo";
 
 
@@ -292,6 +294,7 @@ public class OsloShow extends SLShow {
             }
         )
     };
+    private Workspace workspace;
 
     public TreeModel_v2 buildModel() {
         return new TreeModel_v2(new TreeConfig(LIMB_CONFIGS));
@@ -330,6 +333,8 @@ public class OsloShow extends SLShow {
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
+        workspace = new Workspace(lx, ui, "shows/oslo");
+        workspace.setRequestsBeforeSwitch(2);
         //ui.preview.addComponent(new UITreeStructure((TreeModel_v2) lx.model));
 
         //new UITenereControllers(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
@@ -338,5 +343,10 @@ public class OsloShow extends SLShow {
     @Override
     public String getShowName() {
         return SHOW_NAME;
+    }
+
+    @Override
+    public Workspace getWorkspace() {
+        return workspace;
     }
 }
