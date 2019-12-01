@@ -157,10 +157,10 @@ public class SLOutputWindow extends CloseableWindow {
             if (SLShow.mapping != null){
                 mapped = SLShow.mapping.lookUpByControllerId(dc.humanID) != null;
             }
+            if (mapped && onlyUnmapped.isOn()){
+                continue;
+            }
             if (mapped) {
-                if (onlyUnmapped.isOn()){
-                    continue;
-                }
                 UI.pushColor(UI.COLOR_HEADER, UIConstants.BLUE);
                 UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.BLUE);
                 UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.BLUE_HOVER);
@@ -174,12 +174,12 @@ public class SLOutputWindow extends CloseableWindow {
 //            String displayName = show.controllerInventory2.getNameByMac(dc.networkDevice.deviceId);
             UI.CollapseResult cr = UI.collapsibleSection(displayName, false);
 
+            UI.popColor(3);
             if (dc.getMacAddress() != null && UI.beginDragDropSource()) {
                 UI.setDragDropPayload("SL.CubeMacAddress", dc.getMacAddress());
                 UI.endDragDropSource();
             }
 
-            UI.popColor(3);
             // TODO:: impliment this
             dc.momentaryAltTestOutput.setValue(UI.isItemClicked(true) && UI.isAltDown());
             dc.momentaryAltShiftTestBlackout.setValue(UI.isItemClicked(true) && UI.isAltDown() && UI.isShiftDown());

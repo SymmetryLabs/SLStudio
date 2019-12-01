@@ -46,9 +46,6 @@ public abstract class SLShow implements Show {
     public SLControllerInventory controllerInventory;
     public PersistentControllerByHumanIdMap controllerInventory2;
     public static SLSculptureControllerMapping mapping; // only initialized for top level... more evidence we need a top level SLModel.
-    {
-        SLSculptureControllerMapping.loadFromDisk(getShowName(), controllerInventory);
-    }
 
     /**
      * Power related.
@@ -73,6 +70,7 @@ public abstract class SLShow implements Show {
         controllerInventory = SLControllerInventory.loadFromDisk();
         controllerInventory2 = PersistentControllerByHumanIdMap.loadFromDisk();
         controllerInventory.importPersistentControllerByHumanIdMap(controllerInventory2);
+        mapping = SLSculptureControllerMapping.loadFromDisk(getShowName(), controllerInventory);
         //        mapping = SLSculptureControllerMapping.loadFromDisk(getShowName(), controllerInventory2);
     }
 

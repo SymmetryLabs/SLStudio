@@ -19,7 +19,7 @@ import static com.symmetrylabs.util.MathConstants.*;
 
 
 public class TreeModel extends SLModel {
-    protected static final boolean SMALL_TREE_MODEL = true;
+    protected static final boolean SMALL_TREE_MODEL = false;
 
     private TreeConfig config;
     public final List<Limb> limbs;

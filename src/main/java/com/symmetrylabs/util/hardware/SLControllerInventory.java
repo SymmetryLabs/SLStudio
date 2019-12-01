@@ -39,6 +39,7 @@ public class SLControllerInventory {
 
     protected SLControllerInventory() {
 //        allControllers = new ArrayList<DiscoverableController>();
+        rebuild();
     }
 
     public void addListener(Listener listener) {
@@ -57,7 +58,20 @@ public class SLControllerInventory {
     }
 
     public String getNameByMac(String deviceId) {
-        ControllerMetadata metadata = macAddrToControllerMetadataMap.get(deviceId);
+        if (deviceId.equals("broadcast")){
+            return "broadcast";
+        }
+        ControllerMetadata metadata = null;
+        try{
+            metadata = macAddrToControllerMetadataMap.get(deviceId);
+            if (metadata == null){
+                String oneColonFormat = MACAddress.valueOf(deviceId).toString();
+                metadata = macAddrToControllerMetadataMap.get(oneColonFormat);
+            }
+        }
+        catch (Exception e){
+
+        }
         return metadata == null ? deviceId : metadata.humanID;
     }
 
@@ -69,6 +83,15 @@ public class SLControllerInventory {
 
     public void rebuild() {
         // logic to rebuild inventory
+        for (ControllerMetadata controllerMetadata : allControllers){
+            controllerByCtrlId.put(controllerMetadata.humanID, controllerMetadata);
+            if (controllerMetadata.networkDevice != null){
+                macAddrToControllerMetadataMap.put(MACAddress.valueOf(controllerMetadata.networkDevice.deviceId).toString(), controllerMetadata);
+            }
+            else if (controllerMetadata.macAddrString != null){
+                macAddrToControllerMetadataMap.put(controllerMetadata.macAddrString, controllerMetadata);
+            }
+        }
     }
 
     public boolean save() {
@@ -247,6 +270,7 @@ public class SLControllerInventory {
         InputStream resourceStream = cl.getResourceAsStream(PERSISTENT_SLCONTROLLER_INVENTORY);
         if (resourceStream != null) {
             SLControllerInventory loadMe = new Gson().fromJson(new InputStreamReader(resourceStream), SLControllerInventory.class);
+            loadMe.rebuild();
             return loadMe;
         }
         return new SLControllerInventory();
