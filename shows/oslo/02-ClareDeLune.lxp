@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1574978975551,
+  "timestamp": 1575207222292,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -53,7 +53,7 @@
             "modulationColor": -16711899,
             "parameters": {
               "label": "Channel-1",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -286,7 +286,7 @@
             "modulationColor": -13304064,
             "parameters": {
               "label": "Channel-2",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -397,7 +397,7 @@
             "modulationColor": -7143169,
             "parameters": {
               "label": "Channel-3",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -523,7 +523,7 @@
             "modulationColor": -16749057,
             "parameters": {
               "label": "Channel-4",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -673,7 +673,7 @@
             "modulationColor": -7012608,
             "parameters": {
               "label": "Channel-5",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -764,7 +764,7 @@
             "modulationColor": -13304064,
             "parameters": {
               "label": "Channel-6",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -831,7 +831,7 @@
             "modulationColor": -16711782,
             "parameters": {
               "label": "Channel-7",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -998,7 +998,7 @@
             "modulationColor": -56576,
             "parameters": {
               "label": "Channel-8",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -1066,7 +1066,7 @@
             "modulationColor": -2556160,
             "parameters": {
               "label": "Channel-9",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -1170,7 +1170,7 @@
             "modulationColor": -9961728,
             "parameters": {
               "label": "Channel-10",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -1303,13 +1303,13 @@
             "modulationColor": -16711914,
             "parameters": {
               "label": "Channel-11",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -1354,7 +1354,7 @@
             "modulationColor": -16711756,
             "parameters": {
               "label": "Channel-12",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -1423,7 +1423,7 @@
             "modulationColor": -14089985,
             "parameters": {
               "label": "Channel-13",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -1511,7 +1511,7 @@
             "modulationColor": -21504,
             "parameters": {
               "label": "Channel-14",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -1565,13 +1565,13 @@
             "modulationColor": -65403,
             "parameters": {
               "label": "Channel-15",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -1615,7 +1615,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16711794,
+          "modulationColor": -65358,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -1708,7 +1708,7 @@
         "modulationColor": -16711917,
         "parameters": {
           "label": "Audio Input",
-          "device": 4
+          "device": 1
         }
       },
       "output": {
@@ -1730,7 +1730,7 @@
       "modulationColor": -65446,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -1738,7 +1738,6 @@
       }
     },
     "components": {
-      "treeModelingTool": {},
       "envelop": {
         "id": 33,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",

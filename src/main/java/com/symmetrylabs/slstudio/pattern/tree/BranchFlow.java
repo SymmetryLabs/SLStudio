@@ -40,7 +40,7 @@ public class BranchFlow extends TreePattern {
     private final CompoundParameter fadeOut =
         new CompoundParameter("out", 0.3, 0, 0.5);
     private final DiscreteParameter cursorCount =
-        new DiscreteParameter("count", 2, 1, 4);
+        new DiscreteParameter("count", 2, 1, 30);
 
     private double t = 0;
 
