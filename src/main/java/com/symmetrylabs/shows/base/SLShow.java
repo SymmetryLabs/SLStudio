@@ -86,6 +86,7 @@ public abstract class SLShow implements Show {
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
 
 
+        // PinMode(...)
         DebugPortMonitor debugPortMonitor = new DebugPortMonitor();
         debugPortMonitor.start();
 
