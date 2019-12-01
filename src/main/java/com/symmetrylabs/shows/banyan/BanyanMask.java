@@ -9,9 +9,9 @@ import com.symmetrylabs.shows.tree.TreeModel;
 
 
 public class BanyanMask extends SLEffect<BanyanModel> {
- 
+
 	public enum Mode {
-		TREE, STAR 
+		TREE, STAR
 	}
 
 	public final EnumParameter<Mode> mode = new EnumParameter<>("mode", Mode.STAR);
@@ -23,6 +23,9 @@ public class BanyanMask extends SLEffect<BanyanModel> {
 
     @Override
     public void run(double deltaMs, double amount) {
+	    if (!(model instanceof  BanyanModel)){
+	        return;
+        }
     	BanyanModel tree = (BanyanModel) model;
 
     	switch (mode.getEnum()) {
