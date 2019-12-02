@@ -53,7 +53,17 @@ public class NetworkDevice {
         }
         this.productId = "";
         this.versionId = "";
-        this.deviceId = "broadcast";
+        switch(s) {
+            case "10.255.255.255":
+                this.deviceId = "broadcast";
+                break;
+            case "127.0.0.1":
+                this.deviceId = "loopback";
+                break;
+            default:
+                this.deviceId = "wut?";
+                break;
+        }
     }
 
     public boolean equals(Object object) {

@@ -87,6 +87,14 @@ public abstract class SLShow implements Show {
             broadCastDevice.humanID = "broadcast";
             controllers.add(broadCastDevice);
             lx.addOutput(broadCastDevice);
+
+            // loopback
+            DiscoverableController loopbackDevice = new AssignableTenereController(lx, new NetworkDevice("127.0.0.1"));
+//            loopbackDevice.isBroadcastDevice.setValue(true);
+            loopbackDevice.isLoopbackDevice.setValue(true);
+            loopbackDevice.humanID = "loopback";
+            controllers.add(loopbackDevice);
+            lx.addOutput(loopbackDevice);
         } catch (SocketException e) {
             e.printStackTrace();
         }
