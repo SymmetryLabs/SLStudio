@@ -156,6 +156,7 @@ public class JapanTreeShow extends TreeShow {
         });
 
         int branchId = 0;
+
         for (TreeModel.Branch branch : tree.getBranches()) {
             try {
                 AssignableTenereController controller = new AssignableTenereController(lx, branch);
