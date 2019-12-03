@@ -10,7 +10,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.transform.LXVector;
 
-public class StripSelector extends SLPattern<StripsModel> {
+public class  StripSelector extends SLPattern<StripsModel> {
     private DiscreteParameter selectedstrip;
 
     public StripSelector(LX lx){
@@ -21,6 +21,7 @@ public class StripSelector extends SLPattern<StripsModel> {
 
     public void run(double deltaMs){
         setColors(LXColor.BLACK);
+        System.out.println(model.getStripByIndex(selectedstrip.getValuei()).modelId);
         for (LXPoint v : model.getStripByIndex(selectedstrip.getValuei()).getPoints()) {
             colors[v.index] = LXColor.BLUE;
         }

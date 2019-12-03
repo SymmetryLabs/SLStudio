@@ -88,7 +88,13 @@ public class GospelShow implements Show {
 	    new OutputGroup(UNIVERSE_6).addDeadPoints(1, model)
 	      .addPoints(model.splicePoints("vip-lounge-strip18", 0, 48), OutputGroup.REVERSE)
 	      .addPoints(model.splicePoints("vip-lounge-strip6", 0, 66))
+	      // .addPoints(model.splicePoints("vip-lounge-strip14", 0, 49)),
 	      .addPoints(model.splicePoints("vip-lounge-strip14", 0, 37)),
+
+	    new OutputGroup(UNIVERSE_73)
+	    	.addPoints(model.splicePoints("vip-lounge-strip14", 34, 15)),
+
+
 
 	    new OutputGroup(UNIVERSE_9)
 	      .addPoints(model.splicePoints("vip-lounge-strip3", 0, 92), OutputGroup.REVERSE)
@@ -102,7 +108,8 @@ public class GospelShow implements Show {
 	    new OutputGroup(UNIVERSE_11).addDeadPoints(2, model)
 	      .addPoints(model.splicePoints("vip-lounge-strip4", 0, 44), OutputGroup.REVERSE),
 
-	    new OutputGroup(UNIVERSE_64, 1)
+	    // new OutputGroup(UNIVERSE_64, 1)
+	    new OutputGroup(UNIVERSE_64)
 	      .addPoints(model.splicePoints("vip-lounge-strip16", 0, 67), OutputGroup.REVERSE)
 	      .addPoints(model.splicePoints("vip-lounge-strip2", 0, 84))
 	      .addDeadPoints(2, model),
@@ -115,7 +122,8 @@ public class GospelShow implements Show {
 	      .addPoints(model.splicePoints("vip-lounge-strip13", 0, 10))
 	      .addPoints(model.splicePoints("vip-lounge-strip4", 55, 44), OutputGroup.REVERSE),
 
-	    new OutputGroup(UNIVERSE_67, -1).addDeadPoints(1, model)
+	    // new OutputGroup(UNIVERSE_67, -1).addDeadPoints(1, model)
+	    new OutputGroup(UNIVERSE_67).addDeadPoints(1, model)
 	      .addPoints(model.splicePoints("vip-lounge-strip2", 83, 58))
 	      // .addDeadPoints(1, model)
 	      .addPoints(model.splicePoints("vip-lounge-strip11", 0, 39))
@@ -128,6 +136,7 @@ public class GospelShow implements Show {
 
 	    new OutputGroup(UNIVERSE_71).addDeadPoints(1, model)
 	      .addPoints(model.splicePoints("vip-lounge-strip14", 35, 14))
+	      // .addPoints(model.splicePoints("vip-lounge-strip14", 0, 49))
 	      .addDeadPoints(1, model),
 
 	    new OutputGroup(UNIVERSE_31)
@@ -136,10 +145,11 @@ public class GospelShow implements Show {
 
 	    new OutputGroup(UNIVERSE_42)
 	      .addPoints(model.splicePoints("vip-lounge-strip22", 0, 100))
-	      .addPoints(model.splicePoints("vip-lounge-strip23", 0, 73)),
+	      .addPoints(model.splicePoints("vip-lounge-strip23", 0, 79)),
+	      // .addPoints(model.splicePoints("vip-lounge-strip23", 0, 73)),
 
 	    new OutputGroup(UNIVERSE_54).addDeadPoints(10, model)
-	      .addPoints(model.splicePoints("vip-lounge-strip23", 49, 26))
+	      // .addPoints(model.splicePoints("vip-lounge-strip23", 49, 26))
 	      .addPoints(model.splicePoints("vip-lounge-strip24", 0, 80)),
 
 	    new OutputGroup(UNIVERSE_58).addDeadPoints(2, model)
@@ -197,7 +207,8 @@ public class GospelShow implements Show {
 	     *------------------------------------------------------------------------------------*/
 
 	    //ceiling
-	    new OutputGroup(UNIVERSE_79)
+	    // new OutputGroup(UNIVERSE_79)
+	    new OutputGroup(UNIVERSE_38)
 	      .addPoints(model.splicePoints("columns-strip1", 0, 49)),
 
 	    new OutputGroup(UNIVERSE_30)
@@ -271,7 +282,8 @@ public class GospelShow implements Show {
 	    /**
 	     * Big Long Section
 	     *------------------------------------------------------------------------------------*/
-	    new OutputGroup(UNIVERSE_43).addDeadPoints(1, model)
+	    // new OutputGroup(UNIVERSE_43).addDeadPoints(1, model)
+	    new OutputGroup(UNIVERSE_56).addDeadPoints(1, model)
 	      .addPoints(model.splicePoints("big-long-section-strip1", 149, 48))
 	      .addPoints(model.splicePoints("big-long-section-strip8", 0, 70))
 	      .addPoints(model.splicePoints("big-long-section-strip4", 51, 33), OutputGroup.REVERSE),
@@ -299,8 +311,8 @@ public class GospelShow implements Show {
 	      .addPoints(model.splicePoints("big-long-section-strip2", 0, 32), OutputGroup.REVERSE)
 	      .addPoints(model.splicePoints("big-long-section-strip9", 0, 69)),
 
-	    new OutputGroup(UNIVERSE_66, -1)
-	      .addPoints(model.splicePoints("big-long-section-strip3", 0, 153), OutputGroup.REVERSE),
+	    // new OutputGroup(UNIVERSE_66, -1)
+	    //   .addPoints(model.splicePoints("big-long-section-strip3", 0, 153), OutputGroup.REVERSE),
 
 	    new OutputGroup(UNIVERSE_66)
 	      .addPoints(model.splicePoints("big-long-section-strip3", 0, 153), OutputGroup.REVERSE),
@@ -430,15 +442,18 @@ public class GospelShow implements Show {
 	  public final String ipAddress;
 	  public final int universe;
 
+	  // public OutputGroup(int universe) {
+	  //   this(universe, 0);
+	  // }
+
+
 	  public OutputGroup(int universe) {
-	    this(universe, 0);
-	  }
-
-
-	  public OutputGroup(int universe, int offset) {
 	    // int ipIndex = (int)Math.ceil((float)universe / (float)IP_ADDRESSES.length);
 	    int ipIndex = (int)Math.floor(((float)universe - 1) / 8.0);
-	    ipIndex += offset;
+	    // ipIndex += offset;
+	    if (universe == 64 || universe == 56) {
+	    	ipIndex++;		
+	    }
 	    this.ipAddress = IP_ADDRESSES[ipIndex];
 	    this.universe = universe;
 	    // println("Creating an OutputGroup with IP Address: [" + ipAddress + "] and universe: [" + universe + "]");
