@@ -143,7 +143,6 @@ public class JapanTreeShow extends TreeShow {
         TreeModel tree = (TreeModel) (lx.model);
         TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
 
-        System.out.println("Number of branches: " + tree.getBranches().size());
 
         DebugPortMonitor debugPortMonitor = new DebugPortMonitor();
         debugPortMonitor.start();
