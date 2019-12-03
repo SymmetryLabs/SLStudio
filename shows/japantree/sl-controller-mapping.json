@@ -3,6 +3,18 @@
     {
       "modelId": "Branch2",
       "humanID": "354"
+    },
+    {
+      "modelId": "Branch3",
+      "humanID": "308"
+    },
+    {
+      "modelId": "Branch5",
+      "humanID": "371"
+    },
+    {
+      "modelId": "Branch54",
+      "humanID": "315"
     }
   ],
   "showName": "japantree"
