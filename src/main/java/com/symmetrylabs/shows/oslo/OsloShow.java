@@ -340,6 +340,12 @@ public class OsloShow extends SLShow implements HasWorkspace {
         //new UITenereControllers(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
     }
 
+    public void setupUi(LX lx){
+        super.setupLx(lx);
+        workspace = new Workspace(lx, (SLStudioLX.UI) null, "shows/oslo");
+        workspace.setRequestsBeforeSwitch(2);
+    }
+
     @Override
     public String getShowName() {
         return SHOW_NAME;

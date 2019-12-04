@@ -31,7 +31,7 @@ public class EmpireWallShow implements Show {
     	put("B", "192.168.0.101");
     	put("C", "192.168.0.102");
     	put("D", "192.168.0.103");
-    	put("E", "192.168.0.104");	
+    	put("E", "192.168.0.104");
     	put("F", "192.168.0.105");
     	put("G", "192.168.0.106");
     	put("H", "192.168.0.107");
@@ -54,10 +54,10 @@ public class EmpireWallShow implements Show {
 		 * Quadrants!
 		 *
 		 * The wall can be broken in to four quadrants, top left, top right, bottom left, and bottom right.
-		 * The origin of each quadrant is it's corner of the wall. The quadrant a vine belongs is determined 
+		 * The origin of each quadrant is it's corner of the wall. The quadrant a vine belongs is determined
 		 * by the position of the vines hole on the 2x8 frame. The postiion of the vine's leaves2 are then measured
-		 * relative to the origin of the quadrant the vine belongs. 
-		 * 
+		 * relative to the origin of the quadrant the vine belongs.
+		 *
 		 * TOP LEFT:     x goes to the right,  y goes down,  z goes away from the wall
 		 * TOP RIGHT:    x goes to the left,   y goes down,  z goes away from the wall
 		 * BOTTOM LEFT:  x goes to the right,  y goes up,    z goes away from the wall
@@ -193,7 +193,7 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(0, 95, -2, 0, 0, 0),        //1
 				new LeafConfig(3, 101, 1, 0, 0, 0),       //2
 				new LeafConfig(9.5f, 99, 1.5f, 0, 0, 0),     //3
-				new LeafConfig(16.5f, 105, 3, 0, 0, 0),	  //4	
+				new LeafConfig(16.5f, 105, 3, 0, 0, 0),	  //4
 				new LeafConfig(30.5f, 96, 6, 0, 0, 0),    //5
 				new LeafConfig(38.5f, 100, 5, 0, 0, 0),    //6
 				new LeafConfig(36.5f, 94, 6, 0, 0, 0),    //7
@@ -257,7 +257,7 @@ public class EmpireWallShow implements Show {
 		new VineConfig("D2",
 			new LeafConfig[] {
 				new LeafConfig(-1, 57, 3, 0, 0, 0),  //1
-				new LeafConfig(4, 56, 5, 0, 0, 0),   //2 
+				new LeafConfig(4, 56, 5, 0, 0, 0),   //2
 				new LeafConfig(11, 65, 3, 0, 0, 0),  //3
 				new LeafConfig(12, 66, 0, 0, 0, 0),  //4
 				new LeafConfig(23, 70, 5, 0, 0, 0),  //5
@@ -387,7 +387,7 @@ public class EmpireWallShow implements Show {
 //E429 no data
 		new VineConfig("E4",
 			new LeafConfig[] {
-				new LeafConfig(-2, 0, 4.5f, 0, 0, 0),   
+				new LeafConfig(-2, 0, 4.5f, 0, 0, 0),
 				new LeafConfig(13, 7, 5, 0, 0, 0),
 				new LeafConfig(24, 5.5f, 6, 0, 0, 0),
 				new LeafConfig(28, -4, 0, 0, 0, 0),
@@ -483,8 +483,8 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(216-33.5f, -2, 6.5f, 0, 0, 0),
 				new LeafConfig(216-35, 2, 4, 0, 0, 0),
 				new LeafConfig(216-40, 8, 6.5f, 0, 0, 0),
-				new LeafConfig(216-52, 14, 8, 0, 0, 0), 
-				new LeafConfig(216-54, 13, 4.5f, 0, 0, 0), 
+				new LeafConfig(216-52, 14, 8, 0, 0, 0),
+				new LeafConfig(216-54, 13, 4.5f, 0, 0, 0),
 				new LeafConfig(216-56, 15.5f, 7.5f, 0, 0, 0),
 				new LeafConfig(216-69, 13.5f, 7, 0, 0, 0),
 				new LeafConfig(216-82, 9.5f, 7, 0, 0, 0),
@@ -655,17 +655,17 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(216-6.5f, 92, 7, 0, 0, 0),
 				new LeafConfig(216-14, 97.5f, 9, 0, 0, 0),
 				new LeafConfig(216-16, 100.5f, 7, 0, 0, 0),
-				new LeafConfig(216-12, 105.5f, 7.5f, 0, 0, 0), 
+				new LeafConfig(216-12, 105.5f, 7.5f, 0, 0, 0),
 				new LeafConfig(216-24, 112.5f, 8, 0, 0, 0),
 				new LeafConfig(216-23, 110, 3, 0, 0, 0),
 				new LeafConfig(216-26, 109, 5.5f, 0, 0, 0),
-				new LeafConfig(216-38, 112.5f, 4.5f, 0, 0, 0), 
+				new LeafConfig(216-38, 112.5f, 4.5f, 0, 0, 0),
 				new LeafConfig(216-41.5f, 106.5f, 6.5f, 0, 0, 0),
 				new LeafConfig(216-42.5f, 114.5f, 6, 0, 0, 0),
 				new LeafConfig(216-43.5f, 126.5f, 5, 0, 0, 0),
-				new LeafConfig(216-50, 128.5f, 5, 0, 0, 0), 
-				new LeafConfig(216-45.5f, 133, 5.5f, 0, 0, 0), 
-				new LeafConfig(216-59.5f, 139, 3, 0, 0, 0), 
+				new LeafConfig(216-50, 128.5f, 5, 0, 0, 0),
+				new LeafConfig(216-45.5f, 133, 5.5f, 0, 0, 0),
+				new LeafConfig(216-59.5f, 139, 3, 0, 0, 0),
 				new LeafConfig(216-62.5f, 130, 3, 0, 0, 0),
 				new LeafConfig(216-65, 130.5f, 4.5f, 0, 0, 0),
 			}
@@ -702,7 +702,7 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(216-76, 76, 3, 0, 0, 0),
 				new LeafConfig(216-76, 76, 3, 0, 0, 0),
 				new LeafConfig(216-76, 76, 3, 0, 0, 0),
-				new LeafConfig(216-76, 76, 3, 0, 0, 0),	
+				new LeafConfig(216-76, 76, 3, 0, 0, 0),
 			}
 		),
 
@@ -751,7 +751,7 @@ public class EmpireWallShow implements Show {
 			    new LeafConfig(216-43, 144-40, 4, 0, 0, 0),
 			    new LeafConfig(216-51, 144-39, 7, 0, 0, 0),
 			    new LeafConfig(216-50, 144-35.5f, 4, 0, 0, 0),
-			    new LeafConfig(216-54, 144-33.5f, 6.5f, 0, 0, 0), 
+			    new LeafConfig(216-54, 144-33.5f, 6.5f, 0, 0, 0),
 			    new LeafConfig(216-59, 144-34.5f, 2, 0, 0, 0),
 			    new LeafConfig(216-60, 144-29, 3, 0, 0, 0),
 			    new LeafConfig(216-64.5f, 144-26.5f, 2.5f, 0, 0, 0),
@@ -802,25 +802,7 @@ public class EmpireWallShow implements Show {
 	};
 
 	final StripConfig[] STRIPS_CONFIG = new StripConfig[] {
-
-		/**
-		 * Perimeter Strips!  
-		 *
-		 *         TL ➜     TM ➜      TR ←
-		 *      --------- --------- ---------
-		 *     |                             |
-		 *   ↑ |                             | RU
-		 *  LU |                             | ↓
-		 *     |                             |
-		 *
-		 *   ↑ |                             | RL
-		 *  LL |                             | ↓
-		 *     |                             | 
-		 *      --------- --------- ---------
-		 *         BL →     BM ←      BR →
-		 */
-
-		/**
+		/*
 		 * Strip Config
 		 *
 		 * String: Pixlite Id / Pixlite Port (A-K / 1-4) Example: D3
@@ -844,7 +826,7 @@ public class EmpireWallShow implements Show {
 
 		new StripConfig("D3", x(6),             y(6),             zRot(90),  82), // LL
 		new StripConfig("C4", x(6),             y(60),            zRot(90),  119), // LU
-	};	
+	};
 
 	public SLModel buildModel() {
 		List<Strip> strips = new ArrayList<>();

@@ -266,6 +266,12 @@ public class UI {
      */
     public static int COND_APPEARING;
 
+//    public void runAfterDraw(Runnable r) {
+//        synchronized (runPostDraw) {
+//            runPostDraw.add(r);
+//        }
+//    }
+
     /**
      * A class representing the state of a collapsable section that is removeable.
      */
