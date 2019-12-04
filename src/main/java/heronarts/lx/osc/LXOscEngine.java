@@ -483,7 +483,7 @@ public class LXOscEngine extends LXComponent {
             sendMessage(oscMessage);
         }
 
-        private void sendMessage(OscMessage message) {
+        public void sendMessage(OscMessage message) {
             try {
                 send(oscMessage);
             } catch (IOException iox) {
