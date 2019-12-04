@@ -281,9 +281,15 @@ public class Workspace extends LXComponent {
                     }
                     System.out.println(String.format("starting switch to project %d", index));
                 }
-                WorkspaceProject workspace = projects.get(index);
-                openProject(workspace);
+
+                openWorkspace(index);
+
             }
         }
+    }
+
+    private void openWorkspace(int index) {
+        WorkspaceProject workspace = projects.get(index);
+        openProject(workspace);
     }
 }
