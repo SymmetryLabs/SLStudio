@@ -287,7 +287,7 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
             }
             fillDatagramsAndAddToOutput();
         } else if (points != null) { // there is a fixture for this one
-            numPixels = 1200;
+            points.size();
             // Fill the datagram with pixel data
             if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
                 initPacketData(numPixels, true);

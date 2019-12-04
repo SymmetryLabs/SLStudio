@@ -1,14 +1,6 @@
 {
   "assignments": [
     {
-      "modelId": "Branch21",
-      "humanID": "311"
-    },
-    {
-      "modelId": "Branch24",
-      "humanID": "343"
-    },
-    {
       "modelId": "Branch25",
       "humanID": "370"
     },
@@ -17,176 +9,244 @@
       "humanID": "364"
     },
     {
-      "modelId": "Branch27",
-      "humanID": "317"
-    },
-    {
       "modelId": "Branch28",
-      "humanID": "361"
+      "humanID": "317"
     },
     {
       "modelId": "Branch29",
       "humanID": "362"
     },
     {
-      "modelId": "Branch34",
-      "humanID": "333"
-    },
-    {
       "modelId": "Branch35",
-      "humanID": "330"
-    },
-    {
-      "modelId": "Branch36",
-      "humanID": "302"
-    },
-    {
-      "modelId": "Branch37",
-      "humanID": "360"
-    },
-    {
-      "modelId": "Branch38",
-      "humanID": "325"
+      "humanID": "329"
     },
     {
       "modelId": "Branch39",
       "humanID": "365"
     },
     {
-      "modelId": "Branch40",
-      "humanID": "304"
-    },
-    {
-      "modelId": "Branch41",
-      "humanID": "355"
-    },
-    {
-      "modelId": "Branch42",
-      "humanID": "341"
-    },
-    {
       "modelId": "Branch45",
-      "humanID": "358"
-    },
-    {
-      "modelId": "Branch47",
-      "humanID": "308"
-    },
-    {
-      "modelId": "Branch48",
-      "humanID": "359"
-    },
-    {
-      "modelId": "Branch49",
-      "humanID": "334"
-    },
-    {
-      "modelId": "Branch51",
-      "humanID": "328"
+      "humanID": "355"
     },
     {
       "modelId": "Branch53",
       "humanID": "315"
     },
     {
-      "modelId": "Branch55",
-      "humanID": "298"
-    },
-    {
-      "modelId": "Branch58",
-      "humanID": "345"
-    },
-    {
       "modelId": "Branch60",
-      "humanID": "369"
+      "humanID": "326"
     },
     {
       "modelId": "Branch61",
-      "humanID": "372"
-    },
-    {
-      "modelId": "Branch62",
-      "humanID": "309"
-    },
-    {
-      "modelId": "Branch67",
-      "humanID": "346"
-    },
-    {
-      "modelId": "Branch72",
-      "humanID": "348"
-    },
-    {
-      "modelId": "Branch73",
-      "humanID": "310"
-    },
-    {
-      "modelId": "Branch74",
       "humanID": "303"
     },
     {
+      "modelId": "Branch72",
+      "humanID": "366"
+    },
+    {
+      "modelId": "Branch73",
+      "humanID": "305"
+    },
+    {
       "modelId": "Branch75",
-      "humanID": "332"
-    },
-    {
-      "modelId": "Branch1",
-      "humanID": "354"
-    },
-    {
-      "modelId": "Branch3",
-      "humanID": "312"
-    },
-    {
-      "modelId": "Branch4",
-      "humanID": "371"
-    },
-    {
-      "modelId": "Branch7",
-      "humanID": "329"
+      "humanID": "369"
     },
     {
       "modelId": "Branch10",
-      "humanID": "352"
-    },
-    {
-      "modelId": "Branch11",
-      "humanID": "301"
+      "humanID": "322"
     },
     {
       "modelId": "Branch12",
-      "humanID": "367"
-    },
-    {
-      "modelId": "Branch13",
-      "humanID": "350"
+      "humanID": "299"
     },
     {
       "modelId": "Branch15",
-      "humanID": "320"
-    },
-    {
-      "modelId": "Branch16",
-      "humanID": "353"
-    },
-    {
-      "modelId": "Branch17",
-      "humanID": "306"
-    },
-    {
-      "modelId": "Branch18",
-      "humanID": "307"
-    },
-    {
-      "modelId": "Branch19",
-      "humanID": "324"
-    },
-    {
-      "modelId": "Branch20",
-      "humanID": "363"
+      "humanID": "314"
     },
     {
       "modelId": "Branch22",
-      "humanID": "366"
+      "humanID": "325"
+    },
+    {
+      "modelId": "Branch69",
+      "humanID": "300"
+    },
+    {
+      "modelId": "Branch23",
+      "humanID": "366b"
+    },
+    {
+      "modelId": "Branch65",
+      "humanID": "298"
+    },
+    {
+      "modelId": "Branch9",
+      "humanID": "301"
+    },
+    {
+      "modelId": "Branch46",
+      "humanID": "302"
+    },
+    {
+      "modelId": "Branch3",
+      "humanID": "318"
+    },
+    {
+      "modelId": "Branch31",
+      "humanID": "308"
+    },
+    {
+      "modelId": "Branch30",
+      "humanID": "311"
+    },
+    {
+      "modelId": "Branch49",
+      "humanID": "360"
+    },
+    {
+      "modelId": "Branch36",
+      "humanID": "316"
+    },
+    {
+      "modelId": "Branch2",
+      "humanID": "306"
+    },
+    {
+      "modelId": "Branch8",
+      "humanID": "320"
+    },
+    {
+      "modelId": "Branch47",
+      "humanID": "321"
+    },
+    {
+      "modelId": "Branch62",
+      "humanID": "324"
+    },
+    {
+      "modelId": "Branch52",
+      "humanID": "328"
+    },
+    {
+      "modelId": "Branch44",
+      "humanID": "330"
+    },
+    {
+      "modelId": "Branch64",
+      "humanID": "332"
+    },
+    {
+      "modelId": "Branch74",
+      "humanID": "333"
+    },
+    {
+      "modelId": "Branch54",
+      "humanID": "334"
+    },
+    {
+      "modelId": "Branch38",
+      "humanID": "312"
+    },
+    {
+      "modelId": "Branch1",
+      "humanID": "339"
+    },
+    {
+      "modelId": "Branch4",
+      "humanID": "353"
+    },
+    {
+      "modelId": "Branch40",
+      "humanID": "341"
+    },
+    {
+      "modelId": "Branch50",
+      "humanID": "342"
+    },
+    {
+      "modelId": "Branch71",
+      "humanID": "345"
+    },
+    {
+      "modelId": "Branch66",
+      "humanID": "356"
+    },
+    {
+      "modelId": "Branch57",
+      "humanID": "347"
+    },
+    {
+      "modelId": "Branch58",
+      "humanID": "348"
+    },
+    {
+      "modelId": "Branch6",
+      "humanID": "350"
+    },
+    {
+      "modelId": "Branch7",
+      "humanID": "352"
+    },
+    {
+      "modelId": "Branch21",
+      "humanID": "307"
+    },
+    {
+      "modelId": "Branch11",
+      "humanID": "354"
+    },
+    {
+      "modelId": "Branch42",
+      "humanID": "304"
+    },
+    {
+      "modelId": "Branch70",
+      "humanID": "346"
+    },
+    {
+      "modelId": "Branch34",
+      "humanID": "358"
+    },
+    {
+      "modelId": "Branch51",
+      "humanID": "359"
+    },
+    {
+      "modelId": "Branch32",
+      "humanID": "337"
+    },
+    {
+      "modelId": "Branch24",
+      "humanID": "361"
+    },
+    {
+      "modelId": "Branch0",
+      "humanID": "363"
+    },
+    {
+      "modelId": "Branch77",
+      "humanID": "309"
+    },
+    {
+      "modelId": "Branch27",
+      "humanID": "343"
+    },
+    {
+      "modelId": "Branch17",
+      "humanID": "371"
+    },
+    {
+      "modelId": "Branch20",
+      "humanID": "372"
+    },
+    {
+      "modelId": "Branch48",
+      "humanID": "398"
+    },
+    {
+      "modelId": "Branch56",
+      "humanID": "357"
     }
   ],
   "showName": "japantree"
