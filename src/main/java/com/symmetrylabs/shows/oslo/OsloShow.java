@@ -341,7 +341,7 @@ public class OsloShow extends SLShow implements HasWorkspace {
     }
 
     public void setupUi(LX lx){
-        super.setupLx(lx);
+        super.setupUi(lx);
         workspace = new Workspace(lx, (SLStudioLX.UI) null, "shows/oslo");
         workspace.setRequestsBeforeSwitch(2);
     }
