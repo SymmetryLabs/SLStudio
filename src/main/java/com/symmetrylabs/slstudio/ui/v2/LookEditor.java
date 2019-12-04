@@ -100,6 +100,7 @@ public class LookEditor implements Window {
                 vwc = channelHeader(chan, chanName, vwc);
 
                 float fader = UI.vertSliderFloat("##fader-" + chanName, chan.fader.getValuef(), 0, 1, "", 30, 180);
+                MainMenu.getInstance().setOscRoute(chan.fader);
                 if (fader != chan.fader.getValuef()) {
                     lx.engine.addTask(() -> chan.fader.setValue(fader));
                 }
@@ -109,7 +110,9 @@ public class LookEditor implements Window {
                 CrossfadeGroup group = chan.crossfadeGroup.getEnum();
 
                 pui.toggle(chan.enabled, false, 40);
+                MainMenu.getInstance().setOscRoute(chan.enabled);
                 boolean cueStart = chan.cueActive.getValueb();
+                MainMenu.getInstance().setOscRoute(chan.cueActive);
                 if (pui.toggle(chan.cueActive, true, 40) && !cueStart) {
                     for (LXChannel cc : look.channels) {
                         if (cc != chan) {
@@ -128,6 +131,7 @@ public class LookEditor implements Window {
                     group = CrossfadeGroup.BYPASS;
                 }
                 chan.crossfadeGroup.setValue(group);
+                MainMenu.getInstance().setOscRoute(chan.crossfadeGroup);
                 UI.endGroup();
 
                 UI.pushWidth(80);

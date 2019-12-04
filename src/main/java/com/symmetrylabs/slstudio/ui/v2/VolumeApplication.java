@@ -195,7 +195,7 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
         /* These windows aren't really transient but we don't want them to appear in
            the Window menu and they don't have a close button, so there's no risk of
            them disappearing. */
-        WindowManager.addTransient(new MainMenu(lx, this));
+        WindowManager.addTransient(MainMenu.getInstance(lx, this));
         WindowManager.addTransient(picker);
         WindowManager.addTransient(new CaptionWindow(lx));
 

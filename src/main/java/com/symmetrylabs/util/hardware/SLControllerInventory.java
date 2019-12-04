@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.stream.JsonWriter;
 //import com.symmetrylabs.slstudio.output.DiscoverableController;
+import com.symmetrylabs.controllers.symmeTreeController.infrastructure.PersistentControllerByHumanIdMap;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.output.DiscoverableController;
 import com.symmetrylabs.util.NetworkUtil.MACAddress;
@@ -207,6 +208,19 @@ public class SLControllerInventory {
             e.printStackTrace();
         }
     }
+
+    public void importPersistentControllerByHumanIdMap(PersistentControllerByHumanIdMap importme){
+        for (String hID : importme.slControllerIndex.keySet()){
+            this.addNetworkDeviceByName(hID, importme.slControllerIndex.get(hID));
+        }
+        this.rebuildAllControllers();
+        try {
+            this.writeInventoryToDisk();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void rebuildAllControllers() {
         allControllers.clear();

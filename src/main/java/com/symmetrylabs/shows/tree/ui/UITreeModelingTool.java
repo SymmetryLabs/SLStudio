@@ -509,7 +509,7 @@ public class UITreeModelingTool extends UICollapsibleSection {
             int index = modelingTool.getSelectedLimb().getBranches().indexOf(branch);
             String ipAddress = branch.getConfig().ipAddress;
             int output = branch.getConfig().channel;
-            return index + "/  (ip: " + ipAddress + ")  [ch: " + output + "]" + isLocked;
+            return (index+1) + "/  (ip: " + ipAddress + ")  [ch: " + output + "]" + isLocked;
         }
 
         public boolean isSelected() {

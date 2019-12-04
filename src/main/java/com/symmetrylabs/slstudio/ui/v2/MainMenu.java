@@ -5,12 +5,19 @@ import com.symmetrylabs.shows.ShowRegistry;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+
 import com.symmetrylabs.slstudio.server.VolumeCore;
 import heronarts.lx.LX;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.data.Project;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.surface.LXMidiSurface;
+import heronarts.lx.osc.LXOscEngine;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,11 +29,31 @@ public class MainMenu implements Window {
     private final LX lx;
     private final VolumeApplication parent;
     private final ParameterUI pui;
+    private final StringParameter oscRoute;
 
-    public MainMenu(LX lx, VolumeApplication parent) {
+    private static MainMenu instance = null;
+
+    public static MainMenu getInstance(LX lx, VolumeApplication parent) {
+        if (instance == null) {
+            return instance = new MainMenu(lx, parent);
+        } else {
+            return instance;
+        }
+    }
+
+    public static MainMenu getInstance() {
+        if (instance != null) {
+            return instance;
+        } else {
+            return null;
+        }
+    }
+
+    private MainMenu(LX lx, VolumeApplication parent) {
         this.lx = lx;
         this.parent = parent;
         this.pui = ParameterUI.getDefault(lx);
+        this.oscRoute = new StringParameter("oscRoute", "/test/route");
     }
 
     public void draw() {
@@ -164,6 +191,7 @@ public class MainMenu implements Window {
             UI.menuText(String.format("Built at %s", com.symmetrylabs.slstudio.Version.BUILD_DATE));
             UI.endMenu();
         }
+        UI.text(oscRoute.getString());
         UI.endMainMenuBar();
     }
 
@@ -183,6 +211,20 @@ public class MainMenu implements Window {
                 Lists.newArrayList(project.toString()));
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void setOscRoute(LXParameter p) {
+        String route = LXOscEngine.getOscAddress(p);
+
+        if (UI.isItemHovered()) {
+            this.oscRoute.setValue(route);
+        }
+        if (UI.isItemClicked(true) && UI.isCtrlDown()) {
+            System.out.println(route);
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            StringSelection str = new StringSelection(route == null ? "" : route);
+            clipboard.setContents(str, str);
         }
     }
 }
