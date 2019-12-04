@@ -9,10 +9,6 @@
       "humanID": "364"
     },
     {
-      "modelId": "Branch28",
-      "humanID": "317"
-    },
-    {
       "modelId": "Branch29",
       "humanID": "362"
     },
@@ -150,7 +146,7 @@
     },
     {
       "modelId": "Branch1",
-      "humanID": "339"
+      "humanID": "361"
     },
     {
       "modelId": "Branch4",
@@ -175,10 +171,6 @@
     {
       "modelId": "Branch57",
       "humanID": "347"
-    },
-    {
-      "modelId": "Branch58",
-      "humanID": "348"
     },
     {
       "modelId": "Branch6",
@@ -218,7 +210,7 @@
     },
     {
       "modelId": "Branch24",
-      "humanID": "361"
+      "humanID": "317"
     },
     {
       "modelId": "Branch0",
@@ -247,6 +239,42 @@
     {
       "modelId": "Branch56",
       "humanID": "357"
+    },
+    {
+      "modelId": "Branch14",
+      "humanID": "399v"
+    },
+    {
+      "modelId": "Branch67",
+      "humanID": "399x"
+    },
+    {
+      "modelId": "Branch59",
+      "humanID": "348"
+    },
+    {
+      "modelId": "Branch58",
+      "humanID": "399w"
+    },
+    {
+      "modelId": "Branch28",
+      "humanID": "399y"
+    },
+    {
+      "modelId": "Branch5",
+      "humanID": "367"
+    },
+    {
+      "modelId": "Branch13",
+      "humanID": "399z"
+    },
+    {
+      "modelId": "Branch18",
+      "humanID": "339"
+    },
+    {
+      "modelId": "Branch33",
+      "humanID": "310"
     }
   ],
   "showName": "japantree"
