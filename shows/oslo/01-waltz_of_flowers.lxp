@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1575207203251,
+  "timestamp": 1575219160543,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -44,7 +44,7 @@
         "modulationColor": -65375,
         "parameters": {
           "label": "Look-1",
-          "focusedChannel": 15
+          "focusedChannel": 0
         },
         "channels": [
           {
@@ -84,6 +84,24 @@
                   "amount": 1.0,
                   "attack": 100.0,
                   "decay": 100.0
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                }
+              },
+              {
+                "id": 17953,
+                "class": "com.symmetrylabs.slstudio.effect.LSD",
+                "modulationColor": -31744,
+                "parameters": {
+                  "label": "LSD",
+                  "expandedInUi": true,
+                  "enabled": true,
+                  "Scale": 12.799999937415123,
+                  "Speed": 4.0,
+                  "Range": 1.0
                 },
                 "modulation": {
                   "modulators": [],
@@ -241,7 +259,7 @@
                   "label": "Desaturation",
                   "expandedInUi": true,
                   "enabled": true,
-                  "amount": 1.0,
+                  "amount": 0.0,
                   "attack": 100.0,
                   "decay": 100.0
                 },
@@ -329,7 +347,7 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Hue": 359.99999195337296,
-                  "Spark": 0.009999999776482582,
+                  "Spark": 0.0,
                   "Wave": 0.0,
                   "xPos": 0.5,
                   "yPos": 0.5,
@@ -602,7 +620,7 @@
                   "label": "Raindrops",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "Number": -351.2000048279764,
+                  "Number": -380.0,
                   "Size": 0.38799999356269843,
                   "SizeVar": 0.5299999993294477,
                   "Speed": -6866.000002995133,
@@ -1125,7 +1143,7 @@
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 0.006527208723127842,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -1407,7 +1425,7 @@
                   "label": "Explosions",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "Number": 12.20999950170517,
+                  "Number": 1.0,
                   "Bright": 50.0,
                   "Rate": 8000.0,
                   "Blur": 0.3400000059604644
@@ -1454,7 +1472,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -65358,
+          "modulationColor": -65363,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -1492,7 +1510,7 @@
             "label": "Blur",
             "expandedInUi": true,
             "enabled": true,
-            "amount": 0.49000000953674316
+            "amount": 0.0
           },
           "modulation": {
             "modulators": [],
@@ -1586,7 +1604,7 @@
       "modulationColor": -65525,
       "parameters": {
         "label": "Output",
-        "enabled": false,
+        "enabled": true,
         "mode": 0,
         "fps": 34.0,
         "gamma": 0,
