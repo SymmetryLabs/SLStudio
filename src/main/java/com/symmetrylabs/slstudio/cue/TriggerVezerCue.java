@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.cue;
 
+    import com.google.gson.JsonObject;
     import heronarts.lx.LX;
     import heronarts.lx.osc.LXOscEngine;
     import heronarts.lx.osc.OscMessage;
@@ -27,6 +28,7 @@ public class TriggerVezerCue extends Cue implements CueTypeAdapter{
             e.printStackTrace();
         }
         this.lx = lx;
+        this.durationMs.setValue(100); // it's ok to fire a few times. Set duration to 100ms
     }
 
     public void triggerVezerShow(String showname){
@@ -41,5 +43,17 @@ public class TriggerVezerCue extends Cue implements CueTypeAdapter{
 
     public String getCueType(){
         return CUE_TYPE;
+    }
+
+    @Override
+    public void save(JsonObject obj) {
+        obj.addProperty("showName", showName.getString());
+        super.save(obj);
+    }
+
+    @Override
+    public void load(JsonObject obj) {
+        showName.setValue(obj.get("showName").getAsString());
+        super.load(obj);
     }
 }

@@ -27,7 +27,7 @@ public class Cue implements CueTypeAdapter {
 
         startAtStr = new StringParameter("startAt", "00:00");
         startAt = DateTime.now().withTime(0, 0, 0, 0);
-        durationMs = (CompoundParameter) new CompoundParameter("duration", 1000, 50, MAX_DURATION * 1000)
+        durationMs = (CompoundParameter) new CompoundParameter("duration", 1000, 0, MAX_DURATION * 1000)
             .setExponent(4)
             .setUnits(LXParameter.Units.MILLISECONDS);
 

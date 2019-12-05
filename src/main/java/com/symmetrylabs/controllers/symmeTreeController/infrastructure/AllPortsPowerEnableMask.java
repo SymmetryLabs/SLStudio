@@ -1,6 +1,7 @@
 package com.symmetrylabs.controllers.symmeTreeController.infrastructure;
 
 import com.google.gson.annotations.Expose;
+import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.output.DiscoverableController;
 import com.symmetrylabs.util.hardware.powerMon.ControllerWithPowerFeedback;
 import com.symmetrylabs.util.persistance.ClassWriterLoader;
@@ -70,8 +71,8 @@ public class AllPortsPowerEnableMask {
     }
 
     public void saveToDisk () throws IOException {
-        new ClassWriterLoader<>(PERSISTENT_PORT_MASK, AllPortsPowerEnableMask.class).writeObj(this);
-        new ClassWriterLoader<>(fmtNow() + PERSISTENT_PORT_MASK, AllPortsPowerEnableMask.class).writeObj(this); // save with date
+        new ClassWriterLoader<>(PERSISTENT_PORT_MASK, AllPortsPowerEnableMask.class, ApplicationState.showName()).writeObj(this);
+        new ClassWriterLoader<>(fmtNow() + PERSISTENT_PORT_MASK, AllPortsPowerEnableMask.class, ApplicationState.showName()).writeObj(this); // save with date
     }
 
     public void postToFirebase() {

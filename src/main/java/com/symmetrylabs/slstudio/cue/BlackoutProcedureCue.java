@@ -32,11 +32,12 @@ public class BlackoutProcedureCue extends Cue implements CueTypeAdapter {
         super(cuedParameter);
         isHourly = true; // set Static by Nathan.  That's what he needs in Oslo.
         this.lx = lx;
+        this.durationMs.setValue(0); // make sure we only fire once
     }
 
     public void execute(){
         // fade brightness to zero, ensure nothing else is running...
-        double startValue = lx.engine.output.brightness.getValue();
+        double startValue = lx.engine.output.brightness.getValuef();
 
         lx.engine.addTask(()->{
             lx.engine.output.brightness.setValue(0);
@@ -61,6 +62,7 @@ public class BlackoutProcedureCue extends Cue implements CueTypeAdapter {
 
                 show.allPortsPowerEnableMask.loadControllerSetMaskStateTo_RAM(ccs);
 
+                lx.engine.output.brightness.setValue(startValue);
                 try {
                     show.allPortsPowerEnableMask.saveToDisk();
                     show.allPortsPowerEnableMask.postToFirebase();
@@ -68,7 +70,6 @@ public class BlackoutProcedureCue extends Cue implements CueTypeAdapter {
                     e.printStackTrace();
                 }
 
-                lx.engine.output.brightness.setValue(startValue);
             }
         }, delayBeforeCuttoff.getValuei() );
     }
