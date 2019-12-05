@@ -44,6 +44,13 @@ public class CueWindow extends CloseableWindow {
             if (cr.isOpen) {
                 UI.textWrapped(cue.toString());
                 pui.draw(cue.startAtStr);
+                if (cue instanceof TriggerVezerCue){
+                    pui.draw( ((TriggerVezerCue) cue).showName );
+                    if (UI.button("remove" + "##" + cue.uid)){
+                        this.cueManager.removeCue(cue);
+                    }
+                    continue;
+                }
                 pui.draw(cue.durationSec);
                 pui.draw(cue.fadeTo);
                 if (UI.button("remove" + "##" + cue.uid)){

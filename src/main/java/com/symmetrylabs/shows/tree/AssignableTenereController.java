@@ -53,7 +53,7 @@ public class AssignableTenereController extends DiscoverableController implement
 
 //    public DiscreteParameter blackoutPowerThreshold = new DiscreteParameter("Blackout", 0, 4095);
 //    public final BooleanParameter blackoutRogueLEDsActive = new BooleanParameter("Activate blackout procedure", false);
-    private MetaSample lastReceivedPowerSample = null;
+    private MetaSample lastReceivedPowerSample = new MetaSample();
     private int[][] pixelIndices;
 
     // ARRRRrrrrgggggghhhh delete these...

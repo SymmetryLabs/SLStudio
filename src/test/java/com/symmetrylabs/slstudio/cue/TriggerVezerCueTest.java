@@ -18,7 +18,7 @@ public class TriggerVezerCueTest {
         lx.engine.osc.transmitActive.setValue(true);
 
         TriggerVezerCue tc = new TriggerVezerCue(lx, new BoundedParameter("null")); // just a hack to ignore this arg.
-        tc.executeTask();
+        tc.triggerVezerShow();
         lx.engine.run();
 
     }

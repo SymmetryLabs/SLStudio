@@ -141,7 +141,7 @@ public class CueManager implements LXLoopTask, CaptionSource, SLStudioLX.SaveHoo
 
         Cue cc = current.cue;
         if (cc instanceof TriggerVezerCue){
-            ((TriggerVezerCue) cc).executeTask();
+            ((TriggerVezerCue) cc).triggerVezerShow(((TriggerVezerCue) cc).showName.getString());
         }
         else{
             t = constrain(elapsedMs / cc.durationMs.getValue(), 0, 1);

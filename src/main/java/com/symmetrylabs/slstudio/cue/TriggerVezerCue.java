@@ -4,6 +4,7 @@ package com.symmetrylabs.slstudio.cue;
     import heronarts.lx.osc.LXOscEngine;
     import heronarts.lx.osc.OscMessage;
     import heronarts.lx.parameter.BoundedParameter;
+    import heronarts.lx.parameter.StringParameter;
 
     import java.io.IOException;
     import java.net.SocketException;
@@ -12,7 +13,7 @@ package com.symmetrylabs.slstudio.cue;
 public class TriggerVezerCue extends Cue {
     private LX lx;
     private LXOscEngine.Transmitter oscTransmitter = null;
-
+    public StringParameter showName = new StringParameter("show name");
 
     public TriggerVezerCue(LX lx, BoundedParameter cuedParameter) {
         super(cuedParameter);
@@ -26,9 +27,9 @@ public class TriggerVezerCue extends Cue {
         this.lx = lx;
     }
 
-    public void executeTask(){
+    public void triggerVezerShow(String showname){
         // logic to trigger vezer show
-        OscMessage playShowMessage = new OscMessage("/vezer/composition/1/play").add(1); // something like this.
+        OscMessage playShowMessage = new OscMessage("/vezer/" + showname + "/play").add(1); // something like this.
         try {
             oscTransmitter.send(playShowMessage);
         } catch (IOException e) {
