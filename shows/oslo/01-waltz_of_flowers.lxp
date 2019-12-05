@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "timestamp": 1575219160543,
+  "version": 3,
+  "timestamp": 1575572833258,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -259,7 +259,7 @@
                   "label": "Desaturation",
                   "expandedInUi": true,
                   "enabled": true,
-                  "amount": 0.0,
+                  "amount": 1.0,
                   "attack": 100.0,
                   "decay": 100.0
                 },
@@ -297,13 +297,13 @@
             "modulationColor": -16741121,
             "parameters": {
               "label": "3 - Pong",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 0.2958333492279053,
               "crossfadeGroup": 1,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -578,20 +578,20 @@
             "modulationColor": -16711763,
             "parameters": {
               "label": "7 - Rain",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
-              "crossfadeGroup": 0,
+              "fader": 1.0,
+              "crossfadeGroup": 1,
               "blendMode": 0,
               "transitionEnabled": false,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
               "autoDisable": false,
-              "speed": 0.6200000047683716,
+              "speed": 0.5029564499855042,
               "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
@@ -876,17 +876,17 @@
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
-              "autoCycleEnabled": false,
-              "autoCycleTimeSecs": 60.0,
+              "autoCycleEnabled": true,
+              "autoCycleTimeSecs": 13.357000350952148,
               "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
-              "transitionEnabled": false,
+              "transitionEnabled": true,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
               "autoDisable": false,
               "speed": 0.7076923018321395,
-              "editorVisible": false,
+              "editorVisible": true,
               "patternBlendMode": 0,
               "blendPatterns": false
             },
@@ -929,7 +929,7 @@
                 }
               }
             ],
-            "patternIndex": 4,
+            "patternIndex": 5,
             "patterns": [
               {
                 "id": 1100,
@@ -1143,7 +1143,7 @@
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.006527208723127842,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -1332,7 +1332,7 @@
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 0.0013843111228197813,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -1472,7 +1472,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -65363,
+          "modulationColor": -16711702,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -1612,79 +1612,6 @@
       }
     },
     "components": {
-      "envelop": {
-        "id": 33,
-        "class": "com.symmetrylabs.slstudio.envelop.Envelop",
-        "modulationColor": -16712193,
-        "parameters": {
-          "label": "Envelop",
-          "running": true,
-          "trigger": false
-        },
-        "source": {
-          "id": 34,
-          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Source",
-          "modulationColor": -65511,
-          "parameters": {
-            "label": "Source",
-            "running": true,
-            "trigger": false,
-            "Gain": 0.0,
-            "Range": 24.0,
-            "Attack": 25.0,
-            "Release": 50.0,
-            "Source-1": 0.0,
-            "Source-2": 0.0,
-            "Source-3": 0.0,
-            "Source-4": 0.0,
-            "Source-5": 0.0,
-            "Source-6": 0.0,
-            "Source-7": 0.0,
-            "Source-8": 0.0,
-            "Source-9": 0.0,
-            "Source-10": 0.0,
-            "Source-11": 0.0,
-            "Source-12": 0.0,
-            "Source-13": 0.0,
-            "Source-14": 0.0,
-            "Source-15": 0.0,
-            "Source-16": 0.0
-          }
-        },
-        "decode": {
-          "id": 35,
-          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Decode",
-          "modulationColor": -10813696,
-          "parameters": {
-            "label": "Decode",
-            "running": true,
-            "trigger": false,
-            "Gain": 0.0,
-            "Range": 24.0,
-            "Attack": 25.0,
-            "Release": 50.0,
-            "Decode-1": 0.0,
-            "Decode-2": 0.0,
-            "Decode-3": 0.0,
-            "Decode-4": 0.0,
-            "Decode-5": 0.0,
-            "Decode-6": 0.0,
-            "Decode-7": 0.0,
-            "Decode-8": 0.0
-          }
-        }
-      },
-      "outputControl": {
-        "id": 149,
-        "class": "com.symmetrylabs.slstudio.output.OutputControl",
-        "modulationColor": -17664,
-        "parameters": {
-          "label": "Output Control",
-          "Broadcast packet enabled": false,
-          "test unicast": false,
-          "broadcast (10.255.255.255)": false
-        }
-      },
       "swatches": {
         "id": 28,
         "class": "com.symmetrylabs.slstudio.palettes.SwatchLibrary",
@@ -1821,7 +1748,7 @@
         "visible": false
       },
       "Cue": {
-        "visible": false
+        "visible": true
       },
       "Developer/About imgui": {
         "visible": false

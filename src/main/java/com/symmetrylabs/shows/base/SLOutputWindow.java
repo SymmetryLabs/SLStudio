@@ -69,6 +69,11 @@ public class SLOutputWindow extends CloseableWindow {
         UI.text("alt-click any controller to send test pattern");
         UI.text("alt-shift-click any controller to momentarily blackout all outputs");
 
+        if (show instanceof SLShow){
+            int numTwigsKilled = show.allPortsPowerEnableMask.getTotalTwigsKilled();
+            UI.text(numTwigsKilled + " twigs are shutoff");
+        }
+
         boolean blackout = UI.button("blackout procedure");
 
         boolean dump = UI.button("dump metadata to file");

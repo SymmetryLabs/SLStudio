@@ -157,5 +157,9 @@ public class AllPortsPowerEnableMask {
     public static AllPortsPowerEnableMask loadFromDisk (){
         return new ClassWriterLoader<>(PERSISTENT_PORT_MASK, AllPortsPowerEnableMask.class).loadObj();
     }
+
+    public int getTotalTwigsKilled() {
+        return totalTwigsKilled;
+    }
 }
 

@@ -1,13 +1,13 @@
 {
-  "version": 2,
-  "timestamp": 1575207222292,
+  "version": 3,
+  "timestamp": 1575572361637,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
     "modulationColor": -16711913,
     "parameters": {
       "label": "Engine",
-      "speed": 0.4519334137439728,
+      "speed": 0.6419413089752197,
       "multithreaded": true,
       "channelMultithreaded": true,
       "networkMultithreaded": true
@@ -44,7 +44,7 @@
         "modulationColor": -16725761,
         "parameters": {
           "label": "Look-1",
-          "focusedChannel": 10
+          "focusedChannel": 1
         },
         "channels": [
           {
@@ -53,21 +53,21 @@
             "modulationColor": -16711899,
             "parameters": {
               "label": "Channel-1",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
-              "autoCycleEnabled": false,
+              "autoCycleEnabled": true,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 0.4408230781555176,
               "crossfadeGroup": 0,
               "blendMode": 0,
-              "transitionEnabled": false,
+              "transitionEnabled": true,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
               "autoDisable": false,
               "speed": 1.0,
-              "editorVisible": true,
+              "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
             },
@@ -81,7 +81,7 @@
                   "label": "ColorFilter",
                   "expandedInUi": true,
                   "enabled": true,
-                  "Hue": 97.1999978274107,
+                  "Hue": 360.0,
                   "Sat": 100.0,
                   "Alpha": false
                 },
@@ -286,21 +286,21 @@
             "modulationColor": -13304064,
             "parameters": {
               "label": "Channel-2",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
-              "autoCycleEnabled": false,
+              "autoCycleEnabled": true,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
-              "transitionEnabled": false,
+              "transitionEnabled": true,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
               "autoDisable": false,
               "speed": 1.0,
-              "editorVisible": true,
+              "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
             },
@@ -325,62 +325,21 @@
                 }
               }
             ],
-            "patternIndex": 2,
+            "patternIndex": 0,
             "patterns": [
               {
-                "id": 726,
-                "class": "heronarts.lx.pattern.SolidColorPattern",
-                "modulationColor": -16720897,
+                "id": 6896,
+                "class": "com.symmetrylabs.slstudio.pattern.tree.TreeMeltOut",
+                "modulationColor": -38912,
                 "parameters": {
-                  "label": "SolidColor",
+                  "label": "TreeMeltOut",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "color/hue": 0.0,
-                  "color/brightness": 100.0,
-                  "color/saturation": 100.0,
-                  "color": -65536
-                },
-                "modulation": {
-                  "modulators": [],
-                  "modulations": [],
-                  "triggers": []
-                },
-                "autoCycleEnabled": true
-              },
-              {
-                "id": 729,
-                "class": "com.symmetrylabs.slstudio.pattern.tree.TreeSwarm",
-                "modulationColor": -3473153,
-                "parameters": {
-                  "label": "TreeSwarm",
-                  "expandedInUi": true,
-                  "Enabled": true,
-                  "speed": 2000.0,
-                  "base": 10.0,
-                  "floor": 20.0
-                },
-                "modulation": {
-                  "modulators": [],
-                  "modulations": [],
-                  "triggers": []
-                },
-                "autoCycleEnabled": true
-              },
-              {
-                "id": 754,
-                "class": "com.symmetrylabs.slstudio.pattern.tree.TreeVortex",
-                "modulationColor": -65401,
-                "parameters": {
-                  "label": "TreeVortex",
-                  "expandedInUi": true,
-                  "Enabled": true,
-                  "speed": 3180.893510309278,
-                  "size": 46.920000024139874,
-                  "xPos": -56.4321174621582,
-                  "yPos": 165.6840362548828,
-                  "xSlope": 0.20000000298023224,
-                  "ySlope": 0.5,
-                  "zSlope": 0.30000001192092896
+                  "speed": 256.0,
+                  "level": 0.0,
+                  "auto": true,
+                  "melt": 0.5,
+                  "resetOnAuto": false
                 },
                 "modulation": {
                   "modulators": [],
@@ -411,7 +370,7 @@
               "transitionBlendMode": 0,
               "autoDisable": false,
               "speed": 1.0,
-              "editorVisible": true,
+              "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
             },
@@ -527,17 +486,17 @@
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
-              "autoCycleEnabled": false,
+              "autoCycleEnabled": true,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 0.030987558886408806,
               "crossfadeGroup": 0,
               "blendMode": 0,
-              "transitionEnabled": false,
+              "transitionEnabled": true,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
               "autoDisable": false,
               "speed": 1.0,
-              "editorVisible": true,
+              "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
             },
@@ -687,7 +646,7 @@
               "transitionBlendMode": 0,
               "autoDisable": false,
               "speed": 1.0,
-              "editorVisible": true,
+              "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
             },
@@ -742,7 +701,7 @@
                   "label": "BranchFlow",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "period": 4400.559976160526,
+                  "period": 2900.709916561842,
                   "in": 0.2,
                   "out": 0.3,
                   "limb": 1000.0,
@@ -778,7 +737,7 @@
               "transitionBlendMode": 0,
               "autoDisable": false,
               "speed": 1.0,
-              "editorVisible": true,
+              "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
             },
@@ -790,9 +749,9 @@
                 "modulationColor": -16711797,
                 "parameters": {
                   "label": "ColorFilter",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "enabled": true,
-                  "Hue": 253.86614799499512,
+                  "Hue": 147.49797821044922,
                   "Sat": 100.0,
                   "Alpha": false
                 },
@@ -811,7 +770,7 @@
                 "modulationColor": -1572609,
                 "parameters": {
                   "label": "TreeAudioMeltDown",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "speed": 118.73181357854264,
                   "melt": 0.41000001318752766
@@ -835,16 +794,16 @@
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
-              "autoCycleEnabled": false,
+              "autoCycleEnabled": true,
               "autoCycleTimeSecs": 60.0,
               "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
-              "transitionEnabled": false,
+              "transitionEnabled": true,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
               "autoDisable": false,
-              "speed": 1.0,
+              "speed": 0.4402769207954407,
               "editorVisible": true,
               "patternBlendMode": 0,
               "blendPatterns": false
@@ -857,7 +816,7 @@
                 "modulationColor": -4864,
                 "parameters": {
                   "label": "ColorFilter",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "enabled": true,
                   "Hue": 57.600006088614464,
                   "Sat": 100.0,
@@ -878,7 +837,7 @@
                 "modulationColor": -1507073,
                 "parameters": {
                   "label": "SolidColor",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "color/hue": 0.0,
                   "color/brightness": 100.0,
@@ -898,7 +857,7 @@
                 "modulationColor": -131328,
                 "parameters": {
                   "label": "TreeChevron",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "speed": 17000.0,
                   "reverse": false,
@@ -918,7 +877,7 @@
                 "modulationColor": -16759553,
                 "parameters": {
                   "label": "TreeChess",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "speed": 17000.0,
                   "reverse": false,
@@ -937,7 +896,7 @@
                 "modulationColor": -11206401,
                 "parameters": {
                   "label": "TreeAxisPlanes",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "xSpeed": 19000.0,
                   "ySpeed": 13000.0,
@@ -959,7 +918,7 @@
                 "modulationColor": -9896192,
                 "parameters": {
                   "label": "TextureWave",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "Rotate": false,
                   "speed": 1000.0
@@ -977,7 +936,7 @@
                 "modulationColor": -6095104,
                 "parameters": {
                   "label": "TextureSparkle",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "Rotate": false,
                   "speed": 1281.9359599391437,
@@ -998,13 +957,13 @@
             "modulationColor": -56576,
             "parameters": {
               "label": "Channel-8",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 0.9384934902191162,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -1026,7 +985,7 @@
                   "label": "ColorFilter",
                   "expandedInUi": true,
                   "enabled": true,
-                  "Hue": 125.99999718368053,
+                  "Hue": 302.4000120162964,
                   "Sat": 100.0,
                   "Alpha": false
                 },
@@ -1045,9 +1004,9 @@
                 "modulationColor": -16711935,
                 "parameters": {
                   "label": "TreeSnakes",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
-                  "speed": 5483.329749421417,
+                  "speed": 19000.0,
                   "modSpeed": 7000.0,
                   "size": 15.0
                 },
@@ -1066,13 +1025,13 @@
             "modulationColor": -2556160,
             "parameters": {
               "label": "Channel-9",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 0.950946033000946,
               "crossfadeGroup": 0,
               "blendMode": 1,
               "transitionEnabled": false,
@@ -1080,7 +1039,7 @@
               "transitionBlendMode": 0,
               "autoDisable": false,
               "speed": 1.0,
-              "editorVisible": true,
+              "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
             },
@@ -1094,7 +1053,7 @@
                 "modulationColor": -65332,
                 "parameters": {
                   "label": "SolidColor",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "color/hue": 0.0,
                   "color/brightness": 100.0,
@@ -1114,7 +1073,7 @@
                 "modulationColor": -14614784,
                 "parameters": {
                   "label": "TextureSparkle",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "Rotate": false,
                   "speed": 5000.0,
@@ -1133,7 +1092,7 @@
                 "modulationColor": -9633537,
                 "parameters": {
                   "label": "TextureWave",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "Rotate": false,
                   "speed": 4000.0
@@ -1151,7 +1110,7 @@
                 "modulationColor": -65359,
                 "parameters": {
                   "label": "TextureCrawl",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "Rotate": false
                 },
@@ -1184,7 +1143,7 @@
               "transitionBlendMode": 0,
               "autoDisable": false,
               "speed": 1.0,
-              "editorVisible": true,
+              "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
             },
@@ -1196,7 +1155,7 @@
                 "modulationColor": -16711805,
                 "parameters": {
                   "label": "ColorFilter",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "enabled": true,
                   "Hue": 0.0,
                   "Sat": 100.0,
@@ -1217,7 +1176,7 @@
                 "modulationColor": -16711859,
                 "parameters": {
                   "label": "SolidColor",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "color/hue": 0.0,
                   "color/brightness": 100.0,
@@ -1237,7 +1196,7 @@
                 "modulationColor": -9502976,
                 "parameters": {
                   "label": "TreeSirens",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "speed1": 9000.0,
                   "speed2": 9000.0,
@@ -1261,7 +1220,7 @@
                 "modulationColor": -16711714,
                 "parameters": {
                   "label": "TreeSnakes",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "speed": 7000.0,
                   "modSpeed": 7000.0,
@@ -1280,7 +1239,7 @@
                 "modulationColor": -15597824,
                 "parameters": {
                   "label": "TreeMeltDown",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "speed": 64.0,
                   "level": 0.5799999870359898,
@@ -1303,13 +1262,13 @@
             "modulationColor": -16711914,
             "parameters": {
               "label": "Channel-11",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -1317,7 +1276,7 @@
               "transitionBlendMode": 0,
               "autoDisable": false,
               "speed": 1.0,
-              "editorVisible": true,
+              "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
             },
@@ -1331,7 +1290,7 @@
                 "modulationColor": -16711742,
                 "parameters": {
                   "label": "TreeMeltOut",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "speed": 73.94492455761974,
                   "level": 0.09999999776482582,
@@ -1360,7 +1319,7 @@
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.00593698862940073,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -1368,7 +1327,7 @@
               "transitionBlendMode": 0,
               "autoDisable": false,
               "speed": 1.0,
-              "editorVisible": true,
+              "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
             },
@@ -1382,7 +1341,7 @@
                 "modulationColor": -6487809,
                 "parameters": {
                   "label": "SolidColor",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "color/hue": 0.0,
                   "color/brightness": 100.0,
@@ -1402,7 +1361,7 @@
                 "modulationColor": -16768001,
                 "parameters": {
                   "label": "TreeChess",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "speed": 7600.399942761658,
                   "reverse": false,
@@ -1437,7 +1396,7 @@
               "transitionBlendMode": 0,
               "autoDisable": false,
               "speed": 1.0,
-              "editorVisible": true,
+              "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
             },
@@ -1451,7 +1410,7 @@
                 "modulationColor": -40448,
                 "parameters": {
                   "label": "SolidColor",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "color/hue": 0.0,
                   "color/brightness": 100.0,
@@ -1471,7 +1430,7 @@
                 "modulationColor": -16718849,
                 "parameters": {
                   "label": "TreeAudioMeter",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "mode": 0.26000000908970833,
                   "size": 0.37000000115483994
@@ -1489,7 +1448,7 @@
                 "modulationColor": -16646400,
                 "parameters": {
                   "label": "TreeAudioWaves",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "speed": 256.0,
                   "mode": 0.0,
@@ -1511,13 +1470,13 @@
             "modulationColor": -21504,
             "parameters": {
               "label": "Channel-14",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -1525,7 +1484,7 @@
               "transitionBlendMode": 0,
               "autoDisable": false,
               "speed": 1.0,
-              "editorVisible": true,
+              "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
             },
@@ -1542,7 +1501,7 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "palette": 0,
-                  "speed": 12.0,
+                  "speed": 171.99993133544922,
                   "width": 63.43212890625,
                   "wipeOut": true,
                   "refill": true,
@@ -1579,7 +1538,7 @@
               "transitionBlendMode": 0,
               "autoDisable": false,
               "speed": 1.0,
-              "editorVisible": true,
+              "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
             },
@@ -1593,7 +1552,7 @@
                 "modulationColor": -16750081,
                 "parameters": {
                   "label": "Sparkle",
-                  "expandedInUi": true,
+                  "expandedInUi": false,
                   "Enabled": true,
                   "Dens": 0.15,
                   "Attack": 0.4,
@@ -1615,7 +1574,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -65358,
+          "modulationColor": -16711702,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -1730,7 +1689,7 @@
       "modulationColor": -65446,
       "parameters": {
         "label": "Output",
-        "enabled": false,
+        "enabled": true,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -1738,79 +1697,6 @@
       }
     },
     "components": {
-      "envelop": {
-        "id": 33,
-        "class": "com.symmetrylabs.slstudio.envelop.Envelop",
-        "modulationColor": -65316,
-        "parameters": {
-          "label": "Envelop",
-          "running": true,
-          "trigger": false
-        },
-        "source": {
-          "id": 34,
-          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Source",
-          "modulationColor": -12517632,
-          "parameters": {
-            "label": "Source",
-            "running": true,
-            "trigger": false,
-            "Gain": 0.0,
-            "Range": 24.0,
-            "Attack": 25.0,
-            "Release": 50.0,
-            "Source-1": 0.0,
-            "Source-2": 0.0,
-            "Source-3": 0.0,
-            "Source-4": 0.0,
-            "Source-5": 0.0,
-            "Source-6": 0.0,
-            "Source-7": 0.0,
-            "Source-8": 0.0,
-            "Source-9": 0.0,
-            "Source-10": 0.0,
-            "Source-11": 0.0,
-            "Source-12": 0.0,
-            "Source-13": 0.0,
-            "Source-14": 0.0,
-            "Source-15": 0.0,
-            "Source-16": 0.0
-          }
-        },
-        "decode": {
-          "id": 35,
-          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Decode",
-          "modulationColor": -16711684,
-          "parameters": {
-            "label": "Decode",
-            "running": true,
-            "trigger": false,
-            "Gain": 0.0,
-            "Range": 24.0,
-            "Attack": 25.0,
-            "Release": 50.0,
-            "Decode-1": 0.0,
-            "Decode-2": 0.0,
-            "Decode-3": 0.0,
-            "Decode-4": 0.0,
-            "Decode-5": 0.0,
-            "Decode-6": 0.0,
-            "Decode-7": 0.0,
-            "Decode-8": 0.0
-          }
-        }
-      },
-      "outputControl": {
-        "id": 291,
-        "class": "com.symmetrylabs.slstudio.output.OutputControl",
-        "modulationColor": -11008,
-        "parameters": {
-          "label": "Output Control",
-          "Broadcast packet enabled": false,
-          "test unicast": false,
-          "broadcast (10.255.255.255)": false
-        }
-      },
       "swatches": {
         "id": 28,
         "class": "com.symmetrylabs.slstudio.palettes.SwatchLibrary",
@@ -1898,7 +1784,14 @@
       }
     },
     "midi": {
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "CoreMIDI4J - Bus 1",
+          "channel": true,
+          "control": true,
+          "sync": false
+        }
+      ],
       "surfaces": [],
       "mapping": []
     }
@@ -1907,19 +1800,60 @@
     "channelPresets": {
       "presets": {}
     },
-    "ui": {
-      "audioExpanded": true,
-      "paletteExpanded": true,
-      "engineExpanded": true,
-      "clipViewVisible": true,
-      "modulatorExpanded": {},
-      "preview": {
-        "radius": 474.32340549223574,
-        "theta": 4.164000000000011,
-        "phi": 0.2669999999999998,
-        "positionX": 72.0,
-        "positionY": 108.05232238769531,
-        "positionZ": -76.97056579589844
+    "volumeWindowManager": {
+      "Audio": {
+        "visible": false
+      },
+      "Color swatches": {
+        "visible": false
+      },
+      "Console": {
+        "visible": false
+      },
+      "Controllers/Inventory": {
+        "visible": false
+      },
+      "Controllers/Mapping": {
+        "visible": false
+      },
+      "Controllers/Output": {
+        "visible": true
+      },
+      "Controllers/Scaling": {
+        "visible": false
+      },
+      "Cue": {
+        "visible": true
+      },
+      "Developer/About imgui": {
+        "visible": false
+      },
+      "Developer/Imgui demo": {
+        "visible": false
+      },
+      "Developer/Imgui metrics": {
+        "visible": false
+      },
+      "Developer/Style editor": {
+        "visible": false
+      },
+      "Internals": {
+        "visible": true
+      },
+      "Master": {
+        "visible": true
+      },
+      "Modulation": {
+        "visible": false
+      },
+      "OSC": {
+        "visible": false
+      },
+      "Remote Control": {
+        "visible": false
+      },
+      "Tap Tempo": {
+        "visible": false
       }
     }
   }
