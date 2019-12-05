@@ -17,6 +17,8 @@ import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.slstudio.ui.v2.ControllerMgmt.SLInventoryWindow;
 import com.symmetrylabs.slstudio.ui.v2.SLModelMappingWindow;
 import com.symmetrylabs.slstudio.ui.v2.WindowManager;
+import com.symmetrylabs.util.NetworkChannelDebugMonitor.DebugPortMonitor;
+import com.symmetrylabs.util.NetworkChannelDebugMonitor.MachinePortMonitor;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 import com.symmetrylabs.util.hardware.powerMon.ControllerWithPowerFeedback;
@@ -81,6 +83,14 @@ public abstract class SLShow implements Show {
 
         final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
+
+
+        // PinMode(...)
+        DebugPortMonitor debugPortMonitor = new DebugPortMonitor();
+        debugPortMonitor.start();
+
+        MachinePortMonitor machinePortMonitor = new MachinePortMonitor(this);
+        machinePortMonitor.start();
 
         try {
             DiscoverableController broadCastDevice = new AssignableTenereController(lx, new NetworkDevice("10.255.255.255"));

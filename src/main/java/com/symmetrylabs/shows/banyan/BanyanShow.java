@@ -38,100 +38,103 @@ public class BanyanShow extends TreeShow {
     BranchConfig[] LIMB_TYPE = new BranchConfig[] {
 
         // -------------------------------------------------------
-        /* 1  */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 1  */ new BranchConfig(false, 18-108, 16*FOOT, 108-75, 0, 0, 0, BRANCH), // Round B
         /* 2  */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 3  */ new BranchConfig(true, -86+92, 20*FOOT+1, 90-75, 0, 0, 0, BRANCH),
-        /* 4  */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 5  */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 6  */ new BranchConfig(true, -95+92, 20*FOOT, -10-75, 0, 0, 0, BRANCH),
+        /* 3  */ new BranchConfig(false, -86+92, 20*FOOT+1, 90-75, 0, 0, 0, BRANCH), // Round A
+        /* 4  */ new BranchConfig(false, -6-108, 14*FOOT+7, 14-75, 0, 0, 0, BRANCH), // Round B
+        /* 5  */ new BranchConfig(false, 68-108, 14*FOOT+9, 20-75, 0, 0, 0, BRANCH), // Round B
+        /* 6  */ new BranchConfig(false, -95+92, 20*FOOT, -10-75, 0, 0, 0, BRANCH), // Round A
         /* 7  */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 8  */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 8  */ new BranchConfig(false, 29-108, 17*FOOT+11, 32-75, 0, 0, 0, BRANCH), // Round B
         /* 9  */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 10 */ new BranchConfig(true, -30+92, 18*FOOT+10, 28-75, 0, 0, 0, BRANCH),
+        /* 10 */ new BranchConfig(false, -30+92, 18*FOOT+10, 28-75, 0, 0, 0, BRANCH), // Round A
 
         // -------------------------------------------------------
-        /* 11 */ new BranchConfig(true, -64+92, 16*FOOT+11, -91-75, 0, 0, 0, BRANCH),
-        /* 12 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 13 */ new BranchConfig(true, 13+92, 16*FOOT, 26-75, 0, 0, 0, BRANCH),
-        /* 14 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 11 */ new BranchConfig(false, -64+92, 16*FOOT+11, -91-75, 0, 0, 0, BRANCH), // Round A
+        /* 12 */ new BranchConfig(false, 13-108, 16*FOOT+10, -75, 0, 0, 0, BRANCH), // Round B
+        /* 13 */ new BranchConfig(false, 13+92, 16*FOOT, 26-75, 0, 0, 0, BRANCH), // Round A
+        /* 14 */ new BranchConfig(false, -4-108, 16*FOOT+5, 85-75, 0, 0, 0, BRANCH), // Round B
         /* 15 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 16 */ new BranchConfig(true, -13+92, 19*FOOT+2, 48-75, 0, 0, 0, BRANCH),
-        /* 17 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 18 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 19 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 20 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 16 */ new BranchConfig(false, -13+92, 19*FOOT+2, 48-75, 0, 0, 0, BRANCH), // Round A
+        /* 17 */ new BranchConfig(false, -14-108, 16*FOOT+5, 100-75, 0, 0, 0, BRANCH), // Round B
+        /* 18 */ new BranchConfig(false, -20-108, 15*FOOT+10, 112-75, 0, 0, 0, BRANCH), // Round B
+        /* 19 */ new BranchConfig(false, 34-108, 16*FOOT+7, 154-75, 0, 0, 0, BRANCH), // Round B
+        /* 20 */ new BranchConfig(false, 41-108, 13*FOOT+8, 169-75, 0, 0, 0, BRANCH), // Round B
 
         // -------------------------------------------------------
-        /* 21 */ // new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH), EMPTY!
-        /* 22 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 21 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH), // EMPTY!
+        /* 22 */ new BranchConfig(false, 21-108, 16*FOOT+1, -31-75, 0, 0, 0, BRANCH), // Round B
         /* 23 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 24 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 25 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 26 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 27 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 28 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 29 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 24 */ new BranchConfig(false, 119-108, 17*FOOT+1, 181-22-75, 0, 0, 0, BRANCH), // Round B
+        /* 25 */ new BranchConfig(false, 90-108, 13*FOOT+8, 181-15-75, 0, 0, 0, BRANCH), // Round B1
+        /* 26 */ new BranchConfig(false, 104-108, 17*FOOT, 181-6-75, 0, 0, 0, BRANCH), // Round B
+        /* 27 */ new BranchConfig(false, 119-108, 18*8+8, 181-11-75, 0, 0, 0, BRANCH), // Round B
+        /* 28 */ new BranchConfig(false, 73-108, 16*FOOT+7, 181-14-75, 0, 0, 0, BRANCH), // Round B
+        /* 29 */ new BranchConfig(false, 73-108, 18*FOOT+8, 181-24-75, 0, 0, 0, BRANCH), // Round B
         /* 30 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
 
         // -------------------------------------------------------
-        /* 31 */ new BranchConfig(true, -18+92, 16*FOOT+8, 150-75, 0, 0, 0, BRANCH),
-        /* 32 */ new BranchConfig(true,  -2+92, 17*FOOT+3, 111-75, 0, 0, 0, BRANCH),
-        /* 33 */ new BranchConfig(true, 18+92, 18*FOOT, 63-75, 0, 0, 0, BRANCH),
-        /* 34 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 35 */ new BranchConfig(true, -33+92, 19*FOOT, 140-75, 0, 0, 0, BRANCH),
-        /* 36 */ new BranchConfig(true, -53+92, 20*FOOT, 126-75, 0, 0, 0, BRANCH),
-        /* 37 */ new BranchConfig(true, -32+92, 14*FOOT+6, 82-75, 0, 0, 0, BRANCH),
+        /* 31 */ new BranchConfig(false, -18+92, 16*FOOT+8, 150-75, 0, 0, 0, BRANCH), // Round A
+        /* 32 */ new BranchConfig(false,  -2+92, 17*FOOT+3, 111-75, 0, 0, 0, BRANCH), // Round A
+        /* 33 */ new BranchConfig(false, 18+92, 18*FOOT, 63-75, 0, 0, 0, BRANCH), // Round A
+        /* 34 */ new BranchConfig(false, 10-108, 14*FOOT+9, 153-75, 0, 0, 0, BRANCH), // Round B
+        /* 35 */ new BranchConfig(false, -33+92, 19*FOOT, 140-75, 0, 0, 0, BRANCH), // Round A
+        /* 36 */ new BranchConfig(false, -53+92, 20*FOOT, 126-75, 0, 0, 0, BRANCH), // Round A
+        /* 37 */ new BranchConfig(false, -32+92, 14*FOOT+6, 82-75, 0, 0, 0, BRANCH), // Round A
         /* 38 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 39 */ new BranchConfig(true, -107+92, 16*FOOT+8, 116-75, 0, 0, 0, BRANCH),
-        /* 40 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 39 */ new BranchConfig(false, -107+92, 16*FOOT+8, 116-75, 0, 0, 0, BRANCH), // Round A
+        /* 40 */ new BranchConfig(false, 47-108, 18*FOOT+8, 126-75, 0, 0, 0, BRANCH), // Round B
 
         // -------------------------------------------------------
         /* 41 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 42 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 42 */ new BranchConfig(false, 39-108, 14*FOOT+1, 75-75, 0, 0, 0, BRANCH), // Round B
         /* 43 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 44 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 45 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 46 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 44 */ new BranchConfig(false, 52-108, 14 *FOOT+7, 76-75, 0, 0, 0, BRANCH), // Round B
+        /* 45 */ new BranchConfig(false, 73-108, 17*FOOT+2, 66-75, 0, 0, 0, BRANCH), // Round B
+        /* 46 */ new BranchConfig(false, 67-108, 20*FOOT+3, 49-75, 0, 0, 0, BRANCH), // Round B
         /* 47 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 48 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 49 */ new BranchConfig(true, -20+92, 20*FOOT+9, 93-75, 0, 0, 0, BRANCH),
-        /* 50 */ new BranchConfig(true, -28+92, 21*FOOT+7, 79-75, 0, 0, 0, BRANCH),
+        /* 48 */ new BranchConfig(false, 36-108, 19*FOOT+7, 93-75, 0, 0, 0, BRANCH), // Round B
+        /* 49 */ new BranchConfig(false, -20+92, 20*FOOT+9, 93-75, 0, 0, 0, BRANCH), // Round A
+        /* 50 */ new BranchConfig(false, -28+92, 21*FOOT+7, 79-75, 0, 0, 0, BRANCH), // Round A
 
         // -------------------------------------------------------
-        /* 51 */ new BranchConfig(true, -74+92, 18*FOOT+7, 78-75, 0, 0, 0, BRANCH),
-        /* 52 */ new BranchConfig(true, -65+92, 17*FOOT+6, 69-75, 0, 0, 0, BRANCH),
-        /* 53 */ new BranchConfig(true, -101+92, 17*FOOT+3, 44-75, 0, 0, 0, BRANCH),
-        /* 54 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 55 */ new BranchConfig(true, -91+92, 19*FOOT+4, 35-75, 0, 0, 0, BRANCH),
+        /* 51 */ new BranchConfig(false, -74+92, 18*FOOT+7, 78-75, 0, 0, 0, BRANCH), // Round A
+        /* 52 */ new BranchConfig(false, -65+92, 17*FOOT+6, 69-75, 0, 0, 0, BRANCH), // Round A
+        /* 53 */ new BranchConfig(false, -101+92, 17*FOOT+3, 44-75, 0, 0, 0, BRANCH), // Round A
+        /* 54 */ new BranchConfig(false, 55-108, 19*FOOT, 32-75, 0, 0, 0, BRANCH), // Round B
+        /* 55 */ new BranchConfig(false, -91+92, 19*FOOT+4, 35-75, 0, 0, 0, BRANCH), // Round A
         /* 56 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 57 */ new BranchConfig(true, -93+92, 11*FOOT+11, -14-75, 0, 0, 0, BRANCH),
-        /* 58 */ new BranchConfig(true, -42+92, 14*FOOT+5,   10-75, 0, 0, 0, BRANCH),
+        /* 57 */ new BranchConfig(false, -93+92, 11*FOOT+11, -14-75, 0, 0, 0, BRANCH), // Round A
+        /* 58 */ new BranchConfig(false, -42+92, 14*FOOT+5,   10-75, 0, 0, 0, BRANCH), // Round A
         /* 59 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 60 */ new BranchConfig(true, -14+92, 11*FOOT+10,  42-75, 0, 0, 0, BRANCH),
+        /* 60 */ new BranchConfig(false, -14+92, 11*FOOT+10,  42-75, 0, 0, 0, BRANCH), // Round A
 
         // -------------------------------------------------------
-        /* 61 */ new BranchConfig(true, -65+92, 13*FOOT+4, -26-75, 0, 0, 0, BRANCH),
-        /* 62 */ new BranchConfig(true, -18+92, 13*FOOT+4,   0, 0, 0, 0, BRANCH),
-        /* 63 */ new BranchConfig(true,  -6+92, 15*FOOT+2, -32-75, 0, 0, 0, BRANCH),
-        /* 64 */ new BranchConfig(true, 0, 14*FOOT+10, 45-75, 0, 0, 0, BRANCH),
-        /* 65 */ new BranchConfig(true, -12+92, 17*FOOT+2, 39-75, 0, 0, 0, BRANCH),
-        /* 66 */ new BranchConfig(true,  -8+92, 17*FOOT+6, -15-75, 0, 0, 0, BRANCH),
-        /* 67 */ new BranchConfig(true, -31+92, 15*FOOT+8, -60-75, 0, 0, 0, BRANCH),
-        /* 68 */ new BranchConfig(true, -25+92, 17*FOOT+9, -60-75, 0, 0, 0, BRANCH),
-        /* 69 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 61 */ new BranchConfig(false, -65+92, 13*FOOT+4, -26-75, 0, 0, 0, BRANCH), // Round A
+        /* 62 */ new BranchConfig(false, -18+92, 13*FOOT+4,   0, 0, 0, 0, BRANCH), // Round A
+        /* 63 */ new BranchConfig(false,  -6+92, 15*FOOT+2, -32-75, 0, 0, 0, BRANCH), // Round A
+        /* 64 */ new BranchConfig(false, 0, 14*FOOT+10, 45-75, 0, 0, 0, BRANCH), // Round A
+        /* 65 */ new BranchConfig(false, -12+92, 17*FOOT+2, 39-75, 0, 0, 0, BRANCH), // Round A
+        /* 66 */ new BranchConfig(false,  -8+92, 17*FOOT+6, -15-75, 0, 0, 0, BRANCH), // Round A
+        /* 67 */ new BranchConfig(false, -31+92, 15*FOOT+8, -60-75, 0, 0, 0, BRANCH), // Round A
+        /* 68 */ new BranchConfig(false, -25+92, 17*FOOT+9, -60-75, 0, 0, 0, BRANCH), // Round A
+        /* 69 */ new BranchConfig(false, 40-108, 18*FOOT, 9-75, 0, 0, 0, BRANCH), // Round B
         /* 70 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
 
         // -------------------------------------------------------
-        /* 71 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 72 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+        /* 71 */ new BranchConfig(false, 31-108, 12*FOOT, 110-75, 0, 0, 0, BRANCH), // Round B
+        /* 72 */ new BranchConfig(false, 0-108, 18*FOOT+8, 68-75, 0, 0, 0, BRANCH), // Round B
         /* 73 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 74 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 75 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
-        /* 76 */ new BranchConfig(true, -54+92, 19*FOOT+8, 29-75, 0, 0, 0, BRANCH),
-        /* 77 */ new BranchConfig(true, -47+92, 18*FOOT+4, 20-75, 0, 0, 0, BRANCH),
-        /* 78 */ new BranchConfig(true, -53+92, 19*FOOT+4, -59-75, 0, 0, 0, BRANCH),
-        /* 79 */ new BranchConfig(true, -67+92, 20*FOOT, -24-75, 0, 0, 0, BRANCH),
+        /* 74 */ new BranchConfig(false, 43-108, 13*FOOT+2, 9-75, 0, 0, 0, BRANCH), // Round B
+        /* 75 */ new BranchConfig(false, 93-108, 13*FOOT+1, 181-50, 0, 0, 0, BRANCH), // Round B1
+        /* 76 */ new BranchConfig(false, -54+92, 19*FOOT+8, 29-75, 0, 0, 0, BRANCH), // Round A
+        /* 77 */ new BranchConfig(false, -47+92, 18*FOOT+4, 20-75, 0, 0, 0, BRANCH), // Round A
+        /* 78 */ new BranchConfig(false, -53+92, 19*FOOT+4, -59-75, 0, 0, 0, BRANCH), // Round A
+        /* 79 */ new BranchConfig(false, -67+92, 20*FOOT, -24-75, 0, 0, 0, BRANCH), // Round A
         /* 80 */ new BranchConfig(false, 0, 0, 0, 0, 0, 0, BRANCH),
+
+        /* 80 */ new BranchConfig(false, -86+92, 20*FOOT, 42-75, 0, 0, 0, BRANCH), // was 53B!
+
     };
 
     public SLModel buildModel() {
@@ -154,7 +157,7 @@ public class BanyanShow extends TreeShow {
             new LimbConfig(false, 0, 0, 0, 0, 0, LIMB_TYPE),
         });
 
-        BanyanModel.Star.Config starConfig = new BanyanModel.Star.Config(0, 30*FOOT, 0, 220);
+        BanyanModel.Star.Config starConfig = new BanyanModel.Star.Config(0, 26*FOOT, 0, 220);
 
         BanyanModel banyanModel = new BanyanModel(SHOW_NAME, treeConfig, starConfig);
         return banyanModel;
@@ -222,14 +225,14 @@ public class BanyanShow extends TreeShow {
         starLite.addPixliteOutput(new PointsGrouping( "16", BanyanModel.star.innerPanels.get(get).getPoints()).reversePoints()
             .addPoints(BanyanModel.star.outerPanels.get(get).getPoints()));
 
-
+        starLite.enabled.setValue(true);
         lx.addOutput(starLite);
 
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
-        ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
+       // ui.preview.addComponent(new UITreeStructure((TreeModel) lx.model));
 
 //        new UITenereControllers(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.model);
     }

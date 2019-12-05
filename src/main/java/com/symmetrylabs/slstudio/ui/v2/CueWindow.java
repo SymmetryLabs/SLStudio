@@ -2,7 +2,9 @@ package com.symmetrylabs.slstudio.ui.v2;
 
 import com.symmetrylabs.slstudio.cue.Cue;
 import com.symmetrylabs.slstudio.cue.CueManager;
+import com.symmetrylabs.slstudio.cue.TriggerVezerCue;
 import heronarts.lx.LX;
+import heronarts.lx.parameter.BoundedParameter;
 
 public class CueWindow extends CloseableWindow {
 
@@ -22,6 +24,10 @@ public class CueWindow extends CloseableWindow {
 
     @Override
     protected void drawContents() {
+        if (UI.button("add vezer cue")){
+            this.cueManager.addCue(new TriggerVezerCue(lx, new BoundedParameter("null")));
+        }
+        UI.sameLine();
         if (UI.button("add cue")){
             this.cueManager.addCue(new Cue(lx.engine.output.brightness));
         }

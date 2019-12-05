@@ -141,6 +141,10 @@ public class LXOscEngine extends LXComponent {
         addParameter("transmitActive", this.transmitActive);
     }
 
+    public void enqueueMessage(OscMessage toSend){
+        engineTransmitter.sendMessage(toSend);
+    }
+
     /**
      * Gets the OSC address pattern for a parameter
      *

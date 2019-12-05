@@ -140,9 +140,15 @@ public class CueManager implements LXLoopTask, CaptionSource, SLStudioLX.SaveHoo
         }
 
         Cue cc = current.cue;
-        t = constrain(elapsedMs / cc.durationMs.getValue(), 0, 1);
-        double newFader = currentCueValueAtStart + (cc.fadeTo.getValue() - currentCueValueAtStart) * t;
-        cc.cuedParameter.setValue(newFader);
+        if (cc instanceof TriggerVezerCue){
+            ((TriggerVezerCue) cc).executeTask();
+        }
+        else{
+            t = constrain(elapsedMs / cc.durationMs.getValue(), 0, 1);
+            double newFader = currentCueValueAtStart + (cc.fadeTo.getValue() - currentCueValueAtStart) * t;
+            cc.cuedParameter.setValue(newFader);
+        }
+
     }
 
     @Override

@@ -309,11 +309,11 @@ public class OsloShow extends SLShow implements HasWorkspace {
 
         // for now these are declared here. But there should be a more deterministic way of instantiating
         // .. such as a hook on discovery of symmeTree controller
-        DebugPortMonitor debugPortMonitor = new DebugPortMonitor();
-        debugPortMonitor.start();
-
-        MachinePortMonitor machinePortMonitor = new MachinePortMonitor(this);
-        machinePortMonitor.start();
+//        DebugPortMonitor debugPortMonitor = new DebugPortMonitor();
+//        debugPortMonitor.start();
+//
+//        MachinePortMonitor machinePortMonitor = new MachinePortMonitor(this);
+//        machinePortMonitor.start();
 
 //        try {
 //            for (TreeModel_v2.Branch branch : tree.getBranches()) {

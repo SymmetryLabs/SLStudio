@@ -264,8 +264,9 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
                 }
             } else {
                 // WARNING!! static desperate to get tree working - change later
-                numPixels = 1200;
+//                numPixels = 1200;
 
+                numPixels = points.size();
                 initPacketData(numPixels, false);
                 int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
                 for (int i = 0; i < numPixels; i++) {
