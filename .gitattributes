@@ -18,3 +18,4 @@
 *.ttf filter=lfs diff=lfs merge=lfs -text
 *.ply filter=lfs diff=lfs merge=lfs -text
 src/main/resources/icons/** !filter !merge !diff
+libs/slimgui.lib filter=lfs diff=lfs merge=lfs -text
