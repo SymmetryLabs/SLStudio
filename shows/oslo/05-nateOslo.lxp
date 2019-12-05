@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "timestamp": 1575214061797,
+  "version": 3,
+  "timestamp": 1575546419786,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -53,13 +53,13 @@
             "modulationColor": -16749057,
             "parameters": {
               "label": "shapeBaseA",
-              "enabled": false,
-              "cue": true,
+              "enabled": true,
+              "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 1,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -1332,7 +1332,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -4259585,
+          "modulationColor": -65283,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -1425,7 +1425,7 @@
         "modulationColor": -16711917,
         "parameters": {
           "label": "Audio Input",
-          "device": 2
+          "device": 0
         }
       },
       "output": {
@@ -1447,87 +1447,14 @@
       "modulationColor": -65446,
       "parameters": {
         "label": "Output",
-        "enabled": false,
+        "enabled": true,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.0
+        "brightness": 1.0
       }
     },
     "components": {
-      "envelop": {
-        "id": 33,
-        "class": "com.symmetrylabs.slstudio.envelop.Envelop",
-        "modulationColor": -16712193,
-        "parameters": {
-          "label": "Envelop",
-          "running": true,
-          "trigger": false
-        },
-        "source": {
-          "id": 34,
-          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Source",
-          "modulationColor": -65511,
-          "parameters": {
-            "label": "Source",
-            "running": true,
-            "trigger": false,
-            "Gain": 0.0,
-            "Range": 24.0,
-            "Attack": 25.0,
-            "Release": 50.0,
-            "Source-1": 0.0,
-            "Source-2": 0.0,
-            "Source-3": 0.0,
-            "Source-4": 0.0,
-            "Source-5": 0.0,
-            "Source-6": 0.0,
-            "Source-7": 0.0,
-            "Source-8": 0.0,
-            "Source-9": 0.0,
-            "Source-10": 0.0,
-            "Source-11": 0.0,
-            "Source-12": 0.0,
-            "Source-13": 0.0,
-            "Source-14": 0.0,
-            "Source-15": 0.0,
-            "Source-16": 0.0
-          }
-        },
-        "decode": {
-          "id": 35,
-          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Decode",
-          "modulationColor": -10813696,
-          "parameters": {
-            "label": "Decode",
-            "running": true,
-            "trigger": false,
-            "Gain": 0.0,
-            "Range": 24.0,
-            "Attack": 25.0,
-            "Release": 50.0,
-            "Decode-1": 0.0,
-            "Decode-2": 0.0,
-            "Decode-3": 0.0,
-            "Decode-4": 0.0,
-            "Decode-5": 0.0,
-            "Decode-6": 0.0,
-            "Decode-7": 0.0,
-            "Decode-8": 0.0
-          }
-        }
-      },
-      "outputControl": {
-        "id": 149,
-        "class": "com.symmetrylabs.slstudio.output.OutputControl",
-        "modulationColor": -17664,
-        "parameters": {
-          "label": "Output Control",
-          "Broadcast packet enabled": false,
-          "test unicast": false,
-          "broadcast (10.255.255.255)": false
-        }
-      },
       "swatches": {
         "id": 28,
         "class": "com.symmetrylabs.slstudio.palettes.SwatchLibrary",
@@ -1771,23 +1698,60 @@
     "channelPresets": {
       "presets": {}
     },
-    "ui": {
-      "audioExpanded": true,
-      "paletteExpanded": true,
-      "engineExpanded": true,
-      "clipViewVisible": true,
-      "modulatorExpanded": {
-        "6799": true,
-        "20436": true,
-        "20438": true
+    "volumeWindowManager": {
+      "Audio": {
+        "visible": false
       },
-      "preview": {
-        "radius": 862.7007273709916,
-        "theta": 1.2600000000000013,
-        "phi": 0.1410000000000008,
-        "positionX": 0.63531494140625,
-        "positionY": 284.4466552734375,
-        "positionZ": -0.010833740234375
+      "Color swatches": {
+        "visible": false
+      },
+      "Console": {
+        "visible": false
+      },
+      "Controllers/Inventory": {
+        "visible": false
+      },
+      "Controllers/Mapping": {
+        "visible": false
+      },
+      "Controllers/Output": {
+        "visible": false
+      },
+      "Controllers/Scaling": {
+        "visible": false
+      },
+      "Cue": {
+        "visible": false
+      },
+      "Developer/About imgui": {
+        "visible": false
+      },
+      "Developer/Imgui demo": {
+        "visible": false
+      },
+      "Developer/Imgui metrics": {
+        "visible": false
+      },
+      "Developer/Style editor": {
+        "visible": false
+      },
+      "Internals": {
+        "visible": true
+      },
+      "Master": {
+        "visible": true
+      },
+      "Modulation": {
+        "visible": false
+      },
+      "OSC": {
+        "visible": false
+      },
+      "Remote Control": {
+        "visible": false
+      },
+      "Tap Tempo": {
+        "visible": false
       }
     }
   }
