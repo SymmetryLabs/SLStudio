@@ -278,6 +278,7 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
                 // ok only if we are the special broadcast device
                 if (!this.isBroadcastDevice.isOn()){
                     return; // do nothing if we're not the device
+
                 }
             }
             else { // if we're outputing normally we don't want this.
@@ -287,7 +288,8 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
             }
             fillDatagramsAndAddToOutput();
         } else if (points != null) { // there is a fixture for this one
-            numPixels = 1200;
+//            numPixels = 1200;
+            numPixels = points.size();
             // Fill the datagram with pixel data
             if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
                 initPacketData(numPixels, true);

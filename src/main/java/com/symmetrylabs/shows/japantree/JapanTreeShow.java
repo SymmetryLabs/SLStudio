@@ -28,6 +28,9 @@ import com.symmetrylabs.shows.tree.ui.*;
 import com.symmetrylabs.shows.tree.ui.UITenereControllers;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
+import com.symmetrylabs.util.NetworkChannelDebugMonitor.DebugPortMonitor;
+import com.symmetrylabs.util.NetworkChannelDebugMonitor.MachinePortMonitor;
+
 
 import org.smurn.jply.PlyReaderFile;
 import org.smurn.jply.ElementReader;
@@ -87,7 +90,9 @@ public class JapanTreeShow extends TreeShow {
         List<TwigConfig> branchTwigs = new ArrayList<>();
         try {
             PlyReaderFile ply = new PlyReaderFile("shows/japantree/branch.ply");
+
             ElementReader plyReader = ply.nextElementReader();
+
             for (Element elem = plyReader.readElement(); elem != null; elem = plyReader.readElement()) {
                 branchTwigs.add(
                     new TwigConfig(
@@ -138,7 +143,15 @@ public class JapanTreeShow extends TreeShow {
         TreeModel tree = (TreeModel) (lx.model);
         TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
 
-        System.out.println("Number of branches: " + tree.getBranches().size());
+
+        DebugPortMonitor debugPortMonitor = new DebugPortMonitor();
+        debugPortMonitor.start();
+
+        MachinePortMonitor machinePortMonitor = new MachinePortMonitor(this);
+        machinePortMonitor.start();
+
+
+
 
         lx.engine.addLoopTask(new LXLoopTask() {
             @Override
@@ -153,6 +166,7 @@ public class JapanTreeShow extends TreeShow {
         });
 
         int branchId = 0;
+
         for (TreeModel.Branch branch : tree.getBranches()) {
             try {
                 AssignableTenereController controller = new AssignableTenereController(lx, branch);
