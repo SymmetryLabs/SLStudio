@@ -134,6 +134,10 @@ public class CueManager implements LXLoopTask, CaptionSource, SLStudioLX.SaveHoo
                 elapsedMs = 0;
                 break;
             }
+//            if (cd.cue.isHourly && now.getMinuteOfHour() == 0) {
+//                cd.lastStartedAt = now;
+//                current = cd;
+//            }
         }
         if (current == null) {
             return;
@@ -142,6 +146,9 @@ public class CueManager implements LXLoopTask, CaptionSource, SLStudioLX.SaveHoo
         Cue cc = current.cue;
         if (cc instanceof TriggerVezerCue){
             ((TriggerVezerCue) cc).triggerVezerShow(((TriggerVezerCue) cc).showName.getString());
+        }
+        if (cc instanceof BlackoutProcedureCue){
+            ((BlackoutProcedureCue) cc).execute();
         }
         else{
             t = constrain(elapsedMs / cc.durationMs.getValue(), 0, 1);

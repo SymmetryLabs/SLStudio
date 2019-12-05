@@ -18,6 +18,7 @@ public class Cue {
     public final CompoundParameter durationSec;
     public final CompoundParameter fadeTo;
     public final BoundedParameter cuedParameter;
+    public boolean isHourly = false;
     private DateTime startAt;
 
     public Cue(BoundedParameter cuedParameter) {

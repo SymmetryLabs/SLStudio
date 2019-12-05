@@ -82,7 +82,7 @@ public class SLOutputWindow extends CloseableWindow {
 
         modelID_filter = UI.inputText("filter by controllerId or modelId", modelID_filter);
 
-        pui.draw(filterLessThanThreshhold);
+//        pui.draw(filterLessThanThreshhold);
         pui.draw(filterOnlyAboveAcceptableDarkCurrentThreshhold);
 
         if (savePortPowerPreferencesToRAM){
@@ -127,7 +127,8 @@ public class SLOutputWindow extends CloseableWindow {
                 if (broadcastPortPowerOn){
                     ((ControllerWithPowerFeedback) dc).enableAllPorts();
                 }
-                if ( filterOnlyAboveAcceptableDarkCurrentThreshhold.isOn() && ((ControllerWithPowerFeedback) dc).allPortsLessThanThreshholdDuringBlackout(filterLessThanThreshhold.getValuei()) ){
+//                if ( filterOnlyAboveAcceptableDarkCurrentThreshhold.isOn() && ((ControllerWithPowerFeedback) dc).allPortsLessThanThreshholdDuringBlackout(filterLessThanThreshhold.getValuei()) ){
+                if ( filterOnlyAboveAcceptableDarkCurrentThreshhold.isOn() && ((ControllerWithPowerFeedback) dc).allPortsLessThanThreshholdDuringBlackout(show.globalBlackoutPowerThreshhold.getValuei()) ){
                     continue;
                 }
                 if (blackout){
