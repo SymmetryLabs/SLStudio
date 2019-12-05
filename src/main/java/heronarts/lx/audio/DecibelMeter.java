@@ -57,7 +57,7 @@ public class DecibelMeter extends LXModulator implements LXNormalizedParameter {
      * Meter attack time, in milliseconds
      */
     public final BoundedParameter attack = (BoundedParameter)
-        new BoundedParameter("Attack", 10, 0, 100)
+        new BoundedParameter("Attack", 10, 0, 2000)
         .setDescription("Sets the attack time of the meter response")
         .setUnits(LXParameter.Units.MILLISECONDS);
 

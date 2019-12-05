@@ -12,6 +12,7 @@ import com.symmetrylabs.slstudio.workspaces.Workspace;
 import com.symmetrylabs.util.NetworkChannelDebugMonitor.DebugPortMonitor;
 import com.symmetrylabs.util.NetworkChannelDebugMonitor.MachinePortMonitor;
 import heronarts.lx.LX;
+import heronarts.lx.LXLoopTask;
 import heronarts.lx.transform.LXMatrix;
 
 
@@ -315,6 +316,14 @@ public class OsloShow extends SLShow implements HasWorkspace {
 //        MachinePortMonitor machinePortMonitor = new MachinePortMonitor(this);
 //        machinePortMonitor.start();
 
+        lx.engine.addLoopTask(new LXLoopTask() {
+            @Override
+            public void loop(double v) {
+                if (lx.engine.framesPerSecond.getValuef() != 35) {
+                    lx.engine.framesPerSecond.setValue(35);
+                }
+            }
+        });
 //        try {
 //            for (TreeModel_v2.Branch branch : tree.getBranches()) {
 //                AssignableTenereController controller = new AssignableTenereController(lx, branch, slControllerInventory);

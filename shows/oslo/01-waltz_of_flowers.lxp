@@ -1,6 +1,6 @@
 {
-  "version": 3,
-  "timestamp": 1575545460277,
+  "version": 2,
+  "timestamp": 1575219160543,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -44,7 +44,7 @@
         "modulationColor": -65375,
         "parameters": {
           "label": "Look-1",
-          "focusedChannel": 15
+          "focusedChannel": 0
         },
         "channels": [
           {
@@ -53,7 +53,7 @@
             "modulationColor": -16711785,
             "parameters": {
               "label": "1 - BranchF",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -84,6 +84,24 @@
                   "amount": 1.0,
                   "attack": 100.0,
                   "decay": 100.0
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                }
+              },
+              {
+                "id": 17953,
+                "class": "com.symmetrylabs.slstudio.effect.LSD",
+                "modulationColor": -31744,
+                "parameters": {
+                  "label": "LSD",
+                  "expandedInUi": true,
+                  "enabled": true,
+                  "Scale": 12.799999937415123,
+                  "Speed": 4.0,
+                  "Range": 1.0
                 },
                 "modulation": {
                   "modulators": [],
@@ -213,7 +231,7 @@
             "modulationColor": -16755713,
             "parameters": {
               "label": "2 - Autumn",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -279,7 +297,7 @@
             "modulationColor": -16741121,
             "parameters": {
               "label": "3 - Pong",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -329,7 +347,7 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Hue": 359.99999195337296,
-                  "Spark": 1.0,
+                  "Spark": 0.0,
                   "Wave": 0.0,
                   "xPos": 0.5,
                   "yPos": 0.5,
@@ -357,7 +375,7 @@
             "modulationColor": -15204608,
             "parameters": {
               "label": "4 - Sparkle",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -426,7 +444,7 @@
             "modulationColor": -8716544,
             "parameters": {
               "label": "5 - Treesprk",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -493,7 +511,7 @@
             "modulationColor": -16766209,
             "parameters": {
               "label": "6 - 2 Tone",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -560,7 +578,7 @@
             "modulationColor": -16711763,
             "parameters": {
               "label": "7 - Rain",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -602,7 +620,7 @@
                   "label": "Raindrops",
                   "expandedInUi": false,
                   "Enabled": true,
-                  "Number": -380.6198191642761,
+                  "Number": -380.0,
                   "Size": 0.38799999356269843,
                   "SizeVar": 0.5299999993294477,
                   "Speed": -6866.000002995133,
@@ -645,7 +663,7 @@
             "modulationColor": -45312,
             "parameters": {
               "label": "8 - Snakes",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -729,7 +747,7 @@
             "modulationColor": -65409,
             "parameters": {
               "label": "9 - Sunset",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -803,7 +821,7 @@
             "modulationColor": -37120,
             "parameters": {
               "label": "10 - Swim",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -854,7 +872,7 @@
             "modulationColor": -8704,
             "parameters": {
               "label": "11 - Loop",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -1067,7 +1085,7 @@
             "modulationColor": -4864,
             "parameters": {
               "label": "12 - TexCoral",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -1119,13 +1137,13 @@
             "modulationColor": -16711920,
             "parameters": {
               "label": "13 - Awake",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.005163838155567646,
+              "fader": 0.006527208723127842,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -1185,7 +1203,7 @@
             "modulationColor": -51456,
             "parameters": {
               "label": "14 - Rings",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -1258,7 +1276,7 @@
             "modulationColor": -16743681,
             "parameters": {
               "label": "15 - Met",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -1308,7 +1326,7 @@
             "modulationColor": -6160640,
             "parameters": {
               "label": "16 - Sprk2",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -1377,7 +1395,7 @@
             "modulationColor": -16711832,
             "parameters": {
               "label": "17 - Explo",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -1427,7 +1445,7 @@
             "modulationColor": -16730881,
             "parameters": {
               "label": "Channel-18",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -1454,7 +1472,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16711904,
+          "modulationColor": -65363,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -1594,6 +1612,79 @@
       }
     },
     "components": {
+      "envelop": {
+        "id": 33,
+        "class": "com.symmetrylabs.slstudio.envelop.Envelop",
+        "modulationColor": -16712193,
+        "parameters": {
+          "label": "Envelop",
+          "running": true,
+          "trigger": false
+        },
+        "source": {
+          "id": 34,
+          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Source",
+          "modulationColor": -65511,
+          "parameters": {
+            "label": "Source",
+            "running": true,
+            "trigger": false,
+            "Gain": 0.0,
+            "Range": 24.0,
+            "Attack": 25.0,
+            "Release": 50.0,
+            "Source-1": 0.0,
+            "Source-2": 0.0,
+            "Source-3": 0.0,
+            "Source-4": 0.0,
+            "Source-5": 0.0,
+            "Source-6": 0.0,
+            "Source-7": 0.0,
+            "Source-8": 0.0,
+            "Source-9": 0.0,
+            "Source-10": 0.0,
+            "Source-11": 0.0,
+            "Source-12": 0.0,
+            "Source-13": 0.0,
+            "Source-14": 0.0,
+            "Source-15": 0.0,
+            "Source-16": 0.0
+          }
+        },
+        "decode": {
+          "id": 35,
+          "class": "com.symmetrylabs.slstudio.envelop.Envelop$Decode",
+          "modulationColor": -10813696,
+          "parameters": {
+            "label": "Decode",
+            "running": true,
+            "trigger": false,
+            "Gain": 0.0,
+            "Range": 24.0,
+            "Attack": 25.0,
+            "Release": 50.0,
+            "Decode-1": 0.0,
+            "Decode-2": 0.0,
+            "Decode-3": 0.0,
+            "Decode-4": 0.0,
+            "Decode-5": 0.0,
+            "Decode-6": 0.0,
+            "Decode-7": 0.0,
+            "Decode-8": 0.0
+          }
+        }
+      },
+      "outputControl": {
+        "id": 149,
+        "class": "com.symmetrylabs.slstudio.output.OutputControl",
+        "modulationColor": -17664,
+        "parameters": {
+          "label": "Output Control",
+          "Broadcast packet enabled": false,
+          "test unicast": false,
+          "broadcast (10.255.255.255)": false
+        }
+      },
       "swatches": {
         "id": 28,
         "class": "com.symmetrylabs.slstudio.palettes.SwatchLibrary",
