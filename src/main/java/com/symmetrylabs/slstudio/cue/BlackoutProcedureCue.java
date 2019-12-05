@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.cue;
 
 import com.badlogic.gdx.utils.Timer;
+import com.google.gson.JsonObject;
 import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.slstudio.output.DiscoverableController;
 import com.symmetrylabs.slstudio.ui.v2.UI;
@@ -16,8 +17,14 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.TimerTask;
 
-public class BlackoutProcedureCue extends Cue {
+public class BlackoutProcedureCue extends Cue implements CueTypeAdapter {
 //    public BooleanParameter trigger = new BooleanParameter("force procedure run", false).setMode(BooleanParameter.Mode.MOMENTARY);
+
+    static String CUE_TYPE = "blackout";
+    public String getCueType(){
+        return CUE_TYPE;
+    }
+
     LX lx;
     public DiscreteParameter blackoutThreshhold = new DiscreteParameter("blackout threshhold", 280, 200, 400);
     public DiscreteParameter delayBeforeCuttoff = new DiscreteParameter("precuttoff delay", 400, 100, 1000);

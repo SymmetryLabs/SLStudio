@@ -7,8 +7,7 @@ import heronarts.lx.parameter.*;
 import org.joda.time.DateTime;
 
 
-public class Cue {
-
+public class Cue implements CueTypeAdapter {
     public final static int MAX_DURATION = 10;
 
     private static int uid_counter = 0;
@@ -73,6 +72,7 @@ public class Cue {
         obj.addProperty("startAt", startAtStr.getString());
         obj.addProperty("duration", durationMs.getValue());
         obj.addProperty("fadeTo", fadeTo.getValue());
+        obj.addProperty("type", getCueType());
         /* TODO: store cued parameter path */
     }
 
@@ -84,5 +84,10 @@ public class Cue {
 
     public DateTime getStartTime() {
         return startAt;
+    }
+
+    @Override
+    public String getCueType() {
+        return "normal";
     }
 }

@@ -10,10 +10,12 @@ package com.symmetrylabs.slstudio.cue;
     import java.net.SocketException;
     import java.net.UnknownHostException;
 
-public class TriggerVezerCue extends Cue {
+public class TriggerVezerCue extends Cue implements CueTypeAdapter{
     private LX lx;
     private LXOscEngine.Transmitter oscTransmitter = null;
     public StringParameter showName = new StringParameter("show name");
+
+    static String CUE_TYPE="vezer";
 
     public TriggerVezerCue(LX lx, BoundedParameter cuedParameter) {
         super(cuedParameter);
@@ -35,5 +37,9 @@ public class TriggerVezerCue extends Cue {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getCueType(){
+        return CUE_TYPE;
     }
 }
