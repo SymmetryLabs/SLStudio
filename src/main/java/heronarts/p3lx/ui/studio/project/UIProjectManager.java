@@ -41,7 +41,7 @@ public class UIProjectManager extends UICollapsibleSection {
 
     private final LX lx;
     private final UILabel fileLabel;
-    private Project project;
+    public static Project project;
     private final UIButton saveButton;
     private final UIButton saveAsButton;
     private final UIButton openButton;
