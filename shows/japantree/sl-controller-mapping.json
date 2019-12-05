@@ -1,14 +1,6 @@
 {
   "assignments": [
     {
-      "modelId": "Branch25",
-      "humanID": "370"
-    },
-    {
-      "modelId": "Branch26",
-      "humanID": "364"
-    },
-    {
       "modelId": "Branch29",
       "humanID": "362"
     },
@@ -54,7 +46,7 @@
     },
     {
       "modelId": "Branch12",
-      "humanID": "299"
+      "humanID": "354"
     },
     {
       "modelId": "Branch15",
@@ -83,10 +75,6 @@
     {
       "modelId": "Branch46",
       "humanID": "302"
-    },
-    {
-      "modelId": "Branch3",
-      "humanID": "318"
     },
     {
       "modelId": "Branch31",
@@ -146,7 +134,7 @@
     },
     {
       "modelId": "Branch1",
-      "humanID": "361"
+      "humanID": "363"
     },
     {
       "modelId": "Branch4",
@@ -185,10 +173,6 @@
       "humanID": "307"
     },
     {
-      "modelId": "Branch11",
-      "humanID": "354"
-    },
-    {
       "modelId": "Branch42",
       "humanID": "304"
     },
@@ -209,20 +193,12 @@
       "humanID": "337"
     },
     {
-      "modelId": "Branch24",
-      "humanID": "317"
-    },
-    {
-      "modelId": "Branch0",
-      "humanID": "363"
-    },
-    {
       "modelId": "Branch77",
       "humanID": "309"
     },
     {
       "modelId": "Branch27",
-      "humanID": "343"
+      "humanID": "317"
     },
     {
       "modelId": "Branch17",
@@ -261,20 +237,44 @@
       "humanID": "399y"
     },
     {
-      "modelId": "Branch5",
-      "humanID": "367"
-    },
-    {
       "modelId": "Branch13",
       "humanID": "399z"
     },
     {
-      "modelId": "Branch18",
+      "modelId": "Branch33",
+      "humanID": "310"
+    },
+    {
+      "modelId": "Branch25",
+      "humanID": "343"
+    },
+    {
+      "modelId": "Branch26",
+      "humanID": "370"
+    },
+    {
+      "modelId": "Branch24",
+      "humanID": "364"
+    },
+    {
+      "modelId": "Branch0",
+      "humanID": "361"
+    },
+    {
+      "modelId": "Branch3",
       "humanID": "339"
     },
     {
-      "modelId": "Branch33",
-      "humanID": "310"
+      "modelId": "Branch11",
+      "humanID": "299"
+    },
+    {
+      "modelId": "Branch19",
+      "humanID": "318"
+    },
+    {
+      "modelId": "Branch18",
+      "humanID": "367"
     }
   ],
   "showName": "japantree"
