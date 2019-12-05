@@ -20,9 +20,13 @@ public class AllPortsPowerEnableMask {
     private static String PERSISTENT_PORT_MASK = "persistent-port-mask.json";
 
     @Expose
+    int totalTwigsKilled = 0;
+
+    @Expose
     private final TreeMap<String, Byte> portMaskByControllerHumanID = new TreeMap<>();
 
     public void loadControllerSetMaskStateTo_RAM(Collection<DiscoverableController> controllerSet) {
+        totalTwigsKilled = 0;
         controllerSet.stream().filter(powerController -> powerController instanceof ControllerWithPowerFeedback)
             .map(powerController -> (ControllerWithPowerFeedback) powerController)
             .forEach(this::saveStateByController);
@@ -32,6 +36,12 @@ public class AllPortsPowerEnableMask {
         Byte portMask;
         portMask = filterIntToByte(controller.getLastSample().powerOnStateMask);
         portMaskByControllerHumanID.put(controller.getHumanId(), portMask);
+
+        for (int i = 0; i < 8; i++){
+            if ((portMask >> i & 0x1) == 0x1){
+                totalTwigsKilled++;
+            }
+        }
     }
 
     public void applyStateToController(ControllerWithPowerFeedback controller){
@@ -85,7 +95,9 @@ public class AllPortsPowerEnableMask {
         String fmtdate = fmtNow();
 
         String json_in_file = contentBuilder.toString();
-        String firebaseURL = "https://oslo-46d2a.firebaseio.com/rest/oslo/"+ fmtdate + ".json";
+        String symmetryBaseURL = "https://oslotree-aa3e5.firebaseio.com/";
+        String resourceURI = "oslo/"+ fmtdate + ".json";
+        String firebaseURL = symmetryBaseURL + resourceURI;
 
 //        try {
 //            String cmdString = "curl -X PUT -d " + "'" + json_in_file.replaceAll("\n","") + "' " + firebaseURL;
