@@ -23,7 +23,7 @@ public class DebugPortMonitor extends Thread {
             DatagramPacket recvPacket = new DatagramPacket(respBuf, 256);
             try {
                 debugSock.receive(recvPacket);
-                System.out.print(new String(recvPacket.getData(), 0, recvPacket.getLength()));
+                System.out.print( recvPacket.getAddress().toString() + " - " + (new String(recvPacket.getData(), 0, recvPacket.getLength())));
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -353,7 +353,7 @@ public class AssignableTenereController extends DiscoverableController implement
                 return;
             }
             pwrMaskByte = incomingPwrMaskByte;
-            System.out.println(pwrMaskByte);
+//            System.out.println(pwrMaskByte);
 
             byte[] payload = new byte[1];
             payload[0] = (byte)pwrMaskByte;
