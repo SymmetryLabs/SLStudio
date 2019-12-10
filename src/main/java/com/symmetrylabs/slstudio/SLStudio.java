@@ -5,10 +5,12 @@ import com.google.gson.JsonSyntaxException;
 import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.ShowRegistry;
+import com.symmetrylabs.shows.base.SLShow;
 import com.symmetrylabs.shows.tree.Anemometer;
 import com.symmetrylabs.slstudio.envelop.Envelop;
 import com.symmetrylabs.slstudio.envelop.EnvelopOscListener;
 import com.symmetrylabs.slstudio.mappings.Mappings;
+import com.symmetrylabs.slstudio.mappings.SLSculptureControllerMapping;
 import com.symmetrylabs.slstudio.midi.NotationXLListener;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
 import com.symmetrylabs.slstudio.output.OutputControl;
@@ -136,6 +138,7 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
         println("\n---- Show: " + showName + " ----");
 
         show = ShowRegistry.getShow(this, showName);
+//        SLShow.mapping = SLSculptureControllerMapping.loadFromDisk(showName, ((SLShow)show).controllerInventory);
         LXModel model = show.buildModel();
         printModelStats(model);
 

@@ -25,6 +25,9 @@ import com.symmetrylabs.util.hardware.powerMon.ControllerWithPowerFeedback;
 import com.symmetrylabs.util.listenable.ListenableSet;
 import com.symmetrylabs.util.listenable.SetListener;
 import heronarts.lx.LX;
+import heronarts.lx.LXChannel;
+import heronarts.lx.LXLook;
+import heronarts.lx.LXLoopTask;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.p3lx.ui.UI2dScrollContext;
@@ -38,21 +41,21 @@ import java.util.*;
 /**
  * Base class of utilities all shows should derive from and benefit from
  */
-public abstract class SLShow implements Show {
+public abstract class SLShow implements Show, LXLook.Listener {
     public static final String SHOW_NAME = "slshow";
 
     // power mask stuff.. this will be pretty universal and should proably be an inherited class.  For now just testing;
     public AllPortsPowerEnableMask allPortsPowerEnableMask = AllPortsPowerEnableMask.loadFromDisk();
 
     // top level metadata used in any show
-    public static SLSculptureControllerMapping mapping = null; // only initialized for top level... more evidence we need a top level SLModel.
     public SLControllerInventory controllerInventory;
     public PersistentControllerByHumanIdMap controllerInventory2;
+    public static SLSculptureControllerMapping mapping; // only initialized for top level... more evidence we need a top level SLModel.
 
     /**
      * Power related.
      */
-    DiscreteParameter globalBlackoutPowerThreshhold = new DiscreteParameter("global blackout", 200, 0, 4095);
+    public DiscreteParameter globalBlackoutPowerThreshhold = new DiscreteParameter("global blackout", 200, 0, 4095);
 
 
     public final HashMap<InetAddress, DiscoverableController> controllerByInetAddrMap = new HashMap<>();
@@ -72,9 +75,8 @@ public abstract class SLShow implements Show {
         controllerInventory = SLControllerInventory.loadFromDisk();
         controllerInventory2 = PersistentControllerByHumanIdMap.loadFromDisk();
         controllerInventory.importPersistentControllerByHumanIdMap(controllerInventory2);
-
         mapping = SLSculptureControllerMapping.loadFromDisk(getShowName(), controllerInventory);
-//        mapping = SLSculptureControllerMapping.loadFromDisk(getShowName(), controllerInventory2);
+        //        mapping = SLSculptureControllerMapping.loadFromDisk(getShowName(), controllerInventory2);
     }
 
     public abstract SLModel buildModel();
@@ -186,5 +188,18 @@ public abstract class SLShow implements Show {
 
     public DiscoverableController getControllerByInetAddr(InetAddress sourceControllerAddr) {
         return controllerByInetAddrMap.get(sourceControllerAddr);
+    }
+
+    @Override
+    public void channelAdded(LXLook look, LXChannel lxChannel) {
+        lxChannel.autoDisable.setValue(true);
+    }
+
+    @Override
+    public void channelRemoved(LXLook look, LXChannel lxChannel) {
+    }
+
+    @Override
+    public void channelMoved(LXLook look, LXChannel lxChannel) {
     }
 }

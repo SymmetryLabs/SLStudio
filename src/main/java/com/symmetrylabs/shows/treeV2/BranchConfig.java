@@ -3,6 +3,7 @@ package com.symmetrylabs.shows.treeV2;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.symmetrylabs.shows.base.SLShow;
 import heronarts.lx.transform.LXMatrix;
 
 
@@ -32,6 +33,7 @@ public class BranchConfig {
 
 	public BranchConfig(String modelId, String controllerId, LXMatrix matrix) {
 		this(modelId, controllerId, matrix, new int[DEFAULT_NUMBER_TWIGS]);
+        SLShow.mapping.setControllerAssignment(modelId, controllerId);
 	}
 
 	public BranchConfig(String modelId, String controllerId, LXMatrix matrix, int[] twigOrdering) {

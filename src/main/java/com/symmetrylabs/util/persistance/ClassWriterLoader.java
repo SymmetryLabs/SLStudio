@@ -7,13 +7,18 @@ import com.google.gson.stream.JsonWriter;
 import java.io.*;
 
 public class ClassWriterLoader <T> {
-    private final static String RESOURCES_DIR = "src/main/resources";
+    private static String RESOURCES_DIR = "src/main/resources";
     private final String persistFilePath;
     private final Class<T> tClass;
 
     public ClassWriterLoader(String persistFilePath, Class<T> tClass) {
         this.persistFilePath = persistFilePath;
         this.tClass = tClass;
+    }
+
+    public ClassWriterLoader(String persistFilePath, Class<T> tClass, String resouceDir) {
+        this(persistFilePath, tClass);
+        this.RESOURCES_DIR = "shows/" + resouceDir;
     }
 
     public void writeObj(T instanceToSave) throws IOException {

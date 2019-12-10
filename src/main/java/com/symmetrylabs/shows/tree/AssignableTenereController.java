@@ -53,7 +53,7 @@ public class AssignableTenereController extends DiscoverableController implement
 
 //    public DiscreteParameter blackoutPowerThreshold = new DiscreteParameter("Blackout", 0, 4095);
 //    public final BooleanParameter blackoutRogueLEDsActive = new BooleanParameter("Activate blackout procedure", false);
-    private MetaSample lastReceivedPowerSample = null;
+    private MetaSample lastReceivedPowerSample = new MetaSample();
     private int[][] pixelIndices;
 
     // ARRRRrrrrgggggghhhh delete these...
@@ -353,7 +353,7 @@ public class AssignableTenereController extends DiscoverableController implement
                 return;
             }
             pwrMaskByte = incomingPwrMaskByte;
-            System.out.println(pwrMaskByte);
+//            System.out.println(pwrMaskByte);
 
             byte[] payload = new byte[1];
             payload[0] = (byte)pwrMaskByte;

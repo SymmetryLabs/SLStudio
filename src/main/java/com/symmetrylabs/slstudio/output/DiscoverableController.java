@@ -182,7 +182,9 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
         PointsGrouping points = null;
 
 //        points = SLShow.getPointsMappedToControllerID(this.humanID); // returns null if we're not broadcast
-        points = SLShow.mapping.getPointsMappedToControllerID(this.humanID); // returns null if we're not broadcast
+        if (SLShow.mapping != null){
+            points = SLShow.mapping.getPointsMappedToControllerID(this.humanID); // returns null if we're not broadcast
+        }
 
         numPixels = points == null ? 0 : points.size();
 

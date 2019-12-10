@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.server;
 
 import com.google.common.base.Preconditions;
 import com.symmetrylabs.LXClassLoader;
+import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.ShowRegistry;
 import com.symmetrylabs.slstudio.ApplicationState;
@@ -10,6 +11,8 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.cue.CueManager;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.OutputControl;
+import com.symmetrylabs.slstudio.ui.UIWorkspace;
+import com.symmetrylabs.util.MarkerSource;
 import com.symmetrylabs.util.Utils;
 import heronarts.lx.LX;
 import heronarts.lx.data.LXVersion;
