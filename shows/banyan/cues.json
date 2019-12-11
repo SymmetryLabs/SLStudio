@@ -1,1 +1,5 @@
-{"cues":[{"startAt":"17:00","duration":10000.0,"fadeTo":1.0},{"startAt":"04:00","duration":10000.0,"fadeTo":0.0}]}
+{"cues":[
+	{"showName":"sunrise","startAt":"15:59","duration":100.0,"fadeTo":0.0,"type":"vezer"},
+	{"startAt":"16:08","duration":1000.0,"fadeTo":0.0,"type":"normal"},
+	{"startAt":"16:09","duration":0.0,"fadeTo":0.0,"type":"blackout"}
+]}
