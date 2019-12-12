@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import com.google.gson.annotations.Expose;
 import com.symmetrylabs.slstudio.ApplicationState;
+import com.symmetrylabs.util.NetworkUtil.MACAddress;
 import com.symmetrylabs.util.listenable.ListenableInt;
 
 public class NetworkDevice {
@@ -130,8 +131,12 @@ public class NetworkDevice {
             } catch (RuntimeException e){
                 System.out.println("not sure why the above matcher is failing.");
             }
+            deviceId = MACAddress.valueOf(deviceId).toString(); // convert old style to conformant
         }
         if (deviceId.equals("")){
+
+            assert(false); // we should never get here. Below was a hack.
+
             String tempDeviceID = "de::ad::be:ef::" + uid++%100;
             ApplicationState.setWarning("device matcher error", "assigning temporary id: " + uid);
             deviceId = tempDeviceID;
