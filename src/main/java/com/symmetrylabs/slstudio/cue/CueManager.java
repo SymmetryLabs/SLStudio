@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import heronarts.lx.parameter.BoundedParameter;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Duration;
@@ -134,15 +136,28 @@ public class CueManager implements LXLoopTask, CaptionSource, SLStudioLX.SaveHoo
                 elapsedMs = 0;
                 break;
             }
+//            if (cd.cue.isHourly && now.getMinuteOfHour() == 0) {
+//                cd.lastStartedAt = now;
+//                current = cd;
+//            }
         }
         if (current == null) {
             return;
         }
 
         Cue cc = current.cue;
-        t = constrain(elapsedMs / cc.durationMs.getValue(), 0, 1);
-        double newFader = currentCueValueAtStart + (cc.fadeTo.getValue() - currentCueValueAtStart) * t;
-        cc.cuedParameter.setValue(newFader);
+        if (cc instanceof TriggerVezerCue){
+            ((TriggerVezerCue) cc).triggerVezerShow(((TriggerVezerCue) cc).showName.getString());
+        }
+        if (cc instanceof BlackoutProcedureCue){
+            ((BlackoutProcedureCue) cc).execute();
+        }
+        else{
+            t = constrain(elapsedMs / cc.durationMs.getValue(), 0, 1);
+            double newFader = currentCueValueAtStart + (cc.fadeTo.getValue() - currentCueValueAtStart) * t;
+            cc.cuedParameter.setValue(newFader);
+        }
+
     }
 
     @Override
@@ -201,7 +216,16 @@ public class CueManager implements LXLoopTask, CaptionSource, SLStudioLX.SaveHoo
             JsonArray cueArr = obj.getAsJsonArray(KEY_CUES);
             for (JsonElement cueElem : cueArr) {
                 JsonObject cueObj = cueElem.getAsJsonObject();
-                Cue c = new Cue(lx.engine.output.brightness);
+                Cue c;
+                if (cueObj.get("type").getAsString().equals(BlackoutProcedureCue.CUE_TYPE)){
+                    c = new BlackoutProcedureCue(lx, new BoundedParameter("null"));
+                }
+                else if (cueObj.get("type").getAsString().equals((TriggerVezerCue.CUE_TYPE))){
+                    c = new TriggerVezerCue(lx, new BoundedParameter("null"));
+                }
+                else {
+                    c = new Cue(lx.engine.output.brightness);
+                }
                 c.load(cueObj);
                 addCue(c);
             }
