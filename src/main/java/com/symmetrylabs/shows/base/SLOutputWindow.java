@@ -176,7 +176,10 @@ public class SLOutputWindow extends CloseableWindow {
                 UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.RED_HOVER);
             }
 
+            // logically the controller inventory should be static global? Decoupled from an individual show.
+            // once we give a Mac address a name it does not change per show.
             String displayName = show.controllerInventory.getNameByMac(dc.networkDevice.deviceId);
+
 //            String displayName = show.controllerInventory2.getNameByMac(dc.networkDevice.deviceId);
             UI.CollapseResult cr = UI.collapsibleSection(displayName, false);
 
@@ -184,6 +187,8 @@ public class SLOutputWindow extends CloseableWindow {
             if (dc.getMacAddress() != null && UI.beginDragDropSource()) {
                 UI.setDragDropPayload("SL.CubeMacAddress", dc.getMacAddress());
                 UI.endDragDropSource();
+
+                // also start a drag drop payload here for the controller id.
             }
 
             // TODO:: impliment this
