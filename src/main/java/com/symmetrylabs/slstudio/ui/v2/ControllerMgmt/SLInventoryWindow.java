@@ -121,7 +121,7 @@ public class SLInventoryWindow extends CloseableWindow {
             humanID = UI.inputText("humanID A##" + i, humanID == null ? "" : humanID);
             macAddr = UI.inputText("addr A##" + i, macAddr == null ? "" : macAddr);
             if (UI.beginDragDropTarget()) {
-                String addr = UI.acceptDragDropPayload("SL.CubeMacAddress", String.class);
+                String addr = UI.acceptDragDropPayload("SL.ControllerMacAddr", String.class);
                 if (addr != null) {
                     macAddr = addr;
                 }

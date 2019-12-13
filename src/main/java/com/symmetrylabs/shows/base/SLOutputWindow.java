@@ -185,7 +185,7 @@ public class SLOutputWindow extends CloseableWindow {
 
             UI.popColor(3);
             if (dc.getMacAddress() != null && UI.beginDragDropSource()) {
-                UI.setDragDropPayload("SL.CubeMacAddress", dc.getMacAddress());
+                UI.setDragDropPayload("SL.ControllerMacAddr", dc.getMacAddress());
                 UI.endDragDropSource();
 
                 // also start a drag drop payload here for the controller id.

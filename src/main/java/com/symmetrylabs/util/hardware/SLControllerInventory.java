@@ -49,8 +49,8 @@ public class SLControllerInventory {
     public String getControllerId(String deviceId) {
         //TODO: actually impliment SLController inventory.
 //        return macAddrToControllerMetadataMap.get(deviceId).humanID;
-        MACAddress macAddress = MACAddress.valueOf(deviceId);
-        ControllerMetadata deviceMetadata = macAddrToControllerMetadataMap.get(macAddress.toString());
+//        MACAddress macAddress = MACAddress.valueOf(deviceId);
+        ControllerMetadata deviceMetadata = macAddrToControllerMetadataMap.get(deviceId);
         if (deviceMetadata != null){
             return deviceMetadata.humanID;
         }
