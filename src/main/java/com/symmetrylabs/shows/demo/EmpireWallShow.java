@@ -27,13 +27,13 @@ public class EmpireWallShow implements Show {
 	public final static String SHOW_NAME = "empirewall";
 
 	final Map<String, String> ipAddresses = new HashMap<String, String>() {{
-    	put("A", "192.168.0.100");
-    	put("B", "192.168.0.101");
-    	put("C", "192.168.0.102");
-    	put("D", "192.168.0.103");
-    	put("E", "192.168.0.104");
-    	put("F", "192.168.0.105");
-    	put("G", "192.168.0.106");
+    	put("A", "10.200.1.11");
+    	put("B", "10.200.1.12");
+    	put("C", "10.200.1.13");
+    	put("D", "10.200.1.14");
+    	put("E", "10.200.1.15");
+    	put("F", "10.200.1.16");
+    	put("G", "10.200.1.17");
     	put("H", "192.168.0.107");
     	put("I", "192.168.0.108");
     	put("J", "192.168.0.109");
@@ -70,43 +70,121 @@ public class EmpireWallShow implements Show {
 		 * String: Pixlite Id / Pixlite Port (A-K / 1-4) Example: D3
 		 * Leaf Configs (x position, y position, z position, x rotation, y rotation, z rotation)
 		 */
+        new VineConfig("A1",
+            new LeafConfig[] {
+                new LeafConfig(0, 0, 0, 0, 0, 0),
+                new LeafConfig(10, 0, 0, 0, 0, 0),
+                new LeafConfig(20, 0, 0, 0, 0, 0),
+                new LeafConfig(30, 0, 0, 0, 0, 0),
+                new LeafConfig(40, 0, 0, 0, 0, 0),
+                new LeafConfig(50, 0, 0, 0, 0, 0),
+                new LeafConfig(60, 0, 0, 0, 0, 0),
+                new LeafConfig(70, 0, 0, 0, 0, 0),
+                new LeafConfig(80, 0, 0, 0, 0, 0),
+                new LeafConfig(90, 0, 0, 0, 0, 0),
+                new LeafConfig(100, 0, 0, 0, 0, 0),
+                new LeafConfig(110, 0, 0, 0, 0, 0),
+                new LeafConfig(120, 0, 0, 0, 0, 0),
+                new LeafConfig(130, 0, 0, 0, 0, 0),
+                new LeafConfig(140, 0, 0, 0, 0, 0),
+                new LeafConfig(150, 0, 0, 0, 0, 0),
+                new LeafConfig(160, 0, 0, 0, 0, 0),
+                new LeafConfig(170, 0, 0, 0, 0, 0),
+                new LeafConfig(180, 0, 0, 0, 0, 0),
+                new LeafConfig(190, 0, 0, 0, 0, 0),
+                new LeafConfig(200, 0, 0, 0, 0, 0),
+                new LeafConfig(210, 0, 0, 0, 0, 0),
+                new LeafConfig(220, 0, 0, 0, 0, 0),
+                new LeafConfig(140, 0, 0, 0, 0, 0),
+                new LeafConfig(150, 0, 0, 0, 0, 0),
+                new LeafConfig(160, 0, 0, 0, 0, 0),
+                new LeafConfig(170, 0, 0, 0, 0, 0),
+                new LeafConfig(180, 0, 0, 0, 0, 0),
+                new LeafConfig(190, 0, 0, 0, 0, 0),
+                new LeafConfig(200, 0, 0, 0, 0, 0),
+                new LeafConfig(210, 0, 0, 0, 0, 0),
+                new LeafConfig(220, 0, 0, 0, 0, 0),
+            }
+        ),
 
-		// new VineConfig("A2",
-		// 	new LeafConfig[] {
-		// 		new LeafConfig(0, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(10, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(20, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(30, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(40, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(50, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(60, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(70, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(80, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(90, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(100, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(110, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(120, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(130, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(140, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(150, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(160, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(170, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(180, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(190, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(200, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(210, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(220, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(140, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(150, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(160, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(170, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(180, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(190, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(200, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(210, 0, 0, 0, 0, 0),
-		// 		new LeafConfig(220, 0, 0, 0, 0, 0),
-		// 	}
-		// ),
+
+
+
+
+		 new VineConfig("A2",
+		 	new LeafConfig[] {
+		 		new LeafConfig(0, 0, 0, 0, 0, 0),
+		 		new LeafConfig(10, 0, 0, 0, 0, 0),
+		 		new LeafConfig(20, 0, 0, 0, 0, 0),
+		 		new LeafConfig(30, 0, 0, 0, 0, 0),
+		 		new LeafConfig(40, 0, 0, 0, 0, 0),
+		 		new LeafConfig(50, 0, 0, 0, 0, 0),
+		 		new LeafConfig(60, 0, 0, 0, 0, 0),
+		 		new LeafConfig(70, 0, 0, 0, 0, 0),
+		 		new LeafConfig(80, 0, 0, 0, 0, 0),
+		 		new LeafConfig(90, 0, 0, 0, 0, 0),
+		 		new LeafConfig(100, 0, 0, 0, 0, 0),
+		 		new LeafConfig(110, 0, 0, 0, 0, 0),
+		 		new LeafConfig(120, 0, 0, 0, 0, 0),
+		 		new LeafConfig(130, 0, 0, 0, 0, 0),
+		 		new LeafConfig(140, 0, 0, 0, 0, 0),
+		 		new LeafConfig(150, 0, 0, 0, 0, 0),
+		 		new LeafConfig(160, 0, 0, 0, 0, 0),
+		 		new LeafConfig(170, 0, 0, 0, 0, 0),
+		 		new LeafConfig(180, 0, 0, 0, 0, 0),
+		 		new LeafConfig(190, 0, 0, 0, 0, 0),
+		 		new LeafConfig(200, 0, 0, 0, 0, 0),
+		 		new LeafConfig(210, 0, 0, 0, 0, 0),
+		 		new LeafConfig(220, 0, 0, 0, 0, 0),
+		 		new LeafConfig(140, 0, 0, 0, 0, 0),
+		 		new LeafConfig(150, 0, 0, 0, 0, 0),
+		 		new LeafConfig(160, 0, 0, 0, 0, 0),
+		 		new LeafConfig(170, 0, 0, 0, 0, 0),
+		 		new LeafConfig(180, 0, 0, 0, 0, 0),
+		 		new LeafConfig(190, 0, 0, 0, 0, 0),
+		 		new LeafConfig(200, 0, 0, 0, 0, 0),
+		 		new LeafConfig(210, 0, 0, 0, 0, 0),
+		 		new LeafConfig(220, 0, 0, 0, 0, 0),
+		 	}
+		 ),
+
+
+        new VineConfig("A3",
+            new LeafConfig[] {
+                new LeafConfig(0, 0, 0, 0, 0, 0),
+                new LeafConfig(10, 0, 0, 0, 0, 0),
+                new LeafConfig(20, 0, 0, 0, 0, 0),
+                new LeafConfig(30, 0, 0, 0, 0, 0),
+                new LeafConfig(40, 0, 0, 0, 0, 0),
+                new LeafConfig(50, 0, 0, 0, 0, 0),
+                new LeafConfig(60, 0, 0, 0, 0, 0),
+                new LeafConfig(70, 0, 0, 0, 0, 0),
+                new LeafConfig(80, 0, 0, 0, 0, 0),
+                new LeafConfig(90, 0, 0, 0, 0, 0),
+                new LeafConfig(100, 0, 0, 0, 0, 0),
+                new LeafConfig(110, 0, 0, 0, 0, 0),
+                new LeafConfig(120, 0, 0, 0, 0, 0),
+                new LeafConfig(130, 0, 0, 0, 0, 0),
+                new LeafConfig(140, 0, 0, 0, 0, 0),
+                new LeafConfig(150, 0, 0, 0, 0, 0),
+                new LeafConfig(160, 0, 0, 0, 0, 0),
+                new LeafConfig(170, 0, 0, 0, 0, 0),
+                new LeafConfig(180, 0, 0, 0, 0, 0),
+                new LeafConfig(190, 0, 0, 0, 0, 0),
+                new LeafConfig(200, 0, 0, 0, 0, 0),
+                new LeafConfig(210, 0, 0, 0, 0, 0),
+                new LeafConfig(220, 0, 0, 0, 0, 0),
+                new LeafConfig(140, 0, 0, 0, 0, 0),
+                new LeafConfig(150, 0, 0, 0, 0, 0),
+                new LeafConfig(160, 0, 0, 0, 0, 0),
+                new LeafConfig(170, 0, 0, 0, 0, 0),
+                new LeafConfig(180, 0, 0, 0, 0, 0),
+                new LeafConfig(190, 0, 0, 0, 0, 0),
+                new LeafConfig(200, 0, 0, 0, 0, 0),
+                new LeafConfig(210, 0, 0, 0, 0, 0),
+                new LeafConfig(220, 0, 0, 0, 0, 0),
+            }
+        ),
 
 		new VineConfig("A4",
 			new LeafConfig[] {
@@ -128,7 +206,7 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
-		new VineConfig("B2",
+		new VineConfig("B1",
 			new LeafConfig[] {
 				new LeafConfig(17, 144-8, 3, 0, 0, 0),
 				new LeafConfig(22, 144-8, 3, 0, 0, 0),
@@ -159,6 +237,44 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
+
+        new VineConfig("B2",
+            new LeafConfig[] {
+                new LeafConfig(17, 144-8, 3, 0, 0, 0),
+                new LeafConfig(22, 144-8, 3, 0, 0, 0),
+                new LeafConfig(22, 144-5, 4, 0, 0, 0),
+                new LeafConfig(30, 144-17, 7, 0, 0, 0),
+                new LeafConfig(35, 144-18, 6, 0, 0, 0),
+                new LeafConfig(37, 144-17, 5, 0, 0, 0),
+                new LeafConfig(50, 144-20, 3, 0, 0, 0),
+                new LeafConfig(51, 144-20, 9, 0, 0, 0),
+                new LeafConfig(55, 144-12, 7, 0, 0, 0),
+                new LeafConfig(65, 144-22, 7, 0, 0, 0),
+                new LeafConfig(67, 144-30,3, 0, 0, 0),
+                new LeafConfig(70, 144-31 ,4, 0, 0, 0),
+                new LeafConfig(78, 144-23, 9, 0, 0, 0),
+                new LeafConfig(81, 144-23, 8, 0, 0, 0),
+                new LeafConfig(93, 144-20, 9, 0, 0, 0),
+                new LeafConfig(108,144-24,4, 0, 0, 0),
+                new LeafConfig(110, 144-29, 4, 0, 0, 0),
+                new LeafConfig(123, 144-25,5, 0, 0, 0),
+                new LeafConfig(131, 144-18, 7, 0, 0, 0),
+                new LeafConfig(134, 144-18, 10, 0, 0, 0),
+                new LeafConfig(120, 144-11, 5, 0, 0, 0),
+                new LeafConfig(118, 144-8, 9.5f, 0, 0, 0),
+                new LeafConfig(114, 144-12, 9, 0, 0, 0),
+                new LeafConfig(100, 144-14, 8, 0, 0, 0),
+                new LeafConfig(96, 144-21, 7, 0, 0, 0),
+                new LeafConfig(92, 144-25, 5, 0, 0, 0),
+                new LeafConfig(96, 144-21, 7, 0, 0, 0),
+                new LeafConfig(92, 144-25, 5, 0, 0, 0),
+                new LeafConfig(96, 144-21, 7, 0, 0, 0),
+                new LeafConfig(92, 144-25, 5, 0, 0, 0),
+                new LeafConfig(96, 144-21, 7, 0, 0, 0),
+                new LeafConfig(92, 144-25, 5, 0, 0, 0),
+            }
+        ),
+
 		new VineConfig("B3",
 			new LeafConfig[] {
 				new LeafConfig(-5, 144-31,-1, 0, 0, 0),
@@ -185,8 +301,53 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(136, 144-22, 3, 0, 0, 0),
 				new LeafConfig(133, 144-36, 5, 0, 0, 0),
 				new LeafConfig(128, 144-34, 3, 0, 0, 0),
+                new LeafConfig(131, 144-19, 2, 0, 0, 0),
+                new LeafConfig(136, 144-22, 3, 0, 0, 0),
+                new LeafConfig(133, 144-36, 5, 0, 0, 0),
+                new LeafConfig(128, 144-34, 3, 0, 0, 0),
+                new LeafConfig(131, 144-19, 2, 0, 0, 0),
+                new LeafConfig(136, 144-22, 3, 0, 0, 0),
+                new LeafConfig(133, 144-36, 5, 0, 0, 0),
+                new LeafConfig(128, 144-34, 3, 0, 0, 0),
+                new LeafConfig(131, 144-19, 2, 0, 0, 0),
+                new LeafConfig(136, 144-22, 3, 0, 0, 0),
+                new LeafConfig(133, 144-36, 5, 0, 0, 0),
+                new LeafConfig(128, 144-34, 3, 0, 0, 0),
+                new LeafConfig(131, 144-19, 2, 0, 0, 0),
+                new LeafConfig(136, 144-22, 3, 0, 0, 0),
+                new LeafConfig(133, 144-36, 5, 0, 0, 0),
+                new LeafConfig(128, 144-34, 3, 0, 0, 0),
 			}
 		),
+
+        new VineConfig("B4",
+            new LeafConfig[] {
+                new LeafConfig(-5, 144-31,-1, 0, 0, 0),
+                new LeafConfig(-2, 144-29, 0, 0, 0, 0),
+                new LeafConfig(13, 144-36, 4, 0, 0, 0),
+                new LeafConfig(20, 144-33, 3.5f, 0, 0, 0),
+                new LeafConfig(28, 144-37, 3.5f, 0, 0, 0),
+                new LeafConfig(32, 144-41, 6.5f, 0, 0, 0),
+                new LeafConfig(40.5f, 144-29, 4.5f, 0, 0, 0),
+                new LeafConfig(45.5f, 144-32, 6, 0, 0, 0),
+                new LeafConfig(56, 144-29, 8, 0, 0, 0),
+                new LeafConfig(60, 144-25, 3, 0, 0, 0),
+                new LeafConfig(71, 144-16, 2, 0, 0, 0),
+                new LeafConfig(73, 144-18, 1, 0, 0, 0),
+                new LeafConfig(84, 144-21, 1, 0, 0, 0),
+                new LeafConfig(88, 144-18, 2, 0, 0, 0),
+                new LeafConfig(100, 144-25, 1, 0, 0, 0),
+                new LeafConfig(103, 144-21, 5, 0, 0, 0),
+                new LeafConfig(116, 144-22, 5, 0, 0, 0),
+                new LeafConfig(118.5f, 144-18, 7, 0, 0, 0),
+                new LeafConfig(130, 144-16, 3, 0, 0, 0),
+                new LeafConfig(134, 144-20, 2, 0, 0, 0),
+                new LeafConfig(131, 144-19, 2, 0, 0, 0),
+                new LeafConfig(136, 144-22, 3, 0, 0, 0),
+                new LeafConfig(133, 144-36, 5, 0, 0, 0),
+                new LeafConfig(128, 144-34, 3, 0, 0, 0),
+            }
+        ),
 
 		new VineConfig("C1",
 			new LeafConfig[] {
@@ -219,8 +380,43 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
+        new VineConfig("C2",
+            new LeafConfig[] {
+                new LeafConfig(0, 95, -2, 0, 0, 0),        //1
+                new LeafConfig(3, 101, 1, 0, 0, 0),       //2
+                new LeafConfig(9.5f, 99, 1.5f, 0, 0, 0),     //3
+                new LeafConfig(16.5f, 105, 3, 0, 0, 0),	  //4
+                new LeafConfig(30.5f, 96, 6, 0, 0, 0),    //5
+                new LeafConfig(38.5f, 100, 5, 0, 0, 0),    //6
+                new LeafConfig(36.5f, 94, 6, 0, 0, 0),    //7
+                new LeafConfig(21.5f, 93, 5, 0, 0, 0),    //8
+                new LeafConfig(31.5f, 92, 5, 0, 0, 0),    //9
+                new LeafConfig(34, 93.5f, 6, 0, 0, 0),       //10
+                new LeafConfig(37, 95.5f, 5, 0, 0, 0),       //11
+                new LeafConfig(51, 94.5f, 5.5f, 0, 0, 0),       //12
+                new LeafConfig(67, 92.5f, 7, 0, 0, 0),       //13
+                new LeafConfig(67, 91, 7, 0, 0, 0),       //14
+                new LeafConfig(70, 90, 6, 0, 0, 0),       //15
+                new LeafConfig(80, 101, 3, 0, 0, 0),       //16
+                new LeafConfig(95, 100, 8, 0, 0, 0),       //17
+                new LeafConfig(98.5f, 97, 2, 0, 0, 0),    //18
+                new LeafConfig(96.5f, 100, 6, 0, 0, 0),    //19
+                new LeafConfig(121.5f, 103, 6, 0, 0, 0),   //20
+                new LeafConfig(117.5f, 104, 6, 0, 0, 0),   //21
+                new LeafConfig(130.5f, 97, 7, 0, 0, 0),   //22
+                new LeafConfig(145.5f, 97, 8, 0, 0, 0),   //23
+                new LeafConfig(148.5f, 102, 9, 0, 0, 0),    //24
+                new LeafConfig(150.5f, 97, 5, 0, 0, 0),    //25
+                new LeafConfig(163.5f, 98, 7, 0, 0, 0),    //26
+                new LeafConfig(163.5f, 98, 7, 0, 0, 0),    //27
+
+            }
+        ),
+
+
+
 //d1 is missing leaves2
-		new VineConfig("D1",
+		new VineConfig("C3",
 			new LeafConfig[] {
 				new LeafConfig(2, 48, -6, 0, 0, 0),    //1
 				new LeafConfig(-4, 44, -3, 0, 0, 0),   //2
@@ -254,7 +450,7 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
-		new VineConfig("D2",
+		new VineConfig("C4",
 			new LeafConfig[] {
 				new LeafConfig(-1, 57, 3, 0, 0, 0),  //1
 				new LeafConfig(4, 56, 5, 0, 0, 0),   //2
@@ -286,7 +482,7 @@ public class EmpireWallShow implements Show {
 		),
 
 //labeled c1
-		new VineConfig("D4",
+		new VineConfig("D1",
 			new LeafConfig[] {
 				new LeafConfig(0, 70, 0, 0, 0, 0),
 				new LeafConfig(10, 70, 0, 0, 0, 0),
@@ -311,11 +507,15 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(200, 70, 0, 0, 0, 0),
 				new LeafConfig(210, 70, 0, 0, 0, 0),
 				new LeafConfig(220, 70, 0, 0, 0, 0),
+                new LeafConfig(230, 70, 0, 0, 0, 0),
+                new LeafConfig(240, 70, 0, 0, 0, 0),
+                new LeafConfig(250, 70, 0, 0, 0, 0),
+                new LeafConfig(260, 70, 0, 0, 0, 0),
 
 			}
 		),
 
-		new VineConfig("E1",
+		new VineConfig("D2",
 			new LeafConfig[] {
 				new LeafConfig(22, -5.5f, -1, 0, 0, 0),
 				new LeafConfig(21.5f, -13.5f, -2, 0, 0, 0),
@@ -354,7 +554,7 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
-		new VineConfig("E3",
+		new VineConfig("D3",
 			new LeafConfig[] {
 				new LeafConfig(28, -2.5f, 0, 0, 0, 0),
 				new LeafConfig(24, -3.5f, 4, 0, 0, 0),
@@ -385,7 +585,7 @@ public class EmpireWallShow implements Show {
 			}
 		),
 //E429 no data
-		new VineConfig("E4",
+		new VineConfig("D4",
 			new LeafConfig[] {
 				new LeafConfig(-2, 0, 4.5f, 0, 0, 0),
 				new LeafConfig(13, 7, 5, 0, 0, 0),
@@ -427,7 +627,7 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
-		new VineConfig("F3",
+		new VineConfig("E1",
 			new LeafConfig[] {
 				new LeafConfig(216-104.5f, -2.5f, 5, 0, 0, 0),
 				new LeafConfig(216-99, 1, 2, 0, 0, 0),
@@ -452,11 +652,13 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(216-121, 143.5f, 4, 0, 0, 0),
 				new LeafConfig(216-122.5f, 155, 3.5f, 0, 0, 0),
 				new LeafConfig(216-122.5f, 155, 3.5f, 0, 0, 0),
+                new LeafConfig(216-122.5f, 155, 3.5f, 0, 0, 0),
+                new LeafConfig(216-122.5f, 155, 3.5f, 0, 0, 0),
 
 			}
 		),
 
-		new VineConfig("F4",
+		new VineConfig("E2",
 			new LeafConfig[] {
 				new LeafConfig(216-103,-2.5f, 4.5f, 0, 0, 0),
 				new LeafConfig(216-106.5f,-6, 9, 0, 0, 0),
@@ -477,7 +679,7 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
-		new VineConfig("G1",
+		new VineConfig("E3",
 			new LeafConfig[] {
 				new LeafConfig(216-37.5f, 0, 3, 0, 0, 0),
 				new LeafConfig(216-33.5f, -2, 6.5f, 0, 0, 0),
@@ -498,7 +700,7 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
-		new VineConfig("G4",
+		new VineConfig("E4",
 			new LeafConfig[] {
 				new LeafConfig(216-38.5f, -4, 4.5f, 0, 0, 0),
 				new LeafConfig(216-46.5f, -6.5f, 7, 0, 0, 0),
@@ -516,10 +718,25 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(216-89, 43.5f, 11, 0, 0, 0),
 				new LeafConfig(216-110, 50, 8, 0, 0, 0),
 				new LeafConfig(216-103, 59, 3.5f, 0, 0, 0),
+                new LeafConfig(216-46.5f, -6.5f, 7, 0, 0, 0),
+                new LeafConfig(216-42, 4, 11, 0, 0, 0),
+                new LeafConfig(216-38.5f, 10, 4, 0, 0, 0),
+                new LeafConfig(216-36, 19, 3, 0, 0, 0),
+                new LeafConfig(216-47, 12, 6, 0, 0, 0),
+                new LeafConfig(216-60.5f, 26, 8, 0, 0, 0),
+                new LeafConfig(216-64.5f, 28, 4.5f, 0, 0, 0),
+                new LeafConfig(216-64.5f, 20.5f, 6, 0, 0, 0),
+                new LeafConfig(216-72.5f, 19.5f, 10, 0, 0, 0),
+                new LeafConfig(216-76.5f, 28.5f, 4.5f, 0, 0, 0),
+                new LeafConfig(216-91, 27, 9, 0, 0, 0),
+                new LeafConfig(216-99, 37, 3.5f, 0, 0, 0),
+                new LeafConfig(216-89, 43.5f, 11, 0, 0, 0),
+                new LeafConfig(216-110, 50, 8, 0, 0, 0),
+                new LeafConfig(216-103, 59, 3.5f, 0, 0, 0),
 			}
 		),
 //added a few leaves2
-		new VineConfig("H1",
+		new VineConfig("F1",
 			new LeafConfig[] {
 				new LeafConfig(216-1, 15, 1, 0, 0, 0),
 				new LeafConfig(216-9, 14, 3, 0, 0, 0),
@@ -557,7 +774,7 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
-		new VineConfig("H2",
+		new VineConfig("F2",
 			new LeafConfig[] {
 				new LeafConfig(216-38.5f, 3, 2, 0, 0, 0),
 				new LeafConfig(216-32.5f, 1, 2, 0, 0, 0),
@@ -585,7 +802,7 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
-		new VineConfig("H3",
+		new VineConfig("F3",
 			new LeafConfig[] {
 			    new LeafConfig(216-26.5f, -2, -1, 0, 0, 0),
 			    new LeafConfig(216-23, -2.5f,  -2.5f, 0, 0, 0),
@@ -616,7 +833,7 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
-		new VineConfig("H4",
+		new VineConfig("F4",
 			new LeafConfig[] {
 		        new LeafConfig(216-2.5f, 56, 5, 0, 0, 0),
                 new LeafConfig(216-5, 53, 3, 0, 0, 0),
@@ -648,7 +865,7 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
-		new VineConfig("I3",
+		new VineConfig("G1",
 			new LeafConfig[] {
 				new LeafConfig(216-0, 90, 7, 0, 0, 0),
 				new LeafConfig(216-5, 93, 5.5f, 0, 0, 0),
@@ -671,7 +888,7 @@ public class EmpireWallShow implements Show {
 			}
 		),
 //Last 3 of I4
-		new VineConfig("I4",
+		new VineConfig("G2",
 			new LeafConfig[] {
 				new LeafConfig(216-.5f, 75, 1, 0, 0, 0),
 				new LeafConfig(216-0, 76, 3, 0, 0, 0),
@@ -706,7 +923,7 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
-		new VineConfig("J1",
+		new VineConfig("G3",
 			new LeafConfig[] {
 				new LeafConfig(216-4, 144+4.5f, -4.5f, 0, 0, 0),
 				new LeafConfig(216-8.5f, 144+5, 1, 0, 0, 0),
@@ -727,7 +944,7 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
-		new VineConfig("J2",
+		new VineConfig("G4",
 			new LeafConfig[] {
 			    new LeafConfig(216-2, 144-37, 2.5f, 0, 0, 0),
 			    new LeafConfig(216-3, 144-39, 5, 0, 0, 0),
@@ -813,19 +1030,19 @@ public class EmpireWallShow implements Show {
 		 */
 
 		// measurement to the start of the strip
-		new StripConfig("B1", x(6),             y(WALL_HEIGHT-6), zRot(0),    101), // TL
-		new StripConfig("A1", x(PANEL_WIDTH),   y(WALL_HEIGHT-6), zRot(0),    108), // TM
-		new StripConfig("K2", x(PANEL_WIDTH*2),  y(WALL_HEIGHT-6), zRot(0),    100), // TR
-
-		new StripConfig("I2", x(WALL_WIDTH-6),  y(WALL_HEIGHT-6), zRot(-90),   118), // RU
-		new StripConfig("I1", x(WALL_WIDTH-6),  y(60),            zRot(-90),   83), // RL
-
-		new StripConfig("G3", x(PANEL_WIDTH*2),   y(6),             zRot(0),    101), // BR
-		new StripConfig("G2", x(PANEL_WIDTH*2),   y(6),           zRot(180),  108), // BM
-		new StripConfig("E2", x(6),               y(6),             zRot(0),    101), // BL
-
-		new StripConfig("D3", x(6),             y(6),             zRot(90),  82), // LL
-		new StripConfig("C4", x(6),             y(60),            zRot(90),  119), // LU
+//		new StripConfig("B1", x(6),             y(WALL_HEIGHT-6), zRot(0),    101), // TL
+//		new StripConfig("A1", x(PANEL_WIDTH),   y(WALL_HEIGHT-6), zRot(0),    108), // TM
+//		new StripConfig("K2", x(PANEL_WIDTH*2),  y(WALL_HEIGHT-6), zRot(0),    100), // TR
+//
+//		new StripConfig("I2", x(WALL_WIDTH-6),  y(WALL_HEIGHT-6), zRot(-90),   118), // RU
+//		new StripConfig("I1", x(WALL_WIDTH-6),  y(60),            zRot(-90),   83), // RL
+//
+//		new StripConfig("G3", x(PANEL_WIDTH*2),   y(6),             zRot(0),    101), // BR
+//		new StripConfig("G2", x(PANEL_WIDTH*2),   y(6),           zRot(180),  108), // BM
+//		new StripConfig("E2", x(6),               y(6),             zRot(0),    101), // BL
+//
+//		new StripConfig("D3", x(6),             y(6),             zRot(90),  82), // LL
+//		new StripConfig("C4", x(6),             y(60),            zRot(90),  119), // LU
 	};
 
 	public SLModel buildModel() {
