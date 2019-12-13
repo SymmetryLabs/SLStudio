@@ -33,11 +33,8 @@ public class EmpireWallShow implements Show {
     	put("D", "10.200.1.14");
     	put("E", "10.200.1.15");
     	put("F", "10.200.1.16");
-    	put("G", "10.200.1.17");
-    	put("H", "192.168.0.107");
-    	put("I", "192.168.0.108");
-    	put("J", "192.168.0.109");
-    	put("K", "192.168.0.110");
+    	put("G", "10.200.1.23");
+
 	}};
 
 	final static float WALL_HEIGHT   = FEET * 12.f;
@@ -70,42 +67,42 @@ public class EmpireWallShow implements Show {
 		 * String: Pixlite Id / Pixlite Port (A-K / 1-4) Example: D3
 		 * Leaf Configs (x position, y position, z position, x rotation, y rotation, z rotation)
 		 */
-        new VineConfig("A1",
-            new LeafConfig[] {
-                new LeafConfig(0, 0, 0, 0, 0, 0),
-                new LeafConfig(10, 0, 0, 0, 0, 0),
-                new LeafConfig(20, 0, 0, 0, 0, 0),
-                new LeafConfig(30, 0, 0, 0, 0, 0),
-                new LeafConfig(40, 0, 0, 0, 0, 0),
-                new LeafConfig(50, 0, 0, 0, 0, 0),
-                new LeafConfig(60, 0, 0, 0, 0, 0),
-                new LeafConfig(70, 0, 0, 0, 0, 0),
-                new LeafConfig(80, 0, 0, 0, 0, 0),
-                new LeafConfig(90, 0, 0, 0, 0, 0),
-                new LeafConfig(100, 0, 0, 0, 0, 0),
-                new LeafConfig(110, 0, 0, 0, 0, 0),
-                new LeafConfig(120, 0, 0, 0, 0, 0),
-                new LeafConfig(130, 0, 0, 0, 0, 0),
-                new LeafConfig(140, 0, 0, 0, 0, 0),
-                new LeafConfig(150, 0, 0, 0, 0, 0),
-                new LeafConfig(160, 0, 0, 0, 0, 0),
-                new LeafConfig(170, 0, 0, 0, 0, 0),
-                new LeafConfig(180, 0, 0, 0, 0, 0),
-                new LeafConfig(190, 0, 0, 0, 0, 0),
-                new LeafConfig(200, 0, 0, 0, 0, 0),
-                new LeafConfig(210, 0, 0, 0, 0, 0),
-                new LeafConfig(220, 0, 0, 0, 0, 0),
-                new LeafConfig(140, 0, 0, 0, 0, 0),
-                new LeafConfig(150, 0, 0, 0, 0, 0),
-                new LeafConfig(160, 0, 0, 0, 0, 0),
-                new LeafConfig(170, 0, 0, 0, 0, 0),
-                new LeafConfig(180, 0, 0, 0, 0, 0),
-                new LeafConfig(190, 0, 0, 0, 0, 0),
-                new LeafConfig(200, 0, 0, 0, 0, 0),
-                new LeafConfig(210, 0, 0, 0, 0, 0),
-                new LeafConfig(220, 0, 0, 0, 0, 0),
-            }
-        ),
+        // new VineConfig("A1",
+        //     new LeafConfig[] {
+        //         new LeafConfig(0, 0, 0, 0, 0, 0),
+        //         new LeafConfig(10, 0, 0, 0, 0, 0),
+        //         new LeafConfig(20, 0, 0, 0, 0, 0),
+        //         new LeafConfig(30, 0, 0, 0, 0, 0),
+        //         new LeafConfig(40, 0, 0, 0, 0, 0),
+        //         new LeafConfig(50, 0, 0, 0, 0, 0),
+        //         new LeafConfig(60, 0, 0, 0, 0, 0),
+        //         new LeafConfig(70, 0, 0, 0, 0, 0),
+        //         new LeafConfig(80, 0, 0, 0, 0, 0),
+        //         new LeafConfig(90, 0, 0, 0, 0, 0),
+        //         new LeafConfig(100, 0, 0, 0, 0, 0),
+        //         new LeafConfig(110, 0, 0, 0, 0, 0),
+        //         new LeafConfig(120, 0, 0, 0, 0, 0),
+        //         new LeafConfig(130, 0, 0, 0, 0, 0),
+        //         new LeafConfig(140, 0, 0, 0, 0, 0),
+        //         new LeafConfig(150, 0, 0, 0, 0, 0),
+        //         new LeafConfig(160, 0, 0, 0, 0, 0),
+        //         new LeafConfig(170, 0, 0, 0, 0, 0),
+        //         new LeafConfig(180, 0, 0, 0, 0, 0),
+        //         new LeafConfig(190, 0, 0, 0, 0, 0),
+        //         new LeafConfig(200, 0, 0, 0, 0, 0),
+        //         new LeafConfig(210, 0, 0, 0, 0, 0),
+        //         new LeafConfig(220, 0, 0, 0, 0, 0),
+        //         new LeafConfig(140, 0, 0, 0, 0, 0),
+        //         new LeafConfig(150, 0, 0, 0, 0, 0),
+        //         new LeafConfig(160, 0, 0, 0, 0, 0),
+        //         new LeafConfig(170, 0, 0, 0, 0, 0),
+        //         new LeafConfig(180, 0, 0, 0, 0, 0),
+        //         new LeafConfig(190, 0, 0, 0, 0, 0),
+        //         new LeafConfig(200, 0, 0, 0, 0, 0),
+        //         new LeafConfig(210, 0, 0, 0, 0, 0),
+        //         new LeafConfig(220, 0, 0, 0, 0, 0),
+        //     }
+        // ),
 
 
 
@@ -113,7 +110,7 @@ public class EmpireWallShow implements Show {
 
 		 new VineConfig("A2",
 		 	new LeafConfig[] {
-		 		new LeafConfig(0, 0, 0, 0, 0, 0),
+		 		new LeafConfig(0,  0, 0, 0, 0, 0),
 		 		new LeafConfig(10, 0, 0, 0, 0, 0),
 		 		new LeafConfig(20, 0, 0, 0, 0, 0),
 		 		new LeafConfig(30, 0, 0, 0, 0, 0),
@@ -151,264 +148,254 @@ public class EmpireWallShow implements Show {
 
         new VineConfig("A3",
             new LeafConfig[] {
-                new LeafConfig(0, 0, 0, 0, 0, 0),
-                new LeafConfig(10, 0, 0, 0, 0, 0),
-                new LeafConfig(20, 0, 0, 0, 0, 0),
-                new LeafConfig(30, 0, 0, 0, 0, 0),
-                new LeafConfig(40, 0, 0, 0, 0, 0),
-                new LeafConfig(50, 0, 0, 0, 0, 0),
-                new LeafConfig(60, 0, 0, 0, 0, 0),
-                new LeafConfig(70, 0, 0, 0, 0, 0),
-                new LeafConfig(80, 0, 0, 0, 0, 0),
-                new LeafConfig(90, 0, 0, 0, 0, 0),
-                new LeafConfig(100, 0, 0, 0, 0, 0),
-                new LeafConfig(110, 0, 0, 0, 0, 0),
-                new LeafConfig(120, 0, 0, 0, 0, 0),
-                new LeafConfig(130, 0, 0, 0, 0, 0),
-                new LeafConfig(140, 0, 0, 0, 0, 0),
-                new LeafConfig(150, 0, 0, 0, 0, 0),
-                new LeafConfig(160, 0, 0, 0, 0, 0),
-                new LeafConfig(170, 0, 0, 0, 0, 0),
-                new LeafConfig(180, 0, 0, 0, 0, 0),
-                new LeafConfig(190, 0, 0, 0, 0, 0),
-                new LeafConfig(200, 0, 0, 0, 0, 0),
-                new LeafConfig(210, 0, 0, 0, 0, 0),
-                new LeafConfig(220, 0, 0, 0, 0, 0),
-                new LeafConfig(140, 0, 0, 0, 0, 0),
-                new LeafConfig(150, 0, 0, 0, 0, 0),
-                new LeafConfig(160, 0, 0, 0, 0, 0),
-                new LeafConfig(170, 0, 0, 0, 0, 0),
-                new LeafConfig(180, 0, 0, 0, 0, 0),
-                new LeafConfig(190, 0, 0, 0, 0, 0),
-                new LeafConfig(200, 0, 0, 0, 0, 0),
-                new LeafConfig(210, 0, 0, 0, 0, 0),
-                new LeafConfig(220, 0, 0, 0, 0, 0),
+                new LeafConfig(0, 20, 0, 0, 0, 0),
+                new LeafConfig(10, 20, 0, 0, 0, 0),
+                new LeafConfig(20, 20, 0, 0, 0, 0),
+                new LeafConfig(30, 20, 0, 0, 0, 0),
+                new LeafConfig(40, 20, 0, 0, 0, 0),
+                new LeafConfig(50, 20, 0, 0, 0, 0),
+                new LeafConfig(60, 20, 0, 0, 0, 0),
+                new LeafConfig(70, 20, 0, 0, 0, 0),
+                new LeafConfig(80, 20, 0, 0, 0, 0),
+                new LeafConfig(90, 20, 0, 0, 0, 0),
+                new LeafConfig(100, 20, 0, 0, 0, 0),
+                new LeafConfig(110, 20, 0, 0, 0, 0),
+                new LeafConfig(120, 20, 0, 0, 0, 0),
+                new LeafConfig(130, 20, 0, 0, 0, 0),
+                new LeafConfig(140, 20, 0, 0, 0, 0),
+                new LeafConfig(150, 20, 0, 0, 0, 0),
+                new LeafConfig(160, 20, 0, 0, 0, 0),
+                new LeafConfig(170, 20, 0, 0, 0, 0),
+                new LeafConfig(180, 20, 0, 0, 0, 0),
+                new LeafConfig(190, 20, 0, 0, 0, 0),
+                new LeafConfig(200, 20, 0, 0, 0, 0),
+                new LeafConfig(210, 20, 0, 0, 0, 0),
+                new LeafConfig(220, 20, 0, 0, 0, 0),
+                new LeafConfig(140, 20, 0, 0, 0, 0),
+                new LeafConfig(150, 20, 0, 0, 0, 0),
+                new LeafConfig(160, 20, 0, 0, 0, 0),
+                new LeafConfig(170, 20, 0, 0, 0, 0),
+                new LeafConfig(180, 20, 0, 0, 0, 0),
+                new LeafConfig(190, 20, 0, 0, 0, 0),
+                new LeafConfig(200, 20, 0, 0, 0, 0),
+                new LeafConfig(210, 20, 0, 0, 0, 0),
+                new LeafConfig(220, 20, 0, 0, 0, 0),
             }
         ),
 
-		new VineConfig("A4",
-			new LeafConfig[] {
-				new LeafConfig(82, 144-8, 1, 0, 0, 0),
-				new LeafConfig(77, 144-10, 4, 0, 0, 0),
-				new LeafConfig(79, 144-13, 2, 0, 0, 0),
-				new LeafConfig(94, 144-18, 4, 0, 0, 0),
-				new LeafConfig(120, 144-12, 6, 0, 0, 0),
-				new LeafConfig(114, 144-14, 7, 0, 0, 0),
-				new LeafConfig(114, 144-18, 11, 0, 0, 0),
-				new LeafConfig(98, 144-23, 8, 0, 0, 0),
-				new LeafConfig(86, 144-22, 9, 0, 0, 0),
-				new LeafConfig(82, 144-22, 8, 0, 0, 0),
-				new LeafConfig(77, 144-19, 8, 0, 0, 0),
-				new LeafConfig(65, 144-16, 4.5f, 0, 0, 0),
-				new LeafConfig(62, 144-30, 4, 0, 0, 0),
-				new LeafConfig(67, 144-31, 2, 0, 0, 0),
-				new LeafConfig(64, 144-34, 4, 0, 0, 0),
-			}
-		),
+		// new VineConfig("A4",
+		// 	new LeafConfig[] {
+		// 		new LeafConfig(82, 144-8, 1, 0, 0, 0),
+		// 		new LeafConfig(77, 144-10, 4, 0, 0, 0),
+		// 		new LeafConfig(79, 144-13, 2, 0, 0, 0),
+		// 		new LeafConfig(94, 144-18, 4, 0, 0, 0),
+		// 		new LeafConfig(120, 144-12, 6, 0, 0, 0),
+		// 		new LeafConfig(114, 144-14, 7, 0, 0, 0),
+		// 		new LeafConfig(114, 144-18, 11, 0, 0, 0),
+		// 		new LeafConfig(98, 144-23, 8, 0, 0, 0),
+		// 		new LeafConfig(86, 144-22, 9, 0, 0, 0),
+		// 		new LeafConfig(82, 144-22, 8, 0, 0, 0),
+		// 		new LeafConfig(77, 144-19, 8, 0, 0, 0),
+		// 		new LeafConfig(65, 144-16, 4.5f, 0, 0, 0),
+		// 		new LeafConfig(62, 144-30, 4, 0, 0, 0),
+		// 		new LeafConfig(67, 144-31, 2, 0, 0, 0),
+		// 		new LeafConfig(64, 144-34, 4, 0, 0, 0),
+		// 	}
+		// ),
 
-		new VineConfig("B1",
-			new LeafConfig[] {
-				new LeafConfig(17, 144-8, 3, 0, 0, 0),
-				new LeafConfig(22, 144-8, 3, 0, 0, 0),
-				new LeafConfig(22, 144-5, 4, 0, 0, 0),
-				new LeafConfig(30, 144-17, 7, 0, 0, 0),
-				new LeafConfig(35, 144-18, 6, 0, 0, 0),
-				new LeafConfig(37, 144-17, 5, 0, 0, 0),
-				new LeafConfig(50, 144-20, 3, 0, 0, 0),
-				new LeafConfig(51, 144-20, 9, 0, 0, 0),
-				new LeafConfig(55, 144-12, 7, 0, 0, 0),
-				new LeafConfig(65, 144-22, 7, 0, 0, 0),
-				new LeafConfig(67, 144-30,3, 0, 0, 0),
-				new LeafConfig(70, 144-31 ,4, 0, 0, 0),
-				new LeafConfig(78, 144-23, 9, 0, 0, 0),
-				new LeafConfig(81, 144-23, 8, 0, 0, 0),
-				new LeafConfig(93, 144-20, 9, 0, 0, 0),
-				new LeafConfig(108,144-24,4, 0, 0, 0),
-				new LeafConfig(110, 144-29, 4, 0, 0, 0),
-				new LeafConfig(123, 144-25,5, 0, 0, 0),
-				new LeafConfig(131, 144-18, 7, 0, 0, 0),
-				new LeafConfig(134, 144-18, 10, 0, 0, 0),
-				new LeafConfig(120, 144-11, 5, 0, 0, 0),
-				new LeafConfig(118, 144-8, 9.5f, 0, 0, 0),
-				new LeafConfig(114, 144-12, 9, 0, 0, 0),
-				new LeafConfig(100, 144-14, 8, 0, 0, 0),
-				new LeafConfig(96, 144-21, 7, 0, 0, 0),
-				new LeafConfig(92, 144-25, 5, 0, 0, 0),
-			}
-		),
+		// new VineConfig("B1",
+		// 	new LeafConfig[] {
+		// 		new LeafConfig(17, 144-8, 3, 0, 0, 0),
+		// 		new LeafConfig(22, 144-8, 3, 0, 0, 0),
+		// 		new LeafConfig(22, 144-5, 4, 0, 0, 0),
+		// 		new LeafConfig(30, 144-17, 7, 0, 0, 0),
+		// 		new LeafConfig(35, 144-18, 6, 0, 0, 0),
+		// 		new LeafConfig(37, 144-17, 5, 0, 0, 0),
+		// 		new LeafConfig(50, 144-20, 3, 0, 0, 0),
+		// 		new LeafConfig(51, 144-20, 9, 0, 0, 0),
+		// 		new LeafConfig(55, 144-12, 7, 0, 0, 0),
+		// 		new LeafConfig(65, 144-22, 7, 0, 0, 0),
+		// 		new LeafConfig(67, 144-30,3, 0, 0, 0),
+		// 		new LeafConfig(70, 144-31 ,4, 0, 0, 0),
+		// 		new LeafConfig(78, 144-23, 9, 0, 0, 0),
+		// 		new LeafConfig(81, 144-23, 8, 0, 0, 0),
+		// 		new LeafConfig(93, 144-20, 9, 0, 0, 0),
+		// 		new LeafConfig(108,144-24,4, 0, 0, 0),
+		// 		new LeafConfig(110, 144-29, 4, 0, 0, 0),
+		// 		new LeafConfig(123, 144-25,5, 0, 0, 0),
+		// 		new LeafConfig(131, 144-18, 7, 0, 0, 0),
+		// 		new LeafConfig(134, 144-18, 10, 0, 0, 0),
+		// 		new LeafConfig(120, 144-11, 5, 0, 0, 0),
+		// 		new LeafConfig(118, 144-8, 9.5f, 0, 0, 0),
+		// 		new LeafConfig(114, 144-12, 9, 0, 0, 0),
+		// 		new LeafConfig(100, 144-14, 8, 0, 0, 0),
+		// 		new LeafConfig(96, 144-21, 7, 0, 0, 0),
+		// 		new LeafConfig(92, 144-25, 5, 0, 0, 0),
+		// 	}
+		// ),
 
 
         new VineConfig("B2",
             new LeafConfig[] {
-                new LeafConfig(17, 144-8, 3, 0, 0, 0),
-                new LeafConfig(22, 144-8, 3, 0, 0, 0),
-                new LeafConfig(22, 144-5, 4, 0, 0, 0),
-                new LeafConfig(30, 144-17, 7, 0, 0, 0),
-                new LeafConfig(35, 144-18, 6, 0, 0, 0),
-                new LeafConfig(37, 144-17, 5, 0, 0, 0),
-                new LeafConfig(50, 144-20, 3, 0, 0, 0),
-                new LeafConfig(51, 144-20, 9, 0, 0, 0),
-                new LeafConfig(55, 144-12, 7, 0, 0, 0),
-                new LeafConfig(65, 144-22, 7, 0, 0, 0),
-                new LeafConfig(67, 144-30,3, 0, 0, 0),
-                new LeafConfig(70, 144-31 ,4, 0, 0, 0),
-                new LeafConfig(78, 144-23, 9, 0, 0, 0),
-                new LeafConfig(81, 144-23, 8, 0, 0, 0),
-                new LeafConfig(93, 144-20, 9, 0, 0, 0),
-                new LeafConfig(108,144-24,4, 0, 0, 0),
-                new LeafConfig(110, 144-29, 4, 0, 0, 0),
-                new LeafConfig(123, 144-25,5, 0, 0, 0),
-                new LeafConfig(131, 144-18, 7, 0, 0, 0),
-                new LeafConfig(134, 144-18, 10, 0, 0, 0),
-                new LeafConfig(120, 144-11, 5, 0, 0, 0),
-                new LeafConfig(118, 144-8, 9.5f, 0, 0, 0),
-                new LeafConfig(114, 144-12, 9, 0, 0, 0),
-                new LeafConfig(100, 144-14, 8, 0, 0, 0),
-                new LeafConfig(96, 144-21, 7, 0, 0, 0),
-                new LeafConfig(92, 144-25, 5, 0, 0, 0),
-                new LeafConfig(96, 144-21, 7, 0, 0, 0),
-                new LeafConfig(92, 144-25, 5, 0, 0, 0),
-                new LeafConfig(96, 144-21, 7, 0, 0, 0),
-                new LeafConfig(92, 144-25, 5, 0, 0, 0),
-                new LeafConfig(96, 144-21, 7, 0, 0, 0),
-                new LeafConfig(92, 144-25, 5, 0, 0, 0),
+                new LeafConfig(10, 40, 3, 0, 0, 0),
+                new LeafConfig(20, 40, 3, 0, 0, 0),
+                new LeafConfig(30, 40, 4, 0, 0, 0),
+                new LeafConfig(40, 40, 7, 0, 0, 0),
+                new LeafConfig(50, 40, 6, 0, 0, 0),
+                new LeafConfig(60, 40, 5, 0, 0, 0),
+                new LeafConfig(70, 40, 3, 0, 0, 0),
+                new LeafConfig(80, 40, 9, 0, 0, 0),
+                new LeafConfig(90, 40, 7, 0, 0, 0),
+                new LeafConfig(100, 40, 7, 0, 0, 0),
+                new LeafConfig(110, 40,3, 0, 0, 0),
+                new LeafConfig(120, 40 ,4, 0, 0, 0),
+                new LeafConfig(130, 40, 9, 0, 0, 0),
+                new LeafConfig(140, 40, 8, 0, 0, 0),
+                new LeafConfig(150, 40, 9, 0, 0, 0),
+                new LeafConfig(150,40,4, 0, 0, 0),
+                new LeafConfig(170, 40, 4, 0, 0, 0),
+                new LeafConfig(180, 40,5, 0, 0, 0),
+                new LeafConfig(190, 40, 7, 0, 0, 0),
+                new LeafConfig(200, 40, 10, 0, 0, 0),
+                new LeafConfig(210, 40, 5, 0, 0, 0),
+                new LeafConfig(220, 40, 9.5f, 0, 0, 0),
+                new LeafConfig(230, 40, 9, 0, 0, 0),
+                new LeafConfig(240, 40, 8, 0, 0, 0),
+                new LeafConfig(250, 40, 7, 0, 0, 0),
+                new LeafConfig(260, 40, 5, 0, 0, 0),
+                new LeafConfig(270, 40, 7, 0, 0, 0),
+                new LeafConfig(280, 40, 5, 0, 0, 0),
+                new LeafConfig(290, 40, 7, 0, 0, 0),
+                new LeafConfig(300, 40, 5, 0, 0, 0),
+                new LeafConfig(310, 40, 7, 0, 0, 0),
+                new LeafConfig(320, 40, 5, 0, 0, 0),
             }
         ),
-
+//41
 		new VineConfig("B3",
 			new LeafConfig[] {
-				new LeafConfig(-5, 144-31,-1, 0, 0, 0),
-				new LeafConfig(-2, 144-29, 0, 0, 0, 0),
-				new LeafConfig(13, 144-36, 4, 0, 0, 0),
-				new LeafConfig(20, 144-33, 3.5f, 0, 0, 0),
-				new LeafConfig(28, 144-37, 3.5f, 0, 0, 0),
-				new LeafConfig(32, 144-41, 6.5f, 0, 0, 0),
-				new LeafConfig(40.5f, 144-29, 4.5f, 0, 0, 0),
-				new LeafConfig(45.5f, 144-32, 6, 0, 0, 0),
-				new LeafConfig(56, 144-29, 8, 0, 0, 0),
-				new LeafConfig(60, 144-25, 3, 0, 0, 0),
-				new LeafConfig(71, 144-16, 2, 0, 0, 0),
-				new LeafConfig(73, 144-18, 1, 0, 0, 0),
-				new LeafConfig(84, 144-21, 1, 0, 0, 0),
-				new LeafConfig(88, 144-18, 2, 0, 0, 0),
-				new LeafConfig(100, 144-25, 1, 0, 0, 0),
-				new LeafConfig(103, 144-21, 5, 0, 0, 0),
-				new LeafConfig(116, 144-22, 5, 0, 0, 0),
-				new LeafConfig(118.5f, 144-18, 7, 0, 0, 0),
-				new LeafConfig(130, 144-16, 3, 0, 0, 0),
-				new LeafConfig(134, 144-20, 2, 0, 0, 0),
-				new LeafConfig(131, 144-19, 2, 0, 0, 0),
-				new LeafConfig(136, 144-22, 3, 0, 0, 0),
-				new LeafConfig(133, 144-36, 5, 0, 0, 0),
-				new LeafConfig(128, 144-34, 3, 0, 0, 0),
-                new LeafConfig(131, 144-19, 2, 0, 0, 0),
-                new LeafConfig(136, 144-22, 3, 0, 0, 0),
-                new LeafConfig(133, 144-36, 5, 0, 0, 0),
-                new LeafConfig(128, 144-34, 3, 0, 0, 0),
-                new LeafConfig(131, 144-19, 2, 0, 0, 0),
-                new LeafConfig(136, 144-22, 3, 0, 0, 0),
-                new LeafConfig(133, 144-36, 5, 0, 0, 0),
-                new LeafConfig(128, 144-34, 3, 0, 0, 0),
-                new LeafConfig(131, 144-19, 2, 0, 0, 0),
-                new LeafConfig(136, 144-22, 3, 0, 0, 0),
-                new LeafConfig(133, 144-36, 5, 0, 0, 0),
-                new LeafConfig(128, 144-34, 3, 0, 0, 0),
-                new LeafConfig(131, 144-19, 2, 0, 0, 0),
-                new LeafConfig(136, 144-22, 3, 0, 0, 0),
-                new LeafConfig(133, 144-36, 5, 0, 0, 0),
-                new LeafConfig(128, 144-34, 3, 0, 0, 0),
+			    new LeafConfig(10, 60, 3, 0, 0, 0),
+                new LeafConfig(20, 60, 3, 0, 0, 0),
+                new LeafConfig(30, 60, 4, 0, 0, 0),
+                new LeafConfig(40, 60, 7, 0, 0, 0),
+                new LeafConfig(50, 60, 6, 0, 0, 0),
+                new LeafConfig(60, 60, 5, 0, 0, 0),
+                new LeafConfig(70, 60, 3, 0, 0, 0),
+                new LeafConfig(80, 60, 9, 0, 0, 0),
+                new LeafConfig(90, 60, 7, 0, 0, 0),
+                new LeafConfig(100, 60, 7, 0, 0, 0),
+                new LeafConfig(110, 60,3, 0, 0, 0),
+                new LeafConfig(120, 60 ,4, 0, 0, 0),
+                new LeafConfig(130, 60, 9, 0, 0, 0),
+                new LeafConfig(140, 60, 8, 0, 0, 0),
+                new LeafConfig(150, 60, 9, 0, 0, 0),
+                new LeafConfig(150, 60,4, 0, 0, 0),
+                new LeafConfig(170, 60, 4, 0, 0, 0),
+                new LeafConfig(180, 60,5, 0, 0, 0),
+                new LeafConfig(190, 60, 7, 0, 0, 0),
+                new LeafConfig(200, 60, 10, 0, 0, 0),
+                new LeafConfig(210, 60, 5, 0, 0, 0),
+                new LeafConfig(220, 60, 9.5f, 0, 0, 0),
+                new LeafConfig(230, 60, 9, 0, 0, 0),
+                new LeafConfig(240, 60, 8, 0, 0, 0),
+                new LeafConfig(250, 60, 7, 0, 0, 0),
+                new LeafConfig(260, 60, 5, 0, 0, 0),
+                new LeafConfig(270, 60, 7, 0, 0, 0),
+
 			}
 		),
 
-        new VineConfig("B4",
-            new LeafConfig[] {
-                new LeafConfig(-5, 144-31,-1, 0, 0, 0),
-                new LeafConfig(-2, 144-29, 0, 0, 0, 0),
-                new LeafConfig(13, 144-36, 4, 0, 0, 0),
-                new LeafConfig(20, 144-33, 3.5f, 0, 0, 0),
-                new LeafConfig(28, 144-37, 3.5f, 0, 0, 0),
-                new LeafConfig(32, 144-41, 6.5f, 0, 0, 0),
-                new LeafConfig(40.5f, 144-29, 4.5f, 0, 0, 0),
-                new LeafConfig(45.5f, 144-32, 6, 0, 0, 0),
-                new LeafConfig(56, 144-29, 8, 0, 0, 0),
-                new LeafConfig(60, 144-25, 3, 0, 0, 0),
-                new LeafConfig(71, 144-16, 2, 0, 0, 0),
-                new LeafConfig(73, 144-18, 1, 0, 0, 0),
-                new LeafConfig(84, 144-21, 1, 0, 0, 0),
-                new LeafConfig(88, 144-18, 2, 0, 0, 0),
-                new LeafConfig(100, 144-25, 1, 0, 0, 0),
-                new LeafConfig(103, 144-21, 5, 0, 0, 0),
-                new LeafConfig(116, 144-22, 5, 0, 0, 0),
-                new LeafConfig(118.5f, 144-18, 7, 0, 0, 0),
-                new LeafConfig(130, 144-16, 3, 0, 0, 0),
-                new LeafConfig(134, 144-20, 2, 0, 0, 0),
-                new LeafConfig(131, 144-19, 2, 0, 0, 0),
-                new LeafConfig(136, 144-22, 3, 0, 0, 0),
-                new LeafConfig(133, 144-36, 5, 0, 0, 0),
-                new LeafConfig(128, 144-34, 3, 0, 0, 0),
-            }
-        ),
+        // new VineConfig("B4",
+        //     new LeafConfig[] {
+        //         new LeafConfig(-5, 144-31,-1, 0, 0, 0),
+        //         new LeafConfig(-2, 144-29, 0, 0, 0, 0),
+        //         new LeafConfig(13, 144-36, 4, 0, 0, 0),
+        //         new LeafConfig(20, 144-33, 3.5f, 0, 0, 0),
+        //         new LeafConfig(28, 144-37, 3.5f, 0, 0, 0),
+        //         new LeafConfig(32, 144-41, 6.5f, 0, 0, 0),
+        //         new LeafConfig(40.5f, 144-29, 4.5f, 0, 0, 0),
+        //         new LeafConfig(45.5f, 144-32, 6, 0, 0, 0),
+        //         new LeafConfig(56, 144-29, 8, 0, 0, 0),
+        //         new LeafConfig(60, 144-25, 3, 0, 0, 0),
+        //         new LeafConfig(71, 144-16, 2, 0, 0, 0),
+        //         new LeafConfig(73, 144-18, 1, 0, 0, 0),
+        //         new LeafConfig(84, 144-21, 1, 0, 0, 0),
+        //         new LeafConfig(88, 144-18, 2, 0, 0, 0),
+        //         new LeafConfig(100, 144-25, 1, 0, 0, 0),
+        //         new LeafConfig(103, 144-21, 5, 0, 0, 0),
+        //         new LeafConfig(116, 144-22, 5, 0, 0, 0),
+        //         new LeafConfig(118.5f, 144-18, 7, 0, 0, 0),
+        //         new LeafConfig(130, 144-16, 3, 0, 0, 0),
+        //         new LeafConfig(134, 144-20, 2, 0, 0, 0),
+        //         new LeafConfig(131, 144-19, 2, 0, 0, 0),
+        //         new LeafConfig(136, 144-22, 3, 0, 0, 0),
+        //         new LeafConfig(133, 144-36, 5, 0, 0, 0),
+        //         new LeafConfig(128, 144-34, 3, 0, 0, 0),
+        //     }
+        // ),
 
-		new VineConfig("C1",
-			new LeafConfig[] {
-				new LeafConfig(0, 95, -2, 0, 0, 0),        //1
-				new LeafConfig(3, 101, 1, 0, 0, 0),       //2
-				new LeafConfig(9.5f, 99, 1.5f, 0, 0, 0),     //3
-				new LeafConfig(16.5f, 105, 3, 0, 0, 0),	  //4
-				new LeafConfig(30.5f, 96, 6, 0, 0, 0),    //5
-				new LeafConfig(38.5f, 100, 5, 0, 0, 0),    //6
-				new LeafConfig(36.5f, 94, 6, 0, 0, 0),    //7
-				new LeafConfig(21.5f, 93, 5, 0, 0, 0),    //8
-				new LeafConfig(31.5f, 92, 5, 0, 0, 0),    //9
-				new LeafConfig(34, 93.5f, 6, 0, 0, 0),       //10
-				new LeafConfig(37, 95.5f, 5, 0, 0, 0),       //11
-				new LeafConfig(51, 94.5f, 5.5f, 0, 0, 0),       //12
-				new LeafConfig(67, 92.5f, 7, 0, 0, 0),       //13
-				new LeafConfig(67, 91, 7, 0, 0, 0),       //14
-				new LeafConfig(70, 90, 6, 0, 0, 0),       //15
-				new LeafConfig(80, 101, 3, 0, 0, 0),       //16
-				new LeafConfig(95, 100, 8, 0, 0, 0),       //17
-				new LeafConfig(98.5f, 97, 2, 0, 0, 0),    //18
-				new LeafConfig(96.5f, 100, 6, 0, 0, 0),    //19
-				new LeafConfig(121.5f, 103, 6, 0, 0, 0),   //20
-				new LeafConfig(117.5f, 104, 6, 0, 0, 0),   //21
-				new LeafConfig(130.5f, 97, 7, 0, 0, 0),   //22
-				new LeafConfig(145.5f, 97, 8, 0, 0, 0),   //23
-				new LeafConfig(148.5f, 102, 9, 0, 0, 0),    //24
-				new LeafConfig(150.5f, 97, 5, 0, 0, 0),    //25
-				new LeafConfig(163.5f, 98, 7, 0, 0, 0),    //26
-			}
-		),
+		// new VineConfig("C1",
+		// 	new LeafConfig[] {
+		// 		new LeafConfig(0, 95, -2, 0, 0, 0),        //1
+		// 		new LeafConfig(3, 101, 1, 0, 0, 0),       //2
+		// 		new LeafConfig(9.5f, 99, 1.5f, 0, 0, 0),     //3
+		// 		new LeafConfig(16.5f, 105, 3, 0, 0, 0),	  //4
+		// 		new LeafConfig(30.5f, 96, 6, 0, 0, 0),    //5
+		// 		new LeafConfig(38.5f, 100, 5, 0, 0, 0),    //6
+		// 		new LeafConfig(36.5f, 94, 6, 0, 0, 0),    //7
+		// 		new LeafConfig(21.5f, 93, 5, 0, 0, 0),    //8
+		// 		new LeafConfig(31.5f, 92, 5, 0, 0, 0),    //9
+		// 		new LeafConfig(34, 93.5f, 6, 0, 0, 0),       //10
+		// 		new LeafConfig(37, 95.5f, 5, 0, 0, 0),       //11
+		// 		new LeafConfig(51, 94.5f, 5.5f, 0, 0, 0),       //12
+		// 		new LeafConfig(67, 92.5f, 7, 0, 0, 0),       //13
+		// 		new LeafConfig(67, 91, 7, 0, 0, 0),       //14
+		// 		new LeafConfig(70, 90, 6, 0, 0, 0),       //15
+		// 		new LeafConfig(80, 101, 3, 0, 0, 0),       //16
+		// 		new LeafConfig(95, 100, 8, 0, 0, 0),       //17
+		// 		new LeafConfig(98.5f, 97, 2, 0, 0, 0),    //18
+		// 		new LeafConfig(96.5f, 100, 6, 0, 0, 0),    //19
+		// 		new LeafConfig(121.5f, 103, 6, 0, 0, 0),   //20
+		// 		new LeafConfig(117.5f, 104, 6, 0, 0, 0),   //21
+		// 		new LeafConfig(130.5f, 97, 7, 0, 0, 0),   //22
+		// 		new LeafConfig(145.5f, 97, 8, 0, 0, 0),   //23
+		// 		new LeafConfig(148.5f, 102, 9, 0, 0, 0),    //24
+		// 		new LeafConfig(150.5f, 97, 5, 0, 0, 0),    //25
+		// 		new LeafConfig(163.5f, 98, 7, 0, 0, 0),    //26
+		// 	}
+		// ),
 
         new VineConfig("C2",
             new LeafConfig[] {
-                new LeafConfig(0, 95, -2, 0, 0, 0),        //1
-                new LeafConfig(3, 101, 1, 0, 0, 0),       //2
-                new LeafConfig(9.5f, 99, 1.5f, 0, 0, 0),     //3
-                new LeafConfig(16.5f, 105, 3, 0, 0, 0),	  //4
-                new LeafConfig(30.5f, 96, 6, 0, 0, 0),    //5
-                new LeafConfig(38.5f, 100, 5, 0, 0, 0),    //6
-                new LeafConfig(36.5f, 94, 6, 0, 0, 0),    //7
-                new LeafConfig(21.5f, 93, 5, 0, 0, 0),    //8
-                new LeafConfig(31.5f, 92, 5, 0, 0, 0),    //9
-                new LeafConfig(34, 93.5f, 6, 0, 0, 0),       //10
-                new LeafConfig(37, 95.5f, 5, 0, 0, 0),       //11
-                new LeafConfig(51, 94.5f, 5.5f, 0, 0, 0),       //12
-                new LeafConfig(67, 92.5f, 7, 0, 0, 0),       //13
-                new LeafConfig(67, 91, 7, 0, 0, 0),       //14
-                new LeafConfig(70, 90, 6, 0, 0, 0),       //15
-                new LeafConfig(80, 101, 3, 0, 0, 0),       //16
-                new LeafConfig(95, 100, 8, 0, 0, 0),       //17
-                new LeafConfig(98.5f, 97, 2, 0, 0, 0),    //18
-                new LeafConfig(96.5f, 100, 6, 0, 0, 0),    //19
-                new LeafConfig(121.5f, 103, 6, 0, 0, 0),   //20
-                new LeafConfig(117.5f, 104, 6, 0, 0, 0),   //21
-                new LeafConfig(130.5f, 97, 7, 0, 0, 0),   //22
-                new LeafConfig(145.5f, 97, 8, 0, 0, 0),   //23
-                new LeafConfig(148.5f, 102, 9, 0, 0, 0),    //24
-                new LeafConfig(150.5f, 97, 5, 0, 0, 0),    //25
-                new LeafConfig(163.5f, 98, 7, 0, 0, 0),    //26
-                new LeafConfig(163.5f, 98, 7, 0, 0, 0),    //27
+			    new LeafConfig(10, 80, 3, 0, 0, 0),
+                new LeafConfig(20, 80, 3, 0, 0, 0),
+                new LeafConfig(30, 80, 4, 0, 0, 0),
+                new LeafConfig(40, 80, 7, 0, 0, 0),
+                new LeafConfig(50, 80, 6, 0, 0, 0),
+                new LeafConfig(60, 80, 5, 0, 0, 0),
+                new LeafConfig(70, 80, 3, 0, 0, 0),
+                new LeafConfig(80, 80, 9, 0, 0, 0),
+                new LeafConfig(90, 80, 7, 0, 0, 0),
+                new LeafConfig(100, 80, 7, 0, 0, 0),
+                new LeafConfig(110, 80,3, 0, 0, 0),
+                new LeafConfig(120, 80 ,4, 0, 0, 0),
+                new LeafConfig(130, 80, 9, 0, 0, 0),
+                new LeafConfig(140, 80, 8, 0, 0, 0),
+                new LeafConfig(150, 80, 9, 0, 0, 0),
+                new LeafConfig(150, 80, 4, 0, 0, 0),
+                new LeafConfig(170, 80, 4, 0, 0, 0),
+                new LeafConfig(180, 80, 5, 0, 0, 0),
+                new LeafConfig(190, 80, 7, 0, 0, 0),
+                new LeafConfig(200, 80, 10, 0, 0, 0),
+                new LeafConfig(210, 80, 5, 0, 0, 0),
+                new LeafConfig(220, 80, 9.5f, 0, 0, 0),
+                new LeafConfig(230, 80, 9, 0, 0, 0),
+                new LeafConfig(240, 80, 8, 0, 0, 0),
+                new LeafConfig(250, 80, 7, 0, 0, 0),
+                new LeafConfig(260, 80, 5, 0, 0, 0),
+                new LeafConfig(270, 80, 7, 0, 0, 0),
+                new LeafConfig(280, 80, 7, 0, 0, 0),
+
 
             }
         ),
@@ -441,45 +428,45 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(154.5f, 38.5f-4, 2.5f, 0, 0, 0),   //21
 				new LeafConfig(154.5f+5f, 38.5f-4+4, 4, 0, 0, 0),   //22
 				new LeafConfig(154.5f+5f+10, 38.5f-4+4-11, 2, 0, 0, 0),   //23
-				new LeafConfig(154.5f+5f+10, 38.5f-4+4-11, 2, 0, 0, 0),   //23
-				new LeafConfig(154.5f+5f+10, 38.5f-4+4-11, 2, 0, 0, 0),   //23
-				new LeafConfig(154.5f+5f+10, 38.5f-4+4-11, 2, 0, 0, 0),   //23
-				new LeafConfig(154.5f+5f+10, 38.5f-4+4-11, 2, 0, 0, 0),   //23
-				new LeafConfig(154.5f+5f+10, 38.5f-4+4-11, 2, 0, 0, 0),   //23
-				new LeafConfig(154.5f+5f+10, 38.5f-4+4-11, 2, 0, 0, 0),   //23
+				new LeafConfig(154.5f+5f+10, 38.5f-4+4-11, 2, 0, 0, 0),   //24
+				new LeafConfig(154.5f+5f+10, 38.5f-4+4-11, 2, 0, 0, 0),   //25
+				new LeafConfig(154.5f+5f+10, 38.5f-4+4-11, 2, 0, 0, 0),   //26
+				new LeafConfig(154.5f+5f+10, 38.5f-4+4-11, 2, 0, 0, 0),   //27
+				new LeafConfig(154.5f+5f+10, 38.5f-4+4-11, 2, 0, 0, 0),   //28
+				new LeafConfig(154.5f+5f+10, 38.5f-4+4-11, 2, 0, 0, 0),   //29
 			}
 		),
 
-		new VineConfig("C4",
-			new LeafConfig[] {
-				new LeafConfig(-1, 57, 3, 0, 0, 0),  //1
-				new LeafConfig(4, 56, 5, 0, 0, 0),   //2
-				new LeafConfig(11, 65, 3, 0, 0, 0),  //3
-				new LeafConfig(12, 66, 0, 0, 0, 0),  //4
-				new LeafConfig(23, 70, 5, 0, 0, 0),  //5
-				new LeafConfig(36, 70, 5.5f, 0, 0, 0),  //6
-				new LeafConfig(38, 75, 10, 0, 0, 0),  //7
-				new LeafConfig(50, 76, 7, 0, 0, 0),  //8
-				new LeafConfig(53, 79, 3, 0, 0, 0),  //9
-				new LeafConfig(64, 79, 2, 0, 0, 0),  //10
-				new LeafConfig(66, 78, 5, 0, 0, 0), //11
-				new LeafConfig(79, 73, 6, 0, 0, 0), //12
-				new LeafConfig(77, 78, 6.5f, 0, 0, 0), //13
-				new LeafConfig(82, 69, 4, 0, 0, 0), //14
-				new LeafConfig(87.5f, 69, 6, 0, 0, 0), //15
-				new LeafConfig(83.5f, 55, 7, 0, 0, 0), //16
-				new LeafConfig(89.5f, 60, 5, 0, 0, 0), //17
-				new LeafConfig(91.5f, 52, 4, 0, 0, 0), //18
-				new LeafConfig(98.5f, 55, 5.5f, 0, 0, 0), //19
-				new LeafConfig(109.5f, 55, 4.5f, 0, 0, 0), //20
-				new LeafConfig(112.5f, 50, 3.5f, 0, 0, 0), //21
-				new LeafConfig(124.5f, 57, 2.5f, 0, 0, 0), //22
-				new LeafConfig(121.5f, 62, 4, 0, 0, 0), //23
-				new LeafConfig(121.5f, 62, 4, 0, 0, 0), //23
+		// new VineConfig("C4",
+		// 	new LeafConfig[] {
+		// 		new LeafConfig(-1, 57, 3, 0, 0, 0),  //1
+		// 		new LeafConfig(4, 56, 5, 0, 0, 0),   //2
+		// 		new LeafConfig(11, 65, 3, 0, 0, 0),  //3
+		// 		new LeafConfig(12, 66, 0, 0, 0, 0),  //4
+		// 		new LeafConfig(23, 70, 5, 0, 0, 0),  //5
+		// 		new LeafConfig(36, 70, 5.5f, 0, 0, 0),  //6
+		// 		new LeafConfig(38, 75, 10, 0, 0, 0),  //7
+		// 		new LeafConfig(50, 76, 7, 0, 0, 0),  //8
+		// 		new LeafConfig(53, 79, 3, 0, 0, 0),  //9
+		// 		new LeafConfig(64, 79, 2, 0, 0, 0),  //10
+		// 		new LeafConfig(66, 78, 5, 0, 0, 0), //11
+		// 		new LeafConfig(79, 73, 6, 0, 0, 0), //12
+		// 		new LeafConfig(77, 78, 6.5f, 0, 0, 0), //13
+		// 		new LeafConfig(82, 69, 4, 0, 0, 0), //14
+		// 		new LeafConfig(87.5f, 69, 6, 0, 0, 0), //15
+		// 		new LeafConfig(83.5f, 55, 7, 0, 0, 0), //16
+		// 		new LeafConfig(89.5f, 60, 5, 0, 0, 0), //17
+		// 		new LeafConfig(91.5f, 52, 4, 0, 0, 0), //18
+		// 		new LeafConfig(98.5f, 55, 5.5f, 0, 0, 0), //19
+		// 		new LeafConfig(109.5f, 55, 4.5f, 0, 0, 0), //20
+		// 		new LeafConfig(112.5f, 50, 3.5f, 0, 0, 0), //21
+		// 		new LeafConfig(124.5f, 57, 2.5f, 0, 0, 0), //22
+		// 		new LeafConfig(121.5f, 62, 4, 0, 0, 0), //23
+		// 		new LeafConfig(121.5f, 62, 4, 0, 0, 0), //23
 
 
-			}
-		),
+		// 	}
+		// ),
 
 //labeled c1
 		new VineConfig("D1",
@@ -515,44 +502,44 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
-		new VineConfig("D2",
-			new LeafConfig[] {
-				new LeafConfig(22, -5.5f, -1, 0, 0, 0),
-				new LeafConfig(21.5f, -13.5f, -2, 0, 0, 0),
-				new LeafConfig(20, -11.5f, 2, 0, 0, 0),
-				new LeafConfig(13, 1.5f, 7, 0, 0, 0),
-				new LeafConfig(19, 4, 7, 0, 0, 0),
-				new LeafConfig(13, 5, 11, 0, 0, 0),
-				new LeafConfig(14, 18, 7, 0, 0, 0),
-				new LeafConfig(13, 21.5f, 9.5f, 0, 0, 0),
-				new LeafConfig(19.5f, 24.5f, 8, 0, 0, 0),
-				new LeafConfig(22.5f, 36.5f, 3.5f, 0, 0, 0),
-				new LeafConfig(24, 40.5f, 3.5f, 0, 0, 0),
-				new LeafConfig(33, 48.5f, 7.5f, 0, 0, 0),
-				new LeafConfig(36, 49, 7.5f, 0, 0, 0),
-				new LeafConfig(34.5f, 47.5f, 4, 0, 0, 0),
-				new LeafConfig(43.5f, 41.5f, 2.5f, 0, 0, 0),
-				new LeafConfig(46.5f, 38.5f, 3.5f, 0, 0, 0),
-				new LeafConfig(49.5f, 42.5f, 1, 0, 0, 0),
-				new LeafConfig(61.5f, 32, 3, 0, 0, 0),
-				new LeafConfig(75.5f, 39, 2, 0, 0, 0),
-				new LeafConfig(80, 33.5f, 3.5f, 0, 0, 0),
-				new LeafConfig(82.5f, 40, 2, 0, 0, 0),
-				new LeafConfig(94.5f, 38.5f, 3, 0, 0, 0),
-				new LeafConfig(107, 40.5f, 2, 0, 0, 0),
-				new LeafConfig(110, 38.5f, 6, 0, 0, 0),
-				new LeafConfig(112, 40.5f, 1, 0, 0, 0),
-				new LeafConfig(112.5f, 49.5f, 3.5f, 0, 0, 0),
-				new LeafConfig(115.5f, 61.5f, 1, 0, 0, 0),
-				new LeafConfig(123.5f, 64, .5f, 0, 0, 0),
-				new LeafConfig(115.5f, 67, 2.5f, 0, 0, 0),
-				new LeafConfig(115.5f, 67, 2.5f, 0, 0, 0),
-				new LeafConfig(115.5f, 67, 2.5f, 0, 0, 0),
-				new LeafConfig(115.5f, 67, 2.5f, 0, 0, 0),
-				new LeafConfig(115.5f, 67, 2.5f, 0, 0, 0),
-				new LeafConfig(115.5f, 67, 2.5f, 0, 0, 0),
-			}
-		),
+		// new VineConfig("D2",
+		// 	new LeafConfig[] {
+		// 		new LeafConfig(22, -5.5f, -1, 0, 0, 0),
+		// 		new LeafConfig(21.5f, -13.5f, -2, 0, 0, 0),
+		// 		new LeafConfig(20, -11.5f, 2, 0, 0, 0),
+		// 		new LeafConfig(13, 1.5f, 7, 0, 0, 0),
+		// 		new LeafConfig(19, 4, 7, 0, 0, 0),
+		// 		new LeafConfig(13, 5, 11, 0, 0, 0),
+		// 		new LeafConfig(14, 18, 7, 0, 0, 0),
+		// 		new LeafConfig(13, 21.5f, 9.5f, 0, 0, 0),
+		// 		new LeafConfig(19.5f, 24.5f, 8, 0, 0, 0),
+		// 		new LeafConfig(22.5f, 36.5f, 3.5f, 0, 0, 0),
+		// 		new LeafConfig(24, 40.5f, 3.5f, 0, 0, 0),
+		// 		new LeafConfig(33, 48.5f, 7.5f, 0, 0, 0),
+		// 		new LeafConfig(36, 49, 7.5f, 0, 0, 0),
+		// 		new LeafConfig(34.5f, 47.5f, 4, 0, 0, 0),
+		// 		new LeafConfig(43.5f, 41.5f, 2.5f, 0, 0, 0),
+		// 		new LeafConfig(46.5f, 38.5f, 3.5f, 0, 0, 0),
+		// 		new LeafConfig(49.5f, 42.5f, 1, 0, 0, 0),
+		// 		new LeafConfig(61.5f, 32, 3, 0, 0, 0),
+		// 		new LeafConfig(75.5f, 39, 2, 0, 0, 0),
+		// 		new LeafConfig(80, 33.5f, 3.5f, 0, 0, 0),
+		// 		new LeafConfig(82.5f, 40, 2, 0, 0, 0),
+		// 		new LeafConfig(94.5f, 38.5f, 3, 0, 0, 0),
+		// 		new LeafConfig(107, 40.5f, 2, 0, 0, 0),
+		// 		new LeafConfig(110, 38.5f, 6, 0, 0, 0),
+		// 		new LeafConfig(112, 40.5f, 1, 0, 0, 0),
+		// 		new LeafConfig(112.5f, 49.5f, 3.5f, 0, 0, 0),
+		// 		new LeafConfig(115.5f, 61.5f, 1, 0, 0, 0),
+		// 		new LeafConfig(123.5f, 64, .5f, 0, 0, 0),
+		// 		new LeafConfig(115.5f, 67, 2.5f, 0, 0, 0),
+		// 		new LeafConfig(115.5f, 67, 2.5f, 0, 0, 0),
+		// 		new LeafConfig(115.5f, 67, 2.5f, 0, 0, 0),
+		// 		new LeafConfig(115.5f, 67, 2.5f, 0, 0, 0),
+		// 		new LeafConfig(115.5f, 67, 2.5f, 0, 0, 0),
+		// 		new LeafConfig(115.5f, 67, 2.5f, 0, 0, 0),
+		// 	}
+		// ),
 
 		new VineConfig("D3",
 			new LeafConfig[] {
@@ -585,47 +572,47 @@ public class EmpireWallShow implements Show {
 			}
 		),
 //E429 no data
-		new VineConfig("D4",
-			new LeafConfig[] {
-				new LeafConfig(-2, 0, 4.5f, 0, 0, 0),
-				new LeafConfig(13, 7, 5, 0, 0, 0),
-				new LeafConfig(24, 5.5f, 6, 0, 0, 0),
-				new LeafConfig(28, -4, 0, 0, 0, 0),
-				new LeafConfig(34, -4, 0, 0, 0, 0),
-				new LeafConfig(41, -4, 6, 0, 0, 0),
-				new LeafConfig(47.5f, -3, 2, 0, 0, 0),
-				new LeafConfig(58.5f, 9, 8, 0, 0, 0),
-				new LeafConfig(62.4f, 8, 10, 0, 0, 0),
-				new LeafConfig(77.4f, 7, 2.5f, 0, 0, 0),
-				new LeafConfig(75.4f, 14, 8, 0, 0, 0),
-				new LeafConfig(88.4f, 21, 7, 0, 0, 0),
-				new LeafConfig(98.4f, 17, 4, 0, 0, 0),
-				new LeafConfig(109.4f, 15, 3, 0, 0, 0),
-				new LeafConfig(118.4f, 14, 2, 0, 0, 0),
-				new LeafConfig(134, 26, 4, 0, 0, 0),
-				new LeafConfig(131, 18, 7, 0, 0, 0),
-				new LeafConfig(149, 20, 1, 0, 0, 0),
-				new LeafConfig(143, 8, 9, 0, 0, 0),
-				new LeafConfig(152, 10, 11, 0, 0, 0),
-				new LeafConfig(161.5f, 19, 4, 0, 0, 0),
-				new LeafConfig(173.5f, 6, 8, 0, 0, 0),
-				new LeafConfig(175.5f, 4, 1, 0, 0, 0),
-				new LeafConfig(180, 9, 5, 0, 0, 0),
-				new LeafConfig(190, 9, 6, 0, 0, 0),
-				new LeafConfig(199.5f, 13, 8, 0, 0, 0),
-				new LeafConfig(196.5f, 24, 5, 0, 0, 0),
-				new LeafConfig(209.5f, 21, 4, 0, 0, 0),
-				new LeafConfig(215, 28, 5, 0, 0, 0),
-				new LeafConfig(200, 0, 0, 0, 0, 0),
-				new LeafConfig(210, 0, 0, 0, 0, 0),
-				new LeafConfig(220, 0, 0, 0, 0, 0),
-				new LeafConfig(220, 0, 0, 0, 0, 0),
-				new LeafConfig(220, 0, 0, 0, 0, 0),
-				new LeafConfig(220, 0, 0, 0, 0, 0),
-				new LeafConfig(220, 0, 0, 0, 0, 0),
-				new LeafConfig(220, 0, 0, 0, 0, 0),
-			}
-		),
+		// new VineConfig("D4",
+		// 	new LeafConfig[] {
+		// 		new LeafConfig(-2, 0, 4.5f, 0, 0, 0),
+		// 		new LeafConfig(13, 7, 5, 0, 0, 0),
+		// 		new LeafConfig(24, 5.5f, 6, 0, 0, 0),
+		// 		new LeafConfig(28, -4, 0, 0, 0, 0),
+		// 		new LeafConfig(34, -4, 0, 0, 0, 0),
+		// 		new LeafConfig(41, -4, 6, 0, 0, 0),
+		// 		new LeafConfig(47.5f, -3, 2, 0, 0, 0),
+		// 		new LeafConfig(58.5f, 9, 8, 0, 0, 0),
+		// 		new LeafConfig(62.4f, 8, 10, 0, 0, 0),
+		// 		new LeafConfig(77.4f, 7, 2.5f, 0, 0, 0),
+		// 		new LeafConfig(75.4f, 14, 8, 0, 0, 0),
+		// 		new LeafConfig(88.4f, 21, 7, 0, 0, 0),
+		// 		new LeafConfig(98.4f, 17, 4, 0, 0, 0),
+		// 		new LeafConfig(109.4f, 15, 3, 0, 0, 0),
+		// 		new LeafConfig(118.4f, 14, 2, 0, 0, 0),
+		// 		new LeafConfig(134, 26, 4, 0, 0, 0),
+		// 		new LeafConfig(131, 18, 7, 0, 0, 0),
+		// 		new LeafConfig(149, 20, 1, 0, 0, 0),
+		// 		new LeafConfig(143, 8, 9, 0, 0, 0),
+		// 		new LeafConfig(152, 10, 11, 0, 0, 0),
+		// 		new LeafConfig(161.5f, 19, 4, 0, 0, 0),
+		// 		new LeafConfig(173.5f, 6, 8, 0, 0, 0),
+		// 		new LeafConfig(175.5f, 4, 1, 0, 0, 0),
+		// 		new LeafConfig(180, 9, 5, 0, 0, 0),
+		// 		new LeafConfig(190, 9, 6, 0, 0, 0),
+		// 		new LeafConfig(199.5f, 13, 8, 0, 0, 0),
+		// 		new LeafConfig(196.5f, 24, 5, 0, 0, 0),
+		// 		new LeafConfig(209.5f, 21, 4, 0, 0, 0),
+		// 		new LeafConfig(215, 28, 5, 0, 0, 0),
+		// 		new LeafConfig(200, 0, 0, 0, 0, 0),
+		// 		new LeafConfig(210, 0, 0, 0, 0, 0),
+		// 		new LeafConfig(220, 0, 0, 0, 0, 0),
+		// 		new LeafConfig(220, 0, 0, 0, 0, 0),
+		// 		new LeafConfig(220, 0, 0, 0, 0, 0),
+		// 		new LeafConfig(220, 0, 0, 0, 0, 0),
+		// 		new LeafConfig(220, 0, 0, 0, 0, 0),
+		// 		new LeafConfig(220, 0, 0, 0, 0, 0),
+		// 	}
+		// ),
 
 		new VineConfig("E1",
 			new LeafConfig[] {
@@ -658,47 +645,47 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
-		new VineConfig("E2",
-			new LeafConfig[] {
-				new LeafConfig(216-103,-2.5f, 4.5f, 0, 0, 0),
-				new LeafConfig(216-106.5f,-6, 9, 0, 0, 0),
-				new LeafConfig(216-114.5f, 3, 2.5f, 0, 0, 0),
-				new LeafConfig(216-112, 9, 7, 0, 0, 0),
-				new LeafConfig(216-118, 18.5f, 6.5f, 0, 0, 0),
-				new LeafConfig(216-118, 23, 4.5f, 0, 0, 0),
-				new LeafConfig(216-131.5f, 27.5f, 9, 0, 0, 0),
-				new LeafConfig(216-132.5f, 32.5f, 10.5f, 0, 0, 0),
-				new LeafConfig(216-144, 41, 12, 0, 0, 0),
-				new LeafConfig(216-146.5f, 37, 8, 0, 0, 0),
-				new LeafConfig(216-150.5f, 52, 9, 0, 0, 0),
-				new LeafConfig(216-152.5f, 54, 7.5f, 0, 0, 0),
-				new LeafConfig(216-161.5f, 53, 8, 0, 0, 0),
-				new LeafConfig(216-162.5f, 50, 9, 0, 0, 0),
-				new LeafConfig(216-175.5f, 48, 5, 0, 0, 0),
-				new LeafConfig(216-180.5f, 43.5f, 3.5f, 0, 0, 0),
-			}
-		),
+		// new VineConfig("E2",
+		// 	new LeafConfig[] {
+		// 		new LeafConfig(216-103,-2.5f, 4.5f, 0, 0, 0),
+		// 		new LeafConfig(216-106.5f,-6, 9, 0, 0, 0),
+		// 		new LeafConfig(216-114.5f, 3, 2.5f, 0, 0, 0),
+		// 		new LeafConfig(216-112, 9, 7, 0, 0, 0),
+		// 		new LeafConfig(216-118, 18.5f, 6.5f, 0, 0, 0),
+		// 		new LeafConfig(216-118, 23, 4.5f, 0, 0, 0),
+		// 		new LeafConfig(216-131.5f, 27.5f, 9, 0, 0, 0),
+		// 		new LeafConfig(216-132.5f, 32.5f, 10.5f, 0, 0, 0),
+		// 		new LeafConfig(216-144, 41, 12, 0, 0, 0),
+		// 		new LeafConfig(216-146.5f, 37, 8, 0, 0, 0),
+		// 		new LeafConfig(216-150.5f, 52, 9, 0, 0, 0),
+		// 		new LeafConfig(216-152.5f, 54, 7.5f, 0, 0, 0),
+		// 		new LeafConfig(216-161.5f, 53, 8, 0, 0, 0),
+		// 		new LeafConfig(216-162.5f, 50, 9, 0, 0, 0),
+		// 		new LeafConfig(216-175.5f, 48, 5, 0, 0, 0),
+		// 		new LeafConfig(216-180.5f, 43.5f, 3.5f, 0, 0, 0),
+		// 	}
+		// ),
 
-		new VineConfig("E3",
-			new LeafConfig[] {
-				new LeafConfig(216-37.5f, 0, 3, 0, 0, 0),
-				new LeafConfig(216-33.5f, -2, 6.5f, 0, 0, 0),
-				new LeafConfig(216-35, 2, 4, 0, 0, 0),
-				new LeafConfig(216-40, 8, 6.5f, 0, 0, 0),
-				new LeafConfig(216-52, 14, 8, 0, 0, 0),
-				new LeafConfig(216-54, 13, 4.5f, 0, 0, 0),
-				new LeafConfig(216-56, 15.5f, 7.5f, 0, 0, 0),
-				new LeafConfig(216-69, 13.5f, 7, 0, 0, 0),
-				new LeafConfig(216-82, 9.5f, 7, 0, 0, 0),
-				new LeafConfig(216-85, 13, 8.5f, 0, 0, 0),
-				new LeafConfig(216-87.5f, 14, 5.5f, 0, 0, 0),
-				new LeafConfig(216-101, 21, 9.5f, 0, 0, 0),
-				new LeafConfig(216-113, 20, 7, 0, 0, 0),
-				new LeafConfig(216-119, 21, 6, 0, 0, 0),
-				new LeafConfig(216-118.5f, 18, 9.5f, 0, 0, 0),
-				new LeafConfig(216-131.5f, 21, 7, 0, 0, 0),
-			}
-		),
+		// new VineConfig("E3",
+		// 	new LeafConfig[] {
+		// 		new LeafConfig(216-37.5f, 0, 3, 0, 0, 0),
+		// 		new LeafConfig(216-33.5f, -2, 6.5f, 0, 0, 0),
+		// 		new LeafConfig(216-35, 2, 4, 0, 0, 0),
+		// 		new LeafConfig(216-40, 8, 6.5f, 0, 0, 0),
+		// 		new LeafConfig(216-52, 14, 8, 0, 0, 0),
+		// 		new LeafConfig(216-54, 13, 4.5f, 0, 0, 0),
+		// 		new LeafConfig(216-56, 15.5f, 7.5f, 0, 0, 0),
+		// 		new LeafConfig(216-69, 13.5f, 7, 0, 0, 0),
+		// 		new LeafConfig(216-82, 9.5f, 7, 0, 0, 0),
+		// 		new LeafConfig(216-85, 13, 8.5f, 0, 0, 0),
+		// 		new LeafConfig(216-87.5f, 14, 5.5f, 0, 0, 0),
+		// 		new LeafConfig(216-101, 21, 9.5f, 0, 0, 0),
+		// 		new LeafConfig(216-113, 20, 7, 0, 0, 0),
+		// 		new LeafConfig(216-119, 21, 6, 0, 0, 0),
+		// 		new LeafConfig(216-118.5f, 18, 9.5f, 0, 0, 0),
+		// 		new LeafConfig(216-131.5f, 21, 7, 0, 0, 0),
+		// 	}
+		// ),
 
 		new VineConfig("E4",
 			new LeafConfig[] {
@@ -736,43 +723,43 @@ public class EmpireWallShow implements Show {
 			}
 		),
 //added a few leaves2
-		new VineConfig("F1",
-			new LeafConfig[] {
-				new LeafConfig(216-1, 15, 1, 0, 0, 0),
-				new LeafConfig(216-9, 14, 3, 0, 0, 0),
-				new LeafConfig(216-11.5f, 15, 4.5f, 0, 0, 0),
-				new LeafConfig(216-24, 17, 4, 0, 0, 0),
-				new LeafConfig(216-25, 22, 2.5f, 0, 0, 0),
-				new LeafConfig(216-30, 34, 6, 0, 0, 0),
-				new LeafConfig(216-31, 31, 3, 0, 0, 0),
-				new LeafConfig(216-34.5f, 34, 4, 0, 0, 0),
-				new LeafConfig(216-38.5f, 36, 1, 0, 0, 0),
-				new LeafConfig(216-50, 38, 1, 0, 0, 0),
-				new LeafConfig(216-62, 40, 1, 0, 0, 0),
-				new LeafConfig(216-76, 42, 2, 0, 0, 0),
-				new LeafConfig(216-78, 43.5f, 1, 0, 0, 0),
-				new LeafConfig(216-87, 47.5f, 1, 0, 0, 0),
-				new LeafConfig(216-89, 49, 4, 0, 0, 0),
-				new LeafConfig(216-100, 46, 4.5f, 0, 0, 0),
-				new LeafConfig(216-103, 46, 6, 0, 0, 0),
-				new LeafConfig(216-115, 47.5f, 3, 0, 0, 0),
-				new LeafConfig(216-118, 46.5f, 3, 0, 0, 0),
-				new LeafConfig(216-129, 44.5f, 1.5f, 0, 0, 0),
-				new LeafConfig(216-132, 44, 1, 0, 0, 0),
-				new LeafConfig(216-143.5f, 46, 6, 0, 0, 0),
-				new LeafConfig(216-142.5f, 54, .5f, 0, 0, 0),
-				new LeafConfig(216-157.5f, 59.5f, 2, 0, 0, 0),
-				new LeafConfig(216-158, 64.5f, 2, 0, 0, 0),
-				new LeafConfig(216-165.5f, 72.5f, 2.5f, 0, 0, 0),
-				new LeafConfig(216-171.5f, 74.5f, .5f, 0, 0, 0),
-				new LeafConfig(216-181.5f, 78.5f, 1, 0, 0, 0),
-				new LeafConfig(216-181.5f, 78.5f, 2, 0, 0, 0),
-				new LeafConfig(216-181.5f, 78.5f, 2, 0, 0, 0),
-				new LeafConfig(216-181.5f, 78.5f, 2, 0, 0, 0),
+		// new VineConfig("F1",
+		// 	new LeafConfig[] {
+		// 		new LeafConfig(216-1, 15, 1, 0, 0, 0),
+		// 		new LeafConfig(216-9, 14, 3, 0, 0, 0),
+		// 		new LeafConfig(216-11.5f, 15, 4.5f, 0, 0, 0),
+		// 		new LeafConfig(216-24, 17, 4, 0, 0, 0),
+		// 		new LeafConfig(216-25, 22, 2.5f, 0, 0, 0),
+		// 		new LeafConfig(216-30, 34, 6, 0, 0, 0),
+		// 		new LeafConfig(216-31, 31, 3, 0, 0, 0),
+		// 		new LeafConfig(216-34.5f, 34, 4, 0, 0, 0),
+		// 		new LeafConfig(216-38.5f, 36, 1, 0, 0, 0),
+		// 		new LeafConfig(216-50, 38, 1, 0, 0, 0),
+		// 		new LeafConfig(216-62, 40, 1, 0, 0, 0),
+		// 		new LeafConfig(216-76, 42, 2, 0, 0, 0),
+		// 		new LeafConfig(216-78, 43.5f, 1, 0, 0, 0),
+		// 		new LeafConfig(216-87, 47.5f, 1, 0, 0, 0),
+		// 		new LeafConfig(216-89, 49, 4, 0, 0, 0),
+		// 		new LeafConfig(216-100, 46, 4.5f, 0, 0, 0),
+		// 		new LeafConfig(216-103, 46, 6, 0, 0, 0),
+		// 		new LeafConfig(216-115, 47.5f, 3, 0, 0, 0),
+		// 		new LeafConfig(216-118, 46.5f, 3, 0, 0, 0),
+		// 		new LeafConfig(216-129, 44.5f, 1.5f, 0, 0, 0),
+		// 		new LeafConfig(216-132, 44, 1, 0, 0, 0),
+		// 		new LeafConfig(216-143.5f, 46, 6, 0, 0, 0),
+		// 		new LeafConfig(216-142.5f, 54, .5f, 0, 0, 0),
+		// 		new LeafConfig(216-157.5f, 59.5f, 2, 0, 0, 0),
+		// 		new LeafConfig(216-158, 64.5f, 2, 0, 0, 0),
+		// 		new LeafConfig(216-165.5f, 72.5f, 2.5f, 0, 0, 0),
+		// 		new LeafConfig(216-171.5f, 74.5f, .5f, 0, 0, 0),
+		// 		new LeafConfig(216-181.5f, 78.5f, 1, 0, 0, 0),
+		// 		new LeafConfig(216-181.5f, 78.5f, 2, 0, 0, 0),
+		// 		new LeafConfig(216-181.5f, 78.5f, 2, 0, 0, 0),
+		// 		new LeafConfig(216-181.5f, 78.5f, 2, 0, 0, 0),
 
 
-			}
-		),
+		// 	}
+		// ),
 
 		new VineConfig("F2",
 			new LeafConfig[] {
@@ -798,6 +785,12 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(216-8.5f, 114.5f, 1.5f, 0, 0, 0),
 				new LeafConfig(216-9, 121, 2, 0, 0, 0),
 				new LeafConfig(216-9, 121, 2, 0, 0, 0),
+				new LeafConfig(216-15, 107.5f, 2.5f, 0, 0, 0),
+				new LeafConfig(216-8.5f, 114.5f, 1.5f, 0, 0, 0),
+				new LeafConfig(216-9, 121, 2, 0, 0, 0),
+				new LeafConfig(216-9, 121, 2, 0, 0, 0),
+				new LeafConfig(216-9, 121, 2, 0, 0, 0),
+
 
 			}
 		),
@@ -833,60 +826,60 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
-		new VineConfig("F4",
-			new LeafConfig[] {
-		        new LeafConfig(216-2.5f, 56, 5, 0, 0, 0),
-                new LeafConfig(216-5, 53, 3, 0, 0, 0),
-                new LeafConfig(216-6, 56, 7.5f, 0, 0, 0),
-                new LeafConfig(216-22, 55, 5, 0, 0, 0),
-                new LeafConfig(216-31, 67, 4, 0, 0, 0),
-                new LeafConfig(216-33, 64.5f, 2.5f, 0, 0, 0),
-                new LeafConfig(216-34.5f, 69.5f, 5, 0, 0, 0),
-                new LeafConfig(216-47.5f, 66, 4.5f, 0, 0, 0),
-                new LeafConfig(216-57.5f, 74, 3.5f, 0, 0, 0),
-                new LeafConfig(216-60, 75.5f, 4, 0, 0, 0),
-                new LeafConfig(216-75, 80.5f, 2, 0, 0, 0),
-                new LeafConfig(216-88, 81.5f, 2, 0, 0, 0),
-                new LeafConfig(216-92, 82.5f, 2.5f, 0, 0, 0),
-                new LeafConfig(216-94, 82, 1.5f, 0, 0, 0),
-                new LeafConfig(216-107, 89, 1.5f, 0, 0, 0),
-                new LeafConfig(216-119, 82, 1.5f, 0, 0, 0),
-                new LeafConfig(216-120, 81.5f, 4, 0, 0, 0),
-                new LeafConfig(216-122.5f, 79.5f, 2, 0, 0, 0),
-                new LeafConfig(216-136.5f, 82.5f, 3, 0, 0, 0) ,
-                new LeafConfig(216-158.5f, 85.5f, 3, 0, 0, 0),
-                new LeafConfig(216-158.5f, 85.5f, 3, 0, 0, 0),
-                new LeafConfig(216-158.5f, 85.5f, 3, 0, 0, 0),
-                new LeafConfig(216-158.5f, 85.5f, 3, 0, 0, 0),
-                new LeafConfig(216-158.5f, 85.5f, 3, 0, 0, 0),
-                new LeafConfig(216-158.5f, 85.5f, 3, 0, 0, 0),
-                new LeafConfig(216-158.5f, 85.5f, 3, 0, 0, 0),
-                new LeafConfig(216-158.5f, 85.5f, 3, 0, 0, 0),
-			}
-		),
+		// new VineConfig("F4",
+		// 	new LeafConfig[] {
+		//         new LeafConfig(216-2.5f, 56, 5, 0, 0, 0),
+  //               new LeafConfig(216-5, 53, 3, 0, 0, 0),
+  //               new LeafConfig(216-6, 56, 7.5f, 0, 0, 0),
+  //               new LeafConfig(216-22, 55, 5, 0, 0, 0),
+  //               new LeafConfig(216-31, 67, 4, 0, 0, 0),
+  //               new LeafConfig(216-33, 64.5f, 2.5f, 0, 0, 0),
+  //               new LeafConfig(216-34.5f, 69.5f, 5, 0, 0, 0),
+  //               new LeafConfig(216-47.5f, 66, 4.5f, 0, 0, 0),
+  //               new LeafConfig(216-57.5f, 74, 3.5f, 0, 0, 0),
+  //               new LeafConfig(216-60, 75.5f, 4, 0, 0, 0),
+  //               new LeafConfig(216-75, 80.5f, 2, 0, 0, 0),
+  //               new LeafConfig(216-88, 81.5f, 2, 0, 0, 0),
+  //               new LeafConfig(216-92, 82.5f, 2.5f, 0, 0, 0),
+  //               new LeafConfig(216-94, 82, 1.5f, 0, 0, 0),
+  //               new LeafConfig(216-107, 89, 1.5f, 0, 0, 0),
+  //               new LeafConfig(216-119, 82, 1.5f, 0, 0, 0),
+  //               new LeafConfig(216-120, 81.5f, 4, 0, 0, 0),
+  //               new LeafConfig(216-122.5f, 79.5f, 2, 0, 0, 0),
+  //               new LeafConfig(216-136.5f, 82.5f, 3, 0, 0, 0) ,
+  //               new LeafConfig(216-158.5f, 85.5f, 3, 0, 0, 0),
+  //               new LeafConfig(216-158.5f, 85.5f, 3, 0, 0, 0),
+  //               new LeafConfig(216-158.5f, 85.5f, 3, 0, 0, 0),
+  //               new LeafConfig(216-158.5f, 85.5f, 3, 0, 0, 0),
+  //               new LeafConfig(216-158.5f, 85.5f, 3, 0, 0, 0),
+  //               new LeafConfig(216-158.5f, 85.5f, 3, 0, 0, 0),
+  //               new LeafConfig(216-158.5f, 85.5f, 3, 0, 0, 0),
+  //               new LeafConfig(216-158.5f, 85.5f, 3, 0, 0, 0),
+		// 	}
+		// ),
 
-		new VineConfig("G1",
-			new LeafConfig[] {
-				new LeafConfig(216-0, 90, 7, 0, 0, 0),
-				new LeafConfig(216-5, 93, 5.5f, 0, 0, 0),
-				new LeafConfig(216-6.5f, 92, 7, 0, 0, 0),
-				new LeafConfig(216-14, 97.5f, 9, 0, 0, 0),
-				new LeafConfig(216-16, 100.5f, 7, 0, 0, 0),
-				new LeafConfig(216-12, 105.5f, 7.5f, 0, 0, 0),
-				new LeafConfig(216-24, 112.5f, 8, 0, 0, 0),
-				new LeafConfig(216-23, 110, 3, 0, 0, 0),
-				new LeafConfig(216-26, 109, 5.5f, 0, 0, 0),
-				new LeafConfig(216-38, 112.5f, 4.5f, 0, 0, 0),
-				new LeafConfig(216-41.5f, 106.5f, 6.5f, 0, 0, 0),
-				new LeafConfig(216-42.5f, 114.5f, 6, 0, 0, 0),
-				new LeafConfig(216-43.5f, 126.5f, 5, 0, 0, 0),
-				new LeafConfig(216-50, 128.5f, 5, 0, 0, 0),
-				new LeafConfig(216-45.5f, 133, 5.5f, 0, 0, 0),
-				new LeafConfig(216-59.5f, 139, 3, 0, 0, 0),
-				new LeafConfig(216-62.5f, 130, 3, 0, 0, 0),
-				new LeafConfig(216-65, 130.5f, 4.5f, 0, 0, 0),
-			}
-		),
+		// new VineConfig("G1",
+		// 	new LeafConfig[] {
+		// 		new LeafConfig(216-0, 90, 7, 0, 0, 0),
+		// 		new LeafConfig(216-5, 93, 5.5f, 0, 0, 0),
+		// 		new LeafConfig(216-6.5f, 92, 7, 0, 0, 0),
+		// 		new LeafConfig(216-14, 97.5f, 9, 0, 0, 0),
+		// 		new LeafConfig(216-16, 100.5f, 7, 0, 0, 0),
+		// 		new LeafConfig(216-12, 105.5f, 7.5f, 0, 0, 0),
+		// 		new LeafConfig(216-24, 112.5f, 8, 0, 0, 0),
+		// 		new LeafConfig(216-23, 110, 3, 0, 0, 0),
+		// 		new LeafConfig(216-26, 109, 5.5f, 0, 0, 0),
+		// 		new LeafConfig(216-38, 112.5f, 4.5f, 0, 0, 0),
+		// 		new LeafConfig(216-41.5f, 106.5f, 6.5f, 0, 0, 0),
+		// 		new LeafConfig(216-42.5f, 114.5f, 6, 0, 0, 0),
+		// 		new LeafConfig(216-43.5f, 126.5f, 5, 0, 0, 0),
+		// 		new LeafConfig(216-50, 128.5f, 5, 0, 0, 0),
+		// 		new LeafConfig(216-45.5f, 133, 5.5f, 0, 0, 0),
+		// 		new LeafConfig(216-59.5f, 139, 3, 0, 0, 0),
+		// 		new LeafConfig(216-62.5f, 130, 3, 0, 0, 0),
+		// 		new LeafConfig(216-65, 130.5f, 4.5f, 0, 0, 0),
+		// 	}
+		// ),
 //Last 3 of I4
 		new VineConfig("G2",
 			new LeafConfig[] {
@@ -941,43 +934,57 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(216-60, 144-7, 4, 0, 0, 0),
 				new LeafConfig(216-60.5f, 144-5, 3, 0, 0, 0),
 				new LeafConfig(216-71, 144-16, 1.5f, 0, 0, 0),
+				new LeafConfig(216-8.5f, 144-2.5f, .5f, 0, 0, 0),
+				new LeafConfig(216-13, 144-13.5f, 4, 0, 0, 0),
+				new LeafConfig(216-15.5f, 144-25, 4, 0, 0, 0),
+				new LeafConfig(216-20, 144-26.5f, 3, 0, 0, 0),
+				new LeafConfig(216-23, 144-23.5f, 7.5f, 0, 0, 0),
+				new LeafConfig(216-34.5f, 144-27.5f, 12.5f, 0, 0, 0),
+				new LeafConfig(216-37.5f, 144-21, 9, 0, 0, 0),
+				new LeafConfig(216-44.5f, 144-19, 7, 0, 0, 0),
+				new LeafConfig(216-42, 144-15, 7, 0, 0, 0),
+				new LeafConfig(216-45, 144-9.5f, 4, 0, 0, 0),
+				new LeafConfig(216-56, 144-7, 4.5f, 0, 0, 0),
+				new LeafConfig(216-60, 144-7, 4, 0, 0, 0),
+				new LeafConfig(216-60.5f, 144-5, 3, 0, 0, 0),
+				new LeafConfig(216-71, 144-16, 1.5f, 0, 0, 0),
 			}
 		),
 
-		new VineConfig("G4",
-			new LeafConfig[] {
-			    new LeafConfig(216-2, 144-37, 2.5f, 0, 0, 0),
-			    new LeafConfig(216-3, 144-39, 5, 0, 0, 0),
-			    new LeafConfig(216-5, 144-44, 4, 0, 0, 0),
-			    new LeafConfig(216-9, 144-36.5f, 3, 0, 0, 0),
-			    new LeafConfig(216-14, 144-40.5f, 2.5f, 0, 0, 0),
-			    new LeafConfig(216-14, 144-50, 6, 0, 0, 0),
-			    new LeafConfig(216-14, 144-46, 6.5f, 0, 0, 0),
-			    new LeafConfig(216-18.5f, 144-50.5f, 1.5f, 0, 0, 0),
-			    new LeafConfig(216-22, 144-56.5f, 2, 0, 0, 0),
-			    new LeafConfig(216-23, 144-58.5f, 4, 0, 0, 0),
-			    new LeafConfig(216-21, 144-52.5f, 5, 0, 0, 0),
-			    new LeafConfig(216-26, 144-53.5f, 5.5f, 0, 0, 0),
-			    new LeafConfig(216-29.5f, 144-57, 8.5f, 0, 0, 0),
-			    new LeafConfig(216-32.5f, 144-59, 7, 0, 0, 0),
-			    new LeafConfig(216-36.5f, 144-49, 8.5f, 0, 0, 0),
-			    new LeafConfig(216-38, 144-56, 9, 0, 0, 0),
-			    new LeafConfig(216-43, 144-53, 5.5f, 0, 0, 0),
-			    new LeafConfig(216-39, 144-47, 5, 0, 0, 0),
-			    new LeafConfig(216-48, 144-45, 5, 0, 0, 0),
-			    new LeafConfig(216-43, 144-40, 4, 0, 0, 0),
-			    new LeafConfig(216-51, 144-39, 7, 0, 0, 0),
-			    new LeafConfig(216-50, 144-35.5f, 4, 0, 0, 0),
-			    new LeafConfig(216-54, 144-33.5f, 6.5f, 0, 0, 0),
-			    new LeafConfig(216-59, 144-34.5f, 2, 0, 0, 0),
-			    new LeafConfig(216-60, 144-29, 3, 0, 0, 0),
-			    new LeafConfig(216-64.5f, 144-26.5f, 2.5f, 0, 0, 0),
-			    new LeafConfig(216-66.5f, 144-25.5f, 1.5f, 0, 0, 0),
-			    new LeafConfig(216-64.5f, 144-22, 4.5f, 0, 0, 0),
-			    new LeafConfig(216-70, 144-22, 2.5f, 0, 0, 0),
-			    new LeafConfig(216-71, 144-18.5f, 5, 0, 0, 0),
-			}
-		),
+		// new VineConfig("G4",
+		// 	new LeafConfig[] {
+		// 	    new LeafConfig(216-2, 144-37, 2.5f, 0, 0, 0),
+		// 	    new LeafConfig(216-3, 144-39, 5, 0, 0, 0),
+		// 	    new LeafConfig(216-5, 144-44, 4, 0, 0, 0),
+		// 	    new LeafConfig(216-9, 144-36.5f, 3, 0, 0, 0),
+		// 	    new LeafConfig(216-14, 144-40.5f, 2.5f, 0, 0, 0),
+		// 	    new LeafConfig(216-14, 144-50, 6, 0, 0, 0),
+		// 	    new LeafConfig(216-14, 144-46, 6.5f, 0, 0, 0),
+		// 	    new LeafConfig(216-18.5f, 144-50.5f, 1.5f, 0, 0, 0),
+		// 	    new LeafConfig(216-22, 144-56.5f, 2, 0, 0, 0),
+		// 	    new LeafConfig(216-23, 144-58.5f, 4, 0, 0, 0),
+		// 	    new LeafConfig(216-21, 144-52.5f, 5, 0, 0, 0),
+		// 	    new LeafConfig(216-26, 144-53.5f, 5.5f, 0, 0, 0),
+		// 	    new LeafConfig(216-29.5f, 144-57, 8.5f, 0, 0, 0),
+		// 	    new LeafConfig(216-32.5f, 144-59, 7, 0, 0, 0),
+		// 	    new LeafConfig(216-36.5f, 144-49, 8.5f, 0, 0, 0),
+		// 	    new LeafConfig(216-38, 144-56, 9, 0, 0, 0),
+		// 	    new LeafConfig(216-43, 144-53, 5.5f, 0, 0, 0),
+		// 	    new LeafConfig(216-39, 144-47, 5, 0, 0, 0),
+		// 	    new LeafConfig(216-48, 144-45, 5, 0, 0, 0),
+		// 	    new LeafConfig(216-43, 144-40, 4, 0, 0, 0),
+		// 	    new LeafConfig(216-51, 144-39, 7, 0, 0, 0),
+		// 	    new LeafConfig(216-50, 144-35.5f, 4, 0, 0, 0),
+		// 	    new LeafConfig(216-54, 144-33.5f, 6.5f, 0, 0, 0),
+		// 	    new LeafConfig(216-59, 144-34.5f, 2, 0, 0, 0),
+		// 	    new LeafConfig(216-60, 144-29, 3, 0, 0, 0),
+		// 	    new LeafConfig(216-64.5f, 144-26.5f, 2.5f, 0, 0, 0),
+		// 	    new LeafConfig(216-66.5f, 144-25.5f, 1.5f, 0, 0, 0),
+		// 	    new LeafConfig(216-64.5f, 144-22, 4.5f, 0, 0, 0),
+		// 	    new LeafConfig(216-70, 144-22, 2.5f, 0, 0, 0),
+		// 	    new LeafConfig(216-71, 144-18.5f, 5, 0, 0, 0),
+		// 	}
+		// ),
 
 		// new VineConfig("J3",
 		// 	new LeafConfig[] {
@@ -1074,10 +1081,7 @@ public class EmpireWallShow implements Show {
 			    put("E", new SimplePixlite(lx, ipAddresses.get("E")));
 			    put("F", new SimplePixlite(lx, ipAddresses.get("F")));
 			    put("G", new SimplePixlite(lx, ipAddresses.get("G")));
-			    put("H", new SimplePixlite(lx, ipAddresses.get("H")));
-			    put("I", new SimplePixlite(lx, ipAddresses.get("I")));
-			    put("J", new SimplePixlite(lx, ipAddresses.get("J")));
-			    put("K", new SimplePixlite(lx, ipAddresses.get("K")));
+
 			}};
 
 			VineModel model = (VineModel) lx.model;
