@@ -69,6 +69,11 @@ public class SLOutputWindow extends CloseableWindow {
         UI.text("alt-click any controller to send test pattern");
         UI.text("alt-shift-click any controller to momentarily blackout all outputs");
 
+        if (show instanceof SLShow){
+            int numTwigsKilled = show.allPortsPowerEnableMask.getTotalTwigsKilled();
+            UI.text(numTwigsKilled + " twigs are shutoff");
+        }
+
         boolean blackout = UI.button("blackout procedure");
 
         boolean dump = UI.button("dump metadata to file");
@@ -82,7 +87,7 @@ public class SLOutputWindow extends CloseableWindow {
 
         modelID_filter = UI.inputText("filter by controllerId or modelId", modelID_filter);
 
-        pui.draw(filterLessThanThreshhold);
+//        pui.draw(filterLessThanThreshhold);
         pui.draw(filterOnlyAboveAcceptableDarkCurrentThreshhold);
 
         if (savePortPowerPreferencesToRAM){
@@ -127,7 +132,8 @@ public class SLOutputWindow extends CloseableWindow {
                 if (broadcastPortPowerOn){
                     ((ControllerWithPowerFeedback) dc).enableAllPorts();
                 }
-                if ( filterOnlyAboveAcceptableDarkCurrentThreshhold.isOn() && ((ControllerWithPowerFeedback) dc).allPortsLessThanThreshholdDuringBlackout(filterLessThanThreshhold.getValuei()) ){
+//                if ( filterOnlyAboveAcceptableDarkCurrentThreshhold.isOn() && ((ControllerWithPowerFeedback) dc).allPortsLessThanThreshholdDuringBlackout(filterLessThanThreshhold.getValuei()) ){
+                if ( filterOnlyAboveAcceptableDarkCurrentThreshhold.isOn() && ((ControllerWithPowerFeedback) dc).allPortsLessThanThreshholdDuringBlackout(show.globalBlackoutPowerThreshhold.getValuei()) ){
                     continue;
                 }
                 if (blackout){
@@ -153,11 +159,14 @@ public class SLOutputWindow extends CloseableWindow {
                 }
             }
 
-            boolean mapped = SLShow.mapping.lookUpByControllerId(dc.humanID) != null;
+            boolean mapped = false;
+            if (SLShow.mapping != null){
+                mapped = SLShow.mapping.lookUpByControllerId(dc.humanID) != null;
+            }
+            if (mapped && onlyUnmapped.isOn()){
+                continue;
+            }
             if (mapped) {
-                if (onlyUnmapped.isOn()){
-                    continue;
-                }
                 UI.pushColor(UI.COLOR_HEADER, UIConstants.BLUE);
                 UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.BLUE);
                 UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.BLUE_HOVER);
@@ -171,12 +180,12 @@ public class SLOutputWindow extends CloseableWindow {
 //            String displayName = show.controllerInventory2.getNameByMac(dc.networkDevice.deviceId);
             UI.CollapseResult cr = UI.collapsibleSection(displayName, false);
 
+            UI.popColor(3);
             if (dc.getMacAddress() != null && UI.beginDragDropSource()) {
                 UI.setDragDropPayload("SL.CubeMacAddress", dc.getMacAddress());
                 UI.endDragDropSource();
             }
 
-            UI.popColor(3);
             // TODO:: impliment this
             dc.momentaryAltTestOutput.setValue(UI.isItemClicked(true) && UI.isAltDown());
             dc.momentaryAltShiftTestBlackout.setValue(UI.isItemClicked(true) && UI.isAltDown() && UI.isShiftDown());

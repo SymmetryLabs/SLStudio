@@ -7,8 +7,7 @@ import heronarts.lx.parameter.*;
 import org.joda.time.DateTime;
 
 
-public class Cue {
-
+public class Cue implements CueTypeAdapter {
     public final static int MAX_DURATION = 10;
 
     private static int uid_counter = 0;
@@ -18,6 +17,7 @@ public class Cue {
     public final CompoundParameter durationSec;
     public final CompoundParameter fadeTo;
     public final BoundedParameter cuedParameter;
+    public boolean isHourly = false;
     private DateTime startAt;
 
     public Cue(BoundedParameter cuedParameter) {
@@ -27,7 +27,7 @@ public class Cue {
 
         startAtStr = new StringParameter("startAt", "00:00");
         startAt = DateTime.now().withTime(0, 0, 0, 0);
-        durationMs = (CompoundParameter) new CompoundParameter("duration", 1000, 50, MAX_DURATION * 1000)
+        durationMs = (CompoundParameter) new CompoundParameter("duration", 1000, 0, MAX_DURATION * 1000)
             .setExponent(4)
             .setUnits(LXParameter.Units.MILLISECONDS);
 
@@ -72,6 +72,7 @@ public class Cue {
         obj.addProperty("startAt", startAtStr.getString());
         obj.addProperty("duration", durationMs.getValue());
         obj.addProperty("fadeTo", fadeTo.getValue());
+        obj.addProperty("type", getCueType());
         /* TODO: store cued parameter path */
     }
 
@@ -83,5 +84,10 @@ public class Cue {
 
     public DateTime getStartTime() {
         return startAt;
+    }
+
+    @Override
+    public String getCueType() {
+        return "normal";
     }
 }

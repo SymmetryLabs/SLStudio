@@ -9,7 +9,6 @@ import com.symmetrylabs.shows.tree.TreeModel;
 import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.slstudio.ui.UIOfflineRender;
 import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.util.hardware.SLControllerInventory;
 import heronarts.lx.LX;
@@ -40,6 +39,8 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
     public Integer switchPortNumber; // the physical port index which this controller is plugged to.  May be null.
     public String newControllerID = ""; // tmp holder for new controller ID to write
     public BooleanParameter isBroadcastDevice = new BooleanParameter("this is the special 10.255.255.255 device", false);
+    public BooleanParameter isLoopbackDevice = new BooleanParameter("loopback device", false);
+
     protected int numPixels;
     protected boolean is16BitColorEnabled = false;
 
@@ -182,7 +183,9 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
         PointsGrouping points = null;
 
 //        points = SLShow.getPointsMappedToControllerID(this.humanID); // returns null if we're not broadcast
-        points = SLShow.mapping.getPointsMappedToControllerID(this.humanID); // returns null if we're not broadcast
+        if (SLShow.mapping != null){
+            points = SLShow.mapping.getPointsMappedToControllerID(this.humanID); // returns null if we're not broadcast
+        }
 
         numPixels = points == null ? 0 : points.size();
 
@@ -247,7 +250,7 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
             }
 
             fillDatagramsAndAddToOutput();
-        } else if (ApplicationState.outputControl().testUnicast.isOn() || isBroadcast || ApplicationState.outputControl().testBroadcast.isOn()) {
+        } else if (ApplicationState.outputControl().testUnicast.isOn() || isBroadcast || ApplicationState.outputControl().testBroadcast.isOn() || this.isLoopbackDevice.isOn()) {
             // first get the fixture.
             SLModel model = ((SLModel) lx.model);
             if (model instanceof TreeModel){
@@ -262,7 +265,7 @@ public abstract class DiscoverableController extends LXDatagramOutput implements
                 }
             } else {
                 // WARNING!! static desperate to get tree working - change later
-//                numPixels = 1200;
+                numPixels = points.size();
 
                 numPixels = points.size();
                 initPacketData(numPixels, false);

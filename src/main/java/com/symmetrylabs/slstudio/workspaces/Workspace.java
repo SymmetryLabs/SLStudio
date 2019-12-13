@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.workspaces;
 
 import com.symmetrylabs.slstudio.SLStudioLX;
+import com.symmetrylabs.slstudio.ui.v2.UI;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.data.Project;
@@ -34,6 +35,7 @@ public class Workspace extends LXComponent {
     private final SLStudioLX.UI ui;
     private final String path;
     private final List<WorkspaceProject> projects = new ArrayList<WorkspaceProject>();
+    private UI UIv2;
     private int currentWorkspaceIndex = NO_PROJECT;
     private int successfulWorkspaceSwitches = 0;
     private long lastSwitchTime = 0;
@@ -47,6 +49,7 @@ public class Workspace extends LXComponent {
         this.lx = lx;
         this.ui = ui;
         this.path = path;
+        this.UIv2 = null; // if we're on UIv1
 
         loadProjectFiles();
         Collections.sort(projects, Comparator.comparing(WorkspaceProject::getLabel));
@@ -65,15 +68,21 @@ public class Workspace extends LXComponent {
         }
     }
 
-    /**
-     * Sets the number of OSC requests we must receive before we do a project switch.
-     *
-     * Untrustworthy OSC sources (like Vezer with an untrustworthy time code
-     * source cough cough) will sometimes send a single frame with the wrong
-     * project set in it. Shows can request that we receive the same project
-     * in a number of adjacent frames before we switch to it by setting this
-     * to something nonzero.
-     */
+    public Workspace(LX lx, UI ui, String path) {
+        this(lx, (SLStudioLX.UI) null, path);
+        this.UIv2 = ui;
+    }
+
+
+        /**
+         * Sets the number of OSC requests we must receive before we do a project switch.
+         *
+         * Untrustworthy OSC sources (like Vezer with an untrustworthy time code
+         * source cough cough) will sometimes send a single frame with the wrong
+         * project set in it. Shows can request that we receive the same project
+         * in a number of adjacent frames before we switch to it by setting this
+         * to something nonzero.
+         */
     public void setRequestsBeforeSwitch(int r) {
         requestsBeforeSwitch = r;
     }
@@ -178,24 +187,52 @@ public class Workspace extends LXComponent {
             lx.openProject(Project.createLegacyProject(workspace.getFile()));
         });
 
-        /* We set up this task to run after the next frame of the UI is rendered. It
-         * puts a permit into drawDoneLock, which allows our engine task to run, and then
-         * it waits for a permit on the loadDoneLock before it lets the UI continue.
-         * Blocking in this task blocks the whole UI, so we can ensure the project load
-         * won't smash the UI by waiting for the engine to run our task (i.e., for the
-         * project load to be done). */
-        ui.runAfterDraw(() -> {
-            drawDoneLock.release();
-            lx.engine.addTask(() -> loadDoneLock.release());
-            try {
-                loadDoneLock.acquire();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            successfulWorkspaceSwitches++;
-            System.out.println(String.format(
-                "workspace switch %d finished successfully", successfulWorkspaceSwitches));
-        });
+
+
+        // not needed for UIv2? Nope.  Concurrent modification.
+        if (ui == null){ // signifies we're using UIv2
+            t.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    /* Just a hack.  Wait a little while so that the channels don't wallop on concurrency. */
+                    {
+                        drawDoneLock.release();
+                        lx.engine.addTask(() -> loadDoneLock.release());
+                        try {
+                            loadDoneLock.acquire();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        successfulWorkspaceSwitches++;
+                        System.out.println(String.format(
+                            "workspace switch %d finished successfully", successfulWorkspaceSwitches));
+                    }
+                }
+            }, 2000);
+        }
+        else{
+
+            /* We set up this task to run after the next frame of the UI is rendered. It
+             * puts a permit into drawDoneLock, which allows our engine task to run, and then
+             * it waits for a permit on the loadDoneLock before it lets the UI continue.
+             * Blocking in this task blocks the whole UI, so we can ensure the project load
+             * won't smash the UI by waiting for the engine to run our task (i.e., for the
+             * project load to be done). */
+            ui.runAfterDraw(() -> {
+                drawDoneLock.release();
+                lx.engine.addTask(() -> loadDoneLock.release());
+                try {
+                    loadDoneLock.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                successfulWorkspaceSwitches++;
+                System.out.println(String.format(
+                    "workspace switch %d finished successfully", successfulWorkspaceSwitches));
+            });
+
+        }
+
     }
 
     private void loadProjectFiles() {
