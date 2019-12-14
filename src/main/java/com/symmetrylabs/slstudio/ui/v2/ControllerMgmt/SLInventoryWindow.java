@@ -123,7 +123,7 @@ public class SLInventoryWindow extends CloseableWindow {
             if (UI.beginDragDropTarget()) {
                 String addr = UI.acceptDragDropPayload("SL.ControllerMacAddr", String.class);
                 if (addr != null) {
-                    macAddr = addr;
+                    meta.setMacAddr(addr);
                 }
             }
             if (humanID.length() == 0) humanID = null;

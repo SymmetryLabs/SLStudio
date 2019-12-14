@@ -23,7 +23,7 @@ public class ControllerMetadata implements Comparable<ControllerMetadata>{
     Inet4Address ipAddr;
 
     MACAddress macAddr;
-    @Expose
+    @Expose // hmm... should not exist.  Should only be above macAddr
     String macAddrString;
 
     @Expose
@@ -80,5 +80,14 @@ public class ControllerMetadata implements Comparable<ControllerMetadata>{
     @Override
     public int compareTo(@NotNull ControllerMetadata o) {
         return humanID.compareTo(o.humanID);
+    }
+
+    public void setMacAddr(String addr) {
+        if(addr.length() != 17){
+            System.out.println("malformed mac addr: " + addr + " length not 17");
+        }
+        else {
+            macAddrString = addr;
+        }
     }
 }
