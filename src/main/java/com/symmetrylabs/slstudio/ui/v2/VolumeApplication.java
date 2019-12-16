@@ -208,7 +208,7 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
         WindowManager.addPersistent("OSC", () -> new OscWindow(lx), false);
         WindowManager.addPersistent("Remote Control", () -> new RemoteControlWindow(client), false);
 
-        WindowManager.addPersistent("Cue", () -> new CueWindow(lx, core.cueManager), true);
+        WindowManager.addPersistent("Cue", () -> new CueWindow(lx, core.cueManager), false);
 
         WindowManager.addPersistent("Developer/Imgui demo", SlimguiDemoWindow::new, false);
         WindowManager.addPersistent("Developer/Style editor", SlimguiStyleEditor::new, false);
