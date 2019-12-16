@@ -24,7 +24,15 @@ public class MACAddress {
      * @throws IllegalArgumentException if the string cannot be parsed as a MAC address.
      */
     public static MACAddress valueOf(String address) {
-        String[] elements = address.split("::");
+        String[] elements;
+        if (address.length() == 17){
+            elements = address.split(":");
+
+        }
+        else{
+            elements = address.split("::");
+
+        }
         if (elements.length != MAC_ADDRESS_LENGTH) {
             throw new IllegalArgumentException(
                 "Specified MAC Address must contain 12 hex digits" +
