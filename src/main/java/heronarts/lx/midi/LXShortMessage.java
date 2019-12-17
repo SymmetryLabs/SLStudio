@@ -57,11 +57,11 @@ public abstract class LXShortMessage extends ShortMessage {
 
     LXShortMessage(ShortMessage message, int command) {
         super(message.getMessage());
-        if (getCommand() != command) {
-            throw new IllegalArgumentException(
-                    "LXShortMessage constructed with command " + command
-                            + " but has actual command " + getCommand());
-        }
+    //     if (getCommand() != command) {
+    //         throw new IllegalArgumentException(
+    //                 "LXShortMessage constructed with command " + command
+    //                         + " but has actual command " + getCommand());
+    //     }
     }
 
     LXShortMessage setInput(LXMidiInput input) {

@@ -25,7 +25,7 @@ import javax.sound.midi.ShortMessage;
 public class MidiNoteOff extends MidiNote {
 
     MidiNoteOff(ShortMessage message) {
-        super(message, ShortMessage.NOTE_OFF);
+        super(message, ShortMessage.NOTE_ON);
     }
 
     @Override

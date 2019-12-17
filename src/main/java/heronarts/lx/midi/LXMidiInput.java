@@ -153,9 +153,12 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
                 switch (sm.getCommand()) {
                 case ShortMessage.NOTE_ON:
                     message = new MidiNoteOn(sm);
+                    System.out.println("NoteOnCase1");
+
                     break;
                 case ShortMessage.NOTE_OFF:
-                    message = new MidiNoteOff(sm);
+                    message = new MidiNoteOn(sm);
+                    System.out.println("NoteOffCase1");
                     break;
                 case ShortMessage.CONTROL_CHANGE:
                     message = new MidiControlChange(sm);
