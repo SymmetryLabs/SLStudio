@@ -19,11 +19,9 @@ import java.util.concurrent.TimeUnit;
 public class PaletteEffect extends SLEffect {
 
 
-    Runnable drawRunnable = new Runnable() {
-        public void run() {
             boolean isItSunset = SunsetTool.sunset();
 
-        }
+
 
 
 
