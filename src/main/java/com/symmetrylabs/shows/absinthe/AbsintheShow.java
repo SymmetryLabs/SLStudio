@@ -28,7 +28,8 @@ import heronarts.p3lx.ui.UI3dComponent;
 import static com.symmetrylabs.util.DistanceConstants.*;
 import static com.symmetrylabs.util.MathConstants.*;
 import static com.symmetrylabs.util.MathUtils.*;
-
+import com.symmetrylabs.util.NetworkChannelDebugMonitor.DebugPortMonitor;
+import com.symmetrylabs.util.NetworkChannelDebugMonitor.MachinePortMonitor;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
 import processing.core.PGraphics;
@@ -141,6 +142,11 @@ public class AbsintheShow extends TreeShow {
         super.setupLx(lx);
         TreeModel tree = (TreeModel) (lx.model);
         TreeModelingTool modeler = TreeModelingTool.getInstance(lx);
+        DebugPortMonitor debugPortMonitor = new DebugPortMonitor();
+        debugPortMonitor.start();
+
+        MachinePortMonitor machinePortMonitor = new MachinePortMonitor(this);
+        machinePortMonitor.start();
 
         System.out.println("Number of branches: " + tree.getBranches().size());
 
