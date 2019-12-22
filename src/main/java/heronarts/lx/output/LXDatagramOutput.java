@@ -167,11 +167,11 @@ public class LXDatagramOutput extends LXOutput {
                     if (datagram.destination.failureCount >= 3) {
                         int pow = Math.min(5, datagram.destination.failureCount - 3);
                         long waitFor = (long) (50 * Math.pow(2, pow));
-                        if (logConnections) {
-                            System.out.println(this.date.format(now) + " Retrying " + datagram.packet.getAddress()
-                                    + " in " + waitFor + "ms" + " (" + datagram.destination.failureCount
-                                    + " consecutive failures)");
-                        }
+//                        if (logConnections) {
+//                            System.out.println(this.date.format(now) + " Retrying " + datagram.packet.getAddress()
+//                                    + " in " + waitFor + "ms" + " (" + datagram.destination.failureCount
+//                                    + " consecutive failures)");
+//                        }
                         datagram.destination.sendAfter = now + waitFor;
                         datagram.destination.error.setValue(true);
                     }

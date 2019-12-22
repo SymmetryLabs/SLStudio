@@ -10,20 +10,20 @@ import heronarts.lx.LXLook;
 public class XfadeTimer implements LXLoopTask, CaptionSource {
     private static final double LIGHT_SHOW_MS = 1000 * 60 * 10; // 10min
     private static final double SOLID_COLOR_MS = 1000 * 60 * 30; // 30min
-    private static final double CROSSFADE_MS = 5_000;
+    private static final double FADE_MS = 5_000;
 
     private final LX lx;
     private final LXLook look;
     private boolean inLightShow = true;
     private double timeSinceLastXfade = 0;
     private long lastRunNanos;
-    private double lastXfadeValue = 0;
-    private long xfadeStartNanos;
+    private double lastAmtValue = 0;
+    private long amountStartNanos;
 
     public XfadeTimer(LX lx, SLStudioLX.UI ui) {
         this.lx = lx;
         this.look = lx.engine.getFocusedLook();
-        lastXfadeValue = look.crossfader.getValue();
+        lastAmtValue = look.crossfader.getValue();
     }
 
     @Override
@@ -34,20 +34,20 @@ public class XfadeTimer implements LXLoopTask, CaptionSource {
         timeSinceLastXfade += 1e-6 * (runNanos - lastRunNanos);
         lastRunNanos = runNanos;
 
-        double xfadeValue = look.crossfader.getValue();
-        if (Math.abs(xfadeValue - lastXfadeValue) > 0.1) {
+        double amtValue = look.crossfader.getValue();
+        if (Math.abs(amtValue - lastAmtValue) > 0.1) {
             timeSinceLastXfade = 0;
-            inLightShow = xfadeValue < 0.5;
+            inLightShow = amtValue < 0.5;
         }
-        lastXfadeValue = xfadeValue;
+        lastAmtValue = amtValue;
 
         if (timeSinceLastXfade > (inLightShow ? LIGHT_SHOW_MS : SOLID_COLOR_MS)) {
             inLightShow = !inLightShow;
-            xfadeStartNanos = runNanos;
+            amountStartNanos = runNanos;
             timeSinceLastXfade = 0;
         }
 
-        double xfade = 1e-6 * (runNanos - xfadeStartNanos) / CROSSFADE_MS;
+        double xfade = 1e-6 * (runNanos - amountStartNanos) / FADE_MS;
         if (xfade > 1) {
             xfade = 1;
         }

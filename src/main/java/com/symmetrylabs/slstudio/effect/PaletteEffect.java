@@ -4,22 +4,36 @@ import com.google.gson.JsonObject;
 import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.*;
 
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
+
+
 
 
 public class PaletteEffect extends SLEffect {
 
+    private static final double LIGHT_SHOW_MS = 1000 * 60 * 1; // 10min
+    private static final double SOLID_COLOR_MS = 1000 * 60 * 1; // 30min
+    private static final double FADE_MS = 1000 * 60 * 1;
+    private boolean inLightShow = true;
+    private double timeSinceLastXfade = 0;
+    private long lastRunNanos;
+    private double lastAmtValue = 0;
+    private long amountStartNanos;
 
-            boolean isItSunset = SunsetTool.sunset();
+    private static ScheduledExecutorService scheduler =
+        Executors.newScheduledThreadPool(1);
+
+
 
 
 
@@ -30,7 +44,7 @@ public class PaletteEffect extends SLEffect {
 
     private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
 
-    CompoundParameter amount = new CompoundParameter("Amount", 0, 0, 1);
+    static CompoundParameter amount = new CompoundParameter("Amount", 0, 0, 1);
     DiscreteParameter palette = new DiscreteParameter("Palette", paletteLibrary.getNames());
         // selected colour palette
     CompoundParameter bottom = new CompoundParameter("Bottom", 0, 0, 1);  // palette start point (fraction 0 - 1)
@@ -60,20 +74,113 @@ public class PaletteEffect extends SLEffect {
 
 
 
+    final Runnable checker = new Runnable() {
+
+
+        public void run() {
+            double getAmnt = amount.getValue();
+            double finalAmt = getAmnt;
+            final boolean isItSunset = SunsetTool.sunset();
+            if (!isItSunset){
+                System.out.println("it is not sunset time");
+                double amtValue = finalAmt;
+                double xfade = amtValue - .01;
+                if (xfade < .1) {
+                    xfade = .1;
+                }
+//
+//                long runNanos = System.nanoTime();
+//                timeSinceLastXfade += 1e-6 * (runNanos - lastRunNanos);
+//                lastRunNanos = runNanos;
+//
+//                double amtValue = finalAmt;
+//                if (Math.abs(amtValue - lastAmtValue) > 0.1) {
+//                    timeSinceLastXfade = 0;
+//                    inLightShow = amtValue < 0.5;
+//                }
+//                lastAmtValue = amtValue;
+//
+//                if (timeSinceLastXfade > (inLightShow ? LIGHT_SHOW_MS : SOLID_COLOR_MS)) {
+//                    inLightShow = !inLightShow;
+//                    amountStartNanos = runNanos;
+//                    timeSinceLastXfade = 0;
+//                }
+//
+//                double xfade = (1e-6 * (runNanos - (amountStartNanos * 1)) / FADE_MS) * -1;
+//                if (xfade > 1) {
+//                    xfade = 1;
+//                }
+//                if (inLightShow) {
+//                    xfade = 0 - (xfade * 1);
+//                }
+                PaletteEffect.amount.setValue(xfade);
+            }
+
+
+
+            else {
+                        System.out.println("it is currently sunset time");
+                        double amtValue = finalAmt;
+                        double xfade = amtValue + .01;
+                        if (xfade > 1) {
+                            xfade = 1;
+                        }
+
+//
+//                long runNanos = System.nanoTime();
+//                timeSinceLastXfade += 1e-6 * (runNanos - lastRunNanos);
+//                lastRunNanos = runNanos;
+//
+
+
+
+//                if (Math.abs(amtValue - lastAmtValue) > 0.1) {
+//                    timeSinceLastXfade = 0;
+//                    inLightShow = amtValue < 0.5;
+//                }
+//                lastAmtValue = amtValue;
+//
+//                if (timeSinceLastXfade > (inLightShow ? LIGHT_SHOW_MS : SOLID_COLOR_MS)) {
+//                    inLightShow = !inLightShow;
+//                    amountStartNanos = runNanos;
+//                    timeSinceLastXfade = 0;
+//                }
+//
+//                double xfade = 1e-6 * (runNanos - amountStartNanos) / FADE_MS;
+//                if (xfade > 1) {
+//                    xfade = 1;
+//                }
+//                if (inLightShow) {
+//                    xfade = 1 - xfade;
+//                }
+                        PaletteEffect.amount.setValue(xfade);
+            }
+
+
+
+        }
+    };
+    final ScheduledFuture<?> beeperHandle =
+        scheduler.scheduleAtFixedRate(checker, 1, 60, SECONDS);
+
+
+
+
 
 
 
     @Override
     public void run(double deltaMs, double amount) {
 
-            double amt = this.amount.getValue();
+
+        double amt = this.amount.getValue();
 
 
             if (palette.getOptions().length == 0) {
                 palette.setOptions(paletteLibrary.getNames());
             }
 
-//        double amt = this.amount.getValue();
+
             if (amt == 0) return;
 
             pal.setPalette(paletteLibrary.get(palette.getOption()));
@@ -83,14 +190,8 @@ public class PaletteEffect extends SLEffect {
             pal.setShift(shift.getValue());
             pal.setCutoff(cutoff.getValue());
 
-        if (isItSunset && sunset.getValueb()) {
-            System.out.println("its currently sunset");
 
-             amt = 1;
-        }
-            else {
-             amt = this.amount.getValue();
-        }
+
             for (int i = 0; i < colors.length; i++) {
                 int c = colors[i];
                 int a = c & 0xff000000;

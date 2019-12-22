@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1576547546504,
+  "timestamp": 1577048193112,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -737,9 +737,34 @@
                   "modulations": [],
                   "triggers": []
                 }
+              },
+              {
+                "id": 1140,
+                "class": "com.symmetrylabs.slstudio.effect.PaletteEffect",
+                "modulationColor": -11861761,
+                "parameters": {
+                  "label": "Palette",
+                  "expandedInUi": true,
+                  "enabled": true,
+                  "Amount": 0.0,
+                  "Palette": 0,
+                  "Bottom": 0.0,
+                  "Top": 1.0,
+                  "Shift": 0.0,
+                  "Bias": 0.0,
+                  "Cutoff": 0.0,
+                  "Alpha": false,
+                  "Sunset": false
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                },
+                "paletteName": "astro1"
               }
             ],
-            "patternIndex": 2,
+            "patternIndex": 0,
             "patterns": [
               {
                 "id": 940,
@@ -1010,7 +1035,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16749825,
+          "modulationColor": -16711771,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -1689,7 +1714,7 @@
         "609": true
       },
       "preview": {
-        "radius": 239.01242038095805,
+        "radius": 195.80869855979836,
         "theta": 0.05400000000000019,
         "phi": -0.11699999999999995,
         "positionX": 127.50000762939453,
