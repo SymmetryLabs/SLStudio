@@ -85,8 +85,8 @@ public class PaletteEffect extends SLEffect {
                 System.out.println("it is not sunset time");
                 double amtValue = finalAmt;
                 double xfade = amtValue - .01;
-                if (xfade < .1) {
-                    xfade = .1;
+                if (xfade < 0) {
+                    xfade = 0;
                 }
 //
 //                long runNanos = System.nanoTime();
@@ -161,7 +161,7 @@ public class PaletteEffect extends SLEffect {
         }
     };
     final ScheduledFuture<?> beeperHandle =
-        scheduler.scheduleAtFixedRate(checker, 1, 60, SECONDS);
+        scheduler.scheduleAtFixedRate(checker, 1, 5, SECONDS);
 
 
 
