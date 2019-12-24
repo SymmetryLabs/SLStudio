@@ -94,27 +94,43 @@ public class SunsetTool {
                 }
 
 
+                try {
+                    Date sunSetOffset = new Date(String.valueOf(dateFormat.parse(sunSetTime(responseContent.toString()))));
+                    dateFormat.format(sunSetOffset);
+                    dateFormat.format(time);
+                    sunSetOffset.setMinutes(sunSetOffset.getMinutes() - 45);
+
+                    Date sunSetEndOffset = new Date(String.valueOf(dateFormat.parse(sunSetTime(responseContent.toString()))));
+                    dateFormat.format(sunSetEndOffset);
+                    sunSetOffset.setMinutes(sunSetEndOffset.getMinutes() - 45);
 
 
 
-
-                dateFormat.format(time);
-                System.out.println("Todays current time: " + dateFormat.format(time));
+                    System.out.println("Todays current time: " + dateFormat.format(time));
                 // Check to see if the current time falls within the sunset time
                 try {
-                    if (dateFormat.parse(dateFormat.format(time)).after(dateFormat.parse(sunSetTime(responseContent.toString())))
-                        &&  dateFormat.parse(dateFormat.format(time)).before(dateFormat.parse(sunSetEnd(responseContent.toString()))))
+                    if (dateFormat.parse(dateFormat.format(time)).after(dateFormat.parse(dateFormat.format(sunSetOffset)))
+                        &&  dateFormat.parse(dateFormat.format(time)).before(dateFormat.parse(dateFormat.format(sunSetEndOffset))))
                     {
                         System.out.println("Current time is during Sunset Today");
+                        System.out.println("Sunset offset is " + dateFormat.format(sunSetOffset));
+                        System.out.println("Sunset End offset is " + dateFormat.format(sunSetEndOffset));
+
                         return true;
                     } else {
                         System.out.println("Current time is not during Sunset Today");
+                        System.out.println("Sunset offset is " + dateFormat.format(sunSetOffset));
+                        System.out.println("Sunset End offset is " + dateFormat.format(sunSetEndOffset));
+
+
                         return false;
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
 
 
