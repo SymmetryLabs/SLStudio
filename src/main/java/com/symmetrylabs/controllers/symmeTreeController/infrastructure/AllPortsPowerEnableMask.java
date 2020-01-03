@@ -49,7 +49,7 @@ public class AllPortsPowerEnableMask {
         Byte portMask;
         portMask = portMaskByControllerHumanID.get(controller.getHumanId());
         if (portMask!=null){
-            controller.setPortPowerMask(portMask);
+            //controller.setPortPowerMask(portMask);
         }
     }
 

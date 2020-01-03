@@ -1,1 +1,1 @@
-{"cues":[{"startAt":"17:00","duration":10000.0,"fadeTo":1.0},{"startAt":"04:00","duration":10000.0,"fadeTo":0.0}]}
+{"cues":[{"showName":"christmas","startAt":"18:00","duration":100.0,"fadeTo":0.0,"type":"vezer"},{"showName":"christmas","startAt":"19:00","duration":100.0,"fadeTo":0.0,"type":"vezer"},{"startAt":"17:00","duration":4078.9999961853027,"fadeTo":0.8142857188358903,"type":"normal"},{"startAt":"22:00","duration":4984.000205993652,"fadeTo":0.0,"type":"normal"}]}

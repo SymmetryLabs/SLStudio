@@ -14,7 +14,8 @@ import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.slstudio.output.SimplePixlite;
 import heronarts.lx.LX;
 import heronarts.lx.transform.LXTransform;
-
+import heronarts.lx.LXLoopTask;
+import heronarts.lx.LXChannel;
 import java.net.SocketException;
 
 
@@ -227,6 +228,21 @@ public class BanyanShow extends TreeShow {
 
         starLite.enabled.setValue(true);
         lx.addOutput(starLite);
+
+       lx.engine.addLoopTask(new LXLoopTask() {
+           @Override
+           public void loop(double v) {
+                for (LXChannel channel : lx.engine.getChannels()) {
+                    if (channel.fader.getValue() == 0) {
+                        channel.enabled.setValue(false);
+                    } else {
+                        if (!channel.enabled.isOn()) {
+                            channel.enabled.setValue(true);
+                        }
+                    }
+                }
+           }
+        });
 
     }
 
