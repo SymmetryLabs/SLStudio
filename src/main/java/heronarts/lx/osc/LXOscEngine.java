@@ -658,7 +658,11 @@ public class LXOscEngine extends LXComponent {
             this.listenerSnapshot.addAll(this.listeners);
             for (OscMessage message : this.engineThreadEventQueue) {
                 for (LXOscListener listener : this.listenerSnapshot) {
-                    listener.oscMessage(message);
+                    try {
+                        listener.oscMessage(message);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

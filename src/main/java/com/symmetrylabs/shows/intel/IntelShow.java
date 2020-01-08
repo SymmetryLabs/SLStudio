@@ -18,6 +18,8 @@ import heronarts.lx.osc.OscMessage;
 import java.io.IOException;
 import java.net.SocketException;
 
+import static java.lang.Thread.sleep;
+
 /**
  * This file implements the mapping functions needed to lay out the cubes.
  */
@@ -186,9 +188,9 @@ public static final String SHOW_NAME = "intel";
     public void setupLx(final LX lx) {
 
         final int INTEL_OSC_PORT = 8585;
-        
+
         try {
-            lx.engine.osc.receiver(INTEL_OSC_PORT).addListener(new IntelOscListener());
+            lx.engine.osc.receiver(INTEL_OSC_PORT).addListener(new IntelOscListener(lx));
         } catch (SocketException sx) {
             throw new RuntimeException(sx);
         }
@@ -196,8 +198,29 @@ public static final String SHOW_NAME = "intel";
     }
 
     private static class IntelOscListener implements LXOscListener {
+
+        private final LX lx;
+
+//        public IntelOscListener(LX lx, SLStudioLX.UI ui) {
+//            this.lx = lx;
+//        }
+
+        public IntelOscListener(LX lx) {
+
+            this.lx = lx;
+        }
+
+
         public void oscMessage(OscMessage message) {
             // this will trigger on any osc message received
+            String oscString = String.valueOf(message);
+//            lx.engine.crossfader.setValue(1);
+            System.out.println(oscString);
+            if (oscString.equals("/pattern/1 1")) {
+                System.out.println("OSC MESSASAGE");
+                lx.engine.crossfader.setValue(1);
+
+            }
         }
     }
 
