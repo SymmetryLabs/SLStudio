@@ -1136,6 +1136,20 @@
     },
     {
       "networkDevice": {
+        "ipAddress": "10.125.41.3",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "42:31:06:7D:29:03",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "378",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
         "ipAddress": "10.46.44.19",
         "productId": "symmeTree",
         "versionId": "rev8",
@@ -1423,6 +1437,20 @@
     },
     {
       "networkDevice": {
+        "ipAddress": "10.109.121.87",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "65:49:0C:6D:79:57",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "557",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
         "ipAddress": "10.114.14.39",
         "productId": "symmeTree",
         "versionId": "rev10",
@@ -1573,6 +1601,20 @@
         ]
       },
       "humanID": "B270",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.240.188.55",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "65:52:0C:F0:BC:37",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "424",
       "switchPort": -1
     },
     {
@@ -2221,6 +2263,20 @@
     },
     {
       "networkDevice": {
+        "ipAddress": "10.125.191.7",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "67:49:0A:7D:BF:07",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "563",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
         "ipAddress": "10.174.143.7",
         "productId": "symmeTree",
         "versionId": "rev8",
@@ -2543,6 +2599,20 @@
     },
     {
       "networkDevice": {
+        "ipAddress": "10.18.28.135",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "70:70:00:12:1C:87",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "391",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
         "ipAddress": "10.29.152.145",
         "productId": "symmeTree",
         "versionId": "rev10",
@@ -2609,6 +2679,20 @@
         ]
       },
       "humanID": "B238",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.71.200.231",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "71:49:00:47:C8:E7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "464",
       "switchPort": -1
     },
     {
@@ -2851,6 +2935,20 @@
     },
     {
       "networkDevice": {
+        "ipAddress": "10.148.250.113",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "72:80:00:94:FA:71",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "393",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
         "ipAddress": "10.129.62.183",
         "productId": "symmeTree",
         "versionId": "rev8",
@@ -2921,6 +3019,20 @@
     },
     {
       "networkDevice": {
+        "ipAddress": "10.44.189.7",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "75:51:0F:2C:BD:07",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "386",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
         "ipAddress": "10.51.227.87",
         "productId": "symmeTree",
         "versionId": "rev10",
@@ -2949,6 +3061,20 @@
     },
     {
       "networkDevice": {
+        "ipAddress": "10.236.152.39",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "75:51:0F:EC:98:27",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "478",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
         "ipAddress": "10.236.190.55",
         "productId": "symmeTree",
         "versionId": "rev8",
@@ -2959,6 +3085,20 @@
         ]
       },
       "humanID": "B293",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.254.253.151",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "75:67:0C:FE:FD:97",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "401",
       "switchPort": -1
     },
     {
@@ -3663,6 +3803,34 @@
     },
     {
       "networkDevice": {
+        "ipAddress": "10.220.138.103",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "78:67:0B:DC:8A:67",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "405",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.252.53.119",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "78:67:0B:FC:35:77",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "389",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
         "ipAddress": "10.79.104.199",
         "productId": "symmeTree",
         "versionId": "rev8",
@@ -3985,6 +4153,20 @@
     },
     {
       "networkDevice": {
+        "ipAddress": "10.163.123.247",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "80:49:03:A3:7B:F7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "392",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
         "ipAddress": "10.175.147.7",
         "productId": "symmeTree",
         "versionId": "rev8",
@@ -4037,6 +4219,34 @@
         ]
       },
       "humanID": "R467",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.132.221.71",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "80:50:03:84:DD:47",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "542",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.153.208.55",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "80:50:03:99:D0:37",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "390",
       "switchPort": -1
     },
     {
@@ -5525,6 +5735,20 @@
     },
     {
       "networkDevice": {
+        "ipAddress": "10.88.15.247",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "84:48:0D:58:0F:F7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "377",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
         "ipAddress": "10.155.163.151",
         "productId": "symmeTree",
         "versionId": "rev10",
@@ -5563,6 +5787,20 @@
         ]
       },
       "humanID": "396",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.163.120.199",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "84:49:0F:A3:78:C7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "399",
       "switchPort": -1
     },
     {
@@ -6295,6 +6533,20 @@
     },
     {
       "networkDevice": {
+        "ipAddress": "10.13.167.65",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "86:75:0D:0D:A7:41",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "546",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
         "ipAddress": "10.111.70.113",
         "productId": "symmeTree",
         "versionId": "rev10",
@@ -6361,6 +6613,20 @@
         ]
       },
       "humanID": "R547",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.237.168.215",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "87:49:0D:ED:A8:D7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "409",
       "switchPort": -1
     },
     {
@@ -6627,6 +6893,20 @@
         ]
       },
       "humanID": "B217",
+      "switchPort": -1
+    },
+    {
+      "networkDevice": {
+        "ipAddress": "10.28.75.247",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "88:48:08:1C:4B:F7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "451",
       "switchPort": -1
     },
     {
@@ -8409,6 +8689,20 @@
       "humanID": "B213",
       "switchPort": -1
     },
+    "42:31:06:7D:29:03": {
+      "networkDevice": {
+        "ipAddress": "10.125.41.3",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "42:31:06:7D:29:03",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "378",
+      "switchPort": -1
+    },
     "46:31:0A:2E:2C:13": {
       "networkDevice": {
         "ipAddress": "10.46.44.19",
@@ -8696,6 +8990,20 @@
       "humanID": "R484",
       "switchPort": -1
     },
+    "65:49:0C:6D:79:57": {
+      "networkDevice": {
+        "ipAddress": "10.109.121.87",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "65:49:0C:6D:79:57",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "557",
+      "switchPort": -1
+    },
     "65:49:0C:72:0E:27": {
       "networkDevice": {
         "ipAddress": "10.114.14.39",
@@ -8848,6 +9156,20 @@
         ]
       },
       "humanID": "B270",
+      "switchPort": -1
+    },
+    "65:52:0C:F0:BC:37": {
+      "networkDevice": {
+        "ipAddress": "10.240.188.55",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "65:52:0C:F0:BC:37",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "424",
       "switchPort": -1
     },
     "65:52:0F:80:5F:47": {
@@ -9494,6 +9816,20 @@
       "humanID": "R606",
       "switchPort": -1
     },
+    "67:49:0A:7D:BF:07": {
+      "networkDevice": {
+        "ipAddress": "10.125.191.7",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "67:49:0A:7D:BF:07",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "563",
+      "switchPort": -1
+    },
     "67:49:0A:AE:8F:07": {
       "networkDevice": {
         "ipAddress": "10.174.143.7",
@@ -9816,6 +10152,20 @@
       "humanID": "629",
       "switchPort": -1
     },
+    "70:70:00:12:1C:87": {
+      "networkDevice": {
+        "ipAddress": "10.18.28.135",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "70:70:00:12:1C:87",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "391",
+      "switchPort": -1
+    },
     "70:80:00:1D:98:91": {
       "networkDevice": {
         "ipAddress": "10.29.152.145",
@@ -9884,6 +10234,20 @@
         ]
       },
       "humanID": "B238",
+      "switchPort": -1
+    },
+    "71:49:00:47:C8:E7": {
+      "networkDevice": {
+        "ipAddress": "10.71.200.231",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "71:49:00:47:C8:E7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "464",
       "switchPort": -1
     },
     "71:49:00:95:AC:A7": {
@@ -10124,6 +10488,20 @@
       "humanID": "R434",
       "switchPort": -1
     },
+    "72:80:00:94:FA:71": {
+      "networkDevice": {
+        "ipAddress": "10.148.250.113",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "72:80:00:94:FA:71",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "393",
+      "switchPort": -1
+    },
     "75:49:0C:81:3E:B7": {
       "networkDevice": {
         "ipAddress": "10.129.62.183",
@@ -10194,6 +10572,20 @@
       "humanID": "302",
       "switchPort": -1
     },
+    "75:51:0F:2C:BD:07": {
+      "networkDevice": {
+        "ipAddress": "10.44.189.7",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "75:51:0F:2C:BD:07",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "386",
+      "switchPort": -1
+    },
     "75:51:0F:33:E3:57": {
       "networkDevice": {
         "ipAddress": "10.51.227.87",
@@ -10222,6 +10614,20 @@
       "humanID": "309",
       "switchPort": -1
     },
+    "75:51:0F:EC:98:27": {
+      "networkDevice": {
+        "ipAddress": "10.236.152.39",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "75:51:0F:EC:98:27",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "478",
+      "switchPort": -1
+    },
     "75:51:0F:EC:BE:37": {
       "networkDevice": {
         "ipAddress": "10.236.190.55",
@@ -10234,6 +10640,20 @@
         ]
       },
       "humanID": "B293",
+      "switchPort": -1
+    },
+    "75:67:0C:FE:FD:97": {
+      "networkDevice": {
+        "ipAddress": "10.254.253.151",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "75:67:0C:FE:FD:97",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "401",
       "switchPort": -1
     },
     "75:75:0C:A4:B4:01": {
@@ -10936,6 +11356,34 @@
       "humanID": "R568",
       "switchPort": -1
     },
+    "78:67:0B:DC:8A:67": {
+      "networkDevice": {
+        "ipAddress": "10.220.138.103",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "78:67:0B:DC:8A:67",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "405",
+      "switchPort": -1
+    },
+    "78:67:0B:FC:35:77": {
+      "networkDevice": {
+        "ipAddress": "10.252.53.119",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "78:67:0B:FC:35:77",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "389",
+      "switchPort": -1
+    },
     "78:70:09:4F:68:C7": {
       "networkDevice": {
         "ipAddress": "10.79.104.199",
@@ -11258,6 +11706,20 @@
       "humanID": "R567",
       "switchPort": -1
     },
+    "80:49:03:A3:7B:F7": {
+      "networkDevice": {
+        "ipAddress": "10.163.123.247",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "80:49:03:A3:7B:F7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "392",
+      "switchPort": -1
+    },
     "80:49:03:AF:93:07": {
       "networkDevice": {
         "ipAddress": "10.175.147.7",
@@ -11312,6 +11774,34 @@
         ]
       },
       "humanID": "R467",
+      "switchPort": -1
+    },
+    "80:50:03:84:DD:47": {
+      "networkDevice": {
+        "ipAddress": "10.132.221.71",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "80:50:03:84:DD:47",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "542",
+      "switchPort": -1
+    },
+    "80:50:03:99:D0:37": {
+      "networkDevice": {
+        "ipAddress": "10.153.208.55",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "80:50:03:99:D0:37",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "390",
       "switchPort": -1
     },
     "80:50:03:9E:58:27": {
@@ -12798,6 +13288,20 @@
       "humanID": "348",
       "switchPort": -1
     },
+    "84:48:0D:58:0F:F7": {
+      "networkDevice": {
+        "ipAddress": "10.88.15.247",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "84:48:0D:58:0F:F7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "377",
+      "switchPort": -1
+    },
     "84:48:0E:9B:A3:97": {
       "networkDevice": {
         "ipAddress": "10.155.163.151",
@@ -12838,6 +13342,20 @@
         ]
       },
       "humanID": "396",
+      "switchPort": -1
+    },
+    "84:49:0F:A3:78:C7": {
+      "networkDevice": {
+        "ipAddress": "10.163.120.199",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "84:49:0F:A3:78:C7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "399",
       "switchPort": -1
     },
     "84:51:0C:0A:31:37": {
@@ -13568,6 +14086,20 @@
       "humanID": "625",
       "switchPort": -1
     },
+    "86:75:0D:0D:A7:41": {
+      "networkDevice": {
+        "ipAddress": "10.13.167.65",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "86:75:0D:0D:A7:41",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "546",
+      "switchPort": -1
+    },
     "86:75:0D:6F:46:71": {
       "networkDevice": {
         "ipAddress": "10.111.70.113",
@@ -13636,6 +14168,20 @@
         ]
       },
       "humanID": "R547",
+      "switchPort": -1
+    },
+    "87:49:0D:ED:A8:D7": {
+      "networkDevice": {
+        "ipAddress": "10.237.168.215",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "87:49:0D:ED:A8:D7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "409",
       "switchPort": -1
     },
     "87:49:0E:6C:59:A7": {
@@ -13902,6 +14448,20 @@
         ]
       },
       "humanID": "B217",
+      "switchPort": -1
+    },
+    "88:48:08:1C:4B:F7": {
+      "networkDevice": {
+        "ipAddress": "10.28.75.247",
+        "productId": "symmeTree",
+        "versionId": "rev10",
+        "deviceId": "88:48:08:1C:4B:F7",
+        "featureIds": [
+          "powerManager",
+          "tree_rgb8"
+        ]
+      },
+      "humanID": "451",
       "switchPort": -1
     },
     "88:48:08:1D:8D:17": {
