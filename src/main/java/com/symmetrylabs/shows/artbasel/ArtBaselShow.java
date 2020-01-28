@@ -49,84 +49,84 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 
             new TowerConfig(SP*0, 0, SP*0, new String[][]{new String[] {"204", "1084"}}),
             new TowerConfig(SP*1, 0, SP*.75f, new String[][]{new String[] {"5410ecf48d2f", "1305"}}),
-            new TowerConfig(SP*1.75f, 0, SP*1.75f, new String[][]{new String[] {"919", "910"}, new String[] {"919", "910"}}),
+            new TowerConfig(SP*1.75f, 0, SP*1.75f, new String[][]{new String[] {"571", "570"}, new String[] {"1067", "1066"}}),
             // //Gap between cubes
 
             // //Cubes zig zag back to front
             // //1
-            new TowerConfig(SP*(1.75f+1.5f), 0, SP*(1.75f+1f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f), 0, SP*(1.75f+1f), new String[][]{new String[] {"873", "872"}}),
             // //Next cube left to right closest to downstage
             // //2
-            new TowerConfig(SP*(1.75f+1.5f+.75f), 0, SP*(1.75f+1f-1.25f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f), 0, SP*(1.75f+1f-1.25f), new String[][]{new String[] {"1100", "1102"}}),
             // //Next cube to the right behind
             // //3
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f), 0, SP*(1.75f+1f-1.25f+1f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f), 0, SP*(1.75f+1f-1.25f+1f), new String[][]{new String[] {"475", "474"}}),
             // //4
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f), 0, SP*(1.75f+1f-1.25f+1f-1f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f), 0, SP*(1.75f+1f-1.25f+1f-1f), new String[][]{new String[] {"1221", "1220"}}),
             // //5
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f), new String[][]{new String[] {"953", "1110"}}),
             // //6
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f), new String[][]{new String[] {"781", "780"}}),
             // //GAP between cubes(small)
 
             // //7
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f), new String[][]{new String[] {"775", "774"}}),
             // //8
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f), new String[][]{new String[] {"773", "772"}}),
 
             // //GAP between cubes(large)
 
             // //Cubes zig zag back to front
             // //1
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f), new String[][]{new String[] {"919", "910"}, new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f), new String[][]{new String[] {"1192", "1317"}, new String[] {"575", "1189"}}),
             // //2
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f), 0,     SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f), new String[][]{new String[] {"919", "910"}, new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f), 0,     SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f), new String[][]{new String[] {"1216", "1219"}, new String[] {"1363", "1228"}}),
             //3
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+.5f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+.5f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f), new String[][]{new String[] {"765", "764"}}),
             //4
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+.5f+1f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.5f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+.5f+1f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.5f), new String[][]{new String[] {"771", "770"}}),
             //5
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+.5f+1f+.25f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.5f+2), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+.5f+1f+.25f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.5f+2), new String[][]{new String[] {"1053", "1062"}}),
             //6
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+.5f+1f+.25f+.9f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.5f+2f-1.5f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+.5f+1f+.25f+.9f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.5f+2f-1.5f), new String[][]{new String[] {"975", "489"}}),
 
             //FAR RIGHT 3 BACK TO FRONT
             //7
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+.5f+1f+.25f+.9f+.6f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.5f+2f-1.5f+1.5f), new String[][]{new String[] {"919", "910"}}),
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+.5f+1f+.25f+.9f+.6f+.5f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.5f+2f-1.5f+1.5f-1f), new String[][]{new String[] {"919", "910"}}),
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+.5f+1f+.25f+.9f+.6f+.5f+.1f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.5f+2f-1.5f+1.5f-1f-1.5f), new String[][]{new String[] {"919", "910"}, new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+.5f+1f+.25f+.9f+.6f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.5f+2f-1.5f+1.5f), new String[][]{new String[] {"415", "1050"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+.5f+1f+.25f+.9f+.6f+.5f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.5f+2f-1.5f+1.5f-1f), new String[][]{new String[] {"928", "918"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+.5f+1f+.25f+.9f+.6f+.5f+.1f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.5f+2f-1.5f+1.5f-1f-1.5f), new String[][]{new String[] {"591", "1056"}, new String[] {"957", "1226"}}),
 
 //LAYER 1.5
             //CUBE SPLITTIGN ON THE FAR LEFT
-            new TowerConfig(SP*(1.75f+1f+.75f-1f), SP*1.5f, SP*(1.75f+.25f-1.1f-.2f), new String[][]{new String[] {"204", "1084"}}),
+            new TowerConfig(SP*(1.75f+1f+.75f-1f), SP*1.5f, SP*(1.75f+.25f-1.1f-.2f), new String[][]{new String[] {"723", "196"}}),
             //CUBE SPLITTING NEAR THE MIDDLE GAP
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f-1f), SP*1.5f,     SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f-.5f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f-1f), SP*1.5f,     SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f-.5f), new String[][]{new String[] {"498", "831"}}),
 
 
 //LAYER 2
             //1
-            new TowerConfig(SP*(.75f), SP*1, SP*(.75f), new String[][]{new String[] {"204", "1084"}}),
+            new TowerConfig(SP*(.75f), SP*1, SP*(.75f), new String[][]{new String[] {"572", "806"}}),
             //2
             //STRAIGHT TOWER (ALREADY MAPPED ABOVE)
             // new TowerConfig(SP*1.75f, 0, SP*1.75f, new String[][]{new String[] {"919", "910"}, new String[] {"919", "910"}}),
             //3
-            new TowerConfig(SP*(1.75f+1f), SP*1, SP*(1.75f+.25f), new String[][]{new String[] {"204", "1084"}}),
+            new TowerConfig(SP*(1.75f+1f), SP*1, SP*(1.75f+.25f), new String[][]{new String[] {"971", "974"}}),
             //4
-            new TowerConfig(SP*(1.75f+1f+.75f), SP*1, SP*(1.75f+.25f-1.1f), new String[][]{new String[] {"204", "1084"}}),
+            new TowerConfig(SP*(1.75f+1f+.75f), SP*1, SP*(1.75f+.25f-1.1f), new String[][]{new String[] {"741", "740"}}),
             //5
-            new TowerConfig(SP*(1.75f+1f+.75f+.25f), SP*1, SP*(1.75f+.25f-1.1f+1.1f), new String[][]{new String[] {"204", "1084"}}),
+            new TowerConfig(SP*(1.75f+1f+.75f+.25f), SP*1, SP*(1.75f+.25f-1.1f+1.1f), new String[][]{new String[] {"827", "826"}}),
             //6
-            new TowerConfig(SP*(1.75f+1f+.75f+.25f+1f), SP*1, SP*(1.75f+.25f-1.1f+1.1f-1f), new String[][]{new String[] {"204", "1084"}}),
+            new TowerConfig(SP*(1.75f+1f+.75f+.25f+1f), SP*1, SP*(1.75f+.25f-1.1f+1.1f-1f), new String[][]{new String[] {"143", "150"}}),
             //7
-            new TowerConfig(SP*(1.75f+1f+.75f+.25f+1f+.1f), SP*1, SP*(1.75f+.25f-1.1f+1.1f-1f+1f), new String[][]{new String[] {"204", "1084"}}),
+            new TowerConfig(SP*(1.75f+1f+.75f+.25f+1f+.1f), SP*1, SP*(1.75f+.25f-1.1f+1.1f-1f+1f), new String[][]{new String[] {"583", "582"}}),
             //8
-            new TowerConfig(SP*(1.75f+1f+.75f+.25f+1f+.1f+1f), SP*1, SP*(1.75f+.25f-1.1f+1.1f-1f+1f-2f), new String[][]{new String[] {"204", "1084"}}),
+            new TowerConfig(SP*(1.75f+1f+.75f+.25f+1f+.1f+1f), SP*1, SP*(1.75f+.25f-1.1f+1.1f-1f+1f-2f), new String[][]{new String[] {"361", "1007"}}),
             //9
-            new TowerConfig(SP*(1.75f+1f+.75f+.25f+1f+.1f+1f+.5f), SP*1, SP*(1.75f+.25f-1.1f+1.1f-1f+1f-2f+2f), new String[][]{new String[] {"204", "1084"}}),
+            new TowerConfig(SP*(1.75f+1f+.75f+.25f+1f+.1f+1f+.5f), SP*1, SP*(1.75f+.25f-1.1f+1.1f-1f+1f-2f+2f), new String[][]{new String[] {"609", "608"}}),
             //10
-            new TowerConfig(SP*(1.75f+1f+.75f+.25f+1f+.1f+1f+.5f+.7f), SP*1, SP*(1.75f+.25f-1.1f+1.1f-1f+1f-2f+2f-1f), new String[][]{new String[] {"204", "1084"}}),
+            new TowerConfig(SP*(1.75f+1f+.75f+.25f+1f+.1f+1f+.5f+.7f), SP*1, SP*(1.75f+.25f-1.1f+1.1f-1f+1f-2f+2f-1f), new String[][]{new String[] {"1012", "1039"}}),
             //11
-            new TowerConfig(SP*(1.75f+1f+.75f+.25f+1f+.1f+1f+.5f+.7f+.5f), SP*1, SP*(1.75f+.25f-1.1f+1.1f-1f+1f-1f+2f-2f+1f), new String[][]{new String[] {"204", "1084"}}),
+            new TowerConfig(SP*(1.75f+1f+.75f+.25f+1f+.1f+1f+.5f+.7f+.5f), SP*1, SP*(1.75f+.25f-1.1f+1.1f-1f+1f-1f+2f-2f+1f), new String[][]{new String[] {"1354", "1355"}}),
 
 
 
@@ -139,13 +139,13 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
             //STRAIGHT TOWER (ALREADY MAPPED ABOVE)
             //new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f), 0,     SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f), new String[][]{new String[] {"919", "910"}, new String[] {"919", "910"}}),
             //3
-            new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f),SP*1,SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f),SP*1,SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f), new String[][]{new String[] {"1339", "1340"}}),
             //4
-            new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f+.75f),SP*1,      SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.25f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f+.75f),SP*1,      SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.25f), new String[][]{new String[] {"654", "1083"}}),
             //5
-            new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f+.75f+.5f) ,SP*1, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.25f+2f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f+.75f+.5f) ,SP*1, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.25f+2f), new String[][]{new String[] {"1302", "1303"}}),
             //6
-            new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f+.75f+.5f+.75f) ,SP*1, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.25f+2f-1.25f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f+.75f+.5f+.75f) ,SP*1, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.25f+2f-1.25f), new String[][]{new String[] {"531", "983"}}),
             //7
             //STRAIGHT TOWERALREADY MAPPED ABOVE
             //new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+.5f+1f+.25f+.9f+.6f+.5f+.1f), 0, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-1.5f+2f-1.5f+1.5f-1f-1.5f), new String[][]{new String[] {"919", "910"}, new String[] {"919", "910"}}),
@@ -153,56 +153,56 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 
 //LAYER 3   
             //1
-            new TowerConfig(SP*(1.75f+.6f), SP*2, SP*(1.75f+.1f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+.6f), SP*2, SP*(1.75f+.1f), new String[][]{new String[] {"977", "1024"}}),
             //2
-            new TowerConfig(SP*(1.75f+.6f+1.1f), SP*2, SP*(1.75f+.1f+1f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+.6f+1.1f), SP*2, SP*(1.75f+.1f+1f), new String[][]{new String[] {"567", "566"}}),
             //3
-            new TowerConfig(SP*(1.75f+.6f+1.1f+1.25f), SP*2,    SP*(1.75f+.1f+1f-.5f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+.6f+1.1f+1.25f), SP*2,    SP*(1.75f+.1f+1f-.5f), new String[][]{new String[] {"1325", "1326"}}),
             //4
-            new TowerConfig(SP*(1.75f+.6f+1.1f+1.25f+1f), SP*2, SP*(1.75f+.1f+1f-.5f-.5f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+.6f+1.1f+1.25f+1f), SP*2, SP*(1.75f+.1f+1f-.5f-.5f), new String[][]{new String[] {"517", "1314"}}),
             //5
-            new TowerConfig(SP*(1.75f+.6f+1.1f+1.25f+1f+.5f), SP*2, SP*(1.75f+.1f+1f-.5f-.5f+1f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+.6f+1.1f+1.25f+1f+.5f), SP*2, SP*(1.75f+.1f+1f-.5f-.5f+1f), new String[][]{new String[] {"813", "812"}}),
             //6
-            new TowerConfig(SP*(1.75f+.6f+1.1f+1.25f+1f+.5f+1.1f), SP*2, SP*(1.75f+.1f+1f-.5f-.5f+1f-.5f-.1F), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+.6f+1.1f+1.25f+1f+.5f+1.1f), SP*2, SP*(1.75f+.1f+1f-.5f-.5f+1f-.5f-.1F), new String[][]{new String[] {"1367", "1368"}}),
 
 
             //BIG GAP
 
             //1
             //TOWER OF 3
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f-.1f), SP*2,        SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-.75f+.1f), new String[][]{new String[] {"919", "910"}, new String[] {"919", "910"}, new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f-.1f), SP*2,        SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-.75f+.1f), new String[][]{new String[] {"553", "552"}, new String[] {"849", "919"}, new String[] {"1249", "1123"}}),
             //2
             //SLIGHTLY LOWER TO THE LEFT OF THE TOWER OF 3
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f-.1f-1f), SP*1.85f, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-.75f+.1f+.1f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f-.1f-1f), SP*1.85f, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-.75f+.1f+.1f), new String[][]{new String[] {"942", "930"}}),
             //3
             //2ND CUBE ON THE DOUBLED UP TOWER TO THE RIGHT OF THE TOWER OF 3
 
-            new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f),SP*2,SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f),SP*2,SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f), new String[][]{new String[] {"1238", "1237"}}),
 
             //4
             //TOWER OF TWO TO THE RIGHT
-            new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f+1f),SP*2,SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-.1f), new String[][]{new String[] {"919", "910"}, new String[] {"919", "910"}}),
+            new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f+1f),SP*2,SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-.1f), new String[][]{new String[] {"906", "913"}, new String[] {"751", "750"}}),
 
             //5
-            new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f+1f+.1f),SP*2,SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-.1f-1.5f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f+1f+.1f),SP*2,SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-.1f-1.5f), new String[][]{new String[] {"1030", "1040"}}),
 
 
 //LAYER 3.5
             //FAR RIGHT TOWER THAT SPLITS THE TOWER OF 2
-            new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f+1f+.1f+1f),SP*2.5F,SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-.1f-1.5f-.6f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f+1f+.1f+1f),SP*2.5F,SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-.1f-1.5f-.6f), new String[][]{new String[] {"1126", "111353"}}),
             //SPLITTER CUBETO THE RIGHT AND SLIGHTLY IN FRONT OF THE TOWER OF 3
-            new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f+1f+.1f+1f-1.5f),SP*2.5F,SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-.1f-1.5f-.6f-.4f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f+1f+.1f+1f-1.5f),SP*2.5F,SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-.1f-1.5f-.6f-.4f), new String[][]{new String[] {"529", "528"}}),
 
 //LAYER 4
 
             //FAR LEFT CUBE
-            new TowerConfig(SP*(1.75f+.6f+.5f), SP*3, SP*(1.75f+.1f+.1f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+.6f+.5f), SP*3, SP*(1.75f+.1f+.1f), new String[][]{new String[] {"140", "1134"}}),
             //MIDDLE CUBE 2ND OF THE TOWER OF 2
-            new TowerConfig(SP*(1.75f+.6f+1.1f+1.25f), SP*3,    SP*(1.75f+.1f+1f-.5f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+.6f+1.1f+1.25f), SP*3,    SP*(1.75f+.1f+1f-.5f), new String[][]{new String[] {"1037", "1038"}}),
             //CUBE TO THE RIGHT OF THE SIGN
-            new TowerConfig(SP*(1.75f+.6f+1.1f+1.25f+2f), SP*3,    SP*(1.75f+.1f+1f-.5f+.1f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+.6f+1.1f+1.25f+2f), SP*3,    SP*(1.75f+.1f+1f-.5f+.1f), new String[][]{new String[] {"1072", "1073"}}),
             //CUBE TO THE RIGHT OF THE MIDDLE OF THE TOWER OF 3
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f-.1f+1.6f), SP*3, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-.75f+.1f+.2f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f-.1f+1.6f), SP*3, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-.75f+.1f+.2f), new String[][]{new String[] {"449", "448"}}),
 
             //CUBE TO THE RIGHT DOUBLE STACKED
             //ALREADY MAPPED
@@ -210,11 +210,11 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 //LAYER 5
 
             //LEFT OF THE TOWER OF 2
-            new TowerConfig(SP*(1.75f+.6f+1.1f+1.25f+2f-1f), SP*4,    SP*(1.75f+.1f+1f-.5f+.1f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+.6f+1.1f+1.25f+2f-1f), SP*4,    SP*(1.75f+.1f+1f-.5f+.1f), new String[][]{new String[] {"637", "1057"}}),
             //2nd CUBE OF TOWER OF 2
-            new TowerConfig(SP*(1.75f+.6f+1.1f+1.25f+2f), SP*4,    SP*(1.75f+.1f+1f-.5f+.1f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+.6f+1.1f+1.25f+2f), SP*4,    SP*(1.75f+.1f+1f-.5f+.1f), new String[][]{new String[] {"1343", "1344"}}),
             //CUBE TO THE RIGHT OF THE TOWER OF 3
-            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f-.1f+1F), SP*4, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-.75f+.1f+.2f), new String[][]{new String[] {"919", "910"}}),
+            new TowerConfig(SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f-.1f+1F), SP*4, SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-.75f+.1f+.2f), new String[][]{new String[] {"1081", "972"}}),
 
 
 
