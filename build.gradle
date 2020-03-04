@@ -119,7 +119,7 @@ dependencies {
 	implementation "com.aparapi:aparapi-jni:1.1.3-20180211.063116-7"
 
 	// https://github.com/SymmetryLabs/aparapi
-	implementation 'com.github.SymmetryLabs:aparapi:b6fffad'
+	implementation files('libs/aparapi-b6fffad.jar')
 
 	implementation 'com.fazecast:jSerialComm:[2.0.0,3.0.0)'
 
