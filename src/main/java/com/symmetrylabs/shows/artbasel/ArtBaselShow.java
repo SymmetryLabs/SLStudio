@@ -52,15 +52,15 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 
             //Piano Cubes
             new TowerConfig(SP*0, SP*1, SP*0, new String[][]{new String[] {"5410ecf53264", "5410ecf50358"}}), 
-            new TowerConfig(SP*1, SP*1.5f, SP*.5f, new String[][]{new String[] {"5410ecf50358", "824"}}), 
+            new TowerConfig(SP*1, SP*1.5f, SP*.5f, new String[][]{new String[] {"824", "825"}}), 
             new TowerConfig(SP*1.75f, SP*2.5f, 0, new String[][]{new String[] {"140", "5410ecfdb7c6"}}), 
             new TowerConfig(SP*2f, SP*1.5f, 0, new String[][]{new String[] {"928", "5410ecf53264"}}), 
-            new TowerConfig(SP*3f, SP*2f, SP*-.5f, new String[][]{new String[] {"5410ecf50358", "5410ecf53264"}}), 
+            new TowerConfig(SP*3f, SP*2f, SP*-.5f, new String[][]{new String[] {"5410ecf50358", "489"}}), 
             new TowerConfig(SP*4f, SP*1.5f, SP*-1, new String[][]{new String[] {"5410ecf50358", "5410ecf53264"}}), 
-            new TowerConfig(SP*3.5f, SP*1.5f,SP* -2, new String[][]{new String[] {"5410ecf50358", "5410ecf53264"}}), 
+            new TowerConfig(SP*3.5f, SP*1.5f,SP* -2, new String[][]{new String[] {"826", "827"}}), 
             new TowerConfig(SP*3.5f, SP*.5f,SP* -2, new String[][]{new String[] {"567", "566"}}), 
-            new TowerConfig(SP*3.5f, SP*.5f,SP* -2, new String[][]{new String[] {"5410ecf50358", "5410ecf53264"}}), 
-            new TowerConfig(SP*3.5f, SP*.5f, SP* -3, new String[][]{new String[] {"5410ecf50358", "636"}}), 
+            new TowerConfig(SP*3.5f, SP*-.5f,SP* -2, new String[][]{new String[] {"806", "5410ecf53264"}}), 
+            new TowerConfig(SP*3.5f, SP*.5f, SP* -3, new String[][]{new String[] {"0", "614"}}), 
 
 
 
