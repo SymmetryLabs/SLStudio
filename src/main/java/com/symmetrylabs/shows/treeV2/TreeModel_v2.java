@@ -23,8 +23,8 @@ public class TreeModel_v2 extends TreeModel {
 	public final List<Twig> twigs2;
 	public final List<Leaf> leaves2;
 
-	public TreeModel_v2(TreeConfig config) {
-		super("oslo", new Fixture(config));
+	public TreeModel_v2(String id, TreeConfig config) {
+		super(id, new Fixture(config));
 
 		Fixture f = (Fixture) this.fixtures.get(0);
 		this.limbs2 = Collections.unmodifiableList(f.limbs);

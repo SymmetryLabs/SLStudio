@@ -298,7 +298,7 @@ public class OsloShow extends SLShow implements HasWorkspace {
     private Workspace workspace;
 
     public TreeModel_v2 buildModel() {
-        return new TreeModel_v2(new TreeConfig(LIMB_CONFIGS));
+        return new TreeModel_v2(SHOW_NAME, new TreeConfig(LIMB_CONFIGS));
     }
 
     public void setupLx(final LX lx) {
