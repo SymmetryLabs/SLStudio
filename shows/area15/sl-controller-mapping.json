@@ -1,0 +1,177 @@
+{
+  "assignments": [
+    {
+      "modelId": "L5-0-B3",
+      "humanID": "C448"
+    },
+    {
+      "modelId": "L0-B1",
+      "humanID": "C453"
+    },
+    {
+      "modelId": "L0-B2",
+      "humanID": "C445"
+    },
+    {
+      "modelId": "L1-0-B3",
+      "humanID": "C522"
+    },
+    {
+      "modelId": "L1-0-B4",
+      "humanID": "C477"
+    },
+    {
+      "modelId": "L1-0-B5",
+      "humanID": "C431"
+    },
+    {
+      "modelId": "L2-1-B1",
+      "humanID": "C475"
+    },
+    {
+      "modelId": "L2-0-B1",
+      "humanID": "C436"
+    },
+    {
+      "modelId": "L2-0-B2",
+      "humanID": "C426"
+    },
+    {
+      "modelId": "L2-0-B3",
+      "humanID": "C421"
+    },
+    {
+      "modelId": "L2-0-B4",
+      "humanID": "C429"
+    },
+    {
+      "modelId": "L2-0-B5",
+      "humanID": "C492"
+    },
+    {
+      "modelId": "L2-1-B2",
+      "humanID": "C460"
+    },
+    {
+      "modelId": "L2-1-B3",
+      "humanID": "C479"
+    },
+    {
+      "modelId": "L2-1-B4",
+      "humanID": "C425"
+    },
+    {
+      "modelId": "L1-1-B1",
+      "humanID": "C450"
+    },
+    {
+      "modelId": "L1-1-B3",
+      "humanID": "C474"
+    },
+    {
+      "modelId": "L1-1-B4",
+      "humanID": "C455"
+    },
+    {
+      "modelId": "L2-2-B3",
+      "humanID": "C381"
+    },
+    {
+      "modelId": "L2-2-B4",
+      "humanID": "C452"
+    },
+    {
+      "modelId": "L3-B1",
+      "humanID": "C402"
+    },
+    {
+      "modelId": "L3-B2",
+      "humanID": "C439"
+    },
+    {
+      "modelId": "L3-B3",
+      "humanID": "C438"
+    },
+    {
+      "modelId": "L3-B4",
+      "humanID": "C449"
+    },
+    {
+      "modelId": "L4-B1",
+      "humanID": "C458"
+    },
+    {
+      "modelId": "L4-B2",
+      "humanID": "C443"
+    },
+    {
+      "modelId": "L4-B3",
+      "humanID": "C509"
+    },
+    {
+      "modelId": "L5-1-B2",
+      "humanID": "C420"
+    },
+    {
+      "modelId": "L5-1-B3",
+      "humanID": "C385"
+    },
+    {
+      "modelId": "L5-1-B4",
+      "humanID": "C540"
+    },
+    {
+      "modelId": "L5-2-B1",
+      "humanID": "C533"
+    },
+    {
+      "modelId": "L5-2-B2",
+      "humanID": "C375"
+    },
+    {
+      "modelId": "L5-2-B3",
+      "humanID": "C465"
+    },
+    {
+      "modelId": "L5-2-B4",
+      "humanID": "C459"
+    },
+    {
+      "modelId": "L1-0-B1",
+      "humanID": "C514"
+    },
+    {
+      "modelId": "L1-1-B2",
+      "humanID": "72:49:01:53:1A:C7"
+    },
+    {
+      "modelId": "L5-1-B1",
+      "humanID": "C428"
+    },
+    {
+      "modelId": "L1-0-B2",
+      "humanID": "85:48:0F:F5:7E:E7"
+    },
+    {
+      "modelId": "L4-B4",
+      "humanID": "80:50:03:BE:BC:57"
+    },
+    {
+      "modelId": "L2-2-B2",
+      "humanID": "77:50:0A:B1:EE:D7"
+    },
+    {
+      "modelId": "L5-0-B1",
+      "humanID": "C483"
+    },
+    {
+      "modelId": "L2-2-B1",
+      "humanID": "C469"
+    },
+    {
+      "modelId": "L5-0-B2",
+      "humanID": "C456"
+    }
+  ],
+  "showName": "area15"
+}
