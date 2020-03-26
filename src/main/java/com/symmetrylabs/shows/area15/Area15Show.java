@@ -8,7 +8,6 @@ import com.symmetrylabs.shows.treeV2.LimbConfig;
 import com.symmetrylabs.shows.treeV2.TreeConfig;
 import com.symmetrylabs.shows.treeV2.TreeModel_v2;
 import com.symmetrylabs.slstudio.SLStudioLX;
-import com.symmetrylabs.slstudio.workspaces.Workspace;
 import com.symmetrylabs.util.NetworkChannelDebugMonitor.DebugPortMonitor;
 import com.symmetrylabs.util.NetworkChannelDebugMonitor.MachinePortMonitor;
 import heronarts.lx.LX;
@@ -16,7 +15,7 @@ import heronarts.lx.LXLoopTask;
 import heronarts.lx.transform.LXMatrix;
 
 
-public class Area15Show extends SLShow implements HasWorkspace {
+public class Area15Show extends SLShow {
     public static final String SHOW_NAME = "area15";
 
     final LimbConfig[] LIMB_CONFIGS = new LimbConfig[] {
@@ -115,8 +114,6 @@ public class Area15Show extends SLShow implements HasWorkspace {
         )
     };
 
-    private Workspace workspace;
-
     public TreeModel_v2 buildModel() {
         return new TreeModel_v2(SHOW_NAME, new TreeConfig(LIMB_CONFIGS));
     }
@@ -139,23 +136,14 @@ public class Area15Show extends SLShow implements HasWorkspace {
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
-        workspace = new Workspace(lx, ui, "shows/area15");
-        workspace.setRequestsBeforeSwitch(2);
     }
 
     public void setupUi(LX lx){
         super.setupUi(lx);
-        workspace = new Workspace(lx, (SLStudioLX.UI) null, "shows/area15");
-        workspace.setRequestsBeforeSwitch(2);
     }
 
     @Override
     public String getShowName() {
         return SHOW_NAME;
-    }
-
-    @Override
-    public Workspace getWorkspace() {
-        return workspace;
     }
 }
