@@ -238,7 +238,7 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 //             //5
 //             new TowerConfig  (SP*(1.75f+1.5f+.75f+.25f+.8f+.5f+.9f+.9f+1.1f+1.75f+.5f+1f+1f+.1f),SP*2,SP*(1.75f+1f-1.25f+1f-1f+1f-1.25f+1.25f-.5f+.1f-1.25f+1.1f-.1f-1.5f), new String[][]{new String[] {"1030", "1040"}}),
 
->>>>>>> 658b30fcf0819636a487e792431af035bbe4cc56
+
 
 
 
