@@ -22,7 +22,9 @@ public class DemoShow extends CubesShow implements Show {
     static final float globalRotationY = 0;
     static final float globalRotationZ = 0;
 
-    static final int SP = 26;
+    static final int SP = 34;
+    static final int SPR = 26;
+
 
     static final TowerConfig[] TOWER_CONFIG = {
 
@@ -31,11 +33,29 @@ public class DemoShow extends CubesShow implements Show {
     	//1084 top 204 bottom of top cube
 
 
-        // group 1
+        
+    //Bottom Row
+    new TowerConfig(SP * 0, 0, SP * 0, 0, -45, 0, new String[] {"329"}),
+    new TowerConfig(SP * 1, 0, SP * 0, 0, -45, 0, new String[] {"61"}),
+    new TowerConfig(SP * 2, 0, SP * 0, 0, -45, 0, new String[] {"1117"}),
+    new TowerConfig(SP * 3, 0, SP * 0, 0, -45, 0, new String[] {"188"}),
+    new TowerConfig(SP * 4, 0, SP * 0, 0, -45, 0, new String[] {"337"}),
+    new TowerConfig(SP * 5, 0, SP * 0, 0, -45, 0, new String[] {"1119"}),
 
-    new TowerConfig(SP * 0, 0, SP * 0, 0, -45, 0, new String[] {"39", "71"}),
-    new TowerConfig(SP * 1.5f, SP*2, SP * 0, 0, -45, 0, new String[] {"422"}),
-    new TowerConfig(SP * 2.5f, 0, SP * 0, 0, -45, 0, new String[] {"120", "35"}),
+    //Middle Row
+    new TowerConfig(SP * 0.5f, SPR*1, SP * 0, 0, -45, 0, new String[] {"412"}),
+    new TowerConfig(SP * 1.5f, SPR*1, SP * 0, 0, -45, 0, new String[] {"326"}),
+    new TowerConfig(SP * 2.5f, SPR*1, SP * 0, 0, -45, 0, new String[] {"5410ecf67aeb"}),
+    new TowerConfig(SP * 3.5f, SPR*1, SP * 0, 0, -45, 0, new String[] {"31"}),
+    new TowerConfig(SP * 4.5f, SPR*1, SP * 0, 0, -45, 0, new String[] {"5410ecf48d34"}),
+
+    new TowerConfig(SP * 1, SPR*2, SP * 0, 0, -45, 0, new String[] {"128"}),
+    new TowerConfig(SP * 2, SPR*2, SP * 0, 0, -45, 0, new String[] {"123"}),
+    new TowerConfig(SP * 3, SPR*2, SP * 0, 0, -45, 0, new String[] {"1008"}),
+    new TowerConfig(SP * 4, SPR*2, SP * 0, 0, -45, 0, new String[] {"38"}),
+
+
+    new TowerConfig(SP * 2.5f, SPR*1, SP * 0, 0, -45, 0, new String[] {"157"}),
 
 
 
