@@ -39,6 +39,7 @@ public abstract class LXMidiSurface implements LXMidiListener {
     private static LXMidiOutput findOutput(LXMidiEngine engine, String description) {
         for (LXMidiOutput output : engine.outputs) {
             if (output.getDescription().contains(description)) {
+
                 return output;
             }
         }
@@ -70,14 +71,18 @@ public abstract class LXMidiSurface implements LXMidiListener {
         this.lx = lx;
         this.input = input;
         this.output = output;
+        input.open();
+        output.open();
+        input.addListener(LXMidiSurface.this);
         this.enabled.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
-                if (enabled.isOn()) {
+                if (!enabled.isOn()) {
+                    input.removeListener(LXMidiSurface.this);
+
+                } else {
                     input.open();
                     output.open();
                     input.addListener(LXMidiSurface.this);
-                } else {
-                    input.removeListener(LXMidiSurface.this);
                 }
                 onEnable(enabled.isOn());
             }
