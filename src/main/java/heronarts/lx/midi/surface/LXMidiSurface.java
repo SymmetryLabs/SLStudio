@@ -63,7 +63,7 @@ public abstract class LXMidiSurface implements LXMidiListener {
     protected final LXMidiOutput output;
 
     public final BooleanParameter enabled =
-        new BooleanParameter("Enabled")
+        new BooleanParameter("Enabled", true)
         .setDescription("Whether the control surface is enabled");
 
     protected LXMidiSurface(LX lx, final LXMidiInput input, final LXMidiOutput output) {
