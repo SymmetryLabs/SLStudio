@@ -31,6 +31,7 @@ import heronarts.lx.LXComponent;
 import heronarts.lx.LXMappingEngine;
 import heronarts.lx.LXModulationEngine;
 import heronarts.lx.audio.BandGate;
+import heronarts.lx.midi.surface.APC40Mk2;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.MacroKnobs;
 import heronarts.lx.modulator.MultiStageEnvelope;
@@ -51,6 +52,8 @@ import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import heronarts.p3lx.ui.studio.modulation.UIComponentModulator;
 import heronarts.p3lx.ui.studio.osc.UIOscManager;
 import processing.core.PGraphics;
+
+import static heronarts.lx.midi.surface.APC40Mk2.*;
 
 public class UIRightPane extends UIPane {
 
@@ -75,7 +78,6 @@ public class UIRightPane extends UIPane {
         this.lx = lx;
         this.modulation = this.sections[0];
         this.midi = this.sections[1];
-
         buildMidiUI();
         buildModulationUI();
     }

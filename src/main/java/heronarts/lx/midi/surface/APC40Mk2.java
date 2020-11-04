@@ -437,7 +437,7 @@ public class APC40Mk2 extends LXMidiSurface {
     }
 
     @Override
-    protected void onEnable(boolean on) {
+    public void onEnable(boolean on) {
         setApcMode(on ? ABLETON_ALTERNATE_MODE : GENERIC_MODE);
         if (on) {
             initialize();
@@ -467,7 +467,7 @@ public class APC40Mk2 extends LXMidiSurface {
         });
     }
 
-    private void initialize() {
+    public void initialize() {
         this.output.sendNoteOn(0, BANK, this.bankOn ? LED_ON : LED_OFF);
         for (int i = 0; i < CHANNEL_KNOB_NUM; ++i) {
             sendControlChange(0, CHANNEL_KNOB_STYLE+i, LED_STYLE_OFF);
@@ -579,7 +579,7 @@ public class APC40Mk2 extends LXMidiSurface {
 
     private boolean registered = false;
 
-    private void register() {
+    public void register() {
         if (this.registered) {
             for (LXChannel channel : this.lx.engine.channels) {
                 channel.controlSurfaceFocusLength.setValue(CLIP_LAUNCH_ROWS);

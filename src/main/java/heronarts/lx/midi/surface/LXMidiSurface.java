@@ -71,9 +71,11 @@ public abstract class LXMidiSurface implements LXMidiListener {
         this.lx = lx;
         this.input = input;
         this.output = output;
+
         input.open();
         output.open();
         input.addListener(LXMidiSurface.this);
+
         this.enabled.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
                 if (!enabled.isOn()) {
@@ -87,14 +89,13 @@ public abstract class LXMidiSurface implements LXMidiListener {
                 onEnable(enabled.isOn());
             }
         });
-
     }
 
     public String getDescription() {
         return this.input.getDescription();
     }
 
-    protected void onEnable(boolean isOn) {}
+    public void onEnable(boolean isOn) {}
 
     protected void sendNoteOn(int channel, int note, int velocity) {
         if (this.enabled.isOn()) {

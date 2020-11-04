@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1604477571497,
+  "timestamp": 1604485289120,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -12,7 +12,7 @@
       "scene-3": false,
       "scene-4": false,
       "scene-5": false,
-      "crossfader": 0.937007874015748,
+      "crossfader": 0.9763779527559056,
       "crossfaderBlendMode": 0,
       "speed": 0.4251968503937008,
       "focusedChannel": 0,
@@ -191,7 +191,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -204,7 +204,7 @@
         "warps": [],
         "effects": [],
         "clips": [],
-        "patternIndex": 3,
+        "patternIndex": 0,
         "patterns": [
           {
             "id": 772,
