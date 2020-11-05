@@ -254,7 +254,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
     public final BoundedParameter speed =
             new BoundedParameter("Speed", 1, 0, 2)
-                    .setDescription("Overall speed adjustement to all components in this channel");
+                    .setDescription("Overall speed adjustment to all components in this channel");
 
     public final BooleanParameter editorVisible =
             new BooleanParameter("EditorVisible", false)
@@ -262,6 +262,8 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
     private final List<LXPattern> mutablePatterns = new ArrayList<LXPattern>();
     public final List<LXPattern> patterns = Collections.unmodifiableList(mutablePatterns);
+
+    public static final List<LXPattern> allPatterns = new ArrayList<LXPattern>();
 
     /**
      * A local buffer used for transition blending and effects on this channel
@@ -374,6 +376,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     @Override
     public void onParameterChanged(LXParameter p) {
         if (p == this.autoCycleEnabled) {
+//            System.out.println(allPatterns);
             if (this.transition == null) {
                 this.transitionMillis = this.lx.engine.nowMillis;
             }
@@ -493,6 +496,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     public final LXChannel addPattern(LXPattern pattern) {
         pattern.setChannel(this);
         pattern.setModel(this.model);
+        allPatterns.add(pattern);
         this.mutablePatterns.add(pattern);
         LXUtils.updateIndexes(mutablePatterns);
         this.focusedPattern.setRange(this.mutablePatterns.size());
@@ -504,6 +508,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         if (this.mutablePatterns.size() == 1) {
             this.focusedPattern.bang();
         }
+
         return this;
     }
 
@@ -643,6 +648,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         if (this.nextPatternIndex < 0) {
             this.nextPatternIndex = this.mutablePatterns.size() - 1;
         }
+        System.out.println("goPrev");
         startTransition();
         return this;
     }
@@ -658,6 +664,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         } while ((this.nextPatternIndex != this.activePatternIndex)
                 && !getNextPattern().isAutoCycleEligible());
         if (this.nextPatternIndex != this.activePatternIndex) {
+            System.out.println("goNext");
             startTransition();
         }
         return this;
@@ -674,6 +681,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         return this;
     }
 
+    //==============---------------This selects the pattern to change to based on index-----------=====================
     public final LXBus goIndex(int i) {
         if (i < 0 || i >= this.mutablePatterns.size()) {
             return this;
@@ -682,6 +690,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             finishTransition();
         }
         this.nextPatternIndex = i;
+        System.out.println("GoIndex");
         startTransition();
         return this;
     }
@@ -721,9 +730,13 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         return this.transitionProgress;
     }
 
+
+//==============---------------This method changes the pattern-----------=====================
+
     private void startTransition() {
         LXPattern activePattern = getActivePattern();
         LXPattern nextPattern = getNextPattern();
+        System.out.println(nextPattern);
         if (activePattern == nextPattern || activePattern == null || nextPattern == null) {
             return;
         }

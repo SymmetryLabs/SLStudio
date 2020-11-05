@@ -66,6 +66,7 @@ import java.util.Queue;
 
 import static heronarts.lx.LXChannel.CrossfadeGroup.A;
 import static heronarts.lx.LXChannel.CrossfadeGroup.B;
+import static heronarts.lx.LXChannel.allPatterns;
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
@@ -1106,6 +1107,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             for (Runnable runnable : this.engineThreadTaskQueue) {
                 runnable.run();
             }
+
+            System.out.println(allPatterns);
         }
 
         // The main work: run patterns, blend channels, send to outputs.

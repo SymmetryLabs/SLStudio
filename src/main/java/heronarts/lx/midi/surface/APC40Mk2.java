@@ -149,8 +149,17 @@ public class APC40Mk2 extends LXMidiSurface {
     public static final int LED_MODE_PULSE = 10;
     public static final int LED_MODE_BLINK = 15;
 
+    public static final int ALL_EFFECTS_OFF = 81;
+    public static final int GLOBAL_PALLETE = 82;
+    public static final int STROBE = 83;
+    public static final int LSD = 84;
+    public static final int XMASK = 85;
+    public static final int YMASK = 86;
+
+
     private boolean shiftOn = false;
     private boolean bankOn = true;
+    private boolean panOn = false;
 
     private final Map<LXChannel, ChannelListener> channelListeners = new HashMap<LXChannel, ChannelListener>();
 
@@ -530,7 +539,7 @@ public class APC40Mk2 extends LXMidiSurface {
             int midiChannel = LED_MODE_PRIMARY;
             int color = LED_OFF;
             if (y == activeIndex) {
-                color = 60;
+                color = 20;
             } else if (y == nextIndex) {
                 sendNoteOn(LED_MODE_PRIMARY, note, 60);
                 midiChannel = LED_MODE_PULSE;
@@ -669,7 +678,89 @@ public class APC40Mk2 extends LXMidiSurface {
         int pitch = note.getPitch();
 
         // Global toggle messages
+
+        System.out.println(pitch);
+
         switch (pitch) {
+
+
+
+            case 91: {
+                if (on) {
+
+                    sendNoteOn(0, pitch, lx.tempo.enabled.isOn() ? LED_ON : LED_OFF);
+                    this.bankOn = !this.bankOn;
+                    sendNoteOn(note.getChannel(), BANK, this.bankOn ? LED_ON : LED_OFF);
+                    sendChannelGrid();
+                }
+            }
+
+        case GLOBAL_PALLETE:
+                if (on) {
+//                    this.globalPalleteOn = !this.globalPalleteOn;
+//                    sendNoteOn(LED_MODE_PULSE, pitch, 20);
+                }
+                else {
+//                    sendNoteOn(LED_MODE_BLINK, pitch, LED_OFF);
+
+                }
+
+
+        case STROBE:
+                if (on) {
+//                    this.globalPalleteOn = !this.globalPalleteOn;
+//                    sendNoteOn(LED_MODE_BLINK, pitch, 20);
+                }
+                else {
+//                    sendNoteOn(LED_MODE_BLINK, pitch, LED_OFF);
+
+                }
+
+        case LSD:
+                if (on) {
+//                    this.globalPalleteOn = !this.globalPalleteOn;
+//                    sendNoteOn(LED_MODE_BLINK, pitch, 20);
+                }
+                else {
+//                    sendNoteOn(LED_MODE_BLINK, pitch, LED_OFF);
+
+                }
+        case XMASK:
+                if (on) {
+//                    this.globalPalleteOn = !this.globalPalleteOn;
+//                    sendNoteOn(LED_MODE_BLINK, pitch, 20);
+                }
+                else {
+//                    sendNoteOn(LED_MODE_BLINK, pitch, LED_OFF);
+
+                }
+
+        case YMASK:
+                if (on) {
+//                    this.globalPalleteOn = !this.globalPalleteOn;
+                    sendNoteOn(LED_MODE_BLINK, pitch, 20);
+                }
+                else {
+                    sendNoteOn(LED_MODE_BLINK, pitch, LED_OFF);
+
+                }
+        case ALL_EFFECTS_OFF:
+                if (on) {
+                    sendNoteOn(LED_MODE_BLINK, GLOBAL_PALLETE, LED_OFF);
+                    sendNoteOn(LED_MODE_BLINK, STROBE, LED_OFF);
+                    sendNoteOn(LED_MODE_BLINK, LSD, LED_OFF);
+                    sendNoteOn(LED_MODE_BLINK, XMASK, LED_OFF);
+                    sendNoteOn(LED_MODE_BLINK, YMASK, LED_OFF);
+
+                }
+
+
+        case PAN:
+            if (on) {
+                this.panOn = !this.panOn;
+                sendNoteOn(note.getChannel(), pitch, this.panOn ? LED_ON : LED_OFF);
+                System.out.println("pan on");
+            }
         case SHIFT:
             this.shiftOn = on;
             return;
@@ -697,6 +788,7 @@ public class APC40Mk2 extends LXMidiSurface {
         }
 
         // Global momentary light-up buttons
+
         switch (pitch) {
         case CLIP_STOP:
         case SCENE_LAUNCH:
