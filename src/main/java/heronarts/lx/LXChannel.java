@@ -20,6 +20,7 @@
 
 package heronarts.lx;
 
+import com.jogamp.common.util.ArrayHashSet;
 import heronarts.lx.blend.LXBlend;
 import heronarts.lx.clip.LXChannelClip;
 import heronarts.lx.clip.LXClip;
@@ -36,9 +37,8 @@ import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.parameter.ObjectParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.pattern.SolidColorPattern;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
+import java.util.*;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -263,7 +263,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     private final List<LXPattern> mutablePatterns = new ArrayList<LXPattern>();
     public final List<LXPattern> patterns = Collections.unmodifiableList(mutablePatterns);
 
-    public static final List<LXPattern> allPatterns = new ArrayList<LXPattern>();
+    public static final Map<String, LXPattern> allPatterns = new HashMap<String, LXPattern>();
 
     /**
      * A local buffer used for transition blending and effects on this channel
@@ -326,7 +326,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
     ;
 
-    LXChannel(LX lx, int index, LXPattern[] patterns) {
+    public LXChannel(LX lx, int index, LXPattern[] patterns) {
         super(lx, "Channel-" + (index + 1));
         this.index = index;
         this.label.setDescription("The name of this channel");
@@ -376,7 +376,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     @Override
     public void onParameterChanged(LXParameter p) {
         if (p == this.autoCycleEnabled) {
-//            System.out.println(allPatterns);
             if (this.transition == null) {
                 this.transitionMillis = this.lx.engine.nowMillis;
             }
@@ -496,7 +495,9 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     public final LXChannel addPattern(LXPattern pattern) {
         pattern.setChannel(this);
         pattern.setModel(this.model);
-        allPatterns.add(pattern);
+        String patternString = pattern.toString();
+        System.out.println(patternString);
+        allPatterns.put(patternString, pattern);
         this.mutablePatterns.add(pattern);
         LXUtils.updateIndexes(mutablePatterns);
         this.focusedPattern.setRange(this.mutablePatterns.size());
@@ -648,7 +649,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         if (this.nextPatternIndex < 0) {
             this.nextPatternIndex = this.mutablePatterns.size() - 1;
         }
-        System.out.println("goPrev");
         startTransition();
         return this;
     }
@@ -664,7 +664,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         } while ((this.nextPatternIndex != this.activePatternIndex)
                 && !getNextPattern().isAutoCycleEligible());
         if (this.nextPatternIndex != this.activePatternIndex) {
-            System.out.println("goNext");
             startTransition();
         }
         return this;
@@ -681,6 +680,8 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         return this;
     }
 
+
+
     //==============---------------This selects the pattern to change to based on index-----------=====================
     public final LXBus goIndex(int i) {
         if (i < 0 || i >= this.mutablePatterns.size()) {
@@ -690,7 +691,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             finishTransition();
         }
         this.nextPatternIndex = i;
-        System.out.println("GoIndex");
         startTransition();
         return this;
     }
@@ -736,7 +736,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     private void startTransition() {
         LXPattern activePattern = getActivePattern();
         LXPattern nextPattern = getNextPattern();
-        System.out.println(nextPattern);
         if (activePattern == nextPattern || activePattern == null || nextPattern == null) {
             return;
         }

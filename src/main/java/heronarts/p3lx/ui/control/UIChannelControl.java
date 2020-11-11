@@ -81,7 +81,6 @@ public class UIChannelControl extends UIWindow {
 
     public UIChannelControl(UI ui, LXChannel channel, String label, int numKnobs, float x, float y) {
         super(ui, label, x, y, WIDTH, BASE_HEIGHT + KNOB_ROW_HEIGHT * (numKnobs / KNOBS_PER_ROW));
-
         this.channel = channel;
         int yp = TITLE_LABEL_HEIGHT;
 

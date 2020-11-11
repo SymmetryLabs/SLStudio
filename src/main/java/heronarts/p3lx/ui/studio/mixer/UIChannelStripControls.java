@@ -124,6 +124,7 @@ public class UIChannelStripControls extends UIMixerStripControls {
             new UIButton(bxp, yp, 28, 16) {
                 @Override
                 public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+                    System.out.println(channel);
                     super.onMousePressed(mouseEvent, mx, my);
                     if (channel.cueActive.isOn()) {
                         if (!mouseEvent.isShiftDown() && !mouseEvent.isMetaDown()) {

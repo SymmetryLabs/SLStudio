@@ -45,6 +45,7 @@ public class HHGardenShow implements Show, HasWorkspace, UIFlowerTool.Listener, 
         updatePixlites(lx, (FlowersModel) lx.model);
         lx.engine.addListener(this);
         for (LXChannel c : lx.engine.channels) {
+            System.out.println("is this working " + c);
             c.autoDisable.setValue(true);
         }
     }

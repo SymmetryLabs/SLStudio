@@ -164,6 +164,424 @@ public class LXOscEngine extends LXComponent {
         public void oscMessage(OscMessage message) {
             try {
                 String[] parts = message.getAddressPattern().getValue().split("/");
+                System.out.println(parts[1] + "/" + parts[2]);
+                if (parts[1].equals("AutoCycle")) {
+                    switch (parts[2]) {
+                        case ("AskewPlanes"):
+                            if (LXChannel.allPatterns.get("AskewPlanes[Channel-9 | AskewPlanes]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("AskewPlanes[Channel-9 | AskewPlanes]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("AskewPlanes[Channel-9 | AskewPlanes]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Awaken"):
+                            if (LXChannel.allPatterns.get("Awaken[Channel-9 | Awaken]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Awaken[Channel-9 | Awaken]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Awaken[Channel-9 | Awaken]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Balance"):
+                            if (LXChannel.allPatterns.get("Balance[Channel-9 | Balance]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Balance[Channel-9 | Balance]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Balance[Channel-9 | Balance]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Blinders"):
+                            if (LXChannel.allPatterns.get("Blinders[Channel-9 | Blinders]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Blinders[Channel-9 | Blinders]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Blinders[Channel-9 | Blinders]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Bubbles"):
+                            if (LXChannel.allPatterns.get("Bubbles[Channel-9 | Bubbles]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Bubbles[Channel-9 | Bubbles]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Bubbles[Channel-9 | Bubbles]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("BouncyBalls"):
+                            if (LXChannel.allPatterns.get("BouncyBalls[Channel-9 | BouncyBalls]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("BouncyBalls[Channel-9 | BouncyBalls]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("BouncyBalls[Channel-9 | BouncyBalls]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("CrossSections"):
+                            if (LXChannel.allPatterns.get("CrossSections[Channel-9 | CrossSections]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("CrossSections[Channel-9 | CrossSections]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("CrossSections[Channel-9 | CrossSections]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Crystalline"):
+                            if (LXChannel.allPatterns.get("Crystalline[Channel-9 | Crystalline]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Crystalline[Channel-9 | Crystalline]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Crystalline[Channel-9 | Crystalline]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Diamonds"):
+                            if (LXChannel.allPatterns.get("Diamonds[Channel-9 | Diamonds]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Diamonds[Channel-9 | Diamonds]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Diamonds[Channel-9 | Diamonds]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Explosions"):
+                            if (LXChannel.allPatterns.get("Explosions[Channel-9 | Explosions]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Explosions[Channel-9 | Explosions]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Explosions[Channel-9 | Explosions]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("FlockWave"):
+                            if (LXChannel.allPatterns.get("FlockWave[Channel-9 | FlockWave]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("FlockWave[Channel-9 | FlockWave]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("FlockWave[Channel-9 | FlockWave]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("FlockWaveBlues"):
+                            if (LXChannel.allPatterns.get("FlockWaveBlues[Channel-9 | FlockWaveBlues]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("FlockWaveBlues[Channel-9 | FlockWaveBlues]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("FlockWaveBlues[Channel-9 | FlockWaveBlues]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("FlockWaveFiery"):
+                            if (LXChannel.allPatterns.get("FlockWaveFiery[Channel-9 | FlockWaveFiery]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("FlockWaveFiery[Channel-9 | FlockWaveFiery]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("FlockWaveFiery[Channel-9 | FlockWaveFiery]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("FlockWaveGalaxies"):
+                            if (LXChannel.allPatterns.get("FlockWaveGalaxies[Channel-9 | FlockWaveGalaxies]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("FlockWaveGalaxies[Channel-9 | FlockWaveGalaxies]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("FlockWaveGalaxies[Channel-9 | FlockWaveGalaxies]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("FlockWaveMercury"):
+                            if (LXChannel.allPatterns.get("FlockWaveMercury[Channel-9 | FlockWaveMercury]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("FlockWaveMercury[Channel-9 | FlockWaveMercury]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("FlockWaveMercury[Channel-9 | FlockWaveMercury]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("FlockWaveOoze"):
+                            if (LXChannel.allPatterns.get("FlockWaveOoze[Channel-9 | FlockWaveOoze]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("FlockWaveOoze[Channel-9 | FlockWaveOoze]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("FlockWaveOoze[Channel-9 | FlockWaveOoze]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("FlockWavePlanets"):
+                            if (LXChannel.allPatterns.get("FlockWavePlanets[Channel-9 | FlockWavePlanets]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("FlockWavePlanets[Channel-9 | FlockWavePlanets]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("FlockWavePlanets[Channel-9 | FlockWavePlanets]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("FlockWaveTimewarp"):
+                            if (LXChannel.allPatterns.get("FlockWaveTimewarp[Channel-9 | FlockWaveTimewarp]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("FlockWaveTimewarp[Channel-9 | FlockWaveTimewarp]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("FlockWaveTimewarp[Channel-9 | FlockWaveTimewarp]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Metaballs"):
+                            if (LXChannel.allPatterns.get("Metaballs[Channel-9 | Metaballs]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Metaballs[Channel-9 | Metaballs]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Metaballs[Channel-9 | Metaballs]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Wasps"):
+                            if (LXChannel.allPatterns.get("Wasps[Channel-9 | Wasps]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Wasps[Channel-9 | Wasps]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Wasps[Channel-9 | Wasps]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Noise1"):
+                            System.out.println("noise pattern 1 osc working");
+                            if (LXChannel.allPatterns.get("Noise[Channel-9 | Noise]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Noise[Channel-9 | Noise]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Noise[Channel-9 | Noise]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Noise2"):
+                            if (LXChannel.allPatterns.get("Noise[Channel-9 | Noise]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Noise[Channel-9 | Noise]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Noise[Channel-9 | Noise]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Pong"):
+                            if (LXChannel.allPatterns.get("Pong[Channel-9 | Pong]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Pong[Channel-9 | Pong]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Pong[Channel-9 | Pong]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Psy"):
+                            System.out.println("Psychedelia osc working");
+                            if (LXChannel.allPatterns.get("Psychedelia[Channel-9 | Psychedelia]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Psychedelia[Channel-9 | Psychedelia]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Psychedelia[Channel-9 | Psychedelia]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Raindrops"):
+                            if (LXChannel.allPatterns.get("Raindrops[Channel-9 | Raindrops]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Raindrops[Channel-9 | Raindrops]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Raindrops[Channel-9 | Raindrops]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Rings"):
+                            if (LXChannel.allPatterns.get("Rings[Channel-9 | Rings]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Rings[Channel-9 | Rings]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Rings[Channel-9 | Rings]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Ripple"):
+                            if (LXChannel.allPatterns.get("Ripple[Channel-9 | Ripple]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Ripple[Channel-9 | Ripple]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Ripple[Channel-9 | Ripple]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("RKPattern01"):
+                            if (LXChannel.allPatterns.get("RKPattern01[Channel-9 | RKPattern01]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("RKPattern01[Channel-9 | RKPattern01]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("RKPattern01[Channel-9 | RKPattern01]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("ShiftingPlane"):
+                            if (LXChannel.allPatterns.get("ShiftingPlane[Channel-9 | ShiftingPlane]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("ShiftingPlane[Channel-9 | ShiftingPlane]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("ShiftingPlane[Channel-9 | ShiftingPlane]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("SimplexNoise"):
+                            System.out.println("simplex noise osc working");
+                            if (LXChannel.allPatterns.get("SimplexNoisePattern[Channel-9 | SimplexNoise]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("SimplexNoisePattern[Channel-9 | SimplexNoise]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("SimplexNoisePattern[Channel-9 | SimplexNoise]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("SineSphere"):
+                            if (LXChannel.allPatterns.get("SineSphere[Channel-9 | SineSphere]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("SineSphere[Channel-9 | SineSphere]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("SineSphere[Channel-9 | SineSphere]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("solid"):
+                            if (LXChannel.allPatterns.get("SolidColorPattern[Channel-9 | SolidColor]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("SolidColorPattern[Channel-9 | SolidColor]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("SolidColorPattern[Channel-9 | SolidColor]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("SpaceTime"):
+                            if (LXChannel.allPatterns.get("SpaceTime[Channel-9 | SpaceTime]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("SpaceTime[Channel-9 | SpaceTime]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("SpaceTime[Channel-9 | SpaceTime]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Sparkle"):
+                            if (LXChannel.allPatterns.get("Sparkle[Channel-9 | Sparkle]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Sparkle[Channel-9 | Sparkle]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Sparkle[Channel-9 | Sparkle]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Swarm"):
+                            if (LXChannel.allPatterns.get("Swarm[Channel-9 | Swarm]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Swarm[Channel-9 | Swarm]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Swarm[Channel-9 | Swarm]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("TimPinwheels"):
+                            if (LXChannel.allPatterns.get("TimPinwheels[Channel-9 | TimPinwheels]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("TimPinwheels[Channel-9 | TimPinwheels]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("TimPinwheels[Channel-9 | TimPinwheels]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Swim"):
+                            if (LXChannel.allPatterns.get("Swim[Channel-9 | Swim]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Swim[Channel-9 | Swim]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Swim[Channel-9 | Swim]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("ViolinWave"):
+                            if (LXChannel.allPatterns.get("ViolinWave[Channel-9 | ViolinWave]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("ViolinWave[Channel-9 | ViolinWave]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("ViolinWave[Channel-9 | ViolinWave]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("Voronoi"):
+                            if (LXChannel.allPatterns.get("Voronoi[Channel-9 | Voronoi]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Voronoi[Channel-9 | Voronoi]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("Voronoi[Channel-9 | Voronoi]").toggleAutoCycleEligible();
+                            }
+                            break;
+                        case ("CubeFlash"):
+                            if (LXChannel.allPatterns.get("CubeFlash[Channel-9 | CubeFlash]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("CubeFlash[Channel-9 | CubeFlash]").autoCycleEligible.toggle();
+                            } else {
+                                LXChannel.allPatterns.get("CubeFlash[Channel-9 | CubeFlash]").toggleAutoCycleEligible();
+                            }
+                            break;
+                    }
+                }
+
+                if (parts[1].equals("GoPattern")) {
+                    LXChannel channel = LXEngine.allChannels.get("LXChannel[Channel-9]");
+                    switch (parts[2]) {
+                        case ("AskewPlanes"):
+                            channel.goPattern(LXChannel.allPatterns.get("AskewPlanes[Channel-9 | AskewPlanes]"));
+                            break;
+                        case ("Awaken"):
+                            channel.goPattern(LXChannel.allPatterns.get("Awaken[Channel-9 | Awaken]"));
+                            break;
+                        case ("Balance"):
+                            channel.goPattern(LXChannel.allPatterns.get("Balance[Channel-9 | Balance]"));
+                            break;
+                        case ("Blinders"):
+                            channel.goPattern(LXChannel.allPatterns.get("Blinders[Channel-9 | Blinders]"));
+                            break;
+                        case ("Bubbles"):
+                            channel.goPattern(LXChannel.allPatterns.get("Bubbles[Channel-9 | Bubbles]"));
+                            break;
+                        case ("BouncyBalls"):
+                            channel.goPattern(LXChannel.allPatterns.get("BouncyBalls[Channel-9 | BouncyBalls]"));
+                            break;
+                        case ("CrossSections"):
+                            channel.goPattern(LXChannel.allPatterns.get("CrossSections[Channel-9 | CrossSections]"));
+                            break;
+                        case ("Crystalline"):
+                            channel.goPattern(LXChannel.allPatterns.get("Crystalline[Channel-9 | Crystalline]"));
+                            break;
+                        case ("Diamonds"):
+                            channel.goPattern(LXChannel.allPatterns.get("Diamonds[Channel-9 | Diamonds]"));
+                            break;
+                        case ("Explosions"):
+                            channel.goPattern(LXChannel.allPatterns.get("Explosions[Channel-9 | Explosions]"));
+                            break;
+                        case ("FlockWave"):
+                            channel.goPattern(LXChannel.allPatterns.get("FlockWave[Channel-9 | FlockWave]"));
+                            break;
+                        case ("FlockWaveBlues"):
+                            channel.goPattern(LXChannel.allPatterns.get("FlockWaveBlues[Channel-9 | FlockWaveBlues]"));
+                            break;
+                        case ("FlockWaveFiery"):
+                            channel.goPattern(LXChannel.allPatterns.get("FlockWaveFiery[Channel-9 | FlockWaveFiery]"));
+                            break;
+                        case ("FlockWaveGalaxies"):
+                            channel.goPattern(LXChannel.allPatterns.get("FlockWaveGalaxies[Channel-9 | FlockWaveGalaxies]"));
+                            break;
+                        case ("FlockWaveMercury"):
+                            channel.goPattern(LXChannel.allPatterns.get("FlockWaveMercury[Channel-9 | FlockWaveMercury]"));
+                            break;
+                        case ("FlockWaveOoze"):
+                            channel.goPattern(LXChannel.allPatterns.get("FlockWaveOoze[Channel-9 | FlockWaveOoze]"));
+                            break;
+                        case ("FlockWavePlanets"):
+                            channel.goPattern(LXChannel.allPatterns.get("FlockWavePlanets[Channel-9 | FlockWavePlanets]"));
+                            break;
+                        case ("FlockWaveTimewarp"):
+                            channel.goPattern(LXChannel.allPatterns.get("FlockWaveTimewarp[Channel-9 | FlockWaveTimewarp]"));
+                            break;
+                        case ("Metaballs"):
+                            channel.goPattern(LXChannel.allPatterns.get("Metaballs[Channel-9 | Metaballs]"));
+                            break;
+                        case ("Wasps"):
+                            channel.goPattern(LXChannel.allPatterns.get("Wasps[Channel-9 | Wasps]"));
+                            break;
+                        case ("Noise1"):
+                            channel.goPattern(LXChannel.allPatterns.get("Noise[Channel-9 | Noise]"));
+                            break;
+                        case ("Noise2"):
+                            channel.goPattern(LXChannel.allPatterns.get("Noise2[Channel-9 | Noise2]"));
+                            break;
+                        case ("Pong"):
+                            channel.goPattern(LXChannel.allPatterns.get("Pong[Channel-9 | Pong]"));
+                            break;
+                        case ("Pyschedelia"):
+                            channel.goPattern(LXChannel.allPatterns.get("Psychedelia[Channel-9 | Psychedelia]"));
+                            break;
+                        case ("Raindrops"):
+                            channel.goPattern(LXChannel.allPatterns.get("Raindrops[Channel-9 | Raindrops]"));
+                            break;
+                        case ("Rings"):
+                            channel.goPattern(LXChannel.allPatterns.get("Rings[Channel-9 | Rings]"));
+                            break;
+                        case ("Ripple"):
+                            channel.goPattern(LXChannel.allPatterns.get("Ripple[Channel-9 | Ripple]"));
+                            break;
+                        case ("Raven"):
+                            channel.goPattern(LXChannel.allPatterns.get("RKPattern02[Channel-6 | RKPattern02]"));
+                            break;
+                        case ("ShiftingPlane"):
+                            channel.goPattern(LXChannel.allPatterns.get("ShiftingPlane[Channel-9 | ShiftingPlane]"));
+                            break;
+                        case ("SimplexNoise"):
+                            channel.goPattern(LXChannel.allPatterns.get("SimplexNoisePattern[Channel-9 | SimplexNoisePattern]"));
+                            break;
+                        case ("SineSphere"):
+                            channel.goPattern(LXChannel.allPatterns.get("SineSphere[Channel-9 | SineSphere]"));
+                            break;
+                        case ("SolidColor"):
+                            System.out.println("Solid Color is working");
+                            channel.goPattern(LXChannel.allPatterns.get("SolidColorPattern[Channel-9 | SolidColor]"));
+                            break;
+                        case ("SpaceTime"):
+                            channel.goPattern(LXChannel.allPatterns.get("SpaceTime[Channel-9 | SpaceTime]"));
+                            break;
+                        case ("Sparkle"):
+                            channel.goPattern(LXChannel.allPatterns.get("Sparkle[Channel-9 | Sparkle]"));
+                            break;
+                        case ("Swim"):
+                            channel.goPattern(LXChannel.allPatterns.get("Swim[Channel-9 | Swim]"));
+                            break;
+                        case ("Swarm"):
+                            channel.goPattern(LXChannel.allPatterns.get("Swarm[Channel-9 | Swarm]"));
+                            break;
+                        case ("TimPinwheels"):
+                            channel.goPattern(LXChannel.allPatterns.get("TimPinwheels[Channel-9 | TimPinwheels]"));
+                            break;
+                        case ("ViolinWave"):
+                            channel.goPattern(LXChannel.allPatterns.get("ViolinWave[Channel-9 | ViolinWave]"));
+                            break;
+                        case ("Voronoi"):
+                            channel.goPattern(LXChannel.allPatterns.get("Voronoi[Channel-9 | Voronoi]"));
+                            break;
+                        case ("CubeFlash"):
+                            channel.goPattern(LXChannel.allPatterns.get("CubeFlash[Channel-9 | CubeFlash]"));
+                            break;
+                    }
+                }
+
+
+
                 if (parts[1].equals(ROUTE_LX)) {
                     if (parts[2].equals(ROUTE_ENGINE)) {
                         oscComponent(message, lx.engine, parts, 3);

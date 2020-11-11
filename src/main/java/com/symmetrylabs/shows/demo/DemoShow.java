@@ -7,12 +7,15 @@ import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.slstudio.model.SLModel;
 
+import heronarts.lx.LX;
+import heronarts.lx.LXChannel;
+import heronarts.lx.LXEngine;
 import heronarts.lx.transform.LXTransform;
 
 /**
  * This file implements the mapping functions needed to lay out the cubes.
  */
-public class DemoShow extends CubesShow implements Show {
+public class DemoShow extends CubesShow implements Show, LXEngine.Listener {
 
     static final float globalOffsetX = 0;
     static final float globalOffsetY = 0;
@@ -25,7 +28,6 @@ public class DemoShow extends CubesShow implements Show {
     static final int SP = 34;
     static final int SPR = 26;
 
-
     static final TowerConfig[] TOWER_CONFIG = {
 
     	//1012 top 1039 bottom cube of bottom two stack
@@ -33,7 +35,7 @@ public class DemoShow extends CubesShow implements Show {
     	//1084 top 204 bottom of top cube
 
 
-        
+
     //Bottom Row
     new TowerConfig(SP * 0, 0, SP * 0, 0, -45, 0, new String[] {"329"}),
     new TowerConfig(SP * 1, 0, SP * 0, 0, -45, 0, new String[] {"61"}),
@@ -309,5 +311,29 @@ public class DemoShow extends CubesShow implements Show {
         }
 
         return new CubesModel(towers, allCubesArr);
+    }
+
+    @Override
+    public void setupLx(LX lx) {
+        lx.engine.addListener(this);
+        for (LXChannel c : lx.engine.channels) {
+            System.out.println("is this working" + c);
+            c.autoDisable.setValue(true);
+        }
+    }
+
+    @Override
+    public void channelAdded(LXEngine engine, LXChannel lxChannel) {
+        lxChannel.autoDisable.setValue(true);
+    }
+
+    @Override
+    public void channelRemoved(LXEngine engine, LXChannel channel) {
+
+    }
+
+    @Override
+    public void channelMoved(LXEngine engine, LXChannel channel) {
+
     }
 }

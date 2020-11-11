@@ -123,6 +123,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     private final List<LXChannel> mutableChannels = new ArrayList<LXChannel>();
     public final List<LXChannel> channels = Collections.unmodifiableList(this.mutableChannels);
 
+    public static final Map<String, LXChannel> allChannels = new HashMap<String, LXChannel>();
+
     public final LXMasterChannel masterChannel;
 
     public final Output output;
@@ -894,6 +896,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     public LXChannel addChannel(LXPattern[] patterns) {
         LXChannel channel = new LXChannel(lx, this.mutableChannels.size(), patterns);
+        allChannels.put(channel.toString(), channel);
         channel.setParent(this);
         this.mutableChannels.add(channel);
         this.focusedChannel.setRange(this.mutableChannels.size() + 1);
@@ -1107,8 +1110,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             for (Runnable runnable : this.engineThreadTaskQueue) {
                 runnable.run();
             }
-
-            System.out.println(allPatterns);
         }
 
         // The main work: run patterns, blend channels, send to outputs.

@@ -96,7 +96,7 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
 
     private ModelMetrics warpedMetrics = new ModelMetrics();
 
-    LXBus(LX lx) {
+    public LXBus(LX lx) {
         this(lx, null);
     }
 
@@ -337,7 +337,7 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
         final int stopIndex;
         int index = -1;
         int nextIndex = -1;
-        
+
         public VectorIterator(int stopIndex) {
             this.stopIndex = stopIndex;
         }

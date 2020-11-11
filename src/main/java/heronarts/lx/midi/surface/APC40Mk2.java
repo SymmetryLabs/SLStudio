@@ -156,6 +156,8 @@ public class APC40Mk2 extends LXMidiSurface {
     public static final int XMASK = 85;
     public static final int YMASK = 86;
 
+    public static final int AUTO_CYCLE_ALL = 91;
+
 
     private boolean shiftOn = false;
     private boolean bankOn = true;
@@ -685,7 +687,7 @@ public class APC40Mk2 extends LXMidiSurface {
 
 
 
-            case 91: {
+            case AUTO_CYCLE_ALL: {
                 if (on) {
 
                     sendNoteOn(0, pitch, lx.tempo.enabled.isOn() ? LED_ON : LED_OFF);
