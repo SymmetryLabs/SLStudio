@@ -164,13 +164,14 @@ public class LXOscEngine extends LXComponent {
         public void oscMessage(OscMessage message) {
             try {
                 String[] parts = message.getAddressPattern().getValue().split("/");
-                System.out.println(parts[1] + "/" + parts[2]);
+                LXChannel channel = LXEngine.allChannels.get("LXChannel[Channel-9]");
                 if (parts[1].equals("AutoCycle")) {
                     switch (parts[2]) {
                         case ("AskewPlanes"):
                             if (LXChannel.allPatterns.get("AskewPlanes[Channel-9 | AskewPlanes]").autoCycleEligible.isOn()) {
                                 LXChannel.allPatterns.get("AskewPlanes[Channel-9 | AskewPlanes]").autoCycleEligible.toggle();
                             } else {
+                                channel.goPattern(LXChannel.allPatterns.get("AskewPlanes[Channel-9 | AskewPlanes]"));
                                 LXChannel.allPatterns.get("AskewPlanes[Channel-9 | AskewPlanes]").toggleAutoCycleEligible();
                             }
                             break;
@@ -178,6 +179,7 @@ public class LXOscEngine extends LXComponent {
                             if (LXChannel.allPatterns.get("Awaken[Channel-9 | Awaken]").autoCycleEligible.isOn()) {
                                 LXChannel.allPatterns.get("Awaken[Channel-9 | Awaken]").autoCycleEligible.toggle();
                             } else {
+                                channel.goPattern(LXChannel.allPatterns.get("Awaken[Channel-9 | Awaken]"));
                                 LXChannel.allPatterns.get("Awaken[Channel-9 | Awaken]").toggleAutoCycleEligible();
                             }
                             break;
@@ -186,6 +188,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("Balance[Channel-9 | Balance]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("Balance[Channel-9 | Balance]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Balance[Channel-9 | Balance]"));
                             }
                             break;
                         case ("Blinders"):
@@ -193,6 +196,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("Blinders[Channel-9 | Blinders]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("Blinders[Channel-9 | Blinders]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Blinders[Channel-9 | Blinders]"));
                             }
                             break;
                         case ("Bubbles"):
@@ -200,6 +204,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("Bubbles[Channel-9 | Bubbles]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("Bubbles[Channel-9 | Bubbles]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Bubbles[Channel-9 | Bubbles]"));
                             }
                             break;
                         case ("BouncyBalls"):
@@ -207,6 +212,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("BouncyBalls[Channel-9 | BouncyBalls]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("BouncyBalls[Channel-9 | BouncyBalls]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("BouncyBalls[Channel-9 | BouncyBalls]"));
                             }
                             break;
                         case ("CrossSections"):
@@ -214,6 +220,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("CrossSections[Channel-9 | CrossSections]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("CrossSections[Channel-9 | CrossSections]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("CrossSections[Channel-9 | CrossSections]"));
                             }
                             break;
                         case ("Crystalline"):
@@ -221,6 +228,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("Crystalline[Channel-9 | Crystalline]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("Crystalline[Channel-9 | Crystalline]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Crystalline[Channel-9 | Crystalline]"));
                             }
                             break;
                         case ("Diamonds"):
@@ -228,6 +236,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("Diamonds[Channel-9 | Diamonds]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("Diamonds[Channel-9 | Diamonds]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Diamonds[Channel-9 | Diamonds]"));
                             }
                             break;
                         case ("Explosions"):
@@ -235,6 +244,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("Explosions[Channel-9 | Explosions]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("Explosions[Channel-9 | Explosions]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Explosions[Channel-9 | Explosions]"));
                             }
                             break;
                         case ("FlockWave"):
@@ -242,6 +252,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("FlockWave[Channel-9 | FlockWave]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("FlockWave[Channel-9 | FlockWave]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("FlockWave[Channel-9 | FlockWave]"));
                             }
                             break;
                         case ("FlockWaveBlues"):
@@ -249,6 +260,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("FlockWaveBlues[Channel-9 | FlockWaveBlues]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("FlockWaveBlues[Channel-9 | FlockWaveBlues]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("FlockWaveBlues[Channel-9 | FlockWaveBlues]"));
                             }
                             break;
                         case ("FlockWaveFiery"):
@@ -256,6 +268,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("FlockWaveFiery[Channel-9 | FlockWaveFiery]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("FlockWaveFiery[Channel-9 | FlockWaveFiery]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("FlockWaveFiery[Channel-9 | FlockWaveFiery]"));
                             }
                             break;
                         case ("FlockWaveGalaxies"):
@@ -263,6 +276,8 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("FlockWaveGalaxies[Channel-9 | FlockWaveGalaxies]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("FlockWaveGalaxies[Channel-9 | FlockWaveGalaxies]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("FlockWaveGalaxies[Channel-9 | FlockWaveGalaxies]"));
+
                             }
                             break;
                         case ("FlockWaveMercury"):
@@ -270,6 +285,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("FlockWaveMercury[Channel-9 | FlockWaveMercury]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("FlockWaveMercury[Channel-9 | FlockWaveMercury]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("FlockWaveMercury[Channel-9 | FlockWaveMercury]"));
                             }
                             break;
                         case ("FlockWaveOoze"):
@@ -277,6 +293,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("FlockWaveOoze[Channel-9 | FlockWaveOoze]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("FlockWaveOoze[Channel-9 | FlockWaveOoze]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("FlockWaveOoze[Channel-9 | FlockWaveOoze]"));
                             }
                             break;
                         case ("FlockWavePlanets"):
@@ -284,6 +301,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("FlockWavePlanets[Channel-9 | FlockWavePlanets]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("FlockWavePlanets[Channel-9 | FlockWavePlanets]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("FlockWavePlanets[Channel-9 | FlockWavePlanets]"));
                             }
                             break;
                         case ("FlockWaveTimewarp"):
@@ -291,6 +309,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("FlockWaveTimewarp[Channel-9 | FlockWaveTimewarp]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("FlockWaveTimewarp[Channel-9 | FlockWaveTimewarp]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("FlockWaveTimewarp[Channel-9 | FlockWaveTimewarp]"));
                             }
                             break;
                         case ("Metaballs"):
@@ -298,6 +317,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("Metaballs[Channel-9 | Metaballs]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("Metaballs[Channel-9 | Metaballs]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Metaballs[Channel-9 | Metaballs]"));
                             }
                             break;
                         case ("Wasps"):
@@ -305,21 +325,23 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("Wasps[Channel-9 | Wasps]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("Wasps[Channel-9 | Wasps]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Wasps[Channel-9 | Wasps]"));
                             }
                             break;
                         case ("Noise1"):
-                            System.out.println("noise pattern 1 osc working");
-                            if (LXChannel.allPatterns.get("Noise[Channel-9 | Noise]").autoCycleEligible.isOn()) {
-                                LXChannel.allPatterns.get("Noise[Channel-9 | Noise]").autoCycleEligible.toggle();
+                            if (LXChannel.allPatterns.get("Noise[Channel-9 | Noise]1").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Noise[Channel-9 | Noise]1").autoCycleEligible.toggle();
                             } else {
-                                LXChannel.allPatterns.get("Noise[Channel-9 | Noise]").toggleAutoCycleEligible();
+                                LXChannel.allPatterns.get("Noise[Channel-9 | Noise]1").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Noise[Channel-9 | Noise]1"));
                             }
                             break;
                         case ("Noise2"):
-                            if (LXChannel.allPatterns.get("Noise[Channel-9 | Noise]").autoCycleEligible.isOn()) {
-                                LXChannel.allPatterns.get("Noise[Channel-9 | Noise]").autoCycleEligible.toggle();
+                            if (LXChannel.allPatterns.get("Noise[Channel-9 | Noise]2").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("Noise[Channel-9 | Noise]2").autoCycleEligible.toggle();
                             } else {
-                                LXChannel.allPatterns.get("Noise[Channel-9 | Noise]").toggleAutoCycleEligible();
+                                LXChannel.allPatterns.get("Noise[Channel-9 | Noise]2").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Noise[Channel-9 | Noise]2"));
                             }
                             break;
                         case ("Pong"):
@@ -327,14 +349,16 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("Pong[Channel-9 | Pong]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("Pong[Channel-9 | Pong]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Pong[Channel-9 | Pong]"));
                             }
                             break;
                         case ("Psy"):
-                            System.out.println("Psychedelia osc working");
                             if (LXChannel.allPatterns.get("Psychedelia[Channel-9 | Psychedelia]").autoCycleEligible.isOn()) {
                                 LXChannel.allPatterns.get("Psychedelia[Channel-9 | Psychedelia]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("Psychedelia[Channel-9 | Psychedelia]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Psychedelia[Channel-9 | Psychedelia]"));
+
                             }
                             break;
                         case ("Raindrops"):
@@ -342,6 +366,8 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("Raindrops[Channel-9 | Raindrops]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("Raindrops[Channel-9 | Raindrops]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Raindrops[Channel-9 | Raindrops]"));
+
                             }
                             break;
                         case ("Rings"):
@@ -349,6 +375,8 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("Rings[Channel-9 | Rings]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("Rings[Channel-9 | Rings]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Rings[Channel-9 | Rings]"));
+
                             }
                             break;
                         case ("Ripple"):
@@ -356,13 +384,16 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("Ripple[Channel-9 | Ripple]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("Ripple[Channel-9 | Ripple]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Ripple[Channel-9 | Ripple]"));
+
                             }
                             break;
-                        case ("RKPattern01"):
+                        case ("Raven"):
                             if (LXChannel.allPatterns.get("RKPattern01[Channel-9 | RKPattern01]").autoCycleEligible.isOn()) {
                                 LXChannel.allPatterns.get("RKPattern01[Channel-9 | RKPattern01]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("RKPattern01[Channel-9 | RKPattern01]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("RKPattern01[Channel-9 | RKPattern01]"));
                             }
                             break;
                         case ("ShiftingPlane"):
@@ -370,14 +401,17 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("ShiftingPlane[Channel-9 | ShiftingPlane]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("ShiftingPlane[Channel-9 | ShiftingPlane]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("ShiftingPlane[Channel-9 | ShiftingPlane]"));
+
                             }
                             break;
                         case ("SimplexNoise"):
-                            System.out.println("simplex noise osc working");
                             if (LXChannel.allPatterns.get("SimplexNoisePattern[Channel-9 | SimplexNoise]").autoCycleEligible.isOn()) {
                                 LXChannel.allPatterns.get("SimplexNoisePattern[Channel-9 | SimplexNoise]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("SimplexNoisePattern[Channel-9 | SimplexNoise]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("SimplexNoisePattern[Channel-9 | SimplexNoise]"));
+
                             }
                             break;
                         case ("SineSphere"):
@@ -385,6 +419,8 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("SineSphere[Channel-9 | SineSphere]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("SineSphere[Channel-9 | SineSphere]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("SineSphere[Channel-9 | SineSphere]"));
+
                             }
                             break;
                         case ("solid"):
@@ -392,6 +428,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("SolidColorPattern[Channel-9 | SolidColor]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("SolidColorPattern[Channel-9 | SolidColor]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("SolidColorPattern[Channel-9 | SolidColor]"));
                             }
                             break;
                         case ("SpaceTime"):
@@ -399,6 +436,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("SpaceTime[Channel-9 | SpaceTime]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("SpaceTime[Channel-9 | SpaceTime]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("SpaceTime[Channel-9 | SpaceTime]"));
                             }
                             break;
                         case ("Sparkle"):
@@ -406,6 +444,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("Sparkle[Channel-9 | Sparkle]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("Sparkle[Channel-9 | Sparkle]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Sparkle[Channel-9 | Sparkle]"));
                             }
                             break;
                         case ("Swarm"):
@@ -413,6 +452,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("Swarm[Channel-9 | Swarm]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("Swarm[Channel-9 | Swarm]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Swarm[Channel-9 | Swarm]"));
                             }
                             break;
                         case ("TimPinwheels"):
@@ -420,6 +460,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("TimPinwheels[Channel-9 | TimPinwheels]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("TimPinwheels[Channel-9 | TimPinwheels]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("TimPinwheels[Channel-9 | TimPinwheels]"));
                             }
                             break;
                         case ("Swim"):
@@ -427,6 +468,8 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("Swim[Channel-9 | Swim]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("Swim[Channel-9 | Swim]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Swim[Channel-9 | Swim]"));
+
                             }
                             break;
                         case ("ViolinWave"):
@@ -434,6 +477,7 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("ViolinWave[Channel-9 | ViolinWave]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("ViolinWave[Channel-9 | ViolinWave]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("ViolinWave[Channel-9 | ViolinWave]"));
                             }
                             break;
                         case ("Voronoi"):
@@ -441,6 +485,8 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("Voronoi[Channel-9 | Voronoi]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("Voronoi[Channel-9 | Voronoi]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("Voronoi[Channel-9 | Voronoi]"));
+
                             }
                             break;
                         case ("CubeFlash"):
@@ -448,13 +494,15 @@ public class LXOscEngine extends LXComponent {
                                 LXChannel.allPatterns.get("CubeFlash[Channel-9 | CubeFlash]").autoCycleEligible.toggle();
                             } else {
                                 LXChannel.allPatterns.get("CubeFlash[Channel-9 | CubeFlash]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("CubeFlash[Channel-9 | CubeFlash]"));
+
                             }
                             break;
                     }
                 }
 
                 if (parts[1].equals("GoPattern")) {
-                    LXChannel channel = LXEngine.allChannels.get("LXChannel[Channel-9]");
+//                    LXChannel channel = LXEngine.allChannels.get("LXChannel[Channel-9]");
                     switch (parts[2]) {
                         case ("AskewPlanes"):
                             channel.goPattern(LXChannel.allPatterns.get("AskewPlanes[Channel-9 | AskewPlanes]"));
@@ -517,10 +565,10 @@ public class LXOscEngine extends LXComponent {
                             channel.goPattern(LXChannel.allPatterns.get("Wasps[Channel-9 | Wasps]"));
                             break;
                         case ("Noise1"):
-                            channel.goPattern(LXChannel.allPatterns.get("Noise[Channel-9 | Noise]"));
+                            channel.goPattern(LXChannel.allPatterns.get("Noise[Channel-9 | Noise]1"));
                             break;
                         case ("Noise2"):
-                            channel.goPattern(LXChannel.allPatterns.get("Noise2[Channel-9 | Noise2]"));
+                            channel.goPattern(LXChannel.allPatterns.get("Noise[Channel-9 | Noise]2"));
                             break;
                         case ("Pong"):
                             channel.goPattern(LXChannel.allPatterns.get("Pong[Channel-9 | Pong]"));
@@ -538,19 +586,18 @@ public class LXOscEngine extends LXComponent {
                             channel.goPattern(LXChannel.allPatterns.get("Ripple[Channel-9 | Ripple]"));
                             break;
                         case ("Raven"):
-                            channel.goPattern(LXChannel.allPatterns.get("RKPattern02[Channel-6 | RKPattern02]"));
+                            channel.goPattern(LXChannel.allPatterns.get("RKPattern01[Channel-9 | RKPattern01]"));
                             break;
                         case ("ShiftingPlane"):
                             channel.goPattern(LXChannel.allPatterns.get("ShiftingPlane[Channel-9 | ShiftingPlane]"));
                             break;
                         case ("SimplexNoise"):
-                            channel.goPattern(LXChannel.allPatterns.get("SimplexNoisePattern[Channel-9 | SimplexNoisePattern]"));
+                            channel.goPattern(LXChannel.allPatterns.get("SimplexNoisePattern[Channel-9 | SimplexNoise]"));
                             break;
                         case ("SineSphere"):
                             channel.goPattern(LXChannel.allPatterns.get("SineSphere[Channel-9 | SineSphere]"));
                             break;
                         case ("SolidColor"):
-                            System.out.println("Solid Color is working");
                             channel.goPattern(LXChannel.allPatterns.get("SolidColorPattern[Channel-9 | SolidColor]"));
                             break;
                         case ("SpaceTime"):

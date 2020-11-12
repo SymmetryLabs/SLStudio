@@ -492,12 +492,20 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         return this;
     }
 
+    private int noiseNumber = 1;
     public final LXChannel addPattern(LXPattern pattern) {
         pattern.setChannel(this);
         pattern.setModel(this.model);
         String patternString = pattern.toString();
+        if (patternString.equals("Noise[Channel-9 | Noise]")) {
+
+            allPatterns.put(patternString + noiseNumber, pattern);
+            noiseNumber++;
+        }
+        else {
+            allPatterns.put(patternString, pattern);
+        }
         System.out.println(patternString);
-        allPatterns.put(patternString, pattern);
         this.mutablePatterns.add(pattern);
         LXUtils.updateIndexes(mutablePatterns);
         this.focusedPattern.setRange(this.mutablePatterns.size());

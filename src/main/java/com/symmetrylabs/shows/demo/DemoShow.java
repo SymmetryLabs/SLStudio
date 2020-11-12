@@ -320,6 +320,7 @@ public class DemoShow extends CubesShow implements Show, LXEngine.Listener {
             System.out.println("is this working" + c);
             c.autoDisable.setValue(true);
         }
+
     }
 
     @Override
