@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1605006370648,
+  "timestamp": 1605424487748,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,7 +14,7 @@
       "scene-5": false,
       "crossfader": 1.0,
       "crossfaderBlendMode": 0,
-      "speed": 0.8188976377952756,
+      "speed": 0.2866666726768017,
       "focusedChannel": 8,
       "cueA": false,
       "cueB": false,
@@ -30,10 +30,10 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 0.0,
+        "color/hue": 2.1052632331848145,
         "color/brightness": 100.0,
-        "color/saturation": 100.0,
-        "color": -65536,
+        "color/saturation": 75.0,
+        "color": -47552,
         "period": 120000.0,
         "range": 0.0,
         "spread": 0.0,
@@ -1320,12 +1320,12 @@
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
-          "autoCycleTimeSecs": 1.5322019625687986,
+          "autoCycleTimeSecs": 1.675039506957546,
           "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
-          "transitionTimeSecs": 0.1,
+          "transitionTimeSecs": 2.819969482254237,
           "transitionBlendMode": 0,
           "autoDisable": false,
           "speed": 1.0,
@@ -1334,7 +1334,7 @@
         "warps": [],
         "effects": [],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 34,
         "patterns": [
           {
             "id": 1591,
@@ -1343,8 +1343,8 @@
             "parameters": {
               "label": "AskewPlanes",
               "Hue": 0.0,
-              "Spark": 0.0,
-              "Wave": 0.0,
+              "Spark": 0.25999999046325684,
+              "Wave": 0.3499999940395355,
               "xPos": 1.0,
               "yPos": 0.5,
               "X-SYM": false,
@@ -1353,7 +1353,7 @@
               "X-DUP": false,
               "JOG": false,
               "GREY": false,
-              "Thick": 0.2,
+              "Thick": 0.39600000381469724,
               "Number": 0
             },
             "modulation": {
@@ -1361,7 +1361,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 1602,
@@ -1382,7 +1382,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true,
+            "autoCycleEnabled": false,
             "paletteName": "astro1"
           },
           {
@@ -1400,7 +1400,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 2978,
@@ -1414,7 +1414,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 3001,
@@ -1435,7 +1435,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 5400,
@@ -1443,16 +1443,16 @@
             "modulationColor": -2490113,
             "parameters": {
               "label": "BouncyBalls",
-              "BNC": 0.8,
-              "FLR": 0.9899999778717756,
-              "SIZE": 0.5
+              "BNC": 0.38999998569488525,
+              "FLR": 0.6399999856948853,
+              "SIZE": 0.47999998927116394
             },
             "modulation": {
               "modulators": [],
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 3023,
@@ -1475,7 +1475,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 3036,
@@ -1501,7 +1501,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 3046,
@@ -1521,7 +1521,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 3058,
@@ -1539,7 +1539,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 8064,
@@ -1580,7 +1580,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 3085,
@@ -1621,7 +1621,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 3093,
@@ -1662,7 +1662,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 3099,
@@ -1674,7 +1674,7 @@
               "nearBlobs": false,
               "everywhere": true,
               "timeScale": 0.09,
-              "size": 560.0,
+              "size": 839.9999737739563,
               "detail": 6.6,
               "ripple": 0.4,
               "x": 177.0,
@@ -1744,7 +1744,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 3217,
@@ -1785,7 +1785,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 3223,
@@ -1826,7 +1826,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 3231,
@@ -1867,7 +1867,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 3894,
@@ -1891,7 +1891,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 5610,
@@ -1932,7 +1932,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 6076,
@@ -1948,7 +1948,7 @@
               "xRot": 0.5,
               "yRot": 0.5,
               "zRot": 0.5,
-              "Spin": 0.5,
+              "Spin": 0.0,
               "X-SYM": false,
               "Y-SYM": false,
               "R-SYM": false,
@@ -1966,7 +1966,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 6224,
@@ -2000,7 +2000,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 6304,
@@ -2027,7 +2027,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 6320,
@@ -2049,10 +2049,10 @@
             "modulationColor": -57344,
             "parameters": {
               "label": "Raindrops",
-              "Number": -40.0,
-              "Size": 0.35,
+              "Number": -269.6000051498413,
+              "Size": 0.33399999141693115,
               "SizeVar": 0.5,
-              "Speed": -1000.0,
+              "Speed": -4989.999920129776,
               "SpeedVar": 0.5,
               "HueVar": 0.5
             },
@@ -2082,7 +2082,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 6556,
@@ -2104,7 +2104,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 6563,
@@ -2118,8 +2118,8 @@
               "rX": 0.0,
               "rY": 0.0,
               "rZ": 0.0,
-              "amt": 20.0,
-              "speed": 3.1415927410125732,
+              "amt": 13.719999313354492,
+              "speed": -1.2566373960106603,
               "dsp": 1.5707963705062866,
               "nDsp": 1.0
             },
@@ -2128,7 +2128,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 6682,
@@ -2160,7 +2160,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 6836,
@@ -2185,7 +2185,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 6859,
@@ -2203,7 +2203,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 7203,
@@ -2219,7 +2219,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 7214,
@@ -2239,7 +2239,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 7310,
@@ -2253,7 +2253,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 7324,
@@ -2272,7 +2272,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 7373,
@@ -2280,12 +2280,12 @@
             "modulationColor": -2227969,
             "parameters": {
               "label": "TimPinwheels",
-              "HSpr": 0.75,
+              "HSpr": 0.14000000059604645,
               "VOff": 1.0,
               "ZSlp": 0.6,
               "Shrp": 0.25,
               "Drez": 0.25,
-              "Clic": 0.5,
+              "Clic": 0.8799999952316284,
               "Hue": 0.667,
               "HSpd": 0.667
             },
@@ -2294,7 +2294,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 7461,
@@ -2318,7 +2318,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 7551,
@@ -2326,7 +2326,7 @@
             "modulationColor": -16711799,
             "parameters": {
               "label": "Voronoi",
-              "SPEED": 1.8,
+              "SPEED": 0.40000003129243844,
               "WIDTH": 0.2,
               "NUM": 14
             },
@@ -2335,7 +2335,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           },
           {
             "id": 7579,
@@ -2354,7 +2354,7 @@
               "modulations": [],
               "triggers": []
             },
-            "autoCycleEnabled": true
+            "autoCycleEnabled": false
           }
         ]
       }
@@ -2374,8 +2374,8 @@
           "modulationColor": -12779776,
           "parameters": {
             "label": "Speckle",
-            "enabled": true,
-            "amt": 0.0
+            "enabled": false,
+            "amt": 1.0
           }
         }
       ],
@@ -2402,7 +2402,7 @@
           "parameters": {
             "label": "Blur",
             "enabled": true,
-            "amount": 0.07874015748031496
+            "amount": 0.5599999874830246
           },
           "modulation": {
             "modulators": [],
@@ -2447,7 +2447,7 @@
           "parameters": {
             "label": "Desaturation",
             "enabled": true,
-            "amount": 0.0,
+            "amount": 0.6399999856948853,
             "attack": 100.0,
             "decay": 100.0
           },
@@ -2466,7 +2466,7 @@
             "enabled": false,
             "Scale": 10.0,
             "Speed": 4.0,
-            "Range": 1.3653543307086613
+            "Range": 0.7
           },
           "modulation": {
             "modulators": [],
@@ -2482,7 +2482,7 @@
             "label": "Strobe",
             "enabled": false,
             "Shape": 2,
-            "Freq": 5.220866141732283,
+            "Freq": 0.05,
             "Black": true
           },
           "modulation": {
@@ -2513,7 +2513,7 @@
             "label": "Palette",
             "enabled": false,
             "Amount": 1.0,
-            "Palette": 0,
+            "Palette": 9,
             "Bottom": 0.0,
             "Top": 1.0,
             "Shift": 0.0,
@@ -2526,7 +2526,7 @@
             "modulations": [],
             "triggers": []
           },
-          "paletteName": "astro1"
+          "paletteName": "hb/rain"
         }
       ],
       "clips": []
@@ -2537,8 +2537,8 @@
       "modulationColor": -16711887,
       "parameters": {
         "label": "",
-        "period": 500.0,
-        "bpm": 120.0,
+        "period": 452.22222222222223,
+        "bpm": 132.67813267813267,
         "tap": false,
         "nudgeUp": false,
         "nudgeDown": false,
@@ -2619,14 +2619,14 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.2599999997764826
+        "brightness": 1.0
       }
     },
     "components": {
       "GammaExpander": {
-        "id": 9648,
+        "id": 10044,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16711913,
+        "modulationColor": -12648193,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
@@ -2705,7 +2705,7 @@
         "parameters": {
           "label": "Output Control",
           "Broadcast packet enabled": false,
-          "Test broadcast enabled": false
+          "Test broadcast enabled": true
         }
       }
     },
@@ -2923,12 +2923,12 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 245.7718673738416,
+        "radius": 278.95035786259143,
         "theta": -0.0029999999999999593,
         "phi": 0.09900000000000003,
-        "positionX": 116.94816589355469,
-        "positionY": 37.0,
-        "positionZ": 10.56124210357666
+        "positionX": 65.8124771118164,
+        "positionY": 66.875,
+        "positionZ": -23.080503463745117
       }
     }
   }
