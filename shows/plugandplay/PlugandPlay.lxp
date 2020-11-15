@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1605424487748,
+  "timestamp": 1605425187172,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 1.0,
       "crossfaderBlendMode": 0,
       "speed": 0.2866666726768017,
-      "focusedChannel": 8,
+      "focusedChannel": 9,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -2375,7 +2375,7 @@
           "parameters": {
             "label": "Speckle",
             "enabled": false,
-            "amt": 1.0
+            "amt": 0.0
           }
         }
       ],
@@ -2441,23 +2441,6 @@
           }
         },
         {
-          "id": 1355,
-          "class": "heronarts.lx.effect.DesaturationEffect",
-          "modulationColor": -15335169,
-          "parameters": {
-            "label": "Desaturation",
-            "enabled": true,
-            "amount": 0.6399999856948853,
-            "attack": 100.0,
-            "decay": 100.0
-          },
-          "modulation": {
-            "modulators": [],
-            "modulations": [],
-            "triggers": []
-          }
-        },
-        {
           "id": 1156,
           "class": "com.symmetrylabs.slstudio.effect.LSD",
           "modulationColor": -65312,
@@ -2467,6 +2450,23 @@
             "Scale": 10.0,
             "Speed": 4.0,
             "Range": 0.7
+          },
+          "modulation": {
+            "modulators": [],
+            "modulations": [],
+            "triggers": []
+          }
+        },
+        {
+          "id": 1355,
+          "class": "heronarts.lx.effect.DesaturationEffect",
+          "modulationColor": -15335169,
+          "parameters": {
+            "label": "Desaturation",
+            "enabled": false,
+            "amount": 0.0,
+            "attack": 100.0,
+            "decay": 100.0
           },
           "modulation": {
             "modulators": [],
