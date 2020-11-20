@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1605783387426,
+  "timestamp": 1605836365222,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -1417,18 +1417,17 @@
             "autoCycleEnabled": false
           },
           {
-            "id": 3001,
-            "class": "com.symmetrylabs.slstudio.pattern.Bubbles",
-            "modulationColor": -3342081,
+            "id": 8567,
+            "class": "com.symmetrylabs.slstudio.pattern.BassPod",
+            "modulationColor": -16772865,
             "parameters": {
-              "label": "Bubbles",
-              "Number": 0.3,
-              "Speed": 0.25,
-              "Sat": 50.0,
-              "Size": 20.0,
-              "Trans": 9.0,
-              "PopFrq": 30.0,
-              "zDep": 2.0
+              "label": "BassPod",
+              "Clr": 0.5,
+              "Gain": 0.8299999833106995,
+              "Range": 0.2,
+              "Attk": 0.4,
+              "Rls": 0.4,
+              "Slope": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -2553,7 +2552,7 @@
       "modulationColor": -16711831,
       "parameters": {
         "label": "Audio",
-        "enabled": false,
+        "enabled": true,
         "mode": 0
       },
       "meter": {
@@ -2562,26 +2561,26 @@
         "modulationColor": -16711858,
         "parameters": {
           "label": "Meter",
-          "running": false,
+          "running": true,
           "trigger": false,
           "gain": 0.0,
           "range": 48.0,
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.2312015181912681,
-          "Band-2": 0.2687185379324454,
-          "Band-3": 0.2538484614191091,
-          "Band-4": 0.20288160613646333,
-          "Band-5": 0.17025502961549732,
-          "Band-6": 0.11434456163291695,
-          "Band-7": 0.02530318821969546,
-          "Band-8": 0.1000531137316063,
-          "Band-9": 0.08005832474004515,
+          "Band-1": 0.0,
+          "Band-2": 0.0,
+          "Band-3": 0.0,
+          "Band-4": 0.0,
+          "Band-5": 0.0,
+          "Band-6": 0.0,
+          "Band-7": 0.0,
+          "Band-8": 0.0,
+          "Band-9": 0.0,
           "Band-10": 0.0,
-          "Band-11": 0.13306396398010223,
-          "Band-12": 0.05168072873674723,
-          "Band-13": 0.019308883016197265,
+          "Band-11": 0.0,
+          "Band-12": 0.0,
+          "Band-13": 0.0,
           "Band-14": 0.0,
           "Band-15": 0.0,
           "Band-16": 0.0
