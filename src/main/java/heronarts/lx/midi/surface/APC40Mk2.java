@@ -564,16 +564,16 @@ public class APC40Mk2 extends LXMidiSurface {
             int mode = LED_MODE_PRIMARY;
             if (channel != null) {
                 int pitch = CLIP_LAUNCH + index + CLIP_LAUNCH_COLUMNS * (CLIP_LAUNCH_ROWS - 1 - i);
-                LXClip clip = channel.getClip(i);
-                if (clip != null) {
-                    color = channel.arm.isOn() ? LED_RED_HALF : LED_GRAY;
-                    if (clip.isRunning()) {
-                        color = channel.arm.isOn() ? LED_RED : LED_GREEN;
-                        sendNoteOn(LED_MODE_PRIMARY, pitch, color);
-                        mode = LED_MODE_PULSE;
-                        color = channel.arm.isOn() ? LED_RED_HALF : LED_GREEN_HALF;
-                    }
-                }
+//                LXClip clip = channel.getClip(i);
+//                if (clip != null) {
+//                    color = channel.arm.isOn() ? LED_RED_HALF : LED_GRAY;
+//                    if (clip.isRunning()) {
+//                        color = channel.arm.isOn() ? LED_RED : LED_GREEN;
+//                        sendNoteOn(LED_MODE_PRIMARY, pitch, color);
+//                        mode = LED_MODE_PULSE;
+//                        color = channel.arm.isOn() ? LED_RED_HALF : LED_GREEN_HALF;
+//                    }
+//                }
                 sendNoteOn(mode, pitch, color);
             }
         }
