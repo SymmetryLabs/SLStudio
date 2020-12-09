@@ -96,13 +96,14 @@ public class Awaken extends SLPattern<SLModel> {
                 c.dist = 0;
             }
         }
+        ColorPalette gradient = paletteLibrary.get(palette.getOption());
+
         centers.removeIf(c -> c.dying && c.dist > c.killDist);
         if (centers.isEmpty()) {
-            Arrays.fill(colors, LXColor.BLACK);
+            Arrays.fill(colors, gradient.getColor(0));
             return;
         }
 
-        ColorPalette gradient = paletteLibrary.get(palette.getOption());
         for (LXVector vx : getVectors()) {
             float d = 0;
             for (Center c : centers) {

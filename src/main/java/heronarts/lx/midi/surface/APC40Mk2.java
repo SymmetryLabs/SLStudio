@@ -691,19 +691,19 @@ public class APC40Mk2 extends LXMidiSurface {
                 if (on) {
 
                     sendNoteOn(0, pitch, lx.tempo.enabled.isOn() ? LED_ON : LED_OFF);
-                    this.bankOn = !this.bankOn;
+                    // this.bankOn = !this.bankOn;
                     sendNoteOn(note.getChannel(), BANK, this.bankOn ? LED_ON : LED_OFF);
-                    sendChannelGrid();
+                    // sendChannelGrid();
                 }
             }
 
         case GLOBAL_PALLETE:
                 if (on) {
-//                    this.globalPalleteOn = !this.globalPalleteOn;
-//                    sendNoteOn(LED_MODE_PULSE, pitch, 20);
+                   // this.globalPalleteOn = !this.globalPalleteOn;
+                   // sendNoteOn(LED_MODE_PULSE, pitch, 20);
                 }
                 else {
-//                    sendNoteOn(LED_MODE_BLINK, pitch, LED_OFF);
+                   // sendNoteOn(LED_MODE_BLINK, pitch, LED_OFF);
 
                 }
 
