@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1607574373952,
+  "timestamp": 1607578657583,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -1266,7 +1266,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -3548,10 +3548,23 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.0
+        "brightness": 0.6571428664028645
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 16795,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -16747521,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
       "envelop": {
         "id": 29,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -4121,14 +4134,7 @@
       }
     },
     "midi": {
-      "inputs": [
-        {
-          "name": "CoreMIDI4J - APC40 mkII",
-          "channel": false,
-          "control": true,
-          "sync": false
-        }
-      ],
+      "inputs": [],
       "mapping": [
         {
           "channel": 0,
