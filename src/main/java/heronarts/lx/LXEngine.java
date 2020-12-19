@@ -66,6 +66,7 @@ import java.util.Queue;
 
 import static heronarts.lx.LXChannel.CrossfadeGroup.A;
 import static heronarts.lx.LXChannel.CrossfadeGroup.B;
+import static heronarts.lx.LXChannel.allPatterns;
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
@@ -121,6 +122,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     private final List<LXChannel> mutableChannels = new ArrayList<LXChannel>();
     public final List<LXChannel> channels = Collections.unmodifiableList(this.mutableChannels);
+
+    public static final Map<String, LXChannel> allChannels = new HashMap<String, LXChannel>();
 
     public final LXMasterChannel masterChannel;
 
@@ -893,6 +896,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     public LXChannel addChannel(LXPattern[] patterns) {
         LXChannel channel = new LXChannel(lx, this.mutableChannels.size(), patterns);
+        allChannels.put(channel.toString(), channel);
         channel.setParent(this);
         this.mutableChannels.add(channel);
         this.focusedChannel.setRange(this.mutableChannels.size() + 1);

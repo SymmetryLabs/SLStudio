@@ -35,6 +35,7 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.component.UIItemList;
+import heronarts.lx.LXChannel;
 
 public class UIPatternList extends UIItemList.ScrollList {
 
