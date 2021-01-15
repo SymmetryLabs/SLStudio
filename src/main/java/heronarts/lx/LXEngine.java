@@ -121,6 +121,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     public final Output output;
 
+    public static final Map<String, LXChannel> allChannels = new HashMap<String, LXChannel>();
+
     private final List<MessageListener> messageListeners = new ArrayList<MessageListener>();
 
     public final BoundedParameter framesPerSecond = new BoundedParameter("FPS", 60, 0, 300);
@@ -737,6 +739,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     }
 
     public LXLook addLook() {
+        System.out.println("Look Added");
         LXLook look = new LXLook(lx);
         look.setParent(this);
         look.index = mutableLooks.size();
@@ -804,6 +807,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     @Deprecated
     public LXChannel addChannel(LXPattern[] patterns) {
         LXChannel channel = getFocusedLook().addChannel();
+        allChannels.put(channel.toString(), channel);
+        System.out.println(channel);
         channel.setPatterns(patterns);
         return channel;
     }

@@ -523,6 +523,7 @@ public class LX {
      * @return this
      */
     public LX goPattern(LXPattern pattern) {
+        System.out.println("GO PATTERN");
         this.engine.goPattern(pattern);
         return this;
     }

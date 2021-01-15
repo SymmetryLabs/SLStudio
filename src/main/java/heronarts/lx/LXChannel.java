@@ -19,7 +19,7 @@
  */
 
 package heronarts.lx;
-
+import java.util.*;
 import heronarts.lx.blend.LXBlend;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXShortMessage;
@@ -275,7 +275,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
     private final List<LXPattern> mutablePatterns = new ArrayList<LXPattern>();
     public final List<LXPattern> patterns = Collections.unmodifiableList(mutablePatterns);
-
     /**
      * A local buffer used for transition blending and effects on this channel
      */
@@ -526,7 +525,8 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         }
         return this;
     }
-
+    
+    private int noiseNumber = 1;
     public final LXChannel addPattern(LXPattern pattern) {
         pattern.setChannel(this);
         pattern.setModel(this.model);

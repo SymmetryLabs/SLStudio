@@ -10,6 +10,7 @@ import heronarts.lx.mutation.RemovePattern;
 import heronarts.lx.mutation.RemoveWarp;
 import heronarts.lx.warp.LXWarp;
 
+import java.util.*;
 import java.util.List;
 import org.lwjgl.glfw.GLFW;
 
@@ -132,10 +133,9 @@ public class ChannelUI {
     }
 
     private static String newPresetNameBuffer = "";
-
+    
     public static void draw(LX lx, LXChannel chan, ParameterUI pui, WepUI wepUi) {
         String chanName = chan.getLabel();
-
         pui.push().allowMapping(true);
 
         if (UI.collapsibleSection("Channel Options")) {
@@ -195,7 +195,6 @@ public class ChannelUI {
             final LXPattern pat = patterns.get(i);
             String patName = pat.getClass().getSimpleName() + "##pattern-" + i;
             String id = String.format("%s / %s", chanName, patName);
-
             UI.spacing(5, 5);
 
             boolean isActive;
