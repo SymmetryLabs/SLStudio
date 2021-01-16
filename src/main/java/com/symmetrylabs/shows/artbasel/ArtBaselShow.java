@@ -1,5 +1,7 @@
 package com.symmetrylabs.shows.artbasel;
 
+import heronarts.lx.LX;
+import heronarts.lx.LXChannel;
 import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
@@ -44,149 +46,65 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
     static final TowerConfig[] TOWER_CONFIG = {
 
 
-//TOWERS CLOCKWISE AROUND THE ROOM (VIDEO SCREEN IS 12:00)
+//--------------------BACK ROW---------------------------------------
+            //FRONT LEFT TOWER OF 3
+            new TowerConfig(SP*0, SP*0, SP*0, new String[][]{
+                new String[] {"", ""},
+                new String[] {"", ""},
+                new String[] {"", ""},
 
-//TOWER 1
+            }), 
+            //FRONT MIDDLE TOWER OF 3
+            new TowerConfig(SP*1.5f, SP*0, SP*0, new String[][]{
+                new String[] {"", ""},
+                new String[] {"", ""},
+                new String[] {"", ""},
 
-            new TowerConfig(SP * 4, SP * 1, SP * 0, new String[][]{
-                new String[] {"919", "910"},
-                new String[] {"637", "1057"},
-                new String[] {"529", "528"},
-                new String[] {"516", "1101"},
-            }),
+            }), 
+            //FRONT RIGHT TOWER OF 3
+            new TowerConfig(SP*2.5f, SP*0, SP*0, new String[][]{
+                new String[] {"", ""},
+                new String[] {"", ""},
+                new String[] {"", ""},
 
-//TOWER 2
+            }), 
+            //FRONT TOWER OF 2
+            new TowerConfig(SP*3.5f, SP*0, SP*0, new String[][]{
+                new String[] {"", ""},
+                new String[] {"", ""},
 
-            new TowerConfig(SP * 5, SP * 0, -SP * 1, 0, 25, 0, new String[][]{
-                new String[] {"713", "712"},
-                new String[] {"940", "948"},
-            }),
+            }), 
+    //--------------------BACK ROW---------------------------------------
+            //BACK LEFT TOWER OF 4
+            new TowerConfig(SP*.5f, SP*0, SP*-1, new String[][]{
+                new String[] {"", ""},
+                new String[] {"", ""},
+                new String[] {"", ""},
+                new String[] {"", ""},
 
-//TOWER 3
+            }), 
+            //BACK MIDDLE TOWER OF 4
+            new TowerConfig(SP*1.5f, SP*0, SP*-1, new String[][]{
+                new String[] {"", ""},
+                new String[] {"", ""},
+                new String[] {"", ""},
+                new String[] {"", ""},
 
-            new TowerConfig(SP * 5, SP * 0, -SP * 2, 0, 25, 0,  new String[][]{
-                new String[] {"896", "898"},
-                new String[] {"1104", "1103"},
-            }),
+            }), 
+            //BACK RIGHT TOWER OF 4
+            new TowerConfig(SP*2.5f, SP*0, SP*-1, new String[][]{
+                new String[] {"", ""},
+                new String[] {"", ""},
+                new String[] {"", ""},
+                new String[] {"", ""},
 
-//TOWER 4
+            }), 
+            //BACK RIGHT TOWER OF 2
+            new TowerConfig(SP*3.5f, SP*0, SP*-1, new String[][]{
+                new String[] {"", ""},
+                new String[] {"", ""},
 
-            new TowerConfig(SP * 6, SP * 0, -SP * 3, 0, 25, 0,  new String[][]{
-                new String[] {"757", "756"},
-                new String[] {"1096", "1095"},
-                new String[] {"867", "866"},
-                new String[] {"936", "921"},
-            }),
-
-//TOWER 5
-
-            new TowerConfig(SP * 7, SP * 0, -SP * 5 , 0, 45, 0,  new String[][]{
-                new String[] {"1091", "1090"},
-                new String[] {"771", "770"},
-                new String[] {"1111", "1112"},
-                new String[] {"949", "946"},
-            }),
-
-//TOWER 6
-//ON TOP OF SUB BY BOOTH
-
-            new TowerConfig(SP * 6, SP * 2.3f, -SP * 5, 0, 45, 0,  new String[][]{
-                new String[] {"679", "678"},
-                new String[] {"707", "706"},
-            }),
-
-//TOWER 7 (TOWER IN FRONT OF VJ TABLE)
-
-            new TowerConfig(SP * 5 , SP * 1, -SP * 5, 0, 45, 0,  new String[][]{
-                new String[] {"957", "998"},
-                new String[] {"1067", "1066"},
-                new String[] {"481", "480"},
-            }),
-
-//TOWER 8 (TOWER BY SOUND BOOTH)
-
-            new TowerConfig(SP*4, SP * 1, -SP * 6, 0, 45, 0, new String[][]{
-                new String[] {"1099", "1098"},
-                new String[] {"924", "923"},
-                new String[] {"595", "804"},
-            }),
-
-//TOWER 9
-
-            new TowerConfig(SP * 3, SP * 1, -SP * 7,  0, 45, 0,new String[][]{
-                new String[] {"1052", "830"},
-                new String[] {"1085", "920"},
-                new String[] {"473", "472"},
-            }),
-
-
-//TOWER 10
-
-            new TowerConfig(SP * 2, SP * 1, -SP * 7,  0, 45, 0,new String[][]{
-                new String[] {"1026", "1025"},
-                new String[] {"791", "790"},
-                new String[] {"487", "486"},
-            }),
-
-//TOWER 11
-
-            new TowerConfig(SP * 1, SP * 1, -SP * 7,  0, -45, 0,new String[][]{
-                new String[] {"1009", "1008"},
-                new String[] {"935", "999"},
-                new String[] {"997", "996"},
-            }),
-
-//TOWER 12
-
-            new TowerConfig(SP * 0, SP * 1,-SP * 7,  0, -45, 0,new String[][]{
-                new String[] {"515", "514"},
-                new String[] {"491", "490"},
-                new String[] {"477", "476"},
-            }),
-
-//TOWER 13
-
-            new TowerConfig(-SP * 3, SP * 1, -SP * 6,   0, -70, 0, new String[][] {
-                new String[] {"929", "995"},
-                new String[] {"928", "918"},
-                new String[] {"1004", "1018"},
-            }),
-
-//TOWER 14
-
-////////////// TOWER ONTOP OF SUB BY BAR
-
-            new TowerConfig(-SP *2, SP * 2.3f, -SP * 5,  0, -70, 0, new String[][]{
-                new String[] {"719", "718"},
-                new String[] {"817", "682"},
-            }),
-
-//TOWER 15
-
-            new TowerConfig(-SP * 1, 0, -SP * 5, 0, -70, 0,  new String[][]{
-                new String[] {"1028", "1029"},//UNLABLED CUBES
-                new String[] {"926", "998"},
-                new String[] {"906", "912"},
-            }),
-
-//TOWER 16
-
-            //tower of four
-            new TowerConfig(SP * -3, SP * 0, -SP * 1, 0, -90, 0, new String[][]{
-                new String[] {"876", "520"},
-                new String[] {"944", "947"},
-                new String[] {"914", "847"},
-                new String[] {"818", "464"},
-            }),
-
-// //TOWER 17
-
-            new TowerConfig(SP * 0, SP * 1, 0,  new String[][]{
-                new String[] {"1075", "593"},
-                new String[] {"783", "782"},
-                new String[] {"495", "494"},
-                new String[] {"441", "440"},
-            }),
+            }), 
 
 
 };
@@ -438,6 +356,13 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 
         return new CubesModel(SHOW_NAME, towers, allCubesArr, cubeInventory, mapping);
     }
+
+    public void setupLx(LX lx) {
+            for (LXChannel c : lx.engine.getAllSubChannels()) {
+            c.autoDisable.setValue(false);
+        }
+    }
+
 
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {

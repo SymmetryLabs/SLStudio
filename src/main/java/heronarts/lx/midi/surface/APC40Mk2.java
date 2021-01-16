@@ -145,8 +145,35 @@ public class APC40Mk2 extends LXMidiSurface {
     public static final int LED_MODE_PULSE = 10;
     public static final int LED_MODE_BLINK = 15;
 
+    public static final int ALL_EFFECTS_OFF = 81;
+    public static final int GLOBAL_PALLETE = 82;
+    public static final int STROBE = 83;
+    public static final int LSD = 84;
+    public static final int XMASK = 85;
+    public static final int YMASK = 86;
+
+    public static final int BLUR_KNOB = 49;
+    public static final int SPECKLE_KNOB = 50;
+    public static final int DESAT_KNOB = 51;
+    public static final int LSD1_KNOB = 52;
+    public static final int LSD2_KNOB = 53;
+    public static final int STROBE_KNOB = 54;
+    public static final int GLOBAL_PALLETE_KNOB = 55;
+
+    public static final int IPAD_CHANNEL = 91;
+
     private boolean shiftOn = false;
     private boolean bankOn = true;
+
+    private boolean palleteOn = true;
+    private boolean strobeOn = true;
+    private boolean lsdOn = true;
+    private boolean xMaskOn = true;
+    private boolean ymaskOn = true;
+    private boolean ipadOn = false;
+
+    private long ipadButtonStartTime;
+    private long ipadButtonEndTime;
 
     private final Map<LXChannel, ChannelListener> channelListeners = new HashMap<LXChannel, ChannelListener>();
 
@@ -264,6 +291,12 @@ public class APC40Mk2 extends LXMidiSurface {
                     ++i;
                 }
             }
+
+            sendNoteOn(LED_MODE_PRIMARY, GLOBAL_PALLETE, LED_GRAY);
+            sendNoteOn(LED_MODE_PRIMARY, STROBE, LED_GRAY);
+            sendNoteOn(LED_MODE_PRIMARY, LSD, LED_GRAY);
+            sendNoteOn(LED_MODE_PRIMARY, XMASK, LED_GRAY);
+            sendNoteOn(LED_MODE_PRIMARY, YMASK, LED_GRAY);
         }
 
         @Override
@@ -316,7 +349,7 @@ public class APC40Mk2 extends LXMidiSurface {
             this.channel.enabled.addListener(this);
             this.channel.crossfadeGroup.addListener(this);
             this.channel.focusedPattern.addListener(this);
-            this.channel.acceptSwatches.addListener(this);
+            // this.channel.acceptSwatches.addListener(this);
             this.channel.speed.addListener(this);
 
             this.channel.controlSurfaceFocusLength.setValue(CLIP_LAUNCH_ROWS);
@@ -330,7 +363,7 @@ public class APC40Mk2 extends LXMidiSurface {
             this.channel.enabled.removeListener(this);
             this.channel.crossfadeGroup.removeListener(this);
             this.channel.focusedPattern.removeListener(this);
-            this.channel.acceptSwatches.removeListener(this);
+            // this.channel.acceptSwatches.removeListener(this);
             this.channel.speed.removeListener(this);
 
             this.channel.controlSurfaceFocusLength.setValue(0);
@@ -358,8 +391,8 @@ public class APC40Mk2 extends LXMidiSurface {
                     this.channel.controlSurfaceFocusIndex.setValue(focusedPatternIndex - CLIP_LAUNCH_ROWS + 1);
                 }
                 sendChannelPatterns(index, this.channel);
-            } else if (p == this.channel.acceptSwatches) {
-                sendNoteOn(index, CHANNEL_RECORD, this.channel.acceptSwatches.isOn() ? LED_ON : LED_OFF);
+            // } else if (p == this.channel.acceptSwatches) {
+            //     sendNoteOn(index, CHANNEL_RECORD, this.channel.acceptSwatches.isOn() ? LED_ON : LED_OFF);
             } else if (p == this.channel.speed) {
                 sendControlChange(0, CHANNEL_KNOB + index, (int) (channel.speed.getNormalized() * 127));
             }
@@ -418,7 +451,7 @@ public class APC40Mk2 extends LXMidiSurface {
     }
 
     @Override
-    protected void onEnable(boolean on) {
+    public void onEnable(boolean on) {
         setApcMode(on ? ABLETON_ALTERNATE_MODE : GENERIC_MODE);
         if (on) {
             initialize();
@@ -448,7 +481,7 @@ public class APC40Mk2 extends LXMidiSurface {
         });
     }
 
-    private void initialize() {
+    public void initialize() {
         this.output.sendNoteOn(0, BANK, this.bankOn ? LED_ON : LED_OFF);
         for (int i = 0; i < CHANNEL_KNOB_NUM; ++i) {
             sendControlChange(0, CHANNEL_KNOB_STYLE+i, LED_STYLE_OFF);
@@ -461,7 +494,7 @@ public class APC40Mk2 extends LXMidiSurface {
             sendControlChange(0, CHANNEL_KNOB_STYLE+i, LED_STYLE_SINGLE);
         }
         sendChannels();
-        sendSwatches();
+        // sendSwatches();
     }
 
     private void sendChannels() {
@@ -483,7 +516,7 @@ public class APC40Mk2 extends LXMidiSurface {
             sendNoteOn(index, CHANNEL_ACTIVE, channel.enabled.isOn() ? LED_ON : LED_OFF);
             sendNoteOn(index, CHANNEL_CROSSFADE_GROUP, channel.crossfadeGroup.getValuei());
             sendNoteOn(index, CHANNEL_SOLO, channel.cueActive.isOn() ? LED_ON : LED_OFF);
-            sendNoteOn(index, CHANNEL_RECORD, channel.acceptSwatches.isOn() ? LED_ON : LED_OFF);
+            // sendNoteOn(index, CHANNEL_RECORD, channel.acceptSwatches.isOn() ? LED_ON : LED_OFF);
             sendControlChange(0, CHANNEL_KNOB + index, (int) (channel.speed.getNormalized() * 127));
         } else {
             sendNoteOn(index, CHANNEL_ACTIVE, LED_OFF);
@@ -525,16 +558,16 @@ public class APC40Mk2 extends LXMidiSurface {
         }
     }
 
-    private void sendSwatches() {
-        for (int i = 0; i <= SCENE_LAUNCH_NUM; i++) {
-            int v = 0; // corresponds to black
-            int c = lx.swatches.swatches.get(i).color.getColor();
-            if (i < lx.swatches.swatches.size()) {
-                v = APC40Colors.matchColor(c);
-            }
-            sendNoteOn(LED_MODE_PRIMARY, SCENE_LAUNCH + i, v);
-        }
-    }
+    // private void sendSwatches() {
+    //     for (int i = 0; i <= SCENE_LAUNCH_NUM; i++) {
+    //         int v = 0; // corresponds to black
+    //         int c = lx.swatches.swatches.get(i).color.getColor();
+    //         if (i < lx.swatches.swatches.size()) {
+    //             v = APC40Colors.matchColor(c);
+    //         }
+    //         sendNoteOn(LED_MODE_PRIMARY, SCENE_LAUNCH + i, v);
+    //     }
+    // }
 
     private void sendChannelFocus() {
         int focusedChannel = this.lx.engine.getFocusedLook().focusedChannel.getValuei();
@@ -547,7 +580,7 @@ public class APC40Mk2 extends LXMidiSurface {
 
     private boolean registered = false;
 
-    private void register() {
+    public void register() {
         if (this.registered) {
             for (LXChannel channel : getVisibleChannelList()) {
                 channel.controlSurfaceFocusLength.setValue(CLIP_LAUNCH_ROWS);
@@ -608,13 +641,13 @@ public class APC40Mk2 extends LXMidiSurface {
         });
         sendNoteOn(0, METRONOME, lx.tempo.enabled.isOn() ? LED_ON : LED_OFF);
 
-        this.lx.swatches.addListener(new SwatchLibrary.SwatchListener() {
-            @Override
-            public void onSwatchesUpdated() {
-                sendSwatches();
-            }
-        });
-        sendSwatches();
+        // this.lx.swatches.addListener(new SwatchLibrary.SwatchListener() {
+        //     @Override
+        //     public void onSwatchesUpdated() {
+        //         sendSwatches();
+        //     }
+        // });
+        // sendSwatches();
     }
 
     private void registerChannel(LXChannel channel) {
@@ -642,9 +675,90 @@ public class APC40Mk2 extends LXMidiSurface {
 
     private void noteReceived(MidiNote note, boolean on) {
         int pitch = note.getPitch();
-
         // Global toggle messages
         switch (pitch) {
+            case IPAD_CHANNEL: {
+                if (on) {
+                    if (ipadOn) {
+                        sendNoteOn(0, pitch, LED_ON);
+                        ipadOn = !ipadOn;
+                    }
+                    else {
+                        sendNoteOn(0, pitch, LED_OFF);
+                        ipadOn = !ipadOn;
+                    }
+                    // this.bankOn = !this.bankOn;
+                    // sendChannelGrid();
+                }
+                break;
+            }
+            case GLOBAL_PALLETE:
+                if (on) {
+                    if (palleteOn) {
+                        sendNoteOn(LED_MODE_PRIMARY, pitch, 20);
+                        palleteOn = !palleteOn;
+                        System.out.println("Global pallete led on");
+                    }
+                    else {
+                        sendNoteOn(LED_MODE_PRIMARY, pitch, LED_GRAY);
+                        palleteOn = !palleteOn;
+                        System.out.println("Global pallete led off");
+
+                    }
+                    break;
+                }
+            case STROBE:
+                if (on) {
+                    if (strobeOn) {
+                        sendNoteOn(LED_MODE_PRIMARY, pitch, 20);
+                        strobeOn = !strobeOn;
+                    }
+                    else {
+                        sendNoteOn(LED_MODE_PRIMARY, pitch, LED_GRAY);;
+                        strobeOn = !strobeOn;
+                    }
+                    break;
+                }
+
+        case LSD:
+                if (on) {
+                    if (lsdOn) {
+                        sendNoteOn(LED_MODE_PRIMARY, pitch, 20);
+                        lsdOn = !lsdOn;
+                    }
+                    else {
+                        sendNoteOn(LED_MODE_PRIMARY, pitch, LED_GRAY);
+                        lsdOn = !lsdOn;
+                    }
+                    break;
+                }
+        case XMASK:
+                if (on) {
+                    if (xMaskOn) {
+                        sendNoteOn(LED_MODE_PRIMARY, pitch, 20);
+                        xMaskOn = !xMaskOn;
+                    }
+                    else {
+                        sendNoteOn(LED_MODE_PRIMARY, pitch, LED_GRAY);
+                        xMaskOn = !xMaskOn;
+                    }
+                    break;
+                }
+
+        case YMASK:
+                if (on) {
+                    if (ymaskOn) {
+                        sendNoteOn(LED_MODE_PRIMARY, pitch, 20);
+                        ymaskOn = !ymaskOn;
+                    }
+                    else {
+                        sendNoteOn(LED_MODE_PRIMARY, pitch, LED_GRAY);
+                        ymaskOn = !ymaskOn;
+                    }
+                    break;
+                }
+
+
         case SHIFT:
             this.shiftOn = on;
             return;
@@ -732,10 +846,10 @@ public class APC40Mk2 extends LXMidiSurface {
                 return;
             }
 
-            if (pitch >= SCENE_LAUNCH && pitch <= SCENE_LAUNCH_MAX) {
-                lx.swatches.apply(pitch - SCENE_LAUNCH);
-                return;
-            }
+            // if (pitch >= SCENE_LAUNCH && pitch <= SCENE_LAUNCH_MAX) {
+            //     lx.swatches.apply(pitch - SCENE_LAUNCH);
+            //     return;
+            // }
         }
 
         // Channel messages
@@ -772,9 +886,9 @@ public class APC40Mk2 extends LXMidiSurface {
                     // focused.editorVisible.setValue(!focused.editorVisible.isOn() || oldFocused != focused);
                 }
                 return;
-            case CHANNEL_RECORD:
-                channel.acceptSwatches.toggle();
-                return;
+            // case CHANNEL_RECORD:
+            //     channel.acceptSwatches.toggle();
+            //     return;
             case DEVICE_ON_OFF:
                 this.deviceListener.onDeviceOnOff();
                 return;
@@ -851,7 +965,29 @@ public class APC40Mk2 extends LXMidiSurface {
             this.lx.engine.speed.setValue(cc.getNormalized() * 2);
             sendControlChange(0, number, cc.getValue());
             return;
+        case BLUR_KNOB:
+            sendControlChange(0, number, cc.getValue());
+            return;
+        case SPECKLE_KNOB:
+            sendControlChange(0, number, cc.getValue());
+            return;
+        case DESAT_KNOB:
+            sendControlChange(0, number, cc.getValue());
+            return;
+        case LSD1_KNOB:
+            sendControlChange(0, number, cc.getValue());
+            return;
+        case LSD2_KNOB:
+            sendControlChange(0, number, cc.getValue());
+            return;
+        case STROBE_KNOB:
+            sendControlChange(0, number, cc.getValue());
+            return;
+        case GLOBAL_PALLETE_KNOB:
+            sendControlChange(0, number, cc.getValue());
+            return;
         }
+
 
         if (number >= DEVICE_KNOB && number <= DEVICE_KNOB_MAX) {
             this.deviceListener.onKnob(number - DEVICE_KNOB, cc.getNormalized());

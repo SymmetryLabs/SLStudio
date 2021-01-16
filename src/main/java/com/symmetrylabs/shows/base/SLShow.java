@@ -200,7 +200,7 @@ public abstract class SLShow implements Show, LXLook.Listener {
 
     @Override
     public void channelAdded(LXLook look, LXChannel lxChannel) {
-        lxChannel.autoDisable.setValue(true);
+        lxChannel.autoDisable.setValue(false);
     }
 
     @Override

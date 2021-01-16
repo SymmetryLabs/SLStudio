@@ -240,7 +240,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
                     .setDescription("Sets the alpha level of the output of this channel");
 
     public final BooleanParameter autoDisable =
-                    new BooleanParameter("Auto Disable", true)
+                    new BooleanParameter("Auto Disable", false)
                                     .setDescription("If true, disables the channel when the fader goes to zero");
 
     public final ObjectParameter<LXBlend> blendMode;
@@ -391,18 +391,21 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     }
 
     boolean shouldRun() {
-//        if (!this.enabled.isOn()) {
-//            return false;
-//        }
-//        return !this.autoDisable.isOn() || this.fader.getValue() != 0;
-        if (this.fader.getValuef() < 0.05){
-            this.enabled.setValue(false);
-            return false;
-        }
-        else {
-            this.enabled.setValue(true);
+       if (!this.enabled.isOn()) {
+           return false;
+       }
+       else {
             return true;
-        }
+       }
+//        return !this.autoDisable.isOn() || this.fader.getValue() != 0;
+        // if (this.fader.getValuef() < 0.05){
+        //     this.enabled.setValue(false);
+        //     return false;
+        // }
+        // else {
+        //     this.enabled.setValue(true);
+        //     return true;
+        // }
     }
 
     public String getOscAddress() {
