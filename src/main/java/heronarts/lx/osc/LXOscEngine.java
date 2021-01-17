@@ -87,10 +87,10 @@ public class LXOscEngine extends LXComponent {
     private static final String ROUTE_BRIGHTNESS = "brightness";
     private static final String ROUTE_WARP = "warp";
 
-    public final static int DEFAULT_RECEIVE_PORT = 3030;
+    public final static int DEFAULT_RECEIVE_PORT = 8000;
     public final static int DEFAULT_TRANSMIT_PORT = 3131;
 
-    public final static String DEFAULT_RECEIVE_HOST = "0.0.0.0";
+    public final static String DEFAULT_RECEIVE_HOST = "127.0.0.1";
     public final static String DEFAULT_TRANSMIT_HOST = "localhost";
 
     private final static int DEFAULT_MAX_PACKET_SIZE = 8192;
@@ -100,12 +100,12 @@ public class LXOscEngine extends LXComponent {
         .setDescription("Hostname to which OSC input socket is bound");
 
     public final DiscreteParameter receivePort = (DiscreteParameter)
-        new DiscreteParameter("RX Port", DEFAULT_RECEIVE_PORT, 1, 9999)
+        new DiscreteParameter("RX Port", DEFAULT_RECEIVE_PORT, 1, 8000)
         .setDescription("UDP port on which the engine listens for OSC message")
         .setUnits(LXParameter.Units.INTEGER);
 
     public final DiscreteParameter transmitPort = (DiscreteParameter)
-        new DiscreteParameter("TX Port", DEFAULT_TRANSMIT_PORT, 1, 9999)
+        new DiscreteParameter("TX Port", DEFAULT_TRANSMIT_PORT, 1, 8000)
         .setDescription("UDP port on which the engine transmits OSC messages")
         .setUnits(LXParameter.Units.INTEGER);
 
