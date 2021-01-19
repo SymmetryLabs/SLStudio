@@ -63,15 +63,18 @@ public abstract class LXMidiSurface implements LXMidiListener {
     protected final LXMidiOutput output;
 
     public final BooleanParameter enabled =
-        new BooleanParameter("Enabled")
+        new BooleanParameter("Enabled", false)
         .setDescription("Whether the control surface is enabled");
 
-    protected LXMidiSurface(LX lx, final LXMidiInput input, final LXMidiOutput output) {
+    public LXMidiSurface(LX lx, final LXMidiInput input, final LXMidiOutput output) {
         this.lx = lx;
         this.input = input;
         this.output = output;
+                // input.open();
+                // output.open();
+                // input.addListener(LXMidiSurface.this);
         this.enabled.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter p) {
+            public void onParameterChanged(LXParameter p) { 
                 if (enabled.isOn()) {
                     input.open();
                     output.open();
@@ -82,7 +85,6 @@ public abstract class LXMidiSurface implements LXMidiListener {
                 onEnable(enabled.isOn());
             }
         });
-
     }
 
     public String getIdentifier() {
@@ -93,7 +95,7 @@ public abstract class LXMidiSurface implements LXMidiListener {
         return this.input.getDescription();
     }
 
-    protected void onEnable(boolean isOn) {}
+    public void onEnable(boolean isOn) {}
 
     protected void sendNoteOn(int channel, int note, int velocity) {
         if (this.enabled.isOn()) {

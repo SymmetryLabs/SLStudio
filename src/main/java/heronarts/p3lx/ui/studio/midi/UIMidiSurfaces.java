@@ -26,7 +26,11 @@
 
 package heronarts.p3lx.ui.studio.midi;
 
+import heronarts.lx.LX;
+import heronarts.lx.midi.LXMidiInput;
+import heronarts.lx.midi.LXMidiOutput;
 import heronarts.lx.midi.LXMidiEngine;
+import heronarts.lx.midi.surface.APC40Mk2;
 import heronarts.lx.midi.surface.LXMidiSurface;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
@@ -48,6 +52,7 @@ public class UIMidiSurfaces extends UICollapsibleSection {
             public void run() {
                 for (LXMidiSurface surface : midiEngine.surfaces) {
                     new UIMidiSurface(ui, surface, getContentWidth()).addToContainer(UIMidiSurfaces.this);
+                    surface.onEnable(true);
                 }
                 setVisible(midiEngine.surfaces.size() > 0);
             }

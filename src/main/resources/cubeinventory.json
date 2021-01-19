@@ -715,8 +715,8 @@
     {
       "addrA": "5410ecf65e05",
       "idA": "957",
-      "addrB": "5410ecf5a71c",
-      "idB": "956",
+      "addrB": "5410ecfdb4b6",
+      "idB": "1226",
       "imported": false
     },
     {
@@ -962,13 +962,6 @@
       "idA": "1011",
       "addrB": "5410ecf54a44",
       "idB": "802",
-      "imported": false
-    },
-    {
-      "addrA": "5410ecfdb4b6",
-      "idA": "1226",
-      "addrB": "5410ecf67178",
-      "idB": "1227",
       "imported": false
     },
     {

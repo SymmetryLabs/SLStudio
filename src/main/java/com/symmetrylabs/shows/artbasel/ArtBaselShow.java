@@ -1,5 +1,6 @@
 package com.symmetrylabs.shows.artbasel;
 
+import heronarts.lx.LX;
 import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
@@ -8,6 +9,10 @@ import com.symmetrylabs.shows.cubes.UICubesOutputs;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
+import heronarts.lx.midi.surface.LXMidiSurface;
+import heronarts.lx.midi.LXMidiEngine;
+import heronarts.lx.midi.LXMidiInput;
+import heronarts.lx.midi.surface.APC40Mk2;
 import heronarts.lx.transform.LXTransform;
 import heronarts.p3lx.ui.UI2dScrollContext;
 import java.io.File;
@@ -48,61 +53,62 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 
 //TOWER 1
 
+            //FRONT LEFT TOWER OF 3
             new TowerConfig(SP*0, SP*0, SP*0, new String[][]{
-                new String[] {"", ""},
-                new String[] {"", ""},
-                new String[] {"", ""},
+                new String[] {"781", "780"},
+                new String[] {"1067", "1066"},
+                new String[] {"361", "1007"},
 
             }), 
             //FRONT MIDDLE TOWER OF 3
             new TowerConfig(SP*1.5f, SP*0, SP*0, new String[][]{
-                new String[] {"", ""},
-                new String[] {"", ""},
-                new String[] {"", ""},
+                new String[] {"741", "740"},
+                new String[] {"5410ecf48d2f", "5410ecf4c520"},
+                new String[] {"415hp", "1050"},
 
             }), 
             //FRONT RIGHT TOWER OF 3
             new TowerConfig(SP*2.5f, SP*0, SP*0, new String[][]{
-                new String[] {"", ""},
-                new String[] {"", ""},
-                new String[] {"", ""},
+                new String[] {"475", "474"},
+                new String[] {"5410ecf4fec0", "5410ecf4c0ab"},
+                new String[] {"5410ecf5aa8e", "5410ecf68db3"},
 
             }), 
             //FRONT TOWER OF 2
             new TowerConfig(SP*3.5f, SP*0, SP*0, new String[][]{
-                new String[] {"", ""},
-                new String[] {"", ""},
+                new String[] {"813", "812"},
+                new String[] {"583", "582"},
 
             }), 
     //--------------------BACK ROW---------------------------------------
             //BACK LEFT TOWER OF 4
             new TowerConfig(SP*.5f, SP*0, SP*1, new String[][]{
-                new String[] {"", ""},
-                new String[] {"", ""},
-                new String[] {"", ""},
-                new String[] {"", ""},
+                new String[] {"5410ecfd8d32", "5410ecf520a5"},
+                new String[] {"575", "1146"},
+                new String[] {"949", "946"},
+                new String[] {"723", "196"},
 
             }), 
             //BACK MIDDLE TOWER OF 4
             new TowerConfig(SP*1.5f, SP*0, SP*1, new String[][]{
-                new String[] {"", ""},
-                new String[] {"", ""},
-                new String[] {"", ""},
-                new String[] {"", ""},
+                new String[] {"5410ecf4feb5", "1056"},
+                new String[] {"957", "1348"},
+                new String[] {"1053", "1062"},
+                new String[] {"5410ecf4eb5", "5410ecf4fd47"},
 
             }), 
             //BACK RIGHT TOWER OF 4
             new TowerConfig(SP*2.5f, SP*0, SP*1, new String[][]{
-                new String[] {"", ""},
-                new String[] {"", ""},
-                new String[] {"", ""},
-                new String[] {"", ""},
+                new String[] {"953", "1110"},
+                new String[] {"971", "994"},
+                new String[] {"637", "1057"},
+                new String[] {"765", "764"},
 
             }), 
             //BACK RIGHT TOWER OF 2
             new TowerConfig(SP*3.5f, SP*0, SP*1, new String[][]{
-                new String[] {"", ""},
-                new String[] {"", ""},
+                new String[] {"1073", "1072"},
+                new String[] {"873", "872"},
 
             }), 
 
@@ -356,6 +362,7 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 
         return new CubesModel(SHOW_NAME, towers, allCubesArr, cubeInventory, mapping);
     }
+
 
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {

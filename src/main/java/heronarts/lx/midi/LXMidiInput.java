@@ -49,7 +49,7 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
         .setDescription("Whether midi events from this device are forwarded to channels");
 
     public final BooleanParameter controlEnabled =
-        new BooleanParameter("Control", false)
+        new BooleanParameter("Control", true)
         .setDescription("Whether midi events from this device are used for control mapping");
 
     public final BooleanParameter syncEnabled =
@@ -95,6 +95,7 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
     protected void onEnabled(boolean enabled) {
         if (enabled && !this.isOpen) {
             try {
+                System.out.println("onenabled override");
                 this.device.open();
                 this.device.getTransmitter().setReceiver(new Receiver());
                 this.isOpen = true;

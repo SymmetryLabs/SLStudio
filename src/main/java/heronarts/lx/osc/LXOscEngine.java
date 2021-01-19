@@ -195,7 +195,9 @@ public class LXOscEngine extends LXComponent {
                             if (chan.getPattern(2).autoCycleEligible.isOn()) {
                                 chan.getPattern(2).autoCycleEligible.toggle();
                             } else {
+                                lx.engine.addTask(() -> chan.goIndex(2));
                                 chan.getPattern(2).toggleAutoCycleEligible();
+
                             }
                             break;
                         case ("Blinders"):
@@ -203,6 +205,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(3).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(3).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(3));
                             }
                             break;
                         case ("BassPod"):
@@ -210,6 +213,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(4).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(4).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(4));
                             }
                             break;
                         case ("BouncyBalls"):
@@ -217,6 +221,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(5).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(5).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(5));
                             }
                             break;
                         case ("CrossSections"):
@@ -224,6 +229,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(6).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(6).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(6));
                             }
                             break;
                         case ("Crystalline"):
@@ -231,6 +237,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(7).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(7).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(7));
                             }
                             break;
                         case ("Diamonds"):
@@ -238,6 +245,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(8).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(8).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(8));
                             }
                             break;
                         case ("Explosions"):
@@ -245,6 +253,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(9).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(9).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(9));
                             }
                             break;
                         case ("FlockWave"):
@@ -252,6 +261,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(10).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(10).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(10));
                             }
                             break;
                         case ("FlockWaveBlues"):
@@ -259,6 +269,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(11).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(11).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(11));
                             }
                             break;
                         case ("FlockWaveFiery"):
@@ -266,6 +277,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(12).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(12).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(12));
                             }
                             break;
                         case ("FlockWaveGalaxies"):
@@ -273,6 +285,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(13).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(13).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(13));
                             }
                             break;
                         case ("FlockWaveMercury"):
@@ -280,6 +293,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(14).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(14).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(14));
                             }
                             break;
                         case ("FlockWaveOoze"):
@@ -287,6 +301,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(15).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(15).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(15));
                             }
                             break;
                         case ("FlockWavePlanets"):
@@ -294,6 +309,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(16).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(16).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(16));
                             }
                             break;
                         case ("FlockWaveTimewarp"):
@@ -301,6 +317,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(17).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(17).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(17));
                             }
                             break;
                         case ("Metaballs"):
@@ -308,6 +325,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(18).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(18).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(18));
                             }
                             break;
                         case ("Wasps"):
@@ -315,6 +333,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(19).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(19).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(19));
                             }
                             break;
                         case ("Noise1"):
@@ -322,6 +341,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(20).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(20).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(20));
                             }
                             break;
                         case ("Noise2"):
@@ -329,6 +349,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(21).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(21).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(21));
                             }
                             break;
                         case ("Pong"):
@@ -336,6 +357,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(22).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(22).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(22));
                             }
                             break;
                         case ("Psy"):
@@ -343,6 +365,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(23).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(23).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(23));
                             }
                             break;
                         case ("Raindrops"):
@@ -350,6 +373,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(24).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(24).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(24));
                             }
                             break;
                         case ("Rings"):
@@ -357,6 +381,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(25).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(25).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(25));
                             }
                             break;
                         case ("Ripple"):
@@ -364,13 +389,15 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(26).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(26).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(26));
                             }
                             break;
-                        case ("Raven"):
+                        case ("Spheres"):
                             if (chan.getPattern(27).autoCycleEligible.isOn()) {
                                 chan.getPattern(27).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(27).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(27));
                             }
                             break;
                         case ("ShiftingPlane"):
@@ -378,6 +405,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(28).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(28).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(28));
                             }
                             break;
                         case ("SimplexNoise"):
@@ -385,6 +413,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(29).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(29).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(29));
                             }
                             break;
                         case ("SineSphere"):
@@ -392,6 +421,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(30).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(30).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(30));
                             }
                             break;
                         case ("solid"):
@@ -399,6 +429,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(31).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(31).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(31));
                             }
                             break;
                         case ("SpaceTime"):
@@ -406,6 +437,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(32).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(32).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(32));
                             }
                             break;
                         case ("Sparkle"):
@@ -413,6 +445,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(33).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(33).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(33));
                             }
                             break;
                         case ("Swarm"):
@@ -420,6 +453,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(34).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(34).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(34));
                             }
                             break;
                         case ("TimPinwheels"):
@@ -427,6 +461,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(35).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(35).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(35));
                             }
                             break;
                         case ("Swim"):
@@ -434,6 +469,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(36).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(36).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(36));
                             }
                             break;
                         case ("ViolinWave"):
@@ -441,6 +477,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(37).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(37).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(37));
                             }
                             break;
                         case ("Voronoi"):
@@ -448,6 +485,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(38).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(38).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(38));
                             }
                             break;
                         case ("CubeFlash"):
@@ -455,6 +493,7 @@ public class LXOscEngine extends LXComponent {
                                 chan.getPattern(39).autoCycleEligible.toggle();
                             } else {
                                 chan.getPattern(39).toggleAutoCycleEligible();
+                                lx.engine.addTask(() -> chan.goIndex(39));
                             }
                             break;
                     }
@@ -570,7 +609,7 @@ public class LXOscEngine extends LXComponent {
                             // channel.goPattern(LXChannel.allPatterns.get("Ripple[Channel-9 | Ripple]"));
                             lx.engine.addTask(() -> chan.goIndex(26));
                             break;
-                        case ("Raven"):
+                        case ("Spheres"):
                             // channel.goPattern(LXChannel.allPatterns.get("RKPattern01[Channel-9 | RKPattern01]"));
                             lx.engine.addTask(() -> chan.goIndex(27));
                             break;
