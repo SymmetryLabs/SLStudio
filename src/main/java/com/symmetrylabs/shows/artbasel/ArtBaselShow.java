@@ -51,16 +51,16 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 //1132, 1135
 
             //Piano Cubes
-            new TowerConfig(SP*0, SP*1, SP*0, new String[][]{new String[] {"5410ecf53264", "5410ecf50358"}}), 
-            new TowerConfig(SP*1, SP*1.5f, SP*.5f, new String[][]{new String[] {"824", "825"}}), 
-            new TowerConfig(SP*1.75f, SP*2.5f, 0, new String[][]{new String[] {"140", "5410ecfdb7c6"}}), 
-            new TowerConfig(SP*2f, SP*1.5f, 0, new String[][]{new String[] {"928", "5410ecf53264"}}), 
-            new TowerConfig(SP*3f, SP*2f, SP*-.5f, new String[][]{new String[] {"5410ecf50358", "489"}}), 
-            new TowerConfig(SP*4f, SP*1.5f, SP*-1, new String[][]{new String[] {"5410ecf50358", "5410ecf53264"}}), 
-            new TowerConfig(SP*3.5f, SP*1.5f,SP* -2, new String[][]{new String[] {"826", "827"}}), 
-            new TowerConfig(SP*3.5f, SP*.5f,SP* -2, new String[][]{new String[] {"567", "566"}}), 
-            new TowerConfig(SP*3.5f, SP*-.5f,SP* -2, new String[][]{new String[] {"806", "5410ecf53264"}}), 
-            new TowerConfig(SP*3.5f, SP*.5f, SP* -3, new String[][]{new String[] {"0", "614"}}), 
+            // new TowerConfig(SP*0, SP*1, SP*0, new String[][]{new String[] {"5410ecf53264", "5410ecf50358"}}), 
+            // new TowerConfig(SP*1, SP*1.5f, SP*.5f, new String[][]{new String[] {"824", "825"}}), 
+            // new TowerConfig(SP*1.75f, SP*2.5f, 0, new String[][]{new String[] {"140", "5410ecfdb7c6"}}), 
+            // new TowerConfig(SP*2f, SP*1.5f, 0, new String[][]{new String[] {"928", "5410ecf53264"}}), 
+            // new TowerConfig(SP*3f, SP*2f, SP*-.5f, new String[][]{new String[] {"5410ecf50358", "489"}}), 
+            // new TowerConfig(SP*4f, SP*1.5f, SP*-1, new String[][]{new String[] {"5410ecf50358", "5410ecf53264"}}), 
+            // new TowerConfig(SP*3.5f, SP*1.5f,SP* -2, new String[][]{new String[] {"826", "827"}}), 
+            // new TowerConfig(SP*3.5f, SP*.5f,SP* -2, new String[][]{new String[] {"567", "566"}}), 
+            // new TowerConfig(SP*3.5f, SP*-.5f,SP* -2, new String[][]{new String[] {"806", "5410ecf53264"}}), 
+            // new TowerConfig(SP*3.5f, SP*.5f, SP* -3, new String[][]{new String[] {"0", "614"}}), 
 
 
 
@@ -96,12 +96,32 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
             // Tower of 4 
             new TowerConfig(SP*6, 0, SP*0, new String[][]{new String[] {"1140", "5410ecfdb2dd"}, new String[] {"778", "970"}, new String[] {"747", "746"},  new String[] {"398", "1151"}}),
             // Tower of 3 
-            new TowerConfig(SP*5.5f, SP*.5f, SP*-1, new String[][]{new String[] {"1030", "1040"},  new String[] {"5410ecf53668", "5410ecf5205e"}, new String[] {"449", "448"}}),
+            new TowerConfig(SP*5.5f, SP*.5f, SP*-2.5f, new String[][]{new String[] {"1030", "1040"},  new String[] {"5410ecf53668", "5410ecf5205e"}, new String[] {"449", "448"}}),
             // Tower of 4 
-            new TowerConfig(SP*6, 0, SP*-2, new String[][]{new String[] {"977", ""}, new String[] {"5410ecfd56ff", "5410ecf6a91e"}, new String[] {"795", "5410ecf4bf7e"},  new String[] {"654", ""}}), 
+            // new TowerConfig(SP*6, 0, SP*-2, new String[][]{new String[] {"977", ""}, new String[] {"5410ecfd56ff", "5410ecf6a91e"}, new String[] {"795", "5410ecf4bf7e"},  new String[] {"654", ""}}), 
+           
 
+            // Tower of 4  
+            new TowerConfig(SP*7, 0, SP*-4, new String[][]{new String[] {"617", "616"}, new String[] {"799", "798"}, new String[] {"567", "566"},  new String[] {"993", "973"}}), 
+            // Tower of 4 
+            new TowerConfig(SP*6.5f, 0, SP*-3, new String[][]{new String[] {"977", "1024"}, new String[] {"5410ecfd56ff", "5410ecf6a91e"}, new String[] {"795", "1344"},  new String[] {"654", "1083"}}), 
 
+            // Tower of 4 
+            new TowerConfig(SP*4, 0, SP*-2, new String[][]{new String[] {"952", "943"}, new String[] {"5410ecfd56ff", "951"}, new String[] {"721", "720"},  new String[] {"871", "870"}}), 
+            // Tower of 4 
+            new TowerConfig(SP*3, 0, SP*-2, new String[][]{new String[] {"687", "686"}, new String[] {"203", "156"}, new String[] {"981", "982"},  new String[] {"749", "748"}}), 
+            // Tower of 3 
+            new TowerConfig(SP*2, 0, SP*-2, new String[][]{new String[] {"729", "728"}, new String[] {"611", "610"},  new String[] {"621", "620"}}), 
+            // Tower of 4 
+            new TowerConfig(SP*1, 0, SP*-2, new String[][]{new String[] {"545", "439"}, new String[] {"635", "634"}, new String[] {"753", "752"},  new String[] {"789", "788"}}), 
 
+            // Tower of 4 
+            new TowerConfig(0, 0, SP*-3, new String[][]{new String[] {"592", "1000"}, new String[] {"607", "606"}, new String[] {"523", "522"},  new String[] {"1003", "989"}}), 
+
+            // Tower of 3 
+            new TowerConfig(SP*-1, 0, SP*-4, new String[][]{new String[] {"835", "834"}, new String[] {"483", "482"},  new String[] {"884", "880"}}), 
+
+            
 //             // //Gap between cubes
 
 //             // //Cubes zig zag back to front
