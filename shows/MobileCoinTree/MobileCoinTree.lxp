@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "timestamp": 1622143498377,
+  "timestamp": 1622144838696,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -73,7 +73,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 21,
+            "patternIndex": 15,
             "patterns": [
               {
                 "id": 51,
@@ -607,7 +607,7 @@
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": true,
-              "autoCycleTimeSecs": 26.614999771118164,
+              "autoCycleTimeSecs": 36.55799865722656,
               "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 1,
@@ -654,7 +654,7 @@
                   "label": "ColorFilter",
                   "expandedInUi": true,
                   "enabled": false,
-                  "Hue": 0.0,
+                  "Hue": 108.00000429153442,
                   "Sat": 100.0,
                   "Alpha": false
                 },
@@ -665,17 +665,27 @@
                 }
               },
               {
-                "id": 1156,
-                "class": "com.symmetrylabs.slstudio.effect.LABShift",
-                "modulationColor": -12452096,
+                "id": 1664,
+                "class": "com.symmetrylabs.slstudio.effect.MidiTrigger",
+                "modulationColor": -65425,
                 "parameters": {
-                  "label": "LABShift",
+                  "label": "MidiTrigger",
                   "expandedInUi": true,
                   "enabled": false,
-                  "Lboost": 0.0,
-                  "Lshift": 0.0,
-                  "Ashift": 0.0,
-                  "Bshift": 0.0
+                  "Attack": 0.5,
+                  "Decay": 0.5,
+                  "In": 0.0,
+                  "Out": 0.0,
+                  "Brt": 1.0,
+                  "PitchLo": 24,
+                  "PitchHi": 72,
+                  "Shape": 0,
+                  "Hold": false,
+                  "Follow": false,
+                  "XPOS": false,
+                  "XNEG": false,
+                  "DISC": false,
+                  "HOLE": false
                 },
                 "modulation": {
                   "modulators": [],
@@ -684,7 +694,7 @@
                 }
               }
             ],
-            "patternIndex": 6,
+            "patternIndex": 1,
             "patterns": [
               {
                 "id": 1130,
@@ -842,7 +852,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -4063488,
+          "modulationColor": -16711851,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
