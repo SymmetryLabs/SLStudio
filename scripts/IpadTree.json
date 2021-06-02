@@ -2292,8 +2292,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -2420,8 +2419,7 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -2452,8 +2450,7 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "button",
@@ -2620,9 +2617,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -2751,8 +2746,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -2831,8 +2825,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "button",
@@ -2999,9 +2992,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -3130,8 +3121,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -3210,13 +3200,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -3268,9 +3255,7 @@
             "variables": "@{parent.variables}",
             "traversing": false,
             "widgets": [],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -3399,8 +3384,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -3479,8 +3463,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -3559,13 +3542,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -3694,13 +3674,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -3877,8 +3854,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -3909,8 +3885,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "button",
@@ -3954,9 +3929,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -4085,8 +4058,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -4165,13 +4137,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -4300,8 +4269,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -4332,8 +4300,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -4412,8 +4379,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -4492,8 +4458,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -4572,8 +4537,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -4652,8 +4616,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -4780,8 +4743,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -4812,8 +4774,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -4892,8 +4853,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -4944,9 +4904,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -5075,8 +5033,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -5203,8 +5160,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -5235,13 +5191,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -5370,13 +5323,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -5505,8 +5455,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -5537,8 +5486,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -5589,9 +5537,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -5672,8 +5618,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -5704,8 +5649,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -5804,9 +5748,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -5887,8 +5829,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -5919,8 +5860,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -6019,9 +5959,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -6150,8 +6088,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -6182,8 +6119,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -6234,9 +6170,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -6365,8 +6299,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -6397,8 +6330,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -6449,9 +6381,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -6532,8 +6462,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -6564,8 +6493,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -6664,9 +6592,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -6747,8 +6673,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -6779,8 +6704,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -6879,9 +6803,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -7010,8 +6932,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -7042,8 +6963,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -7094,9 +7014,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -7273,8 +7191,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -7305,13 +7222,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -7488,8 +7402,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -7520,8 +7433,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -7600,8 +7512,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -7680,13 +7591,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -7767,8 +7675,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -7799,8 +7706,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -7927,8 +7833,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -8007,8 +7912,7 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -8059,9 +7963,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -8142,8 +8044,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -8174,8 +8075,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -8350,8 +8250,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "button",
@@ -8395,9 +8294,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -8449,9 +8346,7 @@
             "variables": "@{parent.variables}",
             "traversing": false,
             "widgets": [],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -8580,8 +8475,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -8612,8 +8506,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -8692,8 +8585,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -8744,9 +8636,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -8875,8 +8765,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -8907,8 +8796,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -8959,9 +8847,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -9090,13 +8976,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -9177,8 +9060,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -9209,8 +9091,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -9309,9 +9190,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -9392,8 +9271,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -9472,8 +9350,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -9552,8 +9429,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -9604,9 +9480,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -9783,8 +9657,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -9815,8 +9688,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -9895,13 +9767,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -10078,8 +9947,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -10110,13 +9978,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -10197,8 +10062,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -10277,8 +10141,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -10357,8 +10220,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -10409,9 +10271,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -10492,8 +10352,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -10524,8 +10383,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -10624,9 +10482,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -10755,13 +10611,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -10890,8 +10743,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -10922,8 +10774,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -10974,9 +10825,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -11105,8 +10954,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -11137,8 +10985,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -11217,8 +11064,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -11249,8 +11095,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -11349,9 +11194,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -11480,8 +11323,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -11560,8 +11402,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -11592,8 +11433,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -11644,9 +11484,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -11727,8 +11565,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -11759,8 +11596,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -11859,9 +11695,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -11942,8 +11776,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -12022,8 +11855,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -12102,8 +11934,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -12195,9 +12026,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -12374,8 +12203,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -12406,13 +12234,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "text",
@@ -12443,8 +12268,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "text",
@@ -12475,8 +12299,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "fader",
@@ -12636,8 +12459,7 @@
             "script": "",
             "address": "auto",
             "preArgs": "",
-            "target": "",
-            "decimals": 2
+            "target": ""
           },
           {
             "type": "text",
@@ -12668,8 +12490,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "button",
@@ -12741,8 +12562,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "fader",
@@ -12823,8 +12643,7 @@
             "address": "auto",
             "preArgs": "",
             "target": "",
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "button",
@@ -13322,8 +13141,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "fader",
@@ -13404,8 +13222,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "fader",
@@ -13660,16 +13477,14 @@
             "bypass": false
           }
         ],
-        "tabs": [],
-        "relative": false,
-        "ignoreTabs": false
+        "tabs": []
       },
       {
         "type": "modal",
         "top": "1.27%",
         "left": "49.69%",
         "id": "Pattern Select",
-        "visible": false,
+        "visible": true,
         "width": "48.34%",
         "height": "17.51%",
         "expand": "false",
@@ -13772,8 +13587,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "frame",
@@ -13887,7 +13701,7 @@
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/Balance/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -13898,8 +13712,8 @@
             "wrap": false,
             "colorTextOn": "auto",
             "label": "auto",
-            "on": "Balance",
-            "off": 0,
+            "on": 2,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false
           },
@@ -13971,7 +13785,7 @@
                 "default": "",
                 "linkId": "",
                 "script": "",
-                "address": "/lx/channel/9/warp/1/amt",
+                "address": "/lx/channel/1/warp/1/amt",
                 "preArgs": "",
                 "typeTags": "",
                 "decimals": 2,
@@ -14022,7 +13836,7 @@
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/Awaken/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -14033,8 +13847,8 @@
             "wrap": false,
             "colorTextOn": "auto",
             "label": "auto",
-            "on": "Awaken",
-            "off": 0,
+            "on": 1,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false
           },
@@ -14042,7 +13856,7 @@
             "type": "button",
             "top": "29.36%",
             "left": "7.17%",
-            "id": "Blinders",
+            "id": "Blues",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -14063,15 +13877,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Blinders",
-            "off": 0,
+            "on": 3,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/Blinders/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -14083,7 +13897,7 @@
             "type": "button",
             "top": "37.94%",
             "left": "7.17%",
-            "id": "BassPod",
+            "id": "Borealis",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -14104,15 +13918,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "BassPod",
-            "off": 0,
+            "on": 4,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/BassPod/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -14124,7 +13938,7 @@
             "type": "button",
             "top": "3.62%",
             "left": "17.95%",
-            "id": "Bouncy Balls",
+            "id": "BranchFlow",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -14145,15 +13959,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Bouncy Balls",
-            "off": 0,
+            "on": 5,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "Bouncy Balls",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/BouncyBalls/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -14165,7 +13979,7 @@
             "type": "button",
             "top": "12.2%",
             "left": "17.95%",
-            "id": "Cross Sects",
+            "id": "Chess",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -14186,15 +14000,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Cross Sects",
-            "off": 0,
+            "on": 6,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "Cross Sects",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/CrossSections/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -14206,7 +14020,7 @@
             "type": "button",
             "top": "20.78%",
             "left": "17.95%",
-            "id": "Crystalline",
+            "id": "Chevron",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -14227,15 +14041,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Crystalline",
-            "off": 0,
+            "on": 7,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/Crystalline/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -14247,7 +14061,7 @@
             "type": "button",
             "top": "29.36%",
             "left": "17.95%",
-            "id": "Diamonds",
+            "id": "Clouds",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -14268,15 +14082,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Diamonds",
-            "off": 0,
+            "on": 8,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/Diamonds/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -14288,7 +14102,7 @@
             "type": "button",
             "top": "37.94%",
             "left": "17.95%",
-            "id": "Explosions",
+            "id": "Crawl",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -14309,15 +14123,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Explosions",
-            "off": 0,
+            "on": 9,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/Explosions/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -14329,7 +14143,7 @@
             "type": "button",
             "top": "3.62%",
             "left": "28.58%",
-            "id": "FlockWave",
+            "id": "Emanation",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -14350,15 +14164,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "FlockWave",
-            "off": 0,
+            "on": 10,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "FlockWave",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/FlockWave/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -14369,47 +14183,6 @@
           {
             "type": "button",
             "top": "12.2%",
-            "left": "28.58%",
-            "id": "Blues ",
-            "visible": true,
-            "interaction": true,
-            "width": "8.2%",
-            "height": "7.35%",
-            "expand": "false",
-            "colorText": "auto",
-            "colorWidget": "#00ffe2",
-            "colorStroke": "auto",
-            "colorFill": "auto",
-            "alphaStroke": "auto",
-            "alphaFillOff": "auto",
-            "alphaFillOn": "auto",
-            "lineWidth": "auto",
-            "padding": "auto",
-            "html": "",
-            "css": "font-size: 100%;",
-            "colorTextOn": "auto",
-            "label": "auto",
-            "vertical": false,
-            "wrap": false,
-            "on": "Blues",
-            "off": 0,
-            "mode": "tap",
-            "doubleTap": false,
-            "value": "Blues",
-            "default": "",
-            "linkId": ">>Pattern",
-            "script": "",
-            "address": "/GoPattern/FlockWaveBlues/",
-            "preArgs": "",
-            "typeTags": "",
-            "decimals": 1,
-            "target": "",
-            "ignoreDefaults": false,
-            "bypass": false
-          },
-          {
-            "type": "button",
-            "top": "20.78%",
             "left": "28.58%",
             "id": "Fiery",
             "visible": true,
@@ -14432,15 +14205,56 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Fiery",
-            "off": 0,
+            "on": 11,
+            "off": 127,
+            "mode": "tap",
+            "doubleTap": false,
+            "value": "Blues",
+            "default": "",
+            "linkId": ">>Pattern",
+            "script": "",
+            "address": "/lx/look/1/channel/1/activePattern/",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 1,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "20.78%",
+            "left": "28.58%",
+            "id": "Galaxies",
+            "visible": true,
+            "interaction": true,
+            "width": "8.2%",
+            "height": "7.35%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "#00ffe2",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "font-size: 100%;",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 12,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "Fiery ",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/FlockWaveFiery/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -14452,7 +14266,7 @@
             "type": "button",
             "top": "29.36%",
             "left": "28.58%",
-            "id": "Galaxy",
+            "id": "GameOfLife",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -14473,15 +14287,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Galaxy",
-            "off": 0,
+            "on": 13,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "Galaxy",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/FlockWaveGalaxies/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -14493,7 +14307,7 @@
             "type": "button",
             "top": "37.94%",
             "left": "28.58%",
-            "id": "Mercury ",
+            "id": "Spin",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -14514,15 +14328,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Mercury ",
-            "off": 0,
+            "on": 14,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "Mercury ",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/FlockWaveMercury/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -14534,6 +14348,334 @@
             "type": "button",
             "top": "3.62%",
             "left": "39.29%",
+            "id": "InOut",
+            "visible": true,
+            "interaction": true,
+            "width": "8.2%",
+            "height": "7.35%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "#00ffe2",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "font-size: 100%;",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 15,
+            "off": 127,
+            "mode": "tap",
+            "doubleTap": false,
+            "value": "Ooze",
+            "default": "",
+            "linkId": ">>Pattern",
+            "script": "",
+            "address": "/lx/look/1/channel/1/activePattern/",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 1,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "12.2%",
+            "left": "39.29%",
+            "id": "LightHouse",
+            "visible": true,
+            "interaction": true,
+            "width": "8.2%",
+            "height": "7.35%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "#00ffe2",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "font-size: 100%;",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 16,
+            "off": 127,
+            "mode": "tap",
+            "doubleTap": false,
+            "value": "Planets",
+            "default": "",
+            "linkId": ">>Pattern",
+            "script": "",
+            "address": "/lx/look/1/channel/1/activePattern/",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 1,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "20.78%",
+            "left": "39.29%",
+            "id": "Loop",
+            "visible": true,
+            "interaction": true,
+            "width": "8.2%",
+            "height": "7.35%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "#00ffe2",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "font-size: 100%;",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 17,
+            "off": 127,
+            "mode": "tap",
+            "doubleTap": false,
+            "value": "TimeWarp",
+            "default": "",
+            "linkId": ">>Pattern",
+            "script": "",
+            "address": "/lx/look/1/channel/1/activePattern/",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 1,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "29.36%",
+            "left": "39.29%",
+            "id": "MeltDown",
+            "visible": true,
+            "interaction": true,
+            "width": "8.2%",
+            "height": "7.35%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "#00ffe2",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "font-size: 100%;",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 18,
+            "off": 127,
+            "mode": "tap",
+            "doubleTap": false,
+            "value": "Metaballs",
+            "default": "",
+            "linkId": ">>Pattern",
+            "script": "",
+            "address": "/lx/look/1/channel/1/activePattern/",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 1,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "37.94%",
+            "left": "39.29%",
+            "id": "MeltOut",
+            "visible": true,
+            "interaction": true,
+            "width": "8.2%",
+            "height": "7.35%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "#00ffe2",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "font-size: 100%;",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 19,
+            "off": 127,
+            "mode": "tap",
+            "doubleTap": false,
+            "value": "Wasps",
+            "default": "",
+            "linkId": ">>Pattern",
+            "script": "",
+            "address": "/lx/look/1/channel/1/activePattern/",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 1,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "3.62%",
+            "left": "50%",
+            "id": "MeltUp",
+            "visible": true,
+            "interaction": true,
+            "width": "8.2%",
+            "height": "7.35%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "#00ffe2",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "font-size: 100%;",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 20,
+            "off": 127,
+            "mode": "tap",
+            "doubleTap": false,
+            "value": "Noise VWave",
+            "default": "",
+            "linkId": ">>Pattern",
+            "script": "",
+            "address": "/lx/look/1/channel/1/activePattern/",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 1,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "12.2%",
+            "left": "50%",
+            "id": "NoiseFire",
+            "visible": true,
+            "interaction": true,
+            "width": "8.2%",
+            "height": "7.35%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "#00ffe2",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "font-size: 100%;",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 21,
+            "off": 127,
+            "mode": "tap",
+            "doubleTap": false,
+            "value": "Noise Fire",
+            "default": "",
+            "linkId": ">>Pattern",
+            "script": "",
+            "address": "/lx/look/1/channel/1/activePattern/",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 1,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "20.78%",
+            "left": "50%",
+            "id": "NoiseVwave",
+            "visible": true,
+            "interaction": true,
+            "width": "8.2%",
+            "height": "7.35%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "#00ffe2",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "font-size: 100%;",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 22,
+            "off": 127,
+            "mode": "tap",
+            "doubleTap": false,
+            "value": "Pong",
+            "default": "",
+            "linkId": ">>Pattern",
+            "script": "",
+            "address": "/lx/look/1/channel/1/activePattern/",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 1,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "29.36%",
+            "left": "50%",
             "id": "Ooze",
             "visible": true,
             "interaction": true,
@@ -14555,343 +14697,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Ooze",
-            "off": 0,
-            "mode": "tap",
-            "doubleTap": false,
-            "value": "Ooze",
-            "default": "",
-            "linkId": ">>Pattern",
-            "script": "",
-            "address": "/GoPattern/FlockWaveOoze/",
-            "preArgs": "",
-            "typeTags": "",
-            "decimals": 1,
-            "target": "",
-            "ignoreDefaults": false,
-            "bypass": false
-          },
-          {
-            "type": "button",
-            "top": "12.2%",
-            "left": "39.29%",
-            "id": "Planets",
-            "visible": true,
-            "interaction": true,
-            "width": "8.2%",
-            "height": "7.35%",
-            "expand": "false",
-            "colorText": "auto",
-            "colorWidget": "#00ffe2",
-            "colorStroke": "auto",
-            "colorFill": "auto",
-            "alphaStroke": "auto",
-            "alphaFillOff": "auto",
-            "alphaFillOn": "auto",
-            "lineWidth": "auto",
-            "padding": "auto",
-            "html": "",
-            "css": "font-size: 100%;",
-            "colorTextOn": "auto",
-            "label": "auto",
-            "vertical": false,
-            "wrap": false,
-            "on": "Planets",
-            "off": 0,
-            "mode": "tap",
-            "doubleTap": false,
-            "value": "Planets",
-            "default": "",
-            "linkId": ">>Pattern",
-            "script": "",
-            "address": "/GoPattern/FlockWavePlanets/",
-            "preArgs": "",
-            "typeTags": "",
-            "decimals": 1,
-            "target": "",
-            "ignoreDefaults": false,
-            "bypass": false
-          },
-          {
-            "type": "button",
-            "top": "20.78%",
-            "left": "39.29%",
-            "id": "TimeWarp",
-            "visible": true,
-            "interaction": true,
-            "width": "8.2%",
-            "height": "7.35%",
-            "expand": "false",
-            "colorText": "auto",
-            "colorWidget": "#00ffe2",
-            "colorStroke": "auto",
-            "colorFill": "auto",
-            "alphaStroke": "auto",
-            "alphaFillOff": "auto",
-            "alphaFillOn": "auto",
-            "lineWidth": "auto",
-            "padding": "auto",
-            "html": "",
-            "css": "font-size: 100%;",
-            "colorTextOn": "auto",
-            "label": "auto",
-            "vertical": false,
-            "wrap": false,
-            "on": "TimeWarp",
-            "off": 0,
-            "mode": "tap",
-            "doubleTap": false,
-            "value": "TimeWarp",
-            "default": "",
-            "linkId": ">>Pattern",
-            "script": "",
-            "address": "/GoPattern/FlockWaveTimewarp/",
-            "preArgs": "",
-            "typeTags": "",
-            "decimals": 1,
-            "target": "",
-            "ignoreDefaults": false,
-            "bypass": false
-          },
-          {
-            "type": "button",
-            "top": "29.36%",
-            "left": "39.29%",
-            "id": "Metaballs",
-            "visible": true,
-            "interaction": true,
-            "width": "8.2%",
-            "height": "7.35%",
-            "expand": "false",
-            "colorText": "auto",
-            "colorWidget": "#00ffe2",
-            "colorStroke": "auto",
-            "colorFill": "auto",
-            "alphaStroke": "auto",
-            "alphaFillOff": "auto",
-            "alphaFillOn": "auto",
-            "lineWidth": "auto",
-            "padding": "auto",
-            "html": "",
-            "css": "font-size: 100%;",
-            "colorTextOn": "auto",
-            "label": "auto",
-            "vertical": false,
-            "wrap": false,
-            "on": "Metaballs",
-            "off": 0,
-            "mode": "tap",
-            "doubleTap": false,
-            "value": "Metaballs",
-            "default": "",
-            "linkId": ">>Pattern",
-            "script": "",
-            "address": "/GoPattern/Metaballs/",
-            "preArgs": "",
-            "typeTags": "",
-            "decimals": 1,
-            "target": "",
-            "ignoreDefaults": false,
-            "bypass": false
-          },
-          {
-            "type": "button",
-            "top": "37.94%",
-            "left": "39.29%",
-            "id": "Wasps",
-            "visible": true,
-            "interaction": true,
-            "width": "8.2%",
-            "height": "7.35%",
-            "expand": "false",
-            "colorText": "auto",
-            "colorWidget": "#00ffe2",
-            "colorStroke": "auto",
-            "colorFill": "auto",
-            "alphaStroke": "auto",
-            "alphaFillOff": "auto",
-            "alphaFillOn": "auto",
-            "lineWidth": "auto",
-            "padding": "auto",
-            "html": "",
-            "css": "font-size: 100%;",
-            "colorTextOn": "auto",
-            "label": "auto",
-            "vertical": false,
-            "wrap": false,
-            "on": "Wasps",
-            "off": 0,
-            "mode": "tap",
-            "doubleTap": false,
-            "value": "Wasps",
-            "default": "",
-            "linkId": ">>Pattern",
-            "script": "",
-            "address": "/GoPattern/Wasps/",
-            "preArgs": "",
-            "typeTags": "",
-            "decimals": 1,
-            "target": "",
-            "ignoreDefaults": false,
-            "bypass": false
-          },
-          {
-            "type": "button",
-            "top": "3.62%",
-            "left": "50%",
-            "id": "Noise VWave",
-            "visible": true,
-            "interaction": true,
-            "width": "8.2%",
-            "height": "7.35%",
-            "expand": "false",
-            "colorText": "auto",
-            "colorWidget": "#00ffe2",
-            "colorStroke": "auto",
-            "colorFill": "auto",
-            "alphaStroke": "auto",
-            "alphaFillOff": "auto",
-            "alphaFillOn": "auto",
-            "lineWidth": "auto",
-            "padding": "auto",
-            "html": "",
-            "css": "font-size: 100%;",
-            "colorTextOn": "auto",
-            "label": "auto",
-            "vertical": false,
-            "wrap": false,
-            "on": "Noise VWave",
-            "off": 0,
-            "mode": "tap",
-            "doubleTap": false,
-            "value": "Noise VWave",
-            "default": "",
-            "linkId": ">>Pattern",
-            "script": "",
-            "address": "/GoPattern/Noise1/",
-            "preArgs": "",
-            "typeTags": "",
-            "decimals": 1,
-            "target": "",
-            "ignoreDefaults": false,
-            "bypass": false
-          },
-          {
-            "type": "button",
-            "top": "12.2%",
-            "left": "50%",
-            "id": "Noise Fire",
-            "visible": true,
-            "interaction": true,
-            "width": "8.2%",
-            "height": "7.35%",
-            "expand": "false",
-            "colorText": "auto",
-            "colorWidget": "#00ffe2",
-            "colorStroke": "auto",
-            "colorFill": "auto",
-            "alphaStroke": "auto",
-            "alphaFillOff": "auto",
-            "alphaFillOn": "auto",
-            "lineWidth": "auto",
-            "padding": "auto",
-            "html": "",
-            "css": "font-size: 100%;",
-            "colorTextOn": "auto",
-            "label": "auto",
-            "vertical": false,
-            "wrap": false,
-            "on": "Noise Fire",
-            "off": 0,
-            "mode": "tap",
-            "doubleTap": false,
-            "value": "Noise Fire",
-            "default": "",
-            "linkId": ">>Pattern",
-            "script": "",
-            "address": "/GoPattern/Noise2/",
-            "preArgs": "",
-            "typeTags": "",
-            "decimals": 1,
-            "target": "",
-            "ignoreDefaults": false,
-            "bypass": false
-          },
-          {
-            "type": "button",
-            "top": "20.78%",
-            "left": "50%",
-            "id": "Pong",
-            "visible": true,
-            "interaction": true,
-            "width": "8.2%",
-            "height": "7.35%",
-            "expand": "false",
-            "colorText": "auto",
-            "colorWidget": "#00ffe2",
-            "colorStroke": "auto",
-            "colorFill": "auto",
-            "alphaStroke": "auto",
-            "alphaFillOff": "auto",
-            "alphaFillOn": "auto",
-            "lineWidth": "auto",
-            "padding": "auto",
-            "html": "",
-            "css": "font-size: 100%;",
-            "colorTextOn": "auto",
-            "label": "auto",
-            "vertical": false,
-            "wrap": false,
-            "on": "Pong",
-            "off": 0,
-            "mode": "tap",
-            "doubleTap": false,
-            "value": "Pong",
-            "default": "",
-            "linkId": ">>Pattern",
-            "script": "",
-            "address": "/GoPattern/Pong/",
-            "preArgs": "",
-            "typeTags": "",
-            "decimals": 1,
-            "target": "",
-            "ignoreDefaults": false,
-            "bypass": false
-          },
-          {
-            "type": "button",
-            "top": "29.36%",
-            "left": "50%",
-            "id": "Pyschedelia",
-            "visible": true,
-            "interaction": true,
-            "width": "8.2%",
-            "height": "7.35%",
-            "expand": "false",
-            "colorText": "auto",
-            "colorWidget": "#00ffe2",
-            "colorStroke": "auto",
-            "colorFill": "auto",
-            "alphaStroke": "auto",
-            "alphaFillOff": "auto",
-            "alphaFillOn": "auto",
-            "lineWidth": "auto",
-            "padding": "auto",
-            "html": "",
-            "css": "font-size: 100%;",
-            "colorTextOn": "auto",
-            "label": "auto",
-            "vertical": false,
-            "wrap": false,
-            "on": "Pyschedelia",
-            "off": 0,
+            "on": 23,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "Pyschedelia",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/Pyschedelia/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -14903,7 +14717,7 @@
             "type": "button",
             "top": "37.94%",
             "left": "50%",
-            "id": "Raindrops",
+            "id": "Scanner",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -14924,15 +14738,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Raindrops",
-            "off": 0,
+            "on": 24,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "Raindrops",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/Raindrops/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -14944,7 +14758,7 @@
             "type": "button",
             "top": "3.62%",
             "left": "60.71%",
-            "id": "Rings",
+            "id": "PinWheels",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -14965,15 +14779,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Rings",
-            "off": 0,
+            "on": 25,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "Rings",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/Rings/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -14984,6 +14798,88 @@
           {
             "type": "button",
             "top": "12.2%",
+            "left": "60.71%",
+            "id": "Poisson",
+            "visible": true,
+            "interaction": true,
+            "width": "8.2%",
+            "height": "7.35%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "#00ffe2",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "font-size: 100%;",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 26,
+            "off": 127,
+            "mode": "tap",
+            "doubleTap": false,
+            "value": "Ripple",
+            "default": "",
+            "linkId": ">>Pattern",
+            "script": "",
+            "address": "/lx/look/1/channel/1/activePattern/",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 1,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "20.78%",
+            "left": "60.71%",
+            "id": "Rings",
+            "visible": true,
+            "interaction": true,
+            "width": "8.2%",
+            "height": "7.35%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "#00ffe2",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "font-size: 100%;",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 27,
+            "off": 127,
+            "mode": "tap",
+            "doubleTap": false,
+            "value": "Spheres",
+            "default": "",
+            "linkId": ">>Pattern",
+            "script": "",
+            "address": "/lx/look/1/channel/1/activePattern/",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 1,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "29.36%",
             "left": "60.71%",
             "id": "Ripple",
             "visible": true,
@@ -15006,97 +14902,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Ripple",
-            "off": 0,
-            "mode": "tap",
-            "doubleTap": false,
-            "value": "Ripple",
-            "default": "",
-            "linkId": ">>Pattern",
-            "script": "",
-            "address": "/GoPattern/Ripple/",
-            "preArgs": "",
-            "typeTags": "",
-            "decimals": 1,
-            "target": "",
-            "ignoreDefaults": false,
-            "bypass": false
-          },
-          {
-            "type": "button",
-            "top": "20.78%",
-            "left": "60.71%",
-            "id": "Spheres",
-            "visible": true,
-            "interaction": true,
-            "width": "8.2%",
-            "height": "7.35%",
-            "expand": "false",
-            "colorText": "auto",
-            "colorWidget": "#00ffe2",
-            "colorStroke": "auto",
-            "colorFill": "auto",
-            "alphaStroke": "auto",
-            "alphaFillOff": "auto",
-            "alphaFillOn": "auto",
-            "lineWidth": "auto",
-            "padding": "auto",
-            "html": "",
-            "css": "font-size: 100%;",
-            "colorTextOn": "auto",
-            "label": "auto",
-            "vertical": false,
-            "wrap": false,
-            "on": "Spheres",
-            "off": 0,
-            "mode": "tap",
-            "doubleTap": false,
-            "value": "Spheres",
-            "default": "",
-            "linkId": ">>Pattern",
-            "script": "",
-            "address": "/GoPattern/Spheres/",
-            "preArgs": "",
-            "typeTags": "",
-            "decimals": 1,
-            "target": "",
-            "ignoreDefaults": false,
-            "bypass": false
-          },
-          {
-            "type": "button",
-            "top": "29.36%",
-            "left": "60.71%",
-            "id": "Shifting Plns",
-            "visible": true,
-            "interaction": true,
-            "width": "8.2%",
-            "height": "7.35%",
-            "expand": "false",
-            "colorText": "auto",
-            "colorWidget": "#00ffe2",
-            "colorStroke": "auto",
-            "colorFill": "auto",
-            "alphaStroke": "auto",
-            "alphaFillOff": "auto",
-            "alphaFillOn": "auto",
-            "lineWidth": "auto",
-            "padding": "auto",
-            "html": "",
-            "css": "font-size: 100%;",
-            "colorTextOn": "auto",
-            "label": "auto",
-            "vertical": false,
-            "wrap": false,
-            "on": "Shifting Plns",
-            "off": 0,
+            "on": 28,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "Shifting Plns",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/ShiftingPlane/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -15108,7 +14922,7 @@
             "type": "button",
             "top": "37.94%",
             "left": "60.71%",
-            "id": "Smplx Noise",
+            "id": "Sirens",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -15129,15 +14943,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Smplx Noise",
-            "off": 0,
+            "on": 29,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "Smplx Noise",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/SimplexNoise/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -15149,7 +14963,7 @@
             "type": "button",
             "top": "3.62%",
             "left": "71.5%",
-            "id": "Sine Sphere",
+            "id": "SmplxNoise",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -15170,15 +14984,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Sine Sphere",
-            "off": 0,
+            "on": 30,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "Sine Sphere",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/SineSphere/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -15189,6 +15003,47 @@
           {
             "type": "button",
             "top": "12.2%",
+            "left": "71.5%",
+            "id": "Snakes",
+            "visible": true,
+            "interaction": true,
+            "width": "8.2%",
+            "height": "7.35%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "#00ffe2",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "font-size: 100%;",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 31,
+            "off": 127,
+            "mode": "tap",
+            "doubleTap": false,
+            "value": "Solid Color",
+            "default": "",
+            "linkId": ">>Pattern",
+            "script": "",
+            "address": "/lx/look/1/channel/1/activePattern/",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 1,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "20.78%",
             "left": "71.5%",
             "id": "Solid Color",
             "visible": true,
@@ -15211,56 +15066,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Solid Color",
-            "off": 0,
-            "mode": "tap",
-            "doubleTap": false,
-            "value": "Solid Color",
-            "default": "",
-            "linkId": ">>Pattern",
-            "script": "",
-            "address": "/GoPattern/SolidColor/",
-            "preArgs": "",
-            "typeTags": "",
-            "decimals": 1,
-            "target": "",
-            "ignoreDefaults": false,
-            "bypass": false
-          },
-          {
-            "type": "button",
-            "top": "20.78%",
-            "left": "71.5%",
-            "id": "Spacetime",
-            "visible": true,
-            "interaction": true,
-            "width": "8.2%",
-            "height": "7.35%",
-            "expand": "false",
-            "colorText": "auto",
-            "colorWidget": "#00ffe2",
-            "colorStroke": "auto",
-            "colorFill": "auto",
-            "alphaStroke": "auto",
-            "alphaFillOff": "auto",
-            "alphaFillOn": "auto",
-            "lineWidth": "auto",
-            "padding": "auto",
-            "html": "",
-            "css": "font-size: 100%;",
-            "colorTextOn": "auto",
-            "label": "auto",
-            "vertical": false,
-            "wrap": false,
-            "on": "Spacetime",
-            "off": 0,
+            "on": 32,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "Spacetime",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/SpaceTime/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -15293,15 +15107,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Sparkle",
-            "off": 0,
+            "on": 33,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "Sparkle",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/Sparkle/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -15313,7 +15127,7 @@
             "type": "button",
             "top": "37.94%",
             "left": "71.5%",
-            "id": "Swim",
+            "id": "Spark",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -15334,15 +15148,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Swim",
-            "off": 0,
+            "on": 34,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "Swarm",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/Swarm/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -15354,7 +15168,7 @@
             "type": "button",
             "top": "3.62%",
             "left": "82.13%",
-            "id": "Swarm",
+            "id": "StarLight",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -15377,7 +15191,7 @@
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/Swim/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -15387,15 +15201,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Swarm",
-            "off": 0,
+            "on": 35,
+            "off": 127,
             "doubleTap": false
           },
           {
             "type": "button",
             "top": "12.2%",
             "left": "82.13%",
-            "id": "Pinwheels",
+            "id": "Swarm",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -15417,7 +15231,7 @@
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/TimPinwheels/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -15428,15 +15242,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Pinwheels",
-            "off": 0,
+            "on": 36,
+            "off": 127,
             "mode": "tap"
           },
           {
             "type": "button",
             "top": "20.78%",
             "left": "82.13%",
-            "id": "Violin Wave",
+            "id": "Tumbler",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -15457,15 +15271,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Violin Wave",
-            "off": 0,
+            "on": 37,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "Violin Wave",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/ViolinWave/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -15477,7 +15291,7 @@
             "type": "button",
             "top": "29.36%",
             "left": "82.13%",
-            "id": "Voronoi",
+            "id": "Vortex",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -15498,15 +15312,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Voronoi",
-            "off": 0,
+            "on": 38,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "Voronoi",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/Voronoi/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -15518,7 +15332,7 @@
             "type": "button",
             "top": "37.94%",
             "left": "82.13%",
-            "id": "Cube Flash",
+            "id": "Wave",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -15539,15 +15353,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Cube Flash",
-            "off": 0,
+            "on": 39,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
             "value": "Cube Flash",
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/GoPattern/CubeFlash/",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -15580,15 +15394,15 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Askew Plns",
-            "off": 0,
+            "on": 0,
+            "off": 127,
             "mode": "tap",
             "doubleTap": false,
-            "value": "",
+            "value": 1,
             "default": "",
             "linkId": ">>Pattern",
             "script": "",
-            "address": "/lx/channel/1/goPattern/1",
+            "address": "/lx/look/1/channel/1/activePattern/",
             "preArgs": "",
             "typeTags": "",
             "decimals": 1,
@@ -15725,8 +15539,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "button",
@@ -15752,7 +15565,7 @@
             "default": "",
             "linkId": "",
             "script": "",
-            "address": "/lx/channel/9/autoCycleEnabled",
+            "address": "/lx/channel/1/autoCycleEnabled",
             "preArgs": "",
             "target": "",
             "vertical": false,
@@ -15795,7 +15608,7 @@
             "default": "",
             "linkId": "",
             "script": "",
-            "address": "/lx/channel/9/autoCycleTimeSecs",
+            "address": "/lx/channel/1/autoCycleTimeSecs",
             "preArgs": "",
             "typeTags": "",
             "decimals": 10,
@@ -15848,8 +15661,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "text",
@@ -15880,8 +15692,7 @@
             "script": "",
             "address": "auto",
             "preArgs": "",
-            "target": "",
-            "decimals": 2
+            "target": ""
           },
           {
             "type": "button",
@@ -15909,7 +15720,7 @@
             "default": "",
             "linkId": "",
             "script": "",
-            "address": "/lx/channel/9/transitionEnabled",
+            "address": "/lx/channel/1/transitionEnabled",
             "preArgs": "",
             "target": "",
             "interaction": true,
@@ -15953,8 +15764,7 @@
             "address": "auto",
             "preArgs": "",
             "target": "",
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "fader",
@@ -15980,7 +15790,7 @@
             "default": "",
             "linkId": "",
             "script": "",
-            "address": "/lx/channel/9/transitionTimeSecs",
+            "address": "/lx/channel/1/transitionTimeSecs",
             "preArgs": "",
             "target": "",
             "interaction": true,
@@ -16035,8 +15845,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "button",
@@ -16105,7 +15914,7 @@
             "default": "",
             "linkId": "",
             "script": "",
-            "address": "/lx/channel/9/effect/2/enabled",
+            "address": "/lx/channel/2/effect/1/enabled",
             "preArgs": "",
             "target": "",
             "interaction": true,
@@ -16146,7 +15955,7 @@
             "default": "",
             "linkId": "",
             "script": "",
-            "address": "/lx/channel/9/effect/6/enabled",
+            "address": "/lx/channel/1/effect/3/enabled",
             "preArgs": "",
             "target": "",
             "interaction": true,
@@ -16167,8 +15976,8 @@
             "left": "52.44%",
             "id": "Desat",
             "visible": true,
-            "width": "9.36%",
-            "height": "6.79%",
+            "width": "9.27%",
+            "height": "6.84%",
             "expand": false,
             "colorText": "auto",
             "colorWidget": "#00ffe2",
@@ -16187,7 +15996,7 @@
             "default": "",
             "linkId": "",
             "script": "",
-            "address": "/lx/channel/9/effect/5/enabled",
+            "address": "/lx/channel/1/effect/4/enabled",
             "preArgs": "",
             "target": "",
             "interaction": true,
@@ -16229,7 +16038,7 @@
             "default": "",
             "linkId": "",
             "script": "",
-            "address": "/lx/channel/9/effect/4/enabled",
+            "address": "/lx/channel/1/effect/2/enabled",
             "preArgs": "",
             "typeTags": "",
             "decimals": 2,
@@ -16281,7 +16090,7 @@
             "default": "",
             "linkId": "",
             "script": "",
-            "address": "/lx/channel/9/effect/2/Palette",
+            "address": "/lx/channel/2/effect/1/Palette",
             "preArgs": "",
             "typeTags": "",
             "decimals": 2,
@@ -16333,7 +16142,7 @@
             "default": "",
             "linkId": "",
             "script": "",
-            "address": "/lx/channel/9/effect/5/amount",
+            "address": "/lx/channel/1/effect/4/amount",
             "preArgs": "",
             "typeTags": "",
             "decimals": 2,
@@ -16381,7 +16190,7 @@
             "default": "",
             "linkId": "",
             "script": "",
-            "address": "/lx/channel/9/effect/6/Freq",
+            "address": "/lx/channel/1/effect/3/Freq",
             "preArgs": "",
             "typeTags": "",
             "decimals": 2,
@@ -16415,7 +16224,7 @@
             "default": "",
             "linkId": "",
             "script": "",
-            "address": "/lx/channel/9/effect/4/Range",
+            "address": "/lx/channel/1/effect/2/Range",
             "preArgs": "",
             "typeTags": "",
             "decimals": 2,
@@ -16461,7 +16270,7 @@
             "default": "",
             "linkId": "",
             "script": "",
-            "address": "/lx/channel/9/effect/1/amount",
+            "address": "/lx/channel/1/effect/1/amount",
             "preArgs": "",
             "target": "",
             "interaction": true,
@@ -16509,7 +16318,7 @@
             "default": "",
             "linkId": "",
             "script": "",
-            "address": "/lx/channel/9/effect/3/enabled",
+            "address": "/lx/channel/2/effect/2/enabled",
             "preArgs": "",
             "target": "",
             "vertical": false,
@@ -16555,8 +16364,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "fader",
@@ -16582,7 +16390,7 @@
             "default": "",
             "linkId": "",
             "script": "",
-            "address": "/lx/palette/color/hue",
+            "address": "/lx/channel/2/effect/2/Hue",
             "preArgs": "",
             "target": "",
             "interaction": true,
@@ -16637,8 +16445,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "fader",
@@ -16666,7 +16473,7 @@
             "default": "",
             "linkId": "",
             "script": "",
-            "address": "/lx/palette/color/saturation",
+            "address": "/lx/channel/2/effect/2/Sat",
             "preArgs": "",
             "typeTags": "",
             "decimals": 2,
@@ -16780,7 +16587,7 @@
                 "default": "",
                 "linkId": "",
                 "script": "",
-                "address": "/lx/channel/9/pattern/1/Spark",
+                "address": "/lx/channel/1/pattern/1/Spark",
                 "preArgs": "",
                 "typeTags": "",
                 "decimals": 2,
@@ -16817,8 +16624,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -16860,7 +16666,7 @@
                 "default": "",
                 "linkId": "",
                 "script": "",
-                "address": "/lx/channel/9/pattern/1/Wave",
+                "address": "/lx/channel/1/pattern/1/Wave",
                 "preArgs": "",
                 "typeTags": "",
                 "decimals": 2,
@@ -16892,7 +16698,7 @@
                 "default": "",
                 "linkId": "",
                 "script": "",
-                "address": "/lx/channel/9/pattern/1/Thick",
+                "address": "/lx/channel/1/pattern/1/Thick",
                 "preArgs": "",
                 "target": "",
                 "interaction": true,
@@ -16945,8 +16751,7 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -16977,8 +16782,7 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "button",
@@ -17013,7 +16817,7 @@
                 "default": "",
                 "linkId": "",
                 "script": "",
-                "address": "/lx/channel/9/pattern/1/X-SYM",
+                "address": "/lx/channel/1/pattern/1/X-SYM",
                 "preArgs": "",
                 "typeTags": "",
                 "decimals": 2,
@@ -17054,7 +16858,7 @@
                 "default": "",
                 "linkId": "",
                 "script": "",
-                "address": "/lx/channel/9/pattern/1/Y-SYM",
+                "address": "/lx/channel/1/pattern/1/Y-SYM",
                 "preArgs": "",
                 "typeTags": "",
                 "decimals": 2,
@@ -17095,7 +16899,7 @@
                 "default": "",
                 "linkId": "",
                 "script": "",
-                "address": "/lx/channel/9/pattern/1/R-SYM",
+                "address": "/lx/channel/1/pattern/1/R-SYM",
                 "preArgs": "",
                 "typeTags": "",
                 "decimals": 2,
@@ -17136,7 +16940,7 @@
                 "default": "",
                 "linkId": "",
                 "script": "",
-                "address": "/lx/channel/9/pattern/1/X-DUP",
+                "address": "/lx/channel/1/pattern/1/X-DUP",
                 "preArgs": "",
                 "typeTags": "",
                 "decimals": 2,
@@ -17145,9 +16949,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -17239,7 +17041,7 @@
                 "default": "",
                 "linkId": "",
                 "script": "",
-                "address": "/lx/channel/9/pattern/2/palette",
+                "address": "/lx/channel/1/pattern/2/palette",
                 "preArgs": "",
                 "typeTags": "",
                 "decimals": 2,
@@ -17276,8 +17078,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -17319,7 +17120,7 @@
                 "default": "",
                 "linkId": "",
                 "script": "",
-                "address": "/lx/channel/9/pattern/2/speed",
+                "address": "/lx/channel/1/pattern/2/speed",
                 "preArgs": "",
                 "typeTags": "",
                 "decimals": 2,
@@ -17356,8 +17157,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "button",
@@ -17392,7 +17192,7 @@
                 "default": "",
                 "linkId": "",
                 "script": "",
-                "address": "/lx/channel/9/pattern/2/trigger",
+                "address": "/lx/channel/1/pattern/2/trigger",
                 "preArgs": "",
                 "typeTags": "",
                 "decimals": 2,
@@ -17433,89 +17233,7 @@
                 "default": "",
                 "linkId": "",
                 "script": "",
-                "address": "/lx/channel/9/pattern/2/reset",
-                "preArgs": "",
-                "typeTags": "",
-                "decimals": 2,
-                "target": "",
-                "ignoreDefaults": false,
-                "bypass": false
-              },
-              {
-                "type": "button",
-                "top": "46.93%",
-                "left": "51.94%",
-                "id": "R-SYM",
-                "visible": true,
-                "interaction": true,
-                "width": "17.61%",
-                "height": "33.98%",
-                "expand": "false",
-                "colorText": "auto",
-                "colorWidget": "auto",
-                "colorStroke": "auto",
-                "colorFill": "auto",
-                "alphaStroke": "auto",
-                "alphaFillOff": "auto",
-                "alphaFillOn": "auto",
-                "lineWidth": "auto",
-                "padding": "auto",
-                "html": "",
-                "css": "",
-                "colorTextOn": "auto",
-                "label": "auto",
-                "vertical": false,
-                "wrap": false,
-                "on": 1,
-                "off": 0,
-                "mode": "toggle",
-                "doubleTap": false,
-                "value": "",
-                "default": "",
-                "linkId": "",
-                "script": "",
-                "address": "/lx/channel/9/pattern/1/R-SYM",
-                "preArgs": "",
-                "typeTags": "",
-                "decimals": 2,
-                "target": "",
-                "ignoreDefaults": false,
-                "bypass": false
-              },
-              {
-                "type": "button",
-                "top": "46.93%",
-                "left": "77.46%",
-                "id": "X-DUP",
-                "visible": true,
-                "interaction": true,
-                "width": "17.61%",
-                "height": "33.98%",
-                "expand": "false",
-                "colorText": "auto",
-                "colorWidget": "auto",
-                "colorStroke": "auto",
-                "colorFill": "auto",
-                "alphaStroke": "auto",
-                "alphaFillOff": "auto",
-                "alphaFillOn": "auto",
-                "lineWidth": "auto",
-                "padding": "auto",
-                "html": "",
-                "css": "",
-                "colorTextOn": "auto",
-                "label": "auto",
-                "vertical": false,
-                "wrap": false,
-                "on": 1,
-                "off": 0,
-                "mode": "toggle",
-                "doubleTap": false,
-                "value": "",
-                "default": "",
-                "linkId": "",
-                "script": "",
-                "address": "/lx/channel/9/pattern/1/X-DUP",
+                "address": "/lx/channel/1/pattern/2/reset",
                 "preArgs": "",
                 "typeTags": "",
                 "decimals": 2,
@@ -17524,9 +17242,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -17618,7 +17334,7 @@
                 "default": "",
                 "linkId": "",
                 "script": "",
-                "address": "/lx/channel/9/pattern/3/Speed",
+                "address": "/lx/channel/1/pattern/3/Speed",
                 "preArgs": "",
                 "typeTags": "",
                 "decimals": 2,
@@ -17655,8 +17371,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -17698,7 +17413,7 @@
                 "default": "",
                 "linkId": "",
                 "script": "",
-                "address": "/lx/channel/9/pattern/3/Crazy",
+                "address": "/lx/channel/1/pattern/3/Crazy",
                 "preArgs": "",
                 "typeTags": "",
                 "decimals": 2,
@@ -17735,13 +17450,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -17788,14 +17500,12 @@
             "contain": true,
             "scroll": true,
             "innerPadding": true,
-            "popupLabel": "Blinders",
+            "popupLabel": "Blues",
             "popupPadding": "auto",
             "variables": "@{parent.variables}",
             "traversing": false,
             "widgets": [],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -17924,8 +17634,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -18004,13 +17713,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -18139,8 +17845,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -18267,8 +17972,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -18299,13 +18003,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -18434,8 +18135,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -18466,8 +18166,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -18546,8 +18245,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -18626,8 +18324,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -18706,8 +18403,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -18786,8 +18482,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -18914,8 +18609,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -18946,8 +18640,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -19026,8 +18719,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -19078,9 +18770,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -19209,8 +18899,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -19289,13 +18978,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -19472,8 +19158,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -19504,8 +19189,7 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "button",
@@ -19549,9 +19233,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -19680,13 +19362,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -19815,8 +19494,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -19847,8 +19525,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -19899,9 +19576,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -19982,8 +19657,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -20014,8 +19688,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -20114,9 +19787,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -20197,8 +19868,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -20229,8 +19899,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -20329,9 +19998,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -20460,8 +20127,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -20492,8 +20158,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -20544,9 +20209,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -20675,13 +20338,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -20858,8 +20518,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -20890,13 +20549,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -21025,8 +20681,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -21057,8 +20712,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -21109,9 +20763,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -21192,8 +20844,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -21224,8 +20875,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -21324,9 +20974,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -21407,8 +21055,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -21439,8 +21086,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -21539,9 +21185,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -21670,8 +21314,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -21702,8 +21345,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -21754,9 +21396,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -21933,8 +21573,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -21965,8 +21604,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -22045,8 +21683,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -22125,13 +21762,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -22212,8 +21846,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -22244,8 +21877,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -22372,8 +22004,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -22452,8 +22083,7 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -22504,9 +22134,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -22587,8 +22215,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -22619,8 +22246,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -22795,8 +22421,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "button",
@@ -22840,9 +22465,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -22894,9 +22517,7 @@
             "variables": "@{parent.variables}",
             "traversing": false,
             "widgets": [],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -23025,8 +22646,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -23057,8 +22677,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -23137,8 +22756,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -23189,9 +22807,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -23368,8 +22984,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -23400,8 +23015,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -23480,13 +23094,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -23567,8 +23178,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -23647,8 +23257,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -23727,8 +23336,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -23779,9 +23387,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -23862,8 +23468,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -23894,8 +23499,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -23994,9 +23598,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -24125,13 +23727,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -24260,8 +23859,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -24292,8 +23890,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -24344,9 +23941,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -24523,8 +24118,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -24555,13 +24149,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -24613,9 +24204,7 @@
             "variables": "@{parent.variables}",
             "traversing": false,
             "widgets": [],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -24696,8 +24285,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -24728,8 +24316,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -24828,9 +24415,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -24959,13 +24544,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -25094,8 +24676,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -25126,8 +24707,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -25178,9 +24758,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -25309,8 +24887,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -25341,8 +24918,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -25421,8 +24997,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -25453,8 +25028,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -25553,9 +25127,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -25684,8 +25256,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -25764,8 +25335,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -25796,8 +25366,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -25848,9 +25417,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -25931,8 +25498,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -25963,8 +25529,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -26063,9 +25628,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -26146,8 +25709,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -26226,8 +25788,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -26306,8 +25867,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -26399,9 +25959,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -26578,8 +26136,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -26610,13 +26167,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "button",
@@ -26644,7 +26198,7 @@
             "default": "",
             "linkId": "",
             "script": "",
-            "address": "/lx/channel/9/warp/1/enabled",
+            "address": "/lx/channel/1/warp/1/enabled",
             "preArgs": "",
             "target": "",
             "interaction": true,
@@ -26664,7 +26218,7 @@
             "top": "0%",
             "left": "7.09%",
             "id": "Pattern",
-            "visible": true,
+            "visible": false,
             "width": "85%",
             "height": "3.35%",
             "expand": "false",
@@ -26688,8 +26242,7 @@
             "script": "",
             "address": "auto",
             "preArgs": "",
-            "target": "",
-            "decimals": 2
+            "target": ""
           },
           {
             "type": "button",
@@ -26733,9 +26286,7 @@
             "bypass": false
           }
         ],
-        "tabs": [],
-        "relative": false,
-        "ignoreTabs": false
+        "tabs": []
       },
       {
         "type": "fader",
@@ -26816,8 +26367,7 @@
         "target": "",
         "vertical": false,
         "wrap": false,
-        "align": "center",
-        "decimals": 2
+        "align": "center"
       },
       {
         "type": "fader",
@@ -26898,8 +26448,7 @@
         "target": "",
         "vertical": false,
         "wrap": false,
-        "align": "center",
-        "decimals": 2
+        "align": "center"
       },
       {
         "type": "button",
@@ -27434,8 +26983,7 @@
         "address": "auto",
         "preArgs": "",
         "target": "",
-        "align": "center",
-        "decimals": 2
+        "align": "center"
       },
       {
         "type": "text",
@@ -27466,8 +27014,7 @@
         "address": "auto",
         "preArgs": "",
         "target": "",
-        "align": "center",
-        "decimals": 2
+        "align": "center"
       },
       {
         "type": "button",
@@ -27554,6 +27101,6 @@
     ],
     "tabs": []
   },
-  "version": "1.8.3",
+  "version": "1.6.1",
   "type": "Open Stage Control session"
 }
