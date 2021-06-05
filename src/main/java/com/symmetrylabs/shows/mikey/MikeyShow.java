@@ -38,49 +38,49 @@ public class MikeyShow implements Show {
         public static MikeyModel create() {
             List<Strip> strips = new ArrayList<Strip>();
             LXTransform t = new LXTransform();
-            Strip.Metrics metrics = new Strip.Metrics(200, 1); //strip config
+            Strip.Metrics metrics = new Strip.Metrics(240, 1); //number of leds per channel
             t.push();
             Strip strip = new Strip("1", metrics, t);         //create the first strip
             strips.add(strip);                                                  //add the first strip to strip array
-            t.translate(0, 2, 0);                                   //translate to 2nd strip location
-            Strip stripRev = new Strip("2", metrics, t);                   //create the 2nd strip
-            List<LXPoint> reverse_these = Lists.reverse(stripRev.getPoints()); //reflect 2nd strip
-            Strip stripReversed = new Strip(metrics, reverse_these);  //create new strip with 2nd strips reflection
-            strips.add(stripReversed);
+            // t.translate(0, 2, 0);                                   //translate to 2nd strip location
+            // Strip stripRev = new Strip("2", metrics, t);                   //create the 2nd strip
+            // List<LXPoint> reverse_these = Lists.reverse(stripRev.getPoints()); //reflect 2nd strip
+            // Strip stripReversed = new Strip(metrics, reverse_these);  //create new strip with 2nd strips reflection
+            // strips.add(stripReversed);
             t.pop();
 
-            // t.translate(100, 14, 0);
-            // t.push();
-            // Strip strip2 = new Strip("1", metrics, t);         //create the first strip
-            // strips.add(strip2);                                                  //add the first strip to strip array
+            t.translate(0, 4, 0);
+            t.push();
+            Strip strip2 = new Strip("1", metrics, t);         //create the first strip
+            strips.add(strip2);                                                  //add the first strip to strip array
             // t.translate(0, 2, 0);                                   //translate to 2nd strip location
             // Strip strip2Rev = new Strip("2", metrics, t);                   //create the 2nd strip
             // List<LXPoint> reverse_these2 = Lists.reverse(strip2Rev.getPoints()); //reflect 2nd strip
             // Strip stripReversed2 = new Strip(metrics, reverse_these2);  //create new strip with 2nd strips reflection
             // strips.add(stripReversed2);
-            // t.pop();
+            t.pop();
 
-            // t.translate(-95, 28, 0);
-            // t.push();
-            // Strip strip3 = new Strip("1", metrics, t);         //create the first strip
-            // strips.add(strip3);                                                  //add the first strip to strip array
+            t.translate(0, 4, 0);
+            t.push();
+            Strip strip3 = new Strip("1", metrics, t);         //create the first strip
+            strips.add(strip3);                                                  //add the first strip to strip array
             // t.translate(0, 2, 0);                                   //translate to 2nd strip location
             // Strip strip3Rev = new Strip("2", metrics, t);                   //create the 2nd strip
             // List<LXPoint> reverse_these3 = Lists.reverse(strip3Rev.getPoints()); //reflect 2nd strip
             // Strip stripReversed3 = new Strip(metrics, reverse_these3);  //create new strip with 2nd strips reflection
             // strips.add(stripReversed3);
-            // t.pop();
+            t.pop();
 
-            // t.translate(70, 14, 0);
-            // t.push();
-            // Strip strip4 = new Strip("1", metrics, t);         //create the first strip
-            // strips.add(strip4);                                                  //add the first strip to strip array
+            t.translate(0, 4, 0);
+            t.push();
+            Strip strip4 = new Strip("1", metrics, t);         //create the first strip
+            strips.add(strip4);                                                  //add the first strip to strip array
             // t.translate(0, 2, 0);                                   //translate to 2nd strip location
             // Strip strip4Rev = new Strip("2", metrics, t);                   //create the 2nd strip
             // List<LXPoint> reverse_these4 = Lists.reverse(strip4Rev.getPoints()); //reflect 2nd strip
             // Strip stripReversed4 = new Strip(metrics, reverse_these4);  //create new strip with 2nd strips reflection
             // strips.add(stripReversed4);
-            // t.pop();
+            t.pop();
 
             // t.translate(-120, 14, 0);
             // t.push();
@@ -160,7 +160,15 @@ public class MikeyShow implements Show {
         public MikeyPixlite(LX lx, String ip, MikeyModel model) {
             super(lx, ip);
             addPixliteOutput(
-                new PointsGrouping("4").addPoints(model.getStripByIndex(0).getPoints()).addPoints(model.getStripByIndex(1).getPoints()));
+                new PointsGrouping("1").addPoints(model.getStripByIndex(0).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("2").addPoints(model.getStripByIndex(1).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("3").addPoints(model.getStripByIndex(2).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("4").addPoints(model.getStripByIndex(3).getPoints()));
+
+
             // addPixliteOutput(
             //     new PointsGrouping("4").addPoints(model.getStripByIndex(2).getPoints()).addPoints(model.getStripByIndex(3).getPoints()));
             // addPixliteOutput(
