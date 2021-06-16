@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1623808336927,
+  "timestamp": 1623813030718,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -57,8 +57,8 @@
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
-              "autoCycleEnabled": false,
-              "autoCycleTimeSecs": 26.0,
+              "autoCycleEnabled": true,
+              "autoCycleTimeSecs": 63.0,
               "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
@@ -108,7 +108,7 @@
                 "parameters": {
                   "label": "ColorFilter",
                   "expandedInUi": true,
-                  "enabled": true,
+                  "enabled": false,
                   "Hue": 0.0,
                   "Sat": 49.60629921259843,
                   "Alpha": false
@@ -188,7 +188,7 @@
                 }
               }
             ],
-            "patternIndex": 34,
+            "patternIndex": 25,
             "patterns": [
               {
                 "id": 65,
@@ -620,11 +620,11 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Clr": 0.5,
-                  "Gain": 0.619999997317791,
-                  "Range": 0.2,
+                  "Gain": 0.6099999975413084,
+                  "Range": 0.30999999754130836,
                   "Attk": 0.4,
                   "Rls": 0.4,
-                  "Slope": 0.5
+                  "Slope": 0.4499999899417162
                 },
                 "modulation": {
                   "modulators": [],
@@ -692,7 +692,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 1661,
@@ -970,10 +970,10 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Clr": 0.5,
-                  "Gain": 0.8799999915063381,
+                  "Gain": 0.619999997317791,
                   "Range": 0.19000001810491085,
                   "Attk": 0.4,
-                  "Rls": 0.4,
+                  "Rls": 0.3299999926239252,
                   "Slope": 0.5
                 },
                 "modulation": {
@@ -981,7 +981,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 2320,
@@ -1009,7 +1009,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 2500,
@@ -1019,12 +1019,12 @@
                   "label": "ViolinWave",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "Level": 0.45,
+                  "Level": 0.18999999575316906,
                   "Egde": 0.5,
                   "Range": 0.5,
                   "Rls": 0.5,
                   "Speed": 0.5,
-                  "Amp": 0.25,
+                  "Amp": 3.0,
                   "Wave": 0.5,
                   "pSize": 0.5,
                   "pSpeed": 0.5,
@@ -1060,7 +1060,7 @@
                   "X-DUP": false,
                   "JOG": false,
                   "GREY": false,
-                  "Speed": 0.55,
+                  "Speed": 0.4699999964237209,
                   "Symm": 0,
                   "Anim": 7,
                   "Dens": 0.6,
@@ -1093,14 +1093,14 @@
                   "JOG": false,
                   "GREY": false,
                   "Size": 0.4000000059604645,
-                  "Anim": 1
+                  "Anim": 0
                 },
                 "modulation": {
                   "modulators": [],
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 3356,
@@ -1110,18 +1110,42 @@
                   "label": "ParamCrossSections",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "xPos": -45.0,
-                  "yPos": 97.81999781355262,
+                  "xPos": 172.17010886586968,
+                  "yPos": 44.62626120955656,
                   "zPos": 0.0,
                   "xSpd": 0.0,
                   "ySpd": 0.7399999890476465,
                   "zSpd": 0.0,
                   "xSize": 0.0,
-                  "xLvl": 0.0,
-                  "yLvl": 1.0,
+                  "xLvl": 1.0,
+                  "yLvl": 0.0,
                   "zLvl": 0.0,
                   "ySize": 0.0,
                   "zSize": 0.12000000402331351
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                },
+                "autoCycleEnabled": false
+              },
+              {
+                "id": 3638,
+                "class": "com.symmetrylabs.slstudio.pattern.CubeEQ",
+                "modulationColor": -31744,
+                "parameters": {
+                  "label": "CubeEQ",
+                  "expandedInUi": true,
+                  "Enabled": true,
+                  "Gain": 0.760000005364418,
+                  "Range": 0.35999999642372127,
+                  "Attack": 0.4199999995529652,
+                  "Rls": 0.4,
+                  "Slope": 0.5,
+                  "Edge": 0.5,
+                  "Clr": 0.16999999843537808,
+                  "Block": 0.2899999935179949
                 },
                 "modulation": {
                   "modulators": [],
@@ -1379,13 +1403,13 @@
             "modulationColor": -52992,
             "parameters": {
               "label": "Channel-5",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -1919,7 +1943,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -32000,
+          "modulationColor": -14352129,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -1989,21 +2013,21 @@
           "release": 100.0,
           "slope": 4.5,
           "Band-1": 0.0,
-          "Band-2": 0.03925993529014893,
-          "Band-3": 0.1666292526977523,
-          "Band-4": 0.27287882228543836,
-          "Band-5": 0.3106933418942067,
-          "Band-6": 0.33582706330582024,
-          "Band-7": 0.3025121345948274,
-          "Band-8": 0.0,
-          "Band-9": 0.0,
+          "Band-2": 0.0,
+          "Band-3": 0.0,
+          "Band-4": 0.04594093177370573,
+          "Band-5": 0.14462651048370956,
+          "Band-6": 0.255725907432797,
+          "Band-7": 0.2387087923569412,
+          "Band-8": 0.04606528544395039,
+          "Band-9": 0.06105302633207843,
           "Band-10": 0.0,
           "Band-11": 0.0,
-          "Band-12": 0.1501915579290728,
-          "Band-13": 0.15597226626293548,
+          "Band-12": 0.0,
+          "Band-13": 0.0,
           "Band-14": 0.0,
-          "Band-15": 0.0,
-          "Band-16": 0.0
+          "Band-15": 0.013798950587002756,
+          "Band-16": 0.06488110241945844
         }
       },
       "input": {
@@ -2038,7 +2062,7 @@
         "mode": 0,
         "fps": 34.0,
         "gamma": 0,
-        "brightness": 0.7857142835855484
+        "brightness": 0.7999999979510903
       }
     },
     "components": {
@@ -2118,7 +2142,7 @@
         }
       },
       "outputControl": {
-        "id": 50,
+        "id": 54,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -65326,
         "parameters": {
@@ -2443,7 +2467,7 @@
             "label": "",
             "enabled": true,
             "Polarity": 0,
-            "Range": 1.0
+            "Range": 0.9745762748643756
           }
         },
         {
@@ -2604,6 +2628,12 @@
     },
     "midi": {
       "inputs": [
+        {
+          "name": "M3D [hw:1,0,0]",
+          "channel": true,
+          "control": true,
+          "sync": true
+        },
         {
           "name": "CoreMIDI4J - Midi Fighter 3D",
           "channel": true,
@@ -2790,9 +2820,9 @@
         "2630": true
       },
       "preview": {
-        "radius": 230.45400862124038,
-        "theta": -0.00900000000000039,
-        "phi": 0.04799999999999993,
+        "radius": 554.615049629088,
+        "theta": 0.01799999999999961,
+        "phi": 0.09599999999999997,
         "positionX": 165.4993133544922,
         "positionY": 72.0,
         "positionZ": -0.1349981725215912
