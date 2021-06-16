@@ -160,7 +160,7 @@ public class MikeyShow implements Show {
             strips.add(stripReversed10);
             t.pop();
 
-            t.translate(184, -110, 0);
+            t.translate(150+30, -110, 0);
             t.push();
             Strip strip11 = new Strip("1", metrics, t);         //create the first strip
             strips.add(strip11);                                                  //add the first strip to strip array
@@ -171,7 +171,7 @@ public class MikeyShow implements Show {
             strips.add(stripReversed11);
             t.pop();
 
-            t.translate(-10, 72, 0);
+            t.translate(-10-30,72, 0);
             t.push();
             Strip strip12 = new Strip("1", metrics, t);         //create the first strip
             strips.add(strip12);                                                  //add the first strip to strip array
@@ -182,6 +182,7 @@ public class MikeyShow implements Show {
             strips.add(stripReversed12);
             t.pop();
 
+            //SIDE ROOM BARS
             t.translate(-300, -140, 0);
             t.push();
             t.rotateZ(60);
@@ -260,17 +261,17 @@ public class MikeyShow implements Show {
             addPixliteOutput(
                 new PointsGrouping("9").addPoints(model.getStripByIndex(18).getPoints()).addPoints(model.getStripByIndex(19).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("11").addPoints(model.getStripByIndex(20).getPoints()).addPoints(model.getStripByIndex(21).getPoints()));
+                new PointsGrouping("16").addPoints(model.getStripByIndex(20).getPoints()).addPoints(model.getStripByIndex(21).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("12").addPoints(model.getStripByIndex(22).getPoints()).addPoints(model.getStripByIndex(23).getPoints()));
+                new PointsGrouping("15").addPoints(model.getStripByIndex(22).getPoints()).addPoints(model.getStripByIndex(23).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("13").addPoints(model.getStripByIndex(24).getPoints()).addPoints(model.getStripByIndex(25).getPoints()));
+                new PointsGrouping("12").addPoints(model.getStripByIndex(24).getPoints()).addPoints(model.getStripByIndex(25).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("14").addPoints(model.getStripByIndex(26).getPoints()).addPoints(model.getStripByIndex(27).getPoints()));
+                new PointsGrouping("11").addPoints(model.getStripByIndex(26).getPoints()).addPoints(model.getStripByIndex(27).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("15").addPoints(model.getStripByIndex(28).getPoints()).addPoints(model.getStripByIndex(29).getPoints()));
+                new PointsGrouping("13").addPoints(model.getStripByIndex(28).getPoints()).addPoints(model.getStripByIndex(29).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("16").addPoints(model.getStripByIndex(30).getPoints()).addPoints(model.getStripByIndex(31).getPoints()));
+                new PointsGrouping("14").addPoints(model.getStripByIndex(30).getPoints()).addPoints(model.getStripByIndex(31).getPoints()));
 
 
 //            addPixliteOutput(
