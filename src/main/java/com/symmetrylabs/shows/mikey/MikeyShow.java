@@ -160,7 +160,75 @@ public class MikeyShow implements Show {
             strips.add(stripReversed10);
             t.pop();
 
+            t.translate(184, -110, 0);
+            t.push();
+            Strip strip11 = new Strip("1", metrics, t);         //create the first strip
+            strips.add(strip11);                                                  //add the first strip to strip array
+            t.translate(0, 2, 0);                                   //translate to 2nd strip location
+            Strip strip11Rev = new Strip("2", metrics, t);                   //create the 2nd strip
+            List<LXPoint> reverse_these11 = Lists.reverse(strip11Rev.getPoints()); //reflect 2nd strip
+            Strip stripReversed11 = new Strip(metrics, reverse_these11);  //create new strip with 2nd strips reflection
+            strips.add(stripReversed11);
+            t.pop();
 
+            t.translate(-10, 72, 0);
+            t.push();
+            Strip strip12 = new Strip("1", metrics, t);         //create the first strip
+            strips.add(strip12);                                                  //add the first strip to strip array
+            t.translate(0, 2, 0);                                   //translate to 2nd strip location
+            Strip strip12Rev = new Strip("2", metrics, t);                   //create the 2nd strip
+            List<LXPoint> reverse_these12 = Lists.reverse(strip12Rev.getPoints()); //reflect 2nd strip
+            Strip stripReversed12 = new Strip(metrics, reverse_these12);  //create new strip with 2nd strips reflection
+            strips.add(stripReversed12);
+            t.pop();
+
+            t.translate(-300, -140, 0);
+            t.push();
+            t.rotateZ(60);
+            Strip strip13 = new Strip("1", metrics, t);         //create the first strip
+            strips.add(strip13);                                                  //add the first strip to strip array
+            t.translate(0, 2, 0);                                   //translate to 2nd strip location
+            Strip strip13Rev = new Strip("2", metrics, t);                   //create the 2nd strip
+            List<LXPoint> reverse_these13 = Lists.reverse(strip13Rev.getPoints()); //reflect 2nd strip
+            Strip stripReversed13 = new Strip(metrics, reverse_these13);  //create new strip with 2nd strips reflection
+            strips.add(stripReversed13);
+            t.pop();
+
+            t.translate(0, -14, 0);
+            t.push();
+            t.rotateZ(60);
+            Strip strip14 = new Strip("1", metrics, t);         //create the first strip
+            strips.add(strip14);                                                  //add the first strip to strip array
+            t.translate(0, 2, 0);                                   //translate to 2nd strip location
+            Strip strip14Rev = new Strip("2", metrics, t);                   //create the 2nd strip
+            List<LXPoint> reverse_these14 = Lists.reverse(strip14Rev.getPoints()); //reflect 2nd strip
+            Strip stripReversed14 = new Strip(metrics, reverse_these14);  //create new strip with 2nd strips reflection
+            strips.add(stripReversed14);
+            t.pop();
+
+            t.translate(0, -14, 0);
+            t.push();
+            t.rotateZ(60);
+            Strip strip15 = new Strip("1", metrics, t);         //create the first strip
+            strips.add(strip15);                                                  //add the first strip to strip array
+            t.translate(0, 2, 0);                                   //translate to 2nd strip location
+            Strip strip15Rev = new Strip("2", metrics, t);                   //create the 2nd strip
+            List<LXPoint> reverse_these15 = Lists.reverse(strip15Rev.getPoints()); //reflect 2nd strip
+            Strip stripReversed15 = new Strip(metrics, reverse_these15);  //create new strip with 2nd strips reflection
+            strips.add(stripReversed15);
+            t.pop();
+
+            t.translate(0, -14, 0);
+            t.push();
+            t.rotateZ(60);
+            Strip strip16 = new Strip("1", metrics, t);         //create the first strip
+            strips.add(strip16);                                                  //add the first strip to strip array
+            t.translate(0, 2, 0);                                   //translate to 2nd strip location
+            Strip strip16Rev = new Strip("2", metrics, t);                   //create the 2nd strip
+            List<LXPoint> reverse_these16 = Lists.reverse(strip16Rev.getPoints()); //reflect 2nd strip
+            Strip stripReversed16 = new Strip(metrics, reverse_these16);  //create new strip with 2nd strips reflection
+            strips.add(stripReversed16);
+            t.pop();
 
 
 
@@ -191,7 +259,19 @@ public class MikeyShow implements Show {
                 new PointsGrouping("10").addPoints(model.getStripByIndex(16).getPoints()).addPoints(model.getStripByIndex(17).getPoints()));
             addPixliteOutput(
                 new PointsGrouping("9").addPoints(model.getStripByIndex(18).getPoints()).addPoints(model.getStripByIndex(19).getPoints()));
-//
+            addPixliteOutput(
+                new PointsGrouping("11").addPoints(model.getStripByIndex(20).getPoints()).addPoints(model.getStripByIndex(21).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("12").addPoints(model.getStripByIndex(22).getPoints()).addPoints(model.getStripByIndex(23).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("13").addPoints(model.getStripByIndex(24).getPoints()).addPoints(model.getStripByIndex(25).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("14").addPoints(model.getStripByIndex(26).getPoints()).addPoints(model.getStripByIndex(27).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("15").addPoints(model.getStripByIndex(28).getPoints()).addPoints(model.getStripByIndex(29).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("16").addPoints(model.getStripByIndex(30).getPoints()).addPoints(model.getStripByIndex(31).getPoints()));
+
 
 //            addPixliteOutput(
 //                new PointsGrouping("1").addPoints(model.getStripByIndex(0).getPoints()).addPoints(model.getStripByIndex(1).getPoints()));
