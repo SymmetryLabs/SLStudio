@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1607578657583,
+  "timestamp": 1624050143617,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.0,
       "crossfaderBlendMode": 0,
-      "speed": 0.5039370078740157,
-      "focusedChannel": 5,
+      "speed": 0.6200000047683716,
+      "focusedChannel": 8,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -2325,8 +2325,8 @@
             "modulationColor": -9699073,
             "parameters": {
               "label": "Blur",
-              "enabled": true,
-              "amount": 0.5748031496062992
+              "enabled": false,
+              "amount": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -2341,7 +2341,7 @@
             "parameters": {
               "label": "Palette",
               "enabled": false,
-              "Amount": 0.0,
+              "Amount": 0.98,
               "Palette": 0,
               "Bottom": 0.0,
               "Top": 1.0,
@@ -2380,7 +2380,7 @@
               "enabled": false,
               "Scale": 10.0,
               "Speed": 4.0,
-              "Range": 0.7
+              "Range": 2.0
             },
             "modulation": {
               "modulators": [],
@@ -2413,7 +2413,7 @@
               "label": "Strobe",
               "enabled": false,
               "Shape": 0,
-              "Freq": 4.925500094890594,
+              "Freq": 10.0,
               "Black": true
             },
             "modulation": {
@@ -3548,23 +3548,10 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.6571428664028645
+        "brightness": 1.0
       }
     },
     "components": {
-      "GammaExpander": {
-        "id": 16795,
-        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -16747521,
-        "parameters": {
-          "label": "GammaExpander",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
-      },
       "envelop": {
         "id": 29,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",

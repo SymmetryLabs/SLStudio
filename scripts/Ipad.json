@@ -2331,7 +2331,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -2458,7 +2459,8 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -2489,7 +2491,8 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "button",
@@ -2656,7 +2659,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -2785,7 +2790,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -2864,7 +2870,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "button",
@@ -3031,7 +3038,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -3160,7 +3169,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -3239,10 +3249,13 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -3294,7 +3307,9 @@
             "variables": "@{parent.variables}",
             "traversing": false,
             "widgets": [],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -3423,7 +3438,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -3502,7 +3518,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -3581,10 +3598,13 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -3713,10 +3733,13 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -3893,7 +3916,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -3924,7 +3948,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "button",
@@ -3968,7 +3993,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -4097,7 +4124,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -4176,10 +4204,13 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -4308,7 +4339,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -4339,7 +4371,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -4418,7 +4451,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -4497,7 +4531,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -4576,7 +4611,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -4655,7 +4691,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -4782,7 +4819,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -4813,7 +4851,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -4892,7 +4931,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -4943,7 +4983,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -5072,7 +5114,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -5199,7 +5242,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -5230,10 +5274,13 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -5362,10 +5409,13 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -5494,7 +5544,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -5525,7 +5576,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -5576,7 +5628,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -5657,7 +5711,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -5688,7 +5743,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -5787,7 +5843,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -5868,7 +5926,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -5899,7 +5958,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -5998,7 +6058,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -6127,7 +6189,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -6158,7 +6221,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -6209,7 +6273,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -6338,7 +6404,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -6369,7 +6436,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -6420,7 +6488,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -6501,7 +6571,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -6532,7 +6603,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -6631,7 +6703,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -6712,7 +6786,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -6743,7 +6818,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -6842,7 +6918,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -6971,7 +7049,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -7002,7 +7081,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -7053,7 +7133,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -7230,7 +7312,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -7261,10 +7344,13 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -7441,7 +7527,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -7472,7 +7559,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -7551,7 +7639,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -7630,10 +7719,13 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -7714,7 +7806,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -7745,7 +7838,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -7872,7 +7966,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -7951,7 +8046,8 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -8002,7 +8098,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -8083,7 +8181,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -8114,7 +8213,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -8289,7 +8389,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "button",
@@ -8333,7 +8434,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -8385,7 +8488,9 @@
             "variables": "@{parent.variables}",
             "traversing": false,
             "widgets": [],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -8514,7 +8619,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -8545,7 +8651,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -8624,7 +8731,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -8675,7 +8783,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -8804,7 +8914,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -8835,7 +8946,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -8886,7 +8998,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -9015,10 +9129,13 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -9099,7 +9216,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -9130,7 +9248,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -9229,7 +9348,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -9310,7 +9431,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -9389,7 +9511,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -9468,7 +9591,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -9519,7 +9643,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -9696,7 +9822,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -9727,7 +9854,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -9806,10 +9934,13 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -9986,7 +10117,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -10017,10 +10149,13 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -10101,7 +10236,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -10180,7 +10316,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -10259,7 +10396,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -10310,7 +10448,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -10391,7 +10531,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -10422,7 +10563,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -10521,7 +10663,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -10650,10 +10794,13 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -10782,7 +10929,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -10813,7 +10961,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -10864,7 +11013,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -10993,7 +11144,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -11024,7 +11176,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -11103,7 +11256,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -11134,7 +11288,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -11233,7 +11388,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -11362,7 +11519,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -11441,7 +11599,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -11472,7 +11631,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -11523,7 +11683,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -11604,7 +11766,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -11635,7 +11798,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -11734,7 +11898,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -11815,7 +11981,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -11894,7 +12061,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -11973,7 +12141,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -12065,7 +12234,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -12242,7 +12413,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -12273,10 +12445,13 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "text",
@@ -12307,7 +12482,8 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center"
+            "align": "center",
+            "decimals": 2
           },
           {
             "type": "text",
@@ -12338,7 +12514,8 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center"
+            "align": "center",
+            "decimals": 2
           },
           {
             "type": "fader",
@@ -12498,7 +12675,8 @@
             "script": "",
             "address": "auto",
             "preArgs": "",
-            "target": ""
+            "target": "",
+            "decimals": 2
           },
           {
             "type": "text",
@@ -12529,7 +12707,8 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center"
+            "align": "center",
+            "decimals": 2
           },
           {
             "type": "button",
@@ -12601,7 +12780,8 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center"
+            "align": "center",
+            "decimals": 2
           },
           {
             "type": "fader",
@@ -12682,7 +12862,8 @@
             "address": "auto",
             "preArgs": "",
             "target": "",
-            "align": "center"
+            "align": "center",
+            "decimals": 2
           },
           {
             "type": "button",
@@ -13180,7 +13361,8 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center"
+            "align": "center",
+            "decimals": 2
           },
           {
             "type": "fader",
@@ -13261,7 +13443,8 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center"
+            "align": "center",
+            "decimals": 2
           },
           {
             "type": "fader",
@@ -13557,7 +13740,9 @@
             "mode": "toggle"
           }
         ],
-        "tabs": []
+        "tabs": [],
+        "relative": false,
+        "ignoreTabs": false
       },
       {
         "type": "modal",
@@ -13667,7 +13852,8 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center"
+            "align": "center",
+            "decimals": 2
           },
           {
             "type": "frame",
@@ -15619,7 +15805,8 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center"
+            "align": "center",
+            "decimals": 2
           },
           {
             "type": "button",
@@ -15741,7 +15928,8 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center"
+            "align": "center",
+            "decimals": 2
           },
           {
             "type": "text",
@@ -15772,7 +15960,8 @@
             "script": "",
             "address": "auto",
             "preArgs": "",
-            "target": ""
+            "target": "",
+            "decimals": 2
           },
           {
             "type": "button",
@@ -15844,7 +16033,8 @@
             "address": "auto",
             "preArgs": "",
             "target": "",
-            "align": "center"
+            "align": "center",
+            "decimals": 2
           },
           {
             "type": "fader",
@@ -15925,7 +16115,8 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center"
+            "align": "center",
+            "decimals": 2
           },
           {
             "type": "button",
@@ -15994,7 +16185,7 @@
             "default": "",
             "linkId": "",
             "script": "",
-            "address": "/lx/master/effect/9/enabled",
+            "address": "/lx/channel/9/effect/2/enabled",
             "preArgs": "",
             "target": "",
             "interaction": true,
@@ -16444,7 +16635,8 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center"
+            "align": "center",
+            "decimals": 2
           },
           {
             "type": "fader",
@@ -16525,7 +16717,8 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center"
+            "align": "center",
+            "decimals": 2
           },
           {
             "type": "fader",
@@ -16704,7 +16897,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -16831,7 +17025,8 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -16862,7 +17057,8 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "button",
@@ -17029,7 +17225,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -17158,7 +17356,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -17237,7 +17436,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "button",
@@ -17404,7 +17604,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -17533,7 +17735,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -17612,10 +17815,13 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -17667,7 +17873,9 @@
             "variables": "@{parent.variables}",
             "traversing": false,
             "widgets": [],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -17796,7 +18004,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -17875,10 +18084,13 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -18007,7 +18219,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -18134,7 +18347,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -18165,10 +18379,13 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -18297,7 +18514,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -18328,7 +18546,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -18407,7 +18626,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -18486,7 +18706,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -18565,7 +18786,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -18644,7 +18866,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -18771,7 +18994,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -18802,7 +19026,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -18881,7 +19106,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -18932,7 +19158,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -19061,7 +19289,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -19140,10 +19369,13 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -19320,7 +19552,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -19351,7 +19584,8 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "button",
@@ -19395,7 +19629,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -19524,10 +19760,13 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -19656,7 +19895,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -19687,7 +19927,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -19738,7 +19979,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -19819,7 +20062,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -19850,7 +20094,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -19949,7 +20194,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -20030,7 +20277,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -20061,7 +20309,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -20160,7 +20409,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -20289,7 +20540,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -20320,7 +20572,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -20371,7 +20624,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -20500,10 +20755,13 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -20680,7 +20938,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -20711,10 +20970,13 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -20843,7 +21105,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -20874,7 +21137,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -20925,7 +21189,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -21006,7 +21272,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -21037,7 +21304,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -21136,7 +21404,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -21217,7 +21487,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -21248,7 +21519,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -21347,7 +21619,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -21476,7 +21750,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -21507,7 +21782,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -21558,7 +21834,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -21735,7 +22013,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -21766,7 +22045,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -21845,7 +22125,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -21924,10 +22205,13 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -22008,7 +22292,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -22039,7 +22324,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -22166,7 +22452,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -22245,7 +22532,8 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -22296,7 +22584,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -22377,7 +22667,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -22408,7 +22699,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -22583,7 +22875,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "button",
@@ -22627,7 +22920,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -22679,7 +22974,9 @@
             "variables": "@{parent.variables}",
             "traversing": false,
             "widgets": [],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -22808,7 +23105,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -22839,7 +23137,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -22918,7 +23217,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -22969,7 +23269,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -23146,7 +23448,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -23177,7 +23480,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -23256,10 +23560,13 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -23340,7 +23647,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -23419,7 +23727,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -23498,7 +23807,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -23549,7 +23859,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -23630,7 +23942,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -23661,7 +23974,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -23760,7 +24074,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -23889,10 +24205,13 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -24021,7 +24340,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -24052,7 +24372,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -24103,7 +24424,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -24280,7 +24603,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -24311,10 +24635,13 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -24366,7 +24693,9 @@
             "variables": "@{parent.variables}",
             "traversing": false,
             "widgets": [],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -24447,7 +24776,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -24478,7 +24808,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -24577,7 +24908,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -24706,10 +25039,13 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -24838,7 +25174,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -24869,7 +25206,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -24920,7 +25258,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -25049,7 +25389,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -25080,7 +25421,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -25159,7 +25501,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -25190,7 +25533,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -25289,7 +25633,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -25418,7 +25764,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -25497,7 +25844,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -25528,7 +25876,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -25579,7 +25928,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -25660,7 +26011,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -25691,7 +26043,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -25790,7 +26143,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "modal",
@@ -25871,7 +26226,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -25950,7 +26306,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -26029,7 +26386,8 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": ""
+                "target": "",
+                "decimals": 2
               },
               {
                 "type": "knob",
@@ -26121,7 +26479,9 @@
                 "bypass": false
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "button",
@@ -26380,7 +26740,8 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               },
               {
                 "type": "text",
@@ -26411,10 +26772,13 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center"
+                "align": "center",
+                "decimals": 2
               }
             ],
-            "tabs": []
+            "tabs": [],
+            "relative": false,
+            "ignoreTabs": false
           },
           {
             "type": "button",
@@ -26486,10 +26850,13 @@
             "script": "",
             "address": "auto",
             "preArgs": "",
-            "target": ""
+            "target": "",
+            "decimals": 2
           }
         ],
-        "tabs": []
+        "tabs": [],
+        "relative": false,
+        "ignoreTabs": false
       },
       {
         "type": "fader",
@@ -26570,7 +26937,8 @@
         "target": "",
         "vertical": false,
         "wrap": false,
-        "align": "center"
+        "align": "center",
+        "decimals": 2
       },
       {
         "type": "fader",
@@ -26651,7 +27019,8 @@
         "target": "",
         "vertical": false,
         "wrap": false,
-        "align": "center"
+        "align": "center",
+        "decimals": 2
       },
       {
         "type": "button",
@@ -27186,7 +27555,8 @@
         "address": "auto",
         "preArgs": "",
         "target": "",
-        "align": "center"
+        "align": "center",
+        "decimals": 2
       },
       {
         "type": "text",
@@ -27217,7 +27587,8 @@
         "address": "auto",
         "preArgs": "",
         "target": "",
-        "align": "center"
+        "align": "center",
+        "decimals": 2
       },
       {
         "type": "button",
@@ -27304,6 +27675,6 @@
     ],
     "tabs": []
   },
-  "version": "1.6.1",
+  "version": "1.8.3",
   "type": "Open Stage Control session"
 }
