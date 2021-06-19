@@ -31,28 +31,27 @@ public class YsiadsPartyShow extends CubesShow implements Show {
 
     static final TowerConfig[] TOWER_CONFIG = {
         //Left Cubes bottom to top
-        new TowerConfig(CSP*0, 0, 0, 0, 45, 0, new String[] {"412"}),
-        new TowerConfig(CSP*.25f, 0, CSP*.75f, 0, 45, 0, new String[] { "62"}),
+        new TowerConfig(CSP*0, 0, 0, 0, 45, 0, new String[] {"71"}),
 
-        new TowerConfig(CSP*-.25f, SP * 1, CSP*-.25f, 0, 45, 0, new String[] { "188"}),
-        new TowerConfig(CSP*-.4f, SP*1, CSP*.75f, 0, 45, 0, new String[] {"76"}),
-        new TowerConfig(CSP*.5f, SP*1, SP*1.1f, 0, 45, 0, new String[] {"5410ecf67aeb"}),
+        new TowerConfig(CSP*-.4f, SP*.75f, CSP*.75f, 0, 45, 0, new String[] {"549"}),
 
-        new TowerConfig(CSP*(.5f+.25f), SP*2, SP*(1.1f+.25f), 0, 45, 0, new String[] {"1119"}),
+        // new TowerConfig(CSP*(.5f+.25f), SP*2, SP*(1.1f+.25f), 0, 45, 0, new String[] {"1119"}),
 
         // //Center Cubes
-        new TowerConfig(CSP*(.5f+.25f+.75f), SP*2.8f, SP*(1.1f+.25f+.33f), 0, 45, 0, new String[] {"1"}),
-        new TowerConfig(CSP*(.5f+.25f+.75f-.75f), SP*(3.8f-1f), SP*(1.1f+.25f+.33f), 90, 90, 90, new String[] {"128"}),
+        new TowerConfig(CSP*(.5f+.25f+.75f), SP*1.8f, SP*(1.1f+.25f+.33f), 0, 45, 0, new String[] {"23"}),
+        new TowerConfig(CSP*(.5f+.25f+.75f-1f), SP*1.8f, SP*(1.1f+.25f+.33f), 0, 45, 0, new String[] {"329"}),
+
+        // new TowerConfig(CSP*(.5f+.25f+.75f-.75f), SP*(3.8f-1f), SP*(1.1f+.25f+.33f), 90, 90, 90, new String[] {"128"}),
 
         // //Right Cubes top to bottom
-        new TowerConfig(CSP*(.5f+.25f+.75f+.75f), SP*2, SP*(1.1f+.25f), 0, 45, 0, new String[] {"205"}),
+        // new TowerConfig(CSP*(.5f+.25f+.75f+.75f), SP*2, SP*(1.1f+.25f), 0, 45, 0, new String[] {"205"}),
 
-        new TowerConfig(CSP*(.5f+.25f+.75f+.75f+.25f), SP*1, SP*1.1f, 0, 45, 0, new String[] {"69"}),
-        new TowerConfig(CSP*(.5f+.25f+.75f+.75f+.25f+.9f), SP*1, CSP*(.75f), 0, 45, 0, new String[] {"61"}),
-        new TowerConfig(CSP*(.5f+.25f+.75f+.75f+.25f+.9f-.15f), SP*1, CSP*-.25f, 0, 45, 0, new String[] {"38"}),
+        new TowerConfig(CSP*(.5f+.25f+.75f+.75f+.25f), SP*1, SP*1.1f, 0, 45, 0, new String[] {"113"}),
+        // new TowerConfig(CSP*(.5f+.25f+.75f+.75f+.25f+.9f), SP*1, CSP*(.75f), 0, 45, 0, new String[] {"61"}),
+        // new TowerConfig(CSP*(.5f+.25f+.75f+.75f+.25f+.9f-.15f), SP*1, CSP*-.25f, 0, 45, 0, new String[] {"38"}),
 
-        new TowerConfig(CSP*(.5f+.25f+.75f+.75f+.25f+.9f-.15f-.5f), SP*0, CSP*.75f, 0, 45, 0, new String[] {"31"}),
-        new TowerConfig(CSP*(.5f+.25f+.75f+.75f+.25f+.9f-.15f-.5f+.25f), SP*0, 0, 0, 0, 0, new String[] {"123"}),
+        new TowerConfig(CSP*(.5f+.25f+.75f+.75f+.25f+.9f-.15f-.5f), SP*0, CSP*.75f, 0, 45, 0, new String[] {"356"}),
+        // new TowerConfig(CSP*(.5f+.25f+.75f+.75f+.25f+.9f-.15f-.5f+.25f), SP*0, 0, 0, 0, 0, new String[] {"123"}),
 
 
         // new TowerConfig(CSP*(.5f+.25f+.75f+.75f+.25f+.9f+.15f-1f), SP*0, CSP*.75f, 0, 45, 0, new String[] {"0"}),

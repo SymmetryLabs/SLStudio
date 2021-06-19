@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1624050143617,
+  "timestamp": 1624063030600,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -2325,8 +2325,8 @@
             "modulationColor": -9699073,
             "parameters": {
               "label": "Blur",
-              "enabled": false,
-              "amount": 0.0
+              "enabled": true,
+              "amount": 0.529999990016222
             },
             "modulation": {
               "modulators": [],
@@ -2424,7 +2424,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 20,
+        "patternIndex": 6,
         "patterns": [
           {
             "id": 1591,
@@ -2553,9 +2553,9 @@
               "ySpd": 0.6,
               "zSpd": 0.5,
               "xSize": 0.3,
-              "xLvl": 1.0,
+              "xLvl": 0.26999999769032,
               "yLvl": 1.0,
-              "zLvl": 0.5,
+              "zLvl": 0.0,
               "ySize": 0.3,
               "zSize": 0.3
             },
@@ -3185,7 +3185,7 @@
               "y": 0.0,
               "z": 0.315,
               "ampl": 40.0,
-              "wavel": 136.2492384187302,
+              "wavel": 120.21043395996094,
               "period": 13770.9998710081
             },
             "modulation": {
@@ -3552,6 +3552,19 @@
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 17973,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -16734209,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
       "envelop": {
         "id": 29,
         "class": "com.symmetrylabs.slstudio.envelop.Envelop",
@@ -4843,12 +4856,12 @@
         "16192": true
       },
       "preview": {
-        "radius": 271.87933829489066,
-        "theta": 0.015000000000000176,
-        "phi": 0.007796370506283785,
-        "positionX": 54.813053131103516,
-        "positionY": 83.875,
-        "positionZ": -23.137496948242188
+        "radius": 139.94188388445156,
+        "theta": 0.0180000000000021,
+        "phi": 0.13079637050628717,
+        "positionX": 68.99211120605469,
+        "positionY": 56.774993896484375,
+        "positionZ": 30.541946411132812
       }
     }
   }
