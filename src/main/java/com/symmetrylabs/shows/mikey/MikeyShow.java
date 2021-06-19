@@ -27,7 +27,7 @@ public class MikeyShow implements Show {
 
     @Override
     public void setupLx(LX lx) {
-        MikeyPixlite pixlite = new MikeyPixlite(lx, "10.200.1.100", (MikeyModel) lx.model, 0, 7);
+        MikeyPixlite pixlite = new MikeyPixlite(lx, "10.200.1.100", (MikeyModel) lx.model);
         lx.addOutput(pixlite);
     }
 
@@ -258,28 +258,29 @@ public class MikeyShow implements Show {
         }
     }
     static class MikeyPixlite extends SimplePixlite {
-        public MikeyPixlite(LX lx, String ip, MikeyModel model, int startStrip, int endStrip) {
+        public MikeyPixlite(LX lx, String ip, MikeyModel model) {
             super(lx, ip);
-            for (int i = startStrip; i <= endStrip; i++){
-                addPixliteOutput(
-                new PointsGrouping((i+1)+"").addPoints(model.getStripByIndex(i).getPoints()));
-            }
-            // addPixliteOutput(
-            //     new PointsGrouping("1").addPoints(model.getStripByIndex(0).getPoints()));
-            // addPixliteOutput(
-            //     new PointsGrouping("2").addPoints(model.getStripByIndex(1).getPoints()));
-            // addPixliteOutput(
-            //     new PointsGrouping("3").addPoints(model.getStripByIndex(2).getPoints()));
-            // addPixliteOutput(
-            //     new PointsGrouping("4").addPoints(model.getStripByIndex(3).getPoints()));
-            // addPixliteOutput(
-            //     new PointsGrouping("5").addPoints(model.getStripByIndex(4).getPoints()));
-            // addPixliteOutput(
-            //     new PointsGrouping("6").addPoints(model.getStripByIndex(5).getPoints()));
-            // addPixliteOutput(
-            //     new PointsGrouping("7").addPoints(model.getStripByIndex(6).getPoints()));
-            // addPixliteOutput(
-            //     new PointsGrouping("8").addPoints(model.getStripByIndex(7).getPoints()));
+            // for (int i = startStrip; i <= endStrip; i++){
+            //     addPixliteOutput(
+            //     new PointsGrouping((i+1)+"").addPoints(model.getStripByIndex(i).getPoints()));
+            // }
+
+            addPixliteOutput(
+                new PointsGrouping("1").addPoints(model.getStripByIndex(0).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("2").addPoints(model.getStripByIndex(1).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("3").addPoints(model.getStripByIndex(2).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("4").addPoints(model.getStripByIndex(3).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("5").addPoints(model.getStripByIndex(4).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("6").addPoints(model.getStripByIndex(5).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("7").addPoints(model.getStripByIndex(6).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("8").addPoints(model.getStripByIndex(7).getPoints()));
             // addPixliteOutput(
             //     new PointsGrouping("2").addPoints(model.getStripByIndex(2).getPoints()).addPoints(model.getStripByIndex(3).getPoints()));
             // addPixliteOutput(
