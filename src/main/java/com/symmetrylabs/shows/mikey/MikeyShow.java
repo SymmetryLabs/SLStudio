@@ -37,7 +37,7 @@ public class MikeyShow implements Show {
         }
 
         public static MikeyModel create() {
-            int barAngle = 60;
+            int barAngle = -60;
             int spacing = -60;
             List<Strip> strips = new ArrayList<Strip>();
             LXTransform t = new LXTransform();
