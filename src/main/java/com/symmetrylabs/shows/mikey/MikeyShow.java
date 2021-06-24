@@ -26,8 +26,16 @@ public class MikeyShow implements Show {
 
     @Override
     public void setupLx(LX lx) {
-        MikeyPixlite pixlite = new MikeyPixlite(lx, "10.200.1.100", (MikeyModel) lx.model);
+        MikeyPixlite pixlite = new MikeyPixlite(lx, "10.200.1.100", (MikeyModel) lx.model, 1);
+        // MikeyPixlite wLED1 = new MikeyPixlite(lx, "10.200.1.111", (MikeyModel) lx.model, 2);
+        // MikeyPixlite wLED2 = new MikeyPixlite(lx, "10.200.1.102", (MikeyModel) lx.model, 2);
+        // MikeyPixlite wLED3 = new MikeyPixlite(lx, "10.200.1.103", (MikeyModel) lx.model, 2);
+        // MikeyPixlite wLED4 = new MikeyPixlite(lx, "10.200.1.106", (MikeyModel) lx.model, 2);
         lx.addOutput(pixlite);
+        // lx.addOutput(wLED1); 
+        // lx.addOutput(wLED2); 
+        // lx.addOutput(wLED3); 
+        // lx.addOutput(wLED4);  
     }
 
     static class MikeyModel extends StripsModel<Strip> {
@@ -38,7 +46,8 @@ public class MikeyShow implements Show {
         public static MikeyModel create() {
             List<Strip> strips = new ArrayList<Strip>();
             LXTransform t = new LXTransform();
-            Strip.Metrics metrics = new Strip.Metrics(139, 1); //strip config
+            Strip.Metrics metrics = new Strip.Metrics(139, 1); //strip config\
+            // Strip.Metrics wLedMetrics = new Strip.Metrics(139, 1); //strip config
 //                for (int i =0; i < 20; i=i+2) {
 //                    t.push();
 //                    Strip strip = new Strip(String.format("strip%d", i), metrics, t);         //create the first strip
@@ -231,12 +240,16 @@ public class MikeyShow implements Show {
             strips.add(stripReversed16);
             t.pop();
 
+            // Strip strip17 = new Strip("1", wLedMetrics, t);         
+            // strips.add(strip17);   
+
             return new MikeyModel(strips);
         }
     }
     static class MikeyPixlite extends SimplePixlite {
-        public MikeyPixlite(LX lx, String ip, MikeyModel model) {
+        public MikeyPixlite(LX lx, String ip, MikeyModel model, int pixliteNum) {
             super(lx, ip);
+            if (pixliteNum == 1) {
             addPixliteOutput(
                 new PointsGrouping("2").addPoints(model.getStripByIndex(0).getPoints()).addPoints(model.getStripByIndex(1).getPoints()));
             addPixliteOutput(
@@ -269,7 +282,13 @@ public class MikeyShow implements Show {
                 new PointsGrouping("13").addPoints(model.getStripByIndex(28).getPoints()).addPoints(model.getStripByIndex(29).getPoints()));
             addPixliteOutput(
                 new PointsGrouping("14").addPoints(model.getStripByIndex(30).getPoints()).addPoints(model.getStripByIndex(31).getPoints()));
+ }
 
+    // if (pixliteNum == 2) {
+    //          addPixliteOutput(
+    //             new PointsGrouping("1").addPoints(model.getStripByIndex(32).getPoints()));
+
+    // }
 
 //            addPixliteOutput(
 //                new PointsGrouping("1").addPoints(model.getStripByIndex(0).getPoints()).addPoints(model.getStripByIndex(1).getPoints()));
