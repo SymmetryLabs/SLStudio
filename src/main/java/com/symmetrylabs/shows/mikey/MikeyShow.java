@@ -231,9 +231,6 @@ public class MikeyShow implements Show {
             strips.add(stripReversed16);
             t.pop();
 
-
-
-
             return new MikeyModel(strips);
         }
     }
