@@ -3,6 +3,7 @@ package com.symmetrylabs.shows.mikey;
 import com.google.common.collect.Lists;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
+import com.symmetrylabs.slstudio.showplugins.FaderLimiter;
 import com.symmetrylabs.slstudio.model.CandyBar;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.Strip;
@@ -32,6 +33,7 @@ public class MikeyShow implements Show {
         // MikeyPixlite wLED3 = new MikeyPixlite(lx, "10.200.1.103", (MikeyModel) lx.model, 2);
         // MikeyPixlite wLED4 = new MikeyPixlite(lx, "10.200.1.106", (MikeyModel) lx.model, 2);
         lx.addOutput(pixlite);
+        FaderLimiter.attach(lx, 0.85f);
         // lx.addOutput(wLED1); 
         // lx.addOutput(wLED2); 
         // lx.addOutput(wLED3); 

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1624510386244,
+  "timestamp": 1625713974329,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -188,7 +188,7 @@
                 }
               }
             ],
-            "patternIndex": 3,
+            "patternIndex": 4,
             "patterns": [
               {
                 "id": 6258,
@@ -2898,7 +2898,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -14483712,
+          "modulationColor": -13041920,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -3953,6 +3953,18 @@
     "midi": {
       "inputs": [
         {
+          "name": "M3D [hw:1,0,0]",
+          "channel": true,
+          "control": true,
+          "sync": true
+        },
+        {
+          "name": "Twister [hw:2,0,0]",
+          "channel": true,
+          "control": true,
+          "sync": true
+        },
+        {
           "name": "Twister [hw:1,0,0]",
           "channel": true,
           "control": true,
@@ -3963,12 +3975,6 @@
           "channel": true,
           "control": true,
           "sync": false
-        },
-        {
-          "name": "M3D [hw:1,0,0]",
-          "channel": true,
-          "control": true,
-          "sync": true
         },
         {
           "name": "CoreMIDI4J - Midi Fighter 3D",
