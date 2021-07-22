@@ -39,34 +39,84 @@ public class MikeyShow implements Show {
         public static MikeyModel create() {
             int barAngle = -60;
             int spacing = -60;
+            int barFlip = 180;
+            int topSpacing = 80;
+            int topHeight = 200;
             List<Strip> strips = new ArrayList<Strip>();
             LXTransform t = new LXTransform();
             // Strip.Metrics metrics = new Strip.Metrics(139, 1); //strip config
             DoubleStrip.Metrics metrics = new DoubleStrip.Metrics(139, -1, 2); // 1" front/back gap
             t.push();
-            for (int i=0; i<5; i++) {
+            for (int i=0; i<8; i++) {
+                if (i==4) {
+                    t.translate(0, 0, 24); //TRANSLATE BACK BAR
+                }
                 t.push();
-                t.rotateZ(barAngle);
+                if (i<4) {
+                    t.rotateZ(barAngle);
+                }
+                else {
+                    t.translate(0, topHeight, 0);
+                }
+                if (i==5) {
+                    t.translate(topSpacing,0,0);    
+                }
                 t.translate(spacing,0,0);
+                if (i>=6) {
+                    t.translate(12, -100, 0);
+                }
+                if (i==7) {
+                    t.translate(12,10,0);
+                }
                 // t.rotateX(-60);
                 DoubleStrip strip = new DoubleStrip("1", metrics, t);         //create the first strip
-                strips.add(strip);                                                  //add the first strip to strip array
+                strips.add(strip); 
+                // if (i==4) {
+                //     t.translate(0, 0, -24); //TRANSLATE BACK BAR BACK
+                // }                                                 //add the first strip to strip array
                 t.pop();
-                t.translate(0, 12, 0);
+                if (i<=3) {
+                  t.translate(0, 12, 0);  
+                }
+                
+                               
         }
             t.pop();
             t.scaleX(-1);
             t.push();
-            for (int i=0; i<5; i++) {
+            for (int i=0; i<8; i++) {
+                if (i==4) {
+                    t.translate(0, 0, 24); //TRANSLATE BACK BAR
+                }
                 t.push();
-                t.rotateZ(barAngle);
+                if (i<4) {
+                    t.rotateZ(barAngle);
+                }
+                else {
+                    t.translate(0, topHeight, 0);
+                }
+                if (i==5) {
+                    t.translate(topSpacing,0,0);    
+                }
                 t.translate(spacing,0,0);
+                if (i>=6) {
+                    t.translate(12, -100, 0);
+                }
+                if (i==7) {
+                    t.translate(12,10,0);
+                }
                 // t.rotateX(-60);
                 DoubleStrip strip = new DoubleStrip("1", metrics, t);         //create the first strip
-                strips.add(strip);                                                  //add the first strip to strip array
+                strips.add(strip); 
+                // if (i==4) {
+                //     t.translate(0, 0, -24); //TRANSLATE BACK BAR BACK
+                // }                                                 //add the first strip to strip array
                 t.pop();
-    
-            t.translate(0, 12, 0);
+                if (i<=3) {
+                  t.translate(0, 12, 0);  
+                }
+                
+                
         }
             t.pop();
 
@@ -274,7 +324,7 @@ public class MikeyShow implements Show {
             addPixliteOutput(
                 new PointsGrouping("10").addPoints(model.getStripByIndex(3).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("").addPoints(model.getStripByIndex(4).getPoints()));
+                new PointsGrouping("12").addPoints(model.getStripByIndex(4).getPoints()));
             addPixliteOutput(
                 new PointsGrouping("1").addPoints(model.getStripByIndex(5).getPoints()));
             addPixliteOutput(
@@ -284,7 +334,16 @@ public class MikeyShow implements Show {
             addPixliteOutput(
                 new PointsGrouping("8").addPoints(model.getStripByIndex(8).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("").addPoints(model.getStripByIndex(9).getPoints()));
+                new PointsGrouping("11").addPoints(model.getStripByIndex(9).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("11").addPoints(model.getStripByIndex(10).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("12").addPoints(model.getStripByIndex(11).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("13").addPoints(model.getStripByIndex(12).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("14").addPoints(model.getStripByIndex(13).getPoints()));
+
             // addPixliteOutput(
             //     new PointsGrouping("9").addPoints(model.getStripByIndex(8).getPoints()));
             // addPixliteOutput(

@@ -316,7 +316,7 @@ public class APC40Mk2 extends LXMidiSurface {
             this.channel.enabled.addListener(this);
             this.channel.crossfadeGroup.addListener(this);
             this.channel.focusedPattern.addListener(this);
-            this.channel.acceptSwatches.addListener(this);
+            // this.channel.acceptSwatches.addListener(this);
             this.channel.speed.addListener(this);
 
             this.channel.controlSurfaceFocusLength.setValue(CLIP_LAUNCH_ROWS);
@@ -330,7 +330,7 @@ public class APC40Mk2 extends LXMidiSurface {
             this.channel.enabled.removeListener(this);
             this.channel.crossfadeGroup.removeListener(this);
             this.channel.focusedPattern.removeListener(this);
-            this.channel.acceptSwatches.removeListener(this);
+            // this.channel.acceptSwatches.removeListener(this);
             this.channel.speed.removeListener(this);
 
             this.channel.controlSurfaceFocusLength.setValue(0);
@@ -358,9 +358,11 @@ public class APC40Mk2 extends LXMidiSurface {
                     this.channel.controlSurfaceFocusIndex.setValue(focusedPatternIndex - CLIP_LAUNCH_ROWS + 1);
                 }
                 sendChannelPatterns(index, this.channel);
-            } else if (p == this.channel.acceptSwatches) {
-                sendNoteOn(index, CHANNEL_RECORD, this.channel.acceptSwatches.isOn() ? LED_ON : LED_OFF);
-            } else if (p == this.channel.speed) {
+            } 
+            // else if (p == this.channel.acceptSwatches) {
+            //     sendNoteOn(index, CHANNEL_RECORD, this.channel.acceptSwatches.isOn() ? LED_ON : LED_OFF);
+            // } 
+            else if (p == this.channel.speed) {
                 sendControlChange(0, CHANNEL_KNOB + index, (int) (channel.speed.getNormalized() * 127));
             }
         }
@@ -461,7 +463,7 @@ public class APC40Mk2 extends LXMidiSurface {
             sendControlChange(0, CHANNEL_KNOB_STYLE+i, LED_STYLE_SINGLE);
         }
         sendChannels();
-        sendSwatches();
+        // sendSwatches();
     }
 
     private void sendChannels() {
@@ -483,7 +485,7 @@ public class APC40Mk2 extends LXMidiSurface {
             sendNoteOn(index, CHANNEL_ACTIVE, channel.enabled.isOn() ? LED_ON : LED_OFF);
             sendNoteOn(index, CHANNEL_CROSSFADE_GROUP, channel.crossfadeGroup.getValuei());
             sendNoteOn(index, CHANNEL_SOLO, channel.cueActive.isOn() ? LED_ON : LED_OFF);
-            sendNoteOn(index, CHANNEL_RECORD, channel.acceptSwatches.isOn() ? LED_ON : LED_OFF);
+            // sendNoteOn(index, CHANNEL_RECORD, channel.acceptSwatches.isOn() ? LED_ON : LED_OFF);
             sendControlChange(0, CHANNEL_KNOB + index, (int) (channel.speed.getNormalized() * 127));
         } else {
             sendNoteOn(index, CHANNEL_ACTIVE, LED_OFF);
@@ -608,13 +610,13 @@ public class APC40Mk2 extends LXMidiSurface {
         });
         sendNoteOn(0, METRONOME, lx.tempo.enabled.isOn() ? LED_ON : LED_OFF);
 
-        this.lx.swatches.addListener(new SwatchLibrary.SwatchListener() {
-            @Override
-            public void onSwatchesUpdated() {
-                sendSwatches();
-            }
-        });
-        sendSwatches();
+        // this.lx.swatches.addListener(new SwatchLibrary.SwatchListener() {
+        //     @Override
+        //     public void onSwatchesUpdated() {
+        //         sendSwatches();
+        //     }
+        // });
+        // sendSwatches();
     }
 
     private void registerChannel(LXChannel channel) {
@@ -732,10 +734,10 @@ public class APC40Mk2 extends LXMidiSurface {
                 return;
             }
 
-            if (pitch >= SCENE_LAUNCH && pitch <= SCENE_LAUNCH_MAX) {
-                lx.swatches.apply(pitch - SCENE_LAUNCH);
-                return;
-            }
+            // if (pitch >= SCENE_LAUNCH && pitch <= SCENE_LAUNCH_MAX) {
+            //     lx.swatches.apply(pitch - SCENE_LAUNCH);
+            //     return;
+            // }
         }
 
         // Channel messages
@@ -772,9 +774,9 @@ public class APC40Mk2 extends LXMidiSurface {
                     // focused.editorVisible.setValue(!focused.editorVisible.isOn() || oldFocused != focused);
                 }
                 return;
-            case CHANNEL_RECORD:
-                channel.acceptSwatches.toggle();
-                return;
+            // case CHANNEL_RECORD:
+            //     channel.acceptSwatches.toggle();
+            //     return;
             case DEVICE_ON_OFF:
                 this.deviceListener.onDeviceOnOff();
                 return;
