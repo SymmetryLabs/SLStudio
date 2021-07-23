@@ -316,25 +316,25 @@ public class MikeyShow implements Show {
             // }
 
             addPixliteOutput(
-                new PointsGrouping("4").addPoints(model.getStripByIndex(0).getPoints()));
+                new PointsGrouping("1").addPoints(model.getStripByIndex(0).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("3").addPoints(model.getStripByIndex(1).getPoints()));
+                new PointsGrouping("2").addPoints(model.getStripByIndex(1).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("9").addPoints(model.getStripByIndex(2).getPoints()));
+                new PointsGrouping("3").addPoints(model.getStripByIndex(2).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("10").addPoints(model.getStripByIndex(3).getPoints()));
+                new PointsGrouping("4").addPoints(model.getStripByIndex(3).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("12").addPoints(model.getStripByIndex(4).getPoints()));
+                new PointsGrouping("5").addPoints(model.getStripByIndex(4).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("1").addPoints(model.getStripByIndex(5).getPoints()));
+                new PointsGrouping("6").addPoints(model.getStripByIndex(5).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("2").addPoints(model.getStripByIndex(6).getPoints()));
+                new PointsGrouping("7").addPoints(model.getStripByIndex(6).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("7").addPoints(model.getStripByIndex(7).getPoints()));
+                new PointsGrouping("8").addPoints(model.getStripByIndex(7).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("8").addPoints(model.getStripByIndex(8).getPoints()));
+                new PointsGrouping("9").addPoints(model.getStripByIndex(8).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("11").addPoints(model.getStripByIndex(9).getPoints()));
+                new PointsGrouping("10").addPoints(model.getStripByIndex(9).getPoints()));
             addPixliteOutput(
                 new PointsGrouping("11").addPoints(model.getStripByIndex(10).getPoints()));
             addPixliteOutput(
@@ -343,6 +343,10 @@ public class MikeyShow implements Show {
                 new PointsGrouping("13").addPoints(model.getStripByIndex(12).getPoints()));
             addPixliteOutput(
                 new PointsGrouping("14").addPoints(model.getStripByIndex(13).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("15").addPoints(model.getStripByIndex(12).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("16").addPoints(model.getStripByIndex(13).getPoints()));
 
             // addPixliteOutput(
             //     new PointsGrouping("9").addPoints(model.getStripByIndex(8).getPoints()));
