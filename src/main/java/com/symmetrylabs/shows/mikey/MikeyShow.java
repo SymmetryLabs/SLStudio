@@ -37,35 +37,44 @@ public class MikeyShow implements Show {
         }
 
         public static MikeyModel create() {
-            int barAngle = -60;
+            int barAngle = 60;
+            int barAngle2 = -60;
             int spacing = -60;
-            int barFlip = 180;
-            int topSpacing = 80;
-            int topHeight = 200;
+            int barFlip = 0;
+            int topSpacing = 0;
+            int topHeight = 140;
+            int middleSpacing = 0;
             List<Strip> strips = new ArrayList<Strip>();
             LXTransform t = new LXTransform();
             // Strip.Metrics metrics = new Strip.Metrics(139, 1); //strip config
             DoubleStrip.Metrics metrics = new DoubleStrip.Metrics(139, -1, 2); // 1" front/back gap
             t.push();
-            for (int i=0; i<8; i++) {
+            for (int i=0; i<7; i++) {
                 if (i==4) {
                     t.translate(0, 0, 24); //TRANSLATE BACK BAR
                 }
+                if (i==1) {
+                    t.translate (middleSpacing, 0, 0);
+                } 
                 t.push();
-                if (i<4) {
+                if (i<3) {
                     t.rotateZ(barAngle);
                 }
                 else {
                     t.translate(0, topHeight, 0);
                 }
-                if (i==5) {
+                if (i>=3) {
+                    t.rotateZ(barFlip);
+                }
+                
+                if (i==4) {
                     t.translate(topSpacing,0,0);    
                 }
                 t.translate(spacing,0,0);
-                if (i>=6) {
-                    t.translate(12, -100, 0);
+                if (i>=5) {
+                    t.translate(12, 0, 0);
                 }
-                if (i==7) {
+                if (i==6) {
                     t.translate(12,10,0);
                 }
                 // t.rotateX(-60);
@@ -75,34 +84,39 @@ public class MikeyShow implements Show {
                 //     t.translate(0, 0, -24); //TRANSLATE BACK BAR BACK
                 // }                                                 //add the first strip to strip array
                 t.pop();
-                if (i<=3) {
+                if (i<=2) {
                   t.translate(0, 12, 0);  
-                }
-                
-                               
+                }              
         }
             t.pop();
             t.scaleX(-1);
             t.push();
-            for (int i=0; i<8; i++) {
+            for (int i=0; i<7; i++) {
                 if (i==4) {
                     t.translate(0, 0, 24); //TRANSLATE BACK BAR
                 }
+                if (i==1) {
+                    t.translate (middleSpacing, 0, 0);
+                } 
                 t.push();
-                if (i<4) {
+                if (i<3) {
                     t.rotateZ(barAngle);
                 }
+
                 else {
                     t.translate(0, topHeight, 0);
                 }
-                if (i==5) {
+                if (i>=3) {
+                    t.rotateZ(barFlip);
+                }
+                if (i==4) {
                     t.translate(topSpacing,0,0);    
                 }
                 t.translate(spacing,0,0);
-                if (i>=6) {
-                    t.translate(12, -100, 0);
+                if (i>=5) {
+                    t.translate(12, 0, 0);
                 }
-                if (i==7) {
+                if (i==6) {
                     t.translate(12,10,0);
                 }
                 // t.rotateX(-60);
@@ -110,11 +124,13 @@ public class MikeyShow implements Show {
                 strips.add(strip); 
                 // if (i==4) {
                 //     t.translate(0, 0, -24); //TRANSLATE BACK BAR BACK
-                // }                                                 //add the first strip to strip array
+                // }  
+  
                 t.pop();
-                if (i<=3) {
+                if (i<=2) {
                   t.translate(0, 12, 0);  
                 }
+                
                 
                 
         }
