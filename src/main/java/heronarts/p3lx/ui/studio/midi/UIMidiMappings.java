@@ -53,7 +53,7 @@ public class UIMidiMappings extends UICollapsibleSection {
 
     public UIMidiMappings(UI ui, final LX lx, float x, float y, float w) {
         super(ui, x, y, w, 0);
-        setTitle("MAPPINGS");
+        setTitle("MIDI MAPPINGS");
         this.ui = ui;
         this.midiEngine = lx.engine.midi;
 
