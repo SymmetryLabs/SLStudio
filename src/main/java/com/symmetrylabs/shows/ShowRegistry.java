@@ -9,6 +9,7 @@ import com.symmetrylabs.shows.artbasel.ArtBaselShow;
 import com.symmetrylabs.shows.base.BaseDemoShow;
 import com.symmetrylabs.shows.demo.DemoShow;
 import com.symmetrylabs.shows.exploratorium.ExploratoriumShow;
+import com.symmetrylabs.shows.firefly.FireflyShow;
 import com.symmetrylabs.shows.hblamp.HbLampShow;
 import com.symmetrylabs.shows.hhgarden.HHFlowerShow;
 import com.symmetrylabs.shows.hhgarden.HHGardenShow;
@@ -109,6 +110,7 @@ public class ShowRegistry {
         map.put(BanyanShow.SHOW_NAME, BanyanShow::new);
         map.put(Area15Show.SHOW_NAME, Area15Show::new);
         map.put(Andy.SHOW_NAME, Andy::new);
+        map.put(FireflyShow.SHOW_NAME, FireflyShow::new);
     }
 
     interface ShowBuilder {
