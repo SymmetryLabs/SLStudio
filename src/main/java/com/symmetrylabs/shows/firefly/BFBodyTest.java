@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.shows.firefly;
 
 import art.lookingup.KaledoscopeModel;
 import art.lookingup.LUButterfly;
@@ -9,6 +9,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.DiscreteParameter;
 
 public class BFBodyTest extends SLPattern {
+    public static final String GROUP_NAME = FireflyShow.SHOW_NAME;
 
     DiscreteParameter which = new DiscreteParameter("which", 0, 0, 4);
     int currentLed = 0;

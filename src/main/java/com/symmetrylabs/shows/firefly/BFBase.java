@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.shows.firefly;
 
 import art.lookingup.KaledoscopeModel;
 import art.lookingup.LUButterfly;

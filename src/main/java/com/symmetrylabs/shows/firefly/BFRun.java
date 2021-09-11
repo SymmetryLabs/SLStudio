@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.shows.firefly;
 
 import art.lookingup.KaledoscopeModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
@@ -9,6 +9,8 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
 public class BFRun extends SLPattern {
+    public static final String GROUP_NAME = FireflyShow.SHOW_NAME;
+
     DiscreteParameter runNum = new DiscreteParameter("run", 0, 0, 7);
     BooleanParameter tracer = new BooleanParameter("tracer", false);
 

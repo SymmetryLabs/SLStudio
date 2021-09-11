@@ -1,12 +1,14 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.shows.firefly;
 
 import art.lookingup.KaledoscopeModel;
 import art.lookingup.LUButterfly;
+import com.symmetrylabs.shows.firefly.BFBase;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 
 public class BFStrandHue extends BFBase {
+    public static final String GROUP_NAME = FireflyShow.SHOW_NAME;
 
     public BFStrandHue(LX lx) {
         super(lx);

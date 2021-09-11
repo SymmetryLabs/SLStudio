@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.shows.firefly;
 
 import art.lookingup.KaledoscopeModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
@@ -8,6 +8,8 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.DiscreteParameter;
 
 public class BFStrand extends SLPattern {
+    public static final String GROUP_NAME = FireflyShow.SHOW_NAME;
+
     DiscreteParameter strandNum = new DiscreteParameter("strand", 0, 0, 10);
     public BFStrand(LX lx) {
         super(lx);
