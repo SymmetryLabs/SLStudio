@@ -60,16 +60,16 @@ public class LUButterfly {
             right.add(new LXPoint(x + stripSpacing, y, z + (7 - i) * ledSpacing));
         }
         pointsClockwise.addAll(left);
-        for (int i = right.size() - 1; i >= 0; i--)
-            pointsClockwise.add(right.get(i));
+        pointsClockwise.addAll(right);
 
-        pointsCounterClockwise.addAll(right);
         for (int i = left.size() - 1; i >= 0; i--)
             pointsCounterClockwise.add(left.get(i));
+        for (int i = right.size() - 1; i >= 0; i--)
+            pointsCounterClockwise.add(right.get(i));
 
         for (int i = 0; i < left.size(); i++) {
             pointsByRow.add(left.get(i));
-            pointsByRow.add(right.get(i));
+            pointsByRow.add(right.get(7-i));
         }
 
         allPoints.addAll(left);
