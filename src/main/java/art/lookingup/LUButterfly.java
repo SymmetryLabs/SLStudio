@@ -3,6 +3,7 @@ package art.lookingup;
 import heronarts.lx.model.LXPoint;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * 16 LED Butterfly representation.  There are two 8 LED strips side-by-side.  For reference, we will refer to the view
@@ -21,6 +22,8 @@ import java.util.List;
  *
  */
 public class LUButterfly {
+    private static final Logger logger = Logger.getLogger(KaledoscopeModel.class.getName());
+
     public static float ledSpacing = 0.3f;
     public static float stripSpacing = 0.6f;
     public List<LXPoint> right;
@@ -43,6 +46,22 @@ public class LUButterfly {
         this.runIndex = runIndex;
 
         buildPoints();
+    }
+
+    /**
+     * Update the position of the butterfly.  We will need update the position of all points.
+     * NOTE: The bezier is only in a 2D plane, so pos.y corresponds to our 'z' coordinate.
+     * @param pos
+     */
+    public void updatePosition(KaledoscopeModel.Point pos) {
+        float deltaX = pos.x - x;
+        float deltaZ = pos.y - z;
+        for (LXPoint point : allPoints) {
+            point.x += deltaX;
+            point.z += deltaZ;
+        }
+        x = pos.x;
+        z = pos.y;
     }
 
     public void buildPoints() {

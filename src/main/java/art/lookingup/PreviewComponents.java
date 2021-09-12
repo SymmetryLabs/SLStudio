@@ -19,6 +19,10 @@ public class PreviewComponents {
         public boolean showAxes;
         public boolean showCtrlPoints;
         public boolean showFloor;
+        static public int selectedRun;
+        static public int selectedBezier;
+        static public int selectedCtrlPt;
+        static public float ptSize;
 
         public Axes() {
             xAxis = new UICylinder(1f, 10.0f, 4, LXColor.rgb(127,0,0));
@@ -26,7 +30,59 @@ public class PreviewComponents {
             zAxis = new UICylinder(1f, 10.0f, 4, LXColor.rgb(0, 0, 127));
             floor = new Floor();
             showAxes = true;
+            showFloor = true;
             showCtrlPoints = true;
+            selectedRun = 0;
+            selectedBezier = 0;
+            selectedCtrlPt = 0;
+            ptSize = 5f;
+        }
+
+        public void nextSelectedRun() {
+            selectedRun = (selectedRun + 1) % KaledoscopeModel.allButterflyRuns.size();
+        }
+
+        public void nextSelectedBezier() {
+            selectedBezier = (selectedBezier + 1) % KaledoscopeModel.BEZIERS_PER_RUN;
+        }
+
+        public void nextSelectedCtrlPt() {
+            selectedCtrlPt = (selectedCtrlPt + 1) % 4;
+        }
+
+        static public KaledoscopeModel.Point getCurSelPt() {
+            KaledoscopeModel.Run selRun = KaledoscopeModel.allRuns.get(selectedRun);
+            if (selectedBezier != -1) {
+                KaledoscopeModel.Bezier selBezier = selRun.beziers.get(selectedBezier);
+                if (selectedCtrlPt != -1) {
+                    KaledoscopeModel.Point ctrlPt = getBezierPointByIndex(selBezier, selectedCtrlPt);
+                    return ctrlPt;
+                }
+            }
+            return null;
+        }
+
+        static public KaledoscopeModel.Bezier getCurBezier() {
+            return getCurSelRun().beziers.get(selectedBezier);
+        }
+
+        static public KaledoscopeModel.Run getCurSelRun() {
+            return KaledoscopeModel.allRuns.get(selectedRun);
+        }
+
+        static public KaledoscopeModel.Point getBezierPointByIndex(KaledoscopeModel.Bezier bezier, int index) {
+            switch (index) {
+                case 0:
+                    return bezier.start;
+                case 1:
+                    return bezier.c1;
+                case 2:
+                    return bezier.c2;
+                case 3:
+                    return bezier.end;
+                default:
+                    return null;
+            }
         }
 
         public void onDraw(UI ui, PGraphics pg) {
@@ -43,35 +99,65 @@ public class PreviewComponents {
                 pg.popMatrix();
 
                 if (showCtrlPoints) {
+                    KaledoscopeModel.Run selRun = null;
+                    KaledoscopeModel.Bezier selBezier = null;
+                    KaledoscopeModel.Point ctrlPt = null;
+                    selRun = KaledoscopeModel.allRuns.get(selectedRun);
+                    selBezier = selRun.beziers.get(selectedBezier);
+                    ctrlPt = getBezierPointByIndex(selBezier, selectedCtrlPt);
+
                     // show cubes at each bezier control point
-                    int runNum = 0;
                     for (KaledoscopeModel.Run run : KaledoscopeModel.allRuns) {
-                        int bezierNum = 1;
                         if (run.beziers != null) {
-                            for (KaledoscopeModel.Bezier bezier : run.beziers) {
-                                pg.stroke(0);
-                                pg.pushMatrix();
-                                pg.translate(bezier.start.x, KaledoscopeModel.butterflyYHeight, bezier.start.y);
-                                int bright = 255 / bezierNum;
-                                pg.fill(LXColor.rgb(0, 0, bright));
-                                pg.box(3);
-                                pg.popMatrix();
-                                pg.pushMatrix();
-                                pg.translate(bezier.end.x, KaledoscopeModel.butterflyYHeight, bezier.end.y);
-                                pg.fill(LXColor.rgb(0, bright, bright));
-                                pg.box(3);
-                                pg.popMatrix();
-                                pg.pushMatrix();
-                                pg.translate(bezier.c1.x, KaledoscopeModel.butterflyYHeight, bezier.c1.y);
-                                pg.fill(LXColor.rgb(bright, 0, 0));
-                                pg.box(3);
-                                pg.popMatrix();
-                                pg.pushMatrix();
-                                pg.translate(bezier.c2.x, KaledoscopeModel.butterflyYHeight, bezier.c2.y);
-                                pg.fill(LXColor.rgb(0, bright, 0));
-                                pg.box(3);
-                                pg.popMatrix();
-                                bezierNum++;
+                            if (run == selRun) {
+                                for (KaledoscopeModel.Bezier bezier : run.beziers) {
+                                    pg.stroke(0);
+                                    pg.pushMatrix();
+                                    pg.translate(bezier.start.x, KaledoscopeModel.butterflyYHeight, bezier.start.y);
+                                    int bright = 255;
+                                    pg.stroke(0);
+                                    if (selRun == run &&
+                                        selBezier == bezier &&
+                                        ctrlPt == bezier.start)
+                                        pg.stroke(255);
+                                    pg.fill(LXColor.rgb(0, 0, bright));
+                                    pg.box(ptSize);
+                                    pg.popMatrix();
+
+                                    pg.pushMatrix();
+                                    pg.translate(bezier.end.x, KaledoscopeModel.butterflyYHeight, bezier.end.y);
+                                    pg.stroke(0);
+                                    if (selRun == run &&
+                                        selBezier == bezier &&
+                                        ctrlPt == bezier.end)
+                                        pg.stroke(255);
+                                    pg.fill(LXColor.rgb(0, bright, bright));
+                                    pg.box(ptSize);
+                                    pg.popMatrix();
+
+                                    pg.pushMatrix();
+                                    pg.translate(bezier.c1.x, KaledoscopeModel.butterflyYHeight, bezier.c1.y);
+                                    pg.stroke(0);
+                                    if (selRun == run &&
+                                        selBezier == bezier &&
+                                        ctrlPt == bezier.c1)
+                                        pg.stroke(255);
+                                    pg.fill(LXColor.rgb(bright, 0, 0));
+                                    pg.box(ptSize);
+                                    pg.popMatrix();
+
+                                    pg.pushMatrix();
+                                    pg.translate(bezier.c2.x, KaledoscopeModel.butterflyYHeight, bezier.c2.y);
+                                    pg.stroke(0);
+                                    if (selRun == run &&
+                                        selBezier == bezier &&
+                                        ctrlPt == bezier.c2)
+                                        pg.stroke(255);
+                                    pg.fill(LXColor.rgb(0, bright, 0));
+                                    pg.box(ptSize);
+                                    pg.popMatrix();
+                                    pg.stroke(0);
+                                }
                             }
                         }
                     }
@@ -134,9 +220,9 @@ public class PreviewComponents {
         }
 
         public void onDraw(UI ui, PGraphics pg) {
-            float x1 = 7.0f;
-            float y1 = -3.9f;
-            float z1 = -7.0f;
+            float x1 = 120.0f;
+            float y1 = 0f;
+            float z1 = -470.0f;
             pg.noStroke();
             pg.fill(40, 40, 40);
             pg.beginShape();
