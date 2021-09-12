@@ -5,9 +5,13 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.LXParameter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * UI class for configuring the number of runs of butterflies and the number of runs of
- * flowers.
+ * flowers.  We don't specify the default values here because they must be created before
+ * the model is created in FireflyShow which is before the UI is built.
  *
  * TODO(tracy): Currently there is only an adhoc relationship between strand ID's and run ID's.
  * i.e. The strand ID's are allocated start at 0 as we build the runs of butterflies and the runs
@@ -20,6 +24,10 @@ import heronarts.lx.parameter.LXParameter;
  */
 public class RunsConfig extends UIConfig {
   public static final String BUTTERFLY_RUNS = "bf runs";
+  public static final String BF_STRANDS_RUN1 = "brun1 s#";
+  public static final String BF_STRANDS_RUN2 = "brun2 s#";
+  public static final String BF_STRANDS_RUN3 = "brun3 s#";
+  public static final String BF_STRANDS_RUN4 = "brun4 s#";
   public static final String FLOWER_RUNS = "fl runs";
   public static final String title = "runs";
   public static final String filename = "runs.json";
@@ -32,11 +40,24 @@ public class RunsConfig extends UIConfig {
     this.lx = lx;
 
     // Run 1
-    registerStringParameter(BUTTERFLY_RUNS, "3");
-    registerStringParameter(FLOWER_RUNS, "4");
+    registerStringParameter(BUTTERFLY_RUNS, null);
+    registerStringParameter(BF_STRANDS_RUN1, null);
+    registerStringParameter(BF_STRANDS_RUN2, null);
+    registerStringParameter(BF_STRANDS_RUN3, null);
+    registerStringParameter(BF_STRANDS_RUN4, null);
+    registerStringParameter(FLOWER_RUNS, null);
     save();
 
     buildUI(ui);
+  }
+
+  static public List<Integer> getRunsNumStrands(ParameterFile pFile) {
+      List<Integer> numStrands = new ArrayList<Integer>(0);
+      numStrands.add(Integer.parseInt(pFile.getStringParameter(BF_STRANDS_RUN1, "4").getString()));
+      numStrands.add(Integer.parseInt(pFile.getStringParameter(BF_STRANDS_RUN2, "4").getString()));
+      numStrands.add(Integer.parseInt(pFile.getStringParameter(BF_STRANDS_RUN3, "4").getString()));
+      numStrands.add(Integer.parseInt(pFile.getStringParameter(BF_STRANDS_RUN4, "4").getString()));
+      return numStrands;
   }
 
   @Override

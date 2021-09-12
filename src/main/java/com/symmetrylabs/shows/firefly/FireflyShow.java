@@ -36,6 +36,8 @@ public class FireflyShow implements Show {
     static public int runsButterflies;
     static public int runsFlowers;
     static public List<Integer> allStrandLengths;
+    // Allow each butterfly run to have a configurable number of runs.
+    static public List<Integer> butterflyRunsNumStrands;
 
     /**
      * These are parameters we need for building the model. We bind the UI to these ParameterFile's
@@ -48,14 +50,15 @@ public class FireflyShow implements Show {
     public void loadModelParams() {
         runsConfigParams = ParameterFile.instantiateAndLoad(RunsConfig.filename);
         strandLengthsParams = ParameterFile.instantiateAndLoad(StrandLengths.filename);
-        runsButterflies = Integer.parseInt(runsConfigParams.getStringParameter(RunsConfig.BUTTERFLY_RUNS, "3").getString());
+        runsButterflies = Integer.parseInt(runsConfigParams.getStringParameter(RunsConfig.BUTTERFLY_RUNS, "2").getString());
         runsFlowers = Integer.parseInt(runsConfigParams.getStringParameter(RunsConfig.FLOWER_RUNS, "4").getString());
         allStrandLengths = StrandLengths.getAllStrandLengths(strandLengthsParams);
+        butterflyRunsNumStrands = RunsConfig.getRunsNumStrands(runsConfigParams);
     }
 
     public SLModel buildModel() {
         loadModelParams();
-        return KaledoscopeModel.createModel(3, 2, 20);
+        return KaledoscopeModel.createModel(runsButterflies);
     }
 
     public void setupLx(final LX lx) {

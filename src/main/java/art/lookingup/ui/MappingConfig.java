@@ -1,5 +1,6 @@
 package art.lookingup.ui;
 
+import art.lookingup.KaledoscopeOutput;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.LXParameter;
@@ -40,22 +41,23 @@ public class MappingConfig extends UIConfig {
     int contentWidth = (int)ui.leftPane.global.getContentWidth();
     this.lx = lx;
 
-    registerStringParameter(OUTPUT1, "0,1");
-    registerStringParameter(OUTPUT2, "2,3");
-    registerStringParameter(OUTPUT3, "4,5");
-    registerStringParameter(OUTPUT4, "6");
-    registerStringParameter(OUTPUT5, "7");
-    registerStringParameter(OUTPUT6, "8");
-    registerStringParameter(OUTPUT7, "9");
-    registerStringParameter(OUTPUT8, "10");
-    registerStringParameter(OUTPUT9, "11");
-    registerStringParameter(OUTPUT10, "12");
-    registerStringParameter(OUTPUT11, "13");
-    registerStringParameter(OUTPUT12, "14");
-    registerStringParameter(OUTPUT13, "15");
-    registerStringParameter(OUTPUT14, "16");
-    registerStringParameter(OUTPUT15, "17");
-    registerStringParameter(OUTPUT16, "18");
+    registerStringParameter(OUTPUT1, "0");
+    registerStringParameter(OUTPUT2, "1");
+    registerStringParameter(OUTPUT3, "2");
+    registerStringParameter(OUTPUT4, "3");
+    registerStringParameter(OUTPUT5, "4");
+    registerStringParameter(OUTPUT6, "5");
+    registerStringParameter(OUTPUT7, "6");
+    registerStringParameter(OUTPUT8, "7");
+    registerStringParameter(OUTPUT9, "8");
+    registerStringParameter(OUTPUT10, "9");
+    registerStringParameter(OUTPUT11, "10");
+    registerStringParameter(OUTPUT12, "11");
+    registerStringParameter(OUTPUT13, "12");
+    registerStringParameter(OUTPUT14, "13");
+    registerStringParameter(OUTPUT15, "14");
+    registerStringParameter(OUTPUT16, "15");
+
 
     save();
 
@@ -71,6 +73,19 @@ public class MappingConfig extends UIConfig {
   public void onSave() {
     // Only reconfigure if a parameter changed.
     if (parameterChanged) {
+        boolean originalEnabled = lx.engine.output.enabled.getValueb();
+        lx.engine.output.enabled.setValue(false);
+            /*
+            for (LXOutput child : lx.engine.output.children) {
+                lx.engine.output.removeChild(child);
+            } */
+        // This version of LX doesn't provide access to the children variable so we will use
+        // a static member variable we set when constructing the output.
+        lx.engine.output.removeChild(KaledoscopeOutput.butterflyDatagramOutput);
+        lx.engine.output.removeChild(KaledoscopeOutput.flowerDatagramOutput);
+        KaledoscopeOutput.configurePixliteOutput(lx);
+        parameterChanged = false;
+        lx.engine.output.enabled.setValue(originalEnabled);
     }
   }
 }

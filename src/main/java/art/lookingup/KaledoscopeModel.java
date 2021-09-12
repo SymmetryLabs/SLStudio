@@ -291,7 +291,7 @@ public class KaledoscopeModel extends SLModel {
         }
         RunType runType;
 
-        public Run(int runIndex, RunType runType, int numStrands, float x, float y, float z) {
+        public Run(int runIndex, RunType runType, float x, float y, float z) {
             this.runIndex = runIndex;
             this.runType = runType;
             strands = new ArrayList<Strand>();
@@ -299,6 +299,9 @@ public class KaledoscopeModel extends SLModel {
             flowers = new ArrayList<LUFlower>();
             allPoints = new ArrayList<LXPoint>();
 
+            // To make numStrands configurable do like this after adding UI
+            // int numStrands = FireflyShow.butterflyRunsNumStrands.get(runIndex);
+            int numStrands = 1;
             for (int i = 0; i < numStrands; i++) {
                 Strand strand = new Strand(this, allStrands.size(), Strand.StrandType.FLOWER, x, y, z, i);
                 allPoints.addAll(strand.allPoints);
@@ -308,10 +311,12 @@ public class KaledoscopeModel extends SLModel {
             }
         }
 
-        public Run(int runIndex, float pos, int numStrands) {
+        public Run(int runIndex, float pos) {
             this.runIndex = runIndex;
             this.runType = RunType.BUTTERFLY;
-            float curveEndpointDistance = 80f;
+            int numStrands = FireflyShow.butterflyRunsNumStrands.get(runIndex);
+            float curveEndpointDistance = 250f;
+
             Point bezierStart = new Point(pos, 0f);
             Point bezierEnd = new Point(pos, curveEndpointDistance);
             Point bezierC1 = new Point(bezierStart.x + cxOffset, bezierStart.y + cyOffset);
@@ -356,7 +361,7 @@ public class KaledoscopeModel extends SLModel {
         }
     }
 
-    static public KaledoscopeModel createModel(int numButterflyRuns, int strandsPerRun, int butterfliesPerStrand) {
+    static public KaledoscopeModel createModel(int numButterflyRuns) {
         List<LXPoint> allPoints = new ArrayList<LXPoint>();
 
         allRuns = new ArrayList<Run>();
@@ -365,12 +370,11 @@ public class KaledoscopeModel extends SLModel {
         allStrands = new ArrayList<Strand>();
         allButterflies = new ArrayList<LUButterfly>();
         allFlowers = new ArrayList<LUFlower>();
-        numStrandsPerRun = strandsPerRun;
         List<LXPoint> butterflyPoints = new ArrayList<LXPoint>();
         List<LXPoint> flowerPoints = new ArrayList<LXPoint>();
 
         for (int i = 0; i < numButterflyRuns; i++) {
-            Run run = new Run(i, i * lineSpacingInches, 2);
+            Run run = new Run(i, i * lineSpacingInches);
             allRuns.add(run);
             allButterflyRuns.add(run);
             allPoints.addAll(run.allPoints);
@@ -380,10 +384,10 @@ public class KaledoscopeModel extends SLModel {
         int flowerRuns = FireflyShow.runsFlowers;
         for (int i = 0; i < flowerRuns; i++) {
             float x = -5f * 12f;
-            float runSpacing = 10f * 12f;
-            if (i % 2 == 1)
+            float runSpacing = 20f * 12f;
+            if (i % 2 == 0)
                 x += 10 * 12f;
-            Run run = new Run(allRuns.size(), Run.RunType.FLOWER, 1, x, 8f * 12f, i * runSpacing + 12f);
+            Run run = new Run(allRuns.size(), Run.RunType.FLOWER, x, 8f * 12f, i * runSpacing + 12f);
             allRuns.add(run);
             allFlowerRuns.add(run);
             allPoints.addAll(run.allPoints);

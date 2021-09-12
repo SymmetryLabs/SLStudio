@@ -222,12 +222,12 @@ public class PreviewComponents {
         public void onDraw(UI ui, PGraphics pg) {
             float x1 = 120.0f;
             float y1 = 0f;
-            float z1 = -470.0f;
+            float z1 = -1170.0f;
             pg.noStroke();
             pg.fill(40, 40, 40);
             pg.beginShape();
-            pg.vertex(x1, y1, z1);
-            pg.vertex(-x1, y1, z1);
+            pg.vertex(x1, y1, 0f);
+            pg.vertex(-x1, y1, 0f);
             pg.vertex(-x1, y1, -z1);
             pg.vertex(x1, y1, -z1);
             pg.endShape(PConstants.CLOSE);
