@@ -11,7 +11,7 @@ import heronarts.lx.parameter.DiscreteParameter;
 public class BFRun extends SLPattern {
     public static final String GROUP_NAME = FireflyShow.SHOW_NAME;
 
-    DiscreteParameter runNum = new DiscreteParameter("run", 0, 0, 7);
+    DiscreteParameter runNum = new DiscreteParameter("run", 0, 0, 6);
     BooleanParameter tracer = new BooleanParameter("tracer", false);
 
     int currentIndex = 0;

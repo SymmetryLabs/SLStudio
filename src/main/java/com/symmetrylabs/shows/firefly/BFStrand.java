@@ -10,7 +10,7 @@ import heronarts.lx.parameter.DiscreteParameter;
 public class BFStrand extends SLPattern {
     public static final String GROUP_NAME = FireflyShow.SHOW_NAME;
 
-    DiscreteParameter strandNum = new DiscreteParameter("strand", 0, 0, 10);
+    DiscreteParameter strandNum = new DiscreteParameter("strand", 0, 0, 12);
     public BFStrand(LX lx) {
         super(lx);
         addParameter("strand", strandNum);
