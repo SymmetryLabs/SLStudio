@@ -50,15 +50,11 @@ public class KaledoscopeModel extends SLModel {
         public List<LXPoint> allPoints;
         public List<LXPoint> addressablePoints;
 
-        float x, y, z;
 
-        public Strand(Run run, int strandId, StrandType strandType, float x, float y, float z, int strandRunIndex) {
+        public Strand(Run run, AnchorTree tree, int strandId, StrandType strandType, int strandRunIndex) {
             this.strandId = strandId;
             this.run = run;
             this.strandType = strandType;
-            this.x = x;
-            this.y = y;
-            this.z = z;
             flowers = new ArrayList<LUFlower>();
             butterflies = new ArrayList<LUButterfly>();
             allPoints = new ArrayList<LXPoint>();
@@ -68,10 +64,15 @@ public class KaledoscopeModel extends SLModel {
             int configuredNumFlowers = FireflyShow.allStrandLengths.get(strandId);
             logger.log(Level.INFO, "Generating flower strand id " + strandId + " of length: " + configuredNumFlowers);
             float flowerSpacing = 12f;
+            float flowerMaxHeight = 110f;
             for (int i = 0; i < configuredNumFlowers; i++) {
                 int prevStrandsFlowers = run.flowers.size();
-                // Flowers are wired from top to bottom since the wiring will be high up in the tree.
-                LUFlower flower = new LUFlower(i, i + prevStrandsFlowers, x, y - i * flowerSpacing, z);
+                // Flowers are wired from top to bottom since the wiring will be high up in the tree.  We need to
+                // compute every 12 inches along a helix that started at the top of the run.
+                float flowerRunArcDistance = (i + prevStrandsFlowers) * flowerSpacing;
+                float t = tree.helix.getTAtArcLength(flowerRunArcDistance);
+                Point3 pos = tree.helix.calculateHelicalPoint(t);
+                LUFlower flower = new LUFlower(i, i + prevStrandsFlowers, pos.x + tree.x, flowerMaxHeight - pos.y, pos.z + tree.z);
                 flowers.add(flower);
                 allFlowers.add(flower);
                 allPoints.addAll(flower.allPoints);
@@ -104,8 +105,7 @@ public class KaledoscopeModel extends SLModel {
                 float butterflyThisCurveDistance = currentButterflyArcDistance - prevCurveDistance;
                 Bezier bezier = beziers.get(currentBezierIndex);
                 float thisCurveT = bezier.getTAtArcLength(butterflyThisCurveDistance);
-                Point bPos = bezier.getPointAtArcLength(thisCurveT);
-
+                Point bPos = bezier.calculateBezierPoint(thisCurveT);
 
                 LUButterfly butterfly = new LUButterfly(i, i + prevStrandsButterflies, bPos.x, butterflyYHeight, bPos.y);
                 butterflies.add(butterfly);
@@ -145,7 +145,7 @@ public class KaledoscopeModel extends SLModel {
             float butterflyThisCurveDistance = currentButterflyArcDistance - prevCurveDistance;
             Bezier bezier = beziers.get(currentBezierIndex);
             float thisCurveT = bezier.getTAtArcLength(butterflyThisCurveDistance);
-            Point bPos = bezier.getPointAtArcLength(thisCurveT);
+            Point bPos = bezier.calculateBezierPoint(thisCurveT);
             return bPos;
         }
 
@@ -260,10 +260,6 @@ public class KaledoscopeModel extends SLModel {
             }
             return 1f;
         }
-
-        public Point getPointAtArcLength(float t) {
-            return calculateBezierPoint(t);
-        }
     }
 
     /**
@@ -291,7 +287,7 @@ public class KaledoscopeModel extends SLModel {
         }
         RunType runType;
 
-        public Run(int runIndex, RunType runType, float x, float y, float z) {
+        public Run(int runIndex, RunType runType, AnchorTree tree) {
             this.runIndex = runIndex;
             this.runType = runType;
             strands = new ArrayList<Strand>();
@@ -303,7 +299,7 @@ public class KaledoscopeModel extends SLModel {
             // int numStrands = FireflyShow.butterflyRunsNumStrands.get(runIndex);
             int numStrands = 1;
             for (int i = 0; i < numStrands; i++) {
-                Strand strand = new Strand(this, allStrands.size(), Strand.StrandType.FLOWER, x, y, z, i);
+                Strand strand = new Strand(this, tree, allStrands.size(), Strand.StrandType.FLOWER, i);
                 allPoints.addAll(strand.allPoints);
                 flowers.addAll(strand.flowers);
                 allStrands.add(strand);
@@ -361,6 +357,107 @@ public class KaledoscopeModel extends SLModel {
         }
     }
 
+    static public class Point3 {
+        float x;
+        float y;
+        float z;
+    }
+
+    /**
+     * Anchor trees are the trees that the cabling is anchored to.  The tree positions determine the flower strand
+     * locations and the control points on the bezier curves.  The diameter of the trees determine the helical shape
+     * of the flower strands.
+     *
+     * We will perform the same procedure we used for computing bezier curve arc lengths.  Just sample many times
+     * along the helix to compute a helix approximated by many short line segments.  We can then map those segments
+     * to t values and then for a provided length add up segments until we achieve that length and then pick
+     * a nearby t value.
+     */
+    static public class AnchorTree {
+        public float x;
+        public float z;
+        public float radius;
+        public Helix helix;
+
+        public AnchorTree(float x, float z, float radius, float helixSlope) {
+            this.x = x;
+            this.z = z;
+            this.radius = radius;
+            helix = new Helix(radius, helixSlope);
+        }
+
+    }
+
+
+    static public class Helix {
+        public static final int ARC_SAMPLES = 400;
+        public static final float MAX_T = 40f;
+        float[] arcLengths;
+        public float totalArcLength;
+        float slope;
+        float radius;
+
+        public Helix(float radius, float slope) {
+            this.slope = slope;
+            this.radius = radius;
+            computeArcLengths(MAX_T);
+        }
+
+        public Point3 calculateHelicalPoint(float t)
+        {
+            Point3 p = new Point3();
+            p.x = radius * (float)Math.cos(t);
+            p.z = radius * (float)Math.sin(t);
+            p.y = t * slope;
+
+            return p;
+        }
+
+        /**
+         * Compute a lookup table of arc lengths.  This samples t values at points along
+         * the curve and just does a simple linear distance computation. With the lookup
+         * table we can ask for a distance along the curve and get the 't' value at that
+         * point on the curve.  We can then use that 't' value to compute our X and Y
+         * coordinates.
+         */
+        public void computeArcLengths(float maxT) {
+            arcLengths = new float[ARC_SAMPLES];
+            Point3 prevPoint = new Point3();
+            float ox = 0f;
+            float oy = 0f;
+            float clen = 0f;
+            prevPoint.x = 0f;
+            prevPoint.y = 0f;
+            prevPoint.z = 0f;
+
+            for (int i = 0; i < arcLengths.length; i++) {
+                float t = (maxT * i) / (float)ARC_SAMPLES;
+                Point3 nextPoint = calculateHelicalPoint(  t);
+                float dx = nextPoint.x - prevPoint.x;
+                float dy = nextPoint.y - prevPoint.y;
+                float dz = nextPoint.z - prevPoint.z;
+                clen += Math.sqrt(dx * dx + dy * dy + dz * dz);
+                arcLengths[i] = clen;
+                prevPoint = nextPoint;
+            }
+            Point3 maxP = calculateHelicalPoint(maxT);
+            logger.info("max helical point: " + maxP.x + "," + maxP.y + "," + maxP.z);
+            totalArcLength = clen;
+            logger.info("HELIX total arc length: " + totalArcLength);
+        }
+
+        public float getTAtArcLength(float arcLength) {
+            if (arcLength < arcLengths[0])
+                return 0f;
+            for (int i = 1; i < arcLengths.length; i++) {
+                if (arcLength < arcLengths[i] && arcLength > arcLengths[i-1]) {
+                    return MAX_T * (((float)(i - 1))/(float)ARC_SAMPLES);
+                }
+            }
+            return 1f;
+        }
+    }
+
     static public KaledoscopeModel createModel(int numButterflyRuns) {
         List<LXPoint> allPoints = new ArrayList<LXPoint>();
 
@@ -387,7 +484,8 @@ public class KaledoscopeModel extends SLModel {
             float runSpacing = 20f * 12f;
             if (i % 2 == 0)
                 x += 10 * 12f;
-            Run run = new Run(allRuns.size(), Run.RunType.FLOWER, x, 8f * 12f, i * runSpacing + 12f);
+            AnchorTree tree = new AnchorTree(x, i * runSpacing + 12f, 12f, 5f);
+            Run run = new Run(allRuns.size(), Run.RunType.FLOWER, tree);
             allRuns.add(run);
             allFlowerRuns.add(run);
             allPoints.addAll(run.allPoints);
