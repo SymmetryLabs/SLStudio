@@ -41,6 +41,7 @@ public class FireflyShow implements Show {
     // Allow each butterfly run to have a configurable number of runs.
     static public List<Integer> butterflyRunsNumStrands;
     static public List<Float> anchorTreesPos;
+    static public List<Float> anchorTreesRadii;
 
     /**
      * These are parameters we need for building the model. We bind the UI to these ParameterFile's
@@ -59,6 +60,7 @@ public class FireflyShow implements Show {
         allStrandLengths = StrandLengths.getAllStrandLengths(strandLengthsParams);
         butterflyRunsNumStrands = RunsConfig.getRunsNumStrands(runsConfigParams);
         anchorTreesPos = AnchorTreeConfig.getTreesPos(anchorTreesParams);
+        anchorTreesRadii = AnchorTreeConfig.getTreesRadii(anchorTreesParams);
     }
 
     public SLModel buildModel() {

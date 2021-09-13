@@ -498,7 +498,7 @@ public class KaledoscopeModel extends SLModel {
             if (i % 2 == 0)
                 x += 10 * 12f;
             anchorTrees.add(new AnchorTree(FireflyShow.anchorTreesPos.get(i*2),
-                FireflyShow.anchorTreesPos.get(i*2 + 1), 12f, 5f));
+                FireflyShow.anchorTreesPos.get(i*2 + 1), FireflyShow.anchorTreesRadii.get(i), 5f));
         }
 
         for (int i = 0; i < numButterflyRuns; i++) {
