@@ -80,7 +80,7 @@ public class KaledoscopeModel extends SLModel {
             }
         }
 
-        public Strand(Run run, int strandId, float xpos, int strandRunIndex, List<Bezier> beziers) {
+        public Strand(Run run, int strandId, int strandRunIndex, List<Bezier> beziers) {
             this.strandId = strandId;
             strandType = StrandType.BUTTERFLY;
             butterflies = new ArrayList<LUButterfly>();
@@ -279,7 +279,7 @@ public class KaledoscopeModel extends SLModel {
         public List<Bezier> beziers;
         int runIndex;
         float cxOffset = 70f;
-        float cyOffset = 30f;
+        float cyOffset = 20f;
 
         public enum RunType {
             BUTTERFLY,
@@ -307,35 +307,52 @@ public class KaledoscopeModel extends SLModel {
             }
         }
 
-        public Run(int runIndex, float pos) {
+        public Run(int runIndex, List<AnchorTree> trees) {
             this.runIndex = runIndex;
             this.runType = RunType.BUTTERFLY;
             int numStrands = FireflyShow.butterflyRunsNumStrands.get(runIndex);
-            float curveEndpointDistance = 250f;
+            float treeMargin = 2f;
 
-            Point bezierStart = new Point(pos, 0f);
-            Point bezierEnd = new Point(pos, curveEndpointDistance);
-            Point bezierC1 = new Point(bezierStart.x + cxOffset, bezierStart.y + cyOffset);
-            Point bezierC2 = new Point(bezierEnd.x + cxOffset, bezierEnd.y - cyOffset);
+            // Run index == 0 needs to be to the left of tree.
+            // Run index == 1 needs to be to the right of tree.
+            float startX = trees.get(0).x - (trees.get(0).radius + treeMargin);
+            if (runIndex == 1)
+                startX = trees.get(0).x + (trees.get(0).radius + treeMargin);
+            Point bezierStart = new Point(startX, trees.get(0).z);
+            float endX = trees.get(1).x - (trees.get(1).radius + treeMargin);
+            if (runIndex == 1)
+                endX = trees.get(1).x + (trees.get(1).radius + treeMargin);
+            Point bezierEnd = new Point(endX, trees.get(1).z);
+            Point bezierC1 = new Point(bezierStart.x, bezierStart.y + cyOffset);
+            Point bezierC2 = new Point(bezierEnd.x, bezierEnd.y - cyOffset);
             bezier1 = new Bezier(bezierStart, bezierC1, bezierC2, bezierEnd);
 
 
             Point b2Start = new Point(bezierEnd.x, bezierEnd.y);
-            Point b2End = new Point(bezierEnd.x, curveEndpointDistance * 2);
-            Point b2C1 = new Point(b2Start.x - cxOffset, b2Start.y + cyOffset);
-            Point b2C2 = new Point(b2End.x - cxOffset, b2End.y - cyOffset);
+            float endX2 = trees.get(2).x - (trees.get(2).radius + treeMargin);
+            if (runIndex == 1)
+                endX2 = trees.get(2).x + (trees.get(2).radius + treeMargin);
+            Point b2End = new Point(endX2, trees.get(2).z);
+            Point b2C1 = new Point(b2Start.x, b2Start.y + cyOffset);
+            Point b2C2 = new Point(b2End.x, b2End.y - cyOffset);
             bezier2 = new Bezier(b2Start, b2C1, b2C2, b2End);
 
             Point b3Start = new Point(b2End.x, b2End.y);
-            Point b3End = new Point(b2End.x, curveEndpointDistance * 3);
-            Point b3C1 = new Point(b3Start.x + cxOffset, b3Start.y + cyOffset);
-            Point b3C2 = new Point(b3End.x + cxOffset, b3End.y - cyOffset);
+            float endX3 = trees.get(3).x - (trees.get(3).radius + treeMargin);
+            if (runIndex == 1)
+                endX3 = trees.get(3).x + (trees.get(3).radius + treeMargin);
+            Point b3End = new Point(endX3, trees.get(3).z);
+            Point b3C1 = new Point(b3Start.x, b3Start.y + cyOffset);
+            Point b3C2 = new Point(b3End.x, b3End.y - cyOffset);
             bezier3 = new Bezier(b3Start, b3C1, b3C2, b3End);
 
             Point b4Start = new Point(b3End.x, b3End.y);
-            Point b4End = new Point(b3End.x, curveEndpointDistance * 4);
-            Point b4C1 = new Point(b4Start.x - cxOffset, b4Start.y + cyOffset);
-            Point b4C2 = new Point(b4End.x - cxOffset, b4End.y - cyOffset);
+            float endX4 = trees.get(4).x - (trees.get(4).radius + treeMargin);
+            if (runIndex == 1)
+                endX4 = trees.get(4).x + (trees.get(4).radius + treeMargin);
+            Point b4End = new Point(endX4, trees.get(4).z);
+            Point b4C1 = new Point(b4Start.x, b4Start.y + cyOffset);
+            Point b4C2 = new Point(b4End.x, b4End.y - cyOffset);
             bezier4 = new Bezier(b4Start, b4C1, b4C2, b4End);
 
             strands = new ArrayList<Strand>();
@@ -348,7 +365,7 @@ public class KaledoscopeModel extends SLModel {
             beziers.add(bezier3);
             beziers.add(bezier4);
             for (int i = 0; i < numStrands; i++) {
-                Strand strand = new Strand(this, allStrands.size(), pos, i, beziers);
+                Strand strand = new Strand(this, allStrands.size(), i, beziers);
                 allPoints.addAll(strand.allPoints);
                 butterflies.addAll(strand.butterflies);
                 allStrands.add(strand);
@@ -372,6 +389,9 @@ public class KaledoscopeModel extends SLModel {
      * along the helix to compute a helix approximated by many short line segments.  We can then map those segments
      * to t values and then for a provided length add up segments until we achieve that length and then pick
      * a nearby t value.
+     *
+     * Five generated tree coordinates:
+     * 60.0,12.0 : -60.0,252.0 : 60.0,492.0 : -60.0,732.0 : 60.0,972.0
      */
     static public class AnchorTree {
         public float x;
@@ -382,6 +402,7 @@ public class KaledoscopeModel extends SLModel {
         public AnchorTree(float x, float z, float radius, float helixSlope) {
             this.x = x;
             this.z = z;
+            logger.info("Anchor tree coordinates: " + x + "," + z);
             this.radius = radius;
             helix = new Helix(radius, helixSlope);
         }
@@ -469,9 +490,19 @@ public class KaledoscopeModel extends SLModel {
         allFlowers = new ArrayList<LUFlower>();
         List<LXPoint> butterflyPoints = new ArrayList<LXPoint>();
         List<LXPoint> flowerPoints = new ArrayList<LXPoint>();
+        List<AnchorTree> anchorTrees = new ArrayList<AnchorTree>();
+
+        float runSpacing = 20f * 12f;
+        for (int i = 0; i < 5; i++){
+            float x = -5f * 12f;
+            if (i % 2 == 0)
+                x += 10 * 12f;
+            anchorTrees.add(new AnchorTree(FireflyShow.anchorTreesPos.get(i*2),
+                FireflyShow.anchorTreesPos.get(i*2 + 1), 12f, 5f));
+        }
 
         for (int i = 0; i < numButterflyRuns; i++) {
-            Run run = new Run(i, i * lineSpacingInches);
+            Run run = new Run(i, anchorTrees);
             allRuns.add(run);
             allButterflyRuns.add(run);
             allPoints.addAll(run.allPoints);
@@ -480,12 +511,7 @@ public class KaledoscopeModel extends SLModel {
 
         int flowerRuns = FireflyShow.runsFlowers;
         for (int i = 0; i < flowerRuns; i++) {
-            float x = -5f * 12f;
-            float runSpacing = 20f * 12f;
-            if (i % 2 == 0)
-                x += 10 * 12f;
-            AnchorTree tree = new AnchorTree(x, i * runSpacing + 12f, 12f, 5f);
-            Run run = new Run(allRuns.size(), Run.RunType.FLOWER, tree);
+            Run run = new Run(allRuns.size(), Run.RunType.FLOWER, anchorTrees.get(i));
             allRuns.add(run);
             allFlowerRuns.add(run);
             allPoints.addAll(run.allPoints);
