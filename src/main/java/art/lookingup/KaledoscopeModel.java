@@ -72,7 +72,11 @@ public class KaledoscopeModel extends SLModel {
                 float flowerRunArcDistance = (i + prevStrandsFlowers) * flowerSpacing;
                 float t = tree.helix.getTAtArcLength(flowerRunArcDistance);
                 Point3 pos = tree.helix.calculateHelicalPoint(t);
-                LUFlower flower = new LUFlower(i, i + prevStrandsFlowers, pos.x + tree.x, flowerMaxHeight - pos.y, pos.z + tree.z);
+                float flowerX = pos.x + tree.x;
+                float flowerY = flowerMaxHeight - pos.y;
+                float flowerZ = pos.z + tree.z;
+                // logger.info("FLOWER " + i + " pos: " + flowerX + "," + flowerY + "," + flowerZ + " hdist: " + flowerRunArcDistance + " t: " + t);
+                LUFlower flower = new LUFlower(i, i + prevStrandsFlowers, flowerX, flowerY, flowerZ);
                 flowers.add(flower);
                 allFlowers.add(flower);
                 allPoints.addAll(flower.allPoints);
@@ -188,6 +192,13 @@ public class KaledoscopeModel extends SLModel {
         public Point c1;
         public Point c2;
         public Point end;
+        //  Allow the beziers to be chained.  We need to know previous and next so that we can implement
+        // control point constraints to keep the curve continuous.
+        // TODO(allow adjustment of control point distance to end/start part while preserving the slope
+        // of the line between control point end/start points and opposing control point in order
+        // to preserve first derivative continuity.
+        public Bezier prev;
+        public Bezier next;
         float[] arcLengths;
         public float totalArcLength;
         public static final int ARC_SAMPLES = 300;
@@ -411,7 +422,7 @@ public class KaledoscopeModel extends SLModel {
 
 
     static public class Helix {
-        public static final int ARC_SAMPLES = 400;
+        public static final int ARC_SAMPLES = 1000;
         public static final float MAX_T = 40f;
         float[] arcLengths;
         public float totalArcLength;
@@ -451,8 +462,10 @@ public class KaledoscopeModel extends SLModel {
             prevPoint.y = 0f;
             prevPoint.z = 0f;
 
+            prevPoint = calculateHelicalPoint(0f);
+
             for (int i = 0; i < arcLengths.length; i++) {
-                float t = (maxT * i) / (float)ARC_SAMPLES;
+                float t = (maxT * i + 1) / (float)ARC_SAMPLES;
                 Point3 nextPoint = calculateHelicalPoint(  t);
                 float dx = nextPoint.x - prevPoint.x;
                 float dy = nextPoint.y - prevPoint.y;
@@ -467,12 +480,20 @@ public class KaledoscopeModel extends SLModel {
             logger.info("HELIX total arc length: " + totalArcLength);
         }
 
+        // 5, 10, 15, 20
+        // arch length 0 -> 0f
         public float getTAtArcLength(float arcLength) {
-            if (arcLength < arcLengths[0])
+            if (arcLength < Math.abs(0.01f))
                 return 0f;
-            for (int i = 1; i < arcLengths.length; i++) {
+            for (int i = 0; i < arcLengths.length; i++) {
+                if (arcLength == arcLengths[i]) {
+                    return MAX_T * (((float)(i))/(float)ARC_SAMPLES);
+                }
                 if (arcLength < arcLengths[i] && arcLength > arcLengths[i-1]) {
-                    return MAX_T * (((float)(i - 1))/(float)ARC_SAMPLES);
+                    float moreThanT = (((float)(i - 1))/(float)ARC_SAMPLES);
+                    float lessThanT = (((float)(i))/(float)ARC_SAMPLES);
+                    float avgT = (moreThanT + lessThanT) / 2f;
+                    return MAX_T * avgT;
                 }
             }
             return 1f;
