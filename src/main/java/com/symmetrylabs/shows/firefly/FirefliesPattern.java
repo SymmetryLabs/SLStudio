@@ -1,5 +1,6 @@
 package com.symmetrylabs.shows.firefly;
 
+import java.util.List;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.color.LXColor;
@@ -10,6 +11,7 @@ import heronarts.lx.parameter.EnumParameter;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import art.lookingup.KaledoscopeModel;
 import art.lookingup.LUButterfly;
+import art.lookingup.LUFlower;
 
 // based on https://github.com/ncase/fireflies
 public class FirefliesPattern extends SLPattern<KaledoscopeModel> {
@@ -27,6 +29,8 @@ public class FirefliesPattern extends SLPattern<KaledoscopeModel> {
     public final CompoundParameter durationParam;
     public final BooleanParameter resetParam;
     public final CompoundParameter noiseParam;
+    public final BooleanParameter enableButterfliesParam;
+    public final BooleanParameter enableFlowersParam;
 
     private static final int CLOCK_MAX = 1000;
 
@@ -51,6 +55,9 @@ public class FirefliesPattern extends SLPattern<KaledoscopeModel> {
         addParameter(resetParam = new BooleanParameter("Reset").setMode(BooleanParameter.Mode.MOMENTARY));
         addParameter(noiseParam = new CompoundParameter("Noise", 0.01, 0, 0.05));
 
+        addParameter(enableButterfliesParam = new BooleanParameter("EnableButterflies", true));
+        addParameter(enableFlowersParam = new BooleanParameter("EnableFlowers", true));
+
         resetParam.addListener((p) -> resetClocks());
 
         usePaletteParam.addListener((p) -> {
@@ -67,8 +74,8 @@ public class FirefliesPattern extends SLPattern<KaledoscopeModel> {
             }
         });
 
-        clocks = new int[KaledoscopeModel.allButterflies.size()];
-        flashStarts = new long[KaledoscopeModel.allButterflies.size()];
+        clocks = new int[KaledoscopeModel.allButterflies.size() + KaledoscopeModel.allFlowers.size()];
+        flashStarts = new long[clocks.length];
 
         resetClocks();
     }
@@ -85,7 +92,10 @@ public class FirefliesPattern extends SLPattern<KaledoscopeModel> {
         long timerMillis = System.nanoTime() / 1000000;
         double flashDur = durationParam.getValue() * 1000;
 
-        for (int i = 0; i < KaledoscopeModel.allButterflies.size(); ++i) {
+        int flowersStart = KaledoscopeModel.allButterflies.size();
+        int flowersEnd = flowersStart + KaledoscopeModel.allFlowers.size();
+
+        for (int i = 0; i < flowersEnd; ++i) {
             clocks[i] += noiseParam.getValue() * (Math.random() * 2 - 1) * CLOCK_MAX;
             clocks[i] += speedParam.getValue() * deltaMs;
             if (clocks[i] > CLOCK_MAX) {
@@ -93,16 +103,18 @@ public class FirefliesPattern extends SLPattern<KaledoscopeModel> {
                 clocks[i] = 0;
 
                 if (syncParam.isOn()) {
-                    LUButterfly bi = KaledoscopeModel.allButterflies.get(i);
-                    for (int j = 0; j < KaledoscopeModel.allButterflies.size(); ++j) {
-                        LUButterfly bj = KaledoscopeModel.allButterflies.get(j);
+                    LUButterfly bi = i < flowersStart ? KaledoscopeModel.allButterflies.get(i) : null;
+                    LUFlower fi = i >= flowersStart ? KaledoscopeModel.allFlowers.get(i - flowersStart) : null;
+                    for (int j = 0; j < flowersEnd; ++j) {
+                        LUButterfly bj = j < flowersStart ? KaledoscopeModel.allButterflies.get(j) : null;
+                        LUFlower fj = j >= flowersStart ? KaledoscopeModel.allFlowers.get(j - flowersStart) : null;
 
                         if (i == j)
                             continue;
 
-                        float dx = bi.x - bj.x;
-                        float dy = bi.y - bj.y;
-                        float dz = bi.z - bj.z;
+                        float dx = (bi == null ? fi.x : bi.x) - (bj == null ? fj.x : bj.x);
+                        float dy = (bi == null ? fi.y : bi.y) - (bj == null ? fj.y : bj.y);
+                        float dz = (bi == null ? fi.z : bi.z) - (bj == null ? fj.z : bj.z);
                         double d = Math.sqrt(dx * dx + dy * dy + dz * dz);
                         double p = -d / radiusParam.getValue() + 1;
 
@@ -116,17 +128,26 @@ public class FirefliesPattern extends SLPattern<KaledoscopeModel> {
 
         setColors(LXColor.BLACK);
 
-        for (int i = 0; i < KaledoscopeModel.allButterflies.size(); ++i) {
-            LUButterfly butterfly = KaledoscopeModel.allButterflies.get(i);
+        for (int i = 0; i < flowersEnd; ++i) {
+            List<LXPoint> points = null;
+            if (enableButterfliesParam.isOn() && i < flowersStart) {
+                points = KaledoscopeModel.allButterflies.get(i).allPoints;
+            }
+            if (enableFlowersParam.isOn() && i >= flowersStart) {
+                points = KaledoscopeModel.allFlowers.get(i - flowersStart).allPoints;
+            }
+
+            if (points == null)
+                continue;
 
             long td = timerMillis - flashStarts[i];
             if (td > 0 && td <= flashDur) {
-                for (LXPoint p : butterfly.allPoints) {
+                for (LXPoint p : points) {
                     colors[p.index] = colorParam.getColor();
                 }
             }
             else if (flashModeParam.getEnum() == FlashMode.CLOCK) {
-                for (LXPoint p : butterfly.allPoints) {
+                for (LXPoint p : points) {
                     colors[p.index] = LXColor.scaleBrightness(colorParam.getColor(), clocks[i] / (float)CLOCK_MAX);
                 }
             }
