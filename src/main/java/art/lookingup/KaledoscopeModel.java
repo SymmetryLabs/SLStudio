@@ -44,7 +44,7 @@ public class KaledoscopeModel extends SLModel {
             BUTTERFLY,
             FLOWER
         }
-        StrandType strandType;
+        public StrandType strandType;
         public Run run;
 
         public List<LUButterfly> butterflies;
