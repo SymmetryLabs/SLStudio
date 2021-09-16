@@ -1,6 +1,7 @@
 package art.lookingup.ui;
 
 import art.lookingup.KaledoscopeModel;
+import art.lookingup.KaledoscopeOutput;
 import art.lookingup.ParameterFile;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.LX;
@@ -93,7 +94,19 @@ public class StrandLengths extends UIConfig {
     public void onSave() {
         // Only reconfigure if a parameter changed.
         if (parameterChanged) {
-            // TODO(tracy): rebuild the network if the butterfly strand lengths are adjusted.
+            // TODO(tracy): Provide some constraints on this so that if we change a butterfly strand length then
+            // we substract or add to the appropriate adjacent strand?  Maybe UI is too complex for middle strand
+            // cases where we aren't sure which end of the strand to adjust.
+            KaledoscopeModel.reassignButterflyStrands();
+            boolean originalEnabled = lx.engine.output.enabled.getValueb();
+            lx.engine.output.enabled.setValue(false);
+            // This version of LX doesn't provide access to the children variable so we will use
+            // a static member variable we set when constructing the output.
+            lx.engine.output.removeChild(KaledoscopeOutput.butterflyDatagramOutput);
+            lx.engine.output.removeChild(KaledoscopeOutput.flowerDatagramOutput);
+            KaledoscopeOutput.configurePixliteOutput(lx);
+            parameterChanged = false;
+            lx.engine.output.enabled.setValue(originalEnabled);
         }
     }
 }

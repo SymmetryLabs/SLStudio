@@ -25,6 +25,7 @@ public class LUFlower {
     static final float RADIUS = 1.5f;
     static final int NUM_PETALS = 5;
     FlowerConfig flowerConfig;
+    public boolean dead = false;
 
     public LUFlower(KaledoscopeModel.AnchorTree tree, LUFlower.FlowerConfig flowerConfig, int globalRunNum) {
         this.x = tree.x + tree.radius * (float) Math.cos(Math.toRadians(flowerConfig.azimuth));
@@ -54,7 +55,7 @@ public class LUFlower {
         addressablePoints.add(center);
         addressablePoints.add(petals[0]);
         allPoints = new ArrayList<LXPoint>();
-        allPoints.addAll(addressablePoints);
+        if (!dead) allPoints.addAll(addressablePoints);
         allPoints.add(petals[1]);
         allPoints.add(petals[2]);
         allPoints.add(petals[3]);

@@ -137,11 +137,11 @@ public class KaledoscopeModel extends SLModel {
                 float thisCurveT = bezier.getTAtArcLength(butterflyThisCurveDistance);
                 Bezier.Point bPos = bezier.calculateBezierPoint(thisCurveT);
 
-                LUButterfly butterfly = new LUButterfly(i, i + prevStrandsButterflies, bPos.x, butterflyYHeight, bPos.y);
+                LUButterfly butterfly = new LUButterfly(strandId, i, i + prevStrandsButterflies, bPos.x, butterflyYHeight, bPos.y);
                 butterflies.add(butterfly);
                 allButterflies.add(butterfly);
                 allPoints.addAll(butterfly.allPoints);
-                addressablePoints.addAll(butterfly.allPoints);
+                addressablePoints.addAll(butterfly.addressablePoints);
             }
         }
 
@@ -263,56 +263,11 @@ public class KaledoscopeModel extends SLModel {
             int numStrands = FireflyShow.butterflyRunsNumStrands.get(runId);
             float treeMargin = 2f;
 
-            /*
-            // Run index == 0 needs to be to the left of tree.
-            // Run index == 1 needs to be to the right of tree.
-            float startX = trees.get(0).x - (trees.get(0).radius + treeMargin);
-            if (runId == 1)
-                startX = trees.get(0).x + (trees.get(0).radius + treeMargin);
-            Bezier.Point bezierStart = new Bezier.Point(startX, trees.get(0).z);
-            float endX = trees.get(1).x - (trees.get(1).radius + treeMargin);
-            if (runId == 1)
-                endX = trees.get(1).x + (trees.get(1).radius + treeMargin);
-            Bezier.Point bezierEnd = new Bezier.Point(endX, trees.get(1).z);
-            Bezier.Point bezierC1 = new Bezier.Point(bezierStart.x, bezierStart.y + bezierCtrlPtYOffset);
-            Bezier.Point bezierC2 = new Bezier.Point(bezierEnd.x, bezierEnd.y - bezierCtrlPtYOffset);
-            bezier1 = new Bezier(bezierStart, bezierC1, bezierC2, bezierEnd);
-
-
-            Bezier.Point b2Start = new Bezier.Point(bezierEnd.x, bezierEnd.y);
-            float endX2 = trees.get(2).x - (trees.get(2).radius + treeMargin);
-            if (runId == 1)
-                endX2 = trees.get(2).x + (trees.get(2).radius + treeMargin);
-            Bezier.Point b2End = new Bezier.Point(endX2, trees.get(2).z);
-            Bezier.Point b2C1 = new Bezier.Point(b2Start.x, b2Start.y + bezierCtrlPtYOffset);
-            Bezier.Point b2C2 = new Bezier.Point(b2End.x, b2End.y - bezierCtrlPtYOffset);
-            bezier2 = new Bezier(b2Start, b2C1, b2C2, b2End);
-
-            Bezier.Point b3Start = new Bezier.Point(b2End.x, b2End.y);
-            float endX3 = trees.get(3).x - (trees.get(3).radius + treeMargin);
-            if (runId == 1)
-                endX3 = trees.get(3).x + (trees.get(3).radius + treeMargin);
-            Bezier.Point b3End = new Bezier.Point(endX3, trees.get(3).z);
-            Bezier.Point b3C1 = new Bezier.Point(b3Start.x, b3Start.y + bezierCtrlPtYOffset);
-            Bezier.Point b3C2 = new Bezier.Point(b3End.x, b3End.y - bezierCtrlPtYOffset);
-            bezier3 = new Bezier(b3Start, b3C1, b3C2, b3End);
-
-            Bezier.Point b4Start = new Bezier.Point(b3End.x, b3End.y);
-            float endX4 = trees.get(4).x - (trees.get(4).radius + treeMargin);
-            if (runId == 1)
-                endX4 = trees.get(4).x + (trees.get(4).radius + treeMargin);
-            Bezier.Point b4End = new Bezier.Point(endX4, trees.get(4).z);
-            Bezier.Point b4C1 = new Bezier.Point(b4Start.x, b4Start.y + bezierCtrlPtYOffset);
-            Bezier.Point b4C2 = new Bezier.Point(b4End.x, b4End.y - bezierCtrlPtYOffset);
-            bezier4 = new Bezier(b4Start, b4C1, b4C2, b4End);
-            */
-
             beziers = getAnchorTreeBeziers(trees, treeMargin);
             strands = new ArrayList<Strand>();
             butterflies = new ArrayList<LUButterfly>();
             flowers = new ArrayList<LUFlower>();
             allPoints = new ArrayList<LXPoint>();
-
 
             for (int i = 0; i < numStrands; i++) {
                 Strand strand = new Strand(this, allStrands.size(), i, beziers);
@@ -472,6 +427,47 @@ public class KaledoscopeModel extends SLModel {
 
     public KaledoscopeModel(List<LXPoint> points) {
         super("kaledoscope", points);
+    }
+
+    /**
+     * Re-assign butterflies to strands.  This allows us to modify the strand lengths as appropriate for
+     * the anchor trees at runtime without restarting SLStudio.  The entire number of butterflies must
+     * be conserved since we can't change the number of LXPoints aka the LXModel without restarting.  This
+     * should just change the pixlite output mapping.  The UI for configuring strand lengths of butterflies
+     * should automatically adjust adjacent strand lengths in order to preserve this property.
+     */
+    static public void reassignButterflyStrands() {
+        int totalButterfliesAssigned = 0;
+        for (Run run : allButterflyRuns) {
+            // Get all the strand lengths assigned to this run.
+            int currentButterflyRunIndex = 0;
+            for (int runStrandNum = 0; runStrandNum < 4; runStrandNum++) {
+                int sLength = StrandLengths.getNumButterflies(run.runId, runStrandNum);
+                if (sLength == 0)
+                    continue;
+                Strand strand = getButterflyStrandByAddress(run.runId, runStrandNum);
+                // Reset the list of butterflies in the strand.  This list is used by KaledoscopeOutput to do the
+                // Pixlite output mapping. Specifically strand.addressablePoints.  The difference between allPoints
+                // and addressablePoints is that flowers have only 2 addressable LEDs but 6 total leds.  Also,
+                // in order to be able to use a physical jumper to bypass dead butterfly or flower fixtures, we
+                // need to keep them in the model, but not send ArtNet data for them.  When one is marked dead,
+                // none of it's points will be added to addressablePoints.
+                strand.butterflies = new ArrayList<LUButterfly>();
+                strand.allPoints = new ArrayList<LXPoint>();
+                strand.addressablePoints = new ArrayList<LXPoint>();
+                for (int butterflyStrandNum = 0; butterflyStrandNum < sLength; butterflyStrandNum++) {
+                    LUButterfly butterfly = run.butterflies.get(currentButterflyRunIndex + butterflyStrandNum);
+                    butterfly.assignStrand(run.strands.get(runStrandNum), butterflyStrandNum);
+                    strand.butterflies.add(butterfly);
+                    strand.allPoints.addAll(butterfly.allPoints);
+                    strand.addressablePoints.addAll(butterfly.addressablePoints);
+                }
+                currentButterflyRunIndex += sLength;
+            }
+            logger.info("Assigned " + currentButterflyRunIndex + " butterflies to strands for run " + run.runId);
+            totalButterfliesAssigned += currentButterflyRunIndex;
+        }
+        logger.info("Assigned " + totalButterfliesAssigned + " total butterflies to strands for all runs");
     }
 
     /**

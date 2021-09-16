@@ -29,6 +29,7 @@ public class LUButterfly {
     public List<LXPoint> right;
     public List<LXPoint> left;
     public List<LXPoint> allPoints;
+    public List<LXPoint> addressablePoints;
     public List<LXPoint> pointsClockwise;
     public List<LXPoint> pointsCounterClockwise;
     public List<LXPoint> pointsByRow;
@@ -36,16 +37,30 @@ public class LUButterfly {
     public float y;
     public float z;
     public int strandIndex;
+    public int strandId;
     public int runIndex;
+    public boolean dead;
 
-    public LUButterfly(int strandIndex, int runIndex, float x, float y, float z) {
+    public LUButterfly(int strandId, int strandIndex, int runIndex, float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.strandId = strandId;
         this.strandIndex = strandIndex;
         this.runIndex = runIndex;
 
         buildPoints();
+    }
+
+    /**
+     * Allow for the butterfly to be reassigned to a new strand.
+     *
+     * @param strand
+     * @param strandIndex
+     */
+    public void assignStrand(KaledoscopeModel.Strand strand, int strandIndex) {
+        this.strandId = strand.strandId;
+        this.strandIndex = strandIndex;
     }
 
     /**
@@ -66,6 +81,7 @@ public class LUButterfly {
 
     public void buildPoints() {
         allPoints = new ArrayList<LXPoint>();
+        addressablePoints = new ArrayList<LXPoint>();
         left = new ArrayList<LXPoint>(8);
         right = new ArrayList<LXPoint>(8);
         pointsClockwise = new ArrayList<LXPoint>();
@@ -93,5 +109,11 @@ public class LUButterfly {
 
         allPoints.addAll(left);
         allPoints.addAll(right);
+
+        // Allow for the butterfly to be marked 'dead'.  This means that it exists in the model but that we
+        // have skipped over it in the physical install with just a jumper wire because it physically died.
+        if (!dead) {
+            addressablePoints.addAll(allPoints);
+        }
     }
 }
