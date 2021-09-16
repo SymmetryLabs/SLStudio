@@ -1,7 +1,6 @@
 package art.lookingup;
 
 import art.lookingup.ui.MappingConfig;
-import art.lookingup.ui.UIPixliteConfig;
 import com.symmetrylabs.shows.firefly.FireflyShow;
 import heronarts.lx.output.LXDatagramOutput;
 import heronarts.lx.LX;
@@ -29,10 +28,6 @@ public class KaledoscopeOutput {
 
     public static void configurePixliteOutput(LX lx) {
         List<ArtNetDatagram> datagrams = new ArrayList<ArtNetDatagram>();
-        List<Integer> countsPerOutput = new ArrayList<Integer>();
-        // For each output, track the number of points per panel type so we can log the details to help
-        // with output verification.
-
         String butterflyPixliteIp = FireflyShow.pixliteConfig.butterflyPixliteIp();
         int butterflyPixlitePort = FireflyShow.pixliteConfig.butterflyPixlitePort();
         logger.info("Butterfly ArtNet: " + butterflyPixliteIp + ":" + butterflyPixlitePort);
@@ -71,7 +66,6 @@ public class KaledoscopeOutput {
 
                 if (strandIds.length() > 0) {
                     List<LXPoint> pointsWireOrder = new ArrayList<LXPoint>();
-
                     // NOTE: We typically shouldn't have multiple strands mapped to a single output since the purpose of
                     // strands are to increase the FPS but we will support it to provide some install time flexibility.
                     String[] ids = strandIds.split(",");
@@ -107,9 +101,9 @@ public class KaledoscopeOutput {
                             // On the first pass, we will only map butterfly strands.  We will do a second pass
                             // and map flower strands.
                             if (strandType == 0 && strand.strandType == KaledoscopeModel.Strand.StrandType.BUTTERFLY)
-                                pointsWireOrder.addAll(strand.allPoints);
+                                pointsWireOrder.addAll(strand.addressablePoints);
                             if (strandType == 1 && strand.strandType == KaledoscopeModel.Strand.StrandType.FLOWER)
-                                pointsWireOrder.addAll(strand.allPoints);
+                                pointsWireOrder.addAll(strand.addressablePoints);
                         }
                     }
                     // If we didn't add any points, this was the wrong strand type so we can just skip ahead to
@@ -169,6 +163,7 @@ public class KaledoscopeOutput {
                 else
                     flowerDatagramOutput = datagramOutput;
           /*
+          // TODO(tracy): Add an ArtNet sync packet.
           try {
               datagramOutput.addDatagram(new ArtSyncDatagram().setAddress(targetPixliteIp).setPort(targetPixlitePort));
           } catch (UnknownHostException uhex) {
