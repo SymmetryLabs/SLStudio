@@ -1,5 +1,6 @@
 package art.lookingup;
 
+import art.lookingup.ui.FlowersConfig;
 import com.symmetrylabs.shows.firefly.FireflyShow;
 import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.model.LXPoint;
@@ -10,21 +11,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class KaledoscopeModel extends SLModel {
-
-    public static float butterflySpacingInches = 12f;
-    public static float lineSpacingInches = 24f;
-
     private static final Logger logger = Logger.getLogger(KaledoscopeModel.class.getName());
 
+    public static float butterflySpacingInches = 12f;
+    public static List<AnchorTree> anchorTrees;
     public static List<LUButterfly> allButterflies;
     public static List<LUFlower> allFlowers;
     public static List<Run> allRuns;
     public static List<Run> allButterflyRuns;
     public static List<Run> allFlowerRuns;
     public static List<Strand> allStrands;
-    public static int numStrandsPerRun;
     public static float butterflyYHeight = 120f;
+    public static final int NUM_ANCHOR_TREES = 5;
+    public static final int NUM_ANCHOR_TREES_FLOWERS = 4;
     public static final int BEZIERS_PER_RUN = 4;
+    public static final int FLOWER_RUNS_PER_TREE = 2;
+    public static final int FLOWER_STRANDS_PER_RUN = 1;
 
     /**
      * A Strand is some number of butterflies wired in series. Strands are meant to limit the number of LEDs on a
@@ -51,8 +53,18 @@ public class KaledoscopeModel extends SLModel {
         public List<LXPoint> addressablePoints;
 
 
-        public Strand(Run run, AnchorTree tree, int strandId, StrandType strandType, int strandRunIndex) {
-            this.strandId = strandId;
+        /**
+         * Create a strand of flowers.  Currently a single run of flowers consists of a single strand so strandRunIndex will
+         * always be 0.
+         * @param run
+         * @param tree
+         * @param whichRun
+         * @param globalStrandId
+         * @param strandType
+         * @param strandRunIndex
+         */
+        public Strand(Run run, AnchorTree tree, int whichRun, int globalStrandId, StrandType strandType, int strandRunIndex) {
+            this.strandId = globalStrandId;
             this.run = run;
             this.strandType = strandType;
             flowers = new ArrayList<LUFlower>();
@@ -61,22 +73,33 @@ public class KaledoscopeModel extends SLModel {
             addressablePoints  = new ArrayList<LXPoint>();
             this.strandRunIndex = strandRunIndex;
 
-            int configuredNumFlowers = FireflyShow.allStrandLengths.get(strandId);
-            logger.log(Level.INFO, "Generating flower strand id " + strandId + " of length: " + configuredNumFlowers);
-            float flowerSpacing = 12f;
-            float flowerMaxHeight = 110f;
+            // TODO(tracy): Allow for flower specific strand lengths versus relying on globalStrandId
+            // Flower strand length configs should be like
+            // Tree 1.0: 14
+            // Tree 1.1: 13
+            // Tree 2.0: 12
+            // Tree 2.1: 15
+            int configuredNumFlowers = FireflyShow.allStrandLengths.get(globalStrandId);
+            logger.log(Level.INFO, "Generating flower strand id " + globalStrandId + " of length: " + configuredNumFlowers);
+
             for (int i = 0; i < configuredNumFlowers; i++) {
-                int prevStrandsFlowers = run.flowers.size();
+                /*
+                float flowerSpacing = 12f;
+                float flowerMaxHeight = 110f;
+                int prevRunFlowers = run.flowers.size();
                 // Flowers are wired from top to bottom since the wiring will be high up in the tree.  We need to
                 // compute every 12 inches along a helix that started at the top of the run.
-                float flowerRunArcDistance = (i + prevStrandsFlowers) * flowerSpacing;
+                float flowerRunArcDistance = (i + prevRunFlowers) * flowerSpacing;
                 float t = tree.helix.getTAtArcLength(flowerRunArcDistance);
-                Point3 pos = tree.helix.calculateHelicalPoint(t);
+                Helix.Point3 pos = tree.helix.calculateHelicalPoint(t);
                 float flowerX = pos.x + tree.x;
                 float flowerY = flowerMaxHeight - pos.y;
                 float flowerZ = pos.z + tree.z;
                 // logger.info("FLOWER " + i + " pos: " + flowerX + "," + flowerY + "," + flowerZ + " hdist: " + flowerRunArcDistance + " t: " + t);
-                LUFlower flower = new LUFlower(i, i + prevStrandsFlowers, flowerX, flowerY, flowerZ);
+                LUFlower flower = new LUFlower(tree.id, i, i + prevRunFlowers, flowerX, flowerY, flowerZ);
+                */
+                LUFlower.FlowerConfig flowerConfig = FlowersConfig.getFlowerConfig(tree.id, whichRun, i);
+                LUFlower flower = new LUFlower(tree, flowerConfig, run.runId);
                 flowers.add(flower);
                 allFlowers.add(flower);
                 allPoints.addAll(flower.allPoints);
@@ -84,6 +107,20 @@ public class KaledoscopeModel extends SLModel {
             }
         }
 
+        /**
+         * Create a strand of butterflies.  The positions are determined by the passed in list of bezier curves and also
+         * the butterfly's position in the entire run of butterflies.
+         *
+         * TODO(tracy): Strands are embedded in the model building process but they are just a output mapping feature.
+         * The assignments of butterflies to strands should be independent of the model so that we can adjust the
+         * strand lengths at runtime without rebuilding the model since we really just need to restart the networking
+         * output.
+         *
+         * @param run
+         * @param strandId
+         * @param strandRunIndex
+         * @param beziers
+         */
         public Strand(Run run, int strandId, int strandRunIndex, List<Bezier> beziers) {
             this.strandId = strandId;
             strandType = StrandType.BUTTERFLY;
@@ -94,11 +131,19 @@ public class KaledoscopeModel extends SLModel {
 
             this.strandRunIndex = strandRunIndex;
             // The number of configured butterflies on this strand.
+            // TODO(tracy): We need to configure the number of butterflies on each run.
+            // And then we build our strand lengths based on tree positions so that
+            // they add up to the total number of butterflies.  We should then allow
+            // for the strands to change lengths while constraining the total number
+            // of butterflies.  i.e. only allow +/- on a strand such that it steals points
+            // from or adds points to the next strand.  That also means we need to be
+            // able to perform strand assignment outside of model building in order to
+            // adjust strand lengths without restarting the program (just need to restart
+            // the network.
             int configuredNumButterflies = FireflyShow.allStrandLengths.get(strandId);
 
             for (int i = 0; i < configuredNumButterflies; i++) {
                 // How many butterflies so far on this run.
-
                 int prevStrandsButterflies = run.butterflies.size();
                 int currentButterflyRunIndex= prevStrandsButterflies + i;
                 float runStartOffsetInches = 2f * 12f;
@@ -109,7 +154,7 @@ public class KaledoscopeModel extends SLModel {
                 float butterflyThisCurveDistance = currentButterflyArcDistance - prevCurveDistance;
                 Bezier bezier = beziers.get(currentBezierIndex);
                 float thisCurveT = bezier.getTAtArcLength(butterflyThisCurveDistance);
-                Point bPos = bezier.calculateBezierPoint(thisCurveT);
+                Bezier.Point bPos = bezier.calculateBezierPoint(thisCurveT);
 
                 LUButterfly butterfly = new LUButterfly(i, i + prevStrandsButterflies, bPos.x, butterflyYHeight, bPos.y);
                 butterflies.add(butterfly);
@@ -121,7 +166,7 @@ public class KaledoscopeModel extends SLModel {
 
         public void recomputeBeziers(List<Bezier> beziers) {
             for (int i = 0; i < butterflies.size(); i++) {
-                Point bPos = computeButterflyPosition(beziers, i);
+                Bezier.Point bPos = computeButterflyPosition(beziers, i);
                 butterflies.get(i).updatePosition(bPos);
             }
         }
@@ -134,7 +179,7 @@ public class KaledoscopeModel extends SLModel {
          * @param butterflyStrandIndex
          * @return
          */
-        public Point computeButterflyPosition(List<Bezier> beziers, int butterflyStrandIndex) {
+        public Bezier.Point computeButterflyPosition(List<Bezier> beziers, int butterflyStrandIndex) {
 
             int prevStrandsButterflies = 0;
             for (int strandNum = 0; strandNum < strandRunIndex; strandNum++) {
@@ -149,7 +194,7 @@ public class KaledoscopeModel extends SLModel {
             float butterflyThisCurveDistance = currentButterflyArcDistance - prevCurveDistance;
             Bezier bezier = beziers.get(currentBezierIndex);
             float thisCurveT = bezier.getTAtArcLength(butterflyThisCurveDistance);
-            Point bPos = bezier.calculateBezierPoint(thisCurveT);
+            Bezier.Point bPos = bezier.calculateBezierPoint(thisCurveT);
             return bPos;
         }
 
@@ -187,91 +232,6 @@ public class KaledoscopeModel extends SLModel {
         }
     }
 
-    static public class Bezier {
-        public Point start;
-        public Point c1;
-        public Point c2;
-        public Point end;
-        //  Allow the beziers to be chained.  We need to know previous and next so that we can implement
-        // control point constraints to keep the curve continuous.
-        // TODO(allow adjustment of control point distance to end/start part while preserving the slope
-        // of the line between control point end/start points and opposing control point in order
-        // to preserve first derivative continuity.
-        public Bezier prev;
-        public Bezier next;
-        float[] arcLengths;
-        public float totalArcLength;
-        public static final int ARC_SAMPLES = 300;
-
-        public Bezier(Point s, Point c1, Point c2, Point e) {
-            start = s;
-            this.c1 = c1;
-            this.c2 = c2;
-            end = e;
-            computeArcLengths();
-        }
-
-        public Point calculateBezierPoint(float t) {
-            return calculateBezierPoint(t, start, c1, c2, end);
-        }
-
-        /* t is time(value of 0.0f-1.0f; 0 is the start 1 is the end) */
-        static public Point calculateBezierPoint(float t, Point s, Point c1, Point c2, Point e)
-        {
-            float u = 1 - t;
-            float tt = t*t;
-            float uu = u*u;
-            float uuu = uu * u;
-            float ttt = tt * t;
-
-            Point p = new Point(s.x * uuu, s.y * uuu);
-            p.x += 3 * uu * t * c1.x;
-            p.y += 3 * uu * t * c1.y;
-            p.x += 3 * u * tt * c2.x;
-            p.y += 3 * u * tt * c2.y;
-            p.x += ttt * e.x;
-            p.y += ttt * e.y;
-
-            return p;
-        }
-
-        /**
-         * Compute a lookup table of arc lengths.  This samples t values at points along
-         * the curve and just does a simple linear distance computation. With the lookup
-         * table we can ask for a distance along the curve and get the 't' value at that
-         * point on the curve.  We can then use that 't' value to compute our X and Y
-         * coordinates.
-         */
-        public void computeArcLengths() {
-            arcLengths = new float[ARC_SAMPLES];
-            Point prevPoint = start;
-            float ox = 0f;
-            float oy = 0f;
-            float clen = 0f;
-
-            for (int i = 0; i < arcLengths.length; i++) {
-                Point nextPoint = calculateBezierPoint( i * 1f / arcLengths.length);
-                float dx = nextPoint.x - prevPoint.x;
-                float dy = nextPoint.y - prevPoint.y;
-                clen += Math.sqrt(dx * dx + dy * dy);
-                arcLengths[i] = clen;
-                prevPoint = nextPoint;
-            }
-            totalArcLength = clen;
-            logger.info("Bezier total arc length: " + totalArcLength);
-        }
-
-        public float getTAtArcLength(float arcLength) {
-            if (arcLength < arcLengths[0])
-                return 0f;
-            for (int i = 1; i < arcLengths.length; i++) {
-                if (arcLength < arcLengths[i] && arcLength > arcLengths[i-1]) {
-                    return (((float)(i - 1))/(float)ARC_SAMPLES);
-                }
-            }
-            return 1f;
-        }
-    }
 
     /**
      * A Run is a single full line of butterflies.  It is composed of multiple strands wired in series.  The
@@ -288,7 +248,7 @@ public class KaledoscopeModel extends SLModel {
         Bezier bezier3;
         Bezier bezier4;
         public List<Bezier> beziers;
-        int runIndex;
+        int runId;
         float cxOffset = 70f;
         float cyOffset = 20f;
 
@@ -298,8 +258,11 @@ public class KaledoscopeModel extends SLModel {
         }
         RunType runType;
 
-        public Run(int runIndex, RunType runType, AnchorTree tree) {
-            this.runIndex = runIndex;
+        /**
+         * A Run of flowers.  For each tree, there are two runs of flowers each one strand long.
+         */
+        public Run(int runId, RunType runType, AnchorTree tree, int whichRun) {
+            this.runId = runId;
             this.runType = runType;
             strands = new ArrayList<Strand>();
             butterflies = new ArrayList<LUButterfly>();
@@ -307,10 +270,10 @@ public class KaledoscopeModel extends SLModel {
             allPoints = new ArrayList<LXPoint>();
 
             // To make numStrands configurable do like this after adding UI
-            // int numStrands = FireflyShow.butterflyRunsNumStrands.get(runIndex);
-            int numStrands = 1;
-            for (int i = 0; i < numStrands; i++) {
-                Strand strand = new Strand(this, tree, allStrands.size(), Strand.StrandType.FLOWER, i);
+            // int numStrands = FireflyShow.butterflyRunsNumStrands.get(runId);
+            for (int i = 0; i < FLOWER_STRANDS_PER_RUN; i++) {
+                //Run run, AnchorTree tree, int treeRunNum, int globalStrandId, StrandType strandType, int strandRunIndex) {
+                Strand strand = new Strand(this, tree, whichRun, allStrands.size(), Strand.StrandType.FLOWER, i);
                 allPoints.addAll(strand.allPoints);
                 flowers.addAll(strand.flowers);
                 allStrands.add(strand);
@@ -318,52 +281,52 @@ public class KaledoscopeModel extends SLModel {
             }
         }
 
-        public Run(int runIndex, List<AnchorTree> trees) {
-            this.runIndex = runIndex;
+        public Run(int runId, List<AnchorTree> trees) {
+            this.runId = runId;
             this.runType = RunType.BUTTERFLY;
-            int numStrands = FireflyShow.butterflyRunsNumStrands.get(runIndex);
+            int numStrands = FireflyShow.butterflyRunsNumStrands.get(runId);
             float treeMargin = 2f;
 
             // Run index == 0 needs to be to the left of tree.
             // Run index == 1 needs to be to the right of tree.
             float startX = trees.get(0).x - (trees.get(0).radius + treeMargin);
-            if (runIndex == 1)
+            if (runId == 1)
                 startX = trees.get(0).x + (trees.get(0).radius + treeMargin);
-            Point bezierStart = new Point(startX, trees.get(0).z);
+            Bezier.Point bezierStart = new Bezier.Point(startX, trees.get(0).z);
             float endX = trees.get(1).x - (trees.get(1).radius + treeMargin);
-            if (runIndex == 1)
+            if (runId == 1)
                 endX = trees.get(1).x + (trees.get(1).radius + treeMargin);
-            Point bezierEnd = new Point(endX, trees.get(1).z);
-            Point bezierC1 = new Point(bezierStart.x, bezierStart.y + cyOffset);
-            Point bezierC2 = new Point(bezierEnd.x, bezierEnd.y - cyOffset);
+            Bezier.Point bezierEnd = new Bezier.Point(endX, trees.get(1).z);
+            Bezier.Point bezierC1 = new Bezier.Point(bezierStart.x, bezierStart.y + cyOffset);
+            Bezier.Point bezierC2 = new Bezier.Point(bezierEnd.x, bezierEnd.y - cyOffset);
             bezier1 = new Bezier(bezierStart, bezierC1, bezierC2, bezierEnd);
 
 
-            Point b2Start = new Point(bezierEnd.x, bezierEnd.y);
+            Bezier.Point b2Start = new Bezier.Point(bezierEnd.x, bezierEnd.y);
             float endX2 = trees.get(2).x - (trees.get(2).radius + treeMargin);
-            if (runIndex == 1)
+            if (runId == 1)
                 endX2 = trees.get(2).x + (trees.get(2).radius + treeMargin);
-            Point b2End = new Point(endX2, trees.get(2).z);
-            Point b2C1 = new Point(b2Start.x, b2Start.y + cyOffset);
-            Point b2C2 = new Point(b2End.x, b2End.y - cyOffset);
+            Bezier.Point b2End = new Bezier.Point(endX2, trees.get(2).z);
+            Bezier.Point b2C1 = new Bezier.Point(b2Start.x, b2Start.y + cyOffset);
+            Bezier.Point b2C2 = new Bezier.Point(b2End.x, b2End.y - cyOffset);
             bezier2 = new Bezier(b2Start, b2C1, b2C2, b2End);
 
-            Point b3Start = new Point(b2End.x, b2End.y);
+            Bezier.Point b3Start = new Bezier.Point(b2End.x, b2End.y);
             float endX3 = trees.get(3).x - (trees.get(3).radius + treeMargin);
-            if (runIndex == 1)
+            if (runId == 1)
                 endX3 = trees.get(3).x + (trees.get(3).radius + treeMargin);
-            Point b3End = new Point(endX3, trees.get(3).z);
-            Point b3C1 = new Point(b3Start.x, b3Start.y + cyOffset);
-            Point b3C2 = new Point(b3End.x, b3End.y - cyOffset);
+            Bezier.Point b3End = new Bezier.Point(endX3, trees.get(3).z);
+            Bezier.Point b3C1 = new Bezier.Point(b3Start.x, b3Start.y + cyOffset);
+            Bezier.Point b3C2 = new Bezier.Point(b3End.x, b3End.y - cyOffset);
             bezier3 = new Bezier(b3Start, b3C1, b3C2, b3End);
 
-            Point b4Start = new Point(b3End.x, b3End.y);
+            Bezier.Point b4Start = new Bezier.Point(b3End.x, b3End.y);
             float endX4 = trees.get(4).x - (trees.get(4).radius + treeMargin);
-            if (runIndex == 1)
+            if (runId == 1)
                 endX4 = trees.get(4).x + (trees.get(4).radius + treeMargin);
-            Point b4End = new Point(endX4, trees.get(4).z);
-            Point b4C1 = new Point(b4Start.x, b4Start.y + cyOffset);
-            Point b4C2 = new Point(b4End.x, b4End.y - cyOffset);
+            Bezier.Point b4End = new Bezier.Point(endX4, trees.get(4).z);
+            Bezier.Point b4C1 = new Bezier.Point(b4Start.x, b4Start.y + cyOffset);
+            Bezier.Point b4C2 = new Bezier.Point(b4End.x, b4End.y - cyOffset);
             bezier4 = new Bezier(b4Start, b4C1, b4C2, b4End);
 
             strands = new ArrayList<Strand>();
@@ -385,11 +348,6 @@ public class KaledoscopeModel extends SLModel {
         }
     }
 
-    static public class Point3 {
-        float x;
-        float y;
-        float z;
-    }
 
     /**
      * Anchor trees are the trees that the cabling is anchored to.  The tree positions determine the flower strand
@@ -405,104 +363,29 @@ public class KaledoscopeModel extends SLModel {
      * 60.0,12.0 : -60.0,252.0 : 60.0,492.0 : -60.0,732.0 : 60.0,972.0
      */
     static public class AnchorTree {
+        int id;
         public float x;
         public float z;
         public float radius;
-        public Helix helix;
+        public float ringTopHeight;
+        // Make it easy to address specific flowers via the anchor tree.
+        public List<Run> flowerRuns;
 
-        public AnchorTree(float x, float z, float radius, float helixSlope) {
+        public AnchorTree(int id, float x, float z, float radius, float ringTopHeight) {
+            this.id = id;
             this.x = x;
             this.z = z;
+            this.ringTopHeight = ringTopHeight;
             logger.info("Anchor tree coordinates: " + x + "," + z);
             this.radius = radius;
-            helix = new Helix(radius, helixSlope);
-        }
-
-    }
-
-
-    static public class Helix {
-        public static final int ARC_SAMPLES = 1000;
-        public static final float MAX_T = 40f;
-        float[] arcLengths;
-        public float totalArcLength;
-        float slope;
-        float radius;
-
-        public Helix(float radius, float slope) {
-            this.slope = slope;
-            this.radius = radius;
-            computeArcLengths(MAX_T);
-        }
-
-        public Point3 calculateHelicalPoint(float t)
-        {
-            Point3 p = new Point3();
-            p.x = radius * (float)Math.cos(t);
-            p.z = radius * (float)Math.sin(t);
-            p.y = t * slope;
-
-            return p;
-        }
-
-        /**
-         * Compute a lookup table of arc lengths.  This samples t values at points along
-         * the curve and just does a simple linear distance computation. With the lookup
-         * table we can ask for a distance along the curve and get the 't' value at that
-         * point on the curve.  We can then use that 't' value to compute our X and Y
-         * coordinates.
-         */
-        public void computeArcLengths(float maxT) {
-            arcLengths = new float[ARC_SAMPLES];
-            Point3 prevPoint = new Point3();
-            float ox = 0f;
-            float oy = 0f;
-            float clen = 0f;
-            prevPoint.x = 0f;
-            prevPoint.y = 0f;
-            prevPoint.z = 0f;
-
-            prevPoint = calculateHelicalPoint(0f);
-
-            for (int i = 0; i < arcLengths.length; i++) {
-                float t = (maxT * i + 1) / (float)ARC_SAMPLES;
-                Point3 nextPoint = calculateHelicalPoint(  t);
-                float dx = nextPoint.x - prevPoint.x;
-                float dy = nextPoint.y - prevPoint.y;
-                float dz = nextPoint.z - prevPoint.z;
-                clen += Math.sqrt(dx * dx + dy * dy + dz * dz);
-                arcLengths[i] = clen;
-                prevPoint = nextPoint;
-            }
-            Point3 maxP = calculateHelicalPoint(maxT);
-            logger.info("max helical point: " + maxP.x + "," + maxP.y + "," + maxP.z);
-            totalArcLength = clen;
-            logger.info("HELIX total arc length: " + totalArcLength);
-        }
-
-        // 5, 10, 15, 20
-        // arch length 0 -> 0f
-        public float getTAtArcLength(float arcLength) {
-            if (arcLength < Math.abs(0.01f))
-                return 0f;
-            for (int i = 0; i < arcLengths.length; i++) {
-                if (arcLength == arcLengths[i]) {
-                    return MAX_T * (((float)(i))/(float)ARC_SAMPLES);
-                }
-                if (arcLength < arcLengths[i] && arcLength > arcLengths[i-1]) {
-                    float moreThanT = (((float)(i - 1))/(float)ARC_SAMPLES);
-                    float lessThanT = (((float)(i))/(float)ARC_SAMPLES);
-                    float avgT = (moreThanT + lessThanT) / 2f;
-                    return MAX_T * avgT;
-                }
-            }
-            return 1f;
+            flowerRuns = new ArrayList<Run>();
         }
     }
 
     static public KaledoscopeModel createModel(int numButterflyRuns) {
         List<LXPoint> allPoints = new ArrayList<LXPoint>();
 
+        anchorTrees = new ArrayList<AnchorTree>();
         allRuns = new ArrayList<Run>();
         allButterflyRuns = new ArrayList<Run>(numButterflyRuns);
         allFlowerRuns = new ArrayList<Run>();
@@ -511,15 +394,20 @@ public class KaledoscopeModel extends SLModel {
         allFlowers = new ArrayList<LUFlower>();
         List<LXPoint> butterflyPoints = new ArrayList<LXPoint>();
         List<LXPoint> flowerPoints = new ArrayList<LXPoint>();
-        List<AnchorTree> anchorTrees = new ArrayList<AnchorTree>();
 
-        float runSpacing = 20f * 12f;
-        for (int i = 0; i < 5; i++){
+
+        for (int i = 0; i < NUM_ANCHOR_TREES; i++){
             float x = -5f * 12f;
             if (i % 2 == 0)
                 x += 10 * 12f;
-            anchorTrees.add(new AnchorTree(FireflyShow.anchorTreesPos.get(i*2),
-                FireflyShow.anchorTreesPos.get(i*2 + 1), FireflyShow.anchorTreesRadii.get(i), 5f));
+            // The 5th tree is just an anchor for a bezier curve and does not contain any flower rings.
+            float anchorTreeRingTop = 9f * 12f;
+            if (i < 4) {
+               anchorTreeRingTop = FireflyShow.anchorTreesRingTops.get(i);
+            }
+            anchorTrees.add(new AnchorTree(i, FireflyShow.anchorTreesPos.get(i*2),
+                FireflyShow.anchorTreesPos.get(i*2 + 1), FireflyShow.anchorTreesRadii.get(i),
+                anchorTreeRingTop));
         }
 
         for (int i = 0; i < numButterflyRuns; i++) {
@@ -530,13 +418,19 @@ public class KaledoscopeModel extends SLModel {
             butterflyPoints.addAll(run.allPoints);
         }
 
-        int flowerRuns = FireflyShow.runsFlowers;
-        for (int i = 0; i < flowerRuns; i++) {
-            Run run = new Run(allRuns.size(), Run.RunType.FLOWER, anchorTrees.get(i));
-            allRuns.add(run);
-            allFlowerRuns.add(run);
-            allPoints.addAll(run.allPoints);
-            flowerPoints.addAll(run.allPoints);
+        //int flowerRuns = FireflyShow.runsFlowers;
+        // There are two runs of flowers per tree. Each run is just a single strand.
+        for (int i = 0; i < NUM_ANCHOR_TREES_FLOWERS; i++) {
+            List<Run> treeFlowerRuns = new ArrayList<Run>();
+            for (int j = 0; j < FLOWER_RUNS_PER_TREE; j++) {
+                Run run = new Run(allRuns.size(), Run.RunType.FLOWER, anchorTrees.get(i), j);
+                allRuns.add(run);
+                allFlowerRuns.add(run);
+                treeFlowerRuns.add(run);
+                allPoints.addAll(run.allPoints);
+                flowerPoints.addAll(run.allPoints);
+            }
+            anchorTrees.get(i).flowerRuns = treeFlowerRuns;
         }
 
         return new KaledoscopeModel(allPoints);
@@ -544,15 +438,6 @@ public class KaledoscopeModel extends SLModel {
 
     public KaledoscopeModel(List<LXPoint> points) {
         super("kaledoscope", points);
-    }
-
-    static public class Point {
-        public float x;
-        public float y;
-        public Point(float x, float y) {
-            this.x = x;
-            this.y = y;
-        }
     }
 
     /**

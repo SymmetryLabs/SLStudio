@@ -12,15 +12,19 @@ public class AnchorTreeConfig extends UIConfig {
     public static final String TREE1_X = "tree1_x";
     public static final String TREE1_Z = "tree1_z";
     public static final String TREE1_RADIUS = "tree1_radius";
+    public static final String TREE1_RING_TOP = "t1_ringtop";
     public static final String TREE2_X = "tree2_x";
     public static final String TREE2_Z = "tree2_z";
     public static final String TREE2_RADIUS = "tree2_radius";
+    public static final String TREE2_RING_TOP = "t2_ringtop";
     public static final String TREE3_X = "tree3_x";
     public static final String TREE3_Z = "tree3_z";
     public static final String TREE3_RADIUS = "tree3_radius";
+    public static final String TREE3_RING_TOP = "t3_ringtop";
     public static final String TREE4_X = "tree4_x";
     public static final String TREE4_Z = "tree4_z";
     public static final String TREE4_RADIUS = "tree4_radius";
+    public static final String TREE4_RING_TOP = "t4_ringtop";
     public static final String TREE5_X = "tree5_x";
     public static final String TREE5_Z = "tree5_z";
     public static final String TREE5_RADIUS = "tree5_radius";
@@ -37,15 +41,19 @@ public class AnchorTreeConfig extends UIConfig {
         registerStringParameter(TREE1_X, null);
         registerStringParameter(TREE1_Z, null);
         registerStringParameter(TREE1_RADIUS, null);
+        registerStringParameter(TREE1_RING_TOP, null);
         registerStringParameter(TREE2_X, null);
         registerStringParameter(TREE2_Z, null);
         registerStringParameter(TREE2_RADIUS, null);
+        registerStringParameter(TREE2_RING_TOP, null);
         registerStringParameter(TREE3_X, null);
         registerStringParameter(TREE3_Z, null);
         registerStringParameter(TREE3_RADIUS, null);
+        registerStringParameter(TREE3_RING_TOP, null);
         registerStringParameter(TREE4_X, null);
         registerStringParameter(TREE4_Z, null);
         registerStringParameter(TREE4_RADIUS, null);
+        registerStringParameter(TREE4_RING_TOP, null);
         registerStringParameter(TREE5_X, null);
         registerStringParameter(TREE5_Z, null);
         registerStringParameter(TREE5_RADIUS, null);
@@ -64,6 +72,7 @@ public class AnchorTreeConfig extends UIConfig {
         treesPos.add(Float.parseFloat(pFile.getStringParameter(TREE1_X, "60.0").getString()));
         treesPos.add(Float.parseFloat(pFile.getStringParameter(TREE1_Z, "12.0").getString()));
         treesPos.add(Float.parseFloat(pFile.getStringParameter(TREE2_X, "-60.0").getString()));
+
         treesPos.add(Float.parseFloat(pFile.getStringParameter(TREE2_Z, "252.0").getString()));
         treesPos.add(Float.parseFloat(pFile.getStringParameter(TREE3_X, "60.0").getString()));
         treesPos.add(Float.parseFloat(pFile.getStringParameter(TREE3_Z, "492.0").getString()));
@@ -83,6 +92,20 @@ public class AnchorTreeConfig extends UIConfig {
         treesRadii.add(Float.parseFloat(pFile.getStringParameter(TREE4_RADIUS, "24.0").getString()));
         treesRadii.add(Float.parseFloat(pFile.getStringParameter(TREE5_RADIUS, "12.0").getString()));
         return treesRadii;
+    }
+
+    /**
+     * Ring tops are the top height of flower rings.
+     * @param pFile
+     * @return
+     */
+    static public List<Float> getTreesRingTops(ParameterFile pFile) {
+        List<Float> ringTops = new ArrayList<Float>();
+        ringTops.add(Float.parseFloat(pFile.getStringParameter(TREE1_RING_TOP, "" + 9f * 12f).getString()));
+        ringTops.add(Float.parseFloat(pFile.getStringParameter(TREE2_RING_TOP, "" + 9f * 12f).getString()));
+        ringTops.add(Float.parseFloat(pFile.getStringParameter(TREE3_RING_TOP, "" + 9f * 12f).getString()));
+        ringTops.add(Float.parseFloat(pFile.getStringParameter(TREE4_RING_TOP, "" + 9f * 12f).getString()));
+        return ringTops;
     }
 
     @Override

@@ -1,20 +1,15 @@
 package com.symmetrylabs.shows.firefly;
 
-import art.lookingup.KaledoscopeModel;
-import art.lookingup.KaledoscopeOutput;
-import art.lookingup.ParameterFile;
-import art.lookingup.PreviewComponents;
+import art.lookingup.*;
 import art.lookingup.ui.*;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.LX;
 import heronarts.p3lx.ui.UIEventHandler;
-import heronarts.p3lx.ui.studio.mixer.UIMixerStrip;
 import processing.event.KeyEvent;
 
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 public class FireflyShow implements Show {
@@ -27,6 +22,7 @@ public class FireflyShow implements Show {
     public static StrandLengths strandLengths;
     public static RunsConfig runsConfig;
     static public AnchorTreeConfig anchorTreeConfig;
+    static public FlowersConfig flowersConfig;
     UIPreviewComponents previewComponents;
     public static PreviewComponents.Axes axes;
 
@@ -42,6 +38,8 @@ public class FireflyShow implements Show {
     static public List<Integer> butterflyRunsNumStrands;
     static public List<Float> anchorTreesPos;
     static public List<Float> anchorTreesRadii;
+    static public List<Float> anchorTreesRingTops;
+    List<LUFlower.FlowerConfig> flowerConfigs;
 
     /**
      * These are parameters we need for building the model. We bind the UI to these ParameterFile's
@@ -61,6 +59,8 @@ public class FireflyShow implements Show {
         butterflyRunsNumStrands = RunsConfig.getRunsNumStrands(runsConfigParams);
         anchorTreesPos = AnchorTreeConfig.getTreesPos(anchorTreesParams);
         anchorTreesRadii = AnchorTreeConfig.getTreesRadii(anchorTreesParams);
+        anchorTreesRingTops = AnchorTreeConfig.getTreesRingTops(anchorTreesParams);
+        flowerConfigs = FlowersConfig.getAllFlowerConfigs();
     }
 
     public SLModel buildModel() {
@@ -81,7 +81,7 @@ public class FireflyShow implements Show {
         mappingConfig = (MappingConfig) new MappingConfig(lx.ui, lx).setExpanded(false).addToContainer(lx.ui.leftPane.global);
         runsConfig = (RunsConfig) new RunsConfig(lx.ui, lx, runsConfigParams).setExpanded(false).addToContainer(lx.ui.leftPane.global);
         strandLengths = (StrandLengths) new StrandLengths(lx.ui, lx, strandLengthsParams).setExpanded(false).addToContainer(lx.ui.leftPane.global);
-
+        flowersConfig = (FlowersConfig) new FlowersConfig(lx.ui, lx, FlowersConfig.flowersParamFile).setExpanded(false).addToContainer(lx.ui.leftPane.global);
         KaledoscopeOutput.configurePixliteOutput(lx);
         lx.ui.setTopLevelKeyEventHandler(new TopLevelKeyEventHandler(lx));
     }
@@ -97,10 +97,10 @@ public class FireflyShow implements Show {
         @Override
         public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
             super.onKeyPressed(keyEvent, keyChar, keyCode);
-            KaledoscopeModel.Point curPt = PreviewComponents.Axes.getCurSelPt();
-            KaledoscopeModel.Bezier prevBezier = null;
-            KaledoscopeModel.Bezier curBezier = PreviewComponents.Axes.getCurBezier();
-            KaledoscopeModel.Bezier nextBezier = null;
+            Bezier.Point curPt = PreviewComponents.Axes.getCurSelPt();
+            Bezier prevBezier = null;
+            Bezier curBezier = PreviewComponents.Axes.getCurBezier();
+            Bezier nextBezier = null;
             KaledoscopeModel.Run curRun = PreviewComponents.Axes.getCurSelRun();
             float moveIncr = 12.0f;
             boolean needsUpdate = false;

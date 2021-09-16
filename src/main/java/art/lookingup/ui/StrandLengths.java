@@ -112,10 +112,10 @@ public class StrandLengths extends UIConfig {
         lengths.add(Integer.parseInt(pFile.getStringParameter(STRAND12, "14").getString()));
 
         // Unused
-        lengths.add(Integer.parseInt(pFile.getStringParameter(STRAND13, "0").getString()));
-        lengths.add(Integer.parseInt(pFile.getStringParameter(STRAND14, "0").getString()));
-        lengths.add(Integer.parseInt(pFile.getStringParameter(STRAND15, "0").getString()));
-        lengths.add(Integer.parseInt(pFile.getStringParameter(STRAND16, "0").getString()));
+        lengths.add(Integer.parseInt(pFile.getStringParameter(STRAND13, "14").getString()));
+        lengths.add(Integer.parseInt(pFile.getStringParameter(STRAND14, "14").getString()));
+        lengths.add(Integer.parseInt(pFile.getStringParameter(STRAND15, "14").getString()));
+        lengths.add(Integer.parseInt(pFile.getStringParameter(STRAND16, "14").getString()));
         return lengths;
     }
 
@@ -128,6 +128,7 @@ public class StrandLengths extends UIConfig {
     public void onSave() {
         // Only reconfigure if a parameter changed.
         if (parameterChanged) {
+            // TODO(tracy): rebuild the network if the butterfly strand lengths are adjusted.
         }
     }
 }

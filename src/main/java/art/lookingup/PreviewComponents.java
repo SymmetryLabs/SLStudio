@@ -50,19 +50,19 @@ public class PreviewComponents {
             selectedCtrlPt = (selectedCtrlPt + 1) % 4;
         }
 
-        static public KaledoscopeModel.Point getCurSelPt() {
+        static public Bezier.Point getCurSelPt() {
             KaledoscopeModel.Run selRun = KaledoscopeModel.allRuns.get(selectedRun);
             if (selectedBezier != -1) {
-                KaledoscopeModel.Bezier selBezier = selRun.beziers.get(selectedBezier);
+                Bezier selBezier = selRun.beziers.get(selectedBezier);
                 if (selectedCtrlPt != -1) {
-                    KaledoscopeModel.Point ctrlPt = getBezierPointByIndex(selBezier, selectedCtrlPt);
+                    Bezier.Point ctrlPt = getBezierPointByIndex(selBezier, selectedCtrlPt);
                     return ctrlPt;
                 }
             }
             return null;
         }
 
-        static public KaledoscopeModel.Bezier getCurBezier() {
+        static public Bezier getCurBezier() {
             return getCurSelRun().beziers.get(selectedBezier);
         }
 
@@ -70,7 +70,7 @@ public class PreviewComponents {
             return KaledoscopeModel.allRuns.get(selectedRun);
         }
 
-        static public KaledoscopeModel.Point getBezierPointByIndex(KaledoscopeModel.Bezier bezier, int index) {
+        static public Bezier.Point getBezierPointByIndex(Bezier bezier, int index) {
             switch (index) {
                 case 0:
                     return bezier.start;
@@ -100,8 +100,8 @@ public class PreviewComponents {
 
                 if (showCtrlPoints) {
                     KaledoscopeModel.Run selRun = null;
-                    KaledoscopeModel.Bezier selBezier = null;
-                    KaledoscopeModel.Point ctrlPt = null;
+                    Bezier selBezier = null;
+                    Bezier.Point ctrlPt = null;
                     selRun = KaledoscopeModel.allRuns.get(selectedRun);
                     selBezier = selRun.beziers.get(selectedBezier);
                     ctrlPt = getBezierPointByIndex(selBezier, selectedCtrlPt);
@@ -110,7 +110,7 @@ public class PreviewComponents {
                     for (KaledoscopeModel.Run run : KaledoscopeModel.allRuns) {
                         if (run.beziers != null) {
                             if (run == selRun) {
-                                for (KaledoscopeModel.Bezier bezier : run.beziers) {
+                                for (Bezier bezier : run.beziers) {
                                     pg.stroke(0);
                                     pg.pushMatrix();
                                     pg.translate(bezier.start.x, KaledoscopeModel.butterflyYHeight, bezier.start.y);

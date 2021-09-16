@@ -53,7 +53,7 @@ public class LUButterfly {
      * NOTE: The bezier is only in a 2D plane, so pos.y corresponds to our 'z' coordinate.
      * @param pos
      */
-    public void updatePosition(KaledoscopeModel.Point pos) {
+    public void updatePosition(Bezier.Point pos) {
         float deltaX = pos.x - x;
         float deltaZ = pos.y - z;
         for (LXPoint point : allPoints) {
