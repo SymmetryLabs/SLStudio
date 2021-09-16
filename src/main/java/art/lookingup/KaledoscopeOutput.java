@@ -75,6 +75,30 @@ public class KaledoscopeOutput {
                     // NOTE: We typically shouldn't have multiple strands mapped to a single output since the purpose of
                     // strands are to increase the FPS but we will support it to provide some install time flexibility.
                     String[] ids = strandIds.split(",");
+                    // For flowers, we specify the strand id's and anchorTree.runNum.  We will process the input and
+                    // then just build the expected global stand id for below.
+                    if (strandType == 1) {
+                        String[] flowerStrandAddress = ids[0].split("\\.");
+                        int anchorTree = Integer.parseInt(flowerStrandAddress[0]);
+                        int runNum = Integer.parseInt(flowerStrandAddress[1]);
+                        // Unused outputs for flowers should have -1, -1 as the mapping.
+                        if (anchorTree == -1)
+                            continue;
+                        KaledoscopeModel.Strand strand = KaledoscopeModel.getFlowerStrandByAddress(anchorTree, runNum);
+                        ids = new String[1];
+                        ids[0] = "" + strand.strandId;
+                    } else {
+                        // Allow for butterfly run specification to be 0.1, 0.2, etc where first number is the run
+                        // and second number is the strand on that run.
+                        String[] butterflyStrandAddress = ids[0].split("\\.");
+                        int runNum = Integer.parseInt(butterflyStrandAddress[0]);
+                        int runStrandNum = Integer.parseInt(butterflyStrandAddress[1]);
+                        if (runNum == -1)
+                            continue;
+                        KaledoscopeModel.Strand strand = KaledoscopeModel.getButterflyStrandByAddress(runNum, runStrandNum);
+                        ids = new String[1];
+                        ids[0] = "" + strand.strandId;
+                    }
                     for (int i = 0; i < ids.length; i++) {
                         int strandId = Integer.parseInt(ids[i]);
                         if (strandId < KaledoscopeModel.allStrands.size()) {
