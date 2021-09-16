@@ -1,5 +1,6 @@
 package art.lookingup;
 
+import art.lookingup.ui.MappingConfig;
 import art.lookingup.ui.UIPixliteConfig;
 import com.symmetrylabs.shows.firefly.FireflyShow;
 import heronarts.lx.output.LXDatagramOutput;
@@ -57,12 +58,19 @@ public class KaledoscopeOutput {
             }
             int curUniverseNum = 0;
             for (int outputNum = 0; outputNum < 16; outputNum++) {
-                logger.info("Loading mapping for output " + (outputNum + 1));
-                String strandIds = FireflyShow.mappingConfig.getStringParameter("output" + (outputNum + 1)).getString();
-                logger.info("strand ids: " + strandIds);
+                String strandIds;
+                if (strandType == 0) {
+                    logger.info("Loading butterfly mapping for output " + (outputNum + 1));
+                    strandIds = FireflyShow.mappingConfig.getStringParameter(MappingConfig.BF_PIXLITE_BASE + (outputNum + 1)).getString();
+                    logger.info("butterfly pixlite output " + (outputNum + 1) + " strand ids: " + strandIds);
+                }  else {
+                    logger.info("Loading flower mapping for output " + (outputNum + 1));
+                    strandIds = FireflyShow.mappingConfig.getStringParameter(MappingConfig.F_PIXLITE_BASE + (outputNum + 1)).getString();
+                    logger.info("flower pixlite output " + (outputNum + 1) + " strand ids: " + strandIds);
+                }
+
                 if (strandIds.length() > 0) {
                     List<LXPoint> pointsWireOrder = new ArrayList<LXPoint>();
-
 
                     // NOTE: We typically shouldn't have multiple strands mapped to a single output since the purpose of
                     // strands are to increase the FPS but we will support it to provide some install time flexibility.
@@ -84,7 +92,7 @@ public class KaledoscopeOutput {
                     // the next strand.  We don't want to continue below because we would be bumping our universe
                     // number each time we skipped a strand.
                     if (pointsWireOrder.size() == 0) {
-                        logger.info("Skipping different strand type.");
+                        // Too noisy logger.info("Skipping different strand type.");
                         continue;
                     }
 

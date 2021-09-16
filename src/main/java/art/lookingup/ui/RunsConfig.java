@@ -28,8 +28,7 @@ public class RunsConfig extends UIConfig {
   public static final String BF_STRANDS_RUN2 = "brun2 s#";
   public static final String BF_STRANDS_RUN3 = "brun3 s#";
   public static final String BF_STRANDS_RUN4 = "brun4 s#";
-  public static final String FLOWER_RUNS = "fl runs";
-  public static final String title = "runs";
+  public static final String title = "bf runs";
   public static final String filename = "runs.json";
   public LX lx;
   private boolean parameterChanged = false;
@@ -45,7 +44,6 @@ public class RunsConfig extends UIConfig {
     registerStringParameter(BF_STRANDS_RUN2, null);
     registerStringParameter(BF_STRANDS_RUN3, null);
     registerStringParameter(BF_STRANDS_RUN4, null);
-    registerStringParameter(FLOWER_RUNS, null);
     save();
 
     buildUI(ui);

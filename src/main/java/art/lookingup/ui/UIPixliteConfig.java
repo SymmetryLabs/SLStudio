@@ -11,7 +11,7 @@ public class UIPixliteConfig extends UIConfig {
     public static final String FLOWER_PIXLITE_IP = "flw_ip";
     public static final String FLOWER_PIXLITE_PORT = "flw_port";
 
-    public static final String title = "pixlite";
+    public static final String title = "pixlite IP";
     public static final String filename = "pixliteconfig.json";
     public LX lx;
     private boolean parameterChanged = false;

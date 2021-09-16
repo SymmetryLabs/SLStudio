@@ -5,6 +5,8 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.LXParameter;
 
+import java.util.Map;
+
 /**
  * UIMappingConfig provides mapping configuration for LED strands.
  * Here you can reassign strand numbers for particular Pixlite outputs.
@@ -14,78 +16,155 @@ import heronarts.lx.parameter.LXParameter;
  * LX Output so that it can be re-configured at runtime.
  */
 public class MappingConfig extends UIConfig {
-  public static final String OUTPUT1 = "output1";
-  public static final String OUTPUT2 = "output2";
-  public static final String OUTPUT3 = "output3";
-  public static final String OUTPUT4 = "output4";
-  public static final String OUTPUT5 = "output5";
-  public static final String OUTPUT6 = "output6";
-  public static final String OUTPUT7 = "output7";
-  public static final String OUTPUT8 = "output8";
-  public static final String OUTPUT9 = "output9";
-  public static final String OUTPUT10 = "output10";
-  public static final String OUTPUT11 = "output11";
-  public static final String OUTPUT12 = "output12";
-  public static final String OUTPUT13 = "output13";
-  public static final String OUTPUT14 = "output14";
-  public static final String OUTPUT15 = "output15";
-  public static final String OUTPUT16 = "output16";
+    public static final String BF_PIXLITE_BASE = "bf_out_";
+    public static final int BF_NUM_OUTPUTS = 16;
+    public static final String BF_PIXLITE1 = "bf_out_1";
+    public static final String BF_PIXLITE2 = "bf_out_2";
+    public static final String BF_PIXLITE3 = "bf_out_3";
+    public static final String BF_PIXLITE4 = "bf_out_4";
+    public static final String BF_PIXLITE5 = "bf_out_5";
+    public static final String BF_PIXLITE6 = "bf_out_6";
+    public static final String BF_PIXLITE7 = "bf_out_7";
+    public static final String BF_PIXLITE8 = "bf_out_8";
+    public static final String BF_PIXLITE9 = "bf_out_9";
+    public static final String BF_PIXLITE10 = "bf_out_10";
+    public static final String BF_PIXLITE11 = "bf_out_11";
+    public static final String BF_PIXLITE12 = "bf_out_12";
+    public static final String BF_PIXLITE13 = "bf_out_13";
+    public static final String BF_PIXLITE14 = "bf_out_14";
+    public static final String BF_PIXLITE15 = "bf_out_15";
+    public static final String BF_PIXLITE16 = "bf_out_16";
 
-  public static final String title = "mapping";
-  public static final String filename = "mappingconfig.json";
-  public LX lx;
-  private boolean parameterChanged = false;
+    public static final String F_PIXLITE_BASE = "f_out_";
+    public static final int F_NUM_OUTPUTS = 16;
+    public static final String F_PIXLITE1 = "f_out_1";
+    public static final String F_PIXLITE2 = "f_out_2";
+    public static final String F_PIXLITE3 = "f_out_3";
+    public static final String F_PIXLITE4 = "f_out_4";
+    public static final String F_PIXLITE5 = "f_out_5";
+    public static final String F_PIXLITE6 = "f_out_6";
+    public static final String F_PIXLITE7 = "f_out_7";
+    public static final String F_PIXLITE8 = "f_out_8";
+    public static final String F_PIXLITE9 = "f_out_9";
+    public static final String F_PIXLITE10 = "f_out_10";
+    public static final String F_PIXLITE11 = "f_out_11";
+    public static final String F_PIXLITE12 = "f_out_12";
+    public static final String F_PIXLITE13 = "f_out_13";
+    public static final String F_PIXLITE14 = "f_out_14";
+    public static final String F_PIXLITE15 = "f_out_15";
+    public static final String F_PIXLITE16 = "f_out_16";
 
-  public MappingConfig(final SLStudioLX.UI ui, LX lx) {
-    super(ui, title, filename);
-    int contentWidth = (int)ui.leftPane.global.getContentWidth();
-    this.lx = lx;
+    public static final String title = "pixlite outputs";
+    public static final String filename = "mappingconfig.json";
+    public LX lx;
+    private boolean parameterChanged = false;
 
-    registerStringParameter(OUTPUT1, "0");
-    registerStringParameter(OUTPUT2, "1");
-    registerStringParameter(OUTPUT3, "2");
-    registerStringParameter(OUTPUT4, "3");
-    registerStringParameter(OUTPUT5, "4");
-    registerStringParameter(OUTPUT6, "5");
-    registerStringParameter(OUTPUT7, "6");
-    registerStringParameter(OUTPUT8, "7");
-    registerStringParameter(OUTPUT9, "8");
-    registerStringParameter(OUTPUT10, "9");
-    registerStringParameter(OUTPUT11, "10");
-    registerStringParameter(OUTPUT12, "11");
-    registerStringParameter(OUTPUT13, "12");
-    registerStringParameter(OUTPUT14, "13");
-    registerStringParameter(OUTPUT15, "14");
-    registerStringParameter(OUTPUT16, "15");
+    public MappingConfig(final SLStudioLX.UI ui, LX lx) {
+        super(ui, title, filename);
+        int contentWidth = (int)ui.leftPane.global.getContentWidth();
+        this.lx = lx;
+
+        registerStringParameter(BF_PIXLITE1, "0");
+        registerStringParameter(BF_PIXLITE2, "1");
+        registerStringParameter(BF_PIXLITE3, "2");
+        registerStringParameter(BF_PIXLITE4, "3");
+        registerStringParameter(BF_PIXLITE5, "4");
+        registerStringParameter(BF_PIXLITE6, "5");
+        registerStringParameter(BF_PIXLITE7, "6");
+        registerStringParameter(BF_PIXLITE8, "7");
+        registerStringParameter(BF_PIXLITE9, "8");
+        registerStringParameter(BF_PIXLITE10, "9");
+        registerStringParameter(BF_PIXLITE11, "10");
+        registerStringParameter(BF_PIXLITE12, "11");
+        registerStringParameter(BF_PIXLITE13, "12");
+        registerStringParameter(BF_PIXLITE14, "13");
+        registerStringParameter(BF_PIXLITE15, "14");
+        registerStringParameter(BF_PIXLITE16, "15");
+
+        registerStringParameter(F_PIXLITE1, "0");
+        registerStringParameter(F_PIXLITE2, "1");
+        registerStringParameter(F_PIXLITE3, "2");
+        registerStringParameter(F_PIXLITE4, "3");
+        registerStringParameter(F_PIXLITE5, "4");
+        registerStringParameter(F_PIXLITE6, "5");
+        registerStringParameter(F_PIXLITE7, "6");
+        registerStringParameter(F_PIXLITE8, "7");
+        registerStringParameter(F_PIXLITE9, "8");
+        registerStringParameter(F_PIXLITE10, "9");
+        registerStringParameter(F_PIXLITE11, "10");
+        registerStringParameter(F_PIXLITE12, "11");
+        registerStringParameter(F_PIXLITE13, "12");
+        registerStringParameter(F_PIXLITE14, "13");
+        registerStringParameter(F_PIXLITE15, "14");
+        registerStringParameter(F_PIXLITE16, "15");
 
 
-    save();
+        save();
 
-    buildUI(ui);
-  }
+        buildUI(ui);
+    }
 
-  @Override
-  public void onParameterChanged(LXParameter p) {
-    parameterChanged = true;
-  }
 
-  @Override
-  public void onSave() {
-    // Only reconfigure if a parameter changed.
-    if (parameterChanged) {
-        boolean originalEnabled = lx.engine.output.enabled.getValueb();
-        lx.engine.output.enabled.setValue(false);
+    /**
+     * Return the Pixlite output for a given butterfly strand.
+     * NOTE: The UI shows Pixlite outputs as 1 indexed but ArtNet is really 0 indexed so we return
+     * 0 for Pixlite Output 1, etc. This is just to keep it consisted with Advatek Assistant UI.
+     *
+     * @param strandNum
+     * @return
+     */
+    public int butterflyPixliteOutputForStrand(int strandNum) {
+        for (int i = 1; i < BF_NUM_OUTPUTS + 1; i++) {
+            String outputKey = BF_PIXLITE_BASE + i;
+            int strand = Integer.parseInt(getStringParameter(outputKey).getString());
+            if (strand == strandNum) {
+                return i - 1;
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Return the Pixlite output for a given flower strand.
+     * NOTE: The UI shows Pixlite outputs as 1 indexed but ArtNet is really 0 indexed so we return
+     * 0 for Pixlite Output 1, etc. This is just to keep it consisted with Advatek Assistant UI.
+     *
+     * @param strandNum
+     * @return
+     */
+    public int flowerPixliteOutputForStrand(int strandNum) {
+        for (int i = 1; i < F_NUM_OUTPUTS + 1; i++) {
+            String outputKey = F_PIXLITE_BASE + i;
+            int strand = Integer.parseInt(getStringParameter(outputKey).getString());
+            if (strand == strandNum) {
+                return i - 1;
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        parameterChanged = true;
+    }
+
+    @Override
+    public void onSave() {
+        // Only reconfigure if a parameter changed.
+        if (parameterChanged) {
+            boolean originalEnabled = lx.engine.output.enabled.getValueb();
+            lx.engine.output.enabled.setValue(false);
             /*
             for (LXOutput child : lx.engine.output.children) {
                 lx.engine.output.removeChild(child);
             } */
-        // This version of LX doesn't provide access to the children variable so we will use
-        // a static member variable we set when constructing the output.
-        lx.engine.output.removeChild(KaledoscopeOutput.butterflyDatagramOutput);
-        lx.engine.output.removeChild(KaledoscopeOutput.flowerDatagramOutput);
-        KaledoscopeOutput.configurePixliteOutput(lx);
-        parameterChanged = false;
-        lx.engine.output.enabled.setValue(originalEnabled);
+            // This version of LX doesn't provide access to the children variable so we will use
+            // a static member variable we set when constructing the output.
+            lx.engine.output.removeChild(KaledoscopeOutput.butterflyDatagramOutput);
+            lx.engine.output.removeChild(KaledoscopeOutput.flowerDatagramOutput);
+            KaledoscopeOutput.configurePixliteOutput(lx);
+            parameterChanged = false;
+            lx.engine.output.enabled.setValue(originalEnabled);
+        }
     }
-  }
 }

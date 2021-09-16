@@ -20,7 +20,7 @@ public class FlowersConfig extends UIConfig {
     public static final String filename = "flowers.json";
     public LX lx;
     private boolean parameterChanged = false;
-    static public final int MAX_FLOWERS_PER_RUN = 15;
+    static public final int MAX_FLOWERS_PER_RUN = 14;
     static public ParameterFile flowersParamFile;
 
     public FlowersConfig(final SLStudioLX.UI ui, LX lx, ParameterFile paramFile) {
@@ -47,8 +47,9 @@ public class FlowersConfig extends UIConfig {
         if (flowersParamFile == null) {
             flowersParamFile = ParameterFile.instantiateAndLoad(filename);
         }
-        // The default is ring 0, and 360f * flowerNum / (MAX_FLOWERS_PER_RUN-1) degrees and vertical displacement of 0.
-        String val = flowersParamFile.getStringParameter(flowerAddress, "" + treeRunNum + "," + 360f * (float)flowerNum / (float)(MAX_FLOWERS_PER_RUN-1) + "," + "0f").getString();
+        // The default is ring 0, and 360f * flowerNum / (MAX_FLOWERS_PER_RUN) degrees and vertical displacement of 0.
+        float azimuth = 360f * (float)flowerNum / (float)MAX_FLOWERS_PER_RUN;
+        String val = flowersParamFile.getStringParameter(flowerAddress, "" + treeRunNum + "," + (int)azimuth + "," + "0").getString();
         String[] posVals = val.split(",");
         LUFlower.FlowerConfig flowerConfig = new LUFlower.FlowerConfig();
         flowerConfig.treeNum = treeNum;

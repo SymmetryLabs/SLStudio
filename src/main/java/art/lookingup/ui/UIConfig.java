@@ -192,11 +192,11 @@ public class UIConfig extends UICollapsibleSection implements LXParameterListene
         textRow.setPadding(0, 0, 0, 0);
         textRow.addToContainer(this);
 
-        UILabel label = new UILabel(0, 0, 45, 20);
+        UILabel label = new UILabel(0, 0, 70, 20);
         label.setLabel(p.getLabel());
         label.addToContainer(textRow);
         label.setPadding(5, 0);
-        UITextBox textBox = new UITextBox(50,0, ui.leftPane.global.getContentWidth() - 55, 20 );
+        UITextBox textBox = new UITextBox(50,0, ui.leftPane.global.getContentWidth() - 80, 20 );
         ((LXListenableParameter)p).addListener(this);
         textBox.setParameter((StringParameter)p);
         textBox.addToContainer(textRow);

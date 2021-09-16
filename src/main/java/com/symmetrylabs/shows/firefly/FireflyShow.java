@@ -32,7 +32,6 @@ public class FireflyShow implements Show {
     public static ParameterFile strandLengthsParams;
     public static ParameterFile anchorTreesParams;
     static public int runsButterflies;
-    static public int runsFlowers;
     static public List<Integer> allStrandLengths;
     // Allow each butterfly run to have a configurable number of runs.
     static public List<Integer> butterflyRunsNumStrands;
@@ -54,7 +53,6 @@ public class FireflyShow implements Show {
         strandLengthsParams = ParameterFile.instantiateAndLoad(StrandLengths.filename);
         anchorTreesParams = ParameterFile.instantiateAndLoad(AnchorTreeConfig.filename);
         runsButterflies = Integer.parseInt(runsConfigParams.getStringParameter(RunsConfig.BUTTERFLY_RUNS, "2").getString());
-        runsFlowers = Integer.parseInt(runsConfigParams.getStringParameter(RunsConfig.FLOWER_RUNS, "4").getString());
         allStrandLengths = StrandLengths.getAllStrandLengths(strandLengthsParams);
         butterflyRunsNumStrands = RunsConfig.getRunsNumStrands(runsConfigParams);
         anchorTreesPos = AnchorTreeConfig.getTreesPos(anchorTreesParams);
@@ -75,13 +73,13 @@ public class FireflyShow implements Show {
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         axes = new PreviewComponents.Axes();
         ui.preview.addComponent(axes);
-        previewComponents = (UIPreviewComponents) new UIPreviewComponents(ui).setExpanded(true).addToContainer(lx.ui.leftPane.global);
         pixliteConfig = (UIPixliteConfig) new UIPixliteConfig(ui, lx).setExpanded(false).addToContainer(lx.ui.leftPane.global);
-        anchorTreeConfig = (AnchorTreeConfig) new AnchorTreeConfig(ui, lx, anchorTreesParams).setExpanded(true).addToContainer(lx.ui.leftPane.global);
         mappingConfig = (MappingConfig) new MappingConfig(lx.ui, lx).setExpanded(false).addToContainer(lx.ui.leftPane.global);
+        anchorTreeConfig = (AnchorTreeConfig) new AnchorTreeConfig(ui, lx, anchorTreesParams).setExpanded(true).addToContainer(lx.ui.leftPane.global);
+        flowersConfig = (FlowersConfig) new FlowersConfig(lx.ui, lx, FlowersConfig.flowersParamFile).setExpanded(false).addToContainer(lx.ui.leftPane.global);
         runsConfig = (RunsConfig) new RunsConfig(lx.ui, lx, runsConfigParams).setExpanded(false).addToContainer(lx.ui.leftPane.global);
         strandLengths = (StrandLengths) new StrandLengths(lx.ui, lx, strandLengthsParams).setExpanded(false).addToContainer(lx.ui.leftPane.global);
-        flowersConfig = (FlowersConfig) new FlowersConfig(lx.ui, lx, FlowersConfig.flowersParamFile).setExpanded(false).addToContainer(lx.ui.leftPane.global);
+        previewComponents = (UIPreviewComponents) new UIPreviewComponents(ui).setExpanded(false).addToContainer(lx.ui.leftPane.global);
         KaledoscopeOutput.configurePixliteOutput(lx);
         lx.ui.setTopLevelKeyEventHandler(new TopLevelKeyEventHandler(lx));
     }
