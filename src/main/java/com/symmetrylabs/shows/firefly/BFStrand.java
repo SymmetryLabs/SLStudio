@@ -10,10 +10,15 @@ import heronarts.lx.parameter.DiscreteParameter;
 public class BFStrand extends SLPattern {
     public static final String GROUP_NAME = FireflyShow.SHOW_NAME;
 
-    DiscreteParameter strandNum = new DiscreteParameter("strand", 0, 0, 12);
+    DiscreteParameter strandNum = new DiscreteParameter("strand", 0, 0, 100);
     public BFStrand(LX lx) {
         super(lx);
         addParameter("strand", strandNum);
+    }
+
+    @Override
+    public void onActive() {
+        strandNum.setRange(0, KaledoscopeModel.allStrands.size());
     }
 
     @Override
