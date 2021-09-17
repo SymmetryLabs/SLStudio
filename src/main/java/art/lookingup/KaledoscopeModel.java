@@ -7,7 +7,9 @@ import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.model.LXPoint;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -141,6 +143,11 @@ public class KaledoscopeModel extends SLModel {
                 butterflies.add(butterfly);
                 allButterflies.add(butterfly);
                 allPoints.addAll(butterfly.allPoints);
+                // For each point on the butterfly, build an index of it's distance along the run.  This will help with
+                // linear rendering algorithms.
+                for (LXPoint butterflyPoint : butterfly.allPoints) {
+                    run.ptsRunInches.put(butterflyPoint.index, currentButterflyArcDistance);
+                }
                 addressablePoints.addAll(butterfly.addressablePoints);
             }
         }
@@ -227,6 +234,8 @@ public class KaledoscopeModel extends SLModel {
         public List<Bezier> beziers;
         int runId;
         static final float bezierCtrlPtYOffset = 20f;
+        public Map<Integer, Integer> ptsRunIndex;
+        public Map<Integer, Float> ptsRunInches;
 
         public enum RunType {
             BUTTERFLY,
@@ -244,6 +253,8 @@ public class KaledoscopeModel extends SLModel {
             butterflies = new ArrayList<LUButterfly>();
             flowers = new ArrayList<LUFlower>();
             allPoints = new ArrayList<LXPoint>();
+            ptsRunIndex = new HashMap<Integer, Integer>();
+            ptsRunInches = new HashMap<Integer, Float>();
 
             // To make numStrands configurable do like this after adding UI
             // int numStrands = FireflyShow.butterflyRunsNumStrands.get(runId);
@@ -254,6 +265,11 @@ public class KaledoscopeModel extends SLModel {
                 flowers.addAll(strand.flowers);
                 allStrands.add(strand);
                 strands.add(strand);
+            }
+            int ptRunIndex = 0;
+            for (LXPoint pt : allPoints) {
+                ptsRunIndex.put(pt.index, ptRunIndex);
+                ++ptRunIndex;
             }
         }
 
@@ -268,6 +284,8 @@ public class KaledoscopeModel extends SLModel {
             butterflies = new ArrayList<LUButterfly>();
             flowers = new ArrayList<LUFlower>();
             allPoints = new ArrayList<LXPoint>();
+            ptsRunIndex = new HashMap<Integer, Integer>();
+            ptsRunInches = new HashMap<Integer, Float>();
 
             for (int i = 0; i < numStrands; i++) {
                 Strand strand = new Strand(this, allStrands.size(), i, beziers);
@@ -276,10 +294,16 @@ public class KaledoscopeModel extends SLModel {
                 allStrands.add(strand);
                 strands.add(strand);
             }
+            int ptRunIndex = 0;
+            for (LXPoint pt : allPoints) {
+                ptsRunIndex.put(pt.index, ptRunIndex);
+                ++ptRunIndex;
+            }
         }
 
         /**
-         * Generate the bezier curves for the butterflies based on the anchor tree locations.
+         * Generate the bezier curves for the butterflies based on the anchor tree locations.  This is for the
+         * scenario with 2 runs of butterflies.
          *
          * @param trees
          * @param treeMargin
@@ -334,6 +358,20 @@ public class KaledoscopeModel extends SLModel {
             curves.add(bezier4);
 
             return curves;
+        }
+
+        public float getButterfliesRunDistance() {
+            return butterflies.size() * 12f;
+        }
+
+        /**
+         * For a given LXPoint, return it's distance in inches along the run.  This groups all LEDs of a single
+         * butterfly at the same distance.  It is used for some linear effects.
+         * @param point
+         * @return
+         */
+        public float getRunDistance(LXPoint point) {
+            return ptsRunInches.get(point.index);
         }
     }
 
