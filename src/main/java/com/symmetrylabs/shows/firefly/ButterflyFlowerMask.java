@@ -16,8 +16,8 @@ public class ButterflyFlowerMask extends SLEffect<KaledoscopeModel> {
     public ButterflyFlowerMask(LX lx) {
         super(lx);
 
-        addParameter(enableButterfliesParam = new BooleanParameter("EnableButterflies", true));
-        addParameter(enableFlowersParam = new BooleanParameter("EnableFlowers", true));
+        addParameter(enableButterfliesParam = new BooleanParameter("Butterflies", true));
+        addParameter(enableFlowersParam = new BooleanParameter("Flowers", true));
     }
 
     @Override
