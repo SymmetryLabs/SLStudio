@@ -116,4 +116,14 @@ public class LUButterfly {
             addressablePoints.addAll(allPoints);
         }
     }
+
+    /**
+     * Convenience function to set the color of all points in a butterfly.
+     * @param color
+     */
+    public void setColor(int[] buffer, int color) {
+        for (LXPoint p : allPoints) {
+            buffer[p.index] = color;
+        }
+    }
 }

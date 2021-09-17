@@ -1,6 +1,7 @@
 package com.symmetrylabs.shows.firefly;
 
 import art.lookingup.KaledoscopeModel;
+import art.lookingup.LUButterfly;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
@@ -10,9 +11,9 @@ import heronarts.lx.parameter.DiscreteParameter;
 
 import java.util.logging.Logger;
 
-public class BFRun extends SLPattern {
+public class BFSelector extends SLPattern {
     public static final String GROUP_NAME = FireflyShow.SHOW_NAME;
-    private static final Logger logger = Logger.getLogger(BFRun.class.getName());
+    private static final Logger logger = Logger.getLogger(BFSelector.class.getName());
 
     DiscreteParameter runNum = new DiscreteParameter("run", 0, 0, 100);
     BooleanParameter tracer = new BooleanParameter("tracer", false);
@@ -20,7 +21,7 @@ public class BFRun extends SLPattern {
 
     int currentIndex = 0;
 
-    public BFRun(LX lx) {
+    public BFSelector(LX lx) {
         super(lx);
         addParameter("run", runNum);
         addParameter("tracer", tracer);
@@ -39,18 +40,20 @@ public class BFRun extends SLPattern {
         }
         KaledoscopeModel.Run run = KaledoscopeModel.allRuns.get(runNum.getValuei());
         if (tracer.getValueb()) {
-            for (int i = 0; i < run.allPoints.size(); i++) {
+            for (int i = 0; i < run.butterflies.size(); i++) {
                 if (currentIndex == i)
-                    colors[run.allPoints.get(i).index] = LXColor.rgb(255, 255, 255);
+                    run.butterflies.get(i).setColor(colors, LXColor.rgb(255, 255, 255));
             }
             currentIndex = (currentIndex + 1) % run.allPoints.size();
         } else {
             int i = 0;
-            for (LXPoint p : run.allPoints) {
+            for (LUButterfly butterfly : run.butterflies) {
+                if (index.getValuei() == 0 && runNum.getValuei() == 1) {
+                }
                 if (index.getValuei() == i || index.getValuei() == -1)
-                    colors[p.index] = LXColor.rgb(255, 255, 255);
+                    butterfly.setColor(colors, LXColor.rgb(255, 255, 255));
                 else
-                    colors[p.index] = LXColor.rgb(0, 0,0);
+                    butterfly.setColor(colors, LXColor.rgb(0, 0, 0));
                 i++;
             }
         }
