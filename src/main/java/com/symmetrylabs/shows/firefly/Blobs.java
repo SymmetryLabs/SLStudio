@@ -12,15 +12,14 @@ public class Blobs extends ColorPattern {
 
     public static final int MAX_BLOBS = 100;
 
-    public CompoundParameter slope = new CompoundParameter("slope", 1.0, 0.001, 30.0);
+    public CompoundParameter slope = new CompoundParameter("slope", 30.0, 0.001, 100.0);
     public CompoundParameter maxValue = new CompoundParameter("maxv", 1.0, 0.0, 1.0);
     public CompoundParameter speed = new CompoundParameter("speed", 1.0, 0.0, 10.0);
-    public CompoundParameter randSpeed = new CompoundParameter("randspd", 1.0, 0.0, 5.0);
+    public CompoundParameter randSpeed = new CompoundParameter("randspd", 0.2, 0.0, 5.0);
     public DiscreteParameter numBlobs = new DiscreteParameter("blobs", 1, 1, MAX_BLOBS);
-    public DiscreteParameter nextBarKnob = new DiscreteParameter("nxtBar", -1, -1, 4);
     public DiscreteParameter fxKnob = new DiscreteParameter("fx", 0, 0, 3).setDescription("0=none 1=sparkle 2=cosine");
     public CompoundParameter fxDepth = new CompoundParameter("fxDepth", 1.0f, 0.1f, 1.0f);
-    public DiscreteParameter waveKnob = new DiscreteParameter("wave", 0, 0, 4).setDescription("Waveform type");
+    public DiscreteParameter waveKnob = new DiscreteParameter("wave", 0, 0, 3).setDescription("Waveform type");
     public CompoundParameter widthKnob = new CompoundParameter("width", 0.1f, 0.0f, 10.0f).setDescription("Square wave width");
     public CompoundParameter cosineFreq = new CompoundParameter("cfreq", 1.0, 1.0, 400.0);
 
@@ -44,7 +43,6 @@ public class Blobs extends ColorPattern {
         addParameter(speed);
         addParameter(numBlobs);
         addParameter(randSpeed);
-        addParameter(nextBarKnob);
         addParameter(fxKnob);
         addParameter(fxDepth);
         addParameter(waveKnob);

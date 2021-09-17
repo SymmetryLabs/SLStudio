@@ -31,7 +31,7 @@ public class PreviewComponents {
             floor = new Floor();
             showAxes = true;
             showFloor = true;
-            showCtrlPoints = true;
+            showCtrlPoints = false;
             selectedRun = 0;
             selectedBezier = 0;
             selectedCtrlPt = 0;

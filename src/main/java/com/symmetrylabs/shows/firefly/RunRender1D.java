@@ -147,7 +147,7 @@ public class RunRender1D {
      * Render a step function at the given position with the given slope.
      * @param colors Points color array to write into.
      * @param run The run to render on.
-     * @param t Normalized (0.0-1.0) x position of the step function on the lightbar.
+     * @param t Normalized (0.0-1.0) x position of the step function on the run.
      * @param slope The slope of edge of the step function.
      * @param maxValue Maximum value of the step function (0.0 - 1.0)
      * @param forward Direction of the step function.

@@ -71,7 +71,7 @@ public class FireflyShow implements Show {
         ui.preview.addComponent(axes);
         pixliteConfig = (UIPixliteConfig) new UIPixliteConfig(ui, lx).setExpanded(false).addToContainer(lx.ui.leftPane.global);
         mappingConfig = (MappingConfig) new MappingConfig(lx.ui, lx).setExpanded(false).addToContainer(lx.ui.leftPane.global);
-        anchorTreeConfig = (AnchorTreeConfig) new AnchorTreeConfig(ui, lx, anchorTreesParams).setExpanded(true).addToContainer(lx.ui.leftPane.global);
+        anchorTreeConfig = (AnchorTreeConfig) new AnchorTreeConfig(ui, lx, anchorTreesParams).setExpanded(false).addToContainer(lx.ui.leftPane.global);
         flowersConfig = (FlowersConfig) new FlowersConfig(lx.ui, lx, FlowersConfig.flowersParamFile).setExpanded(false).addToContainer(lx.ui.leftPane.global);
         runsConfig = (RunsConfig) new RunsConfig(lx.ui, lx, runsConfigParams).setExpanded(false).addToContainer(lx.ui.leftPane.global);
         // Make sure to instantiate any fields that were not auto-instantiated during model building.
