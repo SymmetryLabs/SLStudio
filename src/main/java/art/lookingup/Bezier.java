@@ -82,7 +82,7 @@ public class Bezier {
                 return (((float)(i - 1))/(float)ARC_SAMPLES);
             }
         }
-        return 1f;
+        return 0f;
     }
 
     static public class Point {
