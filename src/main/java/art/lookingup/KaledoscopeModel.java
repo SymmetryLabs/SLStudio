@@ -99,12 +99,12 @@ public class KaledoscopeModel extends SLModel {
          * output.
          *
          * @param run
-         * @param strandId
+         * @param globalStrandId
          * @param strandRunIndex
          * @param beziers
          */
-        public Strand(Run run, int strandId, int strandRunIndex, List<Bezier> beziers) {
-            this.strandId = strandId;
+        public Strand(Run run, int globalStrandId, int strandRunIndex, List<Bezier> beziers) {
+            this.strandId = globalStrandId;
             strandType = StrandType.BUTTERFLY;
             butterflies = new ArrayList<LUButterfly>();
             flowers = new ArrayList<LUFlower>();
@@ -122,7 +122,7 @@ public class KaledoscopeModel extends SLModel {
             // able to perform strand assignment outside of model building in order to
             // adjust strand lengths without restarting the program (just need to restart
             // the network.
-            int configuredNumButterflies = StrandLengths.getNumButterflies(run.runId, strandId);
+            int configuredNumButterflies = StrandLengths.getNumButterflies(run.runId, strandRunIndex);
             //FireflyShow.allStrandLengths.get(strandId);
 
             for (int i = 0; i < configuredNumButterflies; i++) {
@@ -139,7 +139,7 @@ public class KaledoscopeModel extends SLModel {
                 float thisCurveT = bezier.getTAtArcLength(butterflyThisCurveDistance);
                 Bezier.Point bPos = bezier.calculateBezierPoint(thisCurveT);
 
-                LUButterfly butterfly = new LUButterfly(strandId, i, i + prevStrandsButterflies, bPos.x, butterflyYHeight, bPos.y);
+                LUButterfly butterfly = new LUButterfly(globalStrandId, i, i + prevStrandsButterflies, bPos.x, butterflyYHeight, bPos.y);
                 butterflies.add(butterfly);
                 allButterflies.add(butterfly);
                 allPoints.addAll(butterfly.allPoints);
@@ -273,13 +273,17 @@ public class KaledoscopeModel extends SLModel {
             }
         }
 
-        public Run(int runId, List<AnchorTree> trees) {
+        public Run(int runId, List<AnchorTree> trees, float xPos) {
             this.runId = runId;
             this.runType = RunType.BUTTERFLY;
             int numStrands = FireflyShow.butterflyRunsNumStrands.get(runId);
             float treeMargin = 2f;
 
-            beziers = getAnchorTreeBeziers(trees, treeMargin);
+            if (FireflyShow.runsButterflies == 2) {
+                beziers = getAnchorTreeBeziers(trees, treeMargin);
+            } else {
+                beziers = get3RunBeziers(xPos);
+            }
             strands = new ArrayList<Strand>();
             butterflies = new ArrayList<LUButterfly>();
             flowers = new ArrayList<LUFlower>();
@@ -352,6 +356,45 @@ public class KaledoscopeModel extends SLModel {
             Bezier.Point b4C1 = new Bezier.Point(b4Start.x, b4Start.y + bezierCtrlPtYOffset);
             Bezier.Point b4C2 = new Bezier.Point(b4End.x, b4End.y - bezierCtrlPtYOffset);
             Bezier bezier4 = new Bezier(b4Start, b4C1, b4C2, b4End);
+            curves.add(bezier1);
+            curves.add(bezier2);
+            curves.add(bezier3);
+            curves.add(bezier4);
+
+            return curves;
+        }
+
+        public List<Bezier> get3RunBeziers(float pos) {
+            List<Bezier> curves = new ArrayList<Bezier>();
+            float curveEndpointDistance = 80f;
+            float cxOffset= 70f;
+            float cyOffset= 20f;
+
+            Bezier.Point bezierStart = new Bezier.Point(pos, 0f);
+            Bezier.Point bezierEnd = new Bezier.Point(pos, curveEndpointDistance);
+            Bezier.Point bezierC1 = new Bezier.Point(bezierStart.x + cxOffset, bezierStart.y + cyOffset);
+            Bezier.Point bezierC2 = new Bezier.Point(bezierEnd.x + cxOffset, bezierEnd.y - cyOffset);
+            Bezier bezier1 = new Bezier(bezierStart, bezierC1, bezierC2, bezierEnd);
+
+
+            Bezier.Point b2Start = new Bezier.Point(bezierEnd.x, bezierEnd.y);
+            Bezier.Point b2End = new Bezier.Point(bezierEnd.x, curveEndpointDistance * 2);
+            Bezier.Point b2C1 = new Bezier.Point(b2Start.x - cxOffset, b2Start.y + cyOffset);
+            Bezier.Point b2C2 = new Bezier.Point(b2End.x - cxOffset, b2End.y - cyOffset);
+            Bezier bezier2 = new Bezier(b2Start, b2C1, b2C2, b2End);
+
+            Bezier.Point b3Start = new Bezier.Point(b2End.x, b2End.y);
+            Bezier.Point b3End = new Bezier.Point(b2End.x, curveEndpointDistance * 3);
+            Bezier.Point b3C1 = new Bezier.Point(b3Start.x + cxOffset, b3Start.y + cyOffset);
+            Bezier.Point b3C2 = new Bezier.Point(b3End.x + cxOffset, b3End.y - cyOffset);
+            Bezier bezier3 = new Bezier(b3Start, b3C1, b3C2, b3End);
+
+            Bezier.Point b4Start = new Bezier.Point(b3End.x, b3End.y);
+            Bezier.Point b4End = new Bezier.Point(b3End.x, curveEndpointDistance * 4);
+            Bezier.Point b4C1 = new Bezier.Point(b4Start.x - cxOffset, b4Start.y + cyOffset);
+            Bezier.Point b4C2 = new Bezier.Point(b4End.x - cxOffset, b4End.y - cyOffset);
+            Bezier bezier4 = new Bezier(b4Start, b4C1, b4C2, b4End);
+
             curves.add(bezier1);
             curves.add(bezier2);
             curves.add(bezier3);
@@ -437,8 +480,13 @@ public class KaledoscopeModel extends SLModel {
                 anchorTreeRingTop));
         }
 
+        // If we have 3 runs, we will not use the anchor trees for curve definition, so we
+        // should pass in an appropriate x-coordinate starting point for each run.
+        float strandSpacing = 6f * 12f; // strands 6 feet apart
+        float xPos = -strandSpacing;
         for (int i = 0; i < numButterflyRuns; i++) {
-            Run run = new Run(i, anchorTrees);
+            Run run = new Run(i, anchorTrees, xPos);
+            xPos += strandSpacing;
             allRuns.add(run);
             allButterflyRuns.add(run);
             allPoints.addAll(run.allPoints);
@@ -490,6 +538,7 @@ public class KaledoscopeModel extends SLModel {
                 // in order to be able to use a physical jumper to bypass dead butterfly or flower fixtures, we
                 // need to keep them in the model, but not send ArtNet data for them.  When one is marked dead,
                 // none of it's points will be added to addressablePoints.
+                if (strand == null) continue;
                 strand.butterflies = new ArrayList<LUButterfly>();
                 strand.allPoints = new ArrayList<LXPoint>();
                 strand.addressablePoints = new ArrayList<LXPoint>();
@@ -540,9 +589,12 @@ public class KaledoscopeModel extends SLModel {
      *
      * @param runNum Which run of butterflies, starts at 0.
      * @param runStrandNum Which strand on the run, starts at 0.
-     * @return
+     * @return The appropriate strand or null if the address doesn't make sense for this topology.
      */
     static public Strand getButterflyStrandByAddress(int runNum, int runStrandNum) {
+        Run run = allButterflyRuns.get(runNum);
+        if (runStrandNum >= run.strands.size())
+            return null;
         return allButterflyRuns.get(runNum).strands.get(runStrandNum);
     }
 }

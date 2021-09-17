@@ -90,6 +90,11 @@ public class KaledoscopeOutput {
                         if (runNum == -1)
                             continue;
                         KaledoscopeModel.Strand strand = KaledoscopeModel.getButterflyStrandByAddress(runNum, runStrandNum);
+                        // TODO(tracy): When switching between 2 and 3 runs, the number of strands on a run for
+                        // 3 runs is only 2, not 4 so attempting to map that is crashing.  For now, we will just
+                        // return a null strand and if we see that, just skip it.
+                        if (strand == null)
+                            continue;
                         ids = new String[1];
                         ids[0] = "" + strand.strandId;
                     }
