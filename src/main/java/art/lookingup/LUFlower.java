@@ -27,12 +27,12 @@ public class LUFlower {
     FlowerConfig flowerConfig;
     public boolean dead = false;
 
-    public LUFlower(KaledoscopeModel.AnchorTree tree, LUFlower.FlowerConfig flowerConfig, int globalRunNum) {
-        this.x = tree.x + tree.radius * (float) Math.cos(Math.toRadians(flowerConfig.azimuth));
+    public LUFlower(AnchorTree tree, LUFlower.FlowerConfig flowerConfig, int globalRunNum) {
+        this.x = tree.p.x + tree.p.radius * (float) Math.cos(Math.toRadians(flowerConfig.azimuth));
         float ringSpacing = 24f;
-        float topRingHeight = tree.ringTopHeight;
+        float topRingHeight = tree.p.fw1Top;
         this.y = topRingHeight - flowerConfig.ringNum * ringSpacing + flowerConfig.verticalDisplacement;
-        this.z = tree.z + tree.radius * (float) Math.sin(Math.toRadians(flowerConfig.azimuth));
+        this.z = tree.p.z + tree.p.fw1Radius * (float) Math.sin(Math.toRadians(flowerConfig.azimuth));
         this.anchorTree = tree.id;
         this.globalRunNum = globalRunNum;
         this.treeRunNum = flowerConfig.treeRunNum;

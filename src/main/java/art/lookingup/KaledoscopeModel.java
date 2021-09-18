@@ -25,7 +25,7 @@ public class KaledoscopeModel extends SLModel {
     public static List<Run> allFlowerRuns;
     public static List<Strand> allStrands;
     public static float butterflyYHeight = 120f;
-    public static final int NUM_ANCHOR_TREES = 3;
+    public static final int NUM_ANCHOR_TREES = 6;
     public static final int NUM_ANCHOR_TREES_FLOWERS = 3;
     public static final int BEZIERS_PER_RUN = 4;
     public static final int FLOWER_RUNS_PER_TREE = 2;
@@ -177,11 +177,10 @@ public class KaledoscopeModel extends SLModel {
             // TODO
             // We need to continue until thisButterflyCable.prevButterflyCableDistance >= cable.length on
             // all three cables.
+            // How many butterflies so far on this run.
             for (int i = 0; cables.get(0).prevButterflyTotalCableDistance < (cables.get(0).length() - 1f); i++) {
-                // How many butterflies so far on this run.
                 int prevStrandsButterflies = run.butterflies.size();
-                int currentButterflyRunIndex= prevStrandsButterflies + i;
-
+                int currentButterflyRunIndex = prevStrandsButterflies + i;
                 int whichCable = getCableForButterflyRunIndex(currentButterflyRunIndex);
                 Cable thisButterflyCable = cables.get(whichCable);
                 float[] newButterflyPosition = thisButterflyCable.newPosition(6f);
@@ -199,6 +198,9 @@ public class KaledoscopeModel extends SLModel {
                     run.ptsRunInches.put(butterflyPoint.index, thisButterflyCable.prevButterflyTotalCableDistance);
                 }
                 addressablePoints.addAll(butterfly.addressablePoints);
+                thisButterflyCable.points.addAll(butterfly.allPoints);
+                thisButterflyCable.startTree.outPoints.addAll(butterfly.allPoints);
+                thisButterflyCable.endTree.inPoints.addAll(butterfly.allPoints);
             }
         }
 
@@ -300,7 +302,6 @@ public class KaledoscopeModel extends SLModel {
         public List<Bezier> beziers;
         public List<List<Cable>> allCables;
         int runId;
-        static final float bezierCtrlPtYOffset = 20f;
         public Map<Integer, Integer> ptsRunIndex;
         public Map<Integer, Float> ptsRunInches;
 
@@ -340,41 +341,7 @@ public class KaledoscopeModel extends SLModel {
             }
         }
 
-        public Run(int runId, List<AnchorTree> trees, float xPos) {
-            this.runId = runId;
-            this.runType = RunType.BUTTERFLY;
-            int numStrands = FireflyShow.butterflyRunsNumStrands.get(runId);
-            float treeMargin = 2f;
-
-            if (FireflyShow.runsButterflies == 2) {
-                beziers = getAnchorTreeBeziers(trees, treeMargin);
-            } else if (FireflyShow.runsButterflies == 1) {
-                beziers = get1RunBeziers(xPos);
-            } else {
-                beziers = get3RunBeziers(xPos);
-            }
-            strands = new ArrayList<Strand>();
-            butterflies = new ArrayList<LUButterfly>();
-            flowers = new ArrayList<LUFlower>();
-            allPoints = new ArrayList<LXPoint>();
-            ptsRunIndex = new HashMap<Integer, Integer>();
-            ptsRunInches = new HashMap<Integer, Float>();
-
-            for (int i = 0; i < numStrands; i++) {
-                Strand strand = new Strand(this, allStrands.size(), i, beziers);
-                allPoints.addAll(strand.allPoints);
-                butterflies.addAll(strand.butterflies);
-                allStrands.add(strand);
-                strands.add(strand);
-            }
-            int ptRunIndex = 0;
-            for (LXPoint pt : allPoints) {
-                ptsRunIndex.put(pt.index, ptRunIndex);
-                ++ptRunIndex;
-            }
-        }
-
-        public Run(int runId, List<AnchorTree> trees, float xPos, float yPos, float zPos) {
+        public Run(int runId, List<AnchorTree> trees) {
             this.runId = runId;
             this.runType = RunType.BUTTERFLY;
             int numStrands = FireflyShow.butterflyRunsNumStrands.get(runId);
@@ -410,148 +377,6 @@ public class KaledoscopeModel extends SLModel {
             }
         }
 
-        /**
-         * Generate the bezier curves for the butterflies based on the anchor tree locations.  This is for the
-         * scenario with 2 runs of butterflies.
-         *
-         * @param trees
-         * @param treeMargin
-         * @return
-         */
-        public List<Bezier> getAnchorTreeBeziers(List<AnchorTree> trees, float treeMargin) {
-            List<Bezier> curves = new ArrayList<Bezier>();
-            // Run index == 0 needs to be to the left of tree.
-            // Run index == 1 needs to be to the right of tree.
-            float startX = trees.get(0).x - (trees.get(0).radius + treeMargin);
-            if (runId == 1)
-                startX = trees.get(0).x + (trees.get(0).radius + treeMargin);
-            Bezier.Point bezierStart = new Bezier.Point(startX, trees.get(0).z);
-            float endX = trees.get(1).x - (trees.get(1).radius + treeMargin);
-            if (runId == 1)
-                endX = trees.get(1).x + (trees.get(1).radius + treeMargin);
-            Bezier.Point bezierEnd = new Bezier.Point(endX, trees.get(1).z);
-            Bezier.Point bezierC1 = new Bezier.Point(bezierStart.x, bezierStart.y + bezierCtrlPtYOffset);
-            Bezier.Point bezierC2 = new Bezier.Point(bezierEnd.x, bezierEnd.y - bezierCtrlPtYOffset);
-            Bezier bezier1 = new Bezier(bezierStart, bezierC1, bezierC2, bezierEnd);
-
-
-            Bezier.Point b2Start = new Bezier.Point(bezierEnd.x, bezierEnd.y);
-            float endX2 = trees.get(2).x - (trees.get(2).radius + treeMargin);
-            if (runId == 1)
-                endX2 = trees.get(2).x + (trees.get(2).radius + treeMargin);
-            Bezier.Point b2End = new Bezier.Point(endX2, trees.get(2).z);
-            Bezier.Point b2C1 = new Bezier.Point(b2Start.x, b2Start.y + bezierCtrlPtYOffset);
-            Bezier.Point b2C2 = new Bezier.Point(b2End.x, b2End.y - bezierCtrlPtYOffset);
-            Bezier bezier2 = new Bezier(b2Start, b2C1, b2C2, b2End);
-
-            Bezier.Point b3Start = new Bezier.Point(b2End.x, b2End.y);
-            float endX3 = trees.get(3).x - (trees.get(3).radius + treeMargin);
-            if (runId == 1)
-                endX3 = trees.get(3).x + (trees.get(3).radius + treeMargin);
-            Bezier.Point b3End = new Bezier.Point(endX3, trees.get(3).z);
-            Bezier.Point b3C1 = new Bezier.Point(b3Start.x, b3Start.y + bezierCtrlPtYOffset);
-            Bezier.Point b3C2 = new Bezier.Point(b3End.x, b3End.y - bezierCtrlPtYOffset);
-            Bezier bezier3 = new Bezier(b3Start, b3C1, b3C2, b3End);
-
-            Bezier.Point b4Start = new Bezier.Point(b3End.x, b3End.y);
-            float endX4 = trees.get(4).x - (trees.get(4).radius + treeMargin);
-            if (runId == 1)
-                endX4 = trees.get(4).x + (trees.get(4).radius + treeMargin);
-            Bezier.Point b4End = new Bezier.Point(endX4, trees.get(4).z);
-            Bezier.Point b4C1 = new Bezier.Point(b4Start.x, b4Start.y + bezierCtrlPtYOffset);
-            Bezier.Point b4C2 = new Bezier.Point(b4End.x, b4End.y - bezierCtrlPtYOffset);
-            Bezier bezier4 = new Bezier(b4Start, b4C1, b4C2, b4End);
-            curves.add(bezier1);
-            curves.add(bezier2);
-            curves.add(bezier3);
-            curves.add(bezier4);
-
-            return curves;
-        }
-
-        public List<Bezier> get3RunBeziers(float pos) {
-            List<Bezier> curves = new ArrayList<Bezier>();
-            float curveEndpointDistance = 80f;
-            float cxOffset= 70f;
-            float cyOffset= 20f;
-
-            Bezier.Point bezierStart = new Bezier.Point(pos, 0f);
-            Bezier.Point bezierEnd = new Bezier.Point(pos, curveEndpointDistance);
-            Bezier.Point bezierC1 = new Bezier.Point(bezierStart.x + cxOffset, bezierStart.y + cyOffset);
-            Bezier.Point bezierC2 = new Bezier.Point(bezierEnd.x + cxOffset, bezierEnd.y - cyOffset);
-            Bezier bezier1 = new Bezier(bezierStart, bezierC1, bezierC2, bezierEnd);
-
-
-            Bezier.Point b2Start = new Bezier.Point(bezierEnd.x, bezierEnd.y);
-            Bezier.Point b2End = new Bezier.Point(bezierEnd.x, curveEndpointDistance * 2);
-            Bezier.Point b2C1 = new Bezier.Point(b2Start.x - cxOffset, b2Start.y + cyOffset);
-            Bezier.Point b2C2 = new Bezier.Point(b2End.x - cxOffset, b2End.y - cyOffset);
-            Bezier bezier2 = new Bezier(b2Start, b2C1, b2C2, b2End);
-
-            Bezier.Point b3Start = new Bezier.Point(b2End.x, b2End.y);
-            Bezier.Point b3End = new Bezier.Point(b2End.x, curveEndpointDistance * 3);
-            Bezier.Point b3C1 = new Bezier.Point(b3Start.x + cxOffset, b3Start.y + cyOffset);
-            Bezier.Point b3C2 = new Bezier.Point(b3End.x + cxOffset, b3End.y - cyOffset);
-            Bezier bezier3 = new Bezier(b3Start, b3C1, b3C2, b3End);
-
-            Bezier.Point b4Start = new Bezier.Point(b3End.x, b3End.y);
-            Bezier.Point b4End = new Bezier.Point(b3End.x, curveEndpointDistance * 4);
-            Bezier.Point b4C1 = new Bezier.Point(b4Start.x - cxOffset, b4Start.y + cyOffset);
-            Bezier.Point b4C2 = new Bezier.Point(b4End.x - cxOffset, b4End.y - cyOffset);
-            Bezier bezier4 = new Bezier(b4Start, b4C1, b4C2, b4End);
-
-            curves.add(bezier1);
-            curves.add(bezier2);
-            curves.add(bezier3);
-            curves.add(bezier4);
-
-            return curves;
-        }
-
-        /**
-         * This should be enough curves to create a zigzag pattern.  We will just flatten the curves
-         * to a line (c1 = start, c2 = end).
-         * @param pos
-         * @return
-         */
-        public List<Bezier> get1RunBeziers(float pos) {
-            List<Bezier> curves = new ArrayList<Bezier>();
-            float curveEndpointDistance = 80f;
-            float cxOffset= 70f;
-            float cyOffset= 20f;
-
-            Bezier.Point bezierStart = new Bezier.Point(pos, 0f);
-            Bezier.Point bezierEnd = new Bezier.Point(pos, curveEndpointDistance);
-            Bezier.Point bezierC1 = new Bezier.Point(bezierStart.x + cxOffset, bezierStart.y + cyOffset);
-            Bezier.Point bezierC2 = new Bezier.Point(bezierEnd.x + cxOffset, bezierEnd.y - cyOffset);
-            Bezier bezier1 = new Bezier(bezierStart, bezierC1, bezierC2, bezierEnd);
-
-
-            Bezier.Point b2Start = new Bezier.Point(bezierEnd.x, bezierEnd.y);
-            Bezier.Point b2End = new Bezier.Point(bezierEnd.x, curveEndpointDistance * 2);
-            Bezier.Point b2C1 = new Bezier.Point(b2Start.x - cxOffset, b2Start.y + cyOffset);
-            Bezier.Point b2C2 = new Bezier.Point(b2End.x - cxOffset, b2End.y - cyOffset);
-            Bezier bezier2 = new Bezier(b2Start, b2C1, b2C2, b2End);
-
-            Bezier.Point b3Start = new Bezier.Point(b2End.x, b2End.y);
-            Bezier.Point b3End = new Bezier.Point(b2End.x, curveEndpointDistance * 3);
-            Bezier.Point b3C1 = new Bezier.Point(b3Start.x + cxOffset, b3Start.y + cyOffset);
-            Bezier.Point b3C2 = new Bezier.Point(b3End.x + cxOffset, b3End.y - cyOffset);
-            Bezier bezier3 = new Bezier(b3Start, b3C1, b3C2, b3End);
-
-            Bezier.Point b4Start = new Bezier.Point(b3End.x, b3End.y);
-            Bezier.Point b4End = new Bezier.Point(b3End.x, curveEndpointDistance * 4);
-            Bezier.Point b4C1 = new Bezier.Point(b4Start.x - cxOffset, b4Start.y + cyOffset);
-            Bezier.Point b4C2 = new Bezier.Point(b4End.x - cxOffset, b4End.y - cyOffset);
-            Bezier bezier4 = new Bezier(b4Start, b4C1, b4C2, b4End);
-
-            curves.add(bezier1);
-            curves.add(bezier2);
-            curves.add(bezier3);
-            curves.add(bezier4);
-
-            return curves;
-        }
 
         /**
          * Returns an array of lists of cable.  The first element of the array is a list of cable segments representing
@@ -560,72 +385,34 @@ public class KaledoscopeModel extends SLModel {
          * @return
          */
         public List<List<Cable>> getAnchorTreeCables(List<AnchorTree> anchorTrees) {
-            // This first anchor point is not a tree.
-            float prevAnchorX = 0f;
-            float prevAnchorY = 10 * 12f;  // 10ft TODO configurable
-            float prevAnchorZ = 0f;
             // All cables for the entire run.
             List<List<Cable>> allCableRuns = new ArrayList<List<Cable>>();
-            float lowerCableDistance = 24f;  // 6 inches.
             for (int whichCableRun = 0; whichCableRun < 3; whichCableRun++) {
                 List<Cable> cableRun = new ArrayList<Cable>();
-                // First cable is from common fixed point to first anchor tree.
-                float startX = prevAnchorX;
-                float startY = prevAnchorY;
-                float startZ = prevAnchorZ;
-                float endX = anchorTrees.get(0).x;
-                if (whichCableRun == 0) {
-                     endX -= anchorTrees.get(0).radius;
-                } else if (whichCableRun == 1) {
-                    endX += anchorTrees.get(0).radius;
-                } // third bottom cable ends in middle of tree?
-                float endZ = anchorTrees.get(0).z;
-                // Technically, the bottom cable ends at tree.z - radius but it is okay to just
-                // pretend that it travels through the tree.  It just isn't possible to attach a butterfly
-                // at that position.
-                float endY = 10 * 12f; // 10ft TODO configurable based on first tree.
-                if (whichCableRun == 2) {
-                    // 6 inches.  It isn't possible to mount them at 12" lower because then any jump from cable
-                    // to cable would necessarily be more than 12".  It is dependent on the tree radius.  Specifically,
-                    //  a^2 + b^2 = c^2
-                    // radius = a, b = 6, and c = 12, i.e. sqrt(144 - 36), sqrt(108) = 10.4" maximum radius.
-                    // Although, it is possible if the butterfly does not change cables near the tree.
-                    endY -= lowerCableDistance;
-                }
-                Cable cable = new Cable(startX, startY, startZ, endX, endY, endZ, whichCableRun);
-                cableRun.add(cable);
 
+                // TODO(tracy):
                 for (int treeNum = 0; treeNum < anchorTrees.size() - 1; treeNum++) {
-                    AnchorTree anchorTree = anchorTrees.get(treeNum);
-                    startX = anchorTree.x;
-                    if (whichCableRun == 0) {
-                        startX -= anchorTree.radius;
-                    } else if (whichCableRun == 1) {
-                        startX += anchorTree.radius;
+                    AnchorTree tree = anchorTrees.get(treeNum);
+                    // Don't include trees that are not specified as butterfly anchors.
+                    if (!tree.p.isButterflyAnchor)
+                        continue;
+                    float startX = tree.getCableAnchorX(whichCableRun);
+                    float startY = tree.getCableHeight(whichCableRun);
+                    float startZ = tree.p.z;
+                    int nextOffset = 1;
+                    AnchorTree nextAnchorTree = anchorTrees.get(treeNum + nextOffset);
+                    while (!nextAnchorTree.p.isButterflyAnchor && (treeNum + nextOffset) < anchorTrees.size()) {
+                        ++nextOffset;
+                        nextAnchorTree = anchorTrees.get(treeNum + nextOffset);
                     }
-                    startY = 10f * 12f; // 10 ft TODO configurable
-                    if (whichCableRun == 2) {
-                        // 6 inches.  It isn't possible to mount them at 12" lower because then any jump from cable
-                        // to cable would necessarily be more than 12".  It is dependent on the tree radius.  Specifically,
-                        //  a^2 + b^2 = c^2
-                        // radius = a, b = 6, and c = 12, i.e. sqrt(144 - 36), sqrt(108) = 10.4" maximum radius.
-                        // Although, it is possible if the butterfly does not change cables near the tree.
-                        startY -= lowerCableDistance;
-                    }
-                    startZ = anchorTree.z;
-                    AnchorTree nextAnchorTree = anchorTrees.get(treeNum + 1);
-                    endX = nextAnchorTree.x;
-                    if (whichCableRun == 0) {
-                        endX -= nextAnchorTree.radius;
-                    } else if (whichCableRun == 1) {
-                        endX += nextAnchorTree.radius;
-                    }
-                    endY = 10f * 12f; // TODO configurable on next anchor tree.
-                    if (whichCableRun == 2) {
-                        endY -= lowerCableDistance;
-                    }
-                    endZ = nextAnchorTree.z;
-                    cable = new Cable(startX, startY, startZ, endX, endY, endZ, whichCableRun);
+                    float endX = nextAnchorTree.getCableAnchorX(whichCableRun);
+                    float endY = tree.getCableHeight(whichCableRun);
+                    float endZ = nextAnchorTree.p.z;
+                    Cable cable = new Cable(startX, startY, startZ, endX, endY, endZ, whichCableRun);
+                    tree.outCables[whichCableRun] = cable;
+                    nextAnchorTree.inCables[whichCableRun] = cable;
+                    cable.startTree = tree;
+                    cable.endTree = nextAnchorTree;
                     cableRun.add(cable);
                 }
                 allCableRuns.add(cableRun);
@@ -664,6 +451,9 @@ public class KaledoscopeModel extends SLModel {
         public float endY;
         public float[] unitVector;
         public int whichCableRun;  // 0 left, 1 right, 2 lower centered.
+        public AnchorTree startTree;
+        public AnchorTree endTree;
+        public List<LXPoint> points;
 
         // Used during the construction of the butterfly runs.  Track the position of the last butterfly on this
         // cable so that for the next butterfly we can use the cable-distance between the two to compute the new
@@ -685,6 +475,7 @@ public class KaledoscopeModel extends SLModel {
             prevButterflyY = startY;
             prevButterflyZ = startZ;
             this.whichCableRun = whichCableRun;
+            points = new ArrayList<LXPoint>();
         }
         public float length() {
             float diffX = endX - startX;
@@ -725,39 +516,6 @@ public class KaledoscopeModel extends SLModel {
         }
     }
 
-    /**
-     * Anchor trees are the trees that the cabling is anchored to.  The tree positions determine the flower strand
-     * locations and the control points on the bezier curves.  The diameter of the trees determine the helical shape
-     * of the flower strands.
-     *
-     * We will perform the same procedure we used for computing bezier curve arc lengths.  Just sample many times
-     * along the helix to compute a helix approximated by many short line segments.  We can then map those segments
-     * to t values and then for a provided length add up segments until we achieve that length and then pick
-     * a nearby t value.
-     *
-     * Five generated tree coordinates:
-     * 60.0,12.0 : -60.0,252.0 : 60.0,492.0 : -60.0,732.0 : 60.0,972.0
-     */
-    static public class AnchorTree {
-        int id;
-        public float x;
-        public float z;
-        public float radius;
-        public float ringTopHeight;
-        // Make it easy to address specific flowers via the anchor tree.
-        public List<Run> flowerRuns;
-
-        public AnchorTree(int id, float x, float z, float radius, float ringTopHeight) {
-            this.id = id;
-            this.x = x;
-            this.z = z;
-            this.ringTopHeight = ringTopHeight;
-            logger.info("Anchor tree coordinates: " + x + "," + z);
-            this.radius = radius;
-            flowerRuns = new ArrayList<Run>();
-        }
-    }
-
     static public KaledoscopeModel createModel(int numButterflyRuns) {
         List<LXPoint> allPoints = new ArrayList<LXPoint>();
 
@@ -773,31 +531,17 @@ public class KaledoscopeModel extends SLModel {
 
 
         for (int i = 0; i < NUM_ANCHOR_TREES; i++){
-            float x = -5f * 12f;
-            if (i % 2 == 0)
-                x += 10 * 12f;
-            // The 5th tree is just an anchor for a bezier curve and does not contain any flower rings.
-            float anchorTreeRingTop = 9f * 12f;
-            if (i < 4) {
-               anchorTreeRingTop = FireflyShow.anchorTreesRingTops.get(i);
-            }
-            anchorTrees.add(new AnchorTree(i, FireflyShow.anchorTreesPos.get(i*2),
-                FireflyShow.anchorTreesPos.get(i*2 + 1), FireflyShow.anchorTreesRadii.get(i),
-                anchorTreeRingTop));
+            anchorTrees.add(new AnchorTree(i));
         }
 
-        // If we have 3 runs, we will not use the anchor trees for curve definition, so we
-        // should pass in an appropriate x-coordinate starting point for each run.
-        float strandSpacing = 6f * 12f; // strands 6 feet apart
-        float xPos = -strandSpacing;
         for (int i = 0; i < numButterflyRuns; i++) {
             Run run;
             if (FireflyShow.runsButterflies == 1) {
-                run = new Run(i, anchorTrees, 0f, 0f, 0f);
+                run = new Run(i, anchorTrees);
             } else {
-                run = new Run(i, anchorTrees, xPos);
+                logger.severe("Only 1 run of butterflies currently supported!");
+                run = null;
             }
-            xPos += strandSpacing;
             allRuns.add(run);
             allButterflyRuns.add(run);
             allPoints.addAll(run.allPoints);
@@ -805,11 +549,10 @@ public class KaledoscopeModel extends SLModel {
         }
         logger.info("Total butterflies: " + allButterflyRuns.get(0).butterflies.size());
 
-        //int flowerRuns = FireflyShow.runsFlowers;
-        // There are two runs of flowers per tree. Each run is just a single strand.
-        for (int i = 0; i < NUM_ANCHOR_TREES_FLOWERS; i++) {
+        for (int i = 0; i < NUM_ANCHOR_TREES; i++) {
             List<Run> treeFlowerRuns = new ArrayList<Run>();
-            for (int j = 0; j < FLOWER_RUNS_PER_TREE; j++) {
+            AnchorTree tree = anchorTrees.get(i);
+            for (int j = 0; j < tree.numberFlowerRuns(); j++) {
                 Run run = new Run(allRuns.size(), Run.RunType.FLOWER, anchorTrees.get(i), j);
                 allRuns.add(run);
                 allFlowerRuns.add(run);

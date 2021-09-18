@@ -161,6 +161,16 @@ public class ParameterFile {
     }
 
     /**
+     * Return a string parameter as a float.  Convenience function.
+     * @param name
+     * @param value
+     * @return
+     */
+    public float getStringParameterF(String name, String value) {
+        return Float.parseFloat(getStringParameter(name, value).getString());
+    }
+
+    /**
      * Create a new DiscreteParameter to be saved.
      *
      * @param name The label for the DiscreteParameter.  Used as a key in properties file.  Must be unique.

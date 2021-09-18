@@ -1,111 +1,86 @@
 package art.lookingup.ui;
 
+import art.lookingup.AnchorTree;
+import art.lookingup.KaledoscopeModel;
 import art.lookingup.ParameterFile;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.LXParameter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class AnchorTreeConfig extends UIConfig {
-    public static final String TREE1_X = "tree1_x";
-    public static final String TREE1_Z = "tree1_z";
-    public static final String TREE1_RADIUS = "tree1_radius";
-    public static final String TREE1_RING_TOP = "t1_ringtop";
-    public static final String TREE2_X = "tree2_x";
-    public static final String TREE2_Z = "tree2_z";
-    public static final String TREE2_RADIUS = "tree2_radius";
-    public static final String TREE2_RING_TOP = "t2_ringtop";
-    public static final String TREE3_X = "tree3_x";
-    public static final String TREE3_Z = "tree3_z";
-    public static final String TREE3_RADIUS = "tree3_radius";
-    public static final String TREE3_RING_TOP = "t3_ringtop";
-    public static final String TREE4_X = "tree4_x";
-    public static final String TREE4_Z = "tree4_z";
-    public static final String TREE4_RADIUS = "tree4_radius";
-    public static final String TREE4_RING_TOP = "t4_ringtop";
-    public static final String TREE5_X = "tree5_x";
-    public static final String TREE5_Z = "tree5_z";
-    public static final String TREE5_RADIUS = "tree5_radius";
+    public static final String TREE_BASE = "t";
+    public static final String TREE_X = "_x";
+    public static final String TREE_Z = "_z";
+    public static final String TREE_BF = "_butterfly";  // 1 = butterfly anchor, 0 = not
+    public static final String TREE_RADIUS = "_radius";
+    public static final String TREE_C1_Y = "_c1_y";  // cable mounting height.
+    public static final String TREE_C2_Y = "_c2_y";
+    public static final String TREE_C3_Y = "_c3_y";
+    public static final String TREE_FW1_TOP = "_fw1_top";
+    public static final String TREE_FW1_RADIUS = "_fw1_rad";
+    public static final String TREE_FW2_TOP = "_fw2_top";
+    public static final String TREE_FW2_RADIUS = "_fw2_rad";
+
     public static final String title = "trees";
     public static final String filename = "trees.json";
     public LX lx;
     private boolean parameterChanged = false;
+    static public ParameterFile anchorTreeParamFile;
 
     public AnchorTreeConfig(final SLStudioLX.UI ui, LX lx, ParameterFile parameterFile) {
         super(ui, title, filename, parameterFile);
 
         this.lx = lx;
 
-        registerStringParameter(TREE1_X, null);
-        registerStringParameter(TREE1_Z, null);
-        registerStringParameter(TREE1_RADIUS, null);
-        registerStringParameter(TREE1_RING_TOP, null);
-        registerStringParameter(TREE2_X, null);
-        registerStringParameter(TREE2_Z, null);
-        registerStringParameter(TREE2_RADIUS, null);
-        registerStringParameter(TREE2_RING_TOP, null);
-        registerStringParameter(TREE3_X, null);
-        registerStringParameter(TREE3_Z, null);
-        registerStringParameter(TREE3_RADIUS, null);
-        registerStringParameter(TREE3_RING_TOP, null);
-        registerStringParameter(TREE4_X, null);
-        registerStringParameter(TREE4_Z, null);
-        registerStringParameter(TREE4_RADIUS, null);
-        registerStringParameter(TREE4_RING_TOP, null);
-        registerStringParameter(TREE5_X, null);
-        registerStringParameter(TREE5_Z, null);
-        registerStringParameter(TREE5_RADIUS, null);
+        for (int treeNum = 0; treeNum < KaledoscopeModel.NUM_ANCHOR_TREES; treeNum++) {
+            registerStringParameter(TREE_BASE + treeNum + TREE_X, null);
+            registerStringParameter(TREE_BASE + treeNum + TREE_Z, null);
+            registerStringParameter(TREE_BASE + treeNum + TREE_BF, null);
+            registerStringParameter(TREE_BASE + treeNum + TREE_RADIUS, null);
+            registerStringParameter(TREE_BASE + treeNum + TREE_C1_Y, null);
+            registerStringParameter(TREE_BASE + treeNum + TREE_C2_Y, null);
+            registerStringParameter(TREE_BASE + treeNum + TREE_C3_Y, null);
+            registerStringParameter(TREE_BASE + treeNum + TREE_FW1_TOP, null);
+            registerStringParameter(TREE_BASE + treeNum + TREE_FW1_RADIUS, null);
+            registerStringParameter(TREE_BASE + treeNum + TREE_FW2_TOP, null);
+            registerStringParameter(TREE_BASE + treeNum + TREE_FW2_RADIUS, null);
+        }
 
         save();
 
         buildUI(ui);
     }
 
-    static public List<Float> getTreesPos(ParameterFile pFile) {
-        List<Float> treesPos = new ArrayList<Float>(0);
-        /*
-         * Five generated tree coordinates:
-         * 60.0,12.0 : -60.0,252.0 : 60.0,492.0 : -60.0,732.0 : 60.0,972.0
-         */
-        treesPos.add(Float.parseFloat(pFile.getStringParameter(TREE1_X, "60.0").getString()));
-        treesPos.add(Float.parseFloat(pFile.getStringParameter(TREE1_Z, "12.0").getString()));
-        treesPos.add(Float.parseFloat(pFile.getStringParameter(TREE2_X, "-60.0").getString()));
+    static public AnchorTree.AnchorTreeParams getAnchorTree(int treeNum) {
+        if (anchorTreeParamFile == null)
+            anchorTreeParamFile = ParameterFile.instantiateAndLoad(filename);
+        AnchorTree.AnchorTreeParams p = new AnchorTree.AnchorTreeParams();
+        float zSpacing = 15f * 12f; // 15 feet in Z
+        float xOffset = 5f * 12f; // 5 feet offset horizontally from center.
+        if (treeNum % 2 == 1) {
+            xOffset = -xOffset;
+        }
+        p.x = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_X, "" + xOffset);
+        p.z = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_Z, "" + (treeNum * zSpacing));
+        int radius = 12;
+        if (treeNum % 2 == 1)
+            radius = 24;
+        p.radius = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_RADIUS, "" + radius);
 
-        treesPos.add(Float.parseFloat(pFile.getStringParameter(TREE2_Z, "252.0").getString()));
-        treesPos.add(Float.parseFloat(pFile.getStringParameter(TREE3_X, "60.0").getString()));
-        treesPos.add(Float.parseFloat(pFile.getStringParameter(TREE3_Z, "492.0").getString()));
-        treesPos.add(Float.parseFloat(pFile.getStringParameter(TREE4_X, "-60.0").getString()));
-        treesPos.add(Float.parseFloat(pFile.getStringParameter(TREE4_Z, "732.0").getString()));
-        treesPos.add(Float.parseFloat(pFile.getStringParameter(TREE5_X, "60.0").getString()));
-        treesPos.add(Float.parseFloat(pFile.getStringParameter(TREE5_Z, "972.0").getString()));
-        return treesPos;
-    }
+        // Flowers are pre-mounted on cages wrapped around the trees.  We allow for the cage-specific radius to be
+        // specified because the radius at the anchor cable mounting might be different than the radius where the cage
+        // is mounted.
+        p.fw1Top = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_FW1_TOP, "120");
+        p.fw1Radius = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_FW1_RADIUS, "" + radius);
+        p.fw2Top = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_FW2_TOP, "72");
+        p.fw2Radius = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_FW2_RADIUS, "" + radius);
 
-    static public List<Float> getTreesRadii(ParameterFile pFile) {
-        List<Float> treesRadii = new ArrayList<Float>(0);
+        p.isButterflyAnchor = Integer.parseInt(anchorTreeParamFile.getStringParameter(TREE_BASE + treeNum + TREE_BF, "1").getString()) != 0;
 
-        treesRadii.add(Float.parseFloat(pFile.getStringParameter(TREE1_RADIUS, "12.0").getString()));
-        treesRadii.add(Float.parseFloat(pFile.getStringParameter(TREE2_RADIUS, "24.0").getString()));
-        treesRadii.add(Float.parseFloat(pFile.getStringParameter(TREE3_RADIUS, "12.0").getString()));
-        treesRadii.add(Float.parseFloat(pFile.getStringParameter(TREE4_RADIUS, "24.0").getString()));
-        treesRadii.add(Float.parseFloat(pFile.getStringParameter(TREE5_RADIUS, "12.0").getString()));
-        return treesRadii;
-    }
-
-    /**
-     * Ring tops are the top height of flower rings.
-     * @param pFile
-     * @return
-     */
-    static public List<Float> getTreesRingTops(ParameterFile pFile) {
-        List<Float> ringTops = new ArrayList<Float>();
-        ringTops.add(Float.parseFloat(pFile.getStringParameter(TREE1_RING_TOP, "" + 9f * 12f).getString()));
-        ringTops.add(Float.parseFloat(pFile.getStringParameter(TREE2_RING_TOP, "" + 9f * 12f).getString()));
-        ringTops.add(Float.parseFloat(pFile.getStringParameter(TREE3_RING_TOP, "" + 9f * 12f).getString()));
-        ringTops.add(Float.parseFloat(pFile.getStringParameter(TREE4_RING_TOP, "" + 9f * 12f).getString()));
-        return ringTops;
+        p.c1Y = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_C1_Y, "120");
+        p.c2Y = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_C2_Y, "114");
+        p.c3Y = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_C3_Y, "120");
+        return p;
     }
 
     @Override

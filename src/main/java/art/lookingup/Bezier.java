@@ -1,5 +1,8 @@
 package art.lookingup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Bezier {
     public Point start;
     public Point c1;
@@ -84,6 +87,195 @@ public class Bezier {
         }
         return 0f;
     }
+
+    // Moved anchor tree bezier curve generation out of model creation to clean up the code over there
+    // since we are not using this method.
+    /**
+     * Generate the run using Bezier curves.  We are currently not using this.
+     *
+     * @param runId
+     * @param trees
+     * @param xPos
+     *
+    public Run(int runId, List<KaledoscopeModel.AnchorTree> trees, float xPos) {
+        this.runId = runId;
+        this.runType = KaledoscopeModel.Run.RunType.BUTTERFLY;
+        int numStrands = FireflyShow.butterflyRunsNumStrands.get(runId);
+        float treeMargin = 2f;
+
+        if (FireflyShow.runsButterflies == 2) {
+            beziers = Bezier.getAnchorTreeBeziers(runId, trees, treeMargin);
+        } else if (FireflyShow.runsButterflies == 1) {
+            beziers = Bezier.get1RunBeziers(xPos);
+        } else {
+            beziers = Bezier.get3RunBeziers(xPos);
+        }
+        strands = new ArrayList<KaledoscopeModel.Strand>();
+        butterflies = new ArrayList<LUButterfly>();
+        flowers = new ArrayList<LUFlower>();
+        allPoints = new ArrayList<LXPoint>();
+        ptsRunIndex = new HashMap<Integer, Integer>();
+        ptsRunInches = new HashMap<Integer, Float>();
+
+        for (int i = 0; i < numStrands; i++) {
+            KaledoscopeModel.Strand strand = new KaledoscopeModel.Strand(this, allStrands.size(), i, beziers);
+            allPoints.addAll(strand.allPoints);
+            butterflies.addAll(strand.butterflies);
+            allStrands.add(strand);
+            strands.add(strand);
+        }
+        int ptRunIndex = 0;
+        for (LXPoint pt : allPoints) {
+            ptsRunIndex.put(pt.index, ptRunIndex);
+            ++ptRunIndex;
+        }
+    }
+    */
+
+    static final float bezierCtrlPtYOffset = 20f;
+    /**
+     * Generate the bezier curves for the butterflies based on the anchor tree locations.  This is for the
+     * scenario with 2 runs of butterflies.
+     *
+     * @param trees
+     * @param treeMargin
+     * @return
+     */
+    static public List<Bezier> getAnchorTreeBeziers(int runId, List<AnchorTree> trees, float treeMargin) {
+        List<Bezier> curves = new ArrayList<Bezier>();
+        // Run index == 0 needs to be to the left of tree.
+        // Run index == 1 needs to be to the right of tree.
+        float startX = trees.get(0).p.x - (trees.get(0).p.radius + treeMargin);
+        if (runId == 1)
+            startX = trees.get(0).p.x + (trees.get(0).p.radius + treeMargin);
+        Bezier.Point bezierStart = new Bezier.Point(startX, trees.get(0).p.z);
+        float endX = trees.get(1).p.x - (trees.get(1).p.radius + treeMargin);
+        if (runId == 1)
+            endX = trees.get(1).p.x + (trees.get(1).p.radius + treeMargin);
+        Bezier.Point bezierEnd = new Bezier.Point(endX, trees.get(1).p.z);
+        Bezier.Point bezierC1 = new Bezier.Point(bezierStart.x, bezierStart.y + bezierCtrlPtYOffset);
+        Bezier.Point bezierC2 = new Bezier.Point(bezierEnd.x, bezierEnd.y - bezierCtrlPtYOffset);
+        Bezier bezier1 = new Bezier(bezierStart, bezierC1, bezierC2, bezierEnd);
+
+
+        Bezier.Point b2Start = new Bezier.Point(bezierEnd.x, bezierEnd.y);
+        float endX2 = trees.get(2).p.x - (trees.get(2).p.radius + treeMargin);
+        if (runId == 1)
+            endX2 = trees.get(2).p.x + (trees.get(2).p.radius + treeMargin);
+        Bezier.Point b2End = new Bezier.Point(endX2, trees.get(2).p.z);
+        Bezier.Point b2C1 = new Bezier.Point(b2Start.x, b2Start.y + bezierCtrlPtYOffset);
+        Bezier.Point b2C2 = new Bezier.Point(b2End.x, b2End.y - bezierCtrlPtYOffset);
+        Bezier bezier2 = new Bezier(b2Start, b2C1, b2C2, b2End);
+
+        Bezier.Point b3Start = new Bezier.Point(b2End.x, b2End.y);
+        float endX3 = trees.get(3).p.x - (trees.get(3).p.radius + treeMargin);
+        if (runId == 1)
+            endX3 = trees.get(3).p.x + (trees.get(3).p.radius + treeMargin);
+        Bezier.Point b3End = new Bezier.Point(endX3, trees.get(3).p.z);
+        Bezier.Point b3C1 = new Bezier.Point(b3Start.x, b3Start.y + bezierCtrlPtYOffset);
+        Bezier.Point b3C2 = new Bezier.Point(b3End.x, b3End.y - bezierCtrlPtYOffset);
+        Bezier bezier3 = new Bezier(b3Start, b3C1, b3C2, b3End);
+
+        Bezier.Point b4Start = new Bezier.Point(b3End.x, b3End.y);
+        float endX4 = trees.get(4).p.x - (trees.get(4).p.radius + treeMargin);
+        if (runId == 1)
+            endX4 = trees.get(4).p.x + (trees.get(4).p.radius + treeMargin);
+        Bezier.Point b4End = new Bezier.Point(endX4, trees.get(4).p.z);
+        Bezier.Point b4C1 = new Bezier.Point(b4Start.x, b4Start.y + bezierCtrlPtYOffset);
+        Bezier.Point b4C2 = new Bezier.Point(b4End.x, b4End.y - bezierCtrlPtYOffset);
+        Bezier bezier4 = new Bezier(b4Start, b4C1, b4C2, b4End);
+        curves.add(bezier1);
+        curves.add(bezier2);
+        curves.add(bezier3);
+        curves.add(bezier4);
+
+        return curves;
+    }
+
+    static public List<Bezier> get3RunBeziers(float pos) {
+        List<Bezier> curves = new ArrayList<Bezier>();
+        float curveEndpointDistance = 80f;
+        float cxOffset= 70f;
+        float cyOffset= 20f;
+
+        Bezier.Point bezierStart = new Bezier.Point(pos, 0f);
+        Bezier.Point bezierEnd = new Bezier.Point(pos, curveEndpointDistance);
+        Bezier.Point bezierC1 = new Bezier.Point(bezierStart.x + cxOffset, bezierStart.y + cyOffset);
+        Bezier.Point bezierC2 = new Bezier.Point(bezierEnd.x + cxOffset, bezierEnd.y - cyOffset);
+        Bezier bezier1 = new Bezier(bezierStart, bezierC1, bezierC2, bezierEnd);
+
+
+        Bezier.Point b2Start = new Bezier.Point(bezierEnd.x, bezierEnd.y);
+        Bezier.Point b2End = new Bezier.Point(bezierEnd.x, curveEndpointDistance * 2);
+        Bezier.Point b2C1 = new Bezier.Point(b2Start.x - cxOffset, b2Start.y + cyOffset);
+        Bezier.Point b2C2 = new Bezier.Point(b2End.x - cxOffset, b2End.y - cyOffset);
+        Bezier bezier2 = new Bezier(b2Start, b2C1, b2C2, b2End);
+
+        Bezier.Point b3Start = new Bezier.Point(b2End.x, b2End.y);
+        Bezier.Point b3End = new Bezier.Point(b2End.x, curveEndpointDistance * 3);
+        Bezier.Point b3C1 = new Bezier.Point(b3Start.x + cxOffset, b3Start.y + cyOffset);
+        Bezier.Point b3C2 = new Bezier.Point(b3End.x + cxOffset, b3End.y - cyOffset);
+        Bezier bezier3 = new Bezier(b3Start, b3C1, b3C2, b3End);
+
+        Bezier.Point b4Start = new Bezier.Point(b3End.x, b3End.y);
+        Bezier.Point b4End = new Bezier.Point(b3End.x, curveEndpointDistance * 4);
+        Bezier.Point b4C1 = new Bezier.Point(b4Start.x - cxOffset, b4Start.y + cyOffset);
+        Bezier.Point b4C2 = new Bezier.Point(b4End.x - cxOffset, b4End.y - cyOffset);
+        Bezier bezier4 = new Bezier(b4Start, b4C1, b4C2, b4End);
+
+        curves.add(bezier1);
+        curves.add(bezier2);
+        curves.add(bezier3);
+        curves.add(bezier4);
+
+        return curves;
+    }
+
+    /**
+     * This should be enough curves to create a zigzag pattern.  We will just flatten the curves
+     * to a line (c1 = start, c2 = end).
+     * @param pos
+     * @return
+     */
+    static public List<Bezier> get1RunBeziers(float pos) {
+        List<Bezier> curves = new ArrayList<Bezier>();
+        float curveEndpointDistance = 80f;
+        float cxOffset= 70f;
+        float cyOffset= 20f;
+
+        Bezier.Point bezierStart = new Bezier.Point(pos, 0f);
+        Bezier.Point bezierEnd = new Bezier.Point(pos, curveEndpointDistance);
+        Bezier.Point bezierC1 = new Bezier.Point(bezierStart.x + cxOffset, bezierStart.y + cyOffset);
+        Bezier.Point bezierC2 = new Bezier.Point(bezierEnd.x + cxOffset, bezierEnd.y - cyOffset);
+        Bezier bezier1 = new Bezier(bezierStart, bezierC1, bezierC2, bezierEnd);
+
+
+        Bezier.Point b2Start = new Bezier.Point(bezierEnd.x, bezierEnd.y);
+        Bezier.Point b2End = new Bezier.Point(bezierEnd.x, curveEndpointDistance * 2);
+        Bezier.Point b2C1 = new Bezier.Point(b2Start.x - cxOffset, b2Start.y + cyOffset);
+        Bezier.Point b2C2 = new Bezier.Point(b2End.x - cxOffset, b2End.y - cyOffset);
+        Bezier bezier2 = new Bezier(b2Start, b2C1, b2C2, b2End);
+
+        Bezier.Point b3Start = new Bezier.Point(b2End.x, b2End.y);
+        Bezier.Point b3End = new Bezier.Point(b2End.x, curveEndpointDistance * 3);
+        Bezier.Point b3C1 = new Bezier.Point(b3Start.x + cxOffset, b3Start.y + cyOffset);
+        Bezier.Point b3C2 = new Bezier.Point(b3End.x + cxOffset, b3End.y - cyOffset);
+        Bezier bezier3 = new Bezier(b3Start, b3C1, b3C2, b3End);
+
+        Bezier.Point b4Start = new Bezier.Point(b3End.x, b3End.y);
+        Bezier.Point b4End = new Bezier.Point(b3End.x, curveEndpointDistance * 4);
+        Bezier.Point b4C1 = new Bezier.Point(b4Start.x - cxOffset, b4Start.y + cyOffset);
+        Bezier.Point b4C2 = new Bezier.Point(b4End.x - cxOffset, b4End.y - cyOffset);
+        Bezier bezier4 = new Bezier(b4Start, b4C1, b4C2, b4End);
+
+        curves.add(bezier1);
+        curves.add(bezier2);
+        curves.add(bezier3);
+        curves.add(bezier4);
+
+        return curves;
+    }
+
 
     static public class Point {
         public float x;
