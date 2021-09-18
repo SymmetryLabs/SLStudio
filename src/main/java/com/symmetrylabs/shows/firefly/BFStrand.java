@@ -5,15 +5,20 @@ import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
 public class BFStrand extends SLPattern {
     public static final String GROUP_NAME = FireflyShow.SHOW_NAME;
 
     DiscreteParameter strandNum = new DiscreteParameter("strand", 0, 0, 100);
+    BooleanParameter tracer = new BooleanParameter("tracer", false);
+    public int currentIndex;
+
     public BFStrand(LX lx) {
         super(lx);
         addParameter("strand", strandNum);
+        addParameter("tracer", tracer);
     }
 
     @Override
@@ -26,8 +31,17 @@ public class BFStrand extends SLPattern {
         for (LXPoint p : model.points) {
             colors[p.index] = LXColor.rgb(0, 0, 0);
         }
-        for (LXPoint p : KaledoscopeModel.allStrands.get(strandNum.getValuei()).allPoints) {
-            colors[p.index] = LXColor.rgb(255, 255, 255);
+        KaledoscopeModel.Strand strand = KaledoscopeModel.allStrands.get(0);
+        if (tracer.getValueb()) {
+            for (int i = 0; i < strand.allPoints.size(); i++) {
+                if (currentIndex == i)
+                    colors[strand.allPoints.get(i).index] = LXColor.rgb(255, 255, 255);
+            }
+            currentIndex = (currentIndex + 1) % strand.allPoints.size();
+        } else {
+            for (LXPoint p : KaledoscopeModel.allStrands.get(strandNum.getValuei()).allPoints) {
+                colors[p.index] = LXColor.rgb(255, 255, 255);
+            }
         }
     }
 }

@@ -19,6 +19,7 @@ public class PreviewComponents {
         public boolean showAxes;
         public boolean showCtrlPoints;
         public boolean showFloor;
+        public boolean showCables;
         static public int selectedRun;
         static public int selectedBezier;
         static public int selectedCtrlPt;
@@ -32,6 +33,7 @@ public class PreviewComponents {
             showAxes = true;
             showFloor = true;
             showCtrlPoints = false;
+            showCables = true;
             selectedRun = 0;
             selectedBezier = 0;
             selectedCtrlPt = 0;
@@ -53,10 +55,12 @@ public class PreviewComponents {
         static public Bezier.Point getCurSelPt() {
             KaledoscopeModel.Run selRun = KaledoscopeModel.allRuns.get(selectedRun);
             if (selectedBezier != -1) {
-                Bezier selBezier = selRun.beziers.get(selectedBezier);
-                if (selectedCtrlPt != -1) {
-                    Bezier.Point ctrlPt = getBezierPointByIndex(selBezier, selectedCtrlPt);
-                    return ctrlPt;
+                if (selRun != null && selRun.beziers != null && selRun.beziers.size() > 0) {
+                    Bezier selBezier = selRun.beziers.get(selectedBezier);
+                    if (selectedCtrlPt != -1) {
+                        Bezier.Point ctrlPt = getBezierPointByIndex(selBezier, selectedCtrlPt);
+                        return ctrlPt;
+                    }
                 }
             }
             return null;

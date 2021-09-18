@@ -79,6 +79,9 @@ public class KaledoscopeOutput {
                         if (anchorTree == -1)
                             continue;
                         KaledoscopeModel.Strand strand = KaledoscopeModel.getFlowerStrandByAddress(anchorTree, runNum);
+                        // This particular flower strand address isn't used in model, skip.
+                        if (strand == null)
+                            continue;
                         ids = new String[1];
                         ids[0] = "" + strand.strandId;
                     } else {

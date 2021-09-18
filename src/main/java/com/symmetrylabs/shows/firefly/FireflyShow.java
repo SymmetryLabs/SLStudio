@@ -93,6 +93,9 @@ public class FireflyShow implements Show {
         @Override
         public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
             super.onKeyPressed(keyEvent, keyChar, keyCode);
+            // Disable bezier editing.
+            if (keyEvent != null)
+                return;
             Bezier.Point curPt = PreviewComponents.Axes.getCurSelPt();
             Bezier prevBezier = null;
             Bezier curBezier = PreviewComponents.Axes.getCurBezier();
