@@ -48,4 +48,13 @@ public abstract class SLEffect<M extends SLModel> extends LXEffect {
         }
         return super.setModel(model);
     }
+
+    @Override
+    public void loop(double deltaMs) {
+        if (model == null) {
+            return;
+        }
+
+        super.loop(deltaMs);
+    }
 }
