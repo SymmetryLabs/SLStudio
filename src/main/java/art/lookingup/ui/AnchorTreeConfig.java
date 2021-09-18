@@ -27,6 +27,15 @@ public class AnchorTreeConfig extends UIConfig {
     private boolean parameterChanged = false;
     static public ParameterFile anchorTreeParamFile;
 
+    // Rough defaults based on install.
+    public static float[] treesX = {8 * 12, 6 * 12, -3 * 12, -6 * 12, 0 * 12};
+    public static float[] treesZ = {10 * 12, 12 * 12, 19 * 12, 25 * 12, 35 * 12};
+    public static float[] treesFlowers = {2, 2, 1, 1, 1, 1};
+    public static int[] treesButterflies = {1, 1, 0, 1, 1, 1};
+    public static int[] treeRadius = {12, 12, 8, 12, 12, 12};
+
+
+
     public AnchorTreeConfig(final SLStudioLX.UI ui, LX lx, ParameterFile parameterFile) {
         super(ui, title, filename, parameterFile);
 
@@ -55,27 +64,30 @@ public class AnchorTreeConfig extends UIConfig {
         if (anchorTreeParamFile == null)
             anchorTreeParamFile = ParameterFile.instantiateAndLoad(filename);
         AnchorTree.AnchorTreeParams p = new AnchorTree.AnchorTreeParams();
-        float zSpacing = 15f * 12f; // 15 feet in Z
-        float xOffset = 5f * 12f; // 5 feet offset horizontally from center.
-        if (treeNum % 2 == 1) {
-            xOffset = -xOffset;
+        float defaultX = 0f;
+        float defaultZ = 0f;
+        if (treeNum > 0) {
+            defaultX = treesX[treeNum-1];
+            defaultZ = treesZ[treeNum-1];
         }
-        p.x = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_X, "" + xOffset);
-        p.z = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_Z, "" + (treeNum * zSpacing));
-        int radius = 12;
-        if (treeNum % 2 == 1)
-            radius = 24;
+        p.x = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_X, "" + defaultX);
+        p.z = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_Z, "" + defaultZ);
+        int radius = treeRadius[treeNum];
         p.radius = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_RADIUS, "" + radius);
 
         // Flowers are pre-mounted on cages wrapped around the trees.  We allow for the cage-specific radius to be
         // specified because the radius at the anchor cable mounting might be different than the radius where the cage
         // is mounted.
-        p.fw1Top = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_FW1_TOP, "120");
+        p.fw1Top = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_FW1_TOP, "96");
         p.fw1Radius = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_FW1_RADIUS, "" + radius);
-        p.fw2Top = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_FW2_TOP, "72");
+        if (treesFlowers[treeNum] == 2)
+            p.fw2Top = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_FW2_TOP, "60");
+        else
+            p.fw2Top = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_FW2_TOP, "0");
         p.fw2Radius = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_FW2_RADIUS, "" + radius);
 
-        p.isButterflyAnchor = Integer.parseInt(anchorTreeParamFile.getStringParameter(TREE_BASE + treeNum + TREE_BF, "1").getString()) != 0;
+        int treeHasButterfly = treesButterflies[treeNum];
+        p.isButterflyAnchor = Integer.parseInt(anchorTreeParamFile.getStringParameter(TREE_BASE + treeNum + TREE_BF, "" + treeHasButterfly).getString()) != 0;
 
         p.c1Y = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_C1_Y, "120");
         p.c2Y = anchorTreeParamFile.getStringParameterF(TREE_BASE + treeNum + TREE_C2_Y, "114");
