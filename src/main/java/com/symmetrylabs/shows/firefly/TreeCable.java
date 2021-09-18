@@ -33,20 +33,28 @@ public class TreeCable extends SLPattern {
         if (!tree.p.isButterflyAnchor)
             return;
         for (int i = 0; i < tree.inCables.length; i++) {
-            if (cableNum.getValuei() == -1 || cableNum.getValuei() == i) {
+            if (cableNum.getValuei() == i) {
                 if (tree.inCables[i] != null) {
                     for (LXPoint p : tree.inCables[i].points) {
                         colors[p.index] = LXColor.rgb(255, 255, 255);
                     }
                 }
+            } else if (cableNum.getValuei() == -1) {
+               for (LXPoint p : tree.inPoints) {
+                   colors[p.index] = LXColor.rgb(255, 255, 255);
+               }
             }
         }
         for (int i = 0; i < tree.outCables.length; i++) {
-            if (cableNum.getValuei() == -1 || cableNum.getValuei() == i) {
+            if (cableNum.getValuei() == i) {
                 if (tree.outCables[i] != null) {
                     for (LXPoint p : tree.outCables[i].points) {
                         colors[p.index] = LXColor.rgb(255, 255, 255);
                     }
+                }
+            } else if (cableNum.getValuei() == -1) {
+                for (LXPoint p : tree.outPoints) {
+                    colors[p.index] = LXColor.rgb(255, 255, 255);
                 }
             }
         }
