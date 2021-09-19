@@ -9,11 +9,11 @@ import art.lookingup.KaledoscopeModel;
 import art.lookingup.LUButterfly;
 import art.lookingup.LUFlower;
 
-public class ButterflyFlowerMask extends SLEffect<KaledoscopeModel> {
+public class ButterflyFlowerMaskEffect extends SLEffect<KaledoscopeModel> {
     public final BooleanParameter enableButterfliesParam;
     public final BooleanParameter enableFlowersParam;
 
-    public ButterflyFlowerMask(LX lx) {
+    public ButterflyFlowerMaskEffect(LX lx) {
         super(lx);
 
         addParameter(enableButterfliesParam = new BooleanParameter("Butterflies", true));
