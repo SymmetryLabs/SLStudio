@@ -62,6 +62,16 @@ public class LUFlower {
         allPoints.add(petals[4]);
     }
 
+    /**
+     * Convenience function to set the color of all points in a butterfly.
+     * @param color
+     */
+    public void setColor(int[] buffer, int color) {
+        for (LXPoint p : allPoints) {
+            buffer[p.index] = color;
+        }
+    }
+
     static public class FlowerConfig {
         public int ringNum;
         public float azimuth;
