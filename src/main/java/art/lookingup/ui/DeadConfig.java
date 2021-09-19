@@ -101,6 +101,7 @@ public class DeadConfig extends UIConfig {
             // We need to tell the model to mark the fixtures dead.
             KaledoscopeModel.markDeadButterflies(deadButterflyAddresses());
             KaledoscopeModel.markDeadFlowers(deadFlowerAddresses());
+            KaledoscopeModel.updateDeadOnStrands();
 
             // TODO(tracy): Maybe only pause the output that something is being marked dead on?
             boolean originalEnabled = lx.engine.output.enabled.getValueb();

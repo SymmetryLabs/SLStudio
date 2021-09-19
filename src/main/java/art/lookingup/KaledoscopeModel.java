@@ -600,16 +600,45 @@ public class KaledoscopeModel extends SLModel {
             }
             anchorTrees.get(i).flowerRuns = treeFlowerRuns;
         }
+        int totalFlowers = 0;
+        for (Run run : allFlowerRuns) {
+            totalFlowers += run.flowers.size();
+        }
+        logger.info("Total flowers: " + totalFlowers);
+
         DeadConfig.init();
         List<String> deadButterflies = DeadConfig.deadButterflyAddresses();
         markDeadButterflies(deadButterflies);
         List<String> deadFlowers = DeadConfig.deadFlowerAddresses();
         markDeadFlowers(deadFlowers);
+        KaledoscopeModel.updateDeadOnStrands();
         return new KaledoscopeModel(allPoints);
     }
 
     public KaledoscopeModel(List<LXPoint> points) {
         super("kaledoscope", points);
+    }
+
+    /**
+     * Rebuild strands.  We need to do this when we mark something as dead.
+     */
+    static public void updateDeadOnStrands() {
+        for (Run run : allButterflyRuns) {
+            for (Strand strand : run.strands) {
+                strand.addressablePoints = new ArrayList<LXPoint>();
+                for (LUButterfly butterfly: strand.butterflies) {
+                    strand.addressablePoints.addAll(butterfly.addressablePoints);
+                }
+            }
+        }
+        for (Run run : allFlowerRuns) {
+            for (Strand strand : run.strands) {
+                strand.addressablePoints = new ArrayList<LXPoint>();
+                for (LUFlower flower : strand.flowers) {
+                    strand.addressablePoints.addAll(flower.addressablePoints);
+                }
+            }
+        }
     }
 
     /**

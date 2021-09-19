@@ -27,7 +27,6 @@ public class KaledoscopeOutput {
     public static List<List<Integer>> outputs = new ArrayList<List<Integer>>(MAX_OUTPUTS);
 
     public static void configurePixliteOutput(LX lx) {
-        List<ArtNetDatagram> datagrams = new ArrayList<ArtNetDatagram>();
         String butterflyPixliteIp = FireflyShow.pixliteConfig.butterflyPixliteIp();
         int butterflyPixlitePort = FireflyShow.pixliteConfig.butterflyPixlitePort();
         logger.info("Butterfly ArtNet: " + butterflyPixliteIp + ":" + butterflyPixlitePort);
@@ -46,7 +45,9 @@ public class KaledoscopeOutput {
         // For each non-empty mapping output parameter, collect all points in wire order from each strand listed.
         // Distribute all points across the necessary number of 170-led sized universes.  One strand corresponds to
         // one output.  A strand will have multiple universes.  A new strand should start a new universe.
+        List<ArtNetDatagram> datagrams;
         for (int strandType = 0; strandType < 2; strandType++) {
+            datagrams = new ArrayList<ArtNetDatagram>();
             String targetPixliteIp = butterflyPixliteIp;
             int targetPixlitePort = butterflyPixlitePort;
             if (strandType == 1) {
@@ -121,6 +122,13 @@ public class KaledoscopeOutput {
                                 pointsWireOrder.addAll(strand.addressablePoints);
                         }
                     }
+                    int numFixtures = 0;
+                    if (strandType == 0) {
+                        numFixtures = pointsWireOrder.size() / 16;
+                    } else {
+                        numFixtures = pointsWireOrder.size() / 2;
+                    }
+                    outputDebug += "# fixtures: " + numFixtures + "\n";
                     // If we didn't add any points, this was the wrong strand type so we can just skip ahead to
                     // the next strand.  We don't want to continue below because we would be bumping our universe
                     // number each time we skipped a strand.
@@ -187,6 +195,11 @@ public class KaledoscopeOutput {
                     datagramOutput.addDatagram(new ArtNetSyncDatagram(targetPixlitePort).setAddress(targetPixliteIp));
                 } catch (UnknownHostException uhex) {
                     logger.log(Level.SEVERE, "Unknown host for ArtNet sync.", uhex);
+                }
+                if (strandType == 0) {
+                    outputDebug += "Butterfly datagrams: " + datagrams.size() + "\n";
+                } else {
+                    outputDebug += "Flower datagrams: " + datagrams.size() + "\n";
                 }
             } catch (SocketException sex) {
                 logger.log(Level.SEVERE, "Initializing LXDatagramOutput failed.", sex);
