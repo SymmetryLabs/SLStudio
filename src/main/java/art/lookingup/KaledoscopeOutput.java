@@ -36,7 +36,12 @@ public class KaledoscopeOutput {
         int flowerPixlitePort = FireflyShow.pixliteConfig.flowerPixlitePort();
         logger.info("Flower ArtNet: " + flowerPixliteIp + ":" + flowerPixlitePort);
 
+        // Build up a debug string that we will dump all at once for handy reference in the log file.
+        String outputDebug = "\n\n========== Kaledoscope Output Debug Log ==========\n";
         // We need to separate butterfly stands from flower strands and route them to the appropriate pixlites.
+
+        outputDebug += "Butterfly Pixlite: " + butterflyPixliteIp + ":" + butterflyPixlitePort + "\n";
+        outputDebug += "Flower Pixlite:    " + flowerPixliteIp + ":" + flowerPixlitePort + "\n\n";
 
         // For each non-empty mapping output parameter, collect all points in wire order from each strand listed.
         // Distribute all points across the necessary number of 170-led sized universes.  One strand corresponds to
@@ -58,10 +63,12 @@ public class KaledoscopeOutput {
                     logger.info("Loading butterfly mapping for output " + (outputNum + 1));
                     strandIds = FireflyShow.mappingConfig.getStringParameter(MappingConfig.BF_PIXLITE_BASE + (outputNum + 1)).getString();
                     logger.info("butterfly pixlite output " + (outputNum + 1) + " strand ids: " + strandIds);
+                    outputDebug += "Butterfly Pixlite Output " + (outputNum + 1) + ": Strand IDs -> " + strandIds + "\n";
                 }  else {
                     logger.info("Loading flower mapping for output " + (outputNum + 1));
                     strandIds = FireflyShow.mappingConfig.getStringParameter(MappingConfig.F_PIXLITE_BASE + (outputNum + 1)).getString();
                     logger.info("flower pixlite output " + (outputNum + 1) + " strand ids: " + strandIds);
+                    outputDebug += "Flower Pixlite Output " + (outputNum + 1) + ": Strand IDs -> " + strandIds + "\n";
                 }
 
                 if (strandIds.length() > 0) {
@@ -134,6 +141,11 @@ public class KaledoscopeOutput {
                         curIndex++;
                         if (curIndex == 170 || (curUnivOffset == numUniversesThisWire - 1 && curIndex == lastUniverseCount)) {
                             logger.info("Adding datagram: universe=" + (univStartNum + curUnivOffset) + " points=" + curIndex);
+                            if (strandType == 0) {
+                                outputDebug += "Butterfly Datagram: universe=" + (univStartNum + curUnivOffset) + " points=" + curIndex + "\n";
+                            } else {
+                                outputDebug += "Flower Datagram: universe=" + (univStartNum + curUnivOffset) + " points=" + curIndex + "\n";
+                            }
                             ArtNetDatagram datagram = new ArtNetDatagram(thisUniverseIndices, curIndex * 3, univStartNum + curUnivOffset);
                             try {
                                 InetAddress address;
@@ -186,5 +198,6 @@ public class KaledoscopeOutput {
                 logger.log(Level.SEVERE, "Did not configure output, error during LXDatagramOutput init");
             }
         }
+        logger.info(outputDebug);
     }
 }
