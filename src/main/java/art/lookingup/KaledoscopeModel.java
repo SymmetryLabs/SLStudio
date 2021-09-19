@@ -363,8 +363,24 @@ public class KaledoscopeModel extends SLModel {
                 cablesThisStrand.add(cableRun2.get(i));
 
                 Strand strand = new Strand(this, allStrands.size(), i, cablesThisStrand, 0);
-                allPoints.addAll(strand.allPoints);
-                butterflies.addAll(strand.butterflies);
+                if (strand.strandId == 0 || strand.strandId == 2) {
+                    // The first and third strands run backwards.  We already reversed them when building the
+                    // strands but we actually want all the butterflies for a run in proper run order so we
+                    // copy the list
+                    // TODO(tracy): Make strand creation orthogonal to model creation, i.e. independent.
+                    List<LUButterfly> reversedButterflies = new ArrayList<LUButterfly>();
+                    reversedButterflies.addAll(strand.butterflies);
+                    Collections.reverse(reversedButterflies);
+                    butterflies.addAll(reversedButterflies);
+                    // Only the butterfly fixtures are reversed, the data lines on the butterflies are
+                    // not reversed so we add those in the correct order.
+                    for (LUButterfly butterfly : reversedButterflies) {
+                        allPoints.addAll(butterfly.allPoints);
+                    }
+                } else {
+                    allPoints.addAll(strand.allPoints);
+                    butterflies.addAll(strand.butterflies);
+                }
                 allStrands.add(strand);
                 strands.add(strand);
             }
