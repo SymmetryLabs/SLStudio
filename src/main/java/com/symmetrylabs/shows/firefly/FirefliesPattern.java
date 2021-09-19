@@ -3,6 +3,7 @@ package com.symmetrylabs.shows.firefly;
 import java.util.List;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.model.LXFixture;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -25,7 +26,7 @@ public class FirefliesPattern extends SLPattern<KaledoscopeModel> {
     public final BooleanParameter syncParam;
     public final CompoundParameter radiusParam;
     public final CompoundParameter nudgeParam;
-    public final EnumParameter flashModeParam;
+    public final EnumParameter<FlashMode> flashModeParam;
     public final CompoundParameter durationParam;
     public final BooleanParameter resetParam;
     public final CompoundParameter noiseParam;
@@ -40,33 +41,22 @@ public class FirefliesPattern extends SLPattern<KaledoscopeModel> {
     public FirefliesPattern(LX lx) {
         super(lx);
 
+        clocks = new int[KaledoscopeModel.allButterflies.size() + KaledoscopeModel.allFlowers.size()];
+        flashStarts = new long[clocks.length];
+
         double r = Math.sqrt(lx.model.xRange * lx.model.xRange
                                 + lx.model.yRange * lx.model.yRange
                                 + lx.model.zRange * lx.model.zRange);
 
         addParameter(colorParam = new ColorParameter("Color", LXColor.WHITE));
         addParameter(usePaletteParam = new BooleanParameter("UsePalette"));
-        addParameter(speedParam = new CompoundParameter("Speed", 0.5, 0, 2));
-        addParameter(syncParam = new BooleanParameter("EnableSync", false));
-        addParameter(radiusParam = new CompoundParameter("Radius", r / 15, r / 1000, r));
-        addParameter(nudgeParam = new CompoundParameter("Nudge", 0.035, 0.01, 0.1));
-        addParameter(flashModeParam = new EnumParameter<FlashMode>("FlashMode", FlashMode.FLASH));
-        addParameter(durationParam = new CompoundParameter("Duration", 0.75, 0, 2));
-        addParameter(resetParam = new BooleanParameter("Reset").setMode(BooleanParameter.Mode.MOMENTARY));
-        addParameter(noiseParam = new CompoundParameter("Noise", 0.01, 0, 0.05));
-
-        addParameter(enableButterfliesParam = new BooleanParameter("EnableButterflies", true));
-        addParameter(enableFlowersParam = new BooleanParameter("EnableFlowers", true));
-
-        resetParam.addListener((p) -> resetClocks());
-
-        usePaletteParam.addListener((p) -> {
-            colorParam.setColor(lx.palette.color.getColor());
-        });
         colorParam.addListener((p) -> {
             if (colorParam.getColor() != lx.palette.color.getColor()) {
                 usePaletteParam.setValue(false);
             }
+        });
+        usePaletteParam.addListener((p) -> {
+            colorParam.setColor(lx.palette.color.getColor());
         });
         lx.palette.color.addListener((p) -> {
             if (usePaletteParam.isOn()) {
@@ -74,8 +64,19 @@ public class FirefliesPattern extends SLPattern<KaledoscopeModel> {
             }
         });
 
-        clocks = new int[KaledoscopeModel.allButterflies.size() + KaledoscopeModel.allFlowers.size()];
-        flashStarts = new long[clocks.length];
+        addParameter(speedParam = new CompoundParameter("Speed", 0.5, 0, 2));
+        addParameter(syncParam = new BooleanParameter("Sync", false));
+        addParameter(radiusParam = new CompoundParameter("Radius", r / 15, r / 1000, r));
+        addParameter(nudgeParam = new CompoundParameter("Nudge", 0.035, 0.01, 0.1));
+        addParameter(flashModeParam = new EnumParameter<>("FlashMode", FlashMode.FLASH));
+        addParameter(durationParam = new CompoundParameter("Duration", 0.75, 0, 2));
+        addParameter(noiseParam = new CompoundParameter("Noise", 0.01, 0, 0.05));
+
+        addParameter(resetParam = new BooleanParameter("Reset").setMode(BooleanParameter.Mode.MOMENTARY));
+        resetParam.addListener((p) -> resetClocks());
+
+        addParameter(enableButterfliesParam = new BooleanParameter("EnableButterflies", true));
+        addParameter(enableFlowersParam = new BooleanParameter("EnableFlowers", true));
 
         resetClocks();
     }
@@ -126,30 +127,26 @@ public class FirefliesPattern extends SLPattern<KaledoscopeModel> {
             }
         }
 
-        setColors(LXColor.BLACK);
+        clear();
 
         for (int i = 0; i < flowersEnd; ++i) {
-            List<LXPoint> points = null;
+            LXFixture fixture = null;
             if (enableButterfliesParam.isOn() && i < flowersStart) {
-                points = KaledoscopeModel.allButterflies.get(i).allPoints;
+                fixture = KaledoscopeModel.allButterflies.get(i);
             }
             if (enableFlowersParam.isOn() && i >= flowersStart) {
-                points = KaledoscopeModel.allFlowers.get(i - flowersStart).allPoints;
+                fixture = KaledoscopeModel.allFlowers.get(i - flowersStart);
             }
 
-            if (points == null)
+            if (fixture == null)
                 continue;
 
             long td = timerMillis - flashStarts[i];
             if (td > 0 && td <= flashDur) {
-                for (LXPoint p : points) {
-                    colors[p.index] = colorParam.getColor();
-                }
+                setColor(fixture, colorParam.getColor());
             }
             else if (flashModeParam.getEnum() == FlashMode.CLOCK) {
-                for (LXPoint p : points) {
-                    colors[p.index] = LXColor.scaleBrightness(colorParam.getColor(), clocks[i] / (float)CLOCK_MAX);
-                }
+                setColor(fixture, LXColor.scaleBrightness(colorParam.getColor(), clocks[i] / (float)CLOCK_MAX));
             }
         }
     }
