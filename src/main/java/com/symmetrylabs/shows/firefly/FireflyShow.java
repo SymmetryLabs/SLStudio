@@ -44,7 +44,7 @@ public class FireflyShow implements Show {
      */
     public void loadModelParams() {
         runsConfigParams = ParameterFile.instantiateAndLoad(RunsConfig.filename);
-        runsButterflies = Integer.parseInt(runsConfigParams.getStringParameter(RunsConfig.BUTTERFLY_RUNS, "2").getString());
+        runsButterflies = Integer.parseInt(runsConfigParams.getStringParameter(RunsConfig.BUTTERFLY_RUNS, "1").getString());
         butterflyRunsNumStrands = RunsConfig.getRunsNumStrands(runsConfigParams);
         flowerConfigs = FlowersConfig.getAllFlowerConfigs();
     }
