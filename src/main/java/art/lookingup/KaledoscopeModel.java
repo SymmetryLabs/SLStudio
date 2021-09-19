@@ -162,16 +162,7 @@ public class KaledoscopeModel extends SLModel {
 
             this.strandRunIndex = strandRunIndex;
             // The number of configured butterflies on this strand.
-            // TODO(tracy): We need to configure the number of butterflies on each run.
-            // And then we build our strand lengths based on tree positions so that
-            // they add up to the total number of butterflies.  We should then allow
-            // for the strands to change lengths while constraining the total number
-            // of butterflies.  i.e. only allow +/- on a strand such that it steals points
-            // from or adds points to the next strand.  That also means we need to be
-            // able to perform strand assignment outside of model building in order to
-            // adjust strand lengths without restarting the program (just need to restart
-            // the network.
-            int configuredNumButterflies = StrandLengths.getNumButterflies(run.runId, strandRunIndex);
+            //int configuredNumButterflies = StrandLengths.getNumButterflies(run.runId, strandRunIndex);
             //FireflyShow.allStrandLengths.get(strandId);
 
             // TODO
@@ -201,6 +192,7 @@ public class KaledoscopeModel extends SLModel {
                 thisButterflyCable.points.addAll(butterfly.allPoints);
                 thisButterflyCable.startTree.outPoints.addAll(butterfly.allPoints);
                 thisButterflyCable.endTree.inPoints.addAll(butterfly.allPoints);
+                thisButterflyCable.butterflies.add(butterfly);
             }
         }
 
@@ -344,7 +336,6 @@ public class KaledoscopeModel extends SLModel {
         public Run(int runId, List<AnchorTree> trees) {
             this.runId = runId;
             this.runType = RunType.BUTTERFLY;
-            int numStrands = FireflyShow.butterflyRunsNumStrands.get(runId);
 
             allCables = getAnchorTreeCables(trees);
             List<Cable> cableRun0 = allCables.get(0);
@@ -454,6 +445,7 @@ public class KaledoscopeModel extends SLModel {
         public AnchorTree startTree;
         public AnchorTree endTree;
         public List<LXPoint> points;
+        public List<LUButterfly> butterflies;
 
         // Used during the construction of the butterfly runs.  Track the position of the last butterfly on this
         // cable so that for the next butterfly we can use the cable-distance between the two to compute the new
@@ -476,6 +468,7 @@ public class KaledoscopeModel extends SLModel {
             prevButterflyZ = startZ;
             this.whichCableRun = whichCableRun;
             points = new ArrayList<LXPoint>();
+            butterflies = new ArrayList<LUButterfly>();
         }
         public float length() {
             float diffX = endX - startX;
@@ -528,7 +521,6 @@ public class KaledoscopeModel extends SLModel {
         allFlowers = new ArrayList<LUFlower>();
         List<LXPoint> butterflyPoints = new ArrayList<LXPoint>();
         List<LXPoint> flowerPoints = new ArrayList<LXPoint>();
-
 
         for (int i = 0; i < NUM_ANCHOR_TREES; i++){
             anchorTrees.add(new AnchorTree(i));
