@@ -6,10 +6,7 @@ import com.symmetrylabs.shows.firefly.FireflyShow;
 import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.model.LXPoint;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -182,17 +179,27 @@ public class KaledoscopeModel extends SLModel {
                     newButterflyPosition[0], newButterflyPosition[1], newButterflyPosition[2]);
                 butterflies.add(butterfly);
                 allButterflies.add(butterfly);
-                allPoints.addAll(butterfly.allPoints);
                 // For each point on the butterfly, build an index of it's distance along the cable.  This will help with
                 // linear rendering algorithms.
                 for (LXPoint butterflyPoint : butterfly.allPoints) {
                     run.ptsRunInches.put(butterflyPoint.index, thisButterflyCable.prevButterflyTotalCableDistance);
                 }
-                addressablePoints.addAll(butterfly.addressablePoints);
+                //addressablePoints.addAll(butterfly.addressablePoints);
+                //allPoints.addAll(butterfly.allPoints);
                 thisButterflyCable.points.addAll(butterfly.allPoints);
                 thisButterflyCable.startTree.outPoints.addAll(butterfly.allPoints);
                 thisButterflyCable.endTree.inPoints.addAll(butterfly.allPoints);
                 thisButterflyCable.butterflies.add(butterfly);
+            }
+
+            // Some data lines run backwards, so we will add the points to the strand after building the list
+            // of butterflies.  For backwards data lines, we will just reverse the list of butterflies.
+            if (globalStrandId == 0 || globalStrandId == 2) {
+                Collections.reverse(butterflies);
+            }
+            for (int bIndex = 0; bIndex < butterflies.size(); bIndex++) {
+                allPoints.addAll(butterflies.get(bIndex).allPoints);
+                addressablePoints.addAll(butterflies.get(bIndex).addressablePoints);
             }
         }
 

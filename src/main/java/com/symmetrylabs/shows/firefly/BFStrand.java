@@ -31,7 +31,7 @@ public class BFStrand extends SLPattern {
         for (LXPoint p : model.points) {
             colors[p.index] = LXColor.rgb(0, 0, 0);
         }
-        KaledoscopeModel.Strand strand = KaledoscopeModel.allStrands.get(0);
+        KaledoscopeModel.Strand strand = KaledoscopeModel.allStrands.get(strandNum.getValuei());
         if (tracer.getValueb()) {
             for (int i = 0; i < strand.allPoints.size(); i++) {
                 if (currentIndex == i)
@@ -39,7 +39,7 @@ public class BFStrand extends SLPattern {
             }
             currentIndex = (currentIndex + 1) % strand.allPoints.size();
         } else {
-            for (LXPoint p : KaledoscopeModel.allStrands.get(strandNum.getValuei()).allPoints) {
+            for (LXPoint p : strand.allPoints) {
                 colors[p.index] = LXColor.rgb(255, 255, 255);
             }
         }
