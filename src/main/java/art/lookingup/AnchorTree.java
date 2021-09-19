@@ -36,6 +36,7 @@ public class AnchorTree {
      * @param id
      */
     public AnchorTree(int id) {
+        this.id = id;
         p = AnchorTreeConfig.getAnchorTree(id);
         inPoints = new ArrayList<LXPoint>();
         outPoints = new ArrayList<LXPoint>();
