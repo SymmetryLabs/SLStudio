@@ -170,14 +170,12 @@ public class KaledoscopeOutput {
                     butterflyDatagramOutput = datagramOutput;
                 else
                     flowerDatagramOutput = datagramOutput;
-          /*
-          // TODO(tracy): Add an ArtNet sync packet.
-          try {
-              datagramOutput.addDatagram(new ArtSyncDatagram().setAddress(targetPixliteIp).setPort(targetPixlitePort));
-          } catch (UnknownHostException uhex) {
-              logger.log(Level.SEVERE, "Unknown host for ArtNet sync.", uhex);
-          }
-          */
+
+                try {
+                    datagramOutput.addDatagram(new ArtNetSyncDatagram(targetPixlitePort).setAddress(targetPixliteIp));
+                } catch (UnknownHostException uhex) {
+                    logger.log(Level.SEVERE, "Unknown host for ArtNet sync.", uhex);
+                }
             } catch (SocketException sex) {
                 logger.log(Level.SEVERE, "Initializing LXDatagramOutput failed.", sex);
             }

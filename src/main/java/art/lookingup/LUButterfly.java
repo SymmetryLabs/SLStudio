@@ -39,7 +39,7 @@ public class LUButterfly {
     public int strandIndex;
     public int strandId;
     public int runIndex;
-    public boolean dead;
+    public boolean dead = false;
 
     public LUButterfly(int strandId, int strandIndex, int runIndex, float x, float y, float z) {
         this.x = x;
@@ -115,6 +115,11 @@ public class LUButterfly {
         if (!dead) {
             addressablePoints.addAll(allPoints);
         }
+    }
+
+    public void markDead() {
+        dead = true;
+        addressablePoints = new ArrayList<LXPoint>();
     }
 
     /**

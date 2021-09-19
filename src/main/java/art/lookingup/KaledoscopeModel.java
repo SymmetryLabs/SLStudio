@@ -1,5 +1,6 @@
 package art.lookingup;
 
+import art.lookingup.ui.DeadConfig;
 import art.lookingup.ui.FlowersConfig;
 import art.lookingup.ui.StrandLengths;
 import com.symmetrylabs.shows.firefly.FireflyShow;
@@ -87,6 +88,9 @@ public class KaledoscopeModel extends SLModel {
         }
 
         /**
+         * NOTE(tracy): This is commented out because we are currently not using Beziers and to reduce the confusion
+         * unused code for this build might be commented out in case somebody needs to fix something in an emergency.
+         *
          * Create a strand of butterflies.  The positions are determined by the passed in list of bezier curves and also
          * the butterfly's position in the entire run of butterflies.
          *
@@ -100,6 +104,7 @@ public class KaledoscopeModel extends SLModel {
          * @param strandRunIndex
          * @param beziers
          */
+        /*
         public Strand(Run run, int globalStrandId, int strandRunIndex, List<Bezier> beziers) {
             this.strandId = globalStrandId;
             strandType = StrandType.BUTTERFLY;
@@ -148,6 +153,7 @@ public class KaledoscopeModel extends SLModel {
                 addressablePoints.addAll(butterfly.addressablePoints);
             }
         }
+        */
 
         public Strand(Run run, int globalStrandId, int strandRunIndex, List<Cable> cables, float[] prevCablesLengths) {
             this.strandId = globalStrandId;
@@ -594,7 +600,11 @@ public class KaledoscopeModel extends SLModel {
             }
             anchorTrees.get(i).flowerRuns = treeFlowerRuns;
         }
-
+        DeadConfig.init();
+        List<String> deadButterflies = DeadConfig.deadButterflyAddresses();
+        markDeadButterflies(deadButterflies);
+        List<String> deadFlowers = DeadConfig.deadFlowerAddresses();
+        markDeadFlowers(deadFlowers);
         return new KaledoscopeModel(allPoints);
     }
 
@@ -611,6 +621,7 @@ public class KaledoscopeModel extends SLModel {
      * should just change the pixlite output mapping.  The UI for configuring strand lengths of butterflies
      * should automatically adjust adjacent strand lengths in order to preserve this property.
      */
+    /*
     static public void reassignButterflyStrandsDeprecated() {
         int totalButterfliesAssigned = 0;
         for (Run run : allButterflyRuns) {
@@ -645,6 +656,7 @@ public class KaledoscopeModel extends SLModel {
         }
         logger.info("Assigned " + totalButterfliesAssigned + " total butterflies to strands for all runs");
     }
+    */
 
     /**
      * This method needs to be called when we move the control points on the bezier curves.  We will need to
@@ -677,6 +689,40 @@ public class KaledoscopeModel extends SLModel {
     }
 
     /**
+     * Returns a flower given an address.  The address form is anchorTree.runNum.flowerIndex and zero based.
+     * So 1.1.3 is the fourth flower on the second run of the second tree.
+     * @param address
+     * @return
+     */
+    static public LUFlower getFlowerByAddress(String address) {
+        String[] aParts = address.split("\\.");
+        return getFlowerByAddress(Integer.parseInt(aParts[0]), Integer.parseInt(aParts[1]), Integer.parseInt(aParts[2]));
+    }
+
+    static public LUFlower getFlowerByAddress(int anchorTree, int runNum, int flowerIndex) {
+        Strand strand = getFlowerStrandByAddress(anchorTree, runNum);
+        if (flowerIndex < strand.flowers.size()) {
+            return strand.flowers.get(flowerIndex);
+        }
+        return null;
+    }
+
+    /**
+     * Returns a butterfly by address.  Since we only have a single run at this point, the butterfly address is
+     * Strand#.ButterflyIndex and zero based.  So 3.18 is the 19th butterfly on the fourth strand.
+     * @param address
+     * @return
+     */
+    static public LUButterfly getButterflyByAddress(String address) {
+        String[] aParts = address.split("\\.");
+        return getButterflyByAddress(Integer.parseInt(aParts[0]), Integer.parseInt(aParts[1]));
+    }
+
+    static public LUButterfly getButterflyByAddress(int strandNum, int butterflyIndex) {
+        return allButterflyRuns.get(0).strands.get(strandNum).butterflies.get(butterflyIndex);
+    }
+
+    /**
      * To simply the output mapping we want to be able to specify the butterfly strands like 0.3 for the fourth
      * strand on the first run of butterflies.
      *
@@ -691,5 +737,23 @@ public class KaledoscopeModel extends SLModel {
         if (runStrandNum >= run.strands.size())
             return null;
         return allButterflyRuns.get(runNum).strands.get(runStrandNum);
+    }
+
+    static public void markDeadButterflies(List<String> butterflyAddresses) {
+        for (String address : butterflyAddresses) {
+            LUButterfly butterfly = getButterflyByAddress(address);
+            if (butterfly != null) {
+                butterfly.markDead();
+            }
+        }
+    }
+
+    static public void markDeadFlowers(List<String> flowerAddresses) {
+        for (String address : flowerAddresses) {
+            LUFlower flower = getFlowerByAddress(address);
+            if (flower != null) {
+                flower.markDead();
+            }
+        }
     }
 }

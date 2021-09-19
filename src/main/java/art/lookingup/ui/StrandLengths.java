@@ -1,7 +1,6 @@
 package art.lookingup.ui;
 
 import art.lookingup.KaledoscopeModel;
-import art.lookingup.KaledoscopeOutput;
 import art.lookingup.ParameterFile;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.LX;
@@ -31,11 +30,13 @@ public class StrandLengths extends UIConfig {
         int contentWidth = (int)ui.leftPane.global.getContentWidth();
         this.lx = lx;
 
+        /* NOTE(tracy): Butterfly strand lengths should be specified by butterfly per-cable distance measures.
         for (int bfRunNum = 0; bfRunNum < 3; bfRunNum++) {
             for (int strandRunNum = 0; strandRunNum < 4; strandRunNum++) {
                 registerStringParameter("bf_R" + bfRunNum + "_S" + strandRunNum, null);
             }
         }
+        */
 
         for (int treeNum = 0; treeNum < KaledoscopeModel.NUM_ANCHOR_TREES_FLOWERS; treeNum++) {
             for (int runNum = 0; runNum < KaledoscopeModel.FLOWER_RUNS_PER_TREE; runNum++) {
@@ -53,11 +54,13 @@ public class StrandLengths extends UIConfig {
      * need to be initialized before the UI renders.
      */
     static public void preloadDefaults() {
+        /* NOTE(tracy): Butterfly strand lengths should be specified by butterfly per-cable distance measures.
         for (int bfRunNum = 0; bfRunNum < 3; bfRunNum++) {
             for (int strandRunNum = 0; strandRunNum < 4; strandRunNum++) {
                 getNumButterflies(bfRunNum, strandRunNum);
             }
         }
+        */
         for (int treeNum = 0; treeNum < KaledoscopeModel.NUM_ANCHOR_TREES_FLOWERS; treeNum++) {
             for (int runNum = 0; runNum < KaledoscopeModel.FLOWER_RUNS_PER_TREE; runNum++) {
                 getNumFlowers(treeNum, runNum);
@@ -65,7 +68,10 @@ public class StrandLengths extends UIConfig {
         }
     }
 
-    static public int getNumButterflies(int runId, int strandId) {
+    /* NOTE(tracy): Butterfly strand lengths should be specified by butterfly per-cable distance measures.
+     * So this method should not be called.
+     */
+    static public int getNumButterfliesDeprecated(int runId, int strandId) {
         if (strandLengthsParamFile == null) {
             strandLengthsParamFile = ParameterFile.instantiateAndLoad(filename);
         }
@@ -95,6 +101,8 @@ public class StrandLengths extends UIConfig {
         // Only reconfigure if a parameter changed.
         if (parameterChanged) {
             // NOTE(tracy): Strand lengths are currently computed automatically based on trees.
+            // We can't enable this for flowers because changing their strand lengths will change the model which
+            // requires a restart.
             /*
             KaledoscopeModel.reassignButterflyStrands();
             boolean originalEnabled = lx.engine.output.enabled.getValueb();

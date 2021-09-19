@@ -52,8 +52,10 @@ public class LUFlower {
             petals[i] = new LXPoint(x + px, y + py, z);
         }
         addressablePoints = new ArrayList<LXPoint>();
-        addressablePoints.add(center);
-        addressablePoints.add(petals[0]);
+        if (!dead) {
+            addressablePoints.add(center);
+            addressablePoints.add(petals[0]);
+        }
         allPoints = new ArrayList<LXPoint>();
         if (!dead) allPoints.addAll(addressablePoints);
         allPoints.add(petals[1]);
@@ -61,6 +63,12 @@ public class LUFlower {
         allPoints.add(petals[3]);
         allPoints.add(petals[4]);
     }
+
+    public void markDead() {
+        dead = true;
+        addressablePoints = new ArrayList<LXPoint>();
+    }
+
 
     /**
      * Convenience function to set the color of all points in a butterfly.
