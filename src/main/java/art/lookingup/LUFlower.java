@@ -1,16 +1,16 @@
 package art.lookingup;
 
-import heronarts.lx.model.LXPoint;
-
 import java.util.ArrayList;
 import java.util.List;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.model.LXFixture;
 
 /**
  * Represents a flower fixture.  A flower has 1 central LED and 5 petal LEDs but the petals
  * all share an address so there are only 2 addressable LEDs.  We will create LXPoints for
  * all 6 LEDs, but only output the center LED and one petal value.
  */
-public class LUFlower {
+public class LUFlower implements LXFixture {
 
     public LXPoint center;
     public LXPoint[] petals;
@@ -39,6 +39,10 @@ public class LUFlower {
         this.flowerConfig = flowerConfig;
 
         buildPoints();
+    }
+
+    public List<LXPoint> getPoints() {
+        return allPoints;
     }
 
     protected void buildPoints() {

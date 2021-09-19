@@ -1,9 +1,10 @@
 package art.lookingup;
 
-import heronarts.lx.model.LXPoint;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.logging.Logger;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.model.LXFixture;
 
 /**
  * 16 LED Butterfly representation.  There are two 8 LED strips side-by-side.  For reference, we will refer to the view
@@ -21,7 +22,7 @@ import java.util.logging.Logger;
  * if we can get that far with the mapping.  It might also help with mapping.
  *
  */
-public class LUButterfly {
+public class LUButterfly implements LXFixture {
     private static final Logger logger = Logger.getLogger(KaledoscopeModel.class.getName());
 
     public static float ledSpacing = 0.3f;
@@ -50,6 +51,10 @@ public class LUButterfly {
         this.runIndex = runIndex;
 
         buildPoints();
+    }
+
+    public List<LXPoint> getPoints() {
+        return allPoints;
     }
 
     /**
