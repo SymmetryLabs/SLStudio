@@ -57,6 +57,7 @@ public class Blobs extends ColorPattern {
             // TODO(tracy): Pick an initial random lightBarNum such that we are restricted to a specific fixture.
             blobs[i].reset(i % KaledoscopeModel.allButterflyRuns.size(), 0.0f, randSpeed.getValuef(), true);
             blobs[i].color = getNewRGB();
+            blobs[i].pos = -0.001f * i;
         }
     }
 
@@ -83,8 +84,8 @@ public class Blobs extends ColorPattern {
             blobs[i].renderBlob(colors, speed.getValuef(), widthKnob.getValuef(), slope.getValuef(), fadeLevel,
                 waveKnob.getValuei(), false, fxKnob.getValuei(), fxDepth.getValuef(),
                 cosineFreq.getValuef());
-            if (blobs[i].pos > 1f) {
-                blobs[i].pos = -0.2f;
+            if (blobs[i].pos > 0.333f) {
+                blobs[i].pos = -0.000f;
             }
         }
     }

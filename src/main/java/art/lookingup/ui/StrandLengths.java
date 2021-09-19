@@ -94,9 +94,8 @@ public class StrandLengths extends UIConfig {
     public void onSave() {
         // Only reconfigure if a parameter changed.
         if (parameterChanged) {
-            // TODO(tracy): Provide some constraints on this so that if we change a butterfly strand length then
-            // we substract or add to the appropriate adjacent strand?  Maybe UI is too complex for middle strand
-            // cases where we aren't sure which end of the strand to adjust.
+            // NOTE(tracy): Strand lengths are currently computed automatically based on trees.
+            /*
             KaledoscopeModel.reassignButterflyStrands();
             boolean originalEnabled = lx.engine.output.enabled.getValueb();
             lx.engine.output.enabled.setValue(false);
@@ -107,6 +106,7 @@ public class StrandLengths extends UIConfig {
             KaledoscopeOutput.configurePixliteOutput(lx);
             parameterChanged = false;
             lx.engine.output.enabled.setValue(originalEnabled);
+            */
         }
     }
 }

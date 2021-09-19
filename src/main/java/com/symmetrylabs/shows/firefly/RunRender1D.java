@@ -38,7 +38,7 @@ public class RunRender1D {
 
     static public void sine(int colors[], KaledoscopeModel.Run run, float head, float freq, float phase, float min, float depth, LXColor.Blend blend) {
         for (LXPoint pt : run.allPoints) {
-            float ptX = run.getRunDistance(pt) / run.getButterfliesRunDistance();
+            float ptX = run.getRunDistance(pt) / run.getTotalCableLength();
             float value = ((float)Math.sin((double)freq * (head - ptX) + phase) + 1.0f)/2.0f;
             value = min + depth * value;
             int color = (int)(value * 255f);
@@ -48,7 +48,7 @@ public class RunRender1D {
 
     static public void cosine(int colors[], KaledoscopeModel.Run run, float head, float freq, float phase, float min, float depth, LXColor.Blend blend) {
         for (LXPoint pt : run.allPoints) {
-            float ptX = run.getRunDistance(pt) / run.getButterfliesRunDistance();
+            float ptX = run.getRunDistance(pt) / run.getTotalCableLength();
             float value = ((float)Math.cos((double)freq * (head - ptX) + phase) + 1.0f)/2.0f;
             value = min + depth * value;
             int color = (int)(value * 255f);
@@ -79,7 +79,7 @@ public class RunRender1D {
         minMax[0] = (float)zeroCrossingTriangleWave(t, slope);
         minMax[1] = (float)zeroCrossingTriangleWave(t, -slope);
         for (LXPoint pt : run.allPoints) {
-            float ptX = run.getRunDistance(pt) / run.getButterfliesRunDistance();
+            float ptX = run.getRunDistance(pt) / run.getTotalCableLength();
             float val = (float)triangleWave(t, slope, ptX)*maxValue;
             //colors[pt.index] = LXColor.blend(colors[pt.index], LXColor.rgba(gray, gray, gray, 255), blend);
             colors[pt.index] = LXColor.blend(colors[pt.index], LXColor.rgba(
@@ -126,13 +126,13 @@ public class RunRender1D {
 
     static public float[] renderSquare(int colors[], KaledoscopeModel.Run run, float t, float width, float maxValue, LXColor.Blend blend,
                                        int color) {
-        double barPos = t * run.getButterfliesRunDistance();
+        double barPos = t * run.getTotalCableLength();
         float[] minMax = new float[2];
         minMax[0] = t - width/2.0f;
         minMax[1] = t + width/2.0f;
         for (LXPoint pt: run.allPoints) {
             float ptX = run.getRunDistance(pt);
-            float totalRunDistance = run.getButterfliesRunDistance();
+            float totalRunDistance = run.getTotalCableLength();
             //int gray = (int) ((((pt.lbx > minMax[0]*lightBar.length) && (pt.lbx < minMax[1]*lightBar.length))?maxValue:0f)*255.0f);
             float val = (((ptX > minMax[0]*totalRunDistance) && (ptX < minMax[1]*totalRunDistance))?maxValue:0f);
             int newColor = LXColor.blend(colors[pt.index], LXColor.rgba(
@@ -164,7 +164,7 @@ public class RunRender1D {
         for (LXPoint pt : run.allPoints) {
             //int gray = (int) (stepDecayWave(t, width, slope, pt.lbx/lightBar.length, forward)*255.0*maxValue);
             float ptX = run.getRunDistance(pt);
-            float totalRunDistance = run.getButterfliesRunDistance();
+            float totalRunDistance = run.getTotalCableLength(); //getButterfliesRunDistance();
             float val = stepDecayWave(t, width, slope, ptX/totalRunDistance, forward)*maxValue;
             //colors[pt.index] = LXColor.blend(colors[pt.index], LXColor.rgba(gray, gray, gray, 255), blend);
             colors[pt.index] = LXColor.blend(colors[pt.index], LXColor.rgba(

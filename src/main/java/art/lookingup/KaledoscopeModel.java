@@ -74,7 +74,7 @@ public class KaledoscopeModel extends SLModel {
             this.strandRunIndex = strandRunIndex;
 
             int configuredNumFlowers = StrandLengths.getNumFlowers(tree.id, whichRun);
-            logger.log(Level.INFO, "Generating flower strand id " + globalStrandId + " of length: " + configuredNumFlowers);
+            logger.log(Level.INFO, "Generating flower strand id " + tree.id + "." + whichRun + " of length: " + configuredNumFlowers);
 
             for (int i = 0; i < configuredNumFlowers; i++) {
                 LUFlower.FlowerConfig flowerConfig = FlowersConfig.getFlowerConfig(tree.id, whichRun, i);
@@ -149,7 +149,7 @@ public class KaledoscopeModel extends SLModel {
             }
         }
 
-        public Strand(Run run, int globalStrandId, int strandRunIndex, List<Cable> cables, int whatever) {
+        public Strand(Run run, int globalStrandId, int strandRunIndex, List<Cable> cables, float[] prevCablesLengths) {
             this.strandId = globalStrandId;
             strandType = StrandType.BUTTERFLY;
             butterflies = new ArrayList<LUButterfly>();
@@ -181,8 +181,9 @@ public class KaledoscopeModel extends SLModel {
                 allButterflies.add(butterfly);
                 // For each point on the butterfly, build an index of it's distance along the cable.  This will help with
                 // linear rendering algorithms.
+                float butterflyRunInches = thisButterflyCable.prevButterflyTotalCableDistance + prevCablesLengths[whichCable];
                 for (LXPoint butterflyPoint : butterfly.allPoints) {
-                    run.ptsRunInches.put(butterflyPoint.index, thisButterflyCable.prevButterflyTotalCableDistance);
+                    run.ptsRunInches.put(butterflyPoint.index, butterflyRunInches);
                 }
                 //addressablePoints.addAll(butterfly.addressablePoints);
                 //allPoints.addAll(butterfly.allPoints);
@@ -217,7 +218,6 @@ public class KaledoscopeModel extends SLModel {
             // TODO load this from a config
             return 12f;
         }
-
 
         public void recomputeBeziers(List<Bezier> beziers) {
             for (int i = 0; i < butterflies.size(); i++) {
@@ -356,13 +356,15 @@ public class KaledoscopeModel extends SLModel {
             ptsRunIndex = new HashMap<Integer, Integer>();
             ptsRunInches = new HashMap<Integer, Float>();
 
+            float[] currentCableRunLengths = new float[3];
+
             for (int i = 0; i < cableRun0.size(); i++) {
                 List<Cable> cablesThisStrand = new ArrayList<Cable>();
                 cablesThisStrand.add(cableRun0.get(i));
                 cablesThisStrand.add(cableRun1.get(i));
                 cablesThisStrand.add(cableRun2.get(i));
 
-                Strand strand = new Strand(this, allStrands.size(), i, cablesThisStrand, 0);
+                Strand strand = new Strand(this, allStrands.size(), i, cablesThisStrand, currentCableRunLengths);
                 if (strand.strandId == 0 || strand.strandId == 2) {
                     // The first and third strands run backwards.  We already reversed them when building the
                     // strands but we actually want all the butterflies for a run in proper run order so we
@@ -381,6 +383,9 @@ public class KaledoscopeModel extends SLModel {
                     allPoints.addAll(strand.allPoints);
                     butterflies.addAll(strand.butterflies);
                 }
+                currentCableRunLengths[0] += cableRun0.get(i).length();
+                currentCableRunLengths[1] += cableRun0.get(i).length();
+                currentCableRunLengths[2] += cableRun0.get(i).length();
                 allStrands.add(strand);
                 strands.add(strand);
             }
@@ -448,6 +453,18 @@ public class KaledoscopeModel extends SLModel {
         public float getRunDistance(LXPoint point) {
             return ptsRunInches.get(point.index);
         }
+
+
+        public float getTotalCableLength() {
+            float total = 0f;
+            for (int i = 0; i < allCables.get(0).size(); i++) {
+                for (Cable cable : allCables.get(0)) {
+                    total += cable.length();
+                }
+            }
+            return total;
+        }
+
     }
 
     /**
@@ -568,7 +585,7 @@ public class KaledoscopeModel extends SLModel {
             List<Run> treeFlowerRuns = new ArrayList<Run>();
             AnchorTree tree = anchorTrees.get(i);
             for (int j = 0; j < tree.numberFlowerRuns(); j++) {
-                Run run = new Run(allRuns.size(), Run.RunType.FLOWER, anchorTrees.get(i), j);
+                Run run = new Run(allRuns.size(), Run.RunType.FLOWER, tree, j);
                 allRuns.add(run);
                 allFlowerRuns.add(run);
                 treeFlowerRuns.add(run);
@@ -586,13 +603,15 @@ public class KaledoscopeModel extends SLModel {
     }
 
     /**
+     * NOTE(tracy): This is out of date with new single run 3 cable model.
+     *
      * Re-assign butterflies to strands.  This allows us to modify the strand lengths as appropriate for
      * the anchor trees at runtime without restarting SLStudio.  The entire number of butterflies must
      * be conserved since we can't change the number of LXPoints aka the LXModel without restarting.  This
      * should just change the pixlite output mapping.  The UI for configuring strand lengths of butterflies
      * should automatically adjust adjacent strand lengths in order to preserve this property.
      */
-    static public void reassignButterflyStrands() {
+    static public void reassignButterflyStrandsDeprecated() {
         int totalButterfliesAssigned = 0;
         for (Run run : allButterflyRuns) {
             // Get all the strand lengths assigned to this run.
