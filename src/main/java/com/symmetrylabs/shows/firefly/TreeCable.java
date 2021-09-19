@@ -46,7 +46,7 @@ public class TreeCable extends SLPattern {
                         for (LXPoint p : tree.inCables[i].points) {
                             if (currentIndexIn >= tree.inCables[i].points.size())
                                 currentIndexIn = 0;
-                            if (!tracer.getValueb() || tracer.getValueb() && currentIndexIn == j)
+                            if (!tracer.getValueb() || (tracer.getValueb() && currentIndexIn == j))
                                 colors[p.index] = LXColor.rgb(255, 255, 255);
                             j++;
                         }
@@ -60,7 +60,7 @@ public class TreeCable extends SLPattern {
                         if (currentIndexOut >= tree.outCables[i].points.size())
                             currentIndexOut = 0;
                         for (LXPoint p : tree.outCables[i].points) {
-                            if (!tracer.getValueb() || tracer.getValueb() && currentIndexOut == j)
+                            if (!tracer.getValueb() || (tracer.getValueb() && currentIndexOut == j))
                                 colors[p.index] = LXColor.rgb(255, 255, 255);
                             j++;
                         }
@@ -76,13 +76,13 @@ public class TreeCable extends SLPattern {
             if (currentIndexTreeOut >= tree.outPoints.size())
                 currentIndexTreeOut = 0;
             for (LXPoint p : tree.inPoints) {
-                if (!tracer.getValueb() || tracer.getValueb() && currentIndexTreeIn == j)
+                if (!tracer.getValueb() || (tracer.getValueb() && currentIndexTreeIn == j))
                     colors[p.index] = LXColor.rgb(255, 255, 255);
                 j++;
             }
             j = 0;
             for (LXPoint p : tree.outPoints) {
-                if (!tracer.getValueb() || tracer.getValueb() && currentIndexTreeOut == j)
+                if (!tracer.getValueb() || (tracer.getValueb() && currentIndexTreeOut == j))
                     colors[p.index] = LXColor.rgb(255, 255, 255);
                 j++;
             }
