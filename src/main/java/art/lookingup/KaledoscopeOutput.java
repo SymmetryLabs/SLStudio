@@ -60,6 +60,12 @@ public class KaledoscopeOutput {
             int curUniverseNum = 0;
             for (int outputNum = 0; outputNum < 16; outputNum++) {
                 String strandIds;
+                // We are setting our universes just using 6 universes per output.  Typically we build the output
+                // with fully packed universe numbers, but since we want to be able to mark some fixtures as dead
+                // and restart our network output we don't want that recomputation to shift which universes are on
+                // which Pixlite outputs.  That would require updating the Pixlite via Advatek Assistant.  Also
+                // 6 is the maximum number of universes per output on a Pixlite 16 (1020 leds).
+                curUniverseNum = outputNum * 6;
                 if (strandType == 0) {
                     logger.info("Loading butterfly mapping for output " + (outputNum + 1));
                     strandIds = FireflyShow.mappingConfig.getStringParameter(MappingConfig.BF_PIXLITE_BASE + (outputNum + 1)).getString();
