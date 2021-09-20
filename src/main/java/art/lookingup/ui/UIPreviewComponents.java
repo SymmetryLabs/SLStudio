@@ -18,6 +18,7 @@ public class UIPreviewComponents extends UICollapsibleSection {
     public DiscreteParameter selBezierP = new DiscreteParameter("curve", 4);
     public DiscreteParameter selCtrlPtP = new DiscreteParameter("ctrl pt", 4);
     public CompoundParameter ptSize = new CompoundParameter("pt sz", 1f, 10f);
+   // public Parameter trees = new CompoundParameter("trees", )
 
     public UIPreviewComponents(final SLStudioLX.UI ui) {
         super(ui, 0, 0, ui.leftPane.global.getContentWidth(), 200);
@@ -50,7 +51,16 @@ public class UIPreviewComponents extends UICollapsibleSection {
             }
         }.setLabel("ctrl pts").setActive(FireflyShow.axes.showCtrlPoints);
         showCtrlPointsBtn.setWidth(35).setHeight(16);
-        showCtrlPointsBtn.addToContainer(knobsContainer);
+        // Disabled for now
+        //showCtrlPointsBtn.addToContainer(knobsContainer);
+        UIButton showTrees = new UIButton() {
+            @Override
+            public void onToggle(boolean on) {
+                FireflyShow.axes.showTrees = on;
+            }
+        }.setLabel("trees").setActive(FireflyShow.axes.showTrees);
+        showTrees.setWidth(35).setHeight(16);
+        showTrees.addToContainer(knobsContainer);
 
         UI2dContainer knobsContainer2 = new UI2dContainer(0, 30, getContentWidth(), 20);
         knobsContainer2.setLayout(UI2dContainer.Layout.HORIZONTAL);

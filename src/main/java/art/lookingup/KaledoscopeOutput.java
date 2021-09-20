@@ -16,7 +16,8 @@ import java.util.logging.Logger;
 
 
 /**
- * Handles output from our 'colors' buffer to our DMX lights.  Currently using E1.31.
+ * Handles mapping the model to Pixlite outputs.  Each Pixlite output should be assigned 6 universes.  This allows
+ * us to dynamically reconfigure our output to handle dead fixtures that have been replaced with a jumper wire.
  */
 public class KaledoscopeOutput {
     private static final Logger logger = Logger.getLogger(KaledoscopeOutput.class.getName());

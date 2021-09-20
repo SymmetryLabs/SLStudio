@@ -7,6 +7,9 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static processing.core.PConstants.TRIANGLE_STRIP;
 
 public class PreviewComponents {
@@ -20,15 +23,23 @@ public class PreviewComponents {
         public boolean showCtrlPoints;
         public boolean showFloor;
         public boolean showCables;
+        public boolean showTrees = true;
         static public int selectedRun;
         static public int selectedBezier;
         static public int selectedCtrlPt;
         static public float ptSize;
+        List<UICylinder> trees;
 
         public Axes() {
             xAxis = new UICylinder(1f, 10.0f, 4, LXColor.rgb(127,0,0));
             yAxis = new UICylinder(1f, 10.0f, 4, LXColor.rgb(0, 127, 0));
             zAxis = new UICylinder(1f, 10.0f, 4, LXColor.rgb(0, 0, 127));
+            trees = new ArrayList<UICylinder>();
+            List<AnchorTree> anchorTrees = KaledoscopeModel.anchorTrees;
+            for (int treeNum = 0; treeNum < anchorTrees.size(); treeNum++) {
+                // 51, 36, 33 Brown for a tree.
+                trees.add(new UICylinder(anchorTrees.get(treeNum).p.radius, 130f, 6, 0, LXColor.rgb(51, 36, 33)));
+            }
             floor = new Floor();
             showAxes = true;
             showFloor = true;
@@ -102,6 +113,16 @@ public class PreviewComponents {
                 zAxis.onDraw(ui, pg);
                 pg.popMatrix();
 
+                if (showTrees) {
+                    for (int i = 0; i < trees.size(); i++) {
+                        UICylinder tree = trees.get(i);
+                        AnchorTree aTree = KaledoscopeModel.anchorTrees.get(i);
+                        pg.pushMatrix();
+                        pg.translate(aTree.p.x, 0, aTree.p.z);
+                        tree.onDraw(ui, pg);
+                        pg.popMatrix();
+                    }
+                }
                 if (showCtrlPoints) {
                     KaledoscopeModel.Run selRun = null;
                     Bezier selBezier = null;
@@ -183,21 +204,27 @@ public class PreviewComponents {
         private final int detail;
         public final float len;
         private int fill;
+        private int stroke;
 
         public UICylinder(float radius, float len, int detail, int fill) {
-            this(radius, radius, 0, len, detail, fill);
+            this(radius, radius, 0, len, detail, fill, 0);
+        }
+
+        public UICylinder(float radius, float len, int detail, int fill, int stroke) {
+            this(radius, radius, 0, len, detail, fill, stroke);
         }
 
         public UICylinder(float baseRadius, float topRadius, float len, int detail, int fill) {
-            this(baseRadius, topRadius, 0, len, detail, fill);
+            this(baseRadius, topRadius, 0, len, detail, fill, 0);
         }
 
-        public UICylinder(float baseRadius, float topRadius, float yMin, float yMax, int detail, int fill) {
+        public UICylinder(float baseRadius, float topRadius, float yMin, float yMax, int detail, int fill, int stroke) {
             this.base = new PVector[detail];
             this.top = new PVector[detail];
             this.detail = detail;
             this.len = yMax - yMin;
             this.fill = fill;
+            this.stroke = stroke;
             for (int i = 0; i < detail; ++i) {
                 float angle = i * PConstants.TWO_PI / detail;
                 this.base[i] = new PVector(baseRadius * (float)Math.cos(angle), yMin, baseRadius * (float)Math.sin(angle));
@@ -206,8 +233,13 @@ public class PreviewComponents {
         }
 
         public void onDraw(UI ui, PGraphics pg) {
-            pg.fill(fill);
-            pg.noStroke();
+            if (stroke == 0) {
+                pg.fill(fill);
+                pg.noStroke();
+            } else {
+                pg.noFill();
+                pg.stroke(stroke);
+            }
             pg.beginShape(TRIANGLE_STRIP);
             for (int i = 0; i <= this.detail; ++i) {
                 int ii = i % this.detail;
@@ -228,7 +260,7 @@ public class PreviewComponents {
             float y1 = 0f;
             float z1 = -1170.0f;
             pg.noStroke();
-            pg.fill(40, 40, 40);
+            pg.fill(20, 20, 20);
             pg.beginShape();
             pg.vertex(x1, y1, 0f);
             pg.vertex(-x1, y1, 0f);
