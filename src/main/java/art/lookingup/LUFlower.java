@@ -29,9 +29,10 @@ public class LUFlower implements LXFixture {
 
     public LUFlower(AnchorTree tree, LUFlower.FlowerConfig flowerConfig, int globalRunNum) {
         this.x = tree.p.x + tree.p.radius * (float) Math.cos(Math.toRadians(flowerConfig.azimuth));
-        float ringSpacing = 24f;
-        float topRingHeight = tree.p.fw1Top;
-        this.y = topRingHeight - flowerConfig.ringNum * ringSpacing + flowerConfig.verticalDisplacement;
+        this.y = tree.p.fw1Top - flowerConfig.verticalDisplacement;
+        if (flowerConfig.ringNum == 1) {
+            this.y = tree.p.fw2Top - flowerConfig.verticalDisplacement;
+        }
         this.z = tree.p.z + tree.p.fw1Radius * (float) Math.sin(Math.toRadians(flowerConfig.azimuth));
         this.anchorTree = tree.id;
         this.globalRunNum = globalRunNum;

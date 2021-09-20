@@ -9,6 +9,7 @@ import heronarts.lx.parameter.LXParameter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Logger;
 
 /**
@@ -49,7 +50,9 @@ public class FlowersConfig extends UIConfig {
         }
         // The default is ring 0, and 360f * flowerNum / (MAX_FLOWERS_PER_RUN) degrees and vertical displacement of 0.
         float azimuth = 360f * (float)flowerNum / (float)MAX_FLOWERS_PER_RUN;
-        String val = flowersParamFile.getStringParameter(flowerAddress, "" + treeRunNum + "," + (int)azimuth + "," + "0").getString();
+        azimuth = 360f * (float)Math.random();
+        int verticalDisplacement = ThreadLocalRandom.current().nextInt(33);
+        String val = flowersParamFile.getStringParameter(flowerAddress, "" + treeRunNum + "," + (int)azimuth + "," + verticalDisplacement).getString();
         String[] posVals = val.split(",");
         LUFlower.FlowerConfig flowerConfig = new LUFlower.FlowerConfig();
         flowerConfig.treeNum = treeNum;
