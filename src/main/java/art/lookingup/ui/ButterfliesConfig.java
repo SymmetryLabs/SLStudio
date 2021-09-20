@@ -1,7 +1,6 @@
 package art.lookingup.ui;
 
 import art.lookingup.KaledoscopeModel;
-import art.lookingup.LUFlower;
 import art.lookingup.ParameterFile;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.LX;
@@ -22,7 +21,7 @@ public class ButterfliesConfig extends UIConfig {
     public static final String filename = "butterflies.json";
     public LX lx;
     private boolean parameterChanged = false;
-    static public final int MAX_BUTTERFLIES_PER_RUN = 140;
+    static public final int MAX_BUTTERFLIES_PER_RUN = 180;
     static public ParameterFile butterfliesParamFile;
 
     public ButterfliesConfig(final SLStudioLX.UI ui, LX lx, ParameterFile paramFile) {
@@ -52,13 +51,14 @@ public class ButterfliesConfig extends UIConfig {
         // The default is ring 0, and 360f * flowerNum / (MAX_FLOWERS_PER_RUN) degrees and vertical displacement of 0.
         // TODO(tracy): We need to compute a reasonable default until exact measurements are in.
         // Will dump the current generated version.
-        String val = butterfliesParamFile.getStringParameter(butterflyAddress, "-1,0,0").getString();
+        String val = butterfliesParamFile.getStringParameter(butterflyAddress, "-1,0,0,0").getString();
         String[] posVals = val.split(",");
-        int[] vals = new int[3];
+        int[] vals = new int[4];
         try {
             vals[0] = Integer.parseInt(posVals[0]);
             vals[1] = Integer.parseInt(posVals[1]);
             vals[2] = Integer.parseInt(posVals[2]);
+            vals[3] = Integer.parseInt(posVals[3]);
         } catch (Exception ex) {
             logger.severe("Badly formatted butterfly.  Num: " + butterflyNum + " val=" + val);
         }
@@ -74,10 +74,10 @@ public class ButterfliesConfig extends UIConfig {
      * @param whichCable
      * @param inches
      */
-    static public void setButterflyConfig(int butterflyNum, int treeNum, int whichCable, int inches) {
+    static public void setButterflyConfig(int butterflyNum, int treeNum, int whichCable, int inches, int vertical) {
         String butterflyAddress = "B." + butterflyNum;
         StringParameter sp = butterfliesParamFile.getStringParameter(butterflyAddress, "");
-        sp.setValue("" + treeNum + "," + whichCable + "," + inches);
+        sp.setValue("" + treeNum + "," + whichCable + "," + inches + "," + vertical);
     }
 
     /**
@@ -134,15 +134,16 @@ public class ButterfliesConfig extends UIConfig {
     static public int getCableForButterflyRunIndex(int butterflyRunIndex) {
         int[] config = ButterfliesConfig.getButterflyConfig(butterflyRunIndex);
         return config[1];
-        // NOTE(tracy): GENERATE BUTTERFLY POSITIONS use this commented out code.
-        //return butterflyRunIndex % 3;
+    }
+
+    static public int getVertical(int butterflyRunIndex) {
+        int[] config = ButterfliesConfig.getButterflyConfig(butterflyRunIndex);
+        return config[3];
     }
 
     static public float getCableDistancePrevButterfly(int butterflyRunIndex) {
         int[] config = ButterfliesConfig.getButterflyConfig(butterflyRunIndex);
         return (float) config[2];
-        // NOTE(tracy): GENERATE BUTTERFLY POSITIONS use this commented out code.
-        //return 12f;
     }
 
 
