@@ -3,8 +3,10 @@ package com.symmetrylabs.shows.firefly;
 import art.lookingup.*;
 import art.lookingup.ui.*;
 import com.symmetrylabs.shows.Show;
+import com.symmetrylabs.shows.HasWorkspace;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.workspaces.Workspace;
 import heronarts.lx.LX;
 import heronarts.p3lx.ui.UIEventHandler;
 import processing.event.KeyEvent;
@@ -12,7 +14,7 @@ import processing.event.KeyEvent;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class FireflyShow implements Show {
+public class FireflyShow implements Show, HasWorkspace {
     private static final Logger logger = Logger.getLogger(FireflyShow.class.getName());
 
     public final static String SHOW_NAME = "firefly";
@@ -35,6 +37,8 @@ public class FireflyShow implements Show {
     // Allow each butterfly run to have a configurable number of runs.
     static public List<Integer> butterflyRunsNumStrands;
     List<LUFlower.FlowerConfig> flowerConfigs;
+
+    private Workspace workspace;
 
     /**
      * These are parameters we need for building the model. We bind the UI to these ParameterFile's
@@ -77,6 +81,13 @@ public class FireflyShow implements Show {
         previewComponents = (UIPreviewComponents) new UIPreviewComponents(ui).setExpanded(false).addToContainer(lx.ui.leftPane.global);
         KaledoscopeOutput.configurePixliteOutput(lx);
         lx.ui.setTopLevelKeyEventHandler(new TopLevelKeyEventHandler(lx));
+
+        workspace = new Workspace(lx, ui, "shows/" + SHOW_NAME);
+    }
+
+    @Override
+    public Workspace getWorkspace() {
+        return workspace;
     }
 
     public class TopLevelKeyEventHandler extends UIEventHandler {
