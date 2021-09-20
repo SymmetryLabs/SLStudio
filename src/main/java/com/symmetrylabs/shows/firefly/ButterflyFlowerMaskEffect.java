@@ -4,6 +4,7 @@ import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.EnumParameter;
+import heronarts.lx.parameter.BooleanParameter;
 import com.symmetrylabs.slstudio.effect.SLEffect;
 import art.lookingup.KaledoscopeModel;
 import art.lookingup.LUButterfly;
@@ -14,12 +15,16 @@ public class ButterflyFlowerMaskEffect extends SLEffect<KaledoscopeModel> {
 
     public final EnumParameter<MaskMode> butterflyMaskParam;
     public final EnumParameter<MaskMode> flowerMaskParam;
+    public final BooleanParameter flowerPetalsParam;
+    public final BooleanParameter flowerCentersParam;
 
     public ButterflyFlowerMaskEffect(LX lx) {
         super(lx);
 
         addParameter(butterflyMaskParam = new EnumParameter<>("ButterflyMask", MaskMode.PASS));
         addParameter(flowerMaskParam = new EnumParameter<>("FlowerMask", MaskMode.PASS));
+        addParameter(flowerPetalsParam = new BooleanParameter("FlowerPetals", true));
+        addParameter(flowerCentersParam = new BooleanParameter("FlowerCenters", true));
     }
 
     @Override
@@ -44,7 +49,15 @@ public class ButterflyFlowerMaskEffect extends SLEffect<KaledoscopeModel> {
 
             for (int i = 0; i < KaledoscopeModel.allFlowers.size(); ++i) {
                 LUFlower flower = KaledoscopeModel.allFlowers.get(i);
-                setColor(flower, c);
+
+                if (flowerPetalsParam.isOn()) {
+                    for (LXPoint p : flower.petals) {
+                        setColor(p.index, c);
+                    }
+                }
+                if (flowerCentersParam.isOn()) {
+                    setColor(flower.center.index, c);
+                }
             }
         }
     }
