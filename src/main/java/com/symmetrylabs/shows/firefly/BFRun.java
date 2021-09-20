@@ -8,13 +8,15 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class BFRun extends SLPattern {
     public static final String GROUP_NAME = FireflyShow.SHOW_NAME;
     private static final Logger logger = Logger.getLogger(BFRun.class.getName());
 
-    DiscreteParameter runNum = new DiscreteParameter("run", 0, 0, 100);
+    DiscreteParameter runNum = new DiscreteParameter("run", -1, -1, 100);
     BooleanParameter tracer = new BooleanParameter("tracer", false);
     DiscreteParameter index = new DiscreteParameter("index", -1, -1, 500);
 
@@ -29,7 +31,7 @@ public class BFRun extends SLPattern {
 
     @Override
     public void onActive() {
-        runNum.setRange(0, KaledoscopeModel.allRuns.size());
+        runNum.setRange(-1, KaledoscopeModel.allRuns.size());
     }
 
     @Override
@@ -37,21 +39,28 @@ public class BFRun extends SLPattern {
         for (LXPoint p : model.points) {
             colors[p.index] = LXColor.rgb(0, 0, 0);
         }
-        KaledoscopeModel.Run run = KaledoscopeModel.allRuns.get(runNum.getValuei());
-        if (tracer.getValueb()) {
-            for (int i = 0; i < run.allPoints.size(); i++) {
-                if (currentIndex == i)
-                    colors[run.allPoints.get(i).index] = LXColor.rgb(255, 255, 255);
-            }
-            currentIndex = (currentIndex + 1) % run.allPoints.size();
-        } else {
-            int i = 0;
-            for (LXPoint p : run.allPoints) {
-                if (index.getValuei() == i || index.getValuei() == -1)
-                    colors[p.index] = LXColor.rgb(255, 255, 255);
-                else
-                    colors[p.index] = LXColor.rgb(0, 0,0);
-                i++;
+        List<KaledoscopeModel.Run> runs = new ArrayList<KaledoscopeModel.Run>();
+        runs.addAll(KaledoscopeModel.allRuns);
+        if (runNum.getValuei() != -1) {
+            runs.clear();
+            runs.add(KaledoscopeModel.allRuns.get(runNum.getValuei()));
+        }
+        for (KaledoscopeModel.Run run : runs) {
+            if (tracer.getValueb()) {
+                for (int i = 0; i < run.allPoints.size(); i++) {
+                    if (currentIndex == i)
+                        colors[run.allPoints.get(i).index] = LXColor.rgb(255, 255, 255);
+                }
+                currentIndex = (currentIndex + 1) % run.allPoints.size();
+            } else {
+                int i = 0;
+                for (LXPoint p : run.allPoints) {
+                    if (index.getValuei() == i || index.getValuei() == -1)
+                        colors[p.index] = LXColor.rgb(255, 255, 255);
+                    else
+                        colors[p.index] = LXColor.rgb(0, 0, 0);
+                    i++;
+                }
             }
         }
     }
