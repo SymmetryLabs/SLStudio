@@ -12,7 +12,7 @@ abstract public class ColorPattern extends FPSPattern {
 
     public DiscreteParameter paletteKnob = new DiscreteParameter("palette", 0, 0, LUColors.ALL_PALETTES.length);
     public final BooleanParameter randomPaletteKnob =
-        new BooleanParameter("RandomPlt", true);
+        new BooleanParameter("RandPlt", false);
     public CompoundParameter saturation = new CompoundParameter("sat", 1.0f, 0.0, 1.0);
     public CompoundParameter bright = new CompoundParameter("bright", 1.0, 0.0, 1.0);
     public CompoundParameter hue = new CompoundParameter("hue", 0f, 0f, 1.0f);
