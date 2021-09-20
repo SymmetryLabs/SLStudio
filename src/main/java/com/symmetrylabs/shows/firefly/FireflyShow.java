@@ -91,6 +91,9 @@ public class FireflyShow implements Show {
         public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
             super.onKeyPressed(keyEvent, keyChar, keyCode);
             // Disable bezier editing.
+            if (keyChar == '\\') {
+                butterfliesConfig.onSave();
+            }
             if (keyEvent != null)
                 return;
             Bezier.Point curPt = PreviewComponents.Axes.getCurSelPt();
