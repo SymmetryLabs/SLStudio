@@ -41,15 +41,16 @@ public class LUButterfly implements LXFixture {
     public int strandId;
     public int runIndex;
     public boolean dead = false;
+    public KaledoscopeModel.Cable cable;
 
-    public LUButterfly(int strandId, int strandIndex, int runIndex, float x, float y, float z) {
+    public LUButterfly(KaledoscopeModel.Cable cable, int strandId, int strandIndex, int runIndex, float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.strandId = strandId;
         this.strandIndex = strandIndex;
         this.runIndex = runIndex;
-
+        this.cable = cable;
         buildPoints();
     }
 
@@ -82,6 +83,20 @@ public class LUButterfly implements LXFixture {
         }
         x = pos.x;
         z = pos.y;
+    }
+
+    public void updatePosition3D(float x, float y, float z) {
+        float deltaX = x - this.x;
+        float deltaY = y - this.y;
+        float deltaZ = z - this.z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        for (LXPoint point : allPoints) {
+            point.x += deltaX;
+            point.z += deltaZ;
+            point.y += deltaY;
+        }
     }
 
     public void buildPoints() {

@@ -22,6 +22,7 @@ public class FireflyShow implements Show {
     public static StrandLengths strandLengths;
     public static RunsConfig runsConfig;
     static public AnchorTreeConfig anchorTreeConfig;
+    static public ButterfliesConfig butterfliesConfig;
     static public FlowersConfig flowersConfig;
     static public DeadConfig deadConfig;
     UIPreviewComponents previewComponents;
@@ -66,6 +67,7 @@ public class FireflyShow implements Show {
         mappingConfig = (MappingConfig) new MappingConfig(lx.ui, lx).setExpanded(false).addToContainer(lx.ui.leftPane.global);
         deadConfig = (DeadConfig) new DeadConfig(lx.ui, lx, DeadConfig.deadParamFile).setExpanded(false).addToContainer(lx.ui.leftPane.global);
         anchorTreeConfig = (AnchorTreeConfig) new AnchorTreeConfig(ui, lx, AnchorTreeConfig.anchorTreeParamFile).setExpanded(false).addToContainer(lx.ui.leftPane.global);
+        butterfliesConfig = (ButterfliesConfig) new ButterfliesConfig(ui, lx, ButterfliesConfig.butterfliesParamFile).setExpanded(false).addToContainer(lx.ui.leftPane.global);
         flowersConfig = (FlowersConfig) new FlowersConfig(lx.ui, lx, FlowersConfig.flowersParamFile).setExpanded(false).addToContainer(lx.ui.leftPane.global);
         // NOTE(tracy): Final topology is just a single run of butterflies.
         // runsConfig = (RunsConfig) new RunsConfig(lx.ui, lx, runsConfigParams).setExpanded(false).addToContainer(lx.ui.leftPane.global);
