@@ -53,6 +53,32 @@ public class AnchorTree {
             return p.x + p.radius;
     }
 
+    /**
+     * The center cable stops short of the center of the tree Z since it does not run to the
+     * sides of the tree.
+     * @param cableRun
+     * @return
+     */
+    public float getCableAnchorEndZ(int cableRun) {
+        if (cableRun == 1)
+            return p.z - p.radius;
+        else
+            return p.z;
+    }
+
+    /**
+     * The center cable starts at the center of the tree + the tree radius in the Z direction because
+     * it is not mounted to the sides of the tree.
+     * @param cableRun
+     * @return
+     */
+    public float getCableAnchorStartZ(int cableRun) {
+        if (cableRun == 1)
+            return p.z + p.radius;
+        else
+            return p.z;
+    }
+
     public float getCableHeight(int cableRun) {
         if (cableRun == 0)
             return p.c1Y;

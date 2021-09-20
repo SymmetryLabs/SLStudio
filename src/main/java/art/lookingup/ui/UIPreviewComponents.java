@@ -22,7 +22,7 @@ public class UIPreviewComponents extends UICollapsibleSection {
 
     public UIPreviewComponents(final SLStudioLX.UI ui) {
         super(ui, 0, 0, ui.leftPane.global.getContentWidth(), 200);
-        setTitle("Axes");
+        setTitle("Overlay");
         UI2dContainer knobsContainer = new UI2dContainer(0, 0, getContentWidth(), 20);
         knobsContainer.setLayout(UI2dContainer.Layout.HORIZONTAL);
         knobsContainer.setPadding(10, 10, 10, 10);
@@ -50,9 +50,9 @@ public class UIPreviewComponents extends UICollapsibleSection {
                 FireflyShow.axes.showCtrlPoints = on;
             }
         }.setLabel("ctrl pts").setActive(FireflyShow.axes.showCtrlPoints);
-        showCtrlPointsBtn.setWidth(35).setHeight(16);
+        //showCtrlPointsBtn.setWidth(35).setHeight(16);
         // Disabled for now
-        //showCtrlPointsBtn.addToContainer(knobsContainer);
+        showCtrlPointsBtn.addToContainer(knobsContainer);
         UIButton showTrees = new UIButton() {
             @Override
             public void onToggle(boolean on) {
@@ -61,6 +61,16 @@ public class UIPreviewComponents extends UICollapsibleSection {
         }.setLabel("trees").setActive(FireflyShow.axes.showTrees);
         showTrees.setWidth(35).setHeight(16);
         showTrees.addToContainer(knobsContainer);
+
+        UIButton showCablesBtn = new UIButton() {
+            @Override
+            public void onToggle(boolean on) {
+                FireflyShow.axes.showCables = on;
+            }
+        }.setLabel("cables").setActive(FireflyShow.axes.showCables);
+        showCablesBtn.setWidth(35).setHeight(16);
+        showCablesBtn.addToContainer(knobsContainer);
+
 
         UI2dContainer knobsContainer2 = new UI2dContainer(0, 30, getContentWidth(), 20);
         knobsContainer2.setLayout(UI2dContainer.Layout.HORIZONTAL);

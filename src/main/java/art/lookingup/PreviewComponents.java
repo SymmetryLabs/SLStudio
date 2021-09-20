@@ -44,7 +44,7 @@ public class PreviewComponents {
             showAxes = true;
             showFloor = true;
             showCtrlPoints = false;
-            showCables = true;
+            showCables = false;
             selectedRun = 0;
             selectedBezier = 0;
             selectedCtrlPt = 0;
@@ -121,6 +121,27 @@ public class PreviewComponents {
                         pg.translate(aTree.p.x, 0, aTree.p.z);
                         tree.onDraw(ui, pg);
                         pg.popMatrix();
+                    }
+                }
+                if (showCables) {
+                    for (AnchorTree tree : KaledoscopeModel.anchorTrees) {
+                        KaledoscopeModel.Cable[] cables = tree.outCables;
+                        for (KaledoscopeModel.Cable cable : cables) {
+                            if (cable == null) continue;
+                            pg.pushMatrix();
+                            pg.translate(cable.startX, cable.startY, cable.startZ);
+                            int bright = 255;
+                            pg.stroke(0);
+                            pg.fill(LXColor.rgb(0, 0, bright));
+                            pg.box(ptSize);
+                            pg.popMatrix();
+                            pg.pushMatrix();
+                            pg.translate(cable.endX, cable.endY, cable.endZ);
+                            pg.stroke(0);
+                            pg.fill(LXColor.rgb(0, 255, 0));
+                            pg.box(ptSize);
+                            pg.popMatrix();
+                        }
                     }
                 }
                 if (showCtrlPoints) {

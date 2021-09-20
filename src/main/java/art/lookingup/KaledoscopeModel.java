@@ -467,7 +467,7 @@ public class KaledoscopeModel extends SLModel {
                         continue;
                     float startX = tree.getCableAnchorX(whichCableRun);
                     float startY = tree.getCableHeight(whichCableRun);
-                    float startZ = tree.p.z;
+                    float startZ = tree.getCableAnchorStartZ(whichCableRun);
                     int nextOffset = 1;
                     AnchorTree nextAnchorTree = anchorTrees.get(treeNum + nextOffset);
                     while (!nextAnchorTree.p.isButterflyAnchor && (treeNum + nextOffset) < anchorTrees.size()) {
@@ -476,8 +476,30 @@ public class KaledoscopeModel extends SLModel {
                     }
                     float endX = nextAnchorTree.getCableAnchorX(whichCableRun);
                     float endY = tree.getCableHeight(whichCableRun);
-                    float endZ = nextAnchorTree.p.z;
-                    Cable cable = new Cable(startX, startY, startZ, endX, endY, endZ, whichCableRun);
+                    float endZ = nextAnchorTree.getCableAnchorEndZ(whichCableRun);
+                    // Now we need to compute the angle between the anchor trees and rotate all points around the
+                    // Y axis by that amount so that are cable start and end points are more accurate.
+                    // Translate the first tree to the origin and then translate the second tree the same.
+                    float secondTreeX = nextAnchorTree.p.x;
+                    float secondTreeZ = nextAnchorTree.p.z;
+                    float treeX = tree.p.x;
+                    float treeZ = tree.p.z;
+                    secondTreeX = secondTreeX - treeX;
+                    secondTreeZ = secondTreeZ - treeZ;
+                    // Now take the angle from secondTreeX, secondTreeZ to origin.
+                    float radians = (float)Math.atan2(secondTreeZ, secondTreeX);
+                    float degrees = (float)Math.toDegrees(radians);
+                    startX = startX - tree.p.x;
+                    startZ = startZ - tree.p.z;
+                    float []rotatedStart = rotateYAxis(90f - degrees, startX, startZ);
+                    rotatedStart[0] += tree.p.x;
+                    rotatedStart[1] += tree.p.z;
+                    endZ = endZ - nextAnchorTree.p.z;
+                    endX = endX - nextAnchorTree.p.x;
+                    float []rotatedEnd = rotateYAxis(90f - degrees, endX, endZ);
+                    rotatedEnd[0] += nextAnchorTree.p.x;
+                    rotatedEnd[1] += nextAnchorTree.p.z;
+                    Cable cable = new Cable(rotatedStart[0], startY, rotatedStart[1], rotatedEnd[0], endY, rotatedEnd[1], whichCableRun);
                     tree.outCables[whichCableRun] = cable;
                     nextAnchorTree.inCables[whichCableRun] = cable;
                     cable.startTree = tree;
@@ -502,6 +524,16 @@ public class KaledoscopeModel extends SLModel {
          */
         public float getRunDistance(LXPoint point) {
             return ptsRunInches.get(point.index);
+        }
+
+        public float[] rotateYAxis(float degrees, float x, float z) {
+            float xOrig = x;
+            x = (float) (z * Math.sin(Math.toRadians(degrees)) + x * Math.cos(Math.toRadians(degrees)));
+            z = (float) (-xOrig * Math.sin(Math.toRadians(degrees)) + z * Math.cos(Math.toRadians(degrees)));
+            float[] result = new float[2];
+            result[0] = x;
+            result[1] = z;
+            return result;
         }
 
 
