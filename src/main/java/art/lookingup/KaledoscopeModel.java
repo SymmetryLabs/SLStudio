@@ -226,6 +226,11 @@ public class KaledoscopeModel extends SLModel {
                 // For each point on the butterfly, build an index of it's distance along the cable.  This will help with
                 // linear rendering algorithms.
                 float butterflyRunInches = thisButterflyCable.prevButterflyTotalCableDistance + prevCablesLengths[whichCable];
+                // When computing the distance along the cable run, if it is the middle cable, account for the radius of
+                // the starting tree so that points along that cable are not ahead of the points along the cables mounted
+                // to the sides of threes.
+                if (whichCable == 1)
+                    butterflyRunInches += thisButterflyCable.startTree.p.radius;
                 for (LXPoint butterflyPoint : butterfly.allPoints) {
                     run.ptsRunInches.put(butterflyPoint.index, butterflyRunInches);
                 }
@@ -416,7 +421,6 @@ public class KaledoscopeModel extends SLModel {
                 cablesThisStrand.add(cableRun0.get(i));
                 cablesThisStrand.add(cableRun1.get(i));
                 cablesThisStrand.add(cableRun2.get(i));
-
                 Strand strand = new Strand(this, allStrands.size(), i, cablesThisStrand, currentCableRunLengths);
                 if (strand.strandId == 0 || strand.strandId == 2) {
                     // The first and third strands run backwards.  We already reversed them when building the
