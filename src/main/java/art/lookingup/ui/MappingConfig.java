@@ -68,10 +68,10 @@ public class MappingConfig extends UIConfig {
         registerStringParameter(BF_PIXLITE2, "0.1");
         registerStringParameter(BF_PIXLITE3, "0.2");
         registerStringParameter(BF_PIXLITE4, "0.3");
-        registerStringParameter(BF_PIXLITE5, "1.0");
-        registerStringParameter(BF_PIXLITE6, "1.1");
-        registerStringParameter(BF_PIXLITE7, "1.2");
-        registerStringParameter(BF_PIXLITE8, "1.3");
+        registerStringParameter(BF_PIXLITE5, "-1.0");
+        registerStringParameter(BF_PIXLITE6, "-1.1");
+        registerStringParameter(BF_PIXLITE7, "-1.2");
+        registerStringParameter(BF_PIXLITE8, "-1.3");
         registerStringParameter(BF_PIXLITE9, "-1.0");
         registerStringParameter(BF_PIXLITE10, "-1.1");
         registerStringParameter(BF_PIXLITE11, "-1.2");
