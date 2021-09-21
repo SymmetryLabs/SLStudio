@@ -85,6 +85,43 @@ public class LUFlower implements LXFixture {
         }
     }
 
+
+    /**
+     * Update flower position with a new FlowerConfig.
+     */
+    public void updatePosition(FlowerConfig fc) {
+        AnchorTree tree = KaledoscopeModel.anchorTrees.get(anchorTree);
+        float x = tree.p.x + tree.p.radius * (float) Math.cos(Math.toRadians(fc.azimuth));
+        float y = tree.p.fw1Top - fc.verticalDisplacement;
+        if (fc.ringNum == 1) {
+            this.y = tree.p.fw2Top - fc.verticalDisplacement;
+        }
+        float z = tree.p.z + tree.p.fw1Radius * (float) Math.sin(Math.toRadians(fc.azimuth));
+        updatePosition3D(x, y, z);
+        flowerConfig = fc;
+    }
+
+    /**
+     * The FlowerPos pattern can update flower positions.
+     * @param x
+     * @param y
+     * @param z
+     */
+    public void updatePosition3D(float x, float y, float z) {
+        float deltaX = x - this.x;
+        float deltaY = y - this.y;
+        float deltaZ = z - this.z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        for (LXPoint point : allPoints) {
+            point.x += deltaX;
+            point.z += deltaZ;
+            point.y += deltaY;
+        }
+    }
+
+
     static public class FlowerConfig {
         public int ringNum;
         public float azimuth;

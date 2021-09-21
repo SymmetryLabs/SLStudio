@@ -7,6 +7,7 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.LXParameter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -41,6 +42,22 @@ public class FlowersConfig extends UIConfig {
         }
         save();
         buildUI(ui);
+    }
+
+    /**
+     * FlowerPos pattern will use this method to update flower positions.
+     * @param treeNum
+     * @param treeRunNum
+     * @param flowerNum
+     * @param flowerConfig
+     */
+    static public void setFlowerConfig(int treeNum, int treeRunNum, int flowerNum, LUFlower.FlowerConfig flowerConfig) {
+        String flowerAddress = "F." + treeNum + "." + treeRunNum + "." + flowerNum;
+        if (flowersParamFile == null) {
+            flowersParamFile = ParameterFile.instantiateAndLoad(filename);
+        }
+        String val = "" + treeRunNum + "," + flowerConfig.azimuth + "," + flowerConfig.verticalDisplacement;
+        flowersParamFile.getStringParameter(flowerAddress, "").setValue(val);
     }
 
     static public LUFlower.FlowerConfig getFlowerConfig(int treeNum, int treeRunNum, int flowerNum) {
@@ -115,6 +132,19 @@ public class FlowersConfig extends UIConfig {
             }
         }
         return configs;
+    }
+
+    /**
+     * Utility method that will be called by the FlowerPos pattern to update and save flower positions.
+     */
+    static public void saveUpdatedFlowerConfigs() {
+        if (flowersParamFile == null)
+            return;
+        try {
+            flowersParamFile.save();
+        } catch (IOException ioex) {
+            logger.severe("Error attempting to save butterflies.json configuration: " + ioex.getMessage());
+        }
     }
 
     @Override
