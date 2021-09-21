@@ -62,25 +62,21 @@ public class FlowersConfig extends UIConfig {
         if (flowersParamFile == null) {
             flowersParamFile = ParameterFile.instantiateAndLoad(filename);
         }
-        // The default is ring 0, and 360f * flowerNum / (MAX_FLOWERS_PER_RUN) degrees and vertical displacement of 0.
-        float azimuth = 360f * (float)flowerNum / (float)MAX_FLOWERS_PER_RUN;
-        azimuth = 360f * (float)Math.random();
+
+        float azimuth = 360f * (float)Math.random();
         int verticalDisplacement = ThreadLocalRandom.current().nextInt(33);
-        String val = flowersParamFile.getStringParameter(flowerAddress, "" + treeRunNum + "," + (int)azimuth + "," + verticalDisplacement).getString();
+        String val = flowersParamFile.getStringParameter(flowerAddress, "" + (int)azimuth + "," + verticalDisplacement).getString();
         String[] posVals = val.split(",");
         LUFlower.FlowerConfig flowerConfig = new LUFlower.FlowerConfig();
         flowerConfig.treeNum = treeNum;
         flowerConfig.treeRunNum = treeRunNum;
         flowerConfig.indexOnRun = flowerNum;
         if (posVals.length > 0) {
-            flowerConfig.ringNum = Integer.parseInt(posVals[0]);
+            flowerConfig.azimuth = Float.parseFloat(posVals[0]);
             if (posVals.length > 1) {
-                flowerConfig.azimuth = Float.parseFloat(posVals[1]);
-                if (posVals.length > 2) {
-                    flowerConfig.verticalDisplacement = Float.parseFloat(posVals[2]);
-                }
+                flowerConfig.verticalDisplacement = Float.parseFloat(posVals[1]);
             } else {
-                logger.severe("Badly formatted flower config, expect 2 values, got 1: " + flowerAddress + " = " + val);
+            logger.severe("Badly formatted flower config, expect 2 values, got 1: " + flowerAddress + " = " + val);
             }
         } else {
             logger.severe("Badly formatted flower config, expect 2 values, got 0: " + flowerAddress + " = " + val);
@@ -160,6 +156,13 @@ public class FlowersConfig extends UIConfig {
         if (parameterChanged) {
             // TODO(tracy):
             // Based on the flower address, find the flower in KaledoscopeModel and update it's position.
+            List<LUFlower.FlowerConfig> allConfigs = getAllFlowerConfigs();
+            for (LUFlower.FlowerConfig flowerConfig : allConfigs) {
+                LUFlower flower = KaledoscopeModel.anchorTrees.get(flowerConfig.treeNum)
+                    .flowerRuns.get(flowerConfig.treeRunNum).flowers.get(flowerConfig.indexOnRun);
+                flower.updatePosition(flowerConfig);
+            }
+            lx.model.update(true, true);
         }
     }
 }

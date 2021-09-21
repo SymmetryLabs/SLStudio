@@ -30,7 +30,7 @@ public class LUFlower implements LXFixture {
     public LUFlower(AnchorTree tree, LUFlower.FlowerConfig flowerConfig, int globalRunNum) {
         this.x = tree.p.x + tree.p.radius * (float) Math.cos(Math.toRadians(flowerConfig.azimuth));
         this.y = tree.p.fw1Top - flowerConfig.verticalDisplacement;
-        if (flowerConfig.ringNum == 1) {
+        if (flowerConfig.treeRunNum == 1) {
             this.y = tree.p.fw2Top - flowerConfig.verticalDisplacement;
         }
         this.z = tree.p.z + tree.p.fw1Radius * (float) Math.sin(Math.toRadians(flowerConfig.azimuth));
@@ -93,8 +93,8 @@ public class LUFlower implements LXFixture {
         AnchorTree tree = KaledoscopeModel.anchorTrees.get(anchorTree);
         float x = tree.p.x + tree.p.radius * (float) Math.cos(Math.toRadians(fc.azimuth));
         float y = tree.p.fw1Top - fc.verticalDisplacement;
-        if (fc.ringNum == 1) {
-            this.y = tree.p.fw2Top - fc.verticalDisplacement;
+        if (fc.treeRunNum == 1) {
+            y = tree.p.fw2Top - fc.verticalDisplacement;
         }
         float z = tree.p.z + tree.p.fw1Radius * (float) Math.sin(Math.toRadians(fc.azimuth));
         updatePosition3D(x, y, z);
@@ -123,7 +123,6 @@ public class LUFlower implements LXFixture {
 
 
     static public class FlowerConfig {
-        public int ringNum;
         public float azimuth;
         public float verticalDisplacement;
         public int treeNum;
