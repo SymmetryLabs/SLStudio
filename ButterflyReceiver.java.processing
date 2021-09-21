@@ -1,0 +1,321 @@
+/**
+ * ButterflyReceiver.
+ *
+ * Receives ArtNet packets for 2 LED controllers.  
+ */
+
+// import UDP library
+import hypermedia.net.*;
+
+int framePacketCount1 = 0;
+int framePacketCount2 = 0;
+
+UDP udp1;  // define the UDP object
+int udp1Port = 6454;
+UDP udp2;
+int udp2Port = 6455;
+boolean updateImage1 = false;
+boolean updateImage2 = false;
+
+int numButterflies = 135;
+int numTrees = 6;
+int numFlowerStrands = 8;
+int numButterflyStrands = 4;
+
+long lastSyncPacketTime = System.currentTimeMillis();
+
+
+class Butterfly {
+  public int[] ledColors;
+  public int strandId;
+  public int universe;
+  public Butterfly(int universe, int[] ledColors) {
+    this.ledColors = new int[16];
+    this.universe = universe;
+    for (int i = 0; i < 16; i++) {
+      this.ledColors[i] = ledColors[i];
+    }
+  }
+}
+
+class Flower {
+  public int[] ledColors;
+  public int treeId;
+  public int runId;
+  public Flower(int[] ledColors) {
+    this.ledColors = new int[2];
+    for (int i = 0; i < 2; i++) {
+      this.ledColors[i] = ledColors[i];
+    }
+  }
+}
+    
+
+class ButterflyStrand {
+  public int startUniverse;
+  public int endUniverse;
+  public ArrayList<Butterfly> butterflies;
+  
+  
+  public ButterflyStrand(int startUniverse, int endUniverse) {
+    this.startUniverse = startUniverse;
+    this.endUniverse = endUniverse;
+    butterflies = new ArrayList<Butterfly>();
+  }
+}
+
+public void initButterflyStrands() {
+  ButterflyStrand strand = new ButterflyStrand(0, 3);
+  strands.add(strand);
+  strand = new ButterflyStrand(6, 10);
+  strands.add(strand);
+  strand = new ButterflyStrand(12, 13);
+  strands.add(strand);
+  strand = new ButterflyStrand(18, 21);
+  strands.add(strand);
+}
+  
+public void resetButterflyStrands() {
+  for (ButterflyStrand strand : strands) {
+    strand.butterflies.clear();
+  }
+}
+  
+public int totalButterflies() {
+  int total = 0;
+  HashMap <Integer, Integer> totalByUniverse = new HashMap<Integer, Integer>();
+  
+  for (ButterflyStrand strand : strands) {
+    total += strand.butterflies.size();
+   
+    for (Butterfly b : strand.butterflies) {
+      int cur = totalByUniverse.getOrDefault(b.universe, 0);
+      totalByUniverse.put(b.universe, cur + 1);
+    }
+   
+  }
+  for (Integer univ : totalByUniverse.keySet()) {
+    //System.out.println("Total univ: " + univ + " = " + totalByUniverse.get(univ));
+  }
+  return total;
+}
+  
+public void addButterflyToStrand(int universe, Butterfly butterfly) {
+  for (ButterflyStrand strand : strands) {
+    if (universe >= strand.startUniverse && universe <= strand.endUniverse) {
+      strand.butterflies.add(butterfly);
+      return;
+    }
+  }
+}
+
+public ArrayList<ButterflyStrand> strands = new ArrayList<ButterflyStrand>();
+public ArrayList<FlowerStrand> flowerStrands = new ArrayList<FlowerStrand>();
+
+public void initFlowerStrands() {
+    FlowerStrand strand = new FlowerStrand(0);
+    flowerStrands.add(strand);
+    strand = new FlowerStrand(0);
+    flowerStrands.add(strand);
+    strand = new FlowerStrand(6);
+    flowerStrands.add(strand);
+    strand = new FlowerStrand(12);
+    flowerStrands.add(strand);
+    strand = new FlowerStrand(18);
+    flowerStrands.add(strand);
+    strand = new FlowerStrand(24);
+    flowerStrands.add(strand);
+    strand = new FlowerStrand(30);
+    flowerStrands.add(strand);
+    strand = new FlowerStrand(32);
+    flowerStrands.add(strand);
+}
+  
+// Called each ArtNet sync packet.
+public void resetFlowerStrands() {
+  for (FlowerStrand strand : flowerStrands) {
+    strand.flowers.clear();
+  }
+}
+
+public int totalFlowers() {
+  int total = 0;
+  for (FlowerStrand strand: flowerStrands) {
+    total += strand.flowers.size();
+  }
+  return total;
+}
+
+public void addFlowerToStrand(int universeNumber, Flower flower) {
+  for (FlowerStrand strand : flowerStrands) {
+    if (strand.universeNumber == universeNumber) {
+      strand.flowers.add(flower);
+    }
+  }
+}
+  
+class FlowerStrand {
+  public int universeNumber;
+  public ArrayList<Flower> flowers;
+  
+  public FlowerStrand(int universe) {
+    this.universeNumber = universe;
+    flowers = new ArrayList<Flower>();
+  }
+}
+
+/**
+ * init
+ */
+void setup() {
+  // Fix this if you change the above.
+  size(420, 30);
+  initButterflyStrands();
+  initFlowerStrands();
+  // create a new datagram connection
+  // and wait for incomming message
+  udp1 = new UDP(this, udp1Port);
+  //udp.log( true );     // <-- printout the connection activity
+
+  udp1.setReceiveHandler("receiveLedController1");
+  udp1.listen(true);
+  
+  udp2 = new UDP(this, udp2Port);
+  udp2.setReceiveHandler("receiveLedController2");
+  udp2.listen(true);
+  background(127);
+}
+
+//process events
+void draw() {
+
+}
+
+// Butterfly receiver.
+void receiveLedController1(byte[] data, String ip, int port) {
+  //System.out.println("Controller 1 packet.");
+  boolean sync = receiveCommon(data, ip, port, framePacketCount1, true);
+  ++framePacketCount1;
+  if (sync) {
+    long now = System.currentTimeMillis();
+    // System.out.println("pkt ms: " + (now - lastSyncPacketTime));
+    framePacketCount1 = 0;
+    lastSyncPacketTime = now;
+  }
+}
+
+// Flower receiver.
+void receiveLedController2(byte[] data, String ip, int port) {
+  //System.out.println("Controller 2 packet.");
+  boolean sync = receiveCommon(data, ip, port, framePacketCount2, false);
+  ++framePacketCount2;
+  if (sync)
+    framePacketCount2 = 0;
+}
+
+int maxButterflyFixtureNumber = 0;
+int maxUniverseNumber = 0;
+public void addButterfly(int universeNumber, int fixtureNumber, Butterfly butterfly) {
+  if (fixtureNumber > maxButterflyFixtureNumber) {
+    System.out.println("Butterfly univ:" + universeNumber + " fixture:" + fixtureNumber);
+    maxButterflyFixtureNumber = fixtureNumber;
+  }
+  if (universeNumber > maxUniverseNumber) {
+    System.out.println("Butterfly max univ: " + universeNumber + " fixture: " + fixtureNumber);
+    maxUniverseNumber = universeNumber;
+  }
+  addButterflyToStrand(universeNumber, butterfly);
+}
+
+public void addFlower(int universeNumber, int fixtureNumber, Flower flower) {
+  //System.out.println("Flower univ:" + universeNumber + " fixture:" + fixtureNumber);
+  addFlowerToStrand(universeNumber, flower);
+}
+
+int butterflyPacketCount = 0;
+int flowerPacketCount = 0;
+int [] butterflyFixtureColors = new int[17];
+int butterflyFixtureLedCount = 0;
+int [] flowerFixtureColors = new int[2];
+int flowerFixtureLedCount = 0;
+
+boolean receiveCommon( byte[] data, String ip, int port, int framePacketCount, boolean isButterfly) {
+  // println("data.length=" + data.length);
+  // Butterfly has 16 LEDs, flower has only 2 LEDs so this will work for both.
+  
+  int flowerFixtureNumber = 0;
+  int butterflyFixtureNumber = 0;
+  int universeNumber = 0;
+  if (isButterfly) {
+    butterflyPacketCount++;
+  } else {
+    flowerPacketCount++;
+  }
+  // Artnet-Sync packets are 14 bytes long.
+  if (data.length > 15) {
+    // Each packet has a universe number.  Based on the universe #
+    // we can compute which region of pixels to update.  Universe #'s
+    // are unique with respect to a given controller.
+    // Universe at 14, 15    
+    universeNumber = data[14]&0xff | (data[15]&0xff) << 8;
+    // System.out.println("universe #: " + universeNumber);    
+    // Data length is 16-17
+    int colorsLength = (data[16]&0xff) << 8 | data[17]&0xff;
+    // System.out.println("colors length: " + colorsLength);
+    int artnetHeaderSize = 18;
+    // i 0-170
+    
+    // The count of butterflies or flowers.
+    
+    for (int i = 0; i < colorsLength/3; i++) {
+      int red = data[artnetHeaderSize + i*3] & 0xff;
+      int green = data[artnetHeaderSize + i*3 + 1] & 0xff;
+      int blue = data[artnetHeaderSize + i*3 + 2] & 0xff;
+      // System.out.println("red green blue=" + red + " " + green + " " + blue);
+      // System.out.println("universeNumber: " + universeNumber);
+      // System.out.println("framePacketCount: " + framePacketCount);
+      
+      // logger.info("colFromLeft: " + colNumFromLeft + " colFromRight:" + colNumFromRight);
+      int ledColor = color(red, green, blue);
+      if (isButterfly) {
+        butterflyFixtureColors[butterflyFixtureLedCount] = ledColor;
+        butterflyFixtureLedCount++;
+      } else {
+        flowerFixtureColors[flowerFixtureLedCount] = ledColor;
+        flowerFixtureLedCount++;
+      }
+      if (butterflyFixtureLedCount == 16 && isButterfly) {
+        // Create a butterfly and reset count.
+        Butterfly butterfly = new Butterfly(universeNumber, butterflyFixtureColors);
+        addButterfly(universeNumber, butterflyFixtureNumber, butterfly);
+        butterflyFixtureLedCount = 0;
+        butterflyFixtureNumber++;
+      } else if (flowerFixtureLedCount == 2 && !isButterfly) {
+        Flower flower = new Flower(flowerFixtureColors);
+        addFlower(universeNumber, flowerFixtureNumber, flower);
+        flowerFixtureLedCount = 0;
+        flowerFixtureNumber++;
+      }
+    }
+  }
+  
+  if (isButterfly) {
+    //System.out.println("Butterflies this univ: " + universeNumber + " fixtures: " + fixtureNumber);
+  }
+  // ArtNet sync packet
+  if (data[8] == 0x00 && data[9] == 0x52) {
+    if (isButterfly) {
+      //System.out.println("packet sync, packet count = " + (framePacketCount+1));
+      System.out.println("Total butterflies per frame: " + totalButterflies() + " pkt#:" + butterflyPacketCount);
+      resetButterflyStrands();
+      butterflyPacketCount = 0;
+    } else {
+      //System.out.println("packet sync, packet count = " + (framePacketCount2+1));
+      System.out.println("Total flowers per frame: " + totalFlowers() + " packets=" + flowerPacketCount);
+      resetFlowerStrands();
+      flowerPacketCount = 0;
+    }
+    return true;
+  }
+  return false;
+}
