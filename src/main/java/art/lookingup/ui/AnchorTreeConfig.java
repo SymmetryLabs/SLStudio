@@ -28,11 +28,12 @@ public class AnchorTreeConfig extends UIConfig {
     static public ParameterFile anchorTreeParamFile;
 
     // Rough defaults based on install.
-    public static float[] treesX = {8 * 12, 6 * 12, -3 * 12, -6 * 12, 0 * 12};
-    public static float[] treesZ = {10 * 12, 12 * 12, 19 * 12, 25 * 12, 35 * 12};
-    public static float[] treesFlowers = {2, 2, 1, 1, 1, 1};
-    public static int[] treesButterflies = {1, 1, 0, 1, 1, 1};
-    public static int[] treeRadius = {12, 12, 8, 12, 12, 12};
+    // Removed Tree 2: 6 * 12, 12 * 12, 1, 0, 8
+    public static float[] treesX = {8 * 12, -3 * 12, -6 * 12, 0 * 12};
+    public static float[] treesZ = {10 * 12, 19 * 12, 25 * 12, 35 * 12};
+    public static float[] treesFlowers = {2, 2, 1, 1, 2};
+    public static int[] treesButterflies = {1, 1, 1, 1, 1};
+    public static int[] treeRadius = {12, 12, 12, 12, 12};
 
 
 

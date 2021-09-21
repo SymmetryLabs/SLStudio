@@ -26,7 +26,7 @@ public class KaledoscopeModel extends SLModel {
     public static List<Run> allFlowerRuns;
     public static List<Strand> allStrands;
     public static float butterflyYHeight = 120f;
-    public static final int NUM_ANCHOR_TREES = 6;
+    public static final int NUM_ANCHOR_TREES = 5;
     public static final int NUM_ANCHOR_TREES_FLOWERS = 3;
     public static final int BEZIERS_PER_RUN = 4;
     public static final int FLOWER_RUNS_PER_TREE = 2;
@@ -210,10 +210,12 @@ public class KaledoscopeModel extends SLModel {
                 */
 
                 /* MANUAL BUTTERFLY POSITIONS */
+                /* */
                 int whichCable = ButterfliesConfig.getCableForButterflyRunIndex(currentButterflyRunIndex);
                 float incrementDistance = ButterfliesConfig.getCableDistancePrevButterfly(currentButterflyRunIndex);
                 int vertical = ButterfliesConfig.getVertical(currentButterflyRunIndex);
                 Cable thisButterflyCable = cables.get(whichCable);
+
 
                 float[] newButterflyPosition = thisButterflyCable.newPosition(incrementDistance);
                 thisButterflyCable.setPrevButterflyPos(newButterflyPosition);
@@ -242,7 +244,7 @@ public class KaledoscopeModel extends SLModel {
                 /*
                 ButterfliesConfig.setButterflyConfig(butterfly.runIndex, butterfly.cable.startTree.id, butterfly.cable.whichCableRun,
                     (int)incrementDistance, vertical);
-                    */
+                */
             }
 
             // Some data lines run backwards, so we will add the points to the strand after building the list
@@ -790,9 +792,9 @@ public class KaledoscopeModel extends SLModel {
 
         // GENERATE BUTTERFLIES
         // The model creation will update the config when generating butterflies, we just save them here.
-        /*
-        ButterfliesConfig.saveUpdatedButterflyConfigs();
-        */
+        /* */
+        //ButterfliesConfig.saveUpdatedButterflyConfigs();
+
 
         return new KaledoscopeModel(allPoints);
     }
