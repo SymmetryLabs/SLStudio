@@ -1,8 +1,6 @@
 package art.lookingup.ui;
 
-import art.lookingup.KaledoscopeModel;
-import art.lookingup.LUFlower;
-import art.lookingup.ParameterFile;
+import art.lookingup.*;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.LXParameter;
@@ -30,8 +28,7 @@ public class FlowersConfig extends UIConfig {
         int contentWidth = (int)ui.leftPane.global.getContentWidth();
         this.lx = lx;
 
-        // Four anchor trees
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < KaledoscopeModel.NUM_ANCHOR_TREES; i++) {
             // 2 separate strands of flowers per tree
             for (int j = 0; j < 2; j++) {
                 // Maximum 15 flowers per strand
@@ -121,11 +118,16 @@ public class FlowersConfig extends UIConfig {
      */
     static public List<LUFlower.FlowerConfig> getAllFlowerConfigs() {
         List<LUFlower.FlowerConfig> configs = new ArrayList<LUFlower.FlowerConfig>(0);
-        for (int treeNum = 0; treeNum < KaledoscopeModel.NUM_ANCHOR_TREES_FLOWERS; treeNum++) {
+        for (int treeNum = 0; treeNum < KaledoscopeModel.NUM_ANCHOR_TREES; treeNum++) {
             // 2 separate strands of flowers per tree
-            for (int treeRunNum = 0; treeRunNum < KaledoscopeModel.FLOWER_RUNS_PER_TREE; treeRunNum++) {
+            AnchorTree.AnchorTreeParams tree = AnchorTreeConfig.getAnchorTree(treeNum);
+            int numRuns = 2;
+            if (tree.fw2Top < 1f)
+                numRuns = 1;
+            for (int treeRunNum = 0; treeRunNum < numRuns; treeRunNum++) {
                 // Maximum 15 flowers per strand
-                for (int flowerNum = 0; flowerNum < MAX_FLOWERS_PER_RUN; flowerNum++) {
+                int numFlowers = StrandLengths.getNumFlowers(treeNum, treeRunNum);
+                for (int flowerNum = 0; flowerNum < numFlowers; flowerNum++) {
                     LUFlower.FlowerConfig fConfig = getFlowerConfig(treeNum, treeRunNum, flowerNum);
                     configs.add(fConfig);
                 }

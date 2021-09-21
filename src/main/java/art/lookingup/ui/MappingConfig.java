@@ -88,7 +88,7 @@ public class MappingConfig extends UIConfig {
         registerStringParameter(F_PIXLITE5, "2.0");
         registerStringParameter(F_PIXLITE6, "3.0");
         registerStringParameter(F_PIXLITE7, "4.0");
-        registerStringParameter(F_PIXLITE8, "5.0");
+        registerStringParameter(F_PIXLITE8, "4.1");
         registerStringParameter(F_PIXLITE9, "-1.-1");
         registerStringParameter(F_PIXLITE10, "-1.-1");
         registerStringParameter(F_PIXLITE11, "-1.-1");

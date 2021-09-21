@@ -27,9 +27,7 @@ public class KaledoscopeModel extends SLModel {
     public static List<Strand> allStrands;
     public static float butterflyYHeight = 120f;
     public static final int NUM_ANCHOR_TREES = 5;
-    public static final int NUM_ANCHOR_TREES_FLOWERS = 3;
     public static final int BEZIERS_PER_RUN = 4;
-    public static final int FLOWER_RUNS_PER_TREE = 2;
     public static final int FLOWER_STRANDS_PER_RUN = 1;
 
     /**

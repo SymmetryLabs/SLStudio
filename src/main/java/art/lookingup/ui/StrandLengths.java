@@ -1,5 +1,6 @@
 package art.lookingup.ui;
 
+import art.lookingup.AnchorTree;
 import art.lookingup.KaledoscopeModel;
 import art.lookingup.ParameterFile;
 import com.symmetrylabs.slstudio.SLStudioLX;
@@ -30,16 +31,12 @@ public class StrandLengths extends UIConfig {
         int contentWidth = (int)ui.leftPane.global.getContentWidth();
         this.lx = lx;
 
-        /* NOTE(tracy): Butterfly strand lengths should be specified by butterfly per-cable distance measures.
-        for (int bfRunNum = 0; bfRunNum < 3; bfRunNum++) {
-            for (int strandRunNum = 0; strandRunNum < 4; strandRunNum++) {
-                registerStringParameter("bf_R" + bfRunNum + "_S" + strandRunNum, null);
-            }
-        }
-        */
-
-        for (int treeNum = 0; treeNum < KaledoscopeModel.NUM_ANCHOR_TREES_FLOWERS; treeNum++) {
-            for (int runNum = 0; runNum < KaledoscopeModel.FLOWER_RUNS_PER_TREE; runNum++) {
+        for (int treeNum = 0; treeNum < KaledoscopeModel.NUM_ANCHOR_TREES; treeNum++) {
+            AnchorTree.AnchorTreeParams tree = AnchorTreeConfig.getAnchorTree(treeNum);
+            int numRuns = 2;
+            if (tree.fw2Top < 1f)
+                numRuns = 1;
+            for (int runNum = 0; runNum < numRuns; runNum++) {
                 registerStringParameter("fw_T" + treeNum + "_R" + runNum, null);
             }
         }
@@ -54,33 +51,15 @@ public class StrandLengths extends UIConfig {
      * need to be initialized before the UI renders.
      */
     static public void preloadDefaults() {
-        /* NOTE(tracy): Butterfly strand lengths should be specified by butterfly per-cable distance measures.
-        for (int bfRunNum = 0; bfRunNum < 3; bfRunNum++) {
-            for (int strandRunNum = 0; strandRunNum < 4; strandRunNum++) {
-                getNumButterflies(bfRunNum, strandRunNum);
-            }
-        }
-        */
-        for (int treeNum = 0; treeNum < KaledoscopeModel.NUM_ANCHOR_TREES_FLOWERS; treeNum++) {
-            for (int runNum = 0; runNum < KaledoscopeModel.FLOWER_RUNS_PER_TREE; runNum++) {
+        for (int treeNum = 0; treeNum < KaledoscopeModel.NUM_ANCHOR_TREES; treeNum++) {
+            AnchorTree.AnchorTreeParams tree = AnchorTreeConfig.getAnchorTree(treeNum);
+            int numRuns = 2;
+            if (tree.fw2Top < 1f)
+                numRuns = 1;
+            for (int runNum = 0; runNum < numRuns; runNum++) {
                 getNumFlowers(treeNum, runNum);
             }
         }
-    }
-
-    /* NOTE(tracy): Butterfly strand lengths should be specified by butterfly per-cable distance measures.
-     * So this method should not be called.
-     */
-    static public int getNumButterfliesDeprecated(int runId, int strandId) {
-        if (strandLengthsParamFile == null) {
-            strandLengthsParamFile = ParameterFile.instantiateAndLoad(filename);
-        }
-        String key = "bf_R" + runId + "_S" + strandId;
-        // By default currently, we only have 2 runs of butterflies.
-        if (runId < 2)
-            return Integer.parseInt(strandLengthsParamFile.getStringParameter(key, "20").getString());
-        else
-            return Integer.parseInt(strandLengthsParamFile.getStringParameter(key, "0").getString());
     }
 
     static public int getNumFlowers(int anchorTree, int runNum) {
