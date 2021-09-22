@@ -247,7 +247,7 @@ public class KaledoscopeModel extends SLModel {
 
             // Some data lines run backwards, so we will add the points to the strand after building the list
             // of butterflies.  For backwards data lines, we will just reverse the list of butterflies.
-            if (globalStrandId == 0 || globalStrandId == 2) {
+            if (globalStrandId == 0) { // STRAND 2 BACKWARDS || globalStrandId == 2) {
                 Collections.reverse(butterflies);
             }
             for (int bIndex = 0; bIndex < butterflies.size(); bIndex++) {
@@ -422,7 +422,7 @@ public class KaledoscopeModel extends SLModel {
                 cablesThisStrand.add(cableRun1.get(i));
                 cablesThisStrand.add(cableRun2.get(i));
                 Strand strand = new Strand(this, allStrands.size(), i, cablesThisStrand, currentCableRunLengths);
-                if (strand.strandId == 0 || strand.strandId == 2) {
+                if (strand.strandId == 0) { // STRAND 2 BACKWARDS || strand.strandId == 2) {
                     // The first and third strands run backwards.  We already reversed them when building the
                     // strands but we actually want all the butterflies for a run in proper run order so we
                     // copy the list
@@ -439,7 +439,22 @@ public class KaledoscopeModel extends SLModel {
                 } else {
                     allPoints.addAll(strand.allPoints);
                     butterflies.addAll(strand.butterflies);
+                    // STRAND 2 BACKWARDS
+                    // StrandID 2 was going to be backwards, instead it is effectively added to the end of strand 1
+                    // but in a forward direction.  This might change back so we will just do a fixup here instead
+                    // of a larger invasive change to divorce the tree/strand relationship.
+                    if (strand.strandId == 2) {
+                        Strand prevStrand = allStrands.get(1);
+                        prevStrand.allPoints.addAll(strand.allPoints);
+                        prevStrand.addressablePoints.addAll(strand.addressablePoints);
+                        prevStrand.butterflies.addAll(strand.butterflies);
+                        strand.allPoints.clear();
+                        strand.addressablePoints.clear();
+                        strand.butterflies.clear();
+                    }
                 }
+                // This is an approximation.  Just base everything on one cable so we don't have to deal with
+                // tree radii.
                 currentCableRunLengths[0] += cableRun0.get(i).length();
                 currentCableRunLengths[1] += cableRun0.get(i).length();
                 currentCableRunLengths[2] += cableRun0.get(i).length();
@@ -460,7 +475,7 @@ public class KaledoscopeModel extends SLModel {
          */
         public void updateButterflyPositions(LX lx) {
             List<int[]> allButterflyConfigs = ButterfliesConfig.getAllButterflyConfigs();
-            float[] currentCableRunLengths = new float[3];
+            float[] prevCableRunLengths = new float[3];
             List<Cable> cableRun0 = allCables.get(0);
             List<Cable> cableRun1 = allCables.get(1);
             List<Cable> cableRun2 = allCables.get(2);
@@ -494,16 +509,20 @@ public class KaledoscopeModel extends SLModel {
 
                     // For each point on the butterfly, build an index of it's distance along the cable.  This will help with
                     // linear rendering algorithms.
-                    float butterflyRunInches = thisButterflyCable.prevButterflyTotalCableDistance + currentCableRunLengths[whichCable];
+                    float butterflyRunInches = thisButterflyCable.prevButterflyTotalCableDistance + prevCableRunLengths[whichCable];
+                    if (whichCable == 1)
+                        butterflyRunInches += thisButterflyCable.startTree.p.radius;
                     for (LXPoint butterflyPoint : butterfly.allPoints) {
                         allButterflyRuns.get(0).ptsRunInches.put(butterflyPoint.index, butterflyRunInches);
                     }
                     butterflyRunIndex++;
                 }
 
-                currentCableRunLengths[0] += cableRun0.get(strandNum).length();
-                currentCableRunLengths[1] += cableRun1.get(strandNum).length();
-                currentCableRunLengths[2] += cableRun2.get(strandNum).length();
+                // This is an approximation.  Just base everything on one cable so we don't have to deal with
+                // tree radii.
+                prevCableRunLengths[0] += cableRun0.get(strandNum).length();
+                prevCableRunLengths[1] += cableRun0.get(strandNum).length();
+                prevCableRunLengths[2] += cableRun0.get(strandNum).length();
             }
             // Tell the model to update.
             lx.model.update(true, true);
