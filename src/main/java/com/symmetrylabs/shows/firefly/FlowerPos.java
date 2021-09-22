@@ -22,10 +22,11 @@ public class FlowerPos extends SLPattern {
     BooleanParameter tracer = new BooleanParameter("tracer", false);
     DiscreteParameter index = new DiscreteParameter("index", -1, -1, 14);
     CompoundParameter azimuth = new CompoundParameter("az", 0f, 0f, 360f);
-    CompoundParameter vertical = new CompoundParameter("vert", 0f, 0f, 48f);
+    CompoundParameter vertical = new CompoundParameter("vert", 0f, 0f, 240f);
 
     int currentIndex = 0;
     boolean activated = false;
+    boolean disableListener = false;
 
     public FlowerPos(LX lx) {
         super(lx);
@@ -37,7 +38,10 @@ public class FlowerPos extends SLPattern {
         addParameter("tracer", tracer);
         LXParameterListener posListener = new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
-                updateFlowerPos();
+                // When changing the index, we initialize the azimuth and vertical displacement.  When that
+                // happens we don't want to update flower config.
+                if (!disableListener)
+                    updateFlowerPos();
             }
         };
         azimuth.addListener(posListener);
@@ -47,8 +51,10 @@ public class FlowerPos extends SLPattern {
             public void onParameterChanged(LXParameter p) {
                 int flowerNum = ((DiscreteParameter)p).getValuei();
                 LUFlower.FlowerConfig fc = FlowersConfig.getFlowerConfig(treeNum.getValuei(), runNum.getValuei(), flowerNum);
+                disableListener = true;
                 azimuth.setValue(fc.azimuth);
                 vertical.setValue(fc.verticalDisplacement);
+                disableListener = false;
             }
         });
     }
