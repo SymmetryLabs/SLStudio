@@ -19,8 +19,8 @@ public class BFNoise extends BFBase {
     private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
     CompoundParameter scale = new CompoundParameter("scale", 0.01f, 0.01f, 1f);
     CompoundParameter speed = new CompoundParameter("speed", 0.1f, 0.01f, 1f);
-    CompoundParameter angleSpeed = new CompoundParameter("aspeed", 1f, 0f, 10f);
-    BooleanParameter unique = new BooleanParameter("uniq", false);
+    CompoundParameter angleSpeed = new CompoundParameter("aspeed", 0.2f, 0f, 10f);
+    BooleanParameter unique = new BooleanParameter("uniq", true);
 
     BooleanParameter oppose = new BooleanParameter("oppose", true);
     DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());
@@ -50,6 +50,7 @@ public class BFNoise extends BFBase {
         addParameter(palShift);
         addParameter(palBias);
         addParameter(palCutoff);
+        palette.setValue(3);
     }
 
     public static final String GROUP_NAME = FireflyShow.SHOW_NAME;
