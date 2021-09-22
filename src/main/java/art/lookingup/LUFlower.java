@@ -24,7 +24,7 @@ public class LUFlower implements LXFixture {
     public int treeRunNum;
     static final float RADIUS = 1.5f;
     static final int NUM_PETALS = 5;
-    FlowerConfig flowerConfig;
+    public FlowerConfig flowerConfig;
     public boolean dead = false;
 
     public LUFlower(AnchorTree tree, LUFlower.FlowerConfig flowerConfig, int globalRunNum) {
