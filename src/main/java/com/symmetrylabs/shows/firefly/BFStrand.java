@@ -129,8 +129,6 @@ public class BFStrand extends FPSPattern {
             color = LXColor.rgb(255, 0, 255);
         } else if ((index + 1) % 5 == 0) {
             color = LXColor.rgb(0, 255, 255);
-        } else if (index % 8 == 0) {
-            color = LXColor.rgb(255, 255, 255);
         } else if ((index - 1)% 5 == 0) {
             color = LXColor.rgb(0, 0, 255);
         }
