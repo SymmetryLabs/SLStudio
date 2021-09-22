@@ -50,6 +50,8 @@ public class FlowerPos extends SLPattern {
         index.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
                 int flowerNum = ((DiscreteParameter)p).getValuei();
+                if (flowerNum == -1)
+                    return;
                 LUFlower.FlowerConfig fc = FlowersConfig.getFlowerConfig(treeNum.getValuei(), runNum.getValuei(), flowerNum);
                 disableListener = true;
                 azimuth.setValue(fc.azimuth);
@@ -78,8 +80,8 @@ public class FlowerPos extends SLPattern {
         if (flowerNum < 0 || flowerNum >= KaledoscopeModel.anchorTrees.get(tree).flowerRuns.get(run).flowers.size())
             return;
         LUFlower.FlowerConfig flowerConfig = FlowersConfig.getFlowerConfig(tree, run, flowerNum);
-        flowerConfig.azimuth = azimuth.getValuef();
-        flowerConfig.verticalDisplacement = vertical.getValuef();
+        flowerConfig.azimuth = (int)(azimuth.getValuef());
+        flowerConfig.verticalDisplacement = (int)(vertical.getValuef());
         FlowersConfig.setFlowerConfig(tree, run, flowerNum, flowerConfig);
         LUFlower flower = KaledoscopeModel.anchorTrees.get(tree).flowerRuns.get(run).flowers.get(flowerNum);
         flower.updatePosition(flowerConfig);

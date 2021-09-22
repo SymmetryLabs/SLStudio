@@ -53,7 +53,7 @@ public class FlowersConfig extends UIConfig {
         if (flowersParamFile == null) {
             flowersParamFile = ParameterFile.instantiateAndLoad(filename);
         }
-        String val = "" + treeRunNum + "," + flowerConfig.azimuth + "," + flowerConfig.verticalDisplacement;
+        String val = flowerConfig.azimuth + "," + flowerConfig.verticalDisplacement;
         flowersParamFile.getStringParameter(flowerAddress, "").setValue(val);
     }
 
