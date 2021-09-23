@@ -1,6 +1,8 @@
 package com.symmetrylabs.shows.firefly;
 
 import art.lookingup.KaledoscopeModel;
+import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
+import heronarts.lx.blend.LXBlend;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 
@@ -74,6 +76,24 @@ public class RunRender1D {
     }
 
     static public float[] renderTriangle(int colors[], KaledoscopeModel.Run run, float t, float slope, float maxValue, LXColor.Blend blend,
+                                         ZigzagPalette pal) {
+        float[] minMax = new float[2];
+        minMax[0] = (float)zeroCrossingTriangleWave(t, slope);
+        minMax[1] = (float)zeroCrossingTriangleWave(t, -slope);
+        for (LXPoint pt : run.allPoints) {
+            float ptX = run.getRunDistance(pt) / run.getTotalCableLength();
+            float val = (float)triangleWave(t, slope, ptX)*maxValue;
+            int color = pal.getColor(val);
+            int grey = LXColor.gray(val * 100f);
+            color = LXColor.blend(color, grey, LXColor.Blend.MULTIPLY);
+            colors[pt.index] = LXColor.blend(colors[pt.index], LXColor.rgba(
+                (int)(Colors.red(color) * val), (int)(Colors.green(color) * val), (int)(Colors.blue(color) * val), 255),
+                blend);
+        }
+        return minMax;
+    }
+
+    static public float[] renderTriangle(int colors[], KaledoscopeModel.Run run, float t, float slope, float maxValue, LXColor.Blend blend,
                                          int color) {
         float[] minMax = new float[2];
         minMax[0] = (float)zeroCrossingTriangleWave(t, slope);
@@ -125,8 +145,28 @@ public class RunRender1D {
     }
 
     static public float[] renderSquare(int colors[], KaledoscopeModel.Run run, float t, float width, float maxValue, LXColor.Blend blend,
+                                       ZigzagPalette pal) {
+        float[] minMax = new float[2];
+        minMax[0] = t - width/2.0f;
+        minMax[1] = t + width/2.0f;
+        for (LXPoint pt: run.allPoints) {
+            float ptX = run.getRunDistance(pt);
+            float totalRunDistance = run.getTotalCableLength();
+            //int gray = (int) ((((pt.lbx > minMax[0]*lightBar.length) && (pt.lbx < minMax[1]*lightBar.length))?maxValue:0f)*255.0f);
+            float val = (((ptX > minMax[0]*totalRunDistance) && (ptX < minMax[1]*totalRunDistance))?maxValue:0f);
+            int color = pal.getColor(val);
+            int grey = LXColor.gray(val * 100f);
+            color = LXColor.blend(color, grey, LXColor.Blend.MULTIPLY);
+            int newColor = LXColor.blend(colors[pt.index], LXColor.rgba(
+                (int)(Colors.red(color) * val), (int)(Colors.green(color) * val), (int)(Colors.blue(color) * val), 255),
+                blend);
+            colors[pt.index] = newColor;
+        }
+        return minMax;
+    }
+
+    static public float[] renderSquare(int colors[], KaledoscopeModel.Run run, float t, float width, float maxValue, LXColor.Blend blend,
                                        int color) {
-        double barPos = t * run.getTotalCableLength();
         float[] minMax = new float[2];
         minMax[0] = t - width/2.0f;
         minMax[1] = t + width/2.0f;
@@ -167,6 +207,26 @@ public class RunRender1D {
             float totalRunDistance = run.getTotalCableLength(); //getButterfliesRunDistance();
             float val = stepDecayWave(t, width, slope, ptX/totalRunDistance, forward)*maxValue;
             //colors[pt.index] = LXColor.blend(colors[pt.index], LXColor.rgba(gray, gray, gray, 255), blend);
+            colors[pt.index] = LXColor.blend(colors[pt.index], LXColor.rgba(
+                (int)(Colors.red(color) * val), (int)(Colors.green(color) * val), (int)(Colors.blue(color) * val), 255),
+                blend);
+        }
+
+        return minMax;
+    }
+
+    static public float[] renderStepDecay(int colors[], KaledoscopeModel.Run run, float t, float width, float slope,
+                                          float maxValue, boolean forward, LXColor.Blend blend, ZigzagPalette pal) {
+        float[] minMax = stepDecayZeroCrossing(t, width, slope, forward);
+        for (LXPoint pt : run.allPoints) {
+            //int gray = (int) (stepDecayWave(t, width, slope, pt.lbx/lightBar.length, forward)*255.0*maxValue);
+            float ptX = run.getRunDistance(pt);
+            float totalRunDistance = run.getTotalCableLength(); //getButterfliesRunDistance();
+            float val = stepDecayWave(t, width, slope, ptX/totalRunDistance, forward)*maxValue;
+            //colors[pt.index] = LXColor.blend(colors[pt.index], LXColor.rgba(gray, gray, gray, 255), blend);
+            int color = pal.getColor(val);
+            int grey = LXColor.gray(val * 100f);
+            color = LXColor.blend(color, grey, LXColor.Blend.MULTIPLY);
             colors[pt.index] = LXColor.blend(colors[pt.index], LXColor.rgba(
                 (int)(Colors.red(color) * val), (int)(Colors.green(color) * val), (int)(Colors.blue(color) * val), 255),
                 blend);

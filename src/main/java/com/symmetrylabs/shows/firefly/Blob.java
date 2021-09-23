@@ -1,6 +1,7 @@
 package com.symmetrylabs.shows.firefly;
 
 import art.lookingup.KaledoscopeModel;
+import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 import heronarts.lx.color.LXColor;
 
 public class Blob {
@@ -15,7 +16,9 @@ public class Blob {
     public float intensity = 1.0f;
     public float blobWidth = -1.0f;
     int runId;
+    public boolean useGradient = false;
 
+    public ZigzagPalette pal = null;
 
     public void reset(int runId, float initialPos, float randomSpeed, boolean forward) {
         pos = initialPos;
@@ -78,12 +81,25 @@ public class Blob {
      */
     public float[] renderWaveform(int[] colors, KaledoscopeModel.Run run, float position, float width, float slope,
                                   float maxValue, int waveform, LXColor.Blend blend) {
-        if (waveform == WAVEFORM_TRIANGLE)
-            return RunRender1D.renderTriangle(colors, run, position, slope, maxValue, blend, color);
-        else if (waveform == WAVEFORM_SQUARE)
-            return RunRender1D.renderSquare(colors, run, position, width, maxValue, blend, color);
-        else
-            return RunRender1D.renderStepDecay(colors, run, position, width, slope,
-                maxValue, true, LXColor.Blend.ADD, color);
+        if (waveform == WAVEFORM_TRIANGLE) {
+            if (useGradient) {
+                return RunRender1D.renderTriangle(colors, run, position, slope, maxValue, blend, pal);
+            } else {
+                return RunRender1D.renderTriangle(colors, run, position, slope, maxValue, blend, color);
+            }
+        } else if (waveform == WAVEFORM_SQUARE) {
+            if (useGradient) {
+                return RunRender1D.renderSquare(colors, run, position, width, maxValue, blend, pal);
+            } else {
+                return RunRender1D.renderSquare(colors, run, position, width, maxValue, blend, color);
+            }
+        } else {
+            if (useGradient) {
+                return RunRender1D.renderStepDecay(colors, run, position, width, slope, maxValue, true, LXColor.Blend.ADD, pal);
+            } else {
+                return RunRender1D.renderStepDecay(colors, run, position, width, slope,
+                    maxValue, true, LXColor.Blend.ADD, color);
+            }
+        }
     }
 }
