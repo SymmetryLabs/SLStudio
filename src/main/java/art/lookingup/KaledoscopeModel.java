@@ -556,7 +556,7 @@ public class KaledoscopeModel extends SLModel {
                         nextAnchorTree = anchorTrees.get(treeNum + nextOffset);
                     }
                     float endX = nextAnchorTree.getCableAnchorX(whichCableRun);
-                    float endY = tree.getCableHeight(whichCableRun);
+                    float endY = nextAnchorTree.getCableHeight(whichCableRun);
                     float endZ = nextAnchorTree.getCableAnchorEndZ(whichCableRun);
                     // Now we need to compute the angle between the anchor trees and rotate all points around the
                     // Y axis by that amount so that are cable start and end points are more accurate.
