@@ -920,7 +920,8 @@ public class KaledoscopeModel extends SLModel {
 
     /**
      * Returns a flower given an address.  The address form is anchorTree.runNum.flowerIndex and zero based.
-     * So 1.1.3 is the fourth flower on the second run of the second tree.
+     * So 1.1.3 is the fourth flower on the second run of the second tree.  If the tree or runNum is -1, return
+     * null.  This can be used to delete it from the list of dead flowers.  A Restart will be required though.
      * @param address
      * @return
      */
@@ -930,6 +931,10 @@ public class KaledoscopeModel extends SLModel {
     }
 
     static public LUFlower getFlowerByAddress(int anchorTree, int runNum, int flowerIndex) {
+        if (anchorTree < 0 || anchorTree >= KaledoscopeModel.anchorTrees.size())
+            return null;
+        if (runNum < 0 || runNum >= KaledoscopeModel.anchorTrees.get(anchorTree).flowerRuns.size())
+            return null;
         Strand strand = getFlowerStrandByAddress(anchorTree, runNum);
         if (flowerIndex < strand.flowers.size()) {
             return strand.flowers.get(flowerIndex);
@@ -945,10 +950,13 @@ public class KaledoscopeModel extends SLModel {
      */
     static public LUButterfly getButterflyByAddress(String address) {
         String[] aParts = address.split("\\.");
+        if (aParts.length < 2) return null;
         return getButterflyByAddress(Integer.parseInt(aParts[0]), Integer.parseInt(aParts[1]));
     }
 
     static public LUButterfly getButterflyByAddress(int strandNum, int butterflyIndex) {
+        if (strandNum < 0 || strandNum >= allButterflyRuns.get(0).strands.size())
+            return null;
         return allButterflyRuns.get(0).strands.get(strandNum).butterflies.get(butterflyIndex);
     }
 
