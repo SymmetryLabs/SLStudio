@@ -305,12 +305,11 @@ utility/test.tmp
 .tmp.time.since.last.packet
 
 # Firefly
-mappingconfig.json
-pixliteconfig.json
-runs.json
-strandlengths.json
-trees.json
-flowers.json
-dead.json
-butterflies.json
-
+#mappingconfig.json
+#pixliteconfig.json
+#runs.json
+#strandlengths.json
+#trees.json
+#flowers.json
+#dead.json
+#butterflies.json
