@@ -42,6 +42,7 @@ public class LUButterfly implements LXFixture {
     public int runIndex;
     public boolean dead = false;
     public KaledoscopeModel.Cable cable;
+    public float cableDistance;
 
     public LUButterfly(KaledoscopeModel.Cable cable, int strandId, int strandIndex, int runIndex, float x, float y, float z) {
         this.x = x;
@@ -135,6 +136,22 @@ public class LUButterfly implements LXFixture {
         if (!dead) {
             addressablePoints.addAll(allPoints);
         }
+    }
+
+    /**
+     * When moving a butterfly to another cable, we need to figure out which butterfly is the latest butterfly on
+     * that target cable before THIS butterfly.  We can just decrement id's until we find the first ID going backwards
+     * that matches our target cable.  This can return null if we are the first butterfly on the cable.
+     * @param whichCable
+     * @return
+     */
+    public LUButterfly findPreviousButterflyOnTargetCable(int whichCable) {
+        for (int prevId = this.runIndex; prevId >= 0; prevId--) {
+            LUButterfly prev = KaledoscopeModel.allButterflies.get(prevId);
+            if (prev.cable.whichCableRun == whichCable && prev.cable.startTree == cable.startTree)
+                return KaledoscopeModel.allButterflies.get(prevId);
+        }
+        return null;
     }
 
     public void markDead() {

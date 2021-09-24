@@ -38,7 +38,7 @@ public class PreviewComponents {
             List<AnchorTree> anchorTrees = KaledoscopeModel.anchorTrees;
             for (int treeNum = 0; treeNum < anchorTrees.size(); treeNum++) {
                 // 51, 36, 33 Brown for a tree.
-                trees.add(new UICylinder(anchorTrees.get(treeNum).p.radius, 200f, 6, 0, LXColor.rgb(51, 36, 33)));
+                trees.add(new UICylinder(anchorTrees.get(treeNum).p.radius, 200f, 6, 0, LXColor.rgb(81, 66, 63)));
             }
             floor = new Floor();
             showAxes = true;

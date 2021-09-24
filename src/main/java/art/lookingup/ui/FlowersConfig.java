@@ -64,7 +64,16 @@ public class FlowersConfig extends UIConfig {
         }
 
         float azimuth = 360f * (float)Math.random();
+        // verticalDisplacement is now just absolute vertical height.  When generating something reasonable
+        // from scratch, pick a random displacement of 33 inches and subtract that from tree.fw1_top or tree.fw2_top
+        // as appropriate to get the absolute vertical height.
         int verticalDisplacement = ThreadLocalRandom.current().nextInt(33);
+        AnchorTree.AnchorTreeParams tree = AnchorTreeConfig.getAnchorTree(treeNum);
+        if (treeRunNum == 0) {
+            verticalDisplacement = (int)tree.fw1Top - verticalDisplacement;
+        } else {
+            verticalDisplacement = (int)tree.fw2Top - verticalDisplacement;
+        }
         String val = flowersParamFile.getStringParameter(flowerAddress, "" + (int)azimuth + "," + verticalDisplacement).getString();
         String[] posVals = val.split(",");
         LUFlower.FlowerConfig flowerConfig = new LUFlower.FlowerConfig();

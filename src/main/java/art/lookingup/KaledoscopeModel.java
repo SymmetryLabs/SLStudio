@@ -9,6 +9,9 @@ import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
@@ -179,7 +182,8 @@ public class KaledoscopeModel extends SLModel {
             float stopDistance = 8f;
             Random random = new Random(6);
             // NOTE(tracy): GENERATE BUTTERFLY POSITIONS.  Use this commented out for loop.
-            //for (int i = 0; !allCablesWithinAnInch(cables, stopDistance) ; i++) {
+            //float numButterflies[] = {41f, 25f, 15f, 33f};
+            //for (int i = 0; i < (int)numButterflies[globalStrandId]; i++) {
 
             for (int i = 0; i < butterfliesThisTree.size(); i++) {
                 int currentButterflyRunIndex = butterflyRunIndex + i;
@@ -187,9 +191,12 @@ public class KaledoscopeModel extends SLModel {
                 // Probably not going to fine tune that because this will all need to be done manually.
                 /* GENERATE BUTTERFLY POSITIONS */
                 /*
-                int vertical = ThreadLocalRandom.current().nextInt(0, 7);
-                int whichCable = (i % 3); // ButterfliesConfig.getCableForButterflyRunIndex(currentButterflyRunIndex);
+                int vertical = butterflyVerticals.get(currentButterflyRunIndex);
+                int whichCable = butterflyCables.get(currentButterflyRunIndex);
+                    //(i % 3); // ButterfliesConfig.getCableForButterflyRunIndex(currentButterflyRunIndex);
+                */
                 // Try to finish off all cables within 4 inches of the tree.
+                /* Evenly distributing fixture counts instead of this
                 if (cableWithinAnInch(cables.get(whichCable), stopDistance)) {
                     whichCable = (whichCable + 1) % 3;
                     if (cableWithinAnInch(cables.get(whichCable), stopDistance)) {
@@ -197,14 +204,28 @@ public class KaledoscopeModel extends SLModel {
                         whichCable = (whichCable + 1) % 3;
                     }
                 }
+                */
                 // GENERATE BUTTERFLY POSITIONS
-                float incrementDistance = 8f; //
+                /*
+                Cable thisButterflyCable = cables.get(whichCable);
 
+                float cableLength = thisButterflyCable.len;
+                float margins = 12f;
+                float butterflyLength = cableLength - 2f * margins;
+                float incrementDistance = butterflyLength / ((numButterflies[cables.get(0).startTree.id] + 3) / 3f);
+                if (i == 1) {
+                    incrementDistance += incrementDistance/2f;
+                } else if (i == 2) {
+                    incrementDistance += incrementDistance;
+                }
                 if (i == 0 || i == 2) {
                     // For the outside wires, push the start points out.
                     incrementDistance += cables.get(0).startTree.p.radius/2f;
                 }
-                Cable thisButterflyCable = cables.get(whichCable);
+                float measuredDistance = butterflyDistances.get(currentButterflyRunIndex);
+                if (measuredDistance > 0f) {
+                    incrementDistance = measuredDistance - thisButterflyCable.prevButterflyTotalCableDistance;
+                }
                 */
 
                 /* MANUAL BUTTERFLY POSITIONS */
@@ -213,7 +234,6 @@ public class KaledoscopeModel extends SLModel {
                 float incrementDistance = ButterfliesConfig.getCableDistancePrevButterfly(currentButterflyRunIndex);
                 int vertical = ButterfliesConfig.getVertical(currentButterflyRunIndex);
                 Cable thisButterflyCable = cables.get(whichCable);
-
 
                 float[] newButterflyPosition = thisButterflyCable.newPosition(incrementDistance);
                 thisButterflyCable.setPrevButterflyPos(newButterflyPosition);
@@ -234,6 +254,7 @@ public class KaledoscopeModel extends SLModel {
                 for (LXPoint butterflyPoint : butterfly.allPoints) {
                     run.ptsRunInches.put(butterflyPoint.index, butterflyRunInches);
                 }
+                butterfly.cableDistance = thisButterflyCable.prevButterflyTotalCableDistance;
                 thisButterflyCable.points.addAll(butterfly.allPoints);
                 thisButterflyCable.startTree.outPoints.addAll(butterfly.allPoints);
                 thisButterflyCable.endTree.inPoints.addAll(butterfly.allPoints);
@@ -682,6 +703,91 @@ public class KaledoscopeModel extends SLModel {
             len = length();
         }
 
+        /**
+         * When we are moving a butterfly to a new cable, we need to remove it from the old cable.
+         */
+        public void removeButterfly(LUButterfly butterfly) {
+            int pos = butterflies.indexOf(butterfly);
+            butterflies.remove(pos);
+            float bSpacing = ButterfliesConfig.getButterflyConfig(butterfly.runIndex)[2];
+            /*
+            Should we shift the next butterflies backwards or just leave them be?
+            for (int i = pos; i < butterflies.size(); i++) {
+                LUButterfly b = butterflies.get(i);
+                b.cableDistance -= bSpacing;
+            }
+            */
+            rebuildPoints();
+        }
+
+        /**
+         * When we are moving butterflies between cables, we want to insert them after the first previous
+         * butterfly on the target cable to the butterfly we are moving.  We also need to update the inserted
+         * butterfly's position and then the position of all following butterflies.
+         * @param insert
+         * @param prev
+         */
+        public void insertButterflyAfterButterfly(LUButterfly insert, LUButterfly prev) {
+            int insertPos = 0;
+            if (prev == null)
+                butterflies.add(0, insert);
+            else {
+                for (int i = 0; i < butterflies.size(); i++) {
+                    if (butterflies.get(i).runIndex == prev.runIndex) {
+                        butterflies.add(i + 1, insert);
+                        insertPos = i;
+                    }
+                }
+            }
+            insert.cable = this;
+            float insertButterflySpacing = ButterfliesConfig.getButterflyConfig(insert.runIndex)[2];
+            if (prev == null)
+                insert.cableDistance = insertButterflySpacing;
+            else
+                insert.cableDistance = prev.cableDistance + insertButterflySpacing;
+            // Now compute the insert butterfly position
+            float[] newInsertPos = positionAlongCable(insert.cableDistance);
+            insert.updatePosition3D(newInsertPos[0], newInsertPos[1], newInsertPos[2]);
+            for (int i = insertPos + 2; i < butterflies.size(); i++) {
+                LUButterfly next = butterflies.get(i);
+                next.cableDistance += insertButterflySpacing;
+                newInsertPos = positionAlongCable(next.cableDistance);
+                next.updatePosition3D(newInsertPos[0], newInsertPos[1], newInsertPos[2]);
+            }
+            rebuildPoints();
+        }
+
+        /**
+         * Update the spacing distance on a butterfly.  This will need to recompute all the
+         * butterflies after this butterfly on the cable.
+         */
+        public void updateDistance(LUButterfly butterfly, int oldDistance, int newDistance) {
+            int deltaDistance = newDistance - oldDistance;
+            butterfly.cableDistance += deltaDistance;
+            float[] newPos = positionAlongCable(butterfly.cableDistance);
+            butterfly.updatePosition3D(newPos[0], newPos[1], newPos[2]);
+            int[] bc = ButterfliesConfig.getButterflyConfig(butterfly.runIndex);
+            bc[2] = newDistance;
+            ButterfliesConfig.setButterflyConfig(butterfly.runIndex, bc[0], bc[1], bc[2], bc[3]);
+            int index = butterflies.indexOf(butterfly);
+            for (int i = index + 1; i < butterflies.size(); i++) {
+                LUButterfly next = butterflies.get(i);
+                next.cableDistance += deltaDistance;
+                newPos = positionAlongCable(next.cableDistance);
+                next.updatePosition3D(newPos[0], newPos[1], newPos[2]);
+            }
+        }
+
+        /**
+         * When we insert a butterfly into our list of butterflies, we need to rebuild our list of points.
+         */
+        public void rebuildPoints() {
+            points.clear();
+            for (LUButterfly butterfly : butterflies) {
+                points.addAll(butterfly.allPoints);
+            }
+        }
+
         public void resetPrevButterflyToStart() {
             prevButterflyX = startX;
             prevButterflyY = startY;
@@ -739,11 +845,66 @@ public class KaledoscopeModel extends SLModel {
             newPos[2] = prevZ + distance * unitVector[2];
             return newPos;
         }
+
+        /**
+         * When moving a butterfly to this cable, we will figure out it's cable distance and then
+         * use that to compute it's new position.  We also need to recompute the positions of all
+         * butterflies after it.
+         */
+        public float[] positionAlongCable(float distance) {
+            float[] newPos = new float[3];
+            newPos[0] = startX + distance * unitVector[0];
+            newPos[1] = startY + distance * unitVector[1];
+            newPos[2] = startZ + distance * unitVector[2];
+            return newPos;
+        }
     }
+
+    static List<List<String>> butterflyData = new ArrayList<List<String>>();
+    static Map<Integer, Integer> butterflyDistances = new HashMap<Integer, Integer>();
+    static Map<Integer, Integer> butterflyCables = new HashMap<Integer, Integer>();
+    static Map<Integer, Integer> butterflyVerticals = new HashMap<Integer, Integer>();
 
     static public KaledoscopeModel createModel(int numButterflyRuns) {
         List<LXPoint> allPoints = new ArrayList<LXPoint>();
 
+        try {
+            try (BufferedReader br = new BufferedReader(new FileReader("butterflies.txt"))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String[] values = line.split(",");
+                    butterflyData.add(Arrays.asList(values));
+                }
+            }
+        } catch (IOException ioex) {
+
+        }
+        int bNum = 0;
+        for (List<String> values : butterflyData) {
+            // TREE, DISTANCE, CABLE, VERTICAL
+            int treeNum = 0;
+            if ("B".equals(values.get(0)))
+                treeNum = 1;
+            else if ("C".equals(values.get(0)))
+                treeNum = 2;
+            else if ("D".equals(values.get(0)))
+                treeNum = 3;
+            int distance = -1;
+            if (!"".equals(values.get(1)))
+                distance = (int)Float.parseFloat(values.get(1));
+            int cable = Integer.parseInt(values.get(2));
+            int vertical = 0;
+            if (values.size() == 4) {
+                if (!"".equals(values.get(3)))
+                    vertical = (int) Float.parseFloat(values.get(3));
+            }
+
+            butterflyDistances.put(bNum, distance);
+            butterflyCables.put(bNum, cable);
+            butterflyVerticals.put(bNum, vertical);
+            bNum++;
+
+        }
         anchorTrees = new ArrayList<AnchorTree>();
         allRuns = new ArrayList<Run>();
         allButterflyRuns = new ArrayList<Run>(numButterflyRuns);
@@ -825,8 +986,7 @@ public class KaledoscopeModel extends SLModel {
         // GENERATE BUTTERFLIES
         // The model creation will update the config when generating butterflies, we just save them here.
         /* */
-        //ButterfliesConfig.saveUpdatedButterflyConfigs();
-
+        ButterfliesConfig.saveUpdatedButterflyConfigs();
 
         return new KaledoscopeModel(allPoints);
     }

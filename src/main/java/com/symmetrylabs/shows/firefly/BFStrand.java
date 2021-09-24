@@ -48,6 +48,8 @@ public class BFStrand extends FPSPattern {
 
         if (!tracer.getValueb()) {
             if (strand.strandType == KaledoscopeModel.Strand.StrandType.BUTTERFLY) {
+                if (strand.butterflies.size() == 0)
+                    return;
                 if (index.getValuei() >= strand.butterflies.size())
                     index.setValue(strand.butterflies.size() - 1);
                 if (index.getValuei() == -1) {
@@ -77,6 +79,8 @@ public class BFStrand extends FPSPattern {
         } else {
             if (strand.strandType == KaledoscopeModel.Strand.StrandType.BUTTERFLY) {
                 // We need to sanity check this because the user might be switching strands.
+                if (strand.butterflies.size() == 0)
+                    return;
                 if (currentIndex >= strand.butterflies.size())
                     currentIndex = strand.butterflies.size() - 1;
                 strand.butterflies.get(currentIndex).setColor(colors, color);
