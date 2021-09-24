@@ -59,7 +59,9 @@ abstract public class BFBase extends SLPattern {
     void postDraw(double deltaMs) {
 
     }
-    abstract void renderButterfly(double deltaMs, LUButterfly butterfly, int randomInt);
+     protected void renderButterfly(double deltaMs, LUButterfly butterfly, int randomInt) {
+
+     }
 
     protected void renderFlower(double deltaMs, LUFlower flower, int randomInt) {
         // Child class should override.

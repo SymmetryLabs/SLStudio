@@ -789,6 +789,21 @@ public class KaledoscopeModel extends SLModel {
                 flowerPoints.addAll(run.allPoints);
             }
             anchorTrees.get(i).flowerRuns = treeFlowerRuns;
+            // Compute min and max Y.
+            float treeFlowerMin = 1000f;
+            float treeFlowerMax = 0f;
+            for (Run run : treeFlowerRuns) {
+                for (LUFlower flower: run.flowers) {
+                    if (flower.flowerConfig.verticalDisplacement > treeFlowerMax) {
+                        treeFlowerMax = flower.flowerConfig.verticalDisplacement;
+                    }
+                    if (flower.flowerConfig.verticalDisplacement < treeFlowerMin) {
+                        treeFlowerMin = flower.flowerConfig.verticalDisplacement;
+                    }
+                }
+            }
+            anchorTrees.get(i).flowerMax = treeFlowerMax;
+            anchorTrees.get(i).flowerMin = treeFlowerMin;
         }
         int totalFlowers = 0;
         for (Run run : allFlowerRuns) {

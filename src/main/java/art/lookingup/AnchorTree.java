@@ -30,6 +30,8 @@ public class AnchorTree {
     public KaledoscopeModel.Cable[] outCables;
     public List<LXPoint> inPoints;
     public List<LXPoint> outPoints;
+    public float flowerMin;
+    public float flowerMax;
 
     /**
      * Load the anchor tree config params from AnchorTreeConfig.
