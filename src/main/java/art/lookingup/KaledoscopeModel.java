@@ -268,7 +268,7 @@ public class KaledoscopeModel extends SLModel {
 
             // Some data lines run backwards, so we will add the points to the strand after building the list
             // of butterflies.  For backwards data lines, we will just reverse the list of butterflies.
-            if (globalStrandId == 0) { // STRAND 2 BACKWARDS || globalStrandId == 2) {
+            if (globalStrandId == 0 || globalStrandId == 2) { // STRAND 2 BACKWARDS || globalStrandId == 2) {
                 Collections.reverse(butterflies);
             }
             for (int bIndex = 0; bIndex < butterflies.size(); bIndex++) {
@@ -443,7 +443,7 @@ public class KaledoscopeModel extends SLModel {
                 cablesThisStrand.add(cableRun1.get(i));
                 cablesThisStrand.add(cableRun2.get(i));
                 Strand strand = new Strand(this, allStrands.size(), i, cablesThisStrand, currentCableRunLengths);
-                if (strand.strandId == 0) { // STRAND 2 BACKWARDS || strand.strandId == 2) {
+                if (strand.strandId == 0 || strand.strandId == 2) { // STRAND 2 BACKWARDS || strand.strandId == 2) {
                     // The first and third strands run backwards.  We already reversed them when building the
                     // strands but we actually want all the butterflies for a run in proper run order so we
                     // copy the list
@@ -464,6 +464,7 @@ public class KaledoscopeModel extends SLModel {
                     // StrandID 2 was going to be backwards, instead it is effectively added to the end of strand 1
                     // but in a forward direction.  This might change back so we will just do a fixup here instead
                     // of a larger invasive change to divorce the tree/strand relationship.
+                    /*
                     if (strand.strandId == 2) {
                         Strand prevStrand = allStrands.get(1);
                         prevStrand.allPoints.addAll(strand.allPoints);
@@ -473,6 +474,7 @@ public class KaledoscopeModel extends SLModel {
                         strand.addressablePoints.clear();
                         strand.butterflies.clear();
                     }
+                    */
                 }
                 // This is an approximation.  Just base everything on one cable so we don't have to deal with
                 // tree radii.
