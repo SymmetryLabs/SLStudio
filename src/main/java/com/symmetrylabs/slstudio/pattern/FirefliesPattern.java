@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import java.util.List;
+import java.util.Arrays;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
@@ -10,9 +11,11 @@ import heronarts.lx.color.ColorParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.EnumParameter;
+import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 
 // based on https://github.com/ncase/fireflies
-public class FirefliesPattern extends LXPattern {
+public class FirefliesPattern extends SLPattern<SLModel> {
     public static enum FlashMode { FLASH, CLOCK };
 
     public final ColorParameter colorParam;
@@ -29,12 +32,14 @@ public class FirefliesPattern extends LXPattern {
     private static final int CLOCK_MAX = 1000;
 
     private int[] clocks;
+    private boolean[] fired;
     private long[] flashStarts;
 
     public FirefliesPattern(LX lx) {
         super(lx);
 
         clocks = new int[getSubmodelsSize()];
+        fired = new boolean[clocks.length];
         flashStarts = new long[clocks.length];
 
         double r = Math.sqrt(lx.model.xRange * lx.model.xRange
@@ -58,7 +63,7 @@ public class FirefliesPattern extends LXPattern {
         });
 
         addParameter(speedParam = new CompoundParameter("Speed", 0.5, 0, 2));
-        addParameter(syncParam = new BooleanParameter("Sync", true));
+        addParameter(syncParam = new BooleanParameter("Sync", false));
         addParameter(radiusParam = new CompoundParameter("Radius", r / 15, r / 1000, r));
         addParameter(nudgeParam = new CompoundParameter("Nudge", 0.035, 0.01, 0.1));
         addParameter(flashModeParam = new EnumParameter<>("FlashMode", FlashMode.FLASH));
@@ -75,6 +80,7 @@ public class FirefliesPattern extends LXPattern {
         for (int i = 0; i < clocks.length; ++i) {
             clocks[i] = (int)(Math.random() * CLOCK_MAX);
             flashStarts[i] = 0;
+            fired[i] = false;
         }
     }
 
@@ -84,13 +90,14 @@ public class FirefliesPattern extends LXPattern {
     protected void setSubmodelColor(int i, int c) {
         setColor(i, c);
     }
-    protected double getSubmodelsDist(int i, int j) {
+    protected double calcSubmodelEffect(int i, int j, double r) {
         LXPoint pi = model.getPoints().get(i);
         LXPoint pj = model.getPoints().get(j);
         float dx = pi.x - pj.x;
         float dy = pi.y - pj.y;
         float dz = pi.z - pj.z;
-        return Math.sqrt(dx * dx + dy * dy + dz * dz);
+        //return (dx * dx + dy * dy + dz * dz) > (r * r) ? -1 : 1;
+        return -(dx * dx + dy * dy + dz * dz) / (r * r) + 1;
     }
 
     @Override
@@ -98,28 +105,55 @@ public class FirefliesPattern extends LXPattern {
         long timerMillis = System.nanoTime() / 1000000;
         double flashDur = durationParam.getValue() * 1000;
 
-        for (int i = 0; i < getSubmodelsSize(); ++i) {
+        //long startTime = System.nanoTime();
+        //long endTime = 0;
+        int size = getSubmodelsSize();
+        Arrays.fill(fired, false);
+        for (int i = 0; i < size; ++i) {
             clocks[i] += noiseParam.getValue() * (Math.random() * 2 - 1) * CLOCK_MAX;
             clocks[i] += speedParam.getValue() * deltaMs;
             if (clocks[i] > CLOCK_MAX) {
                 flashStarts[i] = timerMillis;
                 clocks[i] = 0;
-
-                if (syncParam.isOn()) {
-                    for (int j = 0; j < getSubmodelsSize(); ++j) {
-                        if (i == j)
-                            continue;
-
-                        double d = getSubmodelsDist(i, j);
-                        double p = -d / radiusParam.getValue() + 1;
-
-                        if (p > 0) {
-                            clocks[j] *= 1 + nudgeParam.getValue() * p;
-                        }
-                    }
-                }
+                fired[i] = true;
             }
         }
+
+        if (syncParam.isOn()) {
+            double r = radiusParam.getValue();
+            int step = 100;
+            int start = (int)(Math.random() * step);
+            if (size < 1000) {
+                step = 1;
+                start = 0;
+            }
+            for (int i = start; i < size; i += step) {
+                if (!fired[i])
+                    continue;
+
+                // hack...
+                LXPoint pi = model.getPoints().get(i);
+                List<LXPoint> nearbyPoints = getModel().getModelIndex()
+                        .pointsWithin(pi, (float)(radiusParam.getValue() / 10));
+
+                //endTime = System.nanoTime();
+                //System.out.println((endTime - startTime) / 1000000f + ", " + nearbyPoints.size());
+                for (LXPoint pj : nearbyPoints) {
+                    int j = pj.index;
+                    if (i == j || fired[j])
+                        continue;
+
+                    double f = calcSubmodelEffect(i, j, r);
+                    if (f > 0) {
+                        clocks[j] *= 1 + nudgeParam.getValue() * f;
+                    }
+                }
+                //endTime = System.nanoTime();
+                //System.out.println((endTime - startTime) / 1000000f);
+            }
+        }
+        //endTime = System.nanoTime();
+        //System.out.println((endTime - startTime) / 1000000f);
 
         clear();
 
