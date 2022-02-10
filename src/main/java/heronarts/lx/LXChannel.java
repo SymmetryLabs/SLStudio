@@ -239,7 +239,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
                     .setDescription("Sets the alpha level of the output of this channel");
 
     public final BooleanParameter autoDisable =
-                    new BooleanParameter("AutoDisable", false)
+                    new BooleanParameter("AutoDisable", true)
                                     .setDescription("If true, disables the channel when the fader goes to zero");
 
     public final ObjectParameter<LXBlend> blendMode;

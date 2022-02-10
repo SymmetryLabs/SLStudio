@@ -2292,8 +2292,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -2420,8 +2419,7 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -2452,8 +2450,7 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "button",
@@ -2620,9 +2617,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -2751,8 +2746,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -2831,8 +2825,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "button",
@@ -2999,9 +2992,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -3130,8 +3121,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -3210,13 +3200,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -3268,9 +3255,7 @@
             "variables": "@{parent.variables}",
             "traversing": false,
             "widgets": [],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -3399,8 +3384,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -3479,8 +3463,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -3559,13 +3542,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -3694,13 +3674,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -3877,8 +3854,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -3909,8 +3885,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "button",
@@ -3954,9 +3929,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -4085,8 +4058,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -4165,13 +4137,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -4300,8 +4269,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -4332,8 +4300,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -4412,8 +4379,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -4492,8 +4458,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -4572,8 +4537,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -4652,8 +4616,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -4780,8 +4743,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -4812,8 +4774,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -4892,8 +4853,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -4944,9 +4904,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -5075,8 +5033,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -5203,8 +5160,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -5235,13 +5191,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -5370,13 +5323,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -5505,8 +5455,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -5537,8 +5486,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -5589,9 +5537,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -5672,8 +5618,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -5704,8 +5649,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -5804,9 +5748,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -5887,8 +5829,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -5919,8 +5860,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -6019,9 +5959,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -6150,8 +6088,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -6182,8 +6119,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -6234,9 +6170,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -6365,8 +6299,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -6397,8 +6330,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -6449,9 +6381,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -6532,8 +6462,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -6564,8 +6493,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -6664,9 +6592,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -6747,8 +6673,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -6779,8 +6704,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -6879,9 +6803,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -7010,8 +6932,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -7042,8 +6963,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -7094,9 +7014,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -7273,8 +7191,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -7305,13 +7222,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -7488,8 +7402,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -7520,8 +7433,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -7600,8 +7512,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -7680,13 +7591,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -7767,8 +7675,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -7799,8 +7706,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -7927,8 +7833,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -8007,8 +7912,7 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -8059,9 +7963,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -8142,8 +8044,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -8174,8 +8075,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -8350,8 +8250,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "button",
@@ -8395,9 +8294,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -8449,9 +8346,7 @@
             "variables": "@{parent.variables}",
             "traversing": false,
             "widgets": [],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -8580,8 +8475,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -8612,8 +8506,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -8692,8 +8585,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -8744,9 +8636,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -8875,8 +8765,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -8907,8 +8796,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -8959,9 +8847,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -9090,13 +8976,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -9177,8 +9060,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -9209,8 +9091,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -9309,9 +9190,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -9392,8 +9271,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -9472,8 +9350,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -9552,8 +9429,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -9604,9 +9480,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -9783,8 +9657,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -9815,8 +9688,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -9895,13 +9767,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -10078,8 +9947,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -10110,13 +9978,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -10197,8 +10062,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -10277,8 +10141,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -10357,8 +10220,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -10409,9 +10271,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -10492,8 +10352,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -10524,8 +10383,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -10624,9 +10482,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -10755,13 +10611,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -10890,8 +10743,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -10922,8 +10774,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -10974,9 +10825,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -11105,8 +10954,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -11137,8 +10985,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -11217,8 +11064,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -11249,8 +11095,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -11349,9 +11194,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -11480,8 +11323,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -11560,8 +11402,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -11592,8 +11433,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -11644,9 +11484,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -11727,8 +11565,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -11759,8 +11596,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -11859,9 +11695,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -11942,8 +11776,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -12022,8 +11855,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -12102,8 +11934,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -12195,9 +12026,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -12374,8 +12203,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -12406,13 +12234,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "text",
@@ -12443,8 +12268,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "text",
@@ -12475,8 +12299,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "fader",
@@ -12636,8 +12459,7 @@
             "script": "",
             "address": "auto",
             "preArgs": "",
-            "target": "",
-            "decimals": 2
+            "target": ""
           },
           {
             "type": "text",
@@ -12668,8 +12490,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "button",
@@ -12741,8 +12562,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "fader",
@@ -12823,8 +12643,7 @@
             "address": "auto",
             "preArgs": "",
             "target": "",
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "button",
@@ -13322,8 +13141,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "fader",
@@ -13404,8 +13222,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "fader",
@@ -13660,9 +13477,7 @@
             "bypass": false
           }
         ],
-        "tabs": [],
-        "relative": false,
-        "ignoreTabs": false
+        "tabs": []
       },
       {
         "type": "modal",
@@ -13772,8 +13587,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "frame",
@@ -15313,7 +15127,7 @@
             "type": "button",
             "top": "37.94%",
             "left": "71.5%",
-            "id": "Swim",
+            "id": "Swarm",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -15334,7 +15148,7 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Swim",
+            "on": "Swarm",
             "off": 0,
             "mode": "tap",
             "doubleTap": false,
@@ -15354,7 +15168,7 @@
             "type": "button",
             "top": "3.62%",
             "left": "82.13%",
-            "id": "Swarm",
+            "id": "Swim",
             "visible": true,
             "interaction": true,
             "width": "8.2%",
@@ -15387,7 +15201,7 @@
             "label": "auto",
             "vertical": false,
             "wrap": false,
-            "on": "Swarm",
+            "on": "Swim",
             "off": 0,
             "doubleTap": false
           },
@@ -15725,8 +15539,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "button",
@@ -15848,8 +15661,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "text",
@@ -15880,8 +15692,7 @@
             "script": "",
             "address": "auto",
             "preArgs": "",
-            "target": "",
-            "decimals": 2
+            "target": ""
           },
           {
             "type": "button",
@@ -15953,8 +15764,7 @@
             "address": "auto",
             "preArgs": "",
             "target": "",
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "fader",
@@ -16035,8 +15845,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "button",
@@ -16555,8 +16364,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "fader",
@@ -16637,8 +16445,7 @@
             "target": "",
             "vertical": false,
             "wrap": false,
-            "align": "center",
-            "decimals": 2
+            "align": "center"
           },
           {
             "type": "fader",
@@ -16817,8 +16624,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -16945,8 +16751,7 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -16977,8 +16782,7 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "button",
@@ -17145,9 +16949,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -17276,8 +17078,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -17356,8 +17157,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "button",
@@ -17524,9 +17324,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -17655,8 +17453,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -17735,13 +17532,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -17793,9 +17587,7 @@
             "variables": "@{parent.variables}",
             "traversing": false,
             "widgets": [],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -17924,8 +17716,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -18004,13 +17795,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -18139,8 +17927,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -18267,8 +18054,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -18299,13 +18085,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -18434,8 +18217,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -18466,8 +18248,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -18546,8 +18327,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -18626,8 +18406,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -18706,8 +18485,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -18786,8 +18564,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -18914,8 +18691,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -18946,8 +18722,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -19026,8 +18801,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -19078,9 +18852,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -19209,8 +18981,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -19289,13 +19060,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -19472,8 +19240,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -19504,8 +19271,7 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "button",
@@ -19549,9 +19315,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -19680,13 +19444,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -19815,8 +19576,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -19847,8 +19607,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -19899,9 +19658,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -19982,8 +19739,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -20014,8 +19770,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -20114,9 +19869,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -20197,8 +19950,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -20229,8 +19981,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -20329,9 +20080,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -20460,8 +20209,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -20492,8 +20240,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -20544,9 +20291,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -20675,13 +20420,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -20858,8 +20600,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -20890,13 +20631,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -21025,8 +20763,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -21057,8 +20794,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -21109,9 +20845,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -21192,8 +20926,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -21224,8 +20957,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -21324,9 +21056,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -21407,8 +21137,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -21439,8 +21168,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -21539,9 +21267,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -21670,8 +21396,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -21702,8 +21427,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -21754,9 +21478,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -21933,8 +21655,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -21965,8 +21686,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -22045,8 +21765,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -22125,13 +21844,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -22212,8 +21928,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -22244,8 +21959,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -22372,8 +22086,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -22452,8 +22165,7 @@
                 "address": "auto",
                 "preArgs": "",
                 "target": "",
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -22504,9 +22216,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -22587,8 +22297,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -22619,8 +22328,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -22795,8 +22503,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "button",
@@ -22840,9 +22547,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -22894,9 +22599,7 @@
             "variables": "@{parent.variables}",
             "traversing": false,
             "widgets": [],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -23025,8 +22728,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -23057,8 +22759,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -23137,8 +22838,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -23189,9 +22889,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -23368,8 +23066,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -23400,8 +23097,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -23480,13 +23176,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -23567,8 +23260,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -23647,8 +23339,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -23727,8 +23418,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -23779,9 +23469,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -23862,8 +23550,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -23894,8 +23581,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -23994,9 +23680,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -24125,13 +23809,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -24260,8 +23941,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -24292,8 +23972,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -24344,9 +24023,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -24523,8 +24200,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -24555,13 +24231,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -24613,9 +24286,7 @@
             "variables": "@{parent.variables}",
             "traversing": false,
             "widgets": [],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -24696,8 +24367,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -24728,8 +24398,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -24828,9 +24497,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -24959,13 +24626,10 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -25094,8 +24758,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -25126,8 +24789,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -25178,9 +24840,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -25309,8 +24969,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -25341,8 +25000,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -25421,8 +25079,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "text",
@@ -25453,8 +25110,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -25553,9 +25209,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -25684,8 +25338,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -25764,8 +25417,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -25796,8 +25448,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -25848,9 +25499,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -25931,8 +25580,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -25963,8 +25611,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -26063,9 +25710,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -26146,8 +25791,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "knob",
@@ -26226,8 +25870,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -26306,8 +25949,7 @@
                 "script": "",
                 "address": "auto",
                 "preArgs": "",
-                "target": "",
-                "decimals": 2
+                "target": ""
               },
               {
                 "type": "knob",
@@ -26399,9 +26041,7 @@
                 "bypass": false
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "modal",
@@ -26578,8 +26218,7 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               },
               {
                 "type": "text",
@@ -26610,13 +26249,10 @@
                 "target": "",
                 "vertical": false,
                 "wrap": false,
-                "align": "center",
-                "decimals": 2
+                "align": "center"
               }
             ],
-            "tabs": [],
-            "relative": false,
-            "ignoreTabs": false
+            "tabs": []
           },
           {
             "type": "button",
@@ -26688,8 +26324,7 @@
             "script": "",
             "address": "auto",
             "preArgs": "",
-            "target": "",
-            "decimals": 2
+            "target": ""
           },
           {
             "type": "button",
@@ -26731,11 +26366,378 @@
             "target": "",
             "ignoreDefaults": false,
             "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "13.97%",
+            "left": "0.88%",
+            "id": "TRIG1",
+            "visible": true,
+            "interaction": true,
+            "width": "5.31%",
+            "height": "11.17%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "auto",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 1,
+            "off": 0,
+            "mode": "tap",
+            "doubleTap": false,
+            "value": "",
+            "default": "",
+            "linkId": "",
+            "script": "",
+            "address": "/lx/engine/modulation/Env 1/trigger",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 2,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "26.54%",
+            "left": "0.88%",
+            "id": "TRIG2",
+            "visible": true,
+            "interaction": true,
+            "width": "5.31%",
+            "height": "11.17%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "auto",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 1,
+            "off": 0,
+            "mode": "tap",
+            "doubleTap": false,
+            "value": "",
+            "default": "",
+            "linkId": "",
+            "script": "",
+            "address": "/lx/engine/modulation/Env 2/trigger",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 2,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "39.11%",
+            "left": "0.88%",
+            "id": "TRIG3",
+            "visible": true,
+            "interaction": true,
+            "width": "5.31%",
+            "height": "11.17%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "auto",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 1,
+            "off": 0,
+            "mode": "tap",
+            "doubleTap": false,
+            "value": "",
+            "default": "",
+            "linkId": "",
+            "script": "",
+            "address": "/lx/engine/modulation/Env 3/trigger",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 2,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "51.68%",
+            "left": "0.88%",
+            "id": "TRIG4",
+            "visible": true,
+            "interaction": true,
+            "width": "5.31%",
+            "height": "11.17%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "auto",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 1,
+            "off": 0,
+            "mode": "tap",
+            "doubleTap": false,
+            "value": "",
+            "default": "",
+            "linkId": "",
+            "script": "",
+            "address": "/lx/engine/modulation/Env 4/trigger",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 2,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "64.25%",
+            "left": "0.88%",
+            "id": "TRIG5",
+            "visible": true,
+            "interaction": true,
+            "width": "5.31%",
+            "height": "11.17%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "auto",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 1,
+            "off": 0,
+            "mode": "tap",
+            "doubleTap": false,
+            "value": "",
+            "default": "",
+            "linkId": "",
+            "script": "",
+            "address": "/lx/engine/modulation/Env 5/trigger",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 2,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "76.82%",
+            "left": "0.88%",
+            "id": "TRIG6",
+            "visible": true,
+            "interaction": true,
+            "width": "5.31%",
+            "height": "11.17%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "auto",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 1,
+            "off": 0,
+            "mode": "tap",
+            "doubleTap": false,
+            "value": "",
+            "default": "",
+            "linkId": "",
+            "script": "",
+            "address": "/lx/engine/modulation/Env 6/trigger",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 2,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "11.17%",
+            "left": "92.84%",
+            "id": "UP",
+            "visible": true,
+            "interaction": true,
+            "width": "5.31%",
+            "height": "11.17%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "auto",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 1,
+            "off": 0,
+            "mode": "push",
+            "doubleTap": false,
+            "value": "",
+            "default": "",
+            "linkId": "",
+            "script": "",
+            "address": "/lx/channel/10/pattern/1/Sweep",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 2,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "23.74%",
+            "left": "92.84%",
+            "id": "LEFT",
+            "visible": true,
+            "interaction": true,
+            "width": "5.31%",
+            "height": "11.17%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "auto",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 1,
+            "off": 0,
+            "mode": "push",
+            "doubleTap": false,
+            "value": "",
+            "default": "",
+            "linkId": "",
+            "script": "",
+            "address": "/lx/channel/11/pattern/1/Sweep",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 2,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
+          },
+          {
+            "type": "button",
+            "top": "36.31%",
+            "left": "92.84%",
+            "id": "CENTER",
+            "visible": true,
+            "interaction": true,
+            "width": "5.31%",
+            "height": "11.17%",
+            "expand": "false",
+            "colorText": "auto",
+            "colorWidget": "auto",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "lineWidth": "auto",
+            "padding": "auto",
+            "html": "",
+            "css": "",
+            "colorTextOn": "auto",
+            "label": "auto",
+            "vertical": false,
+            "wrap": false,
+            "on": 1,
+            "off": 0,
+            "mode": "push",
+            "doubleTap": false,
+            "value": "",
+            "default": "",
+            "linkId": "",
+            "script": "",
+            "address": "/lx/channel/12/pattern/1/Sweep",
+            "preArgs": "",
+            "typeTags": "",
+            "decimals": 2,
+            "target": "",
+            "ignoreDefaults": false,
+            "bypass": false
           }
         ],
-        "tabs": [],
-        "relative": false,
-        "ignoreTabs": false
+        "tabs": []
       },
       {
         "type": "fader",
@@ -26816,8 +26818,7 @@
         "target": "",
         "vertical": false,
         "wrap": false,
-        "align": "center",
-        "decimals": 2
+        "align": "center"
       },
       {
         "type": "fader",
@@ -26898,8 +26899,7 @@
         "target": "",
         "vertical": false,
         "wrap": false,
-        "align": "center",
-        "decimals": 2
+        "align": "center"
       },
       {
         "type": "button",
@@ -27434,8 +27434,7 @@
         "address": "auto",
         "preArgs": "",
         "target": "",
-        "align": "center",
-        "decimals": 2
+        "align": "center"
       },
       {
         "type": "text",
@@ -27466,8 +27465,7 @@
         "address": "auto",
         "preArgs": "",
         "target": "",
-        "align": "center",
-        "decimals": 2
+        "align": "center"
       },
       {
         "type": "button",
@@ -27554,6 +27552,6 @@
     ],
     "tabs": []
   },
-  "version": "1.8.3",
+  "version": "1.6.1",
   "type": "Open Stage Control session"
 }
