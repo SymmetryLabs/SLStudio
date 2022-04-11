@@ -44,145 +44,155 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
 
     static final TowerConfig[] TOWER_CONFIG = {
 
-            //LEG1
+            //LEG1 RIGHT TO LEFT
             //STARTING FROM BOTTOM FRONT LEG FLOOR CUBES WORKING UP THE STRUCTURE
-            new TowerConfig(SP*0, SP*0, SP*0, new String[][]{new String[] {"5410ecf5d87b", ""}}), 
-            new TowerConfig(SP*0, SP*0, SP*2, new String[][]{new String[] {"726", ""}}),
+            new TowerConfig(SP*0, SP*0, SP*0, new String[][]{new String[] {"789", "788"}}), 
+            // new TowerConfig(SP*0, SP*0, SP*2, new String[][]{new String[] {"", ""}}),
             //ONE CUBE UP FROM THE GROUND
-            new TowerConfig(SP*0, SP*1, SP*1, new String[][]{new String[] {"", "879"}}),
-            new TowerConfig(SP*0, SP*1, SP*3, new String[][]{new String[] {"1037", ""}}), 
+            new TowerConfig(SP*0, SP*1, SP*1, new String[][]{new String[] {"1081", "972"}}),
+            // new TowerConfig(SP*0, SP*1, SP*3, new String[][]{new String[] {"", ""}}), 
 
             //TOP ACROSS SECTION
-            new TowerConfig(SP*0, SP*4, SP*3, new String[][]{new String[] {"", "5410ecfdb2d4"}}), 
-            new TowerConfig(SP*-2, SP*4, SP*3, new String[][]{new String[] {"1043", ""}}), 
-            new TowerConfig(SP*-4, SP*4, SP*3, new String[][]{new String[] {"5410ecf583c6", ""}}),
+            new TowerConfig(SP*0, SP*4, SP*3, new String[][]{new String[] {"", "728"}}), 
+            new TowerConfig(SP*-2, SP*4, SP*3, new String[][]{new String[] {"523", "522"}}), 
+            new TowerConfig(SP*-4, SP*4, SP*3, new String[][]{new String[] {"778", "970"}}),
 
             //THREE CUBES UP FROM GROUND ACROSS SECTION
-            new TowerConfig(SP*0, SP*3, SP*3, new String[][]{new String[] {"5410ecf4a602", ""}}), 
-            new TowerConfig(SP*-1.5f, SP*3, SP*3, new String[][]{new String[] {"", "626"}}), 
-            new TowerConfig(SP*-2.5f, SP*3, SP*3, new String[][]{new String[] {"511", ""}}),
-            new TowerConfig(SP*-4, SP*3, SP*3, new String[][]{new String[] {"5410ecfd3c72", "1129"}}),
+            new TowerConfig(SP*0, SP*3, SP*3, new String[][]{new String[] {"922", "1059"}}), 
+            new TowerConfig(SP*-1.5f, SP*3, SP*3, new String[][]{new String[] {"5410ecf4a602", ""}}), 
+            new TowerConfig(SP*-2.5f, SP*3, SP*3, new String[][]{new String[] {"1043", "758"}}),
+            new TowerConfig(SP*-4, SP*3, SP*3, new String[][]{new String[] {"687", "686"}}),
 
             //TWO CUBES UP FROM GROUND ACROSS SECTION
-            new TowerConfig(SP*0, SP*2, SP*2, new String[][]{new String[] {"", "930"}}), 
-            new TowerConfig(SP*-1, SP*2, SP*2, new String[][]{new String[] {"778", "970"}}), 
-            new TowerConfig(SP*-2, SP*2, SP*2, new String[][]{new String[] {"447", "5410ecf4c257"}}),
-            new TowerConfig(SP*-3, SP*2, SP*2, new String[][]{new String[] {"1081", "972"}}), 
-            new TowerConfig(SP*-4, SP*2, SP*2, new String[][]{new String[] {"649", ""}}),
+            new TowerConfig(SP*0, SP*2, SP*2, new String[][]{new String[] {"5410ecf4a799", "5410ecf48ed0"}}), 
+            new TowerConfig(SP*-1, SP*2, SP*2, new String[][]{new String[] {"679", "678"}}), 
+            new TowerConfig(SP*-2, SP*2, SP*2, new String[][]{new String[] {"1003", "989"}}),
+            new TowerConfig(SP*-3, SP*2, SP*2, new String[][]{new String[] {"", "879"}}), 
+            new TowerConfig(SP*-4, SP*2, SP*2, new String[][]{new String[] {"", "1151"}}),
 
             //ONE CUBE FROM GROUND ACROSS SECTION
             // new TowerConfig(SP*0, SP*1, SP*3, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*-1.5f, SP*1, SP*3, new String[][]{new String[] {"470", ""}}), 
-            new TowerConfig(SP*-2.5f, SP*1, SP*3, new String[][]{new String[] {"595", ""}}),
+            new TowerConfig(SP*-1.5f, SP*1, SP*3, new String[][]{new String[] {"721", "720"}}), 
+            new TowerConfig(SP*-2.5f, SP*1, SP*3, new String[][]{new String[] {"988", "768"}}),
             // new TowerConfig(SP*-4, SP*1, SP*3, new String[][]{new String[] {"5410ecf5e2e2", ""}}),
 
-            //LEG2
+            //---------------LEG2-------------------
             //STARTING FROM BOTTOM FRONT LEG FLOOR CUBES WORKING UP THE STRUCTURE
-            new TowerConfig(SP*-4, SP*0, SP*0, new String[][]{new String[] {"815", ""}}), 
-            new TowerConfig(SP*-4, SP*0, SP*2, new String[][]{new String[] {"789", ""}}),
+            new TowerConfig(SP*-4, SP*0, SP*0, new String[][]{new String[] {"5410ecfd7b9c", "1005"}}), 
+            // new TowerConfig(SP*-4, SP*0, SP*2, new String[][]{new String[] {"", ""}}),
             //ONE CUBE UP FROM THE GROUND
-            new TowerConfig(SP*-4, SP*1, SP*1, new String[][]{new String[] {"980", ""}}),
-            new TowerConfig(SP*-4, SP*1, SP*3, new String[][]{new String[] {"5410ecf5e2e2", ""}}), 
+            new TowerConfig(SP*-4, SP*1, SP*1, new String[][]{new String[] {"5410ecfd3c72", "1129"}}),
+            // new TowerConfig(SP*-4, SP*1, SP*3, new String[][]{new String[] {"", ""}}),
 
-            //ONE CUBE UP FROM THE GROUND
-            new TowerConfig(SP*(0-4), SP*1, SP*1, new String[][]{new String[] {"", ""}}),
-            new TowerConfig(SP*(0-4), SP*1, SP*3, new String[][]{new String[] {"", ""}}), 
+            //TOP ACROSS SECTION RIGHT TO LEFT
+            // new TowerConfig(SP*(0-4), SP*4, SP*3, new String[][]{new String[] {"1040", "1030"}}), 
+            new TowerConfig(SP*(-2-4), SP*4, SP*3, new String[][]{new String[] {"1040", "1030"}}), 
+            new TowerConfig(SP*(-4-4), SP*4, SP*3, new String[][]{new String[] {"5410ecfd56ff", "5410ecf6a91e"}}),
 
-            //TOP ACROSS SECTION
-            new TowerConfig(SP*(0-4), SP*4, SP*3, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-2-4), SP*4, SP*3, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-4-4), SP*4, SP*3, new String[][]{new String[] {"", ""}}),
-
-            //THREE CUBES UP FROM GROUND ACROSS SECTION
-            new TowerConfig(SP*(0-4), SP*3, SP*3, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-1.5f-4), SP*3, SP*3, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-2.5f-4), SP*3, SP*3, new String[][]{new String[] {"", ""}}),
-            new TowerConfig(SP*(-4-4), SP*3, SP*3, new String[][]{new String[] {"", ""}}),
+            //THREE CUBES UP FROM GROUND ACROSS SECTION RIGHT TO LEFT
+            // new TowerConfig(SP*(0-4), SP*3, SP*3, new String[][]{new String[] {"", ""}}), 
+            new TowerConfig(SP*(-1.5f-4), SP*3, SP*3, new String[][]{new String[] {"", "5410ecf4c8aa"}}), 
+            new TowerConfig(SP*(-2.5f-4), SP*3, SP*3, new String[][]{new String[] {"529", "528"}}),
+            new TowerConfig(SP*(-4-4), SP*3, SP*3, new String[][]{new String[] {"1125", "1141"}}),
 
             //TWO CUBES UP FROM GROUND ACROSS SECTION
-            new TowerConfig(SP*(0-4), SP*2, SP*2, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-1-4), SP*2, SP*2, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-2-4), SP*2, SP*2, new String[][]{new String[] {"", ""}}),
-            new TowerConfig(SP*(-3-4), SP*2, SP*2, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-4-4), SP*2, SP*2, new String[][]{new String[] {"", ""}}),
+            new TowerConfig(SP*(0-4), SP*2, SP*2, new String[][]{new String[] {"398", "1151"}}), 
+            new TowerConfig(SP*(-1-4), SP*3, SP*2, 90, 90, 0, new String[][]{new String[] {"635", "634"}}), 
+            new TowerConfig(SP*(-2-4), SP*2, SP*2, new String[][]{new String[] {"1037", "1038"}}),
+            new TowerConfig(SP*(-3-4), SP*2, SP*2, new String[][]{new String[] {"1092", "951"}}),
 
-            //LEG3
+            new TowerConfig(SP*(-3-4), SP*2, SP*3, new String[][]{new String[] {"828", "829"}}),
+
+            // new TowerConfig(SP*(-4-4), SP*2, SP*2, new String[][]{new String[] {"398", "1151"}}),
+
+            //ONE CUBE FROM GROUND ACROSS SECTION
+            new TowerConfig(SP*(-1.5f-4), SP*1, SP*3, new String[][]{new String[] {"1128", "5410ecfdb2d4"}}), 
+            new TowerConfig(SP*(-2.5f-4), SP*1, SP*3, new String[][]{new String[] {"5410ecf53090", "5410ecf4c88f"}}),
+
+            //---------------LEG3-----------------------
             //STARTING FROM BOTTOM FRONT LEG FLOOR CUBES WORKING UP THE STRUCTURE
-            new TowerConfig(SP*-8, SP*0, SP*0, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*-8, SP*0, SP*2, new String[][]{new String[] {"", ""}}),
+            new TowerConfig(SP*-8, SP*0, SP*0, new String[][]{new String[] {"649", "648"}}),
             //ONE CUBE UP FROM THE GROUND
-            new TowerConfig(SP*-8, SP*1, SP*1, new String[][]{new String[] {"", ""}}),
-            new TowerConfig(SP*-8, SP*1, SP*3, new String[][]{new String[] {"", ""}}),
+            new TowerConfig(SP*-8, SP*1, SP*1, new String[][]{new String[] {"5410ecf5205e", "5410ecf53668"}}),
 
             //TOP ACROSS SECTION
-            new TowerConfig(SP*(0-8), SP*4, SP*3, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-2-8), SP*4, SP*3, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-4-8), SP*4, SP*3, new String[][]{new String[] {"", ""}}),
+            new TowerConfig(SP*(0-8), SP*4, SP*3, new String[][]{new String[] {"", "5410ecf6a91e"}}), 
+            new TowerConfig(SP*(-2-8), SP*4, SP*3, new String[][]{new String[] {"1133", "1139"}}), 
+            new TowerConfig(SP*(-4-8), SP*4, SP*3, new String[][]{new String[] {"747", "746"}}),
 
             //THREE CUBES UP FROM GROUND ACROSS SECTION
-            new TowerConfig(SP*(0-8), SP*3, SP*3, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-1.5f-8), SP*3, SP*3, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-2.5f-8), SP*3, SP*3, new String[][]{new String[] {"", ""}}),
-            new TowerConfig(SP*(-4-8), SP*3, SP*3, new String[][]{new String[] {"", ""}}),
+            new TowerConfig(SP*(0-8), SP*3, SP*3, new String[][]{new String[] {"955", "905"}}), 
+            new TowerConfig(SP*(-1.5f-8), SP*3, SP*3, new String[][]{new String[] {"864", "1069"}}), 
+            new TowerConfig(SP*(-2.5f-8), SP*3, SP*3, new String[][]{new String[] {"618", "619"}}),
+            // new TowerConfig(SP*(-4-8), SP*3, SP*3, new String[][]{new String[] {"", ""}}),
 
             //TWO CUBES UP FROM GROUND ACROSS SECTION
-            new TowerConfig(SP*(0-8), SP*2, SP*2, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-1-8), SP*2, SP*2, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-2-8), SP*2, SP*2, new String[][]{new String[] {"", ""}}),
-            new TowerConfig(SP*(-3-8), SP*2, SP*2, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-4-8), SP*2, SP*2, new String[][]{new String[] {"", ""}}), 
+            new TowerConfig(SP*(-1-8), SP*2, SP*2, new String[][]{new String[] {"517", "5410ecf583c6"}}), 
+            new TowerConfig(SP*(-2-8), SP*2, SP*2, new String[][]{new String[] {"470", "660"}}),
+            new TowerConfig(SP*(-3-8), SP*2, SP*2, new String[][]{new String[] {"5410ecf5e2e2", "5410ecf6b63e"}}), 
+            new TowerConfig(SP*(-4-8), SP*2, SP*2, new String[][]{new String[] {"868", "869"}}), 
 
-            //LEG4
+            //MIDDLE CUBE BEHIND CENTER
+            new TowerConfig(SP*(-2-8), SP*2, SP*3, new String[][]{new String[] {"701", "5410ecfddc99"}}),
+
+
+
+            //ONE CUBE FROM GROUND ACROSS SECTION
+            new TowerConfig(SP*(-1.5f-8), SP*1, SP*3, new String[][]{new String[] {"1080", "1061"}}), 
+            new TowerConfig(SP*(-2.5f-8), SP*1, SP*3, new String[][]{new String[] {"447", "5410ecf4c257"}}),
+
+            //------------LEG4--------------------
             //STARTING FROM BOTTOM FRONT LEG FLOOR CUBES WORKING UP THE STRUCTURE
-            new TowerConfig(SP*-12, SP*0, SP*0, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*-12, SP*0, SP*2, new String[][]{new String[] {"", ""}}),
+            new TowerConfig(SP*-12, SP*0, SP*0, new String[][]{new String[] {"749", "748"}}), 
+
             //ONE CUBE UP FROM THE GROUND
-            new TowerConfig(SP*-12, SP*1, SP*1, new String[][]{new String[] {"", ""}}),
-            new TowerConfig(SP*-12, SP*1, SP*3, new String[][]{new String[] {"", ""}}),
+            new TowerConfig(SP*-12, SP*1, SP*1, new String[][]{new String[] {"595", "804"}}),
+
+            new TowerConfig(SP*(-1.5f-12), SP*1, SP*3, new String[][]{new String[] {"?13", "?14"}}), 
+            new TowerConfig(SP*(-2.5f-12), SP*1, SP*3, new String[][]{new String[] {"511", "510"}}),
 
             //TOP ACROSS SECTION
-            new TowerConfig(SP*(0-12), SP*4, SP*3, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-2-12), SP*4, SP*3, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-4-12), SP*4, SP*3, new String[][]{new String[] {"", ""}}),
+            new TowerConfig(SP*(0-12), SP*4, SP*3, new String[][]{new String[] {"", "728"}}), 
+            new TowerConfig(SP*(-2-12), SP*4, SP*3, new String[][]{new String[] {"607", "606"}}), 
+            new TowerConfig(SP*(-4-12), SP*4, SP*3, new String[][]{new String[] {"", "728"}}),
 
             //THREE CUBES UP FROM GROUND ACROSS SECTION
-            new TowerConfig(SP*(0-12), SP*3, SP*3, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-1.5f-12), SP*3, SP*3, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-2.5f-12), SP*3, SP*3, new String[][]{new String[] {"", ""}}),
-            new TowerConfig(SP*(-4-12), SP*3, SP*3, new String[][]{new String[] {"", ""}}),
+            new TowerConfig(SP*(0-12), SP*3, SP*3, new String[][]{new String[] {"913", "906"}}), 
+            new TowerConfig(SP*(-1.5f-12), SP*3, SP*3, new String[][]{new String[] {"942", "930"}}), 
+            new TowerConfig(SP*(-2.5f-12), SP*3, SP*3, new String[][]{new String[] {"815", "814"}}),
+            // new TowerConfig(SP*(-4-12), SP*3, SP*3, new String[][]{new String[] {"", ""}}),
 
             //TWO CUBES UP FROM GROUND ACROSS SECTION
-            new TowerConfig(SP*(0-12), SP*2, SP*2, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-1-12), SP*2, SP*2, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-2-12), SP*2, SP*2, new String[][]{new String[] {"", ""}}),
-            new TowerConfig(SP*(-3-12), SP*2, SP*2, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-4-12), SP*2, SP*2, new String[][]{new String[] {"", ""}}),
+            // new TowerConfig(SP*(0-12), SP*2, SP*2, new String[][]{new String[] {"", ""}}), 
+            new TowerConfig(SP*(-1-12), SP*2, SP*2, new String[][]{new String[] {"659", "658"}}), 
+            new TowerConfig(SP*(-2-12), SP*2, SP*2, new String[][]{new String[] {"1142", "1131"}}),
+            new TowerConfig(SP*(-3-12), SP*2, SP*2, new String[][]{new String[] {"775", "774"}}), 
+            // new TowerConfig(SP*(-4-12), SP*2, SP*2, new String[][]{new String[] {"", ""}}),
 
-            //LEG5
-            //STARTING FROM BOTTOM FRONT LEG FLOOR CUBES WORKING UP THE STRUCTURE
-            new TowerConfig(SP*-16, SP*0, SP*0, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*-16, SP*0, SP*2, new String[][]{new String[] {"", ""}}),
-            //ONE CUBE UP FROM THE GROUND
-            new TowerConfig(SP*-16, SP*1, SP*1, new String[][]{new String[] {"", ""}}),
-            new TowerConfig(SP*-16, SP*1, SP*3, new String[][]{new String[] {"", ""}}),
 
-            //TOP ACROSS SECTION
-            new TowerConfig(SP*(0-16), SP*4, SP*3, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-2-16), SP*4, SP*3, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-4-16), SP*4, SP*3, new String[][]{new String[] {"", ""}}),
+            // //LEG5
+            // //STARTING FROM BOTTOM FRONT LEG FLOOR CUBES WORKING UP THE STRUCTURE
+            // new TowerConfig(SP*-16, SP*0, SP*0, new String[][]{new String[] {"789", "788"}}), 
+            // //ONE CUBE UP FROM THE GROUND
+            // new TowerConfig(SP*-16, SP*1, SP*1, new String[][]{new String[] {"", "972"}}),
 
-            //THREE CUBES UP FROM GROUND ACROSS SECTION
-            new TowerConfig(SP*(0-16), SP*3, SP*3, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-1.5f-16), SP*3, SP*3, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-2.5f-16), SP*3, SP*3, new String[][]{new String[] {"", ""}}),
-            new TowerConfig(SP*(-4-16), SP*3, SP*3, new String[][]{new String[] {"", ""}}),
+            // //TOP ACROSS SECTION
+            // new TowerConfig(SP*(0-16), SP*4, SP*3, new String[][]{new String[] {"", ""}}), 
+            // new TowerConfig(SP*(-2-16), SP*4, SP*3, new String[][]{new String[] {"", ""}}), 
+            // new TowerConfig(SP*(-4-16), SP*4, SP*3, new String[][]{new String[] {"", ""}}),
 
-            //TWO CUBES UP FROM GROUND ACROSS SECTION
-            new TowerConfig(SP*(0-16), SP*2, SP*2, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-1-16), SP*2, SP*2, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-2-16), SP*2, SP*2, new String[][]{new String[] {"", ""}}),
-            new TowerConfig(SP*(-3-16), SP*2, SP*2, new String[][]{new String[] {"", ""}}), 
-            new TowerConfig(SP*(-4-16), SP*2, SP*2, new String[][]{new String[] {"", ""}}),
+            // //THREE CUBES UP FROM GROUND ACROSS SECTION
+            // new TowerConfig(SP*(0-16), SP*3, SP*3, new String[][]{new String[] {"", ""}}), 
+            // new TowerConfig(SP*(-1.5f-16), SP*3, SP*3, new String[][]{new String[] {"", ""}}), 
+            // new TowerConfig(SP*(-2.5f-16), SP*3, SP*3, new String[][]{new String[] {"", ""}}),
+            // new TowerConfig(SP*(-4-16), SP*3, SP*3, new String[][]{new String[] {"", ""}}),
+
+            // //TWO CUBES UP FROM GROUND ACROSS SECTION
+            // new TowerConfig(SP*(0-16), SP*2, SP*2, new String[][]{new String[] {"", ""}}), 
+            // new TowerConfig(SP*(-1-16), SP*2, SP*2, new String[][]{new String[] {"", ""}}), 
+            // new TowerConfig(SP*(-2-16), SP*2, SP*2, new String[][]{new String[] {"", ""}}),
+            // new TowerConfig(SP*(-3-16), SP*2, SP*2, new String[][]{new String[] {"", ""}}), 
+            // new TowerConfig(SP*(-4-16), SP*2, SP*2, new String[][]{new String[] {"", ""}}),
 
 
 
