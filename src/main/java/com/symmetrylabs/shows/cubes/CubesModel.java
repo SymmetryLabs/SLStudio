@@ -324,12 +324,12 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
 
         public void updatePoints(LXTransform t) {
             t.push();
-            t.translate(x, y+type.EDGE_HEIGHT, z);
-            t.translate(type.EDGE_WIDTH/2, type.EDGE_HEIGHT/2, type.EDGE_WIDTH/2);
+            t.translate(x, y, z);
+            t.translate(type.EDGE_WIDTH/2, -type.EDGE_HEIGHT/2, type.EDGE_WIDTH/2);
             t.rotateX(rx * Math.PI / 180.);
             t.rotateY((ry * Math.PI / 180.) - HALF_PI);
             t.rotateZ(rz * Math.PI / 180.);
-            t.translate(-type.EDGE_WIDTH/2, -type.EDGE_HEIGHT/2, -type.EDGE_WIDTH/2);
+            t.translate(-type.EDGE_WIDTH/2, type.EDGE_HEIGHT/2, -type.EDGE_WIDTH/2);
 
             for (int i = 0; i < FACES_PER_CUBE; i++) {
                 faces.get(i).updatePoints(t);
