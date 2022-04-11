@@ -38,8 +38,8 @@ public class DemoShow extends CubesShow implements Show, LXEngine.Listener {
 
     //--------------------------------------------SIDE 1-------------------------
     //LEFT SIDE STARTING FROM BOTTOM
-// /*0*/new TowerConfig(CubesModel.Cube.Type.LARGE, 0, SP * 1, 0, 0, 0, 0, new String[] {"0"}),
-/*1*/new TowerConfig(CubesModel.Cube.Type.HD, 0, SP * 1, 0, 0, 0, 0, new String[] {"0", "0"}),
+// /*0*/new TowerConfig(CubesModel.Cube.Type.LARGE, SP*1, SP * 1, 0, 0, 0, 0, new String[] {"0"}),
+/*1*/new TowerConfig(CubesModel.Cube.Type.HD, SP*1, SP * 1, 0, 0, 0, 0, new String[] {"0", "0"}),
 /*2*/new TowerConfig(CubesModel.Cube.Type.HD, SP*.2f, SP*2, SP*0, 0, 0, 0, new String[] {"0", "0"}),
 /*3*/new TowerConfig(CubesModel.Cube.Type.HD, SP*.2f, SP*3, SP*0, 0, 0, 0, new String[] {"0", "0"}),
 /*4*/new TowerConfig(CubesModel.Cube.Type.HD, SP*.6f, SP*4, SP*-.15f, 0, 0, 0, new String[] {"0", "0"}),
@@ -57,6 +57,41 @@ public class DemoShow extends CubesShow implements Show, LXEngine.Listener {
 /*16*/new TowerConfig(CubesModel.Cube.Type.HD, SP*2.3f, SP*3f, SP*-.5f, 0, 0, 0, new String[] {"0", "0"}),
 /*17*/new TowerConfig(CubesModel.Cube.Type.HD, SP*3, SP*2, SP*-.5f, 0, 0, 0, new String[] {"0", "0"}),
 /*18*/new TowerConfig(CubesModel.Cube.Type.HD, SP*3.1f, SP*1, SP*-.5f, 0, 0, 0, new String[] {"0", "0"}),
+
+    // --------------------------------------------SIDE 2-------------------------
+
+/*19*/new TowerConfig(CubesModel.Cube.Type.HD, SP*4.2f, SP*8, SP*.5f, 0, -90, 0, new String[] {"0", "0"}),
+/*20*/new TowerConfig(CubesModel.Cube.Type.HD, SP*5.2f, SP*8, SP*1.5f, 0, -90, 0, new String[] {"0", "0"}),
+/*21*/new TowerConfig(CubesModel.Cube.Type.HD, SP*4.2f, SP*8.2f, SP*1.7f, 0, -90, 0, new String[] {"0", "0"}),
+/*22*/new TowerConfig(CubesModel.Cube.Type.HD, SP*4.2f, SP*7, SP*2.7f, 0, -90, 0, new String[] {"0", "0"}),
+/*23*/new TowerConfig(CubesModel.Cube.Type.HD, SP*4.2f, SP*5, SP*2.4f, 0, -90, 0, new String[] {"0", "0"}),
+/*24*/new TowerConfig(CubesModel.Cube.Type.HD, SP*4.2f, SP*4, SP*1.4f, 0, -90, 0, new String[] {"0", "0"}),
+/*25*/new TowerConfig(CubesModel.Cube.Type.HD, SP*4.2f, SP*3, SP*2, 0, -90, 0, new String[] {"0", "0"}),
+
+
+    //--------------------------------------------SIDE 3-------------------------
+/*26*/new TowerConfig(CubesModel.Cube.Type.HD, SP*4.4f, SP*1, SP*4+1, 0, -180, 0, new String[] {"0", "0"}),
+/*27*/new TowerConfig(CubesModel.Cube.Type.HD, SP*4.6f, SP*2, SP*3.8f+1, 0, -180, 0, new String[] {"0", "0"}),
+/*28*/new TowerConfig(CubesModel.Cube.Type.HD, SP*4.8f, SP*3, SP*3.8f+1, 0, -180, 0, new String[] {"0", "0"}),
+/*29*/new TowerConfig(CubesModel.Cube.Type.HD, SP*4.1f, SP*4, SP*3.8f+1, 0, -180, 0, new String[] {"0", "0"}),
+/*30*/new TowerConfig(CubesModel.Cube.Type.HD, SP*3.3f, SP*5, SP*4.1f+1, 0, -180, 0, new String[] {"0", "0"}),
+/*31*/new TowerConfig(CubesModel.Cube.Type.HD, SP*4.1f, SP*6, SP*3.8f+1, 0, -180, 0, new String[] {"0", "0"}),
+/*32*/new TowerConfig(CubesModel.Cube.Type.HD, SP*4.5f, SP*7, SP*4.2f+1, 0, -180, 0, new String[] {"0", "0"}),
+/*33*/new TowerConfig(CubesModel.Cube.Type.HD, SP*3.5f, SP*7.5f, SP*4.8f+1, 0, -180, 0, new String[] {"0", "0"}),
+/*34*/new TowerConfig(CubesModel.Cube.Type.HD, SP*2.5f, SP*7.5f, SP*5.8f+1, 0, -180, 0, new String[] {"0", "0"}),
+/*35*/new TowerConfig(CubesModel.Cube.Type.HD, SP*2, SP*7.9f, SP*4.8f+1, 0, -180, 0, new String[] {"0", "0"}),
+/*36*/new TowerConfig(CubesModel.Cube.Type.HD, SP*1, SP*7, SP*4.8f+1, 0, -180, 0, new String[] {"0", "0"}),
+/*37*/new TowerConfig(CubesModel.Cube.Type.HD, SP*0, SP*6.5f, SP*5.7f+1, 0, -180, 0, new String[] {"0", "0"}),
+/*38*/new TowerConfig(CubesModel.Cube.Type.HD, SP*1.1f, SP*6, SP*3.8f+1, 0, -180, 0, new String[] {"0", "0"}),
+/*39*/new TowerConfig(CubesModel.Cube.Type.HD, SP*2.3f, SP*5, SP*3.8f+1, 0, -180, 0, new String[] {"0", "0"}),
+/*40*/new TowerConfig(CubesModel.Cube.Type.HD, SP*1.7f, SP*4, SP*4.1f+1, 0, -180, 0, new String[] {"0", "0"}),
+/*41*/new TowerConfig(CubesModel.Cube.Type.HD, SP*1.5f, SP*3, SP*4.6f+1, 0, -180, 0, new String[] {"0", "0"}),
+/*42*/new TowerConfig(CubesModel.Cube.Type.HD, SP*1.3f, SP*2, SP*4.5f+1, 0, -180, 0, new String[] {"0", "0"}),
+/*43*/new TowerConfig(CubesModel.Cube.Type.HD, SP*1.2f, SP*1, SP*4.4f+1, 0, -180, 0, new String[] {"0", "0"}),
+
+
+
+
 
 
 
