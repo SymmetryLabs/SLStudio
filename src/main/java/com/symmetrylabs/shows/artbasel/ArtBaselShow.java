@@ -43,7 +43,9 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
     private Workspace workspace;
 
     static final TowerConfig[] TOWER_CONFIG = {
-
+//5410ecf5d87b
+//528
+      //815
             //LEG1 RIGHT TO LEFT
             //STARTING FROM BOTTOM FRONT LEG FLOOR CUBES WORKING UP THE STRUCTURE
             new TowerConfig(SP*0, SP*0, SP*0, new String[][]{new String[] {"789", "788"}}), 
@@ -92,12 +94,12 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
             //THREE CUBES UP FROM GROUND ACROSS SECTION RIGHT TO LEFT
             // new TowerConfig(SP*(0-4), SP*3, SP*3, new String[][]{new String[] {"", ""}}), 
             new TowerConfig(SP*(-1.5f-4), SP*3, SP*3, new String[][]{new String[] {"", "5410ecf4c8aa"}}), 
-            new TowerConfig(SP*(-2.5f-4), SP*3, SP*3, new String[][]{new String[] {"529", "528"}}),
+            new TowerConfig(SP*(-2.5f-4), SP*3, SP*3, new String[][]{new String[] {"5410ecf5d87b", "528"}}),
             new TowerConfig(SP*(-4-4), SP*3, SP*3, new String[][]{new String[] {"1125", "1141"}}),
 
             //TWO CUBES UP FROM GROUND ACROSS SECTION
             new TowerConfig(SP*(0-4), SP*2, SP*2, new String[][]{new String[] {"398", "1151"}}), 
-            new TowerConfig(SP*(-1-4), SP*3, SP*2, 90, 90, 0, new String[][]{new String[] {"635", "634"}}), 
+            new TowerConfig(SP*(-1-4), SP*3, SP*2, 90, 90, 0, new String[][]{new String[] {"634", "635"}}), 
             new TowerConfig(SP*(-2-4), SP*2, SP*2, new String[][]{new String[] {"1037", "1038"}}),
             new TowerConfig(SP*(-3-4), SP*2, SP*2, new String[][]{new String[] {"1092", "951"}}),
 
@@ -121,16 +123,16 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
             new TowerConfig(SP*(-4-8), SP*4, SP*3, new String[][]{new String[] {"747", "746"}}),
 
             //THREE CUBES UP FROM GROUND ACROSS SECTION
-            new TowerConfig(SP*(0-8), SP*3, SP*3, new String[][]{new String[] {"955", "905"}}), 
-            new TowerConfig(SP*(-1.5f-8), SP*3, SP*3, new String[][]{new String[] {"864", "1069"}}), 
-            new TowerConfig(SP*(-2.5f-8), SP*3, SP*3, new String[][]{new String[] {"618", "619"}}),
+            new TowerConfig(SP*(0-8), SP*3, SP*3, new String[][]{new String[] {"905", "955"}}), 
+            new TowerConfig(SP*(-1.5f-8), SP*3, SP*3, new String[][]{new String[] {"1069", "864"}}), 
+            new TowerConfig(SP*(-2.5f-8), SP*3, SP*3, new String[][]{new String[] {"619", "618"}}),
             // new TowerConfig(SP*(-4-8), SP*3, SP*3, new String[][]{new String[] {"", ""}}),
 
             //TWO CUBES UP FROM GROUND ACROSS SECTION
             new TowerConfig(SP*(-1-8), SP*2, SP*2, new String[][]{new String[] {"517", "5410ecf583c6"}}), 
             new TowerConfig(SP*(-2-8), SP*2, SP*2, new String[][]{new String[] {"470", "660"}}),
             new TowerConfig(SP*(-3-8), SP*2, SP*2, new String[][]{new String[] {"5410ecf5e2e2", "5410ecf6b63e"}}), 
-            new TowerConfig(SP*(-4-8), SP*2, SP*2, new String[][]{new String[] {"868", "869"}}), 
+            new TowerConfig(SP*(-4-8), SP*2, SP*2, new String[][]{new String[] {"869", "868"}}), 
 
             //MIDDLE CUBE BEHIND CENTER
             new TowerConfig(SP*(-2-8), SP*2, SP*3, new String[][]{new String[] {"701", "5410ecfddc99"}}),
@@ -157,9 +159,9 @@ public class ArtBaselShow extends CubesShow implements HasWorkspace {
             new TowerConfig(SP*(-4-12), SP*4, SP*3, new String[][]{new String[] {"", "728"}}),
 
             //THREE CUBES UP FROM GROUND ACROSS SECTION
-            new TowerConfig(SP*(0-12), SP*3, SP*3, new String[][]{new String[] {"913", "906"}}), 
+            new TowerConfig(SP*(0-12), SP*3, SP*3, new String[][]{new String[] {"906", "913"}}), 
             new TowerConfig(SP*(-1.5f-12), SP*3, SP*3, new String[][]{new String[] {"942", "930"}}), 
-            new TowerConfig(SP*(-2.5f-12), SP*3, SP*3, new String[][]{new String[] {"815", "814"}}),
+            new TowerConfig(SP*(-2.5f-12), SP*3, SP*3, new String[][]{new String[] {"814", "815"}}),
             // new TowerConfig(SP*(-4-12), SP*3, SP*3, new String[][]{new String[] {"", ""}}),
 
             //TWO CUBES UP FROM GROUND ACROSS SECTION

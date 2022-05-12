@@ -80,7 +80,6 @@ public abstract class LXShortMessage extends ShortMessage {
             if (note.getVelocity() == 0) {
                 listener.noteOffReceived(note);
             } else {
-                System.out.println(note.toString());
                 listener.noteOnReceived(note);
             }
             break;

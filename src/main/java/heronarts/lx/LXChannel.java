@@ -301,7 +301,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
         @Override
         public void run() {
-            System.out.println("LXEngine Channel thread started [" + getLabel() + "]");
             while (!isInterrupted()) {
                 synchronized (this) {
                     try {
@@ -320,7 +319,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
                     this.signal.notify();
                 }
             }
-            System.out.println("LXEngine Channel thread finished [" + getLabel() + "]");
         }
     }
 
@@ -505,7 +503,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         else {
             allPatterns.put(patternString, pattern);
         }
-        System.out.println(patternString);
         this.mutablePatterns.add(pattern);
         LXUtils.updateIndexes(mutablePatterns);
         this.focusedPattern.setRange(this.mutablePatterns.size());

@@ -697,7 +697,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
         @Override
         public void run() {
-            System.out.println("LXEngine Render Thread started");
             while (!isInterrupted()) {
                 long frameStart = System.currentTimeMillis();
                 LXEngine.this.run();
@@ -727,8 +726,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             frameRate = 0;
             engineThread = null;
             isEngineThreadRunning = false;
-
-            System.out.println("LXEngine Render Thread finished");
         }
     }
 
@@ -1421,8 +1418,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
                 frameRate = 1e9f / timer.ts.currentNanos;
                 lastFrame = now;
             }
-
-            System.out.println("LXEngine Network Thread finished");
         }
 
         public float frameRate() {
