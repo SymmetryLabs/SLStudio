@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 import com.symmetrylabs.shows.ShowRegistry;
 import com.symmetrylabs.slstudio.ui.*;
 import heronarts.lx.*;
+import heronarts.p3lx.ui.studio.mixer.UIChannelStrip;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.event.MouseEvent;
@@ -59,6 +60,8 @@ public class SLStudioLX extends P3LX {
     private static final String PROJECT_FILE_NAME = ".lxproject";
     private static final String KEY_UI = "ui";
     private static final int RESTART_EXIT_CODE = 999;
+    int originalStripWidth = 72;
+    int collapsedStripWidth = 20;
 
     public static interface SaveHook {
         void onSave();
@@ -180,6 +183,28 @@ public class SLStudioLX extends P3LX {
             setTopLevelKeyEventHandler(new UIEventHandler() {
                 @Override
                 public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+                     if (keyChar == '`') {
+                         Map<LXChannel, UIChannelStrip> channelStrips = lx.ui.bottomTray.mixer.channelStrips;
+                         for (LXChannel channel : channelStrips.keySet()) {
+                           UIMixerStrip strip = channelStrips.get(channel);
+                           if ((int)strip.getContentWidth() != collapsedStripWidth) {
+                             originalStripWidth = (int)strip.getContentWidth();
+                           }
+                           if (!strip.hasFocus()) {
+                             strip.setContentWidth(collapsedStripWidth);
+                           } else {
+                             strip.setContentWidth(originalStripWidth);
+                           }
+                         }
+                       } else if (keyChar == '~') {
+                         Map<LXChannel, UIChannelStrip> channelStrips = lx.ui.bottomTray.mixer.channelStrips;
+                         for (LXChannel channel : channelStrips.keySet()) {
+                           UIMixerStrip strip = channelStrips.get(channel);
+                           strip.setContentWidth(originalStripWidth);
+                         }
+                     }
+
+
                     if (keyChar == '?') {
                         helpText.toggleVisible();
                     }
