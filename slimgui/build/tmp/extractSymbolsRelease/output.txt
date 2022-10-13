@@ -1,0 +1,4 @@
+See file:///Users/Cameron/Desktop/ProgrammingStuff/SLStudio2/SLStudio/slimgui/build/tmp/extractSymbolsRelease/output.txt for all output for extractSymbolsRelease.
+Extracting symbols from libslimgui.dylib successful.
+
+Finished extractSymbolsRelease, see full log file:///Users/Cameron/Desktop/ProgrammingStuff/SLStudio2/SLStudio/slimgui/build/tmp/extractSymbolsRelease/output.txt.

@@ -1,0 +1,20 @@
+See file:///Users/Cameron/Desktop/ProgrammingStuff/SLStudio2/SLStudio/slimgui/build/tmp/compileReleaseCpp/output.txt for all output for compileReleaseCpp.
+compiling gl3w.cpp successful.
+
+compiling imgui_impl_opengl3.cpp successful.
+
+compiling imgui_impl_glfw.cpp successful.
+
+compiling imgui_demo.cpp successful.
+
+compiling widgets_symmetry.cpp successful.
+
+compiling imgui_draw.cpp successful.
+
+compiling slimgui.cpp successful.
+
+compiling imgui_widgets.cpp successful.
+
+compiling imgui.cpp successful.
+
+Finished compileReleaseCpp, see full log file:///Users/Cameron/Desktop/ProgrammingStuff/SLStudio2/SLStudio/slimgui/build/tmp/compileReleaseCpp/output.txt.

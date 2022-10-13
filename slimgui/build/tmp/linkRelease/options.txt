@@ -1,0 +1,17 @@
+-shared
+-o
+/Users/Cameron/Desktop/ProgrammingStuff/SLStudio2/SLStudio/slimgui/build/lib/main/release/libslimgui.dylib
+/Users/Cameron/Desktop/ProgrammingStuff/SLStudio2/SLStudio/slimgui/build/obj/main/release/9dd7h33vvqrwwye5t6zrwjirx/imgui_impl_glfw.o
+/Users/Cameron/Desktop/ProgrammingStuff/SLStudio2/SLStudio/slimgui/build/obj/main/release/c1wois2n294mp4rs11pyi00eh/imgui_demo.o
+/Users/Cameron/Desktop/ProgrammingStuff/SLStudio2/SLStudio/slimgui/build/obj/main/release/bpz6fvj84r9o026o7jh7qguus/imgui_widgets.o
+/Users/Cameron/Desktop/ProgrammingStuff/SLStudio2/SLStudio/slimgui/build/obj/main/release/f3an80jufnn7puo85fnmlekd7/slimgui.o
+/Users/Cameron/Desktop/ProgrammingStuff/SLStudio2/SLStudio/slimgui/build/obj/main/release/6kv14gxipq631s07dzuivkvm4/imgui.o
+/Users/Cameron/Desktop/ProgrammingStuff/SLStudio2/SLStudio/slimgui/build/obj/main/release/5pm19bhv3yyonqhle1ffx7otg/imgui_impl_opengl3.o
+/Users/Cameron/Desktop/ProgrammingStuff/SLStudio2/SLStudio/slimgui/build/obj/main/release/a9mj6eyhlecz45gasfdtewxcy/gl3w.o
+/Users/Cameron/Desktop/ProgrammingStuff/SLStudio2/SLStudio/slimgui/build/obj/main/release/6s6dkun1tc8vn0g40rbsj83bv/imgui_draw.o
+/Users/Cameron/Desktop/ProgrammingStuff/SLStudio2/SLStudio/slimgui/build/obj/main/release/b7ir827sip6ana7204u9qj9ul/widgets_symmetry.o
+-g
+-framework
+OpenGL
+../libs/libglfw.dylib
+-m64

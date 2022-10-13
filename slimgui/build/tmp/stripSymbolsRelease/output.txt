@@ -1,0 +1,4 @@
+See file:///Users/Cameron/Desktop/ProgrammingStuff/SLStudio2/SLStudio/slimgui/build/tmp/stripSymbolsRelease/output.txt for all output for stripSymbolsRelease.
+Stripping libslimgui.dylib successful.
+
+Finished stripSymbolsRelease, see full log file:///Users/Cameron/Desktop/ProgrammingStuff/SLStudio2/SLStudio/slimgui/build/tmp/stripSymbolsRelease/output.txt.
