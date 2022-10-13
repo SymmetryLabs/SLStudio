@@ -24,7 +24,7 @@ public class SummerBBQShow implements Show {
         {1, 9}, {1, 10}, {1, 11}, {1, 12}, {1, 13}, {1, 14}, {1, 15}, {1, 16},
         {2, 1}, {2, 2}, {2, 3}, {2, 4}, {2, 5}, {2, 6}, {2, 7}, {2, 8},
         {2, 9}, {2, 10}, {2, 11}, {2, 12}, {2, 13}, {2, 14}, {2, 15}, {2, 16},
-        {0, 5}, {0, 6}, {0, 7}, {3, 8},
+        {0, 5}, {0, 6}, {0, 7}, {0, 8},
     };
 
     String[] pixliteIpAddresses = {
@@ -84,7 +84,7 @@ public class SummerBBQShow implements Show {
             for (int j = 0; j < middleOutputCounts[i]; ++j) {
                 float sweep = j * perOutputSweep;
                 builder.addCircle().withRadius(circleRadius * METER * scale)
-                    .addStrips(2).withDegreeOffset(dir > 0 ? curAngle : curAngle + sweep - perOutputSweep).withDegreeSweep(dir * sweep)
+                    .addStrips(2).withDegreeOffset(dir > 0 ? curAngle : curAngle + sweep + perOutputSweep).withDegreeSweep(dir * sweep)
                     .build();
             }
 
@@ -113,8 +113,8 @@ public class SummerBBQShow implements Show {
         for (CirclesModel.Circle<DoubleStrip> circle : ((CirclesModel<DoubleStrip>)lx.model).getCircles()) {
             int pixliteIndex = pixliteOutputMapping[i][0];
             int outputNumber = pixliteOutputMapping[i][1];
-            pixlites[pixliteIndex].addPixliteOutput(new PointsGrouping(outputNumber+"").addPoints(circle.getPoints()));
             System.out.println("Adding pixlite output: " + i + ", " + pixliteIndex + ", " + outputNumber + ", " + circle.getPoints().size());
+            pixlites[pixliteIndex].addPixliteOutput(new PointsGrouping(outputNumber+"").addPoints(circle.getPoints()));
             ++i;
         }
 
