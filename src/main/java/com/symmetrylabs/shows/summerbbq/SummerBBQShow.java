@@ -49,12 +49,14 @@ public class SummerBBQShow implements Show {
         float arcSweepAngle = arcSegments * segmentAngle;
         float arcStartAngle = 180 - (arcSweepAngle - 180) / 2;
 
-        int startOutputs = 3;
-        int endOutputs = 3;
+        int startOutputs = 4;
+        int startOutputDir = -1;
+        int endOutputs = 4;
+        int endOutputDir = 1;
         float middleStartAngle = arcStartAngle + segmentAngle;
         float middleSweepAngle = (arcSegments - 2) * segmentAngle;
-        int[] middleOutputCounts = {1, 11, 5, 5, 11, 1};
-        int[] middleOutputDirs = {1, -1, 1, -1, 1, -1};
+        int[] middleOutputCounts = {11, 5, 5, 11};
+        int[] middleOutputDirs = {-1, 1, -1, 1};
 
         int middleOutputs = 0;
         for (int i = 0; i < middleOutputCounts.length; ++i) {
@@ -64,26 +66,39 @@ public class SummerBBQShow implements Show {
         // 1 "strip" is 3 strings daisy chained, up and down, back to back
         // we're assuming 2 "strips" per output
         // start outputs, from truss 2 -> 1 clockwise
-        builder.addCircle().withRadius(circleRadius * METER * scale)
-            .addStrips(2).withDegreeOffset(middleStartAngle).withDegreeSweep(-segmentAngle)
-            .build();
+        float curAngle = middleStartAngle;
+        float perOutputSweep = segmentAngle / startOutputs;
+        for (int i = 0; i < startOutputs; ++i) {
+            int dir = startOutputDir;
+            builder.addCircle().withRadius(circleRadius * METER * scale)
+                .addStrips(2).withDegreeOffset(curAngle).withDegreeSweep(dir * perOutputSweep)
+                .build();
+            curAngle += dir * perOutputSweep;
+        }
 
         // middle outputs
-        float curAngle = middleStartAngle;
-        float perOutputSweep = middleSweepAngle / middleOutputs;
+        curAngle = middleStartAngle;
+        perOutputSweep = middleSweepAngle / middleOutputs;
         for (int i = 0; i < middleOutputCounts.length; ++i) {
             int dir = middleOutputDirs[i];
-            float sweep = middleOutputCounts[i] * perOutputSweep;
-            builder.addCircle().withRadius(circleRadius * METER * scale)
-                .addStrips(2).withDegreeOffset(dir > 0 ? curAngle : curAngle + sweep).withDegreeSweep(dir * sweep)
-                .build();
-            curAngle += sweep;
+            for (int j = 0; j < middleOutputCounts[i]; ++j) {
+                float sweep = j * perOutputSweep;
+                builder.addCircle().withRadius(circleRadius * METER * scale)
+                    .addStrips(2).withDegreeOffset(dir > 0 ? curAngle : curAngle + sweep - perOutputSweep).withDegreeSweep(dir * sweep)
+                    .build();
+            }
+
+            curAngle += middleOutputCounts[i] * perOutputSweep;
         }
 
         // end outputs, from truss 7 -> 8 counterclockwise
-        builder.addCircle().withRadius(circleRadius * METER * scale)
-            .addStrips(2).withDegreeOffset(middleStartAngle + 180).withDegreeSweep(segmentAngle)
-            .build();
+        for (int i = 0; i < startOutputs; ++i) {
+            int dir = endOutputDir;
+            builder.addCircle().withRadius(circleRadius * METER * scale)
+                .addStrips(2).withDegreeOffset(curAngle).withDegreeSweep(dir * perOutputSweep)
+                .build();
+            curAngle += dir * perOutputSweep;
+        }
 
         return builder.build();
     }
@@ -99,6 +114,7 @@ public class SummerBBQShow implements Show {
             int pixliteIndex = pixliteOutputMapping[i][0];
             int outputNumber = pixliteOutputMapping[i][1];
             pixlites[pixliteIndex].addPixliteOutput(new PointsGrouping(outputNumber+"").addPoints(circle.getPoints()));
+            System.out.println("Adding pixlite output: " + i + ", " + pixliteIndex + ", " + outputNumber + ", " + circle.getPoints().size());
             ++i;
         }
 
