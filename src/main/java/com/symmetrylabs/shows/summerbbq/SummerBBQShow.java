@@ -53,12 +53,15 @@ public class SummerBBQShow implements Show {
 
         int startOutputs = 4;
         int startOutputDir = -1;
+        int startOutputStrandsPerOutput = 2;
         int endOutputs = 4;
         int endOutputDir = 1;
+        int endOutputStrandsPerOutput = 2;
         float middleStartAngle = arcStartAngle + segmentAngle;
         float middleSweepAngle = (arcSegments - 2) * segmentAngle;
         int[] middleOutputCounts = {11, 5, 5, 11};
         int[] middleOutputDirs = {-1, 1, -1, 1};
+        int[] middleOutputStrandsPerOutput = {2, 3, 3, 2};
 
         int middleOutputs = 0;
         for (int i = 0; i < middleOutputCounts.length; ++i) {
@@ -73,7 +76,7 @@ public class SummerBBQShow implements Show {
         for (int i = 0; i < startOutputs; ++i) {
             int dir = startOutputDir;
             builder.addCircle().withRadius(circleRadius * METER * scale)
-                .addStrips(2).withDegreeOffset(curAngle).withDegreeSweep(dir * perOutputSweep / 2)
+                .addStrips(startOutputStrandsPerOutput).withDegreeOffset(curAngle).withDegreeSweep(dir * perOutputSweep / 2)
                 .build();
             curAngle += dir * perOutputSweep;
         }
@@ -83,10 +86,11 @@ public class SummerBBQShow implements Show {
         perOutputSweep = middleSweepAngle / middleOutputs;
         for (int i = 0; i < middleOutputCounts.length; ++i) {
             int dir = middleOutputDirs[i];
+            int strandsPerOutput = middleOutputStrandsPerOutput[i];
             for (int j = 0; j < middleOutputCounts[i]; ++j) {
                 float offset = curAngle + perOutputSweep * (dir > 0 ? j + 0.5f : middleOutputCounts[i] - j);
                 builder.addCircle().withRadius(circleRadius * METER * scale)
-                    .addStrips(2).withDegreeOffset(offset).withDegreeSweep(dir * perOutputSweep / 2)
+                    .addStrips(strandsPerOutput).withDegreeOffset(offset).withDegreeSweep(dir * perOutputSweep / 2)
                     .build();
             }
 
@@ -98,7 +102,7 @@ public class SummerBBQShow implements Show {
         for (int i = 0; i < startOutputs; ++i) {
             int dir = endOutputDir;
             builder.addCircle().withRadius(circleRadius * METER * scale)
-                .addStrips(2).withDegreeOffset(curAngle + perOutputSweep / 2).withDegreeSweep(dir * perOutputSweep / 2)
+                .addStrips(endOutputStrandsPerOutput).withDegreeOffset(curAngle + perOutputSweep / 2).withDegreeSweep(dir * perOutputSweep / 2)
                 .build();
             curAngle += dir * perOutputSweep;
         }
