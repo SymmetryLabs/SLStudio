@@ -12,6 +12,8 @@ import com.symmetrylabs.slstudio.output.SimplePixlite;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 
 public class SummerBBQShow implements Show {
+    public static final String SHOW_NAME = "summerbbq";
+
     private static final float METER = 39.37008f;
     private static final float FOOT = 12f;
     private static final float STRIP_LENGTH = 3 * METER;
@@ -38,7 +40,7 @@ public class SummerBBQShow implements Show {
         DoubleStrip.Metrics stripMetrics = new DoubleStrip.Metrics(
                 LED_PER_STRIP, STRIP_LENGTH / LED_PER_STRIP, 1, 0); // 1" front/back gap
 
-        CirclesBuilder<DoubleStrip> builder = new CirclesBuilder<>(
+        CirclesBuilder<DoubleStrip> builder = new CirclesBuilder<>(SHOW_NAME,
                 (String id, LXTransform t) -> new DoubleStrip(id, stripMetrics, t));
 
         float scale = 1.0f;
@@ -71,7 +73,7 @@ public class SummerBBQShow implements Show {
         for (int i = 0; i < startOutputs; ++i) {
             int dir = startOutputDir;
             builder.addCircle().withRadius(circleRadius * METER * scale)
-                .addStrips(2).withDegreeOffset(curAngle).withDegreeSweep(dir * perOutputSweep)
+                .addStrips(2).withDegreeOffset(curAngle).withDegreeSweep(dir * perOutputSweep / 2)
                 .build();
             curAngle += dir * perOutputSweep;
         }
@@ -82,9 +84,9 @@ public class SummerBBQShow implements Show {
         for (int i = 0; i < middleOutputCounts.length; ++i) {
             int dir = middleOutputDirs[i];
             for (int j = 0; j < middleOutputCounts[i]; ++j) {
-                float sweep = j * perOutputSweep;
+                float offset = curAngle + perOutputSweep * (dir > 0 ? j + 0.5f : middleOutputCounts[i] - j);
                 builder.addCircle().withRadius(circleRadius * METER * scale)
-                    .addStrips(2).withDegreeOffset(dir > 0 ? curAngle : curAngle + sweep + perOutputSweep).withDegreeSweep(dir * sweep)
+                    .addStrips(2).withDegreeOffset(offset).withDegreeSweep(dir * perOutputSweep / 2)
                     .build();
             }
 
@@ -92,10 +94,11 @@ public class SummerBBQShow implements Show {
         }
 
         // end outputs, from truss 7 -> 8 counterclockwise
+        perOutputSweep = segmentAngle / endOutputs;
         for (int i = 0; i < startOutputs; ++i) {
             int dir = endOutputDir;
             builder.addCircle().withRadius(circleRadius * METER * scale)
-                .addStrips(2).withDegreeOffset(curAngle).withDegreeSweep(dir * perOutputSweep)
+                .addStrips(2).withDegreeOffset(curAngle + perOutputSweep / 2).withDegreeSweep(dir * perOutputSweep / 2)
                 .build();
             curAngle += dir * perOutputSweep;
         }
