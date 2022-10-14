@@ -31,6 +31,7 @@ public class SummerBBQShow implements Show {
         "10.200.1.2",
         "10.200.1.100",
         "10.200.1.200",
+
     };
 
     public StripsModel<DoubleStrip> buildModel() {
