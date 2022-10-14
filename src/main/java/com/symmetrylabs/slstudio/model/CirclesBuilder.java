@@ -11,7 +11,10 @@ public final class CirclesBuilder<T extends Strip> {
 
     private final BiFunction<String, LXTransform, T> stripFactory;
 
-    public CirclesBuilder(BiFunction<String, LXTransform, T> defaultStripFactory) {
+    private final String modelId;
+
+    public CirclesBuilder(String modelId, BiFunction<String, LXTransform, T> defaultStripFactory) {
+        this.modelId = modelId;
         stripFactory = defaultStripFactory;
     }
 
