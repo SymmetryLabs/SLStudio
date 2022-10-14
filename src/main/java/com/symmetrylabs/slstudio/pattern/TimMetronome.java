@@ -57,7 +57,7 @@ public class TimMetronome extends LXPattern {
 
         float fadeMultiplier = (1.0f - fadeParameter.getValuef());
 
-        float armRadius = modelWidth * 0.1f;
+        float armRadius = modelWidth * 0.02f;
         for (LXVector p : projection) {
             boolean onArm = false;
             if (MathUtils.abs(p.x) < armRadius) {

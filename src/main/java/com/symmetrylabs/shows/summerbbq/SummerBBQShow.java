@@ -24,8 +24,8 @@ public class SummerBBQShow implements Show {
         {0, 1}, {0, 2}, {0, 3}, {0, 4},
         {1, 1}, {1, 2}, {1, 3}, {1, 4}, {1, 5}, {1, 6}, {1, 7}, {1, 8},
         {1, 9}, {1, 10}, {1, 11}, {1, 12}, {1, 13}, {1, 14}, {1, 15}, {1, 16},
-        {2, 1}, {2, 2}, {2, 3}, {2, 4}, {2, 5}, {2, 6}, {2, 7}, {2, 8},
         {2, 9}, {2, 10}, {2, 11}, {2, 12}, {2, 13}, {2, 14}, {2, 15}, {2, 16},
+        {2, 1}, {2, 2}, {2, 3}, {2, 4}, {2, 5}, {2, 6}, {2, 7}, {2, 8},
         {0, 5}, {0, 6}, {0, 7}, {0, 8},
     };
 
@@ -62,7 +62,7 @@ public class SummerBBQShow implements Show {
         float middleSweepAngle = (arcSegments - 2) * segmentAngle;
         int[] middleOutputCounts = {11, 5, 5, 11};
         int[] middleOutputDirs = {-1, 1, -1, 1};
-        int[] middleOutputStrandsPerOutput = {2, 3, 3, 2};
+        int[] middleOutputStrandsPerOutput = {2, 2, 2, 2};
 
         int middleOutputs = 0;
         for (int i = 0; i < middleOutputCounts.length; ++i) {
