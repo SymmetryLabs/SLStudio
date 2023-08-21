@@ -505,7 +505,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         else {
             allPatterns.put(patternString, pattern);
         }
-        System.out.println(patternString);
+        // System.out.println(patternString);
         this.mutablePatterns.add(pattern);
         LXUtils.updateIndexes(mutablePatterns);
         this.focusedPattern.setRange(this.mutablePatterns.size());

@@ -6,7 +6,7 @@ import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
-
+import com.symmetrylabs.slstudio.showplugins.FaderLimiter;
 
 import heronarts.lx.transform.LXTransform;
 
@@ -26,45 +26,47 @@ public class YsiadsPartyShow extends CubesShow implements Show {
     static final float globalRotationY = 0;
     static final float globalRotationZ = 0;
     static final float CSP = 32;
-    static final float SP = 26;
 
 
     static final TowerConfig[] TOWER_CONFIG = {
-        //Left Cubes bottom to top
-        new TowerConfig(CSP*0, 0, 0, 0, 45, 0, new String[] {"71"}),
+        //Floaty Barge
+        new TowerConfig(CSP*0, 0, 0, 0, -45, 0, new String[] { "62", "39", "549"}),
+        new TowerConfig(CSP*1, 0, 0, 0, -45, 0, new String[] { "1055"}),
+        new TowerConfig(CSP*2, 0, 0, 0, -45, 0, new String[] { "1008", "31", "157"}),
 
-        new TowerConfig(CSP*-.4f, SP*.75f, CSP*.75f, 0, 45, 0, new String[] {"549"}),
-
-        // new TowerConfig(CSP*(.5f+.25f), SP*2, SP*(1.1f+.25f), 0, 45, 0, new String[] {"1119"}),
-
-        // //Center Cubes
-        new TowerConfig(CSP*(.5f+.25f+.75f), SP*1.8f, SP*(1.1f+.25f+.33f), 0, 45, 0, new String[] {"23"}),
-        new TowerConfig(CSP*(.5f+.25f+.75f-1f), SP*1.8f, SP*(1.1f+.25f+.33f), 0, 45, 0, new String[] {"329"}),
-
-        // new TowerConfig(CSP*(.5f+.25f+.75f-.75f), SP*(3.8f-1f), SP*(1.1f+.25f+.33f), 90, 90, 90, new String[] {"128"}),
-
-        // //Right Cubes top to bottom
-        // new TowerConfig(CSP*(.5f+.25f+.75f+.75f), SP*2, SP*(1.1f+.25f), 0, 45, 0, new String[] {"205"}),
-
-        new TowerConfig(CSP*(.5f+.25f+.75f+.75f+.25f), SP*1, SP*1.1f, 0, 45, 0, new String[] {"113"}),
-        // new TowerConfig(CSP*(.5f+.25f+.75f+.75f+.25f+.9f), SP*1, CSP*(.75f), 0, 45, 0, new String[] {"61"}),
-        // new TowerConfig(CSP*(.5f+.25f+.75f+.75f+.25f+.9f-.15f), SP*1, CSP*-.25f, 0, 45, 0, new String[] {"38"}),
-
-        new TowerConfig(CSP*(.5f+.25f+.75f+.75f+.25f+.9f-.15f-.5f), SP*0, CSP*.75f, 0, 45, 0, new String[] {"356"}),
-        // new TowerConfig(CSP*(.5f+.25f+.75f+.75f+.25f+.9f-.15f-.5f+.25f), SP*0, 0, 0, 0, 0, new String[] {"123"}),
+        //CANVAS PYRAMID
+        //LEFT
+        new TowerConfig(CSP*0, CSP*5, CSP*1, 0,-45, 0, new String[] { "113"}),
+        //TOP
+        new TowerConfig(CSP*1, CSP*6, CSP*1, 0,-45, 0, new String[] { "326"}),
+        //RIGHT
+        new TowerConfig(CSP*2, CSP*5, CSP*1, 0,-45, 0, new String[] { "9"}),
+        //LEFT TOWER CUBES
+        new TowerConfig(CSP*0, CSP*9, CSP*1, 0,-45, 0, new String[] { "1118", "5", "47", "356"}),
+        //RIGHT TOWER CUBES
+        new TowerConfig(CSP*2, CSP*9, CSP*1, 0,-45, 0, new String[] { "71", "337", "191", "23"}),
+        //TOP CUBES
+        new TowerConfig(CSP*1, CSP*14, CSP*1, 0,-45, 0, new String[] { "51"}),
+        new TowerConfig(CSP*1, CSP*15, CSP*1, 0,-45, 0, new String[] { "422"}),
 
 
-        // new TowerConfig(CSP*(.5f+.25f+.75f+.75f+.25f+.9f+.15f-1f), SP*0, CSP*.75f, 0, 45, 0, new String[] {"0"}),
-        // new TowerConfig(CSP*(.5f+.25f+.75f+.75f+.25f+.9f+.15f-1f-.25f), SP*0, 0, 0, 45, 0, new String[] {"0"}),
 
-        // new TowerConfig(CSP*0, 0, 0, 0, 45, 0, new String[] { "521"}),
-        // new TowerConfig(CSP*0, 0, 0, 0, 45, 0, new String[] { "521"}),
-        // new TowerConfig(CSP*0, 0, 0, 0, 45, 0, new String[] { "521"}),
-        // new TowerConfig(CSP*0, 0, 0, 0, 45, 0, new String[] { "521"}),
-        // new TowerConfig(CSP*0, 0, 0, 0, 45, 0, new String[] { "521"}),
 
-        // //back towers going to the right
-        // new TowerConfig(CSP*.5f, 0, CSP*-.5f, 0, 45, 0, new String[] { "29", "141", "32", "34"}),
+
+
+        // //Right Tower
+        // new TowerConfig(CSP*4.5f, 0, CSP*  2, 0, -45, 0, new String[] { "71", "5", "51", "337"}),
+        // new TowerConfig(CSP*5, 0, CSP*  1, 0, 0, 0, new String[] { "1055", "1008", "23"}),
+        // new TowerConfig(CSP*5, 0, 0, 0, -45, 0, new String[] { "77", "157"}),
+        //         new TowerConfig(CSP*5, 0, 0, 0, -45, 0, new String[] { "47", ""}),
+
+        // //Bridge
+        // new TowerConfig(CSP*1,CSP* 3, CSP*  2, 0, -45, 0, new String[] {"31"}),
+        // new TowerConfig(CSP*2,CSP* 3, CSP*  2, 0, -45, 0, new String[] {"62"}),
+        // new TowerConfig(CSP*3,CSP* 3, CSP*  2, 0, -45, 0, new String[] {"39"}),
+        // new TowerConfig(CSP*4,CSP* 3, CSP*  2, 0, -45, 0, new String[] {"422"}),
+        
+
         // new TowerConfig(CSP*1, 0, CSP*-1, 0, 45, 0, new String[] { "86", "68", "174",}),
         // new TowerConfig(CSP*1.5f, 0, CSP*-1.5f, 0, 45, 0, new String[] { "43", "25"}),
         // //back towers going to the left
@@ -118,7 +120,7 @@ public class YsiadsPartyShow extends CubesShow implements Show {
 
     public void setupUi(final SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
-
+        FaderLimiter.attach(lx, 0.9f);
     
     }
 }
