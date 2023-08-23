@@ -43,8 +43,11 @@ public class MikeyShow implements Show {
             int smallBar = 20;
             List<Strip> strips = new ArrayList<Strip>();
             LXTransform t = new LXTransform();
-            Strip.Metrics metricsL3 = new Strip.Metrics(largeBar*3, 1.25f); //strip config
-            Strip.Metrics metricsL2 = new Strip.Metrics(largeBar*2, 1); //strip config
+            Strip.Metrics metricsL3W = new Strip.Metrics(largeBar*3, 2.15f); //strip config
+            Strip.Metrics metricsL3WL = new Strip.Metrics(largeBar*3, 2.05f); //strip config
+            Strip.Metrics metricsL3S = new Strip.Metrics(largeBar*3, 1.5f); //strip config
+
+            Strip.Metrics metricsL2 = new Strip.Metrics(largeBar*2, 1.25f); //strip config
             Strip.Metrics metricsL1 = new Strip.Metrics(largeBar*1, .75f); //strip config
 
             Strip.Metrics metricsS3 = new Strip.Metrics(smallBar*3, 1); //strip config
@@ -55,7 +58,7 @@ public class MikeyShow implements Show {
             t.translate(0, 0, 0);
             t.push();
             t.rotateZ(45);
-            Strip strip1 = new Strip("1", metricsL3, t);         //create the first strip
+            Strip strip1 = new Strip("1", metricsL3W, t);         //create the first strip
             strips.add(strip1);  
             t.pop();
 
@@ -63,14 +66,14 @@ public class MikeyShow implements Show {
             t.push();
             t.translate(smallBar, 0, 0);
             t.rotateZ(45);
-            Strip strip2 = new Strip("1", metricsS3, t);         //create the turn in the first strip
+            Strip strip2 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
             strips.add(strip2);
             t.pop();
 
             t.push();
             t.translate(smallBar, 0, 0);
             t.rotateZ(45);
-            t.translate(smallBar*3, 0, 0);
+            t.translate(((smallBar*3)*1.5f)+15, 0, 0);
             t.rotateZ(-45+90+45);
             Strip strip3 = new Strip("1", metricsS1, t);         //create the second strip
             strips.add(strip3);                                                  //add the first strip to strip array
@@ -87,7 +90,7 @@ public class MikeyShow implements Show {
             t.push();
             t.translate(smallBar*2, 0, 0);
             t.rotateZ(45);
-            t.translate(largeBar*2, 0, 0);
+            t.translate((largeBar*2)+12, 0, 0);
             t.rotateZ(-45+90+45);
             Strip strip5 = new Strip("1", metricsS2, t);         //create the second strip
             strips.add(strip5);                                                  //add the first strip to strip array
@@ -146,7 +149,7 @@ public class MikeyShow implements Show {
             t.push();
             t.translate(smallBar*5, 0, 0);
             t.rotateZ(90);
-            t.translate(largeBar*2, 0, 0);
+            t.translate((largeBar*2)+8, 0, 0);
             t.rotateZ(-90);
             Strip strip12 = new Strip("1", metricsS2, t);         //create the second strip
             strips.add(strip12);                                                  //add the first strip to strip array
@@ -156,14 +159,14 @@ public class MikeyShow implements Show {
             t.push();
             t.translate(smallBar*6, 0, 0);
             t.rotateZ(90);
-            Strip strip13 = new Strip("1", metricsS3, t);         //create the turn in the first strip
+            Strip strip13 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
             strips.add(strip13);
             t.pop();
 
             t.push();
             t.translate(smallBar*6, 0, 0);
             t.rotateZ(90);
-            t.translate(smallBar*3, 0, 0);
+            t.translate(((smallBar*3)*1.5f)+10, 0, 0);
             t.rotateZ(-90);
             Strip strip14 = new Strip("1", metricsS1, t);         //create the second strip
             strips.add(strip14);                                                  //add the first strip to strip array
@@ -173,7 +176,7 @@ public class MikeyShow implements Show {
             t.push();
             t.translate(smallBar*7, 0, 0);
             t.rotateZ(90);
-            Strip strip15 = new Strip("1", metricsL3, t);         //create the turn in the first strip
+            Strip strip15 = new Strip("1", metricsL3WL, t);         //create the turn in the first strip
             strips.add(strip15);
             t.pop();
 
