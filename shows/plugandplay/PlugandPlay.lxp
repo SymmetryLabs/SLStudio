@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1692749544669,
+  "timestamp": 1692758537169,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -2160,9 +2160,9 @@
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
-              "autoCycleEnabled": true,
+              "autoCycleEnabled": false,
               "autoCycleTimeSecs": 5.675039506957546,
-              "fader": 0.8857142850756645,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": true,
@@ -2298,7 +2298,7 @@
                 }
               }
             ],
-            "patternIndex": 7,
+            "patternIndex": 31,
             "patterns": [
               {
                 "id": 1591,
@@ -3221,10 +3221,10 @@
                   "label": "SolidColor",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "color/hue": 189.66038018465042,
+                  "color/hue": 291.2641499340534,
                   "color/brightness": 100.0,
-                  "color/saturation": 0.0,
-                  "color": -1
+                  "color/saturation": 100.0,
+                  "color": -2490113
                 },
                 "modulation": {
                   "modulators": [],
@@ -3471,7 +3471,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16745729,
+          "modulationColor": -6488320,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -3590,7 +3590,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.7428571414202452
+        "brightness": 1.0
       }
     },
     "components": {

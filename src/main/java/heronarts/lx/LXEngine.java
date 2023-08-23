@@ -114,6 +114,9 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     private final List<Runnable> engineThreadTaskQueue = new ArrayList<Runnable>();
     private final Map<String, LXComponent> components = new HashMap<String, LXComponent>();
 
+    public static final Map<String, LXChannel> allChannels = new HashMap<String, LXChannel>();
+
+
     private final List<LXLook> mutableLooks = new ArrayList<>();
     public final List<LXLook> looks = Collections.unmodifiableList(this.mutableLooks);
 
@@ -741,6 +744,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         look.setParent(this);
         look.index = mutableLooks.size();
         mutableLooks.add(look);
+        // allChannels.put(look.toString(), look);
+        System.out.println(look.toString());
         return look;
     }
 
@@ -805,6 +810,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     public LXChannel addChannel(LXPattern[] patterns) {
         LXChannel channel = getFocusedLook().addChannel();
         channel.setPatterns(patterns);
+        System.out.println(channel.toString());
         return channel;
     }
 

@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Collection;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class LXLook extends LXModelComponent implements PolyBufferProvider {
@@ -39,6 +42,9 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
     public Shelf shelf;
 
     private final List<Listener> listeners = new ArrayList<Listener>();
+    public static final Map<String, LXChannel> allChannels = new HashMap<String, LXChannel>();
+
+
 
     protected final PolyBuffer black;  // always black, read-only
     protected final BlendTarget groupA;  // working area for blending group A
@@ -147,6 +153,7 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
     }
 
     public LXChannel addChannel() {
+        System.out.println("ADDING CHANNEL");
         LXChannel channel = new LXChannel(lx, this.mutableChannels.size(), new LXPattern[] {});
         channel.setParent(this);
 
@@ -159,6 +166,9 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
         for (Listener listener : this.listeners) {
             listener.channelAdded(this, channel);
         }
+        allChannels.put(channel.toString(), channel);
+        System.out.println("CHANNEL STRING: " + channel.toString());
+
         return channel;
     }
 

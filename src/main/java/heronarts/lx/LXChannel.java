@@ -20,6 +20,7 @@
 
 package heronarts.lx;
 
+import com.jogamp.common.util.ArrayHashSet;
 import heronarts.lx.blend.LXBlend;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXShortMessage;
@@ -33,6 +34,7 @@ import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.parameter.ObjectParameter;
 import heronarts.lx.parameter.BooleanParameter;
 
+import java.util.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -275,6 +277,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
     private final List<LXPattern> mutablePatterns = new ArrayList<LXPattern>();
     public final List<LXPattern> patterns = Collections.unmodifiableList(mutablePatterns);
+    public static final Map<String, LXPattern> allPatterns = new HashMap<String, LXPattern>();
 
     /**
      * A local buffer used for transition blending and effects on this channel
@@ -527,9 +530,21 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         return this;
     }
 
+    private int noiseNumber = 1;
     public final LXChannel addPattern(LXPattern pattern) {
         pattern.setChannel(this);
         pattern.setModel(this.model);
+        String patternString = pattern.toString();
+        if (patternString.equals("Noise[Channel-9 | Noise]")) {
+
+            allPatterns.put(patternString + noiseNumber, pattern);
+            noiseNumber++;
+        }
+        else {
+            allPatterns.put(patternString, pattern);
+        }
+        System.out.println(patternString);
+
         this.mutablePatterns.add(pattern);
         LXUtils.updateIndexes(mutablePatterns);
         this.focusedPattern.setRange(this.mutablePatterns.size());
@@ -541,6 +556,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         if (this.mutablePatterns.size() == 1) {
             this.focusedPattern.bang();
         }
+
         return this;
     }
 
