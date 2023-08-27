@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1692758537169,
+  "timestamp": 1693129024955,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -2160,8 +2160,8 @@
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
-              "autoCycleEnabled": false,
-              "autoCycleTimeSecs": 5.675039506957546,
+              "autoCycleEnabled": true,
+              "autoCycleTimeSecs": 16.675039506957546,
               "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
@@ -2169,7 +2169,7 @@
               "transitionTimeSecs": 3.0344789922237396,
               "transitionBlendMode": 0,
               "autoDisable": false,
-              "speed": 1.400000000372529,
+              "speed": 0.8307692306116223,
               "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
@@ -2298,7 +2298,7 @@
                 }
               }
             ],
-            "patternIndex": 31,
+            "patternIndex": 32,
             "patterns": [
               {
                 "id": 1591,
@@ -2338,7 +2338,7 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "palette": 0,
-                  "speed": 140.00001177191734,
+                  "speed": 40.00001400709152,
                   "width": 105.33094024658203,
                   "wipeOut": true,
                   "refill": true,
@@ -3221,7 +3221,7 @@
                   "label": "SolidColor",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "color/hue": 291.2641499340534,
+                  "color/hue": 291.2940979003906,
                   "color/brightness": 100.0,
                   "color/saturation": 100.0,
                   "color": -2490113
@@ -3249,7 +3249,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": false
+                "autoCycleEnabled": true
               },
               {
                 "id": 7214,
@@ -3342,12 +3342,12 @@
                   "label": "ViolinWave",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "Level": 0.45,
+                  "Level": 0.2800000037997961,
                   "Egde": 0.5,
                   "Range": 0.5,
                   "Rls": 0.5,
                   "Speed": 0.5,
-                  "Amp": 1.5699999704957006,
+                  "Amp": 1.749999966472387,
                   "Wave": 0.5,
                   "pSize": 0.5,
                   "pSpeed": 0.5,
@@ -3471,7 +3471,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -6488320,
+          "modulationColor": -12845312,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -3524,7 +3524,7 @@
       "modulationColor": -16711831,
       "parameters": {
         "label": "Audio",
-        "enabled": false,
+        "enabled": true,
         "mode": 0
       },
       "meter": {
@@ -3533,29 +3533,29 @@
         "modulationColor": -16711858,
         "parameters": {
           "label": "Meter",
-          "running": false,
+          "running": true,
           "trigger": false,
           "gain": 0.0,
           "range": 48.0,
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.6014992888363235,
-          "Band-2": 0.709912619094069,
-          "Band-3": 0.7088064585105411,
-          "Band-4": 0.6850239500677386,
-          "Band-5": 0.6055008859791731,
-          "Band-6": 0.6708395981000215,
-          "Band-7": 0.6558693712765271,
-          "Band-8": 0.3894521429405565,
-          "Band-9": 0.385775340732486,
-          "Band-10": 0.29356411297399687,
-          "Band-11": 0.2608125469170456,
-          "Band-12": 0.3336941264679152,
-          "Band-13": 0.3486238143810215,
-          "Band-14": 0.3932454271796876,
-          "Band-15": 0.24692635798559337,
-          "Band-16": 0.0
+          "Band-1": 0.5841289262617066,
+          "Band-2": 0.6663939070867528,
+          "Band-3": 0.6646789782173244,
+          "Band-4": 0.6412747240191394,
+          "Band-5": 0.5972710499466956,
+          "Band-6": 0.6462730643781107,
+          "Band-7": 0.5269225023652226,
+          "Band-8": 0.5129520949381305,
+          "Band-9": 0.37720523546170215,
+          "Band-10": 0.14478451713463303,
+          "Band-11": 0.09416252930820335,
+          "Band-12": 0.1713547037990205,
+          "Band-13": 0.053928400074881644,
+          "Band-14": 0.01338238364977451,
+          "Band-15": 0.0,
+          "Band-16": 0.001247589124751869
         }
       },
       "input": {
