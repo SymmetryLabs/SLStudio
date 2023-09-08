@@ -27,7 +27,7 @@ public class MikeyShow implements Show {
 
     @Override
     public void setupLx(LX lx) {
-        MikeyPixlite pixlite = new MikeyPixlite(lx, "10.200.1.4", (MikeyModel) lx.model);
+        MikeyPixlite pixlite = new MikeyPixlite(lx, "10.200.1.42", (MikeyModel) lx.model);
         lx.addOutput(pixlite);
     }
 
@@ -50,6 +50,8 @@ public class MikeyShow implements Show {
 
             Strip.Metrics metricsL2 = new Strip.Metrics(verticalBar*2, 1.25f); //strip config
             Strip.Metrics metricsL1 = new Strip.Metrics(verticalBar*1, .75f); //strip config
+
+            Strip.Metrics metricsL10 = new Strip.Metrics(horizontalBar*10, 1); //strip config
 
             Strip.Metrics metricsS3 = new Strip.Metrics(horizontalBar*3, 1); //strip config
             Strip.Metrics metricsS2 = new Strip.Metrics(horizontalBar*2, 1); //strip config
@@ -84,7 +86,7 @@ public class MikeyShow implements Show {
             t.push();
             t.translate(horizontalBar*2, 0, 0);
             t.rotateZ(45);
-            Strip strip4 = new Strip("1", metricsL2, t);         //create the turn in the first strip
+            Strip strip4 = new Strip("1", metricsL10, t);         //create the turn in the first strip
             strips.add(strip4);
             t.pop();
 
@@ -143,18 +145,18 @@ public class MikeyShow implements Show {
             t.push();
             t.translate(horizontalBar*5, 0, 0);
             t.rotateZ(90);
-            Strip strip11 = new Strip("1", metricsL2, t);         //create the turn in the first strip
+            Strip strip11 = new Strip("1", metricsL10, t);         //create the turn in the first strip
             strips.add(strip11);
             t.pop();
 
-            t.push();
-            t.translate(horizontalBar*5, 0, 0);
-            t.rotateZ(90);
-            t.translate((verticalBar*2)+8, 0, 0);
-            t.rotateZ(-90);
-            Strip strip12 = new Strip("1", metricsS2, t);         //create the second strip
-            strips.add(strip12);                                                  //add the first strip to strip array
-            t.pop();
+            // t.push();
+            // t.translate(horizontalBar*5, 0, 0);
+            // t.rotateZ(90);
+            // t.translate((verticalBar*2)+8, 0, 0);
+            // t.rotateZ(-90);
+            // Strip strip12 = new Strip("1", metricsS2, t);         //create the second strip
+            // strips.add(strip12);                                                  //add the first strip to strip array
+            // t.pop();
 
             //OUTPUT B3
             t.push();
@@ -185,8 +187,31 @@ public class MikeyShow implements Show {
             t.push();
             t.translate(horizontalBar*7, 0, 0);
             t.rotateZ(135.1f);
-            Strip strip16 = new Strip("1", metricsS3, t);         //create the turn in the first strip
+            Strip strip16 = new Strip("1", metricsL10, t);         //create the turn in the first strip
             strips.add(strip16);
+            t.pop();
+
+            //OUTPUT B4
+            t.push();
+            t.translate(horizontalBar*8, 0, 0);
+            t.rotateZ(90);
+            Strip strip17 = new Strip("1", metricsL10, t);         //create the turn in the first strip
+            strips.add(strip17);
+            t.pop();
+
+            //OUTPUT B5
+            t.push();
+            t.translate(horizontalBar*9, 0, 0);
+            t.rotateZ(135.1f);
+            Strip strip18 = new Strip("1", metricsL10, t);         //create the turn in the first strip
+            strips.add(strip18);
+            t.pop();
+            //OUTPUT B5
+            t.push();
+            t.translate(horizontalBar*10, 0, 0);
+            t.rotateZ(135.1f);
+            Strip strip19 = new Strip("1", metricsL10, t);         //create the turn in the first strip
+            strips.add(strip19);
             t.pop();
 
             return new MikeyModel(strips);
@@ -201,26 +226,32 @@ public class MikeyShow implements Show {
             // }
             //A
             addPixliteOutput(
-                new PointsGrouping("3").addPoints(model.getStripByIndex(0).getPoints()));
+                new PointsGrouping("4").addPoints(model.getStripByIndex(0).getPoints()));
             addPixliteOutput(
                 new PointsGrouping("2").addPoints(model.getStripByIndex(1).getPoints()).addPoints(model.getStripByIndex(2).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("5").addPoints(model.getStripByIndex(3).getPoints()).addPoints(model.getStripByIndex(4).getPoints()));
+                new PointsGrouping("3").addPoints(model.getStripByIndex(3).getPoints()).addPoints(model.getStripByIndex(4).getPoints()));
             addPixliteOutput(
                 new PointsGrouping("6").addPoints(model.getStripByIndex(5).getPoints()).addPoints(model.getStripByIndex(6).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("1").addPoints(model.getStripByIndex(7).getPoints()));
+                new PointsGrouping("5").addPoints(model.getStripByIndex(7).getPoints()));
             //B
             addPixliteOutput(
-                new PointsGrouping("10").addPoints(model.getStripByIndex(8).getPoints()).addPoints(model.getStripByIndex(9).getPoints()));
+                new PointsGrouping("16").addPoints(model.getStripByIndex(8).getPoints()).addPoints(model.getStripByIndex(9).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("9").addPoints(model.getStripByIndex(10).getPoints()).addPoints(model.getStripByIndex(11).getPoints()));
+                new PointsGrouping("7").addPoints(model.getStripByIndex(10).getPoints()).addPoints(model.getStripByIndex(11).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("16").addPoints(model.getStripByIndex(12).getPoints()).addPoints(model.getStripByIndex(13).getPoints()));
+                new PointsGrouping("9").addPoints(model.getStripByIndex(12).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("13").addPoints(model.getStripByIndex(14).getPoints()));
+                new PointsGrouping("9").addPoints(model.getStripByIndex(13).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("14").addPoints(model.getStripByIndex(15).getPoints()));
+                new PointsGrouping("10").addPoints(model.getStripByIndex(14).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("11").addPoints(model.getStripByIndex(15).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("15").addPoints(model.getStripByIndex(16).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("12").addPoints(model.getStripByIndex(17).getPoints()));
 
         }
 

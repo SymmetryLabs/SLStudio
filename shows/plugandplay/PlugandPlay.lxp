@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1693129024955,
+  "timestamp": 1694187693719,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -2298,7 +2298,7 @@
                 }
               }
             ],
-            "patternIndex": 32,
+            "patternIndex": 31,
             "patterns": [
               {
                 "id": 1591,
@@ -3471,7 +3471,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -12845312,
+          "modulationColor": -16711727,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -3524,7 +3524,7 @@
       "modulationColor": -16711831,
       "parameters": {
         "label": "Audio",
-        "enabled": true,
+        "enabled": false,
         "mode": 0
       },
       "meter": {
@@ -3533,7 +3533,7 @@
         "modulationColor": -16711858,
         "parameters": {
           "label": "Meter",
-          "running": true,
+          "running": false,
           "trigger": false,
           "gain": 0.0,
           "range": 48.0,
@@ -3670,7 +3670,7 @@
         }
       },
       "outputControl": {
-        "id": 48,
+        "id": 51,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -11008,
         "parameters": {
