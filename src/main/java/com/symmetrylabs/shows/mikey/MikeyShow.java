@@ -171,7 +171,7 @@ public class MikeyShow implements Show {
             t.rotateZ(90);
             t.translate(((horizontalBar*3)*1.5f)+10, 0, 0);
             t.rotateZ(-90);
-            Strip strip14 = new Strip("1", metricsS1, t);         //create the second strip
+            Strip strip14 = new Strip("1", metricsS2, t);         //create the second strip
             strips.add(strip14);                                                  //add the first strip to strip array
             t.pop();
 
@@ -241,7 +241,7 @@ public class MikeyShow implements Show {
             addPixliteOutput(
                 new PointsGrouping("7").addPoints(model.getStripByIndex(10).getPoints()).addPoints(model.getStripByIndex(11).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("9").addPoints(model.getStripByIndex(12).getPoints()));
+                new PointsGrouping("14").addPoints(model.getStripByIndex(12).getPoints()));
             addPixliteOutput(
                 new PointsGrouping("9").addPoints(model.getStripByIndex(13).getPoints()));
             addPixliteOutput(
