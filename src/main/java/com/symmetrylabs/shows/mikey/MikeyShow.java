@@ -27,7 +27,7 @@ public class MikeyShow implements Show {
 
     @Override
     public void setupLx(LX lx) {
-        MikeyPixlite pixlite = new MikeyPixlite(lx, "10.200.1.42", (MikeyModel) lx.model);
+        MikeyPixlite pixlite = new MikeyPixlite(lx, "10.0.0.42", (MikeyModel) lx.model);
         lx.addOutput(pixlite);
     }
 
@@ -41,178 +41,162 @@ public class MikeyShow implements Show {
             int spacing = -60;
             int verticalBar = 22;
             int horizontalBar = 24;
+            int pillarSpacingArch1 = -81;
+            int pillarSpacingArch2 = -73;
+            int pillarspacingArch3 = -74;
+            int arch1Leds = 92;
+            int arch2Leds = 69;
+            int arch3Leds = 67;
+            int arch4Leds = 86;
+            int arch5Leds = 69;
+            int arch6Leds = 69;
+            int pillarLeds37 = 37;
+            int pillarLeds36 = 36;
+            int archLedsDj = horizontalBar*3;
+
             List<Strip> strips = new ArrayList<Strip>();
             LXTransform t = new LXTransform();
-            Strip.Metrics metricsL4W = new Strip.Metrics(verticalBar*4, 2.15f); //strip config
-            Strip.Metrics metricsL3W = new Strip.Metrics(verticalBar*3, 2.15f); //strip config
-            Strip.Metrics metricsL3WL = new Strip.Metrics(verticalBar*3, 2.05f); //strip config
-            Strip.Metrics metricsL3S = new Strip.Metrics(verticalBar*3, 1.5f); //strip config
+            Strip.Metrics pillarMetrics37 = new Strip.Metrics(38, 1); //strip config
+            Strip.Metrics pillarMetrics36 = new Strip.Metrics(37, 1); //strip config
 
-            Strip.Metrics metricsL2 = new Strip.Metrics(verticalBar*2, 1.25f); //strip config
-            Strip.Metrics metricsL1 = new Strip.Metrics(verticalBar*1, .75f); //strip config
+            Strip.Metrics arch1Metrics = new Strip.Metrics(92, 1); //strip config
+            Strip.Metrics arch2Metrics = new Strip.Metrics(69, 1); //strip config
+            Strip.Metrics arch3Metrics = new Strip.Metrics(67, 1); //strip config
+            Strip.Metrics arch4Metrics = new Strip.Metrics(86, 1); //strip config
+            Strip.Metrics arch5Metrics = new Strip.Metrics(69, 1); //strip config
+            Strip.Metrics arch6Metrics = new Strip.Metrics(69, 1); //strip config
+            Strip.Metrics archDjMetrics = new Strip.Metrics(archLedsDj, .75f); //strip config
 
-            Strip.Metrics metricsL10 = new Strip.Metrics(horizontalBar*10, 1); //strip config
-
-            Strip.Metrics metricsS3 = new Strip.Metrics(horizontalBar*3, 1); //strip config
-            Strip.Metrics metricsS2 = new Strip.Metrics(horizontalBar*2, 1); //strip config
-            Strip.Metrics metricsS1 = new Strip.Metrics(horizontalBar*1, 1); //strip config
-
-            //OUTPUT A1
-            t.translate(0, 0, 0);
+            //PILLAR 1
             t.push();
-            t.rotateZ(45);
-            Strip strip1 = new Strip("1", metricsL4W, t);         //create the first strip
+            //Rotate so strip is facing down
+            t.rotateZ(-1.571f); 
+            Strip strip1 = new Strip("1", pillarMetrics37, t);         //create the first strip
             strips.add(strip1);  
             t.pop();
-
-            //OUTPUT A2
+            
+            //ARCH 1
             t.push();
-            t.translate(horizontalBar, 0, 0);
-            t.rotateZ(45);
-            Strip strip2 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            //rotate so strip is facing towards FOH
+            t.rotateY(1.571f);
+            Strip strip2 = new Strip("1", arch1Metrics, t);         //create the turn in the first strip
             strips.add(strip2);
-            t.pop();
 
-            t.push();
-            t.translate(horizontalBar, 0, 0);
-            t.rotateZ(45);
-            t.translate(((horizontalBar*3)*1.5f)+15, 0, 0);
-            t.rotateZ(-45+90+45);
-            Strip strip3 = new Strip("1", metricsS1, t);         //create the second strip
-            strips.add(strip3);                                                  //add the first strip to strip array
-            t.pop();
-
-            //OUTPUT A3
-            t.push();
-            t.translate(horizontalBar*2, 0, 0);
-            t.rotateZ(45);
-            Strip strip4 = new Strip("1", metricsL10, t);         //create the turn in the first strip
+            //PILLAR 2
+            t.translate(arch1Leds, 0, 0);
+            //undo strip is facing toward foh rotation
+            t.rotateY(-1.571f);
+            //rotate strip down
+            t.rotateZ(-1.571f);
+            Strip strip3 = new Strip("1", pillarMetrics37, t);         //create the first strip
+            strips.add(strip3);  
+            
+            //ARCH 2
+            //undo rotate strip down
+            t.rotateZ(1.571f);
+            //rotate strip towards foh            
+            t.rotateY(1.571f);
+            Strip strip4 = new Strip("1", arch2Metrics, t);         //create the turn in the first strip
             strips.add(strip4);
-            t.pop();
 
-            t.push();
-            t.translate(horizontalBar*2, 0, 0);
-            t.rotateZ(45);
-            t.translate((verticalBar*2)+12, 0, 0);
-            t.rotateZ(-45+90+45);
-            Strip strip5 = new Strip("1", metricsS2, t);         //create the second strip
-            strips.add(strip5);                                                  //add the first strip to strip array
-            t.pop();
+            //PILLAR 3
+            t.translate(arch2Leds, 0, 0);
+            //undo strip is facing toward foh rotation
+            t.rotateY(-1.571f);
+            //rotate strip down
+            t.rotateZ(-1.571f);
+            Strip strip5 = new Strip("1", pillarMetrics36, t);         //create the first strip
+            strips.add(strip5);
 
-            //OUTPUT A4
-            t.push();
-            t.translate(horizontalBar*3, 0, 0);
-            t.rotateZ(45);
-            Strip strip6 = new Strip("1", metricsL1, t);         //create the turn in the first strip
+            //ARCH 3
+            //undo rotate strip down
+            t.rotateZ(1.571f);
+            //rotate strip towards foh            
+            t.rotateY(1.571f);
+            Strip strip6 = new Strip("1", arch2Metrics, t);         //create the turn in the first strip
             strips.add(strip6);
+
+            //PILLAR 4
+            t.translate(arch3Leds, 0, 0);
+            //undo strip is facing toward foh rotation
+            t.rotateY(-1.571f);
+            //rotate strip down
+            t.rotateZ(-1.571f);
+            Strip strip7 = new Strip("1", pillarMetrics36, t);         //create the first strip
+            strips.add(strip7);
             t.pop();
 
-            t.push();
-            t.translate(horizontalBar*3, 0, 0);
-            t.rotateZ(45);
-            t.translate(horizontalBar*1, 0, 0);
-            t.rotateZ(-45+90+45);
-            Strip strip7 = new Strip("1", metricsS3, t);         //create the second strip
-            strips.add(strip7);                                                  //add the first strip to strip array
-            t.pop();
+            //RIGHT SIDE TRANSLATED FROM LEFT
+            t.translate(archLedsDj, 0, 0);
 
-            //OUTPUT A5
+            //PILLAR 5
             t.push();
-            t.translate(0, 0, 0);
-            t.rotateZ(0);
-            Strip strip8 = new Strip("1", metricsS3, t);         //create the turn in the first strip
-            strips.add(strip8);
+            //Rotate so strip is facing down
+            t.rotateZ(-1.571f); 
+            Strip strip8 = new Strip("1", pillarMetrics37, t);         //create the first strip
+            strips.add(strip8);  
             t.pop();
-
-            //OUTPUT B1
+            
+            //ARCH 4
             t.push();
-            t.translate(horizontalBar*4, 0, 0);
-            t.rotateZ(90);
-            Strip strip9 = new Strip("1", metricsL1, t);         //create the turn in the first strip
+            //rotate so strip is facing towards FOH
+            t.rotateY(1.571f);
+            Strip strip9 = new Strip("1", arch1Metrics, t);         //create the turn in the first strip
             strips.add(strip9);
-            t.pop();
 
-            t.push();
-            t.translate(horizontalBar*4, 0, 0);
-            t.rotateZ(90);
-            t.translate(horizontalBar*1, 0, 0);
-            t.rotateZ(-90);
-            Strip strip10 = new Strip("1", metricsS3, t);         //create the second strip
-            strips.add(strip10);                                                  //add the first strip to strip array
-            t.pop();
-
-            //OUTPUT B2
-            t.push();
-            t.translate(horizontalBar*5, 0, 0);
-            t.rotateZ(90);
-            Strip strip11 = new Strip("1", metricsL10, t);         //create the turn in the first strip
+            //PILLAR 6
+            t.translate(arch1Leds, 0, 0);
+            //undo strip is facing toward foh rotation
+            t.rotateY(-1.571f);
+            //rotate strip down
+            t.rotateZ(-1.571f);
+            Strip strip10 = new Strip("1", pillarMetrics37, t);         //create the first strip
+            strips.add(strip10);  
+            
+            //ARCH 5
+            //undo rotate strip down
+            t.rotateZ(1.571f);
+            //rotate strip towards foh            
+            t.rotateY(1.571f);
+            Strip strip11 = new Strip("1", arch2Metrics, t);         //create the turn in the first strip
             strips.add(strip11);
-            t.pop();
 
-            // t.push();
-            // t.translate(horizontalBar*5, 0, 0);
-            // t.rotateZ(90);
-            // t.translate((verticalBar*2)+8, 0, 0);
-            // t.rotateZ(-90);
-            // Strip strip12 = new Strip("1", metricsS2, t);         //create the second strip
-            // strips.add(strip12);                                                  //add the first strip to strip array
-            // t.pop();
+            //PILLAR 7
+            t.translate(arch2Leds, 0, 0);
+            //undo strip is facing toward foh rotation
+            t.rotateY(-1.571f);
+            //rotate strip down
+            t.rotateZ(-1.571f);
+            Strip strip12 = new Strip("1", pillarMetrics37, t);         //create the first strip
+            strips.add(strip12);
 
-            //OUTPUT B3
-            t.push();
-            t.translate(horizontalBar*6, 0, 0);
-            t.rotateZ(90);
-            Strip strip13 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            //ARCH 6
+            //undo rotate strip down
+            t.rotateZ(1.571f);
+            //rotate strip towards foh            
+            t.rotateY(1.571f);
+            Strip strip13 = new Strip("1", arch2Metrics, t);         //create the turn in the first strip
             strips.add(strip13);
+
+            //PILLAR 8
+            t.translate(arch3Leds, 0, 0);
+            //undo strip is facing toward foh rotation
+            t.rotateY(-1.571f);
+            //rotate strip down
+            t.rotateZ(-1.571f);
+            Strip strip14 = new Strip("1", pillarMetrics37, t);         //create the first strip
+            strips.add(strip14);
             t.pop();
 
-            t.push();
-            t.translate(horizontalBar*6, 0, 0);
-            t.rotateZ(90);
-            t.translate(((horizontalBar*3)*1.5f)+10, 0, 0);
-            t.rotateZ(-90);
-            Strip strip14 = new Strip("1", metricsS2, t);         //create the second strip
-            strips.add(strip14);                                                  //add the first strip to strip array
-            t.pop();
-
-            //OUTPUT B4
-            t.push();
-            t.translate(horizontalBar*7, 0, 0);
-            t.rotateZ(90);
-            Strip strip15 = new Strip("1", metricsL4W, t);         //create the turn in the first strip
+            // t.pop();
+            //ARCH LEDS ABOVE DJ
+            t.rotateY(-.314);
+            Strip strip15 = new Strip("1", archDjMetrics, t);         //create the first strip
             strips.add(strip15);
-            t.pop();
 
-            //OUTPUT B5
-            t.push();
-            t.translate(horizontalBar*7, 0, 0);
-            t.rotateZ(135.1f);
-            Strip strip16 = new Strip("1", metricsL10, t);         //create the turn in the first strip
-            strips.add(strip16);
-            t.pop();
 
-            //OUTPUT B4
-            t.push();
-            t.translate(horizontalBar*8, 0, 0);
-            t.rotateZ(90);
-            Strip strip17 = new Strip("1", metricsL10, t);         //create the turn in the first strip
-            strips.add(strip17);
-            t.pop();
 
-            //OUTPUT B5
-            t.push();
-            t.translate(horizontalBar*9, 0, 0);
-            t.rotateZ(135.1f);
-            Strip strip18 = new Strip("1", metricsL10, t);         //create the turn in the first strip
-            strips.add(strip18);
-            t.pop();
-            //OUTPUT B5
-            t.push();
-            t.translate(horizontalBar*10, 0, 0);
-            t.rotateZ(135.1f);
-            Strip strip19 = new Strip("1", metricsL10, t);         //create the turn in the first strip
-            strips.add(strip19);
-            t.pop();
+        
 
             return new MikeyModel(strips);
         }
@@ -224,34 +208,51 @@ public class MikeyShow implements Show {
             //     addPixliteOutput(
             //     new PointsGrouping((i+1)+"").addPoints(model.getStripByIndex(i).getPoints()));
             // }
-            //A
+            //PILLAR 1
             addPixliteOutput(
                 new PointsGrouping("4").addPoints(model.getStripByIndex(0).getPoints()));
+            //ARCH 1
             addPixliteOutput(
-                new PointsGrouping("2").addPoints(model.getStripByIndex(1).getPoints()).addPoints(model.getStripByIndex(2).getPoints()));
+                new PointsGrouping("3").addPoints(model.getStripByIndex(1).getPoints()));
+            //PILLAR 2
             addPixliteOutput(
-                new PointsGrouping("3").addPoints(model.getStripByIndex(3).getPoints()).addPoints(model.getStripByIndex(4).getPoints()));
+                new PointsGrouping("2").addPoints(model.getStripByIndex(2).getPoints()));
+            //ARCH 2
             addPixliteOutput(
-                new PointsGrouping("6").addPoints(model.getStripByIndex(5).getPoints()).addPoints(model.getStripByIndex(6).getPoints()));
+                new PointsGrouping("8").addPoints(model.getStripByIndex(3).getPoints()));
+            //PILLAR 3
             addPixliteOutput(
-                new PointsGrouping("5").addPoints(model.getStripByIndex(7).getPoints()));
-            //B
+                new PointsGrouping("5").addPoints(model.getStripByIndex(4).getPoints()));
+            //ARCH 3
             addPixliteOutput(
-                new PointsGrouping("16").addPoints(model.getStripByIndex(8).getPoints()).addPoints(model.getStripByIndex(9).getPoints()));
+                new PointsGrouping("7").addPoints(model.getStripByIndex(5).getPoints()));
+            //PILLAR 4
             addPixliteOutput(
-                new PointsGrouping("7").addPoints(model.getStripByIndex(10).getPoints()).addPoints(model.getStripByIndex(11).getPoints()));
+                new PointsGrouping("6").addPoints(model.getStripByIndex(6).getPoints()));
+            //PILLAR 5
             addPixliteOutput(
-                new PointsGrouping("14").addPoints(model.getStripByIndex(12).getPoints()));
+                new PointsGrouping("16").addPoints(model.getStripByIndex(7).getPoints()));
+            //ARCH 4
             addPixliteOutput(
-                new PointsGrouping("9").addPoints(model.getStripByIndex(13).getPoints()));
+                new PointsGrouping("15").addPoints(model.getStripByIndex(8).getPoints()));
+            //PILLAR 6
             addPixliteOutput(
-                new PointsGrouping("10").addPoints(model.getStripByIndex(14).getPoints()));
+                new PointsGrouping("14").addPoints(model.getStripByIndex(9).getPoints()));
+            //ARCH 5
             addPixliteOutput(
-                new PointsGrouping("11").addPoints(model.getStripByIndex(15).getPoints()));
+                new PointsGrouping("12").addPoints(model.getStripByIndex(10).getPoints()));
+            //PILLAR 7
             addPixliteOutput(
-                new PointsGrouping("15").addPoints(model.getStripByIndex(16).getPoints()));
+                new PointsGrouping("9").addPoints(model.getStripByIndex(11).getPoints()));
+            //ARCH 6
             addPixliteOutput(
-                new PointsGrouping("12").addPoints(model.getStripByIndex(17).getPoints()));
+                new PointsGrouping("11").addPoints(model.getStripByIndex(12).getPoints()));
+            //PILLAR 8
+            addPixliteOutput(
+                new PointsGrouping("10").addPoints(model.getStripByIndex(13).getPoints()));
+            //ARCH OVER DJ
+            addPixliteOutput(
+                new PointsGrouping("13").addPoints(model.getStripByIndex(14).getPoints()));
 
         }
 
