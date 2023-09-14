@@ -65,7 +65,7 @@ public class MikeyShow implements Show {
             Strip.Metrics arch4Metrics = new Strip.Metrics(86, 1); //strip config
             Strip.Metrics arch5Metrics = new Strip.Metrics(69, 1); //strip config
             Strip.Metrics arch6Metrics = new Strip.Metrics(69, 1); //strip config
-            Strip.Metrics archDjMetrics = new Strip.Metrics(archLedsDj, .75f); //strip config
+            Strip.Metrics archDjMetrics = new Strip.Metrics(archLedsDj, 1); //strip config
 
             //PILLAR 1
             t.push();
@@ -190,7 +190,7 @@ public class MikeyShow implements Show {
 
             // t.pop();
             //ARCH LEDS ABOVE DJ
-            t.rotateY(-.314);
+            t.rotateY(-3.14f);
             Strip strip15 = new Strip("1", archDjMetrics, t);         //create the first strip
             strips.add(strip15);
 
