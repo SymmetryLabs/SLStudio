@@ -106,11 +106,16 @@ public class ArtNetDmxDatagram extends LXDatagram {
 
 LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
     int channelIndex = offset;
-    boolean isCustomUniverse = (this.universeNumber >= 69 && this.universeNumber <= 79) || (this.universeNumber >= 79 && this.universeNumber <= 88);
+    boolean isCustomUniverse = (this.universeNumber >= 69 && this.universeNumber <= 78) || (this.universeNumber >= 79 && this.universeNumber <= 88);
     boolean isFirstSet = true;
 
+    int unmappedC = flashUnmapped && !flashInOn ? 0 : unmappedPointColor;
+    if (System.nanoTime() - lastFlashNanos > FLASH_NANOS) {
+        lastFlashNanos = System.nanoTime();
+        flashInOn = !flashInOn;
+    }
+
     for (int index : pointIndices) {
-        // Check if we are in a custom universe and if it's the first set
         if (isCustomUniverse && isFirstSet) {
             channelIndex += 4; // Skip the first 4 channels for the first RGB set
             isFirstSet = false;
@@ -118,18 +123,15 @@ LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
             channelIndex += 5; // Skip 5 channels after every subsequent RGB set
         }
 
-        // Check for buffer overflow
         if (channelIndex + 2 < buffer.length) {
-            int colorValue = (index >= 0) ? colors[index] : unmappedPointColor;
+            int colorValue = (index >= 0) ? colors[index] : unmappedC;
             int gammaExpanded = GammaExpander.getExpandedColor(colorValue);
 
-            // Write the RGB values to the buffer
             buffer[channelIndex++] = (byte) Ops8.red(gammaExpanded);
             buffer[channelIndex++] = (byte) Ops8.green(gammaExpanded);
             buffer[channelIndex++] = (byte) Ops8.blue(gammaExpanded);
         } else {
-            // Exit the loop if we've reached the end of the buffer
-            break;
+            break; // Exit if buffer limit is reached
         }
     }
 
