@@ -590,110 +590,6 @@ public class EmpireWallShow implements Show {
 			}
 		),
 
-		new VineConfig("F1",
-			new LeafConfig[] {
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0)
-			}
-		),
-
-		new VineConfig("F2",
-			new LeafConfig[] {
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0)
-			}
-		),
-
-		new VineConfig("F3",
-			new LeafConfig[] {
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0)
-			}
-		),
-
-		new VineConfig("F4",
-			new LeafConfig[] {
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0)
-			}
-		),
-
 		new VineConfig("G1",
 			new LeafConfig[] {
 				new LeafConfig(0, 0, 0, 0, 0, 0),
@@ -1109,110 +1005,6 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(0, 0, 0, 0, 0, 0)
 			}
 		),
-
-		new VineConfig("K1",
-			new LeafConfig[] {
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0)
-			}
-		),
-
-		new VineConfig("K2",
-			new LeafConfig[] {
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0)
-			}
-		),
-
-		new VineConfig("K3",
-			new LeafConfig[] {
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0)
-			}
-		),
-
-		new VineConfig("K4",
-			new LeafConfig[] {
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0),
-				new LeafConfig(0, 0, 0, 0, 0, 0)
-			}
-		)
 	};
 
 	final float STRIP_LED_PITCH = 1.3f;
@@ -1237,23 +1029,6 @@ public class EmpireWallShow implements Show {
 		 */
 
 		/**
-		 * Old Perimeter Strips
-		 *
-		 *         TL ➜     TM ➜      TR ←
-		 *      --------- --------- ---------
-		 *     |                             |
-		 *   ↑ |                             | RU
-		 *  LU |                             | ↓
-		 *     |                             |
-		 *
-		 *   ↑ |                             | RL
-		 *  LL |                             | ↓
-		 *     |                             | 
-		 *      --------- --------- ---------
-		 *         BL →     BM ←      BR →
-		 */
-
-		/**
 		 * Strip Config
 		 *
 		 * String: Pixlite Id / Pixlite Port (A-K / 1-4) Example: D3
@@ -1263,12 +1038,12 @@ public class EmpireWallShow implements Show {
 	     * Int: number of leds
 		 */
 
-		new StripConfig("A1", x(             6), y(6), zRot( 90), 101), // L
-		new StripConfig("A2", x(WALL_WIDTH/2.f), y(6), zRot(180),  79), // BL
-		new StripConfig("A3", x(WALL_WIDTH/2.f), y(6), zRot(  0),  79), // BR
-		new StripConfig("A4", x(WALL_WIDTH-6.f), y(6), zRot( 90), 101), // R
-		new StripConfig("B1", x(WALL_WIDTH/2.f), y(WALL_HEIGHT-6), zRot(  0),  79), // TR
-		new StripConfig("B2", x(WALL_WIDTH/2.f), y(WALL_HEIGHT-6), zRot(180),  79), // TL
+		new StripConfig("F1", x(             6), y(6), zRot( 90), 101), // L
+		new StripConfig("F2", x(WALL_WIDTH/2.f), y(6), zRot(180),  79), // BL
+		new StripConfig("F3", x(WALL_WIDTH/2.f), y(6), zRot(  0),  79), // BR
+		new StripConfig("F4", x(WALL_WIDTH-6.f), y(6), zRot( 90), 101), // R
+		new StripConfig("K4", x(WALL_WIDTH/2.f), y(WALL_HEIGHT-6), zRot(  0),  79), // TR
+		new StripConfig("K1", x(WALL_WIDTH/2.f), y(WALL_HEIGHT-6), zRot(180),  79), // TL
 
 		// // measurement to the start of the strip
 		// new StripConfig("B1", x(6),             y(WALL_HEIGHT-6), zRot(0),    101), // TL
