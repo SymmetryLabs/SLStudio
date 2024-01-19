@@ -519,8 +519,8 @@ public class TreeModel extends SLModel {
             SMALL, LARGE
         }
 
-        public static final int NUM_LEDS = 10;
-        public static final float LED_SPACING = 1.3f*INCHES;
+        public static final int NUM_LEDS = 15;
+        public static final float LED_SPACING = 0.5f*INCHES;
         public static final float WIDTH = 4.75f*INCHES;
         public static final float LENGTH = 6.5f*INCHES;
 
@@ -594,7 +594,13 @@ public class TreeModel extends SLModel {
 
             int i = 0;
             if (config.size == Size.LARGE) {
-                t.translate(-.05f*INCHES, 0, 0);
+                t.translate(-.05f*INCHES, LED_SPACING, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+                t.translate(0, LED_SPACING, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+                t.translate(0, LED_SPACING, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+                t.translate(0, LED_SPACING, 0);
                 points[i++].update(t.x(), t.y(), t.z());
                 t.translate(0, LED_SPACING, 0);
                 points[i++].update(t.x(), t.y(), t.z());
@@ -605,7 +611,11 @@ public class TreeModel extends SLModel {
                 t.translate(0, LED_SPACING, 0);
                 points[i++].update(t.x(), t.y(), t.z());
 
-                t.translate(.1f*INCHES, 0, 0);
+                t.translate(.1f*INCHES, -LED_SPACING, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+                t.translate(0, -LED_SPACING, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+                t.translate(0, -LED_SPACING, 0);
                 points[i++].update(t.x(), t.y(), t.z());
                 t.translate(0, -LED_SPACING, 0);
                 points[i++].update(t.x(), t.y(), t.z());
@@ -651,7 +661,13 @@ public class TreeModel extends SLModel {
             private Fixture(LXTransform t, Config config) {
                 t.push();
                 if (config.size == Size.LARGE) {
-                    t.translate(-.05f*INCHES, 0, 0);
+                    t.translate(-.05f*INCHES, LED_SPACING, 0);
+                    addPoint(new LXPoint(t));
+                    t.translate(0, LED_SPACING, 0);
+                    addPoint(new LXPoint(t));
+                    t.translate(0, LED_SPACING, 0);
+                    addPoint(new LXPoint(t));
+                    t.translate(0, LED_SPACING, 0);
                     addPoint(new LXPoint(t));
                     t.translate(0, LED_SPACING, 0);
                     addPoint(new LXPoint(t));
@@ -662,7 +678,11 @@ public class TreeModel extends SLModel {
                     t.translate(0, LED_SPACING, 0);
                     addPoint(new LXPoint(t));
 
-                    t.translate(.1f*INCHES, 0, 0);
+                    t.translate(.1f*INCHES, -LED_SPACING, 0);
+                    addPoint(new LXPoint(t));
+                    t.translate(0, -LED_SPACING, 0);
+                    addPoint(new LXPoint(t));
+                    t.translate(0, -LED_SPACING, 0);
                     addPoint(new LXPoint(t));
                     t.translate(0, -LED_SPACING, 0);
                     addPoint(new LXPoint(t));

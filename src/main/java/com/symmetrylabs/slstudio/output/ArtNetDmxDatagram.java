@@ -18,6 +18,7 @@ public class ArtNetDmxDatagram extends LXDatagram {
 
     private int[] pointIndices;
     private boolean sequenceEnabled = false;
+    private int universe = 0;
     private byte sequence = 1;
 
     private int unmappedPointColor = 0x000000;
@@ -35,6 +36,7 @@ public class ArtNetDmxDatagram extends LXDatagram {
         super(ArtNetDatagramUtil.HEADER_LENGTH + ARTNET_DMX_HEADER_LENGTH + dataLength + (dataLength % 2));
 
         this.pointIndices = indices;
+        this.universe = universe;
 
         GammaExpander = GammaExpander.getInstance(lx);
 
@@ -99,6 +101,7 @@ public class ArtNetDmxDatagram extends LXDatagram {
         // We need to slow down the speed at which we send the packets so that we don't overload our switches. 3us seems to
         // be about right - Yona
         busySleep(3000);
+        //System.out.println(getAddress() + " - " + universe);
     }
 
     LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {

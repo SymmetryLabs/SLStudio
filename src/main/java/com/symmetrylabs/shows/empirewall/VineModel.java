@@ -60,7 +60,7 @@ public class VineModel extends SLModel {
 
 	public void reconfigure(VineWallConfig config) {
 		this.config = config;
-		System.out.println("***************");
+		//System.out.println("***************");
 		int i = 0;
 		for (Vine vine : vines) {
 			vine.reconfigure(config.getVines().get(i++));
@@ -99,7 +99,7 @@ public class VineModel extends SLModel {
 			System.out.println("----------");
 			for (TreeModel.Leaf leaf : leaves) {
 				LeafConfig leafConfig = config.getLeaves().get(leafIndex++);
-				System.out.println(leafConfig.index);
+				//System.out.println(leafConfig.index);
 				t.push();
 				t.translate(leafConfig.x, leafConfig.y, -leafConfig.z);
 				t.rotateX(leafConfig.xRot * PI / 180.f);
