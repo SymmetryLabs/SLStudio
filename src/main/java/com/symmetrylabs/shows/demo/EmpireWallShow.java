@@ -70,7 +70,7 @@ public class EmpireWallShow implements Show {
 		 * String: Pixlite Id / Pixlite Port (A-K / 1-4) Example: D3
 		 * Leaf Configs (x position, y position, z position, x rotation, y rotation, z rotation)
 		 */
-
+//NO VINE YET
 		new VineConfig("A1",
 			new LeafConfig[] {
 				new LeafConfig(0, 0, 0, 0, 0, 0),
@@ -96,7 +96,7 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(0, 0, 0, 0, 0, 0)
 			}
 		),
-
+//MAPPED
 		new VineConfig("A2",
 			new LeafConfig[] {
 				new LeafConfig(0, 0, 0, 0, 0, 0),
@@ -122,7 +122,7 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(0, 0, 0, 0, 0, 0)
 			}
 		),
-
+//NO VINE YET
 		new VineConfig("A3",
 			new LeafConfig[] {
 				new LeafConfig(0, 0, 0, 0, 0, 0),
@@ -148,7 +148,7 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(0, 0, 0, 0, 0, 0)
 			}
 		),
-
+//NO VINE YET
 		new VineConfig("A4",
 			new LeafConfig[] {
 				new LeafConfig(0, 0, 0, 0, 0, 0),
@@ -174,6 +174,7 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(0, 0, 0, 0, 0, 0)
 			}
 		),
+
 		new VineConfig("B1",
 			new LeafConfig[] {
 				new LeafConfig(0, 0, 0, 0, 0, 0),
@@ -901,7 +902,7 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(0, 0, 0, 0, 0, 0)
 			}
 		),
-
+//MAPPED
 		new VineConfig("J1",
 			new LeafConfig[] {
 				new LeafConfig(0, 0, 0, 0, 0, 0),
@@ -927,7 +928,7 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(0, 0, 0, 0, 0, 0)
 			}
 		),
-
+//MAPPED
 		new VineConfig("J2",
 			new LeafConfig[] {
 				new LeafConfig(0, 0, 0, 0, 0, 0),
@@ -979,7 +980,7 @@ public class EmpireWallShow implements Show {
 				new LeafConfig(0, 0, 0, 0, 0, 0)
 			}
 		),
-
+	
 		new VineConfig("J4",
 			new LeafConfig[] {
 				new LeafConfig(0, 0, 0, 0, 0, 0),
@@ -1133,10 +1134,10 @@ public class EmpireWallShow implements Show {
 
 		lx.engine.registerComponent("vineModelingTool", VineWallModelingTool.getInstance(lx, true));
 	
-		// MotionSensor motionSensor = MotionSensor.initialize("192.168.1.100");
-		// motionSensor.addListener(() -> {
-		// 	System.out.println("MOTION DETECTED!!!");
-		// });
+		MotionSensor motionSensor = MotionSensor.initialize("192.168.1.50");
+		motionSensor.addListener(() -> {
+			System.out.println("MOTION DETECTED!!!");
+		});
 	}
 
 	@Override
