@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1705727147579,
+  "timestamp": 1705796370677,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -44,7 +44,7 @@
         "modulationColor": -9634048,
         "parameters": {
           "label": "Look-1",
-          "focusedChannel": 12
+          "focusedChannel": 11
         },
         "channels": [
           {
@@ -59,7 +59,7 @@
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 59.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 1,
               "blendMode": 0,
               "transitionEnabled": true,
@@ -1531,14 +1531,14 @@
                   "Enabled": true,
                   "smallScale": 0.18999999575316906,
                   "bigScale": 0.48000000789761543,
-                  "smallColor/hue": 251.05882263183594,
+                  "smallColor/hue": 281.6470642089844,
                   "smallColor/brightness": 100.0,
                   "smallColor/saturation": 100.0,
-                  "smallColor": -13696769,
-                  "bigColor/hue": 112.70587921142578,
+                  "smallColor": -65302,
+                  "bigColor/hue": 147.2941131591797,
                   "bigColor/brightness": 100.0,
                   "bigColor/saturation": 100.0,
-                  "bigColor": -14745856
+                  "bigColor": -16711709
                 },
                 "modulation": {
                   "modulators": [],
@@ -1816,9 +1816,9 @@
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
-              "blendMode": 1,
+              "blendMode": 0,
               "transitionEnabled": false,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 1,
@@ -1830,7 +1830,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 4,
+            "patternIndex": 0,
             "patterns": [
               {
                 "id": 7584,
@@ -1912,7 +1912,7 @@
                   "label": "SolidColor",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "color/hue": 7.179999839514494,
+                  "color/hue": 7.294116973876953,
                   "color/brightness": 100.0,
                   "color/saturation": 100.0,
                   "color": -57600
@@ -1971,7 +1971,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 0,
+            "patternIndex": 1,
             "patterns": [
               {
                 "id": 8031,
@@ -1996,6 +1996,34 @@
                 },
                 "autoCycleEnabled": true,
                 "paletteName": "coral5"
+              },
+              {
+                "id": 8262,
+                "class": "com.symmetrylabs.slstudio.pattern.ParamCrossSections",
+                "modulationColor": -16749825,
+                "parameters": {
+                  "label": "ParamCrossSections",
+                  "expandedInUi": true,
+                  "Enabled": true,
+                  "xPos": 0.0,
+                  "yPos": 2.5174890525987585,
+                  "zPos": 0.0,
+                  "xSpd": 0.7,
+                  "ySpd": 0.6,
+                  "zSpd": 0.5,
+                  "xSize": 0.3,
+                  "xLvl": 0.0,
+                  "yLvl": 1.0,
+                  "zLvl": 0.0,
+                  "ySize": 0.03999999910593033,
+                  "zSize": 0.0
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                },
+                "autoCycleEnabled": true
               }
             ]
           }
@@ -2003,7 +2031,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16711821,
+          "modulationColor": -1638145,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
