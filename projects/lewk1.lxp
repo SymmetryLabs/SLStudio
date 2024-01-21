@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1705802463947,
+  "timestamp": 1705804402004,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -229,7 +229,7 @@
                 }
               }
             ],
-            "patternIndex": 14,
+            "patternIndex": 15,
             "patterns": [
               {
                 "id": 1103,
@@ -300,7 +300,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 1116,
@@ -343,7 +343,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 1118,
@@ -465,6 +465,30 @@
                   "triggers": []
                 },
                 "autoCycleEnabled": true
+              },
+              {
+                "id": 8504,
+                "class": "com.symmetrylabs.slstudio.pattern.Awaken",
+                "modulationColor": -917249,
+                "parameters": {
+                  "label": "Awaken",
+                  "expandedInUi": true,
+                  "Enabled": true,
+                  "palette": 10,
+                  "speed": 31.999999552965164,
+                  "width": 126.1775131225586,
+                  "wipeOut": true,
+                  "refill": true,
+                  "trigger": false,
+                  "reset": false
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                },
+                "autoCycleEnabled": true,
+                "paletteName": "hb/sunrise"
               },
               {
                 "id": 1566,
@@ -616,14 +640,14 @@
                 "autoCycleEnabled": true
               },
               {
-                "id": 8504,
+                "id": 8508,
                 "class": "com.symmetrylabs.slstudio.pattern.Awaken",
-                "modulationColor": -917249,
+                "modulationColor": -65493,
                 "parameters": {
                   "label": "Awaken",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "palette": 10,
+                  "palette": 17,
                   "speed": 31.999999552965164,
                   "width": 126.1775131225586,
                   "wipeOut": true,
@@ -637,7 +661,7 @@
                   "triggers": []
                 },
                 "autoCycleEnabled": true,
-                "paletteName": "hb/sunrise"
+                "paletteName": "ocean1"
               },
               {
                 "id": 1694,
@@ -682,54 +706,6 @@
                 },
                 "autoCycleEnabled": true,
                 "paletteName": "coral5"
-              },
-              {
-                "id": 8506,
-                "class": "com.symmetrylabs.slstudio.pattern.Awaken",
-                "modulationColor": -14941953,
-                "parameters": {
-                  "label": "Awaken",
-                  "expandedInUi": true,
-                  "Enabled": true,
-                  "palette": 13,
-                  "speed": 31.999999552965164,
-                  "width": 126.1775131225586,
-                  "wipeOut": true,
-                  "refill": true,
-                  "trigger": false,
-                  "reset": false
-                },
-                "modulation": {
-                  "modulators": [],
-                  "modulations": [],
-                  "triggers": []
-                },
-                "autoCycleEnabled": true,
-                "paletteName": "jupiter2"
-              },
-              {
-                "id": 8508,
-                "class": "com.symmetrylabs.slstudio.pattern.Awaken",
-                "modulationColor": -65493,
-                "parameters": {
-                  "label": "Awaken",
-                  "expandedInUi": true,
-                  "Enabled": true,
-                  "palette": 17,
-                  "speed": 31.999999552965164,
-                  "width": 126.1775131225586,
-                  "wipeOut": true,
-                  "refill": true,
-                  "trigger": false,
-                  "reset": false
-                },
-                "modulation": {
-                  "modulators": [],
-                  "modulations": [],
-                  "triggers": []
-                },
-                "autoCycleEnabled": true,
-                "paletteName": "ocean1"
               },
               {
                 "id": 8512,
@@ -787,6 +763,30 @@
                   "triggers": []
                 },
                 "autoCycleEnabled": true
+              },
+              {
+                "id": 8506,
+                "class": "com.symmetrylabs.slstudio.pattern.Awaken",
+                "modulationColor": -14941953,
+                "parameters": {
+                  "label": "Awaken",
+                  "expandedInUi": true,
+                  "Enabled": true,
+                  "palette": 13,
+                  "speed": 31.999999552965164,
+                  "width": 126.1775131225586,
+                  "wipeOut": true,
+                  "refill": true,
+                  "trigger": false,
+                  "reset": false
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                },
+                "autoCycleEnabled": true,
+                "paletteName": "jupiter2"
               }
             ]
           },
@@ -1478,11 +1478,11 @@
                   "smallColor/hue": 310.5882263183594,
                   "smallColor/brightness": 100.0,
                   "smallColor/saturation": 100.0,
-                  "smallColor": -65326,
+                  "smallColor": -65328,
                   "bigColor/hue": 179.76470947265625,
                   "bigColor/brightness": 100.0,
                   "bigColor/saturation": 100.0,
-                  "bigColor": -16711682
+                  "bigColor": -16711937
                 },
                 "modulation": {
                   "modulators": [],
@@ -1781,7 +1781,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -2227969,
+          "modulationColor": -16449792,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
