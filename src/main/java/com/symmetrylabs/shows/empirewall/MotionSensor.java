@@ -21,6 +21,8 @@ import heronarts.lx.modulator.QuadraticEnvelope;
 
 public class MotionSensor extends LXRunnableComponent {
 
+    private LX lx;
+
     private static MotionSensor instance = null;
 
     private String ipAddress = null;
@@ -34,9 +36,9 @@ public class MotionSensor extends LXRunnableComponent {
     private final QuadraticEnvelope fadeIn = new QuadraticEnvelope(0, 1, 2000);
     private final QuadraticEnvelope fadeOut = new QuadraticEnvelope(1, 0, 4000);
 
-    private MotionSensor(String ipAddress) {
+    private MotionSensor(LX lx, String ipAddress) {
         super("motionSensor");
-
+        this.lx = lx;
         this.ipAddress = ipAddress;
 
         Runnable task = () -> {
@@ -70,8 +72,9 @@ public class MotionSensor extends LXRunnableComponent {
     }
 
     protected void run(double deltaMs) {
-        if (elapsedMillis += deltaMs > 5000) {
+        if ((elapsedMillis += deltaMs) > 5000) {
             fadeOut.trigger();
+            elapsedMillis = 0;
         }
 
         if (fadeIn.isRunning()) {
