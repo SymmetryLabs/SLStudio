@@ -104,15 +104,21 @@ public class ArtNetDmxDatagram extends LXDatagram {
         busySleep(3000);
     }
 
-LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
+public LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
     int channelIndex = offset;
     boolean isCustomUniverse = (this.universeNumber >= 69 && this.universeNumber <= 78) || (this.universeNumber >= 79 && this.universeNumber <= 88);
     boolean isFirstSet = true;
-
     int unmappedC = flashUnmapped && !flashInOn ? 0 : unmappedPointColor;
+
     if (System.nanoTime() - lastFlashNanos > FLASH_NANOS) {
         lastFlashNanos = System.nanoTime();
         flashInOn = !flashInOn;
+    }
+
+    // Directly handle setting the first channel to 255 in custom universe
+    if (isCustomUniverse && buffer.length > offset) {
+        // System.out.println("Setting channel 1 to 255");
+        buffer[offset] = (byte) 255; // Set the very first channel to 255
     }
 
     for (int index : pointIndices) {
@@ -130,13 +136,28 @@ LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
             buffer[channelIndex++] = (byte) Ops8.red(gammaExpanded);
             buffer[channelIndex++] = (byte) Ops8.green(gammaExpanded);
             buffer[channelIndex++] = (byte) Ops8.blue(gammaExpanded);
-        } else {
-            break; // Exit if buffer limit is reached
+
+            // Correct channel number calculation
+            int channelNum = channelIndex - offset + 1;
+
+            // System.out.println("Channel Number: " + channelNum + ", isCustomUniverse: " + isCustomUniverse);
+
+            // Check if channel number is a multiple of 8 (8, 16, 24, ...)
+            if (isCustomUniverse && channelNum % 8 == 0) {
+                // System.out.println("Setting channel " + channelNum + " to 255");
+                buffer[channelIndex + 1] = (byte) 255; // Set current channel to 255
+            }
         }
     }
 
     return this;
 }
+
+
+
+
+
+
 
 
 
