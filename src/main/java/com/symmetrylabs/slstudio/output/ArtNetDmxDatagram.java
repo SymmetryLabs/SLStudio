@@ -153,16 +153,6 @@ public LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) 
     return this;
 }
 
-
-
-
-
-
-
-
-
-
-
     public void busySleep(long nanos) {
         long elapsed;
         final long startTime = System.nanoTime();
