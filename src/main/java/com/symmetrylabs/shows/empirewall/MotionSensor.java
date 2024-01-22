@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.HashMap;
 
-
+import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXRunnableComponent;
 import heronarts.lx.modulator.QuadraticEnvelope;
@@ -60,9 +60,9 @@ public class MotionSensor extends LXRunnableComponent {
         System.out.println("Motion Sensor initialized");
     }
 
-    public static MotionSensor initialize(String ipAddress) {
+    public static MotionSensor initialize(LX lx, String ipAddress) {
         if (instance == null) {
-            instance = new MotionSensor(ipAddress);
+            instance = new MotionSensor(lx, ipAddress);
         }
         return instance;
     }
