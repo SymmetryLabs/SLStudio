@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 
+import heronarts.lx.LXChannel;
 import heronarts.lx.LXRunnableComponent;
 import heronarts.lx.modulator.QuadraticEnvelope;
 
@@ -74,18 +75,18 @@ public class MotionSensor extends LXRunnableComponent {
         }
 
         if (fadeIn.isRunning()) {
-            Channel motion = lx.engine.getChannel("motion");
+            LXChannel motion = lx.engine.getChannel("motion");
             motion.fader.setValue(fadeIn.getValue());
 
-            Channel ambient = lx.engine.getChannel("ambient");
+            LXChannel ambient = lx.engine.getChannel("ambient");
             ambient.fader.setValue(1 - fadeIn.getValue());
         }
 
         if (fadeOut.isRunning()) {
-            Channel motion = lx.engine.getChannel("motion");
+            LXChannel motion = lx.engine.getChannel("motion");
             motion.fader.setValue(1 - fadeIn.getValue());
 
-            Channel ambient = lx.engine.getChannel("ambient");
+            LXChannel ambient = lx.engine.getChannel("ambient");
             ambient.fader.setValue(fadeIn.getValue());
         }
     }
