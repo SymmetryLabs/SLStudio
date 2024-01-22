@@ -35,7 +35,7 @@ public class MotionSensor extends LXRunnableComponent {
     private final QuadraticEnvelope fadeIn = new QuadraticEnvelope(0, 1, 2000);
     private final QuadraticEnvelope fadeOut = new QuadraticEnvelope(1, 0, 4000);
 
-    fadeIn.addListener(() -> {
+    fadeIn.addListener(() => {
         Channel motion = lx.engine.getChannel("motion");
         motion.fader.setValue(fadeIn.getValue());
 
@@ -43,7 +43,7 @@ public class MotionSensor extends LXRunnableComponent {
         ambient.fader.setValue(1 - fadeIn.getValue());
     });
 
-    fadeOut.addListener(() -> {
+    fadeOut.addListener(() => {
         Channel motion = lx.engine.getChannel("motion");
         motion.fader.setValue(1 - fadeIn.getValue());
 
@@ -56,7 +56,7 @@ public class MotionSensor extends LXRunnableComponent {
 
         this.ipAddress = ipAddress;
 
-        Runnable task = () -> {
+        Runnable task = () => {
             while(true) {
                 //if (enabled.isEnabled()) {
                     makeStateRequest();
