@@ -1135,9 +1135,10 @@ public class EmpireWallShow implements Show {
 		lx.engine.registerComponent("vineModelingTool", VineWallModelingTool.getInstance(lx, true));
 	
 		MotionSensor motionSensor = MotionSensor.initialize("192.168.1.50");
-		motionSensor.addListener(() -> {
-			System.out.println("MOTION DETECTED!!!");
-		});
+		lx.engine.addLoopTask(motionSensor);
+		// motionSensor.addListener(() -> {
+		// 	Channel channel = lx.engine.getChannel("Motion");
+		// });
 	}
 
 	@Override
