@@ -28,28 +28,10 @@ public class MotionSensor extends LXRunnableComponent {
 
     private final List<Listener> listeners = new ArrayList<>();
 
-    //Map<String, Float> previousFaders = new HashMap<>();
-
     private int elapsedMillis = 0;
 
     private final QuadraticEnvelope fadeIn = new QuadraticEnvelope(0, 1, 2000);
     private final QuadraticEnvelope fadeOut = new QuadraticEnvelope(1, 0, 4000);
-
-    fadeIn.addListener(() -> {
-        Channel motion = lx.engine.getChannel("motion");
-        motion.fader.setValue(fadeIn.getValue());
-
-        Channel ambient = lx.engine.getChannel("ambient");
-        ambient.fader.setValue(1 - fadeIn.getValue());
-    });
-
-    fadeOut.addListener(() -> {
-        Channel motion = lx.engine.getChannel("motion");
-        motion.fader.setValue(1 - fadeIn.getValue());
-
-        Channel ambient = lx.engine.getChannel("ambient");
-        ambient.fader.setValue(fadeIn.getValue());
-    });
 
     private MotionSensor(String ipAddress) {
         super("motionSensor");
@@ -90,19 +72,23 @@ public class MotionSensor extends LXRunnableComponent {
         if (elapsedMillis += deltaMs > 5000) {
             fadeOut.trigger();
         }
+
+        if (fadeIn.isRunning()) {
+            Channel motion = lx.engine.getChannel("motion");
+            motion.fader.setValue(fadeIn.getValue());
+
+            Channel ambient = lx.engine.getChannel("ambient");
+            ambient.fader.setValue(1 - fadeIn.getValue());
+        }
+
+        if (fadeOut.isRunning()) {
+            Channel motion = lx.engine.getChannel("motion");
+            motion.fader.setValue(1 - fadeIn.getValue());
+
+            Channel ambient = lx.engine.getChannel("ambient");
+            ambient.fader.setValue(fadeIn.getValue());
+        }
     }
-
-    // private void storeFaderValues() {
-    //     previousFaders.clear();
-
-    //     for (Channel channel : lx.engine.getChannels()) {
-    //         if (channel.getLabel().equals("motion")) {
-    //             continue;
-    //         }
-
-    //         previousFaders.put(channel.getLabel(), channel.fader.getValue());
-    //     }
-    // }
 
     private void triggerEvent() {
         for (Listener listener : listeners) {
@@ -114,9 +100,9 @@ public class MotionSensor extends LXRunnableComponent {
         String formattedDate = formatter.format(date);
         System.out.println("[" + formattedDate + "] Motion Detected!");
 
-        //storeFaderValues();
+        fadeIn.reset();
+        fadeOut.reset();
         fadeIn.trigger();
-        //fadeOut.trigger();
     }
 
     private void makeStateRequest() {
