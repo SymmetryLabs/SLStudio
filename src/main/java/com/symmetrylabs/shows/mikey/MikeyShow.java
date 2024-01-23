@@ -41,6 +41,7 @@ public class MikeyShow implements Show {
             int dmx3 = 3;
             int dmx6 = 6;
             int dmx9 = 9;
+            int dmx12 = 12;
             double zRotation = 1.57;
             int stripWidth = 1;
             List<Strip> strips = new ArrayList<Strip>();
@@ -52,6 +53,8 @@ public class MikeyShow implements Show {
             Strip.Metrics metricsDMX3 = new Strip.Metrics(dmx3, 5); //strip config
             Strip.Metrics metricsDMX6 = new Strip.Metrics(dmx6, 5); //strip config
             Strip.Metrics metricsDMX9 = new Strip.Metrics(dmx9, 5); //strip config
+            Strip.Metrics metricsDMX12 = new Strip.Metrics(dmx12, 5); //strip config
+
 
 
 
