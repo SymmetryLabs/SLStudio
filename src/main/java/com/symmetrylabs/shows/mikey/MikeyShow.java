@@ -41,7 +41,7 @@ public class MikeyShow implements Show {
             int dmx3 = 3;
             int dmx6 = 6;
             int dmx9 = 9;
-            double zRotation = 1.5;
+            double zRotation = 1.57;
             int stripWidth = 1;
             List<Strip> strips = new ArrayList<Strip>();
             LXTransform t = new LXTransform();
@@ -49,14 +49,14 @@ public class MikeyShow implements Show {
 
             Strip.Metrics metricsStrip = new Strip.Metrics(ledStrip, stripWidth); //strip config
 
-            Strip.Metrics metricsDMX3 = new Strip.Metrics(dmx3, stripWidth); //strip config
-            Strip.Metrics metricsDMX6 = new Strip.Metrics(dmx6, stripWidth); //strip config
-            Strip.Metrics metricsDMX9 = new Strip.Metrics(dmx9, stripWidth); //strip config
+            Strip.Metrics metricsDMX3 = new Strip.Metrics(dmx3, 5); //strip config
+            Strip.Metrics metricsDMX6 = new Strip.Metrics(dmx6, 5); //strip config
+            Strip.Metrics metricsDMX9 = new Strip.Metrics(dmx9, 5); //strip config
 
 
 
-
-            //OUTPUT A1
+            //FARTHEST TWO LED STRIPS
+            //----------------BOX 1 (PIXLITE CHANNELS 1-4)--------------
             t.translate(0, 0, 0);
             t.push();
             t.rotateZ(zRotation);
@@ -64,7 +64,6 @@ public class MikeyShow implements Show {
             strips.add(strip1);  
             t.pop();
 
-            //OUTPUT A2
             t.push();
             t.translate(10, 0, 0);
             t.rotateZ(zRotation);
@@ -72,127 +71,137 @@ public class MikeyShow implements Show {
             strips.add(strip2);
             t.pop();
 
-            //OUTPUT A3
+
             t.push();
-            t.translate(20, 0, 0);
+            t.translate(50, 0, 0);
             t.rotateZ(zRotation);
             Strip strip3 = new Strip("1", metricsStrip, t);         //create the turn in the first strip
             strips.add(strip3);
             t.pop();
 
-            t.push();
-            t.translate(30, 0, 0);
-            t.rotateZ(zRotation);
-            t.translate(0,0,0);
-            t.rotateZ(0);
-            Strip strip4 = new Strip("1", metricsStrip, t);         //create the second strip
-            strips.add(strip4);                                                  //add the first strip to strip array
-            t.pop();
-
-            //OUTPUT A4
-            t.push();
-            t.translate(40, 0, 0);
-            t.rotateZ(zRotation);
-            Strip strip5 = new Strip("1", metricsStrip, t);         //create the turn in the first strip
-            strips.add(strip5);
-            t.pop();
-
+            //FARTHEST DMX LIGHTS
             t.push();
             t.translate(50, 0, 0);
-            t.rotateZ(zRotation);
-            Strip strip6 = new Strip("1", metricsStrip, t);         //create the second strip
-            strips.add(strip6);                                                  //add the first strip to strip array
+            t.rotateZ(3.29);
+            Strip strip4 = new Strip("1", metricsDMX9, t);         //create the second strip
+            strips.add(strip4);                                                  //add the first strip to strip array
             t.pop();
+            //----------------BOX 1 --------------
 
-            //OUTPUT A5
+
+            //----------------BOX 2 (PIXLITE CHANNELS 5-8) ---------------
             t.push();
             t.translate(60, 0, 0);
             t.rotateZ(zRotation);
-            Strip strip7 = new Strip("1", metricsDMX9, t);         //create the turn in the first strip
-            strips.add(strip7);
+            t.translate(0,0,0);
+            Strip strip5 = new Strip("1", metricsStrip, t);         //create the second strip
+            strips.add(strip5);                                                  //add the first strip to strip array
             t.pop();
 
-            //OUTPUT B1
+
             t.push();
-            t.translate(70, 0, 0);
+            t.translate(100, 0, 0);
             t.rotateZ(zRotation);
-            Strip strip8 = new Strip("1", metricsDMX9, t);         //create the turn in the first strip
-            strips.add(strip8);
+            Strip strip6 = new Strip("1", metricsStrip, t);         //create the turn in the first strip
+            strips.add(strip6);
             t.pop();
 
-            // t.push();
-            // t.translate(horizontalBar*4, 0, 0);
-            // t.rotateZ(90);
-            // t.translate(horizontalBar*1, 0, 0);
-            // t.rotateZ(-90);
-            // Strip strip10 = new Strip("1", metricsS3, t);         //create the second strip
-            // strips.add(strip10);                                                  //add the first strip to strip array
-            // t.pop();
+            t.push();
+            t.translate(110, 0, 0);
+            t.rotateZ(zRotation);
+            Strip strip7 = new Strip("1", metricsStrip, t);         //create the second strip
+            strips.add(strip7);                                                  //add the first strip to strip array
+            t.pop();
 
-            // //OUTPUT B2
-            // t.push();
-            // t.translate(horizontalBar*5, 0, 0);
-            // t.rotateZ(90);
-            // Strip strip11 = new Strip("1", metricsL10, t);         //create the turn in the first strip
-            // strips.add(strip11);
-            // t.pop();
+            //Channel 8
+            //2ND SET OF DMX LIGHTS
+            t.push();
+            t.translate(140, 0, 0);
+            t.rotateZ(-3.29);
+            Strip strip8 = new Strip("1", metricsDMX9, t);         //create the second strip
+            strips.add(strip8);                                                  //add the first strip to strip array
+            t.pop();
+            //----------------BOX 2 --------------
 
 
-            // //OUTPUT B3
-            // t.push();
-            // t.translate(horizontalBar*6, 0, 0);
-            // t.rotateZ(90);
-            // Strip strip13 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
-            // strips.add(strip13);
-            // t.pop();
+            //----------------BOX 3 (PIXLITE CHANNELS 9-12)--------------
+            t.push();
+            t.translate(150, 0, 0);
+            t.rotateZ(zRotation);
+            Strip strip9 = new Strip("1", metricsStrip, t);         //create the second strip
+            strips.add(strip9);                                                  //add the first strip to strip array
+            t.pop();
 
-            // t.push();
-            // t.translate(horizontalBar*6, 0, 0);
-            // t.rotateZ(90);
-            // t.translate(((horizontalBar*3)*1.5f)+10, 0, 0);
-            // t.rotateZ(-90);
-            // Strip strip14 = new Strip("1", metricsS2, t);         //create the second strip
-            // strips.add(strip14);                                                  //add the first strip to strip array
-            // t.pop();
+            t.push();
+            t.translate(190, 0, 0);
+            t.rotateZ(zRotation);
+            Strip strip10 = new Strip("1", metricsStrip, t);         //create the second strip
+            strips.add(strip10);                                                  //add the first strip to strip array
+            t.pop();
 
-            // //OUTPUT B4
-            // t.push();
-            // t.translate(horizontalBar*7, 0, 0);
-            // t.rotateZ(90);
-            // Strip strip15 = new Strip("1", metricsL4W, t);         //create the turn in the first strip
-            // strips.add(strip15);
-            // t.pop();
+            t.push();
+            t.translate(200, 0, 0);
+            t.rotateZ(zRotation);
+            Strip strip11 = new Strip("1", metricsStrip, t);         //create the second strip
+            strips.add(strip11);                                                  //add the first strip to strip array
+            t.pop();
 
-            // //OUTPUT B5
-            // t.push();
-            // t.translate(horizontalBar*7, 0, 0);
-            // t.rotateZ(135.1f);
-            // Strip strip16 = new Strip("1", metricsL10, t);         //create the turn in the first strip
-            // strips.add(strip16);
-            // t.pop();
+            //LAST SET OF DMX LIGHTS ON LEFT SIDE
+            t.push();
+            t.translate(120, 0, 0);
+            t.rotateZ(0);
+            Strip strip12 = new Strip("1", metricsDMX9, t);         //create the turn in the first strip
+            strips.add(strip12);
+            t.pop();
 
-            // //OUTPUT B4
-            // t.push();
-            // t.translate(horizontalBar*8, 0, 0);
-            // t.rotateZ(90);
-            // Strip strip17 = new Strip("1", metricsL10, t);         //create the turn in the first strip
-            // strips.add(strip17);
-            // t.pop();
 
-            // //OUTPUT B5
-            // t.push();
-            // t.translate(horizontalBar*9, 0, 0);
-            // t.rotateZ(135.1f);
-            // Strip strip18 = new Strip("1", metricsL10, t);         //create the turn in the first strip
-            // strips.add(strip18);
-            // t.pop();
-            // //OUTPUT B5
-            // t.push();
-            // t.translate(horizontalBar*10, 0, 0);
-            // t.rotateZ(135.1f);
-            // Strip strip19 = new Strip("1", metricsL10, t);         //create the turn in the first strip
-            // strips.add(strip19);
-            // t.pop();
+            t.push();
+            t.translate(160, 0, 0);
+            t.rotateZ(zRotation);
+            Strip strip13 = new Strip("1", metricsStrip, t);         //create the turn in the first strip
+            strips.add(strip13);
+            t.pop();
+
+
+            t.push();
+            t.translate(170, 0, 0);
+            t.rotateZ(zRotation);
+            Strip strip14 = new Strip("1", metricsStrip, t);         //create the turn in the first strip
+            strips.add(strip14);
+            t.pop();
+
+            t.push();
+            t.translate(210, 0, 0);
+            t.rotateZ(zRotation);
+            Strip strip15 = new Strip("1", metricsStrip, t);         //create the turn in the first strip
+            strips.add(strip15);
+            t.pop();
+
+            t.push();
+            t.translate(220, 0, 0);
+            t.rotateZ(zRotation);
+            Strip strip16 = new Strip("1", metricsStrip, t);         //create the turn in the first strip
+            strips.add(strip16);
+            t.pop();
+
+
+            //FAR RIGHT DMX LIGHTS
+            t.push();
+            t.translate(220, 0, 0);
+            t.rotateZ(0);
+            Strip strip17 = new Strip("1", metricsDMX9, t);         //create the turn in the first strip
+            strips.add(strip17);
+            t.pop();
+
+            //TOP DMX LIGHTS
+            t.push();
+            t.translate(190, 70, 0);
+            t.rotateZ(0);
+            Strip strip18 = new Strip("1", metricsDMX9, t);         //create the turn in the first strip
+            strips.add(strip18);
+            t.pop();
+            //----------------BOX 3 --------------
+
 
             return new MikeyModel(strips);
         }
@@ -204,29 +213,53 @@ public class MikeyShow implements Show {
             //     addPixliteOutput(
             //     new PointsGrouping((i+1)+"").addPoints(model.getStripByIndex(i).getPoints()));
             // }
-            //A
+            //LED LIGHTS
             addPixliteOutput(
                 new PointsGrouping("1").addPoints(model.getStripByIndex(0).getPoints()));
             addPixliteOutput(
                 new PointsGrouping("2").addPoints(model.getStripByIndex(1).getPoints()));
             addPixliteOutput(
                 new PointsGrouping("3").addPoints(model.getStripByIndex(2).getPoints()));
+
+            //DMX LIGHTS
             addPixliteOutput(
                 new PointsGrouping("4").addPoints(model.getStripByIndex(3).getPoints()));
+
+            //LED LIGHTS
             addPixliteOutput(
                 new PointsGrouping("5").addPoints(model.getStripByIndex(4).getPoints()));
-            // //B
             addPixliteOutput(
                 new PointsGrouping("6").addPoints(model.getStripByIndex(5).getPoints()));
             addPixliteOutput(
                 new PointsGrouping("7").addPoints(model.getStripByIndex(6).getPoints()));
+
+            //DMX LIGHTS
             addPixliteOutput(
                 new PointsGrouping("8").addPoints(model.getStripByIndex(7).getPoints()));
 
-        //     addPixliteOutput(
-        //         new PointsGrouping("9").addPoints(model.getStripByIndex(13).getPoints()));
-        //     addPixliteOutput(
-        //         new PointsGrouping("10").addPoints(model.getStripByIndex(14).getPoints()));
+            //LED LIGHTS
+            addPixliteOutput(
+                new PointsGrouping("9").addPoints(model.getStripByIndex(8).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("10").addPoints(model.getStripByIndex(9).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("11").addPoints(model.getStripByIndex(10).getPoints()));
+            //DMX LIGHTS
+            addPixliteOutput(
+                new PointsGrouping("12").addPoints(model.getStripByIndex(11).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("13").addPoints(model.getStripByIndex(12).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("14").addPoints(model.getStripByIndex(13).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("15").addPoints(model.getStripByIndex(14).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("16").addPoints(model.getStripByIndex(15).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("17").addPoints(model.getStripByIndex(16).getPoints()));
+            //DMX LIGHTS
+            addPixliteOutput(
+                new PointsGrouping("21").addPoints(model.getStripByIndex(17).getPoints()));
         //     addPixliteOutput(
         //         new PointsGrouping("11").addPoints(model.getStripByIndex(15).getPoints()));
         //     addPixliteOutput(
