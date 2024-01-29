@@ -30,11 +30,10 @@ public class ArtNetDmxDatagram extends LXDatagram {
     private GammaExpander GammaExpander;
 
     private boolean isCustomUniverse() {
-        return ((this.universeNumber >= 39 && this.universeNumber <= 48) || 
-                (this.universeNumber >= 79 && this.universeNumber <= 88) || 
-                (this.universeNumber >= 119 && this.universeNumber <= 128) ||
-                (this.universeNumber >= 169 && this.universeNumber <= 178) ||
-                (this.universeNumber >= 119 && this.universeNumber <= 208)
+        return ((this.universeNumber >= 39 && this.universeNumber <= 48) || //4
+                (this.universeNumber >= 79 && this.universeNumber <= 88) ||  //8
+                (this.universeNumber >= 169 && this.universeNumber <= 178) || //21
+                (this.universeNumber >= 119 && this.universeNumber <= 128) //20
         );
     }
 
@@ -52,7 +51,7 @@ public class ArtNetDmxDatagram extends LXDatagram {
                 (universeNumber >= 79 && universeNumber <= 88) || 
                 (universeNumber >= 119 && universeNumber <= 128) ||
                 (universeNumber >= 169 && universeNumber <= 178) ||
-                (universeNumber >= 119 && universeNumber <= 208)
+                (universeNumber >= 119 && universeNumber <= 128)
         );
     }
 
@@ -138,7 +137,7 @@ public LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) 
                 (this.universeNumber >= 79 && this.universeNumber <= 88) || 
                 (this.universeNumber >= 119 && this.universeNumber <= 128)||
                 (this.universeNumber >= 169 && this.universeNumber <= 178) ||
-                (this.universeNumber >= 119 && this.universeNumber <= 208));
+                (this.universeNumber >= 119 && this.universeNumber <= 128));
     int unmappedC = flashUnmapped && !flashInOn ? 0 : unmappedPointColor;
  
     if (System.nanoTime() - lastFlashNanos > FLASH_NANOS) {
