@@ -138,8 +138,7 @@ public class MikeyShow implements Show {
             strips.add(strip9);                                                  //add the first strip to strip array
             t.pop();
 
-            //3 LED STRIPS
-            //Strip-8
+            //3 STRIPS
             t.push();
             t.translate(160, 0, 0);
             t.rotateZ(zRotation);
@@ -147,7 +146,6 @@ public class MikeyShow implements Show {
             strips.add(strip10);                                                  //add the first strip to strip array
             t.pop();
 
-            //Strip-9
             t.push();
             t.translate(180, 0, 0);
             t.rotateZ(zRotation);
@@ -162,9 +160,7 @@ public class MikeyShow implements Show {
             strips.add(strip12);
             t.pop();
 
-            //----------------BOX 4 (PIXLITE CHANNELS 13-16)--------------
-            
-            //Strip-10
+            //DMX LIGHT
             t.push();
             t.translate(240, 0, dmxLightsOffset);
             t.rotateZ(zRotation);
@@ -173,6 +169,7 @@ public class MikeyShow implements Show {
             t.pop();
 
 
+            //TWO LED STRIPS ON RIGHT OF CHURCH
             t.push();
             t.translate(250, 0, 0);
             t.rotateZ(zRotation);
@@ -188,29 +185,19 @@ public class MikeyShow implements Show {
             t.pop();
 
             t.push();
-            t.translate(280, 0, 0);
+            t.translate(280, 0, dmxLightsOffset);
             t.rotateZ(zRotation);
-            Strip strip16 = new Strip("1", metricsStrip, t);         //create the turn in the first strip
+            Strip strip16 = new Strip("1", metricsDMX9, t);         //create the turn in the first strip
             strips.add(strip16);
             t.pop();
             //----------------BOX 4--------------
-
-
-            //----------------BOX 5 (PIXLITE CHANNELS 17-20)---------------
-            //FAR RIGHT DMX LIGHTS
-            t.push();
-            t.translate(240, 0, dmxLightsOffset);
-            t.rotateZ(0);
-            Strip strip17 = new Strip("1", metricsDMX9, t);         //create the turn in the first strip
-            strips.add(strip17);
-            t.pop();
 
             //TOP DMX LIGHTS
             t.push();
             t.translate(190, 110, dmxLightsOffset);
             t.rotateZ(0);
-            Strip strip18 = new Strip("1", metricsDMX9, t);         //create the turn in the first strip
-            strips.add(strip18);
+            Strip strip17 = new Strip("1", metricsDMX9, t);         //create the turn in the first strip
+            strips.add(strip17);
             t.pop();
             //----------------BOX 5--------------s
             return new MikeyModel(strips);
@@ -266,12 +253,12 @@ public class MikeyShow implements Show {
                 new PointsGrouping("14").addPoints(model.getStripByIndex(14).getPoints()));
             //DMX LIGHTS
             addPixliteOutput(
-                new PointsGrouping("17").addPoints(model.getStripByIndex(15).getPoints()));
+                new PointsGrouping("16").addPoints(model.getStripByIndex(15).getPoints()));
 
             //BOX 5
             //DMX ROOF
             addPixliteOutput(
-                new PointsGrouping("25").addPoints(model.getStripByIndex(17).getPoints()));
+                new PointsGrouping("25").addPoints(model.getStripByIndex(16).getPoints()));
         //     addPixliteOutput(
         //         new PointsGrouping("11").addPoints(model.getStripByIndex(15).getPoints()));
         //     addPixliteOutput(

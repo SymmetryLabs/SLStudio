@@ -140,7 +140,7 @@ public LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) 
                 (this.universeNumber >= 159 && this.universeNumber <= 168) || //16
                 (this.universeNumber >= 199 && this.universeNumber <= 208) ||  //20
                 (this.universeNumber >= 209 && this.universeNumber <= 218) ||  //21
-                (this.universeNumber >= 249 && this.universeNumber <= 258));  //21
+                (this.universeNumber >= 249 && this.universeNumber <= 258));  //25
     int unmappedC = flashUnmapped && !flashInOn ? 0 : unmappedPointColor;
  
     if (System.nanoTime() - lastFlashNanos > FLASH_NANOS) {
