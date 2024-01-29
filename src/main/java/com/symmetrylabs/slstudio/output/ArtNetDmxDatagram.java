@@ -34,7 +34,7 @@ public class ArtNetDmxDatagram extends LXDatagram {
                 (this.universeNumber >= 79 && this.universeNumber <= 88) || 
                 (this.universeNumber >= 119 && this.universeNumber <= 128) ||
                 (this.universeNumber >= 169 && this.universeNumber <= 178) ||
-                (this.universeNumber >= 209 && this.universeNumber <= 218)
+                (this.universeNumber >= 119 && this.universeNumber <= 208)
         );
     }
 
