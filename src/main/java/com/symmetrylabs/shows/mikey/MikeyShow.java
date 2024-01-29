@@ -166,9 +166,9 @@ public class MikeyShow implements Show {
             
             //Strip-10
             t.push();
-            t.translate(240, 0, 0);
+            t.translate(240, 0, dmxLightsOffset);
             t.rotateZ(zRotation);
-            Strip strip13 = new Strip("1", metricsStrip, t);         //create the turn in the first strip
+            Strip strip13 = new Strip("1", metricsDMX9, t);         //create the turn in the first strip
             strips.add(strip13);
             t.pop();
 
