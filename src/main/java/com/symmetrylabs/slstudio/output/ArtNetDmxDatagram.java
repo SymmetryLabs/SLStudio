@@ -30,10 +30,12 @@ public class ArtNetDmxDatagram extends LXDatagram {
     private GammaExpander GammaExpander;
 
     private boolean isCustomUniverse() {
-        return ((this.universeNumber >= 39 && this.universeNumber <= 48) || //4
-                (this.universeNumber >= 79 && this.universeNumber <= 88) ||  //8
-                (this.universeNumber >= 169 && this.universeNumber <= 178) || //21
-                (this.universeNumber >= 119 && this.universeNumber <= 128) //20
+        return ((this.universeNumber >= 79 && this.universeNumber <= 88) || //8
+                (this.universeNumber >= 169 && this.universeNumber <= 178) ||  //17
+                (this.universeNumber >= 199 && this.universeNumber <= 208) ||    //20
+                (this.universeNumber >= 219 && this.universeNumber <= 228) || //21
+                (this.universeNumber >= 249 && this.universeNumber <= 258)   //25
+
         );
     }
 
@@ -47,11 +49,12 @@ public class ArtNetDmxDatagram extends LXDatagram {
 
    // Static helper method to determine if a given universe number is custom
     private static boolean isCustomUniverse(int universeNumber) {
-        return ((universeNumber >= 39 && universeNumber <= 48) || 
-                (universeNumber >= 79 && universeNumber <= 88) || 
-                (universeNumber >= 119 && universeNumber <= 128) ||
-                (universeNumber >= 169 && universeNumber <= 178) ||
-                (universeNumber >= 119 && universeNumber <= 128)
+        return ((universeNumber >= 79 && universeNumber <= 88) ||   //8
+                (universeNumber >= 169 && universeNumber <= 178) || //17
+                (universeNumber >= 199 && universeNumber <= 208) || //20
+                (universeNumber >= 219 && universeNumber <= 228) || //21
+                (universeNumber >= 249 && universeNumber <= 258)    //25
+
         );
     }
 
@@ -133,11 +136,11 @@ public class ArtNetDmxDatagram extends LXDatagram {
 
 public LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
     boolean isCustomUniverse = (
-                (this.universeNumber >= 39 && this.universeNumber <= 48) || 
-                (this.universeNumber >= 79 && this.universeNumber <= 88) || 
-                (this.universeNumber >= 119 && this.universeNumber <= 128)||
-                (this.universeNumber >= 169 && this.universeNumber <= 178) ||
-                (this.universeNumber >= 119 && this.universeNumber <= 128));
+                (this.universeNumber >= 79 && this.universeNumber <= 88) || //8
+                (this.universeNumber >= 169 && this.universeNumber <= 178)||//17
+                (this.universeNumber >= 199 && this.universeNumber <= 208) ||  //20
+                (this.universeNumber >= 219 && this.universeNumber <= 228) ||  //21
+                (this.universeNumber >= 249 && this.universeNumber <= 258)  //21
     int unmappedC = flashUnmapped && !flashInOn ? 0 : unmappedPointColor;
  
     if (System.nanoTime() - lastFlashNanos > FLASH_NANOS) {
