@@ -31,9 +31,8 @@ public class ArtNetDmxDatagram extends LXDatagram {
 
     private boolean isCustomUniverse() {
         return ((this.universeNumber >= 79 && this.universeNumber <= 88) || //8
-                (this.universeNumber >= 169 && this.universeNumber <= 178) ||  //17
                 (this.universeNumber >= 199 && this.universeNumber <= 208) ||    //20
-                (this.universeNumber >= 219 && this.universeNumber <= 228) || //21
+                (this.universeNumber >= 209 && this.universeNumber <= 218) || //21
                 (this.universeNumber >= 249 && this.universeNumber <= 258)   //25
 
         );
@@ -50,9 +49,8 @@ public class ArtNetDmxDatagram extends LXDatagram {
    // Static helper method to determine if a given universe number is custom
     private static boolean isCustomUniverse(int universeNumber) {
         return ((universeNumber >= 79 && universeNumber <= 88) ||   //8
-                (universeNumber >= 169 && universeNumber <= 178) || //17
                 (universeNumber >= 199 && universeNumber <= 208) || //20
-                (universeNumber >= 219 && universeNumber <= 228) || //21
+                (universeNumber >= 209 && universeNumber <= 218) || //21
                 (universeNumber >= 249 && universeNumber <= 258)    //25
 
         );
@@ -137,10 +135,9 @@ public class ArtNetDmxDatagram extends LXDatagram {
 public LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
     boolean isCustomUniverse = (
                 (this.universeNumber >= 79 && this.universeNumber <= 88) || //8
-                (this.universeNumber >= 169 && this.universeNumber <= 178)||//17
                 (this.universeNumber >= 199 && this.universeNumber <= 208) ||  //20
-                (this.universeNumber >= 219 && this.universeNumber <= 228) ||  //21
-                (this.universeNumber >= 249 && this.universeNumber <= 258)  //21
+                (this.universeNumber >= 209 && this.universeNumber <= 218) ||  //21
+                (this.universeNumber >= 249 && this.universeNumber <= 258));  //21
     int unmappedC = flashUnmapped && !flashInOn ? 0 : unmappedPointColor;
  
     if (System.nanoTime() - lastFlashNanos > FLASH_NANOS) {

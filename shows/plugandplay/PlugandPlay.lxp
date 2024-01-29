@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1706369609716,
+  "timestamp": 1706496379184,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -2156,13 +2156,13 @@
             "modulationColor": -8978688,
             "parameters": {
               "label": "Channel-9",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 29.675039506957546,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -3221,10 +3221,10 @@
                   "label": "SolidColor",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "color/hue": 169.33961981534958,
+                  "color/hue": 155.76470947265625,
                   "color/brightness": 100.0,
                   "color/saturation": 100.0,
-                  "color": -16711726
+                  "color": -16711784
                 },
                 "modulation": {
                   "modulators": [],
@@ -3444,7 +3444,7 @@
                 }
               }
             ],
-            "patternIndex": 0,
+            "patternIndex": 1,
             "patterns": [
               {
                 "id": 18558,
@@ -3520,7 +3520,7 @@
                   "label": "SolidColor",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "color/hue": 53.849998796358705,
+                  "color/hue": 53.882354736328125,
                   "color/brightness": 100.0,
                   "color/saturation": 100.0,
                   "color": -6912
@@ -3558,7 +3558,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -261889,
+          "modulationColor": -16711747,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -3757,7 +3757,7 @@
         }
       },
       "outputControl": {
-        "id": 56,
+        "id": 55,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -11008,
         "parameters": {
@@ -4932,8 +4932,8 @@
       },
       "preview": {
         "radius": 300.62332688660354,
-        "theta": 0.21120367320510747,
-        "phi": 0.07499999999999951,
+        "theta": -0.11579632679489257,
+        "phi": 0.19799999999999954,
         "positionX": 84.5079345703125,
         "positionY": 105.45574951171875,
         "positionZ": 0.0
