@@ -31,6 +31,7 @@ public class ArtNetDmxDatagram extends LXDatagram {
 
     private boolean isCustomUniverse() {
         return ((this.universeNumber >= 79 && this.universeNumber <= 88) || //8
+                (this.universeNumber >= 159 && this.universeNumber <= 168) || //16
                 (this.universeNumber >= 199 && this.universeNumber <= 208) ||    //20
                 (this.universeNumber >= 209 && this.universeNumber <= 218) || //21
                 (this.universeNumber >= 249 && this.universeNumber <= 258)   //25
@@ -49,6 +50,7 @@ public class ArtNetDmxDatagram extends LXDatagram {
    // Static helper method to determine if a given universe number is custom
     private static boolean isCustomUniverse(int universeNumber) {
         return ((universeNumber >= 79 && universeNumber <= 88) ||   //8
+                 (universeNumber >= 159 && universeNumber <= 168) ||   //16
                 (universeNumber >= 199 && universeNumber <= 208) || //20
                 (universeNumber >= 209 && universeNumber <= 218) || //21
                 (universeNumber >= 249 && universeNumber <= 258)    //25
@@ -135,6 +137,7 @@ public class ArtNetDmxDatagram extends LXDatagram {
 public LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
     boolean isCustomUniverse = (
                 (this.universeNumber >= 79 && this.universeNumber <= 88) || //8
+                (this.universeNumber >= 159 && this.universeNumber <= 168) || //16
                 (this.universeNumber >= 199 && this.universeNumber <= 208) ||  //20
                 (this.universeNumber >= 209 && this.universeNumber <= 218) ||  //21
                 (this.universeNumber >= 249 && this.universeNumber <= 258));  //21
