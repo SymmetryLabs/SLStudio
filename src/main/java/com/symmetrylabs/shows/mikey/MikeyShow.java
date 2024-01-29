@@ -37,7 +37,7 @@ public class MikeyShow implements Show {
         }
 
         public static MikeyModel create() {
-            int ledStrip = 94;
+            int ledStrip = 96;
             int dmx3 = 3;
             int dmx6 = 6;
             int dmx9 = 9;
@@ -94,7 +94,7 @@ public class MikeyShow implements Show {
             //----------------BOX 1 --------------
 
 
-            //----------------BOX 2 (PIXLITE CHANNELS 5-8) ---------------
+            //----------------BOX 2-1 (PIXLITE CHANNELS 5-7) ---------------
             //Strip-4
             t.push();
             t.translate(60, 0, 0);
@@ -120,26 +120,25 @@ public class MikeyShow implements Show {
             strips.add(strip7);                                                  //add the first strip to strip array
             t.pop();
 
-            //Channel 8
-            //2ND SET OF DMX LIGHTS
             t.push();
-            t.translate(100, 0, dmxLightsOffset);
+            t.translate(150, 0, 0);
             t.rotateZ(0);
-            Strip strip8 = new Strip("1", metricsDMX9, t);         //create the second strip
+            Strip strip8 = new Strip("1", metricsStrip, t);         //create the second strip
             strips.add(strip8);                                                  //add the first strip to strip array
             t.pop();
             //----------------BOX 2 --------------
 
 
-            //----------------BOX 3 (PIXLITE CHANNELS 9-12)--------------
-            //Strip-7
+            //----------------BOX 2-2 (PIXLITE CHANNELS 9-12)--------------
+            //SOLO DMX LIGHT 
             t.push();
-            t.translate(150, 0, 0);
+            t.translate(60, 0, dmxLightsOffset);
             t.rotateZ(zRotation);
-            Strip strip9 = new Strip("1", metricsStrip, t);         //create the second strip
+            Strip strip9 = new Strip("1", metricsDMX9, t);         //create the second strip
             strips.add(strip9);                                                  //add the first strip to strip array
             t.pop();
 
+            //3 LED STRIPS
             //Strip-8
             t.push();
             t.translate(160, 0, 0);
@@ -156,15 +155,12 @@ public class MikeyShow implements Show {
             strips.add(strip11);                                                  //add the first strip to strip array
             t.pop();
 
-
-            //LAST SET OF DMX LIGHTS ON LEFT SIDE
             t.push();
-            t.translate(155, 0, dmxLightsOffset);
+            t.translate(190, 0, 0);
             t.rotateZ(0);
-            Strip strip12 = new Strip("1", metricsDMX9, t);         //create the turn in the first strip
+            Strip strip12 = new Strip("1", metricsStrip, t);         //create the turn in the first strip
             strips.add(strip12);
             t.pop();
-            //----------------BOX 3--------------
 
             //----------------BOX 4 (PIXLITE CHANNELS 13-16)--------------
             
@@ -223,53 +219,59 @@ public class MikeyShow implements Show {
     static class MikeyPixlite extends SimplePixlite {
         public MikeyPixlite(LX lx, String ip, MikeyModel model) {
             super(lx, ip);
+            //BOX 1
             //LED LIGHTS
             addPixliteOutput(
-                new PointsGrouping("1").addPoints(model.getStripByIndex(0).getPoints()));
+                new PointsGrouping("6").addPoints(model.getStripByIndex(0).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("2").addPoints(model.getStripByIndex(1).getPoints()));
+                new PointsGrouping("5").addPoints(model.getStripByIndex(1).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("3").addPoints(model.getStripByIndex(2).getPoints()));
-
+                new PointsGrouping("7").addPoints(model.getStripByIndex(2).getPoints()));
             //DMX LIGHTS
             addPixliteOutput(
-                new PointsGrouping("4").addPoints(model.getStripByIndex(3).getPoints()));
+                new PointsGrouping("8").addPoints(model.getStripByIndex(3).getPoints()));
 
+            //BOX 2-1
             //LED LIGHTS
             addPixliteOutput(
-                new PointsGrouping("5").addPoints(model.getStripByIndex(4).getPoints()));
+                new PointsGrouping("9").addPoints(model.getStripByIndex(4).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("6").addPoints(model.getStripByIndex(5).getPoints()));
+                new PointsGrouping("10").addPoints(model.getStripByIndex(5).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("7").addPoints(model.getStripByIndex(6).getPoints()));
+                new PointsGrouping("11").addPoints(model.getStripByIndex(6).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("12").addPoints(model.getStripByIndex(7).getPoints()));
+            //BOX 2-2
+            //DMX LIGHT
+            addPixliteOutput(
+                new PointsGrouping("21").addPoints(model.getStripByIndex(8).getPoints()));
 
+            //BOX 3
+            //LED STRIPS
+            addPixliteOutput(
+                new PointsGrouping("18").addPoints(model.getStripByIndex(9).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("17").addPoints(model.getStripByIndex(10).getPoints()));
+            addPixliteOutput(
+                new PointsGrouping("19").addPoints(model.getStripByIndex(11).getPoints()));
             //DMX LIGHTS
             addPixliteOutput(
-                new PointsGrouping("8").addPoints(model.getStripByIndex(7).getPoints()));
+                new PointsGrouping("20").addPoints(model.getStripByIndex(12).getPoints()));
 
+            //BOX 4
             //LED LIGHTS
             addPixliteOutput(
-                new PointsGrouping("9").addPoints(model.getStripByIndex(8).getPoints()));
+                new PointsGrouping("15").addPoints(model.getStripByIndex(13).getPoints()));
             addPixliteOutput(
-                new PointsGrouping("10").addPoints(model.getStripByIndex(9).getPoints()));
-            addPixliteOutput(
-                new PointsGrouping("11").addPoints(model.getStripByIndex(10).getPoints()));
+                new PointsGrouping("14").addPoints(model.getStripByIndex(14).getPoints()));
             //DMX LIGHTS
             addPixliteOutput(
-                new PointsGrouping("12").addPoints(model.getStripByIndex(11).getPoints()));
+                new PointsGrouping("17").addPoints(model.getStripByIndex(15).getPoints()));
+
+            //BOX 5
+            //DMX ROOF
             addPixliteOutput(
-                new PointsGrouping("13").addPoints(model.getStripByIndex(12).getPoints()));
-            addPixliteOutput(
-                new PointsGrouping("14").addPoints(model.getStripByIndex(13).getPoints()));
-            addPixliteOutput(
-                new PointsGrouping("15").addPoints(model.getStripByIndex(14).getPoints()));
-            addPixliteOutput(
-                new PointsGrouping("16").addPoints(model.getStripByIndex(15).getPoints()));
-            addPixliteOutput(
-                new PointsGrouping("17").addPoints(model.getStripByIndex(16).getPoints()));
-            //DMX LIGHTS
-            addPixliteOutput(
-                new PointsGrouping("21").addPoints(model.getStripByIndex(17).getPoints()));
+                new PointsGrouping("25").addPoints(model.getStripByIndex(17).getPoints()));
         //     addPixliteOutput(
         //         new PointsGrouping("11").addPoints(model.getStripByIndex(15).getPoints()));
         //     addPixliteOutput(
