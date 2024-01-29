@@ -122,7 +122,7 @@ public class MikeyShow implements Show {
 
             t.push();
             t.translate(150, 0, 0);
-            t.rotateZ(0);
+            t.rotateZ(zRotation);
             Strip strip8 = new Strip("1", metricsStrip, t);         //create the second strip
             strips.add(strip8);                                                  //add the first strip to strip array
             t.pop();
@@ -133,7 +133,7 @@ public class MikeyShow implements Show {
             //SOLO DMX LIGHT 
             t.push();
             t.translate(60, 0, dmxLightsOffset);
-            t.rotateZ(zRotation);
+            t.rotateZ(0);
             Strip strip9 = new Strip("1", metricsDMX9, t);         //create the second strip
             strips.add(strip9);                                                  //add the first strip to strip array
             t.pop();
@@ -155,15 +155,15 @@ public class MikeyShow implements Show {
 
             t.push();
             t.translate(190, 0, 0);
-            t.rotateZ(0);
+            t.rotateZ(zRotation);
             Strip strip12 = new Strip("1", metricsStrip, t);         //create the turn in the first strip
             strips.add(strip12);
             t.pop();
 
             //DMX LIGHT
             t.push();
-            t.translate(240, 0, dmxLightsOffset);
-            t.rotateZ(zRotation);
+            t.translate(160, 0, dmxLightsOffset);
+            t.rotateZ(0);
             Strip strip13 = new Strip("1", metricsDMX9, t);         //create the turn in the first strip
             strips.add(strip13);
             t.pop();
@@ -186,7 +186,7 @@ public class MikeyShow implements Show {
 
             t.push();
             t.translate(280, 0, dmxLightsOffset);
-            t.rotateZ(zRotation);
+            t.rotateZ(0);
             Strip strip16 = new Strip("1", metricsDMX9, t);         //create the turn in the first strip
             strips.add(strip16);
             t.pop();
