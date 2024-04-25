@@ -31,6 +31,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList; // This list type is thread-safe
 
 import javax.sound.midi.InvalidMidiDataException;
 
@@ -48,6 +49,7 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.LXTriggerModulation;
 import heronarts.lx.parameter.LXCompoundModulation;
+import heronarts.lx.osc.LXOscListener;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.warp.LXWarp;
 
@@ -130,6 +132,10 @@ public class LXOscEngine extends LXComponent {
 
     private final LX lx;
 
+    private List<LXOscListener> listeners = new CopyOnWriteArrayList<>();
+
+
+
     public LXOscEngine(LX lx) {
         super(lx, "OSC");
         this.lx = lx;
@@ -140,6 +146,12 @@ public class LXOscEngine extends LXComponent {
         addParameter("transmitPort", this.transmitPort);
         addParameter("transmitActive", this.transmitActive);
     }
+
+    public void addListener(LXOscListener listener) {
+        this.listeners.add(listener);
+    }    
+
+
 
     /**
      * Gets the OSC address pattern for a parameter
@@ -198,8 +210,15 @@ public class LXOscEngine extends LXComponent {
                         }
                     }
                 }
+                notifyListeners(message);
             } catch (Exception x) {
                 System.err.println("[OSC] No route for message: " + message.getAddressPattern().getValue());
+            }
+        }
+
+        private void notifyListeners(OscMessage  message) {
+            for (LXOscListener listener : listeners) {
+                listener.oscMessage(message);
             }
         }
 

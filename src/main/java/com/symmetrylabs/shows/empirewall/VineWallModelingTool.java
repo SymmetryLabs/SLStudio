@@ -15,6 +15,7 @@ import heronarts.lx.parameter.ObjectParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.osc.LXOscEngine;
 import heronarts.lx.osc.LXOscListener;
 import heronarts.lx.osc.OscMessage;
 
@@ -50,6 +51,8 @@ public class VineWallModelingTool extends LXComponent implements LXOscListener {
 
         this.leafManipulator = new LeafManipulator(lx);
         addSubcomponent(leafManipulator);
+
+        this.lx.engine.osc.addListener(this);
 
         this.selectedVine = new ObjectParameter<VineModel.Vine>("selectedVine", vineWall.getVinesArray());
         this.selectedLeaves = new DiscreteParameter[vineWall.vines.size()];
@@ -129,6 +132,7 @@ public class VineWallModelingTool extends LXComponent implements LXOscListener {
 
     public void setSelectedVine(VineModel.Vine vine) {
         selectedVine.setValue(vine);
+        System.out.println(vine);
     }
 
     public TreeModel.Leaf getSelectedLeaf() {
@@ -207,7 +211,7 @@ public class VineWallModelingTool extends LXComponent implements LXOscListener {
             // Handle OSC messages based on the defined address schema
             if (address.startsWith("/vineWall/selectedVine")) {
                 int vineIndex = message.getInt(); // Get vine index from OSC message
-                if (vineIndex >= 0 && vineIndex < selectedVine.getOptions().length) {
+                if (vineIndex >= 0) {
                     selectedVine.setValue(vineIndex);
                 }
             } else if (address.startsWith("/vineWall/selectedLeaf")) {
