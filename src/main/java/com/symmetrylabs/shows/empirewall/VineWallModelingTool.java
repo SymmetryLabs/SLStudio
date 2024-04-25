@@ -22,9 +22,11 @@ import com.symmetrylabs.shows.empirewall.config.*;
 import com.symmetrylabs.shows.empirewall.*;
 import com.symmetrylabs.shows.tree.TreeModel;
 import com.symmetrylabs.shows.empirewall.ui.UIVineWallModelingTool;
+import heronarts.lx.osc.LXOscListener;
+import heronarts.lx.osc.OscMessage;
 
 
-public class VineWallModelingTool extends LXComponent {
+public class VineWallModelingTool extends LXComponent implements LXOscListener {
 
     public final LX lx;
 
@@ -51,6 +53,40 @@ public class VineWallModelingTool extends LXComponent {
 
         this.selectedVine = new ObjectParameter<VineModel.Vine>("selectedVine", vineWall.getVinesArray());
         this.selectedLeaves = new DiscreteParameter[vineWall.vines.size()];
+        this.lx.engine.osc.addListener(this);
+
+        @Override
+    public void oscMessage(OscMessage message) {
+        try {
+            String address = message.getAddressPattern().getValue();
+            // Handle OSC messages based on the defined address schema
+            if (address.startsWith("/vineWall/selectedVine")) {
+                int vineIndex = message.getInt(); // Get vine index from OSC message
+                if (vineIndex >= 0 && vineIndex < selectedVine.getOptions().length) {
+                    selectedVine.setValue(vineIndex);
+                }
+            } else if (address.startsWith("/vineWall/selectedLeaf")) {
+                int leafIndex = message.getInt(); // Get leaf index from OSC message
+                int vineIndex = selectedVine.getValuei();
+                if (vineIndex >= 0 && vineIndex < selectedLeaves.length) {
+                    DiscreteParameter leafParam = selectedLeaves[vineIndex];
+                    if (leafIndex >= 0 && leafIndex < leafParam.getRange()) {
+                        leafParam.setValue(leafIndex);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error processing OSC message: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        // Don't forget to remove this component as a listener when it's disposed
+        this.lx.engine.osc.removeListener(this);
+    }
+}
 
         onSave.addListener(parameter -> {
             store.writeConfig();
