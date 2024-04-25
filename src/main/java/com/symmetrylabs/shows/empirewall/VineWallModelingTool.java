@@ -15,6 +15,8 @@ import heronarts.lx.parameter.ObjectParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.osc.LXOscListener;
+import heronarts.lx.osc.OscMessage;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.shows.Show;
@@ -24,7 +26,7 @@ import com.symmetrylabs.shows.tree.TreeModel;
 import com.symmetrylabs.shows.empirewall.ui.UIVineWallModelingTool;
 
 
-public class VineWallModelingTool extends LXComponent {
+public class VineWallModelingTool extends LXComponent implements LXOscListener {
 
     public final LX lx;
 
@@ -101,38 +103,7 @@ public class VineWallModelingTool extends LXComponent {
         leafManipulator.repurposeParameters();
     }
 
-    @Override
-    public void oscMessage(OscMessage message) {
-        try {
-            String address = message.getAddressPattern().getValue();
-            // Handle OSC messages based on the defined address schema
-            if (address.startsWith("/vineWall/selectedVine")) {
-                int vineIndex = message.getInt(); // Get vine index from OSC message
-                if (vineIndex >= 0 && vineIndex < selectedVine.getOptions().length) {
-                    selectedVine.setValue(vineIndex);
-                }
-            } else if (address.startsWith("/vineWall/selectedLeaf")) {
-                int leafIndex = message.getInt(); // Get leaf index from OSC message
-                int vineIndex = selectedVine.getValuei();
-                if (vineIndex >= 0 && vineIndex < selectedLeaves.length) {
-                    DiscreteParameter leafParam = selectedLeaves[vineIndex];
-                    if (leafIndex >= 0 && leafIndex < leafParam.getRange()) {
-                        leafParam.setValue(leafIndex);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("Error processing OSC message: " + e.getMessage());
-        }
-    }
 
-    @Override
-    public void dispose() {
-        super.dispose();
-        // Don't forget to remove this component as a listener when it's disposed
-        this.lx.engine.osc.removeListener(this);
-    }
-}   
 
     public static VineWallModelingTool getInstance(LX lx) {
         return getInstance(lx, true);
@@ -228,4 +199,30 @@ public class VineWallModelingTool extends LXComponent {
             disableParameters = false;
         }
     }
-}
+
+     @Override
+    public void oscMessage(OscMessage message) {
+        try {
+            String address = message.getAddressPattern().getValue();
+            // Handle OSC messages based on the defined address schema
+            if (address.startsWith("/vineWall/selectedVine")) {
+                int vineIndex = message.getInt(); // Get vine index from OSC message
+                if (vineIndex >= 0 && vineIndex < selectedVine.getOptions().length) {
+                    selectedVine.setValue(vineIndex);
+                }
+            } else if (address.startsWith("/vineWall/selectedLeaf")) {
+                int leafIndex = message.getInt(); // Get leaf index from OSC message
+                int vineIndex = selectedVine.getValuei();
+                if (vineIndex >= 0 && vineIndex < selectedLeaves.length) {
+                    DiscreteParameter leafParam = selectedLeaves[vineIndex];
+                    if (leafIndex >= 0 && leafIndex < leafParam.getRange()) {
+                        leafParam.setValue(leafIndex);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error processing OSC message: " + e.getMessage());
+        }
+    }
+}   
+
