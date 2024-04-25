@@ -4,6 +4,7 @@ import com.symmetrylabs.slstudio.cue.BlackoutProcedureCue;
 import com.symmetrylabs.slstudio.cue.Cue;
 import com.symmetrylabs.slstudio.cue.CueManager;
 import com.symmetrylabs.slstudio.cue.TriggerVezerCue;
+import com.symmetrylabs.slstudio.cue.AutomationCue;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.BoundedParameter;
 
@@ -25,6 +26,9 @@ public class CueWindow extends CloseableWindow {
 
     @Override
     protected void drawContents() {
+        if (UI.button("automation cue")){
+            this.cueManager.addCue(new AutomationCue(lx, new BoundedParameter("null")));
+        }
         if (UI.button("vezer cue")){
             this.cueManager.addCue(new TriggerVezerCue(lx, new BoundedParameter("null")));
         }
@@ -53,6 +57,10 @@ public class CueWindow extends CloseableWindow {
                 UI.pushColor(UI.COLOR_HEADER, UIConstants.PURPLE);
                 UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.PURPLE);
                 UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.PURPLE_HOVER);
+            } else if (cue instanceof AutomationCue) {
+                UI.pushColor(UI.COLOR_HEADER, UIConstants.GREEN);
+                UI.pushColor(UI.COLOR_HEADER_ACTIVE, UIConstants.GREEN);
+                UI.pushColor(UI.COLOR_HEADER_HOVERED, UIConstants.GREEN_HOVER);
             }
             else {
                 UI.pushColor(UI.COLOR_HEADER, 0xff665566);
@@ -69,6 +77,12 @@ public class CueWindow extends CloseableWindow {
                 pui.draw(cue.startAtStr);
                 if (cue instanceof TriggerVezerCue){
                     pui.draw( ((TriggerVezerCue) cue).showName );
+                    if (UI.button("remove" + "##" + cue.uid)){
+                        this.cueManager.removeCue(cue);
+                    }
+                    continue;
+                }
+                if (cue instanceof AutomationCue){
                     if (UI.button("remove" + "##" + cue.uid)){
                         this.cueManager.removeCue(cue);
                     }

@@ -7,6 +7,8 @@ public class UIConstants {
     public static final int BLUE_HOVER = 0xFF2EB5E1;
     public static final int RED = 0xFFF95951;
     public static final int RED_HOVER = 0xFFFA7770;
+    public static final int GREEN = 0xFF005500;
+    public static final int GREEN_HOVER = 0xFF006600;
     public static final int PURPLE = 0xFF930FA5;
     public static final int PURPLE_HOVER = 0xFFA63AB5;
 }

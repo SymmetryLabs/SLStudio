@@ -146,6 +146,9 @@ public class CueManager implements LXLoopTask, CaptionSource, SLStudioLX.SaveHoo
         }
 
         Cue cc = current.cue;
+        if (cc instanceof AutomationCue){
+            ((AutomationCue) cc).triggerAutomation();
+        }
         if (cc instanceof TriggerVezerCue){
             ((TriggerVezerCue) cc).triggerVezerShow(((TriggerVezerCue) cc).showName.getString());
         }
@@ -222,6 +225,9 @@ public class CueManager implements LXLoopTask, CaptionSource, SLStudioLX.SaveHoo
                 }
                 else if (cueObj.get("type").getAsString().equals((TriggerVezerCue.CUE_TYPE))){
                     c = new TriggerVezerCue(lx, new BoundedParameter("null"));
+                }
+                else if (cueObj.get("type").getAsString().equals((AutomationCue.CUE_TYPE))){
+                    c = new AutomationCue(lx, new BoundedParameter("null"));
                 }
                 else {
                     c = new Cue(lx.engine.output.brightness);
