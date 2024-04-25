@@ -196,7 +196,7 @@ public abstract class LXModulator extends LXRunnableComponent implements LXCompo
      * @param deltaMs Milliseconds to advance by
      */
     @Override
-    protected final void run(double deltaMs) {
+    public final void run(double deltaMs) {
         this.value = this.computeValue(deltaMs);
     }
 

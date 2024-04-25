@@ -1139,6 +1139,7 @@ public class EmpireWallShow implements Show {
 		// motionSensor.addListener(() -> {
 		// 	Channel channel = lx.engine.getChannel("Motion");
 		// });
+		motionSensor.start();
 	}
 
 	@Override

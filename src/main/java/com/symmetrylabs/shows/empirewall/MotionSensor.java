@@ -33,8 +33,8 @@ public class MotionSensor extends LXRunnableComponent {
 
     private int elapsedMillis = 0;
 
-    private final QuadraticEnvelope fadeIn = new QuadraticEnvelope(0, 1, 2000);
-    private final QuadraticEnvelope fadeOut = new QuadraticEnvelope(1, 0, 4000);
+    private final QuadraticEnvelope fadeIn = new QuadraticEnvelope(0, 1, 1500);
+    private final QuadraticEnvelope fadeOut = new QuadraticEnvelope(1, 0, 6000);
 
     private MotionSensor(LX lx, String ipAddress) {
         super("motionSensor");
@@ -72,29 +72,51 @@ public class MotionSensor extends LXRunnableComponent {
     }
 
     protected void run(double deltaMs) {
-        if ((elapsedMillis += deltaMs) > 5000) {
+        //System.out.println(elapsedMillis);
+        //System.out.println("MotionSensor.loop()");
+
+        fadeIn.run(deltaMs);
+        fadeOut.run(deltaMs);
+
+        LXChannel motion = lx.engine.getChannel("motion");
+        LXChannel ambient = lx.engine.getChannel("ambient");
+
+        if (elapsedMillis > 5000 && elapsedMillis < 5100 && !fadeOut.isRunning()) {
             fadeOut.trigger();
-            elapsedMillis = 0;
+            System.out.println("trigger fade out");
         }
 
         if (fadeIn.isRunning()) {
-            LXChannel motion = lx.engine.getChannel("motion");
             motion.fader.setValue(fadeIn.getValue());
-
-            LXChannel ambient = lx.engine.getChannel("ambient");
             ambient.fader.setValue(1 - fadeIn.getValue());
+
+            //System.out.println("In: " + fadeIn.getValue());
         }
 
         if (fadeOut.isRunning()) {
-            LXChannel motion = lx.engine.getChannel("motion");
-            motion.fader.setValue(1 - fadeIn.getValue());
+            if (fadeOut.getValue() < 1) {
+                motion.fader.setValue(fadeOut.getValue());
+                ambient.fader.setValue(1 - fadeOut.getValue());
+            }
 
-            LXChannel ambient = lx.engine.getChannel("ambient");
-            ambient.fader.setValue(fadeIn.getValue());
+            //System.out.println("Out: " + fadeOut.getValue());
+        }
+
+        elapsedMillis += deltaMs;
+
+        if (elapsedMillis > 11000) {
+            stop();
+            // motion.fader.setValue(0);
+            // ambient.fader.setValue(1);
+            elapsedMillis = 0;
         }
     }
 
     private void triggerEvent() {
+        if (isRunning()) {
+            return;
+        }
+
         for (Listener listener : listeners) {
             listener.onMotionDetected();
         }
@@ -107,6 +129,7 @@ public class MotionSensor extends LXRunnableComponent {
         fadeIn.reset();
         fadeOut.reset();
         fadeIn.trigger();
+        start();
     }
 
     private void makeStateRequest() {
@@ -131,7 +154,7 @@ public class MotionSensor extends LXRunnableComponent {
 
                     boolean newState = value == 1;
                     if (!lastState && newState) {
-                        triggerEvent();
+                        //triggerEvent();
                     }
                     lastState = newState;
                 }
