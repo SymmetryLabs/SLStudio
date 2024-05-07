@@ -41,17 +41,21 @@ public class MotionSensor extends LXRunnableComponent {
         this.lx = lx;
         this.ipAddress = ipAddress;
 
-        Runnable task = () -> {
-            while(true) {
-                //if (enabled.isEnabled()) {
-                    makeStateRequest();
-                    try {
-                        Thread.sleep(250);
-                    } catch (Exception e) {
-                    }
-                //}
+        boolean keepRunning = true;
+
+    Runnable task = () -> {
+        while (keepRunning) {
+            if (makeStateRequest()) {  // Assuming makeStateRequest returns a boolean indicating success
+              keepRunning = false; // Exit the loop on successful connection
+         }
+            try {
+               Thread.sleep(250);
+            } catch (InterruptedException e) {
+               keepRunning = false; // Exit loop on interrupt
+              Thread.currentThread().interrupt(); // Reset interrupted flag
             }
-        };
+        }
+    };
 
         // Create a new thread and start it
         Thread thread = new Thread(task);
@@ -132,45 +136,43 @@ public class MotionSensor extends LXRunnableComponent {
         start();
     }
 
-    private void makeStateRequest() {
-        if (ipAddress == null) {
-            return;
+    private boolean makeStateRequest() {
+    if (ipAddress == null) {
+        return false;
+    }
+
+    HttpURLConnection connection = null;
+    try {
+        URL url = new URL("http://" + ipAddress + "/getValue");
+        connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setConnectTimeout(2000);
+        connection.setReadTimeout(2000);
+
+        int responseCode = connection.getResponseCode();
+        if (responseCode == 200) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                String valueString = reader.readLine();
+                int value = Integer.parseInt(valueString);
+
+                boolean newState = value == 1;
+                lastState = newState;
+                return true; // Indicate a successful request
+            }
+        } else {
+            System.out.println("Motion Sensor: HTTP response code " + responseCode);
+            return false;
         }
-
-        HttpURLConnection connection = null;
-
-        try {
-            URL url = new URL("http://" + ipAddress + "/getValue");
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setConnectTimeout(2000); // 5-second timeout for connecting
-            connection.setReadTimeout(2000);   // 5-second timeout for reading response
-
-            int responseCode = connection.getResponseCode();
-            if (responseCode == 200) {
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-                    String valueString = reader.readLine();
-                    int value = Integer.parseInt(valueString);
-
-                    boolean newState = value == 1;
-                    if (!lastState && newState) {
-                        //triggerEvent();
-                    }
-                    lastState = newState;
-                }
-            } else {
-                System.out.println("Motion Sensor: HTTP response code " + responseCode);
-            }
-
-        } catch (IOException e) {
-            System.out.println("Motion Sensor: Error making HTTP request - " + e.getMessage());
-
-        } finally {
-            if (connection != null) {
-                connection.disconnect(); // Ensure disconnection even with errors
-            }
+    } catch (IOException e) {
+        System.out.println("Motion Sensor: Error making HTTP request - " + e.getMessage());
+        return false;
+    } finally {
+        if (connection != null) {
+            connection.disconnect();
         }
     }
+}
+
 
     public void addListener(Listener listener) {
 		if (!listeners.contains(listener)) {
