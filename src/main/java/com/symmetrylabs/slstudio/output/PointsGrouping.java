@@ -10,35 +10,35 @@ import java.util.List;
 
 public class PointsGrouping {
     public final static boolean REVERSE_ORDERING = true;
-
     public String id;
     private final List<LXPoint> points = new ArrayList<LXPoint>();
 
     public PointsGrouping() {
-        this("no-humanID");
+        this("0");
     }
 
     public PointsGrouping(String id) {
-        this.id = id;
+        this.id = isValidInteger(id) ? id : "0";
     }
 
     public PointsGrouping(List<LXPoint> points) {
-        this("no-humanID", points);
+        this("0", points);
     }
 
     public PointsGrouping(LXPoint[] points) {
-        this("ni-humanID", points);
+        this("0", points);
     }
 
     public PointsGrouping(String id, List<LXPoint> points) {
-        this.id = id;
+        this.id = isValidInteger(id) ? id : "0";
         addPoints(points);
     }
 
     public PointsGrouping(String id, LXPoint[] points) {
-        this.id = id;
+        this.id = isValidInteger(id) ? id : "0";
         addPoints(points);
     }
+
 
     public List<LXPoint> getPoints() {
         return points;
@@ -101,4 +101,17 @@ public class PointsGrouping {
     public void addPoint(LXPoint point) {
         points.add(point);
     }
+    private boolean isValidInteger(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }
+
+

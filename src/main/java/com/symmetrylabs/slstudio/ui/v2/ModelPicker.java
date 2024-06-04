@@ -54,14 +54,21 @@ public class ModelPicker implements Window {
     }
 
     protected void buildPickPoints() {
-        pickPoints.clear();
-        for (LXPoint p : model.points) {
-            PickPoint pp = new PickPoint(p);
-            Preconditions.checkState(p.index == pickPoints.size());
-            pickPoints.add(pp);
-        }
-        recursePickPoints(-1, null, model);
+    pickPoints.clear();
+    int maxIndex = 0;
+    for (LXPoint p : model.points) {
+        maxIndex = Math.max(maxIndex, p.index);
     }
+    pickPoints.ensureCapacity(maxIndex + 1);
+    for (int i = 0; i <= maxIndex; i++) {
+        pickPoints.add(null);
+    }
+    for (LXPoint p : model.points) {
+        PickPoint pp = new PickPoint(p);
+        pickPoints.set(p.index, pp);
+    }
+    recursePickPoints(-1, null, model);
+}
 
     protected void recursePickPoints(int index, String prefix, LXFixture fix) {
         String id = null;

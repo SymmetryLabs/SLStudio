@@ -32,7 +32,7 @@ public class Awaken extends SLPattern<SLModel> {
     private final BooleanParameter refillParam = new BooleanParameter("refill", true);
     private final BooleanParameter triggerParam =
         new BooleanParameter("trigger", false).setMode(BooleanParameter.Mode.MOMENTARY);
-    private final BooleanParameter resetParam =
+    private final BooleanParameter resetParam =elapsedMs
         new BooleanParameter("reset", false).setMode(BooleanParameter.Mode.MOMENTARY);
 
     private final Random rand = new Random();
