@@ -8,6 +8,7 @@ import com.symmetrylabs.slstudio.output.SimplePixlite;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.shows.hhgarden.FlowerModel;
 import com.symmetrylabs.shows.mikey.ParagonModelConfig;
+import heronarts.lx.model.LXAbstractFixture;
 
 import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.LX;
@@ -41,11 +42,18 @@ public class MikeyShow implements Show {
                     flowers.addAll(recursiveModelBuilder(f, t));
                 }
             }
-            SLModel flowersModel = new SLModel(SHOW_NAME, flowers);
-            return flowersModel;
+            return new SLModel(SHOW_NAME, new FlowerFixture(flowers));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    private static class FlowerFixture extends LXAbstractFixture {
+        public FlowerFixture(List<FlowerModel> models) {
+            for (FlowerModel model : models) {
+                points.addAll(model.getPoints());
+            }
         }
     }
 
@@ -64,10 +72,19 @@ public class MikeyShow implements Show {
         return flowers;
     }
 
+    // private static class Fixture extends LXAbstractFixture {
+    //     private Fixture(List<FlowerModel> flowers) {
+    //         for (Flower flower : flowers) {
+    //             for (LXPoint p : flower.points) {
+    //                 this.points.add(p);
+    //             }
+    //         }
+    //     }
+    // }
+
 
     @Override
     public void setupLx(LX lx) {
-    SLModel flowers = (SLModel) (lx.model);        
     // MikeyPixlite pixlite = new MikeyPixlite(lx, "10.200.1.100");
     //     pixlite.configureOutputs(model);
     //     lx.addOutput(pixlite);
