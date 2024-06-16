@@ -366,13 +366,38 @@ public class PaletteLibrary {
                     new NonuniformGradientPalette.Point(0xEAE6CA, 1.00),
                 }));
         pl.put("rainbow", new NonuniformGradientPalette(new NonuniformGradientPalette.Point[] {
-                    new NonuniformGradientPalette.Point(0xFF0000, 0.00),
-                    new NonuniformGradientPalette.Point(0xFFFF00, 0.40),
-                    new NonuniformGradientPalette.Point(0x00FF00, 0.50),
-                    new NonuniformGradientPalette.Point(0x00FFFF, 0.60),
-                    new NonuniformGradientPalette.Point(0x0000FF, 0.70),
-                    new NonuniformGradientPalette.Point(0xFF00FF, 0.90),
-                    new NonuniformGradientPalette.Point(0xFF0000, 1.00),
-                }));
+                new NonuniformGradientPalette.Point(0xFFFFFF, 0.00), //0xFF0000
+                new NonuniformGradientPalette.Point(0xFFFF00, 0.40),
+                new NonuniformGradientPalette.Point(0x00FF00, 0.50),
+                new NonuniformGradientPalette.Point(0x00FFFF, 0.60),
+                new NonuniformGradientPalette.Point(0x0000FF, 0.70),
+                new NonuniformGradientPalette.Point(0xFF00FF, 0.90),
+                new NonuniformGradientPalette.Point(0xFFFFFF, 1.00),
+            }));
+        pl.put("rainbow2", new NonuniformGradientPalette(new NonuniformGradientPalette.Point[] {
+            new NonuniformGradientPalette.Point(0x000000, 0.00), //0xFF0000
+            new NonuniformGradientPalette.Point(0xFFFF00, 0.40),
+            new NonuniformGradientPalette.Point(0x00FF00, 0.50),
+            new NonuniformGradientPalette.Point(0x00FFFF, 0.60),
+            new NonuniformGradientPalette.Point(0x0000FF, 0.70),
+            new NonuniformGradientPalette.Point(0xFF00FF, 0.90),
+            new NonuniformGradientPalette.Point(0x000000, 1.00),
+        }));
+        pl.put("rainbow3", new NonuniformGradientPalette(new NonuniformGradientPalette.Point[] {
+            new NonuniformGradientPalette.Point(0xff0000, 0.0),
+            new NonuniformGradientPalette.Point(0x00ff00, 0.5),
+            // new NonuniformGradientPalette.Point(0x00ff00, 0.66),
+            new NonuniformGradientPalette.Point(0x0000ff, 1.0),
+            // new NonuniformGradientPalette.Point(0xe63946, 0.0),
+            // new NonuniformGradientPalette.Point(0xf1faee, 0.25),
+            // new NonuniformGradientPalette.Point(0xa8dadc, 0.5),
+            // new NonuniformGradientPalette.Point(0x457b9d, 0.75),
+            // new NonuniformGradientPalette.Point(0x1d3557, 1.0),
+        }));
+        pl.put("rainbow4", new NonuniformGradientPalette(new NonuniformGradientPalette.Point[] {
+                new NonuniformGradientPalette.Point(0xFFFFFF, 0.0), //0xFF0000
+                new NonuniformGradientPalette.Point(0x000000, 0.5),
+                new NonuniformGradientPalette.Point(0xFFFFFF, 1.0),
+            }));
     }
 }

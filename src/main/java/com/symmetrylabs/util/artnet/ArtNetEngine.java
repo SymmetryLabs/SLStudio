@@ -42,7 +42,7 @@ public class ArtNetEngine extends LXComponent {
     private final static String LONG_NAME = "SLStudio";
 
     public final DiscreteParameter subNet = (DiscreteParameter)
-                    new DiscreteParameter("SubNet", DEFAULT_SUBNET, 0, 15)
+                    new DiscreteParameter("SubNet", DEFAULT_SUBNET, 0, 23)
                                     .setDescription("SubNet on which the engine sends and receives Art-Net messages")
                                     .setUnits(LXParameter.Units.INTEGER);
 

@@ -16,6 +16,7 @@ public class Spectrum extends SLPattern<SLModel> {
     private final CompoundParameter bright =
         new CompoundParameter("bright", 100, 100);
     private double hue;
+    private final CompoundParameter vectorCount = new CompoundParameter("vectorCount", 0, 300);
 
     public Spectrum(LX lx) {
         super(lx);
@@ -28,9 +29,22 @@ public class Spectrum extends SLPattern<SLModel> {
         hue += degPerSec.getValue() * elapsedMs / 1000.;
         final int color = LXColor.hsb((float) hue, sat.getValuef(), bright.getValuef());
         int[] colors = (int[]) getArray(PolyBuffer.Space.RGB8);
-        for (LXVector v : getVectors()) {
-            colors[v.index] = color;
+        int count = 0;
+
+        for (LXVector v : getVectors())
+        {
+            if (count < degPerSec.getValuef())
+            {
+                colors[v.index] = color;
+                // System.out.println(v.index);
+            }else
+            {
+                colors[v.index] = 0;
+            }
+            count += 1;
+            // System.out.println(color);
         }
+
         markModified(PolyBuffer.Space.RGB8);
     }
 }

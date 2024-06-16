@@ -36,273 +36,69 @@ public class MikeyShow implements Show {
             super(SHOW_NAME, strips);
         }
 
-        public static MikeyModel create() {
-            int barAngle = -60;
-            int spacing = -60;
-            int verticalBar = 22;
-            int horizontalBar = 24;
+        public static MikeyModel create()
+        {
             List<Strip> strips = new ArrayList<Strip>();
             LXTransform t = new LXTransform();
-            Strip.Metrics metrics1 = new Strip.Metrics(1, 1); //strip config
-            Strip.Metrics metrics2 = new Strip.Metrics(2, 1); //strip config
-            Strip.Metrics metrics3 = new Strip.Metrics(3, 1); //strip config
-            Strip.Metrics metrics4 = new Strip.Metrics(4, 1); //strip config
 
-            Strip.Metrics metrics5 = new Strip.Metrics(5, 1); //strip config
-            Strip.Metrics metrics6 = new Strip.Metrics(6, 1); //strip config
+            int sideLengths[] = {3,4,4,3,4,4,3,4,3,4,4,3,4,4,3,4,3,4,4,3,4,4,3,4,4,3,4,4,3,4,4,3,4,3,4,4,4,3,4,3,4,4,3,4,4,3,4,4,3,4,4,3,4,4,3,4,4,3,4,4,3,4,3,4,4,3,4,4,3,4,4,4,3,4,3,4,4,3,4,3};
 
-            //Strip A1
-            t.push();
-            t.translate(0, 0, 0);
-            t.rotateZ(1.5708*2);
-            Strip strip1 = new Strip("1", metrics3, t);         //create the first strip
-            strips.add(strip1);
-            t.pop();
+            // rotate starting position 180
+            t.rotateZ(3.15); // 180 == 3.142
+            // 3.06 to far left
+            // 3.0 is more left
+            // 3.1 too far left
+            // 3.5 way too far right
+            // 3.2 too far right
+            // 3.15  close enough
 
-            //Strip A2
-            t.push();
-            t.translate(-2, 0, -.5f);
-            t.rotateY(1.5708);
-            Strip strip2 = new Strip("1", metrics4, t);         //create the first strip
-            strips.add(strip2);
-            t.pop();
+            // sides
+            for (int len : sideLengths)
+            {
+                t.rotateZ(-0.05f); // rotate up
+                t.translate(5 - len,0,0); // move to start of strip
+                strips.add(new Strip("1", new Strip.Metrics(len, 1), t)); // add strip
+                t.translate(len,0,0); // move to end of strip
+                t.rotateZ(0.05f); // rotate down
+                t.rotateY(1.5708); // rotate 90
+            }
 
-            t.push();
-            t.translate(-2, 0, -3.5f);
-            t.rotateY(0);
-            Strip strip3 = new Strip("1", metrics4, t);         //create the first strip
-            strips.add(strip3);
-            t.pop();
+            // top
+            int topLengths[] = {2,2,2,2};
 
-            t.push();
-            t.translate(1, 0, -2.5f);
-            t.rotateY(-1.5708);
-            Strip strip4 = new Strip("1", metrics3, t);         //create the first strip
-            strips.add(strip4);
-            t.pop();
+            // t.rotateY(1.5708);
+            t.translate(1,-0.5f,-1);
 
-            t.translate(0, 1, 0);
-
-            //Loop 2
-            //Strip A1
-            t.push();
-            t.translate(0, 0, 0);
-            t.rotateZ(1.5708*2);
-            Strip strip5 = new Strip("1", metrics3, t);         //create the first strip
-            strips.add(strip5);
-            t.pop();
-
-            //Strip A2
-            t.push();
-            t.translate(-2, 0, -.5f);
-            t.rotateY(1.5708);
-            Strip strip6 = new Strip("1", metrics4, t);         //create the first strip
-            strips.add(strip6);
-            t.pop();
-
-            t.push();
-            t.translate(-2, 0, -3.5f);
-            t.rotateY(0);
-            Strip strip7 = new Strip("1", metrics4, t);         //create the first strip
-            strips.add(strip7);
-            t.pop();
-
-            t.push();
-            t.translate(1, 0, -2.5f);
-            t.rotateY(-1.5708);
-            Strip strip8 = new Strip("1", metrics3, t);         //create the first strip
-            strips.add(strip8);
-            t.pop();
-
-            // t.push();
-            // t.translate(horizontalBar, 0, 0);
-            // t.rotateZ(45);
-            // t.translate(((horizontalBar*3)*1.5f)+15, 0, 0);
-            // t.rotateZ(-45+90+45);
-            // Strip strip3 = new Strip("1", metricsS1, t);         //create the second strip
-            // strips.add(strip3);                                                  //add the first strip to strip array
-            // t.pop();
-
-            // //OUTPUT A3
-            // t.push();
-            // t.translate(horizontalBar*2, 0, 0);
-            // t.rotateZ(45);
-            // Strip strip4 = new Strip("1", metricsL10, t);         //create the turn in the first strip
-            // strips.add(strip4);
-            // t.pop();
-
-            // t.push();
-            // t.translate(horizontalBar*2, 0, 0);
-            // t.rotateZ(45);
-            // t.translate((verticalBar*2)+12, 0, 0);
-            // t.rotateZ(-45+90+45);
-            // Strip strip5 = new Strip("1", metricsS2, t);         //create the second strip
-            // strips.add(strip5);                                                  //add the first strip to strip array
-            // t.pop();
-
-            // //OUTPUT A4
-            // t.push();
-            // t.translate(horizontalBar*3, 0, 0);
-            // t.rotateZ(45);
-            // Strip strip6 = new Strip("1", metricsL1, t);         //create the turn in the first strip
-            // strips.add(strip6);
-            // t.pop();
-
-            // t.push();
-            // t.translate(horizontalBar*3, 0, 0);
-            // t.rotateZ(45);
-            // t.translate(horizontalBar*1, 0, 0);
-            // t.rotateZ(-45+90+45);
-            // Strip strip7 = new Strip("1", metricsS3, t);         //create the second strip
-            // strips.add(strip7);                                                  //add the first strip to strip array
-            // t.pop();
-
-            // //OUTPUT A5
-            // t.push();
-            // t.translate(0, 0, 0);
-            // t.rotateZ(0);
-            // Strip strip8 = new Strip("1", metricsS3, t);         //create the turn in the first strip
-            // strips.add(strip8);
-            // t.pop();
-
-            // //OUTPUT B1
-            // t.push();
-            // t.translate(horizontalBar*4, 0, 0);
-            // t.rotateZ(90);
-            // Strip strip9 = new Strip("1", metricsL1, t);         //create the turn in the first strip
-            // strips.add(strip9);
-            // t.pop();
-
-            // t.push();
-            // t.translate(horizontalBar*4, 0, 0);
-            // t.rotateZ(90);
-            // t.translate(horizontalBar*1, 0, 0);
-            // t.rotateZ(-90);
-            // Strip strip10 = new Strip("1", metricsS3, t);         //create the second strip
-            // strips.add(strip10);                                                  //add the first strip to strip array
-            // t.pop();
-
-            // //OUTPUT B2
-            // t.push();
-            // t.translate(horizontalBar*5, 0, 0);
-            // t.rotateZ(90);
-            // Strip strip11 = new Strip("1", metricsL10, t);         //create the turn in the first strip
-            // strips.add(strip11);
-            // t.pop();
-
-            // // t.push();
-            // // t.translate(horizontalBar*5, 0, 0);
-            // // t.rotateZ(90);
-            // // t.translate((verticalBar*2)+8, 0, 0);
-            // // t.rotateZ(-90);
-            // // Strip strip12 = new Strip("1", metricsS2, t);         //create the second strip
-            // // strips.add(strip12);                                                  //add the first strip to strip array
-            // // t.pop();
-
-            // //OUTPUT B3
-            // t.push();
-            // t.translate(horizontalBar*6, 0, 0);
-            // t.rotateZ(90);
-            // Strip strip13 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
-            // strips.add(strip13);
-            // t.pop();
-
-            // t.push();
-            // t.translate(horizontalBar*6, 0, 0);
-            // t.rotateZ(90);
-            // t.translate(((horizontalBar*3)*1.5f)+10, 0, 0);
-            // t.rotateZ(-90);
-            // Strip strip14 = new Strip("1", metricsS2, t);         //create the second strip
-            // strips.add(strip14);                                                  //add the first strip to strip array
-            // t.pop();
-
-            // //OUTPUT B4
-            // t.push();
-            // t.translate(horizontalBar*7, 0, 0);
-            // t.rotateZ(90);
-            // Strip strip15 = new Strip("1", metricsL4W, t);         //create the turn in the first strip
-            // strips.add(strip15);
-            // t.pop();
-
-            // //OUTPUT B5
-            // t.push();
-            // t.translate(horizontalBar*7, 0, 0);
-            // t.rotateZ(135.1f);
-            // Strip strip16 = new Strip("1", metricsL10, t);         //create the turn in the first strip
-            // strips.add(strip16);
-            // t.pop();
-
-            // //OUTPUT B4
-            // t.push();
-            // t.translate(horizontalBar*8, 0, 0);
-            // t.rotateZ(90);
-            // Strip strip17 = new Strip("1", metricsL10, t);         //create the turn in the first strip
-            // strips.add(strip17);
-            // t.pop();
-
-            // //OUTPUT B5
-            // t.push();
-            // t.translate(horizontalBar*9, 0, 0);
-            // t.rotateZ(135.1f);
-            // Strip strip18 = new Strip("1", metricsL10, t);         //create the turn in the first strip
-            // strips.add(strip18);
-            // t.pop();
-            // //OUTPUT B5
-            // t.push();
-            // t.translate(horizontalBar*10, 0, 0);
-            // t.rotateZ(135.1f);
-            // Strip strip19 = new Strip("1", metricsL10, t);         //create the turn in the first strip
-            // strips.add(strip19);
-            // t.pop();
+            for (int len : topLengths)
+            {
+                t.translate(1,0,0);
+                strips.add(new Strip("1", new Strip.Metrics(len, 1), t));
+                t.translate(len,0,0);
+                t.rotateY(1.5708);
+            }
 
             return new MikeyModel(strips);
         }
     }
-    static class MikeyPixlite extends SimplePixlite {
+    static class MikeyPixlite extends SimplePixlite{
         public MikeyPixlite(LX lx, String ip, MikeyModel model) {
             super(lx, ip);
-            // for (int i = startStrip; i <= endStrip; i++){
-            //     addPixliteOutput(
-            //     new PointsGrouping((i+1)+"").addPoints(model.getStripByIndex(i).getPoints()));
-            // }
-            //A
-            addPixliteOutput(
-                new PointsGrouping("1")
-                .addPoints(model.getStripByIndex(0).getPoints())
-                .addPoints(model.getStripByIndex(1).getPoints())
-                .addPoints(model.getStripByIndex(2).getPoints())
-                .addPoints(model.getStripByIndex(3).getPoints())
-                .addPoints(model.getStripByIndex(4).getPoints())
-                .addPoints(model.getStripByIndex(5).getPoints())
-                .addPoints(model.getStripByIndex(6).getPoints())
-                .addPoints(model.getStripByIndex(7).getPoints())
-            );
-            // addPixliteOutput(
-            //     new PointsGrouping("2").addPoints(model.getStripByIndex(1).getPoints()).addPoints(model.getStripByIndex(2).getPoints()));
-            // addPixliteOutput(
-            //     new PointsGrouping("3").addPoints(model.getStripByIndex(3).getPoints()).addPoints(model.getStripByIndex(4).getPoints()));
-            // addPixliteOutput(
-            //     new PointsGrouping("6").addPoints(model.getStripByIndex(5).getPoints()).addPoints(model.getStripByIndex(6).getPoints()));
-            // addPixliteOutput(
-            //     new PointsGrouping("5").addPoints(model.getStripByIndex(7).getPoints()));
-            // //B
-            // addPixliteOutput(
-            //     new PointsGrouping("16").addPoints(model.getStripByIndex(8).getPoints()).addPoints(model.getStripByIndex(9).getPoints()));
-            // addPixliteOutput(
-            //     new PointsGrouping("7").addPoints(model.getStripByIndex(10).getPoints()).addPoints(model.getStripByIndex(11).getPoints()));
-            // addPixliteOutput(
-            //     new PointsGrouping("14").addPoints(model.getStripByIndex(12).getPoints()));
-            // addPixliteOutput(
-            //     new PointsGrouping("9").addPoints(model.getStripByIndex(13).getPoints()));
-            // addPixliteOutput(
-            //     new PointsGrouping("10").addPoints(model.getStripByIndex(14).getPoints()));
-            // addPixliteOutput(
-            //     new PointsGrouping("11").addPoints(model.getStripByIndex(15).getPoints()));
-            // addPixliteOutput(
-            //     new PointsGrouping("15").addPoints(model.getStripByIndex(16).getPoints()));
-            // addPixliteOutput(
-            //     new PointsGrouping("12").addPoints(model.getStripByIndex(17).getPoints()));
 
+            PointsGrouping grouping = new PointsGrouping("1");
+
+            for (int i=0; i<84; i++)
+            {
+                grouping.addPoints(model.getStripByIndex(i).getPoints());
+            }
+
+            addPixliteOutput(grouping);
+
+
+            // addPixliteOutput(
+            //     new PointsGrouping("1")
+            //     .addPoints(model.getStripByIndex(0).getPoints())
+            //     .addPoints(model.getStripByIndex(1).getPoints())
+            // );
         }
 
         @Override
