@@ -8,6 +8,7 @@ import com.symmetrylabs.slstudio.output.SimplePixlite;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.shows.mikey.ForestFlowerModel; 
 import com.symmetrylabs.shows.mikey.ParagonModelConfig;
+import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXAbstractFixture;
 
 import com.symmetrylabs.slstudio.model.SLModel;
@@ -31,15 +32,33 @@ public class MikeyShow implements Show {
     public SLModel buildModel() {
         try {
             ParagonModelConfig config = ParagonModelConfig.load();
+            System.out.println("Loaded ParagonModelConfig");
+
+            if (config == null) {
+                System.out.println("Config is null");
+                return null;
+            }
+
+            ParagonModelConfig.ConfigModel modelConfig = config.model;
+            if (modelConfig == null) {
+                System.out.println("Model config is null");
+                return null;
+            }
+
+            if (modelConfig.fixtures == null) {
+                System.out.println("Model config fixtures are null");
+                return null;
+            }
+
             List<ForestFlowerModel> flowers = new ArrayList<>();
             LXTransform t = new LXTransform();
 
-            ParagonModelConfig.ConfigModel modelConfig = config.model;
-            if (modelConfig != null && modelConfig.fixtures != null) {
-                for (ParagonModelConfig.ConfigFixture f : modelConfig.fixtures) {
-                    flowers.addAll(recursiveModelBuilder(f, t));
-                }
+            System.out.println("Number of fixtures: " + modelConfig.fixtures.length);
+            for (ParagonModelConfig.ConfigFixture f : modelConfig.fixtures) {
+                System.out.println("Processing fixture: " + f.label + " with fixture type: " + f.fixtureType);
+                flowers.addAll(recursiveModelBuilder(f, t));
             }
+
             SLModel model = new SLModel(SHOW_NAME, new FlowerFixture(flowers));
             System.out.println("SLModel created with " + model.getPoints().size() + " points.");
             return model;
@@ -52,13 +71,16 @@ public class MikeyShow implements Show {
     private static class FlowerFixture extends LXAbstractFixture {
         public FlowerFixture(List<ForestFlowerModel> models) {
             for (ForestFlowerModel model : models) {
-                points.addAll(model.getPoints());
+                List<LXPoint> modelPoints = model.getPoints();
+                System.out.println("Adding " + modelPoints.size() + " points from ForestFlowerModel to FlowerFixture.");
+                points.addAll(modelPoints);
             }
             System.out.println("FlowerFixture created with " + points.size() + " points.");
         }
     }
 
     private List<ForestFlowerModel> recursiveModelBuilder(ParagonModelConfig.ConfigFixture f, LXTransform t) {
+        System.out.println("Entering recursiveModelBuilder for fixture: " + f.label);
         List<ForestFlowerModel> flowers = new ArrayList<>();
         t.push(new LXMatrix(f.origin));
         if ("flower".equals(f.fixtureType)) {
@@ -71,7 +93,6 @@ public class MikeyShow implements Show {
             }
         }
         t.pop();
-
         return flowers;
     }
 

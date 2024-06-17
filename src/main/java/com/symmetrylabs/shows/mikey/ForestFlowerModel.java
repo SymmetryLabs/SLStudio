@@ -33,6 +33,7 @@ public class ForestFlowerModel {
     }
 
     public List<LXPoint> getPoints() {
+        System.out.println("Returning " + points.size() + " points from ForestFlowerModel.");
         return points;
     }
 }

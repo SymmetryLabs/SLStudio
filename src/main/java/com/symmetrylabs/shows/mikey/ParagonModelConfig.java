@@ -53,9 +53,21 @@ public class ParagonModelConfig {
                 return null;
             }
             Gson gson = new Gson();
-            ConfigModel model = gson.fromJson(new InputStreamReader(is), ConfigModel.class);
+            ParagonModelConfig config = gson.fromJson(new InputStreamReader(is), ParagonModelConfig.class);
             System.out.println("Successfully loaded model from resource");
-            return new ParagonModelConfig(model);
+
+            if (config.model == null) {
+                System.err.println("Model is null");
+            } else {
+                System.out.println("Model type: " + config.model.type);
+                System.out.println("Model label: " + config.model.label);
+                if (config.model.fixtures == null) {
+                    System.err.println("Model fixtures are null");
+                } else {
+                    System.out.println("Number of fixtures: " + config.model.fixtures.length);
+                }
+            }
+            return config;
         } catch (IOException | JsonSyntaxException e) {
             e.printStackTrace();
             return null;
