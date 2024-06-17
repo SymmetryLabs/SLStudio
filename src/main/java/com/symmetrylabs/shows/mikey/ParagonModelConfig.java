@@ -1,6 +1,10 @@
 package com.symmetrylabs.shows.mikey;
 
-import com.symmetrylabs.util.FileUtils;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.IOException;
 
 public class ParagonModelConfig {
     public final ConfigModel model;
@@ -40,6 +44,21 @@ public class ParagonModelConfig {
     }
 
     public static ParagonModelConfig load() {
-        return FileUtils.readShowJson("formatted.pgm", ParagonModelConfig.class);
+        String resourcePath = "/formatted.pgm";
+        System.out.println("Attempting to load resource from path: " + resourcePath);
+
+        try (InputStream is = ParagonModelConfig.class.getResourceAsStream(resourcePath)) {
+            if (is == null) {
+                System.err.println("Resource not found: " + resourcePath);
+                return null;
+            }
+            Gson gson = new Gson();
+            ConfigModel model = gson.fromJson(new InputStreamReader(is), ConfigModel.class);
+            System.out.println("Successfully loaded model from resource");
+            return new ParagonModelConfig(model);
+        } catch (IOException | JsonSyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
