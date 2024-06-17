@@ -7,15 +7,18 @@ import java.util.List;
 
 public class ForestFlowerModel {
     private List<LXPoint> points;
+    private String id;
 
-    public ForestFlowerModel(LXTransform transform) {
+    public ForestFlowerModel(LXTransform transform, String id) {
+        this.id = id;
         this.points = new ArrayList<>();
         createPoints(transform);
         System.out.println("Created ForestFlowerModel with " + points.size() + " points.");
+
     }
 
     private void createPoints(LXTransform transform) {
-        int numPetals = 6;
+        int numPetals = 7;
         float radius = 1.0f;
 
         for (int i = 0; i < numPetals; i++) {
@@ -27,13 +30,17 @@ public class ForestFlowerModel {
             transform.translate(x, y, 0);
             LXPoint point = new LXPoint(transform.x(), transform.y(), transform.z());
             points.add(point);
-            System.out.println("Created point at: (" + point.x + ", " + point.y + ", " + point.z + ")");
+            // System.out.println("Created point at: (" + point.x + ", " + point.y + ", " + point.z + ")");
             transform.pop();
         }
     }
 
     public List<LXPoint> getPoints() {
-        System.out.println("Returning " + points.size() + " points from ForestFlowerModel.");
+        // System.out.println("Returning " + points.size() + " points from ForestFlowerModel.");
         return points;
+    }
+
+    public String getId() {
+        return id;
     }
 }

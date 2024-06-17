@@ -72,21 +72,23 @@ public class MikeyShow implements Show {
         public FlowerFixture(List<ForestFlowerModel> models) {
             for (ForestFlowerModel model : models) {
                 List<LXPoint> modelPoints = model.getPoints();
-                System.out.println("Adding " + modelPoints.size() + " points from ForestFlowerModel to FlowerFixture.");
+                // System.out.println("Adding " + modelPoints.size() + " points from ForestFlowerModel to FlowerFixture.");
                 points.addAll(modelPoints);
             }
-            System.out.println("FlowerFixture created with " + points.size() + " points.");
+            // System.out.println("FlowerFixture created with " + points.size() + " points.");
         }
     }
 
     private List<ForestFlowerModel> recursiveModelBuilder(ParagonModelConfig.ConfigFixture f, LXTransform t) {
-        System.out.println("Entering recursiveModelBuilder for fixture: " + f.label);
+        // System.out.println("Entering recursiveModelBuilder for fixture: " + f.label);
         List<ForestFlowerModel> flowers = new ArrayList<>();
         t.push(new LXMatrix(f.origin));
         if ("flower".equals(f.fixtureType)) {
-            ForestFlowerModel flowerModel = new ForestFlowerModel(t);
+            ForestFlowerModel flowerModel = new ForestFlowerModel(t, f.id);
+            String flowerId = flowerModel.getId();
+            System.out.println("FlowerModel created with id: " + flowerId);
             flowers.add(flowerModel);
-            System.out.println("Added ForestFlowerModel with " + flowerModel.getPoints().size() + " points.");
+            // System.out.println("Added ForestFlowerModel with " + flowerModel.getPoints().size() + " points.");
         } else {
             for (ParagonModelConfig.ConfigFixture cf : f.fixtures) {
                 flowers.addAll(recursiveModelBuilder(cf, t));
