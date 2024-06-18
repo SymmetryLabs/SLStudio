@@ -199,12 +199,12 @@ public class LXOscEngine extends LXComponent {
                                 channel.goPattern(LXChannel.allPatterns.get("Blinders[Channel-9 | Blinders]"));
                             }
                             break;
-                        case ("Bubbles"):
-                            if (LXChannel.allPatterns.get("Bubbles[Channel-9 | Bubbles]").autoCycleEligible.isOn()) {
-                                LXChannel.allPatterns.get("Bubbles[Channel-9 | Bubbles]").autoCycleEligible.toggle();
+                        case ("BassPod"):
+                            if (LXChannel.allPatterns.get("BassPod[Channel-9 | BassPod]").autoCycleEligible.isOn()) {
+                                LXChannel.allPatterns.get("BassPod[Channel-9 | BassPod]").autoCycleEligible.toggle();
                             } else {
-                                LXChannel.allPatterns.get("Bubbles[Channel-9 | Bubbles]").toggleAutoCycleEligible();
-                                channel.goPattern(LXChannel.allPatterns.get("Bubbles[Channel-9 | Bubbles]"));
+                                LXChannel.allPatterns.get("BassPod[Channel-9 | BassPod]").toggleAutoCycleEligible();
+                                channel.goPattern(LXChannel.allPatterns.get("BassPod[Channel-9 | BassPod]"));
                             }
                             break;
                         case ("BouncyBalls"):
@@ -516,8 +516,8 @@ public class LXOscEngine extends LXComponent {
                         case ("Blinders"):
                             channel.goPattern(LXChannel.allPatterns.get("Blinders[Channel-9 | Blinders]"));
                             break;
-                        case ("Bubbles"):
-                            channel.goPattern(LXChannel.allPatterns.get("Bubbles[Channel-9 | Bubbles]"));
+                        case ("BassPod"):
+                            channel.goPattern(LXChannel.allPatterns.get("BassPod[Channel-9 | BassPod]"));
                             break;
                         case ("BouncyBalls"):
                             channel.goPattern(LXChannel.allPatterns.get("BouncyBalls[Channel-9 | BouncyBalls]"));
