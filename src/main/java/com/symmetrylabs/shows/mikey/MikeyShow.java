@@ -2,31 +2,20 @@ package com.symmetrylabs.shows.mikey;
 
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.output.SimplePixlite;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
-import com.symmetrylabs.shows.mikey.ForestFlowerModel; 
-import com.symmetrylabs.shows.mikey.ParagonModelConfig;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXFixture;
+import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXAbstractFixture;
-
-import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.LX;
 import heronarts.lx.transform.LXTransform;
 import heronarts.lx.transform.LXMatrix;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Collections; // Import added for singletonList
 
-public class MikeyShow implements Show  {
+public class MikeyShow implements Show {
     public static final String SHOW_NAME = "mikey";
 
     @Override
@@ -80,13 +69,13 @@ public class MikeyShow implements Show  {
                 points.addAll(modelPoints);
             }
         }
-    public List<ForestFlowerModel> getFlowerModels() {
+
+        public List<ForestFlowerModel> getFlowerModels() {
             return flowerModels;
         }
     }
 
     private List<ForestFlowerModel> recursiveModelBuilder(ParagonModelConfig.ConfigFixture f, LXTransform t) {
-        // System.out.println("Entering recursiveModelBuilder for fixture: " + f.label);
         List<ForestFlowerModel> flowers = new ArrayList<>();
         t.push(new LXMatrix(f.origin));
         if ("flower".equals(f.fixtureType)) {
@@ -94,7 +83,6 @@ public class MikeyShow implements Show  {
             String flowerId = flowerModel.getId();
             System.out.println("FlowerModel created with id: " + flowerId);
             flowers.add(flowerModel);
-            // System.out.println("Added ForestFlowerModel with " + flowerModel.getPoints().size() + " points.");
         } else {
             for (ParagonModelConfig.ConfigFixture cf : f.fixtures) {
                 flowers.addAll(recursiveModelBuilder(cf, t));
@@ -106,69 +94,84 @@ public class MikeyShow implements Show  {
 
     @Override
     public void setupLx(LX lx) {
-    // Create an array of IP addresses for the 8 Pixlites
+        // Create an array of IP addresses for the 8 Pixlites
         String[] pixliteIps = {
             "10.200.1.101", "10.200.1.102", "10.200.1.103", "10.200.1.104",
             "10.200.1.105", "10.200.1.106", "10.200.1.107", "10.200.1.108"
         };
 
-        // Create an instance of MikeyPixlite for each IP address and configure its outputs
-        for (String ip : pixliteIps) {
-            MikeyPixlite pixlite = new MikeyPixlite(lx, ip);
-            pixlite.configureOutputs((SLModel) lx.model);
+        // Distribute points among Pixlite controllers
+        LXFixture[] fixtures = ((SLModel) lx.model).fixtures.toArray(new LXFixture[0]);
+        List<PointsGrouping> allPointGroupings = new ArrayList<>();
+
+        // Creating PointsGroupings from FlowerModels
+        if (fixtures.length > 0 && fixtures[0] instanceof FlowerFixture) {
+            FlowerFixture flowerFixture = (FlowerFixture) fixtures[0];
+            List<ForestFlowerModel> flowerModels = flowerFixture.getFlowerModels();
+
+            for (int i = 0; i < flowerModels.size(); i += 9) {
+                PointsGrouping pg = new PointsGrouping(String.valueOf(allPointGroupings.size()));
+                for (int j = 0; j < 9 && (i + j) < flowerModels.size(); j++) {
+                    pg.addPoints(flowerModels.get(i + j).getPoints());
+                }
+                allPointGroupings.add(pg);
+            }
+        }
+
+        int totalGroupings = allPointGroupings.size();
+        int groupingsPerPixlite = 8;
+
+        int groupIndex = 0;
+        for (int i = 0; i < pixliteIps.length; i++) {
+            MikeyPixlite pixlite = new MikeyPixlite(lx, pixliteIps[i]);
+            int start = i * groupingsPerPixlite;
+            int end = Math.min(start + groupingsPerPixlite, totalGroupings);
+
+            if (start >= totalGroupings) {
+                System.out.println("No more groupings to assign to Pixlite " + pixliteIps[i]);
+                continue;
+            }
+
+            System.out.println("Pixlite " + pixliteIps[i] + " assigned groupings from " + start + " to " + (end - 1));
+
+            List<PointsGrouping> assignedGroupings = new ArrayList<>();
+            for (int j = start; j < end; j++) {
+                assignedGroupings.add(allPointGroupings.get(j));
+            }
+
+            pixlite.configureOutputs(assignedGroupings, groupIndex);
+            groupIndex += assignedGroupings.size();
             lx.addOutput(pixlite);
         }
     }
 
     static class MikeyPixlite extends SimplePixlite {
+        private final String ip;
+
         public MikeyPixlite(LX lx, String ip) {
             super(lx, ip);
+            this.ip = ip;
         }
 
-    public void configureOutputs(SLModel model) {
-            LXFixture[] fixtures = model.fixtures.toArray(new LXFixture[0]);
-            if (fixtures.length > 0 && fixtures[0] instanceof FlowerFixture) {
-                FlowerFixture flowerFixture = (FlowerFixture) fixtures[0];
-                List<ForestFlowerModel> flowerModels = flowerFixture.getFlowerModels();
-
-
-            Map<Integer, PointsGrouping> pointGroupings = new HashMap<>();
-            int groupIndex = 0;
-            for (int i = 0; i < flowerModels.size(); i++) {
-                ForestFlowerModel flowerModel = flowerModels.get(i);
-                int fixtureId = groupIndex;
-
-                PointsGrouping pg = pointGroupings.computeIfAbsent(fixtureId, k -> new PointsGrouping(String.valueOf(k)));
-                pg.addPoints(flowerModel.getPoints());
-
-                if ((i + 1) % 9 == 0) {
-                    groupIndex++;
-                }
-            }
-
+        public void configureOutputs(List<PointsGrouping> pointGroupings, int startIndex) {
             // Assign PointsGroupings to Pixlite outputs, limiting to 8 outputs per Pixlite
-            int outputIndex = 1;
-            for (PointsGrouping pg : pointGroupings.values()) {
-                addPixliteOutput(String.valueOf(outputIndex), pg);
-                outputIndex++;
-                if (outputIndex > 8) {
-                    break;
-                }
+            for (int outputIndex = 0; outputIndex < pointGroupings.size(); outputIndex++) {
+                PointsGrouping pg = pointGroupings.get(outputIndex);
+                int groupIndex = startIndex + outputIndex;
+                System.out.println("Pixlite " + ip + " assigning output index " + (outputIndex + 1) + " to group " + groupIndex);
+                addPixliteOutput(String.valueOf(outputIndex + 1), pg);
             }
         }
-    }
 
-    // public SimplePixlite addPixliteOutput(String outputNumber, PointsGrouping pointsGrouping) {
-    //     try {
-    //         SimplePixliteOutput spo = new SimplePixliteOutput(pointsGrouping);
-    //         spo.setLogConnections(false);
-    //         // Use the appropriate method to set the output number
-    //         // For example: spo.setOutputIndex(Integer.parseInt(outputNumber));
-    //         addChild(spo);
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //     }
-    //     return this;
-    //     }
+        // public SimplePixlite addPixliteOutput(String outputNumber, PointsGrouping pointsGrouping) {
+        //     try {
+        //         SimplePixliteOutput spo = new SimplePixliteOutput(pointsGrouping);
+        //         spo.setLogConnections(false);
+        //         addChild(spo);
+        //     } catch (Exception e) {
+        //         e.printStackTrace();
+        //     }
+        //     return this;
+        // }
     }
 }
