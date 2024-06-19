@@ -44,6 +44,10 @@ public class OscMessage extends OscPacket implements Iterable<OscArgument> {
         setAddressPattern(addressPattern);
     }
 
+    public List<OscArgument> getArguments() {
+        return this.arguments;
+    }
+
     public OscMessage clearArguments() {
         this.arguments.clear();
         this.typeTagDirty = true;

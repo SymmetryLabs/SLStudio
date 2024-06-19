@@ -164,26 +164,29 @@ public class LXOscEngine extends LXComponent {
 
     private class EngineListener implements LXOscListener {
 
-        @Override
-        public void oscMessage(OscMessage message) {
-            try {
-                String[] parts = message.getAddressPattern().getValue().split("/");
-                if (parts[1].equals(ROUTE_LX)) {
-                    if (parts[2].equals(ROUTE_ENGINE)) {
-                        oscComponent(message, lx.engine, parts, 3);
-                    } else if (parts[2].equals(ROUTE_MIDI)) {
-                        oscMidi(message, parts, 3);
-                    } else if (parts[2].equals(ROUTE_TEMPO)) {
-                        oscTempo(message, parts, 3);
-                    } else if (parts[2].equals(ROUTE_OUTPUT)) {
-                        oscComponent(message, lx.engine.output, parts, 3);
-                    } else if (parts[2].equals(ROUTE_AUDIO)) {
-                        oscAudio(message, parts, 3);
-                    } else if (parts[2].equals(ROUTE_PALETTE)) {
-                        oscComponent(message, lx.palette, parts, 3);
-                    } else if (parts[2].equals(ROUTE_MASTER)) {
-                        oscChannel(message, lx.engine.masterChannel, parts, 3);
-                    } else if (parts[2].equals(ROUTE_CHANNEL)) {
+    @Override
+    public void oscMessage(OscMessage message) {
+        try {
+            String[] parts = message.getAddressPattern().getValue().split("/");
+            if (parts[1].equals(ROUTE_LX)) {
+                if (parts[2].equals(ROUTE_ENGINE)) {
+                    oscComponent(message, lx.engine, parts, 3);
+                } else if (parts[2].equals(ROUTE_MIDI)) {
+                    oscMidi(message, parts, 3);
+                } else if (parts[2].equals(ROUTE_TEMPO)) {
+                    oscTempo(message, parts, 3);
+                } else if (parts[2].equals(ROUTE_OUTPUT)) {
+                    oscComponent(message, lx.engine.output, parts, 3);
+                } else if (parts[2].equals(ROUTE_AUDIO)) {
+                    oscAudio(message, parts, 3);
+                } else if (parts[2].equals(ROUTE_PALETTE)) {
+                    oscComponent(message, lx.palette, parts, 3);
+                } else if (parts[2].equals(ROUTE_MASTER)) {
+                    oscChannel(message, lx.engine.masterChannel, parts, 3);
+                } else if (parts[2].equals(ROUTE_CHANNEL)) {
+                    if (parts.length >= 5 && parts[4].equals(ROUTE_PATTERN)) {
+                        handlePatternChange(message.getAddressPattern().getValue(), message.getArguments());
+                    } else {
                         LXLook look = lx.engine.getFocusedLook();
                         if (parts[3].equals(ROUTE_FOCUSED)) {
                             oscChannel(message, look.getFocusedChannel(), parts, 4);
@@ -192,21 +195,69 @@ public class LXOscEngine extends LXComponent {
                         } else {
                             oscChannel(message, look.getChannel(parts[3]), parts, 4);
                         }
-                    } else if (parts[2].equals(ROUTE_LOOK)) {
-                        if (parts[3].equals(ROUTE_FOCUSED)) {
-                            oscLook(message, lx.engine.getFocusedLook(), parts, 4);
-                        } else if (parts[3].matches("\\d+")) {
-                            oscLook(message, lx.engine.getLook(Integer.parseInt(parts[3]) - 1), parts, 4);
-                        } else {
-                            oscLook(message, lx.engine.getLook(parts[3]), parts, 4);
-                        }
+                    }
+                } else if (parts[2].equals(ROUTE_LOOK)) {
+                    if (parts[3].equals(ROUTE_FOCUSED)) {
+                        oscLook(message, lx.engine.getFocusedLook(), parts, 4);
+                    } else if (parts[3].matches("\\d+")) {
+                        oscLook(message, lx.engine.getLook(Integer.parseInt(parts[3]) - 1), parts, 4);
+                    } else {
+                        oscLook(message, lx.engine.getLook(parts[3]), parts, 4);
                     }
                 }
-            } catch (Exception x) {
-                System.err.println("[OSC] No route for message: " + message.getAddressPattern().getValue());
             }
+        } catch (Exception x) {
+            System.err.println("[OSC] No route for message: " + message.getAddressPattern().getValue());
+        }
+    }
+
+    private void handlePatternChange(String address, List<OscArgument> args) {
+    String[] parts = address.split("/");
+    if (parts.length < 5) {
+        System.err.println("Invalid OSC address for pattern change: " + address);
+        return;
+    }
+
+    try {
+        int channelNumber = Integer.parseInt(parts[3]) - 1; // Convert 1-based to 0-based index
+        
+        // Debug: Print the argument type and value
+        if (args.isEmpty()) {
+            System.err.println("No arguments found in OSC message.");
+            return;
         }
 
+        OscArgument firstArg = args.get(0);
+        System.out.println("First argument type: " + firstArg.getClass().getSimpleName());
+        System.out.println("First argument value: " + firstArg.toString());
+
+        int patternIndex;
+        if (firstArg instanceof OscInt) {
+            patternIndex = ((OscInt) firstArg).toInt();
+        } else if (firstArg instanceof OscFloat) {
+            patternIndex = (int) ((OscFloat) firstArg).toFloat();
+        } else {
+            System.err.println("Expected OscInt or OscFloat, but got: " + firstArg.getClass().getSimpleName());
+            return;
+        }
+
+        if (channelNumber < 0 || channelNumber >= lx.engine.getChannels().size()) {
+            System.err.println("Invalid channel number: " + channelNumber);
+            return;
+        }
+
+        LXChannel channel = lx.engine.getChannel(channelNumber);
+        if (patternIndex < 0 || patternIndex >= channel.getPatterns().size()) {
+            System.err.println("Invalid pattern index: " + patternIndex);
+            return;
+        }
+
+        channel.goIndex(patternIndex);
+        System.out.println("Changed pattern on channel " + (channelNumber + 1) + " to pattern index " + patternIndex);
+    } catch (NumberFormatException e) {
+        System.err.println("Failed to parse channel number from address: " + address);
+    }
+}
         private void oscTempo(OscMessage message, String[] parts, int index) {
             if (parts[index].equals(ROUTE_BEAT)) {
                 lx.tempo.trigger(message.getInt()-1);
