@@ -27,7 +27,7 @@ public class MikeyShow implements Show {
 
     @Override
     public void setupLx(LX lx) {
-        MikeyPixlite pixlite = new MikeyPixlite(lx, "4.3.2.1", (MikeyModel) lx.model);
+        MikeyPixlite pixlite = new MikeyPixlite(lx, "wledatom.local", (MikeyModel) lx.model);
         lx.addOutput(pixlite);
     }
 
@@ -41,6 +41,88 @@ public class MikeyShow implements Show {
             List<Strip> strips = new ArrayList<Strip>();
             LXTransform t = new LXTransform();
 
+            // rotate starting position 180
+            t.rotateY(3.14159); // 180 == 3.142
+
+            // sides
+
+            for (int i=0; i<10; i++)
+            {
+                // row k
+                strips.add(new Strip("1", new Strip.Metrics(1, 1), t)); // add strip
+                t.translate(0.5f,0,0);
+                t.rotateY(-1.5708); // rotate 90
+                t.translate(0.5f,0,0);
+
+                strips.add(new Strip("1", new Strip.Metrics(4, 1), t)); // add strip
+                t.translate(3.5f,0,0); // move to end of strip
+                t.rotateY(-1.5708); // rotate 90
+                t.translate(0.5f,0,0);
+
+                strips.add(new Strip("1", new Strip.Metrics(4, 1), t)); // add strip
+                t.translate(3.5f,0,0); // move to end of strip
+                t.rotateY(-1.5708); // rotate 90
+                t.translate(0.5f,0,0);
+
+                strips.add(new Strip("1", new Strip.Metrics(4, 1), t)); // add strip
+                t.translate(3.5f,0,0); // move to end of strip
+                t.rotateY(-1.5708); // rotate 90
+                t.translate(0.5f,0,0);
+
+                strips.add(new Strip("1", new Strip.Metrics(2, 1), t)); // add strip
+                t.translate(1,0,0); // move to end of strip
+
+
+                t.translate(0,0.5f,0); // move up to next row
+                t.rotateY(3.14159); // 180
+
+                // row k+1  (same but reversed, because serpentine)
+                strips.add(new Strip("1", new Strip.Metrics(2, 1), t)); // add strip
+                t.translate(1.5f,0,0); // move to end of strip
+                t.rotateY(1.5708); // rotate 90
+                t.translate(0.5f,0,0); // move to end of strip
+
+                strips.add(new Strip("1", new Strip.Metrics(4, 1), t)); // add strip
+                t.translate(3.5f,0,0); // move to end of strip
+                t.rotateY(1.5708); // rotate 90
+                t.translate(0.5f,0,0);
+
+                strips.add(new Strip("1", new Strip.Metrics(4, 1), t)); // add strip
+                t.translate(3.5f,0,0); // move to end of strip
+                t.rotateY(1.5708); // rotate 90
+                t.translate(0.5f,0,0);
+
+                strips.add(new Strip("1", new Strip.Metrics(4, 1), t)); // add strip
+                t.translate(3.5f,0,0); // move to end of strip
+                t.rotateY(1.5708); // rotate 90
+                t.translate(0.5f,0,0);
+
+                strips.add(new Strip("1", new Strip.Metrics(1, 1), t)); // add strip
+
+                t.translate(0,0.5f,0); // move up to next row
+                t.rotateY(3.14159); // 180
+            }
+
+
+            // top
+            t.rotateY(-1.5708); // rotate 90
+            t.translate(1.5f,0,0);
+
+            for (int i=0; i<4; i++)
+            {
+                strips.add(new Strip("1", new Strip.Metrics(2, 1), t)); // add strip
+                t.translate(2,0,0); // move to end of strip
+                t.rotateY(-1.5708); // rotate 90
+                t.translate(1,0,0);
+            }
+
+
+  
+
+
+
+
+        /* sprial layout
             int sideLengths[] = {3,4,4,3,4,4,3,4,3,4,4,3,4,4,3,4,3,4,4,3,4,4,3,4,4,3,4,4,3,4,4,3,4,3,4,4,4,3,4,3,4,4,3,4,4,3,4,4,3,4,4,3,4,4,3,4,4,3,4,4,3,4,3,4,4,3,4,4,3,4,4,4,3,4,3,4,4,3,4,3};
 
             // rotate starting position 180
@@ -77,6 +159,8 @@ public class MikeyShow implements Show {
                 t.rotateY(1.5708);
             }
 
+        */
+
             return new MikeyModel(strips);
         }
     }
@@ -86,7 +170,7 @@ public class MikeyShow implements Show {
 
             PointsGrouping grouping = new PointsGrouping("1");
 
-            for (int i=0; i<84; i++)
+            for (int i=0; i<104; i++)
             {
                 grouping.addPoints(model.getStripByIndex(i).getPoints());
             }
