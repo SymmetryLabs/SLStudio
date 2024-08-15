@@ -30,7 +30,8 @@ public class ArtNetDmxDatagram extends LXDatagram {
     private GammaExpander GammaExpander;
 
     private boolean isCustomUniverse() {
-        return ((this.universeNumber >= 79 && this.universeNumber <= 88) || //8
+        return (
+                // (this.universeNumber >= 9 && this.universeNumber <= 18) || //1
                 (this.universeNumber >= 159 && this.universeNumber <= 168) || //16
                 (this.universeNumber >= 199 && this.universeNumber <= 208) ||    //20
                 (this.universeNumber >= 209 && this.universeNumber <= 218) || //21
@@ -39,17 +40,19 @@ public class ArtNetDmxDatagram extends LXDatagram {
         );
     }
 
-    // Method to calculate buffer size
     private static int calcBufferSize(int[] indices, int universeNumber) {
-        boolean isCustomUniverse = isCustomUniverse(universeNumber);
-        int multiplier = isCustomUniverse ? 8 : 3;
-        return multiplier * indices.length;
-    }
+    boolean isCustomUniverse = isCustomUniverse(universeNumber);
+    int multiplier = isCustomUniverse ? 8 : 3;
+    int additionalBytes = isCustomUniverse ? 10 : 0; // Include extra space for the custom universe handling
+    return (multiplier * indices.length) + additionalBytes + 10; // Add a small extra buffer of 10 bytes
+}
+
 
 
    // Static helper method to determine if a given universe number is custom
     private static boolean isCustomUniverse(int universeNumber) {
-        return ((universeNumber >= 79 && universeNumber <= 88) ||   //8
+        return (
+                 // (universeNumber >= 9 && universeNumber <= 18) ||   //1
                  (universeNumber >= 159 && universeNumber <= 168) ||   //16
                 (universeNumber >= 199 && universeNumber <= 208) || //20
                 (universeNumber >= 209 && universeNumber <= 218) || //21
@@ -136,45 +139,47 @@ public class ArtNetDmxDatagram extends LXDatagram {
 
 public LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
     boolean isCustomUniverse = (
-                (this.universeNumber >= 79 && this.universeNumber <= 88) || //8
-                (this.universeNumber >= 159 && this.universeNumber <= 168) || //16
-                (this.universeNumber >= 199 && this.universeNumber <= 208) ||  //20
-                (this.universeNumber >= 209 && this.universeNumber <= 218) ||  //21
-                (this.universeNumber >= 249 && this.universeNumber <= 258));  //25
+            // (this.universeNumber >= 9 && this.universeNumber <= 18) || //1
+            (this.universeNumber >= 159 && this.universeNumber <= 168) || //16
+            (this.universeNumber >= 199 && this.universeNumber <= 208) ||  //20
+            (this.universeNumber >= 209 && this.universeNumber <= 218) ||  //21
+            (this.universeNumber >= 249 && this.universeNumber <= 258));  //25
     int unmappedC = flashUnmapped && !flashInOn ? 0 : unmappedPointColor;
- 
+
     if (System.nanoTime() - lastFlashNanos > FLASH_NANOS) {
         lastFlashNanos = System.nanoTime();
         flashInOn = !flashInOn;
     }
- 
+
     int channelIndex = offset;
     for (int index : pointIndices) {
+        // Buffer overflow check
+        if (channelIndex + (isCustomUniverse ? 8 : 3) >= buffer.length) {
+            throw new ArrayIndexOutOfBoundsException("Buffer overflow at channelIndex: " + channelIndex + ", buffer length: " + buffer.length);
+        }
+
         int colorValue = (index >= 0) ? colors[index] : unmappedC;
         int gammaExpanded = GammaExpander.getExpandedColor(colorValue);
-        
 
         if (isCustomUniverse) {
             buffer[channelIndex++] = (byte) 255; // master dimmer
-            buffer[channelIndex++] = (byte) 0; // skip
-            buffer[channelIndex++] = (byte) 0; // skip
-            buffer[channelIndex++] = (byte) 0; // skip
-
         }
 
         buffer[channelIndex++] = (byte) Ops8.red(gammaExpanded);
         buffer[channelIndex++] = (byte) Ops8.green(gammaExpanded);
         buffer[channelIndex++] = (byte) Ops8.blue(gammaExpanded);
 
-
         if (isCustomUniverse) {
+            
+            buffer[channelIndex++] = (byte) 0; // skip
+            buffer[channelIndex++] = (byte) Ops8.red(gammaExpanded);
+            buffer[channelIndex++] = (byte) 0; // skip
+            buffer[channelIndex++] = (byte) 0; // skip
+            buffer[channelIndex++] = (byte) 0; // skip
             buffer[channelIndex++] = (byte) 0; // skip
         }
- 
-
-        
     }
- 
+
     return this;
 }
 
