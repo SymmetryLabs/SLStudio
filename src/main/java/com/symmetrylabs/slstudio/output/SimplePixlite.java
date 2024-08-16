@@ -29,6 +29,10 @@ public class SimplePixlite extends ArtNetOutput {
         return this;
     }
 
+    protected ArtNetDmxDatagram createDatagram(LX lx, String ipAddress, int[] pointIndices, int universeNumber) {
+        return new ArtNetDmxDatagram(lx, ipAddress, pointIndices, universeNumber);
+    }
+
     protected class SimplePixliteOutput extends LXDatagramOutput {
         private final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
         private final int outputIndex;
@@ -56,7 +60,7 @@ public class SimplePixlite extends ArtNetOutput {
                 for (int i1 = 0; i1 < numIndices; i1++) {
                     indices[i1] = pointsGrouping.getPoint(counter++).index;
                 }
-                ArtNetDmxDatagram dmxDatagram = new ArtNetDmxDatagram(lx, ipAddress, indices, universe - 1);
+                ArtNetDmxDatagram dmxDatagram = createDatagram(lx, ipAddress, indices, universe - 1);
                 addDatagram(dmxDatagram);
             }
         }

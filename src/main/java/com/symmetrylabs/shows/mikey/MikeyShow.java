@@ -9,6 +9,8 @@ import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.output.SimplePixlite;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
+import com.symmetrylabs.slstudio.output.ArtNetDmxDatagram;
+import com.symmetrylabs.slstudio.output.ArtNetDmxRgbwypDatagram;
 import com.symmetrylabs.slstudio.model.DoubleStrip;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
@@ -108,6 +110,11 @@ public class MikeyShow implements Show {
             addPixliteOutput(
                 new PointsGrouping("4").addPoints(model.getStripByIndex(3).getPoints()));
 
+        }
+
+        @Override
+        protected ArtNetDmxDatagram createDatagram(LX lx, String ipAddress, int[] pointIndices, int universeNumber) {
+            return new ArtNetDmxRgbwypDatagram(lx, ipAddress, pointIndices, universeNumber);
         }
 
         @Override
