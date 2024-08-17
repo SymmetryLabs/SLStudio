@@ -11,6 +11,7 @@ import com.symmetrylabs.slstudio.output.SimplePixlite;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.slstudio.output.ArtNetDmxDatagram;
 import com.symmetrylabs.slstudio.output.ArtNetDmxRgbwypDatagram;
+import com.symmetrylabs.slstudio.output.ArtNetDmxRgbwDatagram;
 import com.symmetrylabs.slstudio.model.DoubleStrip;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
@@ -66,29 +67,36 @@ public class MikeyShow implements Show {
             t.translate(0, 0, 0);
             t.push();
             t.rotateZ(zRotation);
-            Strip strip1 = new Strip("1", metricsDMX12, t);         //create the first strip
-            strips.add(strip1);  
+            Strip strip1 = new Strip("1", metricsDMX12, t);
+            strips.add(strip1);
             t.pop();
 
             t.translate(12, 0, 24);
             t.push();
             t.rotateZ(zRotation);
-            Strip strip2 = new Strip("1", metricsDMX12, t);         //create the first strip
-            strips.add(strip2);  
+            Strip strip2 = new Strip("2", metricsDMX12, t);
+            strips.add(strip2);
             t.pop();
 
             t.translate(24, 0, 24*2);
             t.push();
             t.rotateZ(zRotation);
-            Strip strip3 = new Strip("1", metricsDMX12, t);         //create the first strip
-            strips.add(strip3);  
+            Strip strip3 = new Strip("3", metricsDMX12, t);
+            strips.add(strip3);
             t.pop();
 
             t.translate(36, 0, 24*3);
             t.push();
             t.rotateZ(zRotation);
-            Strip strip4 = new Strip("1", metricsDMX12, t);         //create the first strip
-            strips.add(strip4);  
+            Strip strip4 = new Strip("4", metricsDMX12, t);
+            strips.add(strip4);
+            t.pop();
+
+            t.translate(48, 0, 24*4);
+            t.push();
+            t.rotateZ(zRotation);
+            Strip strip5 = new Strip("5", metricsStrip, t);
+            strips.add(strip5);
             t.pop();
 
 
@@ -100,7 +108,7 @@ public class MikeyShow implements Show {
         public MikeyPixlite(LX lx, String ip, MikeyModel model) {
             super(lx, ip);
             //BOX 1
-            //LED LIGHTS
+            // DMX RGBWA+UV
             addPixliteOutput(
                 new PointsGrouping("1").addPoints(model.getStripByIndex(0).getPoints()));
             addPixliteOutput(
@@ -110,11 +118,20 @@ public class MikeyShow implements Show {
             addPixliteOutput(
                 new PointsGrouping("4").addPoints(model.getStripByIndex(3).getPoints()));
 
+            // SK6812RGBWW
+            addPixliteOutput(
+                new PointsGrouping("5").addPoints(model.getStripByIndex(4).getPoints()));
+
         }
 
         @Override
-        protected ArtNetDmxDatagram createDatagram(LX lx, String ipAddress, int[] pointIndices, int universeNumber) {
-            return new ArtNetDmxRgbwypDatagram(lx, ipAddress, pointIndices, universeNumber);
+        protected ArtNetDmxDatagram createDatagram(LX lx, String ipAddress, int[] pointIndices, int universeIndex) {
+            if (universeIndex < 4) {
+                return new ArtNetDmxRgbwypDatagram(lx, ipAddress, pointIndices, universeIndex);
+            }
+            else {
+                return new ArtNetDmxRgbwDatagram(lx, ipAddress, pointIndices, universeIndex);
+            }
         }
 
         @Override
