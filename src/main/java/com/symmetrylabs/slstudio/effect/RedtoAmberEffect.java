@@ -30,20 +30,20 @@ public class RedtoAmberEffect extends LXEffect {
 
             // Retrieve the current color
             int gammaExpanded = gammaExpander.getExpandedColor(colors[index]);
-            byte r = (byte)Ops8.red(gammaExpanded);
-            byte g = (byte)Ops8.green(gammaExpanded);
-            byte b = (byte)Ops8.blue(gammaExpanded);
-            byte w = r < g ? r : g;
+            int r = Ops8.red(gammaExpanded);
+            int g = Ops8.green(gammaExpanded);
+            int b = Ops8.blue(gammaExpanded);
+            int w = r < g ? r : g;
             if (b < w) {
                 w = b;
             }
             r -= w;
             g -= w;
             b -= w;
-            byte y = r < g ? r : g; // yellow/amber
+            int y = r < g ? r : g; // yellow/amber
             r -= y;
             g -= y;
-            byte p = b; // purple/UV
+            int p = b; // purple/UV
 
             // Now apply the modified values back into the colors array using the same index
             colors[index] = LXColor.rgb(r, g, b); // 1 2 3

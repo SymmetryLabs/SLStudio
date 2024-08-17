@@ -30,27 +30,27 @@ public class ArtNetDmxRgbwypDatagram extends ArtNetDmxDatagram {
             int colorValue = (index >= 0) ? colors[index] : unmappedColor;
 
             int gammaExpanded = gammaExpander.getExpandedColor(colorValue);
-            byte r = (byte)Ops8.red(gammaExpanded);
-            byte g = (byte)Ops8.green(gammaExpanded);
-            byte b = (byte)Ops8.blue(gammaExpanded);
-            byte w = r < g ? r : g;
+            int r = Ops8.red(gammaExpanded);
+            int g = Ops8.green(gammaExpanded);
+            int b = Ops8.blue(gammaExpanded);
+            int w = r < g ? r : g;
             if (b < w) {
                 w = b;
             }
             r -= w;
             g -= w;
             b -= w;
-            byte y = r < g ? r : g; // yellow/amber
+            int y = r < g ? r : g; // yellow/amber
             r -= y;
             g -= y;
-            byte p = b; // purple/UV
+            int p = b; // purple/UV
 
-            buffer[channelIndex++] = r;
-            buffer[channelIndex++] = g;
-            buffer[channelIndex++] = b;
-            buffer[channelIndex++] = w;
-            buffer[channelIndex++] = y;
-            buffer[channelIndex++] = p;
+            buffer[channelIndex++] = (byte)r;
+            buffer[channelIndex++] = (byte)g;
+            buffer[channelIndex++] = (byte)b;
+            buffer[channelIndex++] = (byte)w;
+            buffer[channelIndex++] = (byte)y;
+            buffer[channelIndex++] = (byte)p;
         }
 
         return this;

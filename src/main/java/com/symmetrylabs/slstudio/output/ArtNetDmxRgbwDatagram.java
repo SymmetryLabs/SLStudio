@@ -30,21 +30,23 @@ public class ArtNetDmxRgbwDatagram extends ArtNetDmxDatagram {
             int colorValue = (index >= 0) ? colors[index] : unmappedColor;
 
             int gammaExpanded = gammaExpander.getExpandedColor(colorValue);
-            byte r = (byte)Ops8.red(gammaExpanded);
-            byte g = (byte)Ops8.green(gammaExpanded);
-            byte b = (byte)Ops8.blue(gammaExpanded);
-            byte w = r < g ? r : g;
+            int r = Ops8.red(gammaExpanded);
+            int g = Ops8.green(gammaExpanded);
+            int b = Ops8.blue(gammaExpanded);
+            int w = r < g ? r : g;
             if (b < w) {
                 w = b;
             }
+            //System.out.print("r="+r+" g="+g+" b="+b+" w=" + w);
             r -= w;
             g -= w;
             b -= w;
+            //System.out.println(" r_="+r+" g_="+g+" b_="+b);
 
-            buffer[channelIndex++] = r;
-            buffer[channelIndex++] = g;
-            buffer[channelIndex++] = b;
-            buffer[channelIndex++] = w;
+            buffer[channelIndex++] = (byte)r;
+            buffer[channelIndex++] = (byte)g;
+            buffer[channelIndex++] = (byte)b;
+            buffer[channelIndex++] = (byte)w;
         }
 
         return this;
