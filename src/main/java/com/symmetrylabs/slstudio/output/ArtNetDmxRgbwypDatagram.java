@@ -5,8 +5,6 @@ import heronarts.lx.LX;
 import heronarts.lx.output.LXDatagram;
 import heronarts.lx.model.LXPoint;
 
-import java.net.UnknownHostException;
-
 public class ArtNetDmxRgbwypDatagram extends ArtNetDmxDatagram {
     private static final int BYTES_PER_PIXEL = 6;
 
@@ -45,7 +43,7 @@ public class ArtNetDmxRgbwypDatagram extends ArtNetDmxDatagram {
             byte y = r < g ? r : g; // yellow/amber
             r -= y;
             g -= y;
-            byte p = 0; // purple/UV
+            byte p = b; // purple/UV
 
             buffer[channelIndex++] = r;
             buffer[channelIndex++] = g;
