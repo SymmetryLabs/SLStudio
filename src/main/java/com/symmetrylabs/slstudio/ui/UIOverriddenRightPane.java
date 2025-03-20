@@ -33,6 +33,7 @@ import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import heronarts.p3lx.ui.studio.osc.UIOscManager;
 
 import com.symmetrylabs.util.artnet.ui.UIArtNetConfig;
+import com.symmetrylabs.util.dmx.ui.UIDmxMappings;
 import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.shows.tree.ui.*;
 import com.symmetrylabs.slstudio.SLStudio;
@@ -97,6 +98,7 @@ public class UIOverriddenRightPane extends UIPane {
     private void buildMidiUI() {
         new UIOscManager(this.ui, this.lx, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
         new UIArtNetConfig(this.ui, this.lx.engine.artNet, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
+        new UIDmxMappings(this.ui, this.lx, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
         new UIMidiSurfaces(this.ui, this.lx.engine.midi, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
         new UIMidiInputs(this.ui, this.lx.engine.midi, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
         new UIMidiMappings(this.ui, this.lx, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
