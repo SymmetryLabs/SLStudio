@@ -27,8 +27,11 @@ public class MikeyShow implements Show {
 
     @Override
     public void setupLx(LX lx) {
-        MikeyPixlite pixlite = new MikeyPixlite(lx, "10.0.0.42", (MikeyModel) lx.model);
-        lx.addOutput(pixlite);
+        MikeyModel model = (MikeyModel) lx.model;
+        MikeyPixlite pixlite1 = new MikeyPixlite(lx, "192.168.0.192", model, 0);      // strips 0-7
+        lx.addOutput(pixlite1);
+        MikeyPixlite pixlite2 = new MikeyPixlite(lx, "192.168.0.193", model, 8);      // strips 8-15
+        lx.addOutput(pixlite2);
     }
 
     static class MikeyModel extends StripsModel<Strip> {
@@ -114,30 +117,73 @@ public class MikeyShow implements Show {
             strips.add(strip8);
             t.pop();
 
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip9 = new Strip("1", metricsL3S, t);    
+            strips.add(strip9);  
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip10 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip10);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip11 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip11);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip12 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip12);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip13 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip13);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip14 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip14);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip15 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip15);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip16 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip16);
+            t.pop();
+        
             return new MikeyModel(strips);
         }
     }
     static class MikeyPixlite extends SimplePixlite {
-        public MikeyPixlite(LX lx, String ip, MikeyModel model) {
+        public MikeyPixlite(LX lx, String ip, MikeyModel model, int stripOffset) {
             super(lx, ip);
-            addPixliteOutput(
-                new PointsGrouping("31").addPoints(model.getStripByIndex(0).getPoints()));
-            addPixliteOutput(
-                new PointsGrouping("29").addPoints(model.getStripByIndex(1).getPoints()));
-
-            addPixliteOutput(
-                new PointsGrouping("22").addPoints(model.getStripByIndex(2).getPoints()));
-            addPixliteOutput(
-                new PointsGrouping("21").addPoints(model.getStripByIndex(3).getPoints()));
-            addPixliteOutput(
-                new PointsGrouping("19").addPoints(model.getStripByIndex(4).getPoints()));
-            addPixliteOutput(
-                new PointsGrouping("20").addPoints(model.getStripByIndex(5).getPoints()));
-            addPixliteOutput(
-                new PointsGrouping("28").addPoints(model.getStripByIndex(6).getPoints()));
-            addPixliteOutput(
-                new PointsGrouping("27").addPoints(model.getStripByIndex(7).getPoints()));
-
+            for (int i = 0; i < 8; i++) {
+                addPixliteOutput(
+                    new PointsGrouping(String.valueOf(i + 1))
+                        .addPoints(model.getStripByIndex(i + stripOffset).getPoints()));
+            }
         }
 
         @Override

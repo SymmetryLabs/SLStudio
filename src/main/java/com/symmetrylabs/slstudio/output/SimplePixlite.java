@@ -42,24 +42,25 @@ public class SimplePixlite extends ArtNetOutput {
         }
 
         private void setupDatagrams(PointsGrouping pointsGrouping) {
-            // the points for one pixlite output have to be spread across multiple universes
-            int numPoints = pointsGrouping.size();
-            int numUniverses = (numPoints / MAX_NUM_POINTS_PER_UNIVERSE) + 1;
-            int counter = 0;
-
-            for (int i = 0; i < numUniverses; i++) {
-                int universe = firstUniverseOnOutput + i;
-                int numIndices = ((i + 1) * MAX_NUM_POINTS_PER_UNIVERSE) > numPoints
-                    ? (numPoints % MAX_NUM_POINTS_PER_UNIVERSE)
-                    : MAX_NUM_POINTS_PER_UNIVERSE;
-                int[] indices = new int[numIndices];
-                for (int i1 = 0; i1 < numIndices; i1++) {
-                    indices[i1] = pointsGrouping.getPoint(counter++).index;
-                }
-                ArtNetDmxDatagram dmxDatagram = new ArtNetDmxDatagram(lx, ipAddress, indices, universe - 1);
-                addDatagram(dmxDatagram);
-            }
+    // Each output gets 4 universes, each universe 170 pixels
+    int numPoints = pointsGrouping.size();
+    int universesPerOutput = 4;
+    int pixelsPerUniverse = MAX_NUM_POINTS_PER_UNIVERSE;
+    int counter = 0;
+    // outputIndex is 0-based, universes start at 1
+    int firstUniverse = (outputIndex - 1) * universesPerOutput;
+    for (int u = 0; u < universesPerOutput; u++) {
+        int universe = firstUniverse + u;
+        int numIndices = Math.min(pixelsPerUniverse, numPoints - counter);
+        if (numIndices <= 0) break;
+        int[] indices = new int[numIndices];
+        for (int i = 0; i < numIndices; i++) {
+            indices[i] = pointsGrouping.getPoint(counter++).index;
         }
+        ArtNetDmxDatagram dmxDatagram = new ArtNetDmxDatagram(lx, ipAddress, indices, universe);
+        addDatagram(dmxDatagram);
+    }
+}
     }
 
 }

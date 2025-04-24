@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "timestamp": 1724287967574,
+  "timestamp": 1745453573201,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -2130,13 +2130,13 @@
             "modulationColor": -8978688,
             "parameters": {
               "label": "Channel-9",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": true,
               "autoCycleTimeSecs": 16.672000885009766,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": true,
@@ -2144,7 +2144,7 @@
               "transitionBlendMode": 0,
               "autoDisable": false,
               "speed": 0.9230769220739603,
-              "editorVisible": true,
+              "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
             },
@@ -2272,7 +2272,7 @@
                 }
               }
             ],
-            "patternIndex": 1,
+            "patternIndex": 2,
             "patterns": [
               {
                 "id": 1591,
@@ -3172,13 +3172,13 @@
             "modulationColor": -65428,
             "parameters": {
               "label": "Channel-10",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -3186,7 +3186,7 @@
               "transitionBlendMode": 0,
               "autoDisable": true,
               "speed": 1.0,
-              "editorVisible": false,
+              "editorVisible": true,
               "patternBlendMode": 0,
               "blendPatterns": false
             },
@@ -3199,8 +3199,8 @@
                 "parameters": {
                   "label": "ColorFilter",
                   "expandedInUi": true,
-                  "enabled": false,
-                  "Hue": 266.3999953866005,
+                  "enabled": true,
+                  "Hue": 136.8000090122223,
                   "Sat": 100.0,
                   "Alpha": false
                 },
@@ -3211,7 +3211,7 @@
                 }
               }
             ],
-            "patternIndex": 0,
+            "patternIndex": 2,
             "patterns": [
               {
                 "id": 18558,
@@ -3221,7 +3221,7 @@
                   "label": "PointIndex",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "index": 58.13911474496126
+                  "index": 0.0
                 },
                 "modulation": {
                   "modulators": [],
@@ -3236,12 +3236,40 @@
                 "modulationColor": -16711826,
                 "parameters": {
                   "label": "WarpCompatibleSolidColor",
-                  "expandedInUi": false,
+                  "expandedInUi": true,
                   "Enabled": true,
                   "Color/hue": 158.03277587890625,
                   "Color/brightness": 98.03921508789062,
                   "Color/saturation": 73.19999694824219,
                   "Color": -12322121
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                },
+                "autoCycleEnabled": true
+              },
+              {
+                "id": 20190,
+                "class": "com.symmetrylabs.slstudio.pattern.ParamCrossSections",
+                "modulationColor": -65473,
+                "parameters": {
+                  "label": "ParamCrossSections",
+                  "expandedInUi": true,
+                  "Enabled": true,
+                  "xPos": 194.92086414219557,
+                  "yPos": 0.0,
+                  "zPos": 0.0,
+                  "xSpd": 0.7,
+                  "ySpd": 0.6,
+                  "zSpd": 0.5,
+                  "xSize": 0.3,
+                  "xLvl": 1.0,
+                  "yLvl": 0.0,
+                  "zLvl": 0.0,
+                  "ySize": 0.0,
+                  "zSize": 0.3
                 },
                 "modulation": {
                   "modulators": [],
@@ -3256,7 +3284,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -1280,
+          "modulationColor": -4325632,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,

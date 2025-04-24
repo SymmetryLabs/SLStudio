@@ -34,6 +34,8 @@ import java.util.List;
 import java.util.Map;
 
 import static heronarts.lx.PolyBuffer.Space.RGB8;
+import java.net.DatagramPacket;
+import com.symmetrylabs.slstudio.output.ArtNetDatagramUtil;
 
 /**
  * An output stage that functions by sending datagram packets.
@@ -176,7 +178,19 @@ public class LXDatagramOutput extends LXOutput {
                         datagram.destination.error.setValue(true);
                     }
                 }
-
+            }
+            // Send Art-Net Sync packet after DMX datagrams
+            for (InetAddress addr : this.destinations.keySet()) {
+                byte[] syncBuf = new byte[ArtNetDatagramUtil.HEADER_LENGTH];
+                ArtNetDatagramUtil.fillHeader(syncBuf, (short) 0x5200);
+                DatagramPacket syncPacket = new DatagramPacket(syncBuf, syncBuf.length, addr, ArtNetDatagramUtil.ARTNET_PORT);
+                try {
+                    this.socket.send(syncPacket);
+                } catch (IOException e) {
+                    if (logConnections) {
+                        System.out.println(this.date.format(now) + " Error sending Art-Net Sync to " + addr + " (" + e.getLocalizedMessage() + ")");
+                    }
+                }
             }
             lastFrameMillis = now;
         }
