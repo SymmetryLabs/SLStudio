@@ -68,7 +68,7 @@ public class NetworkMonitor {
         // new scanner for tree controllers on port 1337
         treeOpcNetworkScanner = new OpcNetworkScanner(dispatcher, recvSelector, 1337);
 //        treeDeviceList = treeOpcNetworkScanner.deviceList;
-        opcDeviceList = treeOpcNetworkScanner.deviceList;
+        opcDeviceList = cubesOpcNetworkScanner.deviceList;
 
 
         artNetNetworkScanner = new ArtNetNetworkScanner(dispatcher, recvSelector);
