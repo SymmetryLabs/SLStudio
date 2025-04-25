@@ -1,28 +1,25 @@
 buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-    dependencies {
-        classpath "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+	repositories {
+		mavenCentral()
+		jcenter()
+	}
+	dependencies {
+		classpath "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.8'
-        // classpath 'edu.sc.seis.macAppBundle:gradle-macappbundle:2.3.0'  // macAppBundle temporarily disabled
-    }
+	}
 }
 
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.9.23'
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
-    id 'java'
-    id 'application'
+	id 'org.jetbrains.kotlin.jvm' version '1.2.60'
+	id 'com.github.johnrengelman.shadow' version '4.0.2'
+	id 'java'
+	id 'application'
     id 'idea'
-    id "com.peterabeles.gversion" version "1.5.0"
-    id "com.google.protobuf" version "0.9.4"
+	id 'edu.sc.seis.macAppBundle' version '2.3.0'
+    id "com.peterabeles.gversion" version "1.2.4"
+    id "com.google.protobuf" version "0.8.8"
 }
-
-// apply plugin: 'edu.sc.seis.macAppBundle'  // macAppBundle temporarily disabled
-
 
 group = 'com.symmetrylabs'
 version = '1.0.5'
@@ -30,51 +27,49 @@ sourceCompatibility = 1.8
 mainClassName = 'com.symmetrylabs.slstudio.SymmetryLauncher'
 
 allprojects {
-    repositories {
-        mavenCentral()
-        maven {
-            url 'https://jitpack.io'
-            credentials {
-                username 'jp_ad5p43bkk3kiaah4slmihuagci'
-            }
-        }
-    }
-    tasks.withType(JavaCompile) {
-        sourceCompatibility = '1.8'
-    }
+	repositories {
+		mavenCentral()
+		maven {
+			url 'https://jitpack.io'
+			// these credentials are for the symmetry-labs account
+			credentials { username 'jp_ad5p43bkk3kiaah4slmihuagci' }
+		}
+	}
+
+	tasks.withType(JavaCompile) {
+		sourceCompatibility = '1.8'
+	}
 }
 
 repositories {
-    mavenCentral()
-    // needed for aparapi dependency
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+	// needed for aparapi dependency
+	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
 dependencies {
-    implementation "com.aparapi:aparapi-jni:1.1.3-20180211.063116-7"
-    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
-    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-    implementation 'com.fazecast:jSerialComm:[2.0.0,3.0.0)'
-    implementation 'com.github.SymmetryLabs:ArtNetStack:44ddfed'
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
-    implementation group: 'com.google.guava', name: 'guava', version: '23.5-jre'
-    implementation group: 'com.harium', name: 'kdtree', version: '1.0.0'
-    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
-    implementation group: 'de.javagl', name: 'obj', version: '0.3.0'
-    implementation group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: '2.9.3'
-    implementation group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
-    implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.3'
-    implementation group: 'org.javassist', name: 'javassist', version: '3.22.0-GA'
-    implementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: '1.9.23'
-    // Processing 4.x and OpenGL dependencies (local jars, Java 17+)
-    implementation files('libs/core-4.4.1.jar')
-    implementation files('libs/jogl-all-2.5.0.jar')
-    implementation files('libs/jogl-all-2.5.0-natives-macosx-universal.jar')
-    implementation files('libs/gluegen-rt-2.5.0.jar')
-    implementation files('libs/gluegen-rt-2.5.0-natives-macosx-universal.jar')
-    // implementation files('libs/minim.jar') // Uncomment only if still needed for audio
-    implementation group: 'uk.co.caprica', name: 'vlcj', version: '3.10.1'
-    implementation group: 'uk.co.xfactory-librarians', name: 'coremidi4j', version: '0.9'
+	implementation "com.aparapi:aparapi-jni:1.1.3-20180211.063116-7" // lock aparapi-jni snapshot version
+	implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+	implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+	implementation 'com.fazecast:jSerialComm:[2.0.0,3.0.0)'
+	implementation 'com.github.SymmetryLabs:ArtNetStack:44ddfed'
+	implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
+	implementation group: 'com.google.guava', name: 'guava', version: '23.5-jre'
+	implementation group: 'com.harium', name: 'kdtree', version: '1.0.0'
+	implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+	implementation group: 'de.javagl', name: 'obj', version: '0.3.0'
+	implementation group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: '2.9.3'
+	implementation group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+	implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.3'
+	implementation group: 'org.javassist', name: 'javassist', version: '3.22.0-GA'
+	implementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: '1.2.60'
+	implementation group: 'org.processing', name: 'core', version: '3.3.6'
+	implementation group: 'org.processing', name: 'video', version: '3.2.3'
+    /* used for logging in vlcj, for more information about why this dependency
+       is declared here instead of vlcj (which is intentional!) check out
+       https://www.slf4j.org/manual.html */
+	implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+	implementation group: 'uk.co.caprica', name: 'vlcj', version: '3.10.1'
+	implementation group: 'uk.co.xfactory-librarians', name: 'coremidi4j', version: '0.9'
     implementation group: 'org.smurn', name: 'jply', version: '0.2.0'
     implementation group: 'joda-time', name: 'joda-time', version: '2.10.1'
     implementation group: 'com.google.protobuf', name: 'protobuf-java', version: protocVersion
@@ -83,41 +78,31 @@ dependencies {
     runtimeOnly group: 'io.grpc', name: 'grpc-netty-shaded', version: grpcVersion
     implementation group: 'io.netty', name: 'netty-all', version: '4.1.36.Final'
 
-    // Processing Video and Minim libraries (local jars)
-    implementation files('libs/video.jar')
-    implementation files('libs/minim.jar')
+	implementation files('libs/minim.jar')
+	implementation files('libs/jogamp-fat.jar')
+	implementation files('libs/aparapi-b6fffad.jar')
 
-    implementation files('libs/aparapi-b6fffad.jar')
+	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.1.1'
+	testCompile 'junit:junit:4.12'
 
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.1.1'
-    testImplementation 'junit:junit:4.12'
+    compile 'org.glassfish:javax.annotation:10.0-b28'
 
-    implementation 'org.glassfish:javax.annotation:10.0-b28'
+
 }
 
 compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+	kotlinOptions.jvmTarget = "1.8"
 }
-
 compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+	kotlinOptions.jvmTarget = "1.8"
 }
 
 run {
-    // Ensure OpenGL window works on macOS
-    // jvmArgs '-XstartOnFirstThread' (REMOVED: keep only in runMinimalTest)
     mainClassName = rootProject.mainClassName
-
     if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
         jvmArgs '-XX:+UseParNewGC', '-XX:+UseConcMarkSweepGC'
-        jvmArgs '-Xmx1024M'
     }
-
-    if (System.properties["os.name"] == "Mac OS X") {
-        // jvmArgs '-XstartOnFirstThread' (REMOVED: keep only in runMinimalTest)
-        // jvmArgs '-Djava.library.path=/Applications/Processing.app/Contents/Java/core/library/macos-x86_64' (REMOVED: not needed for Processing 3.x, and directory does not exist)
-        systemProperty 'java.awt.headless', false
-    }
+    jvmArgs '-Xmx1024M'
 
     // To select a layout from the command line, "gradlew run -Playout=cubes"
     systemProperty 'com.symmetrylabs.layout', findProperty('layout')
@@ -134,112 +119,136 @@ run {
 
 test {
     testLogging {
-        // configure test logging if needed
+        events "passed", "failed", "skipped"
+        showStandardStreams = true
+        exceptionFormat = "full"
     }
 }
 
-task runMinimalTest(type: JavaExec) {
-    description = 'Run the MinimalTest Processing sketch with -XstartOnFirstThread for macOS OpenGL window debugging.'
-    main = 'com.symmetrylabs.slstudio.MinimalTest'
-    classpath = sourceSets.main.runtimeClasspath
-    jvmArgs = ['-XstartOnFirstThread', '-Dprism.order=sw', '-Dprism.verbose=true']
-    systemProperty 'java.awt.headless', false
-}
 
-// macAppBundle {
-//     mainClassName = rootProject.mainClassName
-//     icon = "src/main/resources/application.icns"
-//     bundleJRE = true
-//     javaProperties.put("apple.laf.useScreenMenuBar", "true")
-//     jarTask = "shadowJar"
-//     javaExtras.put("-XX:+UseParNewGC", null)
-//     javaExtras.put("-XX:+UseConcMarkSweepGC", null)
-// }
+macAppBundle {
+	mainClassName = rootProject.mainClassName
+	icon = "src/main/resources/application.icns"
+	bundleJRE = true
+	javaProperties.put("apple.laf.useScreenMenuBar", "true")
+	jarTask = "shadowJar"
+	javaExtras.put("-XX:+UseParNewGC", null);
+	javaExtras.put("-XX:+UseConcMarkSweepGC", null);
+}
 
 task genPrebuiltSlimgui(type: Copy) {
-    description = "builds and copies slimgui library into the libs prebuilt library folder"
-    dependsOn ":slimgui:assembleRelease"
-    from("slimgui/build/lib/main/release") {
-        include "*.dylib"
-        include "*.so"
-        include "*.dll"
-        include "*.lib"
-    }
-    into "libs"
+	description "builds and copies slimgui library into the libs prebuilt library folder"
+	dependsOn ":slimgui:assembleRelease"
+	from("slimgui/build/lib/main/release") {
+		include "*.dylib"
+		include "*.so"
+		include "*.dll"
+		include "*.lib"
+	}
+	into "libs"
 }
 
 task buildAndRunUIv2(type: JavaExec) {
-    dependsOn 'genPrebuiltSlimgui', 'runUIv2'
+	dependsOn ":genPrebuiltSlimgui"
+	dependsOn ":runUIv2"
 }
 
 task runUIv2(type: JavaExec) {
     if (System.properties["os.name"] == "Mac OS X") {
-        // jvmArgs '-XstartOnFirstThread' (REMOVED: keep only in runMinimalTest)
-        systemProperty 'java.awt.headless', false
+        /* GLFW needs to run on the main thread of the process on MacOS,
+           because MacOS only lets you make windows from the main thread. */
+        jvmArgs '-XstartOnFirstThread'
+        /* but! AWT on MacOS also wants to run its main loop on the main thread
+           for the same reason, and it installs weird hooks into the classloader
+           that causes the entire JVM to hang forever because of a concurrency
+           bug if you try to load a native library from off the main thread.
+           Also, it just straight up doesn't work; any call into AWT just
+           deadlocks the JVM. Setting headless mode causes calls to AWT to just
+           crash instead of deadlocking the whole system. */
+        systemProperty 'java.awt.headless', true
     }
+
     main = rootProject.mainClassName
+
     systemProperty 'org.lwjgl.util.Debug', false
     systemProperty 'java.library.path', 'libs'
     systemProperty 'com.symmetrylabs.app', 'volume'
+
+    /* copy our classpath from the normal run task, which has its classpath filled in
+       by the java application plugin. */
     classpath = run.classpath
 }
 
+/* this doesn't add a dependency, but specifies that, in cases where both are
+   going to be run because they're both needed for whatever task we're
+   completing (like buildAndRunUIv2), building the prebuilt must happen before
+   running. */
 runUIv2.mustRunAfter genPrebuiltSlimgui
 
 task runServer(type: JavaExec) {
     systemProperty 'com.symmetrylabs.app', 'server'
     main = rootProject.mainClassName
+    /* copy our classpath from the normal run task, which has its classpath filled in
+       by the java application plugin. */
     classpath = run.classpath
 }
 
 task genUiHeader(type: Exec) {
-    description = "generates the JNI header file for the UI class wrapper around slimgui"
+    description "generates the JNI header file for the UI class wrapper around slimgui"
     commandLine "javac", "-h", "slimgui/src/main/cpp/", "src/main/java/com/symmetrylabs/slstudio/ui/v2/UI.java"
 }
 
 shadowJar {
-    archiveClassifier.set("all")
+    classifier = "all"
 }
 
 task dist(type: Zip) {
-    dependsOn shadowJar
+    dependsOn ":shadowJar"
     from(".") {
-        include 'libs/**', 'shows/**', 'data/**', 'src/main/resources/**'
-        from("scripts") {
-            include 'SLStudio.bat', 'SLStudio.sh', 'Volume.bat', 'Volume.sh', 'VolumeServer.sh', 'VolumeServer.service'
-            filter { line -> line.replace('$VERSION', project.version) }
-        }
+        include 'libs/**'
+        include 'shows/**'
+        include 'data/**'
+        include 'src/main/resources/**'
     }
-    from(shadowJar)
-    into "SLStudio-${project.version}"
+    from("scripts") {
+        include 'SLStudio.bat'
+        include 'SLStudio.sh'
+        include 'Volume.bat'
+        include 'Volume.sh'
+        include 'VolumeServer.sh'
+        include 'VolumeServer.service'
+        filter { line -> line.replace('$VERSION', project.version) }
+    }
+    from(shadowJar) {
+        include "*"
+    }
+    into "SLStudio-" + project.version
 }
 
 tasks.withType(Javadoc) {
-    options.links "https://docs.oracle.com/javase/8/docs/api/"
+    /* configure javadoc tool to link to the official Java 8 javadoc for JDK classes */
+    options.with {
+        links "https://docs.oracle.com/javase/8/docs/api/"
+    }
 }
 
+/* creates com.symmetrylabs.slstudio.Version class with build information */
 gversion {
     srcDir = "src/main/java/"
     classPackage = "com.symmetrylabs.slstudio"
     className = "Version"
 }
-
-project.compileJava.dependsOn createVersionFile
+project.compileJava.dependsOn(createVersionFile)
 
 protobuf {
     protoc {
+        // Download protoc compiler from repositories
         artifact = "com.google.protobuf:protoc:${protocVersion}"
     }
     plugins {
-        grpc {
-            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
-        }
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
     }
     generateProtoTasks {
-        all().each { task ->
-            task.plugins {
-                grpc {}
-            }
-        }
+        all()*.plugins { grpc {} }
     }
 }
