@@ -29,9 +29,47 @@ package heronarts.p3lx.ui.studio.mixer;
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UIObject;
 
 public class UIChannelStrip extends UIMixerStrip {
+    private boolean isSelected = false;
+    protected final LXChannel channel;
+
+    @Override
+    public void onDraw(UI ui, processing.core.PGraphics pg) {
+        UIObject parent = this.getParent();
+        UIMixer mixer = null;
+        if (parent instanceof UIMixer) {
+            mixer = (UIMixer) parent;
+        } else if (parent instanceof UILookStrip) {
+            mixer = ((UILookStrip) parent).getMixer();
+        }
+        boolean isSelected = (mixer != null) && mixer.isChannelSelected(this.channel);
+        if (isSelected) {
+            pg.pushStyle();
+            pg.noStroke();
+            pg.fill(0xFF3399FF, 64); // semi-transparent blue
+            pg.rect(0, 0, this.getWidth(), this.getHeight());
+            pg.popStyle();
+        }
+        super.onDraw(ui, pg);
+    }
+
+    // To select, call this method from parent on mouse event
+    public void select(boolean shift) {
+        UIMixer mixer = (UIMixer) this.getParent();
+        mixer.toggleChannelSelection(this.channel, shift);
+    }
+
+    @Override
+    public void onMousePressed(processing.event.MouseEvent mouseEvent, float mx, float my) {
+        System.out.println("UIChannelStrip.onMousePressed: channel=" + channel.getLabel() + ", shift=" + mouseEvent.isShiftDown());
+        select(mouseEvent.isShiftDown());
+        super.onMousePressed(mouseEvent, mx, my);
+    }
+
     public UIChannelStrip(UI ui, UIMixer mixer, LX lx, LXChannel channel) {
         super(ui, mixer, lx, channel, 0, UIMixer.PADDING);
+        this.channel = channel;
     }
 }

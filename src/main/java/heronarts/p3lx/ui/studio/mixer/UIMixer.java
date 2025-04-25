@@ -38,6 +38,72 @@ import processing.core.PConstants;
 
 public class UIMixer extends UI2dContainer {
 
+    private final UI ui;
+
+    private final java.util.LinkedHashSet<LXChannel> selectedChannels = new java.util.LinkedHashSet<>();
+
+    public boolean isChannelSelected(LXChannel channel) {
+        return selectedChannels.contains(channel);
+    }
+
+    public void toggleChannelSelection(LXChannel channel, boolean shift) {
+        if (!shift) {
+            selectedChannels.clear();
+        }
+        if (selectedChannels.contains(channel)) {
+            selectedChannels.remove(channel);
+        } else {
+            selectedChannels.add(channel);
+        }
+        System.out.print("UIMixer.toggleChannelSelection: Selected channels: [");
+        for (LXChannel ch : selectedChannels) {
+            System.out.print(ch.getLabel() + ", ");
+        }
+        System.out.println("]");
+    }
+
+    public void clearChannelSelection() {
+        selectedChannels.clear();
+    }
+
+    @Override
+    public void onKeyPressed(processing.event.KeyEvent keyEvent, char keyChar, int keyCode) {
+        // CMD+G (Meta+G or Ctrl+G) for grouping
+        if ((keyEvent.isMetaDown() || keyEvent.isControlDown()) && (keyCode == java.awt.event.KeyEvent.VK_G)) {
+            if (selectedChannels.size() > 1) {
+                // Collect selected channels
+                java.util.List<LXChannel> groupChannels = new java.util.ArrayList<>(selectedChannels);
+
+                // Create new look
+                LXLook newLook = lx.engine.addLook();
+                // Remove channels from current look and add to new look
+                LXLook currentLook = lx.engine.getFocusedLook();
+                for (LXChannel channel : groupChannels) {
+                    currentLook.removeChannel(channel);
+                    newLook.addChannel(); // TODO: Copy properties from old channel if needed
+                }
+                // Update UI: remove channel strips and add UILookStrip
+                for (LXChannel channel : groupChannels) {
+                    UIChannelStrip strip = mutableChannelStrips.remove(channel);
+                    if (strip != null) {
+                        strip.removeFromContainer();
+                    }
+                }
+                UILookStrip lookStrip = new UILookStrip(this.ui, this, this.lx, newLook, groupChannels);
+                this.addTopLevelComponent(lookStrip);
+                // Clear selection
+                selectedChannels.clear();
+                redraw();
+            }
+        } else {
+            super.onKeyPressed(keyEvent, keyChar, keyCode);
+        }
+    }
+
+    // TODO: Add key event handler for CMD+G using the correct event system for your UI framework.
+    // See your UI framework's documentation for keyboard shortcut handling.
+
+
     public final static int PADDING = 6;
     private final static int CHILD_MARGIN = 1;
     public final static int STRIP_SPACING = UIMixerStripControls.WIDTH + CHILD_MARGIN;
@@ -53,6 +119,7 @@ public class UIMixer extends UI2dContainer {
 
     public UIMixer(final UI ui, final LX lx, float x, float y, float h) {
         super(x, y, 0, h);
+        this.ui = ui;
         this.lx = lx;
 
         setBackgroundColor(ui.theme.getPaneInsetColor());
