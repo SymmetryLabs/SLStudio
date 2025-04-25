@@ -71,13 +71,21 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
     protected static final Map<String, String> warnings = new HashMap<>();
 
     static public void main(String[] args) {
+        System.out.println("SLStudio: Entering main()");
+        // Enable JOGL debug output for OpenGL error diagnosis
+        System.setProperty("jogl.debug", "true");
+        System.setProperty("com.aparapi.enableShowGeneratedOpenCL", "true");
+        System.setProperty("com.aparapi.dumpProfilesOnExit", "true");
+        System.out.println("SLStudio: Launching Processing sketch...");
         System.setProperty("com.aparapi.enableShowGeneratedOpenCL", "true");
         System.setProperty("com.aparapi.dumpProfilesOnExit", "true");
         PApplet.main(concat(args, new String[] { SLStudio.class.getName() }));
+        System.out.println("SLStudio: PApplet.main() returned");
     }
 
     @Override
     public void settings() {
+        System.out.println("SLStudio: settings() called");
         size(displayWidth, displayHeight, P3D);
         PJOGL.setIcon("application.png");
 
@@ -127,6 +135,7 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
 
     @Override
     public void setup() {
+        System.out.println("SLStudio: setup() started");
         long setupStart = System.nanoTime();
         applet = this;
 
@@ -228,6 +237,7 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
 
         long setupFinish = System.nanoTime();
         println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms");
+        System.out.println("SLStudio: setup() finished");
     }
 
     void printModelStats(LXModel model) {
@@ -243,11 +253,14 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
         println("model.zRange: " + model.zRange + "\n");
     }
 
-    public void draw() {
-        background(lx.ui.theme.getDarkBackgroundColor());
-        DrawHelper.runAll();
-        dispatcher.draw();
-    }
+    int frameLogCounter = 0;
+@Override
+public void draw() {
+
+    background(0);
+    fill(255);
+    ellipse(width/2, height/2, 100, 100);
+}
 
     @Override
     public void setWarning(String key, String message) {

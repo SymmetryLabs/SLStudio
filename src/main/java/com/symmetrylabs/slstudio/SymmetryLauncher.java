@@ -12,6 +12,11 @@ public class SymmetryLauncher {
     public static final String DEFAULT_APP_NAME = SLSTUDIO_NAME;
 
     public static void main(String[] args) {
+        // Debug prints for environment
+        System.out.println("java.awt.headless: " + System.getProperty("java.awt.headless"));
+        System.out.println("java.library.path: " + System.getProperty("java.library.path"));
+        System.out.println("os.name: " + System.getProperty("os.name"));
+        System.out.println("JVM Args: " + java.util.Arrays.toString(java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toArray()));
         String appName = null;
         if (args.length > 0) {
             appName = args[0].toLowerCase();
