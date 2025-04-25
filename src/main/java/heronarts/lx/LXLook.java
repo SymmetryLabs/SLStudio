@@ -153,7 +153,7 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
     }
 
     public LXChannel addChannel() {
-        System.out.println("ADDING CHANNEL");
+        // System.out.println("ADDING CHANNEL");
         LXChannel channel = new LXChannel(lx, this.mutableChannels.size(), new LXPattern[] {});
         channel.setParent(this);
 
@@ -167,7 +167,7 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
             listener.channelAdded(this, channel);
         }
         allChannels.put(channel.toString(), channel);
-        System.out.println("CHANNEL STRING: " + channel.toString());
+        // System.out.println("CHANNEL STRING: " + channel.toString());
 
         return channel;
     }
