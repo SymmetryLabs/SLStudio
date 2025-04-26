@@ -87,6 +87,7 @@ public class ShowRegistry {
         map.put(PenfoldsWineShow.SHOW_NAME, PenfoldsWineShow::new);
         map.put(MikeyShow.SHOW_NAME, MikeyShow::new);
         map.put(CloudRoom.SHOW_NAME, CloudRoom::new);
+        map.put(CompositeShow.SHOW_NAME, CompositeShow::new);
         map.put(HHFlowerShow.SHOW_NAME, HHFlowerShow::new);
         map.put(ArloShow.SHOW_NAME, ArloShow::new);
         map.put(HHGardenShow.SHOW_NAME, HHGardenShow::new);

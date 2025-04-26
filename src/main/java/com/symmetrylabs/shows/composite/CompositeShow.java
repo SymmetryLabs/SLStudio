@@ -2,7 +2,8 @@ package com.symmetrylabs.shows.composite;
 
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.mikey.MikeyShow;
-import com.symmetrylabs.shows.ysiadsparty.YsiadsPartyShow;
+import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.shows.cubes.CubesController;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.Strip;
@@ -11,6 +12,7 @@ import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXTransform;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,10 +36,11 @@ public class CompositeShow implements Show {
         MikeyShow.MikeyPixlite pixlite2 = new MikeyShow.MikeyPixlite(lx, "192.168.0.193", mikeyModel, 8);
         lx.addOutput(pixlite1);
         lx.addOutput(pixlite2);
-        // Add YsiadsParty outputs (CubesControllers)
-        YsiadsPartyShow.YsiadsPartyModel ysiadsModel = model.getYsiadsModel();
-        YsiadsPartyShow.CubesControllers cubesControllers = new YsiadsPartyShow.CubesControllers(lx, ysiadsModel);
-        lx.addOutput(cubesControllers);
+        // Add Cubes outputs (CubesControllers)
+        CubesModel cubesModel = model.getCubesModel();
+        // You may need to adjust the CubesController constructor arguments as needed for your setup
+        CubesController cubesController = new CubesController(lx, "192.168.1.100"); // Example IP
+        lx.addOutput(cubesController);
     }
 
     /**
@@ -45,35 +48,41 @@ public class CompositeShow implements Show {
      */
     public static class CompositeModel extends SLModel {
         private final MikeyShow.MikeyModel mikeyModel;
-        private final YsiadsPartyShow.YsiadsPartyModel ysiadsModel;
+        private final CubesModel cubesModel;
 
-        public CompositeModel(MikeyShow.MikeyModel mikeyModel, YsiadsPartyShow.YsiadsPartyModel ysiadsModel) {
-            super(SHOW_NAME, combinePoints(mikeyModel, ysiadsModel));
+        public CompositeModel(MikeyShow.MikeyModel mikeyModel, CubesModel cubesModel) {
+            super(SHOW_NAME, combinePoints(mikeyModel, cubesModel));
             this.mikeyModel = mikeyModel;
-            this.ysiadsModel = ysiadsModel;
+            this.cubesModel = cubesModel;
         }
 
         public static CompositeModel create() {
             MikeyShow.MikeyModel mikeyModel = MikeyShow.MikeyModel.create();
-            YsiadsPartyShow.YsiadsPartyModel ysiadsModel = YsiadsPartyShow.YsiadsPartyModel.create();
-            return new CompositeModel(mikeyModel, ysiadsModel);
+            // Use YsiadsPartyShow to build the cubes model
+            CubesModel cubesModel = (CubesModel) new com.symmetrylabs.shows.ysiadsparty.YsiadsPartyShow().buildModel();
+            return new CompositeModel(mikeyModel, cubesModel);
         }
 
         public MikeyShow.MikeyModel getMikeyModel() { return mikeyModel; }
-        public YsiadsPartyShow.YsiadsPartyModel getYsiadsModel() { return ysiadsModel; }
+        public CubesModel getCubesModel() { return cubesModel; }
 
         @Override
         public Iterator<? extends LXModel> getChildren() {
             List<LXModel> children = new ArrayList<>();
             children.add(mikeyModel);
-            children.add(ysiadsModel);
+            children.add(cubesModel);
             return children.iterator();
         }
 
         private static List<LXPoint> combinePoints(LXModel... models) {
             List<LXPoint> all = new ArrayList<>();
             for (LXModel m : models) {
-                all.addAll(m.points);
+                Object pts = m.points;
+                if (pts instanceof List) {
+                    all.addAll((List<LXPoint>) pts);
+                } else if (pts instanceof LXPoint[]) {
+                    all.addAll(Arrays.asList((LXPoint[]) pts));
+                }
             }
             return all;
         }

@@ -34,7 +34,7 @@ public class MikeyShow implements Show {
         lx.addOutput(pixlite2);
     }
 
-    static class MikeyModel extends StripsModel<Strip> {
+    public static class MikeyModel extends StripsModel<Strip> {
         public MikeyModel(List<Strip> strips) {
             super(SHOW_NAME, strips);
         }
@@ -176,7 +176,7 @@ public class MikeyShow implements Show {
             return new MikeyModel(strips);
         }
     }
-    static class MikeyPixlite extends SimplePixlite {
+    public static class MikeyPixlite extends SimplePixlite {
         public MikeyPixlite(LX lx, String ip, MikeyModel model, int stripOffset) {
             super(lx, ip);
             for (int i = 0; i < 8; i++) {
