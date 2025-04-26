@@ -17,6 +17,8 @@ import com.symmetrylabs.shows.japantree.JapanTreeShow;
 import com.symmetrylabs.shows.kalpa.KalpaShow;
 import com.symmetrylabs.shows.magicleap.MagicLeapShow;
 import com.symmetrylabs.shows.mikey.MikeyShow;
+import com.symmetrylabs.shows.composite.CompositeShow;
+import com.symmetrylabs.shows.cloudroom.CloudRoom;
 import com.symmetrylabs.shows.misc.Andy;
 import com.symmetrylabs.shows.office.OfficeShow;
 import com.symmetrylabs.shows.penfoldswine.PenfoldsWineShow;
@@ -84,6 +86,7 @@ public class ShowRegistry {
         map.put(GoogleHqShow.SHOW_NAME, GoogleHqShow::new);
         map.put(PenfoldsWineShow.SHOW_NAME, PenfoldsWineShow::new);
         map.put(MikeyShow.SHOW_NAME, MikeyShow::new);
+        map.put(CloudRoom.SHOW_NAME, CloudRoom::new);
         map.put(HHFlowerShow.SHOW_NAME, HHFlowerShow::new);
         map.put(ArloShow.SHOW_NAME, ArloShow::new);
         map.put(HHGardenShow.SHOW_NAME, HHGardenShow::new);
