@@ -42,6 +42,8 @@ import java.util.*;
  * Base class of utilities all shows should derive from and benefit from
  */
 public abstract class SLShow implements Show, LXLook.Listener {
+    protected LX lx;
+    protected Dispatcher dispatcher;
     public static final String SHOW_NAME = "slshow";
 
     // power mask stuff.. this will be pretty universal and should proably be an inherited class.  For now just testing;
@@ -81,7 +83,28 @@ public abstract class SLShow implements Show, LXLook.Listener {
 
     public abstract SLModel buildModel();
 
+    /**
+     * Public method to add a controller for a discovered device. Used by CubesShow and internal listeners.
+     */
+    public void onItemAdded(NetworkDevice device) {
+        final DiscoverableController controller;
+        try {
+            controller = new AssignableTenereController(lx, device, controllerInventory, allPortsPowerEnableMask);
+            controllers.add(controller);
+            controllerByInetAddrMap.put(device.ipAddress, controller);
+            controllerByName.put(controller.humanID, controller);
+            System.out.println("[SLShow] onItemAdded: Added controller humanID=" + controller.humanID + ", ip=" + (controller.networkDevice != null ? controller.networkDevice.ipAddress : "null"));
+            dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
+            // set port mask initially
+            allPortsPowerEnableMask.applyStateToController((ControllerWithPowerFeedback) controller);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void setupLx(LX lx) {
+        this.lx = lx;
+        this.dispatcher = Dispatcher.getInstance(lx);
         instanceByLX.put(lx, new WeakReference<>(this));
 
         final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();
@@ -115,18 +138,7 @@ public abstract class SLShow implements Show, LXLook.Listener {
 
         networkMonitor.opcDeviceList.addListener(new SetListener<NetworkDevice>() {
             public void onItemAdded(NetworkDevice device) {
-                final DiscoverableController controller;
-                try {
-                    controller = new AssignableTenereController(lx, device, controllerInventory, allPortsPowerEnableMask);
-                    controllers.add(controller);
-                    controllerByInetAddrMap.put(device.ipAddress, controller);
-                    controllerByName.put(controller.humanID, controller);
-                    dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
-                    // set port mask initially
-                    allPortsPowerEnableMask.applyStateToController((ControllerWithPowerFeedback) controller);
-                } catch (SocketException e) {
-                    e.printStackTrace();
-                }
+                onItemAdded(device);
             }
 
             public void onItemRemoved(NetworkDevice device) {

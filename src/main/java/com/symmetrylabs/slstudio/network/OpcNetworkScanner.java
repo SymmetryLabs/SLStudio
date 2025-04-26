@@ -36,6 +36,7 @@ public class OpcNetworkScanner extends UdpBroadcastNetworkScanner {
                 ByteBuffer.wrap(new OpcMessage(0x88, 4).bytes),
                 ByteBuffer.wrap(new OpcMessage(0, SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY).bytes),
             });
+        System.out.println("[OpcNetworkScanner] Constructor called, setting up OPC discovery packets");
         port = OpcSocket.DEFAULT_PORT;
         this.dispatcher = dispatcher;
     }
@@ -47,6 +48,7 @@ public class OpcNetworkScanner extends UdpBroadcastNetworkScanner {
 
     @Override
     protected void sendPacket(InetAddress broadcast, DatagramChannel chan, ByteBuffer data) throws IOException {
+        // System.out.println("[OpcNetworkScanner] Sending discovery packet to " + broadcast.getHostAddress() + ":" + port);
         chan.send(data, new InetSocketAddress(broadcast, port));
     }
 

@@ -126,6 +126,8 @@ public abstract class UdpBroadcastNetworkScanner {
      * discovery packet. This method is 100% non-blocking.
      */
     public synchronized void scan() {
+    
+    
         expireInterfaces();
         expireDevices();
         for (InetAddress broadcast : NetworkUtils.getBroadcastAddresses()) {
@@ -135,8 +137,9 @@ public abstract class UdpBroadcastNetworkScanner {
             // try and nerf all other network comms...
             // I feel like static IP targets will still send.  Which is bad.
             // NOTE this is important because otherwise our application floods sum shit.
-            if(broadcast.toString().equals("/10.255.255.255")){
-//            if(true){
+            // Send to all broadcast addresses
+            if (true) {
+                
                 if (!chans.containsKey(broadcast)) {
                     try {
                         DatagramChannel recvChan = SelectorProvider.provider().openDatagramChannel();

@@ -33,6 +33,7 @@ public class UIOutputs extends UICollapsibleSection {
 
         show.addControllerSetListener(new SetListener<DiscoverableController>() {
             public void onItemAdded(final DiscoverableController c) {
+    System.out.println("[UIOutputs] onItemAdded: humanID=" + c.humanID + ", ip=" + (c.networkDevice != null ? c.networkDevice.ipAddress : "null"));
                 dispatcher.dispatchUi(() -> {
                     if (c.networkDevice != null) {
                     c.networkDevice.version.addListener(deviceVersionListener);
@@ -74,6 +75,10 @@ public class UIOutputs extends UICollapsibleSection {
     }
 
     private void updateItems(SLShow show) {
+    System.out.println("[UIOutputs] updateItems: controllers=" + show.getSortedControllers().size());
+    for (DiscoverableController c : show.getSortedControllers()) {
+        System.out.println("[UIOutputs] Controller: humanID=" + c.humanID + ", ip=" + (c.networkDevice != null ? c.networkDevice.ipAddress : "null"));
+    }
         final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
         for (DiscoverableController c : show.getSortedControllers()) { items.add(new ControllerItem(c)); }
         outputList.setItems(items);

@@ -256,7 +256,9 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
     int frameLogCounter = 0;
 @Override
 public void draw() {
-
+    if (dispatcher != null) {
+        dispatcher.draw();
+    }
     background(0);
     fill(255);
     ellipse(width/2, height/2, 100, 100);

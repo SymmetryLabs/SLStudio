@@ -53,6 +53,7 @@ public class NetworkMonitor {
     }
 
     private NetworkMonitor(LX lx) {
+    System.out.println("[NetworkMonitor] Constructed for LX: " + lx);
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
         try {
             recvSelector = SelectorProvider.provider().openSelector();
@@ -75,7 +76,9 @@ public class NetworkMonitor {
         artNetDeviceList = artNetNetworkScanner.deviceList;
 
         opcDeviceList.addListener(new SetListener<NetworkDevice>() {
+    // Debug: Listener attached to opcDeviceList
             public void onItemAdded(final NetworkDevice newDevice) {
+    System.out.println("[NetworkMonitor] onItemAdded: " + newDevice + " IP: " + newDevice.ipAddress);
                 if (newDevice.versionId.isEmpty()) {
                     warnOldVersion();
                 }
@@ -98,7 +101,9 @@ public class NetworkMonitor {
                 });
                 }
             }
-            public void onItemRemoved(final NetworkDevice device) { }
+            public void onItemRemoved(final NetworkDevice device) {
+    System.out.println("[NetworkMonitor] onItemRemoved: " + device + " IP: " + device.ipAddress);
+}
         });
     }
 
@@ -127,6 +132,7 @@ public class NetworkMonitor {
 
     private void loop() {
         while (started) {
+            
             cubesOpcNetworkScanner.scan();
             treeOpcNetworkScanner.scan();
             artNetNetworkScanner.scan();

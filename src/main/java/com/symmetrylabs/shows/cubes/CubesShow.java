@@ -7,6 +7,7 @@ import com.symmetrylabs.slstudio.output.CubeModelControllerMapping;
 import com.symmetrylabs.color.PerceptualColorScale;
 
 import com.symmetrylabs.shows.Show;
+
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
@@ -106,6 +107,7 @@ public abstract class CubesShow implements Show {
     public abstract SLModel buildModel();
 
     public void setupLx(LX lx) {
+        System.out.println("CubesShow.setupLx called for LX: " + lx);
         instanceByLX.put(lx, new WeakReference<>(this));
 
         final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();
@@ -119,14 +121,18 @@ public abstract class CubesShow implements Show {
 
         networkMonitor.opcDeviceList.addListener(new SetListener<NetworkDevice>() {
             public void onItemAdded(NetworkDevice device) {
+                
                 final CubesController controller = new CubesController(lx, device, cubeInventory, outputScaler);
+                
                 controller.set16BitColorEnabled(device.featureIds.contains("rgb16"));
                 controllers.add(controller);
                 dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
+
                 //controller.enabled.setValue(false);
             }
 
             public void onItemRemoved(NetworkDevice device) {
+                System.out.println("CubesShow: Network device removed: " + device);
                 final CubesController controller = getControllerByDevice(device);
                 controllers.remove(controller);
                 dispatcher.dispatchNetwork(() -> {
@@ -165,7 +171,7 @@ public abstract class CubesShow implements Show {
             }
         });
 
-        System.out.println("set up controllers");
+        
     }
 
     public CubesController getControllerByDevice(NetworkDevice device) {

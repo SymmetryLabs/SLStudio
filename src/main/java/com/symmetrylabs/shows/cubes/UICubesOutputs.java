@@ -32,23 +32,36 @@ public class UICubesOutputs extends UICollapsibleSection {
         outputList.addToContainer(this);
 
         show.addControllerSetListener(new SetListener<CubesController>() {
+    
             public void onItemAdded(final CubesController c) {
+                System.out.println("UICubesOutputs: SetListener onItemAdded fired for controller: " + c);
                 dispatcher.dispatchUi(() -> {
-                    if (c.networkDevice != null) {
-                    c.networkDevice.version.addListener(deviceVersionListener);
+                    try {
+                        System.out.println("UICubesOutputs: dispatchUi Runnable executing for updateItems (onItemAdded)");
+                        if (c.networkDevice != null) {
+                            c.networkDevice.version.addListener(deviceVersionListener);
+                        }
+                        updateItems(show);
+                    } catch (Exception e) {
+                        System.out.println("UICubesOutputs: Exception in dispatchUi (onItemAdded): " + e);
+                        e.printStackTrace();
                     }
-
-                    updateItems(show);
                 });
             }
 
             public void onItemRemoved(final CubesController c) {
+                System.out.println("UICubesOutputs: SetListener onItemRemoved fired for controller: " + c);
                 dispatcher.dispatchUi(() -> {
-                    if (c.networkDevice != null) {
-                    c.networkDevice.version.removeListener(deviceVersionListener);
+                    try {
+                        System.out.println("UICubesOutputs: dispatchUi Runnable executing for updateItems (onItemRemoved)");
+                        if (c.networkDevice != null) {
+                            c.networkDevice.version.removeListener(deviceVersionListener);
+                        }
+                        updateItems(show);
+                    } catch (Exception e) {
+                        System.out.println("UICubesOutputs: Exception in dispatchUi (onItemRemoved): " + e);
+                        e.printStackTrace();
                     }
-
-                    updateItems(show);
                 });
             }
         });
@@ -74,8 +87,11 @@ public class UICubesOutputs extends UICollapsibleSection {
     }
 
     private void updateItems(CubesShow show) {
+        System.out.println("UICubesOutputs.updateItems called");
         final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
-        for (CubesController c : show.getSortedControllers()) { items.add(new ControllerItem(c)); }
+        int count = 0;
+        for (CubesController c : show.getSortedControllers()) { items.add(new ControllerItem(c)); count++; }
+        System.out.println("UICubesOutputs.updateItems: number of controllers/items = " + count);
         outputList.setItems(items);
         setTitle(items.size());
         redraw();
