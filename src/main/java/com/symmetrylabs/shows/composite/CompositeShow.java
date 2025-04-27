@@ -19,7 +19,28 @@ import java.util.List;
 /**
  * CompositeShow merges MikeyShow and YsiadsPartyShow so both models and outputs coexist.
  */
-public class CompositeShow implements Show {
+import com.symmetrylabs.slstudio.output.PointsGrouping;
+import com.symmetrylabs.slstudio.output.SLController;
+import com.symmetrylabs.slstudio.network.NetworkMonitor;
+import com.symmetrylabs.slstudio.network.NetworkDevice;
+import com.symmetrylabs.util.listenable.ListenableSet;
+import com.symmetrylabs.util.listenable.SetListener;
+import com.symmetrylabs.util.dispatch.Dispatcher;
+import heronarts.lx.parameter.BooleanParameter;
+
+public class CompositeShow extends com.symmetrylabs.shows.cubes.CubesShow {
+    private final ListenableSet<SLController> controllers = new ListenableSet<>();
+    private final ListenableSet<CubesController> cubesControllers = new ListenableSet<>();
+
+    @Override
+    public String getShowName() {
+        return SHOW_NAME;
+    }
+
+    public void setupUi(com.symmetrylabs.slstudio.SLStudioLX lx, com.symmetrylabs.slstudio.SLStudioLX.UI ui) {
+        new com.symmetrylabs.shows.cubes.UICubesOutputs(lx, ui, this, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.utility);
+        new com.symmetrylabs.shows.cubes.UICubesMappingPanel(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth()).addToContainer(ui.rightPane.utility);
+    }
     public static final String SHOW_NAME = "composite";
 
     @Override
@@ -29,31 +50,158 @@ public class CompositeShow implements Show {
 
     @Override
     public void setupLx(LX lx) {
+        // Ensure model is built and attached to LX before any listeners
+        // LX.model is final and must be set at construction.
+        // If we do not have the correct model, abort with a clear error.
+        if (!(lx.model instanceof CompositeModel)) {
+            throw new IllegalStateException("LX must be constructed with a CompositeModel. Please ensure this in your app startup logic.");
+        }
         CompositeModel model = (CompositeModel) lx.model;
-        // Add Mikey outputs (Pixlite)
         MikeyShow.MikeyModel mikeyModel = model.getMikeyModel();
-        MikeyShow.MikeyPixlite pixlite1 = new MikeyShow.MikeyPixlite(lx, "192.168.1.42", mikeyModel, 0);
-        MikeyShow.MikeyPixlite pixlite2 = new MikeyShow.MikeyPixlite(lx, "192.168.0.193", mikeyModel, 8);
-        lx.addOutput(pixlite1);
-        lx.addOutput(pixlite2);
-        // Add Cubes outputs (CubesControllers)
-        CubesModel cubesModel = model.getCubesModel();
-        // You may need to adjust the CubesController constructor arguments as needed for your setup
-        CubesController cubesController = new CubesController(lx, "192.168.1.100"); // Example IP
-        lx.addOutput(cubesController);
+        Dispatcher dispatcher = Dispatcher.getInstance(lx);
+        NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();
+
+        // Now it is safe to register listeners
+        networkMonitor.opcDeviceList.addListener(new SetListener<NetworkDevice>() {
+            public void onItemAdded(NetworkDevice device) {
+                String physicalId = device.deviceId;
+                PointsGrouping points = new PointsGrouping(physicalId);
+                CubesController cubesController = null;
+                // Debug: log the size of model.cubes
+                System.out.println("[CompositeShow] model.cubes size: " + model.cubes.size());
+                // Find and wire up the matching cube
+                for (com.symmetrylabs.shows.cubes.CubesModel.Cube cube : model.cubes) {
+                    String cubeId = cube.modelId;
+                    System.out.println("[CompositeShow] Checking cubeId=" + cubeId + " against deviceId=" + physicalId);
+                    if (cubeId != null && cubeId.equals(physicalId)) {
+                        System.out.println("[CompositeShow] Match found! Creating CubesController for cubeId=" + cubeId);
+                        // Create CubesController for this cube
+                        cubesController = new CubesController(lx, device, model.inventory, outputScaler);
+                        cubesControllers.add(cubesController);
+                        System.out.println("[CompositeShow] Added CubesController: " + cubesController + " for device " + device.deviceId);
+                        final CubesController finalCubesController = cubesController;
+                        dispatcher.dispatchNetwork(() -> lx.addOutput(finalCubesController));
+                        // Print all outputs after addition
+                        // Print the output that was just added
+                        System.out.println("[CompositeShow] LX Output (just added): " + finalCubesController);
+                        // Optionally set 16-bit color if device supports
+                        cubesController.set16BitColorEnabled(device.featureIds.contains("rgb16"));
+                        // Only one controller per device/cube
+                        break;
+                    }
+                }
+                // Existing SLController logic for Pixlite or other outputs
+                PointsGrouping slPoints = new PointsGrouping(physicalId);
+                for (com.symmetrylabs.shows.cubes.CubesModel.Cube cube : model.cubes) {
+                    String cubeId = cube.modelId;
+                    if (cubeId != null && cubeId.equals(physicalId)) {
+                        List<com.symmetrylabs.slstudio.model.Strip> strips = ((com.symmetrylabs.slstudio.model.StripsModel) cube).getStrips();
+                        for (com.symmetrylabs.slstudio.model.Strip strip : strips) {
+                            slPoints.addPoints(strip.points);
+                        }
+                    }
+                }
+                SLController slController = new SLController(lx, device, slPoints, physicalId);
+                controllers.add(slController);
+                dispatcher.dispatchNetwork(() -> lx.addOutput(slController));
+            }
+            public void onItemRemoved(NetworkDevice device) {
+                // Remove CubesController
+                CubesController cubesControllerToRemove = null;
+                for (CubesController c : cubesControllers) {
+                    if (c.networkDevice == device) {
+                        cubesControllerToRemove = c;
+                        break;
+                    }
+                }
+                if (cubesControllerToRemove != null) {
+                    cubesControllers.remove(cubesControllerToRemove);
+                    final CubesController finalToRemove = cubesControllerToRemove;
+                    dispatcher.dispatchNetwork(() -> {
+                        finalToRemove.dispose();
+                        lx.removeOutput(finalToRemove);
+                    });
+                }
+                // Remove SLController
+                SLController slController = getCompositeControllerByDevice(device);
+                if (slController != null) {
+                    controllers.remove(slController);
+                    dispatcher.dispatchNetwork(() -> {
+                        //lx.removeOutput(slController);
+                    });
+                }
+            }
+        });
+
+        // Enable/disable all controllers when engine output is toggled
+        lx.engine.output.enabled.addListener(param -> {
+            boolean isEnabled = ((BooleanParameter) param).isOn();
+            for (SLController controller : controllers) {
+                controller.enabled.setValue(isEnabled);
+            }
+        });
+
+        // Add Mikey Pixlite outputs
+        lx.addOutput(new MikeyShow.MikeyPixlite(lx, "192.168.1.42", mikeyModel, 0));
+        lx.addOutput(new MikeyShow.MikeyPixlite(lx, "192.168.0.193", mikeyModel, 8));
+    }
+
+    // Use a differently named method to avoid conflict with CubesShow.getControllerByDevice
+    public SLController getCompositeControllerByDevice(NetworkDevice device) {
+        for (SLController controller : controllers) {
+            if (controller.networkDevice == device) {
+                return controller;
+            }
+        }
+        return null;
     }
 
     /**
      * CompositeModel contains both MikeyModel and YsiadsPartyModel as children.
      */
-    public static class CompositeModel extends SLModel {
-        private final MikeyShow.MikeyModel mikeyModel;
-        private final CubesModel cubesModel;
+    public static class CompositeModel extends com.symmetrylabs.slstudio.model.SLModel {
+        public final MikeyShow.MikeyModel mikeyModel;
+        public final CubesModel cubesModel;
+        // Expose cubesModel fields for compatibility (corrected packages and types)
+        public final com.symmetrylabs.slstudio.output.CubeModelControllerMapping mapping;
+        public final com.symmetrylabs.util.hardware.CubeInventory inventory;
+        public final java.util.List<com.symmetrylabs.shows.cubes.CubesModel.Tower> towers;
+        public final java.util.List<com.symmetrylabs.shows.cubes.CubesModel.Cube> cubes;
+        public final java.util.List<com.symmetrylabs.shows.cubes.CubesModel.Face> faces;
 
         public CompositeModel(MikeyShow.MikeyModel mikeyModel, CubesModel cubesModel) {
-            super(SHOW_NAME, combinePoints(mikeyModel, cubesModel));
+            super("CompositeModel", new CompositeFixture(mikeyModel, cubesModel));
             this.mikeyModel = mikeyModel;
             this.cubesModel = cubesModel;
+            // Defensive: fail fast if mapping or inventory is null
+            if (cubesModel.mapping == null)
+                throw new IllegalStateException("cubesModel.mapping is null in CompositeModel constructor!");
+            if (cubesModel.inventory == null)
+                throw new IllegalStateException("cubesModel.inventory is null in CompositeModel constructor!");
+            // Copy cubesModel fields for compatibility with code expecting them on the model
+            this.mapping = cubesModel.mapping;
+            this.inventory = cubesModel.inventory;
+            this.towers = cubesModel.getTowers();
+            this.cubes = cubesModel.getCubes();
+            this.faces = cubesModel.getFaces();
+        }
+
+        private static class CompositeFixture extends heronarts.lx.model.LXAbstractFixture {
+            CompositeFixture(MikeyShow.MikeyModel mikeyModel, CubesModel cubesModel) {
+                if (mikeyModel != null && mikeyModel.getPoints() != null) {
+                    this.points.addAll(mikeyModel.getPoints());
+                }
+                if (cubesModel != null && cubesModel.getPoints() != null) {
+                    this.points.addAll(cubesModel.getPoints());
+                }
+            }
+        }
+
+        public Iterator<? extends LXModel> getChildren() {
+            List<LXModel> children = new ArrayList<>();
+            children.add(mikeyModel);
+            children.add(cubesModel);
+            return children.iterator();
         }
 
         public static CompositeModel create() {
@@ -65,14 +213,6 @@ public class CompositeShow implements Show {
 
         public MikeyShow.MikeyModel getMikeyModel() { return mikeyModel; }
         public CubesModel getCubesModel() { return cubesModel; }
-
-        @Override
-        public Iterator<? extends LXModel> getChildren() {
-            List<LXModel> children = new ArrayList<>();
-            children.add(mikeyModel);
-            children.add(cubesModel);
-            return children.iterator();
-        }
 
         private static List<LXPoint> combinePoints(LXModel... models) {
             List<LXPoint> all = new ArrayList<>();
