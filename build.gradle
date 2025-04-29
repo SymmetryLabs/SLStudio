@@ -86,6 +86,8 @@ repositories {
 }
 
 dependencies {
+
+    implementation 'org.json:json:20210307' 
 	// https://mvnrepository.com/artifact/org.processing/core
 	implementation group: 'org.processing', name: 'core', version: '3.3.6'
 
