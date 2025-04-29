@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1745903397332,
+  "timestamp": 1745905712508,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -3914,7 +3914,7 @@
               "xSpd": 0.7,
               "ySpd": 0.6,
               "zSpd": 0.5,
-              "xSize": 0.3,
+              "xSize": 0.0,
               "xLvl": 1.0,
               "yLvl": 0.2900000065565109,
               "zLvl": 0.0,
@@ -4111,7 +4111,7 @@
         }
       },
       "outputControl": {
-        "id": 51,
+        "id": 66,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -11008,
         "parameters": {

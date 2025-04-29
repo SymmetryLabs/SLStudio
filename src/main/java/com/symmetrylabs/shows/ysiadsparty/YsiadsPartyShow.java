@@ -31,8 +31,8 @@ public class YsiadsPartyShow extends CubesShow implements Show {
 
     static final TowerConfig[] TOWER_CONFIG = {
         //Back Row 1-4
-        new TowerConfig(CSP*-1.5f, CHT*.667f, CSP*0, 0, -45, 0, new String[] { "938", "787","51"}),
-        new TowerConfig(CSP*-.5f, CHT*1.667f, CSP*.5f, 0, -45, 0, new String[] { "833", "39"}),
+        new TowerConfig(CSP*0, CHT*.667f, CSP*0, 0, 135, 0, new String[] { "833", "787","51"}),
+        new TowerConfig(CSP*1, CHT*1.667f, CSP*.5f, 0, 135, 0, new String[] { "938", "39"}),
         // new TowerConfig(CSP*.5f, CHT*1.667f, CSP*.5f, 0, -45, 0, new String[] { "23", "356"}),
         // new TowerConfig(CSP*1.5f, CHT*.667f, CSP*0, 0, -45, 0, new String[] { "14", "9","677"}),
 
