@@ -21,6 +21,10 @@ import java.io.OutputStream;
 import java.net.*;
 
 public class CubesController extends LXOutput implements Comparable<CubesController>, OPCConstants {
+    private PointsGrouping points;
+    public void setPoints(PointsGrouping points) {
+        this.points = points;
+    }
     public final String id;
     public final int idInt;
     public final InetAddress host;
@@ -145,45 +149,8 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             }
         }
 
-        // Find the Cube we're outputting to
-        // If we're on broadcast, use cube 0 for all cubes, even
-        // if that cube isn't modelled yet
-        // Use the mac address to find the cube if we have it
-        // Otherwise use the cube id
-        if (!(lx.model instanceof CubesModel)) {
-            ApplicationState.setWarning("CubesController", "model is not a cube model");
-            return;
-        }
-
-        PointsGrouping points = null;
-        CubesModel cubesModel = (CubesModel)lx.model;
-
-        if ((ApplicationState.outputControl().testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
-            CubesModel.Cube cube = cubesModel.getCubes().get(0);
-            if (cube instanceof CubesModel.DoubleControllerCube) {
-                points = ((CubesModel.DoubleControllerCube)cube).getPointsA();
-            }
-            else {
-                points = new PointsGrouping(cube.getPoints());
-            }
-        } else {
-            for (CubesModel.Cube c : cubesModel.getCubes()) {
-                if (c instanceof CubesModel.DoubleControllerCube) {
-                    CubesModel.DoubleControllerCube c2 = (CubesModel.DoubleControllerCube) c;
-                    if (c2.idA != null && c2.idB != null) {
-                        if (c2.idA.equals(id)) {
-                            points = c2.getPointsA();
-                        }
-                        if (c2.idB.equals(id)) {
-                            points = c2.getPointsB();
-                        }
-                    }
-                }
-                else if (c.id != null && c.id.equals(id)) {
-                    points = new PointsGrouping(c.getPoints());
-                }
-            }
-        }
+        // Always use the controller's assigned points field for output
+        PointsGrouping points = this.points;
 
         // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
         // TODO: refactor here
@@ -226,20 +193,43 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         } else if (points != null) {
             int numPixels = points.size();
 
-            // Fill the datagram with pixel data
+            // Fill the datagram with pixel data and add debug logging
             if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
                 initPacketData(numPixels, true);
                 long[] srcLongs = (long[]) src.getArray(PolyBuffer.Space.RGB16);
                 for (int i = 0; i < numPixels; i++) {
                     LXPoint point = points.getPoint(i);
+                    if (point.index < 0 || point.index >= srcLongs.length) {
+                        // System.err.println(String.format("[CubesController][onSend] ERROR: point.index %d out of bounds for srcLongs[%d] (controller id=%s)", point.index, srcLongs.length, id));
+                        setPixel(i, 0L);
+                        continue;
+                    }
                     setPixel(i, srcLongs[point.index]);
+                    if (i < 8) {
+                        int red = Ops16.red(srcLongs[point.index]);
+                        int green = Ops16.green(srcLongs[point.index]);
+                        int blue = Ops16.blue(srcLongs[point.index]);
+                        // System.out.println(String.format("[CubesController][onSend] id=%s pixel[%d] point.index=%d RGB16=(%d,%d,%d)", id, i, point.index, red, green, blue));
+                    }
                 }
             } else {
                 initPacketData(numPixels, false);
                 int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
                 for (int i = 0; i < numPixels; i++) {
                     LXPoint point = points.getPoint(i);
+                    if (point.index < 0 || point.index >= srcInts.length) {
+                        // System.err.println(String.format("[CubesController][onSend] ERROR: point.index %d out of bounds for srcInts[%d] (controller id=%s)", point.index, srcInts.length, id));
+                        setPixel(i, LXColor.BLACK);
+                        continue;
+                    }
                     setPixel(i, srcInts[point.index]);
+                    if (i < 8) {
+                        int c = srcInts[point.index];
+                        int red = LXColor.red(c);
+                        int green = LXColor.green(c);
+                        int blue = LXColor.blue(c);
+                        // System.out.println(String.format("[CubesController][onSend] id=%s pixel[%d] point.index=%d RGB8=(%d,%d,%d)", id, i, point.index, red, green, blue));
+                    }
                 }
             }
         } else {
@@ -250,12 +240,22 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
             }
         }
 
+        // Debug: log outgoing packet info
+        if (packetData != null) {
+            int previewLen = Math.min(8, packetData.length);
+            StringBuilder preview = new StringBuilder();
+            for (int i = 0; i < previewLen; i++) {
+                preview.append(String.format("%02X ", packetData[i]));
+            }
+            int hash = java.util.Arrays.hashCode(packetData);
+            // System.out.println(String.format("[CubesController][onSend] id=%s host=%s thread=%s dataHash=%08X preview=%s", id, host, Thread.currentThread().getName(), hash, preview.toString()));
+        }
         // Send the cube data to the cube. yay!
         try {
             dsocket.send(packet);
         }
         catch (Exception e) {
-            ApplicationState.setWarning("CubesController", "failed to send packet: " + e.getMessage());
+            // ApplicationState.setWarning("CubesController", "failed to send packet: " + e.getMessage());
         }
     }
 

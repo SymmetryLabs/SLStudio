@@ -1,306 +1,264 @@
 package com.symmetrylabs.shows.composite;
 
-import java.util.List;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.WeakHashMap;
-import java.lang.ref.WeakReference;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.util.*;
+import org.json.JSONObject;
 
 import com.symmetrylabs.shows.Show;
-import com.symmetrylabs.util.CubePhysicalIdMap;
-import heronarts.lx.LX;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.transform.LXTransform;
-import heronarts.lx.output.LXDatagramOutput;
-
-import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.SLStudioLX;
+import com.symmetrylabs.shows.mikey.MikeyShow;
+import com.symmetrylabs.shows.cubes.CubesModel;
+import com.symmetrylabs.shows.cubes.CubesController;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.StripsModel;
+import com.symmetrylabs.slstudio.model.Strip;
+import heronarts.lx.LX;
+import heronarts.lx.model.LXModel;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.transform.LXTransform;
+
+/**
+ * CompositeShow merges MikeyShow and YsiadsPartyShow so both models and outputs coexist.
+ */
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.slstudio.output.SLController;
-import com.symmetrylabs.slstudio.output.SimplePixlite;
-import com.symmetrylabs.shows.cubes.CubesModel;
-import com.symmetrylabs.shows.oslo.TreeModel;
-import com.symmetrylabs.shows.icicles.Icicle;
-import com.symmetrylabs.shows.butterflies.ButterfliesModel;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.ListenableSet;
 import com.symmetrylabs.util.listenable.SetListener;
-import com.symmetrylabs.slstudio.output.TenereDatagram;
+import com.symmetrylabs.util.dispatch.Dispatcher;
+import heronarts.lx.parameter.BooleanParameter;
 
-public class CompositeShow implements Show {
-    ListenableSet<SLController> controllers = new ListenableSet<>();
-    CubePhysicalIdMap cubePhysicalIdMap = new CubePhysicalIdMap();
+public class CompositeShow extends com.symmetrylabs.shows.cubes.CubesShow {
+    public static final String SHOW_NAME = "composite";
+    
+    private final ListenableSet<SLController> controllers = new ListenableSet<>();
+    private final ListenableSet<CubesController> cubesControllers = new ListenableSet<>();
+    
+    // Map to track all assigned indices for overlap check
+    private static Map<String, int[]> assignedIndicesMap = new HashMap<>();
 
-    List<CubesModel.Cube> cubes = new ArrayList<>();
-    List<TreeModel.Branch> branches = new ArrayList<>();
-    List<ButterfliesModel.Butterfly> butterflies = new ArrayList<>();
+    public Collection<CubesController> getSortedControllers() {
+        return new TreeSet<>(cubesControllers);
+    }
 
-    // for SLController mac address lookup
-    static Map<String, String> macToPhysid = new HashMap<>();
-    static Map<String, String> physidToMac = new HashMap<>();
+    public void addControllerSetListener(SetListener<CubesController> listener) {
+        cubesControllers.addListener(listener);
+    }
 
-    static final float INCHES_PER_METER = 39.3701f;
+    public String getShowName() {
+        return SHOW_NAME;
+    }
 
-    static final float globalOffsetX = 0;
-    static final float globalOffsetY = 0;
-    static final float globalOffsetZ = 0;
+    @Override
+    public void setupUi(com.symmetrylabs.slstudio.SLStudioLX lx, com.symmetrylabs.slstudio.SLStudioLX.UI ui) {
+        new com.symmetrylabs.shows.cubes.UICubesOutputs(lx, ui, this, 0, 0, ui.rightPane.utility.getContentWidth())
+            .addToContainer(ui.rightPane.utility);
+        new com.symmetrylabs.shows.cubes.UICubesMappingPanel(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth())
+            .addToContainer(ui.rightPane.utility);
+    }
 
-    static final float globalRotationX = 0;
-    static final float globalRotationY = 0;
-    static final float globalRotationZ = 0;
-
-    static final float CUBES_SPACING = 24f+9f;;
-    static final float CUBES_Y_JUMP = 24f+12f;
-
-    /**
-     * Cubes
-     *--------------------------------------------------------------------------------------*/
-    static final TowerConfig[] TOWER_CONFIG = {
-        new TowerConfig(0, 0, 0, -45, new String[] { "326", "198", "6","50" }),
-        new TowerConfig(CUBES_SPACING * 1, 0, 0, -45, new String[] { "418", "203", "54" }),
-        new TowerConfig(CUBES_SPACING * 2, 0, 0, -45, new String[] { "150", "312", "129" }),
-        new TowerConfig(CUBES_SPACING * 3, 0, 0, -45, new String[] { "172", "79", "111", "177" }),
-        new TowerConfig(CUBES_SPACING * 1.5f, CUBES_Y_JUMP * 3, 0, -45, new String[] {"87"}),
-        new TowerConfig(CUBES_SPACING * 0.5f, 0, -24*2, -45, new String[] {"340", "135", "391", "390"}),
-        new TowerConfig(CUBES_SPACING * 1.5f, 0, -24*2, -45, new String[] {"182", "398", "94" }),
-        new TowerConfig(CUBES_SPACING * 2.5f, 0, -24*2, -45, new String[] {"29", "30", "199", "27"}),
-        new TowerConfig(CubesModel.Cube.Type.MEDIUM, CUBES_SPACING * 2.5f + 6, 0, -24*2, -45, new String[] { "143"}),
-        new TowerConfig(CubesModel.Cube.Type.MEDIUM, CUBES_SPACING * .5f + 6, 0, -24*2, -45, new String[] { "393"}),
-        new TowerConfig(CUBES_SPACING * 1, 0, -24*4, -45, new String[] { "383", "211", "d8:80:39:9b:23:ad"}),
-        new TowerConfig(CUBES_SPACING * 2, 0, -24*4, -45, new String[] { "196", "18", "361"}),
-        new TowerConfig(CubesModel.Cube.Type.MEDIUM, CUBES_SPACING * 1+6, 0, -24*4, -45, new String[] { "210"}),
-        new TowerConfig(CubesModel.Cube.Type.MEDIUM, CUBES_SPACING * 2+6, 0, -24*4, -45, new String[] { "345"}),
-        new TowerConfig(CubesModel.Cube.Type.SMALL, CUBES_SPACING * 1+12, 0, -24*4, -45, new String[] { "82"}),
-        new TowerConfig(CubesModel.Cube.Type.SMALL, CUBES_SPACING * 2+12, 0, -24*4, -45, new String[] { ""}),
-        new TowerConfig(43.5f, 0, -24*6, -45, new String[] { "74", "63", "33"}),
-        new TowerConfig(CubesModel.Cube.Type.MEDIUM, CUBES_SPACING * 1.5f, 0, -24*6, -45, new String[] { "334"}),
-        new TowerConfig(CubesModel.Cube.Type.SMALL, CUBES_SPACING * 1.75f, 0, -24*6, -45, new String[] { "384"})
-    };
-
-    /**
-     * Leaf Assemblages
-     *--------------------------------------------------------------------------------------*/
-    static final LeafAssemblageConfig[] LEAF_ASSEMBLAGE_CONFIG = {
-        //new LeafAssemblageConfig("0", new float[] {100, 0, 0}, new float[] {0, 0, 0})
-    };
-
-    /**
-     * Branches
-     *--------------------------------------------------------------------------------------*/
-    static final BranchConfig[] BRANCH_CONFIG = {
-        new BranchConfig("branch1", new float[] {300, 50, 0}, new float[] {-30, 0, 40}),
-        new BranchConfig("branch2", new float[] {300, 45, -5}, new float[] {-45, 0, 0})
-    };
-
-    /**
-     * Icicles
-     *--------------------------------------------------------------------------------------*/
-    static final IcicleConfig[] ICICLE_CONFIG = {
-        //new IcicleConfig("0", new float[] {300, 0, 0}, new float[] {0, 0, 0}, 72)
-    };
-
-    /**
-     * Butterflies
-     *--------------------------------------------------------------------------------------*/
-    static final ButterflyConfig[] BUTTERFLY_CONFIG = {
-        new ButterflyConfig("butterfly1", new float[] {270, 50, -25}, new float[] {0, 80, -40}, ButterfliesModel.Butterfly.Type.SHARP_CURVY),
-        new ButterflyConfig("butterfly2", new float[] {300, 50, -30}, new float[] {0, 70, -5}, ButterfliesModel.Butterfly.Type.CURVY)
-    };
-
-    // /**
-    //  * Bars
-    //  *--------------------------------------------------------------------------------------*/
-    // static final BarConfig[] BAR_CONFIG = {
-    //   new BarConfig(0, 0, 0, new String[] {"0"}),
-    // };
-
+    @Override
     public SLModel buildModel() {
-        // Any global transforms
-        LXTransform transform = new LXTransform();
-        transform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
-        transform.rotateY(globalRotationX * Math.PI / 180.);
-        transform.rotateX(globalRotationY * Math.PI / 180.);
-        transform.rotateZ(globalRotationZ * Math.PI / 180.);
-
-        List<Strip> strips = new ArrayList<>();
-
-        /**
-         * Cubes
-         *--------------------------------------------------------------------------------------*/
-        for (TowerConfig config : TOWER_CONFIG) {
-            float x = config.x;
-            float z = config.z;
-            float xRot = config.xRot;
-            float yRot = config.yRot;
-            float zRot = config.zRot;
-            CubesModel.Cube.Type type = config.type;
-
-            for (int i = 0; i < config.ids.length; i++) {
-                float y = config.yValues[i];
-                cubes.add(new CubesModel.Cube(config.ids[i], x, y, z, xRot, yRot, zRot, transform, type));
-            }
-        }
-
-        for (CubesModel.Cube cube : cubes) {
-            for (CubesModel.CubesStrip strip : cube.getStrips()) {
-                strips.add((Strip)strip);
-            }
-        }
-
-        /**
-         * Leaf Assemblages
-         *--------------------------------------------------------------------------------------*/
-        for (LeafAssemblageConfig config : LEAF_ASSEMBLAGE_CONFIG) {
-            transform.push();
-            transform.translate(config.x, config.y, config.z);
-            transform.rotateX(config.rx * Math.PI / 180f);
-            transform.rotateY(config.ry * Math.PI / 180f);
-            transform.rotateZ(config.rz * Math.PI / 180f);
-
-            TreeModel.LeafAssemblage leafAssemblage = new TreeModel.LeafAssemblage(config.channel, transform);
-            for (int i = 0; i < leafAssemblage.leaves.size(); i++) {
-                strips.add(new Strip(
-                    config.id+"_strip"+i,
-                    new Strip.Metrics(leafAssemblage.leaves.size()),
-                    new ArrayList<>(Arrays.asList(leafAssemblage.leaves.get(i).points))
-                ));
-            }
-            transform.pop();
-        }
-
-        /**
-         * Branches
-         *--------------------------------------------------------------------------------------*/
-        for (BranchConfig config : BRANCH_CONFIG) {
-            transform.push();
-            transform.translate(config.x, config.y, config.z);
-            transform.rotateX(config.rx * Math.PI / 180f);
-            transform.rotateY(config.ry * Math.PI / 180f);
-            transform.rotateZ(config.rz * Math.PI / 180f);
-
-            TreeModel.Branch branch = new TreeModel.Branch(transform);
-            branches.add(branch);
-            for (int i = 0; i < branch.leaves.size(); i++) {
-                strips.add(new Strip(
-                    config.id+"_strip"+i,
-                    new Strip.Metrics(branch.leaves.size()),
-                    new ArrayList<>(Arrays.asList(branch.leaves.get(i).points))
-                ));
-            }
-            transform.pop();
-        }
-
-        /**
-         * Icicles
-         *--------------------------------------------------------------------------------------*/
-        for (IcicleConfig config : ICICLE_CONFIG) {
-            transform.push();
-            String id = config.id;
-            float x = config.x;
-            float y = config.y;
-            float z = config.z;
-            float rx = config.rx;
-            float ry = config.ry;
-            float rz = config.rz;
-            Icicle.Metrics metrics = new Icicle.Metrics(config.numPoints, config.pixelPitch);
-
-            Icicle icicle = new Icicle(id, x, y, z, rx, ry, rz, transform, metrics);
-            strips.addAll(icicle.getStrips());
-            transform.pop();
-        }
-
-        /**
-         * Butterflies
-         *--------------------------------------------------------------------------------------*/
-        for (ButterflyConfig config : BUTTERFLY_CONFIG) {
-            transform.push();
-            String id = config.id;
-            float x = config.x;
-            float y = config.y;
-            float z = config.z;
-            float rx = config.rx;
-            float ry = config.ry;
-            float rz = config.rz;
-            ButterfliesModel.Butterfly.Type type = config.type;
-
-            ButterfliesModel.Butterfly butterfly = new ButterfliesModel.Butterfly(id, x, y, z, rx, ry, rz, type, transform);
-            butterflies.add(butterfly);
-            strips.addAll(butterfly.getStrips());
-            transform.pop();
-        }
-
-        /**
-         * TODO: add bars and butterflies
-         */
-
-        return new CompositeModel(strips);
+        return CompositeModel.create();
     }
 
-    private static Map<LX, WeakReference<CompositeShow>> instanceByLX = new WeakHashMap<>();
+    @Override
+    public void setupLx(LX lx) {
+        // Ensure model is built and attached to LX before any listeners
+        if (!(lx.model instanceof CompositeModel)) {
+            throw new IllegalStateException("LX must be constructed with a CompositeModel");
+        }
 
-    public static CompositeShow getInstance(LX lx) {
-        WeakReference<CompositeShow> weakRef = instanceByLX.get(lx);
-        return weakRef == null ? null : weakRef.get();
-    }
+        CompositeModel model = (CompositeModel) lx.model;
+        MikeyShow.MikeyModel mikeyModel = model.getMikeyModel();
+        CubesModel cubesModel = model.getCubesModel();
+        Dispatcher dispatcher = Dispatcher.getInstance(lx);
+        NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();
 
-    public void setupLx(SLStudioLX lx) {
-        instanceByLX.put(lx, new WeakReference<>(this));
+        // Validate point ranges and check for overlaps
+        int mikeyStart = -1, mikeyEnd = -1;
+        int cubesStart = -1, cubesEnd = -1;
 
-        final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();
-        final Dispatcher dispatcher = Dispatcher.getInstance(lx);
+        if (mikeyModel != null && !mikeyModel.getPoints().isEmpty()) {
+            mikeyStart = mikeyModel.getPoints().get(0).index;
+            mikeyEnd = mikeyModel.getPoints().get(mikeyModel.getPoints().size() - 1).index;
+            System.out.println("[CompositeShow] MikeyModel points range: " + mikeyStart + 
+                " to " + mikeyEnd + " (" + mikeyModel.getPoints().size() + " points)");
 
-        /**
-         * TODO: We need to workout a slick way of arbitrarily mapping points to controllers...
-         */
+            // Validate that Mikey indices are sequential and within expected range
+            for (int i = 0; i < mikeyModel.getPoints().size(); i++) {
+                int idx = mikeyModel.getPoints().get(i).index;
+                if (idx < mikeyStart || idx > mikeyEnd) {
+                    System.err.println("[CompositeShow] WARNING: Mikey point index " + idx + 
+                        " outside expected range [" + mikeyStart + "," + mikeyEnd + "]");
+                }
+            }
+        }
+        
+        if (cubesModel != null && !cubesModel.getPoints().isEmpty()) {
+            cubesStart = cubesModel.getPoints().get(0).index;
+            cubesEnd = cubesModel.getPoints().get(cubesModel.getPoints().size() - 1).index;
+            System.out.println("[CompositeShow] CubesModel points range: " + cubesStart + 
+                " to " + cubesEnd + " (" + cubesModel.getPoints().size() + " points)");
 
-        // Put cubes on SLControllers
+            // Validate that cube indices are sequential and within expected range
+            for (int i = 0; i < cubesModel.getPoints().size(); i++) {
+                int idx = cubesModel.getPoints().get(i).index;
+                if (idx < cubesStart || idx > cubesEnd) {
+                    System.err.println("[CompositeShow] WARNING: Cube point index " + idx + 
+                        " outside expected range [" + cubesStart + "," + cubesEnd + "]");
+                }
+            }
+        }
+
+        // Check for overlap between Mikey and Cubes point ranges
+        if (mikeyStart != -1 && cubesStart != -1) {
+            if ((mikeyStart <= cubesEnd && mikeyEnd >= cubesStart) || 
+                (cubesStart <= mikeyEnd && cubesEnd >= mikeyStart)) {
+                System.err.println("[CompositeShow] ERROR: Point index overlap detected between MikeyModel and CubesModel!");
+                System.err.println("MikeyModel range: [" + mikeyStart + "," + mikeyEnd + "]");
+                System.err.println("CubesModel range: [" + cubesStart + "," + cubesEnd + "]");
+            }
+        }
+
+        // Load MAC-to-cubeId mapping from physid_to_mac.json
+        Map<String, String> macToCubeId = new HashMap<>();
+        try {
+            java.nio.file.Path path = java.nio.file.Paths.get("src/main/resources/physid_to_mac.json");
+            String json = new String(java.nio.file.Files.readAllBytes(path));
+            JSONObject obj = new JSONObject(json);
+            for (String key : obj.keySet()) {
+                macToCubeId.put(key, obj.getString(key));
+            }
+        } catch (Exception e) {
+            System.err.println("[CompositeShow] Error loading physid_to_mac.json: " + e.getMessage());
+        }
+
+        // Add network device listener for cubes
         networkMonitor.opcDeviceList.addListener(new SetListener<NetworkDevice>() {
+            @Override
             public void onItemAdded(NetworkDevice device) {
-                String physicalId = cubePhysicalIdMap.getPhysicalId(device.deviceId);
-                final PointsGrouping points = new PointsGrouping(physicalId);
+                String physicalId = device.deviceId;
+                CubesModel.Cube matchedCube = null;
+                String matchedCubeId = null;
 
-                for (CubesModel.Cube cube : cubes) {
-                    if (cube.id.equals(physicalId)) {
-                        // this should live somewhere
-                        List<Strip> strips = ((StripsModel)cube).getStrips();
-
-                        points.addPoints(strips.get(6).points)
-                                    .addPoints(strips.get(7).points)
-                                    .addPoints(strips.get(8).points)
-                                    .addPoints(strips.get(9).points)
-                                    .addPoints(strips.get(10).points)
-                                    .addPoints(strips.get(11).points)
-                                    .addPoints(strips.get(0).points)
-                                    .addPoints(strips.get(1).points)
-                                    .addPoints(strips.get(2).points)
-                                    .addPoints(strips.get(3).points)
-                                    .addPoints(strips.get(4).points)
-                                    .addPoints(strips.get(5).points);
+                // Search for cubeId whose mapped MAC matches this device's MAC
+                for (Map.Entry<String, String> entry : macToCubeId.entrySet()) {
+                    if (entry.getValue().equalsIgnoreCase(physicalId)) {
+                        matchedCubeId = entry.getKey();
+                        // Now find the cube with this ID
+                        for (CubesModel.Cube cube : model.cubes) {
+                            if (cube.id != null && cube.id.equals(matchedCubeId)) {
+                                matchedCube = cube;
+                                break;
+                            }
+                        }
+                        break;
                     }
                 }
 
-                final SLController controller = new SLController(lx, device, points);
-                controllers.add(controller);
-                dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
+                if (matchedCube == null) {
+                    System.err.println("[CompositeShow] No matching cube found for device " + device.deviceId);
+                    return;
+                }
+
+                // Create controller and points grouping
+                CubesController cubesController = new CubesController(lx, device, matchedCubeId);
+                PointsGrouping points = new PointsGrouping(matchedCubeId);
+
+                // Get strips from the matched cube
+                if (!(matchedCube instanceof StripsModel)) {
+                    System.err.println("[CompositeShow] ERROR: Matched cube is not a StripsModel: " + 
+                        matchedCube.getClass().getName());
+                    return;
+                }
+
+                List<Strip> strips = ((StripsModel) matchedCube).getStrips();
+
+                // Validate strip count
+                if (strips.size() != 12) {
+                    System.err.println("[CompositeShow] ERROR: Cube " + matchedCubeId + 
+                        " has " + strips.size() + " strips, expected 12");
+                    return;
+                }
+
+                // Track points for duplicate checking
+                Set<LXPoint> assignedPoints = new HashSet<>();
+
+                // Define strip order based on physical wiring
+                int[] stripOrder = {6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5};
+                
+                System.out.println("[CompositeShow] Assigning points for cube " + matchedCubeId);
+                
+                // First validate all strips have points
+                for (int stripIndex : stripOrder) {
+                    Strip strip = strips.get(stripIndex);
+                    if (strip.points == null || strip.points.length == 0) {
+                        System.err.println("[CompositeShow] ERROR: Strip " + stripIndex + 
+                            " has no points in cube " + matchedCubeId);
+                        return;
+                    }
+                }
+                
+                // Now assign points in order
+                for (int stripIndex : stripOrder) {
+                    Strip strip = strips.get(stripIndex);
+                    
+                    // Log the points we're about to add
+                    System.out.println("[CompositeShow] Adding strip " + stripIndex + " points [" + 
+                        strip.points[0].index + " to " + strip.points[strip.points.length-1].index + 
+                        "] to cube " + matchedCubeId);
+                    
+                    // Check for duplicate point assignments
+                    for (LXPoint point : strip.points) {
+                        if (assignedPoints.contains(point)) {
+                            System.err.println("[CompositeShow] WARNING: Point " + point.index + 
+                                " already assigned in cube " + matchedCubeId);
+                            continue;
+                        }
+                        assignedPoints.add(point);
+                    }
+                    points.addPoints(strip.points);
+                }
+                
+                // Set the points on the controller
+                cubesController.setPoints(points);
+                System.out.println("[CompositeShow] Total points assigned to cube " + matchedCubeId + 
+                    ": " + assignedPoints.size());
+                
+                // Add to static map for overlap check
+                if (assignedIndicesMap != null) {
+                    assignedIndicesMap.put(cubesController.id, points.getIndices());
+                }
+                
+                // Enable 16-bit color if supported
+                cubesController.set16BitColorEnabled(device.featureIds.contains("rgb16"));
+                
+                // Add to both controller sets and register output
+                cubesControllers.add(cubesController);
+                dispatcher.dispatchNetwork(() -> lx.addOutput(cubesController));
             }
 
+            @Override
             public void onItemRemoved(NetworkDevice device) {
-                final SLController controller = getControllerByDevice(device);
-                controllers.remove(controller);
-                dispatcher.dispatchNetwork(() -> {
-                    //lx.removeOutput(controller);
-                });
+                CubesController cubesControllerToRemove = null;
+                for (CubesController cc : cubesControllers) {
+                    if (cc.networkDevice.equals(device)) {
+                        cubesControllerToRemove = cc;
+                        break;
+                    }
+                }
+                if (cubesControllerToRemove != null) {
+                    cubesControllers.remove(cubesControllerToRemove);
+                    final CubesController toRemove = cubesControllerToRemove;
+                    dispatcher.dispatchNetwork(() -> {
+                        toRemove.dispose();
+                        lx.removeOutput(toRemove);
+                    });
+                }
             }
         });
 
+        // Enable/disable all controllers when engine output is toggled
         lx.engine.output.enabled.addListener(param -> {
             boolean isEnabled = ((BooleanParameter) param).isOn();
             for (SLController controller : controllers) {
@@ -308,192 +266,81 @@ public class CompositeShow implements Show {
             }
         });
 
-        // Put branches on TenereDatagrams
-        try {
-            addTenereDatagram(lx, new PointsGrouping(branches.get(0).points).getIndicesInRange(0, 420),   (byte) 0x00, "10.200.1.67");
-            addTenereDatagram(lx, new PointsGrouping(branches.get(0).points).getIndicesInRange(420, 840), (byte) 0x04, "10.200.1.67");
-            addTenereDatagram(lx, new PointsGrouping(branches.get(1).points).getIndicesInRange(0, 420),   (byte) 0x00, "10.200.1.81");
-            addTenereDatagram(lx, new PointsGrouping(branches.get(1).points).getIndicesInRange(420, 840), (byte) 0x04, "10.200.1.81");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // Put the butterflies on Pixlite
-        lx.addOutput(new SimplePixlite(lx, "10.200.1.10")
-            .addPixliteOutput(new PointsGrouping("1", butterflies.get(0).points))
-            .addPixliteOutput(new PointsGrouping("2", butterflies.get(1).points))
-        );
+        // Add Mikey Pixlite outputs
+        lx.addOutput(new MikeyShow.MikeyPixlite(lx, "192.168.1.42", mikeyModel, 0));
+        lx.addOutput(new MikeyShow.MikeyPixlite(lx, "192.168.0.193", mikeyModel, 8));
     }
 
-    public SLController getControllerByDevice(NetworkDevice device) {
+    private SLController getCompositeControllerByDevice(NetworkDevice device) {
         for (SLController controller : controllers) {
-            if (controller.networkDevice == device) {
+            if (controller.networkDevice.equals(device)) {
                 return controller;
             }
         }
         return null;
     }
 
-    public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
-    }
+    /**
+     * CompositeModel contains both MikeyModel and YsiadsPartyModel as children.
+     */
+    public static class CompositeModel extends com.symmetrylabs.slstudio.model.SLModel {
+        public final MikeyShow.MikeyModel mikeyModel;
+        public final CubesModel cubesModel;
+        // Expose cubesModel fields for compatibility (corrected packages and types)
 
-    public static void addTenereDatagram(LX lx, int[] indices, byte channel, String ip) throws SocketException, UnknownHostException {
-        lx.addOutput(
-            new LXDatagramOutput(lx).addDatagram(new TenereDatagram(lx, indices, channel).setAddress(ip).setPort(1337))
-        );
-    }
+        public final java.util.List<com.symmetrylabs.shows.cubes.CubesModel.Tower> towers;
+        public final java.util.List<com.symmetrylabs.shows.cubes.CubesModel.Cube> cubes;
+        public final java.util.List<com.symmetrylabs.shows.cubes.CubesModel.Face> faces;
 
-    static class TowerConfig {
+        public CompositeModel(MikeyShow.MikeyModel mikeyModel, CubesModel cubesModel) {
+            super(combinePoints(mikeyModel, cubesModel));
+            this.mikeyModel = mikeyModel;
+            this.cubesModel = cubesModel;
 
-        static final float CUBE_WIDTH = 24;
-        static final float CUBE_HEIGHT = 24;
-        static final float TOWER_WIDTH = 24;
-        static final float TOWER_HEIGHT = 24;
-        static final float CUBE_SPACING = 2.5f;
-
-        static final float TOWER_VERTICAL_SPACING = 2.5f;
-        static final float TOWER_RISER = 14;
-
-        final CubesModel.Cube.Type type;
-        final float x;
-        final float y;
-        final float z;
-        final float xRot;
-        final float yRot;
-        final float zRot;
-        final String[] ids;
-        final float[] yValues;
-
-        TowerConfig(float x, float y, float z, String[] ids) {
-            this(CubesModel.Cube.Type.LARGE, x, y, z, ids);
+            this.towers = cubesModel.getTowers();
+            this.cubes = cubesModel.getCubes();
+            this.faces = cubesModel.getFaces();
         }
 
-        TowerConfig(float x, float y, float z, float yRot, String[] ids) {
-            this(x, y, z, 0, yRot, 0, ids);
-        }
-
-        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, String[] ids) {
-            this(type, x, y, z, 0, 0, 0, ids);
-        }
-
-        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float yRot, String[] ids) {
-            this(type, x, y, z, 0, yRot, 0, ids);
-        }
-
-        TowerConfig(float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
-            this(CubesModel.Cube.Type.LARGE, x, y, z, xRot, yRot, zRot, ids);
-        }
-
-        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
-            this.type = type;
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.xRot = xRot;
-            this.yRot = yRot;
-            this.zRot = zRot;
-            this.ids = ids;
-
-            this.yValues = new float[ids.length];
-            for (int i = 0; i < ids.length; i++) {
-                yValues[i] = y + i * (CUBE_HEIGHT + CUBE_SPACING);
+        private static class CompositeFixture extends heronarts.lx.model.LXAbstractFixture {
+            CompositeFixture(MikeyShow.MikeyModel mikeyModel, CubesModel cubesModel) {
+                if (mikeyModel != null && mikeyModel.getPoints() != null) {
+                    this.points.addAll(mikeyModel.getPoints());
+                }
+                if (cubesModel != null && cubesModel.getPoints() != null) {
+                    this.points.addAll(cubesModel.getPoints());
+                }
             }
         }
-    }
 
-    static class LeafAssemblageConfig {
-        final String id;
-        final float x;
-        final float y;
-        final float z;
-        final float rx;
-        final float ry;
-        final float rz;
-        final int channel;
-
-        LeafAssemblageConfig(String id, float[] coordinates, float[] rotations) {
-            this(id, coordinates, rotations, 0);
+        public Iterator<? extends LXModel> getChildren() {
+            List<LXModel> children = new ArrayList<>();
+            children.add(mikeyModel);
+            children.add(cubesModel);
+            return children.iterator();
         }
 
-        LeafAssemblageConfig(String id, float[] coordinates, float[] rotations, int channel) {
-            this.id = id;
-            this.x = coordinates[0];
-            this.y = coordinates[1];
-            this.z = coordinates[2];
-            this.rx = rotations[0];
-            this.ry = rotations[1];
-            this.rz = rotations[2];
-            this.channel = channel;
-        }
-    }
-
-    static class BranchConfig {
-        final String id;
-        final float x;
-        final float y;
-        final float z;
-        final float rx;
-        final float ry;
-        final float rz;
-
-     BranchConfig(String id, float[] coordinates, float[] rotations) {
-            this.id = id;
-            this.x = coordinates[0];
-            this.y = coordinates[1];
-            this.z = coordinates[2];
-            this.rx = rotations[0];
-            this.ry = rotations[1];
-            this.rz = rotations[2];
-        }
-    }
-
-    static class IcicleConfig {
-        final String id;
-        final float x;
-        final float y;
-        final float z;
-        final float rx;
-        final float ry;
-        final float rz;
-        final int numPoints;
-        final float pixelPitch;
-
-        IcicleConfig(String id, float[] coordinates, float[] rotations, int numPoints) {
-            this(id, coordinates, rotations, numPoints, 0.54f);
+        public static CompositeModel create() {
+            MikeyShow.MikeyModel mikeyModel = MikeyShow.MikeyModel.create();
+            // Use YsiadsPartyShow to build the cubes model
+            CubesModel cubesModel = (CubesModel) new com.symmetrylabs.shows.ysiadsparty.YsiadsPartyShow().buildModel();
+            return new CompositeModel(mikeyModel, cubesModel);
         }
 
-        IcicleConfig(String id, float[] coordinates, float[] rotations, int numPoints, float pixelPitch) {
-            this.id = id;
-            this.x = coordinates[0];
-            this.y = coordinates[1];
-            this.z = coordinates[2];
-            this.rx = rotations[0];
-            this.ry = rotations[1];
-            this.rz = rotations[2];
-            this.numPoints = numPoints;
-            this.pixelPitch = pixelPitch;
-        }
-    }
+        public MikeyShow.MikeyModel getMikeyModel() { return mikeyModel; }
+        public CubesModel getCubesModel() { return cubesModel; }
 
-    static class ButterflyConfig {
-        final String id;
-        final float x;
-        final float y;
-        final float z;
-        final float rx;
-        final float ry;
-        final float rz;
-        final ButterfliesModel.Butterfly.Type type;
-
-        ButterflyConfig(String id, float[] coordinates, float[] rotations, ButterfliesModel.Butterfly.Type type) {
-            this.id = id;
-            this.x = coordinates[0];
-            this.y = coordinates[1];
-            this.z = coordinates[2];
-            this.rx = rotations[0];
-            this.ry = rotations[1];
-            this.rz = rotations[2];
-            this.type = type;
+        private static List<LXPoint> combinePoints(LXModel... models) {
+            List<LXPoint> all = new ArrayList<>();
+            for (LXModel m : models) {
+                Object pts = m.points;
+                if (pts instanceof List) {
+                    all.addAll((List<LXPoint>) pts);
+                } else if (pts instanceof LXPoint[]) {
+                    all.addAll(Arrays.asList((LXPoint[]) pts));
+                }
+            }
+            return all;
         }
     }
 }
