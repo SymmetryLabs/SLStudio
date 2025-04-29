@@ -268,7 +268,7 @@ public class CompositeShow extends com.symmetrylabs.shows.cubes.CubesShow {
 
         // Add Mikey Pixlite outputs
         lx.addOutput(new MikeyShow.MikeyPixlite(lx, "192.168.1.42", mikeyModel, 0));
-        lx.addOutput(new MikeyShow.MikeyPixlite(lx, "192.168.0.193", mikeyModel, 8));
+        // lx.addOutput(new MikeyShow.MikeyPixlite(lx, "192.168.0.193", mikeyModel, 8));
     }
 
     private SLController getCompositeControllerByDevice(NetworkDevice device) {

@@ -30,8 +30,8 @@ public class MikeyShow implements Show {
         MikeyModel model = (MikeyModel) lx.model;
         MikeyPixlite pixlite1 = new MikeyPixlite(lx, "192.168.1.42", model, 0);      // strips 0-7
         lx.addOutput(pixlite1);
-        MikeyPixlite pixlite2 = new MikeyPixlite(lx, "192.168.1.193", model, 8);      // strips 8-15
-        lx.addOutput(pixlite2);
+        // MikeyPixlite pixlite2 = new MikeyPixlite(lx, "192.168.1.193", model, 8);      // strips 8-15
+        // lx.addOutput(pixlite2);
     }
 
     public static class MikeyModel extends StripsModel<Strip> {
@@ -172,6 +172,118 @@ public class MikeyShow implements Show {
             Strip strip16 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
             strips.add(strip16);
             t.pop();
+
+            t.translate(0, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip17 = new Strip("1", metricsL3S, t);    
+            strips.add(strip17);  
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip18 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip18);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip19 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip19);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip20 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip20);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip21 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip21);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip22 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip22);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip23 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip23);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip24 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip24);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip25 = new Strip("1", metricsL3S, t);    
+            strips.add(strip25);  
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip26 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip26);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip27 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip27);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip28 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip28);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip29 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip29);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip30 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip30);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip31 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip31);
+            t.pop();
+
+            t.translate(barSpacing, 0, 0);
+            t.push();
+            t.rotateZ(1.57);
+            Strip strip32 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+            strips.add(strip32);
+            t.pop();
         
             return new MikeyModel(strips);
         }
@@ -179,7 +291,7 @@ public class MikeyShow implements Show {
     public static class MikeyPixlite extends SimplePixlite {
         public MikeyPixlite(LX lx, String ip, MikeyModel model, int stripOffset) {
             super(lx, ip);
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i < 32; i++) {
                 addPixliteOutput(
                     new PointsGrouping(String.valueOf(i + 1))
                         .addPoints(model.getStripByIndex(i + stripOffset).getPoints()));

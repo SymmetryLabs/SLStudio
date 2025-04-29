@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1745903397332,
+  "timestamp": 1745957770505,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 1.0,
       "crossfaderBlendMode": 0,
       "speed": 0.6614173228346457,
-      "focusedChannel": 14,
+      "focusedChannel": 8,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -2294,9 +2294,9 @@
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
-          "autoCycleEnabled": true,
+          "autoCycleEnabled": false,
           "autoCycleTimeSecs": 14.675039506957546,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": true,
@@ -2441,7 +2441,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 28,
+        "patternIndex": 25,
         "patterns": [
           {
             "id": 1591,
@@ -3854,7 +3854,7 @@
             "modulationColor": -14614784,
             "parameters": {
               "label": "BoxMask",
-              "enabled": true,
+              "enabled": false,
               "xSize": 97.76823425292969,
               "cx": 5.3280029296875,
               "ySize": 67.5790023803711,
@@ -3908,7 +3908,7 @@
             "modulationColor": -65320,
             "parameters": {
               "label": "ParamCrossSections",
-              "xPos": 46.579533766960424,
+              "xPos": -52.44022750854492,
               "yPos": 0.0,
               "zPos": 0.0,
               "xSpd": 0.7,
@@ -5381,9 +5381,9 @@
         "16192": true
       },
       "preview": {
-        "radius": 177.7842028528386,
-        "theta": -0.06300000000000018,
-        "phi": 0.748796370506284,
+        "radius": 759.3468761564211,
+        "theta": -0.018000000000000165,
+        "phi": 0.1157963705062835,
         "positionX": -46.85609436035156,
         "positionY": 87.24996948242188,
         "positionZ": 30.848731994628906
