@@ -117,7 +117,15 @@ public class MidiMusic extends SLPattern<SLModel> {
         }
 
         void noteOn(MidiNote note) {
-            xPos = model.xMin + ((note.getPitch() / 30.f) * model.xRange);
+            // In standard MIDI, C0 is note 24 (and sometimes note 12 in other conventions)
+            // We'll adjust our mapping so C0 (note 24) appears at the beginning of the model
+            // And we'll map approximately 5 octaves (60 notes) from C0 to C5
+            
+            int midiC0 = 24; // Standard for C0 in many MIDI implementations
+            float normalizedPosition = Math.max(0, note.getPitch() - midiC0) / 60.0f; // 60 notes = 5 octaves (C0 to C5)
+            normalizedPosition = Math.min(normalizedPosition, 1.0f); // Cap at 1.0 for notes above range
+            
+            xPos = model.xMin + (normalizedPosition * model.xRange);
             yPos.setValue(LXUtils.lerpf(20, model.yMax*top.getValuef(), note.getVelocity() / 127.f)).stop();
             brt.setRangeFromHereTo(LXUtils.lerpf(60, 100, note.getVelocity() / 127.f), 20).start();
         }
@@ -176,38 +184,39 @@ public class MidiMusic extends SLPattern<SLModel> {
     }
 
     public void noteOnReceived(MidiNoteOn note) {
-        if (note.getPitch() < 40) {
-            LightUp light = getLight();
-            lightMap.put(note.getPitch(), light);
-            light.noteOn(note);
-        }
-         else {
+        // Special control notes 90-95 (keep separate for control functions)
+        if (note.getPitch() >= 90 && note.getPitch() <= 95) {
             if (note.getVelocity() > 0) {
                 switch (note.getPitch()) {
-                    case 41:
+                    case 90: // Previously 41
                         Sweep s = getSweep();
                         s.bright = 50 + note.getVelocity() / 127.f * 50;
                         s.falloff = 20 - note.getVelocity() / 127.f * 17;
                         s.position.trigger();
                         break;
-                    case 42:
+                    case 91: // Previously 42
                         sparkleBright = note.getVelocity() / 127.f * 100;
                         sparkleDirection = true;
                         sparkle.trigger();
                         break;
-                    case 43:
+                    case 92: // Previously 43
                         sparkleBright = note.getVelocity() / 127.f * 100;
                         sparkleDirection = false;
                         sparkle.trigger();
                         break;
-                    case 44:
+                    case 93: // Previously 44
                         //effects.boom.trigger();
                         break;
-                    case 45:
+                    case 94: // Previously 45
                         //effects.flash.trigger();
                         break;
                 }
             }
+        } else {
+            // Handle all other notes (0-89) for visualization, expanded from just 0-39 before
+            LightUp light = getLight();
+            lightMap.put(note.getPitch(), light);
+            light.noteOn(note);
         }
         //return true;
     }
