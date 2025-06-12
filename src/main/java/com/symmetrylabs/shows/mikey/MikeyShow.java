@@ -68,19 +68,7 @@ public class MikeyShow implements Show {
             int barSpacing = 24;
             List<Strip> strips = new ArrayList<Strip>();
             LXTransform t = new LXTransform();
-            Strip.Metrics metricsL4W = new Strip.Metrics(verticalBar*4, 2.15f); //strip config
-            Strip.Metrics metricsL3W = new Strip.Metrics(verticalBar*3, 2.15f); //strip config
-            Strip.Metrics metricsL3WL = new Strip.Metrics(verticalBar*3, 2.05f); //strip config
-            Strip.Metrics metricsL3S = new Strip.Metrics(60, 1.5f); //strip config
-
-            Strip.Metrics metricsL2 = new Strip.Metrics(verticalBar*2, 1.25f); //strip config
-            Strip.Metrics metricsL1 = new Strip.Metrics(verticalBar*1, .75f); //strip config
-
-            Strip.Metrics metricsL10 = new Strip.Metrics(horizontalBar*10, 1); //strip config
-
-            Strip.Metrics metricsS3 = new Strip.Metrics(horizontalBar*3, 1); //strip config
-            Strip.Metrics metricsS2 = new Strip.Metrics(horizontalBar*2, 1); //strip config
-            Strip.Metrics metricsS1 = new Strip.Metrics(horizontalBar*1, 1); //strip config
+            Strip.Metrics cloudStripMetrics = new Strip.Metrics(300, 1.5f); //strip config
 
             // t.translate(0, 0, 0);
             // t.push();
@@ -254,7 +242,7 @@ public class MikeyShow implements Show {
                 t.translate(barSpacing, 0, 0);
                 t.push();
                 t.rotateZ(1.57);
-                Strip strip = new Strip("1", metricsL3S, t);         //create the turn in the first strip
+                Strip strip = new Strip("1", cloudStripMetrics, t);         //create the turn in the first strip
                 strips.add(strip);
                 t.pop();
             }

@@ -37,17 +37,21 @@ public class SimplePixlite extends ArtNetOutput {
         public SimplePixliteOutput(PointsGrouping pointsGrouping) throws SocketException {
             super(lx);
             this.outputIndex = Integer.parseInt(pointsGrouping.id);
-            this.firstUniverseOnOutput = outputIndex * 10;
+            // Calculate universe number based on output index (1-8)
+            // Each output gets 2 universes in H340 mode
+            this.firstUniverseOnOutput = (outputIndex - 1) * 2;
             setupDatagrams(pointsGrouping);
         }
 
         private void setupDatagrams(PointsGrouping pointsGrouping) {
-    // Each output gets 4 universes, each universe 170 pixels
+    // K8 ARTNET+DMX controller in H340 mode: 340 pixels per port, 2 universes per port
     int numPoints = pointsGrouping.size();
-    int universesPerOutput = 4;
+    int universesPerOutput = 2; // H340 mode = 2 universes per output
     int pixelsPerUniverse = MAX_NUM_POINTS_PER_UNIVERSE;
     int counter = 0;
-    // outputIndex is 0-based, universes start at 1
+    
+    // For K8 controller, universes are sequentially assigned to each port
+    // Each port gets 2 universes in H340 mode
     int firstUniverse = (outputIndex - 1) * universesPerOutput;
     for (int u = 0; u < universesPerOutput; u++) {
         int universe = firstUniverse + u;
