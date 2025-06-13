@@ -29,30 +29,22 @@ public class MikeyShow implements Show {
     public void setupLx(LX lx) {
         MikeyModel model = (MikeyModel) lx.model;
         //add a total of 12 controllers
-        MikeyPixlite pixlite1 = new MikeyPixlite(lx, "192.168.0.192", model, 0);      // strips 0-7
+        MikeyPixlite pixlite1 = new MikeyPixlite(lx, "192.168.0.200", model, 0);      // strips 0-31
         lx.addOutput(pixlite1);
-        MikeyPixlite pixlite2 = new MikeyPixlite(lx, "192.168.0.193", model, 8);      // strips 8-15
+        MikeyPixlite pixlite2 = new MikeyPixlite(lx, "192.168.0.201", model, 32);      // strips 32-63
         lx.addOutput(pixlite2);
-        MikeyPixlite pixlite3 = new MikeyPixlite(lx, "192.168.0.194", model, 16);      // strips 16-23
+        MikeyPixlite pixlite3 = new MikeyPixlite(lx, "192.168.0.202", model, 64);      // strips 64-95
         lx.addOutput(pixlite3); 
-        MikeyPixlite pixlite4 = new MikeyPixlite(lx, "192.168.0.195", model, 24);      // strips 24-31
+        MikeyPixlite pixlite4 = new MikeyPixlite(lx, "192.168.0.203", model, 96);      // strips 96-127
         lx.addOutput(pixlite4); 
-        MikeyPixlite pixlite5 = new MikeyPixlite(lx, "192.168.0.196", model, 32);      // strips 32-39
+        MikeyPixlite pixlite5 = new MikeyPixlite(lx, "192.168.0.204", model, 128);      // strips 128-159
         lx.addOutput(pixlite5); 
-        MikeyPixlite pixlite6 = new MikeyPixlite(lx, "192.168.0.197", model, 40);      // strips 40-47
+        MikeyPixlite pixlite6 = new MikeyPixlite(lx, "192.168.0.205", model, 160);      // strips 160-191
         lx.addOutput(pixlite6); 
-        MikeyPixlite pixlite7 = new MikeyPixlite(lx, "192.168.0.198", model, 48);      // strips 48-55
+        MikeyPixlite pixlite7 = new MikeyPixlite(lx, "192.168.0.206", model, 192);      // strips 192-223
         lx.addOutput(pixlite7); 
-        MikeyPixlite pixlite8 = new MikeyPixlite(lx, "192.168.0.199", model, 56);      // strips 56-63
+        MikeyPixlite pixlite8 = new MikeyPixlite(lx, "192.168.0.207", model, 224);      // strips 224-255
         lx.addOutput(pixlite8); 
-        MikeyPixlite pixlite9 = new MikeyPixlite(lx, "192.168.0.200", model, 64);      // strips 64-71
-        lx.addOutput(pixlite9); 
-        MikeyPixlite pixlite10 = new MikeyPixlite(lx, "192.168.0.201", model, 72);      // strips 72-79
-        lx.addOutput(pixlite10); 
-        MikeyPixlite pixlite11 = new MikeyPixlite(lx, "192.168.0.202", model, 80);      // strips 80-87
-        lx.addOutput(pixlite11); 
-        MikeyPixlite pixlite12 = new MikeyPixlite(lx, "192.168.0.203", model, 88);      // strips 88-95
-        lx.addOutput(pixlite12); 
     }
 
     static class MikeyModel extends StripsModel<Strip> {
@@ -77,8 +69,9 @@ public class MikeyShow implements Show {
             int horizontalBar = 24;
             int cloudSpacing = 30;
             float rotateZ = -1.57f;
+            float rotateZ180= -1.57f*2;
             int tempSpacer = -256;
-            int ft = 24;
+            int ft = 19;
             List<Strip> strips = new ArrayList<Strip>();
             LXTransform t = new LXTransform();
             Strip.Metrics cloudStripMetrics128 = new Strip.Metrics(128, 1); //strip config long
@@ -86,96 +79,97 @@ public class MikeyShow implements Show {
 
 
 
-            //Add 8 groups of addFourStripGroup labeled as 200-1 through 200-4 in the comments
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //200-1
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //200-2
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //200-3
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //200-4
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //200-5
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //200-6
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //200-7
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //200-8
+            // Add 8 groups of addFourStripGroup labeled as 200-1 through 200-4 in the comments
+            addFourStripGroup(strips,t,16.35f*ft, -13.7f*ft,0,rotateZ180); //200-1
+            addFourStripGroup(strips,t,18.35f*ft, -13.7f*ft,0,rotateZ180); //200-2
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //200-3
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //200-4
+            addFourStripGroup(strips,t,16.35f*ft, -20.7f*ft,0,rotateZ180); //200-5
+            addFourStripGroup(strips,t,18.35f*ft, -20.7f*ft,0,rotateZ180); //200-6
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //200-7
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //200-8
 
             //Add 8 groups of addFourStripGroup labeled as 201-1 through 201-4 in the comments
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //201-1
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //201-2
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //201-3
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //201-4
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //201-5
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //201-6
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //201-7
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //201-8    
+            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //201-1
+            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //201-2
+            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //201-3
+            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //201-4
+            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //201-5
+            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //201-6
+            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //201-7
+            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //201-8    
 
             //Add 8 groups of addFourStripGroup labeled as 202-1 through 202-4 in the comments
-            addFourStripGroup(strips, t, 10*ft, 7*ft, 0, 0); //202-7
-            addFourStripGroup(strips, t, 8*ft, 7*ft, 0, 0); //202-8
-            addFourStripGroup(strips, t, 7*ft, 4*ft, 0, rotateZ); //202-3
-            addFourStripGroup(strips, t, 7*ft, 2*ft, 0, rotateZ); //202-4
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //202-5
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //202-6
-            addFourStripGroup(strips, t, 10*ft, 0, 0, 0); //202-7
-            addFourStripGroup(strips, t, 8*ft, 0, 0, 0); //202-8
+            addFourStripGroup(strips, t, 11.5f*ft, -7*ft, 0, 0); //202-1
+            addFourStripGroup(strips, t, 10f*ft, -7f*ft, 0, 0); //202-2
+            addFourStripGroup(strips, t, 8f*ft, -4f*ft, 0, rotateZ); //202-3
+            addFourStripGroup(strips, t, 8f*ft, -2f*ft, 0, rotateZ); //202-4
+            addFourStripGroup(strips,t,15.5f*ft,0*ft,0,0); //202-5
+            addFourStripGroup(strips,t,13.5f*ft,0*ft,0,0); //202-6
+            addFourStripGroup(strips, t, 11.5f*ft, 0*ft, 0, 0); //202-7
+            addFourStripGroup(strips, t, 10*ft, 0*ft, 0, 0); //202-8
 
 
             //Add 8 groups of addFourStripGroup labeled as 203-1 through 203-4 in the comments
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //203-1
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //203-2
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //203-3
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //203-4
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //203-5
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //203-6
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //203-7
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //203-8
+            addFourStripGroup(strips,t,15.5f*ft,-7*ft,0,0); //203-1
+            addFourStripGroup(strips,t,13.5f*ft,-7*ft,0,0); //203-2
+            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //203-3
+            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //203-4
+            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //203-5
+            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //203-6
+            addFourStripGroup(strips,t,19.5f*ft,0*ft,0,0); //203-7
+            addFourStripGroup(strips,t,17.5f*ft,0*ft,0,0); //203-8
 
             //Add 8 groups of addFourStripGroup labeled as 204-1 through 204-4 in the comments  
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //204-1    
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //204-2
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //204-3
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //204-4
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //204-5
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //204-6
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //204-7
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //204-8
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-1    
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-2
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-3
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-4
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-5
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-6
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-7
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-8
 
             //205
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-1
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-2
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-3
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-4
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-5
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-1
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-2
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-3
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-4
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-5
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-6
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-7
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-8
 
             //206
             //add addFourStripGroup for 206
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //206-1
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //206-2
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //206-3
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //206-4
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //206-5
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-1
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-2
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-3
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-4
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-5
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-6
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-7
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-8
 
             //207
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //207-1
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //207-2
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //207-3
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //207-4
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //207-5
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-1
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-2
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-3
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-4
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-5
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-6
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-7
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-8
 
             //208
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //208-1
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //208-2
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //208-3
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //208-4
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //208-5
-
-            addFourStripGroup(strips, t, 7*ft, 4*ft, 0, rotateZ);
-            addFourStripGroup(strips, t, 7*ft, 2*ft, 0, rotateZ);
-
-            // //Add two more groups with a x of 10 and y of 0 and a x of 8 and y of 0
-            addFourStripGroup(strips, t, 10*ft, 0, 0, 0);
-            addFourStripGroup(strips, t, 8*ft, 0, 0, 0);
-            // //add two more with a x of 10 and y of 7 and x of 8 and y of 7
-            // addFourStripGroup(strips, t, 10*ft, 7*ft, 0, 0);
-            // addFourStripGroup(strips, t, 8*ft, 7*ft, 0, 0);
-
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-1
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-2
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-3
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-4
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-5
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-6
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-7
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-8
             return new MikeyModel(strips);
         }
 

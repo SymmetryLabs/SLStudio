@@ -113,8 +113,8 @@ public class ArtNetDmxDatagram extends LXDatagram {
             int colorValue = (index >= 0) ? colors[index] : unmappedC;
 
             int gammaExpanded = GammaExpander.getExpandedColor(colorValue);
-            buffer[i + byteOffset[0]] = (byte) Ops8.red(gammaExpanded);
-            buffer[i + byteOffset[1]] = (byte) Ops8.green(gammaExpanded);
+            buffer[i + byteOffset[0]] = (byte) Ops8.green(gammaExpanded);
+            buffer[i + byteOffset[1]] = (byte) Ops8.red(gammaExpanded);
             buffer[i + byteOffset[2]] = (byte) Ops8.blue(gammaExpanded);
 
             i += 3;
