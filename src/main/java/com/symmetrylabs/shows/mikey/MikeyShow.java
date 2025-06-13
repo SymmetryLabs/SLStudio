@@ -146,25 +146,25 @@ public class MikeyShow implements Show {
 
             //206
             //add addFourStripGroup for 206
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-1
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-2
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-3
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-4
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-5
+            addFourStripGroup(strips,t,tempSpacer,0,0,0); //206-1
+            addFourStripGroup(strips,t,tempSpacer,0,0,0); //206-2
+            addFourStripGroup(strips,t,tempSpacer,0,0,0); //206-3
+            addFourStripGroup(strips,t,tempSpacer,0,0,0); //206-4
+            addFourStripGroup(strips,t,tempSpacer,0,0,0); //206-5
 
             //207
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-1
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-2
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-3
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-4
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-5
+            addFourStripGroup(strips,t,tempSpacer,0,0,0); //207-1
+            addFourStripGroup(strips,t,tempSpacer,0,0,0); //207-2
+            addFourStripGroup(strips,t,tempSpacer,0,0,0); //207-3
+            addFourStripGroup(strips,t,tempSpacer,0,0,0); //207-4
+            addFourStripGroup(strips,t,tempSpacer,0,0,0); //207-5
 
             //208
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-1
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-2
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-3
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-4
-            addFourStripGroup(strips,t,tempSpacer,0,0,0); //205-5
+            addFourStripGroup(strips,t,tempSpacer,0,0,0); //208-1
+            addFourStripGroup(strips,t,tempSpacer,0,0,0); //208-2
+            addFourStripGroup(strips,t,tempSpacer,0,0,0); //208-3
+            addFourStripGroup(strips,t,tempSpacer,0,0,0); //208-4
+            addFourStripGroup(strips,t,tempSpacer,0,0,0); //208-5
 
             addFourStripGroup(strips, t, 7*ft, 4*ft, 0, rotateZ);
             addFourStripGroup(strips, t, 7*ft, 2*ft, 0, rotateZ);
