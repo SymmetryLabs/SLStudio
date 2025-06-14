@@ -44,7 +44,7 @@ public class MidiMusic extends SLPattern<SLModel> {
 
     private final CompoundParameter wave = new CompoundParameter("Wave", 0);
     private final BooleanParameter triggerSweep = new BooleanParameter("Sweep", false);
-    private final CompoundParameter top = new CompoundParameter("Top", 0.72);
+    private final CompoundParameter top = new CompoundParameter("Top", 1);
 
     public MidiMusic(LX lx) {
         super(lx);
@@ -121,7 +121,7 @@ public class MidiMusic extends SLPattern<SLModel> {
             // We'll adjust our mapping so C0 (note 24) appears at the beginning of the model
             // And we'll map approximately 5 octaves (60 notes) from C0 to C5
             
-            int midiC0 = 24; // Standard for C0 in many MIDI implementations
+            int midiC0 = 24+12; // Standard for C0 in many MIDI implementations
             float normalizedPosition = Math.max(0, note.getPitch() - midiC0) / 60.0f; // 60 notes = 5 octaves (C0 to C5)
             normalizedPosition = Math.min(normalizedPosition, 1.0f); // Cap at 1.0 for notes above range
             
