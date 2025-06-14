@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1749864146565,
+  "timestamp": 1749936945339,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -53,13 +53,13 @@
             "modulationColor": -26880,
             "parameters": {
               "label": "Sparkle",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": true,
               "midiChannel": 0,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -166,13 +166,13 @@
             "modulationColor": -16449792,
             "parameters": {
               "label": "White",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -222,7 +222,7 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "xPos": 23.949872970581055,
-                  "yPos": 23.990663528442383,
+                  "yPos": 0.0,
                   "zPos": 0.0,
                   "xSpd": 0.7,
                   "ySpd": 0.6,
@@ -447,7 +447,7 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "xPos": 23.949872970581055,
-                  "yPos": 23.990663528442383,
+                  "yPos": 0.0,
                   "zPos": 0.0,
                   "xSpd": 0.7,
                   "ySpd": 0.6,
@@ -907,7 +907,7 @@
                   "Enabled": true,
                   "count": 8,
                   "cx": 196.01739501953125,
-                  "cy": 197.78952026367188,
+                  "cy": 0.0,
                   "cz": 0.0,
                   "width": 260.0,
                   "lvel": -0.13999999642372174,
@@ -989,7 +989,7 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "xPos": 235.39790329468235,
-                  "yPos": 27.466640604526315,
+                  "yPos": 0.0,
                   "zPos": 0.0,
                   "xSpd": 0.7,
                   "ySpd": 0.6,
@@ -1499,7 +1499,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -7274241,
+          "modulationColor": -8704,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -1636,9 +1636,9 @@
         }
       },
       "DMXParameterMapper": {
-        "id": 69,
+        "id": 114,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -16711922,
+        "modulationColor": -3473153,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -1830,9 +1830,9 @@
         "radius": 544.369911368615,
         "theta": 6.260999999999961,
         "phi": 0.150716673851011,
-        "positionX": 226.01007080078125,
-        "positionY": 135.78952026367188,
-        "positionZ": -0.6655001044273376
+        "positionX": 156.81765747070312,
+        "positionY": -270.6500244140625,
+        "positionZ": -0.6655000448226929
       }
     }
   }
