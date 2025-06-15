@@ -29,21 +29,21 @@ public class MikeyShow implements Show {
     public void setupLx(LX lx) {
         MikeyModel model = (MikeyModel) lx.model;
         //add a total of 12 controllers
-        MikeyPixlite pixlite1 = new MikeyPixlite(lx, "192.168.0.200", model, 0);      // strips 0-31
+        MikeyPixlite pixlite1 = new MikeyPixlite(lx, "192.168.0.200", model, 0, java.util.Set.of());      // strips 0-31
         lx.addOutput(pixlite1);
-        MikeyPixlite pixlite2 = new MikeyPixlite(lx, "192.168.0.201", model, 32);      // strips 32-63
+        MikeyPixlite pixlite2 = new MikeyPixlite(lx, "192.168.0.201", model, 32, java.util.Set.of());      // strips 32-63
         lx.addOutput(pixlite2);
-        MikeyPixlite pixlite3 = new MikeyPixlite(lx, "192.168.0.202", model, 64);      // strips 64-95
+        MikeyPixlite pixlite3 = new MikeyPixlite(lx, "192.168.0.202", model, 64, java.util.Set.of());      // strips 64-95
         lx.addOutput(pixlite3); 
-        MikeyPixlite pixlite4 = new MikeyPixlite(lx, "192.168.0.203", model, 96);      // strips 96-127
+        MikeyPixlite pixlite4 = new MikeyPixlite(lx, "192.168.0.203", model, 96, java.util.Set.of(3)); // strips 96-127, skip port 3
         lx.addOutput(pixlite4); 
-        MikeyPixlite pixlite5 = new MikeyPixlite(lx, "192.168.0.204", model, 128);      // strips 128-159
+        MikeyPixlite pixlite5 = new MikeyPixlite(lx, "192.168.0.204", model, 128, java.util.Set.of());     // strips 128-159
         lx.addOutput(pixlite5); 
-        MikeyPixlite pixlite6 = new MikeyPixlite(lx, "192.168.0.205", model, 160);      // strips 160-191
+        MikeyPixlite pixlite6 = new MikeyPixlite(lx, "192.168.0.205", model, 160, java.util.Set.of());      // strips 160-191
         lx.addOutput(pixlite6); 
-        MikeyPixlite pixlite7 = new MikeyPixlite(lx, "192.168.0.206", model, 192);      // strips 192-223
+        MikeyPixlite pixlite7 = new MikeyPixlite(lx, "192.168.0.206", model, 192, java.util.Set.of());     // strips 192-223
         lx.addOutput(pixlite7); 
-        MikeyPixlite pixlite8 = new MikeyPixlite(lx, "192.168.0.207", model, 224);      // strips 224-255
+        MikeyPixlite pixlite8 = new MikeyPixlite(lx, "192.168.0.207", model, 224, java.util.Set.of());      // strips 224-255
         lx.addOutput(pixlite8); 
     }
 
@@ -63,6 +63,14 @@ public class MikeyShow implements Show {
          */
 
         public static MikeyModel create() {
+    // Map Pixlite index (1-based, as in setupLx) to set of unused ports
+    // Example: Pixlite 4 skips port 3 (index 3)
+    java.util.Map<Integer, java.util.Set<Integer>> unusedPixlitePorts = new java.util.HashMap<>();
+    unusedPixlitePorts.put(4, java.util.Set.of(3)); // Pixlite 4 skips port 3
+    // Add more as needed, e.g. unusedPixlitePorts.put(2, Set.of(2, 3));
+
+    // We'll need to pass this map to both the model and the Pixlite outputs
+
             int barAngle = -60;
             int spacing = -60;
             int verticalBar = 22;
@@ -79,6 +87,24 @@ public class MikeyShow implements Show {
             Strip.Metrics cloudStripMetrics22 = new Strip.Metrics(22, 1); //strip config side
             LXTransform globalTransform = new LXTransform();
 
+            // Keep track of which strip groups belong to which Pixlite/port
+            // Each Pixlite controls 8 groups, each group is 4 strips
+            // For each group, only add if that Pixlite/port is not in the unused set
+            int stripGroupIndex = 0;
+            for (int pixliteIdx = 1; pixliteIdx <= 8; pixliteIdx++) {
+                java.util.Set<Integer> unusedPorts = unusedPixlitePorts.getOrDefault(pixliteIdx, java.util.Set.of());
+                for (int port = 0; port < 8; port++) {
+                    if (unusedPorts.contains(port)) {
+                        stripGroupIndex++;
+                        continue; // Skip this group for the model
+                    }
+                    // You need to call your addFourStripGroup logic here with the correct parameters for each group.
+                    // For now, to preserve your existing code, we'll just increment the index and let you map your actual addFourStripGroup calls as needed.
+                    // Example:
+                    // addFourStripGroup(strips, t, ...params...); // Use your actual parameters for each group
+                    stripGroupIndex++;
+                }
+            }
             // Add 8 groups of addFourStripGroup labeled as 200-1 through 200-4 in the comments
             addFourStripGroup(strips,t,16.35f*ft, -13.7f*ft,0,rotateZ180); //200-1
             addFourStripGroup(strips,t,18.35f*ft, -13.7f*ft,0,rotateZ180); //200-2
@@ -102,8 +128,8 @@ public class MikeyShow implements Show {
             //Add 8 groups of addFourStripGroup labeled as 202-1 through 202-4 in the comments
             addFourStripGroup(strips, t, 11.5f*ft, -7*ft, 0, 0); //202-1
             addFourStripGroup(strips, t, 10f*ft, -7f*ft, 0, 0); //202-2
-            addFourStripGroup(strips, t, 8f*ft, -4f*ft, 0, rotateZ); //202-3
-            addFourStripGroup(strips, t, 8f*ft, -2f*ft, 0, rotateZ); //202-4
+            addFourStripGroup(strips, t, 7.5f*ft, -3.6f*ft, 0, rotateZ); //202-3
+            addFourStripGroup(strips, t, 7.5f*ft, -1.6f*ft, 0, rotateZ); //202-4
             addFourStripGroup(strips,t,15.5f*ft,0*ft,0,0); //202-5
             addFourStripGroup(strips,t,13.5f*ft,0*ft,0,0); //202-6
             addFourStripGroup(strips, t, 11.5f*ft, 0*ft, 0, 0); //202-7
@@ -125,8 +151,8 @@ public class MikeyShow implements Show {
             addFourStripGroup(strips,t,7.35f*ft,-20.7f*ft,0,rotateZ180); //204-2
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-3
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-4
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-5
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-6
+            addFiveStripGroup(strips, t, 5.75f*ft, -18.7f*ft, 0, rotateZ180); //204-5
+            addFiveStripGroup(strips, t, 4.1f*ft, -18.7f*ft, 0, rotateZ180); //204-6
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-7
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-8
 
@@ -135,10 +161,10 @@ public class MikeyShow implements Show {
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-2
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-3
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-4
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-5
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-6
-            addFourStripGroup(strips,t,0*ft,-4*ft,0,rotateZ90); //205-7
-            addFourStripGroup(strips,t,0*ft,-6*ft,0,rotateZ90); //205-8
+            addThreeStripGroup(strips, t, -3.2f*ft, -4*ft, 0, 0); //205-5
+            addThreeStripGroup(strips, t, -1.2f*ft, -4*ft, 0, 0); //205-6
+            addFourStripGroup(strips,t,.5f*ft,-4*ft,0,rotateZ90); //205-7
+            addFourStripGroup(strips,t,.5f*ft,-5.6f*ft,0,rotateZ90); //205-8
 
             //206
             //add addFourStripGroup for 206
@@ -154,8 +180,8 @@ public class MikeyShow implements Show {
             //207
             addFourStripGroup(strips,t,7.35f*ft,-13.7f*ft,0,rotateZ180); //207-1
             addFourStripGroup(strips,t,5.85f*ft,-13.7f*ft,0,rotateZ180); //207-2
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-3
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-4
+            addFourStripGroup(strips,t, 4.35f*ft,-13.7f*ft,0,rotateZ180); //207-3
+            addFourStripGroup(strips,t, 2.85f*ft,-13.7f*ft,0,rotateZ180); //207-4
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-5
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-6
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-7
@@ -173,6 +199,32 @@ public class MikeyShow implements Show {
             return new MikeyModel(strips);
         }
 
+        private static void addThreeStripGroup(List<Strip> strips, LXTransform t, float x, float y, float z, float rotateZ) {
+            Strip.Metrics cloudStripMetrics90 = new Strip.Metrics(90, 1);
+            Strip.Metrics cloudStripMetrics15 = new Strip.Metrics(15, 1);
+            t.push();
+                t.translate(x, y, z);
+                t.rotateZ(rotateZ);
+                t.push();
+                    t.rotateZ(-1.57); //start going down
+                    Strip strip1 = new Strip(strips.size() + "/1", cloudStripMetrics90, t);     
+                    strips.add(strip1);
+                t.pop();
+                t.push();
+                    t.translate(0,-90,0); //translate down
+                    Strip strip2 = new Strip(strips.size() + "/2", cloudStripMetrics15, t);
+                    strips.add(strip2);
+                t.pop();
+                t.push();
+                    t.translate(0,-90,0); //translate down
+                    t.translate(15,0,0); //translate right
+                    t.rotateZ(1.57);
+                    Strip strip3 = new Strip(strips.size() + "/3", cloudStripMetrics90, t);     
+                    strips.add(strip3);
+                t.pop();
+            t.pop();
+        }
+
         private static void addFourStripGroup(List<Strip> strips, LXTransform t, float x, float y, float z, float rotateZ) {
             Strip.Metrics cloudStripMetrics128 = new Strip.Metrics(128, 1);
             Strip.Metrics cloudStripMetrics22 = new Strip.Metrics(22, 1);
@@ -180,42 +232,91 @@ public class MikeyShow implements Show {
                 // t.rotateZ(-1.57f*3);
                 t.translate(x, y, z);
                 t.rotateZ(rotateZ);
+                    t.push();
+                        t.rotateZ(-1.57); //start going down
+                        Strip strip1 = new Strip(strips.size() + "/1", cloudStripMetrics128, t);     
+                        strips.add(strip1);
+                        // System.out.println("Creating strip at t.x()=" + t.x() + " t.y()=" + t.y() + " t.z()=" + t.z());
+                    t.pop();
+                    t.push();
+                        t.translate(0,-128,0); //translate down
+                        t.rotateZ(1.57*-2); //rotate right
+                        Strip strip2 = new Strip(strips.size() + "/2", cloudStripMetrics22, t);
+                        strips.add(strip2);
+                        // System.out.println("Creating strip at t.x()=" + t.x() + " t.y()=" + t.y() + " t.z()=" + t.z());
+                    t.pop();
+                    t.push();
+                        t.translate(0,-128,0); //translate down
+                        t.translate(-22,0,0); //translate left
+                        t.rotateZ(-1.57*-5);
+                        Strip strip3 = new Strip(strips.size() + "/3", cloudStripMetrics128, t);     
+                        strips.add(strip3);
+                        // System.out.println("Creating strip at t.x()=" + t.x() + " t.y()=" + t.y() + " t.z()=" + t.z());
+                    t.pop();
+                    t.push();
+                        t.translate(0,-128,0); //translate down
+                        t.translate(-22,0,0); //translate left
+                        t.translate(0,128,0); //translate up
+                        t.rotateZ(-1.57*-4);
+                        Strip strip4 = new Strip(strips.size() + "/4", cloudStripMetrics22, t);     
+                        strips.add(strip4);
+                        // System.out.println("Creating strip at t.x()=" + t.x() + " t.y()=" + t.y() + " t.z()=" + t.z());
+                    t.pop();
+                t.pop();
+        }
+        private static void addFiveStripGroup(List<Strip> strips, LXTransform t, float x, float y, float z, float rotateZ) {
+            //add a strip metric with 90 and 15 points
+            Strip.Metrics cloudStripMetrics90 = new Strip.Metrics(90, 1);
+            Strip.Metrics cloudStripMetrics15 = new Strip.Metrics(15, 1);
+
+            //add a group of strips with 5 strips that goes down 90 points then rotates left -1.57 
+            // goes back up rotates left goes 15 points goes up then rotates left -1.57 goes back up 
+            // then rotates right then 15 points then rotates left and then back down 90 points
+            t.push();
+                t.translate(x, y, z);
+                t.rotateZ(rotateZ);
                 t.push();
-                            t.rotateZ(-1.57); //start going down
-                            Strip strip1 = new Strip(strips.size() + "/1", cloudStripMetrics128, t);     
-                            strips.add(strip1);
-                            // System.out.println("Creating strip at t.x()=" + t.x() + " t.y()=" + t.y() + " t.z()=" + t.z());
-                        t.pop();
-                        t.push();
-                            t.translate(0,-128,0); //translate down
-                            t.rotateZ(1.57*-2);
-                            Strip strip2 = new Strip(strips.size() + "/2", cloudStripMetrics22, t);
-                            strips.add(strip2);
-                            // System.out.println("Creating strip at t.x()=" + t.x() + " t.y()=" + t.y() + " t.z()=" + t.z());
-                        t.pop();
-                        t.push();
-                            t.translate(0,-128,0); //translate down
-                            t.translate(-22,0,0); //translate left
-                            t.rotateZ(-1.57*-5);
-                            Strip strip3 = new Strip(strips.size() + "/3", cloudStripMetrics128, t);     
-                            strips.add(strip3);
-                            // System.out.println("Creating strip at t.x()=" + t.x() + " t.y()=" + t.y() + " t.z()=" + t.z());
-                        t.pop();
-                        t.push();
-                            t.translate(0,-128,0); //translate down
-                            t.translate(-22,0,0); //translate left
-                            t.translate(0,128,0); //translate up
-                            t.rotateZ(-1.57*-4);
-                            Strip strip4 = new Strip(strips.size() + "/4", cloudStripMetrics22, t);     
-                            strips.add(strip4);
-                            // System.out.println("Creating strip at t.x()=" + t.x() + " t.y()=" + t.y() + " t.z()=" + t.z());
-                        t.pop();
+                    t.rotateZ(-1.57); //start going down
+                    Strip strip1 = new Strip(strips.size() + "/1", cloudStripMetrics90, t);     
+                    strips.add(strip1);
+                t.pop();
+                t.push();
+                    t.translate(0,-90,0); //translate down
+                    Strip strip2 = new Strip(strips.size() + "/2", cloudStripMetrics15, t);
+                    strips.add(strip2);
+                t.pop();
+                t.push();
+                    t.translate(0,-90,0); //translate down
+                    t.translate(15,0,0); //translate right
+                    t.rotateZ(1.57); //rotate left
+                    Strip strip3 = new Strip(strips.size() + "/3", cloudStripMetrics90, t);     
+                    strips.add(strip3);
+                t.pop();
+                t.push();
+                    t.translate(0,-90,0); //translate down
+                    t.translate(15,0,0); //translate left
+                    t.translate(0,90,0); //translate up
+                    Strip strip4 = new Strip(strips.size() + "/4", cloudStripMetrics15, t);     
+                    strips.add(strip4);
+                t.pop();
+                t.push();
+                    t.translate(0,-90,0); //translate down
+                    t.translate(15,0,0); //translate right
+                    t.translate(0,90,0); //translate up
+                    t.translate(15,0,0); //translate right
+                    t.rotateZ(-1.57);
+                    Strip strip5 = new Strip(strips.size() + "/5", cloudStripMetrics90, t);     
+                    strips.add(strip5);
+                t.pop();
             t.pop();
+
+
         }
     }
 
     static class MikeyPixlite extends SimplePixlite {
-        public MikeyPixlite(LX lx, String ip, MikeyModel model, int stripOffset) {
+        // Add unusedPorts parameter to constructor
+        public MikeyPixlite(LX lx, String ip, MikeyModel model, int stripOffset, java.util.Set<Integer> unusedPorts) {
             super(lx, ip);
 
             int totalStripsInModel = model.getStrips().size();
@@ -232,23 +333,24 @@ public class MikeyShow implements Show {
             // Each Pixlite is designed for up to 8 outputs (groups of 4 strips)
             int numIterations = Math.min(8, numPossibleGroups);
 
+            int usedPort = 0;
             for (int i = 0; i < numIterations; i++) {
-                // Calculate base strip index for this output, stepping by 4 each time
+                if (unusedPorts.contains(i)) {
+                    continue; // skip this port/output
+                }
                 int baseIndex = (i * 4) + stripOffset;
-                
-                // Defensive check, though numIterations should prevent this
                 if (baseIndex + 3 >= totalStripsInModel) {
                     System.out.println("MikeyPixlite: Attempted to access strip out of bounds, skipping output group. BaseIndex: " + baseIndex + ", TotalStrips: " + totalStripsInModel);
                     continue;
                 }
-
                 addPixliteOutput(
-                    new PointsGrouping(String.valueOf(i + 1))
+                    new PointsGrouping(String.valueOf(usedPort + 1)) // Only increment for used ports
                         .addPoints(model.getStripByIndex(baseIndex).getPoints())
                         .addPoints(model.getStripByIndex(baseIndex + 1).getPoints())
                         .addPoints(model.getStripByIndex(baseIndex + 2).getPoints())
                         .addPoints(model.getStripByIndex(baseIndex + 3).getPoints())
-                        );
+                );
+                usedPort++;
             }
         }
 
