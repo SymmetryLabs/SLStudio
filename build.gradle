@@ -21,6 +21,10 @@ plugins {
     id "com.google.protobuf" version "0.9.4"
 }
 
+def protocVersion = '3.21.9'
+def grpcVersion = '1.21.0'
+
+
 // apply plugin: 'edu.sc.seis.macAppBundle'  // macAppBundle temporarily disabled
 
 
@@ -228,13 +232,15 @@ project.compileJava.dependsOn createVersionFile
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:${protocVersion}"
+        path = "/opt/homebrew/bin/protoc"
     }
     plugins {
         grpc {
-            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+            // force the Intel (“x86_64”) binary instead of looking for aarch_64
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}:osx-x86_64"
+            }
         }
-    }
+    
     generateProtoTasks {
         all().each { task ->
             task.plugins {
