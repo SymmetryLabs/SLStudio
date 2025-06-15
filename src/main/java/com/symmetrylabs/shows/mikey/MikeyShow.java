@@ -31,20 +31,25 @@ public class MikeyShow implements Show {
         //add a total of 12 controllers
         MikeyPixlite pixlite1 = new MikeyPixlite(lx, "192.168.0.200", model, 0, java.util.Set.of());      // strips 0-31
         lx.addOutput(pixlite1);
-        MikeyPixlite pixlite2 = new MikeyPixlite(lx, "192.168.0.201", model, 32, java.util.Set.of());      // strips 32-63
+        MikeyPixlite pixlite2 = new MikeyPixlite(lx, "192.168.0.202", model, 32, java.util.Set.of());  
         lx.addOutput(pixlite2);
-        MikeyPixlite pixlite3 = new MikeyPixlite(lx, "192.168.0.202", model, 64, java.util.Set.of());      // strips 64-95
+        MikeyPixlite pixlite3 = new MikeyPixlite(lx, "192.168.0.203", model, 64, java.util.Set.of());      //64-95
         lx.addOutput(pixlite3); 
-        MikeyPixlite pixlite4 = new MikeyPixlite(lx, "192.168.0.203", model, 96, java.util.Set.of(3)); // strips 96-127, skip port 3
+        MikeyPixlite pixlite4 = new MikeyPixlite(lx, "192.168.0.204", model, 96, java.util.Set.of());   //96-127
         lx.addOutput(pixlite4); 
-        MikeyPixlite pixlite5 = new MikeyPixlite(lx, "192.168.0.204", model, 128, java.util.Set.of());     // strips 128-159
+        MikeyPixlite pixlite5 = new MikeyPixlite(lx, "192.168.0.205", model, 130, java.util.Set.of());     //129-160
         lx.addOutput(pixlite5); 
-        MikeyPixlite pixlite6 = new MikeyPixlite(lx, "192.168.0.205", model, 160, java.util.Set.of());      // strips 160-191
-        lx.addOutput(pixlite6); 
-        MikeyPixlite pixlite7 = new MikeyPixlite(lx, "192.168.0.206", model, 192, java.util.Set.of());     // strips 192-223
-        lx.addOutput(pixlite7); 
-        MikeyPixlite pixlite8 = new MikeyPixlite(lx, "192.168.0.207", model, 224, java.util.Set.of());      // strips 224-255
-        lx.addOutput(pixlite8); 
+        MikeyPixlite pixlite6 = new MikeyPixlite(lx, "192.168.0.207", model, 160, java.util.Set.of());      //161-192
+        lx.addOutput(pixlite6);
+        // lx.addOutput(pixlite2);
+        // MikeyPixlite pixlite3 = new MikeyPixlite(lx, "192.168.0.203", model, 64, java.util.Set.of(2,3,4,5));      //64-95
+        // lx.addOutput(pixlite3); 
+        // MikeyPixlite pixlite4 = new MikeyPixlite(lx, "192.168.0.204", model, 96, java.util.Set.of(2,3,6,7)); //96-127, skip port 3
+        // lx.addOutput(pixlite4); 
+        // MikeyPixlite pixlite5 = new MikeyPixlite(lx, "192.168.0.205", model, 128, java.util.Set.of(0,1,2,3));     //128-159
+        // lx.addOutput(pixlite5); 
+        // MikeyPixlite pixlite6 = new MikeyPixlite(lx, "192.168.0.207", model, 160, java.util.Set.of(0,1,2,3));      //160-191
+        // lx.addOutput(pixlite6);
     }
 
     static class MikeyModel extends StripsModel<Strip> {
@@ -106,6 +111,8 @@ public class MikeyShow implements Show {
                 }
             }
             // Add 8 groups of addFourStripGroup labeled as 200-1 through 200-4 in the comments
+
+            //1-31
             addFourStripGroup(strips,t,16.35f*ft, -13.7f*ft,0,rotateZ180); //200-1
             addFourStripGroup(strips,t,18.35f*ft, -13.7f*ft,0,rotateZ180); //200-2
             addFourStripGroup(strips,t,8.85f*ft, -20.7f*ft,0,rotateZ180); //200-3
@@ -115,17 +122,8 @@ public class MikeyShow implements Show {
             addFourStripGroup(strips,t,12.35f*ft, -20.7f*ft,0,rotateZ180); //200-7
             addFourStripGroup(strips,t,14.35f*ft, -20.7f*ft,0,rotateZ180); //200-8
 
-            //Add 8 groups of addFourStripGroup labeled as 201-1 through 201-4 in the comments
-            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //201-1
-            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //201-2
-            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //201-3
-            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //201-4
-            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //201-5
-            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //201-6
-            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //201-7
-            addFourStripGroup(strips,t,tempSpacer*ft,0*ft,0,0); //201-8    
-
             //Add 8 groups of addFourStripGroup labeled as 202-1 through 202-4 in the comments
+            //32-63
             addFourStripGroup(strips, t, 11.5f*ft, -7*ft, 0, 0); //202-1
             addFourStripGroup(strips, t, 10f*ft, -7f*ft, 0, 0); //202-2
             addFourStripGroup(strips, t, 7.5f*ft, -3.6f*ft, 0, rotateZ); //202-3
@@ -135,7 +133,7 @@ public class MikeyShow implements Show {
             addFourStripGroup(strips, t, 11.5f*ft, 0*ft, 0, 0); //202-7
             addFourStripGroup(strips, t, 10*ft, 0*ft, 0, 0); //202-8
 
-
+            //64-95
             //Add 8 groups of addFourStripGroup labeled as 203-1 through 203-4 in the comments
             addFourStripGroup(strips,t,15.5f*ft,-7*ft,0,0); //203-1
             addFourStripGroup(strips,t,13.5f*ft,-7*ft,0,0); //203-2
@@ -146,38 +144,43 @@ public class MikeyShow implements Show {
             addFourStripGroup(strips,t,19.5f*ft,0*ft,0,0); //203-7
             addFourStripGroup(strips,t,17.5f*ft,0*ft,0,0); //203-8
 
+            //96-129
+            //FIVE STRIPS 4-5, 4-6
             //Add 8 groups of addFourStripGroup labeled as 204-1 through 204-4 in the comments  
-            addFourStripGroup(strips,t,5.85f*ft,-20.7f*ft,0,rotateZ180); //204-1    
-            addFourStripGroup(strips,t,7.35f*ft,-20.7f*ft,0,rotateZ180); //204-2
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-3
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-4
-            addFiveStripGroup(strips, t, 5.75f*ft, -18.7f*ft, 0, rotateZ180); //204-5
-            addFiveStripGroup(strips, t, 4.1f*ft, -18.7f*ft, 0, rotateZ180); //204-6
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-7
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-8
+            addFourStripGroup(strips,t,5.85f*ft,-20.7f*ft,0,rotateZ180); //204-1  //96-99   
+            addFourStripGroup(strips,t,7.35f*ft,-20.7f*ft,0,rotateZ180); //204-2 //100-103
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-3 //104-107
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-4 //108-111
+            addFiveStripGroup(strips, t, 5.75f*ft, -18.7f*ft, 0, rotateZ180); //204-5 //112-116
+            addFiveStripGroup(strips, t, 4.1f*ft, -18.7f*ft, 0, rotateZ180); //204-6 //117-121
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-7 //122-125
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-8 //126-129
 
+            //Three Strip Group 5-5, 5-6
             //205
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-1
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-2
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-3
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-4
-            addThreeStripGroup(strips, t, -3.2f*ft, -4*ft, 0, 0); //205-5
-            addThreeStripGroup(strips, t, -1.2f*ft, -4*ft, 0, 0); //205-6
-            addFourStripGroup(strips,t,.5f*ft,-4*ft,0,rotateZ90); //205-7
-            addFourStripGroup(strips,t,.5f*ft,-5.6f*ft,0,rotateZ90); //205-8
+            //129-160
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-1 //130-133
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-2 //134-137
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-3 //138-141
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-4 //142-145
+            addThreeStripGroup(strips, t, -3.2f*ft, -4*ft, 0, 0); //205-5 //146-148
+            addThreeStripGroup(strips, t, -1.2f*ft, -4*ft, 0, 0); //205-6 //149-151
+            addFourStripGroup(strips,t,.5f*ft,-4*ft,0,rotateZ90); //205-7 //152-155
+            addFourStripGroup(strips,t,.5f*ft,-5.6f*ft,0,rotateZ90); //205-8 //156-159
 
             //206
             //add addFourStripGroup for 206
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-1
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-2
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-3
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-4
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-5
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-6
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-7
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-8
+            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-1
+            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-2
+            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-3
+            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-4
+            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-5
+            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-6
+            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-7
+            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-8
 
             //207
+            //160-191
             addFourStripGroup(strips,t,7.35f*ft,-13.7f*ft,0,rotateZ180); //207-1
             addFourStripGroup(strips,t,5.85f*ft,-13.7f*ft,0,rotateZ180); //207-2
             addFourStripGroup(strips,t, 4.35f*ft,-13.7f*ft,0,rotateZ180); //207-3
@@ -188,38 +191,38 @@ public class MikeyShow implements Show {
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-8
 
             //208
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-1
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-2
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-3
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-4
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-5
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-6
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-7
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-8
+            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-1
+            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-2
+            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-3
+            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-4
+            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-5
+            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-6
+            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-7
+            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-8
             return new MikeyModel(strips);
         }
 
         private static void addThreeStripGroup(List<Strip> strips, LXTransform t, float x, float y, float z, float rotateZ) {
-            Strip.Metrics cloudStripMetrics90 = new Strip.Metrics(90, 1);
-            Strip.Metrics cloudStripMetrics15 = new Strip.Metrics(15, 1);
+            Strip.Metrics cloudStripMetrics140 = new Strip.Metrics(140, 1);
+            Strip.Metrics cloudStripMetrics22 = new Strip.Metrics(22, 1);
             t.push();
                 t.translate(x, y, z);
                 t.rotateZ(rotateZ);
                 t.push();
                     t.rotateZ(-1.57); //start going down
-                    Strip strip1 = new Strip(strips.size() + "/1", cloudStripMetrics90, t);     
+                    Strip strip1 = new Strip(strips.size() + "/1", cloudStripMetrics140, t);     
                     strips.add(strip1);
                 t.pop();
                 t.push();
-                    t.translate(0,-90,0); //translate down
-                    Strip strip2 = new Strip(strips.size() + "/2", cloudStripMetrics15, t);
+                    t.translate(0,-140,0); //translate down
+                    Strip strip2 = new Strip(strips.size() + "/2", cloudStripMetrics22, t);
                     strips.add(strip2);
                 t.pop();
                 t.push();
-                    t.translate(0,-90,0); //translate down
-                    t.translate(15,0,0); //translate right
+                    t.translate(0,-140,0); //translate down
+                    t.translate(22,0,0); //translate right
                     t.rotateZ(1.57);
-                    Strip strip3 = new Strip(strips.size() + "/3", cloudStripMetrics90, t);     
+                    Strip strip3 = new Strip(strips.size() + "/3", cloudStripMetrics140, t);     
                     strips.add(strip3);
                 t.pop();
             t.pop();
@@ -320,50 +323,83 @@ public class MikeyShow implements Show {
             super(lx, ip);
 
             int totalStripsInModel = model.getStrips().size();
-            // Ensure stripOffset is within bounds to avoid negative availableStrips
-            if (stripOffset < 0) stripOffset = 0; // Or handle error
+            if (stripOffset < 0) stripOffset = 0;
             if (stripOffset >= totalStripsInModel) {
-                // No strips to process if offset is beyond or at the total number of strips
-                return; 
+                return;
             }
 
-            int availableStripsForPixlite = totalStripsInModel - stripOffset;
-            int numPossibleGroups = availableStripsForPixlite / 4; // Integer division gives full groups
-            
-            // Each Pixlite is designed for up to 8 outputs (groups of 4 strips)
-            int numIterations = Math.min(8, numPossibleGroups);
+            // Default: 8 outputs, all 4-strip groups
+            int[] groupSizes = {4,4,4,4,4,4,4,4};
+            if ("192.168.0.204".equals(ip)) {
+                groupSizes = new int[]{4,4,4,4,5,5,4,4};
+            } else if ("192.168.0.205".equals(ip)) {
+                groupSizes = new int[]{4,4,4,4,3,3,4,4};
+            }
 
-            int usedPort = 0;
-            for (int i = 0; i < numIterations; i++) {
+            int baseIndex = stripOffset;
+            for (int i = 0; i < groupSizes.length; i++) {
+                int groupSize = groupSizes[i];
                 if (unusedPorts.contains(i)) {
-                    continue; // skip this port/output
-                }
-                int baseIndex = (i * 4) + stripOffset;
-                if (baseIndex + 3 >= totalStripsInModel) {
-                    System.out.println("MikeyPixlite: Attempted to access strip out of bounds, skipping output group. BaseIndex: " + baseIndex + ", TotalStrips: " + totalStripsInModel);
+                    baseIndex += groupSize;
                     continue;
                 }
+                if (groupSize == 5) {
+                if (baseIndex + 4 >= totalStripsInModel) {
+                    System.out.println("MikeyPixlite: Attempted to access strip out of bounds (5-strip output), skipping. BaseIndex: " + baseIndex + ", TotalStrips: " + totalStripsInModel);
+                    baseIndex += groupSize;
+                    continue;
+                }
+                System.out.println("[OUT] Pixlite " + ip + " Output " + (i+1) + " (5-strip) strips " + baseIndex + " to " + (baseIndex+4));
                 addPixliteOutput(
-                    new PointsGrouping(String.valueOf(usedPort + 1)) // Only increment for used ports
+                    new PointsGrouping(String.valueOf(i + 1))
+                        .addPoints(model.getStripByIndex(baseIndex).getPoints())
+                        .addPoints(model.getStripByIndex(baseIndex + 1).getPoints())
+                        .addPoints(model.getStripByIndex(baseIndex + 2).getPoints())
+                        .addPoints(model.getStripByIndex(baseIndex + 3).getPoints())
+                        .addPoints(model.getStripByIndex(baseIndex + 4).getPoints())
+                );
+            } else if (groupSize == 3) {
+                if (baseIndex + 2 >= totalStripsInModel) {
+                    System.out.println("MikeyPixlite: Attempted to access strip out of bounds (3-strip output), skipping. BaseIndex: " + baseIndex + ", TotalStrips: " + totalStripsInModel);
+                    baseIndex += groupSize;
+                    continue;
+                }
+                System.out.println("[OUT] Pixlite " + ip + " Output " + (i+1) + " (3-strip) strips " + baseIndex + " to " + (baseIndex+2));
+                addPixliteOutput(
+                    new PointsGrouping(String.valueOf(i + 1))
+                        .addPoints(model.getStripByIndex(baseIndex).getPoints())
+                        .addPoints(model.getStripByIndex(baseIndex + 1).getPoints())
+                        .addPoints(model.getStripByIndex(baseIndex + 2).getPoints())
+                );
+            } else {
+                if (baseIndex + 3 >= totalStripsInModel) {
+                    System.out.println("MikeyPixlite: Attempted to access strip out of bounds (4-strip output), skipping. BaseIndex: " + baseIndex + ", TotalStrips: " + totalStripsInModel);
+                    baseIndex += groupSize;
+                    continue;
+                }
+                System.out.println("[OUT] Pixlite " + ip + " Output " + (i+1) + " (4-strip) strips " + baseIndex + " to " + (baseIndex+3));
+                addPixliteOutput(
+                    new PointsGrouping(String.valueOf(i + 1))
                         .addPoints(model.getStripByIndex(baseIndex).getPoints())
                         .addPoints(model.getStripByIndex(baseIndex + 1).getPoints())
                         .addPoints(model.getStripByIndex(baseIndex + 2).getPoints())
                         .addPoints(model.getStripByIndex(baseIndex + 3).getPoints())
                 );
-                usedPort++;
             }
+            baseIndex += groupSize;
         }
+    }
 
-        @Override
-        public SimplePixlite addPixliteOutput(PointsGrouping pointsGrouping) {
-            try {
-                SimplePixliteOutput spo = new SimplePixliteOutput(pointsGrouping);
-                spo.setLogConnections(false);
-                addChild(spo);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return this;
+    @Override
+    public SimplePixlite addPixliteOutput(PointsGrouping pointsGrouping) {
+        try {
+            SimplePixliteOutput spo = new SimplePixliteOutput(pointsGrouping);
+            spo.setLogConnections(false);
+            addChild(spo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return this;
         }
     }
 }
