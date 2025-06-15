@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1749936945339,
+  "timestamp": 1749946451076,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -44,7 +44,7 @@
         "modulationColor": -16711803,
         "parameters": {
           "label": "Look-1",
-          "focusedChannel": 14
+          "focusedChannel": 15
         },
         "channels": [
           {
@@ -328,13 +328,13 @@
             "modulationColor": -27648,
             "parameters": {
               "label": "Diamonds",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -906,7 +906,7 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "count": 8,
-                  "cx": 196.01739501953125,
+                  "cx": 124.0,
                   "cy": 0.0,
                   "cz": 0.0,
                   "width": 260.0,
@@ -988,7 +988,7 @@
                   "label": "ParamCrossSections",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "xPos": 235.39790329468235,
+                  "xPos": 124.0,
                   "yPos": 0.0,
                   "zPos": 0.0,
                   "xSpd": 0.7,
@@ -1394,13 +1394,13 @@
             "modulationColor": -15270144,
             "parameters": {
               "label": "Mapping",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -1414,7 +1414,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 0,
+            "patternIndex": 1,
             "patterns": [
               {
                 "id": 1192,
@@ -1426,6 +1426,23 @@
                   "Enabled": true,
                   "Controller": 2,
                   "Output": 7
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                },
+                "autoCycleEnabled": true
+              },
+              {
+                "id": 1967,
+                "class": "com.symmetrylabs.slstudio.pattern.PointIndex",
+                "modulationColor": -36096,
+                "parameters": {
+                  "label": "PointIndex",
+                  "expandedInUi": true,
+                  "Enabled": true,
+                  "index": 0.0
                 },
                 "modulation": {
                   "modulators": [],
@@ -1499,7 +1516,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -8704,
+          "modulationColor": -16711919,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -1638,7 +1655,7 @@
       "DMXParameterMapper": {
         "id": 114,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -3473153,
+        "modulationColor": -4587265,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -1827,12 +1844,12 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 544.369911368615,
+        "radius": 260.9918921914069,
         "theta": 6.260999999999961,
         "phi": 0.150716673851011,
-        "positionX": 156.81765747070312,
-        "positionY": -270.6500244140625,
-        "positionZ": -0.6655000448226929
+        "positionX": 126.82498168945312,
+        "positionY": -301.6500244140625,
+        "positionZ": 0.0
       }
     }
   }
