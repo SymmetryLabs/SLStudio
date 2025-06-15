@@ -164,10 +164,10 @@ public class MikeyShow implements Show {
             //Three Strip Group 5-5, 5-6
             //205
             //132-163
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-1 //132-135
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-2 //136-139
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-3 //140-143
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-4 //144-147
+            addFourStriptoOneStripGroup(strips,t,.5f*ft,-1*ft,0,0); //205-1 //132-135
+            addFourStriptoOneStripGroup(strips,t,.5f*ft,0*ft,0,0); //205-2 //136-139
+            addFourStriptoOneStripGroup(strips,t,.5f*ft,1*ft,0,0); //205-3 //140-143
+            addFourStriptoOneStripGroup(strips,t,.5f*ft,2*ft,0,0); //205-4 //144-147
             addThreeStripGroup(strips, t, -.7f*ft, -4*ft, 0, 0); //205-5 //148-150
             addThreeStripGroup(strips, t, 1.3f*ft, -4*ft, 0, 0); //205-6 //151-153
             addFourStripGroup(strips,t,.5f*ft,-4*ft,0,rotateZ90); //205-7 //154-157
@@ -196,6 +196,38 @@ public class MikeyShow implements Show {
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-8
             return new MikeyModel(strips);
         }
+
+        //Create a strip group thats 4 strips that starts going left and then rotates in the x axis
+        private static void addFourStriptoOneStripGroup(List<Strip> strips, LXTransform t, float x, float y, float z, float rotateZ) {
+            Strip.Metrics cloudStripMetrics100 = new Strip.Metrics(100, 1);
+            Strip.Metrics cloudStripMetrics50 = new Strip.Metrics(50, 1);
+            t.push();
+                t.translate(x, y, z);
+                t.rotateZ(rotateZ);
+                t.push();
+                    t.translate(0,0,100); //translate 100 into the Z
+                    t.rotateY(1.57*1); //start going Up From Z (rotate on X axis)
+                    Strip strip1 = new Strip(strips.size() + "/1", cloudStripMetrics50, t);     
+                    strips.add(strip1);
+                t.pop();
+                t.push();
+                    t.translate(0,0,50); //translate down 50 into the Z
+                    t.rotateY(1.57*1); //start going Up From Z (rotate on X axis)
+                    Strip strip2 = new Strip(strips.size() + "/2", cloudStripMetrics50, t);
+                    strips.add(strip2);
+                t.pop();
+                t.push();
+                    Strip strip3 = new Strip(strips.size() + "/3", cloudStripMetrics100, t);     
+                    strips.add(strip3);
+                t.pop();
+                t.push();
+                    t.translate(100,0,0); //translate down
+                    Strip strip4 = new Strip(strips.size() + "/4", cloudStripMetrics100, t);     
+                    strips.add(strip4);
+                t.pop();
+            t.pop();
+        }
+            
 
         private static void addThreeStripGroup(List<Strip> strips, LXTransform t, float x, float y, float z, float rotateZ) {
             Strip.Metrics cloudStripMetrics140 = new Strip.Metrics(140, 1);
