@@ -28,7 +28,12 @@ public class MikeyShow implements Show {
     @Override
     public void setupLx(LX lx) {
         MikeyModel model = (MikeyModel) lx.model;
-        //add a total of 12 controllers
+        //add a total of 6 controllers
+        //I'm doing a hacky thing here where I'm offsetting the strips by the number of strips 
+        //per controller but some controllers have more strips than others because some clouds
+        //are longer than others and are created with more strips. So each controller is offset 
+        //by the number of strips in the previous controller. This is a hack and I'm lazy
+
         MikeyPixlite pixlite1 = new MikeyPixlite(lx, "192.168.0.200", model, 0, java.util.Set.of());      // strips 0-31
         lx.addOutput(pixlite1);
         MikeyPixlite pixlite2 = new MikeyPixlite(lx, "192.168.0.202", model, 32, java.util.Set.of());  
@@ -37,9 +42,9 @@ public class MikeyShow implements Show {
         lx.addOutput(pixlite3); 
         MikeyPixlite pixlite4 = new MikeyPixlite(lx, "192.168.0.204", model, 96, java.util.Set.of());   //96-127
         lx.addOutput(pixlite4); 
-        MikeyPixlite pixlite5 = new MikeyPixlite(lx, "192.168.0.205", model, 130, java.util.Set.of());     //129-160
+        MikeyPixlite pixlite5 = new MikeyPixlite(lx, "192.168.0.205", model, 132, java.util.Set.of());     //129-160
         lx.addOutput(pixlite5); 
-        MikeyPixlite pixlite6 = new MikeyPixlite(lx, "192.168.0.207", model, 160, java.util.Set.of());      //161-192
+        MikeyPixlite pixlite6 = new MikeyPixlite(lx, "192.168.0.207", model, 162, java.util.Set.of());      //161-192
         lx.addOutput(pixlite6);
         // lx.addOutput(pixlite2);
         // MikeyPixlite pixlite3 = new MikeyPixlite(lx, "192.168.0.203", model, 64, java.util.Set.of(2,3,4,5));      //64-95
@@ -144,7 +149,7 @@ public class MikeyShow implements Show {
             addFourStripGroup(strips,t,19.5f*ft,0*ft,0,0); //203-7
             addFourStripGroup(strips,t,17.5f*ft,0*ft,0,0); //203-8
 
-            //96-129
+            //96-131
             //FIVE STRIPS 4-5, 4-6
             //Add 8 groups of addFourStripGroup labeled as 204-1 through 204-4 in the comments  
             addFourStripGroup(strips,t,5.85f*ft,-20.7f*ft,0,rotateZ180); //204-1  //96-99   
@@ -153,20 +158,20 @@ public class MikeyShow implements Show {
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-4 //108-111
             addFiveStripGroup(strips, t, 5.75f*ft, -18.7f*ft, 0, rotateZ180); //204-5 //112-116
             addFiveStripGroup(strips, t, 4.1f*ft, -18.7f*ft, 0, rotateZ180); //204-6 //117-121
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-7 //122-125
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-8 //126-129
+            addFiveStripGroup(strips,t,2.25f*ft, -17.2f*ft,0,rotateZ180); //204-7 //122-126 //five strip cloud
+            addFiveStripGroup(strips,t,.6f*ft, -17.2f*ft,0,rotateZ180); //204-8 //127-131 //five strip cloud
 
             //Three Strip Group 5-5, 5-6
             //205
-            //129-160
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-1 //130-133
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-2 //134-137
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-3 //138-141
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-4 //142-145
-            addThreeStripGroup(strips, t, -3.2f*ft, -4*ft, 0, 0); //205-5 //146-148
-            addThreeStripGroup(strips, t, -1.2f*ft, -4*ft, 0, 0); //205-6 //149-151
-            addFourStripGroup(strips,t,.5f*ft,-4*ft,0,rotateZ90); //205-7 //152-155
-            addFourStripGroup(strips,t,.5f*ft,-5.6f*ft,0,rotateZ90); //205-8 //156-159
+            //132-163
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-1 //132-135
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-2 //136-139
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-3 //140-143
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-4 //144-147
+            addThreeStripGroup(strips, t, -3.2f*ft, -4*ft, 0, 0); //205-5 //148-150
+            addThreeStripGroup(strips, t, -1.2f*ft, -4*ft, 0, 0); //205-6 //151-153
+            addFourStripGroup(strips,t,.5f*ft,-4*ft,0,rotateZ90); //205-7 //154-157
+            addFourStripGroup(strips,t,.5f*ft,-5.6f*ft,0,rotateZ90); //205-8 //158-161
 
             //206
             //add addFourStripGroup for 206
@@ -180,7 +185,7 @@ public class MikeyShow implements Show {
             // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //206-8
 
             //207
-            //160-191
+            //162-193
             addFourStripGroup(strips,t,7.35f*ft,-13.7f*ft,0,rotateZ180); //207-1
             addFourStripGroup(strips,t,5.85f*ft,-13.7f*ft,0,rotateZ180); //207-2
             addFourStripGroup(strips,t, 4.35f*ft,-13.7f*ft,0,rotateZ180); //207-3
@@ -189,16 +194,6 @@ public class MikeyShow implements Show {
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-6
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-7
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-8
-
-            //208
-            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-1
-            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-2
-            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-3
-            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-4
-            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-5
-            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-6
-            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-7
-            // addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //208-8
             return new MikeyModel(strips);
         }
 
@@ -327,11 +322,14 @@ public class MikeyShow implements Show {
             if (stripOffset >= totalStripsInModel) {
                 return;
             }
-
+            //Each controller has a different number of strips based in its cloud types/sizes
+            //so we need to set the group sizes based on the ip address so that each one gets the
+            //right number of strips
+            //the groupsizes array is the number of strips per cloud
             // Default: 8 outputs, all 4-strip groups
             int[] groupSizes = {4,4,4,4,4,4,4,4};
             if ("192.168.0.204".equals(ip)) {
-                groupSizes = new int[]{4,4,4,4,5,5,4,4};
+                groupSizes = new int[]{4,4,4,4,5,5,5,5};
             } else if ("192.168.0.205".equals(ip)) {
                 groupSizes = new int[]{4,4,4,4,3,3,4,4};
             }
@@ -343,13 +341,16 @@ public class MikeyShow implements Show {
                     baseIndex += groupSize;
                     continue;
                 }
+                //if the group size is 3 then it's a 3 strip cloud 
+                //if the group size is 4, then it's a 4-strip cloud
+                //if the group size is 5, then it's a 5-strip cloud
                 if (groupSize == 5) {
                 if (baseIndex + 4 >= totalStripsInModel) {
                     System.out.println("MikeyPixlite: Attempted to access strip out of bounds (5-strip output), skipping. BaseIndex: " + baseIndex + ", TotalStrips: " + totalStripsInModel);
                     baseIndex += groupSize;
                     continue;
                 }
-                System.out.println("[OUT] Pixlite " + ip + " Output " + (i+1) + " (5-strip) strips " + baseIndex + " to " + (baseIndex+4));
+                    System.out.println("[OUT] Pixlite " + ip + " Output " + (i+1) + " (5-strip) strips " + baseIndex + " to " + (baseIndex+4));
                 addPixliteOutput(
                     new PointsGrouping(String.valueOf(i + 1))
                         .addPoints(model.getStripByIndex(baseIndex).getPoints())
