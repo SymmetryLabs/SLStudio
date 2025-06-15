@@ -156,10 +156,10 @@ public class MikeyShow implements Show {
             addFourStripGroup(strips,t,7.35f*ft,-20.7f*ft,0,rotateZ180); //204-2 //100-103
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-3 //104-107
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //204-4 //108-111
-            addFiveStripGroup(strips, t, 5.75f*ft, -18.7f*ft, 0, rotateZ180); //204-5 //112-116
-            addFiveStripGroup(strips, t, 4.1f*ft, -18.7f*ft, 0, rotateZ180); //204-6 //117-121
-            addFiveStripGroup(strips,t,2.25f*ft, -17.2f*ft,0,rotateZ180); //204-7 //122-126 //five strip cloud
-            addFiveStripGroup(strips,t,.6f*ft, -17.2f*ft,0,rotateZ180); //204-8 //127-131 //five strip cloud
+            addFiveStripGroup(strips, t, 5f*ft, -18.7f*ft, 0, rotateZ180); //204-5 //112-116
+            addFiveStripGroup(strips, t, 3.2f*ft, -18.7f*ft, 0, rotateZ180); //204-6 //117-121
+            addFiveStripGroup(strips,t, 1.5f*ft, -17.2f*ft,0,rotateZ180); //204-7 //122-126 //five strip cloud
+            addFiveStripGroup(strips,t, -.85f*ft, -17.2f*ft,0,rotateZ180); //204-8 //127-131 //five strip cloud
 
             //Three Strip Group 5-5, 5-6
             //205
@@ -168,8 +168,8 @@ public class MikeyShow implements Show {
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-2 //136-139
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-3 //140-143
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //205-4 //144-147
-            addThreeStripGroup(strips, t, -3.2f*ft, -4*ft, 0, 0); //205-5 //148-150
-            addThreeStripGroup(strips, t, -1.2f*ft, -4*ft, 0, 0); //205-6 //151-153
+            addThreeStripGroup(strips, t, -.7f*ft, -4*ft, 0, 0); //205-5 //148-150
+            addThreeStripGroup(strips, t, 1.3f*ft, -4*ft, 0, 0); //205-6 //151-153
             addFourStripGroup(strips,t,.5f*ft,-4*ft,0,rotateZ90); //205-7 //154-157
             addFourStripGroup(strips,t,.5f*ft,-5.6f*ft,0,rotateZ90); //205-8 //158-161
 
@@ -188,8 +188,8 @@ public class MikeyShow implements Show {
             //162-193
             addFourStripGroup(strips,t,7.35f*ft,-13.7f*ft,0,rotateZ180); //207-1
             addFourStripGroup(strips,t,5.85f*ft,-13.7f*ft,0,rotateZ180); //207-2
-            addFourStripGroup(strips,t, 4.35f*ft,-13.7f*ft,0,rotateZ180); //207-3
-            addFourStripGroup(strips,t, 2.85f*ft,-13.7f*ft,0,rotateZ180); //207-4
+            addFourStripGroup(strips,t, 2.35f*ft,-13.7f*ft,0,rotateZ180); //207-3
+            addFourStripGroup(strips,t, 3.85f*ft,-13.7f*ft,0,rotateZ180); //207-4
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-5
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-6
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-7
