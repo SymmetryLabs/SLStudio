@@ -90,7 +90,7 @@ public class MikeyShow implements Show {
             float rotateZ90= 1.57f;
             float rotateZ180= -1.57f*2;
             int ft = 19;
-            float tempSpacer = -5;
+            float tempSpacer = 0;
             List<Strip> strips = new ArrayList<Strip>();
             LXTransform t = new LXTransform();
             Strip.Metrics cloudStripMetrics128 = new Strip.Metrics(128, 1); //strip config long
@@ -194,7 +194,7 @@ public class MikeyShow implements Show {
             addFourStripGroup(strips,t, 2.35f*ft,-13.7f*ft,0,rotateZ180); //207-3 //173-176
             addFourStripGroup(strips,t, 3.85f*ft,-13.7f*ft,0,rotateZ180); //207-4 //177-180
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-5 //181-184
-            addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-6 //185-188
+            addFourStripGroup(strips,t,tempSpacer*ft,0,0, 0); //207-6 //185-188
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-7 //189-192
             addFourStripGroup(strips,t,tempSpacer*ft,0,0,0); //207-8 //193-196
             return new MikeyModel(strips);
@@ -205,6 +205,7 @@ public class MikeyShow implements Show {
             Strip.Metrics cloudStripMetrics100 = new Strip.Metrics(100, 1);
             Strip.Metrics cloudStripMetrics50 = new Strip.Metrics(50, 1);
             t.push();
+                t.rotateZ(1.57f);
                 t.translate(x, y, z);
                 t.rotateZ(rotateZ);
                 t.push();
@@ -236,6 +237,7 @@ public class MikeyShow implements Show {
             Strip.Metrics cloudStripMetrics140 = new Strip.Metrics(140, 1);
             Strip.Metrics cloudStripMetrics22 = new Strip.Metrics(22, 1);
             t.push();
+                t.rotateZ(1.57f);
                 t.translate(x, y, z);
                 t.rotateZ(rotateZ);
                 t.push();
@@ -262,7 +264,7 @@ public class MikeyShow implements Show {
             Strip.Metrics cloudStripMetrics128 = new Strip.Metrics(128, 1);
             Strip.Metrics cloudStripMetrics22 = new Strip.Metrics(22, 1);
             t.push();
-                // t.rotateZ(-1.57f*3);
+                t.rotateZ(1.57f);
                 t.translate(x, y, z);
                 t.rotateZ(rotateZ);
                     t.push();
@@ -305,7 +307,8 @@ public class MikeyShow implements Show {
             //add a group of strips with 5 strips that goes down 90 points then rotates left -1.57 
             // goes back up rotates left goes 15 points goes up then rotates left -1.57 goes back up 
             // then rotates right then 15 points then rotates left and then back down 90 points
-            t.push();
+            t.push();   
+                t.rotateZ(1.57f);
                 t.translate(x, y, z);
                 t.rotateX(rotateX);
                 t.rotateY(rotateY);
