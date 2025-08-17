@@ -4,41 +4,39 @@ public class Cube {
   float square1X = 200;
   float square1Y = 50;
 
-Cube(float tempsquareX, float tempsquareY, int color1, int color2, int color3, String cubeNumber){
+  Cube(float tempsquareX, float tempsquareY, int color1, int color2, int color3, String cubeNumber){
+    String tempCubeNumber = cubeNumber;
 
-String tempCubeNumber= cubeNumber;
-square1X = tempsquareX;
-square1Y = tempsquareY;
+    square1X = tempsquareX;
+    square1Y = tempsquareY;
 
-int tempcolor1 = color1;
-int tempcolor2 = color2;
-int tempcolor3 = color3;
+    // Draw the square as a diamond (rotate 45° about its center)
+    pushMatrix();
+    // keep whatever stroke state you already have elsewhere
+    fill(color1, color2, color3);
 
-color1 = tempcolor1;
-color2 = tempcolor2;
-color3 = tempcolor3;
-fill(tempcolor1, tempcolor2, tempcolor3); 
-rect(square1X, square1Y, CubeWidth, CubeHeight);
-fill(0,0,0);
-text(tempCubeNumber, square1X+4, square1Y+14);
+    // move to the center of the square, rotate, and draw centered
+    translate(square1X + CubeWidth/2.0, square1Y + CubeHeight/2.0);
+    rotate(radians(45));
+    rectMode(CENTER);
+    rect(0, 0, CubeWidth, CubeHeight);
+    popMatrix();
 
- 
+    // Label: upright and centered on the diamond
+    fill(0, 0, 0);
+    textAlign(CENTER, CENTER);
+    text(tempCubeNumber, square1X + CubeWidth/2.0, square1Y + CubeHeight/2.0);
+  }
 
-
+  // (leave the unused flags if you want; they don't affect rendering)
+  boolean mouseinSquare1 = false;
+  boolean mouseinSquare2 = false;
+  boolean mouseinSquare3 = false;
+  boolean mouseinSquare4 = false;
+  boolean mouseinSquare5 = false;
+  boolean mouseinSquare6 = false;
 }
 
-
-
-
-
-boolean mouseinSquare1 = false;
-boolean mouseinSquare2 = false;
-boolean mouseinSquare3 = false;
-boolean mouseinSquare4 = false;
-boolean mouseinSquare5 = false;
-boolean mouseinSquare6 = false;
-
-}
 
 //check if the mouse is in the square
 //void mousePressed() {

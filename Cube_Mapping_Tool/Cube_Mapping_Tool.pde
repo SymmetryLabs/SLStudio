@@ -283,163 +283,23 @@ addButtonColor = color(60);
  //check if mouse is pressed on the save button, if it is send the values to the variable that stores the coordinates of the mapping x y values
  if(mousePressed){
   if(mouseX>x && mouseX <x+w && mouseY>y && mouseY <y+h){
-    
+// Build one line per cube in the requested format and save it.
+String[] lines = new String[20];
+for (int i = 0; i < 20; i++) {
+  int xOut = int(squareX[i] / 2);    // X from squareX/2
+  int yOut = 0;                      // Y always 0
+  int zOut = int(-squareY[i] / 2);   // Z from old Y mapping (negated)
 
-    Cube1MappingX = squareX[0]/2;
-    Cube1MappingY = -squareY[0]/2;
-    Cube2MappingX = squareX[1]/2;
-    Cube2MappingY = -squareY[1]/2;
-    Cube3MappingX = squareX[2]/2;
-    Cube3MappingY = -squareY[2]/2;
-    Cube4MappingX = squareX[3]/2;
-    Cube4MappingY = -squareY[3]/2;
-    Cube5MappingX = squareX[4]/2;
-    Cube5MappingY = -squareY[4]/2;
-    Cube6MappingX = squareX[5]/2;
-    Cube6MappingY = -squareY[5]/2;
-    Cube7MappingX = squareX[6]/2;
-    Cube7MappingY = -squareY[6]/2;
-    Cube8MappingX = squareX[7]/2;
-    Cube8MappingY = -squareY[7]/2;
-    Cube9MappingX = squareX[8]/2;
-    Cube9MappingY = -squareY[8]/2;
-    Cube10MappingX = squareX[9]/2;
-    Cube10MappingY = -squareY[9]/2;
-    Cube11MappingX = squareX[10]/2;
-    Cube11MappingY = -squareY[10]/2;
-    Cube12MappingX = squareX[11]/2;
-    Cube12MappingY = -squareY[11]/2;
-    Cube13MappingX = squareX[12]/2;
-    Cube13MappingY = -squareY[12]/2;
-    Cube14MappingX = squareX[13]/2;
-    Cube14MappingY = -squareY[13]/2;
-    Cube15MappingX = squareX[14]/2;
-    Cube15MappingY = -squareY[14]/2;
-    Cube16MappingX = squareX[15]/2;
-    Cube16MappingY = -squareY[15]/2;
-    Cube17MappingX = squareX[16]/2;
-    Cube17MappingY = -squareY[16]/2;
-    Cube18MappingX = squareX[17]/2;
-    Cube18MappingY = -squareY[17]/2;
-    Cube19MappingX = squareX[18]/2;
-    Cube19MappingY = -squareY[18]/2;
-    Cube20MappingX = squareX[19]/2;
-    Cube20MappingY = -squareY[19]/2;    
+  // Use (i+1) as the cube label
+  lines[i] = "new TowerConfig(" + xOut + ", " + yOut + ", " + zOut
+             + ", 0, -45, 0, new String[] { \"" + (i+1) + "\"}),";
+}
 
- //saves the mapping x y coordinates to a text file that can later be used in the cube software for mapping
- 
-int Cube1MappingXint = int(Cube1MappingX);
-int Cube1MappingYint = int(Cube1MappingY);
-int Cube2MappingXint = int(Cube2MappingX);
-int Cube2MappingYint = int(Cube2MappingY);
-int Cube3MappingXint = int(Cube3MappingX);
-int Cube3MappingYint = int(Cube3MappingY);
-int Cube4MappingXint = int(Cube4MappingX);
-int Cube4MappingYint = int(Cube4MappingY);
-int Cube5MappingXint = int(Cube5MappingX);
-int Cube5MappingYint = int(Cube5MappingY);
-int Cube6MappingXint = int(Cube6MappingX);
-int Cube6MappingYint = int(Cube6MappingY);
-int Cube7MappingXint = int(Cube7MappingX);
-int Cube7MappingYint = int(Cube7MappingY);
-int Cube8MappingXint = int(Cube8MappingX);
-int Cube8MappingYint = int(Cube8MappingY);
-int Cube9MappingXint = int(Cube9MappingX);
-int Cube9MappingYint = int(Cube9MappingY);
-int Cube10MappingXint = int(Cube10MappingX);
-int Cube10MappingYint = int(Cube10MappingY);
-int Cube11MappingXint = int(Cube11MappingX);
-int Cube11MappingYint = int(Cube11MappingY);
-int Cube12MappingXint = int(Cube12MappingX);
-int Cube12MappingYint = int(Cube12MappingY);
-int Cube13MappingXint = int(Cube13MappingX);
-int Cube13MappingYint = int(Cube13MappingY);
-int Cube14MappingXint = int(Cube14MappingX);
-int Cube14MappingYint = int(Cube14MappingY);
-int Cube15MappingXint = int(Cube15MappingX);
-int Cube15MappingYint = int(Cube15MappingY);
-int Cube16MappingXint = int(Cube16MappingX);
-int Cube16MappingYint = int(Cube16MappingY);
-int Cube17MappingXint = int(Cube17MappingX);
-int Cube17MappingYint = int(Cube17MappingY);
-int Cube18MappingXint = int(Cube18MappingX);
-int Cube18MappingYint = int(Cube18MappingY);
-int Cube19MappingXint = int(Cube19MappingX);
-int Cube19MappingYint = int(Cube19MappingY);
-int Cube20MappingXint = int(Cube20MappingX);
-int Cube20MappingYint = int(Cube20MappingY);
+saveStrings("mappingfile.txt", lines);
 
-
-
-
-
-
- String Cube1MappingXString = str(Cube1MappingXint) + " ";
- String Cube1MappingYString = str(Cube1MappingYint) + " ";
- String Cube2MappingXString = str(Cube2MappingXint) + " ";
- String Cube2MappingYString = str(Cube2MappingYint) + " ";
- String Cube3MappingXString = str(Cube3MappingXint) + " ";
- String Cube3MappingYString = str(Cube3MappingYint) + " ";
- String Cube4MappingXString = str(Cube4MappingXint) + " ";
- String Cube4MappingYString = str(Cube4MappingYint) + " ";
- String Cube5MappingXString = str(Cube5MappingXint) + " ";
- String Cube5MappingYString = str(Cube5MappingYint) + " ";
- String Cube6MappingXString = str(Cube6MappingXint) + " ";
- String Cube6MappingYString = str(Cube6MappingYint) + " ";
- String Cube7MappingXString = str(Cube7MappingXint) + " ";
- String Cube7MappingYString = str(Cube7MappingYint) + " ";
- String Cube8MappingXString = str(Cube8MappingXint) + " ";
- String Cube8MappingYString = str(Cube8MappingYint) + " ";
- String Cube9MappingXString = str(Cube9MappingXint) + " ";
- String Cube9MappingYString = str(Cube9MappingYint) + " ";
- String Cube10MappingXString = str(Cube10MappingXint)  + " ";
- String Cube10MappingYString = str(Cube10MappingYint)  + " ";
- String Cube11MappingXString = str(Cube11MappingXint)  + " ";
- String Cube11MappingYString = str(Cube11MappingYint)  + " ";
- String Cube12MappingXString = str(Cube12MappingXint)  + " ";
- String Cube12MappingYString = str(Cube12MappingYint)  + " ";
- String Cube13MappingXString = str(Cube13MappingXint)  + " ";
- String Cube13MappingYString = str(Cube13MappingYint)  + " ";
- String Cube14MappingXString = str(Cube14MappingXint)  + " ";
- String Cube14MappingYString = str(Cube14MappingYint)  + " ";
- String Cube15MappingXString = str(Cube15MappingXint)  + " ";
- String Cube15MappingYString = str(Cube15MappingYint)  + " ";
- String Cube16MappingXString = str(Cube16MappingXint)  + " ";
- String Cube16MappingYString = str(Cube16MappingYint)  + " ";
- String Cube17MappingXString = str(Cube17MappingXint)  + " ";
- String Cube17MappingYString = str(Cube17MappingYint)  + " ";
- String Cube18MappingXString = str(Cube18MappingXint)  + " ";
- String Cube18MappingYString = str(Cube18MappingYint)  + " ";
- String Cube19MappingXString = str(Cube19MappingXint)  + " ";
- String Cube19MappingYString = str(Cube19MappingYint)  + " ";
- String Cube20MappingXString = str(Cube20MappingXint)  + " ";
- String Cube20MappingYString = str(Cube20MappingYint)  + " ";
-
-
-//converts the floats of the x y data into strings (saveStrings can only save data into a txt if its a string)
-
-String Cube1MappingData = Cube1MappingXString + Cube1MappingYString + Cube2MappingXString + Cube2MappingYString + Cube3MappingXString + Cube3MappingYString 
-+ Cube4MappingXString + Cube4MappingYString + Cube5MappingXString + Cube5MappingYString + Cube6MappingXString + Cube6MappingYString + Cube7MappingXString 
-+ Cube7MappingYString + Cube8MappingXString + Cube8MappingYString + Cube9MappingXString + Cube9MappingYString + Cube10MappingXString + Cube10MappingYString
-+ Cube11MappingXString + Cube11MappingYString + Cube12MappingXString + Cube12MappingYString + Cube13MappingXString + Cube13MappingYString + Cube14MappingXString
-+ Cube14MappingYString + Cube15MappingXString + Cube15MappingYString + Cube16MappingXString + Cube16MappingYString + Cube17MappingXString + Cube17MappingYString
-+ Cube18MappingXString + Cube18MappingYString + Cube19MappingXString + Cube19MappingYString + Cube20MappingXString + Cube20MappingYString;
-String data = Cube1MappingData;
-String[] list = split(data, ' ');
-
-
-
-
-    
-    
-// Writes the strings to a file, each on a separate line
-saveStrings("mappingfile.txt", list);
- 
-//closes the window after the mapping text file is saved
-
- showMessageDialog(null,"Mapping File Succesfully Saved!", 
-   "Congratulations", INFORMATION_MESSAGE);
-  }   
+showMessageDialog(null, "Mapping File Successfully Saved!",
+  "Congratulations", INFORMATION_MESSAGE);
+  }
  else {
 
  } 
