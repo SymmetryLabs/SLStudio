@@ -13,6 +13,7 @@ import com.symmetrylabs.util.CubePhysicalIdMap;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.ListenableSet;
 import com.symmetrylabs.util.listenable.SetListener;
+import com.symmetrylabs.slstudio.showplugins.FaderLimiter;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.p3lx.ui.UI2dScrollContext;
@@ -97,6 +98,7 @@ public abstract class CubesShow implements Show {
 
     public void setupLx(LX lx) {
         instanceByLX.put(lx, new WeakReference<>(this));
+        FaderLimiter.attach(lx, .95f);
 
         final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);

@@ -1,41 +1,20 @@
-120
--264
-156
--264
-192
--264
-228
--264
-264
--264
-132
--228
-252
--228
-168
--192
-216
--192
-192
--168
-24
--264
-24
--264
-24
--264
-24
--264
-24
--264
-24
--264
-24
--264
-24
--264
-24
--264
-24
--264
-
+new TowerConfig(98, 0, -153, 0, -45, 0, new String[] { "1"}),
+new TowerConfig(115, 0, -136, 0, -45, 0, new String[] { "2"}),
+new TowerConfig(98, 0, -119, 0, -45, 0, new String[] { "3"}),
+new TowerConfig(132, 0, -153, 0, -45, 0, new String[] { "4"}),
+new TowerConfig(149, 0, -136, 0, -45, 0, new String[] { "5"}),
+new TowerConfig(157, 0, -144, 0, -45, 0, new String[] { "6"}),
+new TowerConfig(170, 0, -132, 0, -45, 0, new String[] { "7"}),
+new TowerConfig(187, 0, -149, 0, -45, 0, new String[] { "8"}),
+new TowerConfig(204, 0, -132, 0, -45, 0, new String[] { "9"}),
+new TowerConfig(221, 0, -149, 0, -45, 0, new String[] { "10"}),
+new TowerConfig(221, 0, -115, 0, -45, 0, new String[] { "11"}),
+new TowerConfig(21, 0, -263, 0, -45, 0, new String[] { "12"}),
+new TowerConfig(21, 0, -263, 0, -45, 0, new String[] { "13"}),
+new TowerConfig(21, 0, -263, 0, -45, 0, new String[] { "14"}),
+new TowerConfig(21, 0, -263, 0, -45, 0, new String[] { "15"}),
+new TowerConfig(21, 0, -263, 0, -45, 0, new String[] { "16"}),
+new TowerConfig(21, 0, -263, 0, -45, 0, new String[] { "17"}),
+new TowerConfig(21, 0, -263, 0, -45, 0, new String[] { "18"}),
+new TowerConfig(21, 0, -263, 0, -45, 0, new String[] { "19"}),
+new TowerConfig(21, 0, -263, 0, -45, 0, new String[] { "20"}),
