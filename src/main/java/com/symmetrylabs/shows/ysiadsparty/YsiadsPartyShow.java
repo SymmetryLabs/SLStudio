@@ -29,18 +29,43 @@ public class YsiadsPartyShow extends CubesShow implements Show {
 
 
     static final TowerConfig[] TOWER_CONFIG = {
-        //back middle (tallest tower)
-        new TowerConfig(CSP*0, 0, 0, 0, 45, 0, new String[] { "521", "123", "422", "192", "157"}),
-        //back towers going to the right
-        new TowerConfig(CSP*.5f, 0, CSP*-.5f, 0, 45, 0, new String[] { "29", "141", "32", "34"}),
-        new TowerConfig(CSP*1, 0, CSP*-1, 0, 45, 0, new String[] { "86", "68", "174",}),
-        new TowerConfig(CSP*1.5f, 0, CSP*-1.5f, 0, 45, 0, new String[] { "43", "25"}),
-        //back towers going to the left
-        new TowerConfig(CSP*-.5f, 0, CSP*-.5f, 0, 45, 0, new String[] { "128", "113", "63", "51"}),
-        new TowerConfig(CSP*-1, 0, CSP*-1, 0, 45, 0, new String[] { "132", "22", "1151",}),
-        //two towers in the middle going to the right
-        new TowerConfig(CSP*0, 0, CSP*-1, 0, 45, 0, new String[] { "1117", "172", "211",}),
-        new TowerConfig(CSP*.5f, 0, CSP*-1.5f, 0, 45, 0, new String[] { "314", "408"}),
+
+        // Boat Center Bottom
+        //X is left right
+        //Y is down up
+        //Z is back forward
+        new TowerConfig(CSP*0,      CSP*0, CSP*0.0f, 0, -45, 0, new String[] { "787"}),
+
+        // Boat Left
+        new TowerConfig(CSP*-0.66f, CSP*1, CSP*0.1f, 0, -45, 0, new String[] { "14"}),
+        new TowerConfig(CSP*-1.66f, CSP*2, CSP*1.0f, 0, -45, 0, new String[] { "21"}),
+        new TowerConfig(CSP*-1.33f, CSP*3, CSP*0.9f, 0, -45, 0, new String[] { "1106"}),
+        new TowerConfig(CSP*-1.00f, CSP*4, CSP*0.8f, 0, -45, 0, new String[] { "35"}),
+        new TowerConfig(CSP*-0.66f, CSP*5, CSP*0.7f, 0, -45, 0, new String[] { "549"}),
+        new TowerConfig(CSP*-1.00f, CSP*6, CSP*0.6f, 0, -45, 0, new String[] { "157"}), // Fix this ID
+
+        // Boat Center Top
+        new TowerConfig(CSP*0,      CSP*7, CSP*0.7f, 0, -45, 0, new String[] { "752"}),
+
+        // Boat Right
+        new TowerConfig(CSP* 1.00f, CSP*6, CSP*0.6f, 0, -45, 0, new String[] { "5410ecf5317f"}),
+        new TowerConfig(CSP* 0.66f, CSP*5, CSP*0.7f, 0, -45, 0, new String[] { "1118"}),
+        new TowerConfig(CSP* 1.00f, CSP*4, CSP*0.8f, 0, -45, 0, new String[] { "51"}),
+        new TowerConfig(CSP* 1.33f, CSP*3, CSP*0.9f, 0, -45, 0, new String[] { "833"}),
+        new TowerConfig(CSP* 1.66f, CSP*2, CSP*1.0f, 0, -45, 0, new String[] { "113"}),
+        new TowerConfig(CSP* 0.66f, CSP*1, CSP*0.1f, 0, -45, 0, new String[] { "677"}),
+
+
+        // Stage Left
+        new TowerConfig(CSP*-3.00f, CSP*-4, CSP* -2, 0, -45, 0, new String[] { "33"}),
+        new TowerConfig(CSP*-3.00f, CSP*-3, CSP* -2, 0, -45, 0, new String[] { "1055"}),
+        new TowerConfig(CSP*-2.00f, CSP*-1, CSP* -2, 0, -45, 0, new String[] { "356"}),
+
+        // Stage Right
+        new TowerConfig(CSP* 3.00f, CSP*-4, CSP* -2, 0, -45, 0, new String[] { "422"}),
+        new TowerConfig(CSP* 3.00f, CSP*-3, CSP* -2, 0, -45, 0, new String[] { "191"}),
+        new TowerConfig(CSP* 2.00f, CSP*-1, CSP* -2, 0, -45, 0, new String[] { "71"}),
+
     };
 
     public SLModel buildModel() {

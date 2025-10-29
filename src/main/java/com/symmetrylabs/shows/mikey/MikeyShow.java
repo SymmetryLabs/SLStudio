@@ -97,7 +97,7 @@ public class MikeyShow implements Show {
         // Create an array of IP addresses for the 8 Pixlites
         String[] pixliteIps = {
             "10.200.1.101", "10.200.1.102", "10.200.1.103", "10.200.1.104",
-            "10.200.1.105", "10.200.1.106", "10.200.1.107", "10.200.1.108"
+            "10.200.1.105", "127.0.0.1", "10.200.1.107", "10.200.1.108"
         };
 
         // Distribute points among Pixlite controllers
