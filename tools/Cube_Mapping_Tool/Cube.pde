@@ -18,7 +18,14 @@ color1 = tempcolor1;
 color2 = tempcolor2;
 color3 = tempcolor3;
 fill(tempcolor1, tempcolor2, tempcolor3); 
-rect(square1X, square1Y, CubeWidth, CubeHeight);
+
+// Rotate 45 degrees to create diamond shape
+pushMatrix();
+translate(square1X + CubeWidth/2, square1Y + CubeHeight/2);
+rotate(radians(45));
+rect(-CubeWidth/2, -CubeHeight/2, CubeWidth, CubeHeight);
+popMatrix();
+
 fill(0,0,0);
 text(tempCubeNumber, square1X+4, square1Y+14);
 

@@ -285,153 +285,138 @@ addButtonColor = color(60);
   if(mouseX>x && mouseX <x+w && mouseY>y && mouseY <y+h){
     
 
+    // Convert coordinates for TowerConfig format
     Cube1MappingX = squareX[0]/2;
-    Cube1MappingY = -squareY[0]/2;
+    Cube1MappingZ = -squareY[0]/2;
     Cube2MappingX = squareX[1]/2;
-    Cube2MappingY = -squareY[1]/2;
+    Cube2MappingZ = -squareY[1]/2;
     Cube3MappingX = squareX[2]/2;
-    Cube3MappingY = -squareY[2]/2;
+    Cube3MappingZ = -squareY[2]/2;
     Cube4MappingX = squareX[3]/2;
-    Cube4MappingY = -squareY[3]/2;
+    Cube4MappingZ = -squareY[3]/2;
     Cube5MappingX = squareX[4]/2;
-    Cube5MappingY = -squareY[4]/2;
+    Cube5MappingZ = -squareY[4]/2;
     Cube6MappingX = squareX[5]/2;
-    Cube6MappingY = -squareY[5]/2;
+    Cube6MappingZ = -squareY[5]/2;
     Cube7MappingX = squareX[6]/2;
-    Cube7MappingY = -squareY[6]/2;
+    Cube7MappingZ = -squareY[6]/2;
     Cube8MappingX = squareX[7]/2;
-    Cube8MappingY = -squareY[7]/2;
+    Cube8MappingZ = -squareY[7]/2;
     Cube9MappingX = squareX[8]/2;
-    Cube9MappingY = -squareY[8]/2;
+    Cube9MappingZ = -squareY[8]/2;
     Cube10MappingX = squareX[9]/2;
-    Cube10MappingY = -squareY[9]/2;
+    Cube10MappingZ = -squareY[9]/2;
     Cube11MappingX = squareX[10]/2;
-    Cube11MappingY = -squareY[10]/2;
+    Cube11MappingZ = -squareY[10]/2;
     Cube12MappingX = squareX[11]/2;
-    Cube12MappingY = -squareY[11]/2;
+    Cube12MappingZ = -squareY[11]/2;
     Cube13MappingX = squareX[12]/2;
-    Cube13MappingY = -squareY[12]/2;
+    Cube13MappingZ = -squareY[12]/2;
     Cube14MappingX = squareX[13]/2;
-    Cube14MappingY = -squareY[13]/2;
+    Cube14MappingZ = -squareY[13]/2;
     Cube15MappingX = squareX[14]/2;
-    Cube15MappingY = -squareY[14]/2;
+    Cube15MappingZ = -squareY[14]/2;
     Cube16MappingX = squareX[15]/2;
-    Cube16MappingY = -squareY[15]/2;
+    Cube16MappingZ = -squareY[15]/2;
     Cube17MappingX = squareX[16]/2;
-    Cube17MappingY = -squareY[16]/2;
+    Cube17MappingZ = -squareY[16]/2;
     Cube18MappingX = squareX[17]/2;
-    Cube18MappingY = -squareY[17]/2;
+    Cube18MappingZ = -squareY[17]/2;
     Cube19MappingX = squareX[18]/2;
-    Cube19MappingY = -squareY[18]/2;
+    Cube19MappingZ = -squareY[18]/2;
     Cube20MappingX = squareX[19]/2;
-    Cube20MappingY = -squareY[19]/2;    
+    Cube20MappingZ = -squareY[19]/2;    
 
  //saves the mapping x y coordinates to a text file that can later be used in the cube software for mapping
  
+// Old variable declarations - replaced with TowerConfig format
 int Cube1MappingXint = int(Cube1MappingX);
-int Cube1MappingYint = int(Cube1MappingY);
+int Cube1MappingZint = int(Cube1MappingZ);
 int Cube2MappingXint = int(Cube2MappingX);
-int Cube2MappingYint = int(Cube2MappingY);
+int Cube2MappingZint = int(Cube2MappingZ);
 int Cube3MappingXint = int(Cube3MappingX);
-int Cube3MappingYint = int(Cube3MappingY);
+int Cube3MappingZint = int(Cube3MappingZ);
 int Cube4MappingXint = int(Cube4MappingX);
-int Cube4MappingYint = int(Cube4MappingY);
+int Cube4MappingZint = int(Cube4MappingZ);
 int Cube5MappingXint = int(Cube5MappingX);
-int Cube5MappingYint = int(Cube5MappingY);
+int Cube5MappingZint = int(Cube5MappingZ);
 int Cube6MappingXint = int(Cube6MappingX);
-int Cube6MappingYint = int(Cube6MappingY);
+int Cube6MappingZint = int(Cube6MappingZ);
 int Cube7MappingXint = int(Cube7MappingX);
-int Cube7MappingYint = int(Cube7MappingY);
+int Cube7MappingZint = int(Cube7MappingZ);
 int Cube8MappingXint = int(Cube8MappingX);
-int Cube8MappingYint = int(Cube8MappingY);
+int Cube8MappingZint = int(Cube8MappingZ);
 int Cube9MappingXint = int(Cube9MappingX);
-int Cube9MappingYint = int(Cube9MappingY);
+int Cube9MappingZint = int(Cube9MappingZ);
 int Cube10MappingXint = int(Cube10MappingX);
-int Cube10MappingYint = int(Cube10MappingY);
+int Cube10MappingZint = int(Cube10MappingZ);
 int Cube11MappingXint = int(Cube11MappingX);
-int Cube11MappingYint = int(Cube11MappingY);
+int Cube11MappingZint = int(Cube11MappingZ);
 int Cube12MappingXint = int(Cube12MappingX);
-int Cube12MappingYint = int(Cube12MappingY);
+int Cube12MappingZint = int(Cube12MappingZ);
 int Cube13MappingXint = int(Cube13MappingX);
-int Cube13MappingYint = int(Cube13MappingY);
+int Cube13MappingZint = int(Cube13MappingZ);
 int Cube14MappingXint = int(Cube14MappingX);
-int Cube14MappingYint = int(Cube14MappingY);
+int Cube14MappingZint = int(Cube14MappingZ);
 int Cube15MappingXint = int(Cube15MappingX);
-int Cube15MappingYint = int(Cube15MappingY);
+int Cube15MappingZint = int(Cube15MappingZ);
 int Cube16MappingXint = int(Cube16MappingX);
-int Cube16MappingYint = int(Cube16MappingY);
+int Cube16MappingZint = int(Cube16MappingZ);
 int Cube17MappingXint = int(Cube17MappingX);
-int Cube17MappingYint = int(Cube17MappingY);
+int Cube17MappingZint = int(Cube17MappingZ);
 int Cube18MappingXint = int(Cube18MappingX);
-int Cube18MappingYint = int(Cube18MappingY);
+int Cube18MappingZint = int(Cube18MappingZ);
 int Cube19MappingXint = int(Cube19MappingX);
-int Cube19MappingYint = int(Cube19MappingY);
+int Cube19MappingZint = int(Cube19MappingZ);
 int Cube20MappingXint = int(Cube20MappingX);
-int Cube20MappingYint = int(Cube20MappingY);
+int Cube20MappingZint = int(Cube20MappingZ);
 
+// Create TowerConfig strings for each cube
+String Cube1Config = "new TowerConfig(" + str(Cube1MappingXint) + ", 0, " + str(Cube1MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube2Config = "new TowerConfig(" + str(Cube2MappingXint) + ", 0, " + str(Cube2MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube3Config = "new TowerConfig(" + str(Cube3MappingXint) + ", 0, " + str(Cube3MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube4Config = "new TowerConfig(" + str(Cube4MappingXint) + ", 0, " + str(Cube4MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube5Config = "new TowerConfig(" + str(Cube5MappingXint) + ", 0, " + str(Cube5MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube6Config = "new TowerConfig(" + str(Cube6MappingXint) + ", 0, " + str(Cube6MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube7Config = "new TowerConfig(" + str(Cube7MappingXint) + ", 0, " + str(Cube7MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube8Config = "new TowerConfig(" + str(Cube8MappingXint) + ", 0, " + str(Cube8MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube9Config = "new TowerConfig(" + str(Cube9MappingXint) + ", 0, " + str(Cube9MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube10Config = "new TowerConfig(" + str(Cube10MappingXint) + ", 0, " + str(Cube10MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube11Config = "new TowerConfig(" + str(Cube11MappingXint) + ", 0, " + str(Cube11MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube12Config = "new TowerConfig(" + str(Cube12MappingXint) + ", 0, " + str(Cube12MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube13Config = "new TowerConfig(" + str(Cube13MappingXint) + ", 0, " + str(Cube13MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube14Config = "new TowerConfig(" + str(Cube14MappingXint) + ", 0, " + str(Cube14MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube15Config = "new TowerConfig(" + str(Cube15MappingXint) + ", 0, " + str(Cube15MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube16Config = "new TowerConfig(" + str(Cube16MappingXint) + ", 0, " + str(Cube16MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube17Config = "new TowerConfig(" + str(Cube17MappingXint) + ", 0, " + str(Cube17MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube18Config = "new TowerConfig(" + str(Cube18MappingXint) + ", 0, " + str(Cube18MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube19Config = "new TowerConfig(" + str(Cube19MappingXint) + ", 0, " + str(Cube19MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
+String Cube20Config = "new TowerConfig(" + str(Cube20MappingXint) + ", 0, " + str(Cube20MappingZint) + ", 0, -45, 0, new String[] { \"\" }),";
 
+// Create array of TowerConfig strings for each cube
+String[] list = {
+  Cube1Config,
+  Cube2Config,
+  Cube3Config,
+  Cube4Config,
+  Cube5Config,
+  Cube6Config,
+  Cube7Config,
+  Cube8Config,
+  Cube9Config,
+  Cube10Config,
+  Cube11Config,
+  Cube12Config,
+  Cube13Config,
+  Cube14Config,
+  Cube15Config,
+  Cube16Config,
+  Cube17Config,
+  Cube18Config,
+  Cube19Config,
+  Cube20Config
+};
 
-
-
-
- String Cube1MappingXString = str(Cube1MappingXint) + " ";
- String Cube1MappingYString = str(Cube1MappingYint) + " ";
- String Cube2MappingXString = str(Cube2MappingXint) + " ";
- String Cube2MappingYString = str(Cube2MappingYint) + " ";
- String Cube3MappingXString = str(Cube3MappingXint) + " ";
- String Cube3MappingYString = str(Cube3MappingYint) + " ";
- String Cube4MappingXString = str(Cube4MappingXint) + " ";
- String Cube4MappingYString = str(Cube4MappingYint) + " ";
- String Cube5MappingXString = str(Cube5MappingXint) + " ";
- String Cube5MappingYString = str(Cube5MappingYint) + " ";
- String Cube6MappingXString = str(Cube6MappingXint) + " ";
- String Cube6MappingYString = str(Cube6MappingYint) + " ";
- String Cube7MappingXString = str(Cube7MappingXint) + " ";
- String Cube7MappingYString = str(Cube7MappingYint) + " ";
- String Cube8MappingXString = str(Cube8MappingXint) + " ";
- String Cube8MappingYString = str(Cube8MappingYint) + " ";
- String Cube9MappingXString = str(Cube9MappingXint) + " ";
- String Cube9MappingYString = str(Cube9MappingYint) + " ";
- String Cube10MappingXString = str(Cube10MappingXint)  + " ";
- String Cube10MappingYString = str(Cube10MappingYint)  + " ";
- String Cube11MappingXString = str(Cube11MappingXint)  + " ";
- String Cube11MappingYString = str(Cube11MappingYint)  + " ";
- String Cube12MappingXString = str(Cube12MappingXint)  + " ";
- String Cube12MappingYString = str(Cube12MappingYint)  + " ";
- String Cube13MappingXString = str(Cube13MappingXint)  + " ";
- String Cube13MappingYString = str(Cube13MappingYint)  + " ";
- String Cube14MappingXString = str(Cube14MappingXint)  + " ";
- String Cube14MappingYString = str(Cube14MappingYint)  + " ";
- String Cube15MappingXString = str(Cube15MappingXint)  + " ";
- String Cube15MappingYString = str(Cube15MappingYint)  + " ";
- String Cube16MappingXString = str(Cube16MappingXint)  + " ";
- String Cube16MappingYString = str(Cube16MappingYint)  + " ";
- String Cube17MappingXString = str(Cube17MappingXint)  + " ";
- String Cube17MappingYString = str(Cube17MappingYint)  + " ";
- String Cube18MappingXString = str(Cube18MappingXint)  + " ";
- String Cube18MappingYString = str(Cube18MappingYint)  + " ";
- String Cube19MappingXString = str(Cube19MappingXint)  + " ";
- String Cube19MappingYString = str(Cube19MappingYint)  + " ";
- String Cube20MappingXString = str(Cube20MappingXint)  + " ";
- String Cube20MappingYString = str(Cube20MappingYint)  + " ";
-
-
-//converts the floats of the x y data into strings (saveStrings can only save data into a txt if its a string)
-
-String Cube1MappingData = Cube1MappingXString + Cube1MappingYString + Cube2MappingXString + Cube2MappingYString + Cube3MappingXString + Cube3MappingYString 
-+ Cube4MappingXString + Cube4MappingYString + Cube5MappingXString + Cube5MappingYString + Cube6MappingXString + Cube6MappingYString + Cube7MappingXString 
-+ Cube7MappingYString + Cube8MappingXString + Cube8MappingYString + Cube9MappingXString + Cube9MappingYString + Cube10MappingXString + Cube10MappingYString
-+ Cube11MappingXString + Cube11MappingYString + Cube12MappingXString + Cube12MappingYString + Cube13MappingXString + Cube13MappingYString + Cube14MappingXString
-+ Cube14MappingYString + Cube15MappingXString + Cube15MappingYString + Cube16MappingXString + Cube16MappingYString + Cube17MappingXString + Cube17MappingYString
-+ Cube18MappingXString + Cube18MappingYString + Cube19MappingXString + Cube19MappingYString + Cube20MappingXString + Cube20MappingYString;
-String data = Cube1MappingData;
-String[] list = split(data, ' ');
-
-
-
-
-    
-    
 // Writes the strings to a file, each on a separate line
 saveStrings("mappingfile.txt", list);
  
@@ -490,7 +475,12 @@ boolean mouseinSquare20 = false;
 
 //check if the mouse is in the square
 void mousePressed() {
-if  (mouseX > squareX[19] && mouseX < squareX[19] + squarewidth[1] && mouseY > squareY[19] && mouseY < squareY[19] + squareheight[1]) {
+// Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX20 = squareX[19] + squarewidth[1]/2;
+    float centerY20 = squareY[19] + squareheight[1]/2;
+    float dx20 = abs(mouseX - centerX20);
+    float dy20 = abs(mouseY - centerY20);
+    if (dx20 + dy20 <= squarewidth[1]/2) {
     mouseinSquare20 = true;
     mouseinSquare1 = false;
     mouseinSquare2 = false;
@@ -515,7 +505,12 @@ if  (mouseX > squareX[19] && mouseX < squareX[19] + squarewidth[1] && mouseY > s
     else {
     mouseinSquare20 = false;
 }
-if  (mouseX > squareX[18] && mouseX < squareX[18] + squarewidth[1] && mouseY > squareY[18] && mouseY < squareY[18] + squareheight[1]) {
+// Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX19 = squareX[18] + squarewidth[1]/2;
+    float centerY19 = squareY[18] + squareheight[1]/2;
+    float dx19 = abs(mouseX - centerX19);
+    float dy19 = abs(mouseY - centerY19);
+    if (dx19 + dy19 <= squarewidth[1]/2) {
     mouseinSquare19 = true;
     mouseinSquare1 = false;
     mouseinSquare2 = false;
@@ -540,7 +535,12 @@ if  (mouseX > squareX[18] && mouseX < squareX[18] + squarewidth[1] && mouseY > s
     else {
     mouseinSquare19 = false;
 }
-if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > squareY[17] && mouseY < squareY[17] + squareheight[1]) {
+// Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX18 = squareX[17] + squarewidth[1]/2;
+    float centerY18 = squareY[17] + squareheight[1]/2;
+    float dx18 = abs(mouseX - centerX18);
+    float dy18 = abs(mouseY - centerY18);
+    if (dx18 + dy18 <= squarewidth[1]/2) {
     mouseinSquare18 = true;
     mouseinSquare1 = false;
     mouseinSquare2 = false;
@@ -565,7 +565,12 @@ if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > s
     else {
     mouseinSquare18 = false;
 }
-  if  (mouseX > squareX[16] && mouseX < squareX[16] + squarewidth[1] && mouseY > squareY[16] && mouseY < squareY[16] + squareheight[1]) {
+  // Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX17 = squareX[16] + squarewidth[1]/2;
+    float centerY17 = squareY[16] + squareheight[1]/2;
+    float dx17 = abs(mouseX - centerX17);
+    float dy17 = abs(mouseY - centerY17);
+    if (dx17 + dy17 <= squarewidth[1]/2) {
     mouseinSquare17 = true;
     mouseinSquare1 = false;
     mouseinSquare2 = false;
@@ -590,7 +595,12 @@ if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > s
     else {
     mouseinSquare17 = false;
 }
-  if  (mouseX > squareX[15] && mouseX < squareX[15] + squarewidth[1] && mouseY > squareY[15] && mouseY < squareY[15] + squareheight[1]) {
+  // Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX16 = squareX[15] + squarewidth[1]/2;
+    float centerY16 = squareY[15] + squareheight[1]/2;
+    float dx16 = abs(mouseX - centerX16);
+    float dy16 = abs(mouseY - centerY16);
+    if (dx16 + dy16 <= squarewidth[1]/2) {
     mouseinSquare16 = true;
     mouseinSquare1 = false;
     mouseinSquare2 = false;
@@ -616,7 +626,12 @@ if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > s
     mouseinSquare16 = false;
 }
 
-  if  (mouseX > squareX[14] && mouseX < squareX[14] + squarewidth[1] && mouseY > squareY[14] && mouseY < squareY[14] + squareheight[1]) {
+  // Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX15 = squareX[14] + squarewidth[14]/2;
+    float centerY15 = squareY[14] + squareheight[14]/2;
+    float dx15 = abs(mouseX - centerX15);
+    float dy15 = abs(mouseY - centerY15);
+    if (dx15 + dy15 <= squarewidth[1]/2) {
     mouseinSquare15 = true;
     mouseinSquare1 = false;
     mouseinSquare2 = false;
@@ -642,7 +657,12 @@ if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > s
     mouseinSquare15 = false;
 }
 
-  if  (mouseX > squareX[13] && mouseX < squareX[13] + squarewidth[1] && mouseY > squareY[13] && mouseY < squareY[13] + squareheight[1]) {
+  // Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX14 = squareX[13] + squarewidth[1]/2;
+    float centerY14 = squareY[13] + squareheight[1]/2;
+    float dx14 = abs(mouseX - centerX14);
+    float dy14 = abs(mouseY - centerY14);
+    if (dx14 + dy14 <= squarewidth[1]/2) {
     mouseinSquare14 = true;
     mouseinSquare1 = false;
     mouseinSquare2 = false;
@@ -668,7 +688,12 @@ if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > s
     mouseinSquare14 = false;
 }
 
-  if  (mouseX > squareX[12] && mouseX < squareX[12] + squarewidth[1] && mouseY > squareY[12] && mouseY < squareY[12] + squareheight[1]) {
+  // Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX13 = squareX[12] + squarewidth[1]/2;
+    float centerY13 = squareY[12] + squareheight[1]/2;
+    float dx13 = abs(mouseX - centerX13);
+    float dy13 = abs(mouseY - centerY13);
+    if (dx13 + dy13 <= squarewidth[1]/2) {
     mouseinSquare13 = true;
     mouseinSquare1 = false;
     mouseinSquare2 = false;
@@ -695,7 +720,12 @@ if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > s
 
 }
 
-  if  (mouseX > squareX[11] && mouseX < squareX[11] + squarewidth[1] && mouseY > squareY[11] && mouseY < squareY[11] + squareheight[1]) {
+  // Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX12 = squareX[11] + squarewidth[1]/2;
+    float centerY12 = squareY[11] + squareheight[1]/2;
+    float dx12 = abs(mouseX - centerX12);
+    float dy12 = abs(mouseY - centerY12);
+    if (dx12 + dy12 <= squarewidth[1]/2) {
     mouseinSquare12 = true;
     mouseinSquare1 = false;
     mouseinSquare2 = false;
@@ -721,7 +751,12 @@ if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > s
     mouseinSquare12 = false;
 }
 
-  if  (mouseX > squareX[10] && mouseX < squareX[10] + squarewidth[1] && mouseY > squareY[10] && mouseY < squareY[10] + squareheight[1]) {
+  // Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX11 = squareX[10] + squarewidth[1]/2;
+    float centerY11 = squareY[10] + squareheight[1]/2;
+    float dx11 = abs(mouseX - centerX11);
+    float dy11 = abs(mouseY - centerY11);
+    if (dx11 + dy11 <= squarewidth[1]/2) {
     mouseinSquare11 = true;
     mouseinSquare1 = false;
     mouseinSquare2 = false;
@@ -746,7 +781,12 @@ if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > s
     else {
     mouseinSquare11 = false;
 }
-  if  (mouseX > squareX[9] && mouseX < squareX[9] + squarewidth[1] && mouseY > squareY[9] && mouseY < squareY[9] + squareheight[1]) {
+  // Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX10 = squareX[9] + squarewidth[1]/2;
+    float centerY10 = squareY[9] + squareheight[1]/2;
+    float dx10 = abs(mouseX - centerX10);
+    float dy10 = abs(mouseY - centerY10);
+    if (dx10 + dy10 <= squarewidth[1]/2) {
     mouseinSquare10 = true;
     mouseinSquare1 = false;
     mouseinSquare2 = false;
@@ -771,7 +811,12 @@ if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > s
     else {
     mouseinSquare10 = false;
 }
-  if  (mouseX > squareX[8] && mouseX < squareX[8] + squarewidth[1] && mouseY > squareY[8] && mouseY < squareY[8] + squareheight[1]) {
+  // Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX9 = squareX[8] + squarewidth[1]/2;
+    float centerY9 = squareY[8] + squareheight[1]/2;
+    float dx9 = abs(mouseX - centerX9);
+    float dy9 = abs(mouseY - centerY9);
+    if (dx9 + dy9 <= squarewidth[1]/2) {
     mouseinSquare9 = true;
     mouseinSquare1 = false;
     mouseinSquare2 = false;
@@ -796,8 +841,12 @@ if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > s
     else {
     mouseinSquare9 = false;
 }
-  if  (mouseX > squareX[7] && mouseX < squareX[7] + squarewidth[1] && mouseY > squareY[7] && mouseY < squareY[7] + squareheight[1]) {
-
+  // Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX8 = squareX[7] + squarewidth[1]/2;
+    float centerY8 = squareY[7] + squareheight[1]/2;
+    float dx8 = abs(mouseX - centerX8);
+    float dy8 = abs(mouseY - centerY8);
+    if (dx8 + dy8 <= squarewidth[1]/2) {
     mouseinSquare8 = true;
     mouseinSquare1 = false;
     mouseinSquare2 = false;
@@ -822,7 +871,12 @@ if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > s
     else {
     mouseinSquare8 = false;
 }
-  if  (mouseX > squareX[6] && mouseX < squareX[6] + squarewidth[1] && mouseY > squareY[6] && mouseY < squareY[6] + squareheight[1]) {
+  // Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX7 = squareX[6] + squarewidth[1]/2;
+    float centerY7 = squareY[6] + squareheight[1]/2;
+    float dx7 = abs(mouseX - centerX7);
+    float dy7 = abs(mouseY - centerY7);
+    if (dx7 + dy7 <= squarewidth[1]/2) {
     mouseinSquare7 = true;
     mouseinSquare1 = false;
     mouseinSquare2 = false;
@@ -847,7 +901,12 @@ if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > s
     else {
     mouseinSquare7 = false;
 }
-if (mouseX > squareX[5] && mouseX < squareX[5] + squarewidth[1] && mouseY > squareY[5] && mouseY < squareY[5] + squareheight[1]) {
+// Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX6 = squareX[5] + squarewidth[1]/2;
+    float centerY6 = squareY[5] + squareheight[1]/2;
+    float dx6 = abs(mouseX - centerX6);
+    float dy6 = abs(mouseY - centerY6);
+    if (dx6 + dy6 <= squarewidth[1]/2) {
     mouseinSquare6 = true;
     mouseinSquare1 = false;
     mouseinSquare2 = false;
@@ -872,7 +931,12 @@ if (mouseX > squareX[5] && mouseX < squareX[5] + squarewidth[1] && mouseY > squa
    else {
     mouseinSquare6 = false;
 }
-  if  (mouseX > squareX[4] && mouseX < squareX[4] + squarewidth[1] && mouseY > squareY[4] && mouseY < squareY[4] + squareheight[1]) {
+  // Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX5 = squareX[4] + squarewidth[1]/2;
+    float centerY5 = squareY[4] + squareheight[1]/2;
+    float dx5 = abs(mouseX - centerX5);
+    float dy5 = abs(mouseY - centerY5);
+    if (dx5 + dy5 <= squarewidth[1]/2) {
     mouseinSquare5 = true;
     mouseinSquare1 = false;
     mouseinSquare2 = false;
@@ -899,7 +963,12 @@ if (mouseX > squareX[5] && mouseX < squareX[5] + squarewidth[1] && mouseY > squa
     mouseinSquare5 = false;
 }
 
-  if  (mouseX > squareX[3] && mouseX < squareX[3] + squarewidth[1] && mouseY > squareY[3] && mouseY < squareY[3] + squareheight[1]) {
+  // Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX4 = squareX[3] + squarewidth[1]/2;
+    float centerY4 = squareY[3] + squareheight[1]/2;
+    float dx4 = abs(mouseX - centerX4);
+    float dy4 = abs(mouseY - centerY4);
+    if (dx4 + dy4 <= squarewidth[1]/2) {
     mouseinSquare4 = true;
     mouseinSquare1 = false;
     mouseinSquare2 = false;
@@ -925,7 +994,12 @@ if (mouseX > squareX[5] && mouseX < squareX[5] + squarewidth[1] && mouseY > squa
     mouseinSquare4 = false;
 }
   
-  if  (mouseX > squareX[2] && mouseX < squareX[2] + squarewidth[1] && mouseY > squareY[2] && mouseY < squareY[2] + squareheight[1]) {
+  // Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX3 = squareX[2] + squarewidth[1]/2;
+    float centerY3 = squareY[2] + squareheight[1]/2;
+    float dx3 = abs(mouseX - centerX3);
+    float dy3 = abs(mouseY - centerY3);
+    if (dx3 + dy3 <= squarewidth[1]/2) {
     mouseinSquare3 = true;
     mouseinSquare1 = false;
     mouseinSquare2 = false;
@@ -951,7 +1025,12 @@ if (mouseX > squareX[5] && mouseX < squareX[5] + squarewidth[1] && mouseY > squa
     mouseinSquare3 = false;
 }
 
-  if  (mouseX > squareX[1] && mouseX < squareX[1] + squarewidth[1] && mouseY > squareY[1] && mouseY < squareY[1] + squareheight[1]) {
+  // Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX2 = squareX[1] + squarewidth[1]/2;
+    float centerY2 = squareY[1] + squareheight[1]/2;
+    float dx2 = abs(mouseX - centerX2);
+    float dy2 = abs(mouseY - centerY2);
+    if (dx2 + dy2 <= squarewidth[1]/2) {
     mouseinSquare2 = true;
     mouseinSquare1 = false;
     mouseinSquare3 = false;
@@ -979,7 +1058,12 @@ if (mouseX > squareX[5] && mouseX < squareX[5] + squarewidth[1] && mouseY > squa
 }
 
 
-  if (mouseX > squareX[0] && mouseX < squareX[0] + squarewidth[1] && mouseY > squareY[0] && mouseY < squareY[0] + squareheight[1]) {
+  // Check if mouse is inside diamond shape (rotated 45 degrees)
+    float centerX1 = squareX[0] + squarewidth[1]/2;
+    float centerY1 = squareY[0] + squareheight[1]/2;
+    float dx1 = abs(mouseX - centerX1);
+    float dy1 = abs(mouseY - centerY1);
+    if (dx1 + dy1 <= squarewidth[1]/2) {
     mouseinSquare1 = true;
     mouseinSquare2 = false;
     mouseinSquare3 = false;
@@ -1009,68 +1093,72 @@ if (mouseX > squareX[5] && mouseX < squareX[5] + squarewidth[1] && mouseY > squa
 
 }
 
-// //snaps the cubes to the grid
+//snaps the cubes to the grid
 
 void mouseReleased() {
-    squareX[0]-=squareX[0]%24;
-    squareY[0]-=squareY[0]%24;
+    // Snap diamonds to 17-pixel grid for proper half-cube diagonal spacing
+    // For 45° diamonds: 24 pixels / √2 ≈ 17 pixels
+    float diamondSpacing = 17;
     
-    squareX[1]-=squareX[1]%24;
-    squareY[1]-=squareY[1]%24;
+    squareX[0]-=squareX[0]%diamondSpacing;
+    squareY[0]-=squareY[0]%diamondSpacing;
     
-    squareX[2]-=squareX[2]%24;
-    squareY[2]-=squareY[2]%24;
+    squareX[1]-=squareX[1]%diamondSpacing;
+    squareY[1]-=squareY[1]%diamondSpacing;
     
-    squareX[3]-=squareX[3]%24;
-    squareY[3]-=squareY[3]%24;
+    squareX[2]-=squareX[2]%diamondSpacing;
+    squareY[2]-=squareY[2]%diamondSpacing;
+    
+    squareX[3]-=squareX[3]%diamondSpacing;
+    squareY[3]-=squareY[3]%diamondSpacing;
 
-    squareX[4]-=squareX[4]%24;
-    squareY[4]-=squareY[4]%24;
+    squareX[4]-=squareX[4]%diamondSpacing;
+    squareY[4]-=squareY[4]%diamondSpacing;
 
-    squareX[5]-=squareX[5]%24;
-    squareY[5]-=squareY[5]%24;
+    squareX[5]-=squareX[5]%diamondSpacing;
+    squareY[5]-=squareY[5]%diamondSpacing;
 
-    squareX[6]-=squareX[6]%24;
-    squareY[6]-=squareY[6]%24;
+    squareX[6]-=squareX[6]%diamondSpacing;
+    squareY[6]-=squareY[6]%diamondSpacing;
     
-    squareX[7]-=squareX[7]%24;
-    squareY[7]-=squareY[7]%24;
+    squareX[7]-=squareX[7]%diamondSpacing;
+    squareY[7]-=squareY[7]%diamondSpacing;
     
-    squareX[8]-=squareX[8]%24;
-    squareY[8]-=squareY[8]%24;
+    squareX[8]-=squareX[8]%diamondSpacing;
+    squareY[8]-=squareY[8]%diamondSpacing;
     
-    squareX[9]-=squareX[9]%24;
-    squareY[9]-=squareY[9]%24;
+    squareX[9]-=squareX[9]%diamondSpacing;
+    squareY[9]-=squareY[9]%diamondSpacing;
 
-    squareX[10]-=squareX[10]%24;
-    squareY[10]-=squareY[10]%24;
+    squareX[10]-=squareX[10]%diamondSpacing;
+    squareY[10]-=squareY[10]%diamondSpacing;
 
-    squareX[11]-=squareX[11]%24;
-    squareY[11]-=squareY[11]%24;
+    squareX[11]-=squareX[11]%diamondSpacing;
+    squareY[11]-=squareY[11]%diamondSpacing;
  
-    squareX[12]-=squareX[12]%24;
-    squareY[12]-=squareY[12]%24;
+    squareX[12]-=squareX[12]%diamondSpacing;
+    squareY[12]-=squareY[12]%diamondSpacing;
 
-    squareX[13]-=squareX[13]%24;
-    squareY[13]-=squareY[13]%24;
+    squareX[13]-=squareX[13]%diamondSpacing;
+    squareY[13]-=squareY[13]%diamondSpacing;
 
-    squareX[14]-=squareX[14]%24;
-    squareY[14]-=squareY[14]%24;
+    squareX[14]-=squareX[14]%diamondSpacing;
+    squareY[14]-=squareY[14]%diamondSpacing;
     
-    squareX[15]-=squareX[15]%24;
-    squareY[15]-=squareY[15]%24;
+    squareX[15]-=squareX[15]%diamondSpacing;
+    squareY[15]-=squareY[15]%diamondSpacing;
     
-    squareX[16]-=squareX[16]%24;
-    squareY[16]-=squareY[16]%24;
+    squareX[16]-=squareX[16]%diamondSpacing;
+    squareY[16]-=squareY[16]%diamondSpacing;
     
-    squareX[17]-=squareX[17]%24;
-    squareY[17]-=squareY[17]%24;
+    squareX[17]-=squareX[17]%diamondSpacing;
+    squareY[17]-=squareY[17]%diamondSpacing;
 
-    squareX[18]-=squareX[18]%24;
-    squareY[18]-=squareY[18]%24;
+    squareX[18]-=squareX[18]%diamondSpacing;
+    squareY[18]-=squareY[18]%diamondSpacing;
 
-    squareX[19]-=squareX[19]%24;
-    squareY[19]-=squareY[19]%24;
+    squareX[19]-=squareX[19]%diamondSpacing;
+    squareY[19]-=squareY[19]%diamondSpacing;
 }
 
 
@@ -1208,65 +1296,65 @@ if (mouseinSquare11) {
 
 
 
-//creates a variable for the x y coordinates of the cube and converts it into inches (48 PIXELS = 24 INCHES)
+//creates a variable for the x z coordinates of the cube and converts it into inches (48 PIXELS = 24 INCHES)
 float Cube1MappingX = squareX[0]/24;
-float Cube1MappingY = +squareY[0]/24;
+float Cube1MappingZ = +squareY[0]/24;
 
 float Cube2MappingX = squareX[1]/24;
-float Cube2MappingY = squareY[1]/24;
+float Cube2MappingZ = squareY[1]/24;
 
 float Cube3MappingX = squareX[2]/24;
-float Cube3MappingY = squareY[2]/24;
+float Cube3MappingZ = squareY[2]/24;
 
 float Cube4MappingX = squareX[3]/24;
-float Cube4MappingY = squareY[3]/24;
+float Cube4MappingZ = squareY[3]/24;
 
 float Cube5MappingX = squareX[4]/24;
-float Cube5MappingY = squareY[4]/24;
+float Cube5MappingZ = squareY[4]/24;
 
 float Cube6MappingX = squareX[5]/24;
-float Cube6MappingY = squareY[5]/24;
+float Cube6MappingZ = squareY[5]/24;
 
 float Cube7MappingX = squareX[6]/24;
-float Cube7MappingY = squareY[6]/24;
+float Cube7MappingZ = squareY[6]/24;
 
 float Cube8MappingX = squareX[7]/24;
-float Cube8MappingY = squareY[7]/24;
+float Cube8MappingZ = squareY[7]/24;
 
 float Cube9MappingX = squareX[8]/24;
-float Cube9MappingY = squareY[8]/24;
+float Cube9MappingZ = squareY[8]/24;
 
 float Cube10MappingX = squareX[9]/24;
-float Cube10MappingY = squareY[9]/24;
+float Cube10MappingZ = squareY[9]/24;
 
 float Cube11MappingX = squareX[10]/24;
-float Cube11MappingY = squareY[10]/24;
+float Cube11MappingZ = squareY[10]/24;
 
 float Cube12MappingX = squareX[11]/24;
-float Cube12MappingY = squareY[11]/24;
+float Cube12MappingZ = squareY[11]/24;
 
 float Cube13MappingX = squareX[12]/24;
-float Cube13MappingY = squareY[12]/24;
+float Cube13MappingZ = squareY[12]/24;
 
 float Cube14MappingX = squareX[13]/24;
-float Cube14MappingY = squareY[13]/24;
+float Cube14MappingZ = squareY[13]/24;
 
 float Cube15MappingX = squareX[14]/24;
-float Cube15MappingY = squareY[14]/24;
+float Cube15MappingZ = squareY[14]/24;
 
 float Cube16MappingX = squareX[15]/24;
-float Cube16MappingY = squareY[15]/24;
+float Cube16MappingZ = squareY[15]/24;
 
 float Cube17MappingX = squareX[16]/24;
-float Cube17MappingY = squareY[16]/24;
+float Cube17MappingZ = squareY[16]/24;
 
 float Cube18MappingX = squareX[17]/24;
-float Cube18MappingY = squareY[17]/24;
+float Cube18MappingZ = squareY[17]/24;
 
 float Cube19MappingX = squareX[18]/24;
-float Cube19MappingY = squareY[18]/24;
+float Cube19MappingZ = squareY[18]/24;
 
 float Cube20MappingX = squareX[19]/24;
-float Cube20MappingY = squareY[19]/24;
+float Cube20MappingZ = squareY[19]/24;
 
  
