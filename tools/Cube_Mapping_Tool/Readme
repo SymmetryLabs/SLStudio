@@ -1,0 +1,18 @@
+-Run the Cube Mapping Tool processing script and place the cubes in their desired position
+-Any cubes at the origin will be ignored
+-Click Save
+-A text file with the mapping coordinates will be automatically created in the directory called mappingfile.txt
+
+
+
+
+
+-using terminal CD into the SLSStudio directory
+and run the mapping script by typing:
+perl tools/mapping_tool_parser.pl
+
+-before hitting enter hit space and drag the mappingfile.txt into terminal (located in the cube mapping tool directory)
+
+-hit enter
+
+-Enjoy
