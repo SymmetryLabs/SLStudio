@@ -42,13 +42,13 @@ public class SimplePixlite extends ArtNetOutput {
         }
 
         private void setupDatagrams(PointsGrouping pointsGrouping) {
-    // Each output gets 4 universes, each universe 170 pixels
+    // Each output gets 1 universes, each universe 170 pixels
     int numPoints = pointsGrouping.size();
-    int universesPerOutput = 4;
+    int universesPerOutput = 1;
     int pixelsPerUniverse = MAX_NUM_POINTS_PER_UNIVERSE;
     int counter = 0;
     // outputIndex is 0-based, universes start at 1
-    int firstUniverse = (outputIndex - 1) * universesPerOutput;
+    int firstUniverse = outputIndex - 1;
     for (int u = 0; u < universesPerOutput; u++) {
         int universe = firstUniverse + u;
         int numIndices = Math.min(pixelsPerUniverse, numPoints - counter);

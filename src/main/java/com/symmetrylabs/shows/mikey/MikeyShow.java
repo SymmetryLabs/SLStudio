@@ -28,9 +28,9 @@ public class MikeyShow implements Show {
     @Override
     public void setupLx(LX lx) {
         MikeyModel model = (MikeyModel) lx.model;
-        MikeyPixlite pixlite1 = new MikeyPixlite(lx, "192.168.0.192", model, 0);      // strips 0-7
+        MikeyPixlite pixlite1 = new MikeyPixlite(lx, "10.200.1.2", model, 0);      // strips 0-7
         lx.addOutput(pixlite1);
-        MikeyPixlite pixlite2 = new MikeyPixlite(lx, "192.168.0.193", model, 8);      // strips 8-15
+        MikeyPixlite pixlite2 = new MikeyPixlite(lx, "10.200.1.3", model, 8);      // strips 8-15
         lx.addOutput(pixlite2);
     }
 
