@@ -40,140 +40,44 @@ public class MikeyShow implements Show {
         }
 
         public static MikeyModel create() {
-            int barAngle = -60;
-            int spacing = -60;
-            int verticalBar = 22;
-            int horizontalBar = 24;
             int barSpacing = 24;
             List<Strip> strips = new ArrayList<Strip>();
             LXTransform t = new LXTransform();
-            Strip.Metrics metricsL4W = new Strip.Metrics(verticalBar*4, 2.15f); //strip config
-            Strip.Metrics metricsL3W = new Strip.Metrics(verticalBar*3, 2.15f); //strip config
-            Strip.Metrics metricsL3WL = new Strip.Metrics(verticalBar*3, 2.05f); //strip config
-            Strip.Metrics metricsL3S = new Strip.Metrics(60, 1.5f); //strip config
+            float stripRotateZ = 1.57f;
+            addStrip(0+barSpacing*0, 0, 0, stripRotateZ, 60, t, strips);  //1 
+            addStrip(0+barSpacing*1, 0, 0, stripRotateZ, 60, t, strips);  //2
+            addStrip(0+barSpacing*2, 0, 0, stripRotateZ, 60, t, strips);  //3
+            addStrip(0+barSpacing*3, 0, 0, stripRotateZ, 60, t, strips);  //4
+            addStrip(0+barSpacing*4, 0, 0, stripRotateZ, 60, t, strips);  //5
+            addStrip(0+barSpacing*5, 0, 0, stripRotateZ, 60, t, strips);  //6
+            addStrip(0+barSpacing*6, 0, 0, stripRotateZ, 60, t, strips);  //7
+            addStrip(0+barSpacing*7, 0, 0, stripRotateZ, 60, t, strips);  //8
+            //add 8 more strips
+            addStrip(0+barSpacing*8, 0, 0, stripRotateZ, 60, t, strips);  //9
+            addStrip(0+barSpacing*9, 0, 0, stripRotateZ, 60, t, strips);  //10
+            addStrip(0+barSpacing*10, 0, 0, stripRotateZ, 60, t, strips);  //11
+            addStrip(0+barSpacing*11, 0, 0, stripRotateZ, 60, t, strips);  //12
+            addStrip(0+barSpacing*12, 0, 0, stripRotateZ, 60, t, strips);  //13
+            addStrip(0+barSpacing*13, 0, 0, stripRotateZ, 60, t, strips);  //14
+            addStrip(0+barSpacing*14, 0, barSpacing, stripRotateZ, 60, t, strips);  //15
+            addStrip(0+barSpacing*15, barSpacing, 0, stripRotateZ, 60, t, strips);  //16
 
-            Strip.Metrics metricsL2 = new Strip.Metrics(verticalBar*2, 1.25f); //strip config
-            Strip.Metrics metricsL1 = new Strip.Metrics(verticalBar*1, .75f); //strip config
 
-            Strip.Metrics metricsL10 = new Strip.Metrics(horizontalBar*10, 1); //strip config
 
-            Strip.Metrics metricsS3 = new Strip.Metrics(horizontalBar*3, 1); //strip config
-            Strip.Metrics metricsS2 = new Strip.Metrics(horizontalBar*2, 1); //strip config
-            Strip.Metrics metricsS1 = new Strip.Metrics(horizontalBar*1, 1); //strip config
-
-            t.translate(0, 0, 0);
-            t.push();
-            t.rotateZ(1.57);
-            Strip strip1 = new Strip("1", metricsL3S, t);    
-            strips.add(strip1);  
-            t.pop();
-
-            t.translate(barSpacing, 0, 0);
-            t.push();
-            t.rotateZ(1.57);
-            Strip strip2 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
-            strips.add(strip2);
-            t.pop();
-
-            t.translate(barSpacing, 0, 0);
-            t.push();
-            t.rotateZ(1.57);
-            Strip strip3 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
-            strips.add(strip3);
-            t.pop();
-
-            t.translate(barSpacing, 0, 0);
-            t.push();
-            t.rotateZ(1.57);
-            Strip strip4 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
-            strips.add(strip4);
-            t.pop();
-
-            t.translate(barSpacing, 0, 0);
-            t.push();
-            t.rotateZ(1.57);
-            Strip strip5 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
-            strips.add(strip5);
-            t.pop();
-
-            t.translate(barSpacing, 0, 0);
-            t.push();
-            t.rotateZ(1.57);
-            Strip strip6 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
-            strips.add(strip6);
-            t.pop();
-
-            t.translate(barSpacing, 0, 0);
-            t.push();
-            t.rotateZ(1.57);
-            Strip strip7 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
-            strips.add(strip7);
-            t.pop();
-
-            t.translate(barSpacing, 0, 0);
-            t.push();
-            t.rotateZ(1.57);
-            Strip strip8 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
-            strips.add(strip8);
-            t.pop();
-
-            t.translate(barSpacing, 0, 0);
-            t.push();
-            t.rotateZ(1.57);
-            Strip strip9 = new Strip("1", metricsL3S, t);    
-            strips.add(strip9);  
-            t.pop();
-
-            t.translate(barSpacing, 0, 0);
-            t.push();
-            t.rotateZ(1.57);
-            Strip strip10 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
-            strips.add(strip10);
-            t.pop();
-
-            t.translate(barSpacing, 0, 0);
-            t.push();
-            t.rotateZ(1.57);
-            Strip strip11 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
-            strips.add(strip11);
-            t.pop();
-
-            t.translate(barSpacing, 0, 0);
-            t.push();
-            t.rotateZ(1.57);
-            Strip strip12 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
-            strips.add(strip12);
-            t.pop();
-
-            t.translate(barSpacing, 0, 0);
-            t.push();
-            t.rotateZ(1.57);
-            Strip strip13 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
-            strips.add(strip13);
-            t.pop();
-
-            t.translate(barSpacing, 0, 0);
-            t.push();
-            t.rotateZ(1.57);
-            Strip strip14 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
-            strips.add(strip14);
-            t.pop();
-
-            t.translate(barSpacing, 0, 0);
-            t.push();
-            t.rotateZ(1.57);
-            Strip strip15 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
-            strips.add(strip15);
-            t.pop();
-
-            t.translate(barSpacing, 0, 0);
-            t.push();
-            t.rotateZ(1.57);
-            Strip strip16 = new Strip("1", metricsL3S, t);         //create the turn in the first strip
-            strips.add(strip16);
-            t.pop();
-        
             return new MikeyModel(strips);
+        }
+
+        private static void addStrip(float translateX, float translateY, float translateZ, float rotateZ, int pixelCount, float height, LXTransform transform, List<Strip> strips) {
+            transform.push();
+            transform.translate(translateX, translateY, translateZ);
+            transform.rotateZ(rotateZ);
+            String stripId = String.valueOf(strips.size() + 1);
+            strips.add(new Strip(stripId, new Strip.Metrics(pixelCount, height), transform));
+            transform.pop();
+        }
+
+        private static void addStrip(float translateX, float translateY, float translateZ, float rotateZ, int pixelCount, LXTransform transform, List<Strip> strips) {
+            addStrip(translateX, translateY, translateZ, rotateZ, pixelCount, 1, transform, strips);
         }
     }
     static class MikeyPixlite extends SimplePixlite {
