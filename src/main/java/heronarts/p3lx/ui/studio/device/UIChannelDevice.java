@@ -55,12 +55,12 @@ class UIChannelDevice extends UIDevice {
             @Override
             protected void onToggle(boolean active) {
                 PatternScope.addToFocusedPattern = active;
-                setLabel(active ? "Scope: Pattern" : "Scope: Channel");
+                setLabel(active ? "Effect: Pattern" : "Effect: Channel");
             }
         };
         scopeButton
             .setActive(PatternScope.addToFocusedPattern)
-            .setLabel(PatternScope.addToFocusedPattern ? "Scope: Pattern" : "Scope: Channel")
+            .setLabel(PatternScope.addToFocusedPattern ? "Effect: Pattern" : "Effect: Channel")
             .setDescription("Toggle whether new effects/warps are added to the channel or to the focused pattern")
             .addToContainer(this);
 
