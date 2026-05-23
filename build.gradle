@@ -126,6 +126,11 @@ run {
     doLast {
         while (file(".restart").exists()) {
             file(".restart").delete()
+            println 'Recompiling before restart...'
+            project.exec {
+                workingDir project.projectDir
+                commandLine './gradlew', 'classes'
+            }
             println 'Restarting...'
             run.exec()
         }

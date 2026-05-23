@@ -2,6 +2,7 @@ package com.symmetrylabs.shows.mikey;
 
 import com.google.common.collect.Lists;
 import com.symmetrylabs.shows.Show;
+import com.symmetrylabs.shows.mikey.ui.UIMikeyModelingTool;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.CandyBar;
 import com.symmetrylabs.slstudio.model.SLModel;
@@ -34,37 +35,46 @@ public class MikeyShow implements Show {
         lx.addOutput(pixlite2);
     }
 
+    @Override
+    public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
+        UIMikeyModelingTool tool = new UIMikeyModelingTool(ui, 0, 0, ui.rightPane.model.getContentWidth());
+        tool.addToContainer(ui.rightPane.model);
+    }
+
     static class MikeyModel extends StripsModel<Strip> {
         public MikeyModel(List<Strip> strips) {
             super(SHOW_NAME, strips);
         }
 
         public static MikeyModel create() {
-            int barSpacing = 24;
             List<Strip> strips = new ArrayList<Strip>();
             LXTransform t = new LXTransform();
-            float stripRotateZ = 1.57f;
-            addStrip(0+barSpacing*0, 0, 0, stripRotateZ, 60, t, strips);  //1 
-            addStrip(0+barSpacing*1, 0, 0, stripRotateZ, 60, t, strips);  //2
-            addStrip(0+barSpacing*2, 0, 0, stripRotateZ, 60, t, strips);  //3
-            addStrip(0+barSpacing*3, 0, 0, stripRotateZ, 60, t, strips);  //4
-            addStrip(0+barSpacing*4, 0, 0, stripRotateZ, 60, t, strips);  //5
-            addStrip(0+barSpacing*5, 0, 0, stripRotateZ, 60, t, strips);  //6
-            addStrip(0+barSpacing*6, 0, 0, stripRotateZ, 60, t, strips);  //7
-            addStrip(0+barSpacing*7, 0, 0, stripRotateZ, 60, t, strips);  //8
-            //add 8 more strips
-            addStrip(0+barSpacing*8, 0, 0, stripRotateZ, 60, t, strips);  //9
-            addStrip(0+barSpacing*9, 0, 0, stripRotateZ, 60, t, strips);  //10
-            addStrip(0+barSpacing*10, 0, 0, stripRotateZ, 60, t, strips);  //11
-            addStrip(0+barSpacing*11, 0, 0, stripRotateZ, 60, t, strips);  //12
-            addStrip(0+barSpacing*12, 0, 0, stripRotateZ, 60, t, strips);  //13
-            addStrip(0+barSpacing*13, 0, 0, stripRotateZ, 60, t, strips);  //14
-            addStrip(0+barSpacing*14, 0, barSpacing, stripRotateZ, 60, t, strips);  //15
-            addStrip(0+barSpacing*15, barSpacing, 0, stripRotateZ, 60, t, strips);  //16
 
-
-
+            float[][] mapping = UIMikeyModelingTool.loadMappingFromDisk();
+            if (mapping == null) {
+                mapping = buildDefaultMapping();
+            }
+            for (int i = 0; i < mapping.length; i++) {
+                float[] m = mapping[i];
+                addStrip(m[0], m[1], m[2], m[3], (int) m[4], m[5], t, strips);
+            }
             return new MikeyModel(strips);
+        }
+
+        private static float[][] buildDefaultMapping() {
+            float[][] d = new float[16][6];
+            int barSpacing = 24;
+            for (int i = 0; i < 16; i++) {
+                d[i][0] = barSpacing * i; // tx
+                d[i][1] = 0f;             // ty
+                d[i][2] = 0f;             // tz
+                d[i][3] = 1.57f;          // rz
+                d[i][4] = 60f;            // px
+                d[i][5] = 1f;             // h
+            }
+            d[14][2] = barSpacing; // strip 15 tz
+            d[15][1] = barSpacing; // strip 16 ty
+            return d;
         }
 
         private static void addStrip(float translateX, float translateY, float translateZ, float rotateZ, int pixelCount, float height, LXTransform transform, List<Strip> strips) {
