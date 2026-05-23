@@ -27,7 +27,9 @@
 package heronarts.p3lx.ui.studio.device;
 
 import java.util.ArrayList;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 
 import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
@@ -36,7 +38,6 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.warp.LXWarp;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
-import heronarts.lx.warp.LXWarp;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UI2dContainer;
@@ -60,6 +61,10 @@ public class UIDeviceBin extends UI2dScrollContext {
     private final UIChannelDevice channelDevice;
     private final List<UIPatternDevice> patternDevices = new ArrayList<>();
     private final List<UIEffectDevice> effectDevices = new ArrayList<>();
+
+    /** Per-pattern UI tiles, created once and added/removed from the container as the focused pattern changes. */
+    private final Map<LXPattern, List<UIEffectDevice>> patternEffectDevices = new IdentityHashMap<>();
+    private final Map<LXPattern, List<UIWarpDevice>> patternWarpDevices = new IdentityHashMap<>();
 
     private final LXBus bus;
     private final LXChannel channel;
@@ -87,6 +92,63 @@ public class UIDeviceBin extends UI2dScrollContext {
                 @Override
                 public void patternRemoved(LXChannel channel, LXPattern pattern) {
                     removePatternDevice(pattern);
+                    // Drop any pattern-scoped tiles for the removed pattern.
+                    List<UIEffectDevice> es = patternEffectDevices.remove(pattern);
+                    if (es != null) {
+                        for (UIEffectDevice d : es) {
+                            if (d.getParent() != null) d.removeFromContainer();
+                        }
+                    }
+                    List<UIWarpDevice> ws = patternWarpDevices.remove(pattern);
+                    if (ws != null) {
+                        for (UIWarpDevice d : ws) {
+                            if (d.getParent() != null) d.removeFromContainer();
+                        }
+                    }
+                }
+
+                @Override
+                public void patternEffectAdded(LXChannel channel, LXPattern pattern, LXEffect effect) {
+                    UIEffectDevice device = new UIEffectDevice(ui, channel, pattern, effect);
+                    patternEffectDevices.computeIfAbsent(pattern, k -> new ArrayList<>()).add(device);
+                    if (pattern == channel.getFocusedPattern()) {
+                        device.addToContainer(UIDeviceBin.this);  // appended at end
+                    }
+                }
+
+                @Override
+                public void patternEffectRemoved(LXChannel channel, LXPattern pattern, LXEffect effect) {
+                    List<UIEffectDevice> list = patternEffectDevices.get(pattern);
+                    if (list == null) return;
+                    for (int i = 0; i < list.size(); i++) {
+                        if (list.get(i).effect == effect) {
+                            UIEffectDevice d = list.remove(i);
+                            if (d.getParent() != null) d.removeFromContainer();
+                            break;
+                        }
+                    }
+                }
+
+                @Override
+                public void patternWarpAdded(LXChannel channel, LXPattern pattern, LXWarp warp) {
+                    UIWarpDevice device = new UIWarpDevice(ui, channel, pattern, warp);
+                    patternWarpDevices.computeIfAbsent(pattern, k -> new ArrayList<>()).add(device);
+                    if (pattern == channel.getFocusedPattern()) {
+                        device.addToContainer(UIDeviceBin.this);  // appended at end
+                    }
+                }
+
+                @Override
+                public void patternWarpRemoved(LXChannel channel, LXPattern pattern, LXWarp warp) {
+                    List<UIWarpDevice> list = patternWarpDevices.get(pattern);
+                    if (list == null) return;
+                    for (int i = 0; i < list.size(); i++) {
+                        if (list.get(i).warp == warp) {
+                            UIWarpDevice d = list.remove(i);
+                            if (d.getParent() != null) d.removeFromContainer();
+                            break;
+                        }
+                    }
                 }
             });
 
@@ -152,6 +214,28 @@ public class UIDeviceBin extends UI2dScrollContext {
     private void setFocusedPattern(LXPattern pattern) {
         for (UIPatternDevice patternDevice : patternDevices) {
             patternDevice.setVisible(patternDevice.pattern == pattern);
+        }
+        // Detach all per-pattern tiles whose pattern is not the focused one,
+        // and (re)attach the focused pattern's tiles to the end of the container.
+        for (Map.Entry<LXPattern, List<UIEffectDevice>> e : patternEffectDevices.entrySet()) {
+            boolean focused = (e.getKey() == pattern);
+            for (UIEffectDevice d : e.getValue()) {
+                if (focused) {
+                    if (d.getParent() == null) d.addToContainer(this);
+                } else {
+                    if (d.getParent() != null) d.removeFromContainer();
+                }
+            }
+        }
+        for (Map.Entry<LXPattern, List<UIWarpDevice>> e : patternWarpDevices.entrySet()) {
+            boolean focused = (e.getKey() == pattern);
+            for (UIWarpDevice d : e.getValue()) {
+                if (focused) {
+                    if (d.getParent() == null) d.addToContainer(this);
+                } else {
+                    if (d.getParent() != null) d.removeFromContainer();
+                }
+            }
         }
     }
 

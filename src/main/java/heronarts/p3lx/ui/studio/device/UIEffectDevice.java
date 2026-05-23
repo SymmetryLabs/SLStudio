@@ -27,8 +27,10 @@
 package heronarts.p3lx.ui.studio.device;
 
 import heronarts.lx.LXBus;
+import heronarts.lx.LXChannel;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXEffect;
+import heronarts.lx.LXPattern;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.p3lx.ui.UI;
 import processing.event.KeyEvent;
@@ -38,15 +40,45 @@ class UIEffectDevice extends UIDevice {
     private final static int WIDTH = 124;
 
     private final LXBus bus;
+    /** When non-null, this tile is scoped to a single pattern's per-pattern chain. */
+    private final LXPattern pattern;
     final LXEffect effect;
 
     UIEffectDevice(UI ui, LXBus bus, final LXEffect effect) {
+        this(ui, bus, null, effect);
+    }
+
+    UIEffectDevice(UI ui, LXBus bus, LXPattern pattern, final LXEffect effect) {
         super(ui, effect, WIDTH);
         this.bus = bus;
+        this.pattern = pattern;
         this.effect = effect;
         setTitle(effect.label);
         setEnabledButton(effect.enabled);
         buildDefaultControlUI(effect);
+    }
+
+    private void doRemove() {
+        if (pattern != null && bus instanceof LXChannel) {
+            ((LXChannel) bus).removePatternEffect(pattern, effect);
+        } else {
+            bus.removeEffect(effect);
+        }
+    }
+
+    private void doMove(int newIndex) {
+        if (pattern != null && bus instanceof LXChannel) {
+            ((LXChannel) bus).movePatternEffect(pattern, effect, newIndex);
+        } else {
+            bus.moveEffect(effect, newIndex);
+        }
+    }
+
+    private int chainSize() {
+        if (pattern != null && bus instanceof LXChannel) {
+            return ((LXChannel) bus).getPatternEffects(pattern).size();
+        }
+        return bus.getEffects().size();
     }
 
     @Override
@@ -61,7 +93,7 @@ class UIEffectDevice extends UIDevice {
             effect.enabled.toggle();
         } else if (keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
             consumeKeyEvent();
-            bus.removeEffect(effect);
+            doRemove();
         } else {
             super.onKeyPressed(keyEvent, keyChar, keyCode);
         }
@@ -69,16 +101,16 @@ class UIEffectDevice extends UIDevice {
         if (keyEvent.isControlDown() || keyEvent.isMetaDown()) {
             if (keyCode == java.awt.event.KeyEvent.VK_D) {
                 consumeKeyEvent();
-                bus.removeEffect(effect);
+                doRemove();
             } else if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
                 consumeKeyEvent();
                 if (effect.getIndex() > 0) {
-                    bus.moveEffect(effect, effect.getIndex() - 1);
+                    doMove(effect.getIndex() - 1);
                 }
             } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
                 consumeKeyEvent();
-                if (effect.getIndex() < bus.getEffects().size() - 1) {
-                    bus.moveEffect(effect, effect.getIndex() + 1);
+                if (effect.getIndex() < chainSize() - 1) {
+                    doMove(effect.getIndex() + 1);
                 }
             }
         }

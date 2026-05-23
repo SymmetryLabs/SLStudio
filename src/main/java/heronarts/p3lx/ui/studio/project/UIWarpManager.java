@@ -6,10 +6,13 @@ import java.util.Comparator;
 import java.util.List;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXChannel;
+import heronarts.lx.LXPattern;
 import heronarts.lx.warp.LXWarp;
 import heronarts.p3lx.P3LX;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.component.UIItemList;
+import heronarts.p3lx.ui.studio.PatternScope;
 import processing.core.PApplet;
 
 public class UIWarpManager extends UIComponentManager {
@@ -67,6 +70,15 @@ public class UIWarpManager extends UIComponentManager {
             }
 
             if (instance != null) {
+                if (PatternScope.addToFocusedPattern && lx.engine.getFocusedChannel() instanceof LXChannel) {
+                    LXChannel ch = (LXChannel) lx.engine.getFocusedChannel();
+                    LXPattern focused = ch.getFocusedPattern();
+                    if (focused != null) {
+                        ch.addPatternWarp(focused, instance);
+                        instance.enabled.setValue(true);
+                        return;
+                    }
+                }
                 lx.engine.getFocusedChannel().addWarp(instance);
                 instance.enabled.setValue(true);
             }

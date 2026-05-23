@@ -33,6 +33,7 @@ import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIDoubleBox;
 import heronarts.p3lx.ui.component.UIDropMenu;
 import heronarts.p3lx.ui.component.UISlider;
+import heronarts.p3lx.ui.studio.PatternScope;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 
@@ -47,13 +48,29 @@ class UIChannelDevice extends UIDevice {
         super(ui, channel, WIDTH);
         setTitle(channel.label);
 
-        new UISlider(0, 0, WIDTH, 16)
+        // Scope toggle: when active, new effects/warps target the focused pattern's
+        // per-pattern chain. The flag is global, but the button is shown in every
+        // channel tile so it's accessible regardless of focus.
+        final UIButton scopeButton = new UIButton(0, 0, WIDTH, 16) {
+            @Override
+            protected void onToggle(boolean active) {
+                PatternScope.addToFocusedPattern = active;
+                setLabel(active ? "Scope: Pattern" : "Scope: Channel");
+            }
+        };
+        scopeButton
+            .setActive(PatternScope.addToFocusedPattern)
+            .setLabel(PatternScope.addToFocusedPattern ? "Scope: Pattern" : "Scope: Channel")
+            .setDescription("Toggle whether new effects/warps are added to the channel or to the focused pattern")
+            .addToContainer(this);
+
+        new UISlider(0, 18, WIDTH, 16)
         .setParameter(channel.speed)
         .setShowLabel(false)
         .addToContainer(this);
 
         this.patternList = (UIPatternList)
-        new UIPatternList(ui, 0, 16, PATTERN_LIST_WIDTH, getContentHeight() - 56, channel)
+        new UIPatternList(ui, 0, 34, PATTERN_LIST_WIDTH, getContentHeight() - 74, channel)
         .setDescription("Patterns available on this channel, click to select, double-click to activate")
         .addToContainer(this);
 

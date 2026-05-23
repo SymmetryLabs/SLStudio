@@ -86,6 +86,24 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         public void patternWillChange(LXChannel channel, LXPattern pattern, LXPattern nextPattern);
 
         public void patternDidChange(LXChannel channel, LXPattern pattern);
+
+        /** Fired when an effect is added to a specific pattern's chain (per-pattern effects). */
+        default void patternEffectAdded(LXChannel channel, LXPattern pattern, LXEffect effect) {}
+
+        /** Fired when an effect is removed from a specific pattern's chain. */
+        default void patternEffectRemoved(LXChannel channel, LXPattern pattern, LXEffect effect) {}
+
+        /** Fired when a pattern-scoped effect is reordered. */
+        default void patternEffectMoved(LXChannel channel, LXPattern pattern, LXEffect effect) {}
+
+        /** Fired when a warp is added to a specific pattern's chain (per-pattern warps). */
+        default void patternWarpAdded(LXChannel channel, LXPattern pattern, LXWarp warp) {}
+
+        /** Fired when a warp is removed from a specific pattern's chain. */
+        default void patternWarpRemoved(LXChannel channel, LXPattern pattern, LXWarp warp) {}
+
+        /** Fired when a pattern-scoped warp is reordered. */
+        default void patternWarpMoved(LXChannel channel, LXPattern pattern, LXWarp warp) {}
     }
 
     public interface MidiListener {
@@ -278,6 +296,11 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     private final List<LXPattern> mutablePatterns = new ArrayList<LXPattern>();
     public final List<LXPattern> patterns = Collections.unmodifiableList(mutablePatterns);
     public static final Map<String, LXPattern> allPatterns = new HashMap<String, LXPattern>();
+
+    /** Per-pattern effect chains. Effects in here are only run when their key pattern is active. */
+    private final Map<LXPattern, List<LXEffect>> patternEffects = new IdentityHashMap<>();
+    /** Per-pattern warp chains. Warps in here are only applied when their key pattern is active. */
+    private final Map<LXPattern, List<LXWarp>> patternWarps = new IdentityHashMap<>();
 
     /**
      * A local buffer used for transition blending and effects on this channel
@@ -615,6 +638,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
                     listener.patternDidChange(this, newActive);
                 }
             }
+            disposePatternScopedComponents(pattern);
             pattern.dispose();
         }
         return this;
@@ -659,7 +683,114 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         components.addAll(mutablePatterns);
         components.addAll(mutableEffects);
         components.addAll(mutableWarps);
+        for (List<LXEffect> es : patternEffects.values()) components.addAll(es);
+        for (List<LXWarp> ws : patternWarps.values()) components.addAll(ws);
         return components;
+    }
+
+    // -----------------------------------------------------------------------
+    // Per-pattern effects / warps API
+    // -----------------------------------------------------------------------
+
+    /**
+     * Returns the (mutable, live) list of effects scoped to the given pattern.
+     * Effects in this list only run while the given pattern is active.
+     */
+    public List<LXEffect> getPatternEffects(LXPattern pattern) {
+        return patternEffects.computeIfAbsent(pattern, k -> new ArrayList<>());
+    }
+
+    /**
+     * Returns the (mutable, live) list of warps scoped to the given pattern.
+     * Warps in this list only apply while the given pattern is active.
+     */
+    public List<LXWarp> getPatternWarps(LXPattern pattern) {
+        return patternWarps.computeIfAbsent(pattern, k -> new ArrayList<>());
+    }
+
+    public LXChannel addPatternEffect(LXPattern pattern, LXEffect effect) {
+        List<LXEffect> list = getPatternEffects(pattern);
+        list.add(effect);
+        effect.setBus(this);
+        LXUtils.updateIndexes(list);
+        for (Listener l : this.listeners) {
+            l.patternEffectAdded(this, pattern, effect);
+        }
+        return this;
+    }
+
+    public LXChannel removePatternEffect(LXPattern pattern, LXEffect effect) {
+        List<LXEffect> list = getPatternEffects(pattern);
+        int idx = list.indexOf(effect);
+        if (idx >= 0) {
+            effect.setIndex(-1);
+            list.remove(idx);
+            LXUtils.updateIndexes(list);
+            for (Listener l : this.listeners) {
+                l.patternEffectRemoved(this, pattern, effect);
+            }
+            effect.dispose();
+        }
+        return this;
+    }
+
+    public LXChannel movePatternEffect(LXPattern pattern, LXEffect effect, int index) {
+        List<LXEffect> list = getPatternEffects(pattern);
+        list.remove(effect);
+        list.add(index, effect);
+        LXUtils.updateIndexes(list);
+        for (Listener l : this.listeners) {
+            l.patternEffectMoved(this, pattern, effect);
+        }
+        return this;
+    }
+
+    public LXChannel addPatternWarp(LXPattern pattern, LXWarp warp) {
+        List<LXWarp> list = getPatternWarps(pattern);
+        list.add(warp);
+        warp.setBus(this);
+        LXUtils.updateIndexes(list);
+        for (Listener l : this.listeners) {
+            l.patternWarpAdded(this, pattern, warp);
+        }
+        return this;
+    }
+
+    public LXChannel removePatternWarp(LXPattern pattern, LXWarp warp) {
+        List<LXWarp> list = getPatternWarps(pattern);
+        int idx = list.indexOf(warp);
+        if (idx >= 0) {
+            warp.setIndex(-1);
+            list.remove(idx);
+            LXUtils.updateIndexes(list);
+            for (Listener l : this.listeners) {
+                l.patternWarpRemoved(this, pattern, warp);
+            }
+            warp.dispose();
+        }
+        return this;
+    }
+
+    public LXChannel movePatternWarp(LXPattern pattern, LXWarp warp, int index) {
+        List<LXWarp> list = getPatternWarps(pattern);
+        list.remove(warp);
+        list.add(index, warp);
+        LXUtils.updateIndexes(list);
+        for (Listener l : this.listeners) {
+            l.patternWarpMoved(this, pattern, warp);
+        }
+        return this;
+    }
+
+    private void disposePatternScopedComponents(LXPattern pattern) {
+        List<LXEffect> es = patternEffects.remove(pattern);
+        if (es != null) {
+            for (LXEffect e : es) e.dispose();
+        }
+        List<LXWarp> ws = patternWarps.remove(pattern);
+        if (ws != null) {
+            for (LXWarp w : ws) w.dispose();
+        }
     }
 
     public final int getFocusedPatternIndex() {
@@ -837,7 +968,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         // Run modulators and components
         super.loop(deltaMs);
 
-        // Apply warps
+        // Apply channel warps
         LXWarp nextInputSource = null;
         LXVector[] nextInputVectors = model.getVectorArray();
         boolean nextInputChanged = false;
@@ -853,13 +984,24 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             setVectorArray(nextInputVectors, nextInputSource);
         }
 
+        // Snapshot channel-warped vectors so per-pattern warps can temporarily
+        // override and we can restore before running channel-level effects.
+        LXVector[] channelVectors = vectorArray;
+        LXWarp channelVectorSource = vectorSource;
+
         if (!blendPatterns.isOn()) {
-            loopNoPatternBlend(deltaMs);
+            loopNoPatternBlend(deltaMs, channelVectors, channelVectorSource);
         } else {
-            loopWithPatternBlend(deltaMs);
+            loopWithPatternBlend(deltaMs, channelVectors, channelVectorSource);
         }
 
-        // Apply effects
+        // Restore channel vectors so channel-level effects see the channel chain output,
+        // not whatever the last pattern's warps left behind.
+        if (vectorArray != channelVectors || vectorSource != channelVectorSource) {
+            setVectorArray(channelVectors, channelVectorSource);
+        }
+
+        // Apply channel-level effects
         for (LXEffect effect : effects) {
             effect.setPolyBuffer(polyBuffer);
             effect.loop(deltaMs);
@@ -868,7 +1010,49 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         this.timer.loopNanos = System.nanoTime() - loopStart;
     }
 
+    /**
+     * Run a single pattern with its pattern-scoped warps and effects.
+     * Warps temporarily mutate the channel's vectorArray; the caller is responsible
+     * for restoring it after all patterns have run.
+     */
+    private void runPatternScoped(LXPattern pat, double deltaMs, PolyBuffer.Space space,
+                                  LXVector[] baseVectors, LXWarp baseVectorSource) {
+        List<LXWarp> pWarps = patternWarps.get(pat);
+        LXVector[] curVecs = baseVectors;
+        LXWarp curSource = baseVectorSource;
+        boolean changed = false;
+        if (pWarps != null) {
+            for (LXWarp w : pWarps) {
+                if (w.isEnabled()) {
+                    w.setInputVectors(curSource, curVecs, changed);
+                    changed = w.applyWarp(deltaMs);
+                    curSource = w;
+                    curVecs = w.getOutputVectors();
+                }
+            }
+        }
+        if (curVecs != vectorArray || curSource != vectorSource || changed) {
+            setVectorArray(curVecs, curSource);
+        }
+
+        pat.setPreferredSpace(space);
+        pat.loop(deltaMs);
+
+        // Per-pattern effects modify the pattern's own polyBuffer before blending.
+        List<LXEffect> pEffects = patternEffects.get(pat);
+        if (pEffects != null) {
+            for (LXEffect e : pEffects) {
+                e.setPolyBuffer(pat.getPolyBuffer());
+                e.loop(deltaMs);
+            }
+        }
+    }
+
     public void loopWithPatternBlend(double deltaMs) {
+        loopWithPatternBlend(deltaMs, vectorArray, vectorSource);
+    }
+
+    public void loopWithPatternBlend(double deltaMs, LXVector[] baseVectors, LXWarp baseVectorSource) {
         PolyBuffer.Space space = colorSpace.getEnum();
         LXBlend blend = patternBlendMode.getObject();
 
@@ -879,8 +1063,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             if (!pat.enabled.isOn()) {
                 continue;
             }
-            pat.setPreferredSpace(space);
-            pat.loop(deltaMs);
+            runPatternScoped(pat, deltaMs, space, baseVectors, baseVectorSource);
 
             if (first) {
                 polyBuffer.copyFrom(pat, space);
@@ -895,6 +1078,10 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
      * Implements the old one-pattern-per-channel behavior of LXChannel, called only if blendPatterns is off.
      */
     public void loopNoPatternBlend(double deltaMs) {
+        loopNoPatternBlend(deltaMs, vectorArray, vectorSource);
+    }
+
+    public void loopNoPatternBlend(double deltaMs, LXVector[] baseVectors, LXWarp baseVectorSource) {
         // Check for transition completion
         if (this.transition != null) {
             double transitionMs = this.lx.engine.nowMillis - this.transitionMillis;
@@ -915,20 +1102,19 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             }
         }
 
-        // Run active pattern
+        // Run active pattern (with its per-pattern warps & effects)
         PolyBuffer.Space space = colorSpace.getEnum();
         LXPattern active = getActivePattern();
         if (active != null) {
-            getActivePattern().setPreferredSpace(space);
-            getActivePattern().loop(deltaMs);
+            runPatternScoped(active, deltaMs, space, baseVectors, baseVectorSource);
         }
 
         // Run transition!
         if (this.transition != null) {
             this.autoCycleProgress = 1;
             this.transitionProgress = (this.lx.engine.nowMillis - this.transitionMillis) / (1000 * this.transitionTimeSecs.getValue());
-            getNextPattern().setPreferredSpace(space);
-            getNextPattern().loop(deltaMs);
+            LXPattern next = getNextPattern();
+            runPatternScoped(next, deltaMs, space, baseVectors, baseVectorSource);
             // TODO(mcslee): this is incorrect. the blend objects are shared, so the same one may be run on multiple
             // channels. either they need to be per-channel instances, or they are not loopable with modulators etc.
             this.transition.loop(deltaMs);
@@ -969,20 +1155,41 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             } catch (InterruptedException e) {}
         }
         for (LXPattern pattern : this.mutablePatterns) {
+            disposePatternScopedComponents(pattern);
             pattern.dispose();
         }
         this.mutablePatterns.clear();
+        patternEffects.clear();
+        patternWarps.clear();
         super.dispose();
     }
 
     private static final String KEY_PATTERNS = "patterns";
     private static final String KEY_PATTERN_INDEX = "patternIndex";
+    private static final String KEY_PATTERN_EFFECTS = "patternEffects";
+    private static final String KEY_PATTERN_WARPS = "patternWarps";
 
     @Override
     public void save(LX lx, JsonObject obj) {
         super.save(lx, obj);
         obj.addProperty(KEY_PATTERN_INDEX, this.activePatternIndex);
-        obj.add(KEY_PATTERNS, LXSerializable.Utils.toArray(lx, this.mutablePatterns));
+        // Patch each pattern's JSON with its per-pattern effect/warp chains so
+        // they're saved alongside the pattern (and loaded together).
+        JsonArray patternsArr = new JsonArray();
+        for (LXPattern p : this.mutablePatterns) {
+            JsonObject pObj = new JsonObject();
+            p.save(lx, pObj);
+            List<LXEffect> es = patternEffects.get(p);
+            if (es != null && !es.isEmpty()) {
+                pObj.add(KEY_PATTERN_EFFECTS, LXSerializable.Utils.toArray(lx, es));
+            }
+            List<LXWarp> ws = patternWarps.get(p);
+            if (ws != null && !ws.isEmpty()) {
+                pObj.add(KEY_PATTERN_WARPS, LXSerializable.Utils.toArray(lx, ws));
+            }
+            patternsArr.add(pObj);
+        }
+        obj.add(KEY_PATTERNS, patternsArr);
     }
 
     @Override
@@ -1000,6 +1207,29 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             if (pattern != null) {
                 pattern.load(lx, patternObj);
                 addPattern(pattern);
+
+                // Restore per-pattern effects
+                if (patternObj.has(KEY_PATTERN_EFFECTS)) {
+                    for (JsonElement el : patternObj.getAsJsonArray(KEY_PATTERN_EFFECTS)) {
+                        JsonObject eObj = (JsonObject) el;
+                        LXEffect e = this.lx.instantiateEffect(eObj.get("class").getAsString());
+                        if (e != null) {
+                            e.load(lx, eObj);
+                            addPatternEffect(pattern, e);
+                        }
+                    }
+                }
+                // Restore per-pattern warps
+                if (patternObj.has(KEY_PATTERN_WARPS)) {
+                    for (JsonElement el : patternObj.getAsJsonArray(KEY_PATTERN_WARPS)) {
+                        JsonObject wObj = (JsonObject) el;
+                        LXWarp w = this.lx.instantiateWarp(wObj.get("class").getAsString());
+                        if (w != null) {
+                            w.load(lx, wObj);
+                            addPatternWarp(pattern, w);
+                        }
+                    }
+                }
             }
         }
 
