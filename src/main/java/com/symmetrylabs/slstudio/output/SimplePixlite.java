@@ -29,6 +29,19 @@ public class SimplePixlite extends ArtNetOutput {
         return this;
     }
 
+    /**
+     * Add an output that spans multiple universes (up to 54).
+     * Each universe gets 170 pixels. Universe numbering starts at 0.
+     */
+    public SimplePixlite addPixliteOutputMultiUniverse(PointsGrouping pointsGrouping, int firstUniverse, int maxUniverses) {
+        try {
+            addChild(new SimplePixliteOutputMultiUniverse(pointsGrouping, firstUniverse, maxUniverses));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
+
     protected class SimplePixliteOutput extends LXDatagramOutput {
         private final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
         private final int outputIndex;
@@ -60,7 +73,42 @@ public class SimplePixlite extends ArtNetOutput {
         ArtNetDmxDatagram dmxDatagram = new ArtNetDmxDatagram(lx, ipAddress, indices, universe);
         addDatagram(dmxDatagram);
     }
-}
+        }
+    }
+
+    /**
+     * Output class that can handle multiple universes (up to 54).
+     * Each universe gets 170 pixels.
+     */
+    protected class SimplePixliteOutputMultiUniverse extends LXDatagramOutput {
+        private final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
+        private final int firstUniverse;
+        private final int maxUniverses;
+
+        public SimplePixliteOutputMultiUniverse(PointsGrouping pointsGrouping, int firstUniverse, int maxUniverses) throws SocketException {
+            super(lx);
+            this.firstUniverse = firstUniverse;
+            this.maxUniverses = maxUniverses;
+            setupDatagrams(pointsGrouping);
+        }
+
+        private void setupDatagrams(PointsGrouping pointsGrouping) {
+            int numPoints = pointsGrouping.size();
+            int pixelsPerUniverse = MAX_NUM_POINTS_PER_UNIVERSE;
+            int counter = 0;
+
+            for (int u = 0; u < maxUniverses; u++) {
+                int universe = firstUniverse + u;
+                int numIndices = Math.min(pixelsPerUniverse, numPoints - counter);
+                if (numIndices <= 0) break;
+                int[] indices = new int[numIndices];
+                for (int i = 0; i < numIndices; i++) {
+                    indices[i] = pointsGrouping.getPoint(counter++).index;
+                }
+                ArtNetDmxDatagram dmxDatagram = new ArtNetDmxDatagram(lx, ipAddress, indices, universe);
+                addDatagram(dmxDatagram);
+            }
+        }
     }
 
 }

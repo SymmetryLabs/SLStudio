@@ -11,15 +11,16 @@ import com.google.gson.reflect.TypeToken;
 
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UITabFocus;
-import heronarts.p3lx.ui.studio.UICollapsibleSection;
+import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.component.UITextBox;
+import processing.core.PConstants;
 
-public class UIMikeyModelingTool extends UICollapsibleSection {
+public class UIMikeyModelingTool extends UI2dContainer {
 
-    public static final int STRIP_COUNT = 16;
-    public static final String[] COLUMN_LABELS = { "tx", "ty", "tz", "rz", "px", "h" };
+    public static final int STRIP_COUNT = 54;
+    public static final String[] COLUMN_LABELS = { "tx", "ty", "tz", "az", "px", "d" };
 
     public static final String MAPPING_FILE = "data/mikey-mapping.json";
 
@@ -29,20 +30,27 @@ public class UIMikeyModelingTool extends UICollapsibleSection {
     private static final int DEFAULT_PIXELS = 60;
     private static final float DEFAULT_HEIGHT = 1f;
 
-    /** Grid of input boxes [row][col] -- 16 strips x 6 parameters. */
+    /** Grid of input boxes [row][col] -- 54 strips x 6 parameters. */
     public final TabbableTextBox[][] inputs = new TabbableTextBox[STRIP_COUNT][COLUMN_LABELS.length];
 
     public UIMikeyModelingTool(UI ui, float x, float y, float w) {
-        super(ui, x, y, w, 420);
-        setTitle("MIKEY MODELER");
+        super(x, y, w, 1100);  // Extra height to ensure all 54 rows are visible
         setPadding(5);
+        setLayout(UI2dContainer.Layout.NONE);  // Use absolute positioning for children
 
-        new UILabel(0, 0, w - 10, 15)
+        // Title
+        new UILabel(0, 0, w - 10, 16)
+            .setLabel("MIKEY MODELER (54 strips)")
+            .setFont(ui.theme.getLabelFont())
+            .setFontColor(ui.theme.getControlTextColor())
+            .addToContainer(this);
+
+        new UILabel(0, 18, w - 10, 15)
             .setLabel("Reload mapping changes:")
             .setPadding(0, 5)
             .addToContainer(this);
 
-        UIButton restart = new UIButton(0, 20, 120, 20) {
+        UIButton restart = new UIButton(0, 38, 120, 20) {
             @Override
             protected void onToggle(boolean active) {
                 if (active) {
@@ -58,7 +66,7 @@ public class UIMikeyModelingTool extends UICollapsibleSection {
     }
 
     private void buildMappingGrid(float w) {
-        final float gridTop = 50;
+        final float gridTop = 68;  // Adjusted for title (16) + label (15) + button (20) + padding
         final float labelColW = 22;
         final float gap = 2;
         final float gridLeft = labelColW + gap;
@@ -66,11 +74,12 @@ public class UIMikeyModelingTool extends UICollapsibleSection {
         final float rowH = boxH + 2;
         final float colW = Math.max(28, (w - gridLeft - 4 - gap * (COLUMN_LABELS.length - 1)) / COLUMN_LABELS.length);
 
-        // Column headers
+        // Column headers (centered over their columns)
         for (int c = 0; c < COLUMN_LABELS.length; c++) {
             float cx = gridLeft + c * (colW + gap);
             new UILabel(cx, gridTop, colW, 12)
                 .setLabel(COLUMN_LABELS[c])
+                .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
                 .addToContainer(this);
         }
 
@@ -84,6 +93,7 @@ public class UIMikeyModelingTool extends UICollapsibleSection {
             float ry = firstRowY + r * rowH;
             new UILabel(0, ry + 2, labelColW, boxH - 2)
                 .setLabel(String.valueOf(r + 1))
+                .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
                 .addToContainer(this);
 
             for (int c = 0; c < COLUMN_LABELS.length; c++) {
@@ -94,6 +104,7 @@ public class UIMikeyModelingTool extends UICollapsibleSection {
                 inputs[r][c] = box;
             }
         }
+        System.out.println("UIMikeyModelingTool: created UI with " + STRIP_COUNT + " rows (height=" + getHeight() + ")");
     }
 
     private static String formatNumber(float v) {
@@ -105,18 +116,15 @@ public class UIMikeyModelingTool extends UICollapsibleSection {
 
     private static float[][] buildDefaults() {
         float[][] d = new float[STRIP_COUNT][6];
+        int barSpacing = 24;
         for (int i = 0; i < STRIP_COUNT; i++) {
-            d[i][0] = BAR_SPACING * i;     // tx
-            d[i][1] = 0f;                  // ty
-            d[i][2] = 0f;                  // tz
-            d[i][3] = STRIP_ROTATE_Z;      // rz
-            d[i][4] = DEFAULT_PIXELS;      // px
-            d[i][5] = DEFAULT_HEIGHT;      // h
+            d[i][0] = barSpacing * i; // tx - spaced in a line
+            d[i][1] = 0f;           // ty - same y for all
+            d[i][2] = 0f;           // tz - same z for all
+            d[i][3] = 1.57f;        // rz
+            d[i][4] = 60f;          // px
+            d[i][5] = 1f;           // h
         }
-        // Strip 15 (index 14): tz = barSpacing
-        d[14][2] = BAR_SPACING;
-        // Strip 16 (index 15): ty = barSpacing
-        d[15][1] = BAR_SPACING;
         return d;
     }
 
@@ -145,15 +153,22 @@ public class UIMikeyModelingTool extends UICollapsibleSection {
     public static float[][] loadMappingFromDisk() {
         File file = new File(MAPPING_FILE);
         if (!file.exists()) {
+            System.out.println("UIMikeyModelingTool: no mapping file found, using defaults");
             return null;
         }
         try (FileReader reader = new FileReader(file)) {
             Type type = new TypeToken<float[][]>() {}.getType();
             float[][] values = new Gson().fromJson(reader, type);
-            if (values != null && values.length == STRIP_COUNT && values[0].length == COLUMN_LABELS.length) {
+            int rows = (values != null) ? values.length : 0;
+            int cols = (values != null && values.length > 0) ? values[0].length : 0;
+            System.out.println("UIMikeyModelingTool: loaded mapping file with " + rows + " rows, " + cols + " cols");
+            if (rows == STRIP_COUNT && cols == COLUMN_LABELS.length) {
+                System.out.println("UIMikeyModelingTool: using loaded mapping (54 strips)");
                 return values;
             }
-        } catch (IOException e) {
+            System.out.println("UIMikeyModelingTool: WRONG dimensions (got " + rows + "x" + cols
+                + ", expected " + STRIP_COUNT + "x" + COLUMN_LABELS.length + "), using defaults");
+        } catch (Exception e) {
             System.err.println("UIMikeyModelingTool: failed to load mapping, using defaults");
             e.printStackTrace();
         }

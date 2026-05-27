@@ -29,10 +29,9 @@ public class MikeyShow implements Show {
     @Override
     public void setupLx(LX lx) {
         MikeyModel model = (MikeyModel) lx.model;
-        MikeyPixlite pixlite1 = new MikeyPixlite(lx, "10.200.1.2", model, 0);      // strips 0-7
-        lx.addOutput(pixlite1);
-        MikeyPixlite pixlite2 = new MikeyPixlite(lx, "10.200.1.3", model, 8);      // strips 8-15
-        lx.addOutput(pixlite2);
+        // Single Pixlite outputting to 54 universes (one per strip)
+        MikeyPixlite pixlite = new MikeyPixlite(lx, "10.200.1.2", model);
+        lx.addOutput(pixlite);
     }
 
     @Override
@@ -52,28 +51,29 @@ public class MikeyShow implements Show {
 
             float[][] mapping = UIMikeyModelingTool.loadMappingFromDisk();
             if (mapping == null) {
+                System.out.println("MikeyShow: using default mapping (54 strips)");
                 mapping = buildDefaultMapping();
             }
+            System.out.println("MikeyShow: building " + mapping.length + " strips from mapping");
             for (int i = 0; i < mapping.length; i++) {
                 float[] m = mapping[i];
                 addStrip(m[0], m[1], m[2], m[3], (int) m[4], m[5], t, strips);
             }
+            System.out.println("MikeyShow: created model with " + strips.size() + " strips");
             return new MikeyModel(strips);
         }
 
         private static float[][] buildDefaultMapping() {
-            float[][] d = new float[16][6];
+            float[][] d = new float[54][6];
             int barSpacing = 24;
-            for (int i = 0; i < 16; i++) {
-                d[i][0] = barSpacing * i; // tx
-                d[i][1] = 0f;             // ty
-                d[i][2] = 0f;             // tz
-                d[i][3] = 1.57f;          // rz
-                d[i][4] = 60f;            // px
-                d[i][5] = 1f;             // h
+            for (int i = 0; i < 54; i++) {
+                d[i][0] = barSpacing * i; // tx - spaced in a line
+                d[i][1] = 0f;           // ty - same y for all
+                d[i][2] = 0f;           // tz - same z for all
+                d[i][3] = 1.57f;        // rz
+                d[i][4] = 60f;          // px
+                d[i][5] = 1f;           // h
             }
-            d[14][2] = barSpacing; // strip 15 tz
-            d[15][1] = barSpacing; // strip 16 ty
             return d;
         }
 
@@ -91,12 +91,16 @@ public class MikeyShow implements Show {
         }
     }
     static class MikeyPixlite extends SimplePixlite {
-        public MikeyPixlite(LX lx, String ip, MikeyModel model, int stripOffset) {
+        public MikeyPixlite(LX lx, String ip, MikeyModel model) {
             super(lx, ip);
-            for (int i = 0; i < 8; i++) {
-                addPixliteOutput(
-                    new PointsGrouping(String.valueOf(i + 1))
-                        .addPoints(model.getStripByIndex(i + stripOffset).getPoints()));
+            // 54 strips, each strip gets its own universe (universes 0-53)
+            for (int i = 0; i < 54; i++) {
+                addPixliteOutputMultiUniverse(
+                    new PointsGrouping(String.valueOf(i))
+                        .addPoints(model.getStripByIndex(i).getPoints()),
+                    i,  // firstUniverse = strip index (0-53)
+                    1   // maxUniverses = 1 per strip
+                );
             }
         }
 
