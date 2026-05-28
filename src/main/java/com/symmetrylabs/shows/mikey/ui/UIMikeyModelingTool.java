@@ -9,14 +9,20 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
+import heronarts.lx.LX;
+import heronarts.lx.model.LXModel;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.transform.LXTransform;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UITabFocus;
 import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UIObject;
 import heronarts.p3lx.ui.component.UIButton;
+import heronarts.p3lx.ui.component.UIDoubleBox;
 import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.component.UITextBox;
+import com.symmetrylabs.slstudio.model.Strip;
 import processing.core.PConstants;
 
 public class UIMikeyModelingTool extends UI2dContainer {
@@ -45,8 +51,8 @@ public class UIMikeyModelingTool extends UI2dContainer {
     private final TabbableTextBox[] countBoxes = new TabbableTextBox[UNIVERSE_COUNT];
 
     // ── strip parameter boxes, built dynamically ──────────────────────────────
-    // Indexed as stripInputs[globalStripIndex][col]
-    private List<TabbableTextBox[]> stripInputs = new ArrayList<>();
+    // Indexed as stripInputs[globalStripIndex][col]  (UIDoubleBox for draggable numeric cols)
+    private List<UIDoubleBox[]> stripInputs = new ArrayList<>();
 
     // Current per-universe strip counts (mirrors countBoxes values after apply)
     private int[] stripCounts = new int[UNIVERSE_COUNT];
@@ -60,7 +66,17 @@ public class UIMikeyModelingTool extends UI2dContainer {
     // Y offset of gridContainer within the outer panel (computed once in constructor)
     private float gridContainerY;
 
+    // Live model reference for real-time point updates (set via setModel)
+    private java.util.List<Strip> liveStrips = null;
+    private LXModel liveModel = null;
+
     // ─────────────────────────────────────────────────────────────────────────
+
+    /** Call this after the model is built to enable real-time point dragging. */
+    public void setModel(LXModel model, java.util.List<Strip> strips) {
+        this.liveModel = model;
+        this.liveStrips = strips;
+    }
 
     public UIMikeyModelingTool(UI ui, float x, float y, float w) {
         super(x, y, w, 2000);  // tall enough; inner content is what matters
@@ -185,6 +201,14 @@ public class UIMikeyModelingTool extends UI2dContainer {
     // ── Core grid builder ─────────────────────────────────────────────────────
 
     private void buildStripGrid(float[][] existingStrips) {
+        buildStripGrid(existingStrips, -1, -1);
+    }
+
+    /**
+     * @param insertAfterGlobalIndex  if >= 0, a blank row is inserted after this global strip index
+     * @param insertInUniverse        the universe (0-based) that receives the inserted row
+     */
+    private void buildStripGrid(float[][] existingStrips, int insertAfterGlobalIndex, int insertInUniverse) {
         // Remove all existing children from gridContainer
         for (UIObject child : new ArrayList<>(gridContainer.getChildren())) {
             ((UI2dComponent) child).removeFromContainer();
@@ -193,11 +217,13 @@ public class UIMikeyModelingTool extends UI2dContainer {
 
         final float labelColW = 22f;
         final float gap       = 2f;
+        final float plusW     = 16f;
+        final float btnsW     = plusW * 2 + gap;  // + and - together
         final float gridLeft  = labelColW + gap;
         final float boxH      = 16f;
         final float rowH      = boxH + 2f;
         final float uHeaderH  = 14f;
-        final float colW      = Math.max(26f, (panelW - gridLeft - 4f - gap * (COLUMN_LABELS.length - 1)) / COLUMN_LABELS.length);
+        final float colW      = Math.max(26f, (panelW - gridLeft - btnsW - gap - 4f - gap * (COLUMN_LABELS.length - 1)) / COLUMN_LABELS.length);
 
         // Column headers
         for (int c = 0; c < COLUMN_LABELS.length; c++) {
@@ -210,6 +236,8 @@ public class UIMikeyModelingTool extends UI2dContainer {
 
         float curY = 14f;
         int globalRow = 0;
+        // Track how many source rows we've consumed (insertions don't consume source rows)
+        int srcRow = 0;
 
         for (int u = 0; u < UNIVERSE_COUNT; u++) {
             int count = stripCounts[u];
@@ -223,22 +251,65 @@ public class UIMikeyModelingTool extends UI2dContainer {
             curY += uHeaderH;
 
             for (int s = 0; s < count; s++) {
+                final int capturedGlobalRow = globalRow;
+                final int capturedUniverse  = u;
+
                 new UILabel(0, curY + 2, labelColW, boxH - 2)
                     .setLabel(String.valueOf(s + 1))
                     .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
                     .addToContainer(gridContainer);
 
-                TabbableTextBox[] row = new TabbableTextBox[COLUMN_LABELS.length];
+                UIDoubleBox[] row = new UIDoubleBox[COLUMN_LABELS.length];
+
+                // If this is the newly inserted row, fill with defaults; otherwise use source data
+                boolean isInserted = (insertAfterGlobalIndex >= 0
+                    && u == insertInUniverse
+                    && globalRow == insertAfterGlobalIndex + 1);
+
+                final int capturedStripIndex = globalRow;
                 for (int c = 0; c < COLUMN_LABELS.length; c++) {
                     float cx = gridLeft + c * (colW + gap);
-                    TabbableTextBox box = new TabbableTextBox(cx, curY, colW, boxH);
-                    float defaultVal = defaultValue(c, globalRow);
-                    float val = (existingStrips != null && globalRow < existingStrips.length)
-                        ? existingStrips[globalRow][c] : defaultVal;
-                    box.setValue(formatNumber(val));
+                    double rangeMin = (c == 4) ? 1 : -9999;
+                    double rangeMax = (c == 4) ? 9999 : 9999;
+                    final int capturedCol = c;
+                    UIDoubleBox box = new UIDoubleBox(cx, curY, colW, boxH) {
+                        @Override
+                        protected void onValueChange(double value) {
+                            updateLiveStrip(capturedStripIndex);
+                        }
+                    };
+                    box.setRange(rangeMin, rangeMax);
+                    float val;
+                    if (isInserted) {
+                        val = defaultValue(c, globalRow);
+                    } else {
+                        float defaultVal = defaultValue(c, globalRow);
+                        val = (existingStrips != null && srcRow < existingStrips.length)
+                            ? existingStrips[srcRow][c] : defaultVal;
+                    }
+                    box.setValue(val);
                     box.addToContainer(gridContainer);
                     row[c] = box;
                 }
+
+                // + and - buttons at end of row
+                float plusX  = gridLeft + COLUMN_LABELS.length * (colW + gap);
+                float minusX = plusX + plusW + gap;
+                new UIButton(plusX, curY, plusW, boxH) {
+                    @Override
+                    protected void onToggle(boolean active) {
+                        if (active) insertStripAfter(capturedGlobalRow, capturedUniverse);
+                    }
+                }.setMomentary(true).setLabel("+").addToContainer(gridContainer);
+                final int capturedCount = count;
+                new UIButton(minusX, curY, plusW, boxH) {
+                    @Override
+                    protected void onToggle(boolean active) {
+                        if (active) removeStrip(capturedGlobalRow, capturedUniverse, capturedCount);
+                    }
+                }.setMomentary(true).setLabel("-").addToContainer(gridContainer);
+
+                if (!isInserted) srcRow++;
                 stripInputs.add(row);
                 curY += rowH;
                 globalRow++;
@@ -251,6 +322,58 @@ public class UIMikeyModelingTool extends UI2dContainer {
         setSize(panelW, gridContainerY + curY + 20);
 
         System.out.println("UIMikeyModelingTool: built grid with " + globalRow + " total strips across " + UNIVERSE_COUNT + " universes");
+    }
+
+    /** Insert a blank strip after globalRow in the given universe, then rebuild. */
+    private void insertStripAfter(int globalRow, int universe) {
+        float[][] snapshot = snapshotStripValues();
+        stripCounts[universe]++;
+        countBoxes[universe].setValue(String.valueOf(stripCounts[universe]));
+        buildStripGrid(snapshot, globalRow, universe);
+    }
+
+    /** Remove the strip at globalRow from the given universe, then rebuild. */
+    private void removeStrip(int globalRow, int universe, int universeStripCount) {
+        if (universeStripCount <= 1) return;  // keep at least 1 strip per universe
+        float[][] snapshot = snapshotStripValues();
+        // Delete row at globalRow from snapshot
+        float[][] shrunk = new float[snapshot.length - 1][COLUMN_LABELS.length];
+        for (int i = 0, j = 0; i < snapshot.length; i++) {
+            if (i != globalRow) shrunk[j++] = snapshot[i];
+        }
+        stripCounts[universe]--;
+        countBoxes[universe].setValue(String.valueOf(stripCounts[universe]));
+        buildStripGrid(shrunk);
+    }
+
+    /** Recompute the LXPoint positions for strip at globalIndex using current box values. */
+    private void updateLiveStrip(int globalIndex) {
+        if (liveStrips == null || globalIndex >= liveStrips.size()) return;
+        if (globalIndex >= stripInputs.size()) return;
+        UIDoubleBox[] row = stripInputs.get(globalIndex);
+        float tx  = (float) row[0].getValue();
+        float ty  = (float) row[1].getValue();
+        float tz  = (float) row[2].getValue();
+        float az  = (float) row[3].getValue();
+        float pitch = (float) row[5].getValue();  // d = pixelPitch/height
+
+        float rotZRad = (float) Math.toRadians(az > 180f ? az - 360f : az);
+
+        Strip strip = liveStrips.get(globalIndex);
+        LXTransform t = new LXTransform();
+        t.translate(tx, ty, tz);
+        t.rotateZ(rotZRad);
+        List<LXPoint> points = strip.getPoints();
+        for (int i = 0; i < points.size(); i++) {
+            t.push();
+            t.translate(pitch * i, 0, 0);
+            points.get(i).update(t.x(), t.y(), t.z());
+            t.pop();
+        }
+        // Notify UIGLPointCloud to re-upload vertex positions to GPU
+        if (liveModel != null) {
+            liveModel.bang();
+        }
     }
 
     private float defaultValue(int col, int stripIndex) {
@@ -272,11 +395,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
         float[][] out = new float[n][COLUMN_LABELS.length];
         for (int r = 0; r < n; r++) {
             for (int c = 0; c < COLUMN_LABELS.length; c++) {
-                try {
-                    out[r][c] = Float.parseFloat(stripInputs.get(r)[c].getValue().trim());
-                } catch (NumberFormatException e) {
-                    out[r][c] = 0f;
-                }
+                out[r][c] = (float) stripInputs.get(r)[c].getValue();
             }
         }
         return out;
@@ -289,11 +408,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
         // Read counts from boxes (in case user edited without pressing Apply)
         file.stripCounts = new int[UNIVERSE_COUNT];
         for (int u = 0; u < UNIVERSE_COUNT; u++) {
-            try {
-                file.stripCounts[u] = Math.max(1, Integer.parseInt(countBoxes[u].getValue().trim()));
-            } catch (NumberFormatException e) {
-                file.stripCounts[u] = 1;
-            }
+            file.stripCounts[u] = stripCounts[u];
         }
         file.strips = snapshotStripValues();
         File f = new File(MAPPING_FILE);
@@ -382,6 +497,13 @@ public class UIMikeyModelingTool extends UI2dContainer {
     /** UITextBox subclass that participates in Tab key focus traversal. */
     public static class TabbableTextBox extends UITextBox implements UITabFocus {
         public TabbableTextBox(float x, float y, float w, float h) {
+            super(x, y, w, h);
+        }
+    }
+
+    /** UIDoubleBox with a finer drag sensitivity (1 unit per 3px) for strip params. */
+    public static class DraggableDoubleBox extends UIDoubleBox {
+        public DraggableDoubleBox(float x, float y, float w, float h) {
             super(x, y, w, h);
         }
     }
