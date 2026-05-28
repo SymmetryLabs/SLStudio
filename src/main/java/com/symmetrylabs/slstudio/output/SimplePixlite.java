@@ -60,8 +60,8 @@ public class SimplePixlite extends ArtNetOutput {
     int universesPerOutput = 1;
     int pixelsPerUniverse = MAX_NUM_POINTS_PER_UNIVERSE;
     int counter = 0;
-    // outputIndex is 0-based, universes start at 1
-    int firstUniverse = outputIndex - 1;
+    // outputIndex is 1-based, universes start at 1
+    int firstUniverse = outputIndex;
     for (int u = 0; u < universesPerOutput; u++) {
         int universe = firstUniverse + u;
         int numIndices = Math.min(pixelsPerUniverse, numPoints - counter);

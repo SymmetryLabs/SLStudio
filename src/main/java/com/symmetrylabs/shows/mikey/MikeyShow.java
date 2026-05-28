@@ -3,6 +3,7 @@ package com.symmetrylabs.shows.mikey;
 import com.google.common.collect.Lists;
 import com.symmetrylabs.shows.Show;
 import com.symmetrylabs.shows.mikey.ui.UIMikeyModelingTool;
+import static com.symmetrylabs.shows.mikey.ui.UIMikeyModelingTool.UNIVERSE_COUNT;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.CandyBar;
 import com.symmetrylabs.slstudio.model.SLModel;
@@ -29,8 +30,8 @@ public class MikeyShow implements Show {
     @Override
     public void setupLx(LX lx) {
         MikeyModel model = (MikeyModel) lx.model;
-        // Single Pixlite outputting to 54 universes (one per strip)
-        MikeyPixlite pixlite = new MikeyPixlite(lx, "10.200.1.2", model);
+        // Pixlite with UNIVERSE_COUNT outputs, each carrying STRIPS_PER_UNIVERSE strips
+        MikeyPixlite pixlite = new MikeyPixlite(lx, "192.168.1.50", model);
         lx.addOutput(pixlite);
     }
 
@@ -49,30 +50,35 @@ public class MikeyShow implements Show {
             List<Strip> strips = new ArrayList<Strip>();
             LXTransform t = new LXTransform();
 
-            float[][] mapping = UIMikeyModelingTool.loadMappingFromDisk();
-            if (mapping == null) {
-                System.out.println("MikeyShow: using default mapping (54 strips)");
-                mapping = buildDefaultMapping();
+            int[] counts = UIMikeyModelingTool.loadStripCountsFromDisk();
+            float[][] mapping = UIMikeyModelingTool.loadStripsFromDisk();
+            int totalStrips = 0;
+            for (int c : counts) totalStrips += c;
+            if (mapping == null || mapping.length != totalStrips) {
+                System.out.println("MikeyShow: using default mapping (" + totalStrips + " strips)");
+                mapping = buildDefaultMapping(totalStrips);
             }
             System.out.println("MikeyShow: building " + mapping.length + " strips from mapping");
             for (int i = 0; i < mapping.length; i++) {
                 float[] m = mapping[i];
-                addStrip(m[0], m[1], m[2], m[3], (int) m[4], m[5], t, strips);
+                float az = m[3] > 180f ? m[3] - 360f : m[3];  // map 0-360 to -180..+180
+                float rotZRad = (float) Math.toRadians(az);
+                addStrip(m[0], m[1], m[2], rotZRad, (int) m[4], m[5], t, strips);
             }
             System.out.println("MikeyShow: created model with " + strips.size() + " strips");
             return new MikeyModel(strips);
         }
 
-        private static float[][] buildDefaultMapping() {
-            float[][] d = new float[54][6];
+        private static float[][] buildDefaultMapping(int totalStrips) {
+            float[][] d = new float[totalStrips][6];
             int barSpacing = 24;
-            for (int i = 0; i < 54; i++) {
+            for (int i = 0; i < totalStrips; i++) {
                 d[i][0] = barSpacing * i; // tx - spaced in a line
-                d[i][1] = 0f;           // ty - same y for all
-                d[i][2] = 0f;           // tz - same z for all
-                d[i][3] = 1.57f;        // rz
-                d[i][4] = 60f;          // px
-                d[i][5] = 1f;           // h
+                d[i][1] = 0f;            // ty - same y for all
+                d[i][2] = 0f;            // tz - same z for all
+                d[i][3] = 90f;           // rz (degrees)
+                d[i][4] = 60f;           // px
+                d[i][5] = 1f;            // h
             }
             return d;
         }
@@ -93,14 +99,15 @@ public class MikeyShow implements Show {
     static class MikeyPixlite extends SimplePixlite {
         public MikeyPixlite(LX lx, String ip, MikeyModel model) {
             super(lx, ip);
-            // 54 strips, each strip gets its own universe (universes 0-53)
-            for (int i = 0; i < 54; i++) {
-                addPixliteOutputMultiUniverse(
-                    new PointsGrouping(String.valueOf(i))
-                        .addPoints(model.getStripByIndex(i).getPoints()),
-                    i,  // firstUniverse = strip index (0-53)
-                    1   // maxUniverses = 1 per strip
-                );
+            // UNIVERSE_COUNT outputs; each output carries a variable number of strips per universe
+            int[] counts = UIMikeyModelingTool.loadStripCountsFromDisk();
+            int stripIndex = 0;
+            for (int u = 0; u < UNIVERSE_COUNT; u++) {
+                PointsGrouping pg = new PointsGrouping(String.valueOf(u + 1));
+                for (int s = 0; s < counts[u]; s++) {
+                    pg.addPoints(model.getStripByIndex(stripIndex++).getPoints());
+                }
+                addPixliteOutput(pg);
             }
         }
 
