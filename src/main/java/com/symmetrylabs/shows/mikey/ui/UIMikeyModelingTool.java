@@ -45,10 +45,12 @@ public class UIMikeyModelingTool extends UI2dContainer {
     public static class MikeyMappingFile {
         public int[]     stripCounts;  // length = UNIVERSE_COUNT
         public float[][] strips;       // length = sum(stripCounts), each row is 6 params
+        public String[]  universeLabels; // length = UNIVERSE_COUNT, user-defined labels
     }
 
     // ── per-universe count boxes (always 54) ──────────────────────────────────
-    private final TabbableTextBox[] countBoxes = new TabbableTextBox[UNIVERSE_COUNT];
+    private final TabbableTextBox[] countBoxes  = new TabbableTextBox[UNIVERSE_COUNT];
+    private final TabbableTextBox[] labelBoxes  = new TabbableTextBox[UNIVERSE_COUNT];
 
     // ── strip parameter boxes, built dynamically ──────────────────────────────
     // Indexed as stripInputs[globalStripIndex][col]  (UIDoubleBox for draggable numeric cols)
@@ -134,6 +136,9 @@ public class UIMikeyModelingTool extends UI2dContainer {
             for (int u = 0; u < UNIVERSE_COUNT; u++) {
                 stripCounts[u] = Math.max(1, saved.stripCounts[u]);
                 countBoxes[u].setValue(String.valueOf(stripCounts[u]));
+                if (saved.universeLabels != null && u < saved.universeLabels.length && saved.universeLabels[u] != null) {
+                    labelBoxes[u].setValue(saved.universeLabels[u]);
+                }
             }
             buildStripGrid(saved.strips);
         } else {
@@ -153,6 +158,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
     static final float COUNT_BOX_START_Y = 36f;  // below "Strips per universe" label
     // Each cell = label (10px) + box (COUNT_BOX_H) + gap
     static final float COUNT_CELL_H = 10f + COUNT_BOX_H + COUNT_BOX_GAP;
+    static final float COUNT_CELL_W = COUNT_BOX_W;
 
     /** Y coordinate of the first pixel below the count-box grid. */
     static float countBoxGridBottom() {
@@ -168,16 +174,17 @@ public class UIMikeyModelingTool extends UI2dContainer {
             int row = u / COUNT_BOX_COLS;
             float cellX = col * (COUNT_BOX_W + COUNT_BOX_GAP);
             float cellY = COUNT_BOX_START_Y + row * COUNT_CELL_H;
-            // Label above box showing universe number 1-54
+            // Universe number label above the count box
             new UILabel(cellX, cellY, COUNT_BOX_W, 10f)
                 .setLabel(String.valueOf(u + 1))
                 .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
                 .setFontColor(0xFF888888)
                 .addToContainer(this);
-            TabbableTextBox box = new TabbableTextBox(cellX, cellY + 10f, COUNT_BOX_W, COUNT_BOX_H);
-            box.setValue(String.valueOf(DEFAULT_STRIPS_PER_UNIVERSE));
-            box.addToContainer(this);
-            countBoxes[u] = box;
+            // Count spinner
+            TabbableTextBox countBox = new TabbableTextBox(cellX, cellY + 10f, COUNT_BOX_W, COUNT_BOX_H);
+            countBox.setValue(String.valueOf(DEFAULT_STRIPS_PER_UNIVERSE));
+            countBox.addToContainer(this);
+            countBoxes[u] = countBox;
         }
     }
 
@@ -218,20 +225,35 @@ public class UIMikeyModelingTool extends UI2dContainer {
         final float labelColW = 22f;
         final float gap       = 2f;
         final float plusW     = 16f;
-        final float btnsW     = plusW * 2 + gap;  // + and - together
+        final float btnsW     = plusW * 2 + gap;  // + and - together (insert/remove strip)
+        final float bumpBtnW  = 13f;  // width of each inline ±5 bump button
         final float gridLeft  = labelColW + gap;
         final float boxH      = 16f;
         final float rowH      = boxH + 2f;
         final float uHeaderH  = 14f;
-        final float colW      = Math.max(26f, (panelW - gridLeft - btnsW - gap - 4f - gap * (COLUMN_LABELS.length - 1)) / COLUMN_LABELS.length);
+        // Each X/Y cell = bumpBtn + gap + box + gap + bumpBtn; other cells = box only
+        // Total fixed width used by X and Y bump buttons: 4 * (bumpBtnW + gap)
+        final float bumpExtra = 4 * (bumpBtnW + gap);
+        final float colW      = Math.max(26f, (panelW - gridLeft - btnsW - gap - 4f - bumpExtra - gap * (COLUMN_LABELS.length - 1)) / COLUMN_LABELS.length);
 
-        // Column headers
+        // Column headers — X and Y cols are offset by their bump buttons
+        float hdrX = gridLeft;
         for (int c = 0; c < COLUMN_LABELS.length; c++) {
-            float cx = gridLeft + c * (colW + gap);
-            new UILabel(cx, 0, colW, 12)
-                .setLabel(COLUMN_LABELS[c])
-                .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
-                .addToContainer(gridContainer);
+            if (c == 0 || c == 1) {
+                // center label over [bump-][box][bump+]
+                float cellW = bumpBtnW + gap + colW + gap + bumpBtnW;
+                new UILabel(hdrX, 0, cellW, 12)
+                    .setLabel(COLUMN_LABELS[c])
+                    .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+                    .addToContainer(gridContainer);
+                hdrX += cellW + gap;
+            } else {
+                new UILabel(hdrX, 0, colW, 12)
+                    .setLabel(COLUMN_LABELS[c])
+                    .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+                    .addToContainer(gridContainer);
+                hdrX += colW + gap;
+            }
         }
 
         float curY = 14f;
@@ -242,12 +264,24 @@ public class UIMikeyModelingTool extends UI2dContainer {
         for (int u = 0; u < UNIVERSE_COUNT; u++) {
             int count = stripCounts[u];
 
-            // Universe header (1-indexed)
-            new UILabel(0, curY, panelW - 4, uHeaderH - 2)
-                .setLabel("U" + (u + 1) + " (" + count + " strip" + (count == 1 ? "" : "s") + ")")
+            // Universe header: "U1 (N strips)" label + inline label text input
+            String headerText = "U" + (u + 1) + " (" + count + " strip" + (count == 1 ? "" : "s") + "):";
+            float headerLabelW = 90f;
+            new UILabel(0, curY, headerLabelW, uHeaderH - 2)
+                .setLabel(headerText != null ? headerText : "")
                 .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
                 .setFontColor(0xFFAAAAAA)
                 .addToContainer(gridContainer);
+            // Inline label text input — reuse existing labelBox so value persists across rebuilds
+            if (labelBoxes[u] == null) {
+                labelBoxes[u] = new TabbableTextBox(headerLabelW + 2, curY, panelW - headerLabelW - 6, uHeaderH - 2);
+                labelBoxes[u].setValue("");
+            } else {
+                labelBoxes[u].setX(headerLabelW + 2);
+                labelBoxes[u].setY(curY);
+                labelBoxes[u].setSize(panelW - headerLabelW - 6, uHeaderH - 2);
+            }
+            labelBoxes[u].addToContainer(gridContainer);
             curY += uHeaderH;
 
             for (int s = 0; s < count; s++) {
@@ -267,42 +301,90 @@ public class UIMikeyModelingTool extends UI2dContainer {
                     && globalRow == insertAfterGlobalIndex + 1);
 
                 final int capturedStripIndex = globalRow;
+                // Compute x positions for each column, with inline bump buttons for X (col 0) and Y (col 1)
+                // Layout: [strip#] [X-][tx][X+] [Y-][ty][Y+] [tz] [az] [px] [d] [+][-]
+                float curX = gridLeft;
                 for (int c = 0; c < COLUMN_LABELS.length; c++) {
-                    float cx = gridLeft + c * (colW + gap);
                     double rangeMin = (c == 4) ? 1 : -9999;
                     double rangeMax = (c == 4) ? 9999 : 9999;
                     final int capturedCol = c;
-                    UIDoubleBox box = new UIDoubleBox(cx, curY, colW, boxH) {
-                        @Override
-                        protected void onValueChange(double value) {
-                            updateLiveStrip(capturedStripIndex);
+                    // For tx (col 0) and ty (col 1): place [-] box [+] inline
+                    if (c == 0 || c == 1) {
+                        final float bumpX = curX;
+                        final int bumpCol = c;
+                        // [-] button
+                        UIButton minBtn = new UIButton(bumpX, curY, bumpBtnW, boxH) {
+                            @Override protected void onToggle(boolean active) {
+                                if (active) {
+                                    UIDoubleBox b = row[bumpCol];
+                                    if (b != null) b.setValue(b.getValue() - 5);
+                                }
+                            }
+                        };
+                        minBtn.setMomentary(true).setLabel("-").addToContainer(gridContainer);
+                        curX += bumpBtnW + gap;
+                        // value box
+                        float boxX = curX;
+                        UIDoubleBox box = new UIDoubleBox(boxX, curY, colW, boxH) {
+                            @Override protected void onValueChange(double value) {
+                                updateLiveStrip(capturedStripIndex);
+                            }
+                        };
+                        box.setRange(rangeMin, rangeMax);
+                        float val;
+                        if (isInserted) {
+                            val = defaultValue(c, globalRow);
+                        } else {
+                            float defaultVal = defaultValue(c, globalRow);
+                            val = (existingStrips != null && srcRow < existingStrips.length)
+                                ? existingStrips[srcRow][c] : defaultVal;
                         }
-                    };
-                    box.setRange(rangeMin, rangeMax);
-                    float val;
-                    if (isInserted) {
-                        val = defaultValue(c, globalRow);
+                        box.setValue(val);
+                        box.addToContainer(gridContainer);
+                        row[c] = box;
+                        curX += colW + gap;
+                        // [+] button
+                        new UIButton(curX, curY, bumpBtnW, boxH) {
+                            @Override protected void onToggle(boolean active) {
+                                if (active) {
+                                    UIDoubleBox b = row[bumpCol];
+                                    if (b != null) b.setValue(b.getValue() + 5);
+                                }
+                            }
+                        }.setMomentary(true).setLabel("+").addToContainer(gridContainer);
+                        curX += bumpBtnW + gap;
                     } else {
-                        float defaultVal = defaultValue(c, globalRow);
-                        val = (existingStrips != null && srcRow < existingStrips.length)
-                            ? existingStrips[srcRow][c] : defaultVal;
+                        // Normal column — just the value box
+                        UIDoubleBox box = new UIDoubleBox(curX, curY, colW, boxH) {
+                            @Override protected void onValueChange(double value) {
+                                updateLiveStrip(capturedStripIndex);
+                            }
+                        };
+                        box.setRange(rangeMin, rangeMax);
+                        float val;
+                        if (isInserted) {
+                            val = defaultValue(c, globalRow);
+                        } else {
+                            float defaultVal = defaultValue(c, globalRow);
+                            val = (existingStrips != null && srcRow < existingStrips.length)
+                                ? existingStrips[srcRow][c] : defaultVal;
+                        }
+                        box.setValue(val);
+                        box.addToContainer(gridContainer);
+                        row[c] = box;
+                        curX += colW + gap;
                     }
-                    box.setValue(val);
-                    box.addToContainer(gridContainer);
-                    row[c] = box;
                 }
 
-                // + and - buttons at end of row
-                float plusX  = gridLeft + COLUMN_LABELS.length * (colW + gap);
-                float minusX = plusX + plusW + gap;
-                new UIButton(plusX, curY, plusW, boxH) {
+                // Insert/remove strip buttons at end of row
+                new UIButton(curX, curY, plusW, boxH) {
                     @Override
                     protected void onToggle(boolean active) {
                         if (active) insertStripAfter(capturedGlobalRow, capturedUniverse);
                     }
                 }.setMomentary(true).setLabel("+").addToContainer(gridContainer);
                 final int capturedCount = count;
-                new UIButton(minusX, curY, plusW, boxH) {
+                new UIButton(curX + plusW + gap, curY, plusW, boxH) {
                     @Override
                     protected void onToggle(boolean active) {
                         if (active) removeStrip(capturedGlobalRow, capturedUniverse, capturedCount);
@@ -407,8 +489,10 @@ public class UIMikeyModelingTool extends UI2dContainer {
         MikeyMappingFile file = new MikeyMappingFile();
         // Read counts from boxes (in case user edited without pressing Apply)
         file.stripCounts = new int[UNIVERSE_COUNT];
+        file.universeLabels = new String[UNIVERSE_COUNT];
         for (int u = 0; u < UNIVERSE_COUNT; u++) {
             file.stripCounts[u] = stripCounts[u];
+            file.universeLabels[u] = labelBoxes[u] != null ? labelBoxes[u].getValue() : "";
         }
         file.strips = snapshotStripValues();
         File f = new File(MAPPING_FILE);

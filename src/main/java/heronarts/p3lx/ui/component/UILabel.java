@@ -133,7 +133,7 @@ public class UILabel extends UI2dComponent {
             ty = this.height / 2;
             break;
         }
-        String str = clipTextToWidth(pg, this.label, this.width - this.leftPadding - this.rightPadding);
+        String str = clipTextToWidth(pg, this.label != null ? this.label : "", this.width - this.leftPadding - this.rightPadding);
         pg.textAlign(this.textAlignHorizontal, this.textAlignVertical);
         pg.text(str, tx + this.textOffsetX, ty + this.textOffsetY);
     }
