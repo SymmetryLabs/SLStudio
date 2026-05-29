@@ -42,6 +42,23 @@ public class MikeyShow implements Show {
         // Wire live strip list so dragging params moves pixels in the 3D view
         MikeyModel model = (MikeyModel) lx.model;
         tool.setModel(model, model.getStrips());
+        // Set camera to center on model and use the model's bounding box for radius.
+        // SLStudio.onUIReady hardcodes setMaxRadius(150*FEET=1800) and setRadius(25*FEET=300)
+        // before calling setupUi, so we must override both here.
+        float cx = model.cx;
+        float cy = model.cy;
+        float cz = model.cz;
+        float viewRadius = Math.max(model.xRange, Math.max(model.yRange, model.zRange)) * 0.75f;
+        if (viewRadius < 100) viewRadius = 100;
+        System.out.println("MikeyShow: model bounds x=" + model.xMin + ".." + model.xMax +
+            " y=" + model.yMin + ".." + model.yMax + " center=(" + cx + "," + cy + "," + cz + ")" +
+            " xRange=" + model.xRange + " viewRadius=" + viewRadius);
+        ui.preview.setRadiusBounds(1, Float.MAX_VALUE);
+        ui.preview.setCenter(cx, cy, cz);
+        ui.preview.setRadius(viewRadius);
+        // Increase depth field so near clip never eats points during panning
+        ui.preview.depth.setValue(2);
+        System.out.println("MikeyShow: camera set center=(" + cx + "," + cy + "," + cz + ") radius=" + viewRadius);
     }
 
     static class MikeyModel extends StripsModel<Strip> {

@@ -175,6 +175,12 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
 
     private boolean showCenter = false;
 
+    // Track mouse position to compute clean per-frame deltas (avoids first-frame jump)
+    private float lastMx = 0, lastMy = 0;
+    private boolean hasDragStart = false;
+    private boolean lastMetaDown = false;
+    private boolean lastShiftDown = false;
+
     private final int x;
     private final int y;
     private PGraphics pg;
@@ -598,11 +604,13 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
             pg.ortho(aspect * -halfRadius, aspect * halfRadius, -halfRadius, halfRadius);
         } else {
             float depthFactor = (float) Math.pow(10, this.depth.getValue());
+            float nearClip = Math.max(0.5f, radiusValue / depthFactor);
+            float farClip = radiusValue * depthFactor * 100f;
             pg.perspective(
                 this.perspective.getValuef() / 180.f * PConstants.PI,
                 aspect,
-                radiusValue / depthFactor,
-                radiusValue * depthFactor
+                nearClip,
+                farClip
             );
         }
 
@@ -671,51 +679,87 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         if (mouseEvent.getCount() > 1) {
             focus();
         }
+        lastMx = mx;
+        lastMy = my;
+        hasDragStart = false;
+        lastMetaDown = mouseEvent.isMetaDown() || mouseEvent.isControlDown();
+        lastShiftDown = mouseEvent.isShiftDown();
+    }
+
+    @Override
+    public void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
+        hasDragStart = false;
     }
 
     @Override
     public void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+        boolean metaDown = mouseEvent.isMetaDown() || mouseEvent.isControlDown();
+        boolean shiftDown = mouseEvent.isShiftDown();
+        // Compute our own delta to avoid accumulated first-frame jumps.
+        // Also reset if modifier state changed, or if the raw Processing delta is suspiciously
+        // large (> 40px), which indicates a missed press event (e.g. app focus click on macOS).
+        if (!hasDragStart || metaDown != lastMetaDown || shiftDown != lastShiftDown) {
+            hasDragStart = true;
+            lastMetaDown = metaDown;
+            lastShiftDown = shiftDown;
+            lastMx = mx;
+            lastMy = my;
+            return;  // skip this event entirely — no accumulated delta to apply
+        }
+        lastMetaDown = metaDown;
+        lastShiftDown = shiftDown;
+        float safeDx = mx - lastMx;
+        float safeDy = my - lastMy;
+        lastMx = mx;
+        lastMy = my;
+
         switch (this.interactionMode) {
         case ZOOM:
                 if (mouseEvent.isShiftDown()) {
-                        this.radius.incrementValue(dy);
+                        this.radius.incrementValue(safeDy);
                 } else if (mouseEvent.isMetaDown() || mouseEvent.isControlDown()) {
-                        float dcx = dx * (float) Math.cos(this.thetaDamped.getValuef());
-                        float dcz = dx * (float) Math.sin(this.thetaDamped.getValuef());
-                        setCenter(this.center.x - dcx, this.center.y + dy, this.center.z - dcz);
+                        float panScale = this.radiusDamped.getValuef() / 500f;
+                        float cdx = LXUtils.constrainf(safeDx, -30, 30) * panScale;
+                        float cdy = LXUtils.constrainf(safeDy, -30, 30) * panScale;
+                        float dcx = cdx * (float) Math.cos(this.thetaDamped.getValuef());
+                        float dcz = cdx * (float) Math.sin(this.thetaDamped.getValuef());
+                        setCenter(this.center.x - dcx, this.center.y + cdy, this.center.z - dcz);
                 } else {
-                        this.theta.incrementValue(-dx * .003);
-                        this.phi.incrementValue(dy * .003);
+                        this.theta.incrementValue(-safeDx * .003);
+                        this.phi.incrementValue(safeDy * .003);
                 }
                 break;
         case ZOOM_Z_UP:
             if (mouseEvent.isShiftDown()) {
-                this.radius.incrementValue(dy);
+                this.radius.incrementValue(safeDy);
             } else if (mouseEvent.isMetaDown() || mouseEvent.isControlDown()) {
-                float dcx = dx * (float) Math.cos(this.thetaDamped.getValuef());
-                float dcz = dx * (float) Math.sin(this.thetaDamped.getValuef());
-                setCenter(this.center.x + dcx, this.center.y - dcz, this.center.z + dy);
+                float panScale = this.radiusDamped.getValuef() / 500f;
+                float cdx = LXUtils.constrainf(safeDx, -30, 30) * panScale;
+                float cdy = LXUtils.constrainf(safeDy, -30, 30) * panScale;
+                float dcx = cdx * (float) Math.cos(this.thetaDamped.getValuef());
+                float dcz = cdx * (float) Math.sin(this.thetaDamped.getValuef());
+                setCenter(this.center.x + dcx, this.center.y - dcz, this.center.z + cdy);
             } else {
-                this.theta.incrementValue(-dx * .003);
-                this.phi.incrementValue(dy * .003);
+                this.theta.incrementValue(-safeDx * .003);
+                this.phi.incrementValue(safeDy * .003);
             }
             break;
         case MOVE:
             if (mouseEvent.isMetaDown() || mouseEvent.isShiftDown()) {
                 float costh = (float) Math.cos(this.thetaDamped.getValuef());
-                float sinth = (float) Math.sin(this.thetaDamped.getValuef());;
-                float dex = dx*costh;
-                float dez = -dx*sinth;
-                float dey = -dy;
+                float sinth = (float) Math.sin(this.thetaDamped.getValuef());
+                float dex = safeDx*costh;
+                float dez = -safeDx*sinth;
+                float dey = -safeDy;
                 if (mouseEvent.isShiftDown()) {
-                    dex -= dy*sinth;
-                    dez -= dy*costh;
+                    dex -= safeDy*sinth;
+                    dez -= safeDy*costh;
                     dey = 0;
                 }
                 setEye(this.eye.x + dex, this.eye.y + dey, this.eye.z + dez);
             } else {
-                this.theta.incrementValue(dx * .003);
-                this.phi.incrementValue(-dy * .003);
+                this.theta.incrementValue(safeDx * .003);
+                this.phi.incrementValue(-safeDy * .003);
             }
             break;
         }
@@ -797,8 +841,10 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         if (object.has(KEY_POSITION_Z)) {
             this.positionZ.setValue(object.get(KEY_POSITION_Z).getAsDouble());
         }
-
-
+        // Sync this.center so cmd+drag panning uses the correct base position
+        this.center.x = this.positionX.getValuef();
+        this.center.y = this.positionY.getValuef();
+        this.center.z = this.positionZ.getValuef();
     }
 
 }
