@@ -43,9 +43,10 @@ public class UIMikeyModelingTool extends UI2dContainer {
 
     /** Saved file format. */
     public static class MikeyMappingFile {
-        public int[]     stripCounts;  // length = UNIVERSE_COUNT
-        public float[][] strips;       // length = sum(stripCounts), each row is 6 params
+        public int[]     stripCounts;    // length = UNIVERSE_COUNT
+        public float[][] strips;         // length = sum(stripCounts), each row is 6 params
         public String[]  universeLabels; // length = UNIVERSE_COUNT, user-defined labels
+        public int[]     blackOffsets;   // length = sum(stripCounts), leading black pixels per strip
     }
 
     // ── per-universe count boxes (always 54) ──────────────────────────────────
@@ -55,6 +56,9 @@ public class UIMikeyModelingTool extends UI2dContainer {
     // ── strip parameter boxes, built dynamically ──────────────────────────────
     // Indexed as stripInputs[globalStripIndex][col]  (UIDoubleBox for draggable numeric cols)
     private List<UIDoubleBox[]> stripInputs = new ArrayList<>();
+
+    // ── per-strip black offset input boxes (rebuilt with strip grid) ──────────
+    private List<TabbableTextBox> blackOffsetInputs = new ArrayList<>();
 
     // Current per-universe strip counts (mirrors countBoxes values after apply)
     private int[] stripCounts = new int[UNIVERSE_COUNT];
@@ -140,13 +144,13 @@ public class UIMikeyModelingTool extends UI2dContainer {
                     labelBoxes[u].setValue(saved.universeLabels[u]);
                 }
             }
-            buildStripGrid(saved.strips);
+            buildStripGrid(saved.strips, saved.blackOffsets);
         } else {
             for (int u = 0; u < UNIVERSE_COUNT; u++) {
                 stripCounts[u] = DEFAULT_STRIPS_PER_UNIVERSE;
                 countBoxes[u].setValue(String.valueOf(DEFAULT_STRIPS_PER_UNIVERSE));
             }
-            buildStripGrid(null);
+            buildStripGrid(null, null);
         }
     }
 
@@ -202,25 +206,26 @@ public class UIMikeyModelingTool extends UI2dContainer {
                 countBoxes[u].setValue("1");
             }
         }
-        buildStripGrid(oldStrips);
+        buildStripGrid(oldStrips, snapshotBlackOffsets());
     }
 
     // ── Core grid builder ─────────────────────────────────────────────────────
 
-    private void buildStripGrid(float[][] existingStrips) {
-        buildStripGrid(existingStrips, -1, -1);
+    private void buildStripGrid(float[][] existingStrips, int[] existingBlackOffsets) {
+        buildStripGrid(existingStrips, existingBlackOffsets, -1, -1);
     }
 
     /**
      * @param insertAfterGlobalIndex  if >= 0, a blank row is inserted after this global strip index
      * @param insertInUniverse        the universe (0-based) that receives the inserted row
      */
-    private void buildStripGrid(float[][] existingStrips, int insertAfterGlobalIndex, int insertInUniverse) {
+    private void buildStripGrid(float[][] existingStrips, int[] existingBlackOffsets, int insertAfterGlobalIndex, int insertInUniverse) {
         // Remove all existing children from gridContainer
         for (UIObject child : new ArrayList<>(gridContainer.getChildren())) {
             ((UI2dComponent) child).removeFromContainer();
         }
         stripInputs.clear();
+        blackOffsetInputs.clear();
 
         final float labelColW = 22f;
         final float gap       = 2f;
@@ -236,27 +241,14 @@ public class UIMikeyModelingTool extends UI2dContainer {
         final float bumpExtra = 4 * (bumpBtnW + gap);
         final float colW      = Math.max(26f, (panelW - gridLeft - btnsW - gap - 4f - bumpExtra - gap * (COLUMN_LABELS.length - 1)) / COLUMN_LABELS.length);
 
-        // Column headers — X and Y cols are offset by their bump buttons
-        float hdrX = gridLeft;
-        for (int c = 0; c < COLUMN_LABELS.length; c++) {
-            if (c == 0 || c == 1) {
-                // center label over [bump-][box][bump+]
-                float cellW = bumpBtnW + gap + colW + gap + bumpBtnW;
-                new UILabel(hdrX, 0, cellW, 12)
-                    .setLabel(COLUMN_LABELS[c])
-                    .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
-                    .addToContainer(gridContainer);
-                hdrX += cellW + gap;
-            } else {
-                new UILabel(hdrX, 0, colW, 12)
-                    .setLabel(COLUMN_LABELS[c])
-                    .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
-                    .addToContainer(gridContainer);
-                hdrX += colW + gap;
-            }
-        }
+        final float bkBoxW   = 32f;  // width of black-offset input
+        final float colHdrH = 11f;
 
-        float curY = 14f;
+        // colW must leave room for: label col + bump buttons on X/Y + all cols + insert/remove btns + bk box
+        // recompute here to ensure bkBox fits within panelW
+        final float colWFinal = Math.max(20f, (panelW - gridLeft - btnsW - gap - bkBoxW - gap - 4f - bumpExtra - gap * (COLUMN_LABELS.length - 1)) / COLUMN_LABELS.length);
+
+        float curY = 0f;
         int globalRow = 0;
         // Track how many source rows we've consumed (insertions don't consume source rows)
         int srcRow = 0;
@@ -264,7 +256,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
         for (int u = 0; u < UNIVERSE_COUNT; u++) {
             int count = stripCounts[u];
 
-            // Universe header: "U1 (N strips)" label + inline label text input
+            // Universe header row: "U1 (N strips):" + name text input
             String headerText = "U" + (u + 1) + " (" + count + " strip" + (count == 1 ? "" : "s") + "):";
             float headerLabelW = 90f;
             new UILabel(0, curY, headerLabelW, uHeaderH - 2)
@@ -272,7 +264,6 @@ public class UIMikeyModelingTool extends UI2dContainer {
                 .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
                 .setFontColor(0xFFAAAAAA)
                 .addToContainer(gridContainer);
-            // Inline label text input — reuse existing labelBox so value persists across rebuilds
             if (labelBoxes[u] == null) {
                 labelBoxes[u] = new TabbableTextBox(headerLabelW + 2, curY, panelW - headerLabelW - 6, uHeaderH - 2);
                 labelBoxes[u].setValue("");
@@ -283,6 +274,34 @@ public class UIMikeyModelingTool extends UI2dContainer {
             }
             labelBoxes[u].addToContainer(gridContainer);
             curY += uHeaderH;
+
+            // Column headers for this universe group
+            float hdrX = gridLeft;
+            for (int c = 0; c < COLUMN_LABELS.length; c++) {
+                if (c == 0 || c == 1) {
+                    float cellW = bumpBtnW + gap + colWFinal + gap + bumpBtnW;
+                    new UILabel(hdrX, curY, cellW, colHdrH)
+                        .setLabel(COLUMN_LABELS[c])
+                        .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+                        .setFontColor(0xFF666666)
+                        .addToContainer(gridContainer);
+                    hdrX += cellW + gap;
+                } else {
+                    new UILabel(hdrX, curY, colWFinal, colHdrH)
+                        .setLabel(COLUMN_LABELS[c])
+                        .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+                        .setFontColor(0xFF666666)
+                        .addToContainer(gridContainer);
+                    hdrX += colWFinal + gap;
+                }
+            }
+            // "bk" column header
+            new UILabel(hdrX + btnsW + gap, curY, bkBoxW, colHdrH)
+                .setLabel("bk")
+                .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+                .setFontColor(0xFF666666)
+                .addToContainer(gridContainer);
+            curY += colHdrH;
 
             for (int s = 0; s < count; s++) {
                 final int capturedGlobalRow = globalRow;
@@ -325,7 +344,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
                         curX += bumpBtnW + gap;
                         // value box
                         float boxX = curX;
-                        UIDoubleBox box = new UIDoubleBox(boxX, curY, colW, boxH) {
+                        UIDoubleBox box = new UIDoubleBox(boxX, curY, colWFinal, boxH) {
                             @Override protected void onValueChange(double value) {
                                 updateLiveStrip(capturedStripIndex);
                             }
@@ -342,7 +361,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
                         box.setValue(val);
                         box.addToContainer(gridContainer);
                         row[c] = box;
-                        curX += colW + gap;
+                        curX += colWFinal + gap;
                         // [+] button
                         new UIButton(curX, curY, bumpBtnW, boxH) {
                             @Override protected void onToggle(boolean active) {
@@ -355,7 +374,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
                         curX += bumpBtnW + gap;
                     } else {
                         // Normal column — just the value box
-                        UIDoubleBox box = new UIDoubleBox(curX, curY, colW, boxH) {
+                        UIDoubleBox box = new UIDoubleBox(curX, curY, colWFinal, boxH) {
                             @Override protected void onValueChange(double value) {
                                 updateLiveStrip(capturedStripIndex);
                             }
@@ -372,7 +391,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
                         box.setValue(val);
                         box.addToContainer(gridContainer);
                         row[c] = box;
-                        curX += colW + gap;
+                        curX += colWFinal + gap;
                     }
                 }
 
@@ -390,6 +409,15 @@ public class UIMikeyModelingTool extends UI2dContainer {
                         if (active) removeStrip(capturedGlobalRow, capturedUniverse, capturedCount);
                     }
                 }.setMomentary(true).setLabel("-").addToContainer(gridContainer);
+
+                // Black offset box at far right
+                float bkX = curX + btnsW + gap;
+                TabbableTextBox bkBox = new TabbableTextBox(bkX, curY, bkBoxW, boxH);
+                int savedBk = (existingBlackOffsets != null && srcRow < existingBlackOffsets.length && !isInserted)
+                    ? existingBlackOffsets[srcRow] : 0;
+                bkBox.setValue(String.valueOf(savedBk));
+                bkBox.addToContainer(gridContainer);
+                blackOffsetInputs.add(bkBox);
 
                 if (!isInserted) srcRow++;
                 stripInputs.add(row);
@@ -409,23 +437,30 @@ public class UIMikeyModelingTool extends UI2dContainer {
     /** Insert a blank strip after globalRow in the given universe, then rebuild. */
     private void insertStripAfter(int globalRow, int universe) {
         float[][] snapshot = snapshotStripValues();
+        int[] bkSnapshot = snapshotBlackOffsets();
         stripCounts[universe]++;
         countBoxes[universe].setValue(String.valueOf(stripCounts[universe]));
-        buildStripGrid(snapshot, globalRow, universe);
+        buildStripGrid(snapshot, bkSnapshot, globalRow, universe);
     }
 
     /** Remove the strip at globalRow from the given universe, then rebuild. */
     private void removeStrip(int globalRow, int universe, int universeStripCount) {
         if (universeStripCount <= 1) return;  // keep at least 1 strip per universe
         float[][] snapshot = snapshotStripValues();
-        // Delete row at globalRow from snapshot
+        int[] bkSnapshot = snapshotBlackOffsets();
+        // Delete row at globalRow from snapshots
         float[][] shrunk = new float[snapshot.length - 1][COLUMN_LABELS.length];
+        int[] bkShrunk = new int[bkSnapshot.length - 1];
         for (int i = 0, j = 0; i < snapshot.length; i++) {
-            if (i != globalRow) shrunk[j++] = snapshot[i];
+            if (i != globalRow) {
+                shrunk[j] = snapshot[i];
+                bkShrunk[j] = bkSnapshot[i];
+                j++;
+            }
         }
         stripCounts[universe]--;
         countBoxes[universe].setValue(String.valueOf(stripCounts[universe]));
-        buildStripGrid(shrunk);
+        buildStripGrid(shrunk, bkShrunk);
     }
 
     /** Recompute the LXPoint positions for strip at globalIndex using current box values. */
@@ -483,6 +518,19 @@ public class UIMikeyModelingTool extends UI2dContainer {
         return out;
     }
 
+    private int[] snapshotBlackOffsets() {
+        int n = blackOffsetInputs.size();
+        int[] out = new int[n];
+        for (int r = 0; r < n; r++) {
+            try {
+                out[r] = Math.max(0, Integer.parseInt(blackOffsetInputs.get(r).getValue().trim()));
+            } catch (NumberFormatException e) {
+                out[r] = 0;
+            }
+        }
+        return out;
+    }
+
     // ── Save / Load ───────────────────────────────────────────────────────────
 
     public void saveMappingToDisk() {
@@ -495,6 +543,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
             file.universeLabels[u] = labelBoxes[u] != null ? labelBoxes[u].getValue() : "";
         }
         file.strips = snapshotStripValues();
+        file.blackOffsets = snapshotBlackOffsets();
         File f = new File(MAPPING_FILE);
         f.getParentFile().mkdirs();
         try (FileWriter writer = new FileWriter(f)) {
@@ -553,6 +602,24 @@ public class UIMikeyModelingTool extends UI2dContainer {
     public static float[][] loadStripsFromDisk() {
         MikeyMappingFile file = loadFileFromDisk();
         return (file != null) ? file.strips : null;
+    }
+
+    /**
+     * Returns the per-strip black pixel offset array from disk.
+     * Length matches sum(stripCounts). Defaults to all-zeros if not present.
+     * Called by MikeyShow at output-build time.
+     */
+    public static int[] loadBlackOffsetsFromDisk() {
+        MikeyMappingFile file = loadFileFromDisk();
+        if (file != null && file.blackOffsets != null) {
+            return file.blackOffsets;
+        }
+        // Default: no black offsets
+        int totalStrips = 0;
+        if (file != null && file.stripCounts != null) {
+            for (int c : file.stripCounts) totalStrips += c;
+        }
+        return new int[totalStrips];
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

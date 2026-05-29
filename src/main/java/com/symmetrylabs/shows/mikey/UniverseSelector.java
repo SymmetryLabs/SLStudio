@@ -33,6 +33,7 @@ public class UniverseSelector extends SLPattern<StripsModel> {
         int maxPixels = 1;
         for (int u = 0; u < UNIVERSE_COUNT; u++) {
             List<LXPoint> pts = new ArrayList<>();
+            int stripStart = stripIndex;
             for (int s = 0; s < counts[u] && stripIndex < strips.size(); s++) {
                 for (LXPoint p : strips.get(stripIndex).getPoints()) {
                     pts.add(p);
@@ -41,7 +42,12 @@ public class UniverseSelector extends SLPattern<StripsModel> {
             }
             universePoints.add(pts);
             if (pts.size() > maxPixels) maxPixels = pts.size();
+            // Log universes near 22 for verification
+            if (u >= 20 && u <= 23) {
+                System.out.println("UniverseSelector: U" + (u + 1) + " -> strips[" + stripStart + ".." + (stripIndex - 1) + "] count=" + counts[u] + " pixels=" + pts.size());
+            }
         }
+        System.out.println("UniverseSelector: total strips=" + strips.size() + " total universes=" + UNIVERSE_COUNT);
 
         addParameter(universe      = new DiscreteParameter("universe", 1, 1, UNIVERSE_COUNT + 1));
         addParameter(pixel         = new DiscreteParameter("pixel",    1, 1, maxPixels + 1));

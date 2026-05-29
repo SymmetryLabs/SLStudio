@@ -62,8 +62,12 @@ public class MikeyShow implements Show {
     }
 
     static class MikeyModel extends StripsModel<Strip> {
-        public MikeyModel(List<Strip> strips) {
+        /** Dedicated LXPoints that always output black. Not part of any strip. */
+        public final List<LXPoint> blackPoints;
+
+        public MikeyModel(List<Strip> strips, List<LXPoint> blackPoints) {
             super(SHOW_NAME, strips);
+            this.blackPoints = blackPoints;
         }
 
         public static MikeyModel create() {
@@ -72,6 +76,7 @@ public class MikeyShow implements Show {
 
             int[] counts = UIMikeyModelingTool.loadStripCountsFromDisk();
             float[][] mapping = UIMikeyModelingTool.loadStripsFromDisk();
+            int[] blackOffsets = UIMikeyModelingTool.loadBlackOffsetsFromDisk();
             int totalStrips = 0;
             for (int c : counts) totalStrips += c;
             if (mapping == null || mapping.length != totalStrips) {
@@ -85,8 +90,15 @@ public class MikeyShow implements Show {
                 float rotZRad = (float) Math.toRadians(az);
                 addStrip(m[0], m[1], m[2], rotZRad, (int) m[4], m[5], t, strips);
             }
-            System.out.println("MikeyShow: created model with " + strips.size() + " strips");
-            return new MikeyModel(strips);
+            // Allocate black point pool — one per total black offset pixel
+            int totalBlack = 0;
+            for (int b : blackOffsets) totalBlack += b;
+            List<LXPoint> blackPoints = new ArrayList<>();
+            for (int i = 0; i < totalBlack; i++) {
+                blackPoints.add(new LXPoint(0, 0, 0));
+            }
+            System.out.println("MikeyShow: created model with " + strips.size() + " strips, " + totalBlack + " black offset pixels");
+            return new MikeyModel(strips, blackPoints);
         }
 
         private static float[][] buildDefaultMapping(int totalStrips) {
@@ -117,17 +129,35 @@ public class MikeyShow implements Show {
         }
     }
     static class MikeyPixlite extends SimplePixlite {
+        private final List<LXPoint> blackPoints;
+
         public MikeyPixlite(LX lx, String ip, MikeyModel model) {
             super(lx, ip);
+            this.blackPoints = model.blackPoints;
             // UNIVERSE_COUNT outputs; each output carries a variable number of strips per universe
             int[] counts = UIMikeyModelingTool.loadStripCountsFromDisk();
+            int[] blackOffsets = UIMikeyModelingTool.loadBlackOffsetsFromDisk();
             int stripIndex = 0;
+            int blackPoolIndex = 0;
             for (int u = 0; u < UNIVERSE_COUNT; u++) {
                 PointsGrouping pg = new PointsGrouping(String.valueOf(u + 1));
                 for (int s = 0; s < counts[u]; s++) {
+                    // Prepend black offset pixels for this strip
+                    int bk = (stripIndex < blackOffsets.length) ? blackOffsets[stripIndex] : 0;
+                    for (int b = 0; b < bk && blackPoolIndex < model.blackPoints.size(); b++) {
+                        pg.addPoint(model.blackPoints.get(blackPoolIndex++));
+                    }
                     pg.addPoints(model.getStripByIndex(stripIndex++).getPoints());
                 }
                 addPixliteOutput(pg);
+            }
+        }
+
+        @Override
+        protected void onSend(int[] colors) {
+            // Force all black-pool points to black before every ArtNet send
+            for (LXPoint p : blackPoints) {
+                if (p.index < colors.length) colors[p.index] = 0;
             }
         }
 
