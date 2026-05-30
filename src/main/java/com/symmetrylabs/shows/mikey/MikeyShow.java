@@ -13,7 +13,7 @@ import com.symmetrylabs.slstudio.output.SimplePixlite;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.slstudio.model.DoubleStrip;
 import heronarts.lx.LX;
-import heronarts.lx.model.LXPoint;
+import heronarts.lx.LXChannel;
 import heronarts.lx.transform.LXMatrix;
 import heronarts.lx.transform.LXTransform;
 import java.util.ArrayList;
@@ -27,12 +27,22 @@ public class MikeyShow implements Show {
         return MikeyModel.create();
     }
 
+    public static StripIlluminator illuminator;
+    public static LXChannel illumChannel;
+
     @Override
     public void setupLx(LX lx) {
         MikeyModel model = (MikeyModel) lx.model;
-        // Pixlite with UNIVERSE_COUNT outputs, each carrying STRIPS_PER_UNIVERSE strips
         MikeyPixlite pixlite = new MikeyPixlite(lx, "192.168.1.50", model);
         lx.addOutput(pixlite);
+        // Dedicated ADD-blend channel: always runs, adds white on top when a strip is selected
+        illumChannel = lx.engine.addChannel();
+        illumChannel.label.setValue("StripIllum");
+        illumChannel.fader.setValue(1.0);
+        illumChannel.blendMode.setValue(0);  // index 0 = AddBlend
+        illuminator = new StripIlluminator(lx);
+        illumChannel.addPattern(illuminator);
+        illumChannel.goPattern(illuminator);
     }
 
     @Override
@@ -42,6 +52,7 @@ public class MikeyShow implements Show {
         // Wire live strip list so dragging params moves pixels in the 3D view
         MikeyModel model = (MikeyModel) lx.model;
         tool.setModel(model, model.getStrips());
+        tool.setLX(lx);
         // Set camera to center on model and use the model's bounding box for radius.
         // SLStudio.onUIReady hardcodes setMaxRadius(150*FEET=1800) and setRadius(25*FEET=300)
         // before calling setupUi, so we must override both here.
@@ -62,12 +73,8 @@ public class MikeyShow implements Show {
     }
 
     static class MikeyModel extends StripsModel<Strip> {
-        /** Dedicated LXPoints that always output black. Not part of any strip. */
-        public final List<LXPoint> blackPoints;
-
-        public MikeyModel(List<Strip> strips, List<LXPoint> blackPoints) {
+        public MikeyModel(List<Strip> strips) {
             super(SHOW_NAME, strips);
-            this.blackPoints = blackPoints;
         }
 
         public static MikeyModel create() {
@@ -76,7 +83,6 @@ public class MikeyShow implements Show {
 
             int[] counts = UIMikeyModelingTool.loadStripCountsFromDisk();
             float[][] mapping = UIMikeyModelingTool.loadStripsFromDisk();
-            int[] blackOffsets = UIMikeyModelingTool.loadBlackOffsetsFromDisk();
             int totalStrips = 0;
             for (int c : counts) totalStrips += c;
             if (mapping == null || mapping.length != totalStrips) {
@@ -87,18 +93,11 @@ public class MikeyShow implements Show {
             for (int i = 0; i < mapping.length; i++) {
                 float[] m = mapping[i];
                 float az = m[3] > 180f ? m[3] - 360f : m[3];  // map 0-360 to -180..+180
-                float rotZRad = (float) Math.toRadians(az);
+                float rotZRad = (float) Math.toRadians(-az);  // negate: Mad Mapper uses clockwise-positive
                 addStrip(m[0], m[1], m[2], rotZRad, (int) m[4], m[5], t, strips);
             }
-            // Allocate black point pool — one per total black offset pixel
-            int totalBlack = 0;
-            for (int b : blackOffsets) totalBlack += b;
-            List<LXPoint> blackPoints = new ArrayList<>();
-            for (int i = 0; i < totalBlack; i++) {
-                blackPoints.add(new LXPoint(0, 0, 0));
-            }
-            System.out.println("MikeyShow: created model with " + strips.size() + " strips, " + totalBlack + " black offset pixels");
-            return new MikeyModel(strips, blackPoints);
+            System.out.println("MikeyShow: created model with " + strips.size() + " strips");
+            return new MikeyModel(strips);
         }
 
         private static float[][] buildDefaultMapping(int totalStrips) {
@@ -129,35 +128,21 @@ public class MikeyShow implements Show {
         }
     }
     static class MikeyPixlite extends SimplePixlite {
-        private final List<LXPoint> blackPoints;
-
         public MikeyPixlite(LX lx, String ip, MikeyModel model) {
             super(lx, ip);
-            this.blackPoints = model.blackPoints;
             // UNIVERSE_COUNT outputs; each output carries a variable number of strips per universe
             int[] counts = UIMikeyModelingTool.loadStripCountsFromDisk();
             int[] blackOffsets = UIMikeyModelingTool.loadBlackOffsetsFromDisk();
             int stripIndex = 0;
-            int blackPoolIndex = 0;
             for (int u = 0; u < UNIVERSE_COUNT; u++) {
                 PointsGrouping pg = new PointsGrouping(String.valueOf(u + 1));
                 for (int s = 0; s < counts[u]; s++) {
-                    // Prepend black offset pixels for this strip
+                    // Prepend black offset pixels for this strip (index=-1, outputs as black)
                     int bk = (stripIndex < blackOffsets.length) ? blackOffsets[stripIndex] : 0;
-                    for (int b = 0; b < bk && blackPoolIndex < model.blackPoints.size(); b++) {
-                        pg.addPoint(model.blackPoints.get(blackPoolIndex++));
-                    }
+                    pg.addBlackPixels(bk);
                     pg.addPoints(model.getStripByIndex(stripIndex++).getPoints());
                 }
                 addPixliteOutput(pg);
-            }
-        }
-
-        @Override
-        protected void onSend(int[] colors) {
-            // Force all black-pool points to black before every ArtNet send
-            for (LXPoint p : blackPoints) {
-                if (p.index < colors.length) colors[p.index] = 0;
             }
         }
 

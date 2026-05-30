@@ -13,6 +13,8 @@ public class PointsGrouping {
 
     public String id;
     private final List<LXPoint> points = new ArrayList<LXPoint>();
+    // Parallel list: true = real point (use p.index), false = black sentinel (use -1)
+    private final List<Boolean> isReal = new ArrayList<Boolean>();
 
     public PointsGrouping() {
         this("no-humanID");
@@ -53,14 +55,14 @@ public class PointsGrouping {
     }
 
     public int size() {
-        return points.size();
+        return isReal.size();
     }
 
     public int[] getIndices() {
-        int[] indices = new int[points.size()];
-
-        for (int i = 0; i < points.size(); i++) {
-            indices[i] = points.get(i).index;
+        int[] indices = new int[isReal.size()];
+        int pi = 0;
+        for (int i = 0; i < isReal.size(); i++) {
+            indices[i] = isReal.get(i) ? points.get(pi++).index : -1;
         }
         return indices;
     }
@@ -70,26 +72,25 @@ public class PointsGrouping {
     }
 
     public PointsGrouping reversePoints() {
-        Collections.reverse(Arrays.asList(points));
+        Collections.reverse(points);
+        Collections.reverse(isReal);
         return this;
     }
 
     public PointsGrouping addPoints(List<LXPoint> pointsToAdd) {
-        this.points.addAll(pointsToAdd);
+        for (LXPoint p : pointsToAdd) { points.add(p); isReal.add(true); }
         return this;
     }
 
     public PointsGrouping addPoints(LXPoint[] pointsToAdd) {
-        this.points.addAll(Arrays.asList(pointsToAdd));
+        for (LXPoint p : pointsToAdd) { points.add(p); isReal.add(true); }
         return this;
     }
 
     public PointsGrouping addPoints(List<LXPoint> pointsToAdd, boolean reverseOrdering) {
-        List<LXPoint> adjustedPoints = new ArrayList<LXPoint>(pointsToAdd);
-        if (reverseOrdering) {
-            Collections.reverse(adjustedPoints);
-        }
-        addPoints(adjustedPoints);
+        List<LXPoint> adjusted = new ArrayList<LXPoint>(pointsToAdd);
+        if (reverseOrdering) Collections.reverse(adjusted);
+        addPoints(adjusted);
         return this;
     }
 
@@ -100,5 +101,13 @@ public class PointsGrouping {
 
     public void addPoint(LXPoint point) {
         points.add(point);
+        isReal.add(true);
     }
+
+    /** Add n black (unmapped) padding slots with sentinel index -1. No LXPoint created. */
+    public PointsGrouping addBlackPixels(int n) {
+        for (int i = 0; i < n; i++) isReal.add(false);
+        return this;
+    }
+
 }

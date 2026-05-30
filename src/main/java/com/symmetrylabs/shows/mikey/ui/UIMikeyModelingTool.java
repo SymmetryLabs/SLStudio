@@ -27,8 +27,8 @@ import processing.core.PConstants;
 
 public class UIMikeyModelingTool extends UI2dContainer {
 
-    /** Number of Pixlite outputs / ArtNet universes. Fixed at 54. */
-    public static final int UNIVERSE_COUNT = 54;
+    /** Number of Pixlite outputs / ArtNet universes. Fixed at 64. */
+    public static final int UNIVERSE_COUNT = 64;
 
     public static final String[] COLUMN_LABELS = { "tx", "ty", "tz", "az", "px", "d" };
     public static final String MAPPING_FILE = "data/mikey-mapping.json";
@@ -75,6 +75,11 @@ public class UIMikeyModelingTool extends UI2dContainer {
     // Live model reference for real-time point updates (set via setModel)
     private java.util.List<Strip> liveStrips = null;
     private LXModel liveModel = null;
+    private LX liveLX = null;
+
+    // Index of the currently illuminated strip (-1 = none)
+    private int illuminatedStrip = -1;
+    private heronarts.p3lx.ui.component.UIButton activeLitButton = null;
 
     // ─────────────────────────────────────────────────────────────────────────
 
@@ -82,6 +87,50 @@ public class UIMikeyModelingTool extends UI2dContainer {
     public void setModel(LXModel model, java.util.List<Strip> strips) {
         this.liveModel = model;
         this.liveStrips = strips;
+    }
+
+    public void setLX(LX lx) {
+        this.liveLX = lx;
+    }
+
+    /** Light up one strip via the StripIlluminator ADD channel. */
+    private void illuminateStrip(int globalIndex) {
+        if (liveLX == null) return;
+        // Re-find channel by label in case static ref is stale after project reload
+        heronarts.lx.LXChannel ch = com.symmetrylabs.shows.mikey.MikeyShow.illumChannel;
+        if (ch == null || !liveLX.engine.getChannels().contains(ch)) {
+            ch = null;
+            for (heronarts.lx.LXChannel c : liveLX.engine.getChannels()) {
+                if ("StripIllum".equals(c.label.getString())) { ch = c; break; }
+            }
+        }
+        if (ch == null) {
+            // Channel was removed by project load — recreate it
+            ch = liveLX.engine.addChannel();
+            ch.label.setValue("StripIllum");
+            ch.fader.setValue(1.0);
+            ch.blendMode.setValue(0);
+            com.symmetrylabs.shows.mikey.MikeyShow.illumChannel = ch;
+        }
+        // Find StripIlluminator fresh from channel pattern list (static ref may be stale after reload)
+        com.symmetrylabs.shows.mikey.StripIlluminator illum = null;
+        for (heronarts.lx.LXPattern p : ch.patterns) {
+            if (p instanceof com.symmetrylabs.shows.mikey.StripIlluminator) {
+                illum = (com.symmetrylabs.shows.mikey.StripIlluminator) p;
+                break;
+            }
+        }
+        if (illum == null) {
+            // Project load cleared the pattern list — re-add it now
+            if (liveLX == null) return;
+            illum = new com.symmetrylabs.shows.mikey.StripIlluminator(liveLX);
+            ch.addPattern(illum);
+            com.symmetrylabs.shows.mikey.MikeyShow.illuminator = illum;
+        }
+        illuminatedStrip = globalIndex;
+        ch.fader.setValue(1.0);
+        ch.goPattern(illum);
+        illum.stripIndex.setValue(globalIndex);
     }
 
     public UIMikeyModelingTool(UI ui, float x, float y, float w) {
@@ -99,7 +148,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
 
         // ── Strip-count header label ──
         new UILabel(0, 20, w - 10, 13)
-            .setLabel("Strips per universe (U0 … U53):")
+            .setLabel("Strips per universe (U1 \u2026 U64):")
             .addToContainer(this);
 
         // ── 54 count boxes laid out in a compact grid ──
@@ -140,11 +189,16 @@ public class UIMikeyModelingTool extends UI2dContainer {
             for (int u = 0; u < UNIVERSE_COUNT; u++) {
                 stripCounts[u] = Math.max(1, saved.stripCounts[u]);
                 countBoxes[u].setValue(String.valueOf(stripCounts[u]));
-                if (saved.universeLabels != null && u < saved.universeLabels.length && saved.universeLabels[u] != null) {
-                    labelBoxes[u].setValue(saved.universeLabels[u]);
-                }
             }
             buildStripGrid(saved.strips, saved.blackOffsets);
+            // Apply universe labels now that labelBoxes have been created by buildStripGrid
+            if (saved.universeLabels != null) {
+                for (int u = 0; u < UNIVERSE_COUNT; u++) {
+                    if (u < saved.universeLabels.length && saved.universeLabels[u] != null && labelBoxes[u] != null) {
+                        labelBoxes[u].setValue(saved.universeLabels[u]);
+                    }
+                }
+            }
         } else {
             for (int u = 0; u < UNIVERSE_COUNT; u++) {
                 stripCounts[u] = DEFAULT_STRIPS_PER_UNIVERSE;
@@ -227,26 +281,29 @@ public class UIMikeyModelingTool extends UI2dContainer {
         stripInputs.clear();
         blackOffsetInputs.clear();
 
-        final float labelColW = 22f;
+        final float labelColW = 14f;
         final float gap       = 2f;
-        final float plusW     = 16f;
+        final float plusW     = 12f;
         final float btnsW     = plusW * 2 + gap;  // + and - together (insert/remove strip)
-        final float bumpBtnW  = 13f;  // width of each inline ±5 bump button
+        final float bumpBtnW  = 10f;  // width of each inline ±5 bump button
         final float gridLeft  = labelColW + gap;
         final float boxH      = 16f;
         final float rowH      = boxH + 2f;
         final float uHeaderH  = 14f;
-        // Each X/Y cell = bumpBtn + gap + box + gap + bumpBtn; other cells = box only
-        // Total fixed width used by X and Y bump buttons: 4 * (bumpBtnW + gap)
-        final float bumpExtra = 4 * (bumpBtnW + gap);
-        final float colW      = Math.max(26f, (panelW - gridLeft - btnsW - gap - 4f - bumpExtra - gap * (COLUMN_LABELS.length - 1)) / COLUMN_LABELS.length);
 
-        final float bkBoxW   = 32f;  // width of black-offset input
+        final float bkBoxW   = 22f;  // width of black-offset input
+        final float litBtnW  = 18f;  // width of illuminate toggle button
         final float colHdrH = 11f;
+        final float xyBoxW  = 30f;  // wider box for tx/ty so 4 digits are visible
+        final float azBoxW  = 28f;  // fixed width for az so 3-4 digits are visible
+        final float pxBoxW  = 26f;  // fixed width for px (pixel count) so 3 digits are visible
 
-        // colW must leave room for: label col + bump buttons on X/Y + all cols + insert/remove btns + bk box
-        // recompute here to ensure bkBox fits within panelW
-        final float colWFinal = Math.max(20f, (panelW - gridLeft - btnsW - gap - bkBoxW - gap - 4f - bumpExtra - gap * (COLUMN_LABELS.length - 1)) / COLUMN_LABELS.length);
+        // tx/ty cell = [-] gap box gap [+]
+        final float xyCell    = bumpBtnW + gap + xyBoxW + gap + bumpBtnW;
+        // Fixed items: gridLeft + 2*xyCell + 2*gap + azBoxW + gap + pxBoxW + gap + btnsW + gap + bkBoxW + gap + litBtnW
+        // Remaining split across tz and d (2 cols, 1 gap between them)
+        final int   otherCols = COLUMN_LABELS.length - 4;  // tz, d
+        final float colWFinal = Math.max(14f, (panelW - gridLeft - 2*(xyCell+gap) - azBoxW - gap - pxBoxW - gap - (otherCols-1)*gap - btnsW - gap - bkBoxW - gap - litBtnW) / otherCols);
 
         float curY = 0f;
         int globalRow = 0;
@@ -279,13 +336,27 @@ public class UIMikeyModelingTool extends UI2dContainer {
             float hdrX = gridLeft;
             for (int c = 0; c < COLUMN_LABELS.length; c++) {
                 if (c == 0 || c == 1) {
-                    float cellW = bumpBtnW + gap + colWFinal + gap + bumpBtnW;
+                    float cellW = bumpBtnW + gap + xyBoxW + gap + bumpBtnW;
                     new UILabel(hdrX, curY, cellW, colHdrH)
                         .setLabel(COLUMN_LABELS[c])
                         .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
                         .setFontColor(0xFF666666)
                         .addToContainer(gridContainer);
                     hdrX += cellW + gap;
+                } else if (c == 3) {
+                    new UILabel(hdrX, curY, azBoxW, colHdrH)
+                        .setLabel(COLUMN_LABELS[c])
+                        .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+                        .setFontColor(0xFF666666)
+                        .addToContainer(gridContainer);
+                    hdrX += azBoxW + gap;
+                } else if (c == 4) {
+                    new UILabel(hdrX, curY, pxBoxW, colHdrH)
+                        .setLabel(COLUMN_LABELS[c])
+                        .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+                        .setFontColor(0xFF666666)
+                        .addToContainer(gridContainer);
+                    hdrX += pxBoxW + gap;
                 } else {
                     new UILabel(hdrX, curY, colWFinal, colHdrH)
                         .setLabel(COLUMN_LABELS[c])
@@ -295,9 +366,15 @@ public class UIMikeyModelingTool extends UI2dContainer {
                     hdrX += colWFinal + gap;
                 }
             }
-            // "bk" column header
-            new UILabel(hdrX + btnsW + gap, curY, bkBoxW, colHdrH)
+            // "bk" and "lit" column headers
+            float bkHdrX = hdrX + btnsW + gap;
+            new UILabel(bkHdrX, curY, bkBoxW, colHdrH)
                 .setLabel("bk")
+                .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+                .setFontColor(0xFF666666)
+                .addToContainer(gridContainer);
+            new UILabel(bkHdrX + bkBoxW + gap, curY, litBtnW, colHdrH)
+                .setLabel("lit")
                 .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
                 .setFontColor(0xFF666666)
                 .addToContainer(gridContainer);
@@ -344,7 +421,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
                         curX += bumpBtnW + gap;
                         // value box
                         float boxX = curX;
-                        UIDoubleBox box = new UIDoubleBox(boxX, curY, colWFinal, boxH) {
+                        UIDoubleBox box = new UIDoubleBox(boxX, curY, xyBoxW, boxH) {
                             @Override protected void onValueChange(double value) {
                                 updateLiveStrip(capturedStripIndex);
                             }
@@ -361,7 +438,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
                         box.setValue(val);
                         box.addToContainer(gridContainer);
                         row[c] = box;
-                        curX += colWFinal + gap;
+                        curX += xyBoxW + gap;
                         // [+] button
                         new UIButton(curX, curY, bumpBtnW, boxH) {
                             @Override protected void onToggle(boolean active) {
@@ -373,8 +450,9 @@ public class UIMikeyModelingTool extends UI2dContainer {
                         }.setMomentary(true).setLabel("+").addToContainer(gridContainer);
                         curX += bumpBtnW + gap;
                     } else {
-                        // Normal column — just the value box
-                        UIDoubleBox box = new UIDoubleBox(curX, curY, colWFinal, boxH) {
+                        // Normal column — az and px get fixed widths
+                        float boxW = (c == 3) ? azBoxW : (c == 4) ? pxBoxW : colWFinal;
+                        UIDoubleBox box = new UIDoubleBox(curX, curY, boxW, boxH) {
                             @Override protected void onValueChange(double value) {
                                 updateLiveStrip(capturedStripIndex);
                             }
@@ -391,7 +469,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
                         box.setValue(val);
                         box.addToContainer(gridContainer);
                         row[c] = box;
-                        curX += colWFinal + gap;
+                        curX += boxW + gap;
                     }
                 }
 
@@ -410,7 +488,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
                     }
                 }.setMomentary(true).setLabel("-").addToContainer(gridContainer);
 
-                // Black offset box at far right
+                // Black offset box
                 float bkX = curX + btnsW + gap;
                 TabbableTextBox bkBox = new TabbableTextBox(bkX, curY, bkBoxW, boxH);
                 int savedBk = (existingBlackOffsets != null && srcRow < existingBlackOffsets.length && !isInserted)
@@ -418,6 +496,26 @@ public class UIMikeyModelingTool extends UI2dContainer {
                 bkBox.setValue(String.valueOf(savedBk));
                 bkBox.addToContainer(gridContainer);
                 blackOffsetInputs.add(bkBox);
+
+                // Illuminate toggle button — radio-style: only one active at a time
+                final int capturedGlobalRowForLit = globalRow;
+                heronarts.p3lx.ui.component.UIButton litBtn = new heronarts.p3lx.ui.component.UIButton(bkX + bkBoxW + gap, curY, litBtnW, boxH) {
+                    @Override
+                    protected void onToggle(boolean active) {
+                        if (active) {
+                            // Deactivate the previously active button
+                            if (activeLitButton != null && activeLitButton != this) {
+                                activeLitButton.setActive(false);
+                            }
+                            activeLitButton = this;
+                            illuminateStrip(capturedGlobalRowForLit);
+                        } else {
+                            if (activeLitButton == this) activeLitButton = null;
+                            illuminateStrip(-1);
+                        }
+                    }
+                };
+                litBtn.setMomentary(false).setLabel("lit").addToContainer(gridContainer);
 
                 if (!isInserted) srcRow++;
                 stripInputs.add(row);
@@ -474,7 +572,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
         float az  = (float) row[3].getValue();
         float pitch = (float) row[5].getValue();  // d = pixelPitch/height
 
-        float rotZRad = (float) Math.toRadians(az > 180f ? az - 360f : az);
+        float rotZRad = (float) Math.toRadians(-(az > 180f ? az - 360f : az));
 
         Strip strip = liveStrips.get(globalIndex);
         LXTransform t = new LXTransform();
