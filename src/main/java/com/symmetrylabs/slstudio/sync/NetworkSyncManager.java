@@ -163,26 +163,65 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         }
     }
     
+    private void sendSlavePacket() {
+        if (isMaster || !syncEnabled.isOn() || discoverySocket == null) return;
+        
+        try {
+            String discoveryMsg = String.format(
+                "{\"instanceId\":\"%s\",\"isMaster\":false,\"timestamp\":%d}",
+                instanceId, System.currentTimeMillis()
+            );
+            
+            byte[] data = discoveryMsg.getBytes();
+            DatagramPacket packet = new DatagramPacket(data, data.length, 
+                InetAddress.getByName("255.255.255.255"), DISCOVERY_PORT);
+            discoverySocket.send(packet);
+            
+            System.out.println("📡 DISCOVERY: Sent packet as SLAVE (ID: " + instanceId + ")");
+            
+        } catch (Exception e) {
+            System.err.println("❌ ERROR: Failed to send slave packet: " + e.getMessage());
+        }
+    }
+    
     private void onDiscoveryReceived(String senderId, boolean senderIsMaster) {
         if (!syncEnabled.isOn()) return;
         
-        System.out.println("🔍 DISCOVERY: Received packet from " + senderId + 
-                          " (isMaster: " + senderIsMaster + ", we are: " + isMaster + ")");
-        
         long now = System.currentTimeMillis();
+        System.out.println("🔍 DISCOVERY: Received packet from " + senderId + 
+                          " (isMaster: " + senderIsMaster + ", we are: " + isMaster + 
+                          ", time: " + now + ")");
+        
         lastSeenTime.put(senderId, now);
         
         // Master/slave election
+        System.out.println("🏛️  ELECTION: Comparing IDs - ours: " + instanceId + " vs theirs: " + senderId);
+        System.out.println("🏛️  ELECTION: Comparison result: " + senderId.compareTo(instanceId));
+        
         if (isMaster && senderIsMaster) {
             // Both think they're master - lower ID wins
             if (senderId.compareTo(instanceId) < 0) {
-                // Other instance becomes master
+                // Other instance becomes master, we become slave
                 isMaster = false;
                 System.out.println("🔄 ROLE CHANGE: Demoted to slave, master is: " + senderId);
             } else {
                 System.out.println("👑 ROLE CONFLICT: We remain master (our ID: " + instanceId + 
                                   " vs their ID: " + senderId + ")");
             }
+        } else if (!isMaster && !senderIsMaster) {
+            // Both are slaves - one should become master
+            if (instanceId.compareTo(senderId) < 0) {
+                // We become master
+                isMaster = true;
+                System.out.println("🔄 ROLE CHANGE: Promoted to master (we have lower ID: " + instanceId + 
+                                  " vs " + senderId + ")");
+            }
+        } else if (!isMaster && senderIsMaster) {
+            // We are slave, they are master - this is correct
+            System.out.println("✅ SLAVE MODE: We are slave, they are master (" + senderId + ")");
+        } else if (isMaster && !senderIsMaster) {
+            // We are master, they are slave - this is correct
+            System.out.println("✅ MASTER MODE: We are master, they are slave (" + senderId + ")");
         }
         
         // Check if this is a new connection
@@ -326,9 +365,14 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         // Listen for discovery packets
         listenForDiscoveryPackets();
         
-        // Send heartbeat if master
-        if (isMaster && (now - lastHeartbeatTime) > HEARTBEAT_INTERVAL_MS) {
-            sendDiscoveryPacket();
+        // Send heartbeat packets
+        if ((now - lastHeartbeatTime) > HEARTBEAT_INTERVAL_MS) {
+            if (isMaster) {
+                sendDiscoveryPacket();
+            } else {
+                sendSlavePacket();
+            }
+            lastHeartbeatTime = now;
         }
         
         // Check for timeouts
@@ -345,8 +389,10 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         
         // Log timeout events
         for (String timedOutPeer : timedOutPeers) {
+            Long lastSeen = lastSeenTime.get(timedOutPeer);
+            long timeSince = lastSeen != null ? (now - lastSeen) : -1;
             System.out.println("⏰ TIMEOUT: Peer " + timedOutPeer + " timed out (last seen " + 
-                              (now - lastSeenTime.getOrDefault(timedOutPeer, 0L)) + "ms ago)");
+                              timeSince + "ms ago, threshold=" + CONNECTION_TIMEOUT_MS + "ms)");
         }
         
         // Check if disconnected
