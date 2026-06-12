@@ -92,39 +92,52 @@ public class MikeyShow implements Show {
             System.out.println("MikeyShow: building " + mapping.length + " strips from mapping");
             for (int i = 0; i < mapping.length; i++) {
                 float[] m = mapping[i];
-                float az = m[3] > 180f ? m[3] - 360f : m[3];  // map 0-360 to -180..+180
-                float rotZRad = (float) Math.toRadians(-az);  // negate: Mad Mapper uses clockwise-positive
-                addStrip(m[0], m[1], m[2], rotZRad, (int) m[4], m[5], t, strips);
+                float az, rx, ry, d;
+                int px;
+                if (m.length >= 8) {
+                    // New 8-col format: [tx,ty,tz,az,rx,ry,px,d]
+                    az = m[3]; rx = m[4]; ry = m[5]; px = (int) m[6]; d = m[7];
+                } else {
+                    // Old 6-col format: [tx,ty,tz,az,px,d] — no rx/ry
+                    az = m[3]; rx = 0f; ry = 0f; px = (int) m[4]; d = m[5];
+                }
+                az = az > 180f ? az - 360f : az;
+                rx = rx > 180f ? rx - 360f : rx;
+                ry = ry > 180f ? ry - 360f : ry;
+                float rotZRad = (float) Math.toRadians(-az);
+                float rotXRad = (float) Math.toRadians(-rx);
+                float rotYRad = (float) Math.toRadians(-ry);
+                addStrip(m[0], m[1], m[2], rotXRad, rotYRad, rotZRad, px, d, t, strips);
             }
             System.out.println("MikeyShow: created model with " + strips.size() + " strips");
             return new MikeyModel(strips);
         }
 
         private static float[][] buildDefaultMapping(int totalStrips) {
-            float[][] d = new float[totalStrips][6];
+            float[][] d = new float[totalStrips][8];
             int barSpacing = 24;
             for (int i = 0; i < totalStrips; i++) {
-                d[i][0] = barSpacing * i; // tx - spaced in a line
-                d[i][1] = 0f;            // ty - same y for all
-                d[i][2] = 0f;            // tz - same z for all
-                d[i][3] = 90f;           // rz (degrees)
-                d[i][4] = 60f;           // px
-                d[i][5] = 1f;            // h
+                d[i][0] = barSpacing * i; // tx
+                d[i][1] = 0f;            // ty
+                d[i][2] = 0f;            // tz
+                d[i][3] = 90f;           // az
+                d[i][4] = 0f;            // rx
+                d[i][5] = 0f;            // ry
+                d[i][6] = 60f;           // px
+                d[i][7] = 1f;            // d
             }
             return d;
         }
 
-        private static void addStrip(float translateX, float translateY, float translateZ, float rotateZ, int pixelCount, float height, LXTransform transform, List<Strip> strips) {
+        private static void addStrip(float tx, float ty, float tz, float rotX, float rotY, float rotZ, int pixelCount, float height, LXTransform transform, List<Strip> strips) {
             transform.push();
-            transform.translate(translateX, translateY, translateZ);
-            transform.rotateZ(rotateZ);
+            transform.translate(tx, ty, tz);
+            transform.rotateX(rotX);
+            transform.rotateY(rotY);
+            transform.rotateZ(rotZ);
             String stripId = String.valueOf(strips.size() + 1);
             strips.add(new Strip(stripId, new Strip.Metrics(pixelCount, height), transform));
             transform.pop();
-        }
-
-        private static void addStrip(float translateX, float translateY, float translateZ, float rotateZ, int pixelCount, LXTransform transform, List<Strip> strips) {
-            addStrip(translateX, translateY, translateZ, rotateZ, pixelCount, 1, transform, strips);
         }
     }
     static class MikeyPixlite extends SimplePixlite {
@@ -132,14 +145,10 @@ public class MikeyShow implements Show {
             super(lx, ip);
             // UNIVERSE_COUNT outputs; each output carries a variable number of strips per universe
             int[] counts = UIMikeyModelingTool.loadStripCountsFromDisk();
-            int[] blackOffsets = UIMikeyModelingTool.loadBlackOffsetsFromDisk();
             int stripIndex = 0;
             for (int u = 0; u < UNIVERSE_COUNT; u++) {
                 PointsGrouping pg = new PointsGrouping(String.valueOf(u + 1));
                 for (int s = 0; s < counts[u]; s++) {
-                    // Prepend black offset pixels for this strip (index=-1, outputs as black)
-                    int bk = (stripIndex < blackOffsets.length) ? blackOffsets[stripIndex] : 0;
-                    pg.addBlackPixels(bk);
                     pg.addPoints(model.getStripByIndex(stripIndex++).getPoints());
                 }
                 addPixliteOutput(pg);
