@@ -33,7 +33,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     public static final int TARGET_CHANNEL = 14;  // Channel to sync (0-based, so 14 = 15th channel)
     public static final int TARGET_PATTERN_INDEX = 0;  // First pattern
     public static final int HEARTBEAT_INTERVAL_MS = 2000;  // 2 seconds
-    public static final int CONNECTION_TIMEOUT_MS = 5000;  // 5 seconds
+    public static final int CONNECTION_TIMEOUT_MS = 10000;  // 10 seconds (more tolerant)
     
     private final LX lx;
     private final NetworkMonitor networkMonitor;
@@ -376,11 +376,21 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         // Listen for discovery packets
         listenForDiscoveryPackets();
         
-        // Send heartbeat packets
+        // Send heartbeat packets with redundancy for reliability
         if ((now - lastHeartbeatTime) > HEARTBEAT_INTERVAL_MS) {
             if (isMaster) {
+                // Send 3 packets for redundancy (UDP can lose packets)
+                sendDiscoveryPacket();
+                try { Thread.sleep(50); } catch (InterruptedException e) {}
+                sendDiscoveryPacket();
+                try { Thread.sleep(50); } catch (InterruptedException e) {}
                 sendDiscoveryPacket();
             } else {
+                // Send 3 packets for redundancy
+                sendSlavePacket();
+                try { Thread.sleep(50); } catch (InterruptedException e) {}
+                sendSlavePacket();
+                try { Thread.sleep(50); } catch (InterruptedException e) {}
                 sendSlavePacket();
             }
             lastHeartbeatTime = now;
@@ -398,12 +408,22 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             return false;
         });
         
-        // Log timeout events
+        // Log timeout events with more detail
         for (String timedOutPeer : timedOutPeers) {
             Long lastSeen = lastSeenTime.get(timedOutPeer);
             long timeSince = lastSeen != null ? (now - lastSeen) : -1;
             System.out.println("⏰ TIMEOUT: Peer " + timedOutPeer + " timed out (last seen " + 
                               timeSince + "ms ago, threshold=" + CONNECTION_TIMEOUT_MS + "ms)");
+            
+            // Try to recover connection by sending extra discovery packets
+            if (isMaster) {
+                try {
+                    System.out.println("🔄 RECOVERY: Sending extra discovery packet for timeout recovery");
+                    sendDiscoveryPacket();
+                } catch (Exception e) {
+                    System.err.println("❌ ERROR: Failed to send recovery packet: " + e.getMessage());
+                }
+            }
         }
         
         // Check if disconnected
