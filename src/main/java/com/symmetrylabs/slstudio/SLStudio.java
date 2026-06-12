@@ -26,6 +26,7 @@ import com.symmetrylabs.util.MarkerSource;
 import com.symmetrylabs.util.Utils;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.slstudio.cue.CueManager;
+import com.symmetrylabs.slstudio.sync.NetworkSyncManager;
 
 import java.io.File;
 import java.io.FileReader;
@@ -62,6 +63,7 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
     public PerformanceManager performanceManager;
     public CueManager cueManager;
     private BlobTracker blobTracker;
+    public NetworkSyncManager networkSyncManager;
     public Anemometer anemometer;
 
     public final BooleanParameter mappingModeEnabled = new BooleanParameter("Mappings");
@@ -183,6 +185,10 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
                 // lx.engine.registerComponent("performanceManager", performanceManager);
 
                 blobTracker = BlobTracker.getInstance(lx);
+
+                networkSyncManager = new NetworkSyncManager(lx);
+                lx.engine.registerComponent("networkSyncManager", networkSyncManager);
+                lx.engine.addLoopTask(networkSyncManager::update);
 
                 ui.theme.setPrimaryColor(0xff008ba0);
                 ui.theme.setSecondaryColor(0xff00a08b);

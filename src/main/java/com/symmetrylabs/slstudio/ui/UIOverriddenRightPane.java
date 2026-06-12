@@ -37,6 +37,7 @@ import com.symmetrylabs.util.dmx.ui.UIDmxMappings;
 import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.shows.tree.ui.*;
 import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.sync.NetworkSyncManager;
 
 
 public class UIOverriddenRightPane extends UIPane {
@@ -80,6 +81,23 @@ public class UIOverriddenRightPane extends UIPane {
 
     private void buildUtilityUI() {
         new UIOfflineRender(this.ui, this.lx, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
+
+        // Add NetworkSync toggle
+        NetworkSyncManager networkSyncManager = (SLStudio.applet != null) ? 
+            SLStudio.applet.networkSyncManager : null;
+        
+        if (networkSyncManager != null) {
+            new UIButton(PADDING, 0, utility.getWidth() - 2 * PADDING, 20) {
+                @Override
+                public void onToggle(boolean on) {
+                    networkSyncManager.syncEnabled.setValue(on);
+                }
+            }
+            .setParameter(networkSyncManager.syncEnabled)
+            .setLabel("Enable Pattern Sync")
+            .setDescription("Enable network synchronization of patterns across multiple SLStudio instances")
+            .addToContainer(utility);
+        }
 
         ui.setBackgroundColor(LXColor.gray(backgroundLightParam.getValue() * 100));
         new UISlider(UISlider.Direction.HORIZONTAL, PADDING, PADDING, utility.getWidth() - 2 * PADDING, 20)

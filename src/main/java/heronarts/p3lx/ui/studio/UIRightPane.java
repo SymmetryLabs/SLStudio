@@ -70,14 +70,16 @@ public class UIRightPane extends UIPane {
     private int macroCount = 1;
 
     public UIRightPane(UI ui, final LX lx) {
-        super(ui, lx, new String[] { "MODULATION", "OSC + MIDI" }, ui.getWidth() - WIDTH, WIDTH);
+        super(ui, lx, new String[] { "MODULATION", "OSC + MIDI", "UTILITY" }, ui.getWidth() - WIDTH, WIDTH);
         this.ui = ui;
         this.lx = lx;
         this.modulation = this.sections[0];
         this.midi = this.sections[1];
+        final UI2dScrollContext utility = this.sections[2];
 
         buildMidiUI();
         buildModulationUI();
+        buildUtilityUI();
     }
 
     private void buildMidiUI() {
@@ -85,6 +87,52 @@ public class UIRightPane extends UIPane {
         new UIMidiSurfaces(this.ui, this.lx.engine.midi, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
         new UIMidiInputs(this.ui, this.lx.engine.midi, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
         new UIMidiMappings(this.ui, this.lx, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
+    }
+    
+    private void buildUtilityUI() {
+        // Add NetworkSync toggle to utility section
+        new UI2dContainer(0, 0, this.sections[2].getContentWidth(), 40) {
+            @Override
+            public void onDraw(UI ui, PGraphics pg) {
+                pg.fill(0xff333333);
+                pg.rect(0, 0, this.width, this.height);
+                pg.fill(0xffffffff);
+                pg.textAlign(processing.core.PConstants.LEFT, processing.core.PConstants.CENTER);
+                pg.text("Network Sync", 8, 12);
+            }
+        }
+        .addToContainer(this.sections[2]);
+        
+        // Get NetworkSyncManager from SLStudio
+        com.symmetrylabs.slstudio.sync.NetworkSyncManager networkSyncManager = 
+            (com.symmetrylabs.slstudio.SLStudio.applet != null) ? 
+            com.symmetrylabs.slstudio.SLStudio.applet.networkSyncManager : null;
+        
+        if (networkSyncManager != null) {
+            new UIButton(8, 20, this.sections[2].getContentWidth() - 16, 16) {
+                @Override
+                public void onToggle(boolean on) {
+                    networkSyncManager.syncEnabled.setValue(on);
+                }
+            }
+            .setParameter(networkSyncManager.syncEnabled)
+            .setLabel("Enable Pattern Sync")
+            .setDescription("Enable network synchronization of patterns across multiple SLStudio instances")
+            .addToContainer(this.sections[2]);
+        } else {
+            // Show message if NetworkSyncManager is not available
+            new UI2dContainer(8, 20, this.sections[2].getContentWidth() - 16, 16) {
+                @Override
+                public void onDraw(UI ui, PGraphics pg) {
+                    pg.fill(0xff666666);
+                    pg.rect(0, 0, this.width, this.height);
+                    pg.fill(0xffffffff);
+                    pg.textAlign(processing.core.PConstants.LEFT, processing.core.PConstants.CENTER);
+                    pg.text("Network Sync: Not Available", 4, 8);
+                }
+            }
+            .addToContainer(this.sections[2]);
+        }
     }
 
     private void buildModulationUI() {
