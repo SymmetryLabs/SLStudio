@@ -403,8 +403,8 @@ public class UIMikeyModelingTool extends UI2dContainer {
                 for (int c = 0; c < COLUMN_LABELS.length; c++) srcVals[c] = defaultValue(c, globalRow);
                 if (!isInserted && existingStrips != null && srcRow < existingStrips.length) {
                     float[] src = existingStrips[srcRow];
-                    if (src.length >= 8) {
-                        // New 8-col format — copy directly
+                    if (src.length >= 9) {
+                        // New 9-col format [tx,ty,tz,az,rx,ry,px,d,cv] — copy directly
                         for (int c = 0; c < COLUMN_LABELS.length; c++) srcVals[c] = src[c];
                     } else if (src.length == 6) {
                         // Old 6-col format: [tx,ty,tz,az,px,d]
