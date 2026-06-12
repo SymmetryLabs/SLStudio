@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1781298221952,
+  "timestamp": 1781300497383,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -2412,13 +2412,13 @@
             "modulationColor": -8978688,
             "parameters": {
               "label": "Channel-9",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 14.675039506957546,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": true,
@@ -4012,13 +4012,13 @@
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
-              "autoCycleEnabled": false,
-              "autoCycleTimeSecs": 60.0,
+              "autoCycleEnabled": true,
+              "autoCycleTimeSecs": 3.0,
               "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
-              "transitionEnabled": false,
-              "transitionTimeSecs": 5.0,
+              "transitionEnabled": true,
+              "transitionTimeSecs": 1.0,
               "transitionBlendMode": 0,
               "autoDisable": true,
               "speed": 1.0,
@@ -4028,7 +4028,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 0,
+            "patternIndex": 2,
             "patterns": [
               {
                 "id": 27712,
@@ -4056,8 +4056,124 @@
                   "Speed": 0.55,
                   "Symm": 0,
                   "Anim": 7,
-                  "Dens": 0.6,
+                  "Dens": 0.24000000804662702,
                   "AnimResets": false
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                },
+                "autoCycleEnabled": true
+              },
+              {
+                "id": 28329,
+                "class": "com.symmetrylabs.slstudio.pattern.AskewPlanes",
+                "modulationColor": -16736769,
+                "parameters": {
+                  "label": "AskewPlanes",
+                  "expandedInUi": true,
+                  "Enabled": true,
+                  "Hue": 0.0,
+                  "Spark": 0.0,
+                  "Wave": 0.0,
+                  "xPos": 1.0,
+                  "yPos": 0.5,
+                  "X-SYM": false,
+                  "Y-SYM": false,
+                  "R-SYM": false,
+                  "X-DUP": false,
+                  "JOG": false,
+                  "GREY": false,
+                  "Thick": 0.2,
+                  "Number": 0
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                },
+                "autoCycleEnabled": true
+              },
+              {
+                "id": 28340,
+                "class": "com.symmetrylabs.slstudio.pattern.Noise",
+                "modulationColor": -16711931,
+                "parameters": {
+                  "label": "Noise",
+                  "expandedInUi": true,
+                  "Enabled": true,
+                  "Hue": 0.0,
+                  "Spark": 0.0,
+                  "Wave": 0.0,
+                  "xPos": 0.5,
+                  "yPos": 0.5,
+                  "xRot": 0.5,
+                  "yRot": 0.5,
+                  "zRot": 0.5,
+                  "Spin": 0.5,
+                  "X-SYM": false,
+                  "Y-SYM": false,
+                  "R-SYM": false,
+                  "X-DUP": false,
+                  "JOG": false,
+                  "GREY": false,
+                  "Speed": 0.55,
+                  "Symm": 0,
+                  "Anim": 5,
+                  "Dens": 0.570000009611249,
+                  "AnimResets": false
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                },
+                "autoCycleEnabled": true
+              },
+              {
+                "id": 28342,
+                "class": "com.symmetrylabs.slstudio.pattern.Pong",
+                "modulationColor": -30208,
+                "parameters": {
+                  "label": "Pong",
+                  "expandedInUi": true,
+                  "Enabled": true,
+                  "Hue": 216.00000321865082,
+                  "Spark": 0.0,
+                  "Wave": 0.0,
+                  "xPos": 0.5,
+                  "yPos": 0.5,
+                  "X-SYM": false,
+                  "Y-SYM": false,
+                  "R-SYM": true,
+                  "X-DUP": false,
+                  "JOG": false,
+                  "GREY": false,
+                  "Size": 0.5700000021606684,
+                  "Anim": 0
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                },
+                "autoCycleEnabled": true
+              },
+              {
+                "id": 28350,
+                "class": "com.symmetrylabs.slstudio.pattern.Raindrops",
+                "modulationColor": -51968,
+                "parameters": {
+                  "label": "Raindrops",
+                  "expandedInUi": true,
+                  "Enabled": true,
+                  "Number": -111.99999839067459,
+                  "Size": 0.18999999798834324,
+                  "SizeVar": 0.5,
+                  "Speed": -1000.0,
+                  "SpeedVar": 0.5,
+                  "HueVar": 0.5
                 },
                 "modulation": {
                   "modulators": [],
@@ -4072,7 +4188,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -12320513,
+          "modulationColor": -16743425,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -4209,13 +4325,22 @@
         }
       },
       "DMXParameterMapper": {
-        "id": 110,
+        "id": 111,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -3211009,
+        "modulationColor": -16711808,
         "parameters": {
           "label": "DMXParameterMapper"
         },
         "mappings": []
+      },
+      "networkSyncManager": {
+        "id": 109,
+        "class": "com.symmetrylabs.slstudio.sync.NetworkSyncManager",
+        "modulationColor": -16384256,
+        "parameters": {
+          "label": "NetworkSync",
+          "syncEnabled": false
+        }
       },
       "envelop": {
         "id": 33,

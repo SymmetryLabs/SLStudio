@@ -47,6 +47,9 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         .setDescription("Enable network pattern synchronization");
     
     private boolean isMaster = false;
+    private long lastRoleChangeTime = 0;
+    private static final long ROLE_STABILITY_MS = 3000; // Wait 3 seconds before role changes
+    
     private final Set<String> connectedPeers = ConcurrentHashMap.newKeySet();
     private final Map<String, Long> lastSeenTime = new ConcurrentHashMap<>();
     private long lastHeartbeatTime = 0;
@@ -194,25 +197,31 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         
         lastSeenTime.put(senderId, now);
         
-        // Master/slave election
+        // Master/slave election with stability check
         System.out.println("🏛️  ELECTION: Comparing IDs - ours: " + instanceId + " vs theirs: " + senderId);
         System.out.println("🏛️  ELECTION: Comparison result: " + senderId.compareTo(instanceId));
         
+        long timeSinceRoleChange = now - lastRoleChangeTime;
+        boolean canChangeRole = timeSinceRoleChange > ROLE_STABILITY_MS;
+        
         if (isMaster && senderIsMaster) {
             // Both think they're master - lower ID wins
-            if (senderId.compareTo(instanceId) < 0) {
+            if (senderId.compareTo(instanceId) < 0 && canChangeRole) {
                 // Other instance becomes master, we become slave
                 isMaster = false;
+                lastRoleChangeTime = now;
                 System.out.println("🔄 ROLE CHANGE: Demoted to slave, master is: " + senderId);
             } else {
                 System.out.println("👑 ROLE CONFLICT: We remain master (our ID: " + instanceId + 
-                                  " vs their ID: " + senderId + ")");
+                                  " vs their ID: " + senderId + ")" + 
+                                  (canChangeRole ? "" : " [stability lock]"));
             }
         } else if (!isMaster && !senderIsMaster) {
             // Both are slaves - one should become master
-            if (instanceId.compareTo(senderId) < 0) {
+            if (instanceId.compareTo(senderId) < 0 && canChangeRole) {
                 // We become master
                 isMaster = true;
+                lastRoleChangeTime = now;
                 System.out.println("🔄 ROLE CHANGE: Promoted to master (we have lower ID: " + instanceId + 
                                   " vs " + senderId + ")");
             }
@@ -239,8 +248,10 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         
         // If we're master and this is a new slave, send initial sync
         if (isMaster && !senderIsMaster) {
-            System.out.println("📤 SYNC TRIGGER: Sending initial sync to new slave " + senderId);
-            sendInitialSync();
+            if (wasNewPeer) {
+                System.out.println("📤 SYNC TRIGGER: Sending initial sync to new slave " + senderId);
+                sendInitialSync();
+            }
         }
     }
     
