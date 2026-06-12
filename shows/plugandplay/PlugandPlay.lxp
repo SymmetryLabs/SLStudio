@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1781047446532,
+  "timestamp": 1781297342315,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -44,7 +44,7 @@
         "modulationColor": -16711767,
         "parameters": {
           "label": "Look-1",
-          "focusedChannel": 15
+          "focusedChannel": 14
         },
         "channels": [
           {
@@ -2418,7 +2418,7 @@
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 14.675039506957546,
-              "fader": 0.4857142884284258,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": true,
@@ -2572,7 +2572,7 @@
                 }
               }
             ],
-            "patternIndex": 31,
+            "patternIndex": 0,
             "patterns": [
               {
                 "id": 1591,
@@ -2624,7 +2624,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true,
+                "autoCycleEnabled": false,
                 "paletteName": "astro1"
               },
               {
@@ -2644,7 +2644,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 2978,
@@ -2660,7 +2660,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 8567,
@@ -2968,7 +2968,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 3173,
@@ -3011,7 +3011,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 3217,
@@ -3054,7 +3054,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 3223,
@@ -3097,7 +3097,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 3231,
@@ -3140,7 +3140,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 3894,
@@ -3245,7 +3245,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 6224,
@@ -3281,7 +3281,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 6304,
@@ -3348,7 +3348,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 6548,
@@ -3371,7 +3371,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 6556,
@@ -3438,7 +3438,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 6716,
@@ -3458,7 +3458,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 6836,
@@ -3523,7 +3523,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 7214,
@@ -3545,7 +3545,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 7310,
@@ -3561,7 +3561,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 7324,
@@ -3606,7 +3606,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               },
               {
                 "id": 7461,
@@ -3651,7 +3651,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               }
             ]
           },
@@ -3661,13 +3661,13 @@
             "modulationColor": -65506,
             "parameters": {
               "label": "Channel-10",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -3712,7 +3712,7 @@
                   "Subspd": 0,
                   "Shape": 0,
                   "Anim": 0,
-                  "-X": false,
+                  "-X": true,
                   "+X": false,
                   "-Y": false,
                   "+Y": false,
@@ -3736,13 +3736,13 @@
             "modulationColor": -2097408,
             "parameters": {
               "label": "Channel-11",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -3811,13 +3811,13 @@
             "modulationColor": -9830656,
             "parameters": {
               "label": "Channel-12",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -3886,13 +3886,13 @@
             "modulationColor": -4652801,
             "parameters": {
               "label": "Channel-13",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -3956,81 +3956,6 @@
             ]
           },
           {
-            "id": 21616,
-            "class": "heronarts.lx.LXChannel",
-            "modulationColor": -8192256,
-            "parameters": {
-              "label": "Channel-14",
-              "enabled": false,
-              "cue": false,
-              "midiMonitor": false,
-              "midiChannel": 16,
-              "autoCycleEnabled": false,
-              "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
-              "crossfadeGroup": 0,
-              "blendMode": 0,
-              "transitionEnabled": false,
-              "transitionTimeSecs": 5.0,
-              "transitionBlendMode": 0,
-              "autoDisable": true,
-              "speed": 1.0,
-              "editorVisible": false,
-              "patternBlendMode": 0,
-              "blendPatterns": false
-            },
-            "warps": [],
-            "effects": [
-              {
-                "id": 21619,
-                "class": "com.symmetrylabs.slstudio.effect.GlobalColorPalette",
-                "modulationColor": -7601921,
-                "parameters": {
-                  "label": "GlobalColorPalette",
-                  "expandedInUi": true,
-                  "enabled": true
-                },
-                "modulation": {
-                  "modulators": [],
-                  "modulations": [],
-                  "triggers": []
-                }
-              }
-            ],
-            "patternIndex": 0,
-            "patterns": [
-              {
-                "id": 21617,
-                "class": "com.symmetrylabs.slstudio.pattern.Lattice",
-                "modulationColor": -47104,
-                "parameters": {
-                  "label": "Lattice",
-                  "expandedInUi": true,
-                  "Enabled": true,
-                  "Hue": 0.0,
-                  "Speed": 218,
-                  "Subspd": 0,
-                  "Shape": 0,
-                  "Anim": 0,
-                  "-X": false,
-                  "+X": false,
-                  "-Y": false,
-                  "+Y": true,
-                  "-Z": true,
-                  "Trigger": false,
-                  "NoteLo": 36,
-                  "NoteHi": 72
-                },
-                "modulation": {
-                  "modulators": [],
-                  "modulations": [],
-                  "triggers": []
-                },
-                "autoCycleEnabled": true
-              }
-            ]
-          },
-          {
             "id": 27084,
             "class": "heronarts.lx.LXChannel",
             "modulationColor": -5439744,
@@ -4078,18 +4003,18 @@
             ]
           },
           {
-            "id": 27087,
+            "id": 27711,
             "class": "heronarts.lx.LXChannel",
-            "modulationColor": -36352,
+            "modulationColor": -2556160,
             "parameters": {
-              "label": "Channel-16",
-              "enabled": false,
+              "label": "Channel-15",
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -4106,25 +4031,33 @@
             "patternIndex": 0,
             "patterns": [
               {
-                "id": 27088,
-                "class": "com.symmetrylabs.slstudio.pattern.ParamCrossSections",
-                "modulationColor": -10092800,
+                "id": 27712,
+                "class": "com.symmetrylabs.slstudio.pattern.Noise",
+                "modulationColor": -16711934,
                 "parameters": {
-                  "label": "ParamCrossSections",
+                  "label": "Noise",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "xPos": 421.0,
-                  "yPos": 442.55015394850034,
-                  "zPos": 0.0,
-                  "xSpd": 0.7,
-                  "ySpd": 0.6,
-                  "zSpd": 0.5,
-                  "xSize": 0.3,
-                  "xLvl": 1.0,
-                  "yLvl": 1.0,
-                  "zLvl": 0.5,
-                  "ySize": 0.3,
-                  "zSize": 0.3
+                  "Hue": 0.0,
+                  "Spark": 0.0,
+                  "Wave": 0.0,
+                  "xPos": 0.5,
+                  "yPos": 0.5,
+                  "xRot": 0.5,
+                  "yRot": 0.5,
+                  "zRot": 0.5,
+                  "Spin": 0.5,
+                  "X-SYM": false,
+                  "Y-SYM": false,
+                  "R-SYM": false,
+                  "X-DUP": false,
+                  "JOG": false,
+                  "GREY": false,
+                  "Speed": 0.55,
+                  "Symm": 0,
+                  "Anim": 7,
+                  "Dens": 0.6,
+                  "AnimResets": false
                 },
                 "modulation": {
                   "modulators": [],
@@ -4139,7 +4072,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16737025,
+          "modulationColor": -12320513,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -4278,7 +4211,7 @@
       "DMXParameterMapper": {
         "id": 110,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -16711697,
+        "modulationColor": -3211009,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -4886,7 +4819,7 @@
       "parameters": {
         "label": "OSC",
         "receiveHost": "127.0.0.1",
-        "receivePort": 8000,
+        "receivePort": 8001,
         "receiveActive": true,
         "transmitHost": "localhost",
         "transmitPort": 3131,
@@ -5651,13 +5584,6 @@
           "componentId": 21614,
           "parameterPath": "Trigger",
           "pitch": 86
-        },
-        {
-          "channel": 2,
-          "type": "NOTE",
-          "componentId": 21617,
-          "parameterPath": "Trigger",
-          "pitch": 85
         }
       ]
     }
