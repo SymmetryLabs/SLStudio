@@ -30,7 +30,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
     /** Number of Pixlite outputs / ArtNet universes. Fixed at 64. */
     public static final int UNIVERSE_COUNT = 64;
 
-    public static final String[] COLUMN_LABELS = { "tx", "ty", "tz", "az", "rx", "ry", "px", "d" };
+    public static final String[] COLUMN_LABELS = { "tx", "ty", "tz", "az", "rx", "ry", "px", "d", "cv" };
     public static final String MAPPING_FILE = "data/mikey-mapping.json";
 
     private static final float DEFAULT_BAR_SPACING = 24f;
@@ -289,16 +289,18 @@ public class UIMikeyModelingTool extends UI2dContainer {
 
         final float litBtnW  = 18f;  // width of illuminate toggle button
         final float colHdrH = 11f;
-        final float xyBoxW  = 30f;  // wider box for tx/ty so 4 digits are visible
-        final float azBoxW  = 28f;  // fixed width for az so 3-4 digits are visible
-        final float pxBoxW  = 26f;  // fixed width for px (pixel count) so 3 digits are visible
+        final float xyBoxW  = 26f;  // wider box for tx/ty so 4 digits are visible
+        final float azBoxW  = 24f;  // fixed width for az so 3-4 digits are visible
+        final float pxBoxW  = 22f;  // fixed width for px (pixel count) so 3 digits are visible
+        final float cvBoxW  = 22f;  // fixed width for cv (curve) so 3 digits are visible
 
         // tx/ty cell = [-] gap box gap [+]
         final float xyCell    = bumpBtnW + gap + xyBoxW + gap + bumpBtnW;
-        // Fixed items: gridLeft + 2*xyCell + 2*gap + azBoxW + gap + pxBoxW + gap + btnsW + gap + litBtnW
-        // Remaining split across tz, rx, ry, d (4 cols, 3 gaps between them)
-        final int   otherCols = COLUMN_LABELS.length - 4;  // tz, rx, ry, d
-        final float colWFinal = Math.max(14f, (panelW - gridLeft - 2*(xyCell+gap) - azBoxW - gap - pxBoxW - gap - (otherCols-1)*gap - btnsW - gap - litBtnW) / otherCols);
+        // Flexible cols: tz, rx, ry, d  (4 cols) — az, px, cv are fixed width
+        final int   otherCols = 4;
+        // Each col (flexible or fixed) contributes (width + gap); litBtnW has no trailing gap
+        final float fixedUsed = gridLeft + 2*(xyCell+gap) + (azBoxW+gap) + (pxBoxW+gap) + (cvBoxW+gap) + otherCols*gap + (btnsW+gap) + litBtnW;
+        final float colWFinal = (panelW - fixedUsed) / otherCols;
 
         float curY = 0f;
         int globalRow = 0;
@@ -352,6 +354,13 @@ public class UIMikeyModelingTool extends UI2dContainer {
                         .setFontColor(0xFF666666)
                         .addToContainer(gridContainer);
                     hdrX += pxBoxW + gap;
+                } else if (c == 8) {  // cv
+                    new UILabel(hdrX, curY, cvBoxW, colHdrH)
+                        .setLabel(COLUMN_LABELS[c])
+                        .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+                        .setFontColor(0xFF666666)
+                        .addToContainer(gridContainer);
+                    hdrX += cvBoxW + gap;
                 } else {
                     new UILabel(hdrX, curY, colWFinal, colHdrH)
                         .setLabel(COLUMN_LABELS[c])
@@ -407,6 +416,11 @@ public class UIMikeyModelingTool extends UI2dContainer {
                         srcVals[5] = 0f;     // ry (new, default 0)
                         srcVals[6] = src[4]; // px  ← was at index 4
                         srcVals[7] = src[5]; // d   ← was at index 5
+                        srcVals[8] = 0f;     // cv (new, default 0)
+                    } else if (src.length == 8) {
+                        // 8-col format: [tx,ty,tz,az,rx,ry,px,d] — no cv yet
+                        for (int c = 0; c < 8; c++) srcVals[c] = src[c];
+                        srcVals[8] = 0f;     // cv (new, default 0)
                     }
                 }
 
@@ -454,8 +468,8 @@ public class UIMikeyModelingTool extends UI2dContainer {
                         }.setMomentary(true).setLabel("+").addToContainer(gridContainer);
                         curX += bumpBtnW + gap;
                     } else {
-                        // Normal column — az (col 3) and px (col 6) get fixed widths
-                        float boxW = (c == 3) ? azBoxW : (c == 6) ? pxBoxW : colWFinal;
+                        // Normal column — az, px, cv get fixed widths; others use colWFinal
+                        float boxW = (c == 3) ? azBoxW : (c == 6) ? pxBoxW : (c == 8) ? cvBoxW : colWFinal;
                         UIDoubleBox box = new UIDoubleBox(curX, curY, boxW, boxH) {
                             @Override protected void onValueChange(double value) {
                                 updateLiveStrip(capturedStripIndex);
@@ -552,6 +566,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
         float rx    = (float) row[4].getValue();
         float ry    = (float) row[5].getValue();
         float pitch = (float) row[7].getValue();  // d = pixelPitch/height (col 7)
+        float cv    = (float) row[8].getValue();  // cv = bezier curve amount (col 8)
 
         float rotZRad = (float) Math.toRadians(-(az > 180f ? az - 360f : az));
         float rotXRad = (float) Math.toRadians(-(rx > 180f ? rx - 360f : rx));
@@ -564,9 +579,12 @@ public class UIMikeyModelingTool extends UI2dContainer {
         t.rotateY(rotYRad);
         t.rotateZ(rotZRad);
         List<LXPoint> points = strip.getPoints();
-        for (int i = 0; i < points.size(); i++) {
+        int n = points.size();
+        for (int i = 0; i < n; i++) {
+            float tParam = (n > 1) ? (float) i / (n - 1) : 0f;
+            float bezier = 4f * cv * tParam * (1f - tParam);  // peaks at middle
             t.push();
-            t.translate(pitch * i, 0, 0);
+            t.translate(pitch * i, 0, bezier);
             points.get(i).update(t.x(), t.y(), t.z());
             t.pop();
         }
@@ -586,6 +604,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
             case 5: return 0f;   // ry
             case 6: return DEFAULT_PIXELS;  // px
             case 7: return DEFAULT_HEIGHT;  // d
+            case 8: return 0f;   // cv
             default: return 0f;
         }
     }
