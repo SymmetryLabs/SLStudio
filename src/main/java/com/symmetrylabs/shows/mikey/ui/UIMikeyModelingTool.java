@@ -22,6 +22,7 @@ import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIDoubleBox;
 import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.component.UITextBox;
+import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.Strip;
 import processing.core.PConstants;
 
@@ -702,19 +703,8 @@ public class UIMikeyModelingTool extends UI2dContainer {
     }
 
     private static void triggerRestart() {
-        try {
-            File restartFile = new File(".restart");
-            if (!restartFile.exists()) restartFile.createNewFile();
-            System.out.println("UIMikeyModelingTool: .restart created, exiting JVM to trigger relaunch.");
-        } catch (IOException e) {
-            System.err.println("UIMikeyModelingTool: failed to create .restart file");
-            e.printStackTrace();
-            return;
-        }
-        new Thread(() -> {
-            try { Thread.sleep(100); } catch (InterruptedException ignored) {}
-            System.exit(0);
-        }, "MikeyRestart").start();
+        // Use proper PApplet restart which handles cleanup correctly
+        SLStudio.applet.restart();
     }
 
     /** UITextBox subclass that participates in Tab key focus traversal. */

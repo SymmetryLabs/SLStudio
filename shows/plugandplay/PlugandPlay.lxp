@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1781047446532,
+  "timestamp": 1781295827313,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -4066,7 +4066,7 @@
                   "label": "StripIlluminator",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "strip": 355
+                  "strip": -1
                 },
                 "modulation": {
                   "modulators": [],
@@ -4103,7 +4103,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 0,
+            "patternIndex": 1,
             "patterns": [
               {
                 "id": 27088,
@@ -4132,6 +4132,25 @@
                   "triggers": []
                 },
                 "autoCycleEnabled": true
+              },
+              {
+                "id": 27711,
+                "class": "com.symmetrylabs.shows.mikey.UniverseSelector",
+                "modulationColor": -65516,
+                "parameters": {
+                  "label": "UniverseSelector",
+                  "expandedInUi": true,
+                  "Enabled": true,
+                  "universe": 1,
+                  "pixel": 1,
+                  "all-pixels": true
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                },
+                "autoCycleEnabled": true
               }
             ]
           }
@@ -4139,7 +4158,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16737025,
+          "modulationColor": -7471360,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -4278,7 +4297,7 @@
       "DMXParameterMapper": {
         "id": 110,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -16711697,
+        "modulationColor": -28672,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -5682,9 +5701,9 @@
         "16192": true
       },
       "preview": {
-        "radius": 1466.7284063893203,
-        "theta": 6.23400000000001,
-        "phi": 0.06720362949371268,
+        "radius": 1772.1031845821315,
+        "theta": 6.270000000000013,
+        "phi": -0.6197963705062869,
         "positionX": 50.107452392578125,
         "positionY": 485.6410217285156,
         "positionZ": -128.09718322753906

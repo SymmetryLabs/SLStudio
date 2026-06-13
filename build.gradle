@@ -248,3 +248,17 @@ protobuf {
         }
     }
 }
+
+task fixProtocPermissions {
+    doLast {
+        fileTree("${gradle.gradleUserHomeDir}/caches/modules-2/files-2.1/io.grpc/protoc-gen-grpc-java")
+            .matching { include '**/*.exe' }
+            .each { it.setExecutable(true) }
+    }
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'generateProto') {
+        task.dependsOn fixProtocPermissions
+    }
+}
