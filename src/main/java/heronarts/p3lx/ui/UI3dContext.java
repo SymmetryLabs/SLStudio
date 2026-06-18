@@ -84,6 +84,23 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
 
     private final PVector eyeDamped = new PVector(0, 0, 0);
 
+    // Quaternion-based free trackball orientation (no gimbal lock).
+    // Home orientations: maps camera-local axes (+X right, +Y up, -Z forward) to world.
+    private static final Quat HOME_Y_UP = new Quat(0, 1, 0, 0);
+    private static final Quat HOME_Z_UP = new Quat(0, 0, 0.70710678f, -0.70710678f);
+
+    private final Quat orientationTarget = new Quat(0, 1, 0, 0);
+    private final Quat orientationCurrent = new Quat(0, 1, 0, 0);
+
+    // Reusable scratch vectors to avoid per-frame allocation
+    private final PVector tmpForward = new PVector();
+    private final PVector tmpUp = new PVector();
+    private final PVector tmpRight = new PVector();
+
+    // Rotation sensitivity (radians per pixel) and orientation damping follow factor
+    private static final float ORBIT_SENS = 0.006f;
+    private static final float ORIENT_DAMP = 0.5f;
+
     public final BooleanParameter ortho =
         new BooleanParameter("Ortho")
         .setDescription("Orthographic projection mode");
@@ -324,6 +341,17 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
             PVector position = this.center;
             switch (interactionMode) {
             case ZOOM:
+            case MOVE:
+                this.orientationTarget.set(HOME_Y_UP);
+                this.orientationCurrent.set(HOME_Y_UP);
+                break;
+            case ZOOM_Z_UP:
+                this.orientationTarget.set(HOME_Z_UP);
+                this.orientationCurrent.set(HOME_Z_UP);
+                break;
+            }
+            switch (interactionMode) {
+            case ZOOM:
             case ZOOM_Z_UP:
                 position = this.center;
                 break;
@@ -404,6 +432,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
      */
     public UI3dContext setTheta(double theta) {
         this.theta.setValue(theta);
+        applyThetaPhiToOrientation(false);
         return this;
     }
 
@@ -415,7 +444,38 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
      */
     public UI3dContext setPhi(float phi) {
         this.phi.setValue(phi);
+        applyThetaPhiToOrientation(false);
         return this;
+    }
+
+    /**
+     * Rebuilds the orientation quaternion from the legacy theta/phi parameters,
+     * preserving compatibility with view-preset buttons and saved projects.
+     *
+     * @param snap if true, snaps the displayed orientation immediately; otherwise animates
+     */
+    private void applyThetaPhiToOrientation(boolean snap) {
+        double t = this.theta.getValue();
+        double p = this.phi.getValue();
+        float cphi = (float) Math.cos(p);
+        float sphi = (float) Math.sin(p);
+        float sth = (float) Math.sin(t);
+        float cth = (float) Math.cos(t);
+
+        if (this.interactionMode == InteractionMode.ZOOM_Z_UP) {
+            // Z-up: eye_dir = (-cphi*sth, -cphi*cth, sphi); forward = -eye_dir
+            this.tmpForward.set(cphi * sth, cphi * cth, -sphi);
+            this.tmpUp.set(0, 0, -1);
+        } else {
+            // Y-up: eye_dir = (cphi*sth, sphi, -cphi*cth); forward = -eye_dir
+            this.tmpForward.set(-cphi * sth, -sphi, cphi * cth);
+            this.tmpUp.set(0, -1, 0);
+        }
+        Quat q = Quat.fromForwardUp(this.tmpForward, this.tmpUp);
+        this.orientationTarget.set(q);
+        if (snap) {
+            this.orientationCurrent.set(q);
+        }
     }
 
     /**
@@ -527,110 +587,66 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     }
 
     private void computePosition() {
+        // Smoothly follow the target orientation (free trackball, no gimbal lock)
+        this.orientationCurrent.slerp(this.orientationTarget, ORIENT_DAMP);
+
         float rv = this.radiusDamped.getValuef();
-        double tv = this.thetaDamped.getValue();
-        double pv = this.phiDamped.getValue();
-        double rollv = this.rollDamped.getValue();
-
-        float sintheta = (float) Math.sin(tv);
-        float costheta = (float) Math.cos(tv);
-        float sinphi = (float) Math.sin(pv);
-        float cosphi = (float) Math.cos(pv);
-
         float px = this.xDamped.getValuef();
         float py = this.yDamped.getValuef();
         float pz = this.zDamped.getValuef();
 
-        switch (this.interactionMode) {
-        case ZOOM:
-            this.centerDamped.set(px, py, pz);
-            this.eyeDamped.set(
-                px + rv * cosphi * sintheta,
-                py + rv * sinphi,
-                pz - rv * cosphi * costheta
-            );
-            if (pv > PHI_UP_CORRECTION) {
-                this.up.set((float) Math.sin(tv), 0, (float) -Math.cos(tv));
-            } else if (pv < -PHI_UP_CORRECTION) {
-                this.up.set((float) -Math.sin(tv), 0, (float) Math.cos(tv));
-            } else {
-                this.up.set(0, -1, 0);
-            }
-            applyRoll(rollv);
-            this.eye.set(this.eyeDamped);
-            break;
-        case ZOOM_Z_UP:
-            this.centerDamped.set(px, py, pz);
-            this.eyeDamped.set(
-                    px - rv * cosphi * sintheta,
-                    py - rv * cosphi * costheta,
-                    pz + rv * sinphi
-                    );
-            if (pv > PHI_UP_CORRECTION) {
-                    this.up.set((float) -Math.sin(tv), (float) -Math.cos(tv), 0);
-            } else if (pv < -PHI_UP_CORRECTION) {
-                    this.up.set((float) Math.sin(tv), (float) Math.cos(tv), 0);
-            } else {
-                    this.up.set(0, 0, -1);
-            }
-            applyRoll(rollv);
-            this.eye.set(this.eyeDamped);
-            break;
-        case MOVE:
+        // Derive world-space camera basis from the current orientation
+        this.orientationCurrent.rotateVector(0, 0, -1, this.tmpForward); // view direction
+        this.orientationCurrent.rotateVector(0, 1, 0, this.tmpUp);       // up direction
+
+        if (this.interactionMode == InteractionMode.MOVE) {
+            // Eye is the fixed pivot; look outward along forward
             this.eyeDamped.set(px, py, pz);
             this.centerDamped.set(
-                px + rv * cosphi * sintheta,
-                py + rv * sinphi,
-                pz + rv * cosphi * costheta
+                px + this.tmpForward.x * rv,
+                py + this.tmpForward.y * rv,
+                pz + this.tmpForward.z * rv
             );
-            this.up.set(0, -1, 0);
-            applyRoll(rollv);
-            this.center.set(this.centerDamped);
-            break;
+        } else {
+            // ZOOM / ZOOM_Z_UP: center is the fixed pivot; eye orbits around it
+            this.centerDamped.set(px, py, pz);
+            this.eyeDamped.set(
+                px - this.tmpForward.x * rv,
+                py - this.tmpForward.y * rv,
+                pz - this.tmpForward.z * rv
+            );
         }
+        this.up.set(this.tmpUp.x, this.tmpUp.y, this.tmpUp.z);
+        this.eye.set(this.eyeDamped);
+        this.center.set(this.centerDamped);
     }
 
     /**
-     * Applies roll rotation to the up vector around the view direction (eye->center axis).
-     * This rotates the camera around its forward viewing axis like a airplane banking.
+     * View-relative trackball orbit. Rotates the camera around its own local up
+     * (yaw) and right (pitch) axes, so behavior is consistent from any angle with
+     * no gimbal lock.
+     *
+     * @param yaw   rotation amount around local up axis (radians)
+     * @param pitch rotation amount around local right axis (radians)
      */
-    private void applyRoll(double rollAngle) {
-        if (rollAngle == 0) return;
+    private void orbit(float yaw, float pitch) {
+        Quat qYaw = Quat.fromAxisAngle(0, 1, 0, yaw);
+        Quat qPitch = Quat.fromAxisAngle(1, 0, 0, pitch);
+        Quat result = this.orientationTarget.mult(qYaw).mult(qPitch);
+        result.normalize();
+        this.orientationTarget.set(result);
+    }
 
-        // View direction (forward axis to rotate around)
-        float vx = this.centerDamped.x - this.eyeDamped.x;
-        float vy = this.centerDamped.y - this.eyeDamped.y;
-        float vz = this.centerDamped.z - this.eyeDamped.z;
-
-        // Normalize view direction
-        float len = (float) Math.sqrt(vx * vx + vy * vy + vz * vz);
-        if (len < 0.0001f) return;
-        vx /= len; vy /= len; vz /= len;
-
-        // Rotate up vector around view axis using Rodrigues' rotation formula
-        float cosRoll = (float) Math.cos(rollAngle);
-        float sinRoll = (float) Math.sin(rollAngle);
-
-        float ux = this.up.x, uy = this.up.y, uz = this.up.z;
-
-        // dot(u, v) * v
-        float dot = ux * vx + uy * vy + uz * vz;
-        float dotvx = dot * vx;
-        float dotvy = dot * vy;
-        float dotvz = dot * vz;
-
-        // cross(v, u)
-        float crossx = vy * uz - vz * uy;
-        float crossy = vz * ux - vx * uz;
-        float crossz = vx * uy - vy * ux;
-
-        // u * cos + cross(v, u) * sin + dot(u, v) * v * (1 - cos)
-        float oneMinusCos = 1 - cosRoll;
-        this.up.set(
-            ux * cosRoll + crossx * sinRoll + dotvx * oneMinusCos,
-            uy * cosRoll + crossy * sinRoll + dotvy * oneMinusCos,
-            uz * cosRoll + crossz * sinRoll + dotvz * oneMinusCos
-        );
+    /**
+     * Rolls the camera around its forward viewing axis (banking).
+     *
+     * @param angle roll amount (radians)
+     */
+    private void rollView(float angle) {
+        Quat qRoll = Quat.fromAxisAngle(0, 0, -1, angle);
+        Quat result = this.orientationTarget.mult(qRoll);
+        result.normalize();
+        this.orientationTarget.set(result);
     }
 
     @Override
@@ -775,64 +791,44 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         lastMx = mx;
         lastMy = my;
 
-        switch (this.interactionMode) {
-        case ZOOM:
-                if (mouseEvent.isShiftDown()) {
-                        this.radius.incrementValue(safeDy);
-                } else if (mouseEvent.isAltDown()) {
-                        // Alt + drag: roll around Z-axis (view direction)
-                        this.roll.incrementValue(safeDx * .003);
-                } else if (mouseEvent.isMetaDown() || mouseEvent.isControlDown()) {
-                        float panScale = this.radiusDamped.getValuef() / 500f;
-                        float cdx = LXUtils.constrainf(safeDx, -30, 30) * panScale;
-                        float cdy = LXUtils.constrainf(safeDy, -30, 30) * panScale;
-                        float dcx = cdx * (float) Math.cos(this.thetaDamped.getValuef());
-                        float dcz = cdx * (float) Math.sin(this.thetaDamped.getValuef());
-                        setCenter(this.center.x - dcx, this.center.y + cdy, this.center.z - dcz);
-                } else {
-                        this.theta.incrementValue(-safeDx * .003);
-                        this.phi.incrementValue(safeDy * .003);
-                }
-                break;
-        case ZOOM_Z_UP:
-            if (mouseEvent.isShiftDown()) {
-                this.radius.incrementValue(safeDy);
-            } else if (mouseEvent.isAltDown()) {
-                // Alt + drag: roll around Z-axis (view direction)
-                this.roll.incrementValue(safeDx * .003);
-            } else if (mouseEvent.isMetaDown() || mouseEvent.isControlDown()) {
-                float panScale = this.radiusDamped.getValuef() / 500f;
-                float cdx = LXUtils.constrainf(safeDx, -30, 30) * panScale;
-                float cdy = LXUtils.constrainf(safeDy, -30, 30) * panScale;
-                float dcx = cdx * (float) Math.cos(this.thetaDamped.getValuef());
-                float dcz = cdx * (float) Math.sin(this.thetaDamped.getValuef());
-                setCenter(this.center.x + dcx, this.center.y - dcz, this.center.z + cdy);
-            } else {
-                this.theta.incrementValue(-safeDx * .003);
-                this.phi.incrementValue(safeDy * .003);
-            }
-            break;
-        case MOVE:
-            if (mouseEvent.isAltDown()) {
-                // Alt + drag: roll around Z-axis (view direction)
-                this.roll.incrementValue(safeDx * .003);
-            } else if (mouseEvent.isMetaDown() || mouseEvent.isShiftDown()) {
-                float costh = (float) Math.cos(this.thetaDamped.getValuef());
-                float sinth = (float) Math.sin(this.thetaDamped.getValuef());
-                float dex = safeDx*costh;
-                float dez = -safeDx*sinth;
-                float dey = -safeDy;
-                if (mouseEvent.isShiftDown()) {
-                    dex -= safeDy*sinth;
-                    dez -= safeDy*costh;
-                    dey = 0;
-                }
-                setEye(this.eye.x + dex, this.eye.y + dey, this.eye.z + dez);
-            } else {
-                this.theta.incrementValue(safeDx * .003);
-                this.phi.incrementValue(-safeDy * .003);
-            }
-            break;
+        // Unified view-relative controls for all interaction modes:
+        //   Shift + drag  -> zoom
+        //   Alt + drag    -> roll (around forward axis)
+        //   Cmd/Ctrl drag -> pan (perpendicular to view)
+        //   drag          -> orbit (free trackball)
+        if (shiftDown) {
+            this.radius.incrementValue(safeDy);
+        } else if (altDown) {
+            rollView(safeDx * ORBIT_SENS);
+        } else if (metaDown) {
+            pan(safeDx, safeDy);
+        } else {
+            orbit(-safeDx * ORBIT_SENS, safeDy * ORBIT_SENS);
+        }
+    }
+
+    /**
+     * View-relative pan: slides the pivot (center in ZOOM modes, eye in MOVE)
+     * along the camera's screen-right and screen-up axes.
+     */
+    private void pan(float safeDx, float safeDy) {
+        this.orientationCurrent.rotateVector(1, 0, 0, this.tmpRight); // screen right in world
+        this.orientationCurrent.rotateVector(0, 1, 0, this.tmpUp);    // screen up in world
+
+        float panScale = this.radiusDamped.getValuef() / 500f;
+        float cdx = LXUtils.constrainf(safeDx, -30, 30) * panScale;
+        float cdy = LXUtils.constrainf(safeDy, -30, 30) * panScale;
+
+        // Drag right -> content follows cursor -> pivot moves left along screen-right.
+        // Drag down  -> content follows cursor -> pivot moves up   along screen-up.
+        float dxw = -this.tmpRight.x * cdx + this.tmpUp.x * cdy;
+        float dyw = -this.tmpRight.y * cdx + this.tmpUp.y * cdy;
+        float dzw = -this.tmpRight.z * cdx + this.tmpUp.z * cdy;
+
+        if (this.interactionMode == InteractionMode.MOVE) {
+            setEye(this.eye.x + dxw, this.eye.y + dyw, this.eye.z + dzw);
+        } else {
+            setCenter(this.center.x + dxw, this.center.y + dyw, this.center.z + dzw);
         }
     }
 
@@ -844,9 +840,12 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
             this.radius.incrementValue(delta * this.radius.getValue() / 1000.);
             break;
         case MOVE:
-            float dcx = delta * (float) Math.sin(this.thetaDamped.getValuef());
-            float dcz = delta * (float) Math.cos(this.thetaDamped.getValuef());
-            setEye(this.eye.x - dcx, this.eye.y, this.eye.z - dcz);
+            this.orientationCurrent.rotateVector(0, 0, -1, this.tmpForward);
+            setEye(
+                this.eye.x + this.tmpForward.x * delta,
+                this.eye.y + this.tmpForward.y * delta,
+                this.eye.z + this.tmpForward.z * delta
+            );
             break;
         }
     }
@@ -862,16 +861,16 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         }
         if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
             consumeKeyEvent();
-            this.theta.incrementValue(amount);
+            orbit(amount, 0);
         } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
             consumeKeyEvent();
-            this.theta.incrementValue(-amount);
+            orbit(-amount, 0);
         } else if (keyCode == java.awt.event.KeyEvent.VK_UP) {
             consumeKeyEvent();
-            this.phi.incrementValue(-amount);
+            orbit(0, -amount);
         } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
             consumeKeyEvent();
-            this.phi.incrementValue(amount);
+            orbit(0, amount);
         }
     }
 
@@ -882,16 +881,26 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     private static final String KEY_POSITION_X = "positionX";
     private static final String KEY_POSITION_Y = "positionY";
     private static final String KEY_POSITION_Z = "positionZ";
+    private static final String KEY_ORIENT_W = "orientW";
+    private static final String KEY_ORIENT_X = "orientX";
+    private static final String KEY_ORIENT_Y = "orientY";
+    private static final String KEY_ORIENT_Z = "orientZ";
 
     @Override
     public void save(LX lx, JsonObject object) {
         object.addProperty(KEY_RADIUS, this.radius.getValue());
+        // Legacy theta/phi/roll retained for backward compatibility with older builds
         object.addProperty(KEY_THETA, this.theta.getValue());
         object.addProperty(KEY_PHI, this.phi.getValue());
         object.addProperty(KEY_ROLL, this.roll.getValue());
         object.addProperty(KEY_POSITION_X, this.positionX.getValue());
         object.addProperty(KEY_POSITION_Y, this.positionY.getValue());
         object.addProperty(KEY_POSITION_Z, this.positionZ.getValue());
+        // Quaternion orientation is the source of truth for the trackball camera
+        object.addProperty(KEY_ORIENT_W, this.orientationTarget.w);
+        object.addProperty(KEY_ORIENT_X, this.orientationTarget.x);
+        object.addProperty(KEY_ORIENT_Y, this.orientationTarget.y);
+        object.addProperty(KEY_ORIENT_Z, this.orientationTarget.z);
     }
 
     @Override
@@ -917,10 +926,160 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         if (object.has(KEY_POSITION_Z)) {
             this.positionZ.setValue(object.get(KEY_POSITION_Z).getAsDouble());
         }
+        // Restore orientation: prefer the quaternion; fall back to legacy theta/phi
+        if (object.has(KEY_ORIENT_W) && object.has(KEY_ORIENT_X)
+            && object.has(KEY_ORIENT_Y) && object.has(KEY_ORIENT_Z)) {
+            float qw = object.get(KEY_ORIENT_W).getAsFloat();
+            float qx = object.get(KEY_ORIENT_X).getAsFloat();
+            float qy = object.get(KEY_ORIENT_Y).getAsFloat();
+            float qz = object.get(KEY_ORIENT_Z).getAsFloat();
+            this.orientationTarget.set(qw, qx, qy, qz);
+            this.orientationTarget.normalize();
+            this.orientationCurrent.set(this.orientationTarget);
+        } else {
+            applyThetaPhiToOrientation(true);
+        }
         // Sync this.center so cmd+drag panning uses the correct base position
         this.center.x = this.positionX.getValuef();
         this.center.y = this.positionY.getValuef();
         this.center.z = this.positionZ.getValuef();
+    }
+
+    /**
+     * Minimal unit-quaternion helper for the free trackball camera.
+     * Rotation convention: rotateVector applies q * v * q^-1.
+     */
+    private static class Quat {
+        float w, x, y, z;
+
+        Quat(float w, float x, float y, float z) {
+            this.w = w; this.x = x; this.y = y; this.z = z;
+        }
+
+        void set(Quat q) {
+            this.w = q.w; this.x = q.x; this.y = q.y; this.z = q.z;
+        }
+
+        void set(float w, float x, float y, float z) {
+            this.w = w; this.x = x; this.y = y; this.z = z;
+        }
+
+        static Quat fromAxisAngle(float ax, float ay, float az, float angle) {
+            float half = angle * 0.5f;
+            float s = (float) Math.sin(half);
+            return new Quat((float) Math.cos(half), ax * s, ay * s, az * s);
+        }
+
+        /** Returns this * q as a new quaternion (apply q first, then this). */
+        Quat mult(Quat q) {
+            return new Quat(
+                w * q.w - x * q.x - y * q.y - z * q.z,
+                w * q.x + x * q.w + y * q.z - z * q.y,
+                w * q.y - x * q.z + y * q.w + z * q.x,
+                w * q.z + x * q.y - y * q.x + z * q.w
+            );
+        }
+
+        void normalize() {
+            float n = (float) Math.sqrt(w * w + x * x + y * y + z * z);
+            if (n > 1e-9f) {
+                w /= n; x /= n; y /= n; z /= n;
+            }
+        }
+
+        /** Rotates vector (vx,vy,vz) by this quaternion, storing the result in out. */
+        void rotateVector(float vx, float vy, float vz, PVector out) {
+            float tx = 2f * (y * vz - z * vy);
+            float ty = 2f * (z * vx - x * vz);
+            float tz = 2f * (x * vy - y * vx);
+            out.x = vx + w * tx + (y * tz - z * ty);
+            out.y = vy + w * ty + (z * tx - x * tz);
+            out.z = vz + w * tz + (x * ty - y * tx);
+        }
+
+        /** Spherically interpolate this toward target by t, storing into this. */
+        void slerp(Quat target, float t) {
+            float dot = w * target.w + x * target.x + y * target.y + z * target.z;
+            float tw = target.w, tx = target.x, ty = target.y, tz = target.z;
+            if (dot < 0f) {
+                tw = -tw; tx = -tx; ty = -ty; tz = -tz; dot = -dot;
+            }
+            if (dot > 0.9995f) {
+                w += t * (tw - w);
+                x += t * (tx - x);
+                y += t * (ty - y);
+                z += t * (tz - z);
+                normalize();
+                return;
+            }
+            float theta0 = (float) Math.acos(dot);
+            float theta = theta0 * t;
+            float sinTheta = (float) Math.sin(theta);
+            float sinTheta0 = (float) Math.sin(theta0);
+            float s0 = (float) Math.cos(theta) - dot * sinTheta / sinTheta0;
+            float s1 = sinTheta / sinTheta0;
+            w = s0 * w + s1 * tw;
+            x = s0 * x + s1 * tx;
+            y = s0 * y + s1 * ty;
+            z = s0 * z + s1 * tz;
+        }
+
+        /**
+         * Builds an orientation quaternion from a desired world forward (eye->center)
+         * and up vector. Local axes map: +X=right, +Y=up, -Z=forward.
+         */
+        static Quat fromForwardUp(PVector forward, PVector up) {
+            float fx = forward.x, fy = forward.y, fz = forward.z;
+            float fl = (float) Math.sqrt(fx * fx + fy * fy + fz * fz);
+            if (fl < 1e-9f) return new Quat(1, 0, 0, 0);
+            fx /= fl; fy /= fl; fz /= fl;
+            // back = -forward (camera local +Z)
+            float bx = -fx, by = -fy, bz = -fz;
+            // right = up x back
+            float rx = up.y * bz - up.z * by;
+            float ry = up.z * bx - up.x * bz;
+            float rz = up.x * by - up.y * bx;
+            float rl = (float) Math.sqrt(rx * rx + ry * ry + rz * rz);
+            if (rl < 1e-9f) { rx = 1; ry = 0; rz = 0; } else { rx /= rl; ry /= rl; rz /= rl; }
+            // trueUp = back x right
+            float ux = by * rz - bz * ry;
+            float uy = bz * rx - bx * rz;
+            float uz = bx * ry - by * rx;
+            // Columns of rotation matrix = images of local X,Y,Z = right, trueUp, back
+            float m00 = rx, m01 = ux, m02 = bx;
+            float m10 = ry, m11 = uy, m12 = by;
+            float m20 = rz, m21 = uz, m22 = bz;
+            float tr = m00 + m11 + m22;
+            float w, x, y, z, s;
+            if (tr > 0) {
+                s = (float) Math.sqrt(tr + 1f) * 2f;
+                w = 0.25f * s;
+                x = (m21 - m12) / s;
+                y = (m02 - m20) / s;
+                z = (m10 - m01) / s;
+            } else if (m00 > m11 && m00 > m22) {
+                s = (float) Math.sqrt(1f + m00 - m11 - m22) * 2f;
+                w = (m21 - m12) / s;
+                x = 0.25f * s;
+                y = (m01 + m10) / s;
+                z = (m02 + m20) / s;
+            } else if (m11 > m22) {
+                s = (float) Math.sqrt(1f + m11 - m00 - m22) * 2f;
+                w = (m02 - m20) / s;
+                x = (m01 + m10) / s;
+                y = 0.25f * s;
+                z = (m12 + m21) / s;
+            } else {
+                s = (float) Math.sqrt(1f + m22 - m00 - m11) * 2f;
+                w = (m10 - m01) / s;
+                x = (m02 + m20) / s;
+                y = (m12 + m21) / s;
+                z = 0.25f * s;
+            }
+            Quat q = new Quat(w, x, y, z);
+            q.normalize();
+            return q;
+        }
     }
 
 }
