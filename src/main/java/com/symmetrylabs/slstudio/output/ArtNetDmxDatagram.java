@@ -32,6 +32,7 @@ public class ArtNetDmxDatagram extends LXDatagram {
     }
 
     public ArtNetDmxDatagram(LX lx, String ipAddress, int[] indices, int dataLength, int universeNumber) {
+        // Use actual data length padded to even number (ArtNet spec requires even length)
         super(ArtNetDatagramUtil.HEADER_LENGTH + ARTNET_DMX_HEADER_LENGTH + dataLength + (dataLength % 2));
 
         this.pointIndices = indices;
@@ -50,8 +51,10 @@ public class ArtNetDmxDatagram extends LXDatagram {
         this.buffer[13] = 0; // Physical
         this.buffer[14] = (byte) (universeNumber & 0xff); // Universe LSB
         this.buffer[15] = (byte) ((universeNumber >>> 8) & 0xff); // Universe MSB
-        this.buffer[16] = (byte) ((dataLength >>> 8) & 0xff);
-        this.buffer[17] = (byte) (dataLength & 0xff);
+        // Report actual padded data length (must be even per ArtNet spec)
+        int paddedDataLength = dataLength + (dataLength % 2);
+        this.buffer[16] = (byte) ((paddedDataLength >>> 8) & 0xff);
+        this.buffer[17] = (byte) (paddedDataLength & 0xff);
     }
 
     public ArtNetDmxDatagram setUnmappedPointColor(int c, boolean flash) {
@@ -96,9 +99,8 @@ public class ArtNetDmxDatagram extends LXDatagram {
             this.buffer[SEQUENCE_INDEX] = this.sequence;
         }
 
-        // We need to slow down the speed at which we send the packets so that we don't overload our switches. 3us seems to
-        // be about right - Yona
-        busySleep(3000);
+        // No delay - test if delay was causing frame rate issues
+        // busySleep(10000);
     }
 
     LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
@@ -109,8 +111,17 @@ public class ArtNetDmxDatagram extends LXDatagram {
             lastFlashNanos = System.nanoTime();
             flashInOn = !flashInOn;
         }
+        // DEBUG: Check for buffer overflow
+        int expectedEnd = offset + pointIndices.length * 3;
+        if (expectedEnd > buffer.length) {
+            System.err.println("ArtNetDmxDatagram BUFFER OVERFLOW: universe=" + ((this.buffer[14] & 0xFF) | ((this.buffer[15] & 0xFF) << 8)) + " expectedEnd=" + expectedEnd + " buffer.length=" + buffer.length + " pointIndices.length=" + pointIndices.length);
+        }
         for (int index : pointIndices) {
-            int colorValue = (index >= 0) ? colors[index] : unmappedC;
+            // DEBUG: Check for color array out of bounds
+            if (index < 0 || index >= colors.length) {
+                System.err.println("ArtNetDmxDatagram COLOR OOB: universe=" + ((this.buffer[14] & 0xFF) | ((this.buffer[15] & 0xFF) << 8)) + " index=" + index + " colors.length=" + colors.length);
+            }
+            int colorValue = (index >= 0 && index < colors.length) ? colors[index] : unmappedC;
 
             int gammaExpanded = GammaExpander.getExpandedColor(colorValue);
             buffer[i + byteOffset[0]] = (byte) Ops8.red(gammaExpanded);

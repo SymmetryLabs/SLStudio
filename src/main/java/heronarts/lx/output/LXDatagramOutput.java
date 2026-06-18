@@ -59,6 +59,12 @@ public class LXDatagramOutput extends LXOutput {
     public LXDatagramOutput(LX lx, DatagramSocket socket) {
         super(lx);
         this.socket = socket;
+        // Increase socket send buffer to prevent overflow with many universes
+        try {
+            this.socket.setSendBufferSize(1024 * 1024); // 1MB send buffer
+        } catch (SocketException e) {
+            // Ignore if not supported on this platform
+        }
     }
 
     /* If set to true, logConnections will print a message every time a
@@ -179,19 +185,19 @@ public class LXDatagramOutput extends LXOutput {
                     }
                 }
             }
-            // Send Art-Net Sync packet after DMX datagrams
-            for (InetAddress addr : this.destinations.keySet()) {
-                byte[] syncBuf = new byte[ArtNetDatagramUtil.HEADER_LENGTH];
-                ArtNetDatagramUtil.fillHeader(syncBuf, (short) 0x5200);
-                DatagramPacket syncPacket = new DatagramPacket(syncBuf, syncBuf.length, addr, ArtNetDatagramUtil.ARTNET_PORT);
-                try {
-                    this.socket.send(syncPacket);
-                } catch (IOException e) {
-                    if (logConnections) {
-                        System.out.println(this.date.format(now) + " Error sending Art-Net Sync to " + addr + " (" + e.getLocalizedMessage() + ")");
-                    }
-                }
-            }
+            // DISABLED: Art-Net Sync packet - testing if this causes issues with high universe counts
+            // for (InetAddress addr : this.destinations.keySet()) {
+            //     byte[] syncBuf = new byte[ArtNetDatagramUtil.HEADER_LENGTH];
+            //     ArtNetDatagramUtil.fillHeader(syncBuf, (short) 0x5200);
+            //     DatagramPacket syncPacket = new DatagramPacket(syncBuf, syncBuf.length, addr, ArtNetDatagramUtil.ARTNET_PORT);
+            //     try {
+            //         this.socket.send(syncPacket);
+            //     } catch (IOException e) {
+            //         if (logConnections) {
+            //             System.out.println(this.date.format(now) + " Error sending Art-Net Sync to " + addr + " (" + e.getLocalizedMessage() + ")");
+            //         }
+            //     }
+            // }
             lastFrameMillis = now;
         }
         afterSend(src);

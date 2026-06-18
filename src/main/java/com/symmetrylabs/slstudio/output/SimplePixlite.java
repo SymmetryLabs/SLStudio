@@ -50,7 +50,10 @@ public class SimplePixlite extends ArtNetOutput {
         public SimplePixliteOutput(PointsGrouping pointsGrouping) throws SocketException {
             super(lx);
             this.outputIndex = Integer.parseInt(pointsGrouping.id);
-            this.firstUniverseOnOutput = outputIndex * 10;
+            // Standard Pixlite configuration uses *10 pattern (output 1 -> universe 10, etc.)
+            // but the Mikey setup currently uses direct mapping (output 1 -> universe 1)
+            this.firstUniverseOnOutput = outputIndex;  // Using direct 1:1 mapping for Mikey
+            System.out.println("SimplePixliteOutput: outputIndex=" + outputIndex + " -> firstUniverse=" + this.firstUniverseOnOutput);
             setupDatagrams(pointsGrouping);
         }
 
@@ -59,8 +62,22 @@ public class SimplePixlite extends ArtNetOutput {
             int numPoints = allIndices.length;
             int pixelsPerUniverse = MAX_NUM_POINTS_PER_UNIVERSE;
             int counter = 0;
-            // outputIndex is 1-based, universes start at 1
-            int firstUniverse = outputIndex;
+            int firstUniverse = firstUniverseOnOutput;
+            int numUniversesNeeded = (numPoints + pixelsPerUniverse - 1) / pixelsPerUniverse;
+            boolean isProblemUniverse = (firstUniverse >= 49 && firstUniverse <= 52);
+            if (isProblemUniverse) {
+                int dataLength = 3 * numPoints;
+                int paddedLength = dataLength + (dataLength % 2);
+                System.out.println("  setupDatagrams [U" + firstUniverse + "]: numPoints=" + numPoints + " dataLength=" + dataLength + " padded=" + paddedLength + " BUFFER=" + (ArtNetDatagramUtil.HEADER_LENGTH + 18 + paddedLength));
+                // Print first few indices to check for overlap
+                if (numPoints > 0) {
+                    System.out.print("    First 5 point indices: ");
+                    for (int i = 0; i < Math.min(5, numPoints); i++) {
+                        System.out.print(allIndices[i] + " ");
+                    }
+                    System.out.println();
+                }
+            }
             for (int u = 0; counter < numPoints; u++) {
                 int universe = firstUniverse + u;
                 int numIndices = Math.min(pixelsPerUniverse, numPoints - counter);

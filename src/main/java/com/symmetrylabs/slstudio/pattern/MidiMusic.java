@@ -45,6 +45,9 @@ public class MidiMusic extends SLPattern<SLModel> {
     private final CompoundParameter wave = new CompoundParameter("Wave", 0);
     private final BooleanParameter triggerSweep = new BooleanParameter("Sweep", false);
     private final CompoundParameter top = new CompoundParameter("Top", 0.72);
+    private final CompoundParameter minNote = new CompoundParameter("MinNote", 0, 0, 127);
+    private final CompoundParameter maxNote = new CompoundParameter("MaxNote", 40, 0, 127);
+    private final BooleanParameter reverse = new BooleanParameter("Reverse", false);
 
     public MidiMusic(LX lx) {
         super(lx);
@@ -53,6 +56,9 @@ public class MidiMusic extends SLPattern<SLModel> {
         addParameter(top);
         addParameter(wave);
         addParameter(triggerSweep);
+        addParameter(minNote);
+        addParameter(maxNote);
+        addParameter(reverse);
 
         triggerSweep.setMode(BooleanParameter.Mode.MOMENTARY);
         triggerSweep.addListener(new LXParameterListener() {
@@ -117,7 +123,14 @@ public class MidiMusic extends SLPattern<SLModel> {
         }
 
         void noteOn(MidiNote note) {
-            xPos = model.xMin + ((note.getPitch() / 30.f) * model.xRange);
+            float noteRange = maxNote.getValuef() - minNote.getValuef();
+            float normalizedPitch = (note.getPitch() - minNote.getValuef()) / (noteRange > 0 ? noteRange : 1);
+            float constrained = (float) LXUtils.constrain(normalizedPitch, 0, 1);
+            if (reverse.isOn()) {
+                xPos = model.xMax - (float)(constrained * model.xRange);
+            } else {
+                xPos = model.xMin + (float)(constrained * model.xRange);
+            }
             yPos.setValue(LXUtils.lerpf(20, model.yMax*top.getValuef(), note.getVelocity() / 127.f)).stop();
             brt.setRangeFromHereTo(LXUtils.lerpf(60, 100, note.getVelocity() / 127.f), 20).start();
         }
@@ -176,7 +189,7 @@ public class MidiMusic extends SLPattern<SLModel> {
     }
 
     public void noteOnReceived(MidiNoteOn note) {
-        if (note.getPitch() < 40) {
+        if (note.getPitch() >= minNote.getValue() && note.getPitch() <= maxNote.getValue()) {
             LightUp light = getLight();
             lightMap.put(note.getPitch(), light);
             light.noteOn(note);

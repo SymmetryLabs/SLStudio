@@ -519,7 +519,7 @@ public class LXOscEngine extends LXComponent {
                             channel.goPattern(LXChannel.allPatterns.get("AskewPlanes[Look-1 | Channel-9 | AskewPlanes]"));
 
 
-                            System.out.println(LXChannel.allPatterns.get("AskewPlanes[Look-1 | Channel-9 | AskewPlanes]"));
+                            // System.out.println(LXChannel.allPatterns.get("AskewPlanes[Look-1 | Channel-9 | AskewPlanes]"));
                             
                             
     

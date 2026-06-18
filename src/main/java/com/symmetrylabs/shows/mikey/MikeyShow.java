@@ -183,7 +183,13 @@ public class MikeyShow implements Show {
         public SimplePixlite addPixliteOutput(PointsGrouping pointsGrouping) {
             try {
                 SimplePixliteOutput spo = new SimplePixliteOutput(pointsGrouping);
-                spo.setLogConnections(false);
+                int outputIdx = Integer.parseInt(pointsGrouping.id);
+                // Enable logging for problem universes 49-52
+                boolean isProblemUniverse = (outputIdx >= 49 && outputIdx <= 52);
+                spo.setLogConnections(isProblemUniverse);
+                if (isProblemUniverse) {
+                    System.out.println("MikeyPixlite: Enabled logging for U" + outputIdx);
+                }
                 addChild(spo);
             } catch (Exception e) {
                 e.printStackTrace();

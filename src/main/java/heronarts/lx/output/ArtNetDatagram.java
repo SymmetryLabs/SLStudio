@@ -56,6 +56,7 @@ public class ArtNetDatagram extends LXDatagram {
     }
 
     public ArtNetDatagram(int[] indices, int dataLength, int universeNumber) {
+        // Use actual data length padded to even number (ArtNet spec requires even length)
         super(ARTNET_HEADER_LENGTH + dataLength + (dataLength % 2));
 
         this.pointIndices = indices;
@@ -77,8 +78,10 @@ public class ArtNetDatagram extends LXDatagram {
         this.buffer[13] = 0; // Physical
         this.buffer[14] = (byte) (universeNumber & 0xff); // Universe LSB
         this.buffer[15] = (byte) ((universeNumber >>> 8) & 0xff); // Universe MSB
-        this.buffer[16] = (byte) ((dataLength >>> 8) & 0xff);
-        this.buffer[17] = (byte) (dataLength & 0xff);
+        // Report actual padded data length (must be even per ArtNet spec)
+        int paddedDataLength = dataLength + (dataLength % 2);
+        this.buffer[16] = (byte) ((paddedDataLength >>> 8) & 0xff);
+        this.buffer[17] = (byte) (paddedDataLength & 0xff);
 
         // Ensure zero rest of buffer
         for (int i = ARTNET_HEADER_LENGTH; i < this.buffer.length; ++i) {
