@@ -103,6 +103,11 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     public final MutableParameter phi = new MutableParameter("Phi", 0);
 
     /**
+     * Roll angle of the camera (rotation around the view direction / forward axis)
+     */
+    public final MutableParameter roll = new MutableParameter("Roll", 0);
+
+    /**
      * Radius of the eye positon from center of the scene
      */
     public final MutableParameter radius = new MutableParameter("Radius", 120);
@@ -148,6 +153,9 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     private final DampedParameter phiDamped =
         new DampedParameter(this.phi, this.rotationVelocity, this.rotationAcceleration);
 
+    private final DampedParameter rollDamped =
+        new DampedParameter(this.roll, this.rotationVelocity, this.rotationAcceleration);
+
     private final DampedParameter radiusDamped =
         new DampedParameter(this.radius, this.cameraVelocity, this.cameraAcceleration);
 
@@ -180,6 +188,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     private boolean hasDragStart = false;
     private boolean lastMetaDown = false;
     private boolean lastShiftDown = false;
+    private boolean lastAltDown = false;
 
     private final int x;
     private final int y;
@@ -201,6 +210,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
 
         addLoopTask(this.thetaDamped);
         addLoopTask(this.phiDamped);
+        addLoopTask(this.rollDamped);
         addLoopTask(this.radiusDamped);
         addLoopTask(this.xDamped);
         addLoopTask(this.yDamped);
@@ -209,6 +219,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         this.thetaDamped.start();
         this.radiusDamped.start();
         this.phiDamped.start();
+        this.rollDamped.start();
         this.xDamped.start();
         this.yDamped.start();
         this.zDamped.start();
@@ -519,6 +530,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         float rv = this.radiusDamped.getValuef();
         double tv = this.thetaDamped.getValue();
         double pv = this.phiDamped.getValue();
+        double rollv = this.rollDamped.getValue();
 
         float sintheta = (float) Math.sin(tv);
         float costheta = (float) Math.cos(tv);
@@ -544,6 +556,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
             } else {
                 this.up.set(0, -1, 0);
             }
+            applyRoll(rollv);
             this.eye.set(this.eyeDamped);
             break;
         case ZOOM_Z_UP:
@@ -560,6 +573,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
             } else {
                     this.up.set(0, 0, -1);
             }
+            applyRoll(rollv);
             this.eye.set(this.eyeDamped);
             break;
         case MOVE:
@@ -570,9 +584,53 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
                 pz + rv * cosphi * costheta
             );
             this.up.set(0, -1, 0);
+            applyRoll(rollv);
             this.center.set(this.centerDamped);
             break;
         }
+    }
+
+    /**
+     * Applies roll rotation to the up vector around the view direction (eye->center axis).
+     * This rotates the camera around its forward viewing axis like a airplane banking.
+     */
+    private void applyRoll(double rollAngle) {
+        if (rollAngle == 0) return;
+
+        // View direction (forward axis to rotate around)
+        float vx = this.centerDamped.x - this.eyeDamped.x;
+        float vy = this.centerDamped.y - this.eyeDamped.y;
+        float vz = this.centerDamped.z - this.eyeDamped.z;
+
+        // Normalize view direction
+        float len = (float) Math.sqrt(vx * vx + vy * vy + vz * vz);
+        if (len < 0.0001f) return;
+        vx /= len; vy /= len; vz /= len;
+
+        // Rotate up vector around view axis using Rodrigues' rotation formula
+        float cosRoll = (float) Math.cos(rollAngle);
+        float sinRoll = (float) Math.sin(rollAngle);
+
+        float ux = this.up.x, uy = this.up.y, uz = this.up.z;
+
+        // dot(u, v) * v
+        float dot = ux * vx + uy * vy + uz * vz;
+        float dotvx = dot * vx;
+        float dotvy = dot * vy;
+        float dotvz = dot * vz;
+
+        // cross(v, u)
+        float crossx = vy * uz - vz * uy;
+        float crossy = vz * ux - vx * uz;
+        float crossz = vx * uy - vy * ux;
+
+        // u * cos + cross(v, u) * sin + dot(u, v) * v * (1 - cos)
+        float oneMinusCos = 1 - cosRoll;
+        this.up.set(
+            ux * cosRoll + crossx * sinRoll + dotvx * oneMinusCos,
+            uy * cosRoll + crossy * sinRoll + dotvy * oneMinusCos,
+            uz * cosRoll + crossz * sinRoll + dotvz * oneMinusCos
+        );
     }
 
     @Override
@@ -684,6 +742,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         hasDragStart = false;
         lastMetaDown = mouseEvent.isMetaDown() || mouseEvent.isControlDown();
         lastShiftDown = mouseEvent.isShiftDown();
+        lastAltDown = mouseEvent.isAltDown();
     }
 
     @Override
@@ -695,19 +754,22 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     public void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
         boolean metaDown = mouseEvent.isMetaDown() || mouseEvent.isControlDown();
         boolean shiftDown = mouseEvent.isShiftDown();
+        boolean altDown = mouseEvent.isAltDown();
         // Compute our own delta to avoid accumulated first-frame jumps.
         // Also reset if modifier state changed, or if the raw Processing delta is suspiciously
         // large (> 40px), which indicates a missed press event (e.g. app focus click on macOS).
-        if (!hasDragStart || metaDown != lastMetaDown || shiftDown != lastShiftDown) {
+        if (!hasDragStart || metaDown != lastMetaDown || shiftDown != lastShiftDown || altDown != lastAltDown) {
             hasDragStart = true;
             lastMetaDown = metaDown;
             lastShiftDown = shiftDown;
+            lastAltDown = altDown;
             lastMx = mx;
             lastMy = my;
             return;  // skip this event entirely — no accumulated delta to apply
         }
         lastMetaDown = metaDown;
         lastShiftDown = shiftDown;
+        lastAltDown = altDown;
         float safeDx = mx - lastMx;
         float safeDy = my - lastMy;
         lastMx = mx;
@@ -717,6 +779,9 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         case ZOOM:
                 if (mouseEvent.isShiftDown()) {
                         this.radius.incrementValue(safeDy);
+                } else if (mouseEvent.isAltDown()) {
+                        // Alt + drag: roll around Z-axis (view direction)
+                        this.roll.incrementValue(safeDx * .003);
                 } else if (mouseEvent.isMetaDown() || mouseEvent.isControlDown()) {
                         float panScale = this.radiusDamped.getValuef() / 500f;
                         float cdx = LXUtils.constrainf(safeDx, -30, 30) * panScale;
@@ -732,6 +797,9 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         case ZOOM_Z_UP:
             if (mouseEvent.isShiftDown()) {
                 this.radius.incrementValue(safeDy);
+            } else if (mouseEvent.isAltDown()) {
+                // Alt + drag: roll around Z-axis (view direction)
+                this.roll.incrementValue(safeDx * .003);
             } else if (mouseEvent.isMetaDown() || mouseEvent.isControlDown()) {
                 float panScale = this.radiusDamped.getValuef() / 500f;
                 float cdx = LXUtils.constrainf(safeDx, -30, 30) * panScale;
@@ -745,7 +813,10 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
             }
             break;
         case MOVE:
-            if (mouseEvent.isMetaDown() || mouseEvent.isShiftDown()) {
+            if (mouseEvent.isAltDown()) {
+                // Alt + drag: roll around Z-axis (view direction)
+                this.roll.incrementValue(safeDx * .003);
+            } else if (mouseEvent.isMetaDown() || mouseEvent.isShiftDown()) {
                 float costh = (float) Math.cos(this.thetaDamped.getValuef());
                 float sinth = (float) Math.sin(this.thetaDamped.getValuef());
                 float dex = safeDx*costh;
@@ -807,6 +878,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     private static final String KEY_RADIUS = "radius";
     private static final String KEY_THETA = "theta";
     private static final String KEY_PHI = "phi";
+    private static final String KEY_ROLL = "roll";
     private static final String KEY_POSITION_X = "positionX";
     private static final String KEY_POSITION_Y = "positionY";
     private static final String KEY_POSITION_Z = "positionZ";
@@ -816,6 +888,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         object.addProperty(KEY_RADIUS, this.radius.getValue());
         object.addProperty(KEY_THETA, this.theta.getValue());
         object.addProperty(KEY_PHI, this.phi.getValue());
+        object.addProperty(KEY_ROLL, this.roll.getValue());
         object.addProperty(KEY_POSITION_X, this.positionX.getValue());
         object.addProperty(KEY_POSITION_Y, this.positionY.getValue());
         object.addProperty(KEY_POSITION_Z, this.positionZ.getValue());
@@ -831,6 +904,9 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         }
         if (object.has(KEY_PHI)) {
             this.phi.setValue(object.get(KEY_PHI).getAsDouble());
+        }
+        if (object.has(KEY_ROLL)) {
+            this.roll.setValue(object.get(KEY_ROLL).getAsDouble());
         }
         if (object.has(KEY_POSITION_X)) {
             this.positionX.setValue(object.get(KEY_POSITION_X).getAsDouble());
