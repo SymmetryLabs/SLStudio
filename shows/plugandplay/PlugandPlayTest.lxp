@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1781313683831,
+  "timestamp": 1781808678765,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -20,7 +20,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 244.21051025390625,
+        "color/hue": 244.2352752685547,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
         "color": -15597313,
@@ -44,7 +44,7 @@
         "modulationColor": -16711767,
         "parameters": {
           "label": "Look-1",
-          "focusedChannel": 8
+          "focusedChannel": 15
         },
         "channels": [
           {
@@ -4270,7 +4270,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -5888,
+          "modulationColor": -65472,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -4409,7 +4409,7 @@
       "DMXParameterMapper": {
         "id": 111,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -1703681,
+        "modulationColor": -8323328,
         "parameters": {
           "label": "DMXParameterMapper"
         },
