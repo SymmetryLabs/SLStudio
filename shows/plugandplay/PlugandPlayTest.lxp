@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1781312772552,
+  "timestamp": 1781313683831,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -20,10 +20,10 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 189.41175842285156,
+        "color/hue": 244.21051025390625,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
-        "color": -16721921,
+        "color": -15597313,
         "period": 1000.0,
         "range": 0.0,
         "spread": 360.0,
@@ -2467,9 +2467,9 @@
                 "parameters": {
                   "label": "Palette",
                   "expandedInUi": true,
-                  "enabled": true,
-                  "Amount": 0.0,
-                  "Palette": 14,
+                  "enabled": false,
+                  "Amount": 1.0,
+                  "Palette": 0,
                   "Bottom": 0.0,
                   "Top": 1.0,
                   "Shift": 0.0,
@@ -2482,7 +2482,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "paletteName": "lake"
+                "paletteName": "astro1"
               },
               {
                 "id": 13219,
@@ -2491,7 +2491,7 @@
                 "parameters": {
                   "label": "GlobalColorPalette",
                   "expandedInUi": true,
-                  "enabled": false
+                  "enabled": true
                 },
                 "modulation": {
                   "modulators": [],
@@ -3359,12 +3359,12 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Hue": 0.0,
-                  "Depth": 0.6,
+                  "Depth": 0.7299999970942735,
                   "Bright": 0.75,
-                  "Sat": 0.5,
+                  "Sat": 0.3499999921768904,
                   "Speed1": 0.2,
                   "Speed2": 0.4,
-                  "Scale": 0.65
+                  "Scale": 0.5600000020116568
                 },
                 "modulation": {
                   "modulators": [],
@@ -4270,7 +4270,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -65368,
+          "modulationColor": -5888,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -4409,7 +4409,7 @@
       "DMXParameterMapper": {
         "id": 111,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -41984,
+        "modulationColor": -1703681,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -5821,12 +5821,12 @@
         "16192": true
       },
       "preview": {
-        "radius": 3100.951032280205,
-        "theta": 6.2039999999999855,
-        "phi": -1.267796370506289,
-        "positionX": 1314.5596923828125,
-        "positionY": 839.168701171875,
-        "positionZ": -826.7843017578125
+        "radius": 2206.054735738445,
+        "theta": 6.581999999999991,
+        "phi": -0.6047963705062926,
+        "positionX": 329.4778747558594,
+        "positionY": 3084.258056640625,
+        "positionZ": -336.11865234375
       }
     }
   }
