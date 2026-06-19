@@ -94,15 +94,23 @@ public class MikeyShow implements Show {
                 float[] m = mapping[i];
                 float az, rx, ry, d, cv;
                 int px;
-                if (m.length >= 9) {
-                    // New 9-col format: [tx,ty,tz,az,rx,ry,px,d,cv]
+                boolean grbSwap;
+                if (m.length >= 10) {
+                    // New 10-col format: [tx,ty,tz,az,rx,ry,px,d,cv,grb]
                     az = m[3]; rx = m[4]; ry = m[5]; px = (int) m[6]; d = m[7]; cv = m[8];
+                    grbSwap = m[9] > 0.5f;
+                } else if (m.length == 9) {
+                    // 9-col format: [tx,ty,tz,az,rx,ry,px,d,cv] — no grb
+                    az = m[3]; rx = m[4]; ry = m[5]; px = (int) m[6]; d = m[7]; cv = m[8];
+                    grbSwap = false;
                 } else if (m.length == 8) {
-                    // 8-col format: [tx,ty,tz,az,rx,ry,px,d] — no cv
+                    // 8-col format: [tx,ty,tz,az,rx,ry,px,d] — no cv/grb
                     az = m[3]; rx = m[4]; ry = m[5]; px = (int) m[6]; d = m[7]; cv = 0f;
+                    grbSwap = false;
                 } else {
-                    // Old 6-col format: [tx,ty,tz,az,px,d] — no rx/ry/cv
+                    // Old 6-col format: [tx,ty,tz,az,px,d] — no rx/ry/cv/grb
                     az = m[3]; rx = 0f; ry = 0f; px = (int) m[4]; d = m[5]; cv = 0f;
+                    grbSwap = false;
                 }
                 az = az > 180f ? az - 360f : az;
                 rx = rx > 180f ? rx - 360f : rx;
@@ -110,14 +118,14 @@ public class MikeyShow implements Show {
                 float rotZRad = (float) Math.toRadians(-az);
                 float rotXRad = (float) Math.toRadians(-rx);
                 float rotYRad = (float) Math.toRadians(-ry);
-                addStrip(m[0], m[1], m[2], rotXRad, rotYRad, rotZRad, px, d, cv, t, strips);
+                addStrip(m[0], m[1], m[2], rotXRad, rotYRad, rotZRad, px, d, cv, grbSwap, t, strips);
             }
             System.out.println("MikeyShow: created model with " + strips.size() + " strips");
             return new MikeyModel(strips);
         }
 
         private static float[][] buildDefaultMapping(int totalStrips) {
-            float[][] d = new float[totalStrips][9];
+            float[][] d = new float[totalStrips][10];
             int barSpacing = 24;
             for (int i = 0; i < totalStrips; i++) {
                 d[i][0] = barSpacing * i; // tx
@@ -129,18 +137,21 @@ public class MikeyShow implements Show {
                 d[i][6] = 60f;           // px
                 d[i][7] = 1f;            // d
                 d[i][8] = 0f;            // cv
+                d[i][9] = 0f;            // grb (0 = RGB, 1 = GRB)
             }
             return d;
         }
 
-        private static void addStrip(float tx, float ty, float tz, float rotX, float rotY, float rotZ, int pixelCount, float height, float curve, LXTransform transform, List<Strip> strips) {
+        private static void addStrip(float tx, float ty, float tz, float rotX, float rotY, float rotZ, int pixelCount, float height, float curve, boolean grbSwap, LXTransform transform, List<Strip> strips) {
             transform.push();
             transform.translate(tx, ty, tz);
             transform.rotateX(rotX);
             transform.rotateY(rotY);
             transform.rotateZ(rotZ);
             String stripId = String.valueOf(strips.size() + 1);
-            Strip strip = new Strip(stripId, new Strip.Metrics(pixelCount, height), transform);
+            Strip.Metrics metrics = new Strip.Metrics(pixelCount, height);
+            metrics.grbSwap = grbSwap;  // Store GRB flag in metrics
+            Strip strip = new Strip(stripId, metrics, transform);
             // Apply bezier curve displacement in local Z after strip is placed
             if (curve != 0f) {
                 List<heronarts.lx.model.LXPoint> pts = strip.getPoints();
@@ -167,13 +178,21 @@ public class MikeyShow implements Show {
     static class MikeyPixlite extends SimplePixlite {
         public MikeyPixlite(LX lx, String ip, MikeyModel model) {
             super(lx, ip);
-            // UNIVERSE_COUNT outputs; each output carries a variable number of strips per universe
+            // UNIVERSE_COUNT outputs; each output carries strips per universe
+            // Per-strip GRB is handled via strip segments within the shared universe
             int[] counts = UIMikeyModelingTool.loadStripCountsFromDisk();
             int stripIndex = 0;
             for (int u = 0; u < UNIVERSE_COUNT; u++) {
                 PointsGrouping pg = new PointsGrouping(String.valueOf(u + 1));
+                int pixelOffset = 0;
                 for (int s = 0; s < counts[u]; s++) {
-                    pg.addPoints(model.getStripByIndex(stripIndex++).getPoints());
+                    if (stripIndex >= model.strips.size()) break;
+                    Strip strip = model.getStripByIndex(stripIndex++);
+                    int numPixels = strip.getPoints().size();
+                    // Add strip segment with its GRB setting
+                    pg.addStripSegment(pixelOffset, pixelOffset + numPixels, strip.metrics.grbSwap);
+                    pg.addPoints(strip.getPoints());
+                    pixelOffset += numPixels;
                 }
                 addPixliteOutput(pg);
             }

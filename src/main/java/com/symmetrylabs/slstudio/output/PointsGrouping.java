@@ -12,9 +12,31 @@ public class PointsGrouping {
     public final static boolean REVERSE_ORDERING = true;
 
     public String id;
+    public boolean grbSwap = false;  // false = RGB (normal), true = GRB (swap red/green)
     private final List<LXPoint> points = new ArrayList<LXPoint>();
     // Parallel list: true = real point (use p.index), false = black sentinel (use -1)
     private final List<Boolean> isReal = new ArrayList<Boolean>();
+
+    // Per-strip segments for individual GRB control within shared universes
+    public static class StripSegment {
+        public final int startIndex;  // Inclusive
+        public final int endIndex;    // Exclusive
+        public final boolean grbSwap;
+        public StripSegment(int startIndex, int endIndex, boolean grbSwap) {
+            this.startIndex = startIndex;
+            this.endIndex = endIndex;
+            this.grbSwap = grbSwap;
+        }
+    }
+    private final List<StripSegment> stripSegments = new ArrayList<>();
+
+    public void addStripSegment(int startIndex, int endIndex, boolean grbSwap) {
+        stripSegments.add(new StripSegment(startIndex, endIndex, grbSwap));
+    }
+
+    public List<StripSegment> getStripSegments() {
+        return stripSegments;
+    }
 
     public PointsGrouping() {
         this("no-humanID");

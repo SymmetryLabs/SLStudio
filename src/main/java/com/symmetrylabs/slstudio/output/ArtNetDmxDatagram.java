@@ -20,6 +20,9 @@ public class ArtNetDmxDatagram extends LXDatagram {
     private boolean sequenceEnabled = false;
     private byte sequence = 1;
 
+    // Per-pixel GRB flags for software-based color swapping
+    private boolean[] grbFlags = null;
+
     private int unmappedPointColor = 0x000000;
     private boolean flashUnmapped = false;
     private boolean flashInOn = true;
@@ -84,6 +87,10 @@ public class ArtNetDmxDatagram extends LXDatagram {
         this.pointIndices = indices;
     }
 
+    public void setGrbFlags(boolean[] flags) {
+        this.grbFlags = flags;
+    }
+
     @Override
     public void onSend(int[] colors) {
         copyPointsGamma(
@@ -109,15 +116,28 @@ public class ArtNetDmxDatagram extends LXDatagram {
             lastFlashNanos = System.nanoTime();
             flashInOn = !flashInOn;
         }
+        int pixelIdx = 0;
         for (int index : pointIndices) {
             int colorValue = (index >= 0) ? colors[index] : unmappedC;
-
             int gammaExpanded = GammaExpander.getExpandedColor(colorValue);
-            buffer[i + byteOffset[0]] = (byte) Ops8.red(gammaExpanded);
-            buffer[i + byteOffset[1]] = (byte) Ops8.green(gammaExpanded);
-            buffer[i + byteOffset[2]] = (byte) Ops8.blue(gammaExpanded);
+
+            // Check if this pixel should use GRB (swap red/green)
+            boolean useGrb = (grbFlags != null && pixelIdx < grbFlags.length && grbFlags[pixelIdx]);
+
+            if (useGrb) {
+                // GRB order: green, red, blue
+                buffer[i + 0] = (byte) Ops8.red(gammaExpanded);
+                buffer[i + 1] = (byte) Ops8.green(gammaExpanded);
+                buffer[i + 2] = (byte) Ops8.blue(gammaExpanded);
+            } else {
+                // Use configured byte order (default RGB)
+                buffer[i + byteOffset[0]] = (byte) Ops8.green(gammaExpanded);
+                buffer[i + byteOffset[1]] = (byte) Ops8.red(gammaExpanded);
+                buffer[i + byteOffset[2]] = (byte) Ops8.blue(gammaExpanded);
+            }
 
             i += 3;
+            pixelIdx++;
         }
         return this;
     }
