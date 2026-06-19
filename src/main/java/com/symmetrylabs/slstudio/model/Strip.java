@@ -43,6 +43,9 @@ public class Strip extends SLModel {
         @Expose
         public final double pixelPitch;
 
+        @Expose
+        public boolean grbSwap = false;  // false = RGB (normal), true = GRB (swap red/green)
+
         public Metrics(int numPoints) {
             // 1.0 default pitch i guess...
             this(numPoints, 1.0);

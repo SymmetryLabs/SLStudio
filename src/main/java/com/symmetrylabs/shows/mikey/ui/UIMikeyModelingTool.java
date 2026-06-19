@@ -31,7 +31,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
     /** Number of Pixlite outputs / ArtNet universes. Fixed at 64. */
     public static final int UNIVERSE_COUNT = 64;
 
-    public static final String[] COLUMN_LABELS = { "tx", "ty", "tz", "az", "rx", "ry", "px", "d", "cv" };
+    public static final String[] COLUMN_LABELS = { "tx", "ty", "tz", "az", "rx", "ry", "px", "d", "cv", "grb" };
     public static final String MAPPING_FILE = "data/mikey-mapping.json";
 
     private static final float DEFAULT_BAR_SPACING = 24f;
@@ -294,13 +294,14 @@ public class UIMikeyModelingTool extends UI2dContainer {
         final float azBoxW  = 24f;  // fixed width for az so 3-4 digits are visible
         final float pxBoxW  = 22f;  // fixed width for px (pixel count) so 3 digits are visible
         final float cvBoxW  = 22f;  // fixed width for cv (curve) so 3 digits are visible
+        final float grbBoxW = 18f;  // fixed width for grb toggle checkbox
 
         // tx/ty cell = [-] gap box gap [+]
         final float xyCell    = bumpBtnW + gap + xyBoxW + gap + bumpBtnW;
-        // Flexible cols: tz, rx, ry, d  (4 cols) — az, px, cv are fixed width
+        // Flexible cols: tz, rx, ry, d  (4 cols) — az, px, cv, grb are fixed width
         final int   otherCols = 4;
         // Each col (flexible or fixed) contributes (width + gap); litBtnW has no trailing gap
-        final float fixedUsed = gridLeft + 2*(xyCell+gap) + (azBoxW+gap) + (pxBoxW+gap) + (cvBoxW+gap) + otherCols*gap + (btnsW+gap) + litBtnW;
+        final float fixedUsed = gridLeft + 2*(xyCell+gap) + (azBoxW+gap) + (pxBoxW+gap) + (cvBoxW+gap) + (grbBoxW+gap) + otherCols*gap + (btnsW+gap) + litBtnW;
         final float colWFinal = (panelW - fixedUsed) / otherCols;
 
         float curY = 0f;
@@ -362,6 +363,13 @@ public class UIMikeyModelingTool extends UI2dContainer {
                         .setFontColor(0xFF666666)
                         .addToContainer(gridContainer);
                     hdrX += cvBoxW + gap;
+                } else if (c == 9) {  // grb
+                    new UILabel(hdrX, curY, grbBoxW, colHdrH)
+                        .setLabel(COLUMN_LABELS[c])
+                        .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+                        .setFontColor(0xFF666666)
+                        .addToContainer(gridContainer);
+                    hdrX += grbBoxW + gap;
                 } else {
                     new UILabel(hdrX, curY, colWFinal, colHdrH)
                         .setLabel(COLUMN_LABELS[c])
@@ -397,15 +405,15 @@ public class UIMikeyModelingTool extends UI2dContainer {
 
                 final int capturedStripIndex = globalRow;
 
-                // Build a remapped source array always of length COLUMN_LABELS.length (8).
-                // Old 6-col files: [tx,ty,tz,az,px,d] → remap to [tx,ty,tz,az,0,0,px,d]
-                // New 8-col files: already correct.
+                // Build a remapped source array always of length COLUMN_LABELS.length (10).
+                // Old 6-col files: [tx,ty,tz,az,px,d] → remap to [tx,ty,tz,az,0,0,px,d,0,0]
+                // New 10-col files: already correct.
                 final float[] srcVals = new float[COLUMN_LABELS.length];
                 for (int c = 0; c < COLUMN_LABELS.length; c++) srcVals[c] = defaultValue(c, globalRow);
                 if (!isInserted && existingStrips != null && srcRow < existingStrips.length) {
                     float[] src = existingStrips[srcRow];
-                    if (src.length >= 9) {
-                        // New 9-col format [tx,ty,tz,az,rx,ry,px,d,cv] — copy directly
+                    if (src.length >= 10) {
+                        // New 10-col format [tx,ty,tz,az,rx,ry,px,d,cv,grb] — copy directly
                         for (int c = 0; c < COLUMN_LABELS.length; c++) srcVals[c] = src[c];
                     } else if (src.length == 6) {
                         // Old 6-col format: [tx,ty,tz,az,px,d]
@@ -418,10 +426,16 @@ public class UIMikeyModelingTool extends UI2dContainer {
                         srcVals[6] = src[4]; // px  ← was at index 4
                         srcVals[7] = src[5]; // d   ← was at index 5
                         srcVals[8] = 0f;     // cv (new, default 0)
+                        srcVals[9] = 0f;     // grb (new, default 0 = RGB)
                     } else if (src.length == 8) {
-                        // 8-col format: [tx,ty,tz,az,rx,ry,px,d] — no cv yet
+                        // 8-col format: [tx,ty,tz,az,rx,ry,px,d] — no cv/grb yet
                         for (int c = 0; c < 8; c++) srcVals[c] = src[c];
                         srcVals[8] = 0f;     // cv (new, default 0)
+                        srcVals[9] = 0f;     // grb (new, default 0 = RGB)
+                    } else if (src.length == 9) {
+                        // 9-col format: [tx,ty,tz,az,rx,ry,px,d,cv] — no grb yet
+                        for (int c = 0; c < 9; c++) srcVals[c] = src[c];
+                        srcVals[9] = 0f;     // grb (new, default 0 = RGB)
                     }
                 }
 
@@ -468,6 +482,24 @@ public class UIMikeyModelingTool extends UI2dContainer {
                             }
                         }.setMomentary(true).setLabel("+").addToContainer(gridContainer);
                         curX += bumpBtnW + gap;
+                    } else if (c == 9) {  // grb toggle button
+                        float boxW = grbBoxW;
+                        final boolean initialGrb = srcVals[c] > 0.5f;
+                        heronarts.p3lx.ui.component.UIButton grbBtn = new heronarts.p3lx.ui.component.UIButton(curX, curY, boxW, boxH) {
+                            @Override
+                            protected void onToggle(boolean active) {
+                                setLabel(active ? "grb" : "rgb");
+                            }
+                        };
+                        grbBtn.setMomentary(false).setLabel(initialGrb ? "grb" : "rgb");
+                        grbBtn.setActive(initialGrb);
+                        grbBtn.addToContainer(gridContainer);
+                        // Store a wrapper that exposes the value as double for snapshot compatibility
+                        row[c] = new UIDoubleBox(0, 0, 0, 0) {
+                            @Override public double getValue() { return grbBtn.isActive() ? 1.0 : 0.0; }
+                            @Override public UIDoubleBox setValue(double v) { grbBtn.setActive(v > 0.5); grbBtn.setLabel(v > 0.5 ? "GRB" : "RGB"); return this; }
+                        };
+                        curX += boxW + gap;
                     } else {
                         // Normal column — az, px, cv get fixed widths; others use colWFinal
                         float boxW = (c == 3) ? azBoxW : (c == 6) ? pxBoxW : (c == 8) ? cvBoxW : colWFinal;
@@ -606,6 +638,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
             case 6: return DEFAULT_PIXELS;  // px
             case 7: return DEFAULT_HEIGHT;  // d
             case 8: return 0f;   // cv
+            case 9: return 0f;   // grb (0 = RGB, 1 = GRB)
             default: return 0f;
         }
     }
