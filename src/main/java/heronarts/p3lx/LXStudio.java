@@ -133,6 +133,7 @@ public class LXStudio extends P3LX {
 
         @Override
         protected void beginDraw() {
+            this.bottomTray.processPendingLayoutToggle();
             if (this.toggleHelpBar) {
                 this.toggleHelpBar = false;
                 toggleHelpBar();

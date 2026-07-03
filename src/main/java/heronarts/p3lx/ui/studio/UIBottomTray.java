@@ -39,6 +39,7 @@ import heronarts.p3lx.ui.UI2dContext;
 import heronarts.p3lx.ui.studio.device.UIDeviceBin;
 import heronarts.p3lx.ui.studio.mixer.UIMixer;
 import heronarts.p3lx.ui.studio.mixer.UIMixerStripControls;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 
@@ -50,6 +51,10 @@ public class UIBottomTray extends UI2dContext {
     public static final int DEVICE_SECTION_HEIGHT = UIDeviceBin.HEIGHT + 2*UIDeviceBin.PADDING;
     public static final int HEIGHT = UIMixer.HEIGHT + DEVICE_SECTION_HEIGHT + 3*PADDING;
     public static final int CLOSED_HEIGHT = UIMixerStripControls.HEIGHT + 2*UIMixer.PADDING + DEVICE_SECTION_HEIGHT + 3*PADDING;
+    // Height of the tray when the device section is beside the mixer (original layout)
+    public static final int SIDE_HEIGHT = UIMixer.HEIGHT + 2*PADDING;
+    private static final int SEPARATOR = 16;
+    private static final int TOGGLE_W = 14;
 
     private final UI ui;
     private final LX lx;
@@ -58,6 +63,11 @@ public class UIBottomTray extends UI2dContext {
 
     private final Map<LXBus, UIDeviceBin> mutableDeviceBins = new HashMap<LXBus, UIDeviceBin>();
     public final Map<LXBus, UIDeviceBin> deviceBins = Collections.unmodifiableMap(this.mutableDeviceBins);
+
+    // When true, the device section is a full-width row below the mixer;
+    // when false, it sits to the right of the mixer (original layout).
+    private boolean deviceBelow = true;
+    private final heronarts.p3lx.ui.component.UIButton layoutToggle;
 
     public UIBottomTray(UI ui, LX lx) {
         super(ui, 0, ui.getHeight() - HEIGHT - UIContextualHelpBar.VISIBLE_HEIGHT, ui.getWidth(), HEIGHT);
@@ -69,9 +79,27 @@ public class UIBottomTray extends UI2dContext {
         this.mixer.addToContainer(this);
 
         this.rightSection = (UI2dContainer)
-            new UI2dContainer(PADDING, PADDING + UIMixer.HEIGHT + PADDING, getContentWidth() - 2*PADDING, DEVICE_SECTION_HEIGHT)
+            new UI2dContainer(PADDING + TOGGLE_W + 2, PADDING + UIMixer.HEIGHT + PADDING, getContentWidth() - 2*PADDING - TOGGLE_W - 2, DEVICE_SECTION_HEIGHT)
             .setBackgroundColor(ui.theme.getPaneInsetColor())
             .setBorderRounding(4)
+            .addToContainer(this);
+
+        // Small arrow button to the left of the device section: toggles between
+        // below-the-mixer and beside-the-mixer layouts.
+        this.layoutToggle = new heronarts.p3lx.ui.component.UIButton(PADDING, PADDING + UIMixer.HEIGHT + PADDING, TOGGLE_W, TOGGLE_W) {
+            @Override
+            public void onToggle(boolean on) {
+                if (on) {
+                    toggleDeviceLayout();
+                }
+            }
+        };
+        this.layoutToggle
+            .setLabel("^")
+            .setMomentary(true)
+            .setBorder(false)
+            .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+            .setDescription("Toggle device section position: below or beside the mixer")
             .addToContainer(this);
 
         for (LXChannel channel : lx.engine.getChannels()) {
@@ -116,6 +144,29 @@ public class UIBottomTray extends UI2dContext {
         this.mutableDeviceBins.remove(channel).removeFromContainer();
     }
 
+    // Set from the engine thread (mouse event); processed on the render thread
+    // in beginDraw via processPendingLayoutToggle(), because resizing UI2dContexts
+    // off the Processing thread crashes the GL renderer.
+    private volatile boolean pendingLayoutToggle = false;
+
+    private void toggleDeviceLayout() {
+        this.pendingLayoutToggle = true;
+    }
+
+    /** Called from UI.beginDraw() on the Processing thread. */
+    public void processPendingLayoutToggle() {
+        if (!this.pendingLayoutToggle) {
+            return;
+        }
+        this.pendingLayoutToggle = false;
+        this.deviceBelow = !this.deviceBelow;
+        // Arrow points where the device section will go on next click
+        this.layoutToggle.setLabel(this.deviceBelow ? "^" : "v");
+        setHeight(this.deviceBelow ? HEIGHT : SIDE_HEIGHT);
+        this.ui.reflow();
+        redraw();
+    }
+
     void onChannelFocus() {
         LXBus focusedChannel = lx.engine.getFocusedChannel();
         for (LXBus channel : this.mutableDeviceBins.keySet()) {
@@ -128,29 +179,50 @@ public class UIBottomTray extends UI2dContext {
 
     @Override
     public void reflow() {
-        if (this.rightSection != null) {
-            this.rightSection.setX(PADDING);
+        if (this.rightSection == null) {
+            return;
+        }
+        if (this.deviceBelow) {
+            this.rightSection.setX(PADDING + TOGGLE_W + 2);
             this.rightSection.setY(PADDING + this.mixer.getHeight() + PADDING);
-            this.rightSection.setWidth(getContentWidth() - 2*PADDING);
-            for (UIDeviceBin deviceBin : this.mutableDeviceBins.values()) {
-                deviceBin.setWidth(this.rightSection.getContentWidth() - 2*UIDeviceBin.PADDING);
-            }
+            this.rightSection.setWidth(Math.max(50, getContentWidth() - 2*PADDING - TOGGLE_W - 2));
+            this.rightSection.setHeight(DEVICE_SECTION_HEIGHT);
+        } else {
+            float deviceX = this.mixer.getX() + this.mixer.getWidth() + SEPARATOR + TOGGLE_W + 2;
+            this.rightSection.setX(deviceX);
+            this.rightSection.setY(PADDING);
+            this.rightSection.setWidth(Math.max(50, getContentWidth() - deviceX - PADDING));
+            this.rightSection.setHeight(this.mixer.getHeight());
+        }
+        this.layoutToggle.setPosition(this.rightSection.getX() - TOGGLE_W - 2, this.rightSection.getY());
+        for (UIDeviceBin deviceBin : this.mutableDeviceBins.values()) {
+            deviceBin.setWidth(this.rightSection.getContentWidth() - 2*UIDeviceBin.PADDING);
+            deviceBin.setY(this.rightSection.getContentHeight() - UIDeviceBin.HEIGHT - UIDeviceBin.PADDING);
         }
     }
 
     @Override
     public void onDraw(UI ui, PGraphics pg) {
-        // Connector from the focused channel strip down to the device row below
         pg.stroke(ui.theme.getPrimaryColor());
         float channelX = PADDING + UIMixer.PADDING + UIMixer.STRIP_SPACING * lx.engine.getFocusedLook().focusedChannel.getValuei() + UIMixerStripControls.WIDTH/2;
-        float binX = this.rightSection.getX() + 12;
-        float mixerBottom = this.mixer.getY() + this.mixer.getHeight();
-        float sectionTop = this.rightSection.getY();
-        float yMid = (mixerBottom + sectionTop) / 2;
         pg.strokeWeight(2);
-        pg.line(channelX, mixerBottom, channelX, yMid);
-        pg.line(binX, yMid, binX, sectionTop);
-        pg.line(Math.min(channelX, binX), yMid, Math.max(channelX, binX), yMid);
+        if (this.deviceBelow) {
+            // Connector from the focused channel strip down to the device row below
+            float binX = this.rightSection.getX() + 12;
+            float mixerBottom = this.mixer.getY() + this.mixer.getHeight();
+            float sectionTop = this.rightSection.getY();
+            float yMid = (mixerBottom + sectionTop) / 2;
+            pg.line(channelX, mixerBottom, channelX, yMid);
+            pg.line(binX, yMid, binX, sectionTop);
+            pg.line(Math.min(channelX, binX), yMid, Math.max(channelX, binX), yMid);
+        } else {
+            // Original connector along the bottom of the tray to the side section
+            float binX = this.rightSection.getX() + 12;
+            float b = 4;
+            pg.line(channelX, this.height-PADDING, channelX, this.height-b-1);
+            pg.line(binX, this.height-b-1, binX, this.height-PADDING);
+            pg.line(Math.min(channelX, binX)+1, this.height-b, Math.max(channelX, binX)-1, this.height-b);
+        }
         pg.strokeWeight(1);
     }
 
