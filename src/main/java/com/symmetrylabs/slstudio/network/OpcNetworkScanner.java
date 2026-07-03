@@ -21,7 +21,7 @@ import static com.symmetrylabs.slstudio.network.OpcMessage.SYMMETRY_LABS_IDENTIF
 import static com.symmetrylabs.slstudio.network.OpcMessage.SYMMETRY_LABS_IDENTIFY_REPLY;
 
 public class OpcNetworkScanner extends UdpBroadcastNetworkScanner {
-    protected static long MAX_MILLIS_WITHOUT_REPLY = 2000;
+    protected static long MAX_MILLIS_WITHOUT_REPLY = 10000;
 
     public final ListenableSet<NetworkDevice> deviceList = new ListenableSet<NetworkDevice>();
     protected Map<String, NetworkDevice> deviceMap = new HashMap<>();
@@ -82,10 +82,11 @@ public class OpcNetworkScanner extends UdpBroadcastNetworkScanner {
     }
 
     public void updateDevice(final NetworkDevice newDevice) {
+        final long replyTime = System.currentTimeMillis();
         dispatcher.dispatchEngine(new Runnable() {
             public void run() {
                 String addr = newDevice.ipAddress.toString();
-                lastReplyMillis.put(addr, System.currentTimeMillis());
+                lastReplyMillis.put(addr, replyTime);
 
                 NetworkDevice existing = deviceMap.get(addr);
                 if (!newDevice.equals(existing)) {

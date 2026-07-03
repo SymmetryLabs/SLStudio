@@ -25,16 +25,28 @@ public class YsiadsPartyShow extends CubesShow implements Show {
     static final float globalRotationX = 0;
     static final float globalRotationY = 0;
     static final float globalRotationZ = 0;
-    static final float CSP = 32;
+    static final float CSP = 24;
 
 
     static final TowerConfig[] TOWER_CONFIG = {
-        //back middle (tallest tower)
-        new TowerConfig(CSP*0, 0, CSP*0, 0, 45, 0, new String[] {"71", "1361", "337"}),
-        new TowerConfig(CSP*1, 0, CSP*0, 0, 45, 0, new String[] {"2001", "1055", "569"}),
-        new TowerConfig(CSP*2, 0, CSP*0, 0, 45, 0, new String[] {"21", "326", "157", "51"}),
-        new TowerConfig(CSP*3, 0, CSP*0, 0, 45, 0, new String[] {"1346", "549", "1217", "192"}),
-        new TowerConfig(CSP*4, 0, CSP*0, 0, 45, 0, new String[] {"113", "787", "9", "938"}),
+new TowerConfig(93, CSP*0, -229, 0, -45, 0, new String[] {"566"}), 
+new TowerConfig(119, CSP*0, -238, 0, -45, 0, new String[] { "549"}),
+new TowerConfig(102, CSP*1, -238, 0, -45, 0, new String[] { "9","337" }),
+new TowerConfig(127, CSP*1, -238, 0, -45, 0, new String[] { "21","833" }), // end of 2 stacks left
+new TowerConfig(110, CSP*3, -221, 0, -45, 0, new String[] { "1106" }), 
+new TowerConfig(110, CSP*4, -195, 0, -45, 0, new String[] { "d880399b135e" }),
+new TowerConfig(136, CSP*4, -204, 0, -45, 0, new String[] { "326" }),
+new TowerConfig(161, CSP*4, -212, 0, -45, 0, new String[] { "51" }),
+new TowerConfig(187, CSP*4, -221, 0, -45, 0, new String[] { "001ec0f4f4e0" }), 
+new TowerConfig(212, CSP*4, -229, 0, -45, 0, new String[] { "5410ecf5560b" }), //top arch
+new TowerConfig(238, CSP*4, -238, 0, -45, 0, new String[] { "5410ecf5c417" }),
+new TowerConfig(246, CSP*3, -255, 0, -45, 0, new String[] { "1346" }),
+new TowerConfig(238, CSP*1, -272, 0, -45, 0, new String[] { "938","787" }),
+new TowerConfig(263, CSP*1, -263, 0, -45, 0, new String[] { "5410ecf56e83","1217" }),
+new TowerConfig(238, CSP*0, -263, 0, -45, 0, new String[] { "d8803962b0e7" }),
+new TowerConfig(263, CSP*0, -263, 0, -45, 0, new String[] { "5410ecf4a773" }),
+
+
         };
 
     public SLModel buildModel() {
