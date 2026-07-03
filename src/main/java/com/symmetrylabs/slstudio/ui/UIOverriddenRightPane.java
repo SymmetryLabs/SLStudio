@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.ui;
 
 import processing.core.PGraphics;
+import processing.event.MouseEvent;
 import com.symmetrylabs.slstudio.cue.UICuePanel;
 
 import heronarts.lx.LX;
@@ -19,6 +20,7 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.LXTriggerModulation;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI2dScrollContext;
 import heronarts.p3lx.ui.UIObject;
@@ -60,6 +62,17 @@ public class UIOverriddenRightPane extends UIPane {
     private int beatCount = 1;
     private int macroCount = 1;
 
+    /** Tracks which tab (section) is currently active so the scrollbar knows which context to scroll. */
+    private int activeSectionIndex = 0;
+    private PaneScrollBar paneScrollBar;
+
+    // UIPane geometry constants (mirrored from UIPane source)
+    private static final int SB_MARGIN   = 8;   // UIPane.MARGIN
+    private static final int SB_INSET_Y  = 32;  // UIPane.MARGIN(8) + UIPane.INSET_Y(24)
+    private static final int SB_PADDING  = 6;   // UIPane.PADDING
+    private static final int SB_BAR_W    = 6;
+    private static final int SB_BAR_PADB = 4;   // extra bottom pad
+
     public UIOverriddenRightPane(UI ui, final LX lx) {
         super(ui, lx, new String[]{"MODULATE", "EXTERN I/O", "MODEL", "UTILITY"}, ui.getWidth() - WIDTH, WIDTH);
         this.ui = ui;
@@ -73,6 +86,173 @@ public class UIOverriddenRightPane extends UIPane {
         buildUtilityUI();
         buildMidiUI();
         buildModulationUI();
+
+        // Scrollbar: a narrow strip on the far-right edge of the pane, sitting inside
+        // the right margin gap (between the inset content and the pane border).
+        // This keeps it clear of the grp button column which ends at the inset's right edge.
+        float sbX = WIDTH - SB_BAR_W - 2;
+        paneScrollBar = new PaneScrollBar(sbX, 0, SB_BAR_W, ui.getHeight());
+        paneScrollBar.addToContainer(this);
+    }
+
+    /** Resyncs active section and redraws scrollbar — called from mouse handlers and wheel. */
+    private void syncScrollBar() {
+        for (int i = 0; i < sections.length; i++) {
+            if (sections[i].visible.isOn()) {
+                activeSectionIndex = i;
+                break;
+            }
+        }
+        if (paneScrollBar != null) paneScrollBar.redraw();
+    }
+
+    @Override
+    public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+        super.onMousePressed(mouseEvent, mx, my);
+        syncScrollBar();
+    }
+
+    @Override
+    public void onMouseWheel(MouseEvent mouseEvent, float mx, float my, float delta) {
+        super.onMouseWheel(mouseEvent, mx, my, delta);
+        if (paneScrollBar != null) paneScrollBar.redraw();
+    }
+
+    /**
+     * Thin draggable scrollbar drawn as a narrow strip on the right edge of the pane.
+     * Coordinates in onDraw and mouse handlers are all in this component's local space
+     * (origin at the component's top-left corner).
+     */
+    private class PaneScrollBar extends UI2dComponent {
+        private static final int TRACK_COLOR      = 0x44FFFFFF;
+        private static final int THUMB_COLOR      = 0xAABBBBBB;
+        private static final int THUMB_HOVER_COLOR = 0xCCDDDDDD;
+
+        private boolean dragging      = false;
+        private boolean hovering      = false;
+        private float   dragStartY    = 0;
+        private float   dragStartScroll = 0;
+
+        PaneScrollBar(float x, float y, float w, float h) {
+            super(x, y, w, h);
+        }
+
+        private UI2dScrollContext activeSection() {
+            if (activeSectionIndex < 0 || activeSectionIndex >= sections.length) return null;
+            return sections[activeSectionIndex];
+        }
+
+        private float viewH()    { UI2dScrollContext s = activeSection(); return s == null ? 1 : s.getHeight(); }
+        private float contentH() { UI2dScrollContext s = activeSection(); return s == null ? 1 : Math.max(s.getScrollHeight(), viewH()); }
+
+        /** Track top in local coords (offset from top of this component). */
+        private float trackTop() { return SB_INSET_Y + SB_PADDING; }
+        /** Track bottom in local coords — aligned to the bottom of the section viewport. */
+        private float trackBot() {
+            UI2dScrollContext s = activeSection();
+            float viewBottom = (s != null) ? SB_INSET_Y + SB_PADDING + s.getHeight() : this.height;
+            return viewBottom - SB_PADDING - SB_BAR_PADB;
+        }
+        /** Track height. */
+        private float trackH()   { return Math.max(0, trackBot() - trackTop()); }
+
+        private float thumbH(float trackH) {
+            return Math.max(20f, trackH * (viewH() / contentH()));
+        }
+
+        private float thumbTopY(float trackH) {
+            UI2dScrollContext s = activeSection();
+            if (s == null) return 0;
+            float scrollable = contentH() - viewH();
+            if (scrollable <= 0) return 0;
+            float frac = (-s.getScrollY()) / scrollable;
+            return frac * (trackH - thumbH(trackH));
+        }
+
+        @Override
+        public void onDraw(UI ui, PGraphics pg) {
+            float view = viewH();
+            float content = contentH();
+            if (content <= view + 1) return;  // nothing to scroll
+
+            float tH = trackH();
+            if (tH <= 0) return;
+
+            float tTop = trackTop();
+            // In local space x=0 is the left edge of this component (= the bar itself)
+            pg.noStroke();
+            pg.fill(TRACK_COLOR);
+            pg.rect(0, tTop, SB_BAR_W, tH, 3);
+
+            float th = thumbH(tH);
+            float ty = tTop + thumbTopY(tH);
+            pg.fill(hovering || dragging ? THUMB_HOVER_COLOR : THUMB_COLOR);
+            pg.rect(0, ty, SB_BAR_W, th, 3);
+        }
+
+        @Override
+        public void onMousePressed(MouseEvent e, float mx, float my) {
+            float view = viewH();
+            float content = contentH();
+            if (content <= view + 1) return;
+
+            float tH  = trackH();
+            float tTop = trackTop();
+            float tBot = trackBot();
+            if (my < tTop || my > tBot) return;
+
+            UI2dScrollContext s = activeSection();
+            if (s == null) return;
+
+            float th = thumbH(tH);
+            float ty = tTop + thumbTopY(tH);
+
+            if (my >= ty && my <= ty + th) {
+                dragging = true;
+                dragStartY = my;
+                dragStartScroll = s.getScrollY();
+            } else {
+                float clickFrac = Math.max(0, Math.min(1, (my - tTop - th / 2f) / (tH - th)));
+                s.setScrollY(-(content - view) * clickFrac);
+                redraw();
+            }
+        }
+
+        @Override
+        public void onMouseReleased(MouseEvent e, float mx, float my) {
+            dragging = false;
+        }
+
+        @Override
+        public void onMouseDragged(MouseEvent e, float mx, float my, float dx, float dy) {
+            if (!dragging) return;
+            UI2dScrollContext s = activeSection();
+            if (s == null) return;
+            float tH  = trackH();
+            float th  = thumbH(tH);
+            float scrollable = contentH() - viewH();
+            float dragFrac = (my - dragStartY) / (tH - th);
+            s.setScrollY(dragStartScroll - dragFrac * scrollable);
+            redraw();
+        }
+
+        @Override
+        public void onMouseMoved(MouseEvent e, float mx, float my) {
+            float tTop = trackTop();
+            float tBot = trackBot();
+            boolean now = (my >= tTop && my <= tBot);
+            if (now != hovering) { hovering = now; redraw(); }
+        }
+
+        @Override
+        public void onMouseOut(MouseEvent e) {
+            if (hovering) { hovering = false; redraw(); }
+        }
+
+        @Override
+        protected void onResize() {
+            redraw();
+        }
     }
 
     private void buildModelUI() {
