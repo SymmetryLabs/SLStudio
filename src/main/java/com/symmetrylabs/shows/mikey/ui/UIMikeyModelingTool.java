@@ -5,7 +5,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gson.Gson;
 
@@ -78,6 +80,11 @@ public class UIMikeyModelingTool extends UI2dContainer {
     // Index of the currently illuminated strip (-1 = none)
     private int illuminatedStrip = -1;
     private heronarts.p3lx.ui.component.UIButton activeLitButton = null;
+
+    // ── Group-select state: strips whose params move together ────────────────
+    private final Set<Integer> groupedStrips = new HashSet<>();
+    private final List<double[]> lastValues = new ArrayList<>();
+    private boolean propagatingGroup = false;
 
     // ─────────────────────────────────────────────────────────────────────────
 
@@ -277,6 +284,8 @@ public class UIMikeyModelingTool extends UI2dContainer {
             ((UI2dComponent) child).removeFromContainer();
         }
         stripInputs.clear();
+        groupedStrips.clear();
+        lastValues.clear();
 
         final float labelColW = 14f;
         final float gap       = 2f;
@@ -289,6 +298,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
         final float uHeaderH  = 14f;
 
         final float litBtnW  = 18f;  // width of illuminate toggle button
+        final float grpBtnW  = 18f;  // width of group-select toggle button
         final float colHdrH = 11f;
         final float xyBoxW  = 26f;  // wider box for tx/ty so 4 digits are visible
         final float azBoxW  = 24f;  // fixed width for az so 3-4 digits are visible
@@ -301,7 +311,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
         // Flexible cols: tz, rx, ry, d  (4 cols) — az, px, cv, grb are fixed width
         final int   otherCols = 4;
         // Each col (flexible or fixed) contributes (width + gap); litBtnW has no trailing gap
-        final float fixedUsed = gridLeft + 2*(xyCell+gap) + (azBoxW+gap) + (pxBoxW+gap) + (cvBoxW+gap) + (grbBoxW+gap) + otherCols*gap + (btnsW+gap) + litBtnW;
+        final float fixedUsed = gridLeft + 2*(xyCell+gap) + (azBoxW+gap) + (pxBoxW+gap) + (cvBoxW+gap) + (grbBoxW+gap) + otherCols*gap + (btnsW+gap) + (litBtnW+gap) + grpBtnW;
         final float colWFinal = (panelW - fixedUsed) / otherCols;
 
         float curY = 0f;
@@ -385,6 +395,12 @@ public class UIMikeyModelingTool extends UI2dContainer {
                 .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
                 .setFontColor(0xFF666666)
                 .addToContainer(gridContainer);
+            // "grp" column header
+            new UILabel(hdrX + btnsW + gap + litBtnW + gap, curY, grpBtnW, colHdrH)
+                .setLabel("grp")
+                .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+                .setFontColor(0xFF666666)
+                .addToContainer(gridContainer);
             curY += colHdrH;
 
             for (int s = 0; s < count; s++) {
@@ -462,9 +478,10 @@ public class UIMikeyModelingTool extends UI2dContainer {
                         curX += bumpBtnW + gap;
                         // value box
                         float boxX = curX;
+                        final int capturedCol = c;
                         UIDoubleBox box = new UIDoubleBox(boxX, curY, xyBoxW, boxH) {
                             @Override protected void onValueChange(double value) {
-                                updateLiveStrip(capturedStripIndex);
+                                handleValueChange(capturedStripIndex, capturedCol, value);
                             }
                         };
                         box.setRange(rangeMin, rangeMax);
@@ -503,9 +520,10 @@ public class UIMikeyModelingTool extends UI2dContainer {
                     } else {
                         // Normal column — az, px, cv get fixed widths; others use colWFinal
                         float boxW = (c == 3) ? azBoxW : (c == 6) ? pxBoxW : (c == 8) ? cvBoxW : colWFinal;
+                        final int capturedCol = c;
                         UIDoubleBox box = new UIDoubleBox(curX, curY, boxW, boxH) {
                             @Override protected void onValueChange(double value) {
-                                updateLiveStrip(capturedStripIndex);
+                                handleValueChange(capturedStripIndex, capturedCol, value);
                             }
                         };
                         box.setRange(rangeMin, rangeMax);
@@ -551,8 +569,25 @@ public class UIMikeyModelingTool extends UI2dContainer {
                 };
                 litBtn.setMomentary(false).setLabel("lit").addToContainer(gridContainer);
 
+                // Group-select toggle button — grouped strips' params move together
+                final int capturedGlobalRowForGrp = globalRow;
+                heronarts.p3lx.ui.component.UIButton grpBtn = new heronarts.p3lx.ui.component.UIButton(curX + btnsW + gap + litBtnW + gap, curY, grpBtnW, boxH) {
+                    @Override
+                    protected void onToggle(boolean active) {
+                        if (active) {
+                            groupedStrips.add(capturedGlobalRowForGrp);
+                        } else {
+                            groupedStrips.remove(Integer.valueOf(capturedGlobalRowForGrp));
+                        }
+                    }
+                };
+                grpBtn.setMomentary(false).setLabel("grp").addToContainer(gridContainer);
+
                 if (!isInserted) srcRow++;
                 stripInputs.add(row);
+                double[] rowLast = new double[COLUMN_LABELS.length];
+                for (int c = 0; c < COLUMN_LABELS.length; c++) rowLast[c] = row[c].getValue();
+                lastValues.add(rowLast);
                 curY += rowH;
                 globalRow++;
             }
@@ -585,6 +620,34 @@ public class UIMikeyModelingTool extends UI2dContainer {
         stripCounts[universe]--;
         countBoxes[universe].setValue(String.valueOf(stripCounts[universe]));
         buildStripGrid(shrunk);
+    }
+
+    /**
+     * Called whenever a strip parameter box changes. If the strip is part of the
+     * selected group, the same delta is applied to that parameter on every other
+     * grouped strip so they move together.
+     */
+    private void handleValueChange(int stripIndex, int col, double newValue) {
+        if (stripIndex < lastValues.size()) {
+            double old = lastValues.get(stripIndex)[col];
+            lastValues.get(stripIndex)[col] = newValue;
+            double delta = newValue - old;
+            if (!propagatingGroup && delta != 0 && groupedStrips.contains(stripIndex) && groupedStrips.size() > 1) {
+                propagatingGroup = true;
+                try {
+                    for (Integer gi : groupedStrips) {
+                        if (gi == stripIndex || gi >= stripInputs.size()) continue;
+                        UIDoubleBox other = stripInputs.get(gi)[col];
+                        if (other != null) {
+                            other.setValue(other.getValue() + delta);
+                        }
+                    }
+                } finally {
+                    propagatingGroup = false;
+                }
+            }
+        }
+        updateLiveStrip(stripIndex);
     }
 
     /** Recompute the LXPoint positions for strip at globalIndex using current box values. */

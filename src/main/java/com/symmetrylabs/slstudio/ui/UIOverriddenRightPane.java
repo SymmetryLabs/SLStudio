@@ -52,7 +52,7 @@ public class UIOverriddenRightPane extends UIPane {
     private final CompoundParameter backgroundLightParam = new CompoundParameter("background", 0.09, 0, 1);
 
     public static final int PADDING = 4;
-    public static final int WIDTH = 500;
+    public static final int WIDTH = 522;
     private static final int ADD_BUTTON_WIDTH = 38;
 
     private int lfoCount = 1;
