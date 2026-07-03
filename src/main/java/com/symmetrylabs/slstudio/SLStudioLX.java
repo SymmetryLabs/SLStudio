@@ -551,12 +551,12 @@ public class SLStudioLX extends P3LX {
             mixer.masterStrip.setHeight(stripHeight);
             mixer.setContentHeight(stripHeight + 2 * UIMixer.PADDING);
 
-            // Clip/device section
-            float binY = UIMixerStrip.SPACING;
+            // Clip/device section — full-width row below the mixer, fixed height
+            float binY = UIDeviceBin.PADDING;
             for (UIDeviceBin bin : this.bottomTray.deviceBins.values()) {
                 bin.setY(binY);
             }
-            this.bottomTray.rightSection.setHeight(stripHeight + 2 * UIMixer.PADDING);
+            this.bottomTray.rightSection.setHeight(UIBottomTray.DEVICE_SECTION_HEIGHT);
 
             // Overall height
             this.bottomTray.setHeight(UIBottomTray.CLOSED_HEIGHT);

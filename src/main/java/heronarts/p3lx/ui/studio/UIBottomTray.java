@@ -45,9 +45,11 @@ import processing.event.KeyEvent;
 public class UIBottomTray extends UI2dContext {
 
     public static final int PADDING = 8;
-    public static final int HEIGHT = UIMixer.HEIGHT + 2*PADDING;
-    public static final int CLOSED_HEIGHT = UIMixerStripControls.HEIGHT + 2*UIMixer.PADDING + 2*PADDING;
-    private static final int SEPARATOR = 16;
+    // Device section is its own full-width row below the mixer so it never
+    // gets cut off when many channels widen the mixer.
+    public static final int DEVICE_SECTION_HEIGHT = UIDeviceBin.HEIGHT + 2*UIDeviceBin.PADDING;
+    public static final int HEIGHT = UIMixer.HEIGHT + DEVICE_SECTION_HEIGHT + 3*PADDING;
+    public static final int CLOSED_HEIGHT = UIMixerStripControls.HEIGHT + 2*UIMixer.PADDING + DEVICE_SECTION_HEIGHT + 3*PADDING;
 
     private final UI ui;
     private final LX lx;
@@ -63,12 +65,11 @@ public class UIBottomTray extends UI2dContext {
         this.lx = lx;
         setBackgroundColor(ui.theme.getPaneBackgroundColor());
 
-        this.mixer = new UIMixer(ui, lx, PADDING, PADDING, HEIGHT-2*PADDING);
+        this.mixer = new UIMixer(ui, lx, PADDING, PADDING, UIMixer.HEIGHT);
         this.mixer.addToContainer(this);
 
-        float rightX = getRightSectionX();
         this.rightSection = (UI2dContainer)
-            new UI2dContainer(rightX, PADDING, getContentWidth() - rightX - PADDING, UIMixer.HEIGHT)
+            new UI2dContainer(PADDING, PADDING + UIMixer.HEIGHT + PADDING, getContentWidth() - 2*PADDING, DEVICE_SECTION_HEIGHT)
             .setBackgroundColor(ui.theme.getPaneInsetColor())
             .setBorderRounding(4)
             .addToContainer(this);
@@ -104,10 +105,6 @@ public class UIBottomTray extends UI2dContext {
         onChannelFocus();
     }
 
-    private float getRightSectionX() {
-        return this.mixer.getWidth() + SEPARATOR;
-    }
-
     private void addChannel(LXBus channel) {
         UIDeviceBin deviceBin = new UIDeviceBin(ui, channel, this.rightSection.getContentHeight() - UIDeviceBin.HEIGHT - UIDeviceBin.PADDING, this.rightSection.getContentWidth() - 2*UIDeviceBin.PADDING);
         this.mutableDeviceBins.put(channel, deviceBin);
@@ -131,10 +128,10 @@ public class UIBottomTray extends UI2dContext {
 
     @Override
     public void reflow() {
-        float deviceX = this.mixer.getWidth() + SEPARATOR;
         if (this.rightSection != null) {
-            this.rightSection.setX(deviceX);
-            this.rightSection.setWidth(getContentWidth() - deviceX - PADDING);
+            this.rightSection.setX(PADDING);
+            this.rightSection.setY(PADDING + this.mixer.getHeight() + PADDING);
+            this.rightSection.setWidth(getContentWidth() - 2*PADDING);
             for (UIDeviceBin deviceBin : this.mutableDeviceBins.values()) {
                 deviceBin.setWidth(this.rightSection.getContentWidth() - 2*UIDeviceBin.PADDING);
             }
@@ -143,14 +140,17 @@ public class UIBottomTray extends UI2dContext {
 
     @Override
     public void onDraw(UI ui, PGraphics pg) {
+        // Connector from the focused channel strip down to the device row below
         pg.stroke(ui.theme.getPrimaryColor());
         float channelX = PADDING + UIMixer.PADDING + UIMixer.STRIP_SPACING * lx.engine.getFocusedLook().focusedChannel.getValuei() + UIMixerStripControls.WIDTH/2;
-        float binX = this.mixer.getX() + this.mixer.getWidth() + SEPARATOR + 12;
-        float b = 4;
+        float binX = this.rightSection.getX() + 12;
+        float mixerBottom = this.mixer.getY() + this.mixer.getHeight();
+        float sectionTop = this.rightSection.getY();
+        float yMid = (mixerBottom + sectionTop) / 2;
         pg.strokeWeight(2);
-        pg.line(channelX, this.height-PADDING, channelX, this.height-b-1);
-        pg.line(binX, this.height-b-1, binX, this.height-PADDING);
-        pg.line(channelX+1, this.height-b, binX-1, this.height-b);
+        pg.line(channelX, mixerBottom, channelX, yMid);
+        pg.line(binX, yMid, binX, sectionTop);
+        pg.line(Math.min(channelX, binX), yMid, Math.max(channelX, binX), yMid);
         pg.strokeWeight(1);
     }
 
