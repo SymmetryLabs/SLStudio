@@ -50,6 +50,7 @@ public class UIOverriddenRightPane extends UIPane {
     public final UI2dScrollContext modulation;
     public final UI2dScrollContext midi;
     public final UI2dScrollContext utility;
+    public final UI2dScrollContext groups;
 
     private final CompoundParameter backgroundLightParam = new CompoundParameter("background", 0.09, 0, 1);
 
@@ -74,13 +75,14 @@ public class UIOverriddenRightPane extends UIPane {
     private static final int SB_BAR_PADB = 4;   // extra bottom pad
 
     public UIOverriddenRightPane(UI ui, final LX lx) {
-        super(ui, lx, new String[]{"MODULATE", "EXTERN I/O", "MODEL", "UTILITY"}, ui.getWidth() - WIDTH, WIDTH);
+        super(ui, lx, new String[]{"MODULATE", "EXTERN I/O", "MODEL", "GROUPS", "UTILITY"}, ui.getWidth() - WIDTH, WIDTH);
         this.ui = ui;
         this.lx = lx;
         this.modulation = this.sections[0];
         this.midi = this.sections[1];
         this.model = this.sections[2];
-        this.utility = this.sections[3];
+        this.groups = this.sections[3];
+        this.utility = this.sections[4];
 
         buildModelUI();
         buildUtilityUI();

@@ -49,6 +49,10 @@ public class MikeyShow implements Show {
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         UIMikeyModelingTool tool = new UIMikeyModelingTool(ui, 0, 0, ui.rightPane.model.getContentWidth());
         tool.addToContainer(ui.rightPane.model);
+        // GROUPS tab: assign strips to 8 groups used by the GroupStripFilter effect
+        com.symmetrylabs.shows.mikey.ui.UIStripGroupTool groupTool =
+            new com.symmetrylabs.shows.mikey.ui.UIStripGroupTool(ui, 0, 0, ui.rightPane.groups.getContentWidth());
+        groupTool.addToContainer(ui.rightPane.groups);
         // Wire live strip list so dragging params moves pixels in the 3D view
         MikeyModel model = (MikeyModel) lx.model;
         tool.setModel(model, model.getStrips());
