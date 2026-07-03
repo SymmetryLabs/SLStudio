@@ -820,10 +820,10 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         float cdy = LXUtils.constrainf(safeDy, -30, 30) * panScale;
 
         // Drag right -> content follows cursor -> pivot moves left along screen-right.
-        // Drag down  -> content follows cursor -> pivot moves up   along screen-up.
-        float dxw = -this.tmpRight.x * cdx + this.tmpUp.x * cdy;
-        float dyw = -this.tmpRight.y * cdx + this.tmpUp.y * cdy;
-        float dzw = -this.tmpRight.z * cdx + this.tmpUp.z * cdy;
+        // Drag down  -> content follows cursor -> pivot moves down  along screen-up.
+        float dxw = -this.tmpRight.x * cdx - this.tmpUp.x * cdy;
+        float dyw = -this.tmpRight.y * cdx - this.tmpUp.y * cdy;
+        float dzw = -this.tmpRight.z * cdx - this.tmpUp.z * cdy;
 
         if (this.interactionMode == InteractionMode.MOVE) {
             setEye(this.eye.x + dxw, this.eye.y + dyw, this.eye.z + dzw);
