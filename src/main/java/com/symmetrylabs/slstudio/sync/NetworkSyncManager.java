@@ -181,7 +181,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         isMaster = true;  // First instance assumes master role
         lastHeartbeatTime = System.currentTimeMillis();
         
-        System.out.println("�🎯 TARGET: Channel " + targetChannelParam.getValuei() + ", Pattern " + TARGET_PATTERN_INDEX);
+        System.out.println("� TARGET: Channel " + targetChannelParam.getValuei() + ", Pattern " + TARGET_PATTERN_INDEX);
         System.out.println("👑 INITIAL ROLE: MASTER (assuming until we detect other instances)");
         
         // Start discovery
@@ -200,7 +200,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             // Restore other channels first, then fade target down
             restoreOtherChannelFaderValues();
             if (targetChannel != null) {
-                System.out.println("🎚️  FADER: Fading channel " + TARGET_CHANNEL + " down to 0.0 (sync disabled)");
+                System.out.println("🎚️  FADER: Fading channel " + targetChannelParam.getValuei() + " down to 0.0 (sync disabled)");
                 setChannelFader(0.0f, 1.0f);
             }
         }
@@ -286,7 +286,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         isConnected = true;
         
         if (targetChannel != null) {
-            System.out.println("🎨 PATTERN SYNC: Switching to channel " + TARGET_CHANNEL + 
+            System.out.println("🎨 PATTERN SYNC: Switching to channel " + targetChannelParam.getValuei() + 
                               ", pattern " + TARGET_PATTERN_INDEX);
             // Switch to target channel and pattern
             lx.engine.getFocusedLook().setFocusedChannel(targetChannel);
@@ -297,7 +297,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             fadeOtherChannelsDown();
             
             // Fade up target channel
-            System.out.println("🎚️  FADER: Fading channel " + TARGET_CHANNEL + " up to 1.0");
+            System.out.println("🎚️  FADER: Fading channel " + targetChannelParam.getValuei() + " up to 1.0");
             setChannelFader(1.0f, 1.0f);
             
             // If master, trigger initial sync
@@ -306,7 +306,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
                 sendInitialSync();
             }
         } else {
-            System.out.println("⚠️  WARNING: Target channel " + TARGET_CHANNEL + " not found!");
+            System.out.println("⚠️  WARNING: Target channel " + targetChannelParam.getValuei() + " not found!");
         }
     }
     
@@ -325,7 +325,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             // Restore other channels first, then fade target down
             restoreOtherChannelFaderValues();
             if (targetChannel != null) {
-                System.out.println("🎚️  FADER: Fading channel " + TARGET_CHANNEL + " down to 0.0");
+                System.out.println("🎚️  FADER: Fading channel " + targetChannelParam.getValuei() + " down to 0.0");
                 setChannelFader(0.0f, 1.0f);
             }
         }
@@ -339,7 +339,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             LXPattern pattern = targetChannel.getPattern(TARGET_PATTERN_INDEX);
             String syncMsg = String.format(
                 "{\"channel\":%d,\"patternIndex\":%d,\"patternName\":\"%s\",\"faderValue\":1.0,\"fadeTime\":1.0,\"timestamp\":%d}",
-                TARGET_CHANNEL, TARGET_PATTERN_INDEX, pattern.getLabel(), System.currentTimeMillis()
+                targetChannelParam.getValuei() - 1, TARGET_PATTERN_INDEX, pattern.getLabel(), System.currentTimeMillis()
             );
             
             OscMessage message = new OscMessage("/slstudio/sync/initial");
@@ -361,7 +361,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             LXPattern pattern = targetChannel.getFocusedPattern();
             String syncMsg = String.format(
                 "{\"channel\":%d,\"patternIndex\":%d,\"patternName\":\"%s\",\"timestamp\":%d}",
-                TARGET_CHANNEL, TARGET_PATTERN_INDEX, pattern.getLabel(), System.currentTimeMillis()
+                targetChannelParam.getValuei() - 1, TARGET_PATTERN_INDEX, pattern.getLabel(), System.currentTimeMillis()
             );
             
             OscMessage message = new OscMessage("/slstudio/sync/trigger");
