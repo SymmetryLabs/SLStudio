@@ -35,6 +35,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     public static final int TARGET_CHANNEL = 14;  // Channel to sync (0-based, so 14 = 15th channel)
     public static final int TARGET_PATTERN_INDEX = 0;  // First pattern
     public static final int HEARTBEAT_INTERVAL_MS = 2000;  // 2 seconds
+    public static final int SYNC_HEARTBEAT_INTERVAL_MS = 2000;  // Re-send current pattern every 2 seconds
     public static final int CONNECTION_TIMEOUT_MS = 10000;  // 10 seconds (5x heartbeat for robustness)
     
     // Wi-Fi interface to use for sync. On macOS the device name varies (en0, en1, etc.)
@@ -59,6 +60,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     private final Set<String> connectedPeers = ConcurrentHashMap.newKeySet();
     private final Map<String, Long> lastSeenTime = new ConcurrentHashMap<>();
     private long lastHeartbeatTime = 0;
+    private long lastSyncHeartbeatTime = 0;
     private boolean syncEnablePending = false;
     
     // Instance identification
@@ -437,20 +439,47 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         try {
             int patternIndex = targetChannel.getNextPatternIndex();
             LXPattern pattern = targetChannel.getNextPattern();
-            String syncMsg = String.format(
-                "{\"channel\":%d,\"patternIndex\":%d,\"patternName\":\"%s\",\"timestamp\":%d}",
-                targetChannelParam.getValuei() - 1, patternIndex, pattern.getLabel(), System.currentTimeMillis()
-            );
-            
-            OscMessage message = new OscMessage("/slstudio/sync/trigger");
-            message.add(syncMsg);
-            oscTransmitter.send(message);
-            
-            System.out.println("📤 SYNC TX: Trigger pattern index " + patternIndex + " (" + pattern.getLabel() + ")");
+            sendSyncMessage(patternIndex, pattern, false);
             
         } catch (Exception e) {
             System.err.println("Failed to send sync trigger: " + e.getMessage());
         }
+    }
+    
+    private void sendSyncHeartbeat() {
+        if (!isMaster || targetChannel == null) return;
+        
+        try {
+            int patternIndex = targetChannel.getNextPatternIndex();
+            LXPattern pattern = targetChannel.getNextPattern();
+            sendSyncMessage(patternIndex, pattern, true);
+            
+        } catch (Exception e) {
+            System.err.println("Failed to send sync heartbeat: " + e.getMessage());
+        }
+    }
+    
+    private void sendSyncMessage(int patternIndex, LXPattern pattern, boolean isHeartbeat) {
+        String syncMsg = String.format(
+            "{\"channel\":%d,\"patternIndex\":%d,\"patternName\":\"%s\",\"timestamp\":%d}",
+            targetChannelParam.getValuei() - 1, patternIndex, pattern.getLabel(), System.currentTimeMillis()
+        );
+        
+        OscMessage message = new OscMessage("/slstudio/sync/trigger");
+        message.add(syncMsg);
+        // Send multiple copies to guard against UDP packet loss
+        try {
+            for (int i = 0; i < 3; i++) {
+                oscTransmitter.send(message);
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to send sync message: " + e.getMessage());
+            return;
+        }
+        
+        String label = isHeartbeat ? "HB" : "TX";
+        System.out.println("📤 SYNC " + label + ": Trigger pattern index " + patternIndex + " (" + pattern.getLabel() + ")");
+        lastSyncHeartbeatTime = System.currentTimeMillis();
     }
     
     private void handleSyncMessage(OscMessage message) {
@@ -533,6 +562,12 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         // Send heartbeat periodically
         if ((now - lastHeartbeatTime) > HEARTBEAT_INTERVAL_MS) {
             sendHeartbeat();
+        }
+        
+        // Re-send current pattern to slave periodically so missed triggers can recover
+        if (isMaster && isConnected && (now - lastSyncHeartbeatTime) > SYNC_HEARTBEAT_INTERVAL_MS) {
+            sendSyncHeartbeat();
+            lastSyncHeartbeatTime = now;
         }
         
         // Check for timeouts
