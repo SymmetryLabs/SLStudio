@@ -36,8 +36,9 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     public static final int HEARTBEAT_INTERVAL_MS = 2000;  // 2 seconds
     public static final int CONNECTION_TIMEOUT_MS = 5000;  // 5 seconds
     
-    // Wi-Fi interface to use for sync (macOS: en1)
-    private static final String WIFI_INTERFACE_NAME = "en1";
+    // Wi-Fi interface to use for sync. On macOS the device name varies (en0, en1, etc.)
+    // so we detect it by display name first, then fall back to common device names.
+    private static final String[] WIFI_INTERFACE_FALLBACKS = { "en0", "en1" };
     
     private final LX lx;
     private final NetworkMonitor networkMonitor;
@@ -104,9 +105,9 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     
     private void initializeWifiInterface() {
         try {
-            NetworkInterface wifiInterface = NetworkInterface.getByName(WIFI_INTERFACE_NAME);
+            NetworkInterface wifiInterface = findWifiInterface();
             if (wifiInterface == null) {
-                throw new RuntimeException("Wi-Fi interface " + WIFI_INTERFACE_NAME + " not found");
+                throw new RuntimeException("Wi-Fi interface not found");
             }
             
             for (InterfaceAddress addr : wifiInterface.getInterfaceAddresses()) {
@@ -119,14 +120,36 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             }
             
             if (wifiLocalAddress == null || wifiBroadcastAddress == null) {
-                throw new RuntimeException("No IPv4 address/broadcast found on " + WIFI_INTERFACE_NAME);
+                throw new RuntimeException("No IPv4 address/broadcast found on Wi-Fi interface");
             }
             
-            System.out.println("🛜 SYNC WIFI: Using " + WIFI_INTERFACE_NAME + " at " + 
-                wifiLocalAddress.getHostAddress() + " broadcast " + wifiBroadcastAddress.getHostAddress());
+            System.out.println("🛜 SYNC WIFI: Using " + wifiInterface.getName() + " (" + wifiInterface.getDisplayName() + 
+                ") at " + wifiLocalAddress.getHostAddress() + " broadcast " + wifiBroadcastAddress.getHostAddress());
         } catch (SocketException e) {
             throw new RuntimeException("Failed to initialize Wi-Fi interface", e);
         }
+    }
+    
+    private NetworkInterface findWifiInterface() throws SocketException {
+        // First try to find by display name (e.g., "Wi-Fi", "AirPort")
+        for (NetworkInterface iface : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+            String displayName = iface.getDisplayName();
+            if (displayName != null && (displayName.toLowerCase().contains("wi-fi") || 
+                                        displayName.toLowerCase().contains("airport") ||
+                                        displayName.toLowerCase().contains("wifi"))) {
+                return iface;
+            }
+        }
+        
+        // Fallback to common device names
+        for (String name : WIFI_INTERFACE_FALLBACKS) {
+            NetworkInterface iface = NetworkInterface.getByName(name);
+            if (iface != null && !iface.isLoopback()) {
+                return iface;
+            }
+        }
+        
+        return null;
     }
     
     @Override
