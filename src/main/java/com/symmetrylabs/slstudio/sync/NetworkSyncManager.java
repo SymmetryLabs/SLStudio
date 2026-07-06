@@ -79,11 +79,26 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     // Auto-cycle state
     private boolean preSyncAutoCycleEnabled = false;
     private boolean autoCycleStateSaved = false;
+    private boolean isInTransition = false;
+    private int pendingPatternIndex = -1;
     private final LXChannel.Listener channelListener = new LXChannel.AbstractListener() {
         @Override
         public void patternWillChange(LXChannel channel, LXPattern pattern, LXPattern nextPattern) {
-            if (syncEnabled.isOn() && isMaster && isConnected && channel == targetChannel) {
-                sendSyncTrigger();
+            if (syncEnabled.isOn() && channel == targetChannel) {
+                isInTransition = true;
+                if (isMaster && isConnected) {
+                    sendSyncTrigger();
+                }
+            }
+        }
+        
+        @Override
+        public void patternDidChange(LXChannel channel, LXPattern pattern) {
+            if (syncEnabled.isOn() && channel == targetChannel) {
+                isInTransition = false;
+                if (!isMaster && isConnected) {
+                    applyPendingPatternChange();
+                }
             }
         }
     };
@@ -278,6 +293,8 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         }
         isConnected = false;
         detachChannelListener();
+        isInTransition = false;
+        pendingPatternIndex = -1;
     }
     
     private void startDiscovery() {
@@ -491,9 +508,15 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             
             if (targetChannel != null) {
                 int currentIndex = targetChannel.getActivePatternIndex();
-                System.out.println("📥 SYNC RX: Request pattern index " + patternIndex + ", current " + currentIndex);
+                int nextIndex = targetChannel.getNextPatternIndex();
+                System.out.println("📥 SYNC RX: Request pattern index " + patternIndex + ", current " + currentIndex + ", next " + nextIndex + ", inTransition " + isInTransition);
                 if (patternIndex < 0 || patternIndex >= targetChannel.getPatterns().size()) {
                     System.err.println("⚠️  WARNING: Received invalid pattern index " + patternIndex);
+                } else if (isInTransition) {
+                    if (patternIndex != nextIndex && patternIndex != currentIndex) {
+                        System.out.println("📥 SYNC RX: Queuing pattern index " + patternIndex + " until current transition finishes");
+                        pendingPatternIndex = patternIndex;
+                    }
                 } else if (patternIndex != currentIndex) {
                     System.out.println("📥 SYNC RX: Switching to pattern index " + patternIndex);
                     targetChannel.goIndex(patternIndex);
@@ -503,6 +526,16 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         } catch (Exception e) {
             System.err.println("Failed to handle sync message: " + e.getMessage());
         }
+    }
+    
+    private void applyPendingPatternChange() {
+        if (pendingPatternIndex < 0 || targetChannel == null) return;
+        int currentIndex = targetChannel.getActivePatternIndex();
+        if (pendingPatternIndex != currentIndex) {
+            System.out.println("🔄 PENDING: Applying queued pattern index " + pendingPatternIndex);
+            targetChannel.goIndex(pendingPatternIndex);
+        }
+        pendingPatternIndex = -1;
     }
     
     private void setChannelFader(float value, float time) {
