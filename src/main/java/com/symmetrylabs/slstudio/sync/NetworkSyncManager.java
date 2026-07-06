@@ -70,6 +70,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     // Fader automation
     private boolean isConnected = false;
     private LXChannel targetChannel = null;
+    private final Map<LXChannel, Double> preSyncFaderValues = new HashMap<>();
     
     public NetworkSyncManager(LX lx) {
         super(lx, "NetworkSync");
@@ -190,10 +191,13 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         connectedPeers.clear();
         lastSeenTime.clear();
         
-        // Fade out channel if connected
-        if (isConnected && targetChannel != null) {
-            System.out.println("🎚️  FADER: Fading channel " + TARGET_CHANNEL + " down to 0.0 (sync disabled)");
-            setChannelFader(0.0f, 1.0f);
+        if (isConnected) {
+            // Restore other channels first, then fade target down
+            restoreOtherChannelFaderValues();
+            if (targetChannel != null) {
+                System.out.println("🎚️  FADER: Fading channel " + TARGET_CHANNEL + " down to 0.0 (sync disabled)");
+                setChannelFader(0.0f, 1.0f);
+            }
         }
         isConnected = false;
     }
@@ -281,7 +285,11 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             lx.engine.getFocusedLook().setFocusedChannel(targetChannel);
             targetChannel.goPattern(targetChannel.getPattern(TARGET_PATTERN_INDEX));
             
-            // Fade up
+            // Save non-target channel fader values and fade them down
+            saveOtherChannelFaderValues();
+            fadeOtherChannelsDown();
+            
+            // Fade up target channel
             System.out.println("🎚️  FADER: Fading channel " + TARGET_CHANNEL + " up to 1.0");
             setChannelFader(1.0f, 1.0f);
             
@@ -298,7 +306,6 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     private void onNetworkDisconnected() {
         System.out.println("🔌 NETWORK DISCONNECTED: Lost connection to all peers");
         System.out.println("👑 ROLE CHANGE: " + (!isMaster ? "Was slave, now promoted to MASTER" : "Was master, no longer connected"));
-        isConnected = false;
         connectedPeers.clear();
         
         // If we were slave, try to become master
@@ -307,11 +314,15 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             System.out.println("🔄 PROMOTION: Promoted to master (no other peers detected)");
         }
         
-        // Fade out channel
-        if (targetChannel != null) {
-            System.out.println("🎚️  FADER: Fading channel " + TARGET_CHANNEL + " down to 0.0");
-            setChannelFader(0.0f, 1.0f);
+        if (isConnected) {
+            // Restore other channels first, then fade target down
+            restoreOtherChannelFaderValues();
+            if (targetChannel != null) {
+                System.out.println("🎚️  FADER: Fading channel " + TARGET_CHANNEL + " down to 0.0");
+                setChannelFader(0.0f, 1.0f);
+            }
         }
+        isConnected = false;
     }
     
     private void sendInitialSync() {
@@ -376,6 +387,38 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         if (targetChannel != null) {
             targetChannel.fader.setValue(value);
         }
+    }
+    
+    private void saveOtherChannelFaderValues() {
+        preSyncFaderValues.clear();
+        for (LXChannel channel : lx.engine.getChannels()) {
+            if (channel != targetChannel) {
+                preSyncFaderValues.put(channel, channel.fader.getValue());
+            }
+        }
+    }
+    
+    private void fadeOtherChannelsDown() {
+        System.out.println("🎚️  FADER: Fading all non-sync channels down to 0.0");
+        for (LXChannel channel : lx.engine.getChannels()) {
+            if (channel != targetChannel) {
+                channel.fader.setValue(0.0f);
+            }
+        }
+    }
+    
+    private void restoreOtherChannelFaderValues() {
+        if (preSyncFaderValues.isEmpty()) return;
+        System.out.println("🎚️  FADER: Restoring non-sync channels to previous values");
+        for (LXChannel channel : lx.engine.getChannels()) {
+            if (channel != targetChannel) {
+                Double value = preSyncFaderValues.get(channel);
+                if (value != null) {
+                    channel.fader.setValue(value);
+                }
+            }
+        }
+        preSyncFaderValues.clear();
     }
     
     /**
