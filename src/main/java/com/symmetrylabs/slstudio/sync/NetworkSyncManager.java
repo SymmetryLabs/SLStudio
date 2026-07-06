@@ -36,6 +36,9 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     public static final int HEARTBEAT_INTERVAL_MS = 2000;  // 2 seconds
     public static final int CONNECTION_TIMEOUT_MS = 5000;  // 5 seconds
     
+    // Wi-Fi interface to use for sync (macOS: en1)
+    private static final String WIFI_INTERFACE_NAME = "en1";
+    
     private final LX lx;
     private final NetworkMonitor networkMonitor;
     private final LXOscEngine oscEngine;
@@ -59,6 +62,10 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     private final String instanceId;
     private final Random random = new Random();
     
+    // Wi-Fi interface addresses
+    private InetAddress wifiLocalAddress;
+    private InetAddress wifiBroadcastAddress;
+    
     // Fader automation
     private boolean isConnected = false;
     private LXChannel targetChannel = null;
@@ -73,10 +80,12 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         this.oscEngine = lx.engine.osc;
         
         try {
+            initializeWifiInterface();
+            
             this.discoverySocket = new DatagramSocket(DISCOVERY_PORT);
             this.discoverySocket.setBroadcast(true);
             this.oscReceiver = oscEngine.receiver(SYNC_OSC_PORT);
-            this.oscTransmitter = oscEngine.transmitter("255.255.255.255", SYNC_OSC_PORT);
+            this.oscTransmitter = oscEngine.transmitter(wifiBroadcastAddress, SYNC_OSC_PORT);
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize network for sync", e);
         }
@@ -91,6 +100,33 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     
     private String generateInstanceId() {
         return "slstudio-" + System.currentTimeMillis() + "-" + random.nextInt(1000);
+    }
+    
+    private void initializeWifiInterface() {
+        try {
+            NetworkInterface wifiInterface = NetworkInterface.getByName(WIFI_INTERFACE_NAME);
+            if (wifiInterface == null) {
+                throw new RuntimeException("Wi-Fi interface " + WIFI_INTERFACE_NAME + " not found");
+            }
+            
+            for (InterfaceAddress addr : wifiInterface.getInterfaceAddresses()) {
+                InetAddress address = addr.getAddress();
+                if (address instanceof Inet4Address) {
+                    wifiLocalAddress = address;
+                    wifiBroadcastAddress = addr.getBroadcast();
+                    break;
+                }
+            }
+            
+            if (wifiLocalAddress == null || wifiBroadcastAddress == null) {
+                throw new RuntimeException("No IPv4 address/broadcast found on " + WIFI_INTERFACE_NAME);
+            }
+            
+            System.out.println("🛜 SYNC WIFI: Using " + WIFI_INTERFACE_NAME + " at " + 
+                wifiLocalAddress.getHostAddress() + " broadcast " + wifiBroadcastAddress.getHostAddress());
+        } catch (SocketException e) {
+            throw new RuntimeException("Failed to initialize Wi-Fi interface", e);
+        }
     }
     
     @Override
@@ -140,28 +176,27 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     }
     
     private void startDiscovery() {
-        if (isMaster) {
-            // Send initial discovery immediately
-            sendDiscoveryPacket();
-        }
+        // Send initial heartbeat immediately
+        sendHeartbeat();
     }
     
-    private void sendDiscoveryPacket() {
-        if (!isMaster || !syncEnabled.isOn() || discoverySocket == null) return;
+    private void sendHeartbeat() {
+        if (!syncEnabled.isOn() || discoverySocket == null) return;
         
         try {
             String discoveryMsg = String.format(
-                "{\"instanceId\":\"%s\",\"isMaster\":true,\"timestamp\":%d}",
-                instanceId, System.currentTimeMillis()
+                "{\"instanceId\":\"%s\",\"isMaster\":%b,\"timestamp\":%d}",
+                instanceId, isMaster, System.currentTimeMillis()
             );
             
             byte[] data = discoveryMsg.getBytes();
             DatagramPacket packet = new DatagramPacket(data, data.length, 
-                InetAddress.getByName("255.255.255.255"), DISCOVERY_PORT);
+                wifiBroadcastAddress, DISCOVERY_PORT);
             discoverySocket.send(packet);
             lastHeartbeatTime = System.currentTimeMillis();
             
-            System.out.println("📡 DISCOVERY: Sent heartbeat as MASTER (ID: " + instanceId + ")");
+            System.out.println("📡 DISCOVERY: Sent heartbeat as " + (isMaster ? "MASTER" : "SLAVE") + 
+                " (ID: " + instanceId + ")");
             
         } catch (Exception e) {
             System.err.println("❌ ERROR: Failed to send discovery packet: " + e.getMessage());
@@ -331,9 +366,9 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         // Listen for discovery packets
         listenForDiscoveryPackets();
         
-        // Send heartbeat if master
-        if (isMaster && (now - lastHeartbeatTime) > HEARTBEAT_INTERVAL_MS) {
-            sendDiscoveryPacket();
+        // Send heartbeat periodically
+        if ((now - lastHeartbeatTime) > HEARTBEAT_INTERVAL_MS) {
+            sendHeartbeat();
         }
         
         // Check for timeouts

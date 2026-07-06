@@ -846,6 +846,7 @@ public class LXOscEngine extends LXComponent {
             this.buffer = ByteBuffer.wrap(this.bytes);
             this.packet = new DatagramPacket(this.bytes, this.bytes.length, address, port);
             this.socket = new DatagramSocket();
+            this.socket.setBroadcast(true);
         }
 
         public void send(OscPacket packet) throws IOException {
