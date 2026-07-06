@@ -17,6 +17,7 @@ public class ArtNetDmxDatagram extends LXDatagram {
     private final static long FLASH_NANOS = 100_000_000;
 
     private int[] pointIndices;
+    private boolean[] grbFlags = null;
     private boolean sequenceEnabled = false;
     private byte sequence = 1;
 
@@ -84,6 +85,11 @@ public class ArtNetDmxDatagram extends LXDatagram {
         this.pointIndices = indices;
     }
 
+    public ArtNetDmxDatagram setGrbFlags(boolean[] flags) {
+        this.grbFlags = flags;
+        return this;
+    }
+
     @Override
     public void onSend(int[] colors) {
         copyPointsGamma(
@@ -109,15 +115,27 @@ public class ArtNetDmxDatagram extends LXDatagram {
             lastFlashNanos = System.nanoTime();
             flashInOn = !flashInOn;
         }
+        int pixelIdx = 0;
         for (int index : pointIndices) {
             int colorValue = (index >= 0) ? colors[index] : unmappedC;
 
             int gammaExpanded = GammaExpander.getExpandedColor(colorValue);
-            buffer[i + byteOffset[0]] = (byte) Ops8.red(gammaExpanded);
-            buffer[i + byteOffset[1]] = (byte) Ops8.green(gammaExpanded);
-            buffer[i + byteOffset[2]] = (byte) Ops8.blue(gammaExpanded);
+            byte r = (byte) Ops8.red(gammaExpanded);
+            byte g = (byte) Ops8.green(gammaExpanded);
+            byte b = (byte) Ops8.blue(gammaExpanded);
+
+            if (grbFlags != null && pixelIdx < grbFlags.length && grbFlags[pixelIdx]) {
+                buffer[i + byteOffset[0]] = g;
+                buffer[i + byteOffset[1]] = r;
+                buffer[i + byteOffset[2]] = b;
+            } else {
+                buffer[i + byteOffset[0]] = r;
+                buffer[i + byteOffset[1]] = g;
+                buffer[i + byteOffset[2]] = b;
+            }
 
             i += 3;
+            pixelIdx++;
         }
         return this;
     }
