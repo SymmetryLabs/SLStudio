@@ -446,6 +446,8 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             message.add(syncMsg);
             oscTransmitter.send(message);
             
+            System.out.println("📤 SYNC TX: Trigger pattern index " + patternIndex + " (" + pattern.getLabel() + ")");
+            
         } catch (Exception e) {
             System.err.println("Failed to send sync trigger: " + e.getMessage());
         }
@@ -459,9 +461,11 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             int patternIndex = Integer.parseInt(extractJsonValue(jsonData, "patternIndex"));
             
             if (targetChannel != null) {
+                int currentIndex = targetChannel.getActivePatternIndex();
+                System.out.println("📥 SYNC RX: Request pattern index " + patternIndex + ", current " + currentIndex);
                 if (patternIndex < 0 || patternIndex >= targetChannel.getPatterns().size()) {
                     System.err.println("⚠️  WARNING: Received invalid pattern index " + patternIndex);
-                } else if (patternIndex != targetChannel.getActivePatternIndex()) {
+                } else if (patternIndex != currentIndex) {
                     System.out.println("📥 SYNC RX: Switching to pattern index " + patternIndex);
                     targetChannel.goIndex(patternIndex);
                 }
