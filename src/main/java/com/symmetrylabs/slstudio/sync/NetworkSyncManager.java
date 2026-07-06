@@ -93,9 +93,9 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             throw new RuntimeException("Failed to initialize network for sync", e);
         }
         
-        // Setup parameter listeners
-        addParameter("syncEnabled", this.syncEnabled);
+        // Setup parameter listeners (order matters: target channel must load before sync enable)
         addParameter("targetChannelParam", this.targetChannelParam);
+        addParameter("syncEnabled", this.syncEnabled);
         // Note: LXComponent.addParameter() automatically registers this as a listener
         
         System.out.println("NetworkSyncManager initialized with instance ID: " + instanceId);
@@ -161,6 +161,12 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
                 enableSync();
             } else {
                 disableSync();
+            }
+        } else if (p == targetChannelParam) {
+            if (syncEnabled.isOn()) {
+                System.out.println("🔄 CHANNEL CHANGE: Sync channel changed to " + targetChannelParam.getValuei() + ", re-syncing...");
+                disableSync();
+                enableSync();
             }
         }
     }
