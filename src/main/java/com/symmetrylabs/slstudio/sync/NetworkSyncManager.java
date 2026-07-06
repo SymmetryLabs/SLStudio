@@ -9,6 +9,7 @@ import heronarts.lx.LXEngine;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXComponent;
 import heronarts.lx.osc.LXOscEngine;
+import heronarts.lx.osc.LXOscListener;
 import heronarts.lx.osc.OscMessage;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -73,6 +74,25 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     private LXChannel targetChannel = null;
     private final Map<LXChannel, Double> preSyncFaderValues = new HashMap<>();
     
+    // Auto-cycle state
+    private boolean preSyncAutoCycleEnabled = false;
+    private boolean autoCycleStateSaved = false;
+    private final LXChannel.Listener channelListener = new LXChannel.AbstractListener() {
+        @Override
+        public void patternDidChange(LXChannel channel, LXPattern pattern) {
+            if (syncEnabled.isOn() && isMaster && isConnected && channel == targetChannel) {
+                sendSyncTrigger();
+            }
+        }
+    };
+    
+    private final LXOscListener oscListener = (OscMessage message) -> {
+        String address = message.getAddressPattern().getValue();
+        if (address.startsWith("/slstudio/sync/")) {
+            handleSyncMessage(message);
+        }
+    };
+    
     public NetworkSyncManager(LX lx) {
         super(lx, "NetworkSync");
         this.lx = lx;
@@ -88,6 +108,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             this.discoverySocket = new DatagramSocket(DISCOVERY_PORT);
             this.discoverySocket.setBroadcast(true);
             this.oscReceiver = oscEngine.receiver(SYNC_OSC_PORT);
+            this.oscReceiver.addListener(oscListener);
             this.oscTransmitter = oscEngine.transmitter(wifiBroadcastAddress, SYNC_OSC_PORT);
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize network for sync", e);
@@ -190,8 +211,42 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         System.out.println("� TARGET: Channel " + targetChannelParam.getValuei() + ", Pattern " + TARGET_PATTERN_INDEX);
         System.out.println("👑 INITIAL ROLE: MASTER (assuming until we detect other instances)");
         
+        attachChannelListener();
+        
         // Start discovery
         startDiscovery();
+    }
+    
+    private void attachChannelListener() {
+        if (targetChannel != null) {
+            targetChannel.addListener(channelListener);
+        }
+    }
+    
+    private void detachChannelListener() {
+        if (targetChannel != null) {
+            targetChannel.removeListener(channelListener);
+        }
+    }
+    
+    private void saveAndDisableAutoCycle() {
+        if (targetChannel == null || autoCycleStateSaved) return;
+        preSyncAutoCycleEnabled = targetChannel.autoCycleEnabled.isOn();
+        autoCycleStateSaved = true;
+        if (preSyncAutoCycleEnabled) {
+            System.out.println("🔄 SLAVE: Disabling auto-cycle on channel " + targetChannelParam.getValuei());
+            targetChannel.autoCycleEnabled.setValue(false);
+        }
+    }
+    
+    private void restoreAutoCycleState() {
+        if (targetChannel == null || !autoCycleStateSaved) return;
+        if (targetChannel.autoCycleEnabled.isOn() != preSyncAutoCycleEnabled) {
+            System.out.println("🔄 RESTORE: Auto-cycle on channel " + targetChannelParam.getValuei() + 
+                " restored to " + preSyncAutoCycleEnabled);
+            targetChannel.autoCycleEnabled.setValue(preSyncAutoCycleEnabled);
+        }
+        autoCycleStateSaved = false;
     }
     
     private void disableSync() {
@@ -203,7 +258,8 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         lastSeenTime.clear();
         
         if (isConnected) {
-            // Restore other channels first, then fade target down
+            // Restore auto-cycle and other channels first, then fade target down
+            restoreAutoCycleState();
             restoreOtherChannelFaderValues();
             if (targetChannel != null) {
                 System.out.println("🎚️  FADER: Fading channel " + targetChannelParam.getValuei() + " down to 0.0 (sync disabled)");
@@ -211,6 +267,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             }
         }
         isConnected = false;
+        detachChannelListener();
     }
     
     private void startDiscovery() {
@@ -292,11 +349,9 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         isConnected = true;
         
         if (targetChannel != null) {
-            System.out.println("🎨 PATTERN SYNC: Switching to channel " + targetChannelParam.getValuei() + 
-                              ", pattern " + TARGET_PATTERN_INDEX);
-            // Switch to target channel and pattern
+            System.out.println("🎨 PATTERN SYNC: Focusing channel " + targetChannelParam.getValuei());
+            // Focus the target channel (master keeps its current pattern; slave will follow via initial sync)
             lx.engine.getFocusedLook().setFocusedChannel(targetChannel);
-            targetChannel.goPattern(targetChannel.getPattern(TARGET_PATTERN_INDEX));
             
             // Save non-target channel fader values and fade them down
             saveOtherChannelFaderValues();
@@ -306,10 +361,12 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             System.out.println("🎚️  FADER: Fading channel " + targetChannelParam.getValuei() + " up to 1.0");
             setChannelFader(1.0f, 1.0f);
             
-            // If master, trigger initial sync
+            // If master, trigger initial sync; if slave, disable auto-cycle so master drives changes
             if (isMaster) {
                 System.out.println("📡 MASTER ACTION: Sending initial sync to all slaves");
                 sendInitialSync();
+            } else {
+                saveAndDisableAutoCycle();
             }
         } else {
             System.out.println("⚠️  WARNING: Target channel " + targetChannelParam.getValuei() + " not found!");
@@ -321,19 +378,20 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         System.out.println("👑 ROLE CHANGE: " + (!isMaster ? "Was slave, now promoted to MASTER" : "Was master, no longer connected"));
         connectedPeers.clear();
         
-        // If we were slave, try to become master
-        if (!isMaster) {
-            isMaster = true;
-            System.out.println("🔄 PROMOTION: Promoted to master (no other peers detected)");
-        }
-        
         if (isConnected) {
-            // Restore other channels first, then fade target down
+            // Restore auto-cycle and other channels first, then fade target down
+            restoreAutoCycleState();
             restoreOtherChannelFaderValues();
             if (targetChannel != null) {
                 System.out.println("🎚️  FADER: Fading channel " + targetChannelParam.getValuei() + " down to 0.0");
                 setChannelFader(0.0f, 1.0f);
             }
+        }
+        
+        // If we were slave, try to become master
+        if (!isMaster) {
+            isMaster = true;
+            System.out.println("🔄 PROMOTION: Promoted to master (no other peers detected)");
         }
         isConnected = false;
     }
@@ -342,10 +400,11 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         if (!isMaster || targetChannel == null) return;
         
         try {
-            LXPattern pattern = targetChannel.getPattern(TARGET_PATTERN_INDEX);
+            int patternIndex = targetChannel.getActivePatternIndex();
+            LXPattern pattern = targetChannel.getActivePattern();
             String syncMsg = String.format(
                 "{\"channel\":%d,\"patternIndex\":%d,\"patternName\":\"%s\",\"faderValue\":1.0,\"fadeTime\":1.0,\"timestamp\":%d}",
-                targetChannelParam.getValuei() - 1, TARGET_PATTERN_INDEX, pattern.getLabel(), System.currentTimeMillis()
+                targetChannelParam.getValuei() - 1, patternIndex, pattern.getLabel(), System.currentTimeMillis()
             );
             
             OscMessage message = new OscMessage("/slstudio/sync/initial");
@@ -364,10 +423,11 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         if (!isMaster || targetChannel == null) return;
         
         try {
-            LXPattern pattern = targetChannel.getFocusedPattern();
+            int patternIndex = targetChannel.getActivePatternIndex();
+            LXPattern pattern = targetChannel.getActivePattern();
             String syncMsg = String.format(
                 "{\"channel\":%d,\"patternIndex\":%d,\"patternName\":\"%s\",\"timestamp\":%d}",
-                targetChannelParam.getValuei() - 1, TARGET_PATTERN_INDEX, pattern.getLabel(), System.currentTimeMillis()
+                targetChannelParam.getValuei() - 1, patternIndex, pattern.getLabel(), System.currentTimeMillis()
             );
             
             OscMessage message = new OscMessage("/slstudio/sync/trigger");
@@ -384,11 +444,15 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         
         try {
             String jsonData = message.getString(0);
-            // Parse JSON and handle sync
-            // For now, just switch to target pattern
+            int patternIndex = Integer.parseInt(extractJsonValue(jsonData, "patternIndex"));
+            
             if (targetChannel != null) {
-                targetChannel.goPattern(targetChannel.getPattern(TARGET_PATTERN_INDEX));
-                setChannelFader(1.0f, 0.5f);  // Quick fade up
+                if (patternIndex >= 0 && patternIndex < targetChannel.getPatterns().size()) {
+                    System.out.println("📥 SYNC RX: Switching to pattern index " + patternIndex);
+                    targetChannel.goIndex(patternIndex);
+                } else {
+                    System.err.println("⚠️  WARNING: Received invalid pattern index " + patternIndex);
+                }
             }
             
         } catch (Exception e) {
@@ -506,17 +570,10 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         }
     }
     
-    /**
-     * Called when pattern changes on the target channel
-     */
-    public void onPatternChanged() {
-        if (syncEnabled.isOn() && isMaster && isConnected) {
-            sendSyncTrigger();
-        }
-    }
-    
     @Override
     public void dispose() {
+        restoreAutoCycleState();
+        detachChannelListener();
         disableSync();
         if (discoverySocket != null) {
             discoverySocket.close();
