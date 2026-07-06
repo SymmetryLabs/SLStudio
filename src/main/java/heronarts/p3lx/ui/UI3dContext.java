@@ -287,7 +287,18 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
             throw new UnsupportedOperationException("Cannot resize UI3dContext created with no size.");
         } else {
             this.pg.dispose();
-            this.pg = this.ui.applet.createGraphics((int) width, (int) height, PConstants.P3D);
+            // Processing createGraphics requires a non-null context ClassLoader on some
+            // platforms (notably macOS + JOGL). The NEWT/JOGL resize thread may have none.
+            Thread currentThread = Thread.currentThread();
+            ClassLoader originalClassLoader = currentThread.getContextClassLoader();
+            if (originalClassLoader == null) {
+                currentThread.setContextClassLoader(this.ui.applet.getClass().getClassLoader());
+            }
+            try {
+                this.pg = this.ui.applet.createGraphics((int) width, (int) height, PConstants.P3D);
+            } finally {
+                currentThread.setContextClassLoader(originalClassLoader);
+            }
             onResize();
         }
         return this;
