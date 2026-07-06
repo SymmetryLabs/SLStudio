@@ -79,7 +79,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     private boolean autoCycleStateSaved = false;
     private final LXChannel.Listener channelListener = new LXChannel.AbstractListener() {
         @Override
-        public void patternDidChange(LXChannel channel, LXPattern pattern) {
+        public void patternWillChange(LXChannel channel, LXPattern pattern, LXPattern nextPattern) {
             if (syncEnabled.isOn() && isMaster && isConnected && channel == targetChannel) {
                 sendSyncTrigger();
             }
@@ -435,8 +435,8 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         if (!isMaster || targetChannel == null) return;
         
         try {
-            int patternIndex = targetChannel.getActivePatternIndex();
-            LXPattern pattern = targetChannel.getActivePattern();
+            int patternIndex = targetChannel.getNextPatternIndex();
+            LXPattern pattern = targetChannel.getNextPattern();
             String syncMsg = String.format(
                 "{\"channel\":%d,\"patternIndex\":%d,\"patternName\":\"%s\",\"timestamp\":%d}",
                 targetChannelParam.getValuei() - 1, patternIndex, pattern.getLabel(), System.currentTimeMillis()
