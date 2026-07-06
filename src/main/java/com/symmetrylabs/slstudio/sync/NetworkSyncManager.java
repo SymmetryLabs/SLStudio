@@ -58,6 +58,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     private final Set<String> connectedPeers = ConcurrentHashMap.newKeySet();
     private final Map<String, Long> lastSeenTime = new ConcurrentHashMap<>();
     private long lastHeartbeatTime = 0;
+    private boolean syncEnablePending = false;
     
     // Instance identification
     private final String instanceId;
@@ -165,19 +166,22 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     }
     
     private void enableSync() {
+        // Get target channel first; if it's not available yet (e.g., during project load),
+        // mark as pending and retry in update() once channels are fully restored.
+        targetChannel = lx.engine.getChannel(targetChannelParam.getValuei() - 1);
+        if (targetChannel == null) {
+            syncEnablePending = true;
+            System.err.println("⚠️  WARNING: Channel " + targetChannelParam.getValuei() + " not found for sync, retrying...");
+            return;
+        }
+        syncEnablePending = false;
+        
         System.out.println("🟢 SYNC ENABLED: Network synchronization activated");
-        System.out.println("🆔 INSTANCE ID: " + instanceId);
+        System.out.println("� INSTANCE ID: " + instanceId);
         isMaster = true;  // First instance assumes master role
         lastHeartbeatTime = System.currentTimeMillis();
         
-        // Get target channel
-        targetChannel = lx.engine.getChannel(targetChannelParam.getValuei() - 1);
-        if (targetChannel == null) {
-            System.err.println("⚠️  WARNING: Channel " + TARGET_CHANNEL + " not found for sync");
-            return;
-        }
-        
-        System.out.println("🎯 TARGET: Channel " + TARGET_CHANNEL + ", Pattern " + TARGET_PATTERN_INDEX);
+        System.out.println("�🎯 TARGET: Channel " + targetChannelParam.getValuei() + ", Pattern " + TARGET_PATTERN_INDEX);
         System.out.println("👑 INITIAL ROLE: MASTER (assuming until we detect other instances)");
         
         // Start discovery
@@ -185,6 +189,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     }
     
     private void disableSync() {
+        syncEnablePending = false;
         System.out.println("🔴 SYNC DISABLED: Network synchronization deactivated");
         System.out.println("🔌 CLEANUP: Clearing all connections and stopping discovery");
         isMaster = false;
@@ -428,6 +433,11 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
      */
     public void update(double deltaMs) {
         if (!syncEnabled.isOn()) return;
+        
+        // Retry enabling sync if it was requested while channels were still loading
+        if (syncEnablePending && targetChannel == null) {
+            enableSync();
+        }
         
         long now = System.currentTimeMillis();
         
