@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.ui.v2;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXLook;
+import com.symmetrylabs.slstudio.sync.NetworkSyncManager;
 
 
 public class MasterWindow extends CloseableWindow {
@@ -43,5 +44,19 @@ public class MasterWindow extends CloseableWindow {
         pui.draw(look.cueB, true);
         pui.draw(lx.engine.speed);
         pui.draw(lx.engine.framesPerSecond);
+        
+        // Add NetworkSync toggle
+        UI.separator();
+        NetworkSyncManager networkSyncManager = (com.symmetrylabs.slstudio.SLStudio.applet != null) ? 
+            com.symmetrylabs.slstudio.SLStudio.applet.networkSyncManager : null;
+        
+        if (networkSyncManager != null) {
+            boolean syncEnabled = UI.checkbox("Network Sync", networkSyncManager.syncEnabled.getValueb());
+            if (syncEnabled != networkSyncManager.syncEnabled.getValueb()) {
+                lx.engine.addTask(() -> networkSyncManager.syncEnabled.setValue(syncEnabled));
+            }
+        } else {
+            UI.text("Network Sync: Not Available");
+        }
     }
 }

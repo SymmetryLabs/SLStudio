@@ -25,6 +25,8 @@ import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI2dScrollContext;
 import heronarts.p3lx.ui.UIObject;
 import heronarts.p3lx.ui.component.UIButton;
+import heronarts.p3lx.ui.component.UIIntegerBox;
+import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.component.UISlider;
 import heronarts.p3lx.ui.studio.UIPane;
 import heronarts.p3lx.ui.studio.midi.UIMidiInputs;
@@ -39,6 +41,7 @@ import com.symmetrylabs.util.dmx.ui.UIDmxMappings;
 import com.symmetrylabs.shows.tree.*;
 import com.symmetrylabs.shows.tree.ui.*;
 import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.sync.NetworkSyncManager;
 
 
 public class UIOverriddenRightPane extends UIPane {
@@ -55,7 +58,7 @@ public class UIOverriddenRightPane extends UIPane {
     private final CompoundParameter backgroundLightParam = new CompoundParameter("background", 0.09, 0, 1);
 
     public static final int PADDING = 4;
-    public static final int WIDTH = 522;
+    public static final int WIDTH = 500;
     private static final int ADD_BUTTON_WIDTH = 38;
 
     private int lfoCount = 1;
@@ -262,6 +265,53 @@ public class UIOverriddenRightPane extends UIPane {
 
     private void buildUtilityUI() {
         new UIOfflineRender(this.ui, this.lx, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
+
+        NetworkSyncManager networkSyncManager = (SLStudio.applet != null) ?
+            SLStudio.applet.networkSyncManager : null;
+
+        if (networkSyncManager != null) {
+            int boxW = 44;
+            int rowW = (int) utility.getContentWidth();
+            int btnW = rowW - boxW - 4;
+
+            UI2dContainer syncRow = (UI2dContainer) new UI2dContainer(0, 0, rowW, 26)
+                .setLayout(UI2dContainer.Layout.HORIZONTAL)
+                .setChildMargin(4)
+                .addToContainer(utility);
+
+            new UIButton(0, 0, btnW, 26) {
+                @Override
+                public void onToggle(boolean on) {
+                    networkSyncManager.syncEnabled.setValue(on);
+                }
+            }
+            .setParameter(networkSyncManager.syncEnabled)
+            .setLabel("Enable Pattern Sync")
+            .setActiveColor(0xff557755)
+            .setInactiveColor(0xff555555)
+            .setDescription("Enable network synchronization of patterns across multiple SLStudio instances")
+            .addToContainer(syncRow);
+
+            UI2dContainer chStack = (UI2dContainer) new UI2dContainer(0, 0, boxW, 26)
+                .setLayout(UI2dContainer.Layout.VERTICAL)
+                .setChildMargin(2)
+                .addToContainer(syncRow);
+
+            new UILabel(0, 0, boxW, 10)
+            .setLabel("Ch")
+            .setTextAlignment(processing.core.PConstants.CENTER, processing.core.PConstants.CENTER)
+            .addToContainer(chStack);
+
+            new UIIntegerBox(0, 0, boxW, 14) {
+                @Override
+                protected void onValueChange(int value) {
+                    networkSyncManager.targetChannelParam.setValue(value);
+                }
+            }
+            .setParameter(networkSyncManager.targetChannelParam)
+            .setDescription("Channel number (1-based) to synchronize")
+            .addToContainer(chStack);
+        }
 
         ui.setBackgroundColor(LXColor.gray(backgroundLightParam.getValue() * 100));
         new UISlider(UISlider.Direction.HORIZONTAL, PADDING, PADDING, utility.getWidth() - 2 * PADDING, 20)

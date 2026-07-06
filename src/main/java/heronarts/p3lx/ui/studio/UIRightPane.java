@@ -44,6 +44,9 @@ import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI2dScrollContext;
 import heronarts.p3lx.ui.UIObject;
 import heronarts.p3lx.ui.component.UIButton;
+import heronarts.p3lx.ui.component.UIIntegerBox;
+import heronarts.p3lx.ui.component.UILabel;
+import heronarts.p3lx.ui.component.UIParameterLabel;
 import heronarts.p3lx.ui.studio.midi.UIMidiInputs;
 import heronarts.p3lx.ui.studio.midi.UIMidiMappings;
 import heronarts.p3lx.ui.studio.midi.UIMidiSurfaces;
@@ -70,7 +73,7 @@ public class UIRightPane extends UIPane {
     private int macroCount = 1;
 
     public UIRightPane(UI ui, final LX lx) {
-        super(ui, lx, new String[] { "MODULATION", "OSC + MIDI" }, ui.getWidth() - WIDTH, WIDTH);
+        super(ui, lx, new String[] { "MODULATION", "OSC + MIDI", "UTILITY" }, ui.getWidth() - WIDTH, WIDTH);
         this.ui = ui;
         this.lx = lx;
         this.modulation = this.sections[0];
@@ -78,6 +81,83 @@ public class UIRightPane extends UIPane {
 
         buildMidiUI();
         buildModulationUI();
+        buildUtilityUI();
+    }
+
+    private void buildUtilityUI() {
+        final UI2dContainer utility = this.sections[2];
+
+        new UI2dContainer(0, 0, utility.getContentWidth(), 40) {
+            @Override
+            public void onDraw(UI ui, PGraphics pg) {
+                pg.fill(0xff333333);
+                pg.rect(0, 0, this.width, this.height);
+                pg.fill(0xffffffff);
+                pg.textAlign(processing.core.PConstants.LEFT, processing.core.PConstants.CENTER);
+                pg.text("Network Sync", 8, 12);
+            }
+        }
+        .addToContainer(utility);
+
+        com.symmetrylabs.slstudio.sync.NetworkSyncManager networkSyncManager =
+            (com.symmetrylabs.slstudio.SLStudio.applet != null) ?
+            com.symmetrylabs.slstudio.SLStudio.applet.networkSyncManager : null;
+
+        if (networkSyncManager != null) {
+            int boxW = 44;
+            int rowW = (int) utility.getContentWidth();
+            int btnW = rowW - boxW - 4;
+
+            UI2dContainer syncRow = (UI2dContainer) new UI2dContainer(0, 0, rowW, 26)
+                .setLayout(UI2dContainer.Layout.HORIZONTAL)
+                .setChildMargin(4)
+                .addToContainer(utility);
+
+            new UIButton(0, 0, btnW, 26) {
+                @Override
+                public void onToggle(boolean on) {
+                    networkSyncManager.syncEnabled.setValue(on);
+                }
+            }
+            .setParameter(networkSyncManager.syncEnabled)
+            .setLabel("Enable Pattern Sync")
+            .setActiveColor(0xff557755)
+            .setInactiveColor(0xff555555)
+            .setDescription("Enable network synchronization of patterns across multiple SLStudio instances")
+            .addToContainer(syncRow);
+
+            UI2dContainer chStack = (UI2dContainer) new UI2dContainer(0, 0, boxW, 26)
+                .setLayout(UI2dContainer.Layout.VERTICAL)
+                .setChildMargin(2)
+                .addToContainer(syncRow);
+
+            new UILabel(0, 0, boxW, 10)
+            .setLabel("Ch")
+            .setTextAlignment(processing.core.PConstants.CENTER, processing.core.PConstants.CENTER)
+            .addToContainer(chStack);
+
+            new UIIntegerBox(0, 0, boxW, 14) {
+                @Override
+                protected void onValueChange(int value) {
+                    networkSyncManager.targetChannelParam.setValue(value);
+                }
+            }
+            .setParameter(networkSyncManager.targetChannelParam)
+            .setDescription("Channel number (1-based) to synchronize")
+            .addToContainer(chStack);
+        } else {
+            new UI2dContainer(8, 20, utility.getContentWidth() - 16, 16) {
+                @Override
+                public void onDraw(UI ui, PGraphics pg) {
+                    pg.fill(0xff555555);
+                    pg.rect(0, 0, this.width, this.height);
+                    pg.fill(0xffffffff);
+                    pg.textAlign(processing.core.PConstants.LEFT, processing.core.PConstants.CENTER);
+                    pg.text("Network Sync: Not Available", 4, 8);
+                }
+            }
+            .addToContainer(utility);
+        }
     }
 
     private void buildMidiUI() {
