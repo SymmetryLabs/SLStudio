@@ -212,6 +212,8 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         System.out.println("👑 INITIAL ROLE: MASTER (assuming until we detect other instances)");
         
         attachChannelListener();
+        saveAutoCycleState();
+        applyAutoCycleForRole();
         
         // Start discovery
         startDiscovery();
@@ -229,13 +231,19 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         }
     }
     
-    private void saveAndDisableAutoCycle() {
+    private void saveAutoCycleState() {
         if (targetChannel == null || autoCycleStateSaved) return;
         preSyncAutoCycleEnabled = targetChannel.autoCycleEnabled.isOn();
         autoCycleStateSaved = true;
-        if (preSyncAutoCycleEnabled) {
-            System.out.println("🔄 SLAVE: Disabling auto-cycle on channel " + targetChannelParam.getValuei());
-            targetChannel.autoCycleEnabled.setValue(false);
+    }
+    
+    private void applyAutoCycleForRole() {
+        if (targetChannel == null) return;
+        boolean desiredAutoCycle = isMaster;
+        if (targetChannel.autoCycleEnabled.isOn() != desiredAutoCycle) {
+            System.out.println("🔄 AUTO-CYCLE: Setting channel " + targetChannelParam.getValuei() + 
+                " to " + desiredAutoCycle + " (" + (isMaster ? "MASTER" : "SLAVE") + ")");
+            targetChannel.autoCycleEnabled.setValue(desiredAutoCycle);
         }
     }
     
@@ -319,6 +327,9 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
                 // Other instance becomes master
                 isMaster = false;
                 System.out.println("🔄 ROLE CHANGE: Demoted to slave, master is: " + senderId);
+                if (isConnected) {
+                    applyAutoCycleForRole();
+                }
             } else {
                 System.out.println("👑 ROLE CONFLICT: We remain master (our ID: " + instanceId + 
                                   " vs their ID: " + senderId + ")");
@@ -361,12 +372,13 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             System.out.println("🎚️  FADER: Fading channel " + targetChannelParam.getValuei() + " up to 1.0");
             setChannelFader(1.0f, 1.0f);
             
-            // If master, trigger initial sync; if slave, disable auto-cycle so master drives changes
+            // Apply auto-cycle based on role (master ON, slave OFF)
+            applyAutoCycleForRole();
+            
+            // If master, trigger initial sync
             if (isMaster) {
                 System.out.println("📡 MASTER ACTION: Sending initial sync to all slaves");
                 sendInitialSync();
-            } else {
-                saveAndDisableAutoCycle();
             }
         } else {
             System.out.println("⚠️  WARNING: Target channel " + targetChannelParam.getValuei() + " not found!");
@@ -379,8 +391,8 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         connectedPeers.clear();
         
         if (isConnected) {
-            // Restore auto-cycle and other channels first, then fade target down
-            restoreAutoCycleState();
+            // Apply auto-cycle for role and restore other channels first, then fade target down
+            applyAutoCycleForRole();
             restoreOtherChannelFaderValues();
             if (targetChannel != null) {
                 System.out.println("🎚️  FADER: Fading channel " + targetChannelParam.getValuei() + " down to 0.0");
@@ -440,18 +452,18 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     }
     
     private void handleSyncMessage(OscMessage message) {
-        if (!syncEnabled.isOn()) return;
+        if (!syncEnabled.isOn() || isMaster) return;
         
         try {
             String jsonData = message.getString(0);
             int patternIndex = Integer.parseInt(extractJsonValue(jsonData, "patternIndex"));
             
             if (targetChannel != null) {
-                if (patternIndex >= 0 && patternIndex < targetChannel.getPatterns().size()) {
+                if (patternIndex < 0 || patternIndex >= targetChannel.getPatterns().size()) {
+                    System.err.println("⚠️  WARNING: Received invalid pattern index " + patternIndex);
+                } else if (patternIndex != targetChannel.getActivePatternIndex()) {
                     System.out.println("📥 SYNC RX: Switching to pattern index " + patternIndex);
                     targetChannel.goIndex(patternIndex);
-                } else {
-                    System.err.println("⚠️  WARNING: Received invalid pattern index " + patternIndex);
                 }
             }
             
