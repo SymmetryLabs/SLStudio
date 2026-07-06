@@ -34,7 +34,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     public static final int TARGET_CHANNEL = 14;  // Channel to sync (0-based, so 14 = 15th channel)
     public static final int TARGET_PATTERN_INDEX = 0;  // First pattern
     public static final int HEARTBEAT_INTERVAL_MS = 2000;  // 2 seconds
-    public static final int CONNECTION_TIMEOUT_MS = 5000;  // 5 seconds
+    public static final int CONNECTION_TIMEOUT_MS = 10000;  // 10 seconds (5x heartbeat for robustness)
     
     // Wi-Fi interface to use for sync. On macOS the device name varies (en0, en1, etc.)
     // so we detect it by display name first, then fall back to common device names.
@@ -237,6 +237,11 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
                           " (isMaster: " + senderIsMaster + ", we are: " + isMaster + ")");
         
         long now = System.currentTimeMillis();
+        
+        // Determine if this is a new/reconnected peer BEFORE updating lastSeenTime
+        boolean wasConnected = isConnected;
+        boolean wasNewPeer = !lastSeenTime.containsKey(senderId);
+        
         lastSeenTime.put(senderId, now);
         
         // Master/slave election
@@ -252,9 +257,6 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             }
         }
         
-        // Check if this is a new connection
-        boolean wasConnected = isConnected;
-        boolean wasNewPeer = !connectedPeers.contains(senderId);
         connectedPeers.add(senderId);
         
         if (wasNewPeer) {
@@ -265,8 +267,8 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             onNetworkConnected();
         }
         
-        // If we're master and this is a new slave, send initial sync
-        if (isMaster && !senderIsMaster) {
+        // If we're master and this is a new/reconnected slave, send initial sync
+        if (isMaster && !senderIsMaster && wasNewPeer) {
             System.out.println("📤 SYNC TRIGGER: Sending initial sync to new slave " + senderId);
             sendInitialSync();
         }
