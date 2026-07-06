@@ -55,6 +55,24 @@ public class MasterWindow extends CloseableWindow {
             if (syncEnabled != networkSyncManager.syncEnabled.getValueb()) {
                 lx.engine.addTask(() -> networkSyncManager.syncEnabled.setValue(syncEnabled));
             }
+
+            // Per-channel sync toggles and channel selects
+            int slotCount = NetworkSyncManager.SYNC_CHANNEL_COUNT;
+            int columns = 4;
+            for (int i = 0; i < slotCount; i++) {
+                if (i % columns != 0) {
+                    UI.sameLine();
+                }
+                final int slotIndex = i;
+                boolean enabled = UI.checkbox("Ch" + (slotIndex + 1), networkSyncManager.syncChannelEnabled[slotIndex].getValueb());
+                if (enabled != networkSyncManager.syncChannelEnabled[slotIndex].getValueb()) {
+                    lx.engine.addTask(() -> networkSyncManager.syncChannelEnabled[slotIndex].setValue(enabled));
+                }
+                int channel = UI.sliderInt("##ch" + slotIndex, networkSyncManager.syncChannelParam[slotIndex].getValuei(), 1, 64);
+                if (channel != networkSyncManager.syncChannelParam[slotIndex].getValuei()) {
+                    lx.engine.addTask(() -> networkSyncManager.syncChannelParam[slotIndex].setValue(channel));
+                }
+            }
         } else {
             UI.text("Network Sync: Not Available");
         }

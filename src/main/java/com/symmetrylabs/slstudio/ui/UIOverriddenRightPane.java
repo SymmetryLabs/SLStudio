@@ -270,47 +270,66 @@ public class UIOverriddenRightPane extends UIPane {
             SLStudio.applet.networkSyncManager : null;
 
         if (networkSyncManager != null) {
-            int boxW = 44;
             int rowW = (int) utility.getContentWidth();
-            int btnW = rowW - boxW - 4;
+            int margin = 2;
+            int slotCount = NetworkSyncManager.SYNC_CHANNEL_COUNT;
+            int slotW = (rowW - (slotCount - 1) * margin) / slotCount;
 
+            // Global network sync toggle
             UI2dContainer syncRow = (UI2dContainer) new UI2dContainer(0, 0, rowW, 26)
                 .setLayout(UI2dContainer.Layout.HORIZONTAL)
                 .setChildMargin(4)
                 .addToContainer(utility);
 
-            new UIButton(0, 0, btnW, 26) {
+            new UIButton(0, 0, rowW, 26) {
                 @Override
                 public void onToggle(boolean on) {
                     networkSyncManager.syncEnabled.setValue(on);
                 }
             }
             .setParameter(networkSyncManager.syncEnabled)
-            .setLabel("Enable Pattern Sync")
+            .setLabel("Network Sync")
             .setActiveColor(0xff557755)
             .setInactiveColor(0xff555555)
             .setDescription("Enable network synchronization of patterns across multiple SLStudio instances")
             .addToContainer(syncRow);
 
-            UI2dContainer chStack = (UI2dContainer) new UI2dContainer(0, 0, boxW, 26)
-                .setLayout(UI2dContainer.Layout.VERTICAL)
-                .setChildMargin(2)
-                .addToContainer(syncRow);
+            // Per-channel sync toggles and channel selects
+            UI2dContainer channelRow = (UI2dContainer) new UI2dContainer(0, 0, rowW, 26)
+                .setLayout(UI2dContainer.Layout.HORIZONTAL)
+                .setChildMargin(margin)
+                .addToContainer(utility);
 
-            new UILabel(0, 0, boxW, 10)
-            .setLabel("Ch")
-            .setTextAlignment(processing.core.PConstants.CENTER, processing.core.PConstants.CENTER)
-            .addToContainer(chStack);
+            for (int i = 0; i < slotCount; i++) {
+                final int slotIndex = i;
+                UI2dContainer slot = (UI2dContainer) new UI2dContainer(0, 0, slotW, 26)
+                    .setLayout(UI2dContainer.Layout.HORIZONTAL)
+                    .setChildMargin(2)
+                    .addToContainer(channelRow);
 
-            new UIIntegerBox(0, 0, boxW, 14) {
-                @Override
-                protected void onValueChange(int value) {
-                    networkSyncManager.targetChannelParam.setValue(value);
+                new UIButton(0, 0, slotW / 2, 26) {
+                    @Override
+                    public void onToggle(boolean on) {
+                        networkSyncManager.syncChannelEnabled[slotIndex].setValue(on);
+                    }
                 }
+                .setParameter(networkSyncManager.syncChannelEnabled[slotIndex])
+                .setLabel("Ch" + (slotIndex + 1))
+                .setActiveColor(0xff557755)
+                .setInactiveColor(0xff555555)
+                .setDescription("Enable synchronization for channel slot " + (slotIndex + 1))
+                .addToContainer(slot);
+
+                new UIIntegerBox(0, 0, slotW / 2, 26) {
+                    @Override
+                    protected void onValueChange(int value) {
+                        networkSyncManager.syncChannelParam[slotIndex].setValue(value);
+                    }
+                }
+                .setParameter(networkSyncManager.syncChannelParam[slotIndex])
+                .setDescription("Channel number (1-based) for sync slot " + (slotIndex + 1))
+                .addToContainer(slot);
             }
-            .setParameter(networkSyncManager.targetChannelParam)
-            .setDescription("Channel number (1-based) to synchronize")
-            .addToContainer(chStack);
         }
 
         ui.setBackgroundColor(LXColor.gray(backgroundLightParam.getValue() * 100));
