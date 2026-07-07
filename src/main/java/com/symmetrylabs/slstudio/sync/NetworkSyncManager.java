@@ -10,7 +10,9 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.LXComponent;
 import heronarts.lx.osc.LXOscEngine;
 import heronarts.lx.osc.LXOscListener;
+import heronarts.lx.osc.OscArgument;
 import heronarts.lx.osc.OscMessage;
+import heronarts.lx.osc.OscTypeTag;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -110,8 +112,17 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     
     private final LXOscListener oscListener = (OscMessage message) -> {
         String address = message.getAddressPattern().getValue();
-        if (address.startsWith("/slstudio/sync/")) {
+        if (address.equals("/slstudio/sync/enable")) {
+            handleSyncEnableMessage(message);
+        } else if (address.startsWith("/slstudio/sync/")) {
             handleSyncMessage(message);
+        }
+    };
+    
+    private final LXOscListener engineOscListener = (OscMessage message) -> {
+        String address = message.getAddressPattern().getValue();
+        if (address.equals("/slstudio/sync/enable")) {
+            handleSyncEnableMessage(message);
         }
     };
     
@@ -132,6 +143,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             this.oscReceiver = oscEngine.receiver(SYNC_OSC_PORT);
             this.oscReceiver.addListener(oscListener);
             this.oscTransmitter = oscEngine.transmitter(wifiBroadcastAddress, SYNC_OSC_PORT);
+            this.oscEngine.addEngineListener(this.engineOscListener);
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize network for sync", e);
         }
@@ -219,7 +231,12 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     @Override
     public void onParameterChanged(LXParameter p) {
         if (p == syncEnabled) {
-            if (syncEnabled.isOn()) {
+            boolean enabled = syncEnabled.isOn();
+            if (isMaster && isConnected) {
+                sendSyncEnable(enabled);
+            }
+            sendEngineSyncEnable(enabled);
+            if (enabled) {
                 enableSync();
             } else {
                 disableSync();
@@ -571,6 +588,79 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         String label = isHeartbeat ? "HB" : "TX";
         System.out.println("📤 SYNC " + label + ": Channel " + (channel.getIndex() + 1) + " pattern index " + patternIndex + " (" + pattern.getLabel() + ")");
         lastSyncHeartbeatTime = System.currentTimeMillis();
+    }
+    
+    private void handleSyncEnableMessage(OscMessage message) {
+        System.out.println("📥 SYNC ENABLE RX: Received message: " + message);
+        try {
+            boolean enabled;
+            OscArgument arg;
+            try {
+                arg = message.get(0);
+            } catch (IndexOutOfBoundsException e) {
+                System.err.println("⚠️  SYNC ENABLE RX: No arguments provided, expected 0/1 or false/true");
+                return;
+            }
+            char typeTag = arg.getTypeTag();
+            switch (typeTag) {
+                case OscTypeTag.INT:
+                case OscTypeTag.CHAR:
+                case OscTypeTag.RGBA:
+                case OscTypeTag.MIDI:
+                    enabled = arg.toInt() != 0;
+                    break;
+                case OscTypeTag.FLOAT:
+                case OscTypeTag.DOUBLE:
+                    enabled = arg.toFloat() != 0;
+                    break;
+                case OscTypeTag.STRING:
+                case OscTypeTag.SYMBOL:
+                    String value = arg.toString().trim().toLowerCase();
+                    enabled = value.equals("1") || value.equals("true") || value.equals("on");
+                    break;
+                case OscTypeTag.TRUE:
+                    enabled = true;
+                    break;
+                case OscTypeTag.FALSE:
+                default:
+                    enabled = false;
+                    break;
+            }
+            System.out.println("📥 SYNC ENABLE RX: Parsed value " + enabled + " (typeTag: " + typeTag + ")");
+            if (syncEnabled.isOn() != enabled) {
+                System.out.println("📥 SYNC ENABLE RX: Setting syncEnabled to " + (enabled ? "ON" : "OFF"));
+                syncEnabled.setValue(enabled);
+            } else {
+                System.out.println("📥 SYNC ENABLE RX: Already " + (enabled ? "ON" : "OFF") + ", no change");
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Failed to handle sync enable message: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    private void sendSyncEnable(boolean enabled) {
+        if (oscTransmitter == null) return;
+        try {
+            OscMessage message = new OscMessage("/slstudio/sync/enable");
+            message.add(enabled ? 1 : 0);
+            oscTransmitter.send(message);
+            System.out.println("📤 SYNC ENABLE TX: " + (enabled ? "ON" : "OFF"));
+        } catch (IOException e) {
+            System.err.println("Failed to send sync enable message: " + e.getMessage());
+        }
+    }
+    
+    private void sendEngineSyncEnable(boolean enabled) {
+        if (this.oscEngine == null || !this.oscEngine.transmitActive.isOn()) return;
+        try {
+            OscMessage message = new OscMessage("/slstudio/sync/enable");
+            message.add(enabled ? 1 : 0);
+            this.oscEngine.enqueueMessage(message);
+            System.out.println("📤 ENGINE SYNC ENABLE TX: " + (enabled ? "ON" : "OFF"));
+        } catch (Exception e) {
+            System.err.println("Failed to send engine sync enable message: " + e.getMessage());
+        }
     }
     
     private void handleSyncMessage(OscMessage message) {

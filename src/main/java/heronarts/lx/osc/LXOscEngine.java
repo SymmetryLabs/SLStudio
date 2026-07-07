@@ -126,6 +126,7 @@ public class LXOscEngine extends LXComponent {
 
     private Receiver engineReceiver;
     private final EngineListener engineListener = new EngineListener();
+    private final List<LXOscListener> engineListenerQueue = new ArrayList<LXOscListener>();
 
     private EngineTransmitter engineTransmitter;
 
@@ -1211,6 +1212,14 @@ public class LXOscEngine extends LXComponent {
         }
     }
 
+    public void addEngineListener(LXOscListener listener) {
+        if (this.engineReceiver != null) {
+            this.engineReceiver.addListener(listener);
+        } else {
+            this.engineListenerQueue.add(listener);
+        }
+    }
+
     private void startReceiver() {
         if (this.engineReceiver != null) {
             stopReceiver();
@@ -1218,6 +1227,9 @@ public class LXOscEngine extends LXComponent {
         try {
             this.engineReceiver = receiver(this.receivePort.getValuei(), this.receiveHost.getString());
             this.engineReceiver.addListener(this.engineListener);
+            for (LXOscListener listener : this.engineListenerQueue) {
+                this.engineReceiver.addListener(listener);
+            }
             System.out.println("Started OSC listener " + this.engineReceiver.address);
         } catch (SocketException sx) {
             System.err.println("Failed to start OSC receiver: " + sx.getLocalizedMessage());
