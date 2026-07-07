@@ -15,6 +15,7 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.parameter.LXParameter.Units;
 
 import java.io.IOException;
 import java.net.*;
@@ -58,8 +59,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     public final DiscreteParameter[] syncChannelParam = new DiscreteParameter[SYNC_CHANNEL_COUNT];
     
     // Legacy migration parameter: old projects saved this as the single sync channel.
-    private final DiscreteParameter targetChannelParam = new DiscreteParameter("targetChannelParam", TARGET_CHANNEL + 1, 1, 65)
-        .setDescription("Legacy sync channel (migrated to syncChannelParam0)");
+    public final DiscreteParameter targetChannelParam = new DiscreteParameter("targetChannelParam", TARGET_CHANNEL + 1, 1, 65);
     private final BooleanParameter legacyMigrated = new BooleanParameter("legacyMigrated", false)
         .setDescription("Legacy channel migration has been applied");
 
@@ -142,7 +142,12 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
                 .setDescription("Enable synchronization for channel slot " + (i + 1));
             this.syncChannelParam[i] = new DiscreteParameter("SyncCh" + (i + 1), i == 0 ? TARGET_CHANNEL + 1 : 1, 1, 65)
                 .setDescription("Channel number (1-based) for sync slot " + (i + 1));
+            this.syncChannelParam[i].setUnits(Units.INTEGER);
         }
+        
+        // Legacy migration formatting
+        this.targetChannelParam.setDescription("Legacy sync channel (migrated to syncChannelParam0)");
+        this.targetChannelParam.setUnits(Units.INTEGER);
         
         // Setup parameter listeners (order matters: channel params must load before sync enable)
         for (int i = 0; i < SYNC_CHANNEL_COUNT; i++) {

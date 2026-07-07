@@ -314,7 +314,7 @@ public class UIOverriddenRightPane extends UIPane {
                     }
                 }
                 .setParameter(networkSyncManager.syncChannelEnabled[slotIndex])
-                .setLabel("Ch" + (slotIndex + 1))
+                .setLabel("Ch")
                 .setActiveColor(0xff557755)
                 .setInactiveColor(0xff555555)
                 .setDescription("Enable synchronization for channel slot " + (slotIndex + 1))

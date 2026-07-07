@@ -64,7 +64,7 @@ public class MasterWindow extends CloseableWindow {
                     UI.sameLine();
                 }
                 final int slotIndex = i;
-                boolean enabled = UI.checkbox("Ch" + (slotIndex + 1), networkSyncManager.syncChannelEnabled[slotIndex].getValueb());
+                boolean enabled = UI.checkbox("Ch", networkSyncManager.syncChannelEnabled[slotIndex].getValueb());
                 if (enabled != networkSyncManager.syncChannelEnabled[slotIndex].getValueb()) {
                     lx.engine.addTask(() -> networkSyncManager.syncChannelEnabled[slotIndex].setValue(enabled));
                 }
