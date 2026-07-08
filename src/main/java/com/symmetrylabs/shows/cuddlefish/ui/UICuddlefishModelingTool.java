@@ -220,8 +220,9 @@ public class UICuddlefishModelingTool extends UI2dContainer {
     static final float COUNT_BOX_H     = 16f;
     static final float COUNT_BOX_GAP   = 2f;
     static final float COUNT_BOX_START_Y = 36f;  // below "Strips per universe" label
-    // Each cell = label (10px) + box (COUNT_BOX_H) + gap
-    static final float COUNT_CELL_H = 10f + COUNT_BOX_H + COUNT_BOX_GAP;
+    static final float COUNT_MUTE_BTN_H = 14f;  // height of the per-universe mute toggle button
+    // Each cell = mute button + box (COUNT_BOX_H) + gap
+    static final float COUNT_CELL_H = COUNT_MUTE_BTN_H + COUNT_BOX_H + COUNT_BOX_GAP;
     static final float COUNT_CELL_W = COUNT_BOX_W;
 
     /** Y coordinate of the first pixel below the count-box grid. */
@@ -240,7 +241,7 @@ public class UICuddlefishModelingTool extends UI2dContainer {
             float cellY = COUNT_BOX_START_Y + row * COUNT_CELL_H;
             // Universe number as a mute toggle button (ON = sending, OFF = muted)
             final int capturedU = u;
-            UIButton muteBtn = new UIButton(cellX, cellY, COUNT_BOX_W, 10f) {
+            UIButton muteBtn = new UIButton(cellX, cellY, COUNT_BOX_W, COUNT_MUTE_BTN_H) {
                 @Override
                 protected void onToggle(boolean active) {
                     // active=true means ON (sending), active=false means muted
@@ -254,7 +255,7 @@ public class UICuddlefishModelingTool extends UI2dContainer {
             muteBtn.addToContainer(this);
             muteButtons[u] = muteBtn;
             // Count spinner
-            TabbableTextBox countBox = new TabbableTextBox(cellX, cellY + 10f, COUNT_BOX_W, COUNT_BOX_H);
+            TabbableTextBox countBox = new TabbableTextBox(cellX, cellY + COUNT_MUTE_BTN_H, COUNT_BOX_W, COUNT_BOX_H);
             countBox.setValue(String.valueOf(DEFAULT_STRIPS_PER_UNIVERSE));
             countBox.addToContainer(this);
             countBoxes[u] = countBox;

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1783538236270,
+  "timestamp": 1783538400525,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -44,7 +44,7 @@
         "modulationColor": -16711767,
         "parameters": {
           "label": "Look-1",
-          "focusedChannel": 0
+          "focusedChannel": 8
         },
         "channels": [
           {
@@ -2572,7 +2572,7 @@
                 }
               }
             ],
-            "patternIndex": 2,
+            "patternIndex": 0,
             "patterns": [
               {
                 "id": 1591,
@@ -3661,13 +3661,13 @@
             "modulationColor": -65506,
             "parameters": {
               "label": "Channel-10",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -3736,13 +3736,13 @@
             "modulationColor": -2097408,
             "parameters": {
               "label": "Channel-11",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -3811,13 +3811,13 @@
             "modulationColor": -9830656,
             "parameters": {
               "label": "Channel-12",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -3886,13 +3886,13 @@
             "modulationColor": -4652801,
             "parameters": {
               "label": "Channel-13",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -3961,13 +3961,13 @@
             "modulationColor": -5439744,
             "parameters": {
               "label": "StripIllum",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -4072,7 +4072,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16727809,
+          "modulationColor": -65329,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -4211,7 +4211,7 @@
       "DMXParameterMapper": {
         "id": 48,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -10027264,
+        "modulationColor": -30720,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -5635,17 +5635,17 @@
         "16192": true
       },
       "preview": {
-        "radius": 1466.7284063893203,
+        "radius": 5201.985065184043,
         "theta": 6.23400000000001,
         "phi": 0.06720362949371268,
         "roll": 0.0,
-        "positionX": 50.107452392578125,
-        "positionY": 485.6410217285156,
-        "positionZ": -128.09718322753906,
-        "orientW": 0.30353552,
-        "orientX": 0.9528089,
-        "orientY": -0.0025856348,
-        "orientZ": -0.0038370609
+        "positionX": 389.1407165527344,
+        "positionY": 1799.50341796875,
+        "positionZ": -876.6233520507812,
+        "orientW": 0.31830925,
+        "orientX": 0.8622746,
+        "orientY": 0.3931102,
+        "orientZ": 0.025022741
       }
     }
   }
