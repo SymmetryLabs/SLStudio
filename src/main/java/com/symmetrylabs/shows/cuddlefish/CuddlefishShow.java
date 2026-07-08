@@ -9,13 +9,19 @@ import com.symmetrylabs.slstudio.model.CandyBar;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
+import com.symmetrylabs.slstudio.output.ArtNetDmxDatagram;
+import com.symmetrylabs.slstudio.output.ArtNetOutput;
 import com.symmetrylabs.slstudio.output.SimplePixlite;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.slstudio.model.DoubleStrip;
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
+import heronarts.lx.output.LXDatagramOutput;
+import heronarts.lx.output.LXDatagram;
 import heronarts.lx.transform.LXMatrix;
 import heronarts.lx.transform.LXTransform;
+import java.net.DatagramSocket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,9 +95,24 @@ public class CuddlefishShow implements Show {
             float[][] mapping = UICuddlefishModelingTool.loadStripsFromDisk();
             int totalStrips = 0;
             for (int c : counts) totalStrips += c;
-            if (mapping == null || mapping.length != totalStrips) {
-                System.out.println("CuddlefishShow: using default mapping (" + totalStrips + " strips)");
+            if (mapping == null) {
+                System.out.println("CuddlefishShow: no mapping on disk, using default (" + totalStrips + " strips)");
                 mapping = buildDefaultMapping(totalStrips);
+            } else if (mapping.length != totalStrips) {
+                System.out.println("CuddlefishShow: mapping has " + mapping.length + " strips but counts sum to " + totalStrips + " — adjusting counts to match mapping");
+                // Recompute counts to match the actual strip data: keep per-universe distribution
+                // but clamp/trim so the total equals mapping.length
+                int loaded = mapping.length;
+                int assigned = 0;
+                for (int u = 0; u < counts.length; u++) {
+                    int give = Math.min(counts[u], loaded - assigned);
+                    counts[u] = give;
+                    assigned += give;
+                    if (assigned >= loaded) {
+                        for (int r = u + 1; r < counts.length; r++) counts[r] = 0;
+                        break;
+                    }
+                }
             }
             System.out.println("CuddlefishShow: building " + mapping.length + " strips from mapping");
             for (int i = 0; i < mapping.length; i++) {
@@ -179,39 +200,111 @@ public class CuddlefishShow implements Show {
             transform.pop();
         }
     }
-    static class CuddlefishPixlite extends SimplePixlite {
+    /**
+     * Single-socket ArtNet output for all 96 cuddlefish universes.
+     * All datagrams share one DatagramSocket and one LXDatagramOutput, eliminating
+     * the per-universe socket overhead that caused glitching above ~51 universes.
+     * Per-universe mute is handled via a boolean[] that skips individual datagrams.
+     */
+    public static class CuddlefishPixlite extends ArtNetOutput {
+        /** Datagrams indexed by universe (0-based) for per-universe mute. */
+        public static final List<ArtNetDmxDatagram> universeDatagram = new ArrayList<>();
+
         public CuddlefishPixlite(LX lx, String ip, CuddlefishModel model) {
             super(lx, ip);
-            // UNIVERSE_COUNT outputs; each output carries strips per universe
-            // Per-strip GRB is handled via strip segments within the shared universe
+            universeDatagram.clear();
+
             int[] counts = UICuddlefishModelingTool.loadStripCountsFromDisk();
-            int stripIndex = 0;
-            for (int u = 0; u < UNIVERSE_COUNT; u++) {
-                PointsGrouping pg = new PointsGrouping(String.valueOf(u + 1));
-                int pixelOffset = 0;
-                for (int s = 0; s < counts[u]; s++) {
-                    if (stripIndex >= model.strips.size()) break;
-                    Strip strip = model.getStripByIndex(stripIndex++);
-                    int numPixels = strip.getPoints().size();
-                    // Add strip segment with its GRB setting
-                    pg.addStripSegment(pixelOffset, pixelOffset + numPixels, strip.metrics.grbSwap);
-                    pg.addPoints(strip.getPoints());
-                    pixelOffset += numPixels;
+
+            try {
+                // One shared socket for all universes
+                DatagramSocket sharedSocket = new DatagramSocket();
+                sharedSocket.setBroadcast(false);
+                SingleSocketOutput singleOut = new SingleSocketOutput(lx, sharedSocket);
+                singleOut.setLogConnections(false);
+
+                int stripIndex = 0;
+                for (int u = 0; u < UNIVERSE_COUNT; u++) {
+                    PointsGrouping pg = new PointsGrouping(String.valueOf(u + 1));
+                    int pixelOffset = 0;
+                    for (int s = 0; s < counts[u]; s++) {
+                        if (stripIndex >= model.strips.size()) break;
+                        Strip strip = model.getStripByIndex(stripIndex++);
+                        int numPixels = strip.getPoints().size();
+                        pg.addStripSegment(pixelOffset, pixelOffset + numPixels, !strip.metrics.grbSwap);
+                        pg.addPoints(strip.getPoints());
+                        pixelOffset += numPixels;
+                    }
+
+                    int[] indices = pg.getIndices();
+                    if (indices.length == 0) {
+                        universeDatagram.add(null);
+                        continue;
+                    }
+
+                    // Build per-pixel GRB flag array
+                    boolean[] grbFlags = new boolean[indices.length];
+                    for (PointsGrouping.StripSegment seg : pg.getStripSegments()) {
+                        for (int i = seg.startIndex; i < seg.endIndex && i < grbFlags.length; i++) {
+                            grbFlags[i] = seg.grbSwap;
+                        }
+                    }
+                    ArtNetDmxDatagram dgram = new ArtNetDmxDatagram(lx, ip, indices, u);
+                    dgram.setGrbFlags(grbFlags);
+                    singleOut.addDatagram(dgram);
+                    universeDatagram.add(dgram);
                 }
-                addPixliteOutput(pg);
+                addChild(singleOut);
+            } catch (SocketException e) {
+                throw new RuntimeException("Failed to create cuddlefish output socket", e);
             }
         }
 
-        @Override
-        public SimplePixlite addPixliteOutput(PointsGrouping pointsGrouping) {
-            try {
-                SimplePixliteOutput spo = new SimplePixliteOutput(pointsGrouping);
-                spo.setLogConnections(false);
-                addChild(spo);
-            } catch (Exception e) {
-                e.printStackTrace();
+        /** Called by UI mute buttons. active=true means sending, false means muted. */
+        public static void setUniverseMuted(int universe, boolean muted) {
+            if (universe >= 0 && universe < universeDatagram.size()) {
+                ArtNetDmxDatagram dgram = universeDatagram.get(universe);
+                if (dgram != null) dgram.enabled.setValue(!muted);
             }
-            return this;
+        }
+
+        /**
+         * Single-socket LXDatagramOutput.
+         * Uses the shared socket from LXDatagramOutput and skips datagrams
+         * whose enabled flag is false (set by setUniverseMuted).
+         */
+        private static class SingleSocketOutput extends LXDatagramOutput {
+            SingleSocketOutput(LX lx, DatagramSocket socket) throws SocketException {
+                super(lx, socket);
+            }
+
+            @Override
+            protected void onSend(heronarts.lx.PolyBuffer src) {
+                List<heronarts.lx.output.LXDatagram> dgrams = getDatagrams();
+                for (heronarts.lx.output.LXDatagram dgram : dgrams) {
+                    if (!dgram.enabled.isOn()) continue;
+                    dgram.onSend(src);
+                    try {
+                        socket.send(dgram.packet);
+                    } catch (java.io.IOException iox) {
+                        // silently skip
+                    }
+                }
+                // One Art-Net sync packet for the whole batch
+                if (!dgrams.isEmpty()) {
+                    try {
+                        byte[] syncBuf = new byte[com.symmetrylabs.slstudio.output.ArtNetDatagramUtil.HEADER_LENGTH];
+                        com.symmetrylabs.slstudio.output.ArtNetDatagramUtil.fillHeader(syncBuf, (short) 0x5200);
+                        java.net.InetAddress addr = dgrams.get(0).getAddress();
+                        if (addr != null) {
+                            socket.send(new java.net.DatagramPacket(syncBuf, syncBuf.length, addr,
+                                com.symmetrylabs.slstudio.output.ArtNetDatagramUtil.ARTNET_PORT));
+                        }
+                    } catch (java.io.IOException iox) {
+                        // silently skip
+                    }
+                }
+            }
         }
     }
 }

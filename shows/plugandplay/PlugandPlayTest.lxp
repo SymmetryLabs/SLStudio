@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1781298221952,
+  "timestamp": 1783537412512,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -44,7 +44,7 @@
         "modulationColor": -16711767,
         "parameters": {
           "label": "Look-1",
-          "focusedChannel": 14
+          "focusedChannel": 8
         },
         "channels": [
           {
@@ -2572,7 +2572,7 @@
                 }
               }
             ],
-            "patternIndex": 0,
+            "patternIndex": 29,
             "patterns": [
               {
                 "id": 1591,
@@ -4008,13 +4008,13 @@
             "modulationColor": -2556160,
             "parameters": {
               "label": "Channel-15",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -4072,7 +4072,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -12320513,
+          "modulationColor": -16756993,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -4209,13 +4209,40 @@
         }
       },
       "DMXParameterMapper": {
-        "id": 110,
+        "id": 143,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -3211009,
+        "modulationColor": -16711926,
         "parameters": {
           "label": "DMXParameterMapper"
         },
         "mappings": []
+      },
+      "networkSyncManager": {
+        "id": 141,
+        "class": "com.symmetrylabs.slstudio.sync.NetworkSyncManager",
+        "modulationColor": -16742145,
+        "parameters": {
+          "label": "NetworkSync",
+          "syncChannelEnabled0": true,
+          "syncChannelParam0": 15,
+          "syncChannelEnabled1": false,
+          "syncChannelParam1": 1,
+          "syncChannelEnabled2": false,
+          "syncChannelParam2": 1,
+          "syncChannelEnabled3": false,
+          "syncChannelParam3": 1,
+          "syncChannelEnabled4": false,
+          "syncChannelParam4": 1,
+          "syncChannelEnabled5": false,
+          "syncChannelParam5": 1,
+          "syncChannelEnabled6": false,
+          "syncChannelParam6": 1,
+          "syncChannelEnabled7": false,
+          "syncChannelParam7": 1,
+          "legacyMigrated": false,
+          "targetChannelParam": 15,
+          "syncEnabled": false
+        }
       },
       "envelop": {
         "id": 33,
@@ -4280,7 +4307,7 @@
         }
       },
       "outputControl": {
-        "id": 105,
+        "id": 137,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -11008,
         "parameters": {
@@ -5611,9 +5638,14 @@
         "radius": 1466.7284063893203,
         "theta": 6.23400000000001,
         "phi": 0.06720362949371268,
+        "roll": 0.0,
         "positionX": 50.107452392578125,
         "positionY": 485.6410217285156,
-        "positionZ": -128.09718322753906
+        "positionZ": -128.09718322753906,
+        "orientW": 0.30353552,
+        "orientX": 0.9528089,
+        "orientY": -0.0025856348,
+        "orientZ": -0.0038370609
       }
     }
   }

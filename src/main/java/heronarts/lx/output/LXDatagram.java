@@ -59,7 +59,7 @@ public abstract class LXDatagram {
 
     protected final byte[] buffer;
 
-    final DatagramPacket packet;
+    public final DatagramPacket packet;
 
     /**
      * Whether this datagram is active

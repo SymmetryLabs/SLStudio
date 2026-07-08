@@ -30,8 +30,8 @@ import processing.core.PConstants;
 
 public class UICuddlefishModelingTool extends UI2dContainer {
 
-    /** Number of Pixlite outputs / ArtNet universes. Fixed at 64. */
-    public static final int UNIVERSE_COUNT = 64;
+    /** Number of Pixlite outputs / ArtNet universes. Fixed at 96. */
+    public static final int UNIVERSE_COUNT = 96;
 
     public static final String[] COLUMN_LABELS = { "tx", "ty", "tz", "az", "rx", "ry", "px", "d", "cv", "grb" };
     public static final String MAPPING_FILE = "data/cuddlefish-mapping.json";
@@ -51,9 +51,10 @@ public class UICuddlefishModelingTool extends UI2dContainer {
         public String[]  universeLabels; // length = UNIVERSE_COUNT, user-defined labels
     }
 
-    // ── per-universe count boxes (always 54) ──────────────────────────────────
+    // ── per-universe count boxes and mute buttons ──────────────────────────────
     private final TabbableTextBox[] countBoxes  = new TabbableTextBox[UNIVERSE_COUNT];
     private final TabbableTextBox[] labelBoxes  = new TabbableTextBox[UNIVERSE_COUNT];
+    private final UIButton[]        muteButtons = new UIButton[UNIVERSE_COUNT];
 
     // ── strip parameter boxes, built dynamically ──────────────────────────────
     // Indexed as stripInputs[globalStripIndex][col]  (UIDoubleBox for draggable numeric cols)
@@ -153,7 +154,7 @@ public class UICuddlefishModelingTool extends UI2dContainer {
 
         // ── Strip-count header label ──
         new UILabel(0, 20, w - 10, 13)
-            .setLabel("Strips per universe (U1 \u2026 U64):")
+            .setLabel("Strips per universe (U1 \u2026 U96):")
             .addToContainer(this);
 
         // ── 54 count boxes laid out in a compact grid ──
@@ -190,9 +191,9 @@ public class UICuddlefishModelingTool extends UI2dContainer {
 
         // ── Load saved data and populate everything ──
         MikeyMappingFile saved = loadFileFromDisk();
-        if (saved != null && saved.stripCounts != null && saved.stripCounts.length == UNIVERSE_COUNT) {
+        if (saved != null && saved.stripCounts != null && saved.stripCounts.length > 0) {
             for (int u = 0; u < UNIVERSE_COUNT; u++) {
-                stripCounts[u] = Math.max(1, saved.stripCounts[u]);
+                stripCounts[u] = (u < saved.stripCounts.length) ? Math.max(1, saved.stripCounts[u]) : 1;
                 countBoxes[u].setValue(String.valueOf(stripCounts[u]));
             }
             buildStripGrid(saved.strips);
@@ -229,7 +230,7 @@ public class UICuddlefishModelingTool extends UI2dContainer {
         return COUNT_BOX_START_Y + rows * COUNT_CELL_H;
     }
 
-    // ── Build the 54 count boxes in a 9-column grid ───────────────────────────
+    // ── Build the 96 count boxes in a 9-column grid with mute toggle ─────────
 
     private void buildCountBoxes(float w) {
         for (int u = 0; u < UNIVERSE_COUNT; u++) {
@@ -237,12 +238,21 @@ public class UICuddlefishModelingTool extends UI2dContainer {
             int row = u / COUNT_BOX_COLS;
             float cellX = col * (COUNT_BOX_W + COUNT_BOX_GAP);
             float cellY = COUNT_BOX_START_Y + row * COUNT_CELL_H;
-            // Universe number label above the count box
-            new UILabel(cellX, cellY, COUNT_BOX_W, 10f)
-                .setLabel(String.valueOf(u + 1))
-                .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
-                .setFontColor(0xFF888888)
-                .addToContainer(this);
+            // Universe number as a mute toggle button (ON = sending, OFF = muted)
+            final int capturedU = u;
+            UIButton muteBtn = new UIButton(cellX, cellY, COUNT_BOX_W, 10f) {
+                @Override
+                protected void onToggle(boolean active) {
+                    // active=true means ON (sending), active=false means muted
+                    com.symmetrylabs.shows.cuddlefish.CuddlefishShow.CuddlefishPixlite
+                        .setUniverseMuted(capturedU, !active);
+                }
+            };
+            muteBtn.setMomentary(false)
+                   .setLabel(String.valueOf(u + 1))
+                   .setActive(true);
+            muteBtn.addToContainer(this);
+            muteButtons[u] = muteBtn;
             // Count spinner
             TabbableTextBox countBox = new TabbableTextBox(cellX, cellY + 10f, COUNT_BOX_W, COUNT_BOX_H);
             countBox.setValue(String.valueOf(DEFAULT_STRIPS_PER_UNIVERSE));
@@ -505,16 +515,16 @@ public class UICuddlefishModelingTool extends UI2dContainer {
                         heronarts.p3lx.ui.component.UIButton grbBtn = new heronarts.p3lx.ui.component.UIButton(curX, curY, boxW, boxH) {
                             @Override
                             protected void onToggle(boolean active) {
-                                setLabel(active ? "grb" : "rgb");
+                                setLabel(active ? "rgb" : "grb");
                             }
                         };
-                        grbBtn.setMomentary(false).setLabel(initialGrb ? "grb" : "rgb");
+                        grbBtn.setMomentary(false).setLabel(initialGrb ? "rgb" : "grb");
                         grbBtn.setActive(initialGrb);
                         grbBtn.addToContainer(gridContainer);
                         // Store a wrapper that exposes the value as double for snapshot compatibility
                         row[c] = new UIDoubleBox(0, 0, 0, 0) {
                             @Override public double getValue() { return grbBtn.isActive() ? 1.0 : 0.0; }
-                            @Override public UIDoubleBox setValue(double v) { grbBtn.setActive(v > 0.5); grbBtn.setLabel(v > 0.5 ? "GRB" : "RGB"); return this; }
+                            @Override public UIDoubleBox setValue(double v) { grbBtn.setActive(v > 0.5); grbBtn.setLabel(v > 0.5 ? "rgb" : "grb"); return this; }
                         };
                         curX += boxW + gap;
                     } else {
@@ -770,9 +780,9 @@ public class UICuddlefishModelingTool extends UI2dContainer {
     public static int[] loadStripCountsFromDisk() {
         MikeyMappingFile file = loadFileFromDisk();
         int[] counts = new int[UNIVERSE_COUNT];
-        if (file != null && file.stripCounts != null && file.stripCounts.length == UNIVERSE_COUNT) {
+        if (file != null && file.stripCounts != null && file.stripCounts.length > 0) {
             for (int u = 0; u < UNIVERSE_COUNT; u++) {
-                counts[u] = Math.max(1, file.stripCounts[u]);
+                counts[u] = (u < file.stripCounts.length) ? Math.max(1, file.stripCounts[u]) : 1;
             }
         } else {
             for (int u = 0; u < UNIVERSE_COUNT; u++) {
