@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1783558294718,
+  "timestamp": 1783560016983,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -2621,7 +2621,7 @@
                   "label": "Pong",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "Cycle": true,
+                  "Cycle": false,
                   "Hue": 208.7999953329563,
                   "Spark": 0.0,
                   "Wave": 0.0,
@@ -2641,7 +2641,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true,
+                "autoCycleEnabled": false,
                 "patternEffects": [
                   {
                     "id": 36163,
@@ -2711,10 +2711,10 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": false,
-                  "color/hue": 0.0,
+                  "color/hue": 359.0,
                   "color/brightness": 100.0,
                   "color/saturation": 100.0,
-                  "color": -65536
+                  "color": -65532
                 },
                 "modulation": {
                   "modulators": [],
@@ -2735,13 +2735,13 @@
                       "color/hue": 0.0,
                       "color/brightness": 100.0,
                       "color/saturation": 100.0,
-                      "color": -16711721,
+                      "color": -16711691,
                       "range": 0.0,
                       "period": 120000.0,
                       "spread": 360.0,
-                      "spreadX": -1.0,
-                      "spreadY": 0.9600000008940697,
-                      "spreadZ": -1.0,
+                      "spreadX": 0.8400000333786011,
+                      "spreadY": -1.0,
+                      "spreadZ": -0.25999999046325684,
                       "spreadR": 0.0,
                       "offsetX": 0.0,
                       "offsetY": 0.0,
@@ -2760,7 +2760,7 @@
                             "trigger": false,
                             "loop": true,
                             "wave": 3,
-                            "period": 8951.025536290179,
+                            "period": 8393.659536978652,
                             "skew": 0.0,
                             "shape": 0.0,
                             "phase": 0.0,
@@ -2792,6 +2792,45 @@
                     }
                   }
                 ]
+              },
+              {
+                "id": 42391,
+                "class": "com.symmetrylabs.slstudio.pattern.Play",
+                "modulationColor": -16711753,
+                "parameters": {
+                  "label": "Play",
+                  "expandedInUi": true,
+                  "Enabled": true,
+                  "Cycle": false,
+                  "Hue": 352.8000068664551,
+                  "Spark": 0.0,
+                  "Wave": 0.0,
+                  "xPos": 0.46000000834465027,
+                  "yPos": 0.5,
+                  "xRot": 0.5,
+                  "yRot": 0.5,
+                  "zRot": 0.5,
+                  "Spin": 0.7099999785423279,
+                  "X-SYM": false,
+                  "Y-SYM": false,
+                  "R-SYM": false,
+                  "X-DUP": false,
+                  "JOG": false,
+                  "GREY": false,
+                  "Rad": 0.4000000059604645,
+                  "Bnc": 0.07000000029802322,
+                  "Amp": 0.20000000298023224,
+                  "tempo": 0.10000000149011612,
+                  "TMult": 0,
+                  "TPat": 1,
+                  "Shape": 0
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                },
+                "autoCycleEnabled": false
               },
               {
                 "id": 1591,
@@ -3029,7 +3068,7 @@
                   "label": "CrossSections",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "Cycle": true,
+                  "Cycle": false,
                   "xSpd": 0.7,
                   "ySpd": 0.6,
                   "zSpd": 0.5,
@@ -3045,7 +3084,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true,
+                "autoCycleEnabled": false,
                 "patternEffects": [
                   {
                     "id": 36157,
@@ -4453,7 +4492,7 @@
                   "label": "Voronoi",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "Cycle": true,
+                  "Cycle": false,
                   "SPEED": 8.80000002682209,
                   "WIDTH": 0.1,
                   "NUM": 27
@@ -4463,7 +4502,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true
+                "autoCycleEnabled": false
               }
             ]
           },
@@ -6410,8 +6449,8 @@
       "modulationColor": -16711887,
       "parameters": {
         "label": "",
-        "period": 1048.8570147915732,
-        "bpm": 57.205128205128204,
+        "period": 2097.7140295831464,
+        "bpm": 28.602564102564102,
         "tap": false,
         "nudgeUp": false,
         "nudgeDown": false,
@@ -6442,22 +6481,22 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.2888258599252044,
-          "Band-2": 0.33496219346922296,
-          "Band-3": 0.394636988998601,
-          "Band-4": 0.4781200825941726,
-          "Band-5": 0.574670727126007,
-          "Band-6": 0.5702887557950971,
-          "Band-7": 0.45427041154285386,
-          "Band-8": 0.4579613857198622,
-          "Band-9": 0.4864973934974791,
-          "Band-10": 0.5237628457094756,
-          "Band-11": 0.3733278189451471,
-          "Band-12": 0.32187557773960407,
-          "Band-13": 0.27054858210347543,
-          "Band-14": 0.3117612312808907,
-          "Band-15": 0.18465027635262954,
-          "Band-16": 0.0
+          "Band-1": 0.2582901626817343,
+          "Band-2": 0.31056526113702543,
+          "Band-3": 0.38457284655668145,
+          "Band-4": 0.47317395482757396,
+          "Band-5": 0.5195695492701264,
+          "Band-6": 0.5356258891589025,
+          "Band-7": 0.4487508672560886,
+          "Band-8": 0.40080623833448004,
+          "Band-9": 0.48646716325744144,
+          "Band-10": 0.491467716280352,
+          "Band-11": 0.3955557661600313,
+          "Band-12": 0.3567711163272329,
+          "Band-13": 0.2776203307595454,
+          "Band-14": 0.2867896759188273,
+          "Band-15": 0.18337283804124327,
+          "Band-16": 0.009716437961322377
         }
       },
       "input": {
@@ -7942,17 +7981,17 @@
         "16192": true
       },
       "preview": {
-        "radius": 6602.881930498481,
+        "radius": 5687.37498316091,
         "theta": 0.0,
         "phi": 0.0,
         "roll": 0.0,
         "positionX": 0.0,
         "positionY": 3428.0,
         "positionZ": -220.41436767578125,
-        "orientW": -0.123506114,
-        "orientX": -0.175658,
-        "orientY": 0.88576746,
-        "orientZ": 0.41146877
+        "orientW": -0.18354,
+        "orientX": -0.15354268,
+        "orientY": 0.7885769,
+        "orientZ": 0.56646645
       }
     }
   }
