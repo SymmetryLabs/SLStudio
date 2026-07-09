@@ -32,6 +32,8 @@ import heronarts.lx.parameter.LXParameter;
 
 public class LXAudioEngine extends LXModulatorComponent implements LXOscComponent {
 
+    private boolean loading = false;
+
     public BooleanParameter enabled =
         new BooleanParameter("Enabled", false)
         .setDescription("Sets whether the audio engine is active");
@@ -77,7 +79,7 @@ public class LXAudioEngine extends LXModulatorComponent implements LXOscComponen
                 this.input.open();
                 if (this.input.isOpen()) {
                     this.input.start();
-                } else {
+                } else if (!this.loading) {
                     this.enabled.setValue(false);
                     return;
                 }
@@ -126,17 +128,31 @@ public class LXAudioEngine extends LXModulatorComponent implements LXOscComponen
 
     @Override
     public void load(LX lx, JsonObject obj) {
-        this.output.reset();
-        if (obj.has(KEY_METER)) {
-            this.meter.load(lx, obj.getAsJsonObject(KEY_METER));
+        this.loading = true;
+        try {
+            this.output.reset();
+            if (obj.has(KEY_METER)) {
+                this.meter.load(lx, obj.getAsJsonObject(KEY_METER));
+            }
+            if (obj.has(KEY_INPUT)) {
+                this.input.load(lx, obj.getAsJsonObject(KEY_INPUT));
+            }
+            if (obj.has(KEY_OUTPUT)) {
+                this.output.load(lx, obj.getAsJsonObject(KEY_OUTPUT));
+            }
+            super.load(lx, obj);
+        } finally {
+            this.loading = false;
         }
-        if (obj.has(KEY_INPUT)) {
-            this.input.load(lx, obj.getAsJsonObject(KEY_INPUT));
+        // If enabled was restored as true but device didn't open (was blocked by loading flag),
+        // retry now that loading is complete.
+        if (this.enabled.isOn() && !this.input.isOpen()) {
+            this.input.open();
+            if (this.input.isOpen()) {
+                this.input.start();
+            }
+            this.meter.running.setValue(this.input.isOpen());
         }
-        if (obj.has(KEY_OUTPUT)) {
-            this.output.load(lx, obj.getAsJsonObject(KEY_OUTPUT));
-        }
-        super.load(lx, obj);
     }
 
 }

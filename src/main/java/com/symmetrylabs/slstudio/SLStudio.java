@@ -233,7 +233,6 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
 
         lx.engine.isChannelMultithreaded.setValue(true);
         lx.engine.isNetworkMultithreaded.setValue(true);
-        lx.engine.audio.enabled.setValue(false);
 
         /* don't mess with enabled if the mute file isn't there; output.enabled is
              set to the value stored in the project file */

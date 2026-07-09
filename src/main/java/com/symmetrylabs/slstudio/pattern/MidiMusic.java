@@ -15,6 +15,8 @@ import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.modulator.Accelerator;
@@ -29,6 +31,8 @@ import com.symmetrylabs.slstudio.model.Strip;
 import heronarts.lx.transform.LXVector;
 
 public class MidiMusic extends SLPattern<SLModel> {
+
+    public enum Axis { X, Y, Z }
 
     private final Stack<LXLayer> newLayers = new Stack<LXLayer>();
 
@@ -46,6 +50,34 @@ public class MidiMusic extends SLPattern<SLModel> {
     private final BooleanParameter triggerSweep = new BooleanParameter("Sweep", false);
     private final CompoundParameter top = new CompoundParameter("Top", 0.72);
 
+    private final EnumParameter<Axis> pitchAxis =
+        new EnumParameter<Axis>("PitchAxis", Axis.X)
+            .setDescription("Model axis that note pitch is mapped to (low=min, high=max)");
+
+    private final EnumParameter<Axis> velAxis =
+        new EnumParameter<Axis>("VelAxis", Axis.Y)
+            .setDescription("Model axis that note velocity is mapped to (soft=min, loud=max)");
+
+    private final DiscreteParameter noteMin =
+        new DiscreteParameter("NoteMin", 0, 0, 128)
+            .setDescription("Lowest MIDI note that triggers a light (C-1=0)");
+
+    private final DiscreteParameter noteMax =
+        new DiscreteParameter("NoteMax", 48, 0, 128)
+            .setDescription("Top of the repeating pitch window (C3=48); pattern tiles every (NoteMax-NoteMin) semitones");
+
+    private final DiscreteParameter pitchShift =
+        new DiscreteParameter("PitchShift", 0, -10, 11)
+            .setDescription("Shift the starting octave by N octaves (each step = 12 semitones)");
+
+    private final BooleanParameter pitchFlip =
+        new BooleanParameter("PitchFlip", false)
+            .setDescription("Flip pitch axis direction (high note = axis min instead of max)");
+
+    private final BooleanParameter velFlip =
+        new BooleanParameter("VelFlip", false)
+            .setDescription("Flip velocity axis direction (loud = axis min instead of max)");
+
     public MidiMusic(LX lx) {
         super(lx);
         addModulator(sparkle).setValue(1);
@@ -53,6 +85,13 @@ public class MidiMusic extends SLPattern<SLModel> {
         addParameter(top);
         addParameter(wave);
         addParameter(triggerSweep);
+        addParameter("pitchAxis", pitchAxis);
+        addParameter("velAxis", velAxis);
+        addParameter("noteMin", noteMin);
+        addParameter("noteMax", noteMax);
+        addParameter("pitchShift", pitchShift);
+        addParameter("pitchFlip", pitchFlip);
+        addParameter("velFlip", velFlip);
 
         triggerSweep.setMode(BooleanParameter.Mode.MOMENTARY);
         triggerSweep.addListener(new LXParameterListener() {
@@ -117,9 +156,26 @@ public class MidiMusic extends SLPattern<SLModel> {
         }
 
         void noteOn(MidiNote note) {
-            xPos = model.xMin + ((note.getPitch() / 30.f) * model.xRange);
-            yPos.setValue(LXUtils.lerpf(20, model.yMax*top.getValuef(), note.getVelocity() / 127.f)).stop();
-            brt.setRangeFromHereTo(LXUtils.lerpf(60, 100, note.getVelocity() / 127.f), 20).start();
+            int span = noteMax.getValuei() - noteMin.getValuei();
+            float pitchT;
+            if (span > 0) {
+                int offset = (note.getPitch() - noteMin.getValuei() - pitchShift.getValuei() * 12) % span;
+                if (offset < 0) offset += span;
+                pitchT = (float) offset / span;
+            } else {
+                pitchT = 0.5f;
+            }
+            if (pitchFlip.isOn()) pitchT = 1f - pitchT;
+            float velT = note.getVelocity() / 127.f;
+            if (velFlip.isOn()) velT = 1f - velT;
+
+            xPos = axisMin(pitchAxis.getEnum()) + pitchT * axisRange(pitchAxis.getEnum());
+            yPos.setValue(LXUtils.lerpf(
+                axisMin(velAxis.getEnum()),
+                axisMin(velAxis.getEnum()) + axisRange(velAxis.getEnum()) * top.getValuef(),
+                velT
+            )).stop();
+            brt.setRangeFromHereTo(LXUtils.lerpf(60, 100, velT), 20).start();
         }
 
         void noteOff(MidiNote note) {
@@ -135,7 +191,9 @@ public class MidiMusic extends SLPattern<SLModel> {
             float yVal = yPos.getValuef();
             for (LXVector p : getVectors()) {
                 float falloff = 6 - 7*lightSize.getValuef();
-                float b = (float)Math.max(0, bVal - falloff*LXUtils.distance(p.x, p.y, xPos, yVal));
+                float pCoord = axisCoord(p, pitchAxis.getEnum());
+                float vCoord = axisCoord(p, velAxis.getEnum());
+                float b = (float)Math.max(0, bVal - falloff*LXUtils.distance(pCoord, vCoord, xPos, yVal));
                 if (b > 0) {
                     blendColor(p.index, lx.hsb(
                         palette.getHuef() + 0.2f*Math.abs(p.x - model.cx) + 0.2f*Math.abs(p.y - model.cy),
@@ -144,6 +202,30 @@ public class MidiMusic extends SLPattern<SLModel> {
                     ), LXColor.Blend.ADD);
                 }
             }
+        }
+    }
+
+    private float axisMin(Axis axis) {
+        switch (axis) {
+            case Y: return model.yMin;
+            case Z: return model.zMin;
+            default: return model.xMin;
+        }
+    }
+
+    private float axisRange(Axis axis) {
+        switch (axis) {
+            case Y: return model.yRange;
+            case Z: return model.zRange;
+            default: return model.xRange;
+        }
+    }
+
+    private float axisCoord(LXVector p, Axis axis) {
+        switch (axis) {
+            case Y: return p.y;
+            case Z: return p.z;
+            default: return p.x;
         }
     }
 
@@ -176,38 +258,10 @@ public class MidiMusic extends SLPattern<SLModel> {
     }
 
     public void noteOnReceived(MidiNoteOn note) {
-        if (note.getPitch() < 40) {
+        if (note.getVelocity() > 0) {
             LightUp light = getLight();
             lightMap.put(note.getPitch(), light);
             light.noteOn(note);
-        }
-         else {
-            if (note.getVelocity() > 0) {
-                switch (note.getPitch()) {
-                    case 41:
-                        Sweep s = getSweep();
-                        s.bright = 50 + note.getVelocity() / 127.f * 50;
-                        s.falloff = 20 - note.getVelocity() / 127.f * 17;
-                        s.position.trigger();
-                        break;
-                    case 42:
-                        sparkleBright = note.getVelocity() / 127.f * 100;
-                        sparkleDirection = true;
-                        sparkle.trigger();
-                        break;
-                    case 43:
-                        sparkleBright = note.getVelocity() / 127.f * 100;
-                        sparkleDirection = false;
-                        sparkle.trigger();
-                        break;
-                    case 44:
-                        //effects.boom.trigger();
-                        break;
-                    case 45:
-                        //effects.flash.trigger();
-                        break;
-                }
-            }
         }
         //return true;
     }

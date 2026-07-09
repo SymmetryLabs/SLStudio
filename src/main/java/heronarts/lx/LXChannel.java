@@ -41,6 +41,7 @@ import java.util.List;
 import com.symmetrylabs.slstudio.ApplicationState;
 import java.util.Collection;
 import com.symmetrylabs.slstudio.presets.ChannelPresetLibrary;
+import com.symmetrylabs.slstudio.effect.SpeedEffect;
 
 
 import com.google.gson.JsonArray;
@@ -712,6 +713,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         List<LXEffect> list = getPatternEffects(pattern);
         list.add(effect);
         effect.setBus(this);
+        effect.setPattern(pattern);
         LXUtils.updateIndexes(list);
         for (Listener l : this.listeners) {
             l.patternEffectAdded(this, pattern, effect);
@@ -724,6 +726,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         int idx = list.indexOf(effect);
         if (idx >= 0) {
             effect.setIndex(-1);
+            effect.setPattern(null);
             list.remove(idx);
             LXUtils.updateIndexes(list);
             for (Listener l : this.listeners) {
@@ -749,6 +752,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         List<LXWarp> list = getPatternWarps(pattern);
         list.add(warp);
         warp.setBus(this);
+        warp.setPattern(pattern);
         LXUtils.updateIndexes(list);
         for (Listener l : this.listeners) {
             l.patternWarpAdded(this, pattern, warp);
@@ -761,6 +765,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         int idx = list.indexOf(warp);
         if (idx >= 0) {
             warp.setIndex(-1);
+            warp.setPattern(null);
             list.remove(idx);
             LXUtils.updateIndexes(list);
             for (Listener l : this.listeners) {
@@ -964,6 +969,12 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     public void loop(double deltaMs) {
         long loopStart = System.nanoTime();
         deltaMs *= this.speed.getValue();
+        for (LXEffect effect : effects) {
+            if (effect instanceof SpeedEffect && effect.isEnabled()) {
+                deltaMs *= ((SpeedEffect) effect).speed.getValue();
+                break;
+            }
+        }
 
         // Run modulators and components
         super.loop(deltaMs);
@@ -1035,15 +1046,26 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             setVectorArray(curVecs, curSource);
         }
 
+        // Scale deltaMs by any SpeedEffect in this pattern's per-pattern effects
+        List<LXEffect> pEffects = patternEffects.get(pat);
+        double patDeltaMs = deltaMs;
+        if (pEffects != null) {
+            for (LXEffect e : pEffects) {
+                if (e instanceof SpeedEffect && e.isEnabled()) {
+                    patDeltaMs *= ((SpeedEffect) e).speed.getValue();
+                    break;
+                }
+            }
+        }
+
         pat.setPreferredSpace(space);
-        pat.loop(deltaMs);
+        pat.loop(patDeltaMs);
 
         // Per-pattern effects modify the pattern's own polyBuffer before blending.
-        List<LXEffect> pEffects = patternEffects.get(pat);
         if (pEffects != null) {
             for (LXEffect e : pEffects) {
                 e.setPolyBuffer(pat.getPolyBuffer());
-                e.loop(deltaMs);
+                e.loop(patDeltaMs);
             }
         }
     }

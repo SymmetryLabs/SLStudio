@@ -129,6 +129,11 @@ public class UIPatternList extends UIItemList.ScrollList {
                     redraw();
                 }
             });
+            pattern.autoCycleEligible.addListener(new LXParameterListener() {
+                public void onParameterChanged(LXParameter p) {
+                    redraw();
+                }
+            });
         }
 
         @Override

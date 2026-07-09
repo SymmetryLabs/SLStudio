@@ -55,11 +55,6 @@ public class UIMixer extends UI2dContainer {
         } else {
             selectedChannels.add(channel);
         }
-        System.out.print("UIMixer.toggleChannelSelection: Selected channels: [");
-        for (LXChannel ch : selectedChannels) {
-            System.out.print(ch.getLabel() + ", ");
-        }
-        System.out.println("]");
     }
 
     public void clearChannelSelection() {

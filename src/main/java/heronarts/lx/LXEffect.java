@@ -64,6 +64,8 @@ public abstract class LXEffect extends LXBusComponent implements LXComponent.Ren
 
     private int index = -1;
 
+    private LXPattern pattern = null;
+
     // An alias for the 8-bit color buffer array, for compatibility with old-style
     // implementations of run(deltaMs, amount) that directly read from and write
     // into the "colors" array.  Newer subclasses should instead implement
@@ -92,6 +94,9 @@ public abstract class LXEffect extends LXBusComponent implements LXComponent.Ren
     }
 
     public String getOscAddress() {
+        if (this.pattern != null) {
+            return this.pattern.getOscAddress() + "/effect/" + (this.index+1);
+        }
         LXBus bus = getBus();
         if (bus != null) {
             return bus.getOscAddress() + "/effect/" + (this.index+1);
@@ -105,6 +110,15 @@ public abstract class LXEffect extends LXBusComponent implements LXComponent.Ren
 
     public final int getIndex() {
         return index;
+    }
+
+    public final LXEffect setPattern(LXPattern pattern) {
+        this.pattern = pattern;
+        return this;
+    }
+
+    public final LXPattern getPattern() {
+        return this.pattern;
     }
 
     /**

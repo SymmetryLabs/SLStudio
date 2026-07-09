@@ -63,7 +63,6 @@ public class UIChannelStrip extends UIMixerStrip {
 
     @Override
     public void onMousePressed(processing.event.MouseEvent mouseEvent, float mx, float my) {
-        System.out.println("UIChannelStrip.onMousePressed: channel=" + channel.getLabel() + ", shift=" + mouseEvent.isShiftDown());
         select(mouseEvent.isShiftDown());
         super.onMousePressed(mouseEvent, mx, my);
     }

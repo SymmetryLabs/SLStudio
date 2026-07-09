@@ -79,6 +79,7 @@ public abstract class LXPattern extends LXBusComponent implements LXComponent.Re
     protected LXPattern(LX lx) {
         super(lx);
         addParameter(enabled);
+        addParameter(autoCycleEligible);
         this.label.setDescription("The name of this pattern");
         this.label.setValue(getClass().getSimpleName().replaceAll("Pattern$", ""));
     }

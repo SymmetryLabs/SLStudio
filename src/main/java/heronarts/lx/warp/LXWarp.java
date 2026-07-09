@@ -39,6 +39,8 @@ public abstract class LXWarp extends LXModelComponent implements LXComponent.Ren
 
     private int index = -1;
 
+    private heronarts.lx.LXPattern pattern = null;
+
     protected LXWarp inputSource = null;
     protected LXVector[] inputVectors = null;  // externally provided, treated as read-only
     protected LXVector[] outputVectors = null;  // solely owned and written by this LXWarp
@@ -164,10 +166,22 @@ public abstract class LXWarp extends LXModelComponent implements LXComponent.Ren
     protected abstract boolean run(double deltaMs, boolean inputVectorsChanged);
 
     public String getOscAddress() {
+        if (this.pattern != null) {
+            return this.pattern.getOscAddress() + "/warp/" + (index + 1);
+        }
         LXBus bus = getBus();
         if (bus != null) {
             return bus.getOscAddress() + "/warp/" + (index + 1);
         }
         return null;
+    }
+
+    public final LXWarp setPattern(heronarts.lx.LXPattern pattern) {
+        this.pattern = pattern;
+        return this;
+    }
+
+    public final heronarts.lx.LXPattern getPattern() {
+        return this.pattern;
     }
 }
