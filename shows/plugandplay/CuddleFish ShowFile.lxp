@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1783560016983,
+  "timestamp": 1783709585237,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -20,10 +20,10 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
+        "color": -16711855,
         "color/hue": 139.05882263183594,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
-        "color": -16711855,
         "period": 1000.0,
         "range": 0.0,
         "spread": 360.0,
@@ -2118,10 +2118,10 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": true,
+                  "color": -65536,
                   "color/hue": 0.0,
                   "color/brightness": 100.0,
-                  "color/saturation": 100.0,
-                  "color": -65536
+                  "color/saturation": 100.0
                 },
                 "modulation": {
                   "modulators": [],
@@ -2711,10 +2711,10 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": false,
+                  "color": -65532,
                   "color/hue": 359.0,
                   "color/brightness": 100.0,
-                  "color/saturation": 100.0,
-                  "color": -65532
+                  "color/saturation": 100.0
                 },
                 "modulation": {
                   "modulators": [],
@@ -2731,13 +2731,13 @@
                       "label": "ColorGradient",
                       "expandedInUi": true,
                       "enabled": true,
-                      "hueMode": 0,
-                      "color/hue": 0.0,
+                      "hueMode": 2,
+                      "color": -16746241,
+                      "color/hue": 211.80999526567757,
                       "color/brightness": 100.0,
                       "color/saturation": 100.0,
-                      "color": -16711691,
                       "range": 0.0,
-                      "period": 120000.0,
+                      "period": 8195.999504067004,
                       "spread": 360.0,
                       "spreadX": 0.8400000333786011,
                       "spreadY": -1.0,
@@ -2749,45 +2749,8 @@
                       "mirror": false
                     },
                     "modulation": {
-                      "modulators": [
-                        {
-                          "id": 41904,
-                          "class": "heronarts.lx.modulator.VariableLFO",
-                          "modulationColor": -5374208,
-                          "parameters": {
-                            "label": "LFO",
-                            "running": true,
-                            "trigger": false,
-                            "loop": true,
-                            "wave": 3,
-                            "period": 8393.659536978652,
-                            "skew": 0.0,
-                            "shape": 0.0,
-                            "phase": 0.0,
-                            "exp": 0.0
-                          }
-                        }
-                      ],
-                      "modulations": [
-                        {
-                          "source": {
-                            "id": 41904
-                          },
-                          "target": {
-                            "componentId": 41898,
-                            "parameterPath": "color/hue"
-                          },
-                          "id": 41905,
-                          "class": "heronarts.lx.parameter.LXCompoundModulation",
-                          "modulationColor": -16187648,
-                          "parameters": {
-                            "label": "",
-                            "enabled": true,
-                            "Polarity": 0,
-                            "Range": 1.0
-                          }
-                        }
-                      ],
+                      "modulators": [],
+                      "modulations": [],
                       "triggers": []
                     }
                   }
@@ -4213,10 +4176,10 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": false,
+                  "color": -16122021,
                   "color/hue": 139.99998474121094,
                   "color/brightness": 100.0,
-                  "color/saturation": 96.47058868408203,
-                  "color": -16122021
+                  "color/saturation": 96.47058868408203
                 },
                 "modulation": {
                   "modulators": [],
@@ -4929,10 +4892,10 @@
                       "expandedInUi": true,
                       "enabled": true,
                       "hueMode": 0,
+                      "color": -16711912,
                       "color/hue": 125.64706420898438,
                       "color/brightness": 100.0,
                       "color/saturation": 100.0,
-                      "color": -16711912,
                       "range": 0.0,
                       "period": 120000.0,
                       "spread": 360.0,
@@ -5279,10 +5242,10 @@
                       "expandedInUi": true,
                       "enabled": true,
                       "hueMode": 0,
+                      "color": -10289408,
                       "color/hue": 96.9411849975586,
                       "color/brightness": 100.0,
                       "color/saturation": 100.0,
-                      "color": -10289408,
                       "range": 0.0,
                       "period": 120000.0,
                       "spread": 100.80000579357147,
@@ -5365,10 +5328,10 @@
                       "expandedInUi": true,
                       "enabled": true,
                       "hueMode": 0,
+                      "color": -16711790,
                       "color/hue": 154.35293579101562,
                       "color/brightness": 100.0,
                       "color/saturation": 100.0,
-                      "color": -16711790,
                       "range": 0.0,
                       "period": 120000.0,
                       "spread": 360.0,
@@ -5593,10 +5556,10 @@
                       "expandedInUi": true,
                       "enabled": true,
                       "hueMode": 0,
+                      "color": -65536,
                       "color/hue": 0.0,
                       "color/brightness": 100.0,
                       "color/saturation": 100.0,
-                      "color": -65536,
                       "range": 0.0,
                       "period": 120000.0,
                       "spread": 129.59999710321426,
@@ -5781,10 +5744,10 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": true,
+                  "color": -65532,
                   "color/hue": 359.0,
                   "color/brightness": 100.0,
-                  "color/saturation": 100.0,
-                  "color": -65532
+                  "color/saturation": 100.0
                 },
                 "modulation": {
                   "modulators": [],
@@ -5802,10 +5765,10 @@
                       "expandedInUi": true,
                       "enabled": true,
                       "hueMode": 0,
-                      "color/hue": 7.179999839514494,
+                      "color": -9472,
+                      "color/hue": 51.529415130615234,
                       "color/brightness": 100.0,
                       "color/saturation": 100.0,
-                      "color": -9472,
                       "range": 0.0,
                       "period": 120000.0,
                       "spread": 345.6000003218651,
@@ -6412,7 +6375,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16711775,
+          "modulationColor": -65490,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -6481,22 +6444,22 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.2582901626817343,
-          "Band-2": 0.31056526113702543,
-          "Band-3": 0.38457284655668145,
-          "Band-4": 0.47317395482757396,
-          "Band-5": 0.5195695492701264,
-          "Band-6": 0.5356258891589025,
-          "Band-7": 0.4487508672560886,
-          "Band-8": 0.40080623833448004,
-          "Band-9": 0.48646716325744144,
-          "Band-10": 0.491467716280352,
-          "Band-11": 0.3955557661600313,
-          "Band-12": 0.3567711163272329,
-          "Band-13": 0.2776203307595454,
-          "Band-14": 0.2867896759188273,
-          "Band-15": 0.18337283804124327,
-          "Band-16": 0.009716437961322377
+          "Band-1": 0.27151738332104014,
+          "Band-2": 0.333810339763147,
+          "Band-3": 0.3246002224616825,
+          "Band-4": 0.28309974208796473,
+          "Band-5": 0.194354795671846,
+          "Band-6": 0.02163435522799828,
+          "Band-7": 0.05402263110059036,
+          "Band-8": 0.04390317250028242,
+          "Band-9": 0.007782194741700166,
+          "Band-10": 0.0,
+          "Band-11": 0.01147934651547633,
+          "Band-12": 0.0,
+          "Band-13": 0.0,
+          "Band-14": 0.0,
+          "Band-15": 0.0,
+          "Band-16": 0.0
         }
       },
       "input": {
@@ -6551,7 +6514,7 @@
       "DMXParameterMapper": {
         "id": 48,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -65448,
+        "modulationColor": -9305857,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -7212,12 +7175,6 @@
           "name": "KeyRig 49",
           "channel": true,
           "control": true,
-          "sync": false
-        },
-        {
-          "name": "APC40 mkII",
-          "channel": false,
-          "control": false,
           "sync": false
         }
       ],
@@ -7988,10 +7945,10 @@
         "positionX": 0.0,
         "positionY": 3428.0,
         "positionZ": -220.41436767578125,
-        "orientW": -0.18354,
-        "orientX": -0.15354268,
-        "orientY": 0.7885769,
-        "orientZ": 0.56646645
+        "orientW": 0.28495994,
+        "orientX": 0.50348455,
+        "orientY": 0.6945451,
+        "orientZ": 0.4276778
       }
     }
   }

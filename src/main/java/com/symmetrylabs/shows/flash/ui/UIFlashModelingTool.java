@@ -86,6 +86,13 @@ public class UIFlashModelingTool extends UI2dContainer {
     private final List<double[]> lastValues = new ArrayList<>();
     private boolean propagatingGroup = false;
 
+    // ── Collapse state per universe ─────────────────────────────────────────
+    private final boolean[] universeCollapsed = new boolean[UNIVERSE_COUNT];
+    // Full strip values, including collapsed universes, used as rebuild source
+    private float[][] currentStripValues = new float[0][COLUMN_LABELS.length];
+    // Strip counts from the last build, for resizing currentStripValues
+    private int[] prevStripCounts = new int[UNIVERSE_COUNT];
+
     // ─────────────────────────────────────────────────────────────────────────
 
     /** Call this after the model is built to enable real-time point dragging. */
@@ -143,6 +150,11 @@ public class UIFlashModelingTool extends UI2dContainer {
         this.panelW = w;
         setPadding(5);
         setLayout(UI2dContainer.Layout.NONE);
+
+        // All universes start collapsed
+        for (int u = 0; u < UNIVERSE_COUNT; u++) {
+            universeCollapsed[u] = true;
+        }
 
         // ── Title ──
         new UILabel(0, 0, w - 10, 16)
@@ -254,31 +266,24 @@ public class UIFlashModelingTool extends UI2dContainer {
     // ── Read count boxes → update stripCounts → rebuild grid ─────────────────
 
     private void rebuildStripGrid() {
-        // Snapshot current strip values before clearing
-        float[][] oldStrips = snapshotStripValues();
         // Read new counts
+        int[] newCounts = new int[UNIVERSE_COUNT];
         for (int u = 0; u < UNIVERSE_COUNT; u++) {
             try {
-                stripCounts[u] = Math.max(1, Integer.parseInt(countBoxes[u].getValue().trim()));
+                newCounts[u] = Math.max(1, Integer.parseInt(countBoxes[u].getValue().trim()));
             } catch (NumberFormatException e) {
-                stripCounts[u] = 1;
+                newCounts[u] = 1;
                 countBoxes[u].setValue("1");
             }
         }
-        buildStripGrid(oldStrips);
+        currentStripValues = resizeStripValues(stripCounts, newCounts, currentStripValues);
+        System.arraycopy(newCounts, 0, stripCounts, 0, UNIVERSE_COUNT);
+        buildStripGrid(currentStripValues);
     }
 
     // ── Core grid builder ─────────────────────────────────────────────────────
 
-    private void buildStripGrid(float[][] existingStrips) {
-        buildStripGrid(existingStrips, -1, -1);
-    }
-
-    /**
-     * @param insertAfterGlobalIndex  if >= 0, a blank row is inserted after this global strip index
-     * @param insertInUniverse        the universe (0-based) that receives the inserted row
-     */
-    private void buildStripGrid(float[][] existingStrips, int insertAfterGlobalIndex, int insertInUniverse) {
+    private void buildStripGrid(float[][] values) {
         // Remove all existing children from gridContainer
         for (UIObject child : new ArrayList<>(gridContainer.getChildren())) {
             ((UI2dComponent) child).removeFromContainer();
@@ -286,6 +291,25 @@ public class UIFlashModelingTool extends UI2dContainer {
         stripInputs.clear();
         groupedStrips.clear();
         lastValues.clear();
+        activeLitButton = null;
+
+        // Ensure backing array matches current strip counts
+        int totalStrips = 0;
+        for (int c : stripCounts) totalStrips += c;
+        if (currentStripValues.length != totalStrips) {
+            if (currentStripValues.length == 0) {
+                currentStripValues = new float[totalStrips][COLUMN_LABELS.length];
+                for (int i = 0; i < totalStrips; i++) {
+                    if (values != null && i < values.length) {
+                        currentStripValues[i] = remapStripValues(values[i]);
+                    } else {
+                        currentStripValues[i] = defaultStripValues(i);
+                    }
+                }
+            } else {
+                currentStripValues = resizeStripValues(prevStripCounts, stripCounts, currentStripValues);
+            }
+        }
 
         final float labelColW = 14f;
         final float gap       = 2f;
@@ -316,17 +340,31 @@ public class UIFlashModelingTool extends UI2dContainer {
 
         float curY = 0f;
         int globalRow = 0;
-        // Track how many source rows we've consumed (insertions don't consume source rows)
-        int srcRow = 0;
 
         for (int u = 0; u < UNIVERSE_COUNT; u++) {
             int count = stripCounts[u];
+            final boolean collapsed = universeCollapsed[u];
+            final String arrow = collapsed ? ">" : "v"; // arrow pointing right/down
+
+            // Collapse arrow toggle next to the universe name
+            final int capturedU = u;
+            final float arrowW = 16f;
+            UIButton arrowBtn = new UIButton(0, curY, arrowW, uHeaderH) {
+                @Override
+                protected void onToggle(boolean active) {
+                    if (active) {
+                        universeCollapsed[capturedU] = !universeCollapsed[capturedU];
+                        buildStripGrid(currentStripValues);
+                    }
+                }
+            };
+            arrowBtn.setMomentary(true).setLabel(arrow).addToContainer(gridContainer);
 
             // Universe header row: "U1 (N strips):" + name text input
             String headerText = "U" + (u + 1) + " (" + count + " strip" + (count == 1 ? "" : "s") + "):";
             float headerLabelW = 90f;
-            new UILabel(0, curY, headerLabelW, uHeaderH - 2)
-                .setLabel(headerText != null ? headerText : "")
+            new UILabel(arrowW + 2, curY, headerLabelW - arrowW - 2, uHeaderH - 2)
+                .setLabel(headerText)
                 .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
                 .setFontColor(0xFFAAAAAA)
                 .addToContainer(gridContainer);
@@ -340,6 +378,12 @@ public class UIFlashModelingTool extends UI2dContainer {
             }
             labelBoxes[u].addToContainer(gridContainer);
             curY += uHeaderH;
+
+            if (collapsed) {
+                // Hide this universe's column headers and strip rows
+                globalRow += count;
+                continue;
+            }
 
             // Column headers for this universe group
             float hdrX = gridLeft;
@@ -414,46 +458,10 @@ public class UIFlashModelingTool extends UI2dContainer {
 
                 UIDoubleBox[] row = new UIDoubleBox[COLUMN_LABELS.length];
 
-                // If this is the newly inserted row, fill with defaults; otherwise use source data
-                boolean isInserted = (insertAfterGlobalIndex >= 0
-                    && u == insertInUniverse
-                    && globalRow == insertAfterGlobalIndex + 1);
-
                 final int capturedStripIndex = globalRow;
 
-                // Build a remapped source array always of length COLUMN_LABELS.length (10).
-                // Old 6-col files: [tx,ty,tz,az,px,d] → remap to [tx,ty,tz,az,0,0,px,d,0,0]
-                // New 10-col files: already correct.
-                final float[] srcVals = new float[COLUMN_LABELS.length];
-                for (int c = 0; c < COLUMN_LABELS.length; c++) srcVals[c] = defaultValue(c, globalRow);
-                if (!isInserted && existingStrips != null && srcRow < existingStrips.length) {
-                    float[] src = existingStrips[srcRow];
-                    if (src.length >= 10) {
-                        // New 10-col format [tx,ty,tz,az,rx,ry,px,d,cv,grb] — copy directly
-                        for (int c = 0; c < COLUMN_LABELS.length; c++) srcVals[c] = src[c];
-                    } else if (src.length == 6) {
-                        // Old 6-col format: [tx,ty,tz,az,px,d]
-                        srcVals[0] = src[0]; // tx
-                        srcVals[1] = src[1]; // ty
-                        srcVals[2] = src[2]; // tz
-                        srcVals[3] = src[3]; // az
-                        srcVals[4] = 0f;     // rx (new, default 0)
-                        srcVals[5] = 0f;     // ry (new, default 0)
-                        srcVals[6] = src[4]; // px  ← was at index 4
-                        srcVals[7] = src[5]; // d   ← was at index 5
-                        srcVals[8] = 0f;     // cv (new, default 0)
-                        srcVals[9] = 0f;     // grb (new, default 0 = RGB)
-                    } else if (src.length == 8) {
-                        // 8-col format: [tx,ty,tz,az,rx,ry,px,d] — no cv/grb yet
-                        for (int c = 0; c < 8; c++) srcVals[c] = src[c];
-                        srcVals[8] = 0f;     // cv (new, default 0)
-                        srcVals[9] = 0f;     // grb (new, default 0 = RGB)
-                    } else if (src.length == 9) {
-                        // 9-col format: [tx,ty,tz,az,rx,ry,px,d,cv] — no grb yet
-                        for (int c = 0; c < 9; c++) srcVals[c] = src[c];
-                        srcVals[9] = 0f;     // grb (new, default 0 = RGB)
-                    }
-                }
+                // Read values from the backing array; remapping was already applied at load time
+                final float[] srcVals = currentStripValues[globalRow];
 
                 // Compute x positions for each column, with inline bump buttons for X (col 0) and Y (col 1)
                 // Layout: [strip#] [X-][tx][X+] [Y-][ty][Y+] [tz] [az] [rx] [ry] [px] [d] [+][-]
@@ -583,7 +591,6 @@ public class UIFlashModelingTool extends UI2dContainer {
                 };
                 grpBtn.setMomentary(false).setLabel("grp").addToContainer(gridContainer);
 
-                if (!isInserted) srcRow++;
                 stripInputs.add(row);
                 double[] rowLast = new double[COLUMN_LABELS.length];
                 for (int c = 0; c < COLUMN_LABELS.length; c++) rowLast[c] = row[c].getValue();
@@ -592,6 +599,9 @@ public class UIFlashModelingTool extends UI2dContainer {
                 globalRow++;
             }
         }
+
+        // Remember counts so future resizes preserve per-universe values
+        System.arraycopy(stripCounts, 0, prevStripCounts, 0, UNIVERSE_COUNT);
 
         // Resize gridContainer to actual content
         gridContainer.setSize(panelW, curY + 10);
@@ -603,23 +613,34 @@ public class UIFlashModelingTool extends UI2dContainer {
 
     /** Insert a blank strip after globalRow in the given universe, then rebuild. */
     private void insertStripAfter(int globalRow, int universe) {
-        float[][] snapshot = snapshotStripValues();
+        float[][] expanded = new float[currentStripValues.length + 1][COLUMN_LABELS.length];
+        for (int i = 0; i <= globalRow; i++) {
+            System.arraycopy(currentStripValues[i], 0, expanded[i], 0, COLUMN_LABELS.length);
+        }
+        expanded[globalRow + 1] = defaultStripValues(globalRow + 1);
+        for (int i = globalRow + 1; i < currentStripValues.length; i++) {
+            System.arraycopy(currentStripValues[i], 0, expanded[i + 1], 0, COLUMN_LABELS.length);
+        }
+        currentStripValues = expanded;
         stripCounts[universe]++;
         countBoxes[universe].setValue(String.valueOf(stripCounts[universe]));
-        buildStripGrid(snapshot, globalRow, universe);
+        buildStripGrid(currentStripValues);
     }
 
     /** Remove the strip at globalRow from the given universe, then rebuild. */
     private void removeStrip(int globalRow, int universe, int universeStripCount) {
         if (universeStripCount <= 1) return;  // keep at least 1 strip per universe
-        float[][] snapshot = snapshotStripValues();
-        float[][] shrunk = new float[snapshot.length - 1][COLUMN_LABELS.length];
-        for (int i = 0, j = 0; i < snapshot.length; i++) {
-            if (i != globalRow) shrunk[j++] = snapshot[i];
+        float[][] shrunk = new float[currentStripValues.length - 1][COLUMN_LABELS.length];
+        for (int i = 0, j = 0; i < currentStripValues.length; i++) {
+            if (i != globalRow) {
+                System.arraycopy(currentStripValues[i], 0, shrunk[j], 0, COLUMN_LABELS.length);
+                j++;
+            }
         }
+        currentStripValues = shrunk;
         stripCounts[universe]--;
         countBoxes[universe].setValue(String.valueOf(stripCounts[universe]));
-        buildStripGrid(shrunk);
+        buildStripGrid(currentStripValues);
     }
 
     /**
@@ -631,6 +652,9 @@ public class UIFlashModelingTool extends UI2dContainer {
         if (stripIndex < lastValues.size()) {
             double old = lastValues.get(stripIndex)[col];
             lastValues.get(stripIndex)[col] = newValue;
+            if (stripIndex < currentStripValues.length) {
+                currentStripValues[stripIndex][col] = (float) newValue;
+            }
             double delta = newValue - old;
             if (!propagatingGroup && delta != 0 && groupedStrips.contains(stripIndex) && groupedStrips.size() > 1) {
                 propagatingGroup = true;
@@ -706,17 +730,65 @@ public class UIFlashModelingTool extends UI2dContainer {
         }
     }
 
-    // ── Snapshot current strip input values into a flat array ─────────────────
-
-    private float[][] snapshotStripValues() {
-        int n = stripInputs.size();
-        float[][] out = new float[n][COLUMN_LABELS.length];
-        for (int r = 0; r < n; r++) {
-            for (int c = 0; c < COLUMN_LABELS.length; c++) {
-                out[r][c] = (float) stripInputs.get(r)[c].getValue();
-            }
+    private float[] defaultStripValues(int globalRow) {
+        float[] out = new float[COLUMN_LABELS.length];
+        for (int c = 0; c < COLUMN_LABELS.length; c++) {
+            out[c] = defaultValue(c, globalRow);
         }
         return out;
+    }
+
+    private float[] remapStripValues(float[] src) {
+        float[] out = defaultStripValues(0);
+        if (src == null) return out;
+        if (src.length >= 10) {
+            System.arraycopy(src, 0, out, 0, COLUMN_LABELS.length);
+        } else if (src.length == 6) {
+            out[0] = src[0]; out[1] = src[1]; out[2] = src[2]; out[3] = src[3];
+            out[4] = 0f; out[5] = 0f;
+            out[6] = src[4]; out[7] = src[5];
+            out[8] = 0f; out[9] = 0f;
+        } else if (src.length == 8) {
+            System.arraycopy(src, 0, out, 0, 8);
+            out[8] = 0f; out[9] = 0f;
+        } else if (src.length == 9) {
+            System.arraycopy(src, 0, out, 0, 9);
+            out[9] = 0f;
+        }
+        return out;
+    }
+
+    private int[] computeOffsets(int[] counts) {
+        int[] offsets = new int[counts.length];
+        int off = 0;
+        for (int i = 0; i < counts.length; i++) {
+            offsets[i] = off;
+            off += counts[i];
+        }
+        return offsets;
+    }
+
+    private float[][] resizeStripValues(int[] oldCounts, int[] newCounts, float[][] oldValues) {
+        int[] oldOffsets = computeOffsets(oldCounts);
+        int[] newOffsets = computeOffsets(newCounts);
+        int totalNew = 0;
+        for (int c : newCounts) totalNew += c;
+        float[][] newValues = new float[totalNew][COLUMN_LABELS.length];
+        for (int u = 0; u < UNIVERSE_COUNT; u++) {
+            int preserve = Math.min(oldCounts[u], newCounts[u]);
+            for (int s = 0; s < preserve; s++) {
+                int oldIdx = oldOffsets[u] + s;
+                int newIdx = newOffsets[u] + s;
+                if (oldIdx < oldValues.length) {
+                    System.arraycopy(oldValues[oldIdx], 0, newValues[newIdx], 0, COLUMN_LABELS.length);
+                }
+            }
+            for (int s = preserve; s < newCounts[u]; s++) {
+                int newIdx = newOffsets[u] + s;
+                newValues[newIdx] = defaultStripValues(newIdx);
+            }
+        }
+        return newValues;
     }
 
     // ── Save / Load ───────────────────────────────────────────────────────────
@@ -730,7 +802,7 @@ public class UIFlashModelingTool extends UI2dContainer {
             file.stripCounts[u] = stripCounts[u];
             file.universeLabels[u] = labelBoxes[u] != null ? labelBoxes[u].getValue() : "";
         }
-        file.strips = snapshotStripValues();
+        file.strips = currentStripValues;
         File f = new File(MAPPING_FILE);
         f.getParentFile().mkdirs();
         try (FileWriter writer = new FileWriter(f)) {

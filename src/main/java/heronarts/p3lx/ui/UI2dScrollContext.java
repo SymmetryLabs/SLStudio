@@ -26,6 +26,7 @@
 
 package heronarts.p3lx.ui;
 
+import processing.core.PGraphics;
 import processing.event.MouseEvent;
 import heronarts.lx.LXUtils;
 
@@ -36,6 +37,13 @@ public class UI2dScrollContext extends UI2dContext {
 
     private boolean horizontalScrollingEnabled = false;
     private boolean verticalScrollingEnabled = true;
+
+    private static final int SCROLL_BAR_WIDTH = 6;
+    private static final int SCROLL_BAR_PADDING = 2;
+
+    private boolean scrollBarDragging = false;
+    private float scrollBarDragStartY = 0;
+    private float scrollBarDragStartScrollY = 0;
 
     public UI2dScrollContext(UI ui, float x, float y, float w, float h) {
         super(ui, x, y, w, h);
@@ -141,23 +149,84 @@ public class UI2dScrollContext extends UI2dContext {
         }
     }
 
+    private boolean isScrollBarVisible() {
+        return this.verticalScrollingEnabled && this.scrollHeight > this.height;
+    }
+
+    private float scrollBarThumbY() {
+        float ratio = -this.scrollY / (this.scrollHeight - this.height);
+        float trackH = this.height - 2 * SCROLL_BAR_PADDING;
+        float thumbH = Math.max(20, (this.height / this.scrollHeight) * trackH);
+        return SCROLL_BAR_PADDING + ratio * (trackH - thumbH);
+    }
+
+    private float scrollBarThumbHeight() {
+        float trackH = this.height - 2 * SCROLL_BAR_PADDING;
+        return Math.max(20, (this.height / this.scrollHeight) * trackH);
+    }
+
+    @Override
+    void draw(UI ui, PGraphics pg) {
+        if (!isVisible()) {
+            return;
+        }
+        boolean needsUpdate = this.needsRedraw || this.childNeedsRedraw;
+        super.draw(ui, pg);
+        if (needsUpdate && isScrollBarVisible()) {
+            PGraphics internal = getGraphics();
+            internal.beginDraw();
+            internal.noStroke();
+            internal.fill(0x44ffffff);
+            float thumbY = scrollBarThumbY();
+            float thumbH = scrollBarThumbHeight();
+            internal.rect(this.width - SCROLL_BAR_PADDING - SCROLL_BAR_WIDTH, thumbY, SCROLL_BAR_WIDTH, thumbH, 3);
+            internal.endDraw();
+            pg.image(internal, 0, 0);
+        }
+    }
+
     @Override
     void mousePressed(MouseEvent mouseEvent, float mx, float my) {
+        if (isScrollBarVisible() && mx >= this.width - SCROLL_BAR_PADDING - SCROLL_BAR_WIDTH - 2) {
+            float thumbY = scrollBarThumbY();
+            float thumbH = scrollBarThumbHeight();
+            if (my >= thumbY && my <= thumbY + thumbH) {
+                this.scrollBarDragging = true;
+                this.scrollBarDragStartY = my;
+                this.scrollBarDragStartScrollY = this.scrollY;
+                return;
+            }
+        }
         super.mousePressed(mouseEvent, mx - this.scrollX, my - this.scrollY);
     }
 
     @Override
     void mouseReleased(MouseEvent mouseEvent, float mx, float my) {
+        if (this.scrollBarDragging) {
+            this.scrollBarDragging = false;
+            return;
+        }
         super.mouseReleased(mouseEvent, mx - this.scrollX, my - this.scrollY);
     }
 
     @Override
     void mouseClicked(MouseEvent mouseEvent, float mx, float my) {
+        if (this.scrollBarDragging) {
+            return;
+        }
         super.mouseClicked(mouseEvent, mx - this.scrollX, my - this.scrollY);
     }
 
     @Override
     void mouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+        if (this.scrollBarDragging) {
+            float trackH = this.height - 2 * SCROLL_BAR_PADDING;
+            float thumbH = scrollBarThumbHeight();
+            float scrollRange = this.scrollHeight - this.height;
+            float dragRatio = scrollRange / (trackH - thumbH);
+            setScrollY(this.scrollBarDragStartScrollY - (my - this.scrollBarDragStartY) * dragRatio);
+            return;
+        }
         super.mouseDragged(mouseEvent, mx - this.scrollX, my - this.scrollY, dx, dy);
     }
 

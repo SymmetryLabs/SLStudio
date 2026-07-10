@@ -279,8 +279,8 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         if (component != null) {
             throw new IllegalStateException("Parameter " + parameter + " already owned by " + component);
         }
-        parameter.setComponent(this, path);
         this.parameters.put(path, parameter);
+        parameter.setComponent(this, path);
         if (parameter instanceof LXListenableParameter) {
             ((LXListenableParameter) parameter).addListener(this);
         }
