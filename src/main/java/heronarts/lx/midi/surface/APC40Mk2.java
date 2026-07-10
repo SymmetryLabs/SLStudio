@@ -209,8 +209,21 @@ public class APC40Mk2 extends LXMidiSurface {
             }
         }
 
+        void sendKnobValues() {
+            for (int i = 0; i < this.knobs.length; ++i) {
+                LXListenableNormalizedParameter parameter = this.knobs[i];
+                if (parameter != null) {
+                    double normalized = (parameter instanceof CompoundParameter) ?
+                        ((CompoundParameter) parameter).getBaseNormalized() :
+                        parameter.getNormalized();
+                    sendControlChange(0, DEVICE_KNOB + i, (int) (normalized * 127));
+                }
+            }
+        }
+
         void register(LXComponent device) {
             if (this.device != device) {
+                APC40Mk2.this.deviceRegisterTime = System.currentTimeMillis();
                 if (this.effect != null) {
                     this.effect.enabled.removeListener(this);
                 }
@@ -269,7 +282,7 @@ public class APC40Mk2 extends LXMidiSurface {
         @Override
         public void onParameterChanged(LXParameter parameter) {
             if (this.channel != null && this.channel instanceof LXChannel && parameter == ((LXChannel)this.channel).focusedPattern) {
-                if (this.device instanceof LXPattern || this.device == null) {
+                if (this.device instanceof LXPattern) {
                     register(((LXChannel)this.channel).getFocusedPattern());
                 }
             } else if (this.effect != null && parameter == this.effect.enabled) {
@@ -548,15 +561,18 @@ public class APC40Mk2 extends LXMidiSurface {
     }
 
     private boolean registered = false;
+    private long deviceRegisterTime = 0;
+    private static final long DEVICE_KNOB_QUIET_MS = 300;
 
-    private void register() {
+    public void register() {
         if (this.registered) {
-            for (LXChannel channel : getVisibleChannelList()) {
+            for (LXChannel channel : this.lx.engine.getChannels()) {
                 channel.controlSurfaceFocusLength.setValue(CLIP_LAUNCH_ROWS);
             }
             return;
         }
-        for (LXChannel channel : getVisibleChannelList()) {
+        this.registered = true;
+        for (LXChannel channel : this.lx.engine.getChannels()) {
             registerChannel(channel);
         }
         this.lx.engine.getFocusedLook().addListener(new LXLook.Listener() {
@@ -609,14 +625,6 @@ public class APC40Mk2 extends LXMidiSurface {
             }
         });
         sendNoteOn(0, METRONOME, lx.tempo.enabled.isOn() ? LED_ON : LED_OFF);
-
-        // this.lx.swatches.addListener(new SwatchLibrary.SwatchListener() {
-        //     @Override
-        //     public void onSwatchesUpdated() {
-        //         sendSwatches();
-        //     }
-        // });
-        // sendSwatches();
     }
 
     private void registerChannel(LXChannel channel) {
@@ -644,6 +652,7 @@ public class APC40Mk2 extends LXMidiSurface {
 
     private void noteReceived(MidiNote note, boolean on) {
         int pitch = note.getPitch();
+        System.out.println("APC40 noteReceived pitch=" + pitch + " ch=" + note.getChannel() + " on=" + on);
 
         // Global toggle messages
         switch (pitch) {
@@ -822,6 +831,7 @@ public class APC40Mk2 extends LXMidiSurface {
     @Override
     public void controlChangeReceived(MidiControlChange cc) {
         int number = cc.getCC();
+        System.out.println("APC40 ccReceived cc=" + number + " ch=" + cc.getChannel() + " val=" + cc.getValue());
         switch (number) {
         case TEMPO:
             if (this.shiftOn) {
@@ -839,8 +849,8 @@ public class APC40Mk2 extends LXMidiSurface {
             return;
         case CHANNEL_FADER:
             int channel = cc.getChannel();
-            if (channel < getVisibleChannelList().size()) {
-                getVisibleChannelList().get(channel).fader.setNormalized(cc.getNormalized());
+            if (channel < this.lx.engine.getChannels().size()) {
+                this.lx.engine.getChannels().get(channel).fader.setNormalized(cc.getNormalized());
             }
             return;
         case MASTER_FADER:
@@ -849,25 +859,32 @@ public class APC40Mk2 extends LXMidiSurface {
         case CROSSFADER:
             this.lx.engine.getFocusedLook().crossfader.setNormalized(cc.getNormalized());
             return;
-        case GLOBAL_SPEED:
-            this.lx.engine.speed.setValue(cc.getNormalized() * 2);
-            sendControlChange(0, number, cc.getValue());
-            return;
         }
 
         if (number >= DEVICE_KNOB && number <= DEVICE_KNOB_MAX) {
+            // The APC40Mk2 hardware sends its stored knob positions when a track
+            // select button is pressed. Those dumps arrive on the track's MIDI
+            // channel (0-7), whereas real knob turns are sent on channel 0.
+            // Discard dumps so they don't clobber the pattern's parameters.
+            if (cc.getChannel() != 0) {
+                this.deviceListener.sendKnobValues();
+                return;
+            }
+            // Also ignore knob CCs arriving right after a device registration
+            // (channel/pattern switch) to catch the dump for track 1, which
+            // arrives on channel 0. Push the correct values back out.
+            if (System.currentTimeMillis() - this.deviceRegisterTime < DEVICE_KNOB_QUIET_MS) {
+                this.deviceListener.sendKnobValues();
+                return;
+            }
             this.deviceListener.onKnob(number - DEVICE_KNOB, cc.getNormalized());
             return;
         }
 
-        // RAPH TEMPORARILY DISABLING FOR PASSION PIT
-        // if (number >= CHANNEL_KNOB && number <= CHANNEL_KNOB_MAX) {
-        //     int chan = number - CHANNEL_KNOB;
-        //     if (chan < getVisibleChannelList().size()) {
-        //         getVisibleChannelList().get(chan).speed.setNormalized(cc.getNormalized());
-        //     }
-        //     return;
-        // }
+        if (number >= CHANNEL_KNOB && number <= CHANNEL_KNOB_MAX) {
+            sendControlChange(cc.getChannel(), cc.getCC(), cc.getValue());
+            return;
+        }
 
         // System.out.println("APC40mk2 UNMAPPED: " + cc);
     }

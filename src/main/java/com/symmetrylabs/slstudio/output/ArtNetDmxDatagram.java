@@ -51,8 +51,9 @@ public class ArtNetDmxDatagram extends LXDatagram {
         this.buffer[13] = 0; // Physical
         this.buffer[14] = (byte) (universeNumber & 0xff); // Universe LSB
         this.buffer[15] = (byte) ((universeNumber >>> 8) & 0xff); // Universe MSB
-        this.buffer[16] = (byte) ((dataLength >>> 8) & 0xff);
-        this.buffer[17] = (byte) (dataLength & 0xff);
+        int paddedLength = dataLength + (dataLength % 2); // Art-Net spec: Length must be even
+        this.buffer[16] = (byte) ((paddedLength >>> 8) & 0xff);
+        this.buffer[17] = (byte) (paddedLength & 0xff);
     }
 
     public ArtNetDmxDatagram setUnmappedPointColor(int c, boolean flash) {

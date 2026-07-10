@@ -28,8 +28,13 @@ public class StripIlluminator extends SLPattern<StripsModel> {
         if (idx < 0) return;
         List<Strip> strips = model.getStrips();
         if (idx < strips.size()) {
-            for (LXPoint p : strips.get(idx).getPoints()) {
-                colors[p.index] = LXColor.WHITE;
+            List<LXPoint> pts = strips.get(idx).getPoints();
+            for (LXPoint p : pts) {
+                if (p.index < 0 || p.index >= colors.length) {
+                    System.err.println("StripIlluminator: point index " + p.index + " out of bounds (colors.length=" + colors.length + ")");
+                } else {
+                    colors[p.index] = LXColor.WHITE;
+                }
             }
         }
     }

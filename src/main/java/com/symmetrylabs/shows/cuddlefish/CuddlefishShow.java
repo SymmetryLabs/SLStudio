@@ -23,7 +23,11 @@ import heronarts.lx.transform.LXTransform;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class CuddlefishShow implements Show {
     public static final String SHOW_NAME = "cuddlefish";
@@ -210,9 +214,32 @@ public class CuddlefishShow implements Show {
         /** Datagrams indexed by universe (0-based) for per-universe mute. */
         public static final List<ArtNetDmxDatagram> universeDatagram = new ArrayList<>();
 
+        /**
+         * Authoritative universe (0-based) -> points-in-output-order mapping.
+         * Built once here and shared with UniverseSelector so the mapping tools
+         * always match what is actually sent on the wire.
+         */
+        public static final List<List<heronarts.lx.model.LXPoint>> universePoints = new ArrayList<>();
+
+        /**
+         * Authoritative (universe, strip-within-universe) -> model strip index table,
+         * built from the same counts/order the datagrams use. Lets the UI illuminate
+         * the exact strip that is sent on a given universe.
+         */
+        public static final List<int[]> universeStripModelIndices = new ArrayList<>();
+
+        /** Returns the model strip index for strip s (0-based) of universe u (0-based), or -1. */
+        public static int getModelStripIndex(int u, int s) {
+            if (u < 0 || u >= universeStripModelIndices.size()) return -1;
+            int[] arr = universeStripModelIndices.get(u);
+            return (s >= 0 && s < arr.length) ? arr[s] : -1;
+        }
+
         public CuddlefishPixlite(LX lx, String ip, CuddlefishModel model) {
             super(lx, ip);
             universeDatagram.clear();
+            universePoints.clear();
+            universeStripModelIndices.clear();
 
             int[] counts = UICuddlefishModelingTool.loadStripCountsFromDisk();
 
@@ -224,17 +251,25 @@ public class CuddlefishShow implements Show {
                 singleOut.setLogConnections(false);
 
                 int stripIndex = 0;
+                Set<Integer> seenUniverses = new HashSet<>();
+                Map<Integer, Integer> pointIndexToUniverse = new HashMap<>();
                 for (int u = 0; u < UNIVERSE_COUNT; u++) {
                     PointsGrouping pg = new PointsGrouping(String.valueOf(u + 1));
                     int pixelOffset = 0;
+                    int[] stripIdxs = new int[counts[u]];
+                    java.util.Arrays.fill(stripIdxs, -1);
                     for (int s = 0; s < counts[u]; s++) {
                         if (stripIndex >= model.strips.size()) break;
+                        stripIdxs[s] = stripIndex;
                         Strip strip = model.getStripByIndex(stripIndex++);
                         int numPixels = strip.getPoints().size();
                         pg.addStripSegment(pixelOffset, pixelOffset + numPixels, !strip.metrics.grbSwap);
                         pg.addPoints(strip.getPoints());
                         pixelOffset += numPixels;
                     }
+                    universeStripModelIndices.add(stripIdxs);
+
+                    universePoints.add(new ArrayList<>(pg.getPoints()));
 
                     int[] indices = pg.getIndices();
                     if (indices.length == 0) {
@@ -242,6 +277,20 @@ public class CuddlefishShow implements Show {
                         continue;
                     }
 
+                    // Guard against duplicate or oversized universes, and point index overlap.
+                    if (!seenUniverses.add(u)) {
+                        System.err.println("CuddlefishPixlite: duplicate ArtNet universe " + u + " detected for output U" + (u + 1));
+                    }
+                    if (indices.length > 170) {
+                        System.err.println("CuddlefishPixlite: universe U" + (u + 1) + " has " + indices.length + " pixels, exceeding 170 pixel DMX limit");
+                    }
+                    for (int idx : indices) {
+                        if (idx < 0) continue;
+                        Integer otherU = pointIndexToUniverse.put(idx, u);
+                        if (otherU != null) {
+                            System.err.println("CuddlefishPixlite: point index " + idx + " assigned to both U" + (otherU + 1) + " and U" + (u + 1));
+                        }
+                    }
                     // Build per-pixel GRB flag array
                     boolean[] grbFlags = new boolean[indices.length];
                     for (PointsGrouping.StripSegment seg : pg.getStripSegments()) {
@@ -249,7 +298,11 @@ public class CuddlefishShow implements Show {
                             grbFlags[i] = seg.grbSwap;
                         }
                     }
-                    ArtNetDmxDatagram dgram = new ArtNetDmxDatagram(lx, ip, indices, u);
+                    // Send a full 512-channel universe (unused channels zero). The issue is
+                    // not 510-vs-512 universe size: U47+ placeholders were sending TINY
+                    // truncated frames (4 channels for a 1-pixel universe), which receivers
+                    // handle inconsistently. Full-size frames match what MadMapper sends.
+                    ArtNetDmxDatagram dgram = new ArtNetDmxDatagram(lx, ip, indices, 512, u);
                     dgram.setGrbFlags(grbFlags);
                     singleOut.addDatagram(dgram);
                     universeDatagram.add(dgram);
@@ -274,8 +327,23 @@ public class CuddlefishShow implements Show {
          * whose enabled flag is false (set by setUniverseMuted).
          */
         private static class SingleSocketOutput extends LXDatagramOutput {
+            /** ArtSync after each frame batch; off by default for Falcon receivers. */
+            private static final boolean SEND_ARTSYNC = false;
+
+            /**
+             * Gap between consecutive packet sends. Without pacing all 96 universes
+             * leave in a single burst and the receiver drops later packets, which
+             * shows up as flicker on higher universe numbers.
+             */
+            private static final long PACKET_GAP_NANOS = 50_000; // 50us -> ~4.8ms per 96-universe frame
+
             SingleSocketOutput(LX lx, DatagramSocket socket) throws SocketException {
                 super(lx, socket);
+            }
+
+            private static void pace(long nanos) {
+                long start = System.nanoTime();
+                while (System.nanoTime() - start < nanos) { /* spin */ }
             }
 
             @Override
@@ -289,11 +357,16 @@ public class CuddlefishShow implements Show {
                     } catch (java.io.IOException iox) {
                         // silently skip
                     }
+                    pace(PACKET_GAP_NANOS);
                 }
-                // One Art-Net sync packet for the whole batch
-                if (!dgrams.isEmpty()) {
+                // One Art-Net sync packet for the whole batch.
+                // Disabled by default: Falcon controllers latch stale data on dropped
+                // packets when in ArtSync synchronous mode. Only enable for receivers
+                // known to handle ArtSync correctly.
+                if (SEND_ARTSYNC && !dgrams.isEmpty()) {
                     try {
-                        byte[] syncBuf = new byte[com.symmetrylabs.slstudio.output.ArtNetDatagramUtil.HEADER_LENGTH];
+                        // ArtSync is 14 bytes: 12-byte header + Aux1/Aux2 (must be 0)
+                        byte[] syncBuf = new byte[com.symmetrylabs.slstudio.output.ArtNetDatagramUtil.HEADER_LENGTH + 2];
                         com.symmetrylabs.slstudio.output.ArtNetDatagramUtil.fillHeader(syncBuf, (short) 0x5200);
                         java.net.InetAddress addr = dgrams.get(0).getAddress();
                         if (addr != null) {

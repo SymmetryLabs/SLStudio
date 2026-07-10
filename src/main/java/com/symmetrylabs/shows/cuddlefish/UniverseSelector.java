@@ -12,7 +12,9 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UniverseSelector extends SLPattern<StripsModel> {
 
@@ -26,14 +28,23 @@ public class UniverseSelector extends SLPattern<StripsModel> {
     public UniverseSelector(LX lx) {
         super(lx);
 
-        // Build universe→points mapping from the same strip counts used by CuddlefishPixlite
+        // Use the exact universe→points mapping built by CuddlefishPixlite so this
+        // tool always matches what is actually sent on the wire. Only fall back to
+        // re-deriving from the on-disk counts if the output has not been built.
+        List<List<LXPoint>> authoritative = CuddlefishShow.CuddlefishPixlite.universePoints;
+        int maxPixels = 1;
+        Map<Integer, Integer> pointIndexToUniverse = new HashMap<>();
+        if (!authoritative.isEmpty()) {
+            for (List<LXPoint> pts : authoritative) {
+                universePoints.add(pts);
+                if (pts.size() > maxPixels) maxPixels = pts.size();
+            }
+        } else {
         int[] counts = UICuddlefishModelingTool.loadStripCountsFromDisk();
         List<Strip> strips = model.getStrips();
         int stripIndex = 0;
-        int maxPixels = 1;
         for (int u = 0; u < UNIVERSE_COUNT; u++) {
             List<LXPoint> pts = new ArrayList<>();
-            int stripStart = stripIndex;
             for (int s = 0; s < counts[u] && stripIndex < strips.size(); s++) {
                 for (LXPoint p : strips.get(stripIndex).getPoints()) {
                     pts.add(p);
@@ -41,13 +52,15 @@ public class UniverseSelector extends SLPattern<StripsModel> {
                 stripIndex++;
             }
             universePoints.add(pts);
-            if (pts.size() > maxPixels) maxPixels = pts.size();
-            // Log universes near 22 for verification
-            if (u >= 20 && u <= 23) {
-                System.out.println("UniverseSelector: U" + (u + 1) + " -> strips[" + stripStart + ".." + (stripIndex - 1) + "] count=" + counts[u] + " pixels=" + pts.size());
+            for (LXPoint p : pts) {
+                Integer otherU = pointIndexToUniverse.put(p.index, u);
+                if (otherU != null) {
+                    System.err.println("UniverseSelector: point index " + p.index + " assigned to both U" + (otherU + 1) + " and U" + (u + 1));
+                }
             }
+            if (pts.size() > maxPixels) maxPixels = pts.size();
         }
-        System.out.println("UniverseSelector: total strips=" + strips.size() + " total universes=" + UNIVERSE_COUNT);
+        }
 
         addParameter(universe      = new DiscreteParameter("universe", 1, 1, UNIVERSE_COUNT + 1));
         addParameter(pixel         = new DiscreteParameter("pixel",    1, 1, maxPixels + 1));

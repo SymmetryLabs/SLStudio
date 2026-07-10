@@ -126,8 +126,14 @@ public class UICuddlefishModelingTool extends UI2dContainer {
                 break;
             }
         }
+        // If the model has been rebuilt, the old illuminator still references the old model/point indices,
+        // so lighting a strip by global index can illuminate the wrong points across multiple universes.
+        if (illum != null && liveLX.model != null && liveLX.model != illum.getModel()) {
+            ch.removePattern(illum);
+            illum = null;
+        }
         if (illum == null) {
-            // Project load cleared the pattern list — re-add it now
+            // Project load cleared the pattern list, or model was rebuilt — re-add it now
             if (liveLX == null) return;
             illum = new com.symmetrylabs.shows.cuddlefish.StripIlluminator(liveLX);
             ch.addPattern(illum);
@@ -313,7 +319,7 @@ public class UICuddlefishModelingTool extends UI2dContainer {
         final float colHdrH = 11f;
         final float xyBoxW  = 26f;  // wider box for tx/ty so 4 digits are visible
         final float azBoxW  = 24f;  // fixed width for az so 3-4 digits are visible
-        final float pxBoxW  = 22f;  // fixed width for px (pixel count) so 3 digits are visible
+        final float pxBoxW  = 32f;  // fixed width for px (pixel count) so 3 digits are clearly visible
         final float cvBoxW  = 22f;  // fixed width for cv (curve) so 3 digits are visible
         final float grbBoxW = 18f;  // fixed width for grb toggle checkbox
 
@@ -562,6 +568,7 @@ public class UICuddlefishModelingTool extends UI2dContainer {
 
                 // Illuminate toggle button — radio-style: only one active at a time
                 final int capturedGlobalRowForLit = globalRow;
+                final int capturedStripInUniverse = s;
                 heronarts.p3lx.ui.component.UIButton litBtn = new heronarts.p3lx.ui.component.UIButton(curX + btnsW + gap, curY, litBtnW, boxH) {
                     @Override
                     protected void onToggle(boolean active) {
@@ -571,7 +578,15 @@ public class UICuddlefishModelingTool extends UI2dContainer {
                                 activeLitButton.setActive(false);
                             }
                             activeLitButton = this;
-                            illuminateStrip(capturedGlobalRowForLit);
+                            // Resolve via the output's authoritative (universe, strip) table so the
+                            // illuminated strip matches what is sent on this universe even if the UI
+                            // grid counts have been edited since the model/output were built.
+                            int modelIdx = com.symmetrylabs.shows.cuddlefish.CuddlefishShow.CuddlefishPixlite
+                                .getModelStripIndex(capturedUniverse, capturedStripInUniverse);
+                            if (modelIdx < 0) {
+                                modelIdx = capturedGlobalRowForLit;
+                            }
+                            illuminateStrip(modelIdx);
                         } else {
                             if (activeLitButton == this) activeLitButton = null;
                             illuminateStrip(-1);
