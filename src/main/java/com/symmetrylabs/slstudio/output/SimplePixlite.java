@@ -80,10 +80,12 @@ public class SimplePixlite extends ArtNetOutput {
                     System.out.println("  GRB flags: first 30 = " + java.util.Arrays.toString(java.util.Arrays.copyOfRange(grbFlags, 0, Math.min(30, grbFlags.length))));
                 }
 
-                // Create a single datagram with per-pixel GRB support
-                ArtNetDmxDatagram dmxDatagram = new ArtNetDmxDatagram(lx, ipAddress, allIndices, firstUniverse);
+                // Create a single datagram with per-pixel GRB support and optional RGBW
+                int dataLength = pointsGrouping.rgbw ? 4 * allIndices.length : 3 * allIndices.length;
+                ArtNetDmxDatagram dmxDatagram = new ArtNetDmxDatagram(lx, ipAddress, allIndices, dataLength, firstUniverse);
                 // Store GRB flags for use during copyPoints
                 dmxDatagram.setGrbFlags(grbFlags);
+                dmxDatagram.setRgbw(pointsGrouping.rgbw);
                 addDatagram(dmxDatagram);
 
             } else {
@@ -97,7 +99,9 @@ public class SimplePixlite extends ArtNetOutput {
                     for (int i = 0; i < numIndices; i++) {
                         indices[i] = allIndices[counter++];
                     }
-                    ArtNetDmxDatagram dmxDatagram = new ArtNetDmxDatagram(lx, ipAddress, indices, universe);
+                    int dataLength = pointsGrouping.rgbw ? 4 * numIndices : 3 * numIndices;
+                    ArtNetDmxDatagram dmxDatagram = new ArtNetDmxDatagram(lx, ipAddress, indices, dataLength, universe);
+                    dmxDatagram.setRgbw(pointsGrouping.rgbw);
                     if (pointsGrouping.grbSwap) {
                         dmxDatagram.setByteOrder(heronarts.lx.output.LXDatagram.ByteOrder.GRB);
                     }
@@ -149,7 +153,9 @@ public class SimplePixlite extends ArtNetOutput {
                 for (int i = 0; i < numIndices; i++) {
                     indices[i] = pointsGrouping.getPoint(counter++).index;
                 }
-                ArtNetDmxDatagram dmxDatagram = new ArtNetDmxDatagram(lx, ipAddress, indices, universe);
+                int dataLength = pointsGrouping.rgbw ? 4 * numIndices : 3 * numIndices;
+                ArtNetDmxDatagram dmxDatagram = new ArtNetDmxDatagram(lx, ipAddress, indices, dataLength, universe);
+                dmxDatagram.setRgbw(pointsGrouping.rgbw);
                 // Apply GRB color swap if enabled for this strip
                 if (pointsGrouping.grbSwap) {
                     dmxDatagram.setByteOrder(heronarts.lx.output.LXDatagram.ByteOrder.GRB);

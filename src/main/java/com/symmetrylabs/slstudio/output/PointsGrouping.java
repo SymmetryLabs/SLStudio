@@ -13,6 +13,7 @@ public class PointsGrouping {
 
     public String id;
     public boolean grbSwap = false;  // false = RGB (normal), true = GRB (swap red/green)
+    public boolean rgbw = false;     // true = send 4-channel RGBW ArtNet, false = 3-channel RGB
     private final List<LXPoint> points = new ArrayList<LXPoint>();
     // Parallel list: true = real point (use p.index), false = black sentinel (use -1)
     private final List<Boolean> isReal = new ArrayList<Boolean>();
