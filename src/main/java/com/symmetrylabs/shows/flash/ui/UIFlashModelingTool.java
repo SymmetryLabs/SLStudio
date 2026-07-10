@@ -380,8 +380,13 @@ public class UIFlashModelingTool extends UI2dContainer {
             curY += uHeaderH;
 
             if (collapsed) {
-                // Hide this universe's column headers and strip rows
-                globalRow += count;
+                // Hide this universe's column headers and strip rows, but keep
+                // the visible-indexed lists aligned with global strip indices.
+                for (int s = 0; s < count; s++) {
+                    stripInputs.add(null);
+                    lastValues.add(null);
+                    globalRow++;
+                }
                 continue;
             }
 
@@ -650,8 +655,10 @@ public class UIFlashModelingTool extends UI2dContainer {
      */
     private void handleValueChange(int stripIndex, int col, double newValue) {
         if (stripIndex < lastValues.size()) {
-            double old = lastValues.get(stripIndex)[col];
-            lastValues.get(stripIndex)[col] = newValue;
+            double[] lastRow = lastValues.get(stripIndex);
+            if (lastRow == null) return;
+            double old = lastRow[col];
+            lastRow[col] = newValue;
             if (stripIndex < currentStripValues.length) {
                 currentStripValues[stripIndex][col] = (float) newValue;
             }
@@ -661,7 +668,9 @@ public class UIFlashModelingTool extends UI2dContainer {
                 try {
                     for (Integer gi : groupedStrips) {
                         if (gi == stripIndex || gi >= stripInputs.size()) continue;
-                        UIDoubleBox other = stripInputs.get(gi)[col];
+                        UIDoubleBox[] otherRow = stripInputs.get(gi);
+                        if (otherRow == null) continue;
+                        UIDoubleBox other = otherRow[col];
                         if (other != null) {
                             other.setValue(other.getValue() + delta);
                         }
@@ -679,6 +688,7 @@ public class UIFlashModelingTool extends UI2dContainer {
         if (liveStrips == null || globalIndex >= liveStrips.size()) return;
         if (globalIndex >= stripInputs.size()) return;
         UIDoubleBox[] row = stripInputs.get(globalIndex);
+        if (row == null) return;
         float tx    = (float) row[0].getValue();
         float ty    = (float) row[1].getValue();
         float tz    = (float) row[2].getValue();

@@ -41,7 +41,7 @@ public class ColorGradient extends LXEffect {
             .setDescription("Hue range for oscillation");
 
     public final CompoundParameter period = (CompoundParameter)
-        new CompoundParameter("Period", 120000, 1000, 1800000)
+        new CompoundParameter("Period", 120000, 1000, 300000)
             .setDescription("Period of hue oscillation or cycle in ms")
             .setUnits(LXParameter.Units.MILLISECONDS);
 
