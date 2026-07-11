@@ -33,6 +33,10 @@ public class MainMenu implements Window {
 
     private static MainMenu instance = null;
 
+    public static void reset() {
+        instance = null;
+    }
+
     public static MainMenu getInstance(LX lx, VolumeApplication parent) {
         if (instance == null) {
             return instance = new MainMenu(lx, parent);

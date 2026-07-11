@@ -7,7 +7,6 @@ import com.symmetrylabs.util.MathUtils;
 import com.symmetrylabs.util.SphereMarker;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -146,11 +145,16 @@ public class Metaballs extends SLPattern<SLModel> {
         }
 
         private void pickRandomTarget() {
-            double[] weights = new double[model.points.length];
+            List<LXVector> vs = getVectorList();
+            if (vs.isEmpty()) {
+                target.set(0, 0, 0);
+                return;
+            }
+
+            double[] weights = new double[vs.size()];
             double totalWeight = 0;
-            LXVector[] vs = getVectorArray();
-            for (int i = 0; i < vs.length; i++) {
-                LXVector v = vs[i];
+            for (int i = 0; i < vs.size(); i++) {
+                LXVector v = vs.get(i);
                 double minDist = Float.MAX_VALUE;
                 for (Ball b : balls) {
                     minDist = Double.min(minDist, b.target.dist(v));
@@ -159,21 +163,32 @@ public class Metaballs extends SLPattern<SLModel> {
                 weights[i] = minDist;
                 totalWeight += minDist;
             }
+
+            if (totalWeight == 0) {
+                LXVector v = vs.get(0);
+                target.set(v.x, v.y, v.z);
+                return;
+            }
+
             for (int i = 0; i < weights.length; i++) {
                 weights[i] /= totalWeight;
             }
 
             double w = random.nextDouble();
             double accum = 0;
-            LXPoint p = null;
+            LXVector v = null;
             for (int i = 0; i < weights.length; i++) {
                 accum += weights[i];
                 if (w < accum) {
-                    p = model.points[i];
+                    v = vs.get(i);
                     break;
                 }
             }
-            target.set(p.x, p.y, p.z);
+            if (v != null) {
+                target.set(v.x, v.y, v.z);
+            } else {
+                target.set(0, 0, 0);
+            }
         }
 
         final void advance(double deltaMs) {

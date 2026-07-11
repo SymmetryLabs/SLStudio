@@ -154,6 +154,7 @@ public class VolumeApplication extends ApplicationAdapter implements VolumeCore.
 
     @Override
     public void onShowChangeStart() {
+        MainMenu.reset();
         WindowManager.reset();
         ConsoleWindow.reset();
         WindowManager.addPersistent(ConsoleWindow.WINDOW_NAME, () -> new ConsoleWindow(), false);

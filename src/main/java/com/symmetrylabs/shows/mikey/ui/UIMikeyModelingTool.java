@@ -30,14 +30,14 @@ import processing.core.PConstants;
 
 public class UIMikeyModelingTool extends UI2dContainer {
 
-    /** Number of Pixlite outputs / ArtNet universes. Fixed at 64. */
-    public static final int UNIVERSE_COUNT = 64;
+    /** Number of Pixlite outputs / ArtNet universes. Fixed at 23. */
+    public static final int UNIVERSE_COUNT = 23;
 
     public static final String[] COLUMN_LABELS = { "tx", "ty", "tz", "az", "rx", "ry", "px", "d", "cv", "grb" };
     public static final String MAPPING_FILE = "data/mikey-mapping.json";
 
     private static final float DEFAULT_BAR_SPACING = 24f;
-    private static final int   DEFAULT_PIXELS = 60;
+    private static final int   DEFAULT_PIXELS = 5;
     private static final float DEFAULT_HEIGHT = 1f;
     private static final float DEFAULT_ROTATE_Z = 90f;
 
@@ -51,7 +51,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
         public String[]  universeLabels; // length = UNIVERSE_COUNT, user-defined labels
     }
 
-    // ── per-universe count boxes (always 54) ──────────────────────────────────
+    // ── per-universe count boxes (always UNIVERSE_COUNT) ─────────────────────
     private final TabbableTextBox[] countBoxes  = new TabbableTextBox[UNIVERSE_COUNT];
     private final TabbableTextBox[] labelBoxes  = new TabbableTextBox[UNIVERSE_COUNT];
 
@@ -153,10 +153,10 @@ public class UIMikeyModelingTool extends UI2dContainer {
 
         // ── Strip-count header label ──
         new UILabel(0, 20, w - 10, 13)
-            .setLabel("Strips per universe (U1 \u2026 U64):")
+            .setLabel("Strips per universe (U1 \u2026 U23):")
             .addToContainer(this);
 
-        // ── 54 count boxes laid out in a compact grid ──
+        // ── count boxes laid out in a compact grid ──
         buildCountBoxes(w);
 
         // ── Buttons (placed below the count box grid) ──
@@ -229,7 +229,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
         return COUNT_BOX_START_Y + rows * COUNT_CELL_H;
     }
 
-    // ── Build the 54 count boxes in a 9-column grid ───────────────────────────
+    // ── Build the count boxes in a 9-column grid ──────────────────────────────
 
     private void buildCountBoxes(float w) {
         for (int u = 0; u < UNIVERSE_COUNT; u++) {
@@ -692,7 +692,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
 
     private float defaultValue(int col, int stripIndex) {
         switch (col) {
-            case 0: return DEFAULT_BAR_SPACING * stripIndex;  // tx
+            case 0: return 0f;   // tx
             case 1: return 0f;   // ty
             case 2: return 0f;   // tz
             case 3: return DEFAULT_ROTATE_Z;  // az

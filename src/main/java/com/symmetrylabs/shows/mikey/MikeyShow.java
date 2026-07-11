@@ -132,13 +132,13 @@ public class MikeyShow implements Show {
             float[][] d = new float[totalStrips][10];
             int barSpacing = 24;
             for (int i = 0; i < totalStrips; i++) {
-                d[i][0] = barSpacing * i; // tx
+                d[i][0] = 0f;            // tx
                 d[i][1] = 0f;            // ty
                 d[i][2] = 0f;            // tz
                 d[i][3] = 90f;           // az
                 d[i][4] = 0f;            // rx
                 d[i][5] = 0f;            // ry
-                d[i][6] = 60f;           // px
+                d[i][6] = 5f;            // px
                 d[i][7] = 1f;            // d
                 d[i][8] = 0f;            // cv
                 d[i][9] = 0f;            // grb (0 = RGB, 1 = GRB)

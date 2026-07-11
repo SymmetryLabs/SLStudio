@@ -135,18 +135,26 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         this.networkMonitor = NetworkMonitor.getInstance(lx);
         this.oscEngine = lx.engine.osc;
         
+        LXOscEngine.Receiver receiver = null;
+        LXOscEngine.Transmitter transmitter = null;
         try {
             initializeWifiInterface();
             
             this.discoverySocket = new DatagramSocket(DISCOVERY_PORT);
             this.discoverySocket.setBroadcast(true);
-            this.oscReceiver = oscEngine.receiver(SYNC_OSC_PORT);
-            this.oscReceiver.addListener(oscListener);
-            this.oscTransmitter = oscEngine.transmitter(wifiBroadcastAddress, SYNC_OSC_PORT);
+            receiver = oscEngine.receiver(SYNC_OSC_PORT);
+            receiver.addListener(oscListener);
+            transmitter = oscEngine.transmitter(wifiBroadcastAddress, SYNC_OSC_PORT);
             this.oscEngine.addEngineListener(this.engineOscListener);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to initialize network for sync", e);
+            System.err.println("WARNING: Failed to initialize network for sync, network sync disabled: " + e.getMessage());
+            if (this.discoverySocket != null) {
+                this.discoverySocket.close();
+                this.discoverySocket = null;
+            }
         }
+        this.oscReceiver = receiver;
+        this.oscTransmitter = transmitter;
         
         // Initialize per-channel sync parameters (channel 1 first, then empty slots)
         for (int i = 0; i < SYNC_CHANNEL_COUNT; i++) {
@@ -181,29 +189,43 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     
     private void initializeWifiInterface() {
         try {
+            NetworkInterface syncInterface = null;
             NetworkInterface wifiInterface = findWifiInterface();
-            if (wifiInterface == null) {
-                throw new RuntimeException("Wi-Fi interface not found");
-            }
-            
-            for (InterfaceAddress addr : wifiInterface.getInterfaceAddresses()) {
-                InetAddress address = addr.getAddress();
-                if (address instanceof Inet4Address) {
-                    wifiLocalAddress = address;
-                    wifiBroadcastAddress = addr.getBroadcast();
-                    break;
+            if (wifiInterface != null && tryUseInterface(wifiInterface)) {
+                syncInterface = wifiInterface;
+            } else {
+                // Fall back to any active non-loopback interface with an IPv4 broadcast address
+                for (NetworkInterface iface : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                    if (iface.isLoopback() || !iface.isUp() || iface.isVirtual()) continue;
+                    if (tryUseInterface(iface)) {
+                        syncInterface = iface;
+                        break;
+                    }
                 }
             }
             
-            if (wifiLocalAddress == null || wifiBroadcastAddress == null) {
-                throw new RuntimeException("No IPv4 address/broadcast found on Wi-Fi interface");
+            if (syncInterface == null || wifiLocalAddress == null || wifiBroadcastAddress == null) {
+                throw new RuntimeException("No network interface with an IPv4 address/broadcast found");
             }
             
-            System.out.println("🛜 SYNC WIFI: Using " + wifiInterface.getName() + " (" + wifiInterface.getDisplayName() + 
+            System.out.println("🛜 SYNC NET: Using " + syncInterface.getName() + " (" + syncInterface.getDisplayName() + 
                 ") at " + wifiLocalAddress.getHostAddress() + " broadcast " + wifiBroadcastAddress.getHostAddress());
         } catch (SocketException e) {
-            throw new RuntimeException("Failed to initialize Wi-Fi interface", e);
+            throw new RuntimeException("Failed to initialize network interface for sync", e);
         }
+    }
+    
+    /** Returns true and sets local/broadcast addresses if the interface has a usable IPv4 address. */
+    private boolean tryUseInterface(NetworkInterface iface) {
+        for (InterfaceAddress addr : iface.getInterfaceAddresses()) {
+            InetAddress address = addr.getAddress();
+            if (address instanceof Inet4Address && addr.getBroadcast() != null) {
+                wifiLocalAddress = address;
+                wifiBroadcastAddress = addr.getBroadcast();
+                return true;
+            }
+        }
+        return false;
     }
     
     private NetworkInterface findWifiInterface() throws SocketException {
@@ -516,7 +538,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     }
     
     private void sendInitialSync() {
-        if (!isMaster || activeSyncChannels.isEmpty()) return;
+        if (!isMaster || activeSyncChannels.isEmpty() || oscTransmitter == null) return;
         
         try {
             for (LXChannel channel : activeSyncChannels) {
@@ -568,6 +590,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     }
     
     private void sendSyncMessage(LXChannel channel, int patternIndex, LXPattern pattern, boolean isHeartbeat) {
+        if (oscTransmitter == null) return;
         String syncMsg = String.format(
             "{\"channel\":%d,\"patternIndex\":%d,\"patternName\":\"%s\",\"timestamp\":%d}",
             channel.getIndex(), patternIndex, pattern.getLabel(), System.currentTimeMillis()
