@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1783730871233,
+  "timestamp": 1783732109566,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -4495,7 +4495,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 1,
+            "patternIndex": 11,
             "patterns": [
               {
                 "id": 28341,
@@ -5180,7 +5180,7 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": true,
-                  "speed": 12.0,
+                  "speed": -37.99999888241291,
                   "dist": 222.39999525249004,
                   "x": -0.9600000008940697,
                   "y": 0.0,
@@ -5190,45 +5190,8 @@
                   "period": 11642.000112682581
                 },
                 "modulation": {
-                  "modulators": [
-                    {
-                      "id": 30673,
-                      "class": "heronarts.lx.modulator.VariableLFO",
-                      "modulationColor": -16711880,
-                      "parameters": {
-                        "label": "LFO",
-                        "running": true,
-                        "trigger": false,
-                        "loop": true,
-                        "wave": 1,
-                        "period": 27182.093463371184,
-                        "skew": 0.0,
-                        "shape": 0.0,
-                        "phase": 0.0,
-                        "exp": 0.0
-                      }
-                    }
-                  ],
-                  "modulations": [
-                    {
-                      "source": {
-                        "id": 30673
-                      },
-                      "target": {
-                        "componentId": 30659,
-                        "parameterPath": "x"
-                      },
-                      "id": 30676,
-                      "class": "heronarts.lx.parameter.LXCompoundModulation",
-                      "modulationColor": -16711778,
-                      "parameters": {
-                        "label": "",
-                        "enabled": true,
-                        "Polarity": 0,
-                        "Range": 0.9000000000000006
-                      }
-                    }
-                  ],
+                  "modulators": [],
+                  "modulations": [],
                   "triggers": []
                 },
                 "autoCycleEnabled": true,
@@ -5334,7 +5297,7 @@
                       "color/saturation": 100.0,
                       "range": 0.0,
                       "period": 30000.0,
-                      "spread": 360.0,
+                      "spread": 122.40000531077385,
                       "spreadX": 0.0,
                       "spreadY": 0.30000001564621925,
                       "spreadZ": 1.0,
@@ -6385,7 +6348,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -2948865,
+          "modulationColor": -16253184,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -6524,7 +6487,7 @@
       "DMXParameterMapper": {
         "id": 111,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -65339,
+        "modulationColor": -327425,
         "parameters": {
           "label": "DMXParameterMapper"
         },
