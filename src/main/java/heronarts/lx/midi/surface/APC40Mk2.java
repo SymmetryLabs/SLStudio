@@ -214,19 +214,15 @@ public class APC40Mk2 extends LXMidiSurface {
         }
 
         void sendKnobValues(int midiChannel) {
-            StringBuilder sb = new StringBuilder("APC40 sendKnobValues ch=" + midiChannel + ":");
             for (int i = 0; i < this.knobs.length; ++i) {
                 LXListenableNormalizedParameter parameter = this.knobs[i];
                 if (parameter != null) {
                     double normalized = (parameter instanceof CompoundParameter) ?
                         ((CompoundParameter) parameter).getBaseNormalized() :
                         parameter.getNormalized();
-                    int val = (int) (normalized * 127);
-                    sb.append(" [").append(i).append("]=").append(val);
-                    sendControlChange(midiChannel, DEVICE_KNOB + i, val);
+                    sendControlChange(midiChannel, DEVICE_KNOB + i, (int) (normalized * 127));
                 }
             }
-            System.out.println(sb);
         }
 
         void register(LXComponent device) {
@@ -671,8 +667,6 @@ public class APC40Mk2 extends LXMidiSurface {
 
     private void noteReceived(MidiNote note, boolean on) {
         int pitch = note.getPitch();
-        System.out.println("APC40 noteReceived pitch=" + pitch + " ch=" + note.getChannel() + " on=" + on);
-
         // Global toggle messages
         switch (pitch) {
         case SHIFT:
@@ -834,7 +828,7 @@ public class APC40Mk2 extends LXMidiSurface {
             }
         }
 
-        System.out.println("APC40mk2 UNMAPPED: " + note);
+        // System.out.println("APC40mk2 UNMAPPED: " + note);
     }
 
     @Override
@@ -850,7 +844,6 @@ public class APC40Mk2 extends LXMidiSurface {
     @Override
     public void controlChangeReceived(MidiControlChange cc) {
         int number = cc.getCC();
-        System.out.println("APC40 ccReceived cc=" + number + " ch=" + cc.getChannel() + " val=" + cc.getValue());
         switch (number) {
         case TEMPO:
             if (this.shiftOn) {
@@ -889,14 +882,12 @@ public class APC40Mk2 extends LXMidiSurface {
                 int dumpChannel = cc.getChannel();
                 if (number == DEVICE_KNOB) {
                     LXLook look = lx.engine.getFocusedLook();
-                    System.out.println("APC40 track-select dump ch=" + dumpChannel + " look.channels.size=" + look.channels.size() + " focusedBefore=" + look.focusedChannel.getValuei());
                     while (look.channels.size() <= dumpChannel) {
                         look.addChannel();
                     }
                     LXChannel selectedChannel = look.channels.get(dumpChannel);
                     selectedChannel.editorVisible.setValue(true);
                     look.focusedChannel.setValue(dumpChannel);
-                    System.out.println("APC40 focusedAfter=" + look.focusedChannel.getValuei() + " device=" + deviceListener.device);
                 }
                 this.deviceListener.sendKnobValues(dumpChannel);
                 return;
@@ -930,10 +921,8 @@ public class APC40Mk2 extends LXMidiSurface {
                     LXLook look = lx.engine.getFocusedLook();
                     if (!look.channels.isEmpty()) {
                         LXChannel ch0 = look.channels.get(0);
-                        System.out.println("APC40 ch0 dump confirmed, selecting ch0, focusedBefore=" + look.focusedChannel.getValuei());
                         ch0.editorVisible.setValue(true);
                         look.focusedChannel.setValue(0);
-                        System.out.println("APC40 ch0 focusedAfter=" + look.focusedChannel.getValuei() + " device=" + deviceListener.device);
                     }
                 }
                 this.deviceListener.sendKnobValues(0);
