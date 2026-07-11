@@ -187,6 +187,7 @@ public class FlashShow implements Show {
             int[] counts = UIFlashModelingTool.loadStripCountsFromDisk();
             boolean[] rgbw = UIFlashModelingTool.loadRgbwFromDisk();
             int stripIndex = 0;
+            System.out.println("FlashPixlite: building " + UNIVERSE_COUNT + " outputs for " + ip);
             for (int u = 0; u < UNIVERSE_COUNT; u++) {
                 PointsGrouping pg = new PointsGrouping(String.valueOf(u + 1));
                 pg.rgbw = rgbw[u];
@@ -200,8 +201,10 @@ public class FlashShow implements Show {
                     pg.addPoints(strip.getPoints());
                     pixelOffset += numPixels;
                 }
+                System.out.println("FlashPixlite output U" + (u + 1) + ": " + pixelOffset + " pixels, rgbw=" + rgbw[u] + ", strips=" + counts[u]);
                 addPixliteOutput(pg);
             }
+            System.out.println("FlashPixlite: built " + UNIVERSE_COUNT + " outputs, total strips = " + stripIndex);
         }
 
         @Override

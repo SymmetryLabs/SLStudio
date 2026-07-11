@@ -20,6 +20,7 @@ public class ArtNetOutput extends LXOutputGroup {
                 @Override
                 public void onItemAdded(InetAddress added) {
                     if (added.getHostAddress().equals(ipAddress)) {
+                        System.out.println("ArtNetOutput: enabling " + ipAddress + " (device discovered)");
                         ArtNetOutput.this.enabled.setValue(true);
                     }
                 }
@@ -27,6 +28,7 @@ public class ArtNetOutput extends LXOutputGroup {
                 @Override
                 public void onItemRemoved(InetAddress added) {
                     if (added.getHostAddress().equals(ipAddress)) {
+                        System.out.println("ArtNetOutput: disabling " + ipAddress + " (device lost)");
                         ArtNetOutput.this.enabled.setValue(false);
                     }
                 }

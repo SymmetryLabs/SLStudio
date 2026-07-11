@@ -18,6 +18,7 @@ public class ArtNetDmxDatagram extends LXDatagram {
 
     private int[] pointIndices;
     private boolean[] grbFlags = null;
+    private boolean rgbw = false;
     private boolean sequenceEnabled = false;
     private byte sequence = 1;
 
@@ -91,6 +92,11 @@ public class ArtNetDmxDatagram extends LXDatagram {
         return this;
     }
 
+    public ArtNetDmxDatagram setRgbw(boolean rgbw) {
+        this.rgbw = rgbw;
+        return this;
+    }
+
     @Override
     public void onSend(int[] colors) {
         copyPointsGamma(
@@ -117,25 +123,37 @@ public class ArtNetDmxDatagram extends LXDatagram {
             flashInOn = !flashInOn;
         }
         int pixelIdx = 0;
+        int bytesPerPixel = rgbw ? 4 : 3;
         for (int index : pointIndices) {
             int colorValue = (index >= 0) ? colors[index] : unmappedC;
 
             int gammaExpanded = GammaExpander.getExpandedColor(colorValue);
-            byte r = (byte) Ops8.red(gammaExpanded);
-            byte g = (byte) Ops8.green(gammaExpanded);
-            byte b = (byte) Ops8.blue(gammaExpanded);
+            int r = Ops8.red(gammaExpanded);
+            int g = Ops8.green(gammaExpanded);
+            int b = Ops8.blue(gammaExpanded);
+            int w = 0;
 
-            if (grbFlags != null && pixelIdx < grbFlags.length && grbFlags[pixelIdx]) {
-                buffer[i + byteOffset[0]] = g;
-                buffer[i + byteOffset[1]] = r;
-                buffer[i + byteOffset[2]] = b;
-            } else {
-                buffer[i + byteOffset[0]] = r;
-                buffer[i + byteOffset[1]] = g;
-                buffer[i + byteOffset[2]] = b;
+            if (rgbw) {
+                w = Math.min(r, Math.min(g, b));
+                r -= w;
+                g -= w;
+                b -= w;
             }
 
-            i += 3;
+            if (grbFlags != null && pixelIdx < grbFlags.length && grbFlags[pixelIdx]) {
+                buffer[i + byteOffset[0]] = (byte) g;
+                buffer[i + byteOffset[1]] = (byte) r;
+                buffer[i + byteOffset[2]] = (byte) b;
+            } else {
+                buffer[i + byteOffset[0]] = (byte) r;
+                buffer[i + byteOffset[1]] = (byte) g;
+                buffer[i + byteOffset[2]] = (byte) b;
+            }
+            if (rgbw) {
+                buffer[i + 3] = (byte) w;
+            }
+
+            i += bytesPerPixel;
             pixelIdx++;
         }
         return this;
