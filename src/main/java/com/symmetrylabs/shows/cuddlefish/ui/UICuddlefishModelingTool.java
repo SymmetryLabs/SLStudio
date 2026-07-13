@@ -582,7 +582,7 @@ public class UICuddlefishModelingTool extends UI2dContainer {
                             // illuminated strip matches what is sent on this universe even if the UI
                             // grid counts have been edited since the model/output were built.
                             int modelIdx = com.symmetrylabs.shows.cuddlefish.CuddlefishShow.CuddlefishPixlite
-                                .getModelStripIndex(capturedUniverse, capturedStripInUniverse);
+                                .getModelStripIndex(capturedUniverse - 1, capturedStripInUniverse);
                             if (modelIdx < 0) {
                                 modelIdx = capturedGlobalRowForLit;
                             }
