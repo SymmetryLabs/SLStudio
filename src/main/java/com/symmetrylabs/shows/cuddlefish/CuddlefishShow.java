@@ -302,7 +302,7 @@ public class CuddlefishShow implements Show {
                     // not 510-vs-512 universe size: U47+ placeholders were sending TINY
                     // truncated frames (4 channels for a 1-pixel universe), which receivers
                     // handle inconsistently. Full-size frames match what MadMapper sends.
-                    ArtNetDmxDatagram dgram = new ArtNetDmxDatagram(lx, ip, indices, 512, u+1);
+                    ArtNetDmxDatagram dgram = new ArtNetDmxDatagram(lx, ip, indices, 512, u);
                     dgram.setGrbFlags(grbFlags);
                     singleOut.addDatagram(dgram);
                     universeDatagram.add(dgram);
