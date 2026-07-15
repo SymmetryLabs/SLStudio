@@ -6106,10 +6106,10 @@
               },
               {
                 "id": 33534,
-                "class": "com.symmetrylabs.shows.cuddlefish.UniverseSelector",
+                "class": "com.symmetrylabs.shows.cuddlefish.UniverseSelectorCuddlefish",
                 "modulationColor": -65792,
                 "parameters": {
-                  "label": "UniverseSelector",
+                  "label": "UniverseSelectorCuddlefish",
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": true,

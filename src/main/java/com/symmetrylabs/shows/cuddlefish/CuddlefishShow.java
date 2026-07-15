@@ -216,7 +216,7 @@ public class CuddlefishShow implements Show {
 
         /**
          * Authoritative universe (0-based) -> points-in-output-order mapping.
-         * Built once here and shared with UniverseSelector so the mapping tools
+         * Built once here and shared with UniverseSelectorCuddlefish so the mapping tools
          * always match what is actually sent on the wire.
          */
         public static final List<List<heronarts.lx.model.LXPoint>> universePoints = new ArrayList<>();
