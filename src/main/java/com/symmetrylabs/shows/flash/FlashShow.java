@@ -209,17 +209,24 @@ public class FlashShow implements Show {
             for (int u = 0; u < UNIVERSE_COUNT; u++) {
                 PointsGrouping pg = new PointsGrouping(String.valueOf(u + 1));
                 pg.rgbw = rgbw[u];
+                int maxPixels = rgbw[u] ? 128 : 170;
                 int pixelOffset = 0;
+                int stripsAdded = 0;
                 for (int s = 0; s < counts[u]; s++) {
                     if (stripIndex >= model.strips.size()) break;
                     Strip strip = model.getStripByIndex(stripIndex++);
                     int numPixels = strip.getPoints().size();
-                    // Add strip segment with its GRB setting
-                    pg.addStripSegment(pixelOffset, pixelOffset + numPixels, strip.metrics.grbSwap);
-                    pg.addPoints(strip.getPoints());
-                    pixelOffset += numPixels;
+                    int remaining = maxPixels - pixelOffset;
+                    if (remaining <= 0) {
+                        continue; // ignore excess strips once universe is full
+                    }
+                    int pixelsToAdd = Math.min(numPixels, remaining);
+                    pg.addStripSegment(pixelOffset, pixelOffset + pixelsToAdd, !strip.metrics.grbSwap);
+                    pg.addPoints(strip.getPoints().subList(0, pixelsToAdd));
+                    pixelOffset += pixelsToAdd;
+                    stripsAdded++;
                 }
-                System.out.println("FlashPixlite output U" + (u + 1) + ": " + pixelOffset + " pixels, rgbw=" + rgbw[u] + ", strips=" + counts[u]);
+                System.out.println("FlashPixlite output U" + (u + 1) + ": " + pixelOffset + " pixels, rgbw=" + rgbw[u] + ", strips=" + stripsAdded + "/" + counts[u]);
                 addPixliteOutput(pg);
             }
             System.out.println("FlashPixlite: built " + UNIVERSE_COUNT + " outputs, total strips = " + stripIndex);
