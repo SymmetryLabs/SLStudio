@@ -135,6 +135,8 @@ public class LXOscEngine extends LXComponent {
 
     private EngineTransmitter engineTransmitter;
 
+    private volatile boolean suppressEcho = false;
+
     private final LX lx;
 
     public interface DestinationListener {
@@ -382,6 +384,7 @@ public class LXOscEngine extends LXComponent {
 
         @Override
         public void oscMessage(OscMessage message) {
+            suppressEcho = true;
             try {
                 String[] parts = message.getAddressPattern().getValue().split("/");
                 LXChannel channel = LXLook.allChannels.get("LXChannel[Look-1 | Channel-9]");
@@ -690,6 +693,8 @@ public class LXOscEngine extends LXComponent {
             } catch (Exception x) {
                 System.err.println("[OSC] No route for message: " + message.getAddressPattern().getValue());
                 x.printStackTrace();
+            } finally {
+                suppressEcho = false;
             }
         }
 
@@ -1021,6 +1026,9 @@ public class LXOscEngine extends LXComponent {
 
         @Override
         public void onParameterChanged(LXParameter parameter) {
+            if (suppressEcho) {
+                return;
+            }
             if (transmitActive.isOn() && parameter.supportsOscTransmit()) {
                 // TODO(mcslee): contemplate accumulating OscMessages into OscBundle
                 // and sending once per engine loop?? Probably a bad tradeoff since
