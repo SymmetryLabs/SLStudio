@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1784172877445,
+  "timestamp": 1784178051114,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -44,7 +44,7 @@
         "modulationColor": -16711767,
         "parameters": {
           "label": "Look-1",
-          "focusedChannel": 16
+          "focusedChannel": 0
         },
         "channels": [
           {
@@ -53,13 +53,13 @@
             "modulationColor": -65347,
             "parameters": {
               "label": "Channel-1",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -203,7 +203,7 @@
                 }
               }
             ],
-            "patternIndex": 0,
+            "patternIndex": 2,
             "patterns": [
               {
                 "id": 697,
@@ -4475,13 +4475,13 @@
             "modulationColor": -16743937,
             "parameters": {
               "label": "AutoCycle",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": true,
               "autoCycleTimeSecs": 10.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": true,
@@ -4495,7 +4495,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 10,
+            "patternIndex": 1,
             "patterns": [
               {
                 "id": 28341,
@@ -6046,13 +6046,13 @@
             "modulationColor": -2817793,
             "parameters": {
               "label": "Bump5",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -6113,13 +6113,13 @@
             "modulationColor": -65316,
             "parameters": {
               "label": "Bump6",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -6184,13 +6184,13 @@
             "modulationColor": -65792,
             "parameters": {
               "label": "Bump7",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -6273,13 +6273,13 @@
             "modulationColor": -852224,
             "parameters": {
               "label": "Bump8",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -6433,7 +6433,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 2,
+            "patternIndex": 1,
             "patterns": [
               {
                 "id": 27085,
@@ -6445,26 +6445,6 @@
                   "Enabled": true,
                   "Cycle": true,
                   "strip": 355
-                },
-                "modulation": {
-                  "modulators": [],
-                  "modulations": [],
-                  "triggers": []
-                },
-                "autoCycleEnabled": true
-              },
-              {
-                "id": 33534,
-                "class": "com.symmetrylabs.shows.cuddlefish.UniverseSelector",
-                "modulationColor": -65792,
-                "parameters": {
-                  "label": "UniverseSelector",
-                  "expandedInUi": true,
-                  "Enabled": true,
-                  "Cycle": true,
-                  "universe": 1,
-                  "pixel": 1,
-                  "all-pixels": true
                 },
                 "modulation": {
                   "modulators": [],
@@ -6726,7 +6706,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -13434625,
+          "modulationColor": -28928,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -6763,8 +6743,8 @@
       "modulationColor": -16711887,
       "parameters": {
         "label": "",
-        "period": 480.0151,
-        "bpm": 124.99606783203278,
+        "period": 480.1719,
+        "bpm": 124.95525040095016,
         "tap": false,
         "nudgeUp": false,
         "nudgeDown": false,
@@ -6865,7 +6845,7 @@
       "DMXParameterMapper": {
         "id": 70,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -16711796,
+        "modulationColor": -10682624,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -7772,10 +7752,20 @@
         "receiveHost": "10.2.0.87",
         "receivePort": 3131,
         "receiveActive": true,
-        "transmitHost": "localhost",
-        "transmitPort": 3131,
+        "transmitHost": "10.2.0.120",
+        "transmitPort": 3030,
         "transmitActive": true
-      }
+      },
+      "extraDestinations": [
+        {
+          "receiveHost": "0.0.0.0",
+          "receivePort": 3030,
+          "receiveActive": false,
+          "transmitHost": "10.2.0.164",
+          "transmitPort": 3232,
+          "transmitActive": true
+        }
+      ]
     },
     "artnet": {
       "id": 25,

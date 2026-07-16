@@ -18,7 +18,7 @@ public class ArtNetDmxDatagram extends LXDatagram {
 
     private int[] pointIndices;
     private boolean[] grbFlags = null;
-    private boolean rgbw = false;
+    // private boolean rgbw = false;
     private boolean sequenceEnabled = false;
     private boolean rgbw = false;
     private byte sequence = 1;
