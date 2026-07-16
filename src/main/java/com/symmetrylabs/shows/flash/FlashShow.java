@@ -99,22 +99,29 @@ public class FlashShow implements Show {
                 float az, rx, ry, d, cv;
                 int px;
                 boolean grbSwap;
+                boolean circle;
+                float diameter;
                 if (m.length >= 10) {
-                    // New 10-col format: [tx,ty,tz,az,rx,ry,px,d,cv,grb]
+                    // New format: [tx,ty,tz,az,rx,ry,px,d,cv,grb,(cir),(dia)]
                     az = m[3]; rx = m[4]; ry = m[5]; px = (int) m[6]; d = m[7]; cv = m[8];
                     grbSwap = m[9] > 0.5f;
+                    circle = m.length >= 11 && m[10] > 0.5f;
+                    diameter = m.length >= 12 ? m[11] : 24f;
                 } else if (m.length == 9) {
                     // 9-col format: [tx,ty,tz,az,rx,ry,px,d,cv] — no grb
                     az = m[3]; rx = m[4]; ry = m[5]; px = (int) m[6]; d = m[7]; cv = m[8];
                     grbSwap = false;
+                    circle = false; diameter = 24f;
                 } else if (m.length == 8) {
                     // 8-col format: [tx,ty,tz,az,rx,ry,px,d] — no cv/grb
                     az = m[3]; rx = m[4]; ry = m[5]; px = (int) m[6]; d = m[7]; cv = 0f;
                     grbSwap = false;
+                    circle = false; diameter = 24f;
                 } else {
                     // Old 6-col format: [tx,ty,tz,az,px,d] — no rx/ry/cv/grb
                     az = m[3]; rx = 0f; ry = 0f; px = (int) m[4]; d = m[5]; cv = 0f;
                     grbSwap = false;
+                    circle = false; diameter = 24f;
                 }
                 az = az > 180f ? az - 360f : az;
                 rx = rx > 180f ? rx - 360f : rx;
@@ -122,14 +129,14 @@ public class FlashShow implements Show {
                 float rotZRad = (float) Math.toRadians(-az);
                 float rotXRad = (float) Math.toRadians(-rx);
                 float rotYRad = (float) Math.toRadians(-ry);
-                addStrip(m[0], m[1], m[2], rotXRad, rotYRad, rotZRad, px, d, cv, grbSwap, t, strips);
+                addStrip(m[0], m[1], m[2], rotXRad, rotYRad, rotZRad, px, d, cv, grbSwap, circle, diameter, t, strips);
             }
             System.out.println("FlashShow: created model with " + strips.size() + " strips");
             return new FlashModel(strips);
         }
 
         private static float[][] buildDefaultMapping(int totalStrips) {
-            float[][] d = new float[totalStrips][10];
+            float[][] d = new float[totalStrips][12];
             int barSpacing = 24;
             for (int i = 0; i < totalStrips; i++) {
                 d[i][0] = barSpacing * i; // tx
@@ -142,11 +149,13 @@ public class FlashShow implements Show {
                 d[i][7] = 1f;            // d
                 d[i][8] = 0f;            // cv
                 d[i][9] = 0f;            // grb (0 = RGB, 1 = GRB)
+                d[i][10] = 0f;           // cir (0 = strip, 1 = circle)
+                d[i][11] = 24f;          // dia (circle diameter)
             }
             return d;
         }
 
-        private static void addStrip(float tx, float ty, float tz, float rotX, float rotY, float rotZ, int pixelCount, float height, float curve, boolean grbSwap, LXTransform transform, List<Strip> strips) {
+        private static void addStrip(float tx, float ty, float tz, float rotX, float rotY, float rotZ, int pixelCount, float height, float curve, boolean grbSwap, boolean circle, float diameter, LXTransform transform, List<Strip> strips) {
             transform.push();
             transform.translate(tx, ty, tz);
             transform.rotateX(rotX);
@@ -156,8 +165,8 @@ public class FlashShow implements Show {
             Strip.Metrics metrics = new Strip.Metrics(pixelCount, height);
             metrics.grbSwap = grbSwap;  // Store GRB flag in metrics
             Strip strip = new Strip(stripId, metrics, transform);
-            // Apply bezier curve displacement in local Z after strip is placed
-            if (curve != 0f) {
+            // Apply circle layout or bezier curve displacement in local space after strip is placed
+            if (circle || curve != 0f) {
                 List<heronarts.lx.model.LXPoint> pts = strip.getPoints();
                 int n = pts.size();
                 // We need absolute positions — re-derive from the strip's own transform
@@ -166,11 +175,20 @@ public class FlashShow implements Show {
                 ct.rotateX(rotX);
                 ct.rotateY(rotY);
                 ct.rotateZ(rotZ);
+                float radius = diameter / 2f;
                 for (int i = 0; i < n; i++) {
                     float tParam = (n > 1) ? (float) i / (n - 1) : 0f;
                     float bezier = 4f * curve * tParam * (1f - tParam);
                     ct.push();
-                    ct.translate(height * i, 0, bezier);
+                    if (circle) {
+                        // Evenly space the pixels around a full, closed 360 circle in the
+                        // local XY plane (flat, z=0) so the first and last pixel are adjacent.
+                        // Rotations applied above turn the whole flat plane.
+                        float angle = (n > 0) ? (float) (2 * Math.PI * i / n) : 0f;
+                        ct.translate(radius * (float) Math.cos(angle), radius * (float) Math.sin(angle), 0);
+                    } else {
+                        ct.translate(height * i, 0, bezier);
+                    }
                     pts.get(i).update(ct.x(), ct.y(), ct.z());
                     ct.pop();
                 }
@@ -187,6 +205,7 @@ public class FlashShow implements Show {
             int[] counts = UIFlashModelingTool.loadStripCountsFromDisk();
             boolean[] rgbw = UIFlashModelingTool.loadRgbwFromDisk();
             int stripIndex = 0;
+            System.out.println("FlashPixlite: building " + UNIVERSE_COUNT + " outputs for " + ip);
             for (int u = 0; u < UNIVERSE_COUNT; u++) {
                 PointsGrouping pg = new PointsGrouping(String.valueOf(u + 1));
                 pg.rgbw = rgbw[u];
@@ -200,8 +219,10 @@ public class FlashShow implements Show {
                     pg.addPoints(strip.getPoints());
                     pixelOffset += numPixels;
                 }
+                System.out.println("FlashPixlite output U" + (u + 1) + ": " + pixelOffset + " pixels, rgbw=" + rgbw[u] + ", strips=" + counts[u]);
                 addPixliteOutput(pg);
             }
+            System.out.println("FlashPixlite: built " + UNIVERSE_COUNT + " outputs, total strips = " + stripIndex);
         }
 
         @Override

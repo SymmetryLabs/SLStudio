@@ -4135,10 +4135,10 @@
               },
               {
                 "id": 27711,
-                "class": "com.symmetrylabs.shows.mikey.UniverseSelector",
+                "class": "com.symmetrylabs.shows.mikey.UniverseSelectorMikey",
                 "modulationColor": -65516,
                 "parameters": {
-                  "label": "UniverseSelector",
+                  "label": "UniverseSelectorMikey",
                   "expandedInUi": true,
                   "Enabled": true,
                   "universe": 1,

@@ -210,13 +210,17 @@ public class APC40Mk2 extends LXMidiSurface {
         }
 
         void sendKnobValues() {
+            sendKnobValues(0);
+        }
+
+        void sendKnobValues(int midiChannel) {
             for (int i = 0; i < this.knobs.length; ++i) {
                 LXListenableNormalizedParameter parameter = this.knobs[i];
                 if (parameter != null) {
                     double normalized = (parameter instanceof CompoundParameter) ?
                         ((CompoundParameter) parameter).getBaseNormalized() :
                         parameter.getNormalized();
-                    sendControlChange(0, DEVICE_KNOB + i, (int) (normalized * 127));
+                    sendControlChange(midiChannel, DEVICE_KNOB + i, (int) (normalized * 127));
                 }
             }
         }
@@ -564,6 +568,17 @@ public class APC40Mk2 extends LXMidiSurface {
     private long deviceRegisterTime = 0;
     private static final long DEVICE_KNOB_QUIET_MS = 300;
 
+    // Burst detection for ch-0 track-select dumps: the APC40 sends all 8
+    // device-knob CCs (numbers 16-23, ~25 ms apart) when track 1 is selected.
+    // A real knob turn only ever sends one CC number repeatedly.
+    // We defer the first ch-0 CC until a second *distinct* CC confirms a dump.
+    private int ch0DumpSeenMask = 0;       // bitmask of CC offsets (0-7) seen
+    private long ch0DumpWindowStart = 0;
+    private int ch0PendingKnob = -1;       // knob offset of deferred first CC
+    private double ch0PendingValue = 0;    // normalized value of deferred CC
+    private boolean ch0SelectFired = false; // whether channel-0 select was done for this dump
+    private static final long CH0_DUMP_WINDOW_MS = 200;
+
     public void register() {
         if (this.registered) {
             for (LXChannel channel : this.lx.engine.getChannels()) {
@@ -652,8 +667,6 @@ public class APC40Mk2 extends LXMidiSurface {
 
     private void noteReceived(MidiNote note, boolean on) {
         int pitch = note.getPitch();
-        System.out.println("APC40 noteReceived pitch=" + pitch + " ch=" + note.getChannel() + " on=" + on);
-
         // Global toggle messages
         switch (pitch) {
         case SHIFT:
@@ -815,7 +828,7 @@ public class APC40Mk2 extends LXMidiSurface {
             }
         }
 
-        System.out.println("APC40mk2 UNMAPPED: " + note);
+        // System.out.println("APC40mk2 UNMAPPED: " + note);
     }
 
     @Override
@@ -831,7 +844,6 @@ public class APC40Mk2 extends LXMidiSurface {
     @Override
     public void controlChangeReceived(MidiControlChange cc) {
         int number = cc.getCC();
-        System.out.println("APC40 ccReceived cc=" + number + " ch=" + cc.getChannel() + " val=" + cc.getValue());
         switch (number) {
         case TEMPO:
             if (this.shiftOn) {
@@ -865,19 +877,62 @@ public class APC40Mk2 extends LXMidiSurface {
             // The APC40Mk2 hardware sends its stored knob positions when a track
             // select button is pressed. Those dumps arrive on the track's MIDI
             // channel (0-7), whereas real knob turns are sent on channel 0.
-            // Discard dumps so they don't clobber the pattern's parameters.
+            // Use the first CC of each dump (CC 16) to select the focused channel.
             if (cc.getChannel() != 0) {
-                this.deviceListener.sendKnobValues();
+                int dumpChannel = cc.getChannel();
+                if (number == DEVICE_KNOB) {
+                    LXLook look = lx.engine.getFocusedLook();
+                    while (look.channels.size() <= dumpChannel) {
+                        look.addChannel();
+                    }
+                    LXChannel selectedChannel = look.channels.get(dumpChannel);
+                    selectedChannel.editorVisible.setValue(true);
+                    look.focusedChannel.setValue(dumpChannel);
+                }
+                this.deviceListener.sendKnobValues(dumpChannel);
                 return;
             }
-            // Also ignore knob CCs arriving right after a device registration
-            // (channel/pattern switch) to catch the dump for track 1, which
-            // arrives on channel 0. Push the correct values back out.
-            if (System.currentTimeMillis() - this.deviceRegisterTime < DEVICE_KNOB_QUIET_MS) {
-                this.deviceListener.sendKnobValues();
+            // The APC40Mk2 also dumps knob positions for track 1 on MIDI ch 0
+            // when track 1's select button is pressed. A real knob turn sends
+            // one CC number repeatedly; a dump sends each of CCs 16-23 once.
+            // Defer the first CC and wait for a second distinct CC to confirm
+            // a dump before deciding whether to apply or discard the values.
+            long now = System.currentTimeMillis();
+            int knobOffset = number - DEVICE_KNOB;
+            if (now - this.ch0DumpWindowStart > CH0_DUMP_WINDOW_MS) {
+                // Window expired — flush any pending real knob turn first
+                if (this.ch0PendingKnob >= 0) {
+                    this.deviceListener.onKnob(this.ch0PendingKnob, this.ch0PendingValue);
+                }
+                this.ch0DumpSeenMask = 0;
+                this.ch0PendingKnob = -1;
+                this.ch0SelectFired = false;
+                this.ch0DumpWindowStart = now;
+            }
+            int bit = 1 << knobOffset;
+            this.ch0DumpSeenMask |= bit;
+            boolean isDump = Integer.bitCount(this.ch0DumpSeenMask) >= 2;
+            if (isDump) {
+                // Dump confirmed — discard any pending first CC
+                this.ch0PendingKnob = -1;
+                // Fire channel-0 select exactly once per dump
+                if (!this.ch0SelectFired) {
+                    this.ch0SelectFired = true;
+                    LXLook look = lx.engine.getFocusedLook();
+                    if (!look.channels.isEmpty()) {
+                        LXChannel ch0 = look.channels.get(0);
+                        ch0.editorVisible.setValue(true);
+                        look.focusedChannel.setValue(0);
+                    }
+                }
+                this.deviceListener.sendKnobValues(0);
                 return;
             }
-            this.deviceListener.onKnob(number - DEVICE_KNOB, cc.getNormalized());
+            // Only one distinct CC so far — could be a real turn or the first
+            // CC of a dump. Defer it: overwrite pending with latest value for
+            // this knob (repeated CCs from a fast turn) and don't apply yet.
+            this.ch0PendingKnob = knobOffset;
+            this.ch0PendingValue = cc.getNormalized();
             return;
         }
 

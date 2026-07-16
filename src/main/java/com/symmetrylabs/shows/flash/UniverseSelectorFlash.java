@@ -14,7 +14,7 @@ import heronarts.lx.parameter.DiscreteParameter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UniverseSelector extends SLPattern<StripsModel> {
+public class UniverseSelectorFlash extends SLPattern<StripsModel> {
 
     private final DiscreteParameter universe;
     private final DiscreteParameter pixel;
@@ -23,7 +23,7 @@ public class UniverseSelector extends SLPattern<StripsModel> {
     // universe index → list of LXPoints in output order (mirrors FlashPixlite mapping)
     private final List<List<LXPoint>> universePoints = new ArrayList<>();
 
-    public UniverseSelector(LX lx) {
+    public UniverseSelectorFlash(LX lx) {
         super(lx);
 
         // Build universe→points mapping from the same strip counts used by FlashPixlite
@@ -44,10 +44,10 @@ public class UniverseSelector extends SLPattern<StripsModel> {
             if (pts.size() > maxPixels) maxPixels = pts.size();
             // Log universes near 22 for verification
             if (u >= 20 && u <= 23) {
-                System.out.println("UniverseSelector: U" + (u + 1) + " -> strips[" + stripStart + ".." + (stripIndex - 1) + "] count=" + counts[u] + " pixels=" + pts.size());
+                System.out.println("UniverseSelectorFlash: U" + (u + 1) + " -> strips[" + stripStart + ".." + (stripIndex - 1) + "] count=" + counts[u] + " pixels=" + pts.size());
             }
         }
-        System.out.println("UniverseSelector: total strips=" + strips.size() + " total universes=" + UNIVERSE_COUNT);
+        System.out.println("UniverseSelectorFlash: total strips=" + strips.size() + " total universes=" + UNIVERSE_COUNT);
 
         addParameter(universe      = new DiscreteParameter("universe", 1, 1, UNIVERSE_COUNT + 1));
         addParameter(pixel         = new DiscreteParameter("pixel",    1, 1, maxPixels + 1));

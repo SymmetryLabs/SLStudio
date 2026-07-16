@@ -33,13 +33,14 @@ public class UIFlashModelingTool extends UI2dContainer {
     /** Number of Pixlite outputs / ArtNet universes. Fixed at 64. */
     public static final int UNIVERSE_COUNT = 64;
 
-    public static final String[] COLUMN_LABELS = { "tx", "ty", "tz", "az", "rx", "ry", "px", "d", "cv", "grb" };
+    public static final String[] COLUMN_LABELS = { "tx", "ty", "tz", "az", "rx", "ry", "px", "d", "cv", "grb", "cir", "dia" };
     public static final String MAPPING_FILE = "data/flash-mapping.json";
 
     private static final float DEFAULT_BAR_SPACING = 24f;
     private static final int   DEFAULT_PIXELS = 60;
     private static final float DEFAULT_HEIGHT = 1f;
     private static final float DEFAULT_ROTATE_Z = 90f;
+    private static final float DEFAULT_DIAMETER = 24f;
 
     /** Default strips per universe when no file is present. */
     private static final int DEFAULT_STRIPS_PER_UNIVERSE = 1;
@@ -336,13 +337,15 @@ public class UIFlashModelingTool extends UI2dContainer {
         final float pxBoxW  = 22f;  // fixed width for px (pixel count) so 3 digits are visible
         final float cvBoxW  = 22f;  // fixed width for cv (curve) so 3 digits are visible
         final float grbBoxW = 18f;  // fixed width for grb toggle checkbox
+        final float cirBoxW = 18f;  // fixed width for cir (circle) toggle checkbox
+        final float diaBoxW = 28f;  // fixed width for dia (diameter) so digits are visible
 
         // tx/ty cell = [-] gap box gap [+]
         final float xyCell    = bumpBtnW + gap + xyBoxW + gap + bumpBtnW;
-        // Flexible cols: tz, rx, ry, d  (4 cols) — az, px, cv, grb are fixed width
+        // Flexible cols: tz, rx, ry, d  (4 cols) — az, px, cv, grb, cir, dia are fixed width
         final int   otherCols = 4;
         // Each col (flexible or fixed) contributes (width + gap); litBtnW has no trailing gap
-        final float fixedUsed = gridLeft + 2*(xyCell+gap) + (azBoxW+gap) + (pxBoxW+gap) + (cvBoxW+gap) + (grbBoxW+gap) + otherCols*gap + (btnsW+gap) + (litBtnW+gap) + grpBtnW;
+        final float fixedUsed = gridLeft + 2*(xyCell+gap) + (azBoxW+gap) + (pxBoxW+gap) + (cvBoxW+gap) + (grbBoxW+gap) + (cirBoxW+gap) + (diaBoxW+gap) + otherCols*gap + (btnsW+gap) + (litBtnW+gap) + grpBtnW;
         final float colWFinal = (panelW - fixedUsed) / otherCols;
 
         float curY = 0f;
@@ -452,6 +455,20 @@ public class UIFlashModelingTool extends UI2dContainer {
                         .setFontColor(0xFF666666)
                         .addToContainer(gridContainer);
                     hdrX += grbBoxW + gap;
+                } else if (c == 10) {  // cir
+                    new UILabel(hdrX, curY, cirBoxW, colHdrH)
+                        .setLabel(COLUMN_LABELS[c])
+                        .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+                        .setFontColor(0xFF666666)
+                        .addToContainer(gridContainer);
+                    hdrX += cirBoxW + gap;
+                } else if (c == 11) {  // dia
+                    new UILabel(hdrX, curY, diaBoxW, colHdrH)
+                        .setLabel(COLUMN_LABELS[c])
+                        .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+                        .setFontColor(0xFF666666)
+                        .addToContainer(gridContainer);
+                    hdrX += diaBoxW + gap;
                 } else {
                     new UILabel(hdrX, curY, colWFinal, colHdrH)
                         .setLabel(COLUMN_LABELS[c])
@@ -495,7 +512,7 @@ public class UIFlashModelingTool extends UI2dContainer {
                 // Layout: [strip#] [X-][tx][X+] [Y-][ty][Y+] [tz] [az] [rx] [ry] [px] [d] [+][-]
                 float curX = gridLeft;
                 for (int c = 0; c < COLUMN_LABELS.length; c++) {
-                    double rangeMin = (c == 6) ? 1 : -9999;  // px col (index 6) min = 1
+                    double rangeMin = (c == 6 || c == 11) ? 1 : -9999;  // px (6) and dia (11) min = 1
                     double rangeMax = 9999;
                     // For tx (col 0) and ty (col 1): place [-] box [+] inline
                     if (c == 0 || c == 1) {
@@ -553,9 +570,29 @@ public class UIFlashModelingTool extends UI2dContainer {
                             @Override public UIDoubleBox setValue(double v) { grbBtn.setActive(v > 0.5); grbBtn.setLabel(v > 0.5 ? "GRB" : "RGB"); return this; }
                         };
                         curX += boxW + gap;
+                    } else if (c == 10) {  // cir (circle) toggle button
+                        float boxW = cirBoxW;
+                        final boolean initialCir = srcVals[c] > 0.5f;
+                        final int capturedCol = c;
+                        heronarts.p3lx.ui.component.UIButton cirBtn = new heronarts.p3lx.ui.component.UIButton(curX, curY, boxW, boxH) {
+                            @Override
+                            protected void onToggle(boolean active) {
+                                setLabel(active ? "cir" : "str");
+                                handleValueChange(capturedStripIndex, capturedCol, active ? 1.0 : 0.0);
+                            }
+                        };
+                        cirBtn.setMomentary(false).setLabel(initialCir ? "cir" : "str");
+                        cirBtn.setActive(initialCir);
+                        cirBtn.addToContainer(gridContainer);
+                        // Store a wrapper that exposes the value as double for snapshot compatibility
+                        row[c] = new UIDoubleBox(0, 0, 0, 0) {
+                            @Override public double getValue() { return cirBtn.isActive() ? 1.0 : 0.0; }
+                            @Override public UIDoubleBox setValue(double v) { cirBtn.setActive(v > 0.5); cirBtn.setLabel(v > 0.5 ? "cir" : "str"); return this; }
+                        };
+                        curX += boxW + gap;
                     } else {
-                        // Normal column — az, px, cv get fixed widths; others use colWFinal
-                        float boxW = (c == 3) ? azBoxW : (c == 6) ? pxBoxW : (c == 8) ? cvBoxW : colWFinal;
+                        // Normal column — az, px, cv, dia get fixed widths; others use colWFinal
+                        float boxW = (c == 3) ? azBoxW : (c == 6) ? pxBoxW : (c == 8) ? cvBoxW : (c == 11) ? diaBoxW : colWFinal;
                         final int capturedCol = c;
                         UIDoubleBox box = new UIDoubleBox(curX, curY, boxW, boxH) {
                             @Override protected void onValueChange(double value) {
@@ -720,6 +757,8 @@ public class UIFlashModelingTool extends UI2dContainer {
         float ry    = (float) row[5].getValue();
         float pitch = (float) row[7].getValue();  // d = pixelPitch/height (col 7)
         float cv    = (float) row[8].getValue();  // cv = bezier curve amount (col 8)
+        boolean circle = row[10].getValue() > 0.5;  // cir = circle layout (col 10)
+        float diameter = (float) row[11].getValue();  // dia = circle diameter (col 11)
 
         float rotZRad = (float) Math.toRadians(-(az > 180f ? az - 360f : az));
         float rotXRad = (float) Math.toRadians(-(rx > 180f ? rx - 360f : rx));
@@ -733,11 +772,20 @@ public class UIFlashModelingTool extends UI2dContainer {
         t.rotateZ(rotZRad);
         List<LXPoint> points = strip.getPoints();
         int n = points.size();
+        float radius = diameter / 2f;
         for (int i = 0; i < n; i++) {
             float tParam = (n > 1) ? (float) i / (n - 1) : 0f;
             float bezier = 4f * cv * tParam * (1f - tParam);  // peaks at middle
             t.push();
-            t.translate(pitch * i, 0, bezier);
+            if (circle) {
+                // Evenly space the pixels around a full, closed 360 circle in the
+                // local XY plane (flat, z=0) so the first and last pixel are adjacent.
+                // Rotations applied above turn the whole flat plane.
+                float angle = (n > 0) ? (float) (2 * Math.PI * i / n) : 0f;
+                t.translate(radius * (float) Math.cos(angle), radius * (float) Math.sin(angle), 0);
+            } else {
+                t.translate(pitch * i, 0, bezier);
+            }
             points.get(i).update(t.x(), t.y(), t.z());
             t.pop();
         }
@@ -759,6 +807,8 @@ public class UIFlashModelingTool extends UI2dContainer {
             case 7: return DEFAULT_HEIGHT;  // d
             case 8: return 0f;   // cv
             case 9: return 0f;   // grb (0 = RGB, 1 = GRB)
+            case 10: return 0f;  // cir (0 = strip, 1 = circle)
+            case 11: return DEFAULT_DIAMETER;  // dia (circle diameter)
             default: return 0f;
         }
     }
@@ -775,7 +825,7 @@ public class UIFlashModelingTool extends UI2dContainer {
         float[] out = defaultStripValues(0);
         if (src == null) return out;
         if (src.length >= 10) {
-            System.arraycopy(src, 0, out, 0, COLUMN_LABELS.length);
+            System.arraycopy(src, 0, out, 0, Math.min(src.length, COLUMN_LABELS.length));
         } else if (src.length == 6) {
             out[0] = src[0]; out[1] = src[1]; out[2] = src[2]; out[3] = src[3];
             out[4] = 0f; out[5] = 0f;

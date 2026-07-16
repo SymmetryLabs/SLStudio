@@ -216,7 +216,7 @@ public class CuddlefishShow implements Show {
 
         /**
          * Authoritative universe (0-based) -> points-in-output-order mapping.
-         * Built once here and shared with UniverseSelector so the mapping tools
+         * Built once here and shared with UniverseSelectorCuddlefish so the mapping tools
          * always match what is actually sent on the wire.
          */
         public static final List<List<heronarts.lx.model.LXPoint>> universePoints = new ArrayList<>();
@@ -302,7 +302,7 @@ public class CuddlefishShow implements Show {
                     // not 510-vs-512 universe size: U47+ placeholders were sending TINY
                     // truncated frames (4 channels for a 1-pixel universe), which receivers
                     // handle inconsistently. Full-size frames match what MadMapper sends.
-                    ArtNetDmxDatagram dgram = new ArtNetDmxDatagram(lx, ip, indices, 512, u);
+                    ArtNetDmxDatagram dgram = new ArtNetDmxDatagram(lx, ip, indices, 512, u + 1);
                     dgram.setGrbFlags(grbFlags);
                     singleOut.addDatagram(dgram);
                     universeDatagram.add(dgram);

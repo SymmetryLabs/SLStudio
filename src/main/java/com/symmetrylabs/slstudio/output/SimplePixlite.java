@@ -46,7 +46,6 @@ public class SimplePixlite extends ArtNetOutput {
     }
 
     protected class SimplePixliteOutput extends LXDatagramOutput {
-        private final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
         private final int outputIndex;
         private final int firstUniverseOnOutput;
 
@@ -57,14 +56,18 @@ public class SimplePixlite extends ArtNetOutput {
             setupDatagrams(pointsGrouping);
         }
 
+        private int maxPixelsPerUniverse(PointsGrouping pointsGrouping) {
+            return pointsGrouping.rgbw ? 128 : 170;
+        }
+
         private void setupDatagrams(PointsGrouping pointsGrouping) {
             int[] allIndices = pointsGrouping.getIndices();
             int firstUniverse = outputIndex;
+            int maxPixels = maxPixelsPerUniverse(pointsGrouping);
 
             // Check if we have per-strip segments with individual GRB settings
             List<PointsGrouping.StripSegment> segments = pointsGrouping.getStripSegments();
             if (!segments.isEmpty()) {
-                // New approach: create ONE datagram per universe with per-pixel GRB info
                 // Build a boolean array indicating GRB for each pixel
                 boolean[] grbFlags = new boolean[allIndices.length];
                 for (PointsGrouping.StripSegment seg : segments) {
@@ -73,20 +76,25 @@ public class SimplePixlite extends ArtNetOutput {
                     }
                 }
 
-                // Debug for universe 37
-                boolean debugU37 = (firstUniverse == 37);
-                if (debugU37) {
-                    System.out.println("SimplePixlite U37: Creating single datagram with " + allIndices.length + " pixels");
-                    System.out.println("  GRB flags: first 30 = " + java.util.Arrays.toString(java.util.Arrays.copyOfRange(grbFlags, 0, Math.min(30, grbFlags.length))));
+                // Split into multiple universes if needed, preserving per-pixel GRB flags
+                int numPoints = allIndices.length;
+                int counter = 0;
+                for (int u = 0; counter < numPoints; u++) {
+                    int universe = firstUniverse + u;
+                    int numIndices = Math.min(maxPixels, numPoints - counter);
+                    int[] indices = new int[numIndices];
+                    boolean[] chunkGrbFlags = new boolean[numIndices];
+                    for (int i = 0; i < numIndices; i++) {
+                        indices[i] = allIndices[counter];
+                        chunkGrbFlags[i] = grbFlags[counter];
+                        counter++;
+                    }
+                    int dataLength = pointsGrouping.rgbw ? 4 * numIndices : 3 * numIndices;
+                    ArtNetDmxDatagram dmxDatagram = new ArtNetDmxDatagram(lx, ipAddress, indices, dataLength, universe);
+                    dmxDatagram.setGrbFlags(chunkGrbFlags);
+                    dmxDatagram.setRgbw(pointsGrouping.rgbw);
+                    addDatagram(dmxDatagram);
                 }
-
-                // Create a single datagram with per-pixel GRB support and optional RGBW
-                int dataLength = pointsGrouping.rgbw ? 4 * allIndices.length : 3 * allIndices.length;
-                ArtNetDmxDatagram dmxDatagram = new ArtNetDmxDatagram(lx, ipAddress, allIndices, dataLength, firstUniverse);
-                // Store GRB flags for use during copyPoints
-                dmxDatagram.setGrbFlags(grbFlags);
-                dmxDatagram.setRgbw(pointsGrouping.rgbw);
-                addDatagram(dmxDatagram);
 
             } else {
                 // Original behavior: one byte order for all points
@@ -94,7 +102,7 @@ public class SimplePixlite extends ArtNetOutput {
                 int counter = 0;
                 for (int u = 0; counter < numPoints; u++) {
                     int universe = firstUniverse + u;
-                    int numIndices = Math.min(MAX_NUM_POINTS_PER_UNIVERSE, numPoints - counter);
+                    int numIndices = Math.min(maxPixels, numPoints - counter);
                     int[] indices = new int[numIndices];
                     for (int i = 0; i < numIndices; i++) {
                         indices[i] = allIndices[counter++];
@@ -109,27 +117,13 @@ public class SimplePixlite extends ArtNetOutput {
                 }
             }
         }
-
-        private class DatagramSpec {
-            final int universe;
-            final int startIdx;
-            final int endIdx;
-            final boolean grbSwap;
-            DatagramSpec(int universe, int startIdx, int endIdx, boolean grbSwap) {
-                this.universe = universe;
-                this.startIdx = startIdx;
-                this.endIdx = endIdx;
-                this.grbSwap = grbSwap;
-            }
-        }
     }
 
     /**
      * Output class that can handle multiple universes (up to 54).
-     * Each universe gets 170 pixels.
+     * Each universe gets 170 RGB pixels or 128 RGBW pixels.
      */
     protected class SimplePixliteOutputMultiUniverse extends LXDatagramOutput {
-        private final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
         private final int firstUniverse;
         private final int maxUniverses;
 
@@ -140,9 +134,13 @@ public class SimplePixlite extends ArtNetOutput {
             setupDatagrams(pointsGrouping);
         }
 
+        private int maxPixelsPerUniverse(PointsGrouping pointsGrouping) {
+            return pointsGrouping.rgbw ? 128 : 170;
+        }
+
         private void setupDatagrams(PointsGrouping pointsGrouping) {
             int numPoints = pointsGrouping.size();
-            int pixelsPerUniverse = MAX_NUM_POINTS_PER_UNIVERSE;
+            int pixelsPerUniverse = maxPixelsPerUniverse(pointsGrouping);
             int counter = 0;
 
             for (int u = 0; u < maxUniverses; u++) {
