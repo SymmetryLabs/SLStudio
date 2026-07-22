@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "timestamp": 1784754598459,
+  "timestamp": 1784756175745,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
     "modulationColor": -16711913,
     "parameters": {
       "label": "Engine",
-      "speed": 1.5433070866141732,
+      "speed": 1.5433070659637451,
       "multithreaded": true,
       "channelMultithreaded": true,
       "networkMultithreaded": true
@@ -4481,7 +4481,7 @@
               "midiChannel": 16,
               "autoCycleEnabled": true,
               "autoCycleTimeSecs": 10.0,
-              "fader": 0.27142852544784546,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": true,
@@ -4495,7 +4495,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 4,
+            "patternIndex": 3,
             "patterns": [
               {
                 "id": 28341,
@@ -6530,7 +6530,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 1,
+            "patternIndex": 0,
             "patterns": [
               {
                 "id": 27712,
@@ -6561,35 +6561,6 @@
                   "Anim": 7,
                   "Dens": 0.6,
                   "AnimResets": false
-                },
-                "modulation": {
-                  "modulators": [],
-                  "modulations": [],
-                  "triggers": []
-                },
-                "autoCycleEnabled": true
-              },
-              {
-                "id": 43357,
-                "class": "com.symmetrylabs.slstudio.pattern.ParamCrossSections",
-                "modulationColor": -65394,
-                "parameters": {
-                  "label": "ParamCrossSections",
-                  "expandedInUi": true,
-                  "Enabled": true,
-                  "Cycle": true,
-                  "xPos": 1301.1799709067443,
-                  "yPos": -255.84772002053887,
-                  "zPos": 0.0,
-                  "xSpd": 0.7,
-                  "ySpd": 0.6,
-                  "zSpd": 0.5,
-                  "xSize": 0.3,
-                  "xLvl": 1.0,
-                  "yLvl": 1.0,
-                  "zLvl": 1.0,
-                  "ySize": 0.3,
-                  "zSize": 0.3
                 },
                 "modulation": {
                   "modulators": [],
@@ -6737,7 +6708,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -3866369,
+          "modulationColor": -16711861,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -6774,8 +6745,8 @@
       "modulationColor": -16711887,
       "parameters": {
         "label": "",
-        "period": 479.86748654422405,
-        "bpm": 125.03451824188232,
+        "period": 480.0115051269531,
+        "bpm": 124.99700394500178,
         "tap": false,
         "nudgeUp": false,
         "nudgeDown": false,
@@ -6876,7 +6847,7 @@
       "DMXParameterMapper": {
         "id": 111,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -16726529,
+        "modulationColor": -16761089,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -7780,8 +7751,8 @@
       "modulationColor": -15662849,
       "parameters": {
         "label": "OSC",
-        "receiveHost": "127.0.0.1",
-        "receivePort": 8001,
+        "receiveHost": "10.2.0.120",
+        "receivePort": 3030,
         "receiveActive": true,
         "transmitHost": "10.2.0.87",
         "transmitPort": 3131,
@@ -7791,9 +7762,17 @@
         {
           "receiveHost": "10.2.0.120",
           "receivePort": 3030,
+          "receiveActive": false,
+          "transmitHost": "10.2.0.164",
+          "transmitPort": 3232,
+          "transmitActive": true
+        },
+        {
+          "receiveHost": "127.0.0.1",
+          "receivePort": 8001,
           "receiveActive": true,
-          "transmitHost": "localhost",
-          "transmitPort": 3131,
+          "transmitHost": "0",
+          "transmitPort": 3232,
           "transmitActive": false
         }
       ]
