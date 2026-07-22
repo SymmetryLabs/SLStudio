@@ -86,6 +86,9 @@ public class UIOverriddenRightPane extends UIPane {
         this.model = this.sections[2];
         this.groups = this.sections[3];
         this.utility = this.sections[4];
+        for (UI2dScrollContext section : this.sections) {
+            section.setScrollBarEnabled(false);
+        }
 
         buildModelUI();
         buildUtilityUI();

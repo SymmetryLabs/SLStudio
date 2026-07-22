@@ -37,6 +37,7 @@ public class UI2dScrollContext extends UI2dContext {
 
     private boolean horizontalScrollingEnabled = false;
     private boolean verticalScrollingEnabled = true;
+    private boolean scrollBarEnabled = true;
 
     private static final int SCROLL_BAR_WIDTH = 6;
     private static final int SCROLL_BAR_PADDING = 2;
@@ -99,6 +100,12 @@ public class UI2dScrollContext extends UI2dContext {
         return this;
     }
 
+    public UI2dScrollContext setScrollBarEnabled(boolean scrollBarEnabled) {
+        this.scrollBarEnabled = scrollBarEnabled;
+        redraw();
+        return this;
+    }
+
     @Override
     protected void onResize() {
         super.onResize();
@@ -150,7 +157,7 @@ public class UI2dScrollContext extends UI2dContext {
     }
 
     private boolean isScrollBarVisible() {
-        return this.verticalScrollingEnabled && this.scrollHeight > this.height;
+        return this.scrollBarEnabled && this.verticalScrollingEnabled && this.scrollHeight > this.height;
     }
 
     private float scrollBarThumbY() {

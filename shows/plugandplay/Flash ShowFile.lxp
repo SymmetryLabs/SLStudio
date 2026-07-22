@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "timestamp": 1784754598459,
+  "timestamp": 1784758964178,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
     "modulationColor": -16711913,
     "parameters": {
       "label": "Engine",
-      "speed": 1.5433070866141732,
+      "speed": 1.5433070659637451,
       "multithreaded": true,
       "channelMultithreaded": true,
       "networkMultithreaded": true
@@ -4481,7 +4481,7 @@
               "midiChannel": 16,
               "autoCycleEnabled": true,
               "autoCycleTimeSecs": 10.0,
-              "fader": 0.27142852544784546,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": true,
@@ -4495,7 +4495,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 4,
+            "patternIndex": 1,
             "patterns": [
               {
                 "id": 28341,
@@ -6530,7 +6530,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 1,
+            "patternIndex": 0,
             "patterns": [
               {
                 "id": 27712,
@@ -6561,35 +6561,6 @@
                   "Anim": 7,
                   "Dens": 0.6,
                   "AnimResets": false
-                },
-                "modulation": {
-                  "modulators": [],
-                  "modulations": [],
-                  "triggers": []
-                },
-                "autoCycleEnabled": true
-              },
-              {
-                "id": 43357,
-                "class": "com.symmetrylabs.slstudio.pattern.ParamCrossSections",
-                "modulationColor": -65394,
-                "parameters": {
-                  "label": "ParamCrossSections",
-                  "expandedInUi": true,
-                  "Enabled": true,
-                  "Cycle": true,
-                  "xPos": 1301.1799709067443,
-                  "yPos": -255.84772002053887,
-                  "zPos": 0.0,
-                  "xSpd": 0.7,
-                  "ySpd": 0.6,
-                  "zSpd": 0.5,
-                  "xSize": 0.3,
-                  "xLvl": 1.0,
-                  "yLvl": 1.0,
-                  "zLvl": 1.0,
-                  "ySize": 0.3,
-                  "zSize": 0.3
                 },
                 "modulation": {
                   "modulators": [],
@@ -6737,7 +6708,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -3866369,
+          "modulationColor": -14336,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -6774,8 +6745,8 @@
       "modulationColor": -16711887,
       "parameters": {
         "label": "",
-        "period": 479.86748654422405,
-        "bpm": 125.03451824188232,
+        "period": 479.99560546875,
+        "bpm": 125.00114441965717,
         "tap": false,
         "nudgeUp": false,
         "nudgeDown": false,
@@ -6876,7 +6847,7 @@
       "DMXParameterMapper": {
         "id": 111,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -16726529,
+        "modulationColor": -16736769,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -7360,7 +7331,7 @@
           "class": "heronarts.lx.modulator.MultiStageEnvelope",
           "modulationColor": -15138561,
           "parameters": {
-            "label": "Env 1",
+            "label": "Bump5",
             "running": false,
             "trigger": false,
             "loop": false,
@@ -7399,7 +7370,7 @@
           "class": "heronarts.lx.modulator.MultiStageEnvelope",
           "modulationColor": -13041409,
           "parameters": {
-            "label": "Env 2",
+            "label": "Bump6",
             "running": false,
             "trigger": false,
             "loop": false,
@@ -7438,7 +7409,7 @@
           "class": "heronarts.lx.modulator.MultiStageEnvelope",
           "modulationColor": -16711869,
           "parameters": {
-            "label": "Env 3",
+            "label": "Bump7",
             "running": false,
             "trigger": false,
             "loop": false,
@@ -7477,7 +7448,7 @@
           "class": "heronarts.lx.modulator.MultiStageEnvelope",
           "modulationColor": -16755201,
           "parameters": {
-            "label": "Env 4",
+            "label": "Bump8",
             "running": false,
             "trigger": false,
             "loop": false,
@@ -7506,7 +7477,7 @@
           "class": "heronarts.lx.modulator.MultiStageEnvelope",
           "modulationColor": -16711745,
           "parameters": {
-            "label": "Env 8",
+            "label": "Bump9",
             "running": false,
             "trigger": false,
             "loop": false,
@@ -7780,20 +7751,28 @@
       "modulationColor": -15662849,
       "parameters": {
         "label": "OSC",
-        "receiveHost": "127.0.0.1",
-        "receivePort": 8001,
-        "receiveActive": true,
+        "receiveHost": "10.2.0.120",
+        "receivePort": 3030,
+        "receiveActive": false,
         "transmitHost": "10.2.0.87",
         "transmitPort": 3131,
         "transmitActive": true
       },
       "extraDestinations": [
         {
-          "receiveHost": "10.2.0.120",
-          "receivePort": 3030,
+          "receiveHost": "0",
+          "receivePort": 9998,
+          "receiveActive": false,
+          "transmitHost": "10.2.0.164",
+          "transmitPort": 3232,
+          "transmitActive": false
+        },
+        {
+          "receiveHost": "127.0.0.1",
+          "receivePort": 8001,
           "receiveActive": true,
-          "transmitHost": "localhost",
-          "transmitPort": 3131,
+          "transmitHost": "0",
+          "transmitPort": 3232,
           "transmitActive": false
         }
       ]
@@ -8664,17 +8643,17 @@
         "46257": true
       },
       "preview": {
-        "radius": 1636.181463009425,
+        "radius": 1369.9794346623528,
         "theta": 0.0,
         "phi": 0.0,
         "roll": 0.0,
         "positionX": 1166.3956298828125,
         "positionY": 138.7938690185547,
         "positionZ": 367.76361083984375,
-        "orientW": 0.081943884,
-        "orientX": -0.0023442544,
-        "orientY": 0.6415041,
-        "orientZ": -0.7627269
+        "orientW": 0.10539463,
+        "orientX": -0.026007118,
+        "orientY": 0.6055586,
+        "orientZ": -0.7883619
       }
     }
   }
