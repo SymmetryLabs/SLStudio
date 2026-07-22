@@ -121,25 +121,38 @@ public class CuddlefishShow implements Show {
             System.out.println("CuddlefishShow: building " + mapping.length + " strips from mapping");
             for (int i = 0; i < mapping.length; i++) {
                 float[] m = mapping[i];
-                float az, rx, ry, d, cv;
+                float az, rx, ry, d, cv, diameter;
                 int px;
-                boolean grbSwap;
-                if (m.length >= 10) {
+                boolean grbSwap, circle;
+                if (m.length >= 12) {
+                    az = m[3]; rx = m[4]; ry = m[5]; px = (int) m[6]; d = m[7]; cv = m[8];
+                    grbSwap = m[9] > 0.5f;
+                    circle = m[10] > 0.5f;
+                    diameter = m[11];
+                } else if (m.length >= 10) {
                     // New 10-col format: [tx,ty,tz,az,rx,ry,px,d,cv,grb]
                     az = m[3]; rx = m[4]; ry = m[5]; px = (int) m[6]; d = m[7]; cv = m[8];
                     grbSwap = m[9] > 0.5f;
+                    circle = false;
+                    diameter = 24f;
                 } else if (m.length == 9) {
                     // 9-col format: [tx,ty,tz,az,rx,ry,px,d,cv] — no grb
                     az = m[3]; rx = m[4]; ry = m[5]; px = (int) m[6]; d = m[7]; cv = m[8];
                     grbSwap = false;
+                    circle = false;
+                    diameter = 24f;
                 } else if (m.length == 8) {
                     // 8-col format: [tx,ty,tz,az,rx,ry,px,d] — no cv/grb
                     az = m[3]; rx = m[4]; ry = m[5]; px = (int) m[6]; d = m[7]; cv = 0f;
                     grbSwap = false;
+                    circle = false;
+                    diameter = 24f;
                 } else {
                     // Old 6-col format: [tx,ty,tz,az,px,d] — no rx/ry/cv/grb
                     az = m[3]; rx = 0f; ry = 0f; px = (int) m[4]; d = m[5]; cv = 0f;
                     grbSwap = false;
+                    circle = false;
+                    diameter = 24f;
                 }
                 az = az > 180f ? az - 360f : az;
                 rx = rx > 180f ? rx - 360f : rx;
@@ -147,14 +160,14 @@ public class CuddlefishShow implements Show {
                 float rotZRad = (float) Math.toRadians(-az);
                 float rotXRad = (float) Math.toRadians(-rx);
                 float rotYRad = (float) Math.toRadians(-ry);
-                addStrip(m[0], m[1], m[2], rotXRad, rotYRad, rotZRad, px, d, cv, grbSwap, t, strips);
+                addStrip(m[0], m[1], m[2], rotXRad, rotYRad, rotZRad, px, d, cv, grbSwap, circle, diameter, t, strips);
             }
             System.out.println("CuddlefishShow: created model with " + strips.size() + " strips");
             return new CuddlefishModel(strips);
         }
 
         private static float[][] buildDefaultMapping(int totalStrips) {
-            float[][] d = new float[totalStrips][10];
+            float[][] d = new float[totalStrips][12];
             int barSpacing = 24;
             for (int i = 0; i < totalStrips; i++) {
                 d[i][0] = barSpacing * i; // tx
@@ -167,11 +180,13 @@ public class CuddlefishShow implements Show {
                 d[i][7] = 1f;            // d
                 d[i][8] = 0f;            // cv
                 d[i][9] = 0f;            // grb (0 = RGB, 1 = GRB)
+                d[i][10] = 0f;
+                d[i][11] = 24f;
             }
             return d;
         }
 
-        private static void addStrip(float tx, float ty, float tz, float rotX, float rotY, float rotZ, int pixelCount, float height, float curve, boolean grbSwap, LXTransform transform, List<Strip> strips) {
+        private static void addStrip(float tx, float ty, float tz, float rotX, float rotY, float rotZ, int pixelCount, float height, float curve, boolean grbSwap, boolean circle, float diameter, LXTransform transform, List<Strip> strips) {
             transform.push();
             transform.translate(tx, ty, tz);
             transform.rotateX(rotX);
@@ -182,7 +197,7 @@ public class CuddlefishShow implements Show {
             metrics.grbSwap = grbSwap;  // Store GRB flag in metrics
             Strip strip = new Strip(stripId, metrics, transform);
             // Apply bezier curve displacement in local Z after strip is placed
-            if (curve != 0f) {
+            if (curve != 0f || circle) {
                 List<heronarts.lx.model.LXPoint> pts = strip.getPoints();
                 int n = pts.size();
                 // We need absolute positions — re-derive from the strip's own transform
@@ -191,11 +206,17 @@ public class CuddlefishShow implements Show {
                 ct.rotateX(rotX);
                 ct.rotateY(rotY);
                 ct.rotateZ(rotZ);
+                float radius = diameter / 2f;
                 for (int i = 0; i < n; i++) {
                     float tParam = (n > 1) ? (float) i / (n - 1) : 0f;
                     float bezier = 4f * curve * tParam * (1f - tParam);
                     ct.push();
-                    ct.translate(height * i, 0, bezier);
+                    if (circle) {
+                        float angle = (n > 0) ? (float) (2 * Math.PI * i / n) : 0f;
+                        ct.translate(radius * (float) Math.cos(angle), radius * (float) Math.sin(angle), 0);
+                    } else {
+                        ct.translate(height * i, 0, bezier);
+                    }
                     pts.get(i).update(ct.x(), ct.y(), ct.z());
                     ct.pop();
                 }

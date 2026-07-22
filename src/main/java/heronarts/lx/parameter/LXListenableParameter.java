@@ -227,14 +227,26 @@ public abstract class LXListenableParameter implements LXParameter {
         return this.shouldSerialize;
     }
 
+    private boolean isBanging = false;
+
+    /**
+     * Returns true if the parameter is currently notifying listeners via bang()
+     * rather than from an actual value change.
+     */
+    public boolean isBanging() {
+        return this.isBanging;
+    }
+
     /**
      * Manually notify all listeners of this parameter's current value.
      * Useful in some situations to force state reset.
      */
     public LXListenableParameter bang() {
+        this.isBanging = true;
         for (LXParameterListener l : listeners) {
             l.onParameterChanged(this);
         }
+        this.isBanging = false;
         return this;
     }
 
