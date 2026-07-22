@@ -27,6 +27,7 @@
 package heronarts.p3lx.ui.studio.osc;
 
 import heronarts.lx.LX;
+import heronarts.lx.osc.LXOscEngine;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.component.UIButton;
@@ -35,30 +36,131 @@ import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.component.UITextBox;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
 import processing.core.PConstants;
+import processing.core.PGraphics;
 
-public class UIOscManager extends UICollapsibleSection {
+import java.util.HashMap;
+import java.util.Map;
 
-    private static final int HEIGHT = 68;
+public class UIOscManager extends UICollapsibleSection implements LXOscEngine.DestinationListener {
+
+    private static final int ROW_HEIGHT = 44;
+    private static final int BASE_HEIGHT = ROW_HEIGHT + 8;
+
+    private final UI ui;
+    private final LX lx;
+    private final Map<LXOscEngine.OscDestination, UI2dContainer> destWidgets = new HashMap<>();
 
     public UIOscManager(UI ui, LX lx, float x, float y, float w) {
-        super(ui, x, y, w, HEIGHT);
+        super(ui, x, y, w, BASE_HEIGHT);
+        this.ui = ui;
+        this.lx = lx;
         setTitle("OSC I/O");
+        setTitleX(4);
+        setLayout(UI2dContainer.Layout.VERTICAL);
+        setChildMargin(4);
 
-        UI2dContainer border = (UI2dContainer) new UI2dContainer(0, 0, getContentWidth(), getContentHeight())
-            .setBackgroundColor(ui.theme.getDarkBackgroundColor())
-            .setBorderRounding(4)
+        // "+" button in the title bar area
+        UIButton addButton = (UIButton) new UIButton((int)(w - 44), 4, 16, 12) {
+            @Override
+            public void onToggle(boolean on) {
+                if (on) {
+                    lx.engine.osc.addDestination();
+                }
+            }
+        }
+        .setLabel("+")
+        .setMomentary(true)
+        .setBorderRounding(4)
+        .setDescription("Add an extra OSC source/destination");
+        addTopLevelComponent(addButton);
+
+        // Main (primary) OSC row
+        addOscRow(lx.engine.osc.receivePort, lx.engine.osc.receiveHost,
+            lx.engine.osc.receiveActive, lx.engine.osc.transmitPort, lx.engine.osc.transmitHost,
+            lx.engine.osc.transmitActive, null);
+
+        // Add rows for any existing extra destinations (e.g. restored from save)
+        for (LXOscEngine.OscDestination dest : lx.engine.osc.getExtraDestinations()) {
+            addExtraDestRow(dest);
+        }
+
+        lx.engine.osc.addDestinationListener(this);
+    }
+
+    private UI2dContainer addOscRow(
+        heronarts.lx.parameter.DiscreteParameter rxPort,
+        heronarts.lx.parameter.StringParameter rxHost,
+        heronarts.lx.parameter.BooleanParameter rxActive,
+        heronarts.lx.parameter.DiscreteParameter txPort,
+        heronarts.lx.parameter.StringParameter txHost,
+        heronarts.lx.parameter.BooleanParameter txActive,
+        LXOscEngine.OscDestination removableDest
+    ) {
+        float bw = getContentWidth();
+
+        UI2dContainer row = (UI2dContainer) new UI2dContainer(0, 0, bw, ROW_HEIGHT)
             .addToContainer(this);
 
+        UI2dContainer border = (UI2dContainer) new UI2dContainer(0, 0, bw, ROW_HEIGHT)
+            .setBackgroundColor(ui.theme.getDarkBackgroundColor())
+            .setBorderRounding(4)
+            .addToContainer(row);
+
         float yp = 4;
-        new UILabel(6, yp+2, 46, 12).setLabel("Input").setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(border);
-        new UIIntegerBox(56, yp, 64, 16).setParameter(lx.engine.osc.receivePort).setMappable(false).addToContainer(border);
-        new UITextBox(124, yp, 70, 16).setParameter(lx.engine.osc.receiveHost).addToContainer(border);
-        new UIButton(198, yp, 16, 16).setParameter(lx.engine.osc.receiveActive).setMappable(false).setBorderRounding(4).addToContainer(border);
+        float portX = 48;
+        float portW = 56;
+        float hostX = portX + portW + 4;
+        float hostW = bw - hostX - 24;
+        float activeX = bw - 20;
+
+        new UILabel(6, yp + 2, 40, 12).setLabel("Input").setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(border);
+        new UIIntegerBox((int) portX, (int) yp, (int) portW, 16).setParameter(rxPort).setMappable(false).addToContainer(border);
+        new UITextBox((int) hostX, (int) yp, (int) hostW, 16).setParameter(rxHost).addToContainer(border);
+        new UIButton((int) activeX, (int) yp, 16, 16).setParameter(rxActive).setMappable(false).setBorderRounding(4).addToContainer(border);
 
         yp += 20;
-        new UILabel(6, yp+2, 46, 12).setLabel("Output").setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(border);
-        new UIIntegerBox(56, yp, 64, 16).setParameter(lx.engine.osc.transmitPort).setMappable(false).addToContainer(border);
-        new UITextBox(124, yp, 70, 16).setParameter(lx.engine.osc.transmitHost).addToContainer(border);
-        new UIButton(198, yp, 16, 16).setParameter(lx.engine.osc.transmitActive).setMappable(false).setBorderRounding(4).addToContainer(border);
+        new UILabel(6, yp + 2, 40, 12).setLabel("Output").setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(border);
+        new UIIntegerBox((int) portX, (int) yp, (int) portW, 16).setParameter(txPort).setMappable(false).addToContainer(border);
+        new UITextBox((int) hostX, (int) yp, (int) hostW, 16).setParameter(txHost).addToContainer(border);
+        new UIButton((int) activeX, (int) yp, 16, 16).setParameter(txActive).setMappable(false).setBorderRounding(4).addToContainer(border);
+
+        if (removableDest != null) {
+            final LXOscEngine.OscDestination destRef = removableDest;
+            new UIButton((int)(bw - 16), 0, 16, 12) {
+                @Override
+                public void onToggle(boolean on) {
+                    if (on) {
+                        lx.engine.osc.removeDestination(destRef);
+                    }
+                }
+            }
+            .setLabel("\u2212")
+            .setMomentary(true)
+            .setBorderRounding(4)
+            .setDescription("Remove this OSC destination")
+            .addToContainer(border);
+        }
+
+        return row;
+    }
+
+    private void addExtraDestRow(LXOscEngine.OscDestination dest) {
+        UI2dContainer row = addOscRow(dest.receivePort, dest.receiveHost,
+            dest.receiveActive, dest.transmitPort, dest.transmitHost,
+            dest.transmitActive, dest);
+        destWidgets.put(dest, row);
+    }
+
+    @Override
+    public void destinationAdded(LXOscEngine engine, LXOscEngine.OscDestination destination) {
+        addExtraDestRow(destination);
+    }
+
+    @Override
+    public void destinationRemoved(LXOscEngine engine, LXOscEngine.OscDestination destination) {
+        UI2dContainer row = destWidgets.remove(destination);
+        if (row != null) {
+            row.removeFromContainer();
+        }
     }
 }

@@ -31,6 +31,11 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import javax.sound.midi.InvalidMidiDataException;
 
@@ -131,6 +136,215 @@ public class LXOscEngine extends LXComponent {
     private EngineTransmitter engineTransmitter;
 
     private final LX lx;
+
+    public interface DestinationListener {
+        void destinationAdded(LXOscEngine engine, OscDestination destination);
+        void destinationRemoved(LXOscEngine engine, OscDestination destination);
+    }
+
+    private final List<DestinationListener> destinationListeners = new ArrayList<DestinationListener>();
+
+    public void addDestinationListener(DestinationListener listener) {
+        this.destinationListeners.add(listener);
+    }
+
+    public void removeDestinationListener(DestinationListener listener) {
+        this.destinationListeners.remove(listener);
+    }
+
+    private final List<OscDestination> extraDestinations = new CopyOnWriteArrayList<OscDestination>();
+
+    public List<OscDestination> getExtraDestinations() {
+        return Collections.unmodifiableList(this.extraDestinations);
+    }
+
+    public OscDestination addDestination() {
+        OscDestination dest = new OscDestination(this.lx, this.extraDestinations.size() + 1);
+        this.extraDestinations.add(dest);
+        for (DestinationListener l : this.destinationListeners) {
+            l.destinationAdded(this, dest);
+        }
+        return dest;
+    }
+
+    public void removeDestination(OscDestination dest) {
+        if (this.extraDestinations.remove(dest)) {
+            dest.dispose();
+            for (DestinationListener l : this.destinationListeners) {
+                l.destinationRemoved(this, dest);
+            }
+        }
+    }
+
+    public class OscDestination {
+        public final StringParameter receiveHost;
+        public final DiscreteParameter receivePort;
+        public final BooleanParameter receiveActive;
+        public final StringParameter transmitHost;
+        public final DiscreteParameter transmitPort;
+        public final BooleanParameter transmitActive;
+
+        private Receiver destReceiver;
+        private Transmitter destTransmitter;
+        private final LXParameterListener paramListener;
+
+        OscDestination(LX lx, int index) {
+            this.receiveHost = (StringParameter)
+                new StringParameter("RX Host " + index, DEFAULT_RECEIVE_HOST)
+                .setDescription("Hostname for extra OSC input #" + index)
+                .setSupportsOscTransmit(false);
+
+            this.receivePort = (DiscreteParameter)
+                new DiscreteParameter("RX Port " + index, DEFAULT_RECEIVE_PORT, 1, 9999)
+                .setDescription("Port for extra OSC input #" + index)
+                .setUnits(LXParameter.Units.INTEGER)
+                .setSupportsOscTransmit(false);
+
+            this.receiveActive = (BooleanParameter)
+                new BooleanParameter("RX Active " + index, false)
+                .setDescription("Enable extra OSC input #" + index)
+                .setSupportsOscTransmit(false);
+
+            this.transmitHost = (StringParameter)
+                new StringParameter("TX Host " + index, DEFAULT_TRANSMIT_HOST)
+                .setDescription("Hostname for extra OSC output #" + index)
+                .setSupportsOscTransmit(false);
+
+            this.transmitPort = (DiscreteParameter)
+                new DiscreteParameter("TX Port " + index, DEFAULT_TRANSMIT_PORT, 1, 9999)
+                .setDescription("Port for extra OSC output #" + index)
+                .setUnits(LXParameter.Units.INTEGER)
+                .setSupportsOscTransmit(false);
+
+            this.transmitActive = (BooleanParameter)
+                new BooleanParameter("TX Active " + index, false)
+                .setDescription("Enable extra OSC output #" + index)
+                .setSupportsOscTransmit(false);
+
+            this.paramListener = (p) -> onDestParamChanged(p);
+            this.receiveHost.addListener(this.paramListener);
+            this.receivePort.addListener(this.paramListener);
+            this.receiveActive.addListener(this.paramListener);
+            this.transmitHost.addListener(this.paramListener);
+            this.transmitPort.addListener(this.paramListener);
+            this.transmitActive.addListener(this.paramListener);
+        }
+
+        private void onDestParamChanged(LXParameter p) {
+            if (p == this.receivePort || p == this.receiveHost) {
+                if (this.destReceiver != null) {
+                    startDestReceiver();
+                }
+            } else if (p == this.receiveActive) {
+                if (this.receiveActive.isOn()) {
+                    startDestReceiver();
+                } else {
+                    stopDestReceiver();
+                }
+            } else if (p == this.transmitPort) {
+                if (this.destTransmitter != null) {
+                    this.destTransmitter.setPort(this.transmitPort.getValuei());
+                }
+            } else if (p == this.transmitHost) {
+                if (this.destTransmitter != null) {
+                    try {
+                        this.destTransmitter.setHost(this.transmitHost.getString());
+                    } catch (UnknownHostException uhx) {
+                        System.err.println("[OSC] Invalid host: " + uhx.getLocalizedMessage());
+                        this.transmitActive.setValue(false);
+                    }
+                }
+            } else if (p == this.transmitActive) {
+                if (this.transmitActive.isOn()) {
+                    startDestTransmitter();
+                } else {
+                    stopDestTransmitter();
+                }
+            }
+        }
+
+        private void startDestReceiver() {
+            stopDestReceiver();
+            try {
+                this.destReceiver = receiver(this.receivePort.getValuei(), this.receiveHost.getString());
+                this.destReceiver.addListener(engineListener);
+                System.out.println("[OSC] Started extra receiver " + this.destReceiver.address);
+            } catch (SocketException sx) {
+                System.err.println("[OSC] Failed to start extra receiver: " + sx.getLocalizedMessage());
+            } catch (UnknownHostException uhx) {
+                System.err.println("[OSC] Bad extra receive host: " + uhx.getLocalizedMessage());
+            }
+        }
+
+        private void stopDestReceiver() {
+            if (this.destReceiver != null) {
+                this.destReceiver.stop();
+                this.destReceiver = null;
+            }
+        }
+
+        private void startDestTransmitter() {
+            if (this.destTransmitter == null) {
+                try {
+                    this.destTransmitter = new Transmitter(
+                        InetAddress.getByName(this.transmitHost.getString()),
+                        this.transmitPort.getValuei(),
+                        DEFAULT_MAX_PACKET_SIZE
+                    );
+                    System.out.println("[OSC] Started extra transmitter to " + this.transmitHost.getString() + ":" + this.transmitPort.getValuei());
+                } catch (UnknownHostException uhx) {
+                    System.err.println("[OSC] Invalid extra TX host: " + uhx.getLocalizedMessage());
+                } catch (SocketException sx) {
+                    System.err.println("[OSC] Could not start extra transmitter: " + sx.getLocalizedMessage());
+                }
+            }
+        }
+
+        private void stopDestTransmitter() {
+            this.destTransmitter = null;
+        }
+
+        public void sendMessage(OscMessage message) {
+            if (this.transmitActive.isOn() && this.destTransmitter != null) {
+                try {
+                    this.destTransmitter.send(message);
+                } catch (IOException iox) {
+                    System.err.println("[OSC] Failed to transmit to extra dest: " + iox.getLocalizedMessage());
+                }
+            }
+        }
+
+        void dispose() {
+            stopDestReceiver();
+            stopDestTransmitter();
+            this.receiveHost.removeListener(this.paramListener);
+            this.receivePort.removeListener(this.paramListener);
+            this.receiveActive.removeListener(this.paramListener);
+            this.transmitHost.removeListener(this.paramListener);
+            this.transmitPort.removeListener(this.paramListener);
+            this.transmitActive.removeListener(this.paramListener);
+        }
+
+        public JsonObject toJson() {
+            JsonObject obj = new JsonObject();
+            obj.addProperty("receiveHost", this.receiveHost.getString());
+            obj.addProperty("receivePort", this.receivePort.getValuei());
+            obj.addProperty("receiveActive", this.receiveActive.isOn());
+            obj.addProperty("transmitHost", this.transmitHost.getString());
+            obj.addProperty("transmitPort", this.transmitPort.getValuei());
+            obj.addProperty("transmitActive", this.transmitActive.isOn());
+            return obj;
+        }
+
+        public void loadJson(JsonObject obj) {
+            if (obj.has("receiveHost")) this.receiveHost.setValue(obj.get("receiveHost").getAsString());
+            if (obj.has("receivePort")) this.receivePort.setValue(obj.get("receivePort").getAsInt());
+            if (obj.has("transmitHost")) this.transmitHost.setValue(obj.get("transmitHost").getAsString());
+            if (obj.has("transmitPort")) this.transmitPort.setValue(obj.get("transmitPort").getAsInt());
+            if (obj.has("receiveActive")) this.receiveActive.setValue(obj.get("receiveActive").getAsBoolean());
+            if (obj.has("transmitActive")) this.transmitActive.setValue(obj.get("transmitActive").getAsBoolean());
+        }
+    }
 
     public LXOscEngine(LX lx) {
         super(lx, "OSC");
@@ -853,6 +1067,9 @@ public class LXOscEngine extends LXComponent {
             } catch (IOException iox) {
                 System.err.println("[OSC] Failed to transmit: " + iox.getLocalizedMessage());
             }
+            for (OscDestination dest : extraDestinations) {
+                dest.sendMessage(message);
+            }
         }
 
         @Override
@@ -1213,6 +1430,34 @@ public class LXOscEngine extends LXComponent {
         synchronized (this.receivers) {
             for (Receiver receiver : this.receivers) {
                 receiver.dispatch();
+            }
+        }
+    }
+
+    private static final String KEY_EXTRA_DESTINATIONS = "extraDestinations";
+
+    @Override
+    public void save(LX lx, JsonObject obj) {
+        super.save(lx, obj);
+        JsonArray arr = new JsonArray();
+        for (OscDestination dest : this.extraDestinations) {
+            arr.add(dest.toJson());
+        }
+        obj.add(KEY_EXTRA_DESTINATIONS, arr);
+    }
+
+    @Override
+    public void load(LX lx, JsonObject obj) {
+        super.load(lx, obj);
+        // Clear existing extra destinations
+        for (OscDestination dest : new ArrayList<OscDestination>(this.extraDestinations)) {
+            removeDestination(dest);
+        }
+        if (obj.has(KEY_EXTRA_DESTINATIONS)) {
+            JsonArray arr = obj.getAsJsonArray(KEY_EXTRA_DESTINATIONS);
+            for (JsonElement el : arr) {
+                OscDestination dest = addDestination();
+                dest.loadJson(el.getAsJsonObject());
             }
         }
     }

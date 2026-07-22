@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1784747392383,
+  "timestamp": 1784752362911,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -328,13 +328,13 @@
             "modulationColor": -16711919,
             "parameters": {
               "label": "Channel-2",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -4475,13 +4475,13 @@
             "modulationColor": -16743937,
             "parameters": {
               "label": "AutoCycle",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": true,
               "autoCycleTimeSecs": 10.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": true,
@@ -4495,7 +4495,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 19,
+            "patternIndex": 0,
             "patterns": [
               {
                 "id": 28341,
@@ -6737,7 +6737,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -11927808,
+          "modulationColor": -16711686,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -6876,7 +6876,7 @@
       "DMXParameterMapper": {
         "id": 111,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -16711719,
+        "modulationColor": -55808,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -7783,10 +7783,11 @@
         "receiveHost": "127.0.0.1",
         "receivePort": 8001,
         "receiveActive": true,
-        "transmitHost": "localhost",
+        "transmitHost": "10.2.0.87",
         "transmitPort": 3131,
         "transmitActive": true
-      }
+      },
+      "extraDestinations": []
     },
     "artnet": {
       "id": 25,
@@ -8654,17 +8655,17 @@
         "46257": true
       },
       "preview": {
-        "radius": 1600.962841588001,
+        "radius": 1636.181463009425,
         "theta": 0.0,
         "phi": 0.0,
         "roll": 0.0,
-        "positionX": 585.0045166015625,
-        "positionY": 905.5669555664062,
-        "positionZ": -84.4075927734375,
-        "orientW": 0.13040197,
-        "orientX": -0.16011034,
-        "orientY": 0.43318313,
-        "orientZ": -0.87733257
+        "positionX": 1166.3956298828125,
+        "positionY": 138.7938690185547,
+        "positionZ": 367.76361083984375,
+        "orientW": 0.081943884,
+        "orientX": -0.0023442544,
+        "orientY": 0.6415041,
+        "orientZ": -0.7627269
       }
     }
   }
