@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1784758964178,
+  "timestamp": 1784760397304,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -4475,13 +4475,13 @@
             "modulationColor": -16743937,
             "parameters": {
               "label": "AutoCycle",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": true,
               "autoCycleTimeSecs": 10.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": true,
@@ -4495,7 +4495,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 1,
+            "patternIndex": 11,
             "patterns": [
               {
                 "id": 28341,
@@ -6708,7 +6708,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -14336,
+          "modulationColor": -65422,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -6745,8 +6745,8 @@
       "modulationColor": -16711887,
       "parameters": {
         "label": "",
-        "period": 479.99560546875,
-        "bpm": 125.00114441965717,
+        "period": 479.95941162109375,
+        "bpm": 125.0105707841964,
         "tap": false,
         "nudgeUp": false,
         "nudgeDown": false,
@@ -6847,7 +6847,7 @@
       "DMXParameterMapper": {
         "id": 111,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -16736769,
+        "modulationColor": -6160640,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -7753,7 +7753,7 @@
         "label": "OSC",
         "receiveHost": "10.2.0.120",
         "receivePort": 3030,
-        "receiveActive": false,
+        "receiveActive": true,
         "transmitHost": "10.2.0.87",
         "transmitPort": 3131,
         "transmitActive": true

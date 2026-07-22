@@ -1030,6 +1030,9 @@ public class LXOscEngine extends LXComponent {
             if (suppressEcho) {
                 return;
             }
+            if (parameter instanceof LXListenableParameter && ((LXListenableParameter) parameter).isBanging()) {
+                return;
+            }
             if (transmitActive.isOn() && parameter.supportsOscTransmit()) {
                 // TODO(mcslee): contemplate accumulating OscMessages into OscBundle
                 // and sending once per engine loop?? Probably a bad tradeoff since
