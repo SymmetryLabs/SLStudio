@@ -530,13 +530,13 @@ public class APC40Mk2 extends LXMidiSurface {
             int midiChannel = LED_MODE_PRIMARY;
             int color = LED_OFF;
             if (y == activeIndex) {
-                color = 60;
+                color = 9;
             } else if (y == nextIndex) {
-                sendNoteOn(LED_MODE_PRIMARY, note, 60);
+                sendNoteOn(LED_MODE_PRIMARY, note, 9);
                 midiChannel = LED_MODE_PULSE;
                 color = 9;
             } else if (y == focusedIndex) {
-                color = 10;
+                color = 9;
             } else if (y < endIndex) {
                 color = 117;
             }
@@ -700,6 +700,14 @@ public class APC40Mk2 extends LXMidiSurface {
         case CLIP_STOP:
             sendNoteOn(note.getChannel(), pitch, on ? LED_ON : LED_OFF);
             break;
+        }
+
+        // On clip button release, re-send the column's LED state in case the
+        // hardware's local button handling turned the LED off on note-off.
+        if (!on && pitch >= CLIP_LAUNCH && pitch <= CLIP_LAUNCH_MAX) {
+            int channelIndex = (pitch - CLIP_LAUNCH) % CLIP_LAUNCH_COLUMNS;
+            sendChannelPatterns(channelIndex, getChannel(channelIndex));
+            return;
         }
 
         // Global momentary
