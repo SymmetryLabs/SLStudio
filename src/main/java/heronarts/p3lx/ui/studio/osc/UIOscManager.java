@@ -74,10 +74,28 @@ public class UIOscManager extends UICollapsibleSection implements LXOscEngine.De
         .setDescription("Add an extra OSC source/destination");
         addTopLevelComponent(addButton);
 
+        // "−" button next to "+" to remove the last extra destination
+        UIButton removeButton = (UIButton) new UIButton((int)(w - 62), 4, 16, 12) {
+            @Override
+            public void onToggle(boolean on) {
+                if (on) {
+                    java.util.List<LXOscEngine.OscDestination> dests = lx.engine.osc.getExtraDestinations();
+                    if (!dests.isEmpty()) {
+                        lx.engine.osc.removeDestination(dests.get(dests.size() - 1));
+                    }
+                }
+            }
+        }
+        .setLabel("-")
+        .setMomentary(true)
+        .setBorderRounding(4)
+        .setDescription("Remove the last extra OSC source/destination");
+        addTopLevelComponent(removeButton);
+
         // Main (primary) OSC row
         addOscRow(lx.engine.osc.receivePort, lx.engine.osc.receiveHost,
             lx.engine.osc.receiveActive, lx.engine.osc.transmitPort, lx.engine.osc.transmitHost,
-            lx.engine.osc.transmitActive, null);
+            lx.engine.osc.transmitActive);
 
         // Add rows for any existing extra destinations (e.g. restored from save)
         for (LXOscEngine.OscDestination dest : lx.engine.osc.getExtraDestinations()) {
@@ -93,8 +111,7 @@ public class UIOscManager extends UICollapsibleSection implements LXOscEngine.De
         heronarts.lx.parameter.BooleanParameter rxActive,
         heronarts.lx.parameter.DiscreteParameter txPort,
         heronarts.lx.parameter.StringParameter txHost,
-        heronarts.lx.parameter.BooleanParameter txActive,
-        LXOscEngine.OscDestination removableDest
+        heronarts.lx.parameter.BooleanParameter txActive
     ) {
         float bw = getContentWidth();
 
@@ -124,22 +141,6 @@ public class UIOscManager extends UICollapsibleSection implements LXOscEngine.De
         new UITextBox((int) hostX, (int) yp, (int) hostW, 16).setParameter(txHost).addToContainer(border);
         new UIButton((int) activeX, (int) yp, 16, 16).setParameter(txActive).setMappable(false).setBorderRounding(4).addToContainer(border);
 
-        if (removableDest != null) {
-            final LXOscEngine.OscDestination destRef = removableDest;
-            new UIButton((int)(bw - 16), 0, 16, 12) {
-                @Override
-                public void onToggle(boolean on) {
-                    if (on) {
-                        lx.engine.osc.removeDestination(destRef);
-                    }
-                }
-            }
-            .setLabel("\u2212")
-            .setMomentary(true)
-            .setBorderRounding(4)
-            .setDescription("Remove this OSC destination")
-            .addToContainer(border);
-        }
 
         return row;
     }
@@ -147,7 +148,7 @@ public class UIOscManager extends UICollapsibleSection implements LXOscEngine.De
     private void addExtraDestRow(LXOscEngine.OscDestination dest) {
         UI2dContainer row = addOscRow(dest.receivePort, dest.receiveHost,
             dest.receiveActive, dest.transmitPort, dest.transmitHost,
-            dest.transmitActive, dest);
+            dest.transmitActive);
         destWidgets.put(dest, row);
     }
 
