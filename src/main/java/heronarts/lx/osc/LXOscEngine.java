@@ -54,6 +54,7 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.LXTriggerModulation;
 import heronarts.lx.parameter.LXCompoundModulation;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.warp.LXWarp;
 
@@ -1049,6 +1050,9 @@ public class LXOscEngine extends LXComponent {
                     } else if (parameter instanceof DiscreteParameter) {
                         oscInt.setValue(((DiscreteParameter) parameter).getValuei());
                         oscMessage.add(oscInt);
+                    } else if (parameter instanceof CompoundParameter) {
+                        oscFloat.setValue((float) ((CompoundParameter) parameter).getBaseNormalized());
+                        oscMessage.add(oscFloat);
                     } else if (parameter instanceof LXNormalizedParameter) {
                         oscFloat.setValue(((LXNormalizedParameter) parameter).getNormalizedf());
                         oscMessage.add(oscFloat);
