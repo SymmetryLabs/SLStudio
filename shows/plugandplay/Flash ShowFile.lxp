@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1784752362911,
+  "timestamp": 1784754598459,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -4475,13 +4475,13 @@
             "modulationColor": -16743937,
             "parameters": {
               "label": "AutoCycle",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": true,
               "autoCycleTimeSecs": 10.0,
-              "fader": 0.0,
+              "fader": 0.27142852544784546,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": true,
@@ -4495,7 +4495,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 0,
+            "patternIndex": 4,
             "patterns": [
               {
                 "id": 28341,
@@ -6737,7 +6737,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16711686,
+          "modulationColor": -3866369,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -6774,8 +6774,8 @@
       "modulationColor": -16711887,
       "parameters": {
         "label": "",
-        "period": 2097.7140295831464,
-        "bpm": 28.602564102564102,
+        "period": 479.86748654422405,
+        "bpm": 125.03451824188232,
         "tap": false,
         "nudgeUp": false,
         "nudgeDown": false,
@@ -6876,7 +6876,7 @@
       "DMXParameterMapper": {
         "id": 111,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -55808,
+        "modulationColor": -16726529,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -7787,7 +7787,16 @@
         "transmitPort": 3131,
         "transmitActive": true
       },
-      "extraDestinations": []
+      "extraDestinations": [
+        {
+          "receiveHost": "10.2.0.120",
+          "receivePort": 3030,
+          "receiveActive": true,
+          "transmitHost": "localhost",
+          "transmitPort": 3131,
+          "transmitActive": false
+        }
+      ]
     },
     "artnet": {
       "id": 25,
