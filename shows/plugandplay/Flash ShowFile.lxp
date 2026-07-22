@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1784141316100,
+  "timestamp": 1784745801571,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -203,7 +203,7 @@
                 }
               }
             ],
-            "patternIndex": 2,
+            "patternIndex": 0,
             "patterns": [
               {
                 "id": 697,
@@ -4475,13 +4475,13 @@
             "modulationColor": -16743937,
             "parameters": {
               "label": "AutoCycle",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
-              "autoCycleEnabled": true,
+              "autoCycleEnabled": false,
               "autoCycleTimeSecs": 10.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": true,
@@ -4495,7 +4495,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 11,
+            "patternIndex": 20,
             "patterns": [
               {
                 "id": 28341,
@@ -5751,6 +5751,27 @@
                     }
                   }
                 ]
+              },
+              {
+                "id": 45255,
+                "class": "heronarts.p3lx.pattern.SolidColorPattern",
+                "modulationColor": -8323328,
+                "parameters": {
+                  "label": "SolidColor",
+                  "expandedInUi": true,
+                  "Enabled": true,
+                  "Cycle": true,
+                  "color": -16711784,
+                  "color/hue": 155.792460501194,
+                  "color/brightness": 100.0,
+                  "color/saturation": 100.0
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                },
+                "autoCycleEnabled": true
               }
             ]
           },
@@ -6218,7 +6239,7 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": true,
-                  "xPos": 1242.6999722103772,
+                  "xPos": 1301.1799709067443,
                   "yPos": -255.84772002053887,
                   "zPos": 0.0,
                   "xSpd": 0.7,
@@ -6227,7 +6248,7 @@
                   "xSize": 0.3,
                   "xLvl": 1.0,
                   "yLvl": 1.0,
-                  "zLvl": 0.5,
+                  "zLvl": 1.0,
                   "ySize": 0.3,
                   "zSize": 0.3
                 },
@@ -6348,7 +6369,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16711935,
+          "modulationColor": -16719105,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -6410,24 +6431,24 @@
         "modulationColor": -16711858,
         "parameters": {
           "label": "Meter",
-          "running": false,
+          "running": true,
           "trigger": false,
           "gain": 0.0,
           "range": 48.0,
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.27151738332104014,
-          "Band-2": 0.333810339763147,
-          "Band-3": 0.3246002224616825,
-          "Band-4": 0.28309974208796473,
-          "Band-5": 0.194354795671846,
-          "Band-6": 0.02163435522799828,
-          "Band-7": 0.05402263110059036,
-          "Band-8": 0.04390317250028242,
-          "Band-9": 0.007782194741700166,
+          "Band-1": 0.0,
+          "Band-2": 0.0,
+          "Band-3": 0.0,
+          "Band-4": 0.0,
+          "Band-5": 0.0,
+          "Band-6": 0.0,
+          "Band-7": 0.0,
+          "Band-8": 0.0,
+          "Band-9": 0.0,
           "Band-10": 0.0,
-          "Band-11": 0.01147934651547633,
+          "Band-11": 0.0,
           "Band-12": 0.0,
           "Band-13": 0.0,
           "Band-14": 0.0,
@@ -6487,7 +6508,7 @@
       "DMXParameterMapper": {
         "id": 111,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -65428,
+        "modulationColor": -524544,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -7145,13 +7166,29 @@
     "midi": {
       "inputs": [
         {
+          "name": "SPD-SX",
+          "channel": true,
+          "control": true,
+          "sync": true
+        },
+        {
+          "name": "APC40 mkII",
+          "channel": true,
+          "control": true,
+          "sync": true
+        },
+        {
           "name": "KeyRig 49",
           "channel": true,
           "control": true,
           "sync": false
         }
       ],
-      "surfaces": [],
+      "surfaces": [
+        {
+          "surfaceid": "in\u003dAPC40 mkII/APC40 mkII,out\u003dAPC40 mkII/APC40 mkII"
+        }
+      ],
       "mapping": [
         {
           "channel": 0,
@@ -7911,7 +7948,7 @@
         "16192": true
       },
       "preview": {
-        "radius": 1612.3242715352142,
+        "radius": 1602.666452341143,
         "theta": 0.0,
         "phi": 0.0,
         "roll": 0.0,

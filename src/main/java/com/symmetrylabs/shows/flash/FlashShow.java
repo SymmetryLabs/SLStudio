@@ -221,7 +221,7 @@ public class FlashShow implements Show {
                         continue; // ignore excess strips once universe is full
                     }
                     int pixelsToAdd = Math.min(numPixels, remaining);
-                    pg.addStripSegment(pixelOffset, pixelOffset + pixelsToAdd, strip.metrics.grbSwap);
+                    pg.addStripSegment(pixelOffset, pixelOffset + pixelsToAdd, !strip.metrics.grbSwap);
                     pg.addPoints(strip.getPoints().subList(0, pixelsToAdd));
                     pixelOffset += pixelsToAdd;
                     stripsAdded++;
