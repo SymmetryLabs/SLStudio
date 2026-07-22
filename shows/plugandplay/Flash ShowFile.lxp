@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1783732109566,
+  "timestamp": 1784141316100,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -4475,13 +4475,13 @@
             "modulationColor": -16743937,
             "parameters": {
               "label": "AutoCycle",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": true,
               "autoCycleTimeSecs": 10.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": true,
@@ -6348,7 +6348,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16253184,
+          "modulationColor": -16711935,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -6487,7 +6487,7 @@
       "DMXParameterMapper": {
         "id": 111,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -327425,
+        "modulationColor": -65428,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -7911,17 +7911,17 @@
         "16192": true
       },
       "preview": {
-        "radius": 2032.3262075593675,
+        "radius": 1612.3242715352142,
         "theta": 0.0,
         "phi": 0.0,
         "roll": 0.0,
-        "positionX": 293.9986267089844,
-        "positionY": 850.1591186523438,
-        "positionZ": 2.162370204925537,
-        "orientW": 0.25324053,
-        "orientX": -0.25184858,
-        "orientY": 0.31125405,
-        "orientZ": -0.8806603
+        "positionX": 585.0045166015625,
+        "positionY": 905.5669555664062,
+        "positionZ": -84.4075927734375,
+        "orientW": 0.06743918,
+        "orientX": -0.11395073,
+        "orientY": 0.58539957,
+        "orientZ": -0.79985905
       }
     }
   }
