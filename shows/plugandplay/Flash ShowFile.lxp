@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1784757802544,
+  "timestamp": 1784758964178,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -4495,7 +4495,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 19,
+            "patternIndex": 1,
             "patterns": [
               {
                 "id": 28341,
@@ -6708,7 +6708,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16711861,
+          "modulationColor": -14336,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -6745,8 +6745,8 @@
       "modulationColor": -16711887,
       "parameters": {
         "label": "",
-        "period": 479.9660949707031,
-        "bpm": 125.00883005842812,
+        "period": 479.99560546875,
+        "bpm": 125.00114441965717,
         "tap": false,
         "nudgeUp": false,
         "nudgeDown": false,
@@ -6847,7 +6847,7 @@
       "DMXParameterMapper": {
         "id": 111,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -16761089,
+        "modulationColor": -16736769,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -7331,7 +7331,7 @@
           "class": "heronarts.lx.modulator.MultiStageEnvelope",
           "modulationColor": -15138561,
           "parameters": {
-            "label": "Env 1",
+            "label": "Bump5",
             "running": false,
             "trigger": false,
             "loop": false,
@@ -7370,7 +7370,7 @@
           "class": "heronarts.lx.modulator.MultiStageEnvelope",
           "modulationColor": -13041409,
           "parameters": {
-            "label": "Env 2",
+            "label": "Bump6",
             "running": false,
             "trigger": false,
             "loop": false,
@@ -7409,7 +7409,7 @@
           "class": "heronarts.lx.modulator.MultiStageEnvelope",
           "modulationColor": -16711869,
           "parameters": {
-            "label": "Env 3",
+            "label": "Bump7",
             "running": false,
             "trigger": false,
             "loop": false,
@@ -7448,7 +7448,7 @@
           "class": "heronarts.lx.modulator.MultiStageEnvelope",
           "modulationColor": -16755201,
           "parameters": {
-            "label": "Env 4",
+            "label": "Bump8",
             "running": false,
             "trigger": false,
             "loop": false,
@@ -7477,7 +7477,7 @@
           "class": "heronarts.lx.modulator.MultiStageEnvelope",
           "modulationColor": -16711745,
           "parameters": {
-            "label": "Env 8",
+            "label": "Bump9",
             "running": false,
             "trigger": false,
             "loop": false,
@@ -7753,7 +7753,7 @@
         "label": "OSC",
         "receiveHost": "10.2.0.120",
         "receivePort": 3030,
-        "receiveActive": true,
+        "receiveActive": false,
         "transmitHost": "10.2.0.87",
         "transmitPort": 3131,
         "transmitActive": true
@@ -7765,7 +7765,7 @@
           "receiveActive": false,
           "transmitHost": "10.2.0.164",
           "transmitPort": 3232,
-          "transmitActive": true
+          "transmitActive": false
         },
         {
           "receiveHost": "127.0.0.1",
@@ -8650,10 +8650,10 @@
         "positionX": 1166.3956298828125,
         "positionY": 138.7938690185547,
         "positionZ": 367.76361083984375,
-        "orientW": 0.105394624,
-        "orientX": -0.026007116,
-        "orientY": 0.6055585,
-        "orientZ": -0.78836185
+        "orientW": 0.10539463,
+        "orientX": -0.026007118,
+        "orientY": 0.6055586,
+        "orientZ": -0.7883619
       }
     }
   }

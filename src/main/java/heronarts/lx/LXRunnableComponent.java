@@ -30,9 +30,10 @@ public abstract class LXRunnableComponent extends LXComponent implements LXLoopT
     /**
      * Whether this modulator is currently running.
      */
-    public final BooleanParameter running =
+    public final BooleanParameter running = (BooleanParameter)
         new BooleanParameter("Running", false)
-        .setDescription("Sets whether the component is running");
+        .setDescription("Sets whether the component is running")
+        .setSupportsOscTransmit(false);
 
     public final BooleanParameter trigger =
         new BooleanParameter("Trigger", false)
