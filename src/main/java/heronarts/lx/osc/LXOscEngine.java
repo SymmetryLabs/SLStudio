@@ -676,7 +676,10 @@ public class LXOscEngine extends LXComponent {
                         if (parts[3].equals(ROUTE_FOCUSED)) {
                             oscChannel(message, look.getFocusedChannel(), parts, 4);
                         } else if (parts[3].matches("\\d+")) {
-                            oscChannel(message, look.getChannel(Integer.parseInt(parts[3]) - 1), parts, 4);
+                            int channelIndex = getOscIndex(parts[3], look.channels.size(), "Channel");
+                            if (channelIndex >= 0) {
+                                oscChannel(message, look.getChannel(channelIndex), parts, 4);
+                            }
                         } else {
                             oscChannel(message, look.getChannel(parts[3]), parts, 4);
                         }
@@ -684,15 +687,17 @@ public class LXOscEngine extends LXComponent {
                         if (parts[3].equals(ROUTE_FOCUSED)) {
                             oscLook(message, lx.engine.getFocusedLook(), parts, 4);
                         } else if (parts[3].matches("\\d+")) {
-                            oscLook(message, lx.engine.getLook(Integer.parseInt(parts[3]) - 1), parts, 4);
+                            int lookIndex = getOscIndex(parts[3], lx.engine.getLooks().size(), "Look");
+                            if (lookIndex >= 0) {
+                                oscLook(message, lx.engine.getLook(lookIndex), parts, 4);
+                            }
                         } else {
                             oscLook(message, lx.engine.getLook(parts[3]), parts, 4);
                         }
                     }
                 }
             } catch (Exception x) {
-                System.err.println("[OSC] No route for message: " + message.getAddressPattern().getValue());
-                x.printStackTrace();
+                System.err.println("[OSC] Invalid message " + message.getAddressPattern().getValue() + ": " + x.getMessage());
             } finally {
                 suppressEcho = false;
             }
@@ -742,12 +747,28 @@ public class LXOscEngine extends LXComponent {
             }
         }
 
+        private int getOscIndex(String value, int size, String type) {
+            int index = Integer.parseInt(value) - 1;
+            if (index < 0 || index >= size) {
+                System.err.println("[OSC] " + type + " index out of bounds: " + value + " (available: " + size + ")");
+                return -1;
+            }
+            return index;
+        }
+
         private void oscLook(OscMessage message, LXLook look, String[] parts, int index) {
+            if (look == null || index >= parts.length) {
+                System.err.println("[OSC] Look not found or route is incomplete");
+                return;
+            }
             if (parts[index].equals(ROUTE_CHANNEL)) {
                 if (parts[index+1].equals(ROUTE_FOCUSED)) {
                     oscChannel(message, look.getFocusedChannel(), parts, index+2);
                 } else if (parts[index+1].matches("\\d+")) {
-                    oscChannel(message, look.getChannel(Integer.parseInt(parts[index+1]) - 1), parts, index+2);
+                    int channelIndex = getOscIndex(parts[index+1], look.channels.size(), "Channel");
+                    if (channelIndex >= 0) {
+                        oscChannel(message, look.getChannel(channelIndex), parts, index+2);
+                    }
                 } else {
                     oscChannel(message, look.getChannel(parts[index+1]), parts, index+2);
                 }
@@ -757,12 +778,20 @@ public class LXOscEngine extends LXComponent {
         }
 
         private void oscChannel(OscMessage message, LXBus channel, String[] parts, int index) {
+            if (channel == null || index >= parts.length) {
+                System.err.println("[OSC] Channel not found or route is incomplete");
+                return;
+            }
             if (channel instanceof LXChannel) {
                 if (parts[index].equals(ROUTE_PATTERN)) {
                     if (parts[index+1].equals(ROUTE_ACTIVE)) {
                         oscPattern(message, ((LXChannel) channel).getActivePattern(), parts, index+2);
                     } else if (parts[index+1].matches("\\d+")) {
-                        oscPattern(message, ((LXChannel) channel).getPattern(Integer.parseInt(parts[index+1]) - 1), parts, index+2);
+                        LXChannel lxChannel = (LXChannel) channel;
+                        int patternIndex = getOscIndex(parts[index+1], lxChannel.getPatterns().size(), "Pattern");
+                        if (patternIndex >= 0) {
+                            oscPattern(message, lxChannel.getPattern(patternIndex), parts, index+2);
+                        }
                     } else {
                         oscPattern(message, ((LXChannel) channel).getPattern(parts[index+1]), parts, index+2);
                     }
@@ -774,7 +803,10 @@ public class LXOscEngine extends LXComponent {
             }
             if (parts[index].equals(ROUTE_EFFECT)) {
                 if (parts[index+1].matches("\\d+")) {
-                    oscEffect(message, channel.getEffect(Integer.parseInt(parts[index+1]) - 1), parts, index+2);
+                    int effectIndex = getOscIndex(parts[index+1], channel.getEffects().size(), "Effect");
+                    if (effectIndex >= 0) {
+                        oscEffect(message, channel.getEffect(effectIndex), parts, index+2);
+                    }
                 } else {
                     oscEffect(message, channel.getEffect(parts[index+1]), parts, index+2);
                 }
@@ -782,7 +814,10 @@ public class LXOscEngine extends LXComponent {
             }
             if (parts[index].equals(ROUTE_WARP)) {
                 if (parts[index+1].matches("\\d+")) {
-                    oscWarp(message, channel.getWarp(Integer.parseInt(parts[index+1]) - 1), parts, index+2);
+                    int warpIndex = getOscIndex(parts[index+1], channel.getWarps().size(), "Warp");
+                    if (warpIndex >= 0) {
+                        oscWarp(message, channel.getWarp(warpIndex), parts, index+2);
+                    }
                 } else {
                     oscWarp(message, channel.getWarp(parts[index+1]), parts, index+2);
                 }
@@ -792,6 +827,10 @@ public class LXOscEngine extends LXComponent {
         }
 
         private void oscEffect(OscMessage message, LXEffect effect, String[] parts, int index) {
+            if (effect == null) {
+                System.err.println("[OSC] Effect not found");
+                return;
+            }
             oscComponent(message, effect, parts, index);
         }
 
@@ -864,10 +903,18 @@ public class LXOscEngine extends LXComponent {
         }
 
         private void oscWarp(OscMessage message, LXWarp warp, String[] parts, int index) {
+            if (warp == null) {
+                System.err.println("[OSC] Warp not found");
+                return;
+            }
             oscComponent(message, warp, parts, index);
         }
 
         private void oscComponent(OscMessage message, LXComponent component, String[] parts, int index) {
+            if (component == null || index >= parts.length) {
+                System.err.println("[OSC] Component not found or route is incomplete");
+                return;
+            }
             if (component instanceof LXModulationComponent && parts[index].equals(ROUTE_MODULATION)) {
                 LXModulationEngine modulation = ((LXModulationComponent) component).getModulation();
                 LXModulator modulator = modulation.getModulator(parts[index+1]);
@@ -894,7 +941,7 @@ public class LXOscEngine extends LXComponent {
             } else if (parameter instanceof StringParameter) {
                 ((StringParameter) parameter).setValue(message.getString());
             } else if (parameter instanceof ColorParameter) {
-                if (parts.length >= index+1) {
+                if (parts.length > index+1) {
                     if (parts[index+1].equals(ROUTE_HUE)) {
                         ((ColorParameter) parameter).hue.setNormalized(message.getFloat());
                     } else if (parts[index+1].equals(ROUTE_SATURATION)) {
