@@ -38,7 +38,12 @@ public class MidiMusic extends SLPattern<SLModel> {
 
     private final Map<Integer, LightUp> lightMap = new HashMap<Integer, LightUp>();
     private final List<LightUp> lights = new ArrayList<LightUp>();
-    private final CompoundParameter lightSize = new CompoundParameter("Size", 0.5);
+    private final CompoundParameter sizeX = new CompoundParameter("SizeX", 0.85)
+        .setDescription("Note size along the model X axis");
+    private final CompoundParameter sizeY = new CompoundParameter("SizeY", 0.81)
+        .setDescription("Note size along the model Y axis");
+    private final CompoundParameter sizeZ = new CompoundParameter("SizeZ", 0.81)
+        .setDescription("Note size along the model Z axis");
 
     private final List<Sweep> sweeps = new ArrayList<Sweep>();
 
@@ -48,23 +53,23 @@ public class MidiMusic extends SLPattern<SLModel> {
 
     private final CompoundParameter wave = new CompoundParameter("Wave", 0);
     private final BooleanParameter triggerSweep = new BooleanParameter("Sweep", false);
-    private final CompoundParameter top = new CompoundParameter("Top", 0.72);
+    private final CompoundParameter top = new CompoundParameter("Top", 0.5);
 
     private final EnumParameter<Axis> pitchAxis =
-        new EnumParameter<Axis>("PitchAxis", Axis.X)
+        new EnumParameter<Axis>("PitchAxis", Axis.Y)
             .setDescription("Model axis that note pitch is mapped to (low=min, high=max)");
 
     private final EnumParameter<Axis> velAxis =
-        new EnumParameter<Axis>("VelAxis", Axis.Y)
+        new EnumParameter<Axis>("VelAxis", Axis.X)
             .setDescription("Model axis that note velocity is mapped to (soft=min, loud=max)");
 
     private final DiscreteParameter noteMin =
-        new DiscreteParameter("NoteMin", 0, 0, 128)
-            .setDescription("Lowest MIDI note that triggers a light (C-1=0)");
+        new DiscreteParameter("NoteMin", 39, 29, 102)
+            .setDescription("Lowest MIDI note that triggers a light (F1=29)");
 
     private final DiscreteParameter noteMax =
-        new DiscreteParameter("NoteMax", 48, 0, 128)
-            .setDescription("Top of the repeating pitch window (C3=48); pattern tiles every (NoteMax-NoteMin) semitones");
+        new DiscreteParameter("NoteMax", 101, 29, 102)
+            .setDescription("Top of the repeating pitch window (C3=48, F7=101 max); pattern tiles every (NoteMax-NoteMin) semitones");
 
     private final DiscreteParameter pitchShift =
         new DiscreteParameter("PitchShift", 0, -10, 11)
@@ -81,7 +86,9 @@ public class MidiMusic extends SLPattern<SLModel> {
     public MidiMusic(LX lx) {
         super(lx);
         addModulator(sparkle).setValue(1);
-        addParameter(lightSize);
+        addParameter(sizeX);
+        addParameter(sizeY);
+        addParameter(sizeZ);
         addParameter(top);
         addParameter(wave);
         addParameter(triggerSweep);
@@ -189,11 +196,16 @@ public class MidiMusic extends SLPattern<SLModel> {
                 return;
             }
             float yVal = yPos.getValuef();
+            Axis pAxis = pitchAxis.getEnum();
+            Axis vAxis = velAxis.getEnum();
+            float fx = 6 - 7*sizeX.getValuef();
+            float fy = 6 - 7*sizeY.getValuef();
+            float fz = 6 - 7*sizeZ.getValuef();
             for (LXVector p : getVectors()) {
-                float falloff = 6 - 7*lightSize.getValuef();
-                float pCoord = axisCoord(p, pitchAxis.getEnum());
-                float vCoord = axisCoord(p, velAxis.getEnum());
-                float b = (float)Math.max(0, bVal - falloff*LXUtils.distance(pCoord, vCoord, xPos, yVal));
+                float dx = fx * (p.x - axisTarget(Axis.X, pAxis, vAxis, xPos, yVal, p.x));
+                float dy = fy * (p.y - axisTarget(Axis.Y, pAxis, vAxis, xPos, yVal, p.y));
+                float dz = fz * (p.z - axisTarget(Axis.Z, pAxis, vAxis, xPos, yVal, p.z));
+                float b = (float)Math.max(0, bVal - Math.sqrt(dx*dx + dy*dy + dz*dz));
                 if (b > 0) {
                     blendColor(p.index, lx.hsb(
                         palette.getHuef() + 0.2f*Math.abs(p.x - model.cx) + 0.2f*Math.abs(p.y - model.cy),
@@ -227,6 +239,12 @@ public class MidiMusic extends SLPattern<SLModel> {
             case Z: return p.z;
             default: return p.x;
         }
+    }
+
+    private float axisTarget(Axis axis, Axis pitch, Axis vel, float pitchPos, float velPos, float coord) {
+        if (axis == pitch) return pitchPos;
+        if (axis == vel) return velPos;
+        return coord;
     }
 
     private LightUp getLight() {
