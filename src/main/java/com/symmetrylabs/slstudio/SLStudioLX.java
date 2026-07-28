@@ -785,7 +785,9 @@ public class SLStudioLX extends P3LX {
         LXClassLoader.findEffects(lx.model.getClass()).stream().forEach(lx::registerEffect);
 
         // Add all patterns
-        LXClassLoader.findPatterns(lx.model.getClass()).stream().forEach(lx::registerPattern);
+        LXClassLoader.findPatterns(lx.model.getClass()).stream()
+            .filter(c -> !"heronarts.lx.pattern.LifePattern".equals(c.getName()))
+            .forEach(lx::registerPattern);
 
         lx.registerPattern(heronarts.p3lx.pattern.SolidColorPattern.class);
         lx.registerPattern(IteratorTestPattern.class);

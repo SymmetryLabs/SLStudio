@@ -27,6 +27,8 @@
 package heronarts.p3lx;
 
 import heronarts.lx.LX;
+import com.symmetrylabs.slstudio.logging.FreezeDetector;
+
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
 import heronarts.lx.PolyBuffer;
@@ -187,6 +189,8 @@ public class P3LX extends LX {
      * cycle.
      */
     public void draw() {
+        FreezeDetector.pulse();
+
         long drawStart = System.nanoTime();
 
         long engineStart = System.nanoTime();

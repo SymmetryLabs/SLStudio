@@ -26,6 +26,9 @@ import com.symmetrylabs.util.MarkerSource;
 import com.symmetrylabs.util.Utils;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.slstudio.cue.CueManager;
+import com.symmetrylabs.slstudio.logging.CrashHandler;
+import com.symmetrylabs.slstudio.logging.CrashLog;
+import com.symmetrylabs.slstudio.logging.FreezeDetector;
 import com.symmetrylabs.slstudio.sync.NetworkSyncManager;
 
 import java.io.File;
@@ -73,6 +76,7 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
     protected static final Map<String, String> warnings = new HashMap<>();
 
     static public void main(String[] args) {
+        CrashHandler.install();
         System.out.println("SLStudio: Entering main()");
         // Enable JOGL debug output for OpenGL error diagnosis
         System.setProperty("jogl.debug", "true");
@@ -143,6 +147,16 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
 
         ApplicationState.setProvider(this);
         Utils.setSketchPath(sketchPath());
+        CrashLog.setLogDirectory(new File(sketchPath(), "logs" + File.separator + "crashes"));
+        FreezeDetector.start(Thread.currentThread());
+
+        // Make sure our crash handler stays installed and covers the animation thread
+        // and any threads created before Processing took over.
+        CrashHandler.install();
+        CrashHandler.applyTo(Thread.currentThread());
+        for (Thread t : Thread.getAllStackTraces().keySet()) {
+            CrashHandler.applyTo(t);
+        }
 
         showName = getSelectedShowName();
         saveSelectedShowName(showName);
@@ -261,6 +275,7 @@ public class SLStudio extends PApplet implements ApplicationState.Provider {
     int frameLogCounter = 0;
 @Override
 public void draw() {
+    FreezeDetector.pulse();
 
     background(0);
     fill(255);

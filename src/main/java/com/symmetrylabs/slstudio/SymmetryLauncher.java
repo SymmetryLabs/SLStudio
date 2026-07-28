@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio;
 
+import com.symmetrylabs.slstudio.logging.CrashHandler;
 import com.symmetrylabs.slstudio.ui.v2.Lwjgl3Launcher;
 import com.symmetrylabs.slstudio.server.VolumeServer;
 
@@ -12,6 +13,8 @@ public class SymmetryLauncher {
     public static final String DEFAULT_APP_NAME = SLSTUDIO_NAME;
 
     public static void main(String[] args) {
+        CrashHandler.install();
+
         // Debug prints for environment
         System.out.println("java.awt.headless: " + System.getProperty("java.awt.headless"));
         System.out.println("java.library.path: " + System.getProperty("java.library.path"));

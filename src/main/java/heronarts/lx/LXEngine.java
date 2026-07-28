@@ -23,6 +23,7 @@ package heronarts.lx;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.symmetrylabs.slstudio.logging.CrashHandler;
 import com.symmetrylabs.util.artnet.ArtNetEngine;
 import com.symmetrylabs.util.dmx.DMXEngine;
 import com.symmetrylabs.util.dmx.LXEngineDMXManager;
@@ -579,6 +580,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
         private EngineThread() {
             super("LXEngine Render Thread");
+            CrashHandler.applyTo(this);
         }
 
         @Override

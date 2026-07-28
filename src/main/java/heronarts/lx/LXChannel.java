@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import com.symmetrylabs.slstudio.ApplicationState;
+import com.symmetrylabs.slstudio.logging.CrashHandler;
 import java.util.Collection;
 import com.symmetrylabs.slstudio.presets.ChannelPresetLibrary;
 import com.symmetrylabs.slstudio.effect.SpeedEffect;
@@ -327,6 +328,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         ChannelThread() {
             super("LXChannel thread #" + channelThreadCount++);
             setDaemon(true);
+            CrashHandler.applyTo(this);
         }
 
         boolean hasStarted = false;
