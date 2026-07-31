@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.symmetrylabs.color.Spaces;
+import com.symmetrylabs.slstudio.logging.PatternErrorGuard;
 import heronarts.lx.LXEngine.BlendTarget;
 import heronarts.lx.LXEngine.EngineBuffer;
 import heronarts.lx.blend.AddBlend;
@@ -307,7 +308,11 @@ public class LXLook extends LXModelComponent implements PolyBufferProvider {
         } else {
             for (LXChannel channel : this.mutableChannels) {
                 if (channel.shouldRun() || channel.cueActive.isOn()) {
-                    channel.loop(deltaMs);
+                    try {
+                        channel.loop(deltaMs);
+                    } catch (Throwable t) {
+                        PatternErrorGuard.report("channel " + channel.getLabel(), t);
+                    }
                 }
             }
         }

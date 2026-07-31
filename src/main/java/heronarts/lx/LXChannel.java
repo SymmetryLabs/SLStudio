@@ -40,6 +40,7 @@ import java.util.Collections;
 import java.util.List;
 import com.symmetrylabs.slstudio.ApplicationState;
 import com.symmetrylabs.slstudio.logging.CrashHandler;
+import com.symmetrylabs.slstudio.logging.PatternErrorGuard;
 import java.util.Collection;
 import com.symmetrylabs.slstudio.presets.ChannelPresetLibrary;
 import com.symmetrylabs.slstudio.effect.SpeedEffect;
@@ -356,7 +357,11 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
                     }
                     this.workReady = false;
                 }
-                loop(this.deltaMs);
+                try {
+                    loop(this.deltaMs);
+                } catch (Throwable t) {
+                    PatternErrorGuard.report("channel " + getLabel(), t);
+                }
                 synchronized (this.signal) {
                     this.signal.workDone = true;
                     this.signal.notify();
@@ -1015,9 +1020,13 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         }
 
         // Apply channel-level effects
-        for (LXEffect effect : effects) {
-            effect.setPolyBuffer(polyBuffer);
-            effect.loop(deltaMs);
+        final double effectDeltaMs = deltaMs;
+        for (LXEffect e : effects) {
+            final LXEffect effect = e;
+            PatternErrorGuard.run(effect, "channel effect " + effect.getLabel(), () -> {
+                effect.setPolyBuffer(polyBuffer);
+                effect.loop(effectDeltaMs);
+            });
         }
 
         this.timer.loopNanos = System.nanoTime() - loopStart;
@@ -1030,17 +1039,33 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
      */
     private void runPatternScoped(LXPattern pat, double deltaMs, PolyBuffer.Space space,
                                   LXVector[] baseVectors, LXWarp baseVectorSource) {
+        if (PatternErrorGuard.isQuarantined(pat)) {
+            return;
+        }
+
         List<LXWarp> pWarps = patternWarps.get(pat);
         LXVector[] curVecs = baseVectors;
         LXWarp curSource = baseVectorSource;
         boolean changed = false;
         if (pWarps != null) {
             for (LXWarp w : pWarps) {
-                if (w.isEnabled()) {
-                    w.setInputVectors(curSource, curVecs, changed);
-                    changed = w.applyWarp(deltaMs);
-                    curSource = w;
-                    curVecs = w.getOutputVectors();
+                if (!w.isEnabled()) {
+                    continue;
+                }
+                final LXWarp warp = w;
+                final LXWarp inSource = curSource;
+                final LXVector[] inVecs = curVecs;
+                final boolean inChanged = changed;
+                boolean ok = PatternErrorGuard.run(
+                    warp, "warp " + warp.getLabel() + " on pattern " + pat.getLabel(),
+                    () -> {
+                        warp.setInputVectors(inSource, inVecs, inChanged);
+                        warp.applyWarp(deltaMs);
+                    });
+                if (ok) {
+                    changed = warp.getOutputVectors() != curVecs;
+                    curSource = warp;
+                    curVecs = warp.getOutputVectors();
                 }
             }
         }
@@ -1060,14 +1085,25 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             }
         }
 
-        pat.setPreferredSpace(space);
-        pat.loop(patDeltaMs);
+        final double loopDeltaMs = patDeltaMs;
+        boolean patternOk = PatternErrorGuard.run(pat, "pattern " + pat.getLabel(), () -> {
+            pat.setPreferredSpace(space);
+            pat.loop(loopDeltaMs);
+        });
+        if (!patternOk) {
+            return;
+        }
 
         // Per-pattern effects modify the pattern's own polyBuffer before blending.
         if (pEffects != null) {
             for (LXEffect e : pEffects) {
-                e.setPolyBuffer(pat.getPolyBuffer());
-                e.loop(patDeltaMs);
+                final LXEffect effect = e;
+                PatternErrorGuard.run(
+                    effect, "effect " + effect.getLabel() + " on pattern " + pat.getLabel(),
+                    () -> {
+                        effect.setPolyBuffer(pat.getPolyBuffer());
+                        effect.loop(loopDeltaMs);
+                    });
             }
         }
     }

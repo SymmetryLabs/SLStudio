@@ -17,6 +17,7 @@ import heronarts.lx.LXUtils;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.util.dispatch.Dispatcher;
+import com.symmetrylabs.slstudio.logging.PatternErrorGuard;
 
 
 public class TreeRoots extends SLPattern<StripsModel<Strip>> {
@@ -233,7 +234,14 @@ public class TreeRoots extends SLPattern<StripsModel<Strip>> {
             //latticeInited = true;
             new Thread() {
                 public void run() {
-                    final dLattice l = new dLattice(model);
+                    final dLattice l;
+                    try {
+                        l = new dLattice(model);
+                    } catch (Throwable t) {
+                        PatternErrorGuard.report(
+                            "lattice initialization for pattern " + getLabel(), t);
+                        return;
+                    }
                     dispatcher.dispatchEngine(new Runnable() {
                         public void run() {
                             lattice = l;
