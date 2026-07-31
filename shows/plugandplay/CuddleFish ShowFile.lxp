@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "timestamp": 1785524919230,
+  "timestamp": 1785532135181,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
     "modulationColor": -16711913,
     "parameters": {
       "label": "Engine",
-      "speed": 1.600000023841858,
+      "speed": 0.9448818897637795,
       "multithreaded": true,
       "channelMultithreaded": true,
       "networkMultithreaded": true
@@ -44,7 +44,7 @@
         "modulationColor": -16711767,
         "parameters": {
           "label": "Look-1",
-          "focusedChannel": 9
+          "focusedChannel": 0
         },
         "channels": [
           {
@@ -66,7 +66,7 @@
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
               "autoDisable": true,
-              "speed": 1.0,
+              "speed": 1.0393700787401574,
               "editorVisible": true,
               "patternBlendMode": 0,
               "blendPatterns": false
@@ -341,7 +341,7 @@
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
               "autoDisable": true,
-              "speed": 1.0,
+              "speed": 1.0393700787401574,
               "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
@@ -620,7 +620,7 @@
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
               "autoDisable": true,
-              "speed": 1.0,
+              "speed": 1.0393700787401574,
               "editorVisible": true,
               "patternBlendMode": 0,
               "blendPatterns": false
@@ -1000,7 +1000,7 @@
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
               "autoDisable": true,
-              "speed": 1.0,
+              "speed": 1.0393700787401574,
               "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
@@ -1363,7 +1363,7 @@
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
               "autoDisable": true,
-              "speed": 1.0,
+              "speed": 1.0393700787401574,
               "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
@@ -1667,7 +1667,7 @@
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
               "autoDisable": true,
-              "speed": 1.0,
+              "speed": 1.0393700787401574,
               "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
@@ -1942,7 +1942,7 @@
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
               "autoDisable": true,
-              "speed": 1.0,
+              "speed": 1.0393700787401574,
               "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
@@ -2210,7 +2210,7 @@
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
               "autoDisable": true,
-              "speed": 1.0,
+              "speed": 1.0393700787401574,
               "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
@@ -2503,7 +2503,7 @@
               "transitionTimeSecs": 4.982036124542355,
               "transitionBlendMode": 0,
               "autoDisable": true,
-              "speed": 1.0153846181929111,
+              "speed": 0.9200000166893005,
               "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
@@ -2517,7 +2517,7 @@
                   "label": "Speckle",
                   "enabled": false,
                   "expandedInUi": true,
-                  "amt": 0.4566929133858268
+                  "amt": 0.0
                 }
               }
             ],
@@ -2587,7 +2587,7 @@
                   "enabled": false,
                   "Scale": 10.0,
                   "Speed": 4.0,
-                  "Range": 0.7
+                  "Range": 1.8830000340938569
                 },
                 "modulation": {
                   "modulators": [],
@@ -2622,7 +2622,7 @@
                   "expandedInUi": true,
                   "enabled": false,
                   "Shape": 0,
-                  "Freq": 6.816000071167945,
+                  "Freq": 6.219000047445297,
                   "Black": true
                 },
                 "modulation": {
@@ -2650,7 +2650,7 @@
                 }
               }
             ],
-            "patternIndex": 2,
+            "patternIndex": 5,
             "patterns": [
               {
                 "id": 35328,
@@ -3869,7 +3869,7 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": false,
-                  "Hue": 0.0,
+                  "Hue": 172.79999613761902,
                   "Spark": 0.0,
                   "Wave": 0.0,
                   "xPos": 0.5,
@@ -4542,7 +4542,7 @@
                   "label": "GroupStripFilter",
                   "expandedInUi": true,
                   "enabled": true,
-                  "g1": true,
+                  "g1": false,
                   "g2": false,
                   "g3": false,
                   "g4": false,
@@ -4558,7 +4558,7 @@
                 }
               }
             ],
-            "patternIndex": 0,
+            "patternIndex": 1,
             "patterns": [
               {
                 "id": 45344,
@@ -5966,6 +5966,27 @@
                     }
                   }
                 ]
+              },
+              {
+                "id": 57778,
+                "class": "heronarts.lx.pattern.SolidColorPattern",
+                "modulationColor": -16771073,
+                "parameters": {
+                  "label": "SolidColor",
+                  "expandedInUi": true,
+                  "Enabled": true,
+                  "Cycle": true,
+                  "color": -65536,
+                  "color/hue": 0.0,
+                  "color/brightness": 100.0,
+                  "color/saturation": 100.0
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                },
+                "autoCycleEnabled": true
               }
             ]
           },
@@ -7653,7 +7674,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16711761,
+          "modulationColor": -7424,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -7722,18 +7743,18 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.013748479552511128,
-          "Band-2": 0.07657531423693165,
-          "Band-3": 0.08483893759483097,
-          "Band-4": 0.09043573714072106,
-          "Band-5": 0.08275353376484473,
-          "Band-6": 0.1323227425290895,
-          "Band-7": 0.31989892907054795,
-          "Band-8": 0.30379194622497685,
-          "Band-9": 0.2008966103362103,
-          "Band-10": 0.14252242226021694,
-          "Band-11": 0.07774353671974643,
-          "Band-12": 0.04888500330027179,
+          "Band-1": 0.03522827682037377,
+          "Band-2": 0.10022414805494073,
+          "Band-3": 0.1185320830829748,
+          "Band-4": 0.12890773371372788,
+          "Band-5": 0.14094671149847748,
+          "Band-6": 0.11087850240005759,
+          "Band-7": 0.30498512895986174,
+          "Band-8": 0.32887827891997257,
+          "Band-9": 0.21253780658196197,
+          "Band-10": 0.11840945756598165,
+          "Band-11": 0.10203583643663039,
+          "Band-12": 0.06857164098995072,
           "Band-13": 0.0,
           "Band-14": 0.0,
           "Band-15": 0.0,
@@ -7792,7 +7813,7 @@
       "DMXParameterMapper": {
         "id": 48,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -16727041,
+        "modulationColor": -65534,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -8739,9 +8760,9 @@
       "inputs": [
         {
           "name": "APC40 mkII",
-          "channel": false,
-          "control": false,
-          "sync": false
+          "channel": true,
+          "control": true,
+          "sync": true
         },
         {
           "name": "U2MIDI Pro",
@@ -8762,13 +8783,6 @@
         }
       ],
       "mapping": [
-        {
-          "channel": 0,
-          "type": "CONTROL_CHANGE",
-          "componentId": 1,
-          "parameterPath": "speed",
-          "cc": 48
-        },
         {
           "channel": 0,
           "type": "CONTROL_CHANGE",
@@ -9496,6 +9510,62 @@
           "componentId": 21614,
           "parameterPath": "Trigger",
           "pitch": 86
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 696,
+          "parameterPath": "speed",
+          "cc": 48
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 708,
+          "parameterPath": "speed",
+          "cc": 48
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 810,
+          "parameterPath": "speed",
+          "cc": 48
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 821,
+          "parameterPath": "speed",
+          "cc": 48
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 834,
+          "parameterPath": "speed",
+          "cc": 48
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 857,
+          "parameterPath": "speed",
+          "cc": 48
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 874,
+          "parameterPath": "speed",
+          "cc": 48
+        },
+        {
+          "channel": 0,
+          "type": "CONTROL_CHANGE",
+          "componentId": 1099,
+          "parameterPath": "speed",
+          "cc": 48
         }
       ]
     }
@@ -9532,10 +9602,10 @@
         "positionX": 0.0,
         "positionY": 3359.308349609375,
         "positionZ": -39.570770263671875,
-        "orientW": 0.2435884,
-        "orientX": 0.5987592,
-        "orientY": 0.7430512,
-        "orientZ": 0.17328347
+        "orientW": 0.3646781,
+        "orientX": 0.59474933,
+        "orientY": 0.5984798,
+        "orientZ": 0.3938339
       }
     }
   }
