@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1785196930499,
+  "timestamp": 1785523577900,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -44,7 +44,7 @@
         "modulationColor": -16711767,
         "parameters": {
           "label": "Look-1",
-          "focusedChannel": 22
+          "focusedChannel": 9
         },
         "channels": [
           {
@@ -203,7 +203,7 @@
                 }
               }
             ],
-            "patternIndex": 3,
+            "patternIndex": 2,
             "patterns": [
               {
                 "id": 697,
@@ -607,13 +607,13 @@
             "modulationColor": -14080,
             "parameters": {
               "label": "Channel-3",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -987,13 +987,13 @@
             "modulationColor": -9043713,
             "parameters": {
               "label": "Channel-4",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -1929,13 +1929,13 @@
             "modulationColor": -16711726,
             "parameters": {
               "label": "Channel-7",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -2197,13 +2197,13 @@
             "modulationColor": -2686721,
             "parameters": {
               "label": "Channel-8",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -4475,13 +4475,13 @@
             "modulationColor": -16743937,
             "parameters": {
               "label": "AutoCycle",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": true,
               "autoCycleTimeSecs": 10.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": true,
@@ -4495,7 +4495,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 13,
+            "patternIndex": 19,
             "patterns": [
               {
                 "id": 28341,
@@ -6654,13 +6654,15 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": true,
-                  "Size": 0.8300000014901161,
+                  "SizeX": 0.85,
+                  "SizeY": 0.81,
+                  "SizeZ": 0.81,
                   "Top": 0.4000000134110451,
                   "Wave": 0.0,
                   "Sweep": false,
                   "pitchAxis": 1,
                   "velAxis": 0,
-                  "noteMin": 0,
+                  "noteMin": 73,
                   "noteMax": 67,
                   "pitchShift": 2,
                   "pitchFlip": true,
@@ -6708,7 +6710,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16711884,
+          "modulationColor": -9764609,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -6745,8 +6747,8 @@
       "modulationColor": -16711887,
       "parameters": {
         "label": "",
-        "period": 789.0418090820312,
-        "bpm": 76.04159793484683,
+        "period": 500.0168151855469,
+        "bpm": 119.99596449118441,
         "tap": false,
         "nudgeUp": false,
         "nudgeDown": false,
@@ -6847,7 +6849,7 @@
       "DMXParameterMapper": {
         "id": 111,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -65288,
+        "modulationColor": -16711814,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -7793,13 +7795,13 @@
     "midi": {
       "inputs": [
         {
-          "name": "APC40 mkII",
+          "name": "SPD-SX",
           "channel": true,
           "control": true,
           "sync": true
         },
         {
-          "name": "SPD-SX",
+          "name": "APC40 mkII",
           "channel": true,
           "control": true,
           "sync": true

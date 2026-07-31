@@ -785,8 +785,13 @@ public class SLStudioLX extends P3LX {
         LXClassLoader.findEffects(lx.model.getClass()).stream().forEach(lx::registerEffect);
 
         // Add all patterns
+        java.util.Set<String> excludedPatterns = new java.util.HashSet<>(java.util.Arrays.asList(
+            "heronarts.lx.pattern.LifePattern",
+            "com.symmetrylabs.slstudio.pattern.TreeRoots",
+            "com.symmetrylabs.slstudio.pattern.Worms"
+        ));
         LXClassLoader.findPatterns(lx.model.getClass()).stream()
-            .filter(c -> !"heronarts.lx.pattern.LifePattern".equals(c.getName()))
+            .filter(c -> !excludedPatterns.contains(c.getName()))
             .forEach(lx::registerPattern);
 
         lx.registerPattern(heronarts.p3lx.pattern.SolidColorPattern.class);

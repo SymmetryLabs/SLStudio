@@ -14,6 +14,7 @@ import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.slstudio.model.DoubleStrip;
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
+import heronarts.lx.PolyBuffer;
 import heronarts.lx.transform.LXMatrix;
 import heronarts.lx.transform.LXTransform;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class FlashShow implements Show {
     @Override
     public void setupLx(LX lx) {
         FlashModel model = (FlashModel) lx.model;
+        FlashBlackout.setStrips(model.getStrips());
         FlashPixlite pixlite = new FlashPixlite(lx, "192.168.1.50", model);
         lx.addOutput(pixlite);
         // Dedicated ADD-blend channel: always runs, adds white on top when a strip is selected
@@ -198,8 +200,12 @@ public class FlashShow implements Show {
         }
     }
     static class FlashPixlite extends SimplePixlite {
+        /** Scratch buffer holding the blacked-out copy of the output colors. */
+        private PolyBuffer maskBuffer = null;
+
         public FlashPixlite(LX lx, String ip, FlashModel model) {
             super(lx, ip);
+            this.lxRef = lx;
             // UNIVERSE_COUNT outputs; each output carries strips per universe
             // Per-strip GRB is handled via strip segments within the shared universe
             int[] counts = UIFlashModelingTool.loadStripCountsFromDisk();
@@ -230,6 +236,36 @@ public class FlashShow implements Show {
                 addPixliteOutput(pg);
             }
             System.out.println("FlashPixlite: built " + UNIVERSE_COUNT + " outputs, total strips = " + stripIndex);
+        }
+
+        private final LX lxRef;
+
+        /**
+         * Forces the points of any blacked-out strip to black for this output tree
+         * only, leaving the engine color buffer (and the 3D preview) untouched.
+         */
+        @Override
+        protected PolyBuffer processOutput(PolyBuffer src, PolyBuffer.Space space) {
+            PolyBuffer out = super.processOutput(src, space);
+            int[] blacked = FlashBlackout.getBlackedPointIndices();
+            if (blacked.length == 0 || space == null) return out;
+            if (maskBuffer == null) {
+                maskBuffer = new PolyBuffer(lxRef);
+            }
+            maskBuffer.copyFrom(out, space);
+            if (space == PolyBuffer.Space.RGB16) {
+                long[] arr = (long[]) maskBuffer.getArray(space);
+                for (int idx : blacked) {
+                    if (idx >= 0 && idx < arr.length) arr[idx] = 0L;
+                }
+            } else {
+                int[] arr = (int[]) maskBuffer.getArray(space);
+                for (int idx : blacked) {
+                    if (idx >= 0 && idx < arr.length) arr[idx] = 0;
+                }
+            }
+            maskBuffer.markModified(space);
+            return maskBuffer;
         }
 
         @Override

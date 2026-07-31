@@ -331,6 +331,7 @@ public class UIFlashModelingTool extends UI2dContainer {
 
         final float litBtnW  = 18f;  // width of illuminate toggle button
         final float grpBtnW  = 18f;  // width of group-select toggle button
+        final float blkBtnW  = 18f;  // width of output blackout toggle button
         final float colHdrH = 11f;
         final float xyBoxW  = 26f;  // wider box for tx/ty so 4 digits are visible
         final float azBoxW  = 24f;  // fixed width for az so 3-4 digits are visible
@@ -345,7 +346,7 @@ public class UIFlashModelingTool extends UI2dContainer {
         // Flexible cols: tz, rx, ry, d  (4 cols) — az, px, cv, grb, cir, dia are fixed width
         final int   otherCols = 4;
         // Each col (flexible or fixed) contributes (width + gap); litBtnW has no trailing gap
-        final float fixedUsed = gridLeft + 2*(xyCell+gap) + (azBoxW+gap) + (pxBoxW+gap) + (cvBoxW+gap) + (grbBoxW+gap) + (cirBoxW+gap) + (diaBoxW+gap) + otherCols*gap + (btnsW+gap) + (litBtnW+gap) + grpBtnW;
+        final float fixedUsed = gridLeft + 2*(xyCell+gap) + (azBoxW+gap) + (pxBoxW+gap) + (cvBoxW+gap) + (grbBoxW+gap) + (cirBoxW+gap) + (diaBoxW+gap) + otherCols*gap + (btnsW+gap) + (litBtnW+gap) + (grpBtnW+gap) + blkBtnW;
         final float colWFinal = (panelW - fixedUsed) / otherCols;
 
         float curY = 0f;
@@ -487,6 +488,12 @@ public class UIFlashModelingTool extends UI2dContainer {
             // "grp" column header
             new UILabel(hdrX + btnsW + gap + litBtnW + gap, curY, grpBtnW, colHdrH)
                 .setLabel("grp")
+                .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+                .setFontColor(0xFF666666)
+                .addToContainer(gridContainer);
+            // "blk" column header (output blackout)
+            new UILabel(hdrX + btnsW + gap + litBtnW + gap + grpBtnW + gap, curY, blkBtnW, colHdrH)
+                .setLabel("blk")
                 .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
                 .setFontColor(0xFF666666)
                 .addToContainer(gridContainer);
@@ -655,6 +662,18 @@ public class UIFlashModelingTool extends UI2dContainer {
                     }
                 };
                 grpBtn.setMomentary(false).setLabel("grp").addToContainer(gridContainer);
+
+                // Blackout toggle button — forces this strip's pixels to black on output only
+                final int capturedGlobalRowForBlk = globalRow;
+                heronarts.p3lx.ui.component.UIButton blkBtn = new heronarts.p3lx.ui.component.UIButton(curX + btnsW + gap + litBtnW + gap + grpBtnW + gap, curY, blkBtnW, boxH) {
+                    @Override
+                    protected void onToggle(boolean active) {
+                        com.symmetrylabs.shows.flash.FlashBlackout.setBlackedOut(capturedGlobalRowForBlk, active);
+                    }
+                };
+                blkBtn.setMomentary(false).setLabel("blk");
+                blkBtn.setActive(com.symmetrylabs.shows.flash.FlashBlackout.isBlackedOut(capturedGlobalRowForBlk));
+                blkBtn.addToContainer(gridContainer);
 
                 stripInputs.add(row);
                 double[] rowLast = new double[COLUMN_LABELS.length];
