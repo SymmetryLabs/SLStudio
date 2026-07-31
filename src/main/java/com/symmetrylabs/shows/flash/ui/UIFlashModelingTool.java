@@ -51,6 +51,7 @@ public class UIFlashModelingTool extends UI2dContainer {
         public float[][] strips;         // length = sum(stripCounts), each row is 6 params
         public String[]  universeLabels; // length = UNIVERSE_COUNT, user-defined labels
         public boolean[] universeRgbw;   // length = UNIVERSE_COUNT, true = 4-channel RGBW ArtNet
+        public boolean[] stripBlackout;  // length = sum(stripCounts), true = force strip black on output
     }
 
     // ── per-universe count boxes (always 54) ──────────────────────────────────
@@ -284,6 +285,8 @@ public class UIFlashModelingTool extends UI2dContainer {
                 countBoxes[u].setValue("1");
             }
         }
+        com.symmetrylabs.shows.flash.FlashBlackout.restore(
+            resizeBlackout(stripCounts, newCounts, snapshotBlackout(currentStripValues.length)));
         currentStripValues = resizeStripValues(stripCounts, newCounts, currentStripValues);
         System.arraycopy(newCounts, 0, stripCounts, 0, UNIVERSE_COUNT);
         buildStripGrid(currentStripValues);
@@ -562,10 +565,12 @@ public class UIFlashModelingTool extends UI2dContainer {
                     } else if (c == 9) {  // grb toggle button
                         float boxW = grbBoxW;
                         final boolean initialGrb = srcVals[c] > 0.5f;
+                        final int capturedCol = c;
                         heronarts.p3lx.ui.component.UIButton grbBtn = new heronarts.p3lx.ui.component.UIButton(curX, curY, boxW, boxH) {
                             @Override
                             protected void onToggle(boolean active) {
                                 setLabel(active ? "grb" : "rgb");
+                                handleValueChange(capturedStripIndex, capturedCol, active ? 1.0 : 0.0);
                             }
                         };
                         grbBtn.setMomentary(false).setLabel(initialGrb ? "grb" : "rgb");
@@ -574,7 +579,7 @@ public class UIFlashModelingTool extends UI2dContainer {
                         // Store a wrapper that exposes the value as double for snapshot compatibility
                         row[c] = new UIDoubleBox(0, 0, 0, 0) {
                             @Override public double getValue() { return grbBtn.isActive() ? 1.0 : 0.0; }
-                            @Override public UIDoubleBox setValue(double v) { grbBtn.setActive(v > 0.5); grbBtn.setLabel(v > 0.5 ? "GRB" : "RGB"); return this; }
+                            @Override public UIDoubleBox setValue(double v) { grbBtn.setActive(v > 0.5); grbBtn.setLabel(v > 0.5 ? "grb" : "rgb"); return this; }
                         };
                         curX += boxW + gap;
                     } else if (c == 10) {  // cir (circle) toggle button
@@ -697,6 +702,13 @@ public class UIFlashModelingTool extends UI2dContainer {
 
     /** Insert a blank strip after globalRow in the given universe, then rebuild. */
     private void insertStripAfter(int globalRow, int universe) {
+        // Shift blackout flags up so they stay attached to the same strips
+        boolean[] oldBlk = snapshotBlackout(currentStripValues.length);
+        boolean[] newBlk = new boolean[oldBlk.length + 1];
+        for (int i = 0; i <= globalRow && i < oldBlk.length; i++) newBlk[i] = oldBlk[i];
+        for (int i = globalRow + 1; i < oldBlk.length; i++) newBlk[i + 1] = oldBlk[i];
+        com.symmetrylabs.shows.flash.FlashBlackout.restore(newBlk);
+
         float[][] expanded = new float[currentStripValues.length + 1][COLUMN_LABELS.length];
         for (int i = 0; i <= globalRow; i++) {
             System.arraycopy(currentStripValues[i], 0, expanded[i], 0, COLUMN_LABELS.length);
@@ -714,6 +726,14 @@ public class UIFlashModelingTool extends UI2dContainer {
     /** Remove the strip at globalRow from the given universe, then rebuild. */
     private void removeStrip(int globalRow, int universe, int universeStripCount) {
         if (universeStripCount <= 1) return;  // keep at least 1 strip per universe
+        // Shift blackout flags down so they stay attached to the same strips
+        boolean[] oldBlk = snapshotBlackout(currentStripValues.length);
+        boolean[] newBlk = new boolean[Math.max(0, oldBlk.length - 1)];
+        for (int i = 0, j = 0; i < oldBlk.length; i++) {
+            if (i != globalRow) newBlk[j++] = oldBlk[i];
+        }
+        com.symmetrylabs.shows.flash.FlashBlackout.restore(newBlk);
+
         float[][] shrunk = new float[currentStripValues.length - 1][COLUMN_LABELS.length];
         for (int i = 0, j = 0; i < currentStripValues.length; i++) {
             if (i != globalRow) {
@@ -870,6 +890,34 @@ public class UIFlashModelingTool extends UI2dContainer {
         return offsets;
     }
 
+    /** Current blackout flags for global strip indices [0, total). */
+    private boolean[] snapshotBlackout(int total) {
+        boolean[] flags = new boolean[Math.max(0, total)];
+        for (int i = 0; i < flags.length; i++) {
+            flags[i] = com.symmetrylabs.shows.flash.FlashBlackout.isBlackedOut(i);
+        }
+        return flags;
+    }
+
+    /** Remaps blackout flags to new global indices when per-universe counts change. */
+    private boolean[] resizeBlackout(int[] oldCounts, int[] newCounts, boolean[] oldFlags) {
+        int[] oldOffsets = computeOffsets(oldCounts);
+        int[] newOffsets = computeOffsets(newCounts);
+        int totalNew = 0;
+        for (int c : newCounts) totalNew += c;
+        boolean[] newFlags = new boolean[totalNew];
+        for (int u = 0; u < UNIVERSE_COUNT; u++) {
+            int preserve = Math.min(oldCounts[u], newCounts[u]);
+            for (int s = 0; s < preserve; s++) {
+                int oldIdx = oldOffsets[u] + s;
+                if (oldIdx < oldFlags.length) {
+                    newFlags[newOffsets[u] + s] = oldFlags[oldIdx];
+                }
+            }
+        }
+        return newFlags;
+    }
+
     private float[][] resizeStripValues(int[] oldCounts, int[] newCounts, float[][] oldValues) {
         int[] oldOffsets = computeOffsets(oldCounts);
         int[] newOffsets = computeOffsets(newCounts);
@@ -907,6 +955,11 @@ public class UIFlashModelingTool extends UI2dContainer {
             file.universeRgbw[u] = universeRgbw[u];
         }
         file.strips = currentStripValues;
+        // Per-strip output blackout flags, indexed by global strip index
+        file.stripBlackout = new boolean[currentStripValues.length];
+        for (int i = 0; i < file.stripBlackout.length; i++) {
+            file.stripBlackout[i] = com.symmetrylabs.shows.flash.FlashBlackout.isBlackedOut(i);
+        }
         File f = new File(MAPPING_FILE);
         f.getParentFile().mkdirs();
         try (FileWriter writer = new FileWriter(f)) {
@@ -978,6 +1031,15 @@ public class UIFlashModelingTool extends UI2dContainer {
             System.arraycopy(file.universeRgbw, 0, rgbw, 0, UNIVERSE_COUNT);
         }
         return rgbw;
+    }
+
+    /**
+     * Returns the per-strip output blackout flags from disk, or null if absent.
+     * Called by FlashShow at output-build time. Indexed by global strip index.
+     */
+    public static boolean[] loadBlackoutFromDisk() {
+        MikeyMappingFile file = loadFileFromDisk();
+        return (file != null) ? file.stripBlackout : null;
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

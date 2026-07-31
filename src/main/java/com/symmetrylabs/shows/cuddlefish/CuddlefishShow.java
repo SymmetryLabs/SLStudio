@@ -59,7 +59,7 @@ public class CuddlefishShow implements Show {
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         UICuddlefishModelingTool tool = new UICuddlefishModelingTool(ui, 0, 0, ui.rightPane.model.getContentWidth());
         tool.addToContainer(ui.rightPane.model);
-        // GROUPS tab: assign strips to 8 groups used by the GroupStripFilter effect
+        // GROUPS tab: assign strips to 12 groups used by the GroupStripFilter effect
         com.symmetrylabs.shows.cuddlefish.ui.UICuddlefishStripGroupTool groupTool =
             new com.symmetrylabs.shows.cuddlefish.ui.UICuddlefishStripGroupTool(ui, 0, 0, ui.rightPane.groups.getContentWidth());
         groupTool.addToContainer(ui.rightPane.groups);

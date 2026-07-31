@@ -37,6 +37,23 @@ public final class FlashBlackout {
         recompute();
     }
 
+    /**
+     * Replaces the current blackout state with the saved flags, indexed by global
+     * strip index. A null or empty array clears all blackouts.
+     */
+    public static synchronized void restore(boolean[] saved) {
+        blackedStrips.clear();
+        if (saved != null) {
+            for (int i = 0; i < saved.length; i++) {
+                if (saved[i]) blackedStrips.add(i);
+            }
+        }
+        recompute();
+        if (!blackedStrips.isEmpty()) {
+            System.out.println("FlashBlackout: restored " + blackedStrips.size() + " blacked-out strips " + blackedStrips);
+        }
+    }
+
     public static synchronized boolean isBlackedOut(int stripIndex) {
         return blackedStrips.contains(stripIndex);
     }

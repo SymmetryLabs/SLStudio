@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1785523577900,
+  "timestamp": 1785533355709,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -44,7 +44,7 @@
         "modulationColor": -16711767,
         "parameters": {
           "label": "Look-1",
-          "focusedChannel": 9
+          "focusedChannel": 19
         },
         "channels": [
           {
@@ -536,7 +536,7 @@
                   "Enabled": true,
                   "Cycle": true,
                   "count": 3,
-                  "cx": 421.0,
+                  "cx": 500.0,
                   "cy": 23.25,
                   "cz": 0.0,
                   "width": 260.0,
@@ -775,7 +775,7 @@
                   "size": 100.0,
                   "detail": 4.0,
                   "ripple": 0.0,
-                  "x": 421.0,
+                  "x": 500.0,
                   "y": 23.25,
                   "z": 0.0,
                   "zScale": 0.0,
@@ -819,7 +819,7 @@
                   "size": 740.1574803149606,
                   "detail": 2.0,
                   "ripple": 0.6,
-                  "x": 421.0,
+                  "x": 500.0,
                   "y": 23.25,
                   "z": 0.0,
                   "zScale": 0.54,
@@ -863,7 +863,7 @@
                   "size": 500.0,
                   "detail": 6.6,
                   "ripple": 0.6,
-                  "x": 421.0,
+                  "x": 500.0,
                   "y": 23.25,
                   "z": 0.0,
                   "zScale": 5.58,
@@ -907,7 +907,7 @@
                   "size": 1419.9999845027924,
                   "detail": 6.456692913385826,
                   "ripple": 0.4,
-                  "x": 421.0,
+                  "x": 500.0,
                   "y": 23.25,
                   "z": 0.0,
                   "zScale": 6.3,
@@ -951,7 +951,7 @@
                   "size": 340.0,
                   "detail": 10.0,
                   "ripple": 0.6,
-                  "x": 421.0,
+                  "x": 500.0,
                   "y": 23.25,
                   "z": 0.0,
                   "zScale": 8.580000076442957,
@@ -1155,7 +1155,7 @@
                   "size": 560.0,
                   "detail": 6.6,
                   "ripple": 0.4,
-                  "x": 421.0,
+                  "x": 500.0,
                   "y": 23.25,
                   "z": 0.0,
                   "zScale": 6.3,
@@ -1199,7 +1199,7 @@
                   "size": 560.0,
                   "detail": 4.4,
                   "ripple": -3.6,
-                  "x": 421.0,
+                  "x": 500.0,
                   "y": 23.25,
                   "z": 0.0,
                   "zScale": -0.18,
@@ -1243,7 +1243,7 @@
                   "size": 560.0,
                   "detail": 6.6,
                   "ripple": 0.6,
-                  "x": 421.0,
+                  "x": 500.0,
                   "y": 23.25,
                   "z": 0.0,
                   "zScale": 5.763779527559054,
@@ -2530,7 +2530,7 @@
                 "parameters": {
                   "label": "GlobalColorPalette",
                   "expandedInUi": true,
-                  "enabled": false
+                  "enabled": true
                 },
                 "modulation": {
                   "modulators": [],
@@ -2564,7 +2564,7 @@
                   "label": "Desaturation",
                   "expandedInUi": true,
                   "enabled": false,
-                  "amount": 0.0,
+                  "amount": 0.8999999761581421,
                   "attack": 100.0,
                   "decay": 100.0
                 },
@@ -3080,7 +3080,7 @@
                   "Enabled": true,
                   "Cycle": false,
                   "count": 39,
-                  "cx": 0.0,
+                  "cx": 500.0,
                   "cy": 1046.22802734375,
                   "cz": 0.0,
                   "width": 260.0,
@@ -3177,7 +3177,7 @@
                   "size": 100.0,
                   "detail": 4.0,
                   "ripple": 0.0,
-                  "x": 421.0,
+                  "x": 500.0,
                   "y": 23.25,
                   "z": 0.0,
                   "zScale": 0.0,
@@ -3221,7 +3221,7 @@
                   "size": 620.0,
                   "detail": 2.0,
                   "ripple": 0.6,
-                  "x": 421.0,
+                  "x": 500.0,
                   "y": 23.25,
                   "z": 0.0,
                   "zScale": 0.54,
@@ -3286,7 +3286,7 @@
                   "size": 1719.9999950826168,
                   "detail": 6.6,
                   "ripple": 0.6,
-                  "x": 421.0,
+                  "x": 500.0,
                   "y": 23.25,
                   "z": 0.0,
                   "zScale": 5.58,
@@ -3351,7 +3351,7 @@
                   "size": 1680.0000071525574,
                   "detail": 10.0,
                   "ripple": 10.0,
-                  "x": 0.0,
+                  "x": 500.0,
                   "y": 23.25,
                   "z": 0.0,
                   "zScale": 12.0,
@@ -3416,7 +3416,7 @@
                   "size": 1459.9999786913395,
                   "detail": 3.9000000804662704,
                   "ripple": 0.6,
-                  "x": 421.0,
+                  "x": 500.0,
                   "y": 23.25,
                   "z": 0.0,
                   "zScale": 3.9,
@@ -3481,7 +3481,7 @@
                   "size": 560.0,
                   "detail": 6.6,
                   "ripple": 0.4,
-                  "x": 421.0,
+                  "x": 500.0,
                   "y": 23.25,
                   "z": 0.0,
                   "zScale": 6.3,
@@ -3546,7 +3546,7 @@
                   "size": 560.0,
                   "detail": 4.4,
                   "ripple": -3.6,
-                  "x": 421.0,
+                  "x": 500.0,
                   "y": 23.25,
                   "z": 0.0,
                   "zScale": -0.18,
@@ -3590,7 +3590,7 @@
                   "size": 560.0,
                   "detail": 6.6,
                   "ripple": 0.6,
-                  "x": 421.0,
+                  "x": 500.0,
                   "y": 23.25,
                   "z": 0.0,
                   "zScale": 5.58,
@@ -4475,13 +4475,13 @@
             "modulationColor": -16743937,
             "parameters": {
               "label": "AutoCycle",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": true,
               "autoCycleTimeSecs": 10.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": true,
@@ -4495,7 +4495,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 19,
+            "patternIndex": 5,
             "patterns": [
               {
                 "id": 28341,
@@ -4508,7 +4508,7 @@
                   "Cycle": true,
                   "palette": 18,
                   "speed": 411.9999910593033,
-                  "width": 3173.700439453125,
+                  "width": 2173.700439453125,
                   "wipeOut": true,
                   "refill": true,
                   "trigger": false,
@@ -4664,7 +4664,7 @@
                   "size": 800.0000034272672,
                   "detail": 3.4000000543892384,
                   "ripple": 0.6,
-                  "x": 300.0,
+                  "x": 500.0,
                   "y": 1046.22802734375,
                   "z": 78.398,
                   "zScale": 0.54,
@@ -4745,7 +4745,7 @@
                   "size": 1679.9999736249447,
                   "detail": 6.6,
                   "ripple": 0.6,
-                  "x": 300.0,
+                  "x": 500.0,
                   "y": 0.4,
                   "z": 78.398,
                   "zScale": -5.099999986588955,
@@ -5186,7 +5186,7 @@
                   "y": 0.0,
                   "z": 0.315,
                   "ampl": 5.999999642372131,
-                  "wavel": 1586.8502197265625,
+                  "wavel": 1086.8502197265625,
                   "period": 11642.000112682581
                 },
                 "modulation": {
@@ -5573,7 +5573,7 @@
                   "Cycle": true,
                   "palette": 35,
                   "speed": 391.9999915063381,
-                  "width": 3173.700439453125,
+                  "width": 2173.700439453125,
                   "wipeOut": true,
                   "refill": true,
                   "trigger": false,
@@ -6444,7 +6444,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 2,
+            "patternIndex": 4,
             "patterns": [
               {
                 "id": 27085,
@@ -6473,7 +6473,7 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": true,
-                  "universe": 1,
+                  "universe": 96,
                   "pixel": 1,
                   "all-pixels": true
                 },
@@ -6493,7 +6493,56 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": true,
-                  "strip": -1
+                  "strip": 543
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                },
+                "autoCycleEnabled": true
+              },
+              {
+                "id": 47239,
+                "class": "com.symmetrylabs.shows.flash.UniverseSelectorFlash",
+                "modulationColor": -65322,
+                "parameters": {
+                  "label": "UniverseSelectorFlash",
+                  "expandedInUi": true,
+                  "Enabled": true,
+                  "Cycle": true,
+                  "universe": 1,
+                  "pixel": 1,
+                  "all-pixels": true
+                },
+                "modulation": {
+                  "modulators": [],
+                  "modulations": [],
+                  "triggers": []
+                },
+                "autoCycleEnabled": true
+              },
+              {
+                "id": 48222,
+                "class": "com.symmetrylabs.slstudio.pattern.ParamCrossSections",
+                "modulationColor": -65417,
+                "parameters": {
+                  "label": "ParamCrossSections",
+                  "expandedInUi": true,
+                  "Enabled": true,
+                  "Cycle": true,
+                  "xPos": 500.0,
+                  "yPos": -149.51392372618784,
+                  "zPos": 0.0,
+                  "xSpd": 0.7,
+                  "ySpd": 0.6,
+                  "zSpd": 0.5,
+                  "xSize": 0.3,
+                  "xLvl": 1.0,
+                  "yLvl": 1.0,
+                  "zLvl": 0.5,
+                  "ySize": 1.0,
+                  "zSize": 0.3
                 },
                 "modulation": {
                   "modulators": [],
@@ -6618,7 +6667,7 @@
                   "label": "Rotate",
                   "enabled": false,
                   "expandedInUi": true,
-                  "cx": 0.0,
+                  "cx": 500.0,
                   "cy": 1046.22802734375,
                   "cz": 0.0,
                   "angle": 0.0
@@ -6633,7 +6682,7 @@
                   "enabled": true,
                   "expandedInUi": true,
                   "x": true,
-                  "cx": 0.0,
+                  "cx": 500.0,
                   "y": false,
                   "cy": 1046.22802734375,
                   "z": false,
@@ -6710,7 +6759,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -9764609,
+          "modulationColor": -15008000,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -6747,8 +6796,8 @@
       "modulationColor": -16711887,
       "parameters": {
         "label": "",
-        "period": 500.0168151855469,
-        "bpm": 119.99596449118441,
+        "period": 500.0278015136719,
+        "bpm": 119.99332800770172,
         "tap": false,
         "nudgeUp": false,
         "nudgeDown": false,
@@ -6849,7 +6898,7 @@
       "DMXParameterMapper": {
         "id": 111,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -16711814,
+        "modulationColor": -20480,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -8645,17 +8694,17 @@
         "46257": true
       },
       "preview": {
-        "radius": 2318.517627474741,
+        "radius": 3152.4859903636084,
         "theta": 0.0,
         "phi": 0.0,
         "roll": 0.0,
-        "positionX": 1166.3956298828125,
-        "positionY": 138.7938690185547,
-        "positionZ": 367.76361083984375,
-        "orientW": 0.6862941,
-        "orientX": -0.32390013,
-        "orientY": -0.28292984,
-        "orientZ": 0.58654916
+        "positionX": 1077.198486328125,
+        "positionY": 167.25502014160156,
+        "positionZ": 297.6336975097656,
+        "orientW": 0.08018402,
+        "orientX": -0.032180868,
+        "orientY": 0.61833537,
+        "orientZ": -0.78115064
       }
     }
   }

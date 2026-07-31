@@ -35,6 +35,7 @@ public class FlashShow implements Show {
     public void setupLx(LX lx) {
         FlashModel model = (FlashModel) lx.model;
         FlashBlackout.setStrips(model.getStrips());
+        FlashBlackout.restore(UIFlashModelingTool.loadBlackoutFromDisk());
         FlashPixlite pixlite = new FlashPixlite(lx, "192.168.1.50", model);
         lx.addOutput(pixlite);
         // Dedicated ADD-blend channel: always runs, adds white on top when a strip is selected
@@ -51,7 +52,7 @@ public class FlashShow implements Show {
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         UIFlashModelingTool tool = new UIFlashModelingTool(ui, 0, 0, ui.rightPane.model.getContentWidth());
         tool.addToContainer(ui.rightPane.model);
-        // GROUPS tab: assign strips to 8 groups used by the GroupStripFilter effect
+        // GROUPS tab: assign strips to 12 groups used by the GroupStripFilter effect
         com.symmetrylabs.shows.flash.ui.UIFlashStripGroupTool groupTool =
             new com.symmetrylabs.shows.flash.ui.UIFlashStripGroupTool(ui, 0, 0, ui.rightPane.groups.getContentWidth());
         groupTool.addToContainer(ui.rightPane.groups);

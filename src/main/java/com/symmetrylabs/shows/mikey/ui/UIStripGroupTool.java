@@ -10,7 +10,7 @@ import processing.core.PConstants;
 
 /**
  * GROUPS tab tool. Mirrors the universe/strip layout of UIMikeyModelingTool
- * but each strip row has 8 toggle boxes that assign the strip to groups 1-8.
+ * but each strip row has 12 toggle boxes that assign the strip to groups 1-12.
  * Group membership is consumed by the GroupStripFilter effect, which blacks
  * out any strip not in the selected group(s).
  *
@@ -36,7 +36,7 @@ public class UIStripGroupTool extends UI2dContainer {
 
         // ── Title ──
         new UILabel(0, 0, w - 10, 16)
-            .setLabel("STRIP GROUPS (8 groups)")
+            .setLabel("STRIP GROUPS (12 groups)")
             .setFont(ui.theme.getLabelFont())
             .setFontColor(ui.theme.getControlTextColor())
             .addToContainer(this);
@@ -80,7 +80,7 @@ public class UIStripGroupTool extends UI2dContainer {
                 .addToContainer(this);
             curY += uHeaderH;
 
-            // Column headers: g1..g8
+            // Column headers: g1..g12
             float hdrX = labelColW + gap;
             for (int g = 0; g < NUM_GROUPS; g++) {
                 new UILabel(hdrX, curY, groupBoxW, colHdrH)
@@ -92,7 +92,7 @@ public class UIStripGroupTool extends UI2dContainer {
             }
             curY += colHdrH;
 
-            // One row per strip: [strip #] [g1] [g2] ... [g8]
+            // One row per strip: [strip #] [g1] [g2] ... [g12]
             for (int s = 0; s < count; s++) {
                 final int stripIndex = globalRow;
 

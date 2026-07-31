@@ -12,7 +12,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 
 /**
- * Filters LED output by strip group. Strips are assigned to up to 8 groups
+ * Filters LED output by strip group. Strips are assigned to up to 12 groups
  * via the GROUPS tab (UIStripGroupTool). When one or more groups are enabled
  * on this effect, only strips belonging to an enabled group light up; all
  * other strips are blacked out. When no groups are enabled, all strips pass
@@ -24,6 +24,7 @@ public class GroupStripFilter extends LXEffect {
 
     public GroupStripFilter(LX lx) {
         super(lx);
+        this.label.setValue("Mikey Group Strip Filter");
         for (int g = 0; g < StripGroups.NUM_GROUPS; g++) {
             groups[g] = new BooleanParameter("g" + (g + 1), false);
             addParameter(groups[g]);

@@ -16,7 +16,7 @@ import com.google.gson.Gson;
  */
 public class StripGroups {
 
-    public static final int NUM_GROUPS = 8;
+    public static final int NUM_GROUPS = 12;
     public static final String GROUPS_FILE = "data/cuddlefish-groups.json";
 
     /** Saved file format. */
