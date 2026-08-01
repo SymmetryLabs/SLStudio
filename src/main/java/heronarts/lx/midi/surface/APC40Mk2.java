@@ -568,16 +568,29 @@ public class APC40Mk2 extends LXMidiSurface {
     private long deviceRegisterTime = 0;
     private static final long DEVICE_KNOB_QUIET_MS = 300;
 
-    // Burst detection for ch-0 track-select dumps: the APC40 sends all 8
-    // device-knob CCs (numbers 16-23, ~25 ms apart) when track 1 is selected.
-    // A real knob turn only ever sends one CC number repeatedly.
-    // We defer the first ch-0 CC until a second *distinct* CC confirms a dump.
-    private int ch0DumpSeenMask = 0;       // bitmask of CC offsets (0-7) seen
-    private long ch0DumpWindowStart = 0;
-    private int ch0PendingKnob = -1;       // knob offset of deferred first CC
-    private double ch0PendingValue = 0;    // normalized value of deferred CC
-    private boolean ch0SelectFired = false; // whether channel-0 select was done for this dump
-    private static final long CH0_DUMP_WINDOW_MS = 200;
+    // Disambiguation for track-select dumps: the APC40 sends all 8
+    // device-knob CCs (numbers 16-23) on the selected track's MIDI channel
+    // (0-7) when that track's select button is pressed. A real knob turn
+    // repeats the *same* CC number many times on the selected track's
+    // channel. Only the first CC after a quiet period is deferred; as soon
+    // as a second CC on that channel arrives we can tell definitively
+    // whether it's a turn (same knob repeats — apply immediately and every
+    // CC thereafter, for smooth continuous updates) or a dump (different
+    // knob — discard). State is tracked per-channel.
+    private static final int KNOB_MODE_UNKNOWN = 0;
+    private static final int KNOB_MODE_TURN = 1;
+    private static final int KNOB_MODE_DUMP = 2;
+
+    private final int[] knobMode = new int[NUM_CHANNELS];
+    private final long[] lastKnobEventTime = new long[NUM_CHANNELS];
+    private final int[] pendingKnob = new int[NUM_CHANNELS];        // knob offset of deferred first CC
+    private final double[] pendingValue = new double[NUM_CHANNELS]; // normalized value of deferred CC
+    private final boolean[] selectFired = new boolean[NUM_CHANNELS]; // whether track select was done for this dump
+    private static final long DUMP_QUIET_MS = 200;
+
+    {
+        java.util.Arrays.fill(this.pendingKnob, -1);
+    }
 
     public void register() {
         if (this.registered) {
@@ -882,66 +895,62 @@ public class APC40Mk2 extends LXMidiSurface {
         }
 
         if (number >= DEVICE_KNOB && number <= DEVICE_KNOB_MAX) {
-            // The APC40Mk2 hardware sends its stored knob positions when a track
-            // select button is pressed. Those dumps arrive on the track's MIDI
-            // channel (0-7), whereas real knob turns are sent on channel 0.
-            // Use the first CC of each dump (CC 16) to select the focused channel.
-            if (cc.getChannel() != 0) {
-                int dumpChannel = cc.getChannel();
-                if (number == DEVICE_KNOB) {
-                    LXLook look = lx.engine.getFocusedLook();
-                    while (look.channels.size() <= dumpChannel) {
-                        look.addChannel();
-                    }
-                    LXChannel selectedChannel = look.channels.get(dumpChannel);
-                    selectedChannel.editorVisible.setValue(true);
-                    look.focusedChannel.setValue(dumpChannel);
-                }
-                this.deviceListener.sendKnobValues(dumpChannel);
-                return;
-            }
-            // The APC40Mk2 also dumps knob positions for track 1 on MIDI ch 0
-            // when track 1's select button is pressed. A real knob turn sends
-            // one CC number repeatedly; a dump sends each of CCs 16-23 once.
-            // Defer the first CC and wait for a second distinct CC to confirm
-            // a dump before deciding whether to apply or discard the values.
+            int ch = cc.getChannel();
             long now = System.currentTimeMillis();
             int knobOffset = number - DEVICE_KNOB;
-            if (now - this.ch0DumpWindowStart > CH0_DUMP_WINDOW_MS) {
-                // Window expired — flush any pending real knob turn first
-                if (this.ch0PendingKnob >= 0) {
-                    this.deviceListener.onKnob(this.ch0PendingKnob, this.ch0PendingValue);
-                }
-                this.ch0DumpSeenMask = 0;
-                this.ch0PendingKnob = -1;
-                this.ch0SelectFired = false;
-                this.ch0DumpWindowStart = now;
+            double normalized = cc.getNormalized();
+
+            if (now - this.lastKnobEventTime[ch] > DUMP_QUIET_MS) {
+                // Quiet period elapsed since the last CC on this channel —
+                // start a fresh determination of turn vs. dump.
+                this.knobMode[ch] = KNOB_MODE_UNKNOWN;
+                this.pendingKnob[ch] = -1;
+                this.selectFired[ch] = false;
             }
-            int bit = 1 << knobOffset;
-            this.ch0DumpSeenMask |= bit;
-            boolean isDump = Integer.bitCount(this.ch0DumpSeenMask) >= 2;
-            if (isDump) {
-                // Dump confirmed — discard any pending first CC
-                this.ch0PendingKnob = -1;
-                // Fire channel-0 select exactly once per dump
-                if (!this.ch0SelectFired) {
-                    this.ch0SelectFired = true;
-                    LXLook look = lx.engine.getFocusedLook();
-                    if (!look.channels.isEmpty()) {
-                        LXChannel ch0 = look.channels.get(0);
-                        ch0.editorVisible.setValue(true);
-                        look.focusedChannel.setValue(0);
-                    }
+            this.lastKnobEventTime[ch] = now;
+
+            switch (this.knobMode[ch]) {
+            case KNOB_MODE_TURN:
+                // Already confirmed as a real turn — apply every CC immediately.
+                this.deviceListener.onKnob(knobOffset, normalized);
+                return;
+            case KNOB_MODE_DUMP:
+                // Already confirmed as a dump — remaining CCs are discarded.
+                return;
+            default:
+                if (this.pendingKnob[ch] < 0) {
+                    // First CC of a potential burst or turn — defer it until
+                    // the next CC on this channel tells us which it is.
+                    this.pendingKnob[ch] = knobOffset;
+                    this.pendingValue[ch] = normalized;
+                    return;
                 }
-                this.deviceListener.sendKnobValues(0);
+                if (knobOffset == this.pendingKnob[ch]) {
+                    // Same knob repeated — confirmed real turn. Apply the
+                    // deferred value and this one, then apply immediately
+                    // going forward.
+                    this.knobMode[ch] = KNOB_MODE_TURN;
+                    this.deviceListener.onKnob(this.pendingKnob[ch], this.pendingValue[ch]);
+                    this.deviceListener.onKnob(knobOffset, normalized);
+                    this.pendingKnob[ch] = -1;
+                    return;
+                }
+                // Distinct knob — confirmed dump. Discard the deferred value.
+                this.knobMode[ch] = KNOB_MODE_DUMP;
+                this.pendingKnob[ch] = -1;
+                if (!this.selectFired[ch]) {
+                    this.selectFired[ch] = true;
+                    LXLook look = lx.engine.getFocusedLook();
+                    while (look.channels.size() <= ch) {
+                        look.addChannel();
+                    }
+                    LXChannel selectedChannel = look.channels.get(ch);
+                    selectedChannel.editorVisible.setValue(true);
+                    look.focusedChannel.setValue(ch);
+                }
+                this.deviceListener.sendKnobValues(ch);
                 return;
             }
-            // Only one distinct CC so far — could be a real turn or the first
-            // CC of a dump. Defer it: overwrite pending with latest value for
-            // this knob (repeated CCs from a fast turn) and don't apply yet.
-            this.ch0PendingKnob = knobOffset;
-            this.ch0PendingValue = cc.getNormalized();
-            return;
         }
 
         if (number >= CHANNEL_KNOB && number <= CHANNEL_KNOB_MAX) {
