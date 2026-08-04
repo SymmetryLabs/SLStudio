@@ -41,8 +41,10 @@ import java.util.Map;
 public class DefibrillatorShow implements Show {
     public static final String SHOW_NAME = "defibrillator";
 
-    /** Relative to the SLStudio working directory. */
-    private static final String FIXTURES_ROOT = "defibrillator_clean/lx_app/Fixtures";
+    /** Relative path (from either the working directory or the app's install directory). */
+    private static final String FIXTURES_REL_PATH = "defibrillator_clean/lx_app/Fixtures";
+    /** Optional override, e.g. for a packaged app: -Dcom.symmetrylabs.defibrillator.fixturesRoot=/abs/path */
+    private static final String FIXTURES_ROOT_PROPERTY = "com.symmetrylabs.defibrillator.fixturesRoot";
     private static final String[] INDEX_FIXTURES = { "heart", "brandeaux", "shady" };
 
     private static List<StripSpec> stripSpecsCache;
@@ -50,9 +52,45 @@ public class DefibrillatorShow implements Show {
     /** Every KiNET port output that was wired up, exposed for the model-tab UI. */
     private final List<OutputEntry> outputEntries = new ArrayList<>();
 
+    /**
+     * Locates the Fixtures/ directory, checking (in order): an explicit system property
+     * override, the current working directory (the normal case when run via Gradle/from a
+     * terminal), and the directory containing this class's own jar/classes (the case for a
+     * packaged, double-clickable app where the CWD at launch isn't the install directory).
+     */
+    private static File resolveFixturesRoot() {
+        String override = System.getProperty(FIXTURES_ROOT_PROPERTY);
+        if (override != null && !override.isEmpty()) {
+            File dir = new File(override);
+            if (dir.isDirectory()) {
+                return dir;
+            }
+            System.err.println("DefibrillatorShow: " + FIXTURES_ROOT_PROPERTY + "=" + override + " is not a directory, ignoring");
+        }
+
+        File cwdRelative = new File(FIXTURES_REL_PATH);
+        if (cwdRelative.isDirectory()) {
+            return cwdRelative;
+        }
+
+        try {
+            File codeLocation = new File(DefibrillatorShow.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            File jarDir = codeLocation.isFile() ? codeLocation.getParentFile() : codeLocation;
+            File jarRelative = new File(jarDir, FIXTURES_REL_PATH);
+            if (jarRelative.isDirectory()) {
+                return jarRelative;
+            }
+        } catch (Exception e) {
+            System.err.println("DefibrillatorShow: could not resolve fixtures relative to jar location: " + e);
+        }
+
+        // Fall back to the CWD-relative path; loadFixture() will log per-file errors.
+        return cwdRelative;
+    }
+
     private static List<StripSpec> loadSpecs() {
         if (stripSpecsCache == null) {
-            File fixturesRoot = new File(FIXTURES_ROOT);
+            File fixturesRoot = resolveFixturesRoot();
             stripSpecsCache = DefibrillatorFixtureLoader.loadKinetStrips(fixturesRoot, INDEX_FIXTURES);
             System.out.println("DefibrillatorShow: loaded " + stripSpecsCache.size() + " KiNET strips from " + fixturesRoot);
         }
