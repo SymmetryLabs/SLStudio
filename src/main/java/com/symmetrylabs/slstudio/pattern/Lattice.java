@@ -50,6 +50,12 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
     protected BooleanParameter negYParam = new BooleanParameter("-Y", false).setDescription("Hold for -Y direction").setMode(BooleanParameter.Mode.MOMENTARY);
     protected BooleanParameter posYParam = new BooleanParameter("+Y", false).setDescription("Hold for +Y direction").setMode(BooleanParameter.Mode.MOMENTARY);
     protected BooleanParameter negZParam = new BooleanParameter("-Z", false).setDescription("Hold for -Z direction").setMode(BooleanParameter.Mode.MOMENTARY);
+    protected BooleanParameter allPosXParam = new BooleanParameter("All+X", false).setDescription("Hold to trigger all strips with animation running in +X direction").setMode(BooleanParameter.Mode.MOMENTARY);
+    protected BooleanParameter allNegXParam = new BooleanParameter("All-X", false).setDescription("Hold to trigger all strips with animation running in -X direction").setMode(BooleanParameter.Mode.MOMENTARY);
+    protected BooleanParameter allPosYParam = new BooleanParameter("All+Y", false).setDescription("Hold to trigger all strips with animation running in +Y direction").setMode(BooleanParameter.Mode.MOMENTARY);
+    protected BooleanParameter allNegYParam = new BooleanParameter("All-Y", false).setDescription("Hold to trigger all strips with animation running in -Y direction").setMode(BooleanParameter.Mode.MOMENTARY);
+    protected BooleanParameter allPosZParam = new BooleanParameter("All+Z", false).setDescription("Hold to trigger all strips with animation running in +Z direction").setMode(BooleanParameter.Mode.MOMENTARY);
+    protected BooleanParameter allNegZParam = new BooleanParameter("All-Z", false).setDescription("Hold to trigger all strips with animation running in -Z direction").setMode(BooleanParameter.Mode.MOMENTARY);
     protected BooleanParameter triggerParam = new BooleanParameter("Trigger", false).setDescription("Trigger a shape").setMode(BooleanParameter.Mode.MOMENTARY);
 
     private DiscreteParameter noteLoParam = new DiscreteParameter("NoteLo", 36, 0, 127).setDescription("Lowest MIDI note of keyboard range");
@@ -74,6 +80,12 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
         addParameter(negYParam);
         addParameter(posYParam);
         addParameter(negZParam);
+        addParameter(allPosXParam);
+        addParameter(allNegXParam);
+        addParameter(allPosYParam);
+        addParameter(allNegYParam);
+        addParameter(allPosZParam);
+        addParameter(allNegZParam);
         addParameter(triggerParam);
 
         addParameter(noteLoParam);
@@ -144,13 +156,23 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
         if (posYParam.isOn()) { dir = Dir.Y; sign = Sign.POS; }
         if (negZParam.isOn()) { dir = Dir.Z; sign = Sign.NEG; }
 
+        Dir allDir = null;
+        Sign allSign = Sign.POS;
+        if (allPosXParam.isOn()) { allDir = Dir.X; allSign = Sign.POS; }
+        if (allNegXParam.isOn()) { allDir = Dir.X; allSign = Sign.NEG; }
+        if (allPosYParam.isOn()) { allDir = Dir.Y; allSign = Sign.POS; }
+        if (allNegYParam.isOn()) { allDir = Dir.Y; allSign = Sign.NEG; }
+        if (allPosZParam.isOn()) { allDir = Dir.Z; allSign = Sign.POS; }
+        if (allNegZParam.isOn()) { allDir = Dir.Z; allSign = Sign.NEG; }
+
         List<ScheduledActivation> newActivations = new ArrayList<>();
         for (Strip strip : model.getStrips()) {
-            if (getStripAxis(strip) == dir) {
+            if (allDir != null || getStripAxis(strip) == dir) {
                 double delay = shape.getDelay(strip);
                 if (delay >= 0) {
-                    newActivations.add(new ScheduledActivation(timeSec + delay, strip, sign, animation, hue));
-
+                    Dir animDir = allDir != null ? allDir : dir;
+                    Sign animSign = allDir != null ? allSign : sign;
+                    newActivations.add(new ScheduledActivation(timeSec + delay, strip, animSign, animDir, animation, hue));
                 }
             }
         }
@@ -183,13 +205,15 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
         public final double startSec;
         public final Strip strip;
         public final Sign sign;
+        public final Dir animDir;
         public final Animation animation;
         public final double hue;
 
-        public ScheduledActivation(double startSec, Strip strip, Sign sign, Animation animation, double hue) {
+        public ScheduledActivation(double startSec, Strip strip, Sign sign, Dir animDir, Animation animation, double hue) {
             this.startSec = startSec;
             this.strip = strip;
             this.sign = sign;
+            this.animDir = animDir;
             this.animation = animation;
             this.hue = hue;
         }
@@ -202,7 +226,7 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
         }
 
         public AnimationRun startAnimation() {
-            return new AnimationRun(strip, sign, animation, hue);
+            return new AnimationRun(strip, sign, animDir, animation, hue);
         }
     }
 
@@ -214,10 +238,10 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
         double hue;
         double elapsedSec;
 
-        public AnimationRun(Strip strip, Sign sign, Animation animation, double hue) {
+        public AnimationRun(Strip strip, Sign sign, Dir animDir, Animation animation, double hue) {
             this.strip = strip;
             this.sign = sign;
-            this.dir = getStripAxis(strip);
+            this.dir = animDir;
             this.animation = animation;
             this.hue = hue;
             elapsedSec = 0;
@@ -233,7 +257,14 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
 
         public void blendOnto(long[] colors) {
             for (LXPoint point : strip.points) {
-                double pos = getPos(point, strip, dir, sign);
+                double pos;
+                if (dir != getStripAxis(strip)) {
+                    // Animation axis differs from strip's physical axis;
+                    // use model-level coordinates for position.
+                    pos = getModelPos(point, dir, sign);
+                } else {
+                    pos = getPos(point, strip, dir, sign);
+                }
                 long c = animation.getColor(elapsedSec, pos, hue);
                 colors[point.index] = Ops16.add(colors[point.index], c);
             }
@@ -315,6 +346,18 @@ public class Lattice extends MidiPolyphonicExpressionPattern<StripsModel<? exten
         if (strip.xRange > strip.yRange && strip.xRange > strip.zRange) return Dir.X;
         if (strip.yRange > strip.zRange) return Dir.Y;
         return Dir.Z;
+    }
+
+    protected double getModelPos(LXPoint point, Dir dir, Sign sign) {
+        double pos;
+        if (dir == Dir.X) {
+            pos = (point.x - model.xMin) / model.xRange;
+        } else if (dir == Dir.Y) {
+            pos = (point.y - model.yMin) / model.yRange;
+        } else {
+            pos = (point.z - model.zMin) / model.zRange;
+        }
+        return (sign == Sign.NEG) ? 1 - pos : pos;
     }
 
     public static double getPos(LXPoint point, Strip strip, Dir dir, Sign sign) {
