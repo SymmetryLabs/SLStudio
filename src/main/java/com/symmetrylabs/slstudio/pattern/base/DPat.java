@@ -25,6 +25,7 @@ public abstract class DPat extends SLPattern<SLModel> {
     public ArrayList<DBool> bools = new ArrayList<DBool>();
     public PVector pTrans = new PVector();
     public PVector mMax, mCtr, mHalf;
+    public boolean flatZ;
     public SplittableRandom splittableRandom = new SplittableRandom();
 
     public LXMidiOutput APCOut;
@@ -60,15 +61,24 @@ public abstract class DPat extends SLPattern<SLModel> {
     }
 
     public PVector getNorm(PVector vec) {
-        return new PVector(vec.x / mMax.x, vec.y / mMax.y, vec.z / mMax.z);
+        return new PVector(
+            mMax.x > 0 ? vec.x / mMax.x : 0.5f,
+            mMax.y > 0 ? vec.y / mMax.y : 0.5f,
+            mMax.z > 0 ? vec.z / mMax.z : 0.5f);
     }
 
     public void setNorm(PVector vec) {
-        vec.set(vec.x / mMax.x, vec.y / mMax.y, vec.z / mMax.z);
+        vec.set(
+            mMax.x > 0 ? vec.x / mMax.x : 0.5f,
+            mMax.y > 0 ? vec.y / mMax.y : 0.5f,
+            mMax.z > 0 ? vec.z / mMax.z : 0.5f);
     }
 
     public void setRand(PVector vec) {
-        vec.set(random(mMax.x), random(mMax.y), random(mMax.z));
+        vec.set(
+            mMax.x > 0 ? random(mMax.x) : 0,
+            mMax.y > 0 ? random(mMax.y) : 0,
+            mMax.z > 0 ? random(mMax.z) : 0);
     }
 
     public void setVec(PVector vec, LXVector v) {
@@ -264,6 +274,7 @@ public abstract class DPat extends SLPattern<SLModel> {
         modmin = new PVector(model.xMin, model.yMin, model.zMin);
         mMax = new PVector(model.xMax, model.yMax, model.zMax);
         mMax.sub(modmin);
+        flatZ = mMax.z < 1e-3f;
         mCtr = new PVector();
         mCtr.set(mMax);
         mCtr.mult(.5f);

@@ -491,7 +491,9 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
     public void midiDispatch(LXShortMessage message) {
         LXPattern activePattern = getActivePattern();
-        message.dispatch(activePattern);
+        if (activePattern != null) {
+            message.dispatch(activePattern);
+        }
         LXPattern nextPattern = getNextPattern();
         if (nextPattern != null && nextPattern != activePattern) {
             message.dispatch(nextPattern);

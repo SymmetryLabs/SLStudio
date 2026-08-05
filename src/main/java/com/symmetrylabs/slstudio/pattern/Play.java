@@ -196,24 +196,26 @@ public class Play extends DPat
         PVector Pn = getNorm(Px);
         PVector V = new PVector();
 
-        float mp    = MathUtils.min(Pn.x, Pn.z);
+        float pz    = flatZ ? Pn.x : Pn.z;
+        float mp    = MathUtils.min(Pn.x, pz);
         float yt     = map(t,0,1,.5f-bnc/2,.5f+bnc/2);
         float r,d;
 
         switch (pShape.getValuei()) {
-            case 0:        V.set(Pn.x, yt                                 , Pn.z);                             break;    // bouncing line
-            case 1:        V.set(Pn.x, map(MathUtils.cos(PConstants.PI*t * Pn.x),-1,1,0,1)  , Pn.z);                             break;    // top tap
-            case 2:        V.set(Pn.x, bnc*map(Pn.x<.5f?Pn.x:1-Pn.x,0,.5f ,0,t-.5f)+.5f, Pn.z);                break;    // V shape
+            case 0:        V.set(Pn.x, yt                                 , pz);                             break;    // bouncing line
+            case 1:        V.set(Pn.x, map(MathUtils.cos(PConstants.PI*t * Pn.x),-1,1,0,1)  , pz);                             break;    // top tap
+            case 2:        V.set(Pn.x, bnc*map(Pn.x<.5f?Pn.x:1-Pn.x,0,.5f ,0,t-.5f)+.5f, pz);                break;    // V shape
             case 3:        V.set(Pn.x, Pn.x < cMidNorm.x ? map(Pn.x,0,cMidNorm.x, .5f,yt) :
-                map(Pn.x,cMidNorm.x,1, yt,.5f), Pn.z);                  break;    //  Random V shape
+                map(Pn.x,cMidNorm.x,1, yt,.5f), pz);                  break;    //  Random V shape
 
-            case 4:        V.set(Pn.x,    .5f*(Pn.x < cMidNorm.x ?     map(Pn.x,0,cMidNorm.x, .5f,yt) :
+            case 4:        float cmz = flatZ ? cMidNorm.x : cMidNorm.z;
+                V.set(Pn.x,    .5f*(Pn.x < cMidNorm.x ?     map(Pn.x,0,cMidNorm.x, .5f,yt) :
                 map(Pn.x,cMidNorm.x,1, yt,.5f)) +
-                .5f*(Pn.z < cMidNorm.z ?     map(Pn.z,0,cMidNorm.z, .5f,yt) :
-                    map(Pn.z,cMidNorm.z,1, yt,.5f)), Pn.z);         break;    //  Random Pyramid shape
+                .5f*(pz < cmz ?     map(pz,0,cmz, .5f,yt) :
+                    map(pz,cmz,1, yt,.5f)), pz);         break;    //  Random Pyramid shape
 
-            case 5:        V.set(Pn.x, bnc*map((Pn.x-.5f)*(Pn.x-.5f),0,.25f,0,t-.5f)+.5f, Pn.z);                break;    // wings
-            case 6:        V.set(Pn.x, bnc*map((mp  -.5f)*(mp  -.5f),0,.25f,0,t-.5f)+.5f, Pn.z);                break;    // wings
+            case 5:        V.set(Pn.x, bnc*map((Pn.x-.5f)*(Pn.x-.5f),0,.25f,0,t-.5f)+.5f, pz);                break;    // wings
+            case 6:        V.set(Pn.x, bnc*map((mp  -.5f)*(mp  -.5f),0,.25f,0,t-.5f)+.5f, pz);                break;    // wings
 
             case 7:        d = MathUtils.min(
                 distToSeg(Px.x, Px.y, a1.getX(70),a1.getY(70), mCtr.x, mCtr.y),
@@ -253,12 +255,13 @@ public class Play extends DPat
 
             case 13:
             case 14:    float y=0; for (rWave w : waves) y += .5f*w.val(Pn.x);    // wave
-                V.set(Pn.x, .7f+y, Pn.z);
+                V.set(Pn.x, .7f+y, pz);
                 break;
 
             default:    return lx.hsb(0,0,0);
         }
-        return lx.hsb(lxh(), 100, c1c(1 - V.dist(Pn)/rad));
+        float vDist = flatZ ? MathUtils.dist(V.x, V.y, Pn.x, Pn.y) : V.dist(Pn);
+        return lx.hsb(lxh(), 100, c1c(1 - vDist/rad));
     }
 }
 
