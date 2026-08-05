@@ -9,6 +9,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 
+import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.util.ColorUtils;
 
 public class RGBScale extends LXEffect {
@@ -31,10 +32,10 @@ public class RGBScale extends LXEffect {
         double bs = bScale.getValue();
         for (LXVector p : getVectors()) {
             int c = colors[p.index];
-            int r = (int) Math.round(rs * LXColor.red(c));
-            int b = (int) Math.round(gs * LXColor.green(c));
-            int g = (int) Math.round(bs * LXColor.blue(c));
-            colors[p.index] = LXColor.rgb(r, g, b);
+            int r = (int) Math.round(rs * Ops8.red(c));
+            int g = (int) Math.round(gs * Ops8.green(c));
+            int b = (int) Math.round(bs * Ops8.blue(c));
+            colors[p.index] = Ops8.rgba(r, g, b, Ops8.alpha(c));
         }
     }
 }

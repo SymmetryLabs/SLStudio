@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1785967888008,
+  "timestamp": 1785969064578,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -44,7 +44,7 @@
         "modulationColor": -16711767,
         "parameters": {
           "label": "Look-1",
-          "focusedChannel": 8
+          "focusedChannel": 9
         },
         "channels": [
           {
@@ -2638,7 +2638,7 @@
                 }
               }
             ],
-            "patternIndex": 2,
+            "patternIndex": 34,
             "patterns": [
               {
                 "id": 1591,
@@ -4060,10 +4060,10 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": false,
-                  "color": -16121984,
-                  "color/hue": 149.01885944604874,
+                  "color": -65532,
+                  "color/hue": 359.0,
                   "color/brightness": 100.0,
-                  "color/saturation": 96.47058868408203
+                  "color/saturation": 100.0
                 },
                 "modulation": {
                   "modulators": [],
@@ -4466,8 +4466,8 @@
                       "range": 3.5999999195337296,
                       "period": 9120.00035867095,
                       "spread": 360.0,
-                      "spreadX": 0.3999999910593033,
-                      "spreadY": 0.8200000040233135,
+                      "spreadX": 1.0,
+                      "spreadY": 1.0,
                       "spreadZ": 0.0,
                       "spreadR": 0.0,
                       "offsetX": 0.0,
@@ -4583,7 +4583,7 @@
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": true,
-              "autoCycleTimeSecs": 10.0,
+              "autoCycleTimeSecs": 15.0,
               "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
@@ -4598,7 +4598,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 23,
+            "patternIndex": 3,
             "patterns": [
               {
                 "id": 28341,
@@ -7149,13 +7149,13 @@
             "modulationColor": -65328,
             "parameters": {
               "label": "Audio",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -7339,7 +7339,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16711864,
+          "modulationColor": -16711905,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -7368,7 +7368,26 @@
         "label": "Master"
       },
       "warps": [],
-      "effects": []
+      "effects": [
+        {
+          "id": 52533,
+          "class": "com.symmetrylabs.slstudio.effect.RGBScale",
+          "modulationColor": -10026753,
+          "parameters": {
+            "label": "RGBScale",
+            "expandedInUi": true,
+            "enabled": true,
+            "rScale": 0.9999999776482582,
+            "gScale": 0.9999999776482582,
+            "bScale": 1.0
+          },
+          "modulation": {
+            "modulators": [],
+            "modulations": [],
+            "triggers": []
+          }
+        }
+      ]
     },
     "tempo": {
       "id": 26,
@@ -7478,7 +7497,7 @@
       "DMXParameterMapper": {
         "id": 111,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -65469,
+        "modulationColor": -16711728,
         "parameters": {
           "label": "DMXParameterMapper"
         },
