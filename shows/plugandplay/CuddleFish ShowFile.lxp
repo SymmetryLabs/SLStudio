@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1785545079643,
+  "timestamp": 1786041990305,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -44,7 +44,7 @@
         "modulationColor": -16711767,
         "parameters": {
           "label": "Look-1",
-          "focusedChannel": 8
+          "focusedChannel": 9
         },
         "channels": [
           {
@@ -2581,13 +2581,13 @@
             "modulationColor": -8978688,
             "parameters": {
               "label": "Ipad",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 14.675039506957546,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -2768,7 +2768,7 @@
                 }
               }
             ],
-            "patternIndex": 2,
+            "patternIndex": 5,
             "patterns": [
               {
                 "id": 35328,
@@ -3065,7 +3065,7 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": false,
-                  "palette": 35,
+                  "palette": 32,
                   "speed": 460.00001206994057,
                   "width": 105.33094024658203,
                   "wipeOut": true,
@@ -3079,7 +3079,7 @@
                   "triggers": []
                 },
                 "autoCycleEnabled": false,
-                "paletteName": "sun4",
+                "paletteName": "sun1",
                 "patternEffects": [
                   {
                     "id": 35315,
@@ -4744,13 +4744,13 @@
             "modulationColor": -16743937,
             "parameters": {
               "label": "AutoCycle",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
-              "autoCycleEnabled": false,
+              "autoCycleEnabled": true,
               "autoCycleTimeSecs": 15.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": true,
@@ -7351,13 +7351,13 @@
             "modulationColor": -7936,
             "parameters": {
               "label": "NordKeys",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": true,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -7389,7 +7389,7 @@
               }
             ],
             "effects": [],
-            "patternIndex": 5,
+            "patternIndex": 0,
             "patterns": [
               {
                 "id": 48231,
@@ -7908,7 +7908,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16711709,
+          "modulationColor": -16711705,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -7978,18 +7978,18 @@
           "release": 100.0,
           "slope": 4.5,
           "Band-1": 0.0,
-          "Band-2": 0.03627047136193651,
-          "Band-3": 0.06433768989629562,
-          "Band-4": 0.1089784694630741,
-          "Band-5": 0.12049858581033057,
-          "Band-6": 0.09036975909830192,
-          "Band-7": 0.28239202086264337,
-          "Band-8": 0.29496154789051043,
-          "Band-9": 0.18868941365535485,
-          "Band-10": 0.12872381526886423,
-          "Band-11": 0.07194072127917506,
-          "Band-12": 0.09582409829516492,
-          "Band-13": 0.014195513257551418,
+          "Band-2": 0.0623104138537075,
+          "Band-3": 0.09109190587070726,
+          "Band-4": 0.11726648766437109,
+          "Band-5": 0.10363372164442419,
+          "Band-6": 0.15750430606852872,
+          "Band-7": 0.2927222277807847,
+          "Band-8": 0.2794818502606753,
+          "Band-9": 0.17068744934028413,
+          "Band-10": 0.12184809290840393,
+          "Band-11": 0.09052728042531355,
+          "Band-12": 0.08623037360342956,
+          "Band-13": 0.0,
           "Band-14": 0.0,
           "Band-15": 0.0,
           "Band-16": 0.0
@@ -8047,7 +8047,7 @@
       "DMXParameterMapper": {
         "id": 48,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -16745985,
+        "modulationColor": -16738817,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -9892,10 +9892,10 @@
         "positionX": 0.0,
         "positionY": 3359.308349609375,
         "positionZ": -39.570770263671875,
-        "orientW": -0.09592598,
-        "orientX": -0.49715495,
-        "orientY": 0.7622862,
-        "orientZ": 0.40318093
+        "orientW": -0.09592599,
+        "orientX": -0.49715498,
+        "orientY": 0.76228625,
+        "orientZ": 0.40318096
       }
     }
   }
