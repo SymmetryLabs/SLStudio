@@ -26,7 +26,8 @@ plugins {
 
 group = 'com.symmetrylabs'
 version = '1.0.5'
-sourceCompatibility = 1.8
+sourceCompatibility = 17
+targetCompatibility = 17
 mainClassName = 'com.symmetrylabs.slstudio.SymmetryLauncher'
 
 allprojects {
@@ -40,13 +41,15 @@ allprojects {
         }
     }
     tasks.withType(JavaCompile) {
-        sourceCompatibility = '1.8'
+        sourceCompatibility = '17'
+        targetCompatibility = '17'
         options.encoding = 'UTF-8'
     }
 }
 
 repositories {
     mavenCentral()
+    maven { url 'https://jogamp.org/deployment/maven/' }
     // needed for aparapi dependency
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
@@ -68,7 +71,10 @@ dependencies {
     implementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: '1.9.23'
     // Processing 4.x and OpenGL dependencies (local jars, Java 17+)
     implementation files('libs/core-4.4.1.jar')
-    implementation files('libs/jogamp-fat.jar')
+    implementation group: 'org.jogamp.gluegen', name: 'gluegen-rt', version: '2.5.0'
+    implementation group: 'org.jogamp.gluegen', name: 'gluegen-rt', version: '2.5.0', classifier: 'natives-macosx-universal'
+    implementation group: 'org.jogamp.jogl', name: 'jogl-all', version: '2.5.0'
+    implementation group: 'org.jogamp.jogl', name: 'jogl-all', version: '2.5.0', classifier: 'natives-macosx-universal'
     // implementation files('libs/minim.jar') // Uncomment only if still needed for audio
     implementation group: 'uk.co.caprica', name: 'vlcj', version: '3.10.1'
     implementation group: 'uk.co.xfactory-librarians', name: 'coremidi4j', version: '0.9'
@@ -94,11 +100,11 @@ dependencies {
 }
 
 compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "17"
 }
 
 compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "17"
 }
 
 run {
@@ -112,10 +118,12 @@ run {
     }
 
     if (System.properties["os.name"] == "Mac OS X") {
-        // jvmArgs '-XstartOnFirstThread' (REMOVED: keep only in runMinimalTest)
-        // jvmArgs '-Djava.library.path=/Applications/Processing.app/Contents/Java/core/library/macos-x86_64' (REMOVED: not needed for Processing 3.x, and directory does not exist)
+        // jvmArgs '-XstartOnFirstThread' (causes deadlock with Swing UI; do not re-enable for the main run task)
+        jvmArgs "-Djava.library.path=${projectDir}/libs/natives/macosx-universal"
         systemProperty 'java.awt.headless', false
     }
+
+    jvmArgs '--add-opens', 'java.desktop/sun.java2d.opengl=ALL-UNNAMED'
 
     // To select a layout from the command line, "gradlew run -Playout=cubes"
     systemProperty 'com.symmetrylabs.layout', findProperty('layout')

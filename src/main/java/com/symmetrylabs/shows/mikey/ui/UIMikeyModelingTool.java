@@ -49,6 +49,7 @@ public class UIMikeyModelingTool extends UI2dContainer {
         public int[]     stripCounts;    // length = UNIVERSE_COUNT
         public float[][] strips;         // length = sum(stripCounts), each row is 6 params
         public String[]  universeLabels; // length = UNIVERSE_COUNT, user-defined labels
+        public boolean[] universeRgbw;   // length = UNIVERSE_COUNT, true = 4-channel RGBW ArtNet
     }
 
     // ── per-universe count boxes (always UNIVERSE_COUNT) ─────────────────────
@@ -62,6 +63,9 @@ public class UIMikeyModelingTool extends UI2dContainer {
 
     // Current per-universe strip counts (mirrors countBoxes values after apply)
     private int[] stripCounts = new int[UNIVERSE_COUNT];
+
+    // Per-universe RGBW ArtNet output flag
+    private final boolean[] universeRgbw = new boolean[UNIVERSE_COUNT];
 
     // Width cache for rebuilding the grid
     private float panelW;
@@ -194,6 +198,9 @@ public class UIMikeyModelingTool extends UI2dContainer {
             for (int u = 0; u < UNIVERSE_COUNT; u++) {
                 stripCounts[u] = Math.max(1, saved.stripCounts[u]);
                 countBoxes[u].setValue(String.valueOf(stripCounts[u]));
+                if (saved.universeRgbw != null && u < saved.universeRgbw.length) {
+                    universeRgbw[u] = saved.universeRgbw[u];
+                }
             }
             buildStripGrid(saved.strips);
             // Apply universe labels now that labelBoxes have been created by buildStripGrid
@@ -322,21 +329,37 @@ public class UIMikeyModelingTool extends UI2dContainer {
         for (int u = 0; u < UNIVERSE_COUNT; u++) {
             int count = stripCounts[u];
 
-            // Universe header row: "U1 (N strips):" + name text input
+            // Universe header row: "U1 (N strips):" + RGBW toggle + name text input
             String headerText = "U" + (u + 1) + " (" + count + " strip" + (count == 1 ? "" : "s") + "):";
             float headerLabelW = 90f;
+            final float rgbwBtnW = 40f;
+            final float rgbwBtnGap = 2f;
             new UILabel(0, curY, headerLabelW, uHeaderH - 2)
                 .setLabel(headerText != null ? headerText : "")
                 .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
                 .setFontColor(0xFFAAAAAA)
                 .addToContainer(gridContainer);
+            // RGBW toggle for this universe (requires Save & Restart to take effect on output)
+            final int capturedUForRgbw = u;
+            UIButton rgbwBtn = new UIButton(headerLabelW + 2, curY, rgbwBtnW, uHeaderH - 2) {
+                @Override
+                protected void onToggle(boolean active) {
+                    universeRgbw[capturedUForRgbw] = active;
+                    setLabel(active ? "RGBW" : "RGB");
+                }
+            };
+            rgbwBtn.setMomentary(false).setLabel(universeRgbw[u] ? "RGBW" : "RGB");
+            rgbwBtn.setActive(universeRgbw[u]);
+            rgbwBtn.addToContainer(gridContainer);
             if (labelBoxes[u] == null) {
-                labelBoxes[u] = new TabbableTextBox(headerLabelW + 2, curY, panelW - headerLabelW - 6, uHeaderH - 2);
+                float labelBoxX = headerLabelW + 2 + rgbwBtnW + rgbwBtnGap;
+                labelBoxes[u] = new TabbableTextBox(labelBoxX, curY, panelW - labelBoxX - 4, uHeaderH - 2);
                 labelBoxes[u].setValue("");
             } else {
-                labelBoxes[u].setX(headerLabelW + 2);
+                float labelBoxX = headerLabelW + 2 + rgbwBtnW + rgbwBtnGap;
+                labelBoxes[u].setX(labelBoxX);
                 labelBoxes[u].setY(curY);
-                labelBoxes[u].setSize(panelW - headerLabelW - 6, uHeaderH - 2);
+                labelBoxes[u].setSize(panelW - labelBoxX - 4, uHeaderH - 2);
             }
             labelBoxes[u].addToContainer(gridContainer);
             curY += uHeaderH;
@@ -726,9 +749,11 @@ public class UIMikeyModelingTool extends UI2dContainer {
         // Read counts from boxes (in case user edited without pressing Apply)
         file.stripCounts = new int[UNIVERSE_COUNT];
         file.universeLabels = new String[UNIVERSE_COUNT];
+        file.universeRgbw = new boolean[UNIVERSE_COUNT];
         for (int u = 0; u < UNIVERSE_COUNT; u++) {
             file.stripCounts[u] = stripCounts[u];
             file.universeLabels[u] = labelBoxes[u] != null ? labelBoxes[u].getValue() : "";
+            file.universeRgbw[u] = universeRgbw[u];
         }
         file.strips = snapshotStripValues();
         File f = new File(MAPPING_FILE);
@@ -789,6 +814,19 @@ public class UIMikeyModelingTool extends UI2dContainer {
     public static float[][] loadStripsFromDisk() {
         MikeyMappingFile file = loadFileFromDisk();
         return (file != null) ? file.strips : null;
+    }
+
+    /**
+     * Returns the per-universe RGBW flags from disk, or all false.
+     * Called by MikeyShow at output-build time.
+     */
+    public static boolean[] loadRgbwFromDisk() {
+        MikeyMappingFile file = loadFileFromDisk();
+        boolean[] rgbw = new boolean[UNIVERSE_COUNT];
+        if (file != null && file.universeRgbw != null && file.universeRgbw.length == UNIVERSE_COUNT) {
+            System.arraycopy(file.universeRgbw, 0, rgbw, 0, UNIVERSE_COUNT);
+        }
+        return rgbw;
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

@@ -185,9 +185,11 @@ public class MikeyShow implements Show {
             // UNIVERSE_COUNT outputs; each output carries strips per universe
             // Per-strip GRB is handled via strip segments within the shared universe
             int[] counts = UIMikeyModelingTool.loadStripCountsFromDisk();
+            boolean[] rgbw = UIMikeyModelingTool.loadRgbwFromDisk();
             int stripIndex = 0;
             for (int u = 0; u < UNIVERSE_COUNT; u++) {
                 PointsGrouping pg = new PointsGrouping(String.valueOf(u + 1));
+                pg.rgbw = rgbw[u];
                 int pixelOffset = 0;
                 for (int s = 0; s < counts[u]; s++) {
                     if (stripIndex >= model.strips.size()) break;
