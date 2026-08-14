@@ -27,7 +27,11 @@
 package heronarts.p3lx.ui.studio.device;
 
 import heronarts.lx.LXChannel;
+import heronarts.lx.LXPatternBank;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UITimerTask;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIDoubleBox;
@@ -36,149 +40,156 @@ import heronarts.p3lx.ui.component.UISlider;
 import heronarts.p3lx.ui.studio.PatternScope;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
+import processing.event.MouseEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 class UIChannelDevice extends UIDevice {
 
-    private static final int PATTERN_LIST_WIDTH = 140;
-    private static final int WIDTH = PATTERN_LIST_WIDTH;
-
-    private final UIPatternList patternList;
+    private static final int BANK_WIDTH = 140;
+    private static final int ADD_BUTTON_WIDTH = 16;
+    
+    private final UI ui;
+    private final LXChannel channel;
+    private final UI2dContainer banksContainer;
+    private final List<UIPatternBank> bankComponents = new ArrayList<>();
+    private UIPatternBank selectedBank = null;
 
     UIChannelDevice(UI ui, UIDeviceBin deviceBin, final LXChannel channel) {
-        super(ui, channel, WIDTH);
+        super(ui, channel, BANK_WIDTH);
+        this.ui = ui;
+        this.channel = channel;
         setTitle(channel.label);
 
-        // Scope toggle: when active, new effects/warps target the focused pattern's
-        // per-pattern chain. The flag is global, but the button is shown in every
-        // channel tile so it's accessible regardless of focus.
-        final UIButton scopeButton = new UIButton(0, 0, WIDTH, 16) {
+        // Scope toggle button
+        final UIButton scopeButton = new UIButton(0, 0, BANK_WIDTH - ADD_BUTTON_WIDTH - 2, 16) {
             @Override
-            protected void onToggle(boolean active) {
-                PatternScope.addToFocusedPattern = active;
-                setLabel(active ? "Effect: Pattern" : "Effect: Channel");
+            public void onMousePressed(processing.event.MouseEvent mouseEvent, float mx, float my) {
+                int numBanks = channel.getBanks().size();
+                PatternScope.cycleScope(numBanks);
+                setLabel(PatternScope.getScopeLabel());
             }
         };
         scopeButton
-            .setActive(PatternScope.addToFocusedPattern)
-            .setLabel(PatternScope.addToFocusedPattern ? "Effect: Pattern" : "Effect: Channel")
-            .setDescription("Toggle whether new effects/warps are added to the channel or to the focused pattern")
+            .setMomentary(true)
+            .setLabel(PatternScope.getScopeLabel())
+            .setDescription("Cycle effect/warp scope: Channel → Pattern → Bank1 → Bank2 → ...")
             .addToContainer(this);
 
-        new UISlider(0, 18, WIDTH, 16)
+        // Add bank button (+)
+        new UIButton(BANK_WIDTH - ADD_BUTTON_WIDTH, 0, ADD_BUTTON_WIDTH, 16) {
+            @Override
+            public void onMousePressed(processing.event.MouseEvent mouseEvent, float mx, float my) {
+                channel.addBank();
+            }
+        }
+        .setLabel("+")
+        .setMomentary(true)
+        .setDescription("Add a new pattern bank")
+        .addToContainer(this);
+
+        new UISlider(0, 18, BANK_WIDTH, 16)
         .setParameter(channel.speed)
         .setShowLabel(false)
         .addToContainer(this);
 
-        this.patternList = (UIPatternList)
-        new UIPatternList(ui, 0, 34, PATTERN_LIST_WIDTH, getContentHeight() - 74, channel)
-        .setDescription("Patterns available on this channel, click to select, double-click to activate")
-        .addToContainer(this);
+        // Container for banks (scrollable horizontally)
+        this.banksContainer = new UI2dContainer(0, 34, BANK_WIDTH, getContentHeight() - 34);
+        this.banksContainer.setLayout(UI2dContainer.Layout.HORIZONTAL);
+        this.banksContainer.setPadding(0);
+        this.banksContainer.addToContainer(this);
 
-        // Transition Controls
-        new UIButton(0, getContentHeight() - 36, 16, 16)
-        .setLabel("\u21C4")
-        .setParameter(channel.transitionEnabled)
-        .setTextOffset(0, -1)
-        .addToContainer(this);
-        new UIDropMenu(18, getContentHeight() - 36, 80, 16, channel.transitionBlendMode)
-        .setDirection(UIDropMenu.Direction.UP)
-        .addToContainer(this);
-        new UITransitionBox(channel, 100, getContentHeight() - 36, 40, 16)
-        .setParameter(channel.transitionTimeSecs)
-        .setShiftMultiplier(.1f)
-        .addToContainer(this);
+        // Initialize banks
+        for (LXPatternBank bank : channel.getBanks()) {
+            addBankUI(bank);
+        }
 
-        // Auto cycle controls
-        new UIButton(0, getContentHeight() - 16, 16, 16)
-        .setLabel("\u21BA")
-        .setParameter(channel.autoCycleEnabled)
-        .addToContainer(this);
-        new UIAutoCycleBox(channel, 18, getContentHeight() - 16, 122, 16)
-        .setParameter(channel.autoCycleTimeSecs)
-        .setShiftMultiplier(60)
-        .addToContainer(this);
+        // Listen for bank changes
+        channel.addListener(new LXChannel.AbstractListener() {
+            @Override
+            public void bankAdded(LXChannel channel, LXPatternBank bank) {
+                addBankUI(bank);
+                updateWidth();
+            }
+
+            @Override
+            public void bankRemoved(LXChannel channel, LXPatternBank bank) {
+                removeBankUI(bank);
+                updateWidth();
+            }
+        });
+
+        updateWidth();
+    }
+
+    private void addBankUI(LXPatternBank bank) {
+        float x = this.bankComponents.size() * BANK_WIDTH;
+        final UIPatternBank bankUI = new UIPatternBank(this.ui, channel, bank, x, 0, this.banksContainer.getHeight());
+        bankUI.setSelectListener(() -> selectBank(bankUI));
+        this.bankComponents.add(bankUI);
+        bankUI.addToContainer(this.banksContainer);
+        if (this.selectedBank == null) {
+            selectBank(bankUI);
+        }
+    }
+
+    private void removeBankUI(LXPatternBank bank) {
+        UIPatternBank toRemove = null;
+        for (UIPatternBank bankUI : this.bankComponents) {
+            if (bankUI.getBank() == bank) {
+                toRemove = bankUI;
+                break;
+            }
+        }
+        if (toRemove != null) {
+            this.bankComponents.remove(toRemove);
+            toRemove.removeFromContainer();
+            if (selectedBank == toRemove) {
+                selectedBank = null;
+            }
+            // Reposition remaining banks
+            for (int i = 0; i < this.bankComponents.size(); i++) {
+                this.bankComponents.get(i).setX(i * BANK_WIDTH);
+            }
+            if (this.selectedBank == null && !this.bankComponents.isEmpty()) {
+                selectBank(this.bankComponents.get(0));
+            }
+        }
+    }
+
+    private void updateWidth() {
+        float contentWidth = Math.max(1, this.bankComponents.size()) * BANK_WIDTH;
+        setContentWidth(contentWidth);
+        setWidth(contentWidth + 2*PADDING + DEVICE_BAR_WIDTH);
+        this.banksContainer.setWidth(contentWidth);
     }
 
     @Override
     public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         super.onKeyPressed(keyEvent, keyChar, keyCode);
         if (!keyEventConsumed()) {
-            if (keyCode == java.awt.event.KeyEvent.VK_UP || keyCode == java.awt.event.KeyEvent.VK_DOWN) {
-                this.patternList.onKeyPressed(keyEvent, keyChar, keyCode);
+            // Delete/Backspace removes selected bank
+            if ((keyCode == java.awt.event.KeyEvent.VK_DELETE || keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) && selectedBank != null) {
+                channel.removeBank(selectedBank.getBank());
+                consumeKeyEvent();
             }
         }
     }
 
-    abstract class UIProgressBox extends UIDoubleBox {
-        protected final LXChannel channel;
-        protected int progress = 0;
-
-        abstract protected boolean hasProgress();
-        abstract protected double getProgress();
-
-        UIProgressBox(final LXChannel channel, float x, float y, float w, float h) {
-            super(x, y, w, h);
-            this.channel = channel;
-            addLoopTask(new UITimerTask(30, UITimerTask.Mode.FPS) {
-                @Override
-                public void run() {
-                    if (hasProgress()) {
-                        int newProgress = (int) (getProgress() * (width-5));
-                        if (newProgress != progress) {
-                            progress = newProgress;
-                            redraw();
-                        }
-                    } else {
-                        if (progress != 0) {
-                            progress = 0;
-                            redraw();
-                        }
-                    }
-                }
-            });
+    private void selectBank(UIPatternBank bank) {
+        if (selectedBank != null) {
+            selectedBank.setSelected(false);
         }
-
-        @Override
-        public void onDraw(UI ui, PGraphics pg) {
-            if (progress > 0) {
-                pg.noFill();
-                pg.stroke(ui.theme.getPrimaryColor());
-                pg.line(2, height-2, 2 + progress, height-2);
+        selectedBank = bank;
+        if (selectedBank != null) {
+            selectedBank.setSelected(true);
+            // Update focused bank parameter
+            int index = this.bankComponents.indexOf(selectedBank);
+            if (index >= 0) {
+                channel.focusedBank.setValue(index);
             }
-            super.onDraw(ui, pg);
         }
     }
 
-    class UITransitionBox extends UIProgressBox {
-        UITransitionBox(LXChannel channel, float x, float y, float w, float h) {
-            super(channel, x, y, w, h);
-        }
-
-        @Override
-        protected boolean hasProgress() {
-            return this.channel.transitionEnabled.isOn();
-        }
-
-        @Override
-        protected double getProgress() {
-            return this.channel.getTransitionProgress();
-        }
-
-    }
-
-    class UIAutoCycleBox extends UIProgressBox {
-        UIAutoCycleBox(LXChannel channel, float x, float y, float w, float h) {
-            super(channel, x, y, w, h);
-        }
-
-        @Override
-        protected boolean hasProgress() {
-            return this.channel.autoCycleEnabled.isOn();
-        }
-
-        @Override
-        protected double getProgress() {
-            return this.channel.getAutoCycleProgress();
-        }
-    }
 }
